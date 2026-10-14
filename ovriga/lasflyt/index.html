@@ -83,6 +83,7 @@ details.sa ol{margin:8px 0 2px;padding-left:22px}
 .panel h3{margin:0 0 6px;font-size:1rem;display:flex;align-items:center;gap:8px}
 .tempo{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-weight:700}
 .tempo input{flex:1;min-width:140px;accent-color:var(--accent);height:34px}
+.uppm{font-weight:800;font-size:1.15rem;text-align:center;margin:2px 0 4px}
 .klocka{font-size:2.2rem;font-weight:800;font-variant-numeric:tabular-nums;min-width:110px}
 .res{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:8px 0}
 .res div{background:#fff;border-radius:14px;padding:6px 8px;text-align:center}
@@ -127,9 +128,9 @@ details.sa ol{margin:8px 0 2px;padding-left:22px}
       <li><b>Lär in helorden:</b> står det ett lila ord i texten (till exempel <i>och</i>) säger du ordet och eleven säger efter.</li>
       <li><b>Modellera:</b> du läser texten högt medan orden lyser ett i taget. Eleven följer med med blicken.</li>
       <li><b>Läs tillsammans:</b> ni läser samtidigt, i takt med markeringen.</li>
-      <li><b>Läs själv, tre gånger:</b> tryck Start när eleven börjar och Stopp när eleven läst sista ordet. Tryck på ord som blev fel eller hoppades över. Välj gärna något om hur det lät.</li>
+      <li><b>Läs själv:</b> eleven läser texten högt. Tryck <i>Läs en gång till</i> och läs igen, tills det flyter. Då trycker du <i>Det flyter</i>. Ingen tid tas.</li>
       <li><b>Fråga:</b> läs frågan högt. Eleven trycker på svaret.</li>
-      <li><b>Ny text:</b> eleven läser en ny text en gång. Då syns om övningen hjälper även på nya texter.</li>
+      <li><b>Ny text:</b> eleven läser en ny text på samma sätt, tills det flyter. Då syns om övningen hjälper även på nya texter.</li>
     </ol>
     <p class="info">Eleven jämförs bara med sig själv. Bilden visas först efter elevens första egna läsning, så att eleven läser orden och inte gissar från bilden.</p>
   </details>
@@ -154,8 +155,6 @@ details.sa ol{margin:8px 0 2px;padding-left:22px}
     <h2>Bra läst! 🎉</h2>
     <div class="stjarnor" id="rStj"></div>
     <p class="info" id="rStjTxt" style="text-align:center;margin-top:0"></p>
-    <h3 style="margin:10px 0 0">Rätt ord per minut</h3>
-    <div class="staplar" id="rStaplar"></div>
     <p id="rTxt" style="font-weight:700"></p>
     <div class="rad"><button class="knapp" id="rIgen">▶ Ett pass till</button><button class="knapp vit" data-home>Till början</button></div>
   </div>
@@ -168,7 +167,7 @@ details.sa ol{margin:8px 0 2px;padding-left:22px}
 <script src="scener.js"></script>
 <script src="../../huvud.js" data-titel="Läsflyt" data-ikon="📖" data-portal="ovriga"></script>
 <script>
-/* Läsflyt: upprepad läsning med en vuxen (modellera, läs tillsammans, läs själv tre gånger, fråga, ny text).
+/* Läsflyt: upprepad läsning med en vuxen (modellera, läs tillsammans, läs själv tills det flyter, fråga, ny text).
    Texterna och nivåerna i texter.js, bilderna i scener.js. Sparas i mattespel-lasflyt-v1 (delas med Bokstäver). */
 const $=id=>document.getElementById(id);
 const KEY="mattespel-lasflyt-v1";
@@ -188,7 +187,7 @@ function show(id){["home","game","result"].forEach(s=>$(s).hidden=s!==id);skarm=
 document.addEventListener("click",e=>{if(e.target.closest("[data-home]"))show("home");});
 
 /* ---------- Startskärm ---------- */
-function status(t){const r=data.las[t.id]||[];const ova=r.filter(x=>x.typ==="ova").length,ny=r.some(x=>x.typ==="ny");
+function status(t){const r=data.las[t.id]||[];const ova=r.filter(x=>x.typ==="ova").reduce((a,x)=>a+(x.g||1),0),ny=r.some(x=>x.typ==="ny");
   return ova>=3?["Övad ✓","ok"]:ny?["Läst som ny text",""]:["Inte läst",""];}
 function hem(){
   $("nivaer").innerHTML=LASNIVA.map(n=>`<button class="niva" data-n="${n.n}" aria-pressed="${n.n===data.niva}"><b>Nivå ${n.n}</b><small>${n.n===1?"":"+ "}${n.namn}</small><span class="st">${stjTxt(data.stars[n.n])}</span></button>`).join("");
@@ -200,14 +199,14 @@ $("nivaer").onclick=e=>{const b=e.target.closest("[data-n]");if(!b)return;data.n
 
 /* ---------- Passet ---------- */
 // välj övningstext (minst läst) och en ny text (aldrig läst om det går)
-function valjTexter(){const lista=LASTEXTER.filter(t=>t.niva===data.niva),n=t=>(data.las[t.id]||[]).length;
+function valjTexter(){const lista=LASTEXTER.filter(t=>t.niva===data.niva),n=t=>(data.las[t.id]||[]).reduce((a,x)=>a+(x.g||1),0);
   const sist=t=>Math.max(0,...(data.las[t.id]||[]).map(x=>x.d));
   const ova=[...lista].sort((a,b)=>(n(a)>=3)-(n(b)>=3)||n(a)-n(b)||sist(a)-sist(b))[0];
   const ny=[...lista.filter(t=>t!==ova)].sort((a,b)=>n(a)-n(b)||sist(a)-sist(b))[0];return[ova,ny];}
-const STEG=[["hel","Ord att känna igen"],["mod","Den vuxne läser"],["til","Läs tillsammans"],["s1","Läs själv: 1 av 3"],["s2","Läs själv: 2 av 3"],["s3","Läs själv: 3 av 3"],["f1","Frågan"],["nyh","Ny text: ord att känna igen"],["ny","Ny text: läs själv"],["f2","Frågan"]];
+const STEG=[["hel","Ord att känna igen"],["mod","Den vuxne läser"],["til","Läs tillsammans"],["s","Läs själv"],["f1","Frågan"],["nyh","Ny text: ord att känna igen"],["ny","Ny text: läs själv"],["f2","Frågan"]];
 let P=null;
 $("borja").onclick=()=>{const[ova,ny]=valjTexter();
-  P={ova,ny,steg:[],i:0,las:[],nyLas:null,bild:false,fr:{}};
+  P={ova,ny,steg:[],i:0,gAnt:0,nyG:0,bild:false,fr:{}};
   P.steg=STEG.filter(([k])=>!(k==="hel"&&!helordI(ova).length)&&!(k==="nyh"&&!helordI(ny).length));
   show("game");visaSteg();};
 $("rIgen").onclick=()=>$("borja").click();
@@ -224,8 +223,8 @@ function visaSteg(){stopMark();const[k,namn]=P.steg[P.i],t=text();
   $("steg").innerHTML=P.steg.map((_,j)=>`<i class="${j<P.i?"klar":j===P.i?"nu":""}"></i>`).join("");
   $("stegNamn").textContent=namn;$("gNiva").textContent=`Nivå ${t.niva}`;
   $("helruta").hidden=true;$("bild").hidden=true;$("las").hidden=false;
-  const bildNu=(t===P.ova&&P.bild)||(t===P.ny&&P.nyLas);if(bildNu)visaBild(t);
-  ritaText(t,/^s\d|ny$/.test(k));
+  const bildNu=(t===P.ova&&P.bild)||(t===P.ny&&P.nyG);if(bildNu)visaBild(t);
+  ritaText(t,false);
   if(k==="hel"||k==="nyh"){const h=helordI(t);$("helruta").hidden=false;$("hela").innerHTML=h.map(w=>`<span>${w}</span>`).join("");
     $("instr").textContent=`Säg ${h.length>1?"orden":"ordet"} högt. Eleven säger efter. ${h.length>1?"De":"Det"} står i lila i texten.`;
     $("panel").innerHTML=`<div class="rad" style="margin-top:14px"><button class="knapp" id="nasta">Vi kan ${h.length>1?"orden":"ordet"} ›</button></div>`;$("nasta").onclick=nasta;return;}
@@ -234,7 +233,7 @@ function visaSteg(){stopMark();const[k,namn]=P.steg[P.i],t=text();
       <div class="rad" style="margin-top:8px"><button class="knapp bla" id="markStart">▶ Starta markeringen</button><button class="knapp" id="nasta">${k==="mod"?"Nästa: läs tillsammans ›":"Nästa: eleven läser själv ›"}</button></div></div>`;
     $("tempo").oninput=e=>{data.tempo=+e.target.value;$("tempoTxt").textContent=data.tempo+" ord/min";save();};
     $("markStart").onclick=()=>startMark(t);$("nasta").onclick=nasta;return;}
-  if(/^s\d$/.test(k)||k==="ny"){$("instr").textContent=k==="ny"?"En text eleven inte har läst. Eleven läser den en gång.":"Eleven läser högt. Vuxen: tryck Start när eleven börjar.";lasPanel(t,k);return;}
+  if(k==="s"||k==="ny"){$("instr").textContent=k==="ny"?"En ny text som eleven inte har läst.":"Eleven läser texten högt.";lasPanel(t,k);return;}
   if(k==="f1"||k==="f2")fraga(t);}
 function nasta(){P.i++;if(P.i>=P.steg.length){klar();return;}visaSteg();window.scrollTo({top:0,behavior:"smooth"});}
 
@@ -247,32 +246,19 @@ function startMark(t){if(mTimer){stopMark();return;}const w=[...document.querySe
     const efter=(w[i].nextSibling&&w[i].nextSibling.textContent)||"",paus=/[.!?]/.test(efter)?1.8:/[,:]/.test(efter)?1.3:1;
     i++;mTimer=setTimeout(steg,60000/data.tempo*paus);};steg();}
 
-/* ---------- Elevens egen läsning: tid, fel och betoning ---------- */
-const BET=["Lät som när man pratar","Stannade vid punkt","Läste ord för ord"];
-let R=null,rTimer=null;
-function lasPanel(t,k){R={t0:0,t:0,fel:new Set(),bet:new Set(),k};
-  $("panel").innerHTML=`<div class="panel"><h3>👩‍🏫 För den vuxne</h3>
-    <div class="rad"><span class="klocka" id="klocka">0,0 s</span><button class="knapp" id="startStopp">▶ Start</button></div>
-    <p class="info">Tryck på ord som blev fel eller hoppades över (en gång till tar bort markeringen).</p><div id="efter"></div></div>`;
-  $("startStopp").onclick=()=>{if(!R.t0){R.t0=performance.now();$("startStopp").textContent="⏹ Stopp";$("startStopp").classList.add("rod");rTimer=setInterval(()=>{$("klocka").textContent=((performance.now()-R.t0)/1000).toFixed(1).replace(".",",")+" s";},100);}
-    else if(!R.t){R.t=performance.now()-R.t0;clearInterval(rTimer);$("startStopp").hidden=true;$("klocka").textContent=(R.t/1000).toFixed(1).replace(".",",")+" s";efterLas(t);}};}
-$("las").onclick=e=>{const w=e.target.closest(".w");if(!w||!R||!$("las").classList.contains("markera"))return;const i=+w.dataset.i;
-  R.fel.has(i)?R.fel.delete(i):R.fel.add(i);w.classList.toggle("fel");if(R.t)efterLas(text());};
-const opm=(n,fel,t)=>Math.round((n-fel)/(t/60000));
-function efterLas(t){const n=ordI(t).length,f=R.fel.size,o=opm(n,f,R.t);
-  // bilden kommer efter elevens första egna läsning
-  if(t===P.ova&&!P.bild){P.bild=true;visaBild(t);}
-  const tidigare=t===P.ova?P.las:[];
-  $("efter").innerHTML=`<div class="res"><div><b>${(R.t/1000).toFixed(1).replace(".",",")} s</b><small>tid</small></div><div><b>${o}</b><small>rätt ord per minut</small></div><div><b>${n-f} av ${n}</b><small>rätt ord</small></div></div>
-    <div style="font-weight:800;font-size:.95rem">Hur lät det? <span class="info">(välj det som stämmer)</span></div>
-    <div class="bet">${BET.map((b,j)=>`<button data-b="${j}" aria-pressed="${R.bet.has(j)}">${b}</button>`).join("")}</div>
-    ${tidigare.length?`<div class="staplar" style="height:110px">${[...tidigare,{o}].map((x,j)=>`<div class="stp"><b>${x.o}</b><i style="height:${Math.max(6,x.o/Math.max(...tidigare.map(y=>y.o),o)*80)}%"></i><small>${j+1}:a</small></div>`).join("")}</div>`:""}
-    <p class="msg">${tidigare.length&&o>tidigare[tidigare.length-1].o?"Snabbare än förra gången! 🚀":tidigare.length?"Bra! Att läsa samma text igen gör den lättare.":"Bra läst!"}</p>
-    <div class="rad"><button class="knapp" id="sparaLas">${R.k==="s3"?"Till frågan ›":R.k==="ny"?"Till frågan ›":"Läs igen ›"}</button></div>`;
-  $("efter").querySelectorAll("[data-b]").forEach(b=>b.onclick=()=>{const j=+b.dataset.b;R.bet.has(j)?R.bet.delete(j):R.bet.add(j);b.setAttribute("aria-pressed",R.bet.has(j));});
-  $("sparaLas").onclick=()=>{const rec={d:Date.now(),t:Math.round(R.t),n,fel:[...R.fel],bet:[...R.bet],typ:R.k==="ny"?"ny":"ova",o};
+/* ---------- Elevens egen läsning: läs igen tills det flyter (ingen tid, inga felmarkeringar) ---------- */
+let R=null;
+function lasPanel(t,k){R={k,g:0};
+  const rit=()=>{$("panel").innerHTML=`<div class="panel"><div class="uppm">📖 Läs igen tills det flyter</div>
+    <p class="info" id="rAnt" style="text-align:center;margin:4px 0 8px">${R.g?`Läst ${R.g} ${R.g===1?"gång":"gånger"}`:"&nbsp;"}</p>
+    <div class="rad" style="justify-content:center"><button class="knapp vit" id="igen">🔁 Läs en gång till</button><button class="knapp" id="flyter">✓ Det flyter! Vi går vidare ›</button></div></div>`;
+    $("igen").onclick=()=>{R.g++;bildNu();rit();};
+    $("flyter").onclick=()=>{R.g++;bildNu();spara();};};
+  const bildNu=()=>{if(t===P.ova&&!P.bild){P.bild=true;visaBild(t);}};   // bilden kommer efter elevens första egna läsning
+  const spara=()=>{const rec={d:Date.now(),t:0,n:ordI(t).length,fel:[],bet:[],typ:k==="ny"?"ny":"ova",o:0,g:R.g};
     (data.las[t.id]=data.las[t.id]||[]).push(rec);data.las[t.id]=data.las[t.id].slice(-20);save();
-    if(R.k==="ny")P.nyLas=rec;else P.las.push(rec);L().pop&&L().pop();nasta();};}
+    if(k==="ny")P.nyG=R.g;else P.gAnt=R.g;nasta();};
+  rit();}
 
 /* ---------- Frågan ---------- */
 function fraga(t){$("las").hidden=true;visaBild(t);
@@ -289,11 +275,8 @@ function fraga(t){$("las").hidden=true;visaBild(t);
 /* ---------- Klart ---------- */
 function klar(){const niva=P.ova.niva;data.pass[niva]=(data.pass[niva]||0)+1;
   const fore=data.stars[niva]||0;data.stars[niva]=Math.min(3,data.pass[niva]);save();
-  const alla=[...P.las.map((x,j)=>({o:x.o,n:`${j+1}:a läsningen`})),...(P.nyLas?[{o:P.nyLas.o,n:"Ny text",ny:1}]:[])],max=Math.max(...alla.map(x=>x.o),1);
-  $("rStaplar").innerHTML=alla.map(x=>`<div class="stp${x.ny?" ny":""}"><b>${x.o}</b><i style="height:${Math.max(6,x.o/max*85)}%"></i><small>${x.n}</small></div>`).join("");
-  const f=P.las[0],s=P.las[P.las.length-1];
-  let txt=f&&s?(s.o>f.o?`Från ${f.o} till ${s.o} rätt ord per minut på samma text. Så fungerar övning! `:`Samma text tre gånger. Det viktiga är att läsa, inte att läsa fort. `):"";
-  if(P.nyLas&&f)txt+=P.nyLas.o>f.o?`På den nya texten läste eleven ${P.nyLas.o} ord per minut, mer än första gången på övningstexten (${f.o}).`:`Den nya texten var ny, därför går den långsammare. Nästa pass övas den.`;
+  let txt=P.gAnt?`Eleven läste övningstexten ${P.gAnt} ${P.gAnt===1?"gång":"gånger"} tills det flöt. Så fungerar övning: det viktiga är att läsa, inte att läsa fort. `:"";
+  if(P.nyG)txt+=`Den nya texten läste eleven ${P.nyG} ${P.nyG===1?"gång":"gånger"}.`;
   $("rTxt").textContent=txt;
   $("rStj").textContent=stjTxt(data.stars[niva]);
   $("rStjTxt").textContent=data.stars[niva]>fore?`Ny stjärna på nivå ${niva}!`:data.stars[niva]>=3?`Alla tre stjärnor på nivå ${niva}. Prova gärna nästa nivå!`:"";
