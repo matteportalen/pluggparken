@@ -273,6 +273,7 @@ var LEKTIONER=[
 ["🐋","Valhajen","Valhajen är världens största fisk, upp till 12 meter lång. Den äter plankton och är ofarlig för människor."],
 ["🦴","Inga ben","Hajar saknar riktiga ben. Skelettet är gjort av brosk, samma material som i din näsa och dina öron."],
 ["🦷","Tusentals tänder","En haj byter tänder hela livet. Vissa arter kan få tusentals tänder under sitt liv."],
+["🥚","Hajägg","Inte alla hajar föder levande ungar. Många lägger ägg i en hård, läderaktig kapsel. Hornhajens ägg ser ut som en spiralformad skruv, och hajmamman puttar in dem i en klippspricka så att de sitter fast. Inuti växer ungen i många månader."],
 ["🌊","Hotade","Hajar har fått ett dåligt rykte. Människor dödar många fler hajar än tvärtom, och många arter är hotade."]]},
 
 {id:"morkmateria",titel:"Mörk materia",kat:"Rymden",e:"🌌",c:"#4B2E83",rutor:[
