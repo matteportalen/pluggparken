@@ -502,7 +502,7 @@ document.querySelectorAll('[data-say]').forEach(b=>b.onclick=()=>speak(SAY[b.dat
 
 /* ---------- Skärmar ---------- */
 let cur='home';
-function show(id){if('speechSynthesis' in window)speechSynthesis.cancel();document.querySelectorAll('.screen').forEach(s=>s.hidden=s.id!==id);cur=id;window.scrollTo(0,0);if(window.MPS)MPS.visa(id);
+function show(id){try{Ljud.sn.stop()}catch(e){}if('speechSynthesis' in window)speechSynthesis.cancel();document.querySelectorAll('.screen').forEach(s=>s.hidden=s.id!==id);cur=id;window.scrollTo(0,0);if(window.MPS)MPS.visa(id);
   if(id==='dag'||id==='arstid')open3D(id);else stop3D();
   if(id==='morker')openEcl();if(id==='storlek')openSize();if(id==='avstand')openDist();if(id==='ar')openYear();if(id==='vikt')openWeight();
   if(id==='zoom')openZoom();if(id==='jattar')openGiants();if(id==='hal')openHole();if(id==='himmel')openNight();if(id==='liv')openLife();}
@@ -1268,10 +1268,13 @@ let lPath='sol',lV=0,lAnim=0;
 /* Supernova: kärnkollaps, blixt, chockvåg och utkastad gas som i Krabbnebulosan och Cassiopeia A */
 let lSN=null,snImg=null,snTmp=null;
 function snLoad(){if(snImg)return;snImg=new Image();snImg.src='supernova-casa.jpg';}
+let snLoop=-1,snFlash=0;
 function drawSupernova(c,W,H,tt){
+  const lp=Math.floor(tt/16);if(lp!==snLoop){snLoop=lp;try{Ljud.sn.start()}catch(e){}}
   const cx=W/2,cy=H*.48,T=16,u=tt%T;           // en film på 16 sekunder som börjar om
   const ease=x=>x<0?0:x>1?1:x*x*(3-2*x);
   c.save();
+  const shk=u>2.45&&u<4.6?Math.exp(-(u-2.45)*1.6)*H*.018:0;if(shk>.2)c.translate((Math.random()-.5)*shk*2,(Math.random()-.5)*shk*2);
   // 0–2,4 s: stjärnan pulserar och drar ihop sig
   if(u<2.6){const k=u/2.6,rad=H*(.2-.16*ease(k)),pul=1+Math.sin(u*(6+k*30))*.04*(1-k*.5);
     const g=c.createRadialGradient(cx,cy,0,cx,cy,rad*pul*1.9);g.addColorStop(0,`rgba(255,${180+75*k|0},${120+135*k|0},1)`);g.addColorStop(.35,`rgba(255,${90+60*k|0},${50+120*k|0},.9)`);g.addColorStop(1,'rgba(255,60,20,0)');
@@ -1301,7 +1304,8 @@ function drawSupernova(c,W,H,tt){
     c.globalCompositeOperation='lighter';c.globalAlpha=pa*.95;c.drawImage(snTmp,0,0);c.globalAlpha=1;
     if(tau>7){c.globalCompositeOperation='source-over';c.fillStyle=`rgba(255,255,255,${Math.min(.6,(tau-7)*.3)})`;c.font=`700 ${H*.028}px "Inter", sans-serif`;c.textAlign='right';c.fillText('Så ser en riktig supernovarest ut: Cassiopeia A. Foto: NASA, CXC, STScI',W-H*.03,H*.86);}}
   // blixten: vitt ljus, snabbt upp och sakta ner, med ljusstrimmor
-  const fl=u>2.4?Math.exp(-(u-2.4)*1.1)*Math.min(1,(u-2.4)*8):0;
+  const fl=u>2.4?Math.exp(-(u-2.4)*1.1)*Math.min(1,(u-2.4)*8):0;snFlash=fl;
+  if(tau>0){c.globalCompositeOperation='lighter';for(let k=0;k<3;k++){const q=tau-k*.55;if(q<=0)continue;const rr=R0*1.3*Math.pow(Math.min(1,q/6),.7),al=Math.max(0,.5*(1-q/6));if(al<=0)continue;c.strokeStyle=`rgba(${k?'255,190,140':'170,210,255'},${al})`;c.lineWidth=H*(.008-k*.002);c.shadowColor='rgba(170,210,255,.9)';c.shadowBlur=H*.04;c.beginPath();c.arc(cx,cy,rr,0,7);c.stroke();}c.shadowBlur=0;}
   if(fl>.01){c.globalCompositeOperation='lighter';const g=c.createRadialGradient(cx,cy,0,cx,cy,H*(.35+.9*fl));g.addColorStop(0,`rgba(255,255,255,${Math.min(1,fl*1.1)})`);g.addColorStop(.25,`rgba(190,215,255,${fl*.7})`);g.addColorStop(1,'rgba(80,120,255,0)');c.fillStyle=g;c.fillRect(0,0,W,H);
     c.strokeStyle=`rgba(210,225,255,${fl*.8})`;c.lineWidth=H*.004;[[0,1],[1,0],[.7,.7],[.7,-.7]].forEach(([dx,dy],k)=>{const L=W*(.25+.5*fl)*(k<2?1:.55);const gr=c.createLinearGradient(cx-dx*L,cy-dy*L,cx+dx*L,cy+dy*L);gr.addColorStop(0,'rgba(210,225,255,0)');gr.addColorStop(.5,`rgba(235,243,255,${fl})`);gr.addColorStop(1,'rgba(210,225,255,0)');c.strokeStyle=gr;c.beginPath();c.moveTo(cx-dx*L,cy-dy*L);c.lineTo(cx+dx*L,cy+dy*L);c.stroke();});}
   // kvar i mitten: en het, pulserande neutronstjärna
@@ -1319,15 +1323,16 @@ function drawStage(c,W,H,k,path,t){const cx=W/2,cy=H*.48,r=srand(9+k);
       c.fillStyle='#000';c.beginPath();c.arc(cx,cy,H*.06,0,7);c.fill();c.strokeStyle='rgba(255,200,120,.8)';c.lineWidth=3;c.beginPath();c.arc(cx,cy,H*.066,0,7);c.stroke();}}}
 function drawLife(){const cv=$('lCv'),W=cv.width,H=cv.height,c=cv.getContext('2d'),t=performance.now()/1000;c.globalAlpha=1;c.fillStyle='#05070F';c.fillRect(0,0,W,H);
   const r=srand(77);for(let i=0;i<120;i++){c.fillStyle=`rgba(255,255,255,${r()*.5+.15})`;c.fillRect(r()*W,r()*H,1.6,1.6);}
-  if(lV>=2.5&&lSN===null)lSN=t;if(lV<2.5)lSN=null;
+  if(lV>=2.5&&lSN===null)lSN=t;if(lV<2.5){if(lSN!==null){try{Ljud.sn.stop()}catch(e){}}lSN=null;snLoop=-1;}
   const i=Math.min(3,Math.floor(lV)),f=lV-i;
   if(lV>=4){drawStage(c,W,H,4,lPath,t);}else{c.globalAlpha=1-f;drawStage(c,W,H,i,lPath,t);c.globalAlpha=f;drawStage(c,W,H,i+1,lPath,t);c.globalAlpha=1;}
   const S=LIV[lPath].s[Math.round(lV)];c.fillStyle='#fff';c.font=`800 ${H*.055}px "Inter", sans-serif`;c.textAlign='center';c.fillText(S.n,W/2,H*.95);
   c.fillStyle='rgba(255,255,255,.7)';c.font=`800 ${H*.04}px "Inter", sans-serif`;c.textAlign='left';c.fillText(`${Math.round(lV)+1} av 5`,W*.03,H*.07);
+  const sf=(lV>=2.5&&lPath==='jatte')?snFlash:0;cv.style.filter=sf>.02?`brightness(${1+sf*.6}) saturate(${1+sf*.4})`:'';
   lText();}
 let lLast='';function lText(){const k=Math.round(lV),key=lPath+k;if(key===lLast)return;lLast=key;const S=LIV[lPath].s[k];$('lBig').textContent=S.n+'.';$('lTxt').textContent=S.t;$('lFacts').innerHTML=`<li>${S.f}</li>`;}
 let lRaf=0;function lLoop(){if(cur!=='liv'){lRaf=0;return;}drawLife();lRaf=requestAnimationFrame(lLoop);}
-function openLife(){snLoad();lLast='';$('lPath').innerHTML=Object.entries(LIV).map(([k,v])=>`<button class="b" aria-pressed="${k===lPath}" data-k="${k}">${v.n}</button>`).join('');
+function openLife(){snLoad();lSN=null;snLoop=-1;lLast='';$('lPath').innerHTML=Object.entries(LIV).map(([k,v])=>`<button class="b" aria-pressed="${k===lPath}" data-k="${k}">${v.n}</button>`).join('');
   $('lPath').querySelectorAll('button').forEach(b=>b.onclick=()=>{lPath=b.dataset.k;lV=0;$('lSl').value=0;openLife();});
   $('lEnd').textContent=LIV[lPath].end;$('lSl').value=lV;if(!lRaf)lRaf=requestAnimationFrame(lLoop);}
 function lTo(to){cancelAnimationFrame(lAnim);const from=lV,t0=performance.now();(function f(n){const k=Math.min(1,(n-t0)/900),e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;lV=from+(to-from)*e;$('lSl').value=lV;if(k<1)lAnim=requestAnimationFrame(f);})(t0);}
