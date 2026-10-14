@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="sv"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow"><title>Granska klipp</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FFF6E0;color:#1D2B53;font:18px/1.4 "Baloo 2","Trebuchet MS",system-ui,sans-serif}
+.w{max-width:860px;margin:0 auto;padding:14px 14px 120px}
+h1{margin:6px 0}p{margin:4px 0 12px;color:#56668F}
+.r{display:flex;gap:12px;background:#fff;border-radius:16px;padding:8px;margin:10px 0;box-shadow:0 4px 0 #EBD9A8;align-items:center}
+.r.on{outline:4px solid #1E9E5E}
+.r img{width:160px;max-width:38%;border-radius:10px;flex:none}
+.r b{display:block;line-height:1.15}.r small{color:#56668F}
+.r label{display:flex;gap:10px;align-items:center;flex:1;cursor:pointer}
+input[type=checkbox]{width:28px;height:28px;flex:none}
+a{color:#3D5AFE;font-weight:700}
+.bar{position:fixed;left:0;right:0;bottom:0;background:#1D2B53;color:#fff;padding:10px 14px;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}
+button{font:inherit;font-weight:800;border:0;border-radius:14px;padding:8px 18px;background:#F2B707;color:#1D2B53;cursor:pointer}
+</style></head><body><div class="w">
+<h1>Granska klipp</h1>
+<p>Bocka i de du vill ha i Specialare. Tryck på länken för att se klippet på YouTube först. Tryck sedan <b>Kopiera valda</b> och klistra in i chatten till Claude.</p>
+<div id="lista"></div></div>
+<div class="bar"><span id="ant">0 valda</span><button id="kop">Kopiera valda</button></div>
+<script src="../klipp.js"></script>
+<script>
+(async()=>{
+const F=await (await fetch("forslag.json?"+Date.now())).json();
+const har=new Set(KLIPP.map(k=>k.id));let val=new Set();
+const L=document.getElementById("lista");
+const nya=F.filter(x=>!har.has(x.id));
+L.innerHTML=nya.length?"":"<p>Inga nya förslag just nu.</p>";
+nya.forEach(x=>{const d=document.createElement("div");d.className="r";
+ d.innerHTML=`<img src="https://i.ytimg.com/vi/${x.id}/mqdefault.jpg" alt=""><label><input type="checkbox"><span><b>${x.titel}</b><small>${x.kanal} · ${Math.round(x.sek/60*10)/10} min · ${x.datum}</small><br><a href="https://www.youtube.com/watch?v=${x.id}" target="_blank" rel="noopener">Se på YouTube ↗</a></span></label>`;
+ d.querySelector("input").onchange=e=>{e.target.checked?val.add(x):val.delete(x);d.classList.toggle("on",e.target.checked);document.getElementById("ant").textContent=val.size+" valda"};
+ L.appendChild(d)});
+document.getElementById("kop").onclick=async()=>{const t=JSON.stringify([...val].map(({id,titel,kanal,sek,sprak})=>({id,titel,kanal,sek,sprak})));try{await navigator.clipboard.writeText(t);alert("Kopierat! Klistra in i chatten.")}catch(e){prompt("Kopiera:",t)}};
+})();
+</script></body></html>

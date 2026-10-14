@@ -69,6 +69,15 @@ h1 span{color:#E0562B}
 .nav:disabled{opacity:.35}
 .nav:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.2)}
 .slut{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+/* klipp */
+#kv{position:fixed;inset:0;z-index:50;background:#14142a;display:none;flex-direction:column;color:#fff}
+#kv.on{display:flex}
+#kv .gv-top{background:#C62828}
+.kv-in{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px;gap:12px;min-height:0}
+.kv-ram{width:min(100%,calc((100vh - 170px)*16/9));aspect-ratio:16/9;background:#000;border-radius:16px;overflow:hidden;box-shadow:0 6px 0 rgba(0,0,0,.4)}
+.kv-ram iframe{width:100%;height:100%;border:0;display:block}
+.kv-not{margin:0;color:#c9cdea;font-size:.9rem;text-align:center;max-width:60ch}
+.kort .ik.bild{background-size:cover;background-position:center;font-size:1.6rem;color:#fff;text-shadow:0 2px 4px rgba(0,0,0,.6);align-content:center}
 /* grejer */
 #gv{position:fixed;inset:0;z-index:50;background:var(--bg);display:none;flex-direction:column;overflow:auto}
 #gv.on{display:flex}
@@ -128,6 +137,11 @@ h1 span{color:#E0562B}
   <div class="vy-nav"><button class="nav" id="vyP">‹ Förra</button><div class="prickar" id="vyD"></div><button class="nav" id="vyN">Nästa ›</button></div>
 </section>
 
+<section id="kv" aria-label="Klipp">
+  <div class="gv-top"><button class="rund" id="kvX" aria-label="Stäng">✕</button><div class="t" id="kvT"></div></div>
+  <div class="kv-in"><div class="kv-ram" id="kvR"></div><p class="kv-not" id="kvN"></p></div>
+</section>
+
 <section id="gv" aria-label="Interaktiv specialare">
   <div class="gv-top"><button class="rund" id="gvX" aria-label="Tillbaka">←</button><div class="t" id="gvT"></div></div>
   <div class="gv-in" id="gvB"></div>
@@ -135,26 +149,27 @@ h1 span{color:#E0562B}
 
 <script src="lektioner.js"></script>
 <script src="grejer.js"></script>
+<script src="klipp.js"></script>
 <script>
 (function(){
 const $=s=>document.querySelector(s);
-const ALLA=[].concat(LEKTIONER.map(l=>Object.assign({typ:"l"},l,{beskr:l.rutor[0][2]})),GREJER.map(g=>Object.assign({typ:"g"},g)));
+const ALLA=[].concat(LEKTIONER.map(l=>Object.assign({typ:"l"},l,{beskr:l.rutor[0][2]})),GREJER.map(g=>Object.assign({typ:"g"},g)),KLIPP.map(k=>({typ:"k",id:k.id,titel:k.titel,kat:"Klipp",e:"🎬",c:"#C62828",beskr:k.kanal+" · "+Math.round(k.sek/60)+" min · "+(k.sprak==="en"?"engelska":"svenska"),sek:k.sek,kanal:k.kanal,sprak:k.sprak})));
 let filter="Alla",cur=null,idx=0,stang=null;
 const dagNr=()=>Math.floor((Date.now()-new Date().getTimezoneOffset()*6e4)/864e5);
 function dagens(){return ALLA[(dagNr()*7+3)%ALLA.length]}
-function href(a,i){return a.typ==="l"?"#l/"+a.id+(i?"/"+i:""):"#g/"+a.id}
+function href(a,i){return a.typ==="k"?"#k/"+a.id:a.typ==="l"?"#l/"+a.id+(i?"/"+i:""):"#g/"+a.id}
 function hem(){
   const d=dagens();
-  const kort=a=>`<button class="kort" data-id="${a.id}" style="--c:${a.c}"><span class="ik" aria-hidden="true">${a.e}</span><span><b>${a.titel}</b><small><span class="etikett${a.typ==="g"?" g":""}">${a.typ==="g"?"Prova själv":a.kat}</span>${a.typ==="l"?a.rutor.length+" bilder":""}</small></span></button>`;
+  const kort=a=>`<button class="kort" data-id="${a.id}" style="--c:${a.c}"><span class="ik${a.typ==="k"?" bild":""}" aria-hidden="true"${a.typ==="k"?` style="background-image:url(klipp/bilder/${a.id}.jpg)"`:""}>${a.typ==="k"?"▶":a.e}</span><span><b>${a.titel}</b><small><span class="etikett${a.typ==="g"?" g":""}">${a.typ==="g"?"Prova själv":a.kat}</span>${a.typ==="l"?a.rutor.length+" bilder":a.typ==="k"?Math.round(a.sek/60)+" min · "+(a.sprak==="en"?"engelska":"svenska"):""}</small></span></button>`;
   $("#dagens").style.setProperty("--c",d.c);
   $("#dagens").innerHTML=`<div class="stor" aria-hidden="true">${d.e}</div><div class="t"><small>Dagens specialare</small><h2>${d.titel}</h2><p>${d.typ==="l"?d.rutor.length+" bilder · "+d.kat:d.beskr}</p><div class="rad"><button class="btn guld" id="dgo">Visa!</button><button class="btn" id="slump">🎲 Slumpa</button></div></div>`;
   $("#dgo").onclick=()=>{location.hash=href(d)};
   $("#slump").onclick=()=>{let a;do{a=ALLA[Math.random()*ALLA.length|0]}while(a===d&&ALLA.length>1);location.hash=href(a)};
-  const kats=["Alla","Prova själv",...new Set(LEKTIONER.map(l=>l.kat))];
+  const kats=["Alla","Klipp","Prova själv",...new Set(LEKTIONER.map(l=>l.kat))];
   $("#chips").innerHTML=kats.map(k=>`<button class="chip${k===filter?" on":""}" data-k="${k}">${k}</button>`).join("");
-  const lista=ALLA.filter(a=>filter==="Alla"||(filter==="Prova själv"?a.typ==="g":a.typ==="l"&&a.kat===filter));
+  const lista=ALLA.filter(a=>filter==="Alla"||(filter==="Prova själv"?a.typ==="g":filter==="Klipp"?a.typ==="k":a.typ==="l"&&a.kat===filter));
   $("#grid").innerHTML=lista.map(kort).join("");
-  $("#foot").textContent=LEKTIONER.length+" minilektioner och "+GREJER.length+" saker att prova";
+  $("#foot").textContent=LEKTIONER.length+" minilektioner, "+GREJER.length+" saker att prova och "+KLIPP.length+" klipp";
 }
 $("#chips").onclick=e=>{const b=e.target.closest(".chip");if(b){filter=b.dataset.k;hem()}};
 $("#grid").onclick=e=>{const b=e.target.closest(".kort");if(!b)return;const a=ALLA.find(x=>x.id===b.dataset.id);location.hash=href(a)};
@@ -168,21 +183,24 @@ function visaBild(){
   history.replaceState(null,"","#l/"+l.id+"/"+(idx+1));
 }
 function oppnaL(l,i){cur=l;idx=Math.max(0,Math.min(l.rutor.length-1,i));$("#vy").style.setProperty("--c",l.c);$("#vyT").textContent=l.e+" "+l.titel;$("#vy").classList.add("on");visaBild()}
-function stangAlla(){$("#vy").classList.remove("on");$("#gv").classList.remove("on");if(stang){try{stang()}catch(e){}stang=null}$("#gvB").innerHTML="";cur=null}
+function stangAlla(){$("#kv").classList.remove("on");$("#kvR").innerHTML="";$("#vy").classList.remove("on");$("#gv").classList.remove("on");if(stang){try{stang()}catch(e){}stang=null}$("#gvB").innerHTML="";cur=null}
+function oppnaK(k){stangAlla();$("#kvT").textContent="🎬 "+k.titel;$("#kvN").textContent="Spelas från YouTube"+(k.sprak==="en"?" (engelska)":"")+". Stäng med ✕ när klippet är slut, så hamnar du inte i andra klipp.";
+  $("#kvR").innerHTML=`<iframe src="https://www.youtube-nocookie.com/embed/${k.id}?rel=0&modestbranding=1&playsinline=1" title="${k.titel.replace(/"/g,"")}" allow="accelerometer; autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;$("#kv").classList.add("on")}
 function oppnaG(g){stangAlla();$("#gv").style.setProperty("--c",g.c);$("#gvT").textContent=g.e+" "+g.titel;$("#gv").classList.add("on");$("#gv").scrollTop=0;stang=g.start($("#gvB"))}
 function rut(){
   const h=location.hash.replace(/^#/,"").split("/");
   if(h[0]==="l"){const l=LEKTIONER.find(x=>x.id===h[1]);if(l){if(cur!==l||!$("#vy").classList.contains("on")){stangAlla()}oppnaL(l,(+h[2]||1)-1);return}}
+  if(h[0]==="k"){const k=KLIPP.find(x=>x.id===h[1]);if(k){oppnaK(k);return}}
   if(h[0]==="g"){const g=GREJER.find(x=>x.id===h[1]);if(g){oppnaG(g);return}}
   stangAlla();
 }
 function gaTill(d){if(!cur)return;const n=idx+d;if(n<0||n>=cur.rutor.length)return;idx=n;visaBild()}
 $("#vyN").onclick=()=>gaTill(1);$("#vyP").onclick=()=>gaTill(-1);
-$("#vyX").onclick=$("#gvX").onclick=()=>{location.hash=""};
+$("#vyX").onclick=$("#gvX").onclick=$("#kvX").onclick=()=>{location.hash=""};
 $("#vyF").onclick=()=>{const e=document.documentElement;if(document.fullscreenElement)document.exitFullscreen();else if(e.requestFullscreen)e.requestFullscreen().catch(()=>{})};
 if(!document.documentElement.requestFullscreen)$("#vyF").style.display="none";
 document.addEventListener("keydown",e=>{
-  if(e.key==="Escape"){if($("#vy").classList.contains("on")||$("#gv").classList.contains("on")){if(!document.fullscreenElement)location.hash=""}return}
+  if(e.key==="Escape"){if($("#vy").classList.contains("on")||$("#gv").classList.contains("on")||$("#kv").classList.contains("on")){if(!document.fullscreenElement)location.hash=""}return}
   if(!$("#vy").classList.contains("on"))return;
   if(e.key==="ArrowRight"||e.key===" "||e.key==="PageDown"){e.preventDefault();gaTill(1)}
   else if(e.key==="ArrowLeft"||e.key==="PageUp"){e.preventDefault();gaTill(-1)}
