@@ -118,11 +118,11 @@ GREJER.push({id:"pengar",titel:"Pengar i skala",kat:"Tal",e:"💰",c:"#2E8B57",m
   const D=[
    {l:"1 miljon dollar",p:.01,v:"10 kg",lb:"ryms i en handväska",text:"10 000 sedlar à 100 dollar. De är bara en liten kub, ungefär 22 cm hög, och ligger i en handväska."},
    {l:"10 miljoner dollar",p:.1,v:"100 kg",lb:"ryms i en stor resväska",text:"100 000 sedlar. En tiondels pall, ungefär en meter hög på en kvarts pall."},
-   {l:"100 miljoner dollar",p:1,v:"1 ton",lb:"går på en pall",text:"1 miljon sedlar fyller en hel lastpall. Så ser den berömda bilden ut."},
+   {l:"100 miljoner dollar",p:1,v:"1 ton",lb:"går på en pall",text:"1 miljon sedlar fyller en hel lastpall."},
    {l:"1 miljard dollar",p:10,v:"10 ton",lb:"en halv lastbil",text:"10 miljoner sedlar. Tio lastpallar i två rader."},
    {l:"10 miljarder dollar",p:100,v:"100 ton",lb:"ca 4 lastbilar",text:"100 miljoner sedlar. 100 lastpallar, som ett litet lager."},
    {l:"100 miljarder dollar",p:1000,v:"1 000 ton",lb:"ca 42 lastbilar",text:"1 000 lastpallar fyller en hel lagerhall."},
-   {l:"1 biljon dollar",p:1e4,v:"10 000 ton",lb:"ca 420 lastbilar",text:"10 miljarder sedlar. 10 000 lastpallar. Det är tusen gånger mer än den berömda bilden med en miljard dollar."},
+   {l:"1 biljon dollar",p:1e4,v:"10 000 ton",lb:"ca 420 lastbilar",text:"10 miljarder sedlar. 10 000 lastpallar. Det är tusen gånger mer än en miljard dollar, som är 10 pallar."},
    {l:"Elon Musk: ca 500 miljarder dollar",p:5000,v:"5 000 ton",lb:"ca 210 lastbilar",text:"Forbes räknar Elon Musk som världens rikaste person, med ungefär 500 miljarder dollar (siffran ändras hela tiden). I 100-dollarssedlar blir det 5 miljarder sedlar, 5 000 lastpallar och en stapel som är 550 kilometer hög."}];
   const SOURCE=S;
   const fmt=(m)=>m>=1000?(m/1000).toLocaleString("sv-SE",{maximumFractionDigits:1})+" km":m>=1?m.toLocaleString("sv-SE",{maximumFractionDigits:1})+" m":(m*100).toLocaleString("sv-SE",{maximumFractionDigits:0})+" cm";
