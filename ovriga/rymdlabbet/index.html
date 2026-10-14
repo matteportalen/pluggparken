@@ -1015,7 +1015,12 @@ function zBuild(){if(zBuilt)return;zBuilt=true;
 function drawZoom(){zBuild();const cv=$('zCv'),W=cv.width,c=cv.getContext('2d'),R=W*.46;c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,W,W);
   const i=Math.min(6,Math.floor(zV)),f=zV-i;
   const lay=(lv,alpha,sc)=>{if(alpha<=0.01)return;c.save();c.globalAlpha=alpha;c.translate(W/2,W/2);c.scale(sc,sc);drawZoomLevel(c,lv,R);c.restore();};
-  if(zV>=7){lay(7,1,1);}else{lay(i,1-f,1-.92*f);lay(i+1,f,1+(1-f)*4);}
+  const SX=Math.cos(1.9)*R*.55,SY=Math.sin(1.9)*R*.55;  // solens plats i Vintergatan ("Du är här")
+  const lay2=(lv,alpha,sc,dx,dy)=>{if(alpha<=0.01)return;c.save();c.globalAlpha=alpha;c.translate(W/2+dx,W/2+dy);c.scale(sc,sc);drawZoomLevel(c,lv,R);c.restore();};
+  if(zV>=7){lay(7,1,1);}
+  else if(i===4){const sc=1+(1-f)*4;lay2(4,1-f,1-.92*f,SX*sc*f,SY*sc*f);lay2(5,f,sc,-SX*sc*(1-f),-SY*sc*(1-f));}   // zooma så att solen stannar i mitten och glider ut till sin plats i galaxen
+  else if(i===5){const sc=1-.77*f;lay2(5,1-f,sc,f*(-R*.45),f*(R*.2));lay(6,f,1+(1-f)*.6);}      // galaxen krymper till sin plats bland grannarna
+  else{lay(i,1-f,1-.92*f);lay(i+1,f,1+(1-f)*4);}
   const bg=$('zBgs').children;for(let k=0;k<bg.length;k++)bg[k].style.opacity=Math.max(0,1-Math.abs(zV-k)*1.2);
   const lg=ZLOG[i]+((ZLOG[Math.min(7,i+1)]-ZLOG[i])*f),lo=6.5,hi=27.5;$('zMark').style.left=((lg-lo)/(hi-lo)*100)+'%';
   zText();}
