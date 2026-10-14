@@ -20,6 +20,8 @@ Publiceras med GitHub Pages på **pluggparken.se** från repot `pluggparken` (ok
 - Delat djur: `djur.js` i roten (`WARD`, `NATUR`, `itemOf`, `owlSVG`, `PETNAME`, `lasDjur()`). Laddas av startsidan, Spelhörnan, Skattjakten och alla övningar med elevens djur (Geometri, Bråk, Division, Multiplikation, Lilla plus, Tiotal, Klockan). **Inga kopior** av djurmallen i sidorna, ändra bara i `djur.js`.
 - Externa skript laddas bara när de behövs: `qrcodejs 1.0.0` från cdnjs (QR-koder), `jsqr 1.4.0` från jsdelivr (läsa QR med kameran, om webbläsaren saknar `BarcodeDetector`) och `matter-js 0.20.0` från cdnjs (fysiken i Tornbygget, med SRI).
 
+- **Sökmotorer** (okt 2026, lärarens önskan: göra så lite som möjligt själv): varje sida har `description` (egen text per sida, skriven för barn och föräldrar), `canonical`, Open Graph och `twitter:card` (delningsbild `og.jpg` 1200 × 630: tavlan med namnet), `theme-color` och favicon (`favicon.svg`, `apple-touch-icon.png`; filerna ligger i roten så att Google hittar dem, `huvud.js` lägger bara till ikonen om ingen finns). `flytta/` och de två testsidorna i `ovriga/hogfrekventa/` har `noindex`. Roten har `sitemap.xml` (47 sidor, skapas om när en sida läggs till), `robots.txt` och `404.html`. Startsidan har JSON-LD (`WebSite`) och en liten synlig text "Om Pluggparken" längst ner (`.om`), eftersom Google läser text och inte bilder. **Läraren behöver själv:** lägga till pluggparken.se i Google Search Console (Domän, bevisas med en TXT-post hos Loopia) och skicka in `https://pluggparken.se/sitemap.xml`, samt få andra sajter (skolan, lärargrupper) att länka hit. Ny övning: lägg en `description` på sidan (samma format som de andra) och en rad i `sitemap.xml`.
+
 ## Mappar och lagring
 
 | Mapp | Innehåll | localStorage-nyckel |
