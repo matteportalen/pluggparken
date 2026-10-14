@@ -190,6 +190,44 @@ h1{background:linear-gradient(100deg,#fff 35%,#ffd86b 50%,#fff 65%);background-s
 .rlkallor a{color:inherit}
 h2{font-family:var(--serif);font-weight:700;letter-spacing:-.01em}
 @media(prefers-reduced-motion:reduce){body::before,h1{animation:none}h1{-webkit-text-fill-color:#fff;color:#fff;background:none}}
+
+/* ===== Zooma ut: filmisk vy ===== */
+input[type=range]{-webkit-appearance:none;appearance:none;background:none;height:34px}
+input[type=range]::-webkit-slider-runnable-track{height:2px;background:linear-gradient(90deg,rgba(255,255,255,.5),rgba(255,255,255,.15));border-radius:2px}
+input[type=range]::-moz-range-track{height:2px;background:rgba(255,255,255,.3)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;margin-top:-8px;border-radius:50%;background:#ffd86b;border:2px solid #fff;box-shadow:0 0 18px #ffd86b}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:#ffd86b;border:2px solid #fff;box-shadow:0 0 18px #ffd86b}
+.b{letter-spacing:.02em}.b.go{animation:rlpuls 2.8s ease-in-out infinite}
+@keyframes rlpuls{50%{box-shadow:0 0 44px rgba(150,175,255,.9)}}
+.zfilm{position:relative;margin:0 -18px;padding:10px 18px 24px;overflow:hidden;min-height:calc(100vh - 140px)}
+.zbgs{position:absolute;inset:-60px;z-index:0}
+.zbgs i{position:absolute;inset:0;background-size:cover;background-position:center;filter:blur(55px) brightness(.38) saturate(1.35);opacity:0;transition:opacity .15s}
+.zvig{position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 40%,rgba(0,0,0,.65) 100%)}
+.zmain{position:relative;z-index:1;display:flex;gap:4vw;align-items:center;justify-content:center;max-width:1180px;margin:0 auto}
+.zst{flex:0 1 auto;min-width:0;display:flex;flex-direction:column;gap:6px}
+.zstage{background:rgba(3,5,10,.55)!important;border-radius:4px;box-shadow:0 0 120px -10px rgba(130,160,255,.6),0 24px 70px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.14)!important}
+.zstage::after{content:"";position:absolute;inset:-20% auto -20% -60%;width:40%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.18),transparent);transform:skewX(-18deg);animation:rlsvep 7s ease-in-out 1s infinite;pointer-events:none}
+@keyframes rlsvep{0%{left:-60%}30%,100%{left:150%}}
+#zCv{display:block;width:min(100%,64vh);max-width:100%;height:auto;margin:0 auto}
+.zcred{margin:0;font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.55)}
+.zcred a{color:inherit}
+.ztx{flex:1 1 340px;min-width:0;max-width:520px;display:flex;flex-direction:column;gap:12px}
+.ztx .kick{font-size:.78rem;font-weight:800;letter-spacing:.18em;color:#b9c6ff;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.22)}
+.ztx .say{background:none;border:0;border-left:3px solid #7f95ff;border-radius:0;padding:2px 0 2px 16px}
+.ztx .say .big{font-size:clamp(1.9rem,3.4vw,3rem);line-height:1.05;margin:0 0 8px}
+.ztx .say p{font-size:1.12rem;line-height:1.45}
+.ztx .facts li{background:none;border:0;border-left:3px solid rgba(255,216,107,.8);border-radius:0;padding:2px 0 2px 14px}
+.zsc{position:relative;height:56px;margin-top:6px}
+.zsc-lin{position:absolute;left:0;right:0;top:26px;height:1px;background:rgba(255,255,255,.3)}
+.zsc-lin i{position:absolute;top:-4px;width:1px;height:9px;background:rgba(255,255,255,.3)}
+.zsc-lin i.st{top:-8px;height:17px;background:rgba(255,255,255,.6)}
+.zsc-lin b{position:absolute;top:14px;transform:translateX(-50%);font-size:.6rem;font-weight:600;opacity:.55;white-space:nowrap}
+.zsc-mark{position:absolute;top:6px;width:2px;height:42px;margin-left:-1px;background:linear-gradient(#ffd86b,transparent);box-shadow:0 0 16px #ffd86b;pointer-events:none}
+.zsc-val{position:absolute;right:0;top:-6px;font-family:var(--serif);font-weight:700;font-size:1.15rem;color:#ffd86b}
+.zslider{margin-top:0}.zslider input{width:100%}
+.zctrl{margin-top:0}
+@media(max-width:860px){.zmain{flex-direction:column;gap:14px}.ztx{max-width:none;flex-basis:auto;width:100%}#zCv{width:min(100%,46vh)}.ztx .say .big{font-size:1.8rem}}
+@media(prefers-reduced-motion:reduce){.zstage::after,.b.go{animation:none}}
 </style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 </head>
@@ -321,14 +359,18 @@ h2{font-family:var(--serif);font-weight:700;letter-spacing:-.01em}
 <!-- Zooma ut i universum -->
 <section id="zoom" class="screen" hidden>
   <button class="back" data-home>← Rymdlabbet</button>
-  <div class="lab">
-    <div><div class="stage"><canvas id="zCv" width="900" height="900" style="max-height:min(68vh,620px);width:auto;max-width:100%;margin:0 auto"></canvas></div>
-      <div class="slider"><span>🔍</span><input type="range" id="zSl" min="0" max="7" step="0.001" aria-label="Zooma"><span>🌌</span></div>
-      <div class="ctrl"><button class="b" id="zIn">◀ Zooma in</button><button class="b go" id="zOut">Zooma ut ▶</button></div>
-    </div>
-    <div class="panel">
-      <div class="say"><div><p class="big" id="zBig"></p><p id="zTxt"></p></div><button class="spk" data-say="zoom" aria-label="Läs upp">🔊</button></div>
-      <ul class="facts" id="zFacts"></ul>
+  <div class="zfilm">
+    <div class="zbgs" id="zBgs" aria-hidden="true"></div><div class="zvig" aria-hidden="true"></div>
+    <div class="zmain">
+      <div class="zst"><div class="stage zstage"><canvas id="zCv" width="900" height="900"></canvas></div>
+        <p class="zcred" id="zCred"></p></div>
+      <div class="ztx"><div class="kick" id="zKick"></div>
+        <div class="say"><div><p class="big" id="zBig"></p><p id="zTxt"></p></div><button class="spk" data-say="zoom" aria-label="Läs upp">🔊</button></div>
+        <ul class="facts" id="zFacts"></ul>
+        <div class="zsc"><div class="zsc-lin" id="zTicks"></div><div class="zsc-mark" id="zMark"></div><div class="zsc-val" id="zVal"></div></div>
+        <div class="slider zslider"><input type="range" id="zSl" min="0" max="7" step="0.001" aria-label="Zooma"></div>
+        <div class="ctrl zctrl"><button class="b" id="zIn">‹ Zooma in</button><button class="b go" id="zOut">Zooma ut ›</button><button class="b" id="zAuto">▶ Spela resan</button></div>
+      </div>
     </div>
   </div>
 </section>
@@ -960,17 +1002,33 @@ function drawZoomLevel(c,i,R){const P=BYID;
     c.font=`700 ${R*.04}px "Inter", sans-serif`;c.fillStyle='#C9D4F2';c.fillText('Magellanska molnen',-R*.6,R*.63);}
   if(i===7){const r=srand(3);for(let k=0;k<420;k++){const x=(r()*2-1)*R*1.05,y=(r()*2-1)*R*1.05,s=r()*R*.03+R*.004,col=r()<.4?'rgba(255,220,180,':'rgba(200,215,255,';
       c.save();c.translate(x,y);c.rotate(r()*3);c.scale(1,.35+r()*.65);const g=c.createRadialGradient(0,0,0,0,0,s);g.addColorStop(0,col+'.95)');g.addColorStop(1,col+'0)');c.fillStyle=g;c.beginPath();c.arc(0,0,s,0,7);c.fill();c.restore();}}}
-function drawZoom(){const cv=$('zCv'),W=cv.width,c=cv.getContext('2d'),R=W*.46;c.setTransform(1,0,0,1,0,0);c.fillStyle='#05070F';c.fillRect(0,0,W,W);
+const ZFILES=["dygn-1.jpg", "manen-1.jpg", "storlek-10.jpg", "storlek-12.jpg", "storlek-13.jpg", "storlek-14.jpg", "morkmateria-4.jpg", "morkmateria-1.jpg"],ZCRED=[{"k": "Bild: Harrison Schmitt / Apollo 17 · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:The_Blue_Marble,_AS17-148-22727.jpg"}, {"k": "Bild: Gregory H. Revera · CC BY-SA 3.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:FullMoon2010.jpg"}, {"k": "Bild: NASA/Goddard Space Flight Center · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:X5.4_solar_flare_seen_by_SDO_in_171_%C3%85_extreme_ultraviolet_light.jpg"}, {"k": "Bild: Reynolds, James Emslie, John · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Transparent_Solar_System_-_Displaying_the_planets_with_their_orbits,_as_known_at_the_present_day._Derived_from_the_latest_and_(IA_dr_transparent-solar-system-displaying-the-planets-with-their-orbits-as-kno-3432004).jpg"}, {"k": "Bild: Digitized Sky Survey 2. Acknowledgement:… · CC BY 4.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:The_sky_around_Alpha_Centauri_and_Proxima_Centauri_(eso1629i).jpg"}, {"k": "Bild: NASA’s Goddard Space Flight… · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:A_top-down_view_of_the_Milky_Way_galaxy_(SVS14930_-_Westerlund_1_illustration_Plan_Unlabeled).jpg"}, {"k": "Bild: Rubin Obs./NSF/AURA · CC BY 4.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Vera_C_Rubin_Observatory%27s_Namesake_(rubin-VeraRubin-Astronomer-and-Inspiration-3).jpg"}, {"k": "Bild: NASA, ESA, S. Beckwith (STScI) and the… · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:A_Sampling_of_Galaxies_From_the_Hubble_Ultra_Deep_Field_Image_(2004-07-1463).jpg"}];
+const ZLOG=[7.1,8.58,11.18,12.65,16.6,20.98,22.38,26.94];  // log10 av storleken i meter
+const ZLAB=['Jorden','Månen','Solen','Solsystemet','Stjärnorna','Vintergatan','Andromeda','Universum'];
+let zBuilt=false;
+function zBuild(){if(zBuilt)return;zBuilt=true;
+  $('zBgs').innerHTML=ZFILES.map(f=>`<i style="background-image:url(../../specialare/bilder/${f})"></i>`).join('');
+  const lo=6.5,hi=27.5,p=v=>(v-lo)/(hi-lo)*100;let t='';
+  for(let e=7;e<=27;e++)t+=`<i class="${e%5===0?'st':''}" style="left:${p(e)}%"></i>`;
+  for(let e=10;e<=25;e+=5)t+=`<b style="left:${p(e)}%">10${String(e).split('').map(d=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[d]).join('')} m</b>`;
+  $('zTicks').innerHTML=t;}
+function drawZoom(){zBuild();const cv=$('zCv'),W=cv.width,c=cv.getContext('2d'),R=W*.46;c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,W,W);
   const i=Math.min(6,Math.floor(zV)),f=zV-i;
   const lay=(lv,alpha,sc)=>{if(alpha<=0.01)return;c.save();c.globalAlpha=alpha;c.translate(W/2,W/2);c.scale(sc,sc);drawZoomLevel(c,lv,R);c.restore();};
   if(zV>=7){lay(7,1,1);}else{lay(i,1-f,1-.92*f);lay(i+1,f,1+(1-f)*4);}
-  const L=ZL[Math.round(zV)];c.fillStyle='rgba(255,255,255,.85)';c.font=`800 ${W*.035}px "Inter", sans-serif`;c.textAlign='left';c.fillText(`${Math.round(zV)+1} av 8`,W*.03,W*.06);
+  const bg=$('zBgs').children;for(let k=0;k<bg.length;k++)bg[k].style.opacity=Math.max(0,1-Math.abs(zV-k)*1.2);
+  const lg=ZLOG[i]+((ZLOG[Math.min(7,i+1)]-ZLOG[i])*f),lo=6.5,hi=27.5;$('zMark').style.left=((lg-lo)/(hi-lo)*100)+'%';
   zText();}
-let zLast=-1;function zText(){const k=Math.round(zV);if(k===zLast)return;zLast=k;const L=ZL[k];$('zBig').textContent=L.big;$('zTxt').textContent=L.txt;$('zFacts').innerHTML=L.f.map(x=>`<li>${x}</li>`).join('');}
+let zLast=-1;function zText(){const k=Math.round(zV);if(k===zLast)return;zLast=k;const L=ZL[k];$('zKick').textContent='STEG '+(k+1)+' / 8 · '+ZLAB[k].toUpperCase();$('zBig').textContent=L.big;$('zTxt').textContent=L.txt;$('zFacts').innerHTML=L.f.map(x=>`<li>${x}</li>`).join('');
+  $('zVal').textContent=[ '12 742 km','384 400 km','150 milj. km','9 miljarder km','4,2 ljusår','100 000 ljusår','2,5 milj. ljusår','93 miljarder ljusår'][k];
+  const cr=ZCRED[k];$('zCred').innerHTML=cr?`<a href="${cr.s}" target="_blank" rel="noopener">Bild: ${cr.k.replace(/^Bild: /,'')}</a>`:'';}
 function openZoom(){zV=Math.round(zV);$('zSl').value=zV;zLast=-1;drawZoom();}
-function zTo(to){cancelAnimationFrame(zAnim);const from=zV,t0=performance.now(),d=Math.abs(to-from)*1100+200;(function f(n){const k=Math.min(1,(n-t0)/d),e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;zV=from+(to-from)*e;$('zSl').value=zV;drawZoom();if(k<1)zAnim=requestAnimationFrame(f);})(t0);}
-$('zSl').addEventListener('input',e=>{cancelAnimationFrame(zAnim);zV=+e.target.value;drawZoom();});
-$('zOut').onclick=()=>zTo(Math.min(7,Math.floor(zV+.001)+1));$('zIn').onclick=()=>zTo(Math.max(0,Math.ceil(zV-.001)-1));
+function zTo(to){cancelAnimationFrame(zAnim);const from=zV,t0=performance.now(),d=Math.abs(to-from)*1500+300;(function f(n){const k=Math.min(1,(n-t0)/d),e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;zV=from+(to-from)*e;$('zSl').value=zV;drawZoom();if(k<1)zAnim=requestAnimationFrame(f);})(t0);}
+let zAuto=0;function zStop(){clearTimeout(zAuto);zAuto=0;$('zAuto').textContent='▶ Spela resan'}
+function zStep(){if(zV>=6.999){zStop();return}zTo(Math.round(zV)+1);zAuto=setTimeout(zStep,4600)}
+$('zAuto').onclick=()=>{if(zAuto){zStop();return}if(zV>=6.999){zV=0;$('zSl').value=0;drawZoom()}$('zAuto').textContent='⏸ Pausa';zAuto=setTimeout(zStep,300)};
+$('zSl').addEventListener('input',e=>{zStop();cancelAnimationFrame(zAnim);zV=+e.target.value;drawZoom();});
+$('zOut').onclick=()=>{zStop();zTo(Math.min(7,Math.floor(zV+.001)+1))};$('zIn').onclick=()=>{zStop();zTo(Math.max(0,Math.ceil(zV-.001)-1))};
 
 /* =====================================================================
    Jättarna: alla klot står på samma punkt, de stora bakom de små.
