@@ -206,7 +206,9 @@ const BANOR={
         ["start","flytt","fiender","port","fjader","bi","isgrop","port","vagg","spikar","fiender","port","flytt","hog","bi","port","mal"]]};
 const T=64,ROWS=12;
 // bossarna: en i slutet av varje värld, besegras med rätta svar (trollstavens blixt)
-const BOSSAR={skog:{namn:"Slemkungen",typ:"slime_normal",hp:5},oken:{namn:"Eldslemmet",typ:"slime_fire",hp:6},is:{namn:"Isjätten",typ:"slime_block",hp:7}};
+// Bossarnas krafter (lärarens önskan: de var samma boss tre gånger): Slemkungen går och hoppar, Eldslemmet slår i marken (eldvåg att hoppa över),
+// Isjätten släpper istappar (skugga på golvet först) och, när den är halvt, slår i marken med en bred frostvåg som kräver dubbelhopp
+const BOSSAR={skog:{namn:"Slemkungen",typ:"slime_normal",hp:5,krafter:[]},oken:{namn:"Eldslemmet",typ:"slime_fire",hp:6,krafter:["slag"]},is:{namn:"Isjätten",typ:"slime_block",hp:7,krafter:["tapp","slag"]}};
 const pek=MPPlatt.pek;
 
 /* ---------- Bilder ---------- */
@@ -254,7 +256,7 @@ function byggBoss(vid){const V=VARLDAR.find(v=>v.id===vid),B=BOSSAR[vid],cols=22
   for(let r=0;r<=8;r++){grid[r][0]="W";grid[r][cols-1]="W";}
   const p={x:-99,boss:true,block:[7,10,13].map(k=>({x:k,y:6,bump:0,fel:0})),skylt:9.5,open:false,q:gen(),visa:0,forsta:true};
   p.block.forEach((bl,j)=>{grid[6][bl.x]="A";bl.v=p.q.opts[j];});
-  return{V,vid,nr:8,boss:{namn:B.namn,typ:B.typ,hp:B.hp,max:B.hp,x:16*T,y:9*T,vx:-110*V.fart,vy:0,hoppT:3,arg:0,hit:0,trollad:0},grid,cols,w:cols*T,h:ROWS*T,
+  return{V,vid,nr:8,boss:{namn:B.namn,typ:B.typ,hp:B.hp,max:B.hp,x:16*T,y:9*T,vx:-110*V.fart,vy:0,hoppT:3,arg:0,hit:0,trollad:0,krafter:B.krafter,slagT:4.5,tappT:3.5,slag:null},vagor:[],tappar:[],grid,cols,w:cols*T,h:ROWS*T,
     mynt:[],stjarnor:[],fiender:[],dekor:[{x:2,y:8,typ:V.dekor[0]},{x:5,y:8,typ:V.dekor[1]}],spikar:[],portar:[p],mal:{x:19,y:7,last:true},fjadrar:[],plankor:[]};}
 const fast=(c,r,lv=LV)=>{if(c<0)return true;if(c>=lv.cols||r<0)return false;if(r>=ROWS)return false;const t=lv.grid[r][c];
   if(t==="D"){const p=lv.portar.find(p=>p.x===c);return !(p&&p.open);}
@@ -283,7 +285,7 @@ function huvud(c,r){const t=LV.grid[r]&&LV.grid[r][c];if(t!=="A")return;
     if(bl.v===p.q.a){bl.ratt=1;P.poang+=p.forsta?50:20;p.vantar=true;L().chime&&L().chime();gnistor(bl.x*T+T/2,bl.y*T,"#7CF0B1",14);
       BL.push({x:bl.x*T+T/2,y:bl.y*T+T/2,sx:bl.x*T+T/2,sy:bl.y*T+T/2,t:0});
       setTimeout(()=>{p.q=gen();p.forsta=true;p.vantar=false;p.block.forEach((b,j)=>{b.v=p.q.opts[j];b.ratt=0;b.fel=0;});},1000);}
-    else{bl.fel=1;p.forsta=false;P.felSvar++;p.visaFel=2.2;p.felQ=p.q;p.vantar=true;LV.boss.arg=2.5;L().bad&&L().bad();
+    else{bl.fel=1;p.forsta=false;P.felSvar++;p.visaFel=2.2;p.felQ=p.q;p.vantar=true;LV.boss.arg=2.5;bossAttack(LV.boss);L().bad&&L().bad();
       tips(`Inte riktigt: ${qText(p.q)} = ${p.q.a}. ${LV.boss.namn} blev arg! Här kommer en ny fråga.`,2200);
       setTimeout(()=>{p.q=gen();p.forsta=true;p.vantar=false;p.block.forEach((b,j)=>{b.v=p.q.opts[j];b.fel=0;});},2200);}
     return;}
@@ -292,19 +294,64 @@ function huvud(c,r){const t=LV.grid[r]&&LV.grid[r][c];if(t!=="A")return;
     if(!p.forsta)P.fel++;tips(p.forsta?"Rätt! Porten öppnas.":"Rätt! Nu öppnas porten.",1600);}
   else{bl.fel=1;p.forsta=false;p.visaFel=2.2;p.felQ=p.q;L().bad&&L().bad();tips(`Inte riktigt: ${qText(p.q)} = ${p.q.a}. Här kommer en ny!`,2200);
     setTimeout(()=>{if(p.open)return;p.q=gen();p.block.forEach((b,j)=>{b.v=p.q.opts[j];b.fel=0;});},2200);}}
+/* ---------- Bossarnas krafter ---------- */
+const slagKan=B=>B.krafter.includes("slag")&&(B.typ!=="slime_block"||B.hp<=Math.ceil(B.max/2));
+function bossAttack(B){if(B.trollad)return;if(B.krafter.includes("tapp"))B.tappT=Math.min(B.tappT,.3);if(slagKan(B)&&!B.slag)B.slagT=Math.min(B.slagT,.3);} // fel svar gör bossen arg: en attack kommer direkt
+function bossKrafter(B,dt,svag){const frost=B.typ==="slime_block",fl=LV.cols*T;
+  // markslag: varnar (lyser rött och darrar), hoppar högt och slår i marken så att en våg glider åt båda hållen
+  if(slagKan(B)){
+    if(!B.slag){B.slagT-=dt;if(B.slagT<=0&&B.y>=9*T&&Math.abs(P.x-B.x)>2.8*T)B.slag={t:0,steg:0};} // slår bara när djuret inte står precis intill
+    else{const S=B.slag;S.t+=dt;
+      if(S.steg===0&&S.t>=.9){S.steg=1;B.vy=-900;L().hop&&L().hop();}
+      else if(S.steg===1){if(B.y<9*T-6)S.luft=1;if(S.luft&&B.y>=9*T){const fart=(frost?270:340)*(1+svag*.35);
+          LV.vagor.push({x:B.x-.8*T,vx:-fart,frost},{x:B.x+.8*T,vx:fart,frost});gnistor(B.x,9*T,frost?"#BEE9FF":"#FF9A3C",26);L().bad&&L().bad();
+          B.slag=null;B.slagT=Math.max(3.4,6.4-svag*3);B.hoppT=Math.max(B.hoppT,1.2);
+          if(!B.tipSlag){B.tipSlag=1;tips(frost?(pek?"Frostvågen är bred! Tryck ⤒ två gånger för dubbelhopp.":"Frostvågen är bred! Hoppa två gånger."):`${B.namn} slår i marken! Hoppa över eldvågen.`,3000);}}}}}
+  // istappar: skugga på golvet en sekund, sedan faller de
+  if(B.krafter.includes("tapp")){B.tappT-=dt;if(B.tappT<=0){B.tappT=Math.max(2.6,4.6-svag*2);
+      const n=svag>.55?3:2,xs=[];xs.push(Math.max(2.2*T,Math.min(fl-2.2*T,P.x+(Math.random()-.5)*T*1.2)));
+      for(let k=1;k<n;k++){let x,g=0;do{x=(2.2+Math.random()*(LV.cols-4.4))*T;g++;}while(g<20&&xs.some(o=>Math.abs(o-x)<1.7*T));xs.push(x);}
+      xs.forEach(x=>LV.tappar.push({x,t:0,y:-T,vy:0,fall:false}));
+      if(!B.tipTapp){B.tipTapp=1;tips("Istappar! Titta på skuggorna på golvet och flytta dig.",3000);}}}
+  LV.tappar.forEach(i=>{i.t+=dt;if(!i.fall&&i.t>=1){i.fall=true;}
+    if(i.fall){i.vy=Math.min(1250,i.vy+3200*dt);i.y+=i.vy*dt;
+      if(Math.abs(P.x-i.x)<.3*T+P.b/2-8&&P.y-P.hh<i.y&&P.y>i.y-1.2*T)skadad();
+      if(i.y>=9*T){i.dod=1;gnistor(i.x,9*T,"#BEE9FF",14);}}});
+  LV.tappar=LV.tappar.filter(i=>!i.dod);
+  // vågorna: eld är låg och smal, frost är bred (dubbelhopp)
+  LV.vagor.forEach(v=>{v.x+=v.vx*dt;const w=v.frost?3.0*T:.9*T;
+    if(Math.abs(P.x-v.x)<w/2+P.b/2-8&&P.y>9*T-.45*T)skadad();
+    if(Math.random()<.5)PAR.push({x:v.x+(Math.random()-.5)*w,y:9*T-10,vx:0,vy:-90,t:0,liv:.4,f:v.frost?"#DFF4FF":"#FFB347"});});
+  LV.vagor=LV.vagor.filter(v=>v.x>1.1*T&&v.x<fl-1.1*T);}
+function ritaKrafter(B,tt){
+  // varning före markslaget: bossen lyser rött och en röd glöd syns på golvet
+  if(B.slag&&B.slag.steg===0){const a=.25+.25*Math.sin(tt*30);ctx.fillStyle=`rgba(229,72,77,${a})`;ctx.beginPath();ctx.ellipse(B.x,9*T-6,1.7*T,14,0,0,7);ctx.fill();
+    ctx.fillStyle="#E5484D";ctx.font='800 44px "Baloo 2",sans-serif';ctx.textAlign="center";ctx.fillText("!",B.x,B.y-2.9*T);}
+  LV.tappar.forEach(i=>{const y0=9*T;
+    if(!i.fall){const k=Math.min(1,i.t/1),pul=.75+.25*Math.sin(tt*26);ctx.fillStyle=`rgba(60,140,230,${(.22+.4*k)*pul})`;ctx.beginPath();ctx.ellipse(i.x,y0-5,(.3+.3*k)*T,9+7*k,0,0,7);ctx.fill();
+      ctx.strokeStyle=`rgba(40,110,210,${.6+.4*k})`;ctx.lineWidth=3;ctx.stroke();
+      ctx.fillStyle=`rgba(40,110,210,${.7+.3*k})`;const ay=y0-1.15*T+Math.sin(tt*14)*6;ctx.beginPath();ctx.moveTo(i.x-.2*T,ay-.35*T);ctx.lineTo(i.x+.2*T,ay-.35*T);ctx.lineTo(i.x,ay+.1*T);ctx.closePath();ctx.fill();}
+    else{ctx.fillStyle="#BEE9FF";ctx.strokeStyle="#4FA8E0";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(i.x-.22*T,i.y-1.1*T);ctx.lineTo(i.x,i.y);ctx.lineTo(i.x+.22*T,i.y-1.1*T);ctx.closePath();ctx.fill();ctx.stroke();
+      ctx.fillStyle="rgba(255,255,255,.8)";ctx.beginPath();ctx.moveTo(i.x-.08*T,i.y-.95*T);ctx.lineTo(i.x-.02*T,i.y-.3*T);ctx.lineTo(i.x-.14*T,i.y-.9*T);ctx.closePath();ctx.fill();}});
+  LV.vagor.forEach(v=>{const y=9*T,hv=.8*T;
+    if(v.frost){const w=3.0*T,n=7;for(let k=0;k<n;k++){const bx=v.x-w/2+(k+.5)*w/n,h=hv*(.75+.25*Math.sin(tt*9+k*2));ctx.fillStyle=k%2?"#BEE9FF":"#8FD3FF";ctx.strokeStyle="#4FA8E0";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(bx-w/n*.5,y);ctx.lineTo(bx,y-h);ctx.lineTo(bx+w/n*.5,y);ctx.closePath();ctx.fill();ctx.stroke();}}
+    else{ctx.fillStyle="rgba(255,120,30,.28)";ctx.beginPath();ctx.ellipse(v.x,y-4,.75*T,10,0,0,7);ctx.fill();
+      for(let k=0;k<3;k++){const fx=v.x+(k-1)*.3*T+Math.sin(tt*14+k)*3,h=hv*(.8+.3*Math.sin(tt*18+k*1.7));ctx.fillStyle=k===1?"#FFD54A":"#FF8A2B";ctx.beginPath();ctx.moveTo(fx-.2*T,y);ctx.quadraticCurveTo(fx-.12*T,y-h*.6,fx,y-h);ctx.quadraticCurveTo(fx+.12*T,y-h*.6,fx+.2*T,y);ctx.closePath();ctx.fill();}}});}
 function bossSteg(dt){const B=LV.boss;B.hit=Math.max(0,B.hit-dt);B.arg=Math.max(0,B.arg-dt);
   // blixtarna från rätt svar flyger till bossen
   BL.forEach(b=>{b.t+=dt*1.6;const e=Math.min(1,b.t);b.x=b.sx+(B.x-b.sx)*e;b.y=b.sy+((B.y-T)-b.sy)*e-Math.sin(e*Math.PI)*90;
     if(Math.random()<.7)PAR.push({x:b.x,y:b.y,vx:(Math.random()-.5)*60,vy:(Math.random()-.5)*60,t:0,liv:.35,f:"#FFE680"});
     if(e>=1&&!b.klar){b.klar=1;if(B.trollad)return;B.hp--;B.hit=.7;gnistor(B.x,B.y-T,"#FFE680",24);L().magic&&L().magic();
-      if(B.hp<=0){B.trollad=.01;LV.mal.last=false;P.poang+=200;gnistor(B.x,B.y-T,"#FF7EB6",40);L().fanfare&&L().fanfare();tips(`Du förtrollade ${B.namn}! Gå ut genom dörren.`,4000);}
+      if(B.hp<=0){B.trollad=.01;LV.mal.last=false;P.poang+=200;gnistor(B.x,B.y-T,"#FF7EB6",40);LV.vagor=[];LV.tappar=[];L().fanfare&&L().fanfare();tips(`Du förtrollade ${B.namn}! Gå ut genom dörren.`,4000);}
       else tips(`Träff! ${B.namn} har ${B.hp} liv kvar.`,1400);}});
   BL=BL.filter(b=>!b.klar);
   if(B.trollad){B.trollad+=dt;return;}
-  // går fram och tillbaka, hoppar ibland, snabbare när den är svag eller arg
-  const fart=110*LV.V.fart*(1+(B.max-B.hp)*.12)*(B.arg>0?1.7:1);B.vx=Math.sign(B.vx||-1)*fart;
-  B.x+=B.vx*dt;if(B.x<2.6*T){B.x=2.6*T;B.vx=fart;}if(B.x>18.4*T){B.x=18.4*T;B.vx=-fart;}
-  B.hoppT-=dt;B.vy+=G.grav*.8*dt;B.y+=B.vy*dt;if(B.y>=9*T){B.y=9*T;B.vy=0;if(B.hoppT<=0){B.vy=-760;B.hoppT=2.2+Math.random()*2.2;}}
+  // går fram och tillbaka, hoppar ibland, snabbare när den är svag eller arg; står still och hoppar högt när den slår i marken
+  const svag=(B.max-B.hp)/B.max,slar=!!B.slag;
+  if(!slar){const fart=110*LV.V.fart*(1+(B.max-B.hp)*.12)*(B.arg>0?1.7:1);B.vx=Math.sign(B.vx||-1)*fart;
+    B.x+=B.vx*dt;if(B.x<2.6*T){B.x=2.6*T;B.vx=fart;}if(B.x>18.4*T){B.x=18.4*T;B.vx=-fart;}}
+  B.hoppT-=dt;B.vy+=G.grav*.8*dt;B.y+=B.vy*dt;if(B.y>=9*T){B.y=9*T;B.vy=0;if(B.hoppT<=0&&!slar){B.vy=-760;B.hoppT=2.2+Math.random()*2.2;}}
+  bossKrafter(B,dt,svag);
   // krock med djuret: hoppa på den biter inte, annars ett hjärta
   if(Math.abs(P.x-B.x)<P.b/2+T*.75&&P.y>B.y-T*1.45&&P.y-P.hh<B.y){
     if(P.vy>80&&P.y<B.y-T*1.05){P.vy=-760;P.hopp=1;if(!B.studs){B.studs=1;tips(`${B.namn} är för stark för att hoppa på. Svara rätt på frågan!`,2400);}}else skadad();}
@@ -427,10 +474,11 @@ function rita(){if(!LV)return;const W=cv.width,H=cv.height,s=skala,vw=W/s,vh=H/s
   if(LV.boss){const B=LV.boss,st=2.6*T;
     if(B.trollad){const g=Math.min(1,B.trollad*1.5);ctx.save();ctx.translate(B.x,B.y);ctx.scale(2.6*g,2.6*g);blomma(0,0);ctx.restore();}
     else if(!(B.hit>0&&Math.floor(tt*14)%2)){const n=`${B.typ}_walk_${Math.floor(tt*(B.arg>0?10:5))%2?"b":"a"}`;
-      spr(n,B.x-st/2,B.y-st+8+(B.vy?0:Math.sin(tt*8)*3),st,st,B.vx>0);
+      spr(n,B.x-st/2+(B.slag&&B.slag.steg===0?Math.sin(tt*70)*4:0),B.y-st+8+(B.vy?0:Math.sin(tt*8)*3),st,st,B.vx>0);
       // krona
       ctx.fillStyle="#F2C230";ctx.strokeStyle="#C99A0A";ctx.lineWidth=4;const kx=B.x,ky=B.y-st*.62;ctx.beginPath();ctx.moveTo(kx-30,ky);ctx.lineTo(kx-30,ky-26);ctx.lineTo(kx-15,ky-12);ctx.lineTo(kx,ky-32);ctx.lineTo(kx+15,ky-12);ctx.lineTo(kx+30,ky-26);ctx.lineTo(kx+30,ky);ctx.closePath();ctx.fill();ctx.stroke();
       if(B.arg>0){ctx.fillStyle="#E5484D";ctx.font='800 34px "Baloo 2",sans-serif';ctx.textAlign="center";ctx.fillText("!",kx+46,ky-20);}}}
+  if(LV.boss)ritaKrafter(LV.boss,tt);
   BL.forEach(b=>{ctx.fillStyle="#FFE680";stjarna(b.x,b.y,18,b.t*10);ctx.strokeStyle="rgba(255,230,128,.6)";ctx.lineWidth=6;ctx.beginPath();ctx.moveTo(b.sx,b.sy);ctx.lineTo(b.x,b.y);ctx.stroke();});
   // skott och partiklar
   E.forEach(s=>{ctx.fillStyle="#FFE680";stjarna(s.x,s.y,12,s.t*12);});
