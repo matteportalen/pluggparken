@@ -59,44 +59,44 @@ GREJER.push({id:"storlek",titel:"Storleksresan",kat:"Rymden",e:"🔭",c:"#3F51B5
 }});
 
 /* ---------- Illusioner ---------- */
-GREJER.push({id:"illusioner",titel:"Optiska illusioner",kat:"Hjärnan",e:"👁️",c:"#D14B8F",beskr:"Lura hjärnan. Mät sedan själv!",start(host){
+GREJER.push({id:"illusioner",titel:"Optiska illusioner",kat:"Hjärnan",e:"👁️",c:"#D14B8F",mork:true,beskr:"Lura hjärnan. Mät sedan själv!",start(host){
   const I=[
-  {n:"Müller-Lyer",fraga:"Vilken linje är längst?",svar:"De är exakt lika långa!",
+  {n:"Müller-Lyer",fraga:"Vilken linje är längst?",svar:"De är exakt lika långa!",varfor:"Pilspetsarna får hjärnan att tro att den ena linjen är längre bort, så den tolkar den som längre.",
    svg:(r)=>`<svg viewBox="0 0 400 220"><g stroke="#1D2B53" stroke-width="6" stroke-linecap="round" fill="none">
    <line x1="80" y1="70" x2="320" y2="70"/><polyline points="105,45 80,70 105,95"/><polyline points="295,45 320,70 295,95"/>
    <line x1="80" y1="150" x2="320" y2="150"/><polyline points="55,125 80,150 55,175"/><polyline points="345,125 320,150 345,175"/></g>
    ${r?`<g stroke="#E5484D" stroke-width="3" stroke-dasharray="6 5"><line x1="80" y1="30" x2="80" y2="200"/><line x1="320" y1="30" x2="320" y2="200"/></g>`:""}</svg>`},
-  {n:"Ebbinghaus",fraga:"Vilken orange cirkel är störst?",svar:"De är lika stora!",
+  {n:"Ebbinghaus",fraga:"Vilken orange cirkel är störst?",svar:"De är lika stora!",varfor:"Hjärnan jämför med det som finns runt omkring. Små cirklar omkring får den mitten att kännas större.",
    svg:(r)=>{let a="",b="";for(let i=0;i<6;i++){const t=i*Math.PI/3;a+=`<circle cx="${110+Math.cos(t)*66}" cy="110+${0}" r="0"/>`;}
     let s="";for(let i=0;i<6;i++){const t=i*Math.PI/3;s+=`<circle cx="${110+Math.cos(t)*68}" cy="${110+Math.sin(t)*68}" r="34" fill="#9AA8D8"/>`;}
     for(let i=0;i<8;i++){const t=i*Math.PI/4;s+=`<circle cx="${290+Math.cos(t)*44}" cy="${110+Math.sin(t)*44}" r="11" fill="#9AA8D8"/>`;}
     return `<svg viewBox="0 0 400 220">${s}<circle cx="110" cy="110" r="22" fill="#F2842B"/><circle cx="290" cy="110" r="22" fill="#F2842B"/>${r?`<circle cx="110" cy="110" r="22" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="5 4"/><circle cx="290" cy="110" r="22" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="5 4"/>`:""}</svg>`}},
-  {n:"Ponzo",fraga:"Vilken streck är längst?",svar:"De är exakt lika långa!",
+  {n:"Ponzo",fraga:"Vilket streck är längst?",svar:"De är exakt lika långa!",varfor:"De sneda linjerna ser ut som en väg som försvinner långt bort. Det som ser ut att vara längre bort tror hjärnan måste vara större.",
    svg:(r)=>`<svg viewBox="0 0 400 240"><g stroke="#56668F" stroke-width="5" fill="none"><line x1="40" y1="230" x2="170" y2="10"/><line x1="360" y1="230" x2="230" y2="10"/>
    <line x1="90" y1="190" x2="310" y2="190" stroke="#c6d6f2" stroke-width="3"/><line x1="115" y1="150" x2="285" y2="150" stroke="#c6d6f2" stroke-width="3"/><line x1="140" y1="110" x2="260" y2="110" stroke="#c6d6f2" stroke-width="3"/></g>
    <line x1="140" y1="60" x2="260" y2="60" stroke="#E5484D" stroke-width="9" stroke-linecap="round"/><line x1="140" y1="200" x2="260" y2="200" stroke="#3D5AFE" stroke-width="9" stroke-linecap="round"/>
    ${r?`<g stroke="#1D2B53" stroke-width="2" stroke-dasharray="5 4"><line x1="140" y1="10" x2="140" y2="235"/><line x1="260" y1="10" x2="260" y2="235"/></g>`:""}</svg>`},
-  {n:"Kafémuren",fraga:"Lutar de vågräta linjerna?",svar:"Nej, alla linjer är helt raka och parallella!",
+  {n:"Kafémuren",fraga:"Lutar de vågräta linjerna?",svar:"Nej, alla linjer är helt raka och parallella!",varfor:"De förskjutna svarta och vita rutorna lurar ögats sätt att se kanter, så linjerna ser ut att luta.",
    svg:(r)=>{let s="";for(let y=0;y<6;y++){const off=[0,24,48,24,0,24][y]-0;for(let x=-2;x<8;x++){const c=(x%2===0)?"#1D2B53":"#fff";s+=`<rect x="${x*48+off}" y="${y*38+10}" width="48" height="34" fill="${c}"/>`;}}
     let l="";for(let y=0;y<=6;y++)l+=`<line x1="0" y1="${y*38+10+(y?-2:-2)+ (y===0?2:0)}" x2="400" y2="${y*38+8+ (y===0?2:0)}" stroke="#9aa" stroke-width="4"/>`;
     return `<svg viewBox="0 0 400 250"><defs><clipPath id="cw"><rect width="400" height="250"/></clipPath></defs><g clip-path="url(#cw)">${s}${l}${r?[0,1,2,3,4,5,6].map(y=>`<line x1="0" y1="${y*38+9}" x2="400" y2="${y*38+9}" stroke="#E5484D" stroke-width="2.5"/>`).join(""):""}</g></svg>`}},
-  {n:"Hermanns rutnät",fraga:"Ser du grå prickar där linjerna korsas?",svar:"Det finns inga prickar! Din hjärna skapar dem. Titta på ett kryss, så försvinner dem du tittar på.",
+  {n:"Hermanns rutnät",fraga:"Ser du grå prickar där linjerna korsas?",svar:"Det finns inga prickar! Titta på ett kryss, så försvinner dem du tittar på.",varfor:"Ögats nervceller jämför ljus och mörkt med närmaste granne. Vid korsningarna blir jämförelsen annorlunda, och hjärnan hittar på en grå prick.",
    svg:()=>{let s="";for(let i=0;i<4;i++)for(let j=0;j<4;j++)s+=`<rect x="${20+i*92}" y="${12+j*58}" width="78" height="46" rx="5" fill="#1D2B53"/>`;return `<svg viewBox="0 0 400 240"><rect width="400" height="240" fill="#fff"/>${s}</svg>`}},
-  {n:"Försvinnande prickar",fraga:"Titta på krysset i mitten i 15 sekunder utan att flytta blicken.",svar:"De suddiga prickarna kan försvinna! Hjärnan slutar lägga märke till det som inte ändras.",
+  {n:"Försvinnande prickar",fraga:"Titta på krysset i mitten i 15 sekunder utan att flytta blicken.",svar:"De suddiga prickarna kan försvinna!",varfor:"Hjärnan slutar lägga märke till det som inte ändras. Det kallas Troxlers effekt.",
    svg:()=>{let s="";for(let i=0;i<12;i++){const t=i*Math.PI/6;s+=`<circle cx="${200+Math.cos(t)*90}" cy="${120+Math.sin(t)*90}" r="22" fill="#e85fa0" opacity=".55" style="filter:blur(6px)"/>`;}
     return `<svg viewBox="0 0 400 240"><rect width="400" height="240" fill="#f3f3f3"/>${s}<g stroke="#000" stroke-width="5"><line x1="188" y1="120" x2="212" y2="120"/><line x1="200" y1="108" x2="200" y2="132"/></g></svg>`}}];
   let i=0,r=false;
-  host.innerHTML=`<div class="ill"><div class="ill-n" id="iN"></div><h3 class="ill-q" id="iQ"></h3><div class="ill-b" id="iB"></div><div class="ill-svar" id="iS"></div>
+  host.innerHTML=`<div class="ill"><div class="kick" id="iN"></div><h3 class="ill-q" id="iQ"></h3><div class="ill-b" id="iB"></div><div class="ill-svar" id="iS"></div>
   <div class="ill-kn"><button class="k" id="iP">‹ Förra</button><button class="k ok" id="iV">Visa svaret</button><button class="k" id="iX">Nästa ›</button></div></div>`;
   const N=host.querySelector("#iN"),Q=host.querySelector("#iQ"),Bx=host.querySelector("#iB"),S=host.querySelector("#iS"),V=host.querySelector("#iV");
-  function rita(){const d=I[i];N.textContent=`${i+1} av ${I.length} · ${d.n}`;Q.textContent=d.fraga;Bx.innerHTML=d.svg(r);S.textContent=r?d.svar:"";V.textContent=r?"Dölj svaret":"Visa svaret";}
+  function rita(){const d=I[i];N.textContent=`${i+1} av ${I.length} · ${d.n}`;Q.textContent=d.fraga;Bx.innerHTML=d.svg(r);S.innerHTML=r?`<b>${d.svar}</b><span>${d.varfor||""}</span>`:"";V.textContent=r?"Dölj svaret":"Visa svaret";}
   host.querySelector("#iP").onclick=()=>{i=(i+I.length-1)%I.length;r=false;rita()};
   host.querySelector("#iX").onclick=()=>{i=(i+1)%I.length;r=false;rita()};
   V.onclick=()=>{r=!r;rita()};rita();return()=>{};
 }});
 
 /* ---------- Spirograf och kalejdoskop ---------- */
-GREJER.push({id:"ritloop",titel:"Oändlig ritloop",kat:"Skapa",e:"🌀",c:"#7E57C2",beskr:"Spirografen ritar själv. Eller rita med kalejdoskop.",start(host){
+GREJER.push({id:"ritloop",titel:"Oändlig ritloop",kat:"Skapa",e:"🌀",c:"#7E57C2",mork:true,beskr:"Spirografen ritar själv. Eller rita med kalejdoskop.",start(host){
   host.innerHTML=`<div class="rit"><div class="rit-tabs"><button class="k on" id="rS">🌀 Spirograf</button><button class="k" id="rK">✨ Kalejdoskop</button></div>
   <canvas id="rC" width="720" height="720"></canvas><div class="ill-kn"><button class="k" id="rN">Ny figur</button><button class="k" id="rP">⏸ Pausa</button><button class="k" id="rT">Sudda</button></div><p class="rit-t" id="rTxt"></p></div>`;
   const C=host.querySelector("#rC"),x=C.getContext("2d"),W=720,mid=W/2;let mode="s",paus=false,raf=0,alive=true,rot=0;
@@ -141,7 +141,7 @@ GREJER.push({id:"ritloop",titel:"Oändlig ritloop",kat:"Skapa",e:"🌀",c:"#7E57
 }});
 
 /* ---------- Hitta den udda ---------- */
-GREJER.push({id:"udda",titel:"Hitta den udda",kat:"Hjärnan",e:"🔍",c:"#E08A00",beskr:"Alla är lika utom en. Hur långt kommer du?",start(host){
+GREJER.push({id:"udda",titel:"Hitta den udda",kat:"Hjärnan",e:"🔍",c:"#E08A00",mork:true,beskr:"Alla är lika utom en. Hur långt kommer du?",start(host){
   const P=[["🐶","🐕"],["😀","😃"],["🍎","🍅"],["⭐","🌟"],["🟦","🔷"],["🐰","🐇"],["🦊","🐱"],["🍓","🍒"],["🌼","🌻"],["🔴","🟠"],["🚗","🚙"],["🐢","🐊"],["🌙","🌛"],["😮","😯"],["🍊","🍑"]];
   host.innerHTML=`<div class="udda"><div class="udda-top"><span id="uN">Nivå 1</span><span id="uT">⏱ 0</span><span id="uR">Rekord: 0</span></div><div class="udda-g" id="uG"></div><p class="rit-t" id="uM">Tryck på den som är annorlunda!</p></div>`;
   const G=host.querySelector("#uG"),Nn=host.querySelector("#uN"),Tt=host.querySelector("#uT"),Rr=host.querySelector("#uR"),Mm=host.querySelector("#uM");
@@ -157,7 +157,7 @@ GREJER.push({id:"udda",titel:"Hitta den udda",kat:"Hjärnan",e:"🔍",c:"#E08A00
 }});
 
 /* ---------- Hitta djuret ---------- */
-GREJER.push({id:"djuret",titel:"Hitta snöleoparden",kat:"Hjärnan",e:"🐆",c:"#546E7A",beskr:"Snöleoparden är mästare på att gömma sig. Hittar du den?",start(host){
+GREJER.push({id:"djuret",titel:"Hitta snöleoparden",kat:"Hjärnan",e:"🐆",c:"#546E7A",mork:true,beskr:"Snöleoparden är mästare på att gömma sig. Hittar du den?",start(host){
   const B=[
    {src:"bilder/snoleopard1.jpg",w:1280,h:960,m:[[618,458]],r:46,f:"Hitta snöleoparden! Den tittar fram ur en liten glipa i berget.",tips:"Titta i skuggan under bergsöverhänget, mitt i bilden.",ant:"Foto: Ksuryawanshi, CC BY-SA 4.0 (Wikimedia Commons)"},
    {src:"bilder/snoleopard2.jpg",w:1280,h:960,m:[[283,598],[958,640]],r:54,f:"Här finns två snöleoparder som går i snön. Hitta båda!",tips:"De går på snön långt nere i bilden, en på vänster och en på höger sida.",ant:"Foto: Ksuryawanshi, CC BY-SA 4.0 (Wikimedia Commons)"}];
@@ -178,7 +178,7 @@ GREJER.push({id:"djuret",titel:"Hitta snöleoparden",kat:"Hjärnan",e:"🐆",c:"
 }});
 
 /* ---------- Tiden går ---------- */
-GREJER.push({id:"tid",titel:"Hur lång är 10 sekunder?",kat:"Hjärnan",e:"⏱️",c:"#00897B",beskr:"Känn efter. Ingen klocka syns!",start(host){
+GREJER.push({id:"tid",titel:"Hur lång är 10 sekunder?",kat:"Hjärnan",e:"⏱️",c:"#00897B",mork:true,beskr:"Känn efter. Ingen klocka syns!",start(host){
   const M=[10,20,5,30];let mi=0,t0=0,kor=false;
   host.innerHTML=`<div class="tid"><h3 class="ill-q" id="tQ"></h3><div class="tid-s" id="tS">?</div><p class="rit-t" id="tM">Tryck Start och tryck Stopp när du tror att tiden har gått. Räkna inte med högt!</p>
   <div class="ill-kn"><button class="k ok" id="tB">Start</button><button class="k" id="tX">Annan tid</button></div></div>`;
