@@ -14,7 +14,7 @@ const KANALER=[
  ["UCwmZiChSryoWQCZMIQezgTg","BBC Earth","en"],
  ["UCONtPx56PSebXJOxbFv-2jQ","Crash Course Kids","en"]];
 const smak=require("./smak.js");const PROF=smak.profil();
-const MAXSEK=8*60, MINSEK=45;
+const MAXSEK=150, MINSEK=45;
 const get=async u=>{const r=await fetch(u,{headers:{"User-Agent":"Mozilla/5.0","Accept-Language":"sv"}});if(!r.ok)throw new Error(r.status);return r.text()};
 const ent=s=>s.replace(/&amp;/g,"&").replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&lt;/g,"<").replace(/&gt;/g,">");
 (async()=>{
