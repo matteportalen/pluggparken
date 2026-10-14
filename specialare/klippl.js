@@ -56,13 +56,6 @@ var KLIPPL={
   "sek": 126,
   "sprak": "sv"
  },
- "smaklokar": {
-  "id": "bPzJr4qTvXk",
-  "titel": "Lukt och smak - de kemiska sinnena",
-  "kanal": "Film och Skola",
-  "sek": 127,
-  "sprak": "sv"
- },
  "leonardo": {
   "id": "vu1NRPX9cYU",
   "titel": "Leonardo – Vetenskapens förnyare",
@@ -84,5 +77,11 @@ var KLIPPL={
   "sek": 252,
   "sprak": "sv"
  },
- "chip": {"id":"eEbZA8cNpnU","titel":"Zooming into an iPhone CPU Silicon Die using Electron Microscope","kanal":"Rotten Culture","sek":89,"sprak":"en"}
+ "chip": {
+  "id": "eEbZA8cNpnU",
+  "titel": "Zooming into an iPhone CPU Silicon Die using Electron Microscope",
+  "kanal": "Rotten Culture",
+  "sek": 89,
+  "sprak": "en"
+ }
 };
