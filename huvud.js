@@ -55,7 +55,7 @@
 @media(max-width:400px){.mph.has-title .mph-mynt{display:none}}
 .mph-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:9em}
 .mph-snd{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.18)!important;font-size:1.15rem;flex:none}
-.mph.ovriga{background:linear-gradient(110deg,#157548 0%,#1E9E5E 55%,#17AFC4 100%);box-shadow:0 3px 0 rgba(29,43,83,.18)}
+.mph.ovriga{background:linear-gradient(110deg,#17302F 0%,#1C3F3D 50%,#25605C 100%);box-shadow:0 3px 0 #7E5129}
 .mph-menu{position:absolute;top:calc(100% + 6px);left:10px;animation:mph-ner .18s ease-out;background:#fff;color:#1D2B53;border-radius:18px;padding:6px;box-shadow:0 10px 30px rgba(29,43,83,.25),0 3px 0 #C6D6F2;min-width:240px;z-index:30}
 .mph-menu a{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;font-weight:800;font-size:1.1rem}
 .mph-menu a:hover,.mph-menu a:focus-visible{background:#EAF3FF;outline:0}
