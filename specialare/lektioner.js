@@ -274,6 +274,8 @@ var LEKTIONER=[
 ["🦴","Inga ben","Hajar saknar riktiga ben. Skelettet är gjort av brosk, samma material som i din näsa och dina öron."],
 ["🦷","Tusentals tänder","En haj byter tänder hela livet. Vissa arter kan få tusentals tänder under sitt liv."],
 ["🥚","Hajägg","Inte alla hajar föder levande ungar. Många lägger ägg i en hård, läderaktig kapsel. Hornhajens ägg ser ut som en spiralformad skruv, och hajmamman puttar in dem i en klippspricka så att de sitter fast. Inuti växer ungen i många månader."],
+["🍼","Levande ungar","De flesta hajar föder levande ungar. Hos hammarhajen växer ungarna i mammans mage och får näring genom en moderkaka, ungefär som hos däggdjur, och föds som små kopior av de vuxna."],
+["🦷","Ungar som äter varandra","Hos sandtigerhajen börjar de största ungarna äta sina syskon redan inne i mamman. Den som blir kvar är större och starkare när den föds."],
 ["🌊","Hotade","Hajar har fått ett dåligt rykte. Människor dödar många fler hajar än tvärtom, och många arter är hotade."]]},
 
 {id:"morkmateria",titel:"Mörk materia",kat:"Rymden",e:"🌌",c:"#4B2E83",rutor:[
