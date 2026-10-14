@@ -160,6 +160,8 @@ const VARLDAR=[
 const BITAR={
   start:["33333333",["d1","d5"]],
   mynt:["3333333333",["o3,7","o4,6","o5,6","o6,7","*5,3"]],
+  lmynt:["3333333333",["o3,7","o4,6","o5,6","o6,7","*5,6"]], // som mynt, men stjärnan ligger bland mynten (ett vanligt hopp räcker): övningsbanan
+
   grop:["33300333",["o3,6","o4,6","d6"]],
   bro:["333000000333",["p4,7,3","o4,6","o5,6","o6,6","*5,3"]],
   kulle:["333444554333",["o6,5","o7,5","*7,2","d1"]],
@@ -177,28 +179,29 @@ const BITAR={
   port:["333333333333",["Q"]],
   mal:["33333333",["X5","d1","d7"]]};
 const BANOR={
-  skog:[["start","mynt","grop","port","fiende","kulle","port","mynt","port","mal"],
-        ["start","mynt","vagg","port","bro","fiende","port","kulle","bi","port","mal"],
-        ["start","fiende","grop","trappa","port","bi","bro","port","spikar","fiende","port","mal"],
-        ["start","mynt","fiender","port","hog","bro","port","bi","spikar","port","vagg","fiende","port","mal"],
-        ["start","bro","fiende","port","trappa","bi","port","gropar","fiender","port","hog","spikar","port","mal"],
-        ["start","fiender","spikar","port","bro","bi","port","vagg","gropar","port","trappa","fiende","hog","port","mal"],
+  // Varje bana lär ut en ny sak i taget (bana 1 i Sagoskogen är en liten övning); fjädrar och plankor kommer tidigt
+  skog:[["start","lmynt","grop","port","lmynt","fiende","port","lmynt","mal"],
+        ["start","mynt","vagg","port","fiende","kulle","port","bro","port","mal"],
+        ["start","mynt","bi","port","fiende","bi","port","kulle","fiende","port","mal"],
+        ["start","spikar","fiende","port","trappa","mynt","spikar","port","bro","spikar","port","mal"],
+        ["start","mynt","fjader","port","fiende","fjader","port","kulle","fiende","port","mal"],
+        ["start","mynt","flytt","port","fiende","trappa","port","flytt","kulle","port","mal"],
         ["start","mynt","fjader","port","flytt","fiende","port","bi","kulle","port","gropar","fiender","port","mal"],
         ["start","fiender","flytt","port","fjader","spikar","port","vagg","bi","port","bro","hog","fiende","port","mal"]],
   oken:[["start","fiende","grop","port","kulle","bi","port","mynt","fiende","port","mal"],
-        ["start","bi","vagg","port","fiender","bro","port","spikar","bi","port","mal"],
-        ["start","gropar","port","trappa","fiende","bi","port","bro","spikar","port","fiender","port","mal"],
-        ["start","fiender","hog","port","gropar","bi","port","vagg","fiende","port","bro","spikar","port","mal"],
-        ["start","bi","fiender","port","trappa","gropar","port","hog","bi","port","spikar","fiender","port","mal"],
-        ["start","fiender","bi","port","vagg","gropar","port","bro","fiende","spikar","port","hog","fiender","bi","port","mal"],
+        ["start","fiender","mynt","port","fiender","kulle","port","fiender","fiende","port","mal"],
+        ["start","mynt","gropar","port","bro","gropar","port","kulle","bi","port","mal"],
+        ["start","mynt","fjader","fjader","port","bi","fjader","port","kulle","fiende","port","mal"],
+        ["start","bi","trappa","port","hog","fiender","port","trappa","spikar","hog","port","mal"],
+        ["start","mynt","flytt","bi","port","flytt","trappa","port","fiende","flytt","port","kulle","mal"],
         ["start","bi","flytt","port","fjader","fiender","port","isgrop","spikar","port","trappa","bi","port","mal"],
         ["start","fiender","isgrop","port","flytt","bi","port","fjader","hog","port","vagg","fiender","spikar","port","mal"]],
   is:  [["start","mynt","isgrop","port","fiende","fjader","port","bi","kulle","port","mal"],
-        ["start","flytt","fiende","port","isgrop","bi","port","fjader","spikar","port","mal"],
-        ["start","fiender","isgrop","port","flytt","bi","port","vagg","hog","port","fiende","port","mal"],
-        ["start","bi","fjader","port","gropar","fiender","port","flytt","spikar","port","trappa","bi","port","mal"],
-        ["start","fiender","flytt","port","isgrop","bi","port","fjader","fiende","port","bro","spikar","port","mal"],
-        ["start","bi","vagg","port","flytt","fiender","port","isgrop","bi","port","fjader","hog","port","mal"],
+        ["start","mynt","isgrop","port","bro","isgrop","port","kulle","fiende","port","mal"],
+        ["start","fiender","mynt","port","fiender","fiende","port","bi","fiender","port","mal"],
+        ["start","mynt","flytt","port","trappa","flytt","bi","port","kulle","flytt","port","mal"],
+        ["start","mynt","fjader","port","fjader","hog","port","fjader","bi","port","kulle","mal"],
+        ["start","mynt","isgrop","port","flytt","fiender","port","isgrop","bi","trappa","port","mal"],
         ["start","fiender","bi","port","flytt","isgrop","port","fjader","spikar","port","gropar","fiender","bi","port","mal"],
         ["start","flytt","fiender","port","fjader","bi","isgrop","port","vagg","spikar","fiender","port","flytt","hog","bi","port","mal"]]};
 const T=64,ROWS=12;
@@ -216,11 +219,12 @@ function laddaDjur(){const d=MPPlatt.djur();djurBild=d.bild;$("bDjur").innerHTML
 /* ---------- Bygga en bana ---------- */
 let LV=null;
 function bygg(vid,nr){const V=VARLDAR.find(v=>v.id===vid),lista=BANOR[vid][nr];
-  let grid=[],obj={mynt:[],stjPlats:[],fiender:[],dekor:[],spikar:[],portar:[],mal:null,fjadrar:[],plankor:[]},x0=0;
+  let grid=[],obj={mynt:[],stjPlats:[],fiender:[],dekor:[],spikar:[],portar:[],mal:null,fjadrar:[],plankor:[],groparX:[],vaggX:[]},x0=0;
   const cols=lista.reduce((s,b)=>s+BITAR[b][0].length,0);
   for(let r=0;r<ROWS;r++)grid.push(Array(cols).fill("."));
   let seed=nr*97+(vid==="oken"?500:vid==="is"?900:0);const slump=()=>{seed=(seed*9301+49297)%233280;return seed/233280;};
   lista.forEach(b=>{const[h,items]=BITAR[b],w=h.length;
+    if(b==="grop"||b==="gropar"||b==="isgrop")obj.groparX.push((x0+3)*T);if(b==="vagg")obj.vaggX.push((x0+4)*T);
     const yta=c=>{const hh=+h[c];return hh?ROWS-hh:ROWS+5;};
     for(let c=0;c<w;c++){const hh=+h[c];for(let r=ROWS-hh;r<ROWS;r++)grid[r][x0+c]="#";}
     items.forEach(s=>{const t=s[0],n=s.slice(1).split(",").map(Number),c=n[0];
@@ -264,7 +268,7 @@ const G=MPPlatt.G; // gemensam fysik i plattform.js
 function start(vid,nr){musikCtx();LV=nr==="boss"?byggBoss(vid):bygg(vid,nr);$("tips").classList.toggle("boss",!!LV.boss);P={x:2*T,y:9*T,vx:0,vy:0,b:40,hh:62,mark:false,hopp:0,riktning:1,skada:0,hjartan:3,poang:0,stj:0,check:2*T,cool:0,coyote:0,buffert:0,fel:0,felSvar:0,bob:0};BL=[];
   E=[];PAR=[];FLOJ=[];cam=0;$("slutRuta").hidden=true;$("pausRuta").hidden=true;pausad=false;
   show("game");resize();igang=true;musikKnapp();last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop);
-  tips(LV.boss?`${LV.boss.namn}! Hoppa med huvudet i rätt svar, så förtrollar trollstaven bossen.`:nr===0&&vid==="skog"?"Spring åt höger! Hoppa med huvudet i rätt svar.":nr===1&&vid==="skog"?"Muren är hög: hoppa två gånger för dubbelhopp!":`${LV.V.namn}, bana ${nr+1}`);}
+  tips(LV.boss?`${LV.boss.namn}! Hoppa med huvudet i rätt svar, så förtrollar trollstaven bossen.`:nr===0&&vid==="skog"?(pek?"Tryck ▶ för att springa åt höger och ⤒ för att hoppa!":"Spring åt höger med → och hoppa med ↑!"):`${LV.V.namn}, bana ${nr+1}`);}
 let tipsT=0;function tips(t,ms=3200){const e=$("tips");e.textContent=t;e.hidden=false;e.style.opacity=1;clearTimeout(tipsT);tipsT=setTimeout(()=>{e.style.opacity=0;setTimeout(()=>e.hidden=true,400);},ms);}
 let E=[],PAR=[],FLOJ=[],BL=[];
 function resize(){const dpr=Math.min(2,window.devicePixelRatio||1),W=innerWidth,H=innerHeight;cv.width=W*dpr;cv.height=H*dpr;
@@ -322,6 +326,11 @@ function uppdatera(dt){if(!igang)return;const tnu=performance.now()/1000;
   // tips första gången man möter något nytt
   const visaTips=(nyckel,villkor,text)=>{if(!(data.sett||{})[nyckel]&&villkor){data.sett=Object.assign({},data.sett,{[nyckel]:1});save();tips(text,4200);}};
   visaTips("troll",LV.fiender.some(f=>!f.trollad&&f.x>P.x&&f.x-P.x<380),pek?"Tryck på ✨ för att förtrolla fienden med trollstaven! Du kan också hoppa på den.":"Tryck mellanslag för att förtrolla fienden med trollstaven! Du kan också hoppa på den.");
+  visaTips("grop",(LV.groparX||[]).some(x=>x>P.x&&x-P.x<300),pek?"Hoppa över gropen med ⤒!":"Hoppa över gropen med ↑!");
+  visaTips("port",(LV.portar||[]).some(p=>!p.open&&p.block[0].x*T>P.x&&p.block[0].x*T-P.x<420),"Här är en svarsport! Hoppa med huvudet i blocket med rätt svar.");
+  visaTips("vagg",(LV.vaggX||[]).some(x=>x>P.x&&x-P.x<300),pek?"Muren är hög! Tryck ⤒ två gånger för dubbelhopp.":"Muren är hög! Tryck ↑ två gånger för dubbelhopp.");
+  visaTips("bi",LV.fiender.some(f=>f.flyg&&!f.trollad&&f.bx>P.x&&f.bx-P.x<420),"Se upp för bin! De flyger i luften. Förtrolla dem med trollstaven eller hoppa över dem.");
+  visaTips("spik",(LV.spikar||[]).some(k=>k.x*T>P.x&&k.x*T-P.x<300),"Spikar gör ont! Hoppa över dem.");
   visaTips("fjader",LV.fjadrar.some(f=>f.x*T>P.x&&f.x*T-P.x<300),"Hoppa på fjädern, så studsar du högt!");
   visaTips("planka",LV.plankor.some(m=>m.x0>P.x&&m.x0-P.x<300),"Plankan åker fram och tillbaka. Hoppa upp när den är nära!");
   P.skada=Math.max(0,P.skada-dt);P.bob+=dt*(Math.abs(P.vx)>20&&P.mark?12:0);
