@@ -35,13 +35,6 @@ var KLIPPL={
   "sek": 168,
   "sprak": "sv"
  },
- "bitcoin": {
-  "id": "IJeM595KA3k",
-  "titel": "Bitcoin – ett experiment",
-  "kanal": "Film och Skola",
-  "sek": 98,
-  "sprak": "sv"
- },
  "kvant": {
   "id": "yEegl_wTysc",
   "titel": "Förstå upptäckten: Kvantfysik – ett steg in i det okända!",
