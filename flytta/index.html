@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Flyttar dina framsteg – Pluggparken</title>
+<style>
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:#1F3A35;color:#F3F0E4;font-family:"Baloo 2","Trebuchet MS",system-ui,sans-serif;text-align:center;padding:24px;box-sizing:border-box}
+h1{margin:0 0 8px;font-size:1.6rem}
+p{margin:0 auto;max-width:28em;font-weight:600;line-height:1.4;color:#C9DCD5}
+a{color:#F4D35E;font-weight:800}
+</style>
+</head>
+<body>
+<main><h1 id="rubrik">Hämtar dina framsteg …</h1><p id="text">Pluggparken har en ny adress. Vänta en liten stund.</p></main>
+<script>
+/* Tar emot framstegen från den gamla adressen (matteportalen.github.io skickar hit med #d=…&t=…).
+   Webbläsaren sparar allt per adress, så utan den här sidan skulle eleverna börja om från noll.
+   d = "1." + komprimerad JSON (eller "0." okomprimerad) med alla nycklar i localStorage, base64url
+   t = sidan man var på (samma väg här), g=0 = Spegelmålas teckningar fick inte plats.
+   Flyttar bara en gång per webbläsare (mp-flyttad); har man redan spelat här slås datan ihop. */
+(async function(){
+  const $=id=>document.getElementById(id),P=new URLSearchParams(location.hash.slice(1));
+  let till=P.get('t')||'/';if(!/^\/(?!\/)/.test(till))till='/';
+  const ga=()=>location.replace(till);
+  const d=P.get('d');if(!d)return ga();
+  try{if(localStorage.getItem('mp-flyttad'))return ga();}catch(e){return ga();}
+  try{
+    const z=d.slice(0,1),b64=d.slice(2).replace(/-/g,'+').replace(/_/g,'/');
+    const bin=atob(b64+'==='.slice((b64.length+3)%4));let bytes=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
+    if(z==='1'){const s=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('deflate-raw'));bytes=new Uint8Array(await new Response(s).arrayBuffer());}
+    const gammal=JSON.parse(new TextDecoder().decode(bytes));
+    const L=k=>{try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;}};
+    for(const [k,v] of Object.entries(gammal)){
+      if(typeof v!=='string'||k==='mp-flyttad')continue;
+      const nu=localStorage.getItem(k);
+      if(nu==null){localStorage.setItem(k,v);continue;}
+      if(nu===v)continue;
+      // finns båda: behåll det som kommit längst
+      if(k==='matteportalen-mynt'){const a=L(k),g=JSON.parse(v);const vinn=(g&&g.tj||0)>(a&&a.tj||0)?g:a;
+        vinn.kopt=[...new Set([...((a&&a.kopt)||[]),...((g&&g.kopt)||[])])];localStorage.setItem(k,JSON.stringify(vinn));}
+      else if(k==='mp-profiles'){const a=L(k)||[],g=JSON.parse(v)||[];const id=new Set(a.map(p=>p.id));localStorage.setItem(k,JSON.stringify([...a,...g.filter(p=>!id.has(p.id))]));}
+      else if(v.length>nu.length)localStorage.setItem(k,v);
+    }
+    localStorage.setItem('mp-flyttad',new Date().toISOString().slice(0,10));
+    if(P.get('g')==='0'){$('rubrik').textContent='Klart!';$('text').innerHTML='Dina framsteg har flyttat hit. Teckningarna i Spegelmåla var för stora för att följa med. <a href="'+till.replace(/"/g,'')+'">Fortsätt</a>';return;}
+    ga();
+  }catch(e){
+    $('rubrik').textContent='Det gick inte att flytta framstegen';
+    $('text').innerHTML='Inget har försvunnit, de finns kvar på den gamla adressen. Prova igen senare eller <a href="/">gå till Pluggparken</a>.';
+  }
+})();
+</script>
+</body>
+</html>

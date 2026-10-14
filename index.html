@@ -303,6 +303,7 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
   <button class="gobtn newbtn" id="whoNew">＋ Skapa ny profil</button>
   <button class="qrbtn" id="scanBtn">📷 Jag har ett inloggningskort (QR-kod)</button>
   <div class="pinfo"><span aria-hidden="true">ℹ️</span><p>Din profil sparas bara i den här webbläsaren. Flera kan ha egna profiler här. Vill du spela på en annan dator eller iPad? Välj <b>Ta med min profil</b> under din profil, skriv ut inloggningskortet med QR-koden och skanna det där.</p></div>
+  <div class="pinfo" id="hamtaGammal" hidden><span aria-hidden="true">🚚</span><p>Har du spelat på <b>matteportalen.github.io</b>? Pluggparken har flyttat hit. <a href="https://matteportalen.github.io/" style="color:var(--accent);font-weight:800">Hämta dina framsteg därifrån</a></p></div>
   <button class="guestlink" id="guestBtn">Fortsätt som gäst</button>
 </div></div>
 
@@ -900,5 +901,6 @@ else if(act&&act!==owner()){switchTo(act);}  // en annan flik har bytt profil
 })();
 </script>
 
+<script>try{if(!localStorage.getItem("mp-flyttad"))document.getElementById("hamtaGammal").hidden=false;}catch(e){}</script>
 </body>
 </html>
