@@ -83,5 +83,6 @@ var KLIPPL={
   "kanal": "UR Play",
   "sek": 252,
   "sprak": "sv"
- }
+ },
+ "chip": {"id":"eEbZA8cNpnU","titel":"Zooming into an iPhone CPU Silicon Die using Electron Microscope","kanal":"Rotten Culture","sek":89,"sprak":"en"}
 };
