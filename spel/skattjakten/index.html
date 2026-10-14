@@ -496,7 +496,7 @@ function renderSlots(){
 function bumpSlot(k){renderSlots();const s=[...document.querySelectorAll(`.slot[data-k="${k}"]`)].pop();if(s){s.classList.remove("bump");void s.offsetWidth;s.classList.add("bump");}window.Ljud&&Ljud.ok&&Ljud.ok();}
 const DIRS={ArrowUp:[0,-1],ArrowDown:[0,1],ArrowLeft:[-1,0],ArrowRight:[1,0],w:[0,-1],s:[0,1],a:[-1,0],d:[1,0],W:[0,-1],S:[0,1],A:[-1,0],D:[1,0]};
 document.addEventListener("keydown",e=>{
-  if(!$("dlg").hidden){if(/^[0-9]$/.test(e.key))key(e.key);else if(e.key==="Backspace"){e.preventDefault();key("del");}else if(e.key==="Enter"){e.preventDefault();key("ok");}else if(e.key==="Escape")closeFoe();return;}
+  if(!$("dlg").hidden){if(/^[0-9]$/.test(e.key))key(e.key);else if(e.key==="Backspace"){e.preventDefault();key("del");}else if(e.key==="Enter"){e.preventDefault();key("ok");}else if(e.key==="Escape")dlgBack();return;}
   if($("game").hidden)return;const d=DIRS[e.key];if(d){e.preventDefault();move(d[0],d[1]);}});
 /* pilknapparna: håll inne för att gå flera steg */
 let holdT=null;
@@ -535,7 +535,8 @@ function check(){
     $("dTip").hidden=false;$("dTip").textContent="Tips: "+o.p.tip;F.input="";showAns();}
 }
 function closeFoe(){$("dlg").hidden=true;F=null;$("shopMenu").hidden=true;document.querySelector(".ansrow").hidden=false;$("dKeys").hidden=false;if("speechSynthesis" in window)speechSynthesis.cancel();}
-$("dBack").onclick=()=>{if(F&&(F.kind==="sell"||F.kind==="buy"))shopMeny();else closeFoe();};
+function dlgBack(){if(F&&(F.kind==="sell"||F.kind==="buy"))shopMeny();else closeFoe();} // Escape och knappen längst ner gör samma sak: ett steg bakåt
+$("dBack").onclick=dlgBack;
 $("dSpk").onclick=()=>{if(!F)return;if(F.kind==="foe")speak(`${F.o.f.name} säger: ${F.o.f.say} ${F.o.p.q}`);else speak(F.las||"");};
 
 /* ---------- Affären: sälj skatterna och köp nyckeln (eleven räknar själv) ---------- */

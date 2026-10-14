@@ -390,6 +390,7 @@ $("rotX").onclick=()=>{tipClosed=true;try{sessionStorage.setItem("mp-tiobas-tip"
 let rz;addEventListener("resize",()=>{clearTimeout(rz);rz=setTimeout(()=>{checkRotate();layout();},120);});
 
 checkRotate();buildBoard();layout();refresh();
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("calc").hidden&&!busy)$("calcBtn").click();});
 </script>
 </body>
 </html>

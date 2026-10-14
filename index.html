@@ -661,7 +661,7 @@ $("btnAlbum").onclick=openAlbum;
 
 /* ---------- Stäng rutor ---------- */
 document.querySelectorAll(".modal").forEach(m=>m.addEventListener("click",e=>{if(m.id==="mWho"||m.id==="mPin"||m.id==="mScan")return;if(e.target===m||e.target.closest("[data-close]"))m.hidden=true;}));
-document.addEventListener("keydown",e=>{if(e.key==="Escape")document.querySelectorAll(".modal").forEach(m=>{if(m.id!=="mWho")m.hidden=true;});});
+
 
 /* ---------- Ljud ---------- */
 function soundLabel(){$("soundBtn").textContent=window.Ljud&&Ljud.on?"🔊 Ljud: på":"🔇 Ljud: av";}
@@ -735,6 +735,12 @@ $("whoGrid").onclick=e=>{const b=e.target.closest("button");if(!b)return;
   const p=byId(b.dataset.id);askPin(`Hej ${p.name}! Skriv din kod.`,owlOf(p.id),v=>{if(hash(v+p.salt)!==p.pinH){$("pinMsg").textContent="Fel kod. Försök igen.";return false;}switchTo(p.id);return true;},
     {cancel:openWho,forgot:()=>adultReset(p)});};
 $("guestBtn").onclick=()=>{if(!list().length&&!owner()){closeAll();return;}switchTo("gast");};
+// Escape stänger rutan (som knappen ✕ eller Avbryt): koden och kameran går tillbaka till profilvalet; profilvalet går tillbaka till förra profilen eller fortsätter som gäst
+document.addEventListener("keydown",e=>{if(e.key!=="Escape")return;const m=[...document.querySelectorAll(".modal")].find(x=>!x.hidden);if(!m)return;e.preventDefault();
+  if(m.id==="mPin")$("pinClose").click();
+  else if(m.id==="mScan")$("scanClose").click();
+  else if(m.id==="mWho"){if(window.__forrigeProfil)switchTo(window.__forrigeProfil);else $("guestBtn").click();}
+  else m.hidden=true;});
 
 /* ---------- Ny profil ---------- */
 const ADJ=["Glada","Snabba","Modiga","Kloka","Busiga","Lugna","Starka","Pigga","Nyfikna","Coola"],DJUR=["Ugglan","Räven","Björnen","Haren","Lodjuret","Ekorren","Igelkotten","Delfinen","Pandan","Tigern"];
@@ -781,7 +787,7 @@ function chip(){
 $("whoChip").onclick=()=>{if(me){$("profName").textContent=me.name;["pCard","pMove","pPin","pDel"].forEach(i=>$(i).hidden=false);openM("mProf");}
   else if(act==="gast"){$("profName").textContent="Gäst";["pCard","pMove","pPin","pDel"].forEach(i=>$(i).hidden=true);openM("mProf");}
   else openWho();};
-$("pSwitch").onclick=()=>{stash();try{sessionStorage.removeItem("mp-active")}catch(e){}openWho();};
+$("pSwitch").onclick=()=>{window.__forrigeProfil=active();stash();try{sessionStorage.removeItem("mp-active")}catch(e){}openWho();};
 $("pPin").onclick=()=>askPin("Skriv din nuvarande kod",owlOf(me.id),v=>{if(hash(v+me.salt)!==me.pinH){$("pinMsg").textContent="Fel kod.";return false;}
   askPin("Välj en ny kod",owlOf(me.id),n=>{const ps=list(),q=ps.find(x=>x.id===me.id);q.pinH=hash(n+q.salt);saveList(ps);closeAll();alert("Klart! Din nya kod är sparad.");return true;});return true;});
 $("pDel").onclick=()=>askPin(`Skriv koden för att ta bort ${me.name}`,owlOf(me.id),v=>{if(hash(v+me.salt)!==me.pinH){$("pinMsg").textContent="Fel kod.";return false;}

@@ -550,6 +550,7 @@ function konfetti(){if(matchMedia("(prefers-reduced-motion: reduce)").matches)re
 window.addEventListener("resize",()=>{if(skarm==="game")gRita();if(bl)bRita();if(skarm==="spar")sRita();});
 document.addEventListener("visibilitychange",()=>{if(document.hidden)paus();});
 show("home");
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&document.querySelector(".blad .stang"))stangBlad();});
 </script>
 </body>
 </html>

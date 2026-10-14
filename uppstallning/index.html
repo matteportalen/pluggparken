@@ -573,6 +573,7 @@ function confetti(){
     if(now-t0<2800)requestAnimationFrame(f);else{x.clearRect(0,0,W,H);c.hidden=true;}})(t0);
 }
 openHome();
+document.addEventListener("keydown",e=>{if(e.key!=="Escape")return;const m=document.getElementById("hmodal");if(m&&!m.hidden){document.getElementById("hclose").click();return;}});
 </script>
 </body>
 </html>

@@ -784,6 +784,7 @@ byId("hmodal").onclick=e=>{if(e.target.id==="hmodal")byId("hmodal").hidden=true;
 window.tioHowtoHome();
 })();
 
+document.addEventListener("keydown",e=>{if(e.key!=="Escape")return;const m=document.getElementById("hmodal");if(m&&!m.hidden){document.getElementById("hclose").click();return;}if(typeof hrOpen==="function"&&!document.getElementById("hrPanel").hidden)hrOpen(false);});
 </script>
 </body>
 </html>
