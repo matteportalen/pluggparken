@@ -211,6 +211,60 @@ h1 span{color:#E0562B}
 .tid{text-align:center}
 .tid-s{font-size:5rem;font-weight:800;margin:10px 0}
 @media (prefers-reduced-motion:reduce){.slide .e,.ring{animation:none}.kort,.btn{transition:none}}
+/* mörk startsida */
+body{background:#070a11;color:#fff;font-family:Inter,"Helvetica Neue",Arial,system-ui,sans-serif}
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.35;background-image:radial-gradient(1.2px 1.2px at 12% 18%,#fff,transparent),radial-gradient(1px 1px at 27% 72%,#fff,transparent),radial-gradient(1.4px 1.4px at 41% 33%,#fff,transparent),radial-gradient(1px 1px at 58% 82%,#fff,transparent),radial-gradient(1.3px 1.3px at 73% 24%,#fff,transparent),radial-gradient(1px 1px at 88% 61%,#fff,transparent),radial-gradient(1.2px 1.2px at 94% 12%,#fff,transparent),radial-gradient(1px 1px at 6% 88%,#fff,transparent);background-size:360px 320px;animation:drift 160s linear infinite}
+.wrap{position:relative;z-index:1;max-width:1120px;padding:18px 18px 64px}
+.topp small{color:rgba(255,255,255,.55);letter-spacing:.14em;text-transform:uppercase;font-size:.72rem;font-weight:600}
+h1{font-family:"Source Serif 4",Georgia,serif;font-weight:700;letter-spacing:-.02em;font-size:clamp(2.6rem,8vw,4.4rem);margin:8px 0 2px}
+h1 span{background:linear-gradient(100deg,#ffd86b,#fff 55%,#ffd86b);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;animation:glans2 6s ease-in-out infinite alternate}
+@keyframes glans2{from{background-position:0 0}to{background-position:100% 0}}
+.lead{color:rgba(255,255,255,.6);margin:0 0 22px;font-size:1.05rem}
+.dagens{position:relative;overflow:hidden;display:flex;align-items:center;gap:26px;min-height:300px;border-radius:8px;padding:30px 34px;margin:6px 0 30px;background:#0b0f19;border:1px solid rgba(255,255,255,.14);box-shadow:0 0 120px -30px color-mix(in srgb,var(--c,#345) 80%,transparent),0 30px 80px rgba(0,0,0,.5)}
+.dagens::before{content:"";position:absolute;inset:-50px;background:var(--bi,none) center/cover,radial-gradient(circle at 25% 30%,color-mix(in srgb,var(--c,#345) 60%,#070a11),#070a11);filter:blur(34px) brightness(.5) saturate(1.3)}
+.dagens::after{content:"";position:absolute;top:-20%;bottom:-20%;left:-50%;width:30%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.18),transparent);transform:skewX(-18deg);animation:blank2 7s ease-in-out 1s infinite}
+@keyframes blank2{0%{left:-50%}35%,100%{left:150%}}
+.dagens>*{position:relative;z-index:1}
+.dagens .stor{flex:none;font-family:"Source Serif 4",Georgia,serif;font-size:clamp(6rem,22vw,10.5rem);font-weight:700;line-height:.9;color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.85);text-shadow:0 0 50px color-mix(in srgb,var(--c,#9bd) 80%,transparent);filter:none;animation:svaj 5s ease-in-out infinite}
+@keyframes svaj{50%{transform:translateY(-8px) rotate(2deg)}}
+.dagens .t{flex:1;min-width:0}
+.dagens small{display:inline-block;background:none;color:color-mix(in srgb,var(--c,#9bd) 50%,#fff);padding:0;font-weight:800;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;border-radius:0}
+.dagens h2{font-family:"Source Serif 4",Georgia,serif;font-weight:700;font-size:clamp(1.9rem,5vw,3.2rem);line-height:1.05;margin:8px 0 6px;letter-spacing:-.01em}
+.dagens p{margin:0 0 18px;color:rgba(255,255,255,.75);max-width:44ch}
+.btn{border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.1);color:#fff;border-radius:12px;padding:10px 20px;font-weight:600;font-size:1rem;box-shadow:none;backdrop-filter:blur(8px)}
+.btn:active{transform:none;background:rgba(255,255,255,.25)}
+.btn.guld{background:#fff;color:#0b1020;border-color:#fff;box-shadow:0 0 30px color-mix(in srgb,var(--c,#9bd) 70%,transparent)}
+.chips{gap:8px;margin:0 0 20px}
+.chip{border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.05);color:rgba(255,255,255,.8);border-radius:999px;padding:3px 15px;font-weight:600;font-size:.9rem}
+.chip.on{background:#fff;color:#0b1020;border-color:#fff}
+.grp{font-size:.78rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.55);margin:26px 0 12px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.14)}
+.grid{grid-template-columns:1fr;gap:14px}
+@media(min-width:460px){.grid{grid-template-columns:1fr 1fr}}
+@media(min-width:860px){.grid{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:1100px){.grid{grid-template-columns:repeat(4,1fr)}}
+.kort{position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;gap:3px;height:178px;padding:14px 16px;border-radius:6px;border:1px solid rgba(255,255,255,.14);background:linear-gradient(to top,rgba(6,9,15,.94),rgba(6,9,15,.35) 60%,rgba(6,9,15,.1)),var(--bi,none) center/cover,color-mix(in srgb,var(--c) 35%,#070a11);box-shadow:0 12px 30px rgba(0,0,0,.4);color:#fff;text-align:left;transition:transform .2s,border-color .2s,box-shadow .2s}
+@media(hover:hover){.kort:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--c) 60%,#fff);box-shadow:0 18px 40px rgba(0,0,0,.5),0 0 40px -6px color-mix(in srgb,var(--c) 80%,transparent)}.kort:hover::after{left:140%}}
+.kort:active{transform:scale(.985);box-shadow:0 8px 20px rgba(0,0,0,.4)}
+.kort::after{content:"";position:absolute;top:-20%;bottom:-20%;left:-60%;width:35%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.22),transparent);transform:skewX(-18deg);transition:left .8s ease;pointer-events:none}
+.kort .kk{font-size:.68rem;font-weight:800;letter-spacing:.16em;color:color-mix(in srgb,var(--c) 45%,#fff)}
+.kort b{font-family:"Source Serif 4",Georgia,serif;font-weight:700;font-size:1.3rem;line-height:1.1;letter-spacing:-.005em}
+.kort small{color:rgba(255,255,255,.62);font-size:.8rem}
+.kort .em{position:absolute;right:12px;top:8px;font-size:2.6rem;filter:drop-shadow(0 0 16px color-mix(in srgb,var(--c) 80%,transparent));opacity:.95}
+.kort.nej{opacity:.45}
+.mark{top:10px;right:10px;font-size:1rem;z-index:2;background:rgba(0,0,0,.45);border-radius:999px;padding:2px 6px}
+.kort .em+.mark{right:auto;left:10px}
+.foot{color:rgba(255,255,255,.5)}
+.foot button{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);color:#fff}
+@media(max-width:560px){.dagens{flex-direction:column;align-items:flex-start;padding:22px;gap:10px;min-height:0}.dagens .stor{font-size:5.5rem}}
+@media(prefers-reduced-motion:reduce){body::before,h1 span,.dagens::after,.dagens .stor{animation:none}}
+/* grejer i mörk ram */
+#gv{background:#070a11}
+#gv .gv-top{background:rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.14);backdrop-filter:blur(10px);color:#fff}
+#gv .gv-top .t{font-weight:600;letter-spacing:.04em}
+#gv .rund{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.22);box-shadow:none}
+#gv .tum button{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);box-shadow:none;filter:none;opacity:.8}
+#gv .tum button.on{background:rgba(255,255,255,.28);outline:none;opacity:1;border-color:#fff}
+#gv .gv-in{background:#FFF6E0;color:#1D2B53;border-radius:12px;margin:16px auto 40px;box-shadow:0 0 90px -20px color-mix(in srgb,var(--c,#9bd) 70%,transparent),0 20px 60px rgba(0,0,0,.5);width:calc(100% - 24px)}
 </style>
 </head>
 <body>
@@ -262,17 +316,21 @@ const dagNr=()=>Math.floor((Date.now()-new Date().getTimezoneOffset()*6e4)/864e5
 function pool(){const p=[];ALLA.forEach(a=>{if(BET[a.id]===-1)return;p.push(a);if(BET[a.id]===1)p.push(a)});return p.length?p:ALLA}
 function dagens(){const p=pool();return p[(dagNr()*7+3)%p.length]}
 function href(a,i){return a.typ==="k"?"#k/"+a.id:a.typ==="l"?"#l/"+a.id+(i?"/"+i:""):"#g/"+a.id}
+function foto1(a){const b=(typeof BILDER!=="undefined"&&BILDER[a.id]||[])[0];return b?"bilder/"+b.f:a.id==="djuret"?"bilder/snoleopard1.jpg":""}
 function hem(){
   const d=dagens();
-  const kort=a=>`<button class="kort${BET[a.id]===-1?" nej":""}" data-id="${a.id}" style="--c:${a.c}"><span class="ik${a.typ==="k"?" bild":""}" aria-hidden="true"${a.typ==="k"?` style="background-image:url(klipp/bilder/${a.id}.jpg)"`:""}>${a.typ==="k"?"▶":a.e}</span><span><b>${a.titel}</b><small><span class="etikett${a.typ==="g"?" g":""}">${a.typ==="g"?"Prova själv":a.kat}</span>${a.typ==="l"?a.rutor.length+" bilder":a.typ==="k"?Math.round(a.sek/60)+" min · "+(a.sprak==="en"?"engelska":"svenska"):""}</small></span>${BET[a.id]?`<span class="mark" aria-label="${BET[a.id]===1?"Du gillade":"Du gillade inte"}">${BET[a.id]===1?"👍":"👎"}</span>`:""}</button>`;
-  $("#dagens").style.setProperty("--c",d.c);
-  $("#dagens").innerHTML=`<div class="stor" aria-hidden="true">${d.e}</div><div class="t"><small>Dagens specialare</small><h2>${d.titel}</h2><p>${d.typ==="l"?d.rutor.length+" bilder · "+d.kat:d.beskr}</p><div class="rad"><button class="btn guld" id="dgo">Visa!</button><button class="btn" id="slump">🎲 Slumpa</button></div></div>`;
+  const kort=a=>{const f=foto1(a);return `<button class="kort${BET[a.id]===-1?" nej":""}" data-id="${a.id}" style="--c:${a.c}${f?`;--bi:url(${f})`:""}">${a.typ==="g"&&!f?`<span class="em" aria-hidden="true">${a.e}</span>`:""}${BET[a.id]?`<span class="mark" aria-label="${BET[a.id]===1?"Du gillade":"Du gillade inte"}">${BET[a.id]===1?"👍":"👎"}</span>`:""}<span class="kk">${a.typ==="g"?"PROVA SJÄLV":a.kat.toUpperCase()}</span><b>${a.titel}</b><small>${a.typ==="l"?a.rutor.length+" bilder":a.beskr}</small></button>`};
+  const mys=d.typ==="l";
+  $("#dagens").style.setProperty("--c",d.c);const df=foto1(d);$("#dagens").style.setProperty("--bi",df?`url(${df})`:"none");
+  $("#dagens").innerHTML=`<div class="stor" aria-hidden="true">${mys?"?":d.e}</div><div class="t"><small>Dagens specialare</small><h2>${mys?"Dagens mysterium":d.titel}</h2><p>${mys?"Ett nytt mysterium inom "+d.kat.toLowerCase()+". Läs ledtrådarna och gissa vad det handlar om!":d.beskr}</p><div class="rad"><button class="btn guld" id="dgo">${mys?"Starta mysteriet":"Visa"}</button><button class="btn" id="slump">🎲 Slumpa</button></div></div>`;
   $("#dgo").onclick=()=>{location.hash=href(d)};
   $("#slump").onclick=()=>{let a;const P=pool();do{a=P[Math.random()*P.length|0]}while(a===d&&P.length>1);location.hash=href(a)};
   const kats=["Alla","Prova själv",...new Set(LEKTIONER.map(l=>l.kat))];
   $("#chips").innerHTML=kats.map(k=>`<button class="chip${k===filter?" on":""}" data-k="${k}">${k}</button>`).join("");
-  const lista=ALLA.filter(a=>filter==="Alla"||(filter==="Prova själv"?a.typ==="g":filter==="Klipp"?a.typ==="k":a.typ==="l"&&a.kat===filter));
-  $("#grid").innerHTML=lista.map(kort).join("");
+  const lista=ALLA.filter(a=>filter==="Alla"||(filter==="Prova själv"?a.typ==="g":a.typ==="l"&&a.kat===filter));
+  const L=lista.filter(a=>a.typ==="l"),G=lista.filter(a=>a.typ==="g");
+  $("#grid").className="";
+  $("#grid").innerHTML=(L.length?`<h2 class="grp">Minilektioner</h2><div class="grid">${L.map(kort).join("")}</div>`:"")+(G.length?`<h2 class="grp">Prova själv</h2><div class="grid">${G.map(kort).join("")}</div>`:"");
   $("#foot").textContent=LEKTIONER.length+" minilektioner och "+GREJER.length+" saker att prova";
 }
 $("#chips").onclick=e=>{const b=e.target.closest(".chip");if(b){filter=b.dataset.k;hem()}};
