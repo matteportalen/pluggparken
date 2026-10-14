@@ -5,44 +5,57 @@ var GREJER=[];
 const el=(t,a,h)=>{const e=document.createElement(t);if(a)for(const k in a){if(k==="class")e.className=a[k];else if(k==="style")e.style.cssText=a[k];else e.setAttribute(k,a[k]);}if(h!=null)e.innerHTML=h;return e;};
 
 /* ---------- Storleksresan ---------- */
-GREJER.push({id:"storlek",titel:"Storleksresan",kat:"Rymden",e:"🔭",c:"#3F51B5",beskr:"Dra från en atom till hela universum.",start(host){
+GREJER.push({id:"storlek",titel:"Storleksresan",kat:"Rymden",e:"🔭",c:"#3F51B5",mork:true,beskr:"Zooma från en atom till hela universum.",start(host){
   const L=[
-   ["⚛️","En atom",1e-10,"Så liten att miljoner ryms på ett hårstrå."],
-   ["🦠","Ett virus",1e-7,"Mindre än en bakterie. Det går inte att se med vanligt förstoringsglas."],
-   ["🔬","En bakterie",2e-6,"Det finns fler bakterier på din hud än människor i Sverige."],
-   ["🧵","Ett hårstrå (tjocklek)",7e-5,"Ungefär en tiondels millimeter."],
-   ["🐜","En myra",5e-3,"Ungefär en halv centimeter."],
-   ["🧒","Ett barn",1.3,"Ungefär en och en kvarts meter."],
-   ["🐋","En blåval",30,"Det största djuret som finns."],
-   ["🏔️","Mount Everest (höjd)",8849,"Åtta och en halv kilometer upp."],
-   ["🌍","Jorden",1.27e7,"Tvärs igenom: ungefär 12 700 kilometer."],
-   ["☀️","Solen",1.39e9,"Mer än en miljon jordklot ryms inuti."],
-   ["⭐","Betelgeuse",1.2e12,"En jättestjärna. Om den satt där solen sitter skulle den fylla upp förbi Mars bana."],
-   ["🪐","Solsystemet",9e12,"Från ena sidan av Neptunus bana till den andra."],
-   ["🌌","Ett ljusår",9.46e15,"Så långt ljuset hinner på ett år."],
-   ["💫","Vintergatan",9.5e20,"Ungefär 100 000 ljusår tvärs över."],
-   ["🔭","Det observerbara universum",8.8e26,"Så långt vi kan se. Det finns hundratals miljarder galaxer."]];
-  host.innerHTML=`<div class="stor"><div class="stor-bild" id="sB"></div><div class="stor-namn" id="sN"></div><div class="stor-m" id="sM"></div><p class="stor-t" id="sT"></p>
-  <input type="range" id="sR" min="0" max="${L.length-1}" step="1" value="0" aria-label="Storlek"><div class="stor-skala"><span>Minst</span><span>Störst</span></div>
-  <div class="stor-rad" id="sRad"></div></div>`;
-  const B=host.querySelector("#sB"),N=host.querySelector("#sN"),M=host.querySelector("#sM"),T=host.querySelector("#sT"),R=host.querySelector("#sR"),RAD=host.querySelector("#sRad");
-  const fmt=m=>{
-    if(m<1e-6)return (m*1e9).toLocaleString("sv-SE",{maximumSignificantDigits:2})+" nanometer";
-    if(m<1e-3)return (m*1e6).toLocaleString("sv-SE",{maximumSignificantDigits:2})+" mikrometer";
-    if(m<1)return (m*1e3).toLocaleString("sv-SE",{maximumSignificantDigits:2})+" millimeter";
-    if(m<1000)return m.toLocaleString("sv-SE",{maximumSignificantDigits:3})+" meter";
-    if(m<9e15)return (m/1000).toLocaleString("sv-SE",{maximumSignificantDigits:3})+" kilometer";
-    return (m/9.46e15).toLocaleString("sv-SE",{maximumSignificantDigits:3})+" ljusår";};
-  const pot=m=>{const p=Math.round(Math.log10(m));return "10"+String(p).replace(/-/g,"⁻").replace(/\d/g,d=>"⁰¹²³⁴⁵⁶⁷⁸⁹"[d])+" m";};
-  RAD.innerHTML=L.map((l,i)=>`<button data-i="${i}" title="${l[1]}">${l[0]}</button>`).join("");
-  function vis(i){
-    const l=L[i];B.textContent=l[0];N.textContent=l[1];M.textContent=fmt(l[2])+"  ·  "+pot(l[2]);T.textContent=l[3];
-    const k=0.25+0.75*i/(L.length-1);B.style.fontSize=(3+k*4.5)+"rem";R.value=i;
-    [...RAD.children].forEach((b,j)=>b.classList.toggle("on",j===i));
-    if(i>0){const g=l[2]/L[i-1][2];T.textContent+=" Det är "+g.toLocaleString("sv-SE",{maximumSignificantDigits:2})+" gånger större än förra steget."}
+   ["En atom",1e-10,"Så liten att flera hundra tusen ryms på tjockleken av ett hårstrå."],
+   ["Ett virus",1e-7,"Mindre än en bakterie. Man kan bara se det med ett elektronmikroskop."],
+   ["En bakterie",2e-6,"Det finns fler bakterier på din hud än det finns människor i Sverige."],
+   ["Ett hårstrå",7e-5,"Tjockleken på ett hårstrå är ungefär en tiondels millimeter."],
+   ["En myra",5e-3,"Ungefär en halv centimeter. Myror kan bära saker som väger mer än de själva."],
+   ["Ett barn",1.3,"Ungefär en och en kvarts meter. Det är du, i storlek."],
+   ["En blåval",30,"Det största djur som någonsin har levt."],
+   ["Mount Everest",8849,"Åtta och en halv kilometer upp, världens högsta berg."],
+   ["Jorden",1.27e7,"Tvärs igenom är jorden ungefär 12 700 kilometer."],
+   ["Solen",1.39e9,"Mer än en miljon jordklot ryms inuti solen."],
+   ["Betelgeuse",1.2e12,"En jättestjärna. Om den satt där solen sitter skulle den fylla upp förbi Mars bana."],
+   ["Solsystemet",9e12,"Från ena sidan av Neptunus bana till den andra."],
+   ["Ett ljusår",9.46e15,"Så långt ljuset hinner på ett år. Bilden visar Alpha Centauri, vårt närmaste stjärnsystem, 4,2 ljusår bort."],
+   ["Vintergatan",9.5e20,"Ungefär 100 000 ljusår tvärs över, med hundratals miljarder stjärnor."],
+   ["Det observerbara universum",8.8e26,"Så långt vi kan se. Det finns hundratals miljarder galaxer."]];
+  const BI=(typeof BILDER!=="undefined"&&BILDER.storlek)||[];
+  const E=["⁰","¹","²","³","⁴","⁵","⁶","⁷","⁸","⁹"];
+  const pot=p=>"10"+(p<0?"⁻":"")+String(Math.abs(p)).split("").map(d=>E[d]).join("");
+  const fmt=m=>{const f=(v,s)=>v.toLocaleString("sv-SE",{maximumSignificantDigits:s});
+    if(m<1e-6)return f(m*1e9,2)+" nanometer";if(m<1e-3)return f(m*1e6,2)+" mikrometer";if(m<1)return f(m*1e3,2)+" millimeter";
+    if(m<1000)return f(m,3)+" meter";if(m<9e15)return f(m/1000,3)+" kilometer";return f(m/9.46e15,3)+" ljusår"};
+  const LO=-10.5,HI=27.5,pos=m=>(Math.log10(m)-LO)/(HI-LO)*100;
+  let ticks="";for(let p=-10;p<=27;p++)ticks+=`<i class="${p%5===0?"st":""}" style="left:${pos(Math.pow(10,p))}%"></i>`;
+  let lab="";for(let p=-10;p<=27;p+=5)lab+=`<b style="left:${pos(Math.pow(10,p))}%">${pot(p)}</b>`;
+  const dots=L.map((l,i)=>`<button class="pr" data-i="${i}" style="left:${pos(l[1])}%" aria-label="${l[0]}"></button>`).join("");
+  host.innerHTML=`<div class="sr"><div class="sr-bg" id="srBg"></div>
+   <div class="sr-main"><figure class="sr-foto"><div class="rama"><img id="srI" alt=""></div><figcaption id="srC"></figcaption></figure>
+   <div class="sr-tx"><div class="kick" id="srK"></div><h2 id="srN"></h2><div class="sr-m" id="srM"></div><div class="sr-e" id="srE"></div>
+   <ul><li id="srF"></li><li id="srJ"></li></ul></div></div>
+   <div class="sr-nav"><div class="sr-skala"><div class="sr-lin">${ticks}</div>${dots}<div class="sr-mark" id="srMk"></div><div class="sr-lab">${lab}</div></div>
+   <div class="sr-kn"><button class="srb" id="srP" aria-label="Förra">‹</button><button class="srb pl" id="srA">▶ Zooma ut</button><button class="srb" id="srX" aria-label="Nästa">›</button></div></div></div>`;
+  const $=s=>host.querySelector(s);let i=0,tim=null;
+  const jmf=m=>{const r=m/1.3;return r>=1?(r<1.5?"Ungefär lika stort som du.":r.toLocaleString("sv-SE",{maximumSignificantDigits:2})+" gånger större än du."):"Du är "+(1/r).toLocaleString("sv-SE",{maximumSignificantDigits:2})+" gånger större."};
+  function vis(n){
+    i=Math.max(0,Math.min(L.length-1,n));const l=L[i],b=BI[i];
+    $("#srBg").style.backgroundImage=b?`url(bilder/${b.f})`:"none";
+    const im=$("#srI");im.classList.remove("zin");void im.offsetWidth;im.src=b?"bilder/"+b.f:"";im.alt=l[0];im.classList.add("zin");
+    $("#srC").innerHTML=b?`<span class="fig">FIG. ${i+1}</span><a href="${b.s}" target="_blank" rel="noopener">${b.k}</a>`:"";
+    $("#srK").textContent="STEG "+(i+1)+" / "+L.length;$("#srN").textContent=l[0];$("#srM").textContent=fmt(l[1]);$("#srE").textContent=pot(Math.round(Math.log10(l[1])))+" meter";
+    $("#srF").textContent=l[2];$("#srJ").textContent=i>0?"Det är "+(l[1]/L[i-1][1]).toLocaleString("sv-SE",{maximumSignificantDigits:2})+" gånger större än förra steget. "+jmf(l[1]):jmf(l[1]);
+    $("#srMk").style.left=pos(l[1])+"%";[...host.querySelectorAll(".pr")].forEach((d,j)=>d.classList.toggle("on",j===i));
   }
-  R.oninput=()=>vis(+R.value);RAD.onclick=e=>{const b=e.target.closest("button");if(b)vis(+b.dataset.i)};
-  vis(0);return()=>{};
+  function stoppa(){clearInterval(tim);tim=null;$("#srA").textContent="▶ Zooma ut"}
+  $("#srP").onclick=()=>{stoppa();vis(i-1)};$("#srX").onclick=()=>{stoppa();vis(i+1)};
+  $("#srA").onclick=()=>{if(tim){stoppa();return}if(i>=L.length-1)vis(0);$("#srA").textContent="⏸ Pausa";tim=setInterval(()=>{if(i>=L.length-1){stoppa();return}vis(i+1)},3800)};
+  host.querySelector(".sr-skala").onclick=e=>{const d=e.target.closest(".pr");if(d){stoppa();vis(+d.dataset.i)}};
+  const key=e=>{if(!document.querySelector("#gv.on"))return;if(e.key==="ArrowRight"){stoppa();vis(i+1)}else if(e.key==="ArrowLeft"){stoppa();vis(i-1)}};
+  document.addEventListener("keydown",key);
+  vis(0);return()=>{stoppa();document.removeEventListener("keydown",key)};
 }});
 
 /* ---------- Illusioner ---------- */
