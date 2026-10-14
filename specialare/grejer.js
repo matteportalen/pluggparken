@@ -104,13 +104,14 @@ GREJER.push({id:"pengar",titel:"Pengar i skala",kat:"Tal",e:"💰",c:"#2E8B57",m
    {l:"1 miljard kronor",n:1e6,h:100,t:"11 dygn och 14 timmar",lon:"2 778 år",text:"1 miljon sedlar. Stapeln är 100 meter hög, nästan lika hög som ett tjugovåningshus. Så mycket har bara några hundra människor i Sverige."},
    {l:"10 miljarder kronor",n:1e7,h:1e3,t:"116 dygn",lon:"27 778 år",text:"10 miljoner sedlar. Stapeln är en kilometer hög, högre än världens högsta byggnad."},
    {l:"100 miljarder kronor",n:1e8,h:1e4,t:"3 år och 2 månader",lon:"277 778 år",text:"100 miljoner sedlar. Stapeln är 10 kilometer hög, lika högt som ett flygplan flyger."},
-   {l:"1 biljon kronor",n:1e9,h:1e5,t:"nästan 32 år",lon:"2,8 miljoner år",text:"1 000 miljarder, en miljard sedlar. Stapeln är 100 kilometer hög och når upp till gränsen mot rymden."}];
-  const LM=[[.17,"en mobil"],[1.3,"ett barn"],[10,"ett trevåningshus"],[190,"Turning Torso"],[828,"Burj Khalifa, världens högsta byggnad"],[8849,"Mount Everest"],[10500,"ett flygplan"],[1e5,"gränsen mot rymden"]];
+   {l:"1 biljon kronor",n:1e9,h:1e5,t:"nästan 32 år",lon:"2,8 miljoner år",text:"1 000 miljarder, en miljard sedlar. Stapeln är 100 kilometer hög och når upp till gränsen mot rymden."},
+   {l:"Världens rikaste person: ca 5 biljoner kronor",n:5e9,h:5e5,t:"nästan 159 år",lon:"ca 14 miljoner år",text:"Den rikaste människan äger just nu ungefär 500 miljarder dollar, alltså runt 5 biljoner kronor (siffran ändras hela tiden). Det blir 5 miljarder sedlar à 1 000 kr, en stapel som är 500 kilometer hög, högre än rymdstationen ISS."}];
+  const LM=[[.17,"en mobil"],[1.3,"ett barn"],[10,"ett trevåningshus"],[190,"Turning Torso"],[828,"Burj Khalifa, världens högsta byggnad"],[8849,"Mount Everest"],[10500,"ett flygplan"],[1e5,"gränsen mot rymden"],[4e5,"rymdstationen ISS"]];
   host.innerHTML=`<div class="pg"><div class="kick" id="pK">Pengar i skala · sedlar à 1 000 kr</div><div class="ill-kn" style="margin:8px 0"><button class="k on" id="pM1">Kronor: sedelstaplar</button><button class="k" id="pM2">Dollar: lastpallar</button></div><h2 id="pL"></h2>
   <div class="pg-st"><canvas id="pC" width="900" height="560"></canvas></div>
   <p class="pg-t" id="pT"></p>
   <div class="pg-rad"><div class="pg-box"><small id="pS1">Tid att räkna sedlarna</small><b id="pTid"></b><span id="pU1">en sedel i sekunden</span></div><div class="pg-box"><small id="pS2">Så länge tar det att tjäna ihop</small><b id="pLon"></b><span id="pU2">med 30 000 kr i månaden, före skatt</span></div></div>
-  <input type="range" id="pR" min="0" max="${S.length-1}" step="1" value="0" aria-label="Summa"><div class="pg-skala"><span>1 miljon</span><span>1 miljard</span><span>1 biljon</span></div>
+  <input type="range" id="pR" min="0" max="${S.length-1}" step="1" value="0" aria-label="Summa"><div class="pg-skala"><span>1 miljon</span><span>1 miljard</span><span>1 biljon</span><span>Rikaste</span></div>
   <div class="ill-kn"><button class="k" id="pP">‹ Mindre</button><button class="k ok" id="pN">Mer ›</button></div>
   <p class="pg-f">Sedlarna är räknade som 0,1 mm tjocka. Stapelns bredd är inte i skala: en riktig stapel skulle vara en tunn nål vid 100 km.</p></div>`;
   const $=s=>host.querySelector(s),C=$("#pC"),x=C.getContext("2d");let i=0,anim=0,hv=S[0].h,raf=0,mode="k";
@@ -121,7 +122,8 @@ GREJER.push({id:"pengar",titel:"Pengar i skala",kat:"Tal",e:"💰",c:"#2E8B57",m
    {l:"1 miljard dollar",p:10,v:"10 ton",lb:"en halv lastbil",text:"10 miljoner sedlar. Tio lastpallar i två rader."},
    {l:"10 miljarder dollar",p:100,v:"100 ton",lb:"ca 4 lastbilar",text:"100 miljoner sedlar. 100 lastpallar, som ett litet lager."},
    {l:"100 miljarder dollar",p:1000,v:"1 000 ton",lb:"ca 42 lastbilar",text:"1 000 lastpallar fyller en hel lagerhall."},
-   {l:"1 biljon dollar",p:1e4,v:"10 000 ton",lb:"ca 420 lastbilar",text:"10 miljarder sedlar. 10 000 lastpallar. Det är tusen gånger mer än den berömda bilden med en miljard dollar."}];
+   {l:"1 biljon dollar",p:1e4,v:"10 000 ton",lb:"ca 420 lastbilar",text:"10 miljarder sedlar. 10 000 lastpallar. Det är tusen gånger mer än den berömda bilden med en miljard dollar."},
+   {l:"Världens rikaste person: ca 500 miljarder dollar",p:5000,v:"5 000 ton",lb:"ca 210 lastbilar",text:"Den rikaste människan äger just nu ungefär 500 miljarder dollar (siffran ändras hela tiden). I 100-dollarssedlar blir det 5 miljarder sedlar, 5 000 lastpallar och en stapel som är 550 kilometer hög."}];
   const SOURCE=S;
   const fmt=(m)=>m>=1000?(m/1000).toLocaleString("sv-SE",{maximumFractionDigits:1})+" km":m>=1?m.toLocaleString("sv-SE",{maximumFractionDigits:1})+" m":(m*100).toLocaleString("sv-SE",{maximumFractionDigits:0})+" cm";
   function rita(){const W=C.width,H=C.height;x.clearRect(0,0,W,H);

@@ -435,7 +435,7 @@ $("#grid").onclick=e=>{const b=e.target.closest(".kort");if(!b)return;const a=AL
 function gnistor(){if(matchMedia("(prefers-reduced-motion:reduce)").matches)return;const v=$("#vy"),r=v.getBoundingClientRect();
   for(let i=0;i<42;i++){const e=document.createElement("i");e.className="gnista";const a=Math.random()*Math.PI*2,d=120+Math.random()*Math.min(r.width,r.height)*.45;
     e.style.cssText=`left:${r.width/2}px;top:${r.height*.45}px;--x:${Math.cos(a)*d}px;--y:${Math.sin(a)*d}px;--s:${6+Math.random()*10}px;--t:${.9+Math.random()*.9}s;--h:${Math.random()<.5?"#fff":"#ffd86b"}`;v.appendChild(e);setTimeout(()=>e.remove(),2000)}}
-let kvTill=null;
+let kvTill=null,gvTill=null;
 let ledt=0,svarat=false;
 const ledtLista=l=>(typeof LEDTRADAR!=="undefined"&&LEDTRADAR[l.id])||null;
 const punkter=t=>{const d=t.split(/(?<=[.!?])\s+(?=[A-ZÅÄÖ0-9"])/);return d.length>1?"<ul>"+d.map(x=>"<li>"+x+"</li>").join("")+"</ul>":"<p>"+t+"</p>"};
@@ -457,10 +457,11 @@ function visaBild(){
     const bi=bildar[i];$("#vy").style.setProperty("--bi",bi?`url(bilder/${bi.f})`:"none");
     const bild=bi?`<figure class="foto"><div class="rama"><img src="bilder/${bi.f}" alt="${r[1]}" decoding="async"></div><figcaption><span class="fig">FIG. ${i+1}</span><a href="${bi.s}" target="_blank" rel="noopener">${bi.k}</a></figcaption></figure>`:`<div class="e" aria-hidden="true">${r[0]}</div>`;
     const nb=bildar[i+1];if(nb){const im=new Image();im.src="bilder/"+nb.f}
-    $("#vyS").classList.toggle("sist",sist);$("#vyS").innerHTML=bild+`<div class="tx">${kick(l.kat.toUpperCase()+" · "+(idx+1)+" / "+n)}<h2>${r[1]}</h2>${punkter(r[2])}</div>`+(sist?`<div class="gillar">Gillade du den? <span class="tum">${tumHtml(l.id)}</span></div>${KLIPPL[l.id]?`<div class="kuriosa"><button class="btn" id="slK">🎬 Kuriosa: se ett kort filmklipp på svenska (${Math.max(1,Math.round(KLIPPL[l.id].sek/60))} min)</button></div>`:""}<div class="slut"><button class="btn guld" id="sl1">🎲 Slumpa en till</button><button class="btn" id="sl2">Till listan</button></div>`:"");
+    $("#vyS").classList.toggle("sist",sist);$("#vyS").innerHTML=bild+`<div class="tx">${kick(l.kat.toUpperCase()+" · "+(idx+1)+" / "+n)}<h2>${r[1]}</h2>${punkter(r[2])}</div>`+(sist?`<div class="gillar">Gillade du den? <span class="tum">${tumHtml(l.id)}</span></div>${(KLIPPL[l.id]||l.grej)?`<div class="kuriosa">${l.grej?`<button class="btn guld" id="slG">🧪 Prova själv: ${GREJER.find(x=>x.id===l.grej).titel}</button> `:""}${KLIPPL[l.id]?`<button class="btn" id="slK">🎬 Kuriosa: se ett kort filmklipp på svenska (${Math.max(1,Math.round(KLIPPL[l.id].sek/60))} min)</button>`:""}</div>`:""}<div class="slut"><button class="btn guld" id="sl1">🎲 Slumpa en till</button><button class="btn" id="sl2">Till listan</button></div>`:"");
   }
   $("#vyD").innerHTML=Array.from({length:n},(_,i)=>`<span class="prick${i===idx?" on":""}"></span>`).join("");
   $("#vyP").disabled=idx===0;$("#vyN").disabled=sist;$("#vyN").style.visibility=sist?"hidden":"visible";
+  if(sist&&$("#slG")){$("#slG").onclick=()=>{gvTill=location.hash;location.hash="#g/"+l.grej}}
   if(sist&&$("#slK")){$("#slK").onclick=()=>{kvTill=location.hash;location.hash="#k/"+KLIPPL[l.id].id}}
   if(sist){$("#sl1").onclick=()=>{let a;const P=pool();do{a=P[Math.random()*P.length|0]}while(a===l&&P.length>1);location.hash=href(a)};$("#sl2").onclick=()=>{location.hash=""}}
   history.replaceState(null,"","#l/"+l.id+"/"+(idx+1));
@@ -479,7 +480,8 @@ function rut(){
 }
 function gaTill(d){if(!cur)return;const n=idx+d,tot=cur.rutor.length+(ledtLista(cur)?1:0);if(n<0||n>=tot)return;idx=n;visaBild()}
 $("#vyN").onclick=()=>gaTill(1);$("#vyP").onclick=()=>gaTill(-1);
-$("#vyX").onclick=$("#gvX").onclick=()=>{location.hash=""};
+$("#vyX").onclick=()=>{location.hash=""};
+$("#gvX").onclick=()=>{const t=gvTill;gvTill=null;location.hash=t||""};
 $("#kvX").onclick=()=>{const t=kvTill;kvTill=null;location.hash=t||""};
 $("#vyF").onclick=()=>{const e=document.documentElement;if(document.fullscreenElement)document.exitFullscreen();else if(e.requestFullscreen)e.requestFullscreen().catch(()=>{})};
 if(!document.documentElement.requestFullscreen)$("#vyF").style.display="none";

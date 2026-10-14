@@ -172,7 +172,7 @@ var LEKTIONER=[
 ["🧮","Räkna avståndet","Ljuset är snabbare än ljudet. Räkna sekunderna mellan blixt och dån. Tre sekunder är ungefär en kilometer."],
 ["🏠","Var säker","Gå inomhus när det åskar. Stå inte under ensamma höga träd."]]},
 
-{id:"stora-tal",titel:"Hur stor är en miljard?",kat:"Tal",e:"🔢",c:"#2E7D5B",rutor:[
+{id:"stora-tal",grej:"pengar",titel:"Hur stor är en miljard?",kat:"Tal",e:"🔢",c:"#2E7D5B",rutor:[
 ["🔢","Stora tal","En miljon är 1 000 000. En miljard är tusen miljoner. Det är svårt att föreställa sig, så vi räknar med tid."],
 ["⏱️","En miljon sekunder","1 miljon sekunder är ungefär 11 och en halv dag."],
 ["📅","En miljard sekunder","1 miljard sekunder är ungefär 31 år och 8 månader! Det är en jättestor skillnad."],
