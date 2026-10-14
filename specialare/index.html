@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Specialare – Pluggparken</title>
+<meta name="theme-color" content="#1F3A35">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FFF6E0;--ink:#1D2B53;--muted:#56668F;--card:#fff;--line:#EBD9A8;--accent:#3D5AFE;--gold:#F2B707;--font:"Baloo 2","Trebuchet MS",system-ui,sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+button{font-family:inherit;color:inherit;cursor:pointer}
+.wrap{max-width:980px;margin:0 auto;padding:16px 16px 56px}
+.topp{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.topp small{color:var(--muted);font-weight:700}
+h1{font-size:clamp(2.2rem,8vw,3.4rem);line-height:1;margin:10px 0 4px;font-weight:800;letter-spacing:-.5px}
+h1 span{color:#E0562B}
+.lead{margin:0 0 16px;color:var(--muted)}
+.dagens{position:relative;display:flex;gap:16px;align-items:center;background:linear-gradient(135deg,var(--c,#3F51B5),#1D2B53);color:#fff;border-radius:26px;padding:20px;margin:8px 0 18px;box-shadow:0 6px 0 rgba(0,0,0,.18);overflow:hidden}
+.dagens .stor{flex:none;font-size:clamp(4rem,16vw,6.5rem);line-height:1;filter:drop-shadow(0 6px 0 rgba(0,0,0,.2))}
+.dagens .t{flex:1;min-width:0}
+.dagens small{display:inline-block;background:var(--gold);color:var(--ink);border-radius:999px;padding:0 10px;font-weight:800;font-size:.85rem}
+.dagens h2{margin:6px 0 2px;font-size:clamp(1.6rem,6vw,2.3rem);line-height:1.05}
+.dagens p{margin:0 0 12px;opacity:.9}
+.btn{border:0;background:#fff;color:var(--ink);border-radius:16px;padding:10px 18px;font-weight:800;font-size:1.05rem;box-shadow:0 4px 0 rgba(0,0,0,.2);transition:transform .08s,box-shadow .08s}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.2)}
+.btn.guld{background:var(--gold)}
+.dagens .rad{display:flex;gap:10px;flex-wrap:wrap}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+.chip{border:2px solid var(--line);background:#fff;border-radius:999px;padding:3px 14px;font-weight:700;font-size:1rem}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:560px){.grid{grid-template-columns:1fr 1fr}}
+@media(min-width:860px){.grid{grid-template-columns:1fr 1fr 1fr}}
+.kort{display:flex;align-items:center;gap:12px;background:var(--card);border:0;border-radius:20px;padding:10px 12px;text-align:left;box-shadow:0 5px 0 var(--line);transition:transform .08s,box-shadow .08s;width:100%}
+.kort:active{transform:translateY(3px);box-shadow:0 2px 0 var(--line)}
+@media(hover:hover){.kort:hover{transform:translateY(-2px);box-shadow:0 7px 0 var(--line)}}
+.kort .ik{flex:none;width:62px;height:62px;border-radius:16px;background:var(--c);display:grid;place-items:center;font-size:2.1rem;transform:rotate(-4deg);box-shadow:inset 0 -5px 0 rgba(0,0,0,.18)}
+.kort b{display:block;font-size:1.15rem;line-height:1.15}
+.kort small{display:block;color:var(--muted);font-size:.9rem;line-height:1.25}
+.etikett{display:inline-block;background:#EEF1FF;color:var(--accent);border-radius:8px;padding:0 7px;font-size:.75rem;font-weight:800;margin-right:4px}
+.etikett.g{background:#FFF0D6;color:#B25B00}
+.foot{text-align:center;color:var(--muted);font-size:.9rem;margin-top:26px}
+/* visare */
+#vy{position:fixed;inset:0;z-index:50;background:var(--c,#3F51B5);color:#fff;display:none;flex-direction:column}
+#vy.on{display:flex}
+.vy-top{display:flex;align-items:center;gap:8px;padding:10px 12px;padding-top:max(10px,env(safe-area-inset-top))}
+.vy-top .t{flex:1;font-weight:800;font-size:1.1rem;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rund{border:0;width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.95);color:var(--ink);font-size:1.3rem;font-weight:800;box-shadow:0 3px 0 rgba(0,0,0,.2)}
+.rund:active{transform:translateY(2px)}
+.slide{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px 20px;gap:10px;min-height:0;overflow:auto}
+.slide .e{font-size:clamp(5rem,26vmin,11rem);line-height:1;filter:drop-shadow(0 8px 0 rgba(0,0,0,.18));animation:pop .45s cubic-bezier(.3,1.5,.5,1)}
+.slide h2{margin:0;font-size:clamp(1.8rem,7vw,3.4rem);line-height:1.05;text-shadow:0 3px 0 rgba(0,0,0,.2)}
+.slide p{margin:0;max-width:30ch;font-size:clamp(1.2rem,4.2vw,2rem);line-height:1.3;background:rgba(255,255,255,.14);border-radius:20px;padding:12px 18px}
+@media(min-width:900px){.slide p{max-width:34ch}}
+@keyframes pop{from{transform:scale(.4) rotate(-12deg);opacity:0}to{transform:none;opacity:1}}
+.vy-nav{display:flex;align-items:center;justify-content:center;gap:14px;padding:8px 12px;padding-bottom:max(14px,env(safe-area-inset-bottom))}
+.prickar{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;max-width:50vw}
+.prick{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.35)}
+.prick.on{background:#fff;transform:scale(1.3)}
+.nav{border:0;border-radius:18px;background:#fff;color:var(--ink);font-weight:800;font-size:1.25rem;min-width:84px;height:54px;box-shadow:0 4px 0 rgba(0,0,0,.2)}
+.nav:disabled{opacity:.35}
+.nav:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.2)}
+.slut{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+/* grejer */
+#gv{position:fixed;inset:0;z-index:50;background:var(--bg);display:none;flex-direction:column;overflow:auto}
+#gv.on{display:flex}
+.gv-top{display:flex;align-items:center;gap:8px;padding:10px 12px;padding-top:max(10px,env(safe-area-inset-top));background:var(--c);color:#fff;position:sticky;top:0;z-index:2}
+.gv-top .t{flex:1;font-weight:800;font-size:1.2rem}
+.gv-in{width:100%;max-width:760px;margin:0 auto;padding:14px 14px 40px}
+.k{border:2px solid var(--line);background:#fff;border-radius:14px;padding:6px 14px;font-weight:800;font-size:1rem;box-shadow:0 3px 0 var(--line)}
+.k:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
+.k.on,.k.ok{background:var(--ink);color:#fff;border-color:var(--ink);box-shadow:0 3px 0 #0b1330}
+.ill-kn{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:10px 0}
+.ill-q{margin:4px 0 8px;font-size:1.4rem;line-height:1.2;text-align:center}
+.ill-n{text-align:center;color:var(--muted);font-weight:700}
+.ill-b{background:#fff;border-radius:20px;box-shadow:0 5px 0 var(--line);overflow:hidden}
+.ill-b svg{display:block;width:100%;height:auto}
+.ill-svar{min-height:3em;text-align:center;font-weight:800;font-size:1.2rem;color:#B3261E;padding:6px}
+.rit-t{text-align:center;color:var(--muted);margin:4px 0}
+.rit-tabs{display:flex;gap:8px;justify-content:center;margin-bottom:8px}
+#rC{width:100%;max-width:560px;margin:0 auto;height:auto;display:block;border-radius:22px;box-shadow:0 5px 0 var(--line);background:#12122b;aspect-ratio:1}
+.stor{text-align:center}
+.stor-bild{min-height:11rem;display:grid;place-items:center;line-height:1;transition:font-size .25s}
+.stor-namn{font-size:1.8rem;font-weight:800}
+.stor-m{color:#3F51B5;font-weight:800;font-size:1.1rem}
+.stor-t{min-height:4.2em;max-width:34ch;margin:6px auto;color:var(--muted)}
+#sR{width:100%;max-width:560px;accent-color:#3F51B5;height:34px}
+.stor-skala{display:flex;justify-content:space-between;color:var(--muted);font-size:.9rem}
+.stor-rad{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:12px}
+.stor-rad button{border:2px solid var(--line);background:#fff;border-radius:12px;font-size:1.4rem;width:46px;height:46px}
+.stor-rad button.on{background:#3F51B5;border-color:#3F51B5}
+.udda-top{display:flex;justify-content:space-between;font-weight:800;margin-bottom:8px}
+.udda-g{display:grid;gap:6px;max-width:520px;margin:0 auto}
+.udda-c{border:0;background:#fff;border-radius:14px;box-shadow:0 3px 0 var(--line);aspect-ratio:1;line-height:1;padding:0}
+.udda-c.fel{background:#FFD9DA}
+.hitta-b{position:relative;border-radius:20px;overflow:hidden;box-shadow:0 5px 0 var(--line);touch-action:manipulation}
+.hitta-b img{display:block;width:100%;height:auto;cursor:crosshair;-webkit-user-drag:none;user-select:none}
+.ring{position:absolute;transform:translate(-50%,-50%);border:4px solid #fff;border-radius:50%;pointer-events:none;box-shadow:0 0 0 3px #1E9E5E,0 0 12px rgba(0,0,0,.5);animation:pop .4s}
+.ring.visa{box-shadow:0 0 0 3px #E5484D,0 0 12px rgba(0,0,0,.5)}
+.kallan{font-size:.8rem;color:var(--muted);text-align:center;margin:4px 0}
+.tid{text-align:center}
+.tid-s{font-size:5rem;font-weight:800;margin:10px 0}
+@media (prefers-reduced-motion:reduce){.slide .e,.ring{animation:none}.kort,.btn{transition:none}}
+</style>
+</head>
+<body>
+<main class="wrap" id="hem">
+  <div class="topp"><small>🤫 Hemlig sida</small></div>
+  <h1>Special<span>are</span></h1>
+  <p class="lead">Minilektioner, illusioner och pyssel för en kort paus. Ingen poäng, bara kul!</p>
+  <section class="dagens" id="dagens"></section>
+  <div class="chips" id="chips" role="group" aria-label="Välj ämne"></div>
+  <div class="grid" id="grid"></div>
+  <p class="foot" id="foot"></p>
+</main>
+
+<section id="vy" aria-label="Minilektion">
+  <div class="vy-top"><button class="rund" id="vyX" aria-label="Stäng">✕</button><div class="t" id="vyT"></div><button class="rund" id="vyF" aria-label="Helskärm">⛶</button></div>
+  <div class="slide" id="vyS"></div>
+  <div class="vy-nav"><button class="nav" id="vyP">‹ Förra</button><div class="prickar" id="vyD"></div><button class="nav" id="vyN">Nästa ›</button></div>
+</section>
+
+<section id="gv" aria-label="Interaktiv specialare">
+  <div class="gv-top"><button class="rund" id="gvX" aria-label="Tillbaka">←</button><div class="t" id="gvT"></div></div>
+  <div class="gv-in" id="gvB"></div>
+</section>
+
+<script src="lektioner.js"></script>
+<script src="grejer.js"></script>
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+const ALLA=[].concat(LEKTIONER.map(l=>Object.assign({typ:"l"},l,{beskr:l.rutor[0][2]})),GREJER.map(g=>Object.assign({typ:"g"},g)));
+let filter="Alla",cur=null,idx=0,stang=null;
+const dagNr=()=>Math.floor((Date.now()-new Date().getTimezoneOffset()*6e4)/864e5);
+function dagens(){return ALLA[(dagNr()*7+3)%ALLA.length]}
+function href(a,i){return a.typ==="l"?"#l/"+a.id+(i?"/"+i:""):"#g/"+a.id}
+function hem(){
+  const d=dagens();
+  const kort=a=>`<button class="kort" data-id="${a.id}" style="--c:${a.c}"><span class="ik" aria-hidden="true">${a.e}</span><span><b>${a.titel}</b><small><span class="etikett${a.typ==="g"?" g":""}">${a.typ==="g"?"Prova själv":a.kat}</span>${a.typ==="l"?a.rutor.length+" bilder":""}</small></span></button>`;
+  $("#dagens").style.setProperty("--c",d.c);
+  $("#dagens").innerHTML=`<div class="stor" aria-hidden="true">${d.e}</div><div class="t"><small>Dagens specialare</small><h2>${d.titel}</h2><p>${d.typ==="l"?d.rutor.length+" bilder · "+d.kat:d.beskr}</p><div class="rad"><button class="btn guld" id="dgo">Visa!</button><button class="btn" id="slump">🎲 Slumpa</button></div></div>`;
+  $("#dgo").onclick=()=>{location.hash=href(d)};
+  $("#slump").onclick=()=>{let a;do{a=ALLA[Math.random()*ALLA.length|0]}while(a===d&&ALLA.length>1);location.hash=href(a)};
+  const kats=["Alla","Prova själv",...new Set(LEKTIONER.map(l=>l.kat))];
+  $("#chips").innerHTML=kats.map(k=>`<button class="chip${k===filter?" on":""}" data-k="${k}">${k}</button>`).join("");
+  const lista=ALLA.filter(a=>filter==="Alla"||(filter==="Prova själv"?a.typ==="g":a.typ==="l"&&a.kat===filter));
+  $("#grid").innerHTML=lista.map(kort).join("");
+  $("#foot").textContent=LEKTIONER.length+" minilektioner och "+GREJER.length+" saker att prova";
+}
+$("#chips").onclick=e=>{const b=e.target.closest(".chip");if(b){filter=b.dataset.k;hem()}};
+$("#grid").onclick=e=>{const b=e.target.closest(".kort");if(!b)return;const a=ALLA.find(x=>x.id===b.dataset.id);location.hash=href(a)};
+/* bildspel */
+function visaBild(){
+  const l=cur,r=l.rutor[idx],sist=idx===l.rutor.length-1;
+  $("#vyS").innerHTML=`<div class="e" aria-hidden="true">${r[0]}</div><h2>${r[1]}</h2><p>${r[2]}</p>`+(sist?`<div class="slut"><button class="btn guld" id="sl1">🎲 Slumpa en till</button><button class="btn" id="sl2">Till listan</button></div>`:"");
+  $("#vyD").innerHTML=l.rutor.map((_,i)=>`<span class="prick${i===idx?" on":""}"></span>`).join("");
+  $("#vyP").disabled=idx===0;$("#vyN").disabled=sist;$("#vyN").style.visibility=sist?"hidden":"visible";
+  if(sist){$("#sl1").onclick=()=>{let a;do{a=ALLA[Math.random()*ALLA.length|0]}while(a===l);location.hash=href(a)};$("#sl2").onclick=()=>{location.hash=""}}
+  history.replaceState(null,"","#l/"+l.id+"/"+(idx+1));
+}
+function oppnaL(l,i){cur=l;idx=Math.max(0,Math.min(l.rutor.length-1,i));$("#vy").style.setProperty("--c",l.c);$("#vyT").textContent=l.e+" "+l.titel;$("#vy").classList.add("on");visaBild()}
+function stangAlla(){$("#vy").classList.remove("on");$("#gv").classList.remove("on");if(stang){try{stang()}catch(e){}stang=null}$("#gvB").innerHTML="";cur=null}
+function oppnaG(g){stangAlla();$("#gv").style.setProperty("--c",g.c);$("#gvT").textContent=g.e+" "+g.titel;$("#gv").classList.add("on");$("#gv").scrollTop=0;stang=g.start($("#gvB"))}
+function rut(){
+  const h=location.hash.replace(/^#/,"").split("/");
+  if(h[0]==="l"){const l=LEKTIONER.find(x=>x.id===h[1]);if(l){if(cur!==l||!$("#vy").classList.contains("on")){stangAlla()}oppnaL(l,(+h[2]||1)-1);return}}
+  if(h[0]==="g"){const g=GREJER.find(x=>x.id===h[1]);if(g){oppnaG(g);return}}
+  stangAlla();
+}
+function gaTill(d){if(!cur)return;const n=idx+d;if(n<0||n>=cur.rutor.length)return;idx=n;visaBild()}
+$("#vyN").onclick=()=>gaTill(1);$("#vyP").onclick=()=>gaTill(-1);
+$("#vyX").onclick=$("#gvX").onclick=()=>{location.hash=""};
+$("#vyF").onclick=()=>{const e=document.documentElement;if(document.fullscreenElement)document.exitFullscreen();else if(e.requestFullscreen)e.requestFullscreen().catch(()=>{})};
+if(!document.documentElement.requestFullscreen)$("#vyF").style.display="none";
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){if($("#vy").classList.contains("on")||$("#gv").classList.contains("on")){if(!document.fullscreenElement)location.hash=""}return}
+  if(!$("#vy").classList.contains("on"))return;
+  if(e.key==="ArrowRight"||e.key===" "||e.key==="PageDown"){e.preventDefault();gaTill(1)}
+  else if(e.key==="ArrowLeft"||e.key==="PageUp"){e.preventDefault();gaTill(-1)}
+  else if(e.key==="f"||e.key==="F")$("#vyF").click();
+});
+let sx=null;
+$("#vyS").addEventListener("touchstart",e=>{sx=e.touches[0].clientX},{passive:true});
+$("#vyS").addEventListener("touchend",e=>{if(sx==null)return;const dx=e.changedTouches[0].clientX-sx;sx=null;if(Math.abs(dx)>50)gaTill(dx<0?1:-1)},{passive:true});
+window.addEventListener("hashchange",rut);
+hem();rut();
+})();
+</script>
+</body>
+</html>
