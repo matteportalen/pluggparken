@@ -406,7 +406,7 @@ var LEKTIONER=[
 {id:"smaklokar",titel:"Smaklökarna",kat:"Kroppen",e:"👅",c:"#D6546B",rutor:[
 ["👅","Tusentals smaklökar","På tungan sitter ungefär 2 000 till 10 000 smaklökar. De byts ut ungefär var tionde till fjortonde dag."],
 ["🍬","Fem grundsmaker","Vi känner sött, surt, salt, bittert och umami, som är smaken av t.ex. parmesan och soja."],
-["🗺️","Tungkartan stämmer inte","Man trodde att varje smak sitter på sin del av tungan. Det är fel. Alla smaker kan kkännas på hela tungan."],
+["🗺️","Tungkartan stämmer inte","Man trodde att varje smak sitter på sin del av tungan. Det är fel. Alla smaker kan kännas på hela tungan."],
 ["🌶️","Chili är inte en smak","Chili ger inte en smak utan en smärtsignal. Ämnet capsaicin aktiverar nerver som tror att munnen är het."],
 ["❄️","Mint känns kall","Menthol i mynta aktiverar nerver som känner kyla. Munnen blir inte kallare, men hjärnan tror det."],
 ["🫐","Mirakelbär","Mirakelbäret från Västafrika gör att sur mat smakar sött i ungefär en halvtimme. Du kan äta en citron som om det vore godis."]]}
