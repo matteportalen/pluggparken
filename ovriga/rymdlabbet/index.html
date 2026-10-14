@@ -22,10 +22,10 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Inter:wght@400;600;800&family=Source+Serif+4:opsz,wght@8..60,500;8..60,700&display=swap" rel="stylesheet">
 <style>
 :root{--ink:#1D2B53;--muted:#56668F;--line:#C6D6F2;--good:#1E9E5E;--good-dark:#157548;--accent:#3D5AFE;--gold:#FFC93C;
-  --space:#0B1030;--glass:rgba(255,255,255,.08);--soft:#C9D4F2;--font:"Baloo 2","Trebuchet MS",system-ui,sans-serif}
+  --space:#0B1030;--glass:rgba(255,255,255,.08);--soft:#C9D4F2;--font:"Inter","Trebuchet MS",system-ui,sans-serif}
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%}
 body{background:radial-gradient(circle,rgba(255,255,255,.55) 1px,transparent 1.5px) 0 0/71px 67px,radial-gradient(circle,rgba(255,255,255,.3) 1px,transparent 1.4px) 30px 20px/43px 53px,var(--space);
@@ -130,6 +130,66 @@ h2{font-size:1.6rem;line-height:1.1;margin:4px 0 6px}
 .ginfo dd{margin:0;font-weight:800}
 @media(max-width:420px){.ginfo dl{grid-template-columns:1fr}.ginfo dt{margin-top:4px}}
 @media (prefers-reduced-motion:reduce){*{transition:none !important}}
+/* ===== Rymdlabbet i museal, filmisk stil (samma känsla som Specialare) ===== */
+:root{--font:Inter,"Helvetica Neue",Arial,system-ui,sans-serif;--serif:"Source Serif 4",Georgia,"Times New Roman",serif;--space:#070a11;--gold:#ffd86b;--soft:rgba(255,255,255,.68);--hair:rgba(255,255,255,.16)}
+body{font-family:var(--font);background:var(--space);position:relative}
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.45;background-image:radial-gradient(1.2px 1.2px at 12% 18%,#fff,transparent),radial-gradient(1px 1px at 27% 72%,#fff,transparent),radial-gradient(1.4px 1.4px at 41% 33%,#fff,transparent),radial-gradient(1px 1px at 58% 82%,#fff,transparent),radial-gradient(1.3px 1.3px at 73% 24%,#fff,transparent),radial-gradient(1px 1px at 88% 61%,#fff,transparent),radial-gradient(1.2px 1.2px at 94% 12%,#fff,transparent),radial-gradient(1px 1px at 6% 88%,#fff,transparent);background-size:360px 320px;animation:rldrift 180s linear infinite}
+body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse at 50% 0%,rgba(90,70,200,.22),transparent 55%),radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,.55) 100%)}
+@keyframes rldrift{to{background-position:-360px 320px}}
+.wrap{position:relative;z-index:1;max-width:1180px;padding:16px 18px 56px}
+h1{font-family:var(--serif);font-weight:700;letter-spacing:-.02em;font-size:clamp(2.6rem,8vw,4.4rem);margin:6px 0 4px}
+h1{background:linear-gradient(100deg,#fff 35%,#ffd86b 50%,#fff 65%);background-size:260% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;animation:rlglans 6s ease-in-out infinite alternate}
+@keyframes rlglans{from{background-position:100% 0}to{background-position:0 0}}
+.lead{color:var(--soft);font-size:1.05rem;max-width:62ch}
+.kick{font-size:.78rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#b9c6ff}
+.grp{font-family:var(--font);font-size:.78rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--soft);margin:30px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--hair)}
+.back{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.28);box-shadow:none;backdrop-filter:blur(8px);font-weight:600;border-radius:12px;padding:4px 16px}
+.back:hover{background:rgba(255,255,255,.2)}
+/* feature */
+.feature{position:relative;overflow:hidden;min-height:230px;border-radius:8px;border:1px solid var(--hair);padding:28px 32px;gap:22px;align-items:flex-end;background:#0b0f19;box-shadow:0 0 120px -30px rgba(120,150,255,.55),0 30px 80px rgba(0,0,0,.5)}
+.feature::before{content:"";position:absolute;inset:-40px;background:var(--bi) center/cover;filter:blur(2px) brightness(.55) saturate(1.25);z-index:0}
+.feature::after{content:"";position:absolute;inset:0;background:linear-gradient(to right,rgba(6,9,15,.92),rgba(6,9,15,.45) 60%,rgba(6,9,15,.2));z-index:0}
+.feature>*{position:relative;z-index:1}
+.fplan{display:none}
+.ftxt b{font-family:var(--serif);font-size:clamp(1.8rem,4vw,2.8rem);letter-spacing:-.01em}
+.ftxt small{color:var(--soft);font-size:1rem;max-width:46ch}
+.fgo{background:#fff;color:#0b1020;box-shadow:0 0 30px rgba(130,160,255,.6);border-radius:12px;font-weight:600;padding:10px 22px}
+/* menykort som plaketter */
+.modes{grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.mode{position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;gap:3px;min-height:190px;padding:16px;border-radius:6px;border:1px solid var(--hair);color:#fff;background:linear-gradient(to top,rgba(6,9,15,.95),rgba(6,9,15,.35) 62%,rgba(6,9,15,.1)),var(--bi,none) center/cover,color-mix(in srgb,var(--c,#345) 35%,#070a11);box-shadow:0 12px 30px rgba(0,0,0,.4);transition:transform .2s,border-color .2s,box-shadow .2s}
+.mode:hover{transform:translateY(-4px);background:linear-gradient(to top,rgba(6,9,15,.95),rgba(6,9,15,.3) 62%,rgba(6,9,15,.05)),var(--bi,none) center/cover,color-mix(in srgb,var(--c,#345) 35%,#070a11);border-color:color-mix(in srgb,var(--c,#9bd) 60%,#fff);box-shadow:0 18px 40px rgba(0,0,0,.5),0 0 40px -6px color-mix(in srgb,var(--c,#9bd) 80%,transparent)}
+.mode:active{transform:scale(.985)}
+.mode::after{content:"";position:absolute;top:-20%;bottom:-20%;left:-60%;width:35%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.22),transparent);transform:skewX(-18deg);transition:left .8s;pointer-events:none}
+.mode:hover::after{left:140%}
+.mode .ic{display:none}
+.mode .kk{font-size:.68rem;font-weight:800;letter-spacing:.16em;color:color-mix(in srgb,var(--c,#9bd) 45%,#fff)}
+.mode b{font-family:var(--serif);font-weight:700;font-size:1.3rem;line-height:1.1}
+.mode small{color:var(--soft);font-size:.85rem}
+/* lägen */
+.say{background:rgba(255,255,255,.06);color:#fff;border:1px solid var(--hair);border-left:3px solid #7f95ff;border-radius:6px;padding:12px 14px}
+.say .big{font-family:var(--serif);font-size:1.25rem;font-weight:700;line-height:1.2}
+.spk{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.28);box-shadow:none;color:#fff}
+.panel{background:rgba(255,255,255,.05);border:1px solid var(--hair);border-radius:6px;backdrop-filter:blur(10px)}
+.stage{border-radius:4px;background:#04060c;box-shadow:0 0 110px -10px rgba(120,150,255,.5),0 24px 70px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.14)}
+.b{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.26);border-radius:12px;font-weight:600;backdrop-filter:blur(8px)}
+.b:hover{background:rgba(255,255,255,.18)}
+.b[aria-pressed="true"]{background:#fff;color:#0b1020;border-color:#fff;box-shadow:0 0 22px rgba(160,180,255,.5)}
+.b.go{background:#fff;color:#0b1020;border-color:#fff;box-shadow:0 0 26px rgba(130,160,255,.55)}
+.slider input{accent-color:#ffd86b}
+.slider output,.vcard .kg,.step output,.agelist span{color:var(--gold);font-family:var(--serif)}
+.facts li,.agelist div,.vcard,.ginfo{background:rgba(255,255,255,.05);border:1px solid var(--hair);border-radius:6px}
+.facts b{color:var(--gold)}
+.skycap{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
+.sky{border-radius:4px;box-shadow:0 0 0 1px var(--hair)}
+.note{color:var(--soft)}
+.olbl,.lbl3,.olbl.ax{font-family:var(--font)}
+.lane{border:1px solid var(--hair);border-radius:6px}
+.step{background:rgba(255,255,255,.06);border:1px solid var(--hair);border-radius:12px}
+.chips .b{border-radius:999px}
+.rlkallor{margin-top:30px;font-size:.7rem;letter-spacing:.04em;color:rgba(255,255,255,.45);line-height:1.6}
+.rlkallor a{color:inherit}
+h2{font-family:var(--serif);font-weight:700;letter-spacing:-.01em}
+@media(prefers-reduced-motion:reduce){body::before,h1{animation:none}h1{-webkit-text-fill-color:#fff;color:#fff;background:none}}
 </style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 </head>
@@ -138,33 +198,35 @@ h2{font-size:1.6rem;line-height:1.1;margin:4px 0 6px}
 
 <!-- Menyn -->
 <section id="home" class="screen">
-  <h1>🔭 Rymdlabbet</h1>
+  <div class="kick">Utforska universum</div>
+  <h1>Rymdlabbet</h1>
   <p class="lead">Utforska jorden, solen, månen och planeterna. Dra, snurra och prova själv, och tryck på 🔊 så läses förklaringen upp.</p>
-  <a class="feature" href="../solsystemet/"><span class="fplan" aria-hidden="true"><i style="--s:46px;--c:radial-gradient(circle at 35% 35%,#FFF3B0,#FFC93C 45%,#FF8A00)"></i><i style="--s:12px;--c:radial-gradient(circle at 35% 35%,#ddd,#8C7E72)"></i><i style="--s:18px;--c:radial-gradient(circle at 35% 35%,#FFE8B0,#C89B4E)"></i><i style="--s:20px;--c:radial-gradient(circle at 35% 35%,#9BD0FF,#2E6FD0)"></i><i style="--s:14px;--c:radial-gradient(circle at 35% 35%,#FFB08A,#C1440E)"></i><i style="--s:34px;--c:radial-gradient(circle at 35% 35%,#F4DEC0,#C9A27A)"></i><i class="ring" style="--s:30px;--c:radial-gradient(circle at 35% 35%,#FFF0C8,#D8C08A)"></i><i style="--s:22px;--c:radial-gradient(circle at 35% 35%,#DFFBFF,#8CCCD6)"></i><i style="--s:21px;--c:radial-gradient(circle at 35% 35%,#B8C8FF,#3F5EC4)"></i></span>
+  <a class="feature" href="../solsystemet/" style="--bi:url(../../specialare/bilder/storlek-10.jpg)"><span class="fplan" aria-hidden="true"><i style="--s:46px;--c:radial-gradient(circle at 35% 35%,#FFF3B0,#FFC93C 45%,#FF8A00)"></i><i style="--s:12px;--c:radial-gradient(circle at 35% 35%,#ddd,#8C7E72)"></i><i style="--s:18px;--c:radial-gradient(circle at 35% 35%,#FFE8B0,#C89B4E)"></i><i style="--s:20px;--c:radial-gradient(circle at 35% 35%,#9BD0FF,#2E6FD0)"></i><i style="--s:14px;--c:radial-gradient(circle at 35% 35%,#FFB08A,#C1440E)"></i><i style="--s:34px;--c:radial-gradient(circle at 35% 35%,#F4DEC0,#C9A27A)"></i><i class="ring" style="--s:30px;--c:radial-gradient(circle at 35% 35%,#FFF0C8,#D8C08A)"></i><i style="--s:22px;--c:radial-gradient(circle at 35% 35%,#DFFBFF,#8CCCD6)"></i><i style="--s:21px;--c:radial-gradient(circle at 35% 35%,#B8C8FF,#3F5EC4)"></i></span>
     <span class="ftxt"><b>🪐 Solsystemet i 3D</b><small>Solen och de åtta planeterna där de är just nu. Snurra, zooma och flyg till en planet.</small></span><span class="fgo">Starta ›</span></a>
   <h3 class="grp">Jorden, solen och månen</h3>
   <div class="modes">
-    <button class="mode" data-go="dag"><span class="ic" style="--c:linear-gradient(135deg,#FFB13D,#3D5AFE)">🌍</span><span><b>Dag och natt</b><small>Varför blir det natt? Snurra jorden och se solen gå upp hemma.</small></span></button>
-    <button class="mode" data-go="arstid"><span class="ic" style="--c:linear-gradient(135deg,#2BB673,#FF9F43)">🍂</span><span><b>Årstiderna</b><small>Varför är det sommar och vinter? Midnattssol och mörkertid.</small></span></button>
-    <a class="mode" href="../solsystemet/#jorden"><span class="ic" style="--c:linear-gradient(135deg,#40456B,#C9D4F2)">🌙</span><span><b>Månens faser</b><small>Varför ändrar månen form? Dra månen runt jorden.</small></span></a>
-    <button class="mode" data-go="morker"><span class="ic" style="--c:linear-gradient(135deg,#141B3D,#E5484D)">🌑</span><span><b>Förmörkelser</b><small>När månen skymmer solen, och när månen blir röd.</small></span></button>
+    <button class="mode" data-go="dag" style="--c:#FFB13D;--bi:url(../../specialare/bilder/iss-3.jpg)"><span class="kk">JORDEN</span><b>Dag och natt</b><small>Varför blir det natt? Snurra jorden och se solen gå upp hemma.</small></button>
+    <button class="mode" data-go="arstid" style="--c:#2BB673;--bi:url(../../specialare/bilder/dygn-1.jpg)"><span class="kk">JORDEN</span><b>Årstiderna</b><small>Varför är det sommar och vinter? Midnattssol och mörkertid.</small></button>
+    <a class="mode" href="../solsystemet/#jorden" style="--c:#9aa6d6;--bi:url(../../specialare/bilder/manen-1.jpg)"><span class="kk">MÅNEN</span><b>Månens faser</b><small>Varför ändrar månen form? Dra månen runt jorden.</small></a>
+    <button class="mode" data-go="morker" style="--c:#E5484D;--bi:url(../../specialare/bilder/rl-eclipse.jpg)"><span class="kk">SOLEN OCH MÅNEN</span><b>Förmörkelser</b><small>När månen skymmer solen, och när månen blir röd.</small></button>
   </div>
   <h3 class="grp">Planeterna</h3>
   <div class="modes">
-    <button class="mode" data-go="storlek"><span class="ic" style="--c:linear-gradient(135deg,#C9A27A,#FDB813)">📏</span><span><b>Hur stora är de?</b><small>Planeterna i rätt storlek, från lilla Merkurius till solen.</small></span></button>
-    <button class="mode" data-go="avstand"><span class="ic" style="--c:linear-gradient(135deg,#3D5AFE,#17AFC4)">🛣️</span><span><b>Hur långt bort?</b><small>Res med ljusets fart från solen ut till Neptunus.</small></span></button>
-    <button class="mode" data-go="ar"><span class="ic" style="--c:linear-gradient(135deg,#7B61FF,#FF6B9A)">🔄</span><span><b>Ett år på varje planet</b><small>Hur lång tid tar ett varv runt solen? Och hur gammal är du där?</small></span></button>
-    <button class="mode" data-go="vikt"><span class="ic" style="--c:linear-gradient(135deg,#FF9F43,#E5484D)">⚖️</span><span><b>Väg dig och hoppa</b><small>Hur tung är du på månen? Hur högt kan du hoppa på Mars?</small></span></button>
+    <button class="mode" data-go="storlek" style="--c:#C9A27A;--bi:url(../../specialare/bilder/manen-2.jpg)"><span class="kk">PLANETERNA</span><b>Hur stora är de?</b><small>Planeterna i rätt storlek, från lilla Merkurius till solen.</small></button>
+    <button class="mode" data-go="avstand" style="--c:#3D5AFE;--bi:url(../../specialare/bilder/storlek-13.jpg)"><span class="kk">PLANETERNA</span><b>Hur långt bort?</b><small>Res med ljusets fart från solen ut till Neptunus.</small></button>
+    <button class="mode" data-go="ar" style="--c:#7B61FF;--bi:url(../../specialare/bilder/dygn-2.jpg)"><span class="kk">PLANETERNA</span><b>Ett år på varje planet</b><small>Hur lång tid tar ett varv runt solen? Och hur gammal är du där?</small></button>
+    <button class="mode" data-go="vikt" style="--c:#FF9F43;--bi:url(../../specialare/bilder/manen-3.jpg)"><span class="kk">PLANETERNA</span><b>Väg dig och hoppa</b><small>Hur tung är du på månen? Hur högt kan du hoppa på Mars?</small></button>
   </div>
   <h3 class="grp">Stjärnor och universum</h3>
   <div class="modes">
-    <button class="mode" data-go="zoom"><span class="ic" style="--c:linear-gradient(135deg,#141B3D,#7B61FF)">🌌</span><span><b>Zooma ut i universum</b><small>Från jorden ut till Vintergatan och alla galaxerna. Vad är ett ljusår?</small></span></button>
-    <button class="mode" data-go="jattar"><span class="ic" style="--c:linear-gradient(135deg,#FF6E3C,#FFC93C)">⭐</span><span><b>Jättarna i rymden</b><small>Solen bredvid de största stjärnorna vi känner till.</small></span></button>
-    <button class="mode" data-go="hal"><span class="ic" style="--c:linear-gradient(135deg,#000000,#FF7A2F)">🕳️</span><span><b>Svarta hål</b><small>Rulla kulor på rymdens gummiduk. Vad händer om man trycker ihop jorden?</small></span></button>
-    <button class="mode" data-go="himmel"><span class="ic" style="--c:linear-gradient(135deg,#04061A,#3D5AFE)">✨</span><span><b>Stjärnhimlen över Sverige</b><small>Hitta Karlavagnen och Polstjärnan, och se himlen vrida sig.</small></span></button>
-    <button class="mode" data-go="liv"><span class="ic" style="--c:linear-gradient(135deg,#FF6B9A,#3D8BFD)">🔥</span><span><b>En stjärnas liv</b><small>Från gasmoln till vit dvärg, eller till supernova och svart hål.</small></span></button>
+    <button class="mode" data-go="zoom" style="--c:#7B61FF;--bi:url(../../specialare/bilder/storlek-14.jpg)"><span class="kk">UNIVERSUM</span><b>Zooma ut i universum</b><small>Från jorden ut till Vintergatan och alla galaxerna. Vad är ett ljusår?</small></button>
+    <button class="mode" data-go="jattar" style="--c:#FF6E3C;--bi:url(../../specialare/bilder/storlek-11.jpg)"><span class="kk">STJÄRNOR</span><b>Jättarna i rymden</b><small>Solen bredvid de största stjärnorna vi känner till.</small></button>
+    <button class="mode" data-go="hal" style="--c:#FF7A2F;--bi:url(../../specialare/bilder/svartahal-1.jpg)"><span class="kk">FYSIK</span><b>Svarta hål</b><small>Rulla kulor på rymdens gummiduk. Vad händer om man trycker ihop jorden?</small></button>
+    <button class="mode" data-go="himmel" style="--c:#3D5AFE;--bi:url(../../specialare/bilder/rl-stjarnor.jpg)"><span class="kk">STJÄRNHIMLEN</span><b>Stjärnhimlen över Sverige</b><small>Hitta Karlavagnen och Polstjärnan, och se himlen vrida sig.</small></button>
+    <button class="mode" data-go="liv" style="--c:#FF6B9A;--bi:url(../../specialare/bilder/atom-6.jpg)"><span class="kk">STJÄRNOR</span><b>En stjärnas liv</b><small>Från gasmoln till vit dvärg, eller till supernova och svart hål.</small></button>
   </div>
   <p class="note">Bilderna på planeterna kommer från Solar System Scope (CC BY 4.0), byggda på data från NASA.</p>
+  <p class="rlkallor">Fotona på korten: Dag och natt: <a href="https://commons.wikimedia.org/wiki/File:Sunrise_from_ISS_2.jpg" target="_blank" rel="noopener">Bild: ESA/Alexander Gerst · CC BY-SA 2.0 · Wikimedia Commons</a> · Årstiderna: <a href="https://commons.wikimedia.org/wiki/File:The_Blue_Marble,_AS17-148-22727.jpg" target="_blank" rel="noopener">Bild: Harrison Schmitt / Apollo 17 · Public domain · Wikimedia Commons</a> · Förmörkelser: <a href="https://commons.wikimedia.org/wiki/File:Total_Solar_Eclipse_2017_-_Corona_and_Earthlight_(36450742744).jpg" target="_blank" rel="noopener">Bild: Bernd Thaller · CC BY 2.0 · Wikimedia Commons</a> · Månens faser: <a href="https://commons.wikimedia.org/wiki/File:FullMoon2010.jpg" target="_blank" rel="noopener">Bild: Gregory H. Revera · CC BY-SA 3.0 · Wikimedia Commons</a> · Hur stora är de?: <a href="https://commons.wikimedia.org/wiki/File:Moon_earth_distance_fit_planets.png" target="_blank" rel="noopener">Bild: Pablo Carlos Budassi · CC BY-SA 4.0 · Wikimedia Commons</a> · Hur långt bort?: <a href="https://commons.wikimedia.org/wiki/File:The_sky_around_Alpha_Centauri_and_Proxima_Centauri_(eso1629i).jpg" target="_blank" rel="noopener">Bild: Digitized Sky Survey 2. Acknowledgement:… · CC BY 4.0 · Wikimedia Commons</a> · Ett år på varje planet: <a href="https://commons.wikimedia.org/wiki/File:Jupiter_-_Great_Red_Spot_-_Nasa%E2%80%99s_Juno_PJ7_(51227577464).png" target="_blank" rel="noopener">Bild: Andrea Luck · CC BY 2.0 · Wikimedia Commons</a> · Väg dig och hoppa: <a href="https://commons.wikimedia.org/wiki/File:John_W._Young_on_the_Moon.jpg" target="_blank" rel="noopener">Bild: Charlie Duke · Public domain · Wikimedia Commons</a> · Zooma ut: <a href="https://commons.wikimedia.org/wiki/File:A_top-down_view_of_the_Milky_Way_galaxy_(SVS14930_-_Westerlund_1_illustration_Plan_Unlabeled).jpg" target="_blank" rel="noopener">Bild: NASA’s Goddard Space Flight… · Public domain · Wikimedia Commons</a> · Jättarna: <a href="https://commons.wikimedia.org/wiki/File:Betelgeuse_captured_by_ALMA.jpg" target="_blank" rel="noopener">Bild: ALMA (ESO/NAOJ/NRAO)/E. O’Gorman/P.… · CC BY 4.0 · Wikimedia Commons</a> · Svarta hål: <a href="https://commons.wikimedia.org/wiki/File:Interstellar_movie_black_hole_with_Doppler_shift_and_gravitational_redshift.jpg" target="_blank" rel="noopener">Bild: Oliver James, Eugénie von Tunzelmann… · CC BY 3.0 · Wikimedia Commons</a> · Stjärnhimlen: <a href="https://commons.wikimedia.org/wiki/File:Star_Trails_Above_Gemini_North_(iotw2506a).jpg" target="_blank" rel="noopener">Bild: International Gemini Observatory/NOIRLab · CC BY 4.0 · Wikimedia Commons</a> · En stjärnas liv: <a href="https://commons.wikimedia.org/wiki/File:The_spectacular_star-forming_Carina_Nebula_imaged_by_the_VLT_Survey_Telescope.jpg" target="_blank" rel="noopener">Bild: ESO · CC BY 4.0 · Wikimedia Commons</a> · Solsystemet i 3D: <a href="https://commons.wikimedia.org/wiki/File:X5.4_solar_flare_seen_by_SDO_in_171_%C3%85_extreme_ultraviolet_light.jpg" target="_blank" rel="noopener">Bild: NASA/Goddard Space Flight Center · Public domain · Wikimedia Commons</a>.</p>
 </section>
 
 <!-- Dag och natt -->
@@ -449,15 +511,15 @@ function drawSky(cv,c,doy,solar,opt){const W=cv.width,H=cv.height,x=cv.getContex
   path(doy,'rgba(255,255,255,.9)',4,[2,9]);
   // marken
   const snow=(doy<75||doy>330)&&c.lat>57||(doy<60||doy>340);
-  x.fillStyle=snow?'#E8F0FA':'#4FA35E';x.fillRect(0,hy,W,H-hy);x.fillStyle=snow?'#C9D8EC':'#3C8A4B';x.fillRect(0,hy,W,6);
-  x.fillStyle=snow?'#1D2B53':'#fff';x.font=`800 ${Math.round(H*.075)}px "Baloo 2", sans-serif`;x.textAlign='center';
+  x.fillStyle=snow?'#c8d4e6':'#1F3A2C';x.fillRect(0,hy,W,H-hy);x.fillStyle=snow?'#aebdd4':'#33604a';x.fillRect(0,hy,W,6);
+  x.fillStyle=snow?'#1D2B53':'#fff';x.font=`800 ${Math.round(H*.075)}px "Inter", sans-serif`;x.textAlign='center';
   [[90,'Öster'],[180,'Söder'],[270,'Väster']].forEach(([a,t])=>x.fillText(t,ax(a),hy+H*.13));
   // solen
   const sp=s||sunPos(c,doy,12);
   if(sp.alt>-1){const px=ax(sp.az),py=ay(sp.alt),r=H*.07;const gg=x.createRadialGradient(px,py,r*.3,px,py,r*2.4);gg.addColorStop(0,'rgba(255,230,120,.9)');gg.addColorStop(1,'rgba(255,200,60,0)');
     x.fillStyle=gg;x.beginPath();x.arc(px,py,r*2.4,0,7);x.fill();x.fillStyle='#FFD23F';x.beginPath();x.arc(px,py,r,0,7);x.fill();
-    if(opt&&opt.deg){x.fillStyle='#fff';x.font=`800 ${Math.round(H*.065)}px "Baloo 2", sans-serif`;x.fillText(`${Math.round(sp.alt)}° upp`,px,py-r-8);}}
-  else{x.fillStyle='#fff';x.font=`800 ${Math.round(H*.07)}px "Baloo 2", sans-serif`;x.fillText('Solen är under horisonten',W/2,H*.4);}}
+    if(opt&&opt.deg){x.fillStyle='#fff';x.font=`800 ${Math.round(H*.065)}px "Inter", sans-serif`;x.fillText(`${Math.round(sp.alt)}° upp`,px,py-r-8);}}
+  else{x.fillStyle='#fff';x.font=`800 ${Math.round(H*.07)}px "Inter", sans-serif`;x.fillText('Solen är under horisonten',W/2,H*.4);}}
 function mix(a,b,k){const p=s=>[1,3,5].map(i=>parseInt(s.slice(i,i+2),16)),A=p(a),B=p(b);return`rgb(${A.map((v,i)=>Math.round(v+(B[i]-v)*k)).join(',')})`;}
 
 /* ---------- Dag och natt: texter ---------- */
@@ -666,7 +728,7 @@ function drawEcl(){const{cv,W,H,ex,ey,R,er,mr}=eGeo(),x=cv.getContext('2d');x.cl
   // solen och solstrålar
   const sg=x.createRadialGradient(-H*.15,ey,H*.1,-H*.15,ey,H*.62);sg.addColorStop(0,'#FFF3B0');sg.addColorStop(.55,'#FFC93C');sg.addColorStop(1,'rgba(255,160,40,0)');x.fillStyle=sg;x.beginPath();x.arc(-H*.15,ey,H*.62,0,7);x.fill();
   x.strokeStyle='rgba(255,210,63,.18)';x.lineWidth=2;for(let i=-4;i<=4;i++){x.beginPath();x.moveTo(H*.3,ey+i*H*.09);x.lineTo(W,ey+i*H*.09);x.stroke();}
-  x.fillStyle='#fff';x.font=`800 ${Math.round(H*.05)}px "Baloo 2", sans-serif`;x.textAlign='left';x.fillText('Solen',H*.04,H*.1);
+  x.fillStyle='#fff';x.font=`800 ${Math.round(H*.05)}px "Inter", sans-serif`;x.textAlign='left';x.fillText('Solen',H*.04,H*.1);
   // jordens skugga (åt höger)
   x.fillStyle='rgba(0,0,0,.75)';x.beginPath();x.moveTo(ex,ey-er);x.lineTo(W,ey-er*.7);x.lineTo(W,ey+er*.7);x.lineTo(ex,ey+er);x.fill();
   // månens bana
@@ -744,7 +806,7 @@ function drawSize(){const cv=$('sCv'),H=380,s=sScale(),gap=26,vw=$('sScroll').cl
   const cy=H*.47;sHit=[];
   pos.forEach(({p,x,r,a,big})=>{c.globalAlpha=a;if(p.id==='saturnus')ringSat(c,x,cy,r,false);ball(c,x,cy,r,p);if(p.id==='saturnus')ringSat(c,x,cy,r,true);
     if(sSel===p){c.strokeStyle='#FFC93C';c.lineWidth=3;c.beginPath();c.arc(x,cy,r+6,0,7);c.stroke();}
-    c.fillStyle='#fff';c.strokeStyle='rgba(0,0,0,.6)';c.lineWidth=4;c.font='800 15px "Baloo 2", sans-serif';c.textAlign='center';
+    c.fillStyle='#fff';c.strokeStyle='rgba(0,0,0,.6)';c.lineWidth=4;c.font='800 15px "Inter", sans-serif';c.textAlign='center';
     // namnet under klotet, eller längst ner om klotet är för stort; solens namn mitt i den synliga delen
     const lx=big?Math.max(40,(Math.max(0,x-r)+x+r)/2-(x+r>V+gap?0:0)):x,lx2=big?Math.max(40,Math.min(x+r,gap+V)/2):lx,ly=Math.min(H-12,cy+r+22);
     c.strokeText(p.n,lx2,ly);c.fillText(p.n,lx2,ly);c.globalAlpha=1;sHit.push({p,x,r});});}
@@ -783,16 +845,16 @@ function drawDist(){const cv=$('vCv'),{c,w,h}=fitCanvas(cv,300),max=vZoom?1.7:31
   c.fillStyle='#05070F';c.fillRect(0,0,w,h);
   const sg=c.createRadialGradient(0,cy,4,0,cy,44);sg.addColorStop(0,'#FFF3B0');sg.addColorStop(.6,'#FFC93C');sg.addColorStop(1,'rgba(255,160,40,0)');c.fillStyle=sg;c.beginPath();c.arc(0,cy,44,0,7);c.fill();
   c.strokeStyle='rgba(201,212,242,.35)';c.lineWidth=2;c.beginPath();c.moveTo(x0,cy);c.lineTo(w-10,cy);c.stroke();
-  c.font='800 14px "Baloo 2", sans-serif';c.textAlign='center';
+  c.font='800 14px "Inter", sans-serif';c.textAlign='center';
   const tight=sx(1.524)-sx(.387)<150;
   if(tight){c.fillStyle='#fff';c.textAlign='left';c.fillText('Merkurius, Venus,',x0+2,cy-42);c.fillText('Jorden och Mars',x0+2,cy-24);c.textAlign='center';}
   PL.forEach((p,i)=>{if(p.au>max)return;const x=sx(p.au),r=p.gas?9:6;if(p.id==='saturnus')ringSat(c,x,cy,r,false);ball(c,x,cy,r,p);if(p.id==='saturnus')ringSat(c,x,cy,r,true);
     if(tight&&i<4)return;
     const up=i%2===0;c.fillStyle=vT>=p.au*AU_S?'#FFC93C':'#fff';c.fillText(p.n,x,up?cy-24:cy+34);
-    if(vT>=p.au*AU_S){c.fillStyle='#C9D4F2';c.font='700 12px "Baloo 2", sans-serif';c.fillText(tTxt(p.au*AU_S),x,up?cy-42:cy+52);c.font='800 14px "Baloo 2", sans-serif';}});
+    if(vT>=p.au*AU_S){c.fillStyle='#C9D4F2';c.font='700 12px "Inter", sans-serif';c.fillText(tTxt(p.au*AU_S),x,up?cy-42:cy+52);c.font='800 14px "Inter", sans-serif';}});
   if(vT>=0){const au=vT/AU_S;if(au<=max){const x=sx(au);const g=c.createRadialGradient(x,cy,1,x,cy,16);g.addColorStop(0,'#fff');g.addColorStop(.4,'#FFE58A');g.addColorStop(1,'rgba(255,229,138,0)');c.fillStyle=g;c.beginPath();c.arc(x,cy,16,0,7);c.fill();
     c.strokeStyle='rgba(255,229,138,.6)';c.lineWidth=3;c.beginPath();c.moveTo(x0,cy);c.lineTo(x,cy);c.stroke();}}
-  c.fillStyle='#C9D4F2';c.font='700 13px "Baloo 2", sans-serif';c.textAlign='right';c.fillText(vZoom?'Bara de inre planeterna':'Avstånden är rätt, planeterna är förstorade',w-10,h-10);}
+  c.fillStyle='#C9D4F2';c.font='700 13px "Inter", sans-serif';c.textAlign='right';c.fillText(vZoom?'Bara de inre planeterna':'Avstånden är rätt, planeterna är förstorade',w-10,h-10);}
 function vLoop(n){if(cur!=='avstand'){vRaf=0;return;}const dt=Math.min(.1,(n-vLast)/1000);vLast=n;vT+=dt*V_SPD[vSpd][1];const end=(vZoom?1.7:30.3)*AU_S;
   if(vT>=end){vT=end;vRaf=0;drawDist();vText();$('vGo').textContent='⚡ Skicka ljus igen';return;}drawDist();vText();vRaf=requestAnimationFrame(vLoop);}
 $('vGo').onclick=()=>{vT=0;vLast=performance.now();$('vGo').textContent='⚡ Ljuset är på väg …';if(!vRaf)vRaf=requestAnimationFrame(vLoop);};
@@ -815,7 +877,7 @@ function drawYear(){const cv=$('yCv'),W=cv.width,c=cv.getContext('2d'),m=W/2;c.f
     if(i===7){c.strokeStyle='rgba(255,201,60,.5)';c.setLineDash([6,6]);c.beginPath();c.moveTo(m+44,m);c.lineTo(m+R+20,m);c.stroke();c.setLineDash([]);}
     const a=yT/p.P*2*Math.PI,x=m+Math.cos(a)*R,y=m-Math.sin(a)*R,r=p.gas?20:14;
     if(p.id==='saturnus')ringSat(c,x,y,r,false);ball(c,x,y,r,p);if(p.id==='saturnus')ringSat(c,x,y,r,true);
-    c.fillStyle='#fff';c.font='800 30px "Baloo 2", sans-serif';c.textAlign='center';c.fillText(p.n,x,y-r-8);});
+    c.fillStyle='#fff';c.font='800 30px "Inter", sans-serif';c.textAlign='center';c.fillText(p.n,x,y-r-8);});
   const n=performance.now();if(n-yTxtT>150){yTxtT=n;yText();}}
 function yText(){const yrs=yT/365.25,Y=Math.floor(yrs),M=Math.floor((yrs-Y)*12);
   $('yBig').textContent=yT<1?'Alla planeter startar vid den streckade linjen.':yT<30.4?`Det har gått ${Math.floor(yT)} ${Math.floor(yT)===1?'dygn':'dygn'} på jorden.`:`Det har gått ${Y?Y+(Y===1?' år':' år'):''}${Y&&M?' och ':''}${M||!Y?M+(M===1?' månad':' månader'):''} på jorden.`;
@@ -840,7 +902,7 @@ function kgUI(){$('kgO').textContent=kg+' kg';
   drawWeight();}
 function drawWeight(){document.querySelectorAll('[data-b]').forEach(cv=>{const c=cv.getContext('2d');c.clearRect(0,0,128,128);const p=BYID[cv.dataset.b];if(p.id==='saturnus'){ringSat(c,64,64,34,false);ball(c,64,64,34,p);ringSat(c,64,64,34,true);}else ball(c,64,64,p.sun?60:52,p);});}
 $('kgM').onclick=()=>{kg=Math.max(5,kg-1);kgUI();};$('kgP').onclick=()=>{kg=Math.min(150,kg+1);kgUI();};
-const GROUND={jorden:'#4FA35E',manen:'#9A9A9A',merkurius:'#8C7E72',venus:'#C89B4E',mars:'#B5532A',jupiter:'#C9A27A',saturnus:'#D8C08A',uranus:'#8CCCD6',neptunus:'#3F5EC4'};
+const GROUND={jorden:'#1F3A2C',manen:'#9A9A9A',merkurius:'#8C7E72',venus:'#C89B4E',mars:'#B5532A',jupiter:'#C9A27A',saturnus:'#D8C08A',uranus:'#8CCCD6',neptunus:'#3F5EC4'};
 const JUMP=.3,MAXH=2; // på jorden hoppar man ungefär 30 cm
 function lane(el,p){const pet=window.owlSVG&&window.lasDjur?owlSVG(lasDjur()):'🦉';const h=JUMP/p.g;
   el.innerHTML=`<div class="rul">${[0.5,1,1.5,2].map(m=>`<i style="bottom:${m/MAXH*100*.76}%">${fmt(m,1)} m</i>`).join('')}</div><div class="max"></div><div class="gr" style="background:${GROUND[p.id]}"></div><div class="pet">${pet}</div><span class="nm">${p.n}</span><span class="hh">${fmt(h*100,0)} cm</span>`;}
@@ -878,31 +940,31 @@ const ZL=[
   {n:'Universum',big:'Universum.',txt:'Varje liten prick här är en hel galax med miljarder stjärnor. Ingen vet hur långt universum fortsätter.',f:['Det finns kanske 2 biljoner galaxer, alltså 2 000 miljarder.','Det finns fler stjärnor i universum än sandkorn på alla jordens stränder.']}];
 let zV=0,zAnim=0;
 function drawZoomLevel(c,i,R){const P=BYID;
-  if(i===0){ball(c,0,0,R*.62,P.jorden);c.fillStyle='#fff';c.font=`800 ${R*.08}px "Baloo 2", sans-serif`;c.textAlign='center';c.fillText('Jorden',0,R*.8);}
+  if(i===0){ball(c,0,0,R*.62,P.jorden);c.fillStyle='#fff';c.font=`800 ${R*.08}px "Inter", sans-serif`;c.textAlign='center';c.fillText('Jorden',0,R*.8);}
   if(i===1){c.strokeStyle='rgba(201,212,242,.45)';c.setLineDash([R*.02,R*.03]);c.lineWidth=R*.006;c.beginPath();c.arc(0,0,R*.82,0,7);c.stroke();c.setLineDash([]);
-    ball(c,0,0,R*.06,P.jorden);ball(c,R*.58,-R*.58,R*.02,MANEN);c.fillStyle='#fff';c.font=`800 ${R*.06}px "Baloo 2", sans-serif`;c.textAlign='center';c.fillText('Jorden',0,R*.14);c.fillText('Månen',R*.58,-R*.64);}
+    ball(c,0,0,R*.06,P.jorden);ball(c,R*.58,-R*.58,R*.02,MANEN);c.fillStyle='#fff';c.font=`800 ${R*.06}px "Inter", sans-serif`;c.textAlign='center';c.fillText('Jorden',0,R*.14);c.fillText('Månen',R*.58,-R*.64);}
   if(i===2||i===3){const max=i===2?1.6:31,list=PL.filter(p=>p.au<=max);const sc=R*.9/max;
     const g=c.createRadialGradient(0,0,1,0,0,R*.08);g.addColorStop(0,'#FFF3B0');g.addColorStop(.5,'#FFC93C');g.addColorStop(1,'rgba(255,160,40,0)');c.fillStyle=g;c.beginPath();c.arc(0,0,R*.08,0,7);c.fill();
     list.forEach((p,k)=>{const r=p.au*sc;c.strokeStyle=p.id==='jorden'?'rgba(120,180,255,.8)':'rgba(201,212,242,.3)';c.lineWidth=R*.004;c.beginPath();c.arc(0,0,r,0,7);c.stroke();
       const a=k*1.7+.6,x=Math.cos(a)*r,y=Math.sin(a)*r;ball(c,x,y,R*(i===2?.025:.018),p);
-      if(i===2||p.gas||p.id==='jorden'){c.fillStyle='#fff';c.font=`800 ${R*.045}px "Baloo 2", sans-serif`;c.textAlign='center';c.fillText(p.n,x,y-R*.04);}});}
+      if(i===2||p.gas||p.id==='jorden'){c.fillStyle='#fff';c.font=`800 ${R*.045}px "Inter", sans-serif`;c.textAlign='center';c.fillText(p.n,x,y-R*.04);}});}
   if(i===4){const r=srand(7);for(let k=0;k<160;k++){c.fillStyle=`rgba(255,255,255,${r()*.5+.2})`;const a=r()*7,d=r()*R*1.1;c.fillRect(Math.cos(a)*d,Math.sin(a)*d,1.5,1.5);}
     const S=[['Solen',0,0,'rgb(255,214,90)'],['Proxima Centauri',4.24,2.2,'rgb(255,140,110)'],['Barnards stjärna',5.96,4.1,'rgb(255,150,120)'],['Sirius',8.6,.9,'rgb(200,220,255)'],['Procyon',11.5,3.3,'rgb(255,250,230)'],['Altair',16.7,5.4,'rgb(230,240,255)']];
-    S.forEach(([n,d,a,col])=>{const x=Math.cos(a)*d/17.5*R,y=Math.sin(a)*d/17.5*R;glowBall(c,x,y,R*(n==='Solen'?.03:.022),col,3);c.fillStyle='#fff';c.font=`800 ${R*.05}px "Baloo 2", sans-serif`;c.textAlign='center';c.fillText(n,x,y-R*.06);
-      if(d){c.fillStyle='#C9D4F2';c.font=`700 ${R*.04}px "Baloo 2", sans-serif`;c.fillText(`${fmt(d,1)} ljusår`,x,y+R*.09);}});}
+    S.forEach(([n,d,a,col])=>{const x=Math.cos(a)*d/17.5*R,y=Math.sin(a)*d/17.5*R;glowBall(c,x,y,R*(n==='Solen'?.03:.022),col,3);c.fillStyle='#fff';c.font=`800 ${R*.05}px "Inter", sans-serif`;c.textAlign='center';c.fillText(n,x,y-R*.06);
+      if(d){c.fillStyle='#C9D4F2';c.font=`700 ${R*.04}px "Inter", sans-serif`;c.fillText(`${fmt(d,1)} ljusår`,x,y+R*.09);}});}
   if(i===5){spiral(c,0,0,R*.95,11,3200,1,0);const yx=Math.cos(1.9)*R*.55,yy=Math.sin(1.9)*R*.55;c.strokeStyle='#FFC93C';c.lineWidth=R*.008;c.beginPath();c.arc(yx,yy,R*.035,0,7);c.stroke();
-    c.fillStyle='#FFC93C';c.font=`800 ${R*.06}px "Baloo 2", sans-serif`;c.textAlign='center';c.fillText('Du är här',yx,yy+R*.11);}
+    c.fillStyle='#FFC93C';c.font=`800 ${R*.06}px "Inter", sans-serif`;c.textAlign='center';c.fillText('Du är här',yx,yy+R*.11);}
   if(i===6){spiral(c,-R*.45,R*.2,R*.22,11,900,1,0);spiral(c,R*.38,-R*.2,R*.36,23,1400,.38,-.5);
     glowBall(c,-R*.62,R*.45,R*.03,'rgb(200,210,255)',3);glowBall(c,-R*.5,R*.5,R*.02,'rgb(200,210,255)',3);spiral(c,R*.55,R*.45,R*.09,31,250,.7,.4);
-    c.fillStyle='#fff';c.font=`800 ${R*.055}px "Baloo 2", sans-serif`;c.textAlign='center';c.fillText('Vintergatan',-R*.45,R*.52);c.fillText('Andromeda',R*.38,-R*.42);c.fillText('Triangelgalaxen',R*.55,R*.62);
-    c.font=`700 ${R*.04}px "Baloo 2", sans-serif`;c.fillStyle='#C9D4F2';c.fillText('Magellanska molnen',-R*.6,R*.63);}
+    c.fillStyle='#fff';c.font=`800 ${R*.055}px "Inter", sans-serif`;c.textAlign='center';c.fillText('Vintergatan',-R*.45,R*.52);c.fillText('Andromeda',R*.38,-R*.42);c.fillText('Triangelgalaxen',R*.55,R*.62);
+    c.font=`700 ${R*.04}px "Inter", sans-serif`;c.fillStyle='#C9D4F2';c.fillText('Magellanska molnen',-R*.6,R*.63);}
   if(i===7){const r=srand(3);for(let k=0;k<420;k++){const x=(r()*2-1)*R*1.05,y=(r()*2-1)*R*1.05,s=r()*R*.03+R*.004,col=r()<.4?'rgba(255,220,180,':'rgba(200,215,255,';
       c.save();c.translate(x,y);c.rotate(r()*3);c.scale(1,.35+r()*.65);const g=c.createRadialGradient(0,0,0,0,0,s);g.addColorStop(0,col+'.95)');g.addColorStop(1,col+'0)');c.fillStyle=g;c.beginPath();c.arc(0,0,s,0,7);c.fill();c.restore();}}}
 function drawZoom(){const cv=$('zCv'),W=cv.width,c=cv.getContext('2d'),R=W*.46;c.setTransform(1,0,0,1,0,0);c.fillStyle='#05070F';c.fillRect(0,0,W,W);
   const i=Math.min(6,Math.floor(zV)),f=zV-i;
   const lay=(lv,alpha,sc)=>{if(alpha<=0.01)return;c.save();c.globalAlpha=alpha;c.translate(W/2,W/2);c.scale(sc,sc);drawZoomLevel(c,lv,R);c.restore();};
   if(zV>=7){lay(7,1,1);}else{lay(i,1-f,1-.92*f);lay(i+1,f,1+(1-f)*4);}
-  const L=ZL[Math.round(zV)];c.fillStyle='rgba(255,255,255,.85)';c.font=`800 ${W*.035}px "Baloo 2", sans-serif`;c.textAlign='left';c.fillText(`${Math.round(zV)+1} av 8`,W*.03,W*.06);
+  const L=ZL[Math.round(zV)];c.fillStyle='rgba(255,255,255,.85)';c.font=`800 ${W*.035}px "Inter", sans-serif`;c.textAlign='left';c.fillText(`${Math.round(zV)+1} av 8`,W*.03,W*.06);
   zText();}
 let zLast=-1;function zText(){const k=Math.round(zV);if(k===zLast)return;zLast=k;const L=ZL[k];$('zBig').textContent=L.big;$('zTxt').textContent=L.txt;$('zFacts').innerHTML=L.f.map(x=>`<li>${x}</li>`).join('');}
 function openZoom(){zV=Math.round(zV);$('zSl').value=zV;zLast=-1;drawZoom();}
@@ -972,13 +1034,13 @@ function drawGiants(){const cv=$('gCv'),{c,w,h}=fitCanvas(cv,(cv.clientWidth||40
     if(gSel===o&&r<h*3){c.strokeStyle='#FFC93C';c.lineWidth=3;c.beginPath();c.arc(x,base-r,r+5,0,7);c.stroke();}
     c.globalAlpha=1;vis.push({o,r,x,a});});
   // namn: under marklinjen, mitt under varje himlakropp som syns
-  c.font='800 14px "Baloo 2", sans-serif';c.textAlign='center';const placed=[];
+  c.font='800 14px "Inter", sans-serif';c.textAlign='center';const placed=[];
   // de största först, så att ett litet klot aldrig tar namnplatsen från ett stort
   vis.slice().sort((A,B)=>B.r-A.r).forEach(({o,r,x,a})=>{if(r<1.5||x<-r*.2)return;const lx=Math.max(50,Math.min(w-50,x));if(placed.some(q=>Math.abs(q-lx)<88))return;placed.push(lx);
     c.globalAlpha=Math.min(1,a*1.5);c.fillStyle=o.typ==='bh'?'#FFB46B':o.typ==='bana'?'#C9D4F2':'#fff';c.fillText(o.n,lx,base+20);c.globalAlpha=1;});
   const idx=Math.round(gShow),far=GI.slice(0,idx).filter((o,i)=>o.r*s<.35);
-  if(far.length){c.fillStyle='rgba(201,212,242,.8)';c.font='700 13px "Baloo 2", sans-serif';c.textAlign='left';c.fillText(`← ${far.length===1?far[0].n:far[far.length-1].n+' och '+(far.length-1)+' till'}: för små för att synas`,10,22);}
-  if(gShow<.02){c.fillStyle='#FFC93C';c.font='800 15px "Baloo 2", sans-serif';c.textAlign='center';c.fillText('Dra i reglaget eller tryck på Resa genom jättarna!',w/2,22);}}
+  if(far.length){c.fillStyle='rgba(201,212,242,.8)';c.font='700 13px "Inter", sans-serif';c.textAlign='left';c.fillText(`← ${far.length===1?far[0].n:far[far.length-1].n+' och '+(far.length-1)+' till'}: för små för att synas`,10,22);}
+  if(gShow<.02){c.fillStyle='#FFC93C';c.font='800 15px "Inter", sans-serif';c.textAlign='center';c.fillText('Dra i reglaget eller tryck på Resa genom jättarna!',w/2,22);}}
 function gLoop(){if(cur!=='jattar'){gRaf=0;return;}
   if(gTour){const n=performance.now(),T=gTour;if(n>T.next&&Math.abs(gZoom-gShow)<.01){if(gZoom>=GI.length-1){gTour=null;$('gTour').textContent='▶ Resa genom jättarna';}else{gZoom=Math.round(gZoom)+1;T.next=n+(GI[gZoom].typ==='bana'?1800:2800);}}}
   const d=gZoom-gShow;if(Math.abs(d)>.0005){gShow+=d*(gTour?.035:.07)+Math.sign(d)*.001;if(Math.abs(gZoom-gShow)<.0012)gShow=gZoom;$('gZoom').value=gShow;
@@ -1024,7 +1086,7 @@ function drawHole(){const cv=$('hCv'),W=cv.width,H=cv.height,c=cv.getContext('2d
     const r=Math.hypot(b.x,b.y),[px,py]=hProj(b.x,b.y,hDepth(r));glowBall(c,px,py,W*.012,b.col,1.8);});
   hRays.forEach(b=>{c.strokeStyle='rgba(255,230,120,.9)';c.lineWidth=2.5;c.beginPath();b.tr.forEach(([x,y],i)=>{const r=Math.hypot(x,y),[px,py]=hProj(x,y,hDepth(r)*.0+0);i?c.lineTo(px,py):c.moveTo(px,py);});c.stroke();});
   if(hDrag&&hDrag.cur){const[a,b]=hProj(hDrag.x,hDrag.y,0),[e,f]=hProj(hDrag.cur[0],hDrag.cur[1],0);c.strokeStyle='#FFC93C';c.lineWidth=4;c.beginPath();c.moveTo(a,b);c.lineTo(e,f);c.stroke();glowBall(c,a,b,W*.012,'rgb(120,200,255)',1.8);}
-  if(hMsg&&performance.now()-hMsgT<2200){c.fillStyle='rgba(0,0,0,.6)';c.fillRect(W/2-W*.3,H*.04,W*.6,H*.09);c.fillStyle='#FFC93C';c.font=`800 ${H*.05}px "Baloo 2", sans-serif`;c.textAlign='center';c.fillText(hMsg,W/2,H*.105);}}
+  if(hMsg&&performance.now()-hMsgT<2200){c.fillStyle='rgba(0,0,0,.6)';c.fillRect(W/2-W*.3,H*.04,W*.6,H*.09);c.fillStyle='#FFC93C';c.font=`800 ${H*.05}px "Inter", sans-serif`;c.textAlign='center';c.fillText(hMsg,W/2,H*.105);}}
 function hStep(dt){const GM=hObj.GM,rr=hObj.rr;
   const acc=(b,k)=>{const r=Math.hypot(b.x,b.y),a=-GM*k/Math.pow(r*r+.0004,1.5);return[a*b.x,a*b.y];};
   for(let s=0;s<10;s++){const h=dt/10;
@@ -1059,7 +1121,7 @@ function kDraw(which,k){const cv=$('kCv'),W=cv.width,H=cv.height,c=cv.getContext
   const p=which==='jord'?BYID.jorden:SOLEN,R0=H*.38,r=R0*Math.pow(.006,k),cx=W*.5,cy=H*.48;
   if(k<1){ball(c,cx,cy,Math.max(r,2),p);}else{c.save();c.translate(cx,cy);c.scale(1,.35);const g=c.createRadialGradient(0,0,4,0,0,26);g.addColorStop(0,'rgba(255,170,60,.95)');g.addColorStop(1,'rgba(255,60,0,0)');c.fillStyle=g;c.beginPath();c.arc(0,0,26,0,7);c.fill();c.restore();
     c.fillStyle='#000';c.beginPath();c.arc(cx,cy,5,0,7);c.fill();c.font='54px serif';c.textAlign='center';c.fillText(which==='jord'?'🍇':'🏘️',cx+W*.22,cy+18);
-    c.fillStyle='#fff';c.font='800 22px "Baloo 2", sans-serif';c.fillText('lika stort som',cx+W*.22,cy-40);}}
+    c.fillStyle='#fff';c.font='800 22px "Inter", sans-serif';c.fillText('lika stort som',cx+W*.22,cy-40);}}
 function kRun(which){cancelAnimationFrame(kAnim);const t0=performance.now();$('kTxt').textContent='Trycker ihop …';
   (function f(n){const k=Math.min(1,(n-t0)/2600);kDraw(which,k);if(k<1)kAnim=requestAnimationFrame(f);
     else $('kTxt').textContent=which==='jord'?'Hela jorden skulle bli ett svart hål som är bara 1,8 cm brett, ungefär som en vindruva. Men den skulle fortfarande väga lika mycket som hela jorden!':'Solen skulle bli ett svart hål som är 6 km brett, ungefär som en liten stad. Men solen kommer aldrig att bli ett svart hål. Den är för liten.';})(t0);}
@@ -1094,12 +1156,12 @@ function drawNight(){const cv=$('nCv'),W=cv.width,H=cv.height,c=cv.getContext('2
   BG.forEach(([ra,de,m])=>{const[a,z]=altaz(ra,de,L);if(a<0)return;const o=show(m);if(o<.05)return;const[x,y]=P(a,z);if(x<0||x>W)return;c.fillStyle=`rgba(255,255,255,${o*.7})`;c.fillRect(x,y,2,2);});
   if(nFig)FIG.forEach(F=>{c.strokeStyle=`rgba(255,201,60,${.25+.45*dark})`;c.lineWidth=2.5;let mid=[0,0],k=0;F.l.forEach(([a,b])=>{const A=altaz(ST[a][0],ST[a][1],L),B=altaz(ST[b][0],ST[b][1],L);if(A[0]<0||B[0]<0)return;
     const p1=P(...A),p2=P(...B);if(Math.abs(p1[0]-p2[0])>W/2)return;c.beginPath();c.moveTo(...p1);c.lineTo(...p2);c.stroke();mid[0]+=p1[0];mid[1]+=p1[1];k++;});
-    if(k&&nNames){c.fillStyle=`rgba(255,201,60,${.5+.5*dark})`;c.font=`800 ${H*.04}px "Baloo 2", sans-serif`;c.textAlign='center';c.fillText(F.n,mid[0]/k,mid[1]/k+H*.07);}});
+    if(k&&nNames){c.fillStyle=`rgba(255,201,60,${.5+.5*dark})`;c.font=`800 ${H*.04}px "Inter", sans-serif`;c.textAlign='center';c.fillText(F.n,mid[0]/k,mid[1]/k+H*.07);}});
   Object.entries(ST).forEach(([n,[ra,de,m]])=>{const[a,z]=altaz(ra,de,L);if(a<0)return;const o=show(m);if(o<.05)return;const[x,y]=P(a,z);const r=Math.max(1.6,4.2-m*.8)*(n==='Polstjärnan'?1.3:1);
-    c.fillStyle=`rgba(255,255,255,${o})`;c.beginPath();c.arc(x,y,r,0,7);c.fill();if(nNames&&NAMN.includes(n)&&o>.3){c.fillStyle=n==='Polstjärnan'?'#FFC93C':'#C9D4F2';c.font=`${n==='Polstjärnan'?800:700} ${H*.033}px "Baloo 2", sans-serif`;c.textAlign='center';c.fillText(n,x,y-r-6);}});
+    c.fillStyle=`rgba(255,255,255,${o})`;c.beginPath();c.arc(x,y,r,0,7);c.fill();if(nNames&&NAMN.includes(n)&&o>.3){c.fillStyle=n==='Polstjärnan'?'#FFC93C':'#C9D4F2';c.font=`${n==='Polstjärnan'?800:700} ${H*.033}px "Inter", sans-serif`;c.textAlign='center';c.fillText(n,x,y-r-6);}});
   // horisont
   c.fillStyle='#0B1424';c.beginPath();c.moveTo(0,hy);for(let x=0;x<=W;x+=W/40)c.lineTo(x,hy-Math.abs(Math.sin(x*.013)+Math.sin(x*.031))*H*.025);c.lineTo(W,H);c.lineTo(0,H);c.fill();
-  c.fillStyle='#fff';c.font=`800 ${H*.04}px "Baloo 2", sans-serif`;c.textAlign='center';
+  c.fillStyle='#fff';c.font=`800 ${H*.04}px "Inter", sans-serif`;c.textAlign='center';
   (nDir==='N'?[[0,'Norr'],[270,'Väster'],[90,'Öster']]:[[180,'Söder'],[90,'Öster'],[270,'Väster']]).forEach(([az,t])=>{const[x]=P(0,az);if(x>20&&x<W-20)c.fillText(t,x,H*.97);});
   nText(dark);}
 function nText(dark){$('nTimeO').textContent='kl '+hhmm(nTime%24);
@@ -1149,8 +1211,8 @@ function drawLife(){const cv=$('lCv'),W=cv.width,H=cv.height,c=cv.getContext('2d
   const r=srand(77);for(let i=0;i<120;i++){c.fillStyle=`rgba(255,255,255,${r()*.5+.15})`;c.fillRect(r()*W,r()*H,1.6,1.6);}
   const i=Math.min(3,Math.floor(lV)),f=lV-i;
   if(lV>=4){drawStage(c,W,H,4,lPath,t);}else{c.globalAlpha=1-f;drawStage(c,W,H,i,lPath,t);c.globalAlpha=f;drawStage(c,W,H,i+1,lPath,t);c.globalAlpha=1;}
-  const S=LIV[lPath].s[Math.round(lV)];c.fillStyle='#fff';c.font=`800 ${H*.055}px "Baloo 2", sans-serif`;c.textAlign='center';c.fillText(S.n,W/2,H*.95);
-  c.fillStyle='rgba(255,255,255,.7)';c.font=`800 ${H*.04}px "Baloo 2", sans-serif`;c.textAlign='left';c.fillText(`${Math.round(lV)+1} av 5`,W*.03,H*.07);
+  const S=LIV[lPath].s[Math.round(lV)];c.fillStyle='#fff';c.font=`800 ${H*.055}px "Inter", sans-serif`;c.textAlign='center';c.fillText(S.n,W/2,H*.95);
+  c.fillStyle='rgba(255,255,255,.7)';c.font=`800 ${H*.04}px "Inter", sans-serif`;c.textAlign='left';c.fillText(`${Math.round(lV)+1} av 5`,W*.03,H*.07);
   lText();}
 let lLast='';function lText(){const k=Math.round(lV),key=lPath+k;if(key===lLast)return;lLast=key;const S=LIV[lPath].s[k];$('lBig').textContent=S.n+'.';$('lTxt').textContent=S.t;$('lFacts').innerHTML=`<li>${S.f}</li>`;}
 let lRaf=0;function lLoop(){if(cur!=='liv'){lRaf=0;return;}drawLife();lRaf=requestAnimationFrame(lLoop);}
