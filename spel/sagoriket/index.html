@@ -176,34 +176,45 @@ const BITAR={
   fjader:["3333333333",["S3","p5,3,3","o5,2","*6,2","o7,2","d9"]],
   flytt:["333000000333",["M3,8,2,4","o5,6","o6,6","d0"]],
   isgrop:["3330003333",["o3,6","o4,5","o5,6","e8"]],
+  // Banbitar med egen form (lärarens önskan: banorna ska byggas upp som i Super Mario World, inte bara springa, hoppa hål och upp på kulle)
+  dal:["33322111122333",["o1,7","o2,7","p6,7,3","o6,6","o8,6","*7,5","e7","d12"]],           // en dal med en fiende och en plattform ovanför
+  pelare:["33300400500400333",["o5,6","o8,5","o11,6","*8,4","f7,5","d1","d15"]],              // pelare av olika höjd över en grop
+  stenar:["33300000000333",["p4,8,2","p7,7,2","p9,8,2","o4,6","o8,5","o9,6","*7,5","d1","d12"]], // stepping stones över en avgrund
+  tunnel:["33333333333333",["p1,5,12","e5","e10","o3,8","o4,8","o7,8","o8,8","o12,8","d13"]], // lågt tak med fiender inuti
+  berg:["33445667765443",["o4,7","o6,5","o9,5","*7,3","e3","d0","d13"]],                      // en bergstopp att klättra över
+  tuvor:["3343343343343343",["o2,7","o5,7","o8,7","o11,7","o14,7","*8,5","e3","d0"]],        // små tuvor i rad
+  stovlar:["333333333333",["G2,8","p6,4,3","o7,3","o8,3","*8,3","e11","d0"]],                  // hopp-stövlar: frukten ger högre hopp, plattformen högt upp nås bara med den
+  vingar:["3333333333333",["V2,8","p5,3,2","p9,2,2","o6,2","o10,1","*10,1","e12","d0"]],        // vingar: flyg upp till plattformarna
+  jaktsten:["",[]],jaktflod:["",[]],mork:["",[]],raddabur:["",[]],                               // taggar utan bredd: ställer in banan (jagande sten eller flod, mörk bana, rädda djuret)
+  etage:["3333333333333333",["p2,7,3","p6,5,3","p10,7,3","o3,6","o7,4","o11,6","*7,3","e13","d0","d15"]], // två våningar med plattformar att hoppa mellan
   port:["333333333333",["Q"]],
   mal:["33333333",["X5","d1","d7"]]};
 const BANOR={
-  // Varje bana lär ut en ny sak i taget (bana 1 i Sagoskogen är en liten övning); fjädrar och plankor kommer tidigt
+  // Varje bana lär ut en ny sak i taget (bana 1 i Sagoskogen är en liten övning) och byggs upp av banbitar med egen form: dalar, pelare, stenar över avgrunder, tunnlar, berg, tuvor och våningar
   skog:[["start","lmynt","grop","port","lmynt","fiende","port","lmynt","mal"],
-        ["start","mynt","vagg","port","fiende","kulle","port","bro","port","mal"],
-        ["start","mynt","bi","port","fiende","bi","port","kulle","fiende","port","mal"],
-        ["start","spikar","fiende","port","trappa","mynt","spikar","port","bro","spikar","port","mal"],
-        ["start","mynt","fjader","port","fiende","fjader","port","kulle","fiende","port","mal"],
-        ["start","mynt","flytt","port","fiende","trappa","port","flytt","kulle","port","mal"],
-        ["start","mynt","fjader","port","flytt","fiende","port","bi","kulle","port","gropar","fiender","port","mal"],
-        ["start","fiender","flytt","port","fjader","spikar","port","vagg","bi","port","bro","hog","fiende","port","mal"]],
+        ["start","mynt","vagg","port","tuvor","fiende","port","dal","port","mal"],
+        ["start","mynt","bi","port","stovlar","berg","port","etage","bi","port","mal"],
+        ["start","mynt","spikar","fiende","port","dal","spikar","port","pelare","port","mal"],
+        ["start","mynt","fjader","port","tunnel","port","berg","fjader","port","mal"],
+        ["start","mynt","flytt","port","etage","tuvor","port","flytt","berg","port","mal"],
+        ["jaktsten","start","mynt","tuvor","port","dal","stenar","port","pelare","fiender","port","berg","mal"],
+        ["start","fiender","flytt","port","berg","vagg","port","stenar","fjader","spikar","port","dal","pelare","bi","port","mal"]],
   oken:[["start","fiende","grop","port","kulle","bi","port","mynt","fiende","port","mal"],
-        ["start","fiender","mynt","port","fiender","kulle","port","fiender","fiende","port","mal"],
-        ["start","mynt","gropar","port","bro","gropar","port","kulle","bi","port","mal"],
-        ["start","mynt","fjader","fjader","port","bi","fjader","port","kulle","fiende","port","mal"],
-        ["start","bi","trappa","port","hog","fiender","port","trappa","spikar","hog","port","mal"],
-        ["start","mynt","flytt","bi","port","flytt","trappa","port","fiende","flytt","port","kulle","mal"],
-        ["start","bi","flytt","port","fjader","fiender","port","isgrop","spikar","port","trappa","bi","port","mal"],
-        ["start","fiender","isgrop","port","flytt","bi","port","fjader","hog","port","vagg","fiender","spikar","port","mal"]],
+        ["start","fiende","mynt","port","dal+n","fiender","port","etage+n","tuvor","port","berg+n","mal"],
+        ["start","mynt","gropar","port","stenar","gropar","port","berg","bi","port","mal"],
+        ["mork","start","mynt","fjader","fjader","port","bi","tuvor","fjader","port","dal","fiende","port","mal"],
+        ["start","bi","trappa","port","berg","fiender","port","pelare","spikar","hog","port","mal"],
+        ["start","mynt","flytt","port","vingar","bi","trappa","port","etage","flytt","port","tunnel","mal"],
+        ["start","bi","flytt","port","fjader","fiender","port","isgrop","spikar","port","stenar","tuvor","bi","port","mal"],
+        ["start","fiender","isgrop","port","flytt","bi","port","fjader","hog","port","dal","pelare","fiender","spikar","port","mal"]],
   is:  [["start","mynt","isgrop","port","fiende","fjader","port","bi","kulle","port","mal"],
-        ["start","mynt","isgrop","port","bro","isgrop","port","kulle","fiende","port","mal"],
-        ["start","fiender","mynt","port","fiender","fiende","port","bi","fiender","port","mal"],
-        ["start","mynt","flytt","port","trappa","flytt","bi","port","kulle","flytt","port","mal"],
-        ["start","mynt","fjader","port","fjader","hog","port","fjader","bi","port","kulle","mal"],
-        ["start","mynt","isgrop","port","flytt","fiender","port","isgrop","bi","trappa","port","mal"],
-        ["start","fiender","bi","port","flytt","isgrop","port","fjader","spikar","port","gropar","fiender","bi","port","mal"],
-        ["start","flytt","fiender","port","fjader","bi","isgrop","port","vagg","spikar","fiender","port","flytt","hog","bi","port","mal"]]};
+        ["jaktflod","start","mynt","isgrop","port","stenar","isgrop","port","berg","fiende","port","mal"],
+        ["start","fiender","mynt","port","tunnel","fiender","port","dal","bi","fiender","port","mal"],
+        ["mork","start","mynt","flytt","port","tuvor","flytt","bi","port","etage","flytt","port","berg","mal"],
+        ["start","mynt","fjader","port","pelare","fjader","hog","port","fjader","bi","port","etage","mal"],
+        ["raddabur","start","mynt","isgrop","port","flytt","fiender","port","stenar","bi","trappa","port","dal","mal"],
+        ["start","fiender","bi","port","flytt","isgrop","port","fjader","spikar","port","berg","fiender","bi","port","mal"],
+        ["start","flytt","fiender","port","fjader","bi","isgrop","port","vagg","spikar","fiender","port","pelare","flytt","hog","bi","port","mal"]]};
 const T=64,ROWS=12;
 // bossarna: en i slutet av varje värld, besegras med rätta svar (trollstavens blixt)
 // Bossarnas krafter (lärarens önskan: de var samma boss tre gånger): Slemkungen går och hoppar, Eldslemmet slår i marken (eldvåg att hoppa över),
@@ -221,17 +232,20 @@ function laddaDjur(){const d=MPPlatt.djur();djurBild=d.bild;$("bDjur").innerHTML
 /* ---------- Bygga en bana ---------- */
 let LV=null;
 function bygg(vid,nr){const V=VARLDAR.find(v=>v.id===vid),lista=BANOR[vid][nr];
-  let grid=[],obj={mynt:[],stjPlats:[],fiender:[],dekor:[],spikar:[],portar:[],mal:null,fjadrar:[],plankor:[],groparX:[],vaggX:[]},x0=0;
-  const cols=lista.reduce((s,b)=>s+BITAR[b][0].length,0);
+  let grid=[],obj={mynt:[],stjPlats:[],fiender:[],dekor:[],spikar:[],portar:[],mal:null,fjadrar:[],plankor:[],groparX:[],vaggX:[],frukter:[],nycklar:[],jagare:null,mork:false,radda:false},x0=0;
+  const bas=b=>b.replace("+n",""); // "dal+n": bitens stjärnplats blir en nyckel
+  const cols=lista.reduce((s,b)=>s+BITAR[bas(b)][0].length,0);
   for(let r=0;r<ROWS;r++)grid.push(Array(cols).fill("."));
   let seed=nr*97+(vid==="oken"?500:vid==="is"?900:0);const slump=()=>{seed=(seed*9301+49297)%233280;return seed/233280;};
-  lista.forEach(b=>{const[h,items]=BITAR[b],w=h.length;
+  lista.forEach(b=>{const nb=b.endsWith("+n"),[h,items]=BITAR[bas(b)],w=h.length;
+    if(b==="jaktsten")obj.jagare={typ:"sten"};if(b==="jaktflod")obj.jagare={typ:"flod"};if(b==="mork")obj.mork=true;if(b==="raddabur")obj.radda=true;
     if(b==="grop"||b==="gropar"||b==="isgrop")obj.groparX.push((x0+3)*T);if(b==="vagg")obj.vaggX.push((x0+4)*T);
     const yta=c=>{const hh=+h[c];return hh?ROWS-hh:ROWS+5;};
     for(let c=0;c<w;c++){const hh=+h[c];for(let r=ROWS-hh;r<ROWS;r++)grid[r][x0+c]="#";}
     items.forEach(s=>{const t=s[0],n=s.slice(1).split(",").map(Number),c=n[0];
       if(t==="o")obj.mynt.push({x:x0+c,y:n[1]});
-      if(t==="*")obj.stjPlats.push({x:x0+c,y:n[1]});
+      if(t==="*"){if(nb)obj.nycklar.push({x:x0+c,y:n[1],tagen:false});else obj.stjPlats.push({x:x0+c,y:n[1]});}
+      if(t==="G"||t==="V")obj.frukter.push({typ:t==="G"?"stovlar":"vingar",x:x0+c,y:n[1],tagen:false});
       if(t==="e")obj.fiender.push({typ:V.gaende[Math.floor(slump()*V.gaende.length)],x:(x0+c)*T+T/2,y:(n.length>1?n[1]+1:yta(c))*T,vx:-70*V.fart,flyg:false});
       if(t==="f")obj.fiender.push({typ:V.flyg,bx:(x0+c)*T+T/2,by:n[1]*T+T/2,x:(x0+c)*T,y:n[1]*T,flyg:true,fas:slump()*6});
       if(t==="^")obj.spikar.push({x:x0+c,y:yta(c)-1});
@@ -249,7 +263,7 @@ function bygg(vid,nr){const V=VARLDAR.find(v=>v.id===vid),lista=BANOR[vid][nr];
   // tre stjärnor, utspridda bland platserna; övriga platser blir mynt
   const sp=obj.stjPlats,val=sp.length<=3?sp:[sp[0],sp[Math.floor(sp.length/2)],sp[sp.length-1]];
   obj.stjarnor=val.map(s=>({x:s.x,y:s.y,tagen:false}));sp.filter(s=>!val.includes(s)).forEach(s=>obj.mynt.push(s));
-  obj.mynt.forEach(m=>m.tagen=false);obj.fiender.forEach(f=>{f.trollad=0;f.dx=f.x;});
+  obj.mynt.forEach(m=>m.tagen=false);obj.fiender.forEach(f=>{f.trollad=0;f.dx=f.x;});obj.nycklarMax=obj.nycklar.length;
   return Object.assign({V,vid,nr,grid,cols,w:cols*T,h:ROWS*T},obj);}
 function byggBoss(vid){const V=VARLDAR.find(v=>v.id===vid),B=BOSSAR[vid],cols=22,grid=[];
   for(let r=0;r<ROWS;r++)grid.push(Array(cols).fill(r>=9?"#":"."));
@@ -267,10 +281,15 @@ const cv=$("cv"),ctx=cv.getContext("2d");
 let P=null,cam=0,skala=1,vy0=0,last=0,raf=0,igang=false,pausad=false;
 const IN={v:false,h:false,u:false,m:false,mFor:false};
 const G=MPPlatt.G; // gemensam fysik i plattform.js
-function start(vid,nr){musikCtx();LV=nr==="boss"?byggBoss(vid):bygg(vid,nr);$("tips").classList.toggle("boss",!!LV.boss);P={x:2*T,y:9*T,vx:0,vy:0,b:40,hh:62,mark:false,hopp:0,riktning:1,skada:0,hjartan:3,poang:0,stj:0,check:2*T,cool:0,coyote:0,buffert:0,fel:0,felSvar:0,bob:0};BL=[];
+function start(vid,nr){musikCtx();LV=nr==="boss"?byggBoss(vid):bygg(vid,nr);$("tips").classList.toggle("boss",!!LV.boss);P={x:2*T,y:9*T,vx:0,vy:0,b:40,hh:62,mark:false,hopp:0,riktning:1,skada:0,hjartan:3,poang:0,stj:0,nycklar:0,kraft:null,kraftT:0,check:2*T,cool:0,coyote:0,buffert:0,fel:0,felSvar:0,bob:0};BL=[];
   E=[];PAR=[];FLOJ=[];cam=0;$("slutRuta").hidden=true;$("pausRuta").hidden=true;pausad=false;
   show("game");resize();igang=true;musikKnapp();last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop);
-  tips(LV.boss?`${LV.boss.namn}! Hoppa med huvudet i rätt svar, så förtrollar trollstaven bossen.`:nr===0&&vid==="skog"?(pek?"Tryck ▶ för att springa åt höger och ⤒ för att hoppa!":"Spring åt höger med → och hoppa med ↑!"):`${LV.V.namn}, bana ${nr+1}`);}
+  tips(LV.boss?`${LV.boss.namn}! Hoppa med huvudet i rätt svar, så förtrollar trollstaven bossen.`:nr===0&&vid==="skog"?(pek?"Tryck ▶ för att springa åt höger och ⤒ för att hoppa!":"Spring åt höger med → och hoppa med ↑!"):`${LV.V.namn}, bana ${nr+1}`);
+  if(LV.jagare){LV.jagare.x=-5*T;LV.jagare.t=0;LV.jagare.vantan=3.5;LV.jagare.rot=0;LV.jagare.tips=0;}
+  if(LV.jagare)tips(LV.jagare.typ==="sten"?"En stor sten rullar efter dig! Spring framåt, men stanna och svara vid portarna.":"En flodvåg kommer efter dig! Spring framåt, men stanna och svara vid portarna.",4200);
+  else if(LV.mork)tips("Det är mörkt! Du ser bara runt dig. Leta efter lamporna vid portarna.",4200);
+  else if(LV.nycklarMax)tips(`Samla ${LV.nycklarMax} nycklar, så öppnas dörren!`,4200);
+  else if(LV.radda)tips("Rädda djuret i buren längst till höger!",4200);}
 let tipsT=0;function tips(t,ms=3200){const e=$("tips");e.textContent=t;e.hidden=false;e.style.opacity=1;clearTimeout(tipsT);tipsT=setTimeout(()=>{e.style.opacity=0;setTimeout(()=>e.hidden=true,400);},ms);}
 let E=[],PAR=[],FLOJ=[],BL=[];
 function resize(){const dpr=Math.min(2,window.devicePixelRatio||1),W=innerWidth,H=innerHeight;cv.width=W*dpr;cv.height=H*dpr;
@@ -367,7 +386,7 @@ function uppdatera(dt){if(!igang)return;const tnu=performance.now()/1000;
   // rörliga plankor (fram och tillbaka över gropen)
   LV.plankor.forEach(m=>{m.fas+=dt*.9;const nx=m.x0+(1-Math.cos(m.fas))/2*m.amp;m.dx=nx-m.x;m.x=nx;});
   // springa, hoppa, plankor och fjädrar: gemensam fysik (plattform.js); huvud() när huvudet slår i ett svarsblock
-  const ev=MPPlatt.steg(P,IN,dt,{fast:(c,r)=>fast(c,r),huvud,fjadrar:LV.fjadrar,plankor:LV.plankor});
+  const ev=MPPlatt.steg(P,IN,dt,{fast:(c,r)=>fast(c,r),huvud,fjadrar:LV.fjadrar,plankor:LV.plankor,hoppMult:P.kraft==="stovlar"?1.28:1,flyg:P.kraft==="vingar"});
   ev.forEach(e=>{L().hop&&L().hop();if(e!=="hopp")gnistor(P.x,P.y,"#fff",e==="fjader"?10:8);});
   LV.fjadrar.forEach(f=>f.ut=Math.max(0,f.ut-dt));
   // tips första gången man möter något nytt
@@ -381,13 +400,25 @@ function uppdatera(dt){if(!igang)return;const tnu=performance.now()/1000;
   visaTips("fjader",LV.fjadrar.some(f=>f.x*T>P.x&&f.x*T-P.x<300),"Hoppa på fjädern, så studsar du högt!");
   visaTips("planka",LV.plankor.some(m=>m.x0>P.x&&m.x0-P.x<300),"Plankan åker fram och tillbaka. Hoppa upp när den är nära!");
   P.skada=Math.max(0,P.skada-dt);P.bob+=dt*(Math.abs(P.vx)>20&&P.mark?12:0);
-  if(P.y>LV.h+120){P.hjartan--;L().bad&&L().bad();if(P.hjartan<=0){igang=false;$("slutRuta").hidden=false;return;}P.x=P.check;P.y=8*T;P.vx=P.vy=0;P.skada=1.4;tips("Hoppsan! Du ramlade ner.",1600);}
+  if(P.y>LV.h+120){P.hjartan--;L().bad&&L().bad();if(P.hjartan<=0){igang=false;$("slutRuta").hidden=false;return;}P.x=P.check;P.y=8*T;P.vx=P.vy=0;P.skada=1.4;if(LV.jagare)LV.jagare.x=Math.min(LV.jagare.x,P.x-7*T);tips("Hoppsan! Du ramlade ner.",1600);}
   // spikar
   LV.spikar.forEach(s=>{if(Math.abs(P.x-(s.x*T+T/2))<T/2+P.b/2-8&&P.y>s.y*T+T*.55&&P.y-P.hh<(s.y+1)*T)skadad();});
   // mynt och stjärnor
   const nara=(cx,cy,r)=>Math.abs(P.x-cx)<r+P.b/2&&Math.abs((P.y-P.hh/2)-cy)<r+P.hh/2;
   LV.mynt.forEach(m=>{if(!m.tagen&&nara(m.x*T+T/2,m.y*T+T/2,18)){m.tagen=true;P.poang+=10;L().pop&&L().pop();gnistor(m.x*T+T/2,m.y*T+T/2,"#FFD84D",6);}});
   LV.stjarnor.forEach(s=>{if(!s.tagen&&nara(s.x*T+T/2,s.y*T+T/2,22)){s.tagen=true;P.stj++;P.poang+=100;L().chime&&L().chime();gnistor(s.x*T+T/2,s.y*T+T/2,"#FFE680",20);tips(`Stjärna ${P.stj} av 3! ⭐`,1400);}});
+  // kraftfrukter: hopp-stövlar eller vingar en stund
+  (LV.frukter||[]).forEach(fr=>{if(!fr.tagen&&nara(fr.x*T+T/2,fr.y*T+T/2,24)){fr.tagen=true;P.kraft=fr.typ;P.kraftT=fr.typ==="vingar"?9:12;L().magic&&L().magic();gnistor(fr.x*T+T/2,fr.y*T+T/2,fr.typ==="vingar"?"#9FD3FF":"#FFE680",22);
+    tips(fr.typ==="vingar"?"Vingar! Tryck hopp flera gånger i luften för att flyga.":"Hopp-stövlar! Du hoppar mycket högre en stund. Prova dubbelhopp!",3600);}});
+  if(P.kraft){P.kraftT-=dt;if(P.kraftT<=0){P.kraft=null;tips("Kraften tog slut.",1300);}}
+  // nycklar: dörren öppnas först när man har alla
+  (LV.nycklar||[]).forEach(k=>{if(!k.tagen&&nara(k.x*T+T/2,k.y*T+T/2,24)){k.tagen=true;P.nycklar++;P.poang+=50;L().chime&&L().chime();gnistor(k.x*T+T/2,k.y*T+T/2,"#FFE680",16);tips(P.nycklar>=LV.nycklarMax?"Alla nycklar! Gå till dörren.":`Nyckel ${P.nycklar} av ${LV.nycklarMax}!`,1800);}});
+  // jagande sten eller flodvåg: väntar medan man svarar vid en svarsport, träffar den djuret kostar det ett hjärta och den backar
+  if(LV.jagare){const J=LV.jagare;J.t+=dt;J.rot+=dt*4;
+    if(J.t>J.vantan){const v=J.typ==="sten"?185:165,pz=LV.portar.some(p=>!p.open&&P.x>(p.block[0].x-3.6)*T&&P.x<(p.x+1)*T),nx=J.x+v*dt;
+      J.x=pz?Math.max(J.x,Math.min(nx,P.x-3.6*T)):nx;
+      if(J.x>P.x-.95*T){skadad();J.x=P.x-7*T;}
+      if(!J.tips&&P.x-J.x<4.5*T){J.tips=1;tips(J.typ==="sten"?"Stenen är nära! Spring!":"Vågen är nära! Spring!",1600);}}}
   // fiender
   LV.fiender.forEach(f=>{if(f.trollad){f.trollad+=dt;return;}
     if(f.flyg){f.fas+=dt;f.x=f.bx+Math.sin(f.fas*1.2)*110;f.y=f.by+Math.sin(f.fas*2.4)*14;}
@@ -406,7 +437,9 @@ function uppdatera(dt){if(!igang)return;const tnu=performance.now()/1000;
   LV.portar.forEach(p=>{p.visa=Math.max(0,p.visa-dt);p.visaFel=Math.max(0,(p.visaFel||0)-dt);p.block.forEach(b=>b.bump=Math.max(0,b.bump-dt*5));});
   if(LV.boss)bossSteg(dt);
   // mål (bossbanans dörr öppnas först när bossen är förtrollad)
-  if(LV.mal&&!LV.mal.last&&Math.abs(P.x-(LV.mal.x*T+T/2))<T*.6&&P.y>LV.mal.y*T){igang=false;klar();}
+  if(LV.mal&&!LV.mal.last&&Math.abs(P.x-(LV.mal.x*T+T/2))<T*.6&&P.y>LV.mal.y*T){
+    if(LV.nycklarMax&&P.nycklar<LV.nycklarMax){if(tnu-(P.malT||0)>3){P.malT=tnu;tips(`Dörren är låst! Du har ${P.nycklar} av ${LV.nycklarMax} nycklar. Leta efter resten.`,2600);}}
+    else{if(LV.radda)tips("Du räddade djuret!",1500);igang=false;klar();}}
   hud();}
 
 /* ---------- Rita ---------- */
@@ -467,6 +500,11 @@ function rita(){if(!LV)return;const W=cv.width,H=cv.height,s=skala,vw=W/s,vh=H/s
   const tt=performance.now()/1000;
   LV.mynt.forEach(m=>{if(!m.tagen&&m.x>=c0&&m.x<=c1){const sq=Math.abs(Math.cos(tt*3+m.x));spr("coin_gold",m.x*T+T/2-T/2*sq+4,m.y*T+4,(T-8)*sq,T-8);}});
   LV.stjarnor.forEach(st=>{if(!st.tagen)spr("star",st.x*T,st.y*T+Math.sin(tt*2+st.x)*5);});
+  (LV.frukter||[]).forEach(fr=>{if(!fr.tagen&&fr.x>=c0&&fr.x<=c1)fruktRita(fr.typ,fr.x*T+T/2,fr.y*T+T/2,tt);});
+  (LV.nycklar||[]).forEach(k=>{if(!k.tagen&&k.x>=c0&&k.x<=c1)nyckelRita(k.x*T+T/2,k.y*T+T/2,tt);});
+  if(LV.jagare)jagareRita(LV.jagare,tt);
+  if(LV.radda&&LV.mal){const bx=LV.mal.x*T-T*.35,by=LV.mal.y*T-4,bw=T*1.7,bh=T*2+8;spr("frog_"+(Math.floor(tt*2)%2?"idle":"jump"),bx+bw/2-T*.5,by+bh-T-8,T,T);
+    ctx.strokeStyle="#3C4A66";ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(bx,by);ctx.lineTo(bx+bw,by);ctx.moveTo(bx,by+bh);ctx.lineTo(bx+bw,by+bh);for(let i=0;i<=5;i++){ctx.moveTo(bx+i*bw/5,by);ctx.lineTo(bx+i*bw/5,by+bh);}ctx.stroke();}
   // fiender (förtrollade blir blommor)
   LV.fiender.forEach(f=>{if(f.trollad){if(f.trollad<4){ctx.globalAlpha=Math.min(1,4-f.trollad);blomma(f.x,(f.flyg?f.y+20:f.y));ctx.globalAlpha=1;}return;}
     const ram=Math.floor(tt*6)%2?"b":"a",n=f.flyg?`${f.typ}_${ram}`:`${f.typ}_${f.typ.startsWith("worm")?"move":"walk"}_${ram}`;
@@ -484,20 +522,54 @@ function rita(){if(!LV)return;const W=cv.width,H=cv.height,s=skala,vw=W/s,vh=H/s
   E.forEach(s=>{ctx.fillStyle="#FFE680";stjarna(s.x,s.y,12,s.t*12);});
   PAR.forEach(p=>{ctx.globalAlpha=1-p.t/p.liv;ctx.fillStyle=p.f;ctx.beginPath();ctx.arc(p.x,p.y,4,0,7);ctx.fill();});ctx.globalAlpha=1;
   FLOJ.forEach(f=>{const e=1-Math.pow(1-f.t,3),x=f.x+(f.tx-f.x)*e,y=f.y+(f.ty-f.y)*e-Math.sin(f.t*Math.PI)*60;ctx.font='800 44px "Baloo 2",sans-serif';ctx.fillStyle="#1E9E5E";ctx.textAlign="center";ctx.fillText(f.v,x,y);});
+  // kraft: ett sken runt djuret, vingar på ryggen
+  if(P.kraft){ctx.save();ctx.globalAlpha=.32+.12*Math.sin(tt*10);ctx.fillStyle=P.kraft==="vingar"?"#9FD3FF":"#FFE680";ctx.beginPath();ctx.ellipse(P.x,P.y-34,34,48,0,0,7);ctx.fill();
+    if(P.kraft==="vingar"){ctx.globalAlpha=.95;ctx.fillStyle="#fff";ctx.strokeStyle="#9FD3FF";ctx.lineWidth=3;const fl=Math.sin(tt*18)*.35;[-1,1].forEach(sd=>{ctx.save();ctx.translate(P.x-sd*14*P.riktning,P.y-42);ctx.rotate(sd*(.5+fl));ctx.beginPath();ctx.ellipse(-sd*16,-6,20,9,0,0,7);ctx.fill();ctx.stroke();ctx.restore();});}ctx.restore();}
   // djuret
   if(djurBild&&djurBild.complete&&!(P.skada>0&&Math.floor(tt*12)%2)){const w=78,h=w*140/120,sq=P.mark?1+Math.sin(P.bob)*.03:1;
     ctx.save();ctx.translate(P.x,P.y+4);ctx.scale(P.riktning<0?-sq:sq,1/sq);ctx.drawImage(djurBild,-w/2,-h*0.98,w,h);ctx.restore();}
   ctx.setTransform(1,0,0,1,0,0);
+  if(LV.mork){ // mörk bana: bara en cirkel runt djuret, svarsportarna, stjärnorna, nycklarna och dörren syns
+    if(!MORK||MORK.width!==W||MORK.height!==H){MORK=document.createElement("canvas");MORK.width=W;MORK.height=H;}
+    const m=MORK.getContext("2d");m.globalCompositeOperation="source-over";m.clearRect(0,0,W,H);m.fillStyle="rgba(8,10,32,.95)";m.fillRect(0,0,W,H);m.globalCompositeOperation="destination-out";
+    const ljus=(wx,wy,r)=>{const sx=(wx-cam)*s,sy=(wy+oy)*s,rr=r*s,g=m.createRadialGradient(sx,sy,rr*.3,sx,sy,rr);g.addColorStop(0,"rgba(0,0,0,1)");g.addColorStop(1,"rgba(0,0,0,0)");m.fillStyle=g;m.beginPath();m.arc(sx,sy,rr,0,7);m.fill();};
+    ljus(P.x,P.y-30,4.2*T+Math.sin(tt*3)*6);
+    LV.portar.forEach(p=>{if(!p.open)ljus((p.x-4)*T,6*T,2.8*T);});
+    LV.stjarnor.forEach(st=>{if(!st.tagen)ljus(st.x*T+T/2,st.y*T+T/2,1.6*T);});
+    (LV.nycklar||[]).forEach(k=>{if(!k.tagen)ljus(k.x*T+T/2,k.y*T+T/2,1.6*T);});
+    (LV.frukter||[]).forEach(k=>{if(!k.tagen)ljus(k.x*T+T/2,k.y*T+T/2,1.6*T);});
+    if(LV.mal)ljus(LV.mal.x*T+T/2,(LV.mal.y+1)*T,2.6*T);
+    E.forEach(e=>ljus(e.x,e.y,1.6*T));
+    ctx.drawImage(MORK,0,0);}
   // bossens livmätare
   if(LV.boss&&!LV.boss.trollad){const B=LV.boss,d=cv._dpr||1,w=Math.min(W*.62,420*d),x=(W-w)/2,y=86*d,h=16*d;
     ctx.fillStyle="rgba(255,255,255,.9)";ctx.beginPath();ctx.roundRect?ctx.roundRect(x-10*d,y-30*d,w+20*d,h+40*d,14*d):ctx.rect(x-10*d,y-30*d,w+20*d,h+40*d);ctx.fill();
     ctx.fillStyle="#1D2B53";ctx.font=`800 ${16*d}px "Baloo 2",sans-serif`;ctx.textAlign="center";ctx.textBaseline="alphabetic";ctx.fillText(`👑 ${B.namn}`,W/2,y-8*d);
     for(let i=0;i<B.max;i++){const sw=w/B.max;ctx.fillStyle=i<B.hp?"#7B61FF":"#E3E8F0";ctx.fillRect(x+i*sw+2*d,y,sw-4*d,h);}}}
+let MORK=null;
+function ytaVid(x){const c=Math.max(0,Math.min(LV.cols-1,Math.floor(x/T)));for(let r=0;r<ROWS;r++)if(LV.grid[r][c]==="#")return r*T;return 9*T;}
+function fruktRita(typ,x,y,t){ctx.save();ctx.translate(x,y+Math.sin(t*3+x)*5);const v=typ==="vingar";
+  ctx.fillStyle=v?"rgba(159,211,255,.42)":"rgba(255,224,102,.42)";ctx.beginPath();ctx.arc(0,0,31+Math.sin(t*5)*2,0,7);ctx.fill();
+  ctx.fillStyle=v?"#6FB8F5":"#8BD450";ctx.strokeStyle=v?"#2F7FC8":"#4E9A1E";ctx.lineWidth=4;ctx.beginPath();ctx.arc(0,3,19,0,7);ctx.fill();ctx.stroke();
+  ctx.fillStyle="#2E8B3E";ctx.beginPath();ctx.ellipse(6,-17,9,5,-.6,0,7);ctx.fill();ctx.fillStyle="#fff";
+  if(v){ctx.beginPath();ctx.ellipse(-8,3,7,11,-.5,0,7);ctx.ellipse(8,3,7,11,.5,0,7);ctx.fill();}
+  else{ctx.beginPath();ctx.moveTo(0,-8);ctx.lineTo(9,4);ctx.lineTo(3,4);ctx.lineTo(3,13);ctx.lineTo(-3,13);ctx.lineTo(-3,4);ctx.lineTo(-9,4);ctx.closePath();ctx.fill();}
+  ctx.restore();}
+function nyckelRita(x,y,t){ctx.save();ctx.translate(x,y+Math.sin(t*3+x)*4);ctx.fillStyle="rgba(255,230,128,.38)";ctx.beginPath();ctx.arc(0,0,25,0,7);ctx.fill();
+  ctx.strokeStyle="#B8860B";ctx.lineWidth=3;ctx.fillStyle="#F2C230";ctx.beginPath();ctx.arc(-9,-5,10,0,7);ctx.fill();ctx.stroke();ctx.fillStyle="#FFF6D0";ctx.beginPath();ctx.arc(-9,-5,3.4,0,7);ctx.fill();
+  ctx.fillStyle="#F2C230";ctx.fillRect(-1,-9,22,7);ctx.strokeRect(-1,-9,22,7);ctx.fillRect(13,-2,6,9);ctx.fillRect(6,-2,5,7);ctx.restore();}
+function jagareRita(J,tt){const y=ytaVid(J.x);
+  if(J.typ==="sten"){const R=1.15*T,cy=y-R*.95;ctx.save();ctx.translate(J.x,cy);ctx.rotate(J.rot);
+    const g=ctx.createRadialGradient(-R*.3,-R*.35,R*.1,0,0,R);g.addColorStop(0,"#C9CDD6");g.addColorStop(1,"#6D7385");ctx.fillStyle=g;ctx.strokeStyle="#3C4256";ctx.lineWidth=5;ctx.beginPath();ctx.arc(0,0,R,0,7);ctx.fill();ctx.stroke();
+    ctx.strokeStyle="#4E566B";ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(-R*.6,-R*.1);ctx.lineTo(-R*.15,R*.1);ctx.lineTo(-R*.2,R*.55);ctx.moveTo(R*.2,-R*.6);ctx.lineTo(R*.45,-R*.15);ctx.lineTo(R*.1,R*.2);ctx.stroke();ctx.restore();
+    if(J.t>J.vantan&&Math.random()<.5)PAR.push({x:J.x+R*.3,y:y-4,vx:80,vy:-60,t:0,liv:.5,f:"#C9B79A"});}
+  else{const top=y-2.5*T;ctx.fillStyle="rgba(70,160,230,.88)";ctx.beginPath();ctx.moveTo(J.x-9*T,y+2*T);ctx.lineTo(J.x-9*T,top+10);ctx.lineTo(J.x-1.4*T,top+Math.sin(tt*6)*6);ctx.quadraticCurveTo(J.x+.5*T,top+.2*T,J.x+.25*T,y-.5*T);ctx.lineTo(J.x-.1*T,y+2*T);ctx.closePath();ctx.fill();
+    ctx.fillStyle="rgba(255,255,255,.85)";for(let i=0;i<7;i++){const a=Math.sin(tt*5+i*1.7);ctx.beginPath();ctx.arc(J.x-.2*T-(i%3)*.35*T+a*5,y-(.4+i*.33)*T,9+((i*5)%4),0,7);ctx.fill();}}}
 function stjarna(x,y,r,rot){ctx.beginPath();for(let i=0;i<10;i++){const a=rot+i*Math.PI/5,rr=i%2?r*.45:r;ctx.lineTo(x+Math.cos(a)*rr,y+Math.sin(a)*rr);}ctx.closePath();ctx.fill();}
 function blomma(x,y){ctx.strokeStyle="#2BB673";ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x,y-28);ctx.stroke();
   ["#FF7EB6","#FF7EB6","#FF7EB6","#FF7EB6","#FF7EB6"].forEach((f,i)=>{const a=i*Math.PI*2/5;ctx.fillStyle=f;ctx.beginPath();ctx.arc(x+Math.cos(a)*10,y-36+Math.sin(a)*10,8,0,7);ctx.fill();});
   ctx.fillStyle="#FFD84D";ctx.beginPath();ctx.arc(x,y-36,7,0,7);ctx.fill();}
-let hudS="";function hud(){const h=`${"❤️".repeat(Math.max(0,P.hjartan))}${"🤍".repeat(Math.max(0,3-P.hjartan))} ${LV.boss?"":`<span>⭐ ${P.stj}/3</span>`} <span>${P.poang} p</span>`;if(h!==hudS){hudS=h;$("hudV").innerHTML=h;}}
+let hudS="";function hud(){const h=`${"❤️".repeat(Math.max(0,P.hjartan))}${"🤍".repeat(Math.max(0,3-P.hjartan))} ${LV.boss?"":`<span>⭐ ${P.stj}/3</span>`} <span>${P.poang} p</span>${LV.nycklarMax?` <span>🔑 ${P.nycklar}/${LV.nycklarMax}</span>`:""}${P.kraft?` <span>${P.kraft==="vingar"?"🦋 vingar":"🥾 högt hopp"} ${Math.ceil(P.kraftT)} s</span>`:""}`;if(h!==hudS){hudS=h;$("hudV").innerHTML=h;}}
 
 /* ---------- Styrning ---------- */
 MPPlatt.styrning(IN,{aktiv:()=>!$("game").hidden,tangent:e=>{if(e.code==="Escape"){togglePaus();return true;}return false;}});
@@ -507,7 +579,7 @@ $("paus").onclick=togglePaus;$("fortsatt").onclick=togglePaus;
 $("avsluta").onclick=$("quit").onclick=$("tillMeny").onclick=()=>{igang=false;cancelAnimationFrame(raf);show("meny");};
 $("igen").onclick=()=>start(LV.vid,LV.boss?"boss":LV.nr);
 // fortsätt från senaste porten med tre nya hjärtan (stjärnor, mynt och öppna portar finns kvar)
-$("fortsattPort").onclick=()=>{P.hjartan=3;P.x=P.check;P.y=8*T;P.vx=P.vy=0;P.skada=1.4;P.forsok=(P.forsok||0)+1;$("slutRuta").hidden=true;igang=true;last=performance.now();};
+$("fortsattPort").onclick=()=>{P.hjartan=3;P.x=P.check;P.y=8*T;P.vx=P.vy=0;P.skada=1.4;if(LV.jagare)LV.jagare.x=Math.min(LV.jagare.x,P.x-7*T);P.forsok=(P.forsok||0)+1;$("slutRuta").hidden=true;igang=true;last=performance.now();};
 document.addEventListener("visibilitychange",()=>{if(document.hidden&&igang&&!pausad)togglePaus();});
 
 /* ---------- Musiken: egna korta slingor med Web Audio (inga ljudfiler), en per värld och en för bossen ----------

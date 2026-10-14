@@ -3,7 +3,7 @@
 
    MPPlatt.G                       fysikens värden (ruta 64 enheter)
    MPPlatt.kropp(x,y)              ny kropp (fötterna vid x,y); spelen får lägga till egna fält
-   MPPlatt.steg(s,inp,dt,o)        ett tidssteg: inp {v,h,u}, o {fast(c,r), huvud(c,r)?, fjadrar?, plankor?}
+   MPPlatt.steg(s,inp,dt,o)        ett tidssteg: inp {v,h,u}, o {fast(c,r), huvud(c,r)?, fjadrar?, plankor?, hoppMult? (högre hopp), flyg? (obegränsat med hopp i luften)}
                                    ger händelser: "hopp", "hopp2", "fjader"
    MPPlatt.styrning(IN,o)          tangenter och pekknappar (.ktrl button[data-k]) sätter IN.v/h/u/m; o {aktiv(), tangent(e)?}
                                    varje nytt tryck sätter också IN.uT/IN.mT, som spelet nollställer när trycket använts
@@ -24,9 +24,11 @@ window.MPPlatt=(()=>{
     s.vx+=Math.sign(mal*G.fart-s.vx)*Math.min(Math.abs(mal*G.fart-s.vx),G.acc*dt*(s.mark?1:.75));
     s.coyote=s.mark?.1:Math.max(0,s.coyote-dt);s.buffert=Math.max(0,s.buffert-dt);
     if((inp.u&&!s.uFor)||inp.uT){s.buffert=.12;inp.uT=false;}s.uFor=inp.u; // uT = tryck som hann släppas mellan två bilder
-    if(s.buffert>0){if(s.coyote>0){s.vy=-G.hopp;s.hopp=1;s.coyote=0;s.buffert=0;s.mark=false;ev.push("hopp");}
+    const hm=o.hoppMult||1; // hopp-stövlar (Sagoriket) ger högre hopp
+    if(s.buffert>0){if(s.coyote>0){s.vy=-G.hopp*hm;s.hopp=1;s.coyote=0;s.buffert=0;s.mark=false;ev.push("hopp");}
       // dubbelhopp: bromsar aldrig (t.ex. direkt efter en fjäder)
-      else if(s.hopp<2&&!s.mark){s.vy=Math.min(s.vy,-G.hopp2);s.hopp=2;s.buffert=0;ev.push("hopp2");}}
+      else if(s.hopp<2&&!s.mark){s.vy=Math.min(s.vy,-G.hopp2*hm);s.hopp=2;s.buffert=0;ev.push("hopp2");}
+      else if(o.flyg&&!s.mark){s.vy=Math.min(s.vy,-G.hopp2*.85);s.buffert=0;ev.push("hopp2");}} // vingar: man kan hoppa hur många gånger som helst i luften
     if(!inp.u&&s.vy<-300)s.vy+=G.grav*dt*.9; // kort hopp om man släpper
     s.vy=Math.min(s.vy+G.grav*dt,1400);
     // rörliga plankor bär med sig den som står på dem
