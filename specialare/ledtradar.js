@@ -40,5 +40,19 @@ var LEDTRADAR={
 "blackfisk":["Jag har tre hjärtan och blått blod.","Jag kan ändra färg på en sekund.","Jag har åtta armar och sprutar bläck."],
 "iss":["Jag åker runt jorden på ungefär 90 minuter.","Jag är stor som en fotbollsplan och svävar över era huvuden.","Människor har bott i mig sedan år 2000, i rymden."],
 "mammutar":["Jag levde när det var iskallt över stora delar av världen.","Jag hade långa, böjda betar och tjock päls.","Jag är släkt med elefanten och dog ut för länge sedan."]
+,
+"penicillin":["Jag upptäcktes av misstag, genom en skål som en forskare glömde.","Jag kommer från ett mögel och dödar bakterier.","Jag är den första antibiotikan, och Alexander Fleming hittade mig 1928."],
+"jast":["Jag är levande, men du ser mig bara som små korn eller en klump.","Jag äter socker och gör bubblor, och utan mig blir degen platt.","Jag får brödet att jäsa. Jag är en liten svamp."],
+"dans":["Vi har rört oss så här i tusentals år, ofta till musik.","Man kan göra det i en balettsal, på en gata eller på en folkfest.","Moonwalk och breakdance är sorter av mig."],
+"webb":["Jag blickar tillbaka i tiden och är nästan frusen.","Min spegel är gjord av 18 guldbitar och jag sitter 1,5 miljoner kilometer bort.","Jag är det största rymdteleskopet, och jag har fått ta över efter Hubble."],
+"sjokablar":["Du använder mig varje dag, men du kan inte se mig, och jag ligger långt nere i djupet.","Ljusblixtar rusar genom mig, och jag är tunn som en trädgårdsslang.","Jag är kablarna som bär nästan hela internet mellan länderna."],
+"chip":["Jag är gjord av sand, men jag är hjärnan i nästan allt du äger.","Jag har miljarder strömbrytare på en yta stor som en nagel.","Jag sitter i din mobil och dator. Jag är ett chip."],
+"mars":["Vi är röda kusiner till bilar, men vi kör där inga människor har varit.","En av oss har en liten helikopter med sig.","Jag heter Perseverance, och jag kör på Mars."],
+"gps":["Jag vet var du är, men du måste inte berätta.","Jag räknar ut avstånd med hjälp av tid och ljusets fart.","Satelliter högt över dig hjälper mig. Jag heter GPS."],
+"vaccin":["Mitt namn kommer från ett djur som ger mjölk.","Jag visar kroppen en ofarlig bit av en sjukdom så den lär sig försvara sig.","Edward Jenner upptäckte mig. Jag har utrotat smittkoppor."],
+"leonardo":["Jag skrev bakvänt, och man måste använda en spegel för att läsa det.","Jag ritade flygmaskiner för över 500 år sedan.","Jag målade Mona Lisa."]
+,
+"ananas":["Jag sticker i munnen, men det är jag som äter dig.","Jag innehåller ett ämne som bryter ner proteiner, så gelé inte stelnar när jag är med.","Jag är gul, taggig och växer i Sydamerika. Jag heter ananas."],
+"smaklokar":["Vi byts ut ungefär varannan vecka, och du har tusentals av oss.","Vi känner sött, surt, salt, bittert och umami.","Vi sitter på din tunga och hjälper dig känna smak."]
 
 };

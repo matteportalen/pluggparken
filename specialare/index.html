@@ -117,7 +117,8 @@ h1 span{color:#E0562B}
 #vy .slide img.susig{filter:blur(30px) saturate(1.2);clip-path:inset(0 round 10px);box-shadow:none}
 @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @media(min-width:900px){#vy .slide{flex-direction:row;flex-wrap:nowrap;gap:5vw;padding:10px 6vw}#vy .slide .foto img{max-height:70vh;max-width:56vw}#vy .slide .tx{max-width:34vw}#vy .slide h2{font-size:clamp(2.2rem,3.6vw,3.6rem)}#vy .slide ul,#vy .slide p{font-size:clamp(1.2rem,1.55vw,1.7rem)}#vy .slide .slut,#vy .slide .gillar{flex-basis:auto}}
-@media(min-width:900px){#vy .slide.sist{flex-wrap:wrap}#vy .slide.sist .foto img{max-height:42vh}}
+@media(min-width:900px){#vy .slide.sist{flex-wrap:wrap}#vy .kuriosa{margin-top:6px}.kuriosa .btn{border-color:rgba(255,255,255,.4);font-size:.95rem}
+#vy .slide.sist .foto img{max-height:27vh}}
 
 /* museum och planetarium */
 #vy .stjarnor{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:0;transition:opacity 1s;background-image:radial-gradient(1.2px 1.2px at 12% 18%,#fff,transparent),radial-gradient(1px 1px at 27% 72%,#fff,transparent),radial-gradient(1.4px 1.4px at 41% 33%,#fff,transparent),radial-gradient(1px 1px at 58% 82%,#fff,transparent),radial-gradient(1.3px 1.3px at 73% 24%,#fff,transparent),radial-gradient(1px 1px at 88% 61%,#fff,transparent),radial-gradient(1.2px 1.2px at 94% 12%,#fff,transparent),radial-gradient(1px 1px at 6% 88%,#fff,transparent),radial-gradient(1.1px 1.1px at 66% 52%,#fff,transparent),radial-gradient(1px 1px at 35% 8%,#fff,transparent);background-size:340px 300px;animation:drift 120s linear infinite}
@@ -379,6 +380,7 @@ h1 span{background:linear-gradient(100deg,#ffd86b,#fff 55%,#ffd86b);background-s
 <script src="ledtradar.js"></script>
 <script src="grejer.js"></script>
 <script src="klipp.js"></script>
+<script src="klippl.js"></script>
 <script>
 (function(){
 const $=s=>document.querySelector(s);
@@ -417,6 +419,7 @@ $("#grid").onclick=e=>{const b=e.target.closest(".kort");if(!b)return;const a=AL
 function gnistor(){if(matchMedia("(prefers-reduced-motion:reduce)").matches)return;const v=$("#vy"),r=v.getBoundingClientRect();
   for(let i=0;i<42;i++){const e=document.createElement("i");e.className="gnista";const a=Math.random()*Math.PI*2,d=120+Math.random()*Math.min(r.width,r.height)*.45;
     e.style.cssText=`left:${r.width/2}px;top:${r.height*.45}px;--x:${Math.cos(a)*d}px;--y:${Math.sin(a)*d}px;--s:${6+Math.random()*10}px;--t:${.9+Math.random()*.9}s;--h:${Math.random()<.5?"#fff":"#ffd86b"}`;v.appendChild(e);setTimeout(()=>e.remove(),2000)}}
+let kvTill=null;
 let ledt=0,svarat=false;
 const ledtLista=l=>(typeof LEDTRADAR!=="undefined"&&LEDTRADAR[l.id])||null;
 const punkter=t=>{const d=t.split(/(?<=[.!?])\s+(?=[A-ZÅÄÖ0-9"])/);return d.length>1?"<ul>"+d.map(x=>"<li>"+x+"</li>").join("")+"</ul>":"<p>"+t+"</p>"};
@@ -438,10 +441,11 @@ function visaBild(){
     const bi=bildar[i];$("#vy").style.setProperty("--bi",bi?`url(bilder/${bi.f})`:"none");
     const bild=bi?`<figure class="foto"><div class="rama"><img src="bilder/${bi.f}" alt="${r[1]}" decoding="async"></div><figcaption><span class="fig">FIG. ${i+1}</span><a href="${bi.s}" target="_blank" rel="noopener">${bi.k}</a></figcaption></figure>`:`<div class="e" aria-hidden="true">${r[0]}</div>`;
     const nb=bildar[i+1];if(nb){const im=new Image();im.src="bilder/"+nb.f}
-    $("#vyS").classList.toggle("sist",sist);$("#vyS").innerHTML=bild+`<div class="tx">${kick(l.kat.toUpperCase()+" · "+(idx+1)+" / "+n)}<h2>${r[1]}</h2>${punkter(r[2])}</div>`+(sist?`<div class="gillar">Gillade du den? <span class="tum">${tumHtml(l.id)}</span></div><div class="slut"><button class="btn guld" id="sl1">🎲 Slumpa en till</button><button class="btn" id="sl2">Till listan</button></div>`:"");
+    $("#vyS").classList.toggle("sist",sist);$("#vyS").innerHTML=bild+`<div class="tx">${kick(l.kat.toUpperCase()+" · "+(idx+1)+" / "+n)}<h2>${r[1]}</h2>${punkter(r[2])}</div>`+(sist?`<div class="gillar">Gillade du den? <span class="tum">${tumHtml(l.id)}</span></div>${KLIPPL[l.id]?`<div class="kuriosa"><button class="btn" id="slK">🎬 Kuriosa: se ett kort filmklipp på svenska (${Math.max(1,Math.round(KLIPPL[l.id].sek/60))} min)</button></div>`:""}<div class="slut"><button class="btn guld" id="sl1">🎲 Slumpa en till</button><button class="btn" id="sl2">Till listan</button></div>`:"");
   }
   $("#vyD").innerHTML=Array.from({length:n},(_,i)=>`<span class="prick${i===idx?" on":""}"></span>`).join("");
   $("#vyP").disabled=idx===0;$("#vyN").disabled=sist;$("#vyN").style.visibility=sist?"hidden":"visible";
+  if(sist&&$("#slK")){$("#slK").onclick=()=>{kvTill=location.hash;location.hash="#k/"+KLIPPL[l.id].id}}
   if(sist){$("#sl1").onclick=()=>{let a;const P=pool();do{a=P[Math.random()*P.length|0]}while(a===l&&P.length>1);location.hash=href(a)};$("#sl2").onclick=()=>{location.hash=""}}
   history.replaceState(null,"","#l/"+l.id+"/"+(idx+1));
 }
@@ -453,17 +457,18 @@ function oppnaG(g){stangAlla();$("#gv").classList.toggle("mork",!!g.mork);nu=g.i
 function rut(){
   const h=location.hash.replace(/^#/,"").split("/");
   if(h[0]==="l"){const l=LEKTIONER.find(x=>x.id===h[1]);if(l){if(cur!==l||!$("#vy").classList.contains("on")){stangAlla()}oppnaL(l,(+h[2]||1)-1);return}}
-  if(h[0]==="k"){const k=KLIPP.find(x=>x.id===h[1]);if(k){oppnaK(k);return}}
+  if(h[0]==="k"){const k=KLIPP.find(x=>x.id===h[1])||Object.values(KLIPPL).find(x=>x.id===h[1]);if(k){oppnaK(k);return}}
   if(h[0]==="g"){const g=GREJER.find(x=>x.id===h[1]);if(g){oppnaG(g);return}}
   stangAlla();
 }
 function gaTill(d){if(!cur)return;const n=idx+d,tot=cur.rutor.length+(ledtLista(cur)?1:0);if(n<0||n>=tot)return;idx=n;visaBild()}
 $("#vyN").onclick=()=>gaTill(1);$("#vyP").onclick=()=>gaTill(-1);
-$("#vyX").onclick=$("#gvX").onclick=$("#kvX").onclick=()=>{location.hash=""};
+$("#vyX").onclick=$("#gvX").onclick=()=>{location.hash=""};
+$("#kvX").onclick=()=>{const t=kvTill;kvTill=null;location.hash=t||""};
 $("#vyF").onclick=()=>{const e=document.documentElement;if(document.fullscreenElement)document.exitFullscreen();else if(e.requestFullscreen)e.requestFullscreen().catch(()=>{})};
 if(!document.documentElement.requestFullscreen)$("#vyF").style.display="none";
 document.addEventListener("keydown",e=>{
-  if(e.key==="Escape"){if($("#vy").classList.contains("on")||$("#gv").classList.contains("on")||$("#kv").classList.contains("on")){if(!document.fullscreenElement)location.hash=""}return}
+  if(e.key==="Escape"){if($("#kv").classList.contains("on")){$("#kvX").click();return}if($("#vy").classList.contains("on")||$("#gv").classList.contains("on")||$("#kv").classList.contains("on")){if(!document.fullscreenElement)location.hash=""}return}
   if(!$("#vy").classList.contains("on"))return;
   if(e.key==="ArrowRight"||e.key===" "||e.key==="PageDown"){e.preventDefault();gaTill(1)}
   else if(e.key==="ArrowLeft"||e.key==="PageUp"){e.preventDefault();gaTill(-1)}

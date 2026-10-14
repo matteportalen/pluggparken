@@ -314,5 +314,101 @@ var LEKTIONER=[
 ["🎨","Grottmålningar","Människor jagade mammutar och ritade dem på grottväggar."],
 ["❄️","Frusna fynd","Hela mammutar har hittats frusna i Sibirien. Kalven Lyuba är över 40 000 år gammal."],
 ["🧬","Tillbaka?","Forskare har tagit DNA från frusna mammutar och funderar på om man kan skapa mammutliknande djur. Ingen har lyckats ännu."]]}
+,
+{id:"penicillin",titel:"Penicillinet",kat:"Kroppen",e:"💊",c:"#3E8E5A",rutor:[
+["🧫","En bortglömd skål","År 1928 kom forskaren Alexander Fleming tillbaka från semestern till sitt labb i London. Han hade glömt en skål med bakterier."],
+["🍄","Mögel som dödade","I skålen hade det växt mögel. Runt mögelfläcken var alla bakterier döda."],
+["🔬","Penicillium","Mögel heter Penicillium. Det gör ett ämne som dödar bakterier. Fleming kallade ämnet penicillin."],
+["👩‍⚕️","Det tog över tio år","Det tog tills 1940-talet innan Howard Florey och Ernst Chain lyckades göra penicillinet till en riktig medicin."],
+["🏥","Räddade miljoner","Före penicillin kunde ett litet sår eller en lunginflammation vara livsfarligt. Nu kunde läkare bota bakterieinfektioner."],
+["🏅","Nobelpris","Fleming, Florey och Chain fick Nobelpriset 1945. Men penicillin dödar bara bakterier, inte virus, och man ska aldrig äta antibiotika i onödan."]]},
+
+{id:"jast",titel:"Så jäser brödet",kat:"Natur",e:"🍞",c:"#C8933E",rutor:[
+["🌾","Ett av de äldsta matlagen","Människor har bakat bröd i över 10 000 år. De äldsta bröden var platta och hårda."],
+["🦠","Jäst är levande","Jäst är en liten svamp som består av en enda cell. Den vaknar när den får det varmt, vått och sött."],
+["🫧","Jästen äter socker","När jästen äter socker i degen gör den koldioxid, samma gas som finns i läsk. Det bildas tusentals små bubblor."],
+["🧶","Gluten fångar bubblorna","Vetemjölet innehåller gluten. När man knådar bildas en seg, elastisk väv som håller kvar gasen, som en ballong."],
+["🔥","I ugnen","I ugnen utvidgas bubblorna och brödet växer. Vid ungefär 55 grader dör jästen, och degen blir fast och luftig."],
+["🟤","Gyllene skorpa","Den bruna skorpan och den goda doften bildas när socker och proteiner reagerar med varandra i värmen. Det kallas Maillard-reaktionen."]]},
+
+{id:"dans",titel:"Dans genom tiderna",kat:"Historia",e:"💃",c:"#C2467A",rutor:[
+["🏺","Äldre än skriften","Människor har dansat i tusentals år. Gamla gravmålningar i Egypten visar dansare för över 4 000 år sedan."],
+["🎭","Balett","Balett började vid furstehov i Italien för ungefär 500 år sedan. I Frankrike grundade kung Ludvig XIV en dansskola 1661."],
+["🪗","Folkdans","I Sverige har man dansat folkdanser som polska och schottis i hundratals år, ofta till fiol och dragspel."],
+["🕺","Moonwalk","1983 visade Michael Jackson sin berömda moonwalk, där han ser ut att gå bakåt medan han glider framåt."],
+["🌆","Breakdance","Breakdance föddes i stadsdelen Bronx i New York på 1970-talet, bland unga som dansade till DJ:ns musik."],
+["🏅","Olympiska spel","År 2024 blev breaking, som breakdance heter, en olympisk gren för första gången, i Paris."]]},
+
+{id:"webb",titel:"James Webb-teleskopet",kat:"Rymden",e:"🔭",c:"#C99A2E",rutor:[
+["🚀","Uppskjutet på juldagen","James Webb-teleskopet sköts upp den 25 december 2021. Det är det största och mest kraftfulla rymdteleskop som någonsin byggts."],
+["📍","Långt bortom månen","Det befinner sig 1,5 miljoner kilometer från jorden, fyra gånger längre bort än månen."],
+["🪞","Guldspegeln","Spegeln är 6,5 meter bred och består av 18 sexkantiga bitar av guldbelagd metall. Den fälldes ihop som origami för att få plats i raketen."],
+["🧊","Ett jättestort solskydd","Teleskopet ser värme, infrarött ljus, så det måste vara iskallt, runt minus 230 grader. Ett solskydd stort som en tennisplan skyddar det."],
+["🌌","De första galaxerna","Eftersom ljuset behöver tid ser teleskopet tillbaka i tiden. Det kan se galaxer som lyste över 13 miljarder år sedan."],
+["📸","Första bilderna","I juli 2022 kom de första bilderna. De visade tusentals galaxer i en liten fläck av himlen och färgglada moln där stjärnor föds."]]},
+
+{id:"sjokablar",titel:"Internet ligger på havsbotten",kat:"Tal",e:"🌐",c:"#1F7A8C",rutor:[
+["🌐","Är internet i luften?","Nej. Nästan allt internet mellan länderna går genom kablar som ligger på havsbotten."],
+["📏","Över en miljon kilometer","Det finns ungefär 500 kablar som tillsammans är över en miljon kilometer långa. Det är mer än två gånger till månen."],
+["💡","Ljus i glasfiber","Inuti kablarna finns glasfibertrådar. Informationen skickas som ljusblixtar, tusentals miljoner varje sekund."],
+["🪢","Tunna som en trädgårdsslang","Ute i djuphavet är kabeln bara ungefär lika tjock som en trädgårdsslang, men har ett skydd av stål och plast."],
+["🚢","Kabelfartyg","Särskilda fartyg lägger ut kablarna och lagar dem när de går sönder, ibland på flera kilometers djup."],
+["📜","Den första kabeln","Den första kabeln över Atlanten lades 1858. Den skickade telegram, och ett meddelande tog många timmar."]]},
+
+{id:"chip",titel:"Mikrochipet",kat:"Tal",e:"🖥️",c:"#4A5D8F",rutor:[
+["🏢","Datorer stora som rum","De första datorerna på 1940-talet fyllde ett helt rum och vägde flera ton. De använde glasrör."],
+["🔌","Transistorn","1947 uppfann forskare transistorn. Den är en liten strömbrytare som kan slå på och av tusentals gånger i sekunden."],
+["🧱","Sand blir chip","Chip görs av kisel, som finns i sand. Det renas, skärs i skivor och bearbetas i extremt rena rum."],
+["🔬","Mindre än ett virus","Transistorerna är bara några miljondels millimeter stora. Ett hårstrå är tiotusentals gånger tjockare."],
+["📱","Miljarder i en mobil","Ett chip i en mobil är stort som en nagel och har mer än tio miljarder transistorer."],
+["⚡","Därför är allt smart","Utan chip skulle det inte finnas mobiler, bilar med datorer eller sjukhusens magnetkameror."]]},
+
+{id:"mars",titel:"Robotar på Mars",kat:"Rymden",e:"🤖",c:"#B5532A",rutor:[
+["🔴","Röd och död planet","Mars är kall, torr och full av damm. Ingen människa har varit där, men robotar har kört runt på ytan i många år."],
+["🚙","Sojourner","1997 landade den första lilla roboten, Sojourner, som var ungefär lika stor som en mikrovågsugn."],
+["🪨","Curiosity","Curiosity landade 2012. Den är stor som en bil och undersöker stenar för att hitta spår av vatten."],
+["🛰️","Perseverance","I februari 2021 landade Perseverance i Jezerokratern, där det för länge sedan fanns en sjö. Den samlar stenprover."],
+["🚁","Helikopter på Mars","Med Perseverance kom helikoptern Ingenuity. Den gjorde den första flygningen på en annan planet, i april 2021."],
+["📡","Radiosignaler tar tid","Signalerna från jorden tar mellan 5 och 20 minuter att nå Mars. Därför kan man inte styra roboten med joystick."]]},
+
+{id:"gps",titel:"Så vet mobilen var du är",kat:"Tal",e:"📍",c:"#2B8A6B",rutor:[
+["📍","Hur vet kartan var du är?","Mobilen tar emot signaler från satelliter som flyger högt över jorden. Systemet heter GPS."],
+["🛰️","Över 30 satelliter","GPS har ungefär 30 satelliter som flyger runt jorden på ungefär 20 000 kilometers höjd."],
+["⏱️","Klockor i rymden","Varje satellit har en extremt exakt atomklocka. Den skickar ut tiden och var satelliten är."],
+["📐","Räknar avstånd","Mobilen mäter hur lång tid signalen tog. Eftersom ljuset har en känd fart kan den räkna ut avståndet till satelliten."],
+["🔺","Minst fyra satelliter","Med avstånd till minst fyra satelliter kan mobilen räkna ut exakt var den är, ofta inom några meter."],
+["🧠","Einstein hjälper till","Satelliternas klockor går lite fortare än klockor på jorden, enligt Einsteins relativitetsteori. Utan korrigering skulle GPS bli fel redan efter någon timme."]]},
+
+{id:"vaccin",titel:"Hur vaccin fungerar",kat:"Kroppen",e:"💉",c:"#3F8FB5",rutor:[
+["🐄","Från en ko","Ordet vaccin kommer från latinets vacca, som betyder ko. Det är en historia om kor och mjölkpigor."],
+["👨‍⚕️","Edward Jenner","1796 såg läkaren Edward Jenner att mjölkpigor som fått kokoppor inte fick de farliga smittkopporna."],
+["💉","Första vaccinet","Jenner provade att ge en pojke lite kokoppsvätska. Pojken blev inte sjuk av smittkoppor när han senare utsattes."],
+["🛡️","Tränar kroppen","Ett vaccin visar immunförsvaret en ofarlig bit av en sjukdom. Kroppen lär sig känna igen den, så den är redo."],
+["🌍","Smittkoppor borta","Genom vaccinering försvann smittkopporna. 1980 förklarade WHO att sjukdomen var utrotad i hela världen."],
+["🧒","Skyddar fler","Vaccin skyddar inte bara dig utan också människor som inte kan vaccineras, eftersom sjukdomen har svårare att sprida sig."]]},
+
+{id:"leonardo",titel:"Leonardo da Vinci",kat:"Historia",e:"🎨",c:"#8A6E3E",rutor:[
+["🎨","Konstnär och uppfinnare","Leonardo da Vinci levde i Italien för över 500 år sedan, 1452 till 1519. Han är mest känd för målningen Mona Lisa."],
+["🖼️","Mona Lisa","Mona Lisa hänger i Louvren i Paris och ses av miljontals människor varje år. Hennes leende har fascinerat folk i hundratals år."],
+["✍️","Spegelskrift","Leonardo skrev sina anteckningar i spegelskrift, från höger till vänster, så att man måste använda en spegel för att läsa dem."],
+["🛩️","Flygmaskiner","Han ritade flygmaskiner, fallskärmar och pansarvagnar. Det mesta byggdes aldrig på hans tid, men många idéer liknar saker som kom senare."],
+["🦴","Han studerade kroppen","Leonardo undersökte människokroppen för att kunna måla den rätt. Hans teckningar av muskler och ben är mycket exakta."],
+["📓","Tusentals sidor","Av hans anteckningsböcker finns ungefär 7 000 sidor kvar, fulla av teckningar, idéer och tankar."]]}
+,
+{id:"ananas",titel:"Ananasen äter tillbaka",kat:"Natur",e:"🍍",c:"#D9A521",rutor:[
+["🍍","Svider i munnen","Har du ätit ananas och känt att det svider eller sticker i munnen? Det beror på att ananasen faktiskt försöker smälta din mun."],
+["🧪","Ett enzym","I ananasen finns ett ämne som heter bromelain. Det är ett enzym som bryter ner proteiner, samma sorts ämnen som tungan och kinderna består av."],
+["👅","Små skador","Bromelain bryter ner lite av det yttersta skiktet i munnen. Det är en lindrig skada som läker på några timmar, och saliven skyddar dig."],
+["🥩","Mördar tuggor","Bromelain används för att göra kött mört, eftersom det bryter ner de sega proteinerna i köttet."],
+["🍮","Gelé som inte stelnar","Gelatin är också ett protein. Lägger du färsk ananas i gelé stelnar den inte, eftersom bromelain bryter ner gelatinet."],
+["🥫","Burk går bra","Ananas på burk har värmts upp, och då slutar enzymet att fungera. Därför funkar den i gelé, och den sticker inte lika mycket."]]},
+
+{id:"smaklokar",titel:"Smaklökarna",kat:"Kroppen",e:"👅",c:"#D6546B",rutor:[
+["👅","Tusentals smaklökar","På tungan sitter ungefär 2 000 till 10 000 smaklökar. De byts ut ungefär var tionde till fjortonde dag."],
+["🍬","Fem grundsmaker","Vi känner sött, surt, salt, bittert och umami, som är smaken av t.ex. parmesan och soja."],
+["🗺️","Tungkartan stämmer inte","Man trodde att varje smak sitter på sin del av tungan. Det är fel. Alla smaker kan kkännas på hela tungan."],
+["🌶️","Chili är inte en smak","Chili ger inte en smak utan en smärtsignal. Ämnet capsaicin aktiverar nerver som tror att munnen är het."],
+["❄️","Mint känns kall","Menthol i mynta aktiverar nerver som känner kyla. Munnen blir inte kallare, men hjärnan tror det."],
+["🫐","Mirakelbär","Mirakelbäret från Västafrika gör att sur mat smakar sött i ungefär en halvtimme. Du kan äta en citron som om det vore godis."]]}
 
 ];
