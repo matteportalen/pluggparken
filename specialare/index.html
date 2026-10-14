@@ -10,7 +10,7 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Inter:wght@400;600;800&family=Source+Serif+4:opsz,wght@8..60,500;8..60,700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#FFF6E0;--ink:#1D2B53;--muted:#56668F;--card:#fff;--line:#EBD9A8;--accent:#3D5AFE;--gold:#F2B707;--font:"Baloo 2","Trebuchet MS",system-ui,sans-serif}
 *{box-sizing:border-box}
@@ -81,6 +81,75 @@ h1 span{color:#E0562B}
 .nav:disabled{opacity:.35}
 .nav:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.2)}
 .slut{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+/* proffsig bildspelsvy */
+#vy{background:#080b12;color:#fff;font-family:Inter,"Helvetica Neue",Arial,system-ui,sans-serif;overflow:hidden}
+#vy::before{content:"";position:absolute;inset:-60px;background:var(--bi,none) center/cover no-repeat,radial-gradient(circle at 30% 20%,color-mix(in srgb,var(--ac,#345) 45%,#080b12),#080b12);filter:blur(50px) brightness(.36) saturate(1.25);z-index:0;pointer-events:none}
+#vy>*{position:relative;z-index:1}
+#vy .vy-top{padding:12px 18px;padding-top:max(12px,env(safe-area-inset-top))}
+#vy .vy-top .t{font-size:.78rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;opacity:.75}
+#vy .rund{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.22);box-shadow:none;backdrop-filter:blur(8px);font-weight:600}
+#vy .rund:active{background:rgba(255,255,255,.25);transform:none}
+#vy .tum button{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);box-shadow:none;filter:none;opacity:.8}
+#vy .tum button.on{background:rgba(255,255,255,.28);outline:none;opacity:1;border-color:#fff}
+#vy .slide{align-items:center;text-align:left;padding:6px 24px 10px;gap:18px;justify-content:center}
+#vy .slide .foto{align-items:flex-end;gap:6px}
+#vy .slide .foto img{border-radius:10px;box-shadow:0 24px 70px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.08);animation:fade .5s ease both;background:#0003}
+#vy .slide .foto figcaption{font-size:.68rem;opacity:.55;text-align:right}
+#vy .slide .foto figcaption a{text-decoration:none}
+#vy .slide .tx{gap:12px;align-items:flex-start;width:100%;max-width:640px}
+#vy .kick{font-size:.78rem;font-weight:800;letter-spacing:.16em;color:color-mix(in srgb,var(--ac,#9bd) 50%,#fff)}
+#vy .slide h2{font-size:clamp(1.9rem,6.5vw,3rem);font-weight:800;letter-spacing:-.025em;line-height:1.04;text-shadow:none;text-align:left}
+#vy .slide ul{max-width:none;gap:14px;font-size:clamp(1.05rem,3.6vw,1.45rem);font-weight:400;line-height:1.4}
+#vy .slide ul li{background:none;border-radius:0;padding:2px 0 2px 16px;border-left:3px solid var(--ac,#9bd)}
+#vy .slide ul li::before{display:none}
+#vy .slide ul li small{display:block;font-size:.65rem;font-weight:800;letter-spacing:.16em;opacity:.65;margin-bottom:2px}
+#vy .slide p{background:none;padding:0 0 0 16px;border-left:3px solid var(--ac,#9bd);border-radius:0;max-width:none;font-size:clamp(1.05rem,3.6vw,1.45rem);line-height:1.4}
+#vy .slide .e{filter:none;font-size:clamp(4rem,18vmin,8rem)}
+#vy .btn{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.3);box-shadow:none;border-radius:12px;font-weight:600}
+#vy .btn.guld{background:#fff;color:#0b1020;border-color:#fff}
+#vy .gillar{font-weight:600;font-size:1rem;opacity:.9}
+#vy .vy-nav{padding:8px 18px;padding-bottom:max(16px,env(safe-area-inset-bottom));gap:18px}
+#vy .nav{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.25);box-shadow:none;font-weight:600;border-radius:12px;height:48px;min-width:96px;font-size:1rem}
+#vy .nav:active:not(:disabled){background:rgba(255,255,255,.25);transform:none}
+#vy .prickar{gap:5px;max-width:42vw}
+#vy .prick{width:20px;height:3px;border-radius:2px;background:rgba(255,255,255,.3);transform:none}
+#vy .prick.on{background:#fff}
+#vy .slide img.susig{filter:blur(30px) saturate(1.2);clip-path:inset(0 round 10px);box-shadow:none}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media(min-width:900px){#vy .slide{flex-direction:row;flex-wrap:nowrap;gap:5vw;padding:10px 6vw}#vy .slide .foto img{max-height:70vh;max-width:56vw}#vy .slide .tx{max-width:34vw}#vy .slide h2{font-size:clamp(2.2rem,3.6vw,3.6rem)}#vy .slide ul,#vy .slide p{font-size:clamp(1.2rem,1.55vw,1.7rem)}#vy .slide .slut,#vy .slide .gillar{flex-basis:auto}}
+@media(min-width:900px){#vy .slide.sist{flex-wrap:wrap}#vy .slide.sist .foto img{max-height:42vh}}
+
+/* museum och planetarium */
+#vy .stjarnor{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:0;transition:opacity 1s;background-image:radial-gradient(1.2px 1.2px at 12% 18%,#fff,transparent),radial-gradient(1px 1px at 27% 72%,#fff,transparent),radial-gradient(1.4px 1.4px at 41% 33%,#fff,transparent),radial-gradient(1px 1px at 58% 82%,#fff,transparent),radial-gradient(1.3px 1.3px at 73% 24%,#fff,transparent),radial-gradient(1px 1px at 88% 61%,#fff,transparent),radial-gradient(1.2px 1.2px at 94% 12%,#fff,transparent),radial-gradient(1px 1px at 6% 88%,#fff,transparent),radial-gradient(1.1px 1.1px at 66% 52%,#fff,transparent),radial-gradient(1px 1px at 35% 8%,#fff,transparent);background-size:340px 300px;animation:drift 120s linear infinite}
+#vy.rymd .stjarnor{opacity:.55}
+@keyframes drift{to{background-position:-340px 300px}}
+#vy .prog{position:absolute;left:0;top:0;height:3px;width:calc(var(--p,0)*100%);background:color-mix(in srgb,var(--ac,#9bd) 60%,#fff);z-index:3;transition:width .5s ease}
+#vy::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 45%,rgba(0,0,0,.55) 100%)}
+#vy .slide h2{font-family:"Source Serif 4",Georgia,"Times New Roman",serif;font-weight:700;letter-spacing:-.01em;line-height:1.08}
+#vy .kick{padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.22);width:100%}
+#vy .slide .foto img{animation:fade .6s ease both,zoom 22s ease-out .2s both;border-radius:3px}
+@keyframes zoom{from{transform:scale(1)}to{transform:scale(1.035)}}
+#vy .slide .foto{overflow:visible}
+#vy .slide .foto figcaption{display:flex;gap:10px;justify-content:flex-start;width:100%;font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;opacity:.7;text-align:left;margin-top:2px}
+#vy .slide .foto figcaption .fig{font-weight:800;opacity:1;flex:none}
+#vy .slide .foto figcaption a{opacity:.8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#vy .slide ul li,#vy .slide p{font-weight:400;letter-spacing:.005em}
+#vy .slide img.susig{animation:none}
+@media(prefers-reduced-motion:reduce){#vy .stjarnor,#vy .slide .foto img{animation:none}}
+/* lite bling */
+#vy .slide .rama{position:relative;overflow:hidden;border-radius:3px;line-height:0;box-shadow:0 0 110px -10px color-mix(in srgb,var(--ac,#9bd) 70%,transparent),0 24px 70px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.14);max-width:100%}
+#vy .slide .rama img{box-shadow:none;border-radius:0;display:block}
+#vy .slide .rama::after{content:"";position:absolute;inset:-20% auto -20% -60%;width:40%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.32),transparent);transform:skewX(-18deg);animation:blank 1.6s ease-out .5s both;pointer-events:none}
+@keyframes blank{to{left:140%}}
+#vy .slide h2{background:linear-gradient(100deg,#fff 38%,color-mix(in srgb,var(--ac,#9bd) 35%,#fff) 50%,#fff 62%);background-size:260% 100%;background-position:120% 0;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;animation:glans 2.6s ease-out .3s both}
+@keyframes glans{from{background-position:120% 0}to{background-position:-30% 0}}
+#vy .kick{border-bottom:0;background:linear-gradient(90deg,transparent,transparent) bottom/100% 1px no-repeat;position:relative}
+#vy .kick::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:1px;background:linear-gradient(90deg,color-mix(in srgb,var(--ac,#9bd) 70%,#fff),rgba(255,255,255,.08))}
+#vy .btn.guld{box-shadow:0 0 28px color-mix(in srgb,var(--ac,#9bd) 70%,transparent),0 0 0 1px rgba(255,255,255,.6);animation:puls 2.6s ease-in-out infinite}
+@keyframes puls{50%{box-shadow:0 0 44px color-mix(in srgb,var(--ac,#9bd) 90%,transparent),0 0 0 1px #fff}}
+#vy .gnista{position:absolute;z-index:5;width:var(--s);height:var(--s);margin:calc(var(--s)/-2);background:var(--h);clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);pointer-events:none;animation:flyg var(--t) ease-out forwards;filter:drop-shadow(0 0 6px var(--h))}
+@keyframes flyg{from{transform:translate(0,0) scale(.2) rotate(0);opacity:1}70%{opacity:1}to{transform:translate(var(--x),var(--y)) scale(1) rotate(200deg);opacity:0}}
+@media(prefers-reduced-motion:reduce){#vy .slide .rama::after,#vy .slide h2,#vy .btn.guld{animation:none}#vy .slide h2{-webkit-text-fill-color:#fff;color:#fff;background:none}}
 /* tummar */
 .tum{display:inline-flex;gap:6px;flex:none}
 .tum button{border:0;width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.95);font-size:1.3rem;box-shadow:0 3px 0 rgba(0,0,0,.2);filter:grayscale(1);opacity:.75}
@@ -157,6 +226,7 @@ h1 span{color:#E0562B}
 </main>
 
 <section id="vy" aria-label="Minilektion">
+  <div class="stjarnor" aria-hidden="true"></div><div class="prog" aria-hidden="true"></div>
   <div class="vy-top"><button class="rund" id="vyX" aria-label="Stäng">✕</button><div class="t" id="vyT"></div><span class="tum" data-tum></span><button class="rund" id="vyF" aria-label="Helskärm">⛶</button></div>
   <div class="slide" id="vyS"></div>
   <div class="vy-nav"><button class="nav" id="vyP">‹ Förra</button><div class="prickar" id="vyD"></div><button class="nav" id="vyN">Nästa ›</button></div>
@@ -180,7 +250,7 @@ h1 span{color:#E0562B}
 <script>
 (function(){
 const $=s=>document.querySelector(s);
-const ALLA=[].concat(LEKTIONER.map(l=>Object.assign({typ:"l"},l,{beskr:l.rutor[0][2]})),GREJER.map(g=>Object.assign({typ:"g"},g)),KLIPP.map(k=>({typ:"k",id:k.id,titel:k.titel,kat:"Klipp",e:"🎬",c:"#C62828",beskr:k.kanal+" · "+Math.round(k.sek/60)+" min · "+(k.sprak==="en"?"engelska":"svenska"),sek:k.sek,kanal:k.kanal,sprak:k.sprak})));
+const ALLA=[].concat(LEKTIONER.map(l=>Object.assign({typ:"l"},l,{beskr:l.rutor[0][2]})),GREJER.map(g=>Object.assign({typ:"g"},g)),[].map(k=>({typ:"k",id:k.id,titel:k.titel,kat:"Klipp",e:"🎬",c:"#C62828",beskr:k.kanal+" · "+Math.round(k.sek/60)+" min · "+(k.sprak==="en"?"engelska":"svenska"),sek:k.sek,kanal:k.kanal,sprak:k.sprak})));
 let filter="Alla",cur=null,idx=0,stang=null,nu=null;
 let BET={};try{BET=JSON.parse(localStorage.getItem("sp-betyg")||"{}")||{}}catch(e){}
 const sparaB=()=>{try{localStorage.setItem("sp-betyg",JSON.stringify(BET))}catch(e){}};
@@ -199,42 +269,47 @@ function hem(){
   $("#dagens").innerHTML=`<div class="stor" aria-hidden="true">${d.e}</div><div class="t"><small>Dagens specialare</small><h2>${d.titel}</h2><p>${d.typ==="l"?d.rutor.length+" bilder · "+d.kat:d.beskr}</p><div class="rad"><button class="btn guld" id="dgo">Visa!</button><button class="btn" id="slump">🎲 Slumpa</button></div></div>`;
   $("#dgo").onclick=()=>{location.hash=href(d)};
   $("#slump").onclick=()=>{let a;const P=pool();do{a=P[Math.random()*P.length|0]}while(a===d&&P.length>1);location.hash=href(a)};
-  const kats=["Alla","Klipp","Prova själv",...new Set(LEKTIONER.map(l=>l.kat))];
+  const kats=["Alla","Prova själv",...new Set(LEKTIONER.map(l=>l.kat))];
   $("#chips").innerHTML=kats.map(k=>`<button class="chip${k===filter?" on":""}" data-k="${k}">${k}</button>`).join("");
   const lista=ALLA.filter(a=>filter==="Alla"||(filter==="Prova själv"?a.typ==="g":filter==="Klipp"?a.typ==="k":a.typ==="l"&&a.kat===filter));
   $("#grid").innerHTML=lista.map(kort).join("");
-  $("#foot").textContent=LEKTIONER.length+" minilektioner, "+GREJER.length+" saker att prova och "+KLIPP.length+" klipp";
+  $("#foot").textContent=LEKTIONER.length+" minilektioner och "+GREJER.length+" saker att prova";
 }
 $("#chips").onclick=e=>{const b=e.target.closest(".chip");if(b){filter=b.dataset.k;hem()}};
 $("#grid").onclick=e=>{const b=e.target.closest(".kort");if(!b)return;const a=ALLA.find(x=>x.id===b.dataset.id);location.hash=href(a)};
 /* bildspel */
+function gnistor(){if(matchMedia("(prefers-reduced-motion:reduce)").matches)return;const v=$("#vy"),r=v.getBoundingClientRect();
+  for(let i=0;i<42;i++){const e=document.createElement("i");e.className="gnista";const a=Math.random()*Math.PI*2,d=120+Math.random()*Math.min(r.width,r.height)*.45;
+    e.style.cssText=`left:${r.width/2}px;top:${r.height*.45}px;--x:${Math.cos(a)*d}px;--y:${Math.sin(a)*d}px;--s:${6+Math.random()*10}px;--t:${.9+Math.random()*.9}s;--h:${Math.random()<.5?"#fff":"#ffd86b"}`;v.appendChild(e);setTimeout(()=>e.remove(),2000)}}
 let ledt=0,svarat=false;
 const ledtLista=l=>(typeof LEDTRADAR!=="undefined"&&LEDTRADAR[l.id])||null;
 const punkter=t=>{const d=t.split(/(?<=[.!?])\s+(?=[A-ZÅÄÖ0-9"])/);return d.length>1?"<ul>"+d.map(x=>"<li>"+x+"</li>").join("")+"</ul>":"<p>"+t+"</p>"};
 function visaBild(){
   const l=cur,L=ledtLista(l),o=L?1:0,n=l.rutor.length+o,sist=idx===n-1;
+  $("#vy").style.setProperty("--p",(idx+1)/n);$("#vy").classList.toggle("rymd",l.kat==="Rymden");
+  const kick=t=>`<div class="kick">${t}</div>`;
   const bildar=(typeof BILDER!=="undefined"&&BILDER[l.id])||[];
   if(L&&idx===0){
     const bi=bildar[0];
-    const tips=L.slice(0,ledt).map((t,i)=>`<li>${t}</li>`).join("");
-    $("#vyT").textContent=svarat?l.e+" "+l.titel:"🕵️ Mysterium";
+    const tips=L.slice(0,ledt).map((t,i)=>`<li><small>LEDTRÅD ${i+1}</small>${t}</li>`).join("");
+    $("#vyT").textContent=svarat?l.titel:"Mysterium";$("#vy").style.setProperty("--bi",bi?`url(bilder/${bi.f})`:"none");
     $("#vyS").classList.remove("sist");
-    $("#vyS").innerHTML=(bi?`<figure class="foto"><img class="${svarat?"":"susig"}" src="bilder/${bi.f}" alt="" decoding="async">${svarat?`<figcaption><a href="${bi.s}" target="_blank" rel="noopener">${bi.k}</a></figcaption>`:""}</figure>`:`<div class="e" aria-hidden="true">${svarat?l.e:"❓"}</div>`)+
-     `<div class="tx"><h2>${svarat?l.titel:"Vad handlar det om?"}</h2>${tips?`<ul class="led">${tips}</ul>`:"<p>Tryck på knappen för första ledtråden.</p>"}<div class="slut">${svarat?"":(ledt<L.length?`<button class="btn guld" id="ledB">🔎 ${ledt?"Nästa ledtråd":"Första ledtråden"}</button>`:"")+`<button class="btn" id="svarB">Visa svaret</button>`}</div></div>`;
-    $("#ledB")&&($("#ledB").onclick=()=>{ledt++;visaBild()});$("#svarB")&&($("#svarB").onclick=()=>{svarat=true;visaBild()});
+    $("#vyS").innerHTML=(bi?`<figure class="foto"><div class="rama"><img class="${svarat?"":"susig"}" src="bilder/${bi.f}" alt="" decoding="async"></div>${svarat?`<figcaption><a href="${bi.s}" target="_blank" rel="noopener">${bi.k}</a></figcaption>`:""}</figure>`:`<div class="e" aria-hidden="true">${svarat?l.e:"❓"}</div>`)+
+     `<div class="tx">${kick(svarat?"SVARET":"MYSTERIUM")}<h2>${svarat?l.titel:"Vad handlar det om?"}</h2>${tips?`<ul class="led">${tips}</ul>`:"<p>Tryck på knappen för första ledtråden.</p>"}<div class="slut">${svarat?"":(ledt<L.length?`<button class="btn guld" id="ledB">🔎 ${ledt?"Nästa ledtråd":"Första ledtråden"}</button>`:"")+`<button class="btn" id="svarB">Visa svaret</button>`}</div></div>`;
+    $("#ledB")&&($("#ledB").onclick=()=>{ledt++;visaBild()});$("#svarB")&&($("#svarB").onclick=()=>{svarat=true;visaBild();gnistor()});
   }else{
-    const i=idx-o,r=l.rutor[i];$("#vyT").textContent=l.e+" "+l.titel;
-    const bi=bildar[i];
-    const bild=bi?`<figure class="foto"><img src="bilder/${bi.f}" alt="${r[1]}" decoding="async"><figcaption><a href="${bi.s}" target="_blank" rel="noopener">${bi.k}</a></figcaption></figure>`:`<div class="e" aria-hidden="true">${r[0]}</div>`;
+    const i=idx-o,r=l.rutor[i];$("#vyT").textContent=l.titel;
+    const bi=bildar[i];$("#vy").style.setProperty("--bi",bi?`url(bilder/${bi.f})`:"none");
+    const bild=bi?`<figure class="foto"><div class="rama"><img src="bilder/${bi.f}" alt="${r[1]}" decoding="async"></div><figcaption><span class="fig">FIG. ${i+1}</span><a href="${bi.s}" target="_blank" rel="noopener">${bi.k}</a></figcaption></figure>`:`<div class="e" aria-hidden="true">${r[0]}</div>`;
     const nb=bildar[i+1];if(nb){const im=new Image();im.src="bilder/"+nb.f}
-    $("#vyS").classList.toggle("sist",sist);$("#vyS").innerHTML=bild+`<div class="tx"><h2>${r[1]}</h2>${punkter(r[2])}</div>`+(sist?`<div class="gillar">Gillade du den? <span class="tum">${tumHtml(l.id)}</span></div><div class="slut"><button class="btn guld" id="sl1">🎲 Slumpa en till</button><button class="btn" id="sl2">Till listan</button></div>`:"");
+    $("#vyS").classList.toggle("sist",sist);$("#vyS").innerHTML=bild+`<div class="tx">${kick(l.kat.toUpperCase()+" · "+(idx+1)+" / "+n)}<h2>${r[1]}</h2>${punkter(r[2])}</div>`+(sist?`<div class="gillar">Gillade du den? <span class="tum">${tumHtml(l.id)}</span></div><div class="slut"><button class="btn guld" id="sl1">🎲 Slumpa en till</button><button class="btn" id="sl2">Till listan</button></div>`:"");
   }
   $("#vyD").innerHTML=Array.from({length:n},(_,i)=>`<span class="prick${i===idx?" on":""}"></span>`).join("");
   $("#vyP").disabled=idx===0;$("#vyN").disabled=sist;$("#vyN").style.visibility=sist?"hidden":"visible";
   if(sist){$("#sl1").onclick=()=>{let a;const P=pool();do{a=P[Math.random()*P.length|0]}while(a===l&&P.length>1);location.hash=href(a)};$("#sl2").onclick=()=>{location.hash=""}}
   history.replaceState(null,"","#l/"+l.id+"/"+(idx+1));
 }
-function oppnaL(l,i){const nyL=cur!==l||!$("#vy").classList.contains("on");cur=l;nu=l.id;uppdTum();if(nyL){ledt=0;svarat=false}const tot=l.rutor.length+(ledtLista(l)?1:0);idx=Math.max(0,Math.min(tot-1,i));if(idx>0)svarat=true;$("#vy").style.setProperty("--c",l.c);$("#vyT").textContent=l.e+" "+l.titel;$("#vy").classList.add("on");visaBild()}
+function oppnaL(l,i){const nyL=cur!==l||!$("#vy").classList.contains("on");cur=l;nu=l.id;uppdTum();if(nyL){ledt=0;svarat=false}const tot=l.rutor.length+(ledtLista(l)?1:0);idx=Math.max(0,Math.min(tot-1,i));if(idx>0)svarat=true;$("#vy").style.setProperty("--ac",l.c);$("#vyT").textContent=l.titel;$("#vy").classList.add("on");visaBild()}
 function stangAlla(){$("#kv").classList.remove("on");$("#kvR").innerHTML="";$("#vy").classList.remove("on");$("#gv").classList.remove("on");if(stang){try{stang()}catch(e){}stang=null}$("#gvB").innerHTML="";cur=null;nu=null;uppdTum()}
 function oppnaK(k){stangAlla();nu=k.id;uppdTum();$("#kvT").textContent="🎬 "+k.titel;$("#kvN").textContent="Spelas från YouTube"+(k.sprak==="en"?" (engelska)":"")+". Stäng med ✕ när klippet är slut, så hamnar du inte i andra klipp.";
   $("#kvR").innerHTML=`<iframe src="https://www.youtube-nocookie.com/embed/${k.id}?rel=0&modestbranding=1&playsinline=1" title="${k.titel.replace(/"/g,"")}" allow="accelerometer; autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;$("#kv").classList.add("on")}
