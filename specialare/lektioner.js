@@ -172,13 +172,13 @@ var LEKTIONER=[
 ["🧮","Räkna avståndet","Ljuset är snabbare än ljudet. Räkna sekunderna mellan blixt och dån. Tre sekunder är ungefär en kilometer."],
 ["🏠","Var säker","Gå inomhus när det åskar. Stå inte under ensamma höga träd."]]},
 
-{id:"stora-tal",grej:"pengar",titel:"Hur stor är en miljard?",kat:"Tal",e:"🔢",c:"#2E7D5B",rutor:[
+{id:"stora-tal",grej:"pengar",titel:"Miljon, miljard och biljon",kat:"Tal",e:"🔢",c:"#2E7D5B",rutor:[
 ["🔢","Stora tal","En miljon är 1 000 000. En miljard är tusen miljoner. Det är svårt att föreställa sig, så vi räknar med tid."],
 ["⏱️","En miljon sekunder","1 miljon sekunder är ungefär 11 och en halv dag."],
 ["📅","En miljard sekunder","1 miljard sekunder är ungefär 31 år och 8 månader! Det är en jättestor skillnad."],
 ["🧮","Mellan dem","Skillnaden mellan en miljon och en miljard är lika stor som mellan 11 dagar och nästan 32 år."],
 ["🌍","Biljon","En biljon är tusen miljarder. En biljon sekunder är över 31 000 år. Då levde mammutar och människor jagade med spjut."],
-["💰","Pengar i skala","Hur högt blir en miljard kronor i sedlar? Prova Pengar i skala under Prova själv. En biljon kronor i 1 000-kronorssedlar blir en stapel som är 100 kilometer hög."]]},
+["💰","Så högt blir pengarna","En miljard kronor i 1 000-kronorssedlar blir en stapel som är 100 meter hög. En biljon blir 100 kilometer, upp till gränsen mot rymden. Tryck på knappen nedan och se själv!"]]},
 
 {id:"kontinenter",titel:"Kontinenterna rör sig",kat:"Natur",e:"🗺️",c:"#6B8E3A",rutor:[
 ["🗺️","Jordens pussel","Jordens yta består av stora bitar, plattor, som flyter på het sten. Länderna sitter fast på dem."],
