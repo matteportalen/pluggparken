@@ -13,6 +13,7 @@ const KANALER=[
  ["UC6E2mP01ZLH_kbAyeazCNdg","Brave Wilderness","en"],
  ["UCwmZiChSryoWQCZMIQezgTg","BBC Earth","en"],
  ["UCONtPx56PSebXJOxbFv-2jQ","Crash Course Kids","en"]];
+const smak=require("./smak.js");const PROF=smak.profil();
 const MAXSEK=8*60, MINSEK=45;
 const get=async u=>{const r=await fetch(u,{headers:{"User-Agent":"Mozilla/5.0","Accept-Language":"sv"}});if(!r.ok)throw new Error(r.status);return r.text()};
 const ent=s=>s.replace(/&amp;/g,"&").replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&lt;/g,"<").replace(/&gt;/g,">");
@@ -31,6 +32,7 @@ const ent=s=>s.replace(/&amp;/g,"&").replace(/&quot;/g,'"').replace(/&#39;/g,"'"
     }
     console.log(namn,ut.filter(x=>x.kanal===namn).length,"förslag");
   }
-  fs.writeFileSync(path.join(__dirname,"../klipp/forslag.json"),JSON.stringify(ut,null,1));
-  console.log("Klart:",ut.length,"förslag → specialare/klipp/forslag.json");
+  const bra=ut.filter(x=>!PROF.nej.has(x.id));bra.forEach(x=>x.poang=smak.poang(PROF,x));bra.sort((a,b)=>b.poang-a.poang||b.datum.localeCompare(a.datum));
+  fs.writeFileSync(path.join(__dirname,"../klipp/forslag.json"),JSON.stringify(bra,null,1));
+  console.log("Klart:",bra.length,"förslag → specialare/klipp/forslag.json");
 })();

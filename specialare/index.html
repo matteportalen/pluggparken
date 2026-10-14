@@ -69,6 +69,16 @@ h1 span{color:#E0562B}
 .nav:disabled{opacity:.35}
 .nav:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.2)}
 .slut{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+/* tummar */
+.tum{display:inline-flex;gap:6px;flex:none}
+.tum button{border:0;width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.95);font-size:1.3rem;box-shadow:0 3px 0 rgba(0,0,0,.2);filter:grayscale(1);opacity:.75}
+.tum button.on{filter:none;opacity:1;outline:3px solid #F2B707}
+.tum button:active{transform:translateY(2px)}
+.kort{position:relative}.kort.nej{opacity:.55}
+.mark{position:absolute;right:8px;top:6px;font-size:1.1rem}
+.gillar{margin-top:6px;font-weight:800;font-size:1.1rem}
+.gillar .tum button{width:56px;height:56px;font-size:1.6rem}
+.foot button{border:2px solid var(--line);background:#fff;border-radius:12px;padding:3px 12px;font-weight:700;font-size:.95rem}
 /* klipp */
 #kv{position:fixed;inset:0;z-index:50;background:#14142a;display:none;flex-direction:column;color:#fff}
 #kv.on{display:flex}
@@ -129,21 +139,22 @@ h1 span{color:#E0562B}
   <div class="chips" id="chips" role="group" aria-label="Välj ämne"></div>
   <div class="grid" id="grid"></div>
   <p class="foot" id="foot"></p>
+  <p class="foot"><button id="kopB">📋 Kopiera mina betyg</button></p>
 </main>
 
 <section id="vy" aria-label="Minilektion">
-  <div class="vy-top"><button class="rund" id="vyX" aria-label="Stäng">✕</button><div class="t" id="vyT"></div><button class="rund" id="vyF" aria-label="Helskärm">⛶</button></div>
+  <div class="vy-top"><button class="rund" id="vyX" aria-label="Stäng">✕</button><div class="t" id="vyT"></div><span class="tum" data-tum></span><button class="rund" id="vyF" aria-label="Helskärm">⛶</button></div>
   <div class="slide" id="vyS"></div>
   <div class="vy-nav"><button class="nav" id="vyP">‹ Förra</button><div class="prickar" id="vyD"></div><button class="nav" id="vyN">Nästa ›</button></div>
 </section>
 
 <section id="kv" aria-label="Klipp">
-  <div class="gv-top"><button class="rund" id="kvX" aria-label="Stäng">✕</button><div class="t" id="kvT"></div></div>
+  <div class="gv-top"><button class="rund" id="kvX" aria-label="Stäng">✕</button><div class="t" id="kvT"></div><span class="tum" data-tum></span></div>
   <div class="kv-in"><div class="kv-ram" id="kvR"></div><p class="kv-not" id="kvN"></p></div>
 </section>
 
 <section id="gv" aria-label="Interaktiv specialare">
-  <div class="gv-top"><button class="rund" id="gvX" aria-label="Tillbaka">←</button><div class="t" id="gvT"></div></div>
+  <div class="gv-top"><button class="rund" id="gvX" aria-label="Tillbaka">←</button><div class="t" id="gvT"></div><span class="tum" data-tum></span></div>
   <div class="gv-in" id="gvB"></div>
 </section>
 
@@ -154,17 +165,24 @@ h1 span{color:#E0562B}
 (function(){
 const $=s=>document.querySelector(s);
 const ALLA=[].concat(LEKTIONER.map(l=>Object.assign({typ:"l"},l,{beskr:l.rutor[0][2]})),GREJER.map(g=>Object.assign({typ:"g"},g)),KLIPP.map(k=>({typ:"k",id:k.id,titel:k.titel,kat:"Klipp",e:"🎬",c:"#C62828",beskr:k.kanal+" · "+Math.round(k.sek/60)+" min · "+(k.sprak==="en"?"engelska":"svenska"),sek:k.sek,kanal:k.kanal,sprak:k.sprak})));
-let filter="Alla",cur=null,idx=0,stang=null;
+let filter="Alla",cur=null,idx=0,stang=null,nu=null;
+let BET={};try{BET=JSON.parse(localStorage.getItem("sp-betyg")||"{}")||{}}catch(e){}
+const sparaB=()=>{try{localStorage.setItem("sp-betyg",JSON.stringify(BET))}catch(e){}};
+function tumHtml(id){return `<button data-v="1" aria-label="Tummen upp" class="${BET[id]===1?"on":""}">👍</button><button data-v="-1" aria-label="Tummen ner" class="${BET[id]===-1?"on":""}">👎</button>`}
+function uppdTum(){document.querySelectorAll("[data-tum]").forEach(e=>{e.innerHTML=nu?tumHtml(nu):"";e.style.display=nu?"":"none"});const g=document.querySelector(".gillar .tum");if(g&&nu)g.innerHTML=tumHtml(nu)}
+function satt(v){if(!nu)return;if(BET[nu]===v)delete BET[nu];else BET[nu]=v;sparaB();uppdTum();hem()}
+document.addEventListener("click",e=>{const b=e.target.closest(".tum button");if(b){satt(+b.dataset.v)}});
 const dagNr=()=>Math.floor((Date.now()-new Date().getTimezoneOffset()*6e4)/864e5);
-function dagens(){return ALLA[(dagNr()*7+3)%ALLA.length]}
+function pool(){const p=[];ALLA.forEach(a=>{if(BET[a.id]===-1)return;p.push(a);if(BET[a.id]===1)p.push(a)});return p.length?p:ALLA}
+function dagens(){const p=pool();return p[(dagNr()*7+3)%p.length]}
 function href(a,i){return a.typ==="k"?"#k/"+a.id:a.typ==="l"?"#l/"+a.id+(i?"/"+i:""):"#g/"+a.id}
 function hem(){
   const d=dagens();
-  const kort=a=>`<button class="kort" data-id="${a.id}" style="--c:${a.c}"><span class="ik${a.typ==="k"?" bild":""}" aria-hidden="true"${a.typ==="k"?` style="background-image:url(klipp/bilder/${a.id}.jpg)"`:""}>${a.typ==="k"?"▶":a.e}</span><span><b>${a.titel}</b><small><span class="etikett${a.typ==="g"?" g":""}">${a.typ==="g"?"Prova själv":a.kat}</span>${a.typ==="l"?a.rutor.length+" bilder":a.typ==="k"?Math.round(a.sek/60)+" min · "+(a.sprak==="en"?"engelska":"svenska"):""}</small></span></button>`;
+  const kort=a=>`<button class="kort${BET[a.id]===-1?" nej":""}" data-id="${a.id}" style="--c:${a.c}"><span class="ik${a.typ==="k"?" bild":""}" aria-hidden="true"${a.typ==="k"?` style="background-image:url(klipp/bilder/${a.id}.jpg)"`:""}>${a.typ==="k"?"▶":a.e}</span><span><b>${a.titel}</b><small><span class="etikett${a.typ==="g"?" g":""}">${a.typ==="g"?"Prova själv":a.kat}</span>${a.typ==="l"?a.rutor.length+" bilder":a.typ==="k"?Math.round(a.sek/60)+" min · "+(a.sprak==="en"?"engelska":"svenska"):""}</small></span>${BET[a.id]?`<span class="mark" aria-label="${BET[a.id]===1?"Du gillade":"Du gillade inte"}">${BET[a.id]===1?"👍":"👎"}</span>`:""}</button>`;
   $("#dagens").style.setProperty("--c",d.c);
   $("#dagens").innerHTML=`<div class="stor" aria-hidden="true">${d.e}</div><div class="t"><small>Dagens specialare</small><h2>${d.titel}</h2><p>${d.typ==="l"?d.rutor.length+" bilder · "+d.kat:d.beskr}</p><div class="rad"><button class="btn guld" id="dgo">Visa!</button><button class="btn" id="slump">🎲 Slumpa</button></div></div>`;
   $("#dgo").onclick=()=>{location.hash=href(d)};
-  $("#slump").onclick=()=>{let a;do{a=ALLA[Math.random()*ALLA.length|0]}while(a===d&&ALLA.length>1);location.hash=href(a)};
+  $("#slump").onclick=()=>{let a;const P=pool();do{a=P[Math.random()*P.length|0]}while(a===d&&P.length>1);location.hash=href(a)};
   const kats=["Alla","Klipp","Prova själv",...new Set(LEKTIONER.map(l=>l.kat))];
   $("#chips").innerHTML=kats.map(k=>`<button class="chip${k===filter?" on":""}" data-k="${k}">${k}</button>`).join("");
   const lista=ALLA.filter(a=>filter==="Alla"||(filter==="Prova själv"?a.typ==="g":filter==="Klipp"?a.typ==="k":a.typ==="l"&&a.kat===filter));
@@ -176,17 +194,17 @@ $("#grid").onclick=e=>{const b=e.target.closest(".kort");if(!b)return;const a=AL
 /* bildspel */
 function visaBild(){
   const l=cur,r=l.rutor[idx],sist=idx===l.rutor.length-1;
-  $("#vyS").innerHTML=`<div class="e" aria-hidden="true">${r[0]}</div><h2>${r[1]}</h2><p>${r[2]}</p>`+(sist?`<div class="slut"><button class="btn guld" id="sl1">🎲 Slumpa en till</button><button class="btn" id="sl2">Till listan</button></div>`:"");
+  $("#vyS").innerHTML=`<div class="e" aria-hidden="true">${r[0]}</div><h2>${r[1]}</h2><p>${r[2]}</p>`+(sist?`<div class="gillar">Gillade du den? <span class="tum">${tumHtml(l.id)}</span></div><div class="slut"><button class="btn guld" id="sl1">🎲 Slumpa en till</button><button class="btn" id="sl2">Till listan</button></div>`:"");
   $("#vyD").innerHTML=l.rutor.map((_,i)=>`<span class="prick${i===idx?" on":""}"></span>`).join("");
   $("#vyP").disabled=idx===0;$("#vyN").disabled=sist;$("#vyN").style.visibility=sist?"hidden":"visible";
-  if(sist){$("#sl1").onclick=()=>{let a;do{a=ALLA[Math.random()*ALLA.length|0]}while(a===l);location.hash=href(a)};$("#sl2").onclick=()=>{location.hash=""}}
+  if(sist){$("#sl1").onclick=()=>{let a;const P=pool();do{a=P[Math.random()*P.length|0]}while(a===l&&P.length>1);location.hash=href(a)};$("#sl2").onclick=()=>{location.hash=""}}
   history.replaceState(null,"","#l/"+l.id+"/"+(idx+1));
 }
-function oppnaL(l,i){cur=l;idx=Math.max(0,Math.min(l.rutor.length-1,i));$("#vy").style.setProperty("--c",l.c);$("#vyT").textContent=l.e+" "+l.titel;$("#vy").classList.add("on");visaBild()}
-function stangAlla(){$("#kv").classList.remove("on");$("#kvR").innerHTML="";$("#vy").classList.remove("on");$("#gv").classList.remove("on");if(stang){try{stang()}catch(e){}stang=null}$("#gvB").innerHTML="";cur=null}
-function oppnaK(k){stangAlla();$("#kvT").textContent="🎬 "+k.titel;$("#kvN").textContent="Spelas från YouTube"+(k.sprak==="en"?" (engelska)":"")+". Stäng med ✕ när klippet är slut, så hamnar du inte i andra klipp.";
+function oppnaL(l,i){cur=l;nu=l.id;uppdTum();idx=Math.max(0,Math.min(l.rutor.length-1,i));$("#vy").style.setProperty("--c",l.c);$("#vyT").textContent=l.e+" "+l.titel;$("#vy").classList.add("on");visaBild()}
+function stangAlla(){$("#kv").classList.remove("on");$("#kvR").innerHTML="";$("#vy").classList.remove("on");$("#gv").classList.remove("on");if(stang){try{stang()}catch(e){}stang=null}$("#gvB").innerHTML="";cur=null;nu=null;uppdTum()}
+function oppnaK(k){stangAlla();nu=k.id;uppdTum();$("#kvT").textContent="🎬 "+k.titel;$("#kvN").textContent="Spelas från YouTube"+(k.sprak==="en"?" (engelska)":"")+". Stäng med ✕ när klippet är slut, så hamnar du inte i andra klipp.";
   $("#kvR").innerHTML=`<iframe src="https://www.youtube-nocookie.com/embed/${k.id}?rel=0&modestbranding=1&playsinline=1" title="${k.titel.replace(/"/g,"")}" allow="accelerometer; autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;$("#kv").classList.add("on")}
-function oppnaG(g){stangAlla();$("#gv").style.setProperty("--c",g.c);$("#gvT").textContent=g.e+" "+g.titel;$("#gv").classList.add("on");$("#gv").scrollTop=0;stang=g.start($("#gvB"))}
+function oppnaG(g){stangAlla();nu=g.id;uppdTum();$("#gv").style.setProperty("--c",g.c);$("#gvT").textContent=g.e+" "+g.titel;$("#gv").classList.add("on");$("#gv").scrollTop=0;stang=g.start($("#gvB"))}
 function rut(){
   const h=location.hash.replace(/^#/,"").split("/");
   if(h[0]==="l"){const l=LEKTIONER.find(x=>x.id===h[1]);if(l){if(cur!==l||!$("#vy").classList.contains("on")){stangAlla()}oppnaL(l,(+h[2]||1)-1);return}}
@@ -209,6 +227,8 @@ document.addEventListener("keydown",e=>{
 let sx=null;
 $("#vyS").addEventListener("touchstart",e=>{sx=e.touches[0].clientX},{passive:true});
 $("#vyS").addEventListener("touchend",e=>{if(sx==null)return;const dx=e.changedTouches[0].clientX-sx;sx=null;if(Math.abs(dx)>50)gaTill(dx<0?1:-1)},{passive:true});
+$("#kopB").onclick=async()=>{const t=JSON.stringify(ALLA.filter(a=>BET[a.id]).map(a=>({id:a.id,titel:a.titel,typ:a.typ,kat:a.kat,kanal:a.kanal||undefined,v:BET[a.id]})));
+  try{await navigator.clipboard.writeText(t);$("#kopB").textContent="✓ Kopierat! Klistra in i chatten"}catch(e){prompt("Kopiera:",t)}};
 window.addEventListener("hashchange",rut);
 hem();rut();
 })();

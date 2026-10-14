@@ -1,7 +1,10 @@
 // Lägger till godkända klipp i specialare/klipp.js och hämtar deras bilder.
 // Kör:  node specialare/skript/laggtill.js '<JSON-listan från granska.html>'
 const fs=require("fs"),path=require("path");
-const lista=JSON.parse(process.argv[2]);
+const indata=JSON.parse(process.argv[2]);
+const lista=Array.isArray(indata)?indata:(indata.ja||[]);
+const nej=Array.isArray(indata)?[]:(indata.nej||[]);
+require("./smak.js").lagg([...lista.map(k=>({id:k.id,titel:k.titel,typ:"k",kanal:k.kanal,v:1})),...nej.map(k=>({id:k.id,titel:k.titel,typ:"k",kanal:k.kanal,v:-1}))]);
 const fil=path.join(__dirname,"../klipp.js");
 let t=fs.readFileSync(fil,"utf8");
 const nu=JSON.parse(t.slice(t.indexOf("["),t.lastIndexOf("]")+1));
