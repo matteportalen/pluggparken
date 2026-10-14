@@ -174,29 +174,7 @@
         self.timer2=setTimeout(glit,3000);},
       stop(){clearTimeout(this.timer);clearTimeout(this.timer2);if(!this.g)return;const c=ac(),t=c.currentTime;this.g.gain.setTargetAtTime(0.0001,t,.6);this.nodes.forEach(x=>{try{x.stop(t+3)}catch(e){}});this.g=null;}
     },
-    /* Supernova: stigande rumlande spänning, tystnad, en djup smäll, chockvåg och ett långt skimrande eko (16 s) */
-    sn:{
-      stop(){if(!this.g)return;const c=ac(),t=c.currentTime;this.g.gain.cancelScheduledValues(t);this.g.gain.setTargetAtTime(0.0001,t,.15);this.nodes.forEach(x=>{try{x.stop(t+1)}catch(e){}});this.g=null;},
-      start(){this.stop();if(!isOn())return;const c=ac();if(!c)return;const t0=c.currentTime+.05,g=c.createGain();g.gain.value=.9;g.connect(c.destination);this.g=g;const N=this.nodes=[];
-        const buf=c.createBuffer(1,c.sampleRate*3,c.sampleRate),d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
-        const noise=(t,dur,f0,f1,vol,type,q)=>{const s=c.createBufferSource();s.buffer=buf;s.loop=true;const f=c.createBiquadFilter();f.type=type||'lowpass';f.Q.value=q||.8;f.frequency.setValueAtTime(f0,t);f.frequency.exponentialRampToValueAtTime(f1,t+dur);
-          const o=c.createGain();o.gain.setValueAtTime(0.0001,t);o.gain.exponentialRampToValueAtTime(vol,t+Math.min(.25,dur*.2));o.gain.exponentialRampToValueAtTime(0.0001,t+dur);s.connect(f).connect(o).connect(g);s.start(t);s.stop(t+dur+.1);N.push(s);};
-        const osc=(t,dur,f0,f1,vol,type)=>{const o=c.createOscillator(),a=c.createGain();o.type=type||'sine';o.frequency.setValueAtTime(f0,t);o.frequency.exponentialRampToValueAtTime(f1,t+dur);
-          a.gain.setValueAtTime(0.0001,t);a.gain.exponentialRampToValueAtTime(vol,t+.05);a.gain.exponentialRampToValueAtTime(0.0001,t+dur);o.connect(a).connect(g);o.start(t);o.stop(t+dur+.1);N.push(o);};
-        /* uppbyggnad 0–2,4 s: djup rumlan och stigande ton som pulserar snabbare */
-        noise(t0,2.4,90,900,.28,'lowpass');osc(t0,2.4,55,310,.2,'sawtooth');osc(t0,2.4,110,620,.07,'triangle');
-        for(let i=0;i<14;i++){const tt=t0+.2+i*(.16-i*.006);osc(tt,.1,70+i*14,60+i*14,.12,'sine');}
-        /* smällen 2,45 s */
-        const b=t0+2.45;osc(b,2.6,95,26,.95,'sine');osc(b,1.4,180,40,.5,'triangle');noise(b,3,5200,60,.8,'lowpass',.5);noise(b,.5,9000,1500,.5,'highpass');
-        /* chockvågen: sus som sveper och mörknar */
-        noise(b+.15,8,4200,140,.35,'bandpass',1.2);osc(b+.3,9,64,42,.22,'sine');
-        /* skimrande eko av höga toner efteråt */
-        [1318.5,1760,2093,2637,3136,2349].forEach((fr,i)=>{const tt=b+1.2+i*.55;osc(tt,3.4,fr,fr*.99,.028,'sine')});
-        /* neutronstjärnans puls */
-        for(let i=0;i<10;i++)osc(b+5+i*1.0,.12,880,820,.03,'sine');
-        g.gain.setValueAtTime(.9,t0+14);g.gain.exponentialRampToValueAtTime(.0001,t0+15.8);}
-    },
-    stopLoops(){this.engine.stop();this.space.stop();this.water.stop();this.ambient.stop(true);this.rymd.stop();this.sn.stop();}
+    stopLoops(){this.engine.stop();this.space.stop();this.water.stop();this.ambient.stop(true);this.rymd.stop();}
   };
   function croakPulse(c,start){
     const t=c.currentTime+start,o=c.createOscillator(),f=c.createBiquadFilter(),g=c.createGain(),am=c.createOscillator(),ag=c.createGain();

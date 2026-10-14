@@ -205,7 +205,7 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;bac
 .zvig{position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 40%,rgba(0,0,0,.65) 100%)}
 .zmain{position:relative;z-index:1;display:flex;gap:4vw;align-items:center;justify-content:center;max-width:1180px;margin:0 auto}
 .zst{flex:0 1 auto;min-width:0;display:flex;flex-direction:column;gap:6px}
-.zstage{background:rgba(3,5,10,.55)!important;border-radius:4px;box-shadow:0 0 120px -10px rgba(130,160,255,.6),0 24px 70px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.14)!important}
+.zstage{align-self:center;background:rgba(3,5,10,.55)!important;border-radius:4px;box-shadow:0 0 120px -10px rgba(130,160,255,.6),0 24px 70px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.14)!important}
 .zstage::after{content:"";position:absolute;inset:-20% auto -20% -60%;width:40%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.18),transparent);transform:skewX(-18deg);animation:rlsvep 7s ease-in-out 1s infinite;pointer-events:none}
 @keyframes rlsvep{0%{left:-60%}30%,100%{left:150%}}
 #zCv{display:block;width:min(100%,64vh);max-width:100%;height:auto;margin:0 auto}
@@ -368,7 +368,7 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;bac
         <div class="say"><div><p class="big" id="zBig"></p><p id="zTxt"></p></div><button class="spk" data-say="zoom" aria-label="Läs upp">🔊</button></div>
         <ul class="facts" id="zFacts"></ul>
         <div class="zsc"><div class="zsc-lin" id="zTicks"></div><div class="zsc-mark" id="zMark"></div><div class="zsc-val" id="zVal"></div></div>
-        <div class="slider zslider"><input type="range" id="zSl" min="0" max="7" step="0.001" aria-label="Zooma"></div>
+        <div class="slider zslider"><input type="range" id="zSl" min="0" max="8" step="0.001" aria-label="Zooma"></div>
         <div class="ctrl zctrl"><button class="b" id="zIn">‹ Zooma in</button><button class="b go" id="zOut">Zooma ut ›</button><button class="b" id="zAuto">▶ Spela resan</button></div>
       </div>
     </div>
@@ -502,7 +502,7 @@ document.querySelectorAll('[data-say]').forEach(b=>b.onclick=()=>speak(SAY[b.dat
 
 /* ---------- Skärmar ---------- */
 let cur='home';
-function show(id){try{Ljud.sn.stop()}catch(e){}if('speechSynthesis' in window)speechSynthesis.cancel();document.querySelectorAll('.screen').forEach(s=>s.hidden=s.id!==id);cur=id;window.scrollTo(0,0);if(window.MPS)MPS.visa(id);
+function show(id){if('speechSynthesis' in window)speechSynthesis.cancel();document.querySelectorAll('.screen').forEach(s=>s.hidden=s.id!==id);cur=id;window.scrollTo(0,0);if(window.MPS)MPS.visa(id);
   if(id==='dag'||id==='arstid')open3D(id);else stop3D();
   if(id==='morker')openEcl();if(id==='storlek')openSize();if(id==='avstand')openDist();if(id==='ar')openYear();if(id==='vikt')openWeight();
   if(id==='zoom')openZoom();if(id==='jattar')openGiants();if(id==='hal')openHole();if(id==='himmel')openNight();if(id==='liv')openLife();}
@@ -979,7 +979,8 @@ const ZL=[
   {n:'De närmaste stjärnorna',big:'De närmaste stjärnorna.',txt:'Nu är hela solsystemet bara en prick. Varje stjärna är en egen sol, och många har egna planeter.',f:['<b>Ett ljusår</b> är hur långt ljuset hinner på ett år: nästan 10 000 miljarder km.','Närmaste stjärnan, Proxima Centauri, är 4,2 ljusår bort. Med en raket skulle det ta 70 000 år att åka dit.']},
   {n:'Vintergatan',big:'Vintergatan, vår galax.',txt:'Solen är en av ungefär 200 miljarder stjärnor i Vintergatan. Vi bor ute i en av spiralarmarna.',f:['Vintergatan är ungefär 100 000 ljusår bred.','En mörk natt utan månsken kan du se Vintergatan som ett ljust band över himlen.','Mitt i Vintergatan finns ett jättestort svart hål.']},
   {n:'Andromeda och grannarna',big:'Vintergatan och grannarna.',txt:'Andromedagalaxen är vår stora granne. Den är 2,5 miljoner ljusår bort och ännu större än Vintergatan.',f:['Andromeda är det mest avlägsna du kan se med bara ögonen, en mörk höstkväll.','Ljuset du ser från Andromeda lämnade den för 2,5 miljoner år sedan, när det inte fanns några människor.']},
-  {n:'Universum',big:'Universum.',txt:'Varje liten prick här är en hel galax med miljarder stjärnor. Ingen vet hur långt universum fortsätter.',f:['Det finns kanske 2 biljoner galaxer, alltså 2 000 miljarder.','Det finns fler stjärnor i universum än sandkorn på alla jordens stränder.']}];
+  {n:'Superhopen Laniakea',big:'Galaxhopar och Laniakea.',txt:'Galaxerna ligger inte jämnt utspridda. De sitter i stora hopar. Vår Vintergata och Andromeda hör till Lokala gruppen, och alla galaxer här strömmar sakta mot samma punkt.',f:['<b>Laniakea</b> är vårt superhopmoln: ungefär 100 000 galaxer på 500 miljoner ljusår. Namnet betyder \"omätlig himmel\" på hawaiianska.','De vita strecken visar åt vilket håll galaxerna rör sig. De dras mot \"Den stora attraktorn\".','Närmaste stora hop, Virgohopen, har över 1 000 galaxer.']},
+  {n:'Det kosmiska nätet',big:'Det kosmiska nätet.',txt:'Zooma ut ännu mer och galaxerna bildar ett jättestort nät av trådar. Mellan trådarna finns enorma, nästan tomma rum. Laniakea är bara en liten bit av nätet.',f:['Trådarna kallas <b>filament</b> och de tomma rummen kallas <b>tomrum</b>. Några är flera hundra miljoner ljusår breda.','Det mesta av trådarna består av osynlig <b>mörk materia</b>. Galaxerna lyser bara där den är tätast.','Hubbles berömda djupa bild täcker en liten fläck på himlen, som ett sugrör mot en hel natthimmel, och visar tusentals galaxer i en tråd långt bort. Det observerbara universum är ca 93 miljarder ljusår brett. Ingen vet hur långt det går vidare.']}];
 let zV=0,zAnim=0;
 function drawZoomLevel(c,i,R){const P=BYID;
   if(i===0){ball(c,0,0,R*.62,P.jorden);c.fillStyle='#fff';c.font=`800 ${R*.08}px "Inter", sans-serif`;c.textAlign='center';c.fillText('Jorden',0,R*.8);}
@@ -1000,11 +1001,38 @@ function drawZoomLevel(c,i,R){const P=BYID;
     glowBall(c,-R*.62,R*.45,R*.03,'rgb(200,210,255)',3);glowBall(c,-R*.5,R*.5,R*.02,'rgb(200,210,255)',3);spiral(c,R*.55,R*.45,R*.09,31,250,.7,.4);
     c.fillStyle='#fff';c.font=`800 ${R*.055}px "Inter", sans-serif`;c.textAlign='center';c.fillText('Vintergatan',-R*.45,R*.52);c.fillText('Andromeda',R*.38,-R*.42);c.fillText('Triangelgalaxen',R*.55,R*.62);
     c.font=`700 ${R*.04}px "Inter", sans-serif`;c.fillStyle='#C9D4F2';c.fillText('Magellanska molnen',-R*.6,R*.63);}
-  if(i===7){glowBall(c,0,0,R*.012,'rgb(255,235,190)',3);glowBall(c,R*.02,-R*.01,R*.008,'rgb(220,230,255)',3);const r=srand(3);for(let k=0;k<420;k++){const x=(r()*2-1)*R*1.05,y=(r()*2-1)*R*1.05,s=r()*R*.03+R*.004,col=r()<.4?'rgba(255,220,180,':'rgba(200,215,255,';
-      c.save();c.translate(x,y);c.rotate(r()*3);c.scale(1,.35+r()*.65);const g=c.createRadialGradient(0,0,0,0,0,s);g.addColorStop(0,col+'.95)');g.addColorStop(1,col+'0)');c.fillStyle=g;c.beginPath();c.arc(0,0,s,0,7);c.fill();c.restore();}}}
-const ZFILES=["dygn-1.jpg", "manen-1.jpg", "storlek-10.jpg", "storlek-12.jpg", "storlek-13.jpg", "storlek-14.jpg", "morkmateria-4.jpg", "morkmateria-1.jpg"],ZCRED=[{"k": "Bild: Harrison Schmitt / Apollo 17 · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:The_Blue_Marble,_AS17-148-22727.jpg"}, {"k": "Bild: Gregory H. Revera · CC BY-SA 3.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:FullMoon2010.jpg"}, {"k": "Bild: NASA/Goddard Space Flight Center · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:X5.4_solar_flare_seen_by_SDO_in_171_%C3%85_extreme_ultraviolet_light.jpg"}, {"k": "Bild: Reynolds, James Emslie, John · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Transparent_Solar_System_-_Displaying_the_planets_with_their_orbits,_as_known_at_the_present_day._Derived_from_the_latest_and_(IA_dr_transparent-solar-system-displaying-the-planets-with-their-orbits-as-kno-3432004).jpg"}, {"k": "Bild: Digitized Sky Survey 2. Acknowledgement:… · CC BY 4.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:The_sky_around_Alpha_Centauri_and_Proxima_Centauri_(eso1629i).jpg"}, {"k": "Bild: NASA’s Goddard Space Flight… · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:A_top-down_view_of_the_Milky_Way_galaxy_(SVS14930_-_Westerlund_1_illustration_Plan_Unlabeled).jpg"}, {"k": "Bild: Rubin Obs./NSF/AURA · CC BY 4.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Vera_C_Rubin_Observatory%27s_Namesake_(rubin-VeraRubin-Astronomer-and-Inspiration-3).jpg"}, {"k": "Bild: NASA, ESA, S. Beckwith (STScI) and the… · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:A_Sampling_of_Galaxies_From_the_Hubble_Ultra_Deep_Field_Image_(2004-07-1463).jpg"}];
-const ZLOG=[7.1,8.58,11.18,12.65,16.6,20.98,22.38,26.94];  // log10 av storleken i meter
-const ZLAB=['Jorden','Månen','Solen','Solsystemet','Stjärnorna','Vintergatan','Andromeda','Universum'];
+  if(i===7){const r=srand(41),AX=R*.5,AY=R*.12;   // Laniakea: galaxhopar och flödet mot Den stora attraktorn
+    c.save();c.globalCompositeOperation='lighter';
+    for(let k=0;k<46;k++){const a0=r()*7,d0=R*(.5+r()*.75),sx=Math.cos(a0)*d0,sy=Math.sin(a0)*d0;c.strokeStyle=`rgba(190,215,255,${.1+r()*.14})`;c.lineWidth=R*.004;c.beginPath();
+      for(let q=0;q<=14;q++){const u=q/14,bx=sx+(AX-sx)*u,by=sy+(AY-sy)*u,w=Math.sin(u*Math.PI)*R*.12*Math.sin(k*1.7);const nx=-(AY-sy),ny=(AX-sx),nl=Math.hypot(nx,ny)||1;const x=bx+nx/nl*w,y=by+ny/nl*w;q?c.lineTo(x,y):c.moveTo(x,y);}c.stroke();}
+    c.restore();
+    const CL=[['Virgohopen',.18,-.16,.1,170],['Den stora attraktorn',.5,.12,.14,260],['Perseus–Fiskarna',-.55,-.38,.11,190],['Fornaxhopen',-.2,.45,.07,100],['Hydrahopen',.3,.52,.08,120]];
+    CL.forEach(([n,x,y,rs,cnt])=>{const px=x*R,py=y*R;c.globalAlpha=.5;glowBall(c,px,py,R*rs*.3,'rgb(255,215,160)',2.2);c.globalAlpha=1;
+      for(let q=0;q<cnt;q++){const a=r()*7,d=Math.pow(r(),.7)*R*rs*1.4;c.fillStyle=`rgba(255,${200+r()*50|0},${160+r()*80|0},${.4+r()*.5})`;const sz=1+r()*2.4;c.fillRect(px+Math.cos(a)*d,py+Math.sin(a)*d,sz,sz);}
+      c.fillStyle='#fff';c.font=`800 ${R*.05}px "Inter", sans-serif`;c.textAlign='center';c.fillText(n,px,py-R*(rs*1.3+.03));});
+    for(let q=0;q<260;q++){c.fillStyle=`rgba(220,230,255,${.15+r()*.4})`;const a=r()*7,d=Math.pow(r(),.6)*R*1.05;c.fillRect(Math.cos(a)*d,Math.sin(a)*d,1.5,1.5);}
+    c.strokeStyle='rgba(255,216,107,.55)';c.setLineDash([R*.02,R*.02]);c.lineWidth=R*.005;c.beginPath();c.ellipse(R*.05,0,R*.95,R*.78,-.2,0,7);c.stroke();c.setLineDash([]);
+    glowBall(c,0,0,R*.022,'rgb(255,235,190)',3);glowBall(c,R*.03,-R*.015,R*.012,'rgb(200,215,255)',3);
+    c.fillStyle='#FFC93C';c.font=`800 ${R*.055}px "Inter", sans-serif`;c.textAlign='center';c.fillText('Lokala gruppen: här är vi',0,R*.1);
+    c.fillStyle='rgba(255,216,107,.85)';c.font=`800 ${R*.05}px "Inter", sans-serif`;c.fillText('Laniakea',R*.55,-R*.62);}
+  if(i===8){const r=srand(8),P=[];for(let k=0;k<170;k++)P.push([(r()*2-1)*R*1.25,(r()*2-1)*R*1.25,r()]);P.push([0,0,1]);P.push([R*.12,R*.05,1]);
+    const deg=P.map(()=>0),E=[];
+    P.forEach((p,k)=>{const d=P.map((q,j)=>[Math.hypot(p[0]-q[0],p[1]-q[1]),j]).filter(x=>x[1]!==k).sort((a,b)=>a[0]-b[0]).slice(0,3);
+      d.forEach(([dist,j],m)=>{if(dist>R*.62||(m===2&&r()<.5))return;E.push([k,j,dist]);deg[k]++;deg[j]++;});});
+    c.save();c.globalCompositeOperation='lighter';c.lineCap='round';
+    E.forEach(([a,b,dist],k)=>{const p=P[a],q=P[b],mx=(p[0]+q[0])/2,my=(p[1]+q[1])/2,nx=-(q[1]-p[1]),ny=q[0]-p[0],nl=Math.hypot(nx,ny)||1,bend=(r()-.5)*dist*.35,cx2=mx+nx/nl*bend,cy2=my+ny/nl*bend;
+      const g=c.createLinearGradient(p[0],p[1],q[0],q[1]);g.addColorStop(0,'rgba(120,150,255,.9)');g.addColorStop(.5,'rgba(190,120,255,.7)');g.addColorStop(1,'rgba(100,190,255,.9)');
+      c.strokeStyle=g;c.lineWidth=R*.02;c.globalAlpha=.22;c.beginPath();c.moveTo(p[0],p[1]);c.quadraticCurveTo(cx2,cy2,q[0],q[1]);c.stroke();
+      c.globalAlpha=.8;c.lineWidth=R*.0035;c.stroke();c.globalAlpha=1;
+      const n=Math.round(dist/R*90);for(let t=0;t<n;t++){const u=r(),x=(1-u)*(1-u)*p[0]+2*u*(1-u)*cx2+u*u*q[0]+(r()-.5)*R*.02,y=(1-u)*(1-u)*p[1]+2*u*(1-u)*cy2+u*u*q[1]+(r()-.5)*R*.02;c.fillStyle=`rgba(${r()<.3?'255,225,190':'210,225,255'},${.35+r()*.5})`;const sz=.8+r()*1.6;c.fillRect(x,y,sz,sz);}});
+    P.forEach((p,k)=>{if(deg[k]>=4){c.globalAlpha=.55;glowBall(c,p[0],p[1],R*(.008+.008*Math.min(1,deg[k]/7)),'rgb(255,214,170)',2.2);c.globalAlpha=1;}});
+    c.restore();
+    c.strokeStyle='rgba(255,216,107,.9)';c.lineWidth=R*.006;c.beginPath();c.arc(0,0,R*.075,0,7);c.stroke();
+    c.fillStyle='#FFC93C';c.font=`800 ${R*.05}px "Inter", sans-serif`;c.textAlign='center';c.fillText('Laniakea: här är vi',0,R*.16);
+    c.fillStyle='rgba(255,255,255,.7)';c.font=`700 ${R*.04}px "Inter", sans-serif`;c.fillText('Filament',-R*.62,-R*.5);c.fillText('Tomrum',R*.55,R*.62);}}
+const ZFILES=["dygn-1.jpg", "manen-1.jpg", "storlek-10.jpg", "storlek-12.jpg", "storlek-13.jpg", "storlek-14.jpg", "morkmateria-4.jpg", "rl-laniakea.jpg", "rl-natet.jpg"],ZCRED=[{"k": "Bild: Harrison Schmitt / Apollo 17 · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:The_Blue_Marble,_AS17-148-22727.jpg"}, {"k": "Bild: Gregory H. Revera · CC BY-SA 3.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:FullMoon2010.jpg"}, {"k": "Bild: NASA/Goddard Space Flight Center · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:X5.4_solar_flare_seen_by_SDO_in_171_%C3%85_extreme_ultraviolet_light.jpg"}, {"k": "Bild: Reynolds, James Emslie, John · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Transparent_Solar_System_-_Displaying_the_planets_with_their_orbits,_as_known_at_the_present_day._Derived_from_the_latest_and_(IA_dr_transparent-solar-system-displaying-the-planets-with-their-orbits-as-kno-3432004).jpg"}, {"k": "Bild: Digitized Sky Survey 2. Acknowledgement:… · CC BY 4.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:The_sky_around_Alpha_Centauri_and_Proxima_Centauri_(eso1629i).jpg"}, {"k": "Bild: NASA’s Goddard Space Flight… · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:A_top-down_view_of_the_Milky_Way_galaxy_(SVS14930_-_Westerlund_1_illustration_Plan_Unlabeled).jpg"}, {"k": "Bild: Rubin Obs./NSF/AURA · CC BY 4.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Vera_C_Rubin_Observatory%27s_Namesake_(rubin-VeraRubin-Astronomer-and-Inspiration-3).jpg"}, {"k": "Bild: Ivanov · CC BY-SA 4.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Laniakea_with_Galaktika.jpg"}, {"k": "Bild: Tsaghkyan · CC BY-SA 4.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Laniakea-2.jpg"}];
+const ZLOG=[7.1,8.58,11.18,12.65,16.6,20.98,22.38,24.7,26.94];  // log10 av storleken i meter
+const ZLAB=['Jorden','Månen','Solen','Solsystemet','Stjärnorna','Vintergatan','Andromeda','Laniakea','Kosmiska nätet'];
 let zBuilt=false;
 function zBuild(){if(zBuilt)return;zBuilt=true;
   $('zBgs').innerHTML=ZFILES.map(f=>`<i style="background-image:url(../../specialare/bilder/${f})"></i>`).join('');
@@ -1013,31 +1041,31 @@ function zBuild(){if(zBuilt)return;zBuilt=true;
   for(let e=10;e<=25;e+=5)t+=`<b style="left:${p(e)}%">10${String(e).split('').map(d=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[d]).join('')} m</b>`;
   $('zTicks').innerHTML=t;}
 function drawZoom(){zBuild();const cv=$('zCv'),W=cv.width,c=cv.getContext('2d'),R=W*.46;c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,W,W);
-  const i=Math.min(6,Math.floor(zV)),f=zV-i;
+  const i=Math.min(7,Math.floor(zV)),f=zV-i;
   const lay=(lv,alpha,sc)=>{if(alpha<=0.01)return;c.save();c.globalAlpha=alpha;c.translate(W/2,W/2);c.scale(sc,sc);drawZoomLevel(c,lv,R);c.restore();};
   const SX=Math.cos(1.9)*R*.55,SY=Math.sin(1.9)*R*.55;  // solens plats i Vintergatan ("Du är här")
   const ei=PL.filter(p=>p.au<=1.6).findIndex(p=>p.id==='jorden'),ea=ei*1.7+.6,ER=R*.9/1.6,EX=Math.cos(ea)*ER,EY=Math.sin(ea)*ER;  // jordens plats i inre solsystemet
   const lay2=(lv,alpha,sc,dx,dy)=>{if(alpha<=0.01)return;c.save();c.globalAlpha=alpha;c.translate(W/2+dx,W/2+dy);c.scale(sc,sc);drawZoomLevel(c,lv,R);c.restore();};
   /* En enda kamera genom hela filmen: ankaret (jorden, solen, Vintergatan ...) ligger kvar under blicken hela vägen.
      Nivå a visas med ankaret i pa, nivå b med ankaret i pb; rho = hur mycket kameran zoomar ut. */
-  const ANK=[[0,0,0,0,.0968],[0,0,EX,EY,.4167],[0,0,0,0,.25],[0,0,0,0,.25],[0,0,SX,SY,.2],[0,0,-R*.45,R*.2,.23],[-R*.05,0,0,0,.25]];
+  const ANK=[[0,0,0,0,.0968],[0,0,EX,EY,.4167],[0,0,0,0,.25],[0,0,0,0,.25],[0,0,SX,SY,.2],[0,0,-R*.45,R*.2,.23],[-R*.05,0,0,0,.25],[0,0,0,0,.2]];
   const trans=(a,f)=>{const [pax,pay,pbx,pby,rho]=ANK[a],tx=(1-f)*pax+f*pbx,ty=(1-f)*pay+f*pby,sa=1-(1-rho)*f,kb=sa/rho;
     const sm=(x,y,v)=>{const t=Math.max(0,Math.min(1,(v-x)/(y-x)));return t*t*(3-2*t)};
     lay2(a,1-sm(.1,.75,f),sa,tx-sa*pax,ty-sa*pay);lay2(a+1,sm(.25,.9,f),kb,tx-kb*pbx,ty-kb*pby);};
-  if(zV>=7){lay(7,1,1);}else trans(i,f);
+  if(zV>=8){lay(8,1,1);}else trans(i,f);
   const bg=$('zBgs').children;for(let k=0;k<bg.length;k++)bg[k].style.opacity=Math.max(0,1-Math.abs(zV-k)*1.2);
-  const lg=ZLOG[i]+((ZLOG[Math.min(7,i+1)]-ZLOG[i])*f),lo=6.5,hi=27.5;$('zMark').style.left=((lg-lo)/(hi-lo)*100)+'%';
+  const lg=ZLOG[i]+((ZLOG[Math.min(8,i+1)]-ZLOG[i])*f),lo=6.5,hi=27.5;$('zMark').style.left=((lg-lo)/(hi-lo)*100)+'%';
   zText();}
-let zLast=-1;function zText(){const k=Math.round(zV);if(k===zLast)return;zLast=k;const L=ZL[k];$('zKick').textContent='STEG '+(k+1)+' / 8 · '+ZLAB[k].toUpperCase();$('zBig').textContent=L.big;$('zTxt').textContent=L.txt;$('zFacts').innerHTML=L.f.map(x=>`<li>${x}</li>`).join('');
-  $('zVal').textContent=[ '12 742 km','384 400 km','150 milj. km','9 miljarder km','4,2 ljusår','100 000 ljusår','2,5 milj. ljusår','93 miljarder ljusår'][k];
+let zLast=-1;function zText(){const k=Math.round(zV);if(k===zLast)return;zLast=k;const L=ZL[k];$('zKick').textContent='STEG '+(k+1)+' / 9 · '+ZLAB[k].toUpperCase();$('zBig').textContent=L.big;$('zTxt').textContent=L.txt;$('zFacts').innerHTML=L.f.map(x=>`<li>${x}</li>`).join('');
+  $('zVal').textContent=[ '12 742 km','384 400 km','150 milj. km','9 miljarder km','4,2 ljusår','100 000 ljusår','2,5 milj. ljusår','520 milj. ljusår','93 miljarder ljusår'][k];
   const cr=ZCRED[k];$('zCred').innerHTML=cr?`<a href="${cr.s}" target="_blank" rel="noopener">Bild: ${cr.k.replace(/^Bild: /,'')}</a>`:'';}
 function openZoom(){zV=Math.round(zV);$('zSl').value=zV;zLast=-1;drawZoom();}
 function zTo(to){cancelAnimationFrame(zAnim);const from=zV,t0=performance.now(),d=Math.abs(to-from)*1500+300;(function f(n){const k=Math.min(1,(n-t0)/d),e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;zV=from+(to-from)*e;$('zSl').value=zV;drawZoom();if(k<1)zAnim=requestAnimationFrame(f);})(t0);}
 let zAuto=0;function zStop(){clearTimeout(zAuto);zAuto=0;$('zAuto').textContent='▶ Spela resan'}
-function zStep(){if(zV>=6.999){zStop();return}zTo(Math.round(zV)+1);zAuto=setTimeout(zStep,4600)}
-$('zAuto').onclick=()=>{if(zAuto){zStop();return}if(zV>=6.999){zV=0;$('zSl').value=0;drawZoom()}$('zAuto').textContent='⏸ Pausa';zAuto=setTimeout(zStep,300)};
+function zStep(){if(zV>=7.999){zStop();return}zTo(Math.round(zV)+1);zAuto=setTimeout(zStep,4600)}
+$('zAuto').onclick=()=>{if(zAuto){zStop();return}if(zV>=7.999){zV=0;$('zSl').value=0;drawZoom()}$('zAuto').textContent='⏸ Pausa';zAuto=setTimeout(zStep,300)};
 $('zSl').addEventListener('input',e=>{zStop();cancelAnimationFrame(zAnim);zV=+e.target.value;drawZoom();});
-$('zOut').onclick=()=>{zStop();zTo(Math.min(7,Math.floor(zV+.001)+1))};$('zIn').onclick=()=>{zStop();zTo(Math.max(0,Math.ceil(zV-.001)-1))};
+$('zOut').onclick=()=>{zStop();zTo(Math.min(8,Math.floor(zV+.001)+1))};$('zIn').onclick=()=>{zStop();zTo(Math.max(0,Math.ceil(zV-.001)-1))};
 
 /* =====================================================================
    Jättarna: alla klot står på samma punkt, de stora bakom de små.
@@ -1270,7 +1298,6 @@ let lSN=null,snImg=null,snTmp=null;
 function snLoad(){if(snImg)return;snImg=new Image();snImg.src='supernova-casa.jpg';}
 let snLoop=-1,snFlash=0;
 function drawSupernova(c,W,H,tt){
-  const lp=Math.floor(tt/16);if(lp!==snLoop){snLoop=lp;try{Ljud.sn.start()}catch(e){}}
   const cx=W/2,cy=H*.48,T=16,u=tt%T;           // en film på 16 sekunder som börjar om
   const ease=x=>x<0?0:x>1?1:x*x*(3-2*x);
   c.save();
@@ -1323,7 +1350,7 @@ function drawStage(c,W,H,k,path,t){const cx=W/2,cy=H*.48,r=srand(9+k);
       c.fillStyle='#000';c.beginPath();c.arc(cx,cy,H*.06,0,7);c.fill();c.strokeStyle='rgba(255,200,120,.8)';c.lineWidth=3;c.beginPath();c.arc(cx,cy,H*.066,0,7);c.stroke();}}}
 function drawLife(){const cv=$('lCv'),W=cv.width,H=cv.height,c=cv.getContext('2d'),t=performance.now()/1000;c.globalAlpha=1;c.fillStyle='#05070F';c.fillRect(0,0,W,H);
   const r=srand(77);for(let i=0;i<120;i++){c.fillStyle=`rgba(255,255,255,${r()*.5+.15})`;c.fillRect(r()*W,r()*H,1.6,1.6);}
-  if(lV>=2.5&&lSN===null)lSN=t;if(lV<2.5){if(lSN!==null){try{Ljud.sn.stop()}catch(e){}}lSN=null;snLoop=-1;}
+  if(lV>=2.5&&lSN===null)lSN=t;if(lV<2.5)lSN=null;
   const i=Math.min(3,Math.floor(lV)),f=lV-i;
   if(lV>=4){drawStage(c,W,H,4,lPath,t);}else{c.globalAlpha=1-f;drawStage(c,W,H,i,lPath,t);c.globalAlpha=f;drawStage(c,W,H,i+1,lPath,t);c.globalAlpha=1;}
   const S=LIV[lPath].s[Math.round(lV)];c.fillStyle='#fff';c.font=`800 ${H*.055}px "Inter", sans-serif`;c.textAlign='center';c.fillText(S.n,W/2,H*.95);
