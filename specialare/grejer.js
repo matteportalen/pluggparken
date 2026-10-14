@@ -95,49 +95,57 @@ GREJER.push({id:"illusioner",titel:"Optiska illusioner",kat:"Hjärnan",e:"👁�
   V.onclick=()=>{r=!r;rita()};rita();return()=>{};
 }});
 
-/* ---------- Spirograf och kalejdoskop ---------- */
-GREJER.push({id:"ritloop",titel:"Oändlig ritloop",kat:"Skapa",e:"🌀",c:"#7E57C2",mork:true,beskr:"Spirografen ritar själv. Eller rita med kalejdoskop.",start(host){
-  host.innerHTML=`<div class="rit"><div class="rit-tabs"><button class="k on" id="rS">🌀 Spirograf</button><button class="k" id="rK">✨ Kalejdoskop</button></div>
-  <canvas id="rC" width="720" height="720"></canvas><div class="ill-kn"><button class="k" id="rN">Ny figur</button><button class="k" id="rP">⏸ Pausa</button><button class="k" id="rT">Sudda</button></div><p class="rit-t" id="rTxt"></p></div>`;
-  const C=host.querySelector("#rC"),x=C.getContext("2d"),W=720,mid=W/2;let mode="s",paus=false,raf=0,alive=true,rot=0;
-  const txt=host.querySelector("#rTxt"),bS=host.querySelector("#rS"),bK=host.querySelector("#rK");
-  function svart(){x.fillStyle="#12122b";x.fillRect(0,0,W,W)}svart();
-  let sp;function ny(){const R=[5,7,8,9,11][Math.random()*5|0],r=[2,3,4][Math.random()*3|0],d=[1.2,1.6,2.2,2.8][Math.random()*4|0];
-    sp={R:R*30,r:r*30,d:d*30,t:0,h:Math.random()*360,len:0,fade:0};svart();}
-  ny();
+/* ---------- Spirograf och kalejdoskop (helskärm) ---------- */
+GREJER.push({id:"ritloop",titel:"Oändlig ritloop",kat:"Skapa",e:"🌀",c:"#7E57C2",mork:true,beskr:"Spirografen ritar själv, för alltid. Eller rita med kalejdoskop.",start(host){
+  host.innerHTML=`<div class="rit"><canvas id="rC"></canvas><div class="rit-t" id="rTxt"></div>
+  <div class="rit-ui"><div class="rit-rad"><button class="k on" id="rS">🌀 Spirograf</button><button class="k" id="rK">✨ Kalejdoskop</button></div>
+  <div class="rit-rad"><button class="k" id="rN">Ny figur</button><button class="k" id="rY" hidden>◐ 12 speglar</button><button class="k" id="rP">⏸ Pausa</button><button class="k" id="rT">Sudda</button><button class="k" id="rB">⬇ Spara bild</button></div></div></div>`;
+  const $=s=>host.querySelector(s),C=$("#rC"),x=C.getContext("2d");
+  let W=0,H=0,dpr=1,mode="s",paus=false,raf=0,alive=true,txtT=0;
+  const top=document.querySelector("#gv .gv-top");const root=$(".rit");
+  function storlek(){dpr=Math.min(2,window.devicePixelRatio||1);const t=top?top.offsetHeight:67;root.style.setProperty("--top",t+"px");
+    const w=window.innerWidth,h=window.innerHeight-t;if(Math.abs(w-W)<2&&Math.abs(h-H)<2)return;W=w;H=h;C.width=Math.round(W*dpr);C.height=Math.round(H*dpr);x.setTransform(dpr,0,0,dpr,0,0);svart();if(sp)ny()}
+  function svart(){x.fillStyle="#070a11";x.fillRect(0,0,W,H)}
   function g(a,b){return b?g(b,a%b):a}
-  function steg(){
-    if(paus)return;
-    if(mode==="s"){
-      const {R,r,d}=sp;const per=2*Math.PI*(r/g(R/30,r/30)/ (r/30))*1;
-      for(let k=0;k<6;k++){
-        const t=sp.t;const px=(R-r)*Math.cos(t)+d*Math.cos((R-r)/r*t),py=(R-r)*Math.sin(t)-d*Math.sin((R-r)/r*t);
-        const t2=t+.03;const qx=(R-r)*Math.cos(t2)+d*Math.cos((R-r)/r*t2),qy=(R-r)*Math.sin(t2)-d*Math.sin((R-r)/r*t2);
-        x.strokeStyle=`hsl(${(sp.h+t*20)%360},90%,65%)`;x.lineWidth=2.4;x.lineCap="round";x.shadowColor=x.strokeStyle;x.shadowBlur=8;
-        x.beginPath();x.moveTo(mid+px*.9,mid+py*.9);x.lineTo(mid+qx*.9,mid+qy*.9);x.stroke();x.shadowBlur=0;sp.t=t2;
-      }
-      const tot=2*Math.PI*(r/g(R/30,r/30))/(r/30)*(R/30)/(R/30)*(r/30)/(r/30);
-      if(sp.t>2*Math.PI*(r/30)/g(R/30,r/30)+.1){sp.fade++;if(sp.fade>120){ny()}}
-      if(sp.fade>0&&sp.fade<=120&&sp.fade%8===0){x.fillStyle="rgba(18,18,43,.18)";x.fillRect(0,0,W,W)}
+  /* spirograf: fortsätter rita och förändras långsamt, tidigare linjer bleknar */
+  let sp=null,fade=0;
+  function ny(){const par=[[5,3],[7,3],[8,3],[9,4],[11,4],[7,2],[5,2],[8,5],[10,3],[13,5]];const [R,r]=par[Math.random()*par.length|0];
+    const d0=r*(1.1+Math.random()*1.3);sp={R,r,d0,t:0,h:Math.random()*360,rot:0,age:0,A:.18+Math.random()*.25,fas:Math.random()*6,hs:6+Math.random()*10,
+      s:Math.min(W,H)*.47/((R-r)+d0*1.35)};svart();x.globalAlpha=1}
+  function punkt(t,d){const {R,r}=sp;return[(R-r)*Math.cos(t)+d*Math.cos((R-r)/r*t),(R-r)*Math.sin(t)-d*Math.sin((R-r)/r*t)]}
+  function stegS(){
+    const {R,r,d0}=sp;const cx=W/2,cy=H/2;x.lineCap="round";x.lineWidth=Math.max(1.2,Math.min(W,H)/420);
+    for(let k=0;k<24;k++){
+      const t=sp.t,t2=t+.028;sp.age+=.028;
+      const mod=1+sp.A*Math.sin(sp.age*.012+sp.fas),d=d0*mod;
+      const a=punkt(t,d),b=punkt(t2,d),cr=Math.cos(sp.rot),sr=Math.sin(sp.rot);
+      const hue=(sp.h+sp.age*sp.hs)%360;x.strokeStyle=`hsla(${hue},95%,66%,.85)`;x.shadowColor=`hsl(${hue},100%,60%)`;x.shadowBlur=9;
+      x.beginPath();x.moveTo(cx+(a[0]*cr-a[1]*sr)*sp.s,cy+(a[0]*sr+a[1]*cr)*sp.s);x.lineTo(cx+(b[0]*cr-b[1]*sr)*sp.s,cy+(b[0]*sr+b[1]*cr)*sp.s);x.stroke();
+      sp.t=t2;sp.rot+=.00045;
     }
-    raf=requestAnimationFrame(steg);
+    x.shadowBlur=0;fade++;if(fade%12===0){x.fillStyle="rgba(7,10,17,.035)";x.fillRect(0,0,W,H)}
+    if(sp.age>7000)ny();   // ungefär två och en halv minut, sedan en ny figur
   }
-  function setT(){txt.textContent=mode==="s"?"Spirografen ritar en ny figur varje gång. Tryck på Ny figur om du vill byta.":"Rita med fingret eller musen. Allt du ritar speglas 12 gånger runt mitten.";bS.classList.toggle("on",mode==="s");bK.classList.toggle("on",mode==="k");}
-  setT();
-  let down=false,lx=0,ly=0,hue=0;
-  function pos(e){const b=C.getBoundingClientRect();return[(e.clientX-b.left)*W/b.width-mid,(e.clientY-b.top)*W/b.height-mid]}
-  function seg(a,b){hue=(hue+4)%360;for(let k=0;k<12;k++){for(const f of[1,-1]){const ang=k*Math.PI/6;const c=Math.cos(ang),s=Math.sin(ang);
-    const ax=a[0],ay=a[1]*f,bx=b[0],by=b[1]*f;x.strokeStyle=`hsl(${hue},90%,65%)`;x.lineWidth=3;x.lineCap="round";x.shadowColor=x.strokeStyle;x.shadowBlur=8;
-    x.beginPath();x.moveTo(mid+ax*c-ay*s,mid+ax*s+ay*c);x.lineTo(mid+bx*c-by*s,mid+bx*s+by*c);x.stroke();}}x.shadowBlur=0}
-  C.onpointerdown=e=>{if(mode!=="k")return;down=true;[lx,ly]=pos(e);C.setPointerCapture(e.pointerId);e.preventDefault()};
+  function slinga(){if(!alive)return;if(!paus&&mode==="s"&&sp)stegS();txtT++;if(txtT===400)$("#rTxt").classList.add("dim");raf=requestAnimationFrame(slinga)}
+  /* kalejdoskop */
+  let sym=12,down=false,lx=0,ly=0,hue=0;
+  function pos(e){const b=C.getBoundingClientRect();return[(e.clientX-b.left)*W/b.width-W/2,(e.clientY-b.top)*H/b.height-H/2]}
+  function seg(a,b){hue=(hue+2.2)%360;const lw=Math.max(2,Math.min(W,H)/200);x.lineWidth=lw;x.lineCap="round";x.strokeStyle=`hsl(${hue},95%,66%)`;x.shadowColor=`hsl(${hue},100%,60%)`;x.shadowBlur=12;
+    for(let k=0;k<sym;k++){const ang=k*Math.PI*2/sym,c=Math.cos(ang),s=Math.sin(ang);
+      for(const f of [1,-1]){const ay=a[1]*f,by=b[1]*f;x.beginPath();x.moveTo(W/2+a[0]*c-ay*s,H/2+a[0]*s+ay*c);x.lineTo(W/2+b[0]*c-by*s,H/2+b[0]*s+by*c);x.stroke()}}
+    x.shadowBlur=0}
+  C.onpointerdown=e=>{if(mode==="s"){ny();return}down=true;[lx,ly]=pos(e);seg([lx,ly],[lx+.01,ly+.01]);C.setPointerCapture(e.pointerId);e.preventDefault()};
   C.onpointermove=e=>{if(!down)return;const p=pos(e);seg([lx,ly],p);lx=p[0];ly=p[1]};
   C.onpointerup=C.onpointercancel=()=>{down=false};C.style.touchAction="none";
-  host.querySelector("#rN").onclick=()=>{mode="s";setT();ny()};
-  host.querySelector("#rP").onclick=e=>{paus=!paus;e.target.textContent=paus?"▶ Fortsätt":"⏸ Pausa"};
-  host.querySelector("#rT").onclick=()=>{svart();if(mode==="s")ny()};
-  bS.onclick=()=>{mode="s";setT();ny()};bK.onclick=()=>{mode="k";setT();svart()};
-  raf=requestAnimationFrame(steg);
-  return()=>{cancelAnimationFrame(raf);alive=false};
+  function setM(m){mode=m;$("#rS").classList.toggle("on",m==="s");$("#rK").classList.toggle("on",m==="k");$("#rY").hidden=m!=="k";$("#rN").hidden=m!=="s";
+    $("#rTxt").textContent=m==="s"?"Spirografen ritar vidare och förändras långsamt. Tryck för en ny figur.":"Rita med fingret eller musen. Allt speglas runt mitten.";$("#rTxt").classList.remove("dim");txtT=0;svart();if(m==="s")ny()}
+  $("#rS").onclick=()=>setM("s");$("#rK").onclick=()=>setM("k");$("#rN").onclick=()=>ny();
+  $("#rY").onclick=e=>{sym=sym===12?8:sym===8?6:sym===6?16:12;e.target.textContent="◐ "+sym+" speglar"};
+  $("#rP").onclick=e=>{paus=!paus;e.target.textContent=paus?"▶ Fortsätt":"⏸ Pausa"};
+  $("#rT").onclick=()=>{svart();if(mode==="s")ny()};
+  $("#rB").onclick=()=>{const a=document.createElement("a");a.download="min-ritning.png";a.href=C.toDataURL("image/png");a.click()};
+  const ro=()=>storlek();window.addEventListener("resize",ro);storlek();setM("s");raf=requestAnimationFrame(slinga);
+  return()=>{cancelAnimationFrame(raf);alive=false;window.removeEventListener("resize",ro)};
 }});
 
 /* ---------- Hitta den udda ---------- */
@@ -157,23 +165,31 @@ GREJER.push({id:"udda",titel:"Hitta den udda",kat:"Hjärnan",e:"🔍",c:"#E08A00
 }});
 
 /* ---------- Hitta djuret ---------- */
-GREJER.push({id:"djuret",titel:"Hitta snöleoparden",kat:"Hjärnan",e:"🐆",c:"#546E7A",mork:true,beskr:"Snöleoparden är mästare på att gömma sig. Hittar du den?",start(host){
+GREJER.push({id:"djuret",titel:"Hitta djuret",kat:"Hjärnan",e:"🐆",c:"#546E7A",mork:true,beskr:"Mästare på att gömma sig. Hittar du djuret?",start(host){
   const B=[
-   {src:"bilder/snoleopard1.jpg",w:1280,h:960,m:[[618,458]],r:46,f:"Hitta snöleoparden! Den tittar fram ur en liten glipa i berget.",tips:"Titta i skuggan under bergsöverhänget, mitt i bilden.",ant:"Foto: Ksuryawanshi, CC BY-SA 4.0 (Wikimedia Commons)"},
-   {src:"bilder/snoleopard2.jpg",w:1280,h:960,m:[[283,598],[958,640]],r:54,f:"Här finns två snöleoparder som går i snön. Hitta båda!",tips:"De går på snön långt nere i bilden, en på vänster och en på höger sida.",ant:"Foto: Ksuryawanshi, CC BY-SA 4.0 (Wikimedia Commons)"}];
-  let i=0,hit=[],fel=0;
-  host.innerHTML=`<div class="hitta"><h3 class="ill-q" id="hQ"></h3><div class="hitta-b" id="hB"><img id="hI" alt="Foto av klippor och snö. Någonstans finns en snöleopard." draggable="false"></div><p class="rit-t" id="hM"></p>
+   {src:"snoleopard1.jpg",w:1280,h:960,m:[[618,458]],r:46,f:"Hitta snöleoparden! Den tittar fram ur en liten glipa i berget.",tips:"Titta i skuggan under bergsöverhänget, mitt i bilden.",fakta:"Snöleoparden bor högt upp i bergen i Asien. Dess grå, fläckiga päls gör den nästan osynlig mot sten och snö.",ant:"Foto: Ksuryawanshi, CC BY-SA 4.0 (Wikimedia Commons)"},
+   {src:"djur-moth.jpg",w:960,h:1449,m:[[590,480]],r:110,f:"Hitta nattfjärilen! Den sitter på en björkstam.",tips:"Leta efter en mörk form med vingar som liknar barken, till höger om mitten.",fakta:"Fjärilen heter björkmätare. När sot gjorde träden mörka i England på 1800-talet blev mörka björkmätare vanligare, eftersom fåglarna såg dem sämre.",ant:"Foto: Gilles San Martin, CC BY-SA 3.0 (Wikimedia Commons)"},
+   {src:"djur-nightjar.jpg",w:960,h:640,m:[[470,300]],r:110,f:"Hitta nattskärran! Den ligger på marken bland torra löv.",tips:"Leta efter ett öga och en vit fläck vid halsen, ungefär mitt i bilden.",fakta:"Nattskärrans fjädrar ser ut som torra löv. Den ligger still på marken hela dagen och jagar insekter på natten.",ant:"Foto: Shiv's fotografia, CC BY-SA 4.0 (Wikimedia Commons)"},
+   {src:"djur-gecko.jpg",w:960,h:568,m:[[450,280]],r:190,f:"Hitta geckon! Den ser ut som lav på en gren.",tips:"Det som ser ut som en lavbevuxen kvist är djuret. Titta längs hela grenen.",fakta:"Mossgeckon bor på Madagaskar. Den har hudflikar längs kroppen som tar bort skuggorna, så den ser ut att sitta platt som en del av grenen.",ant:"Foto: Charles J. Sharp, CC BY-SA 4.0 (Wikimedia Commons)"},
+   {src:"djur-uggla.jpg",w:960,h:640,m:[[500,370]],r:140,f:"Hitta ugglan! Den sitter vid foten av trädet.",tips:"Leta efter två gula ögon längst ner vid trädstammen, till höger.",fakta:"Ugglor har fjädrar i färger som bark och torra löv. De sitter still hela dagen och jagar på natten.",ant:"Foto: Danelle Murray, CC BY-SA 4.0 (Wikimedia Commons)"},
+   {src:"djur-potoo.jpg",w:960,h:788,m:[[500,400]],r:140,f:"Hitta fågeln! Den sitter alldeles stilla i ett träd.",tips:"Fågeln ser ut som en stubbe som sticker upp bakom en tjock gren, strax till höger om mitten.",fakta:"Det här är en stor potoo, en fågel från Sydamerika. Den sitter stilla på en gren hela dagen och ser ut som ett brutet trädstycke. På natten jagar den insekter.",ant:"Foto: gailhampshire, CC BY 2.0 (Wikimedia Commons)"},
+   {src:"djur-ptarmigan.jpg",w:960,h:640,m:[[600,280],[130,410],[290,390]],r:90,f:"Hitta alla tre fåglarna! En vuxen och två kycklingar.",tips:"De står på rad bland stenarna: en stor till höger och två små till vänster.",fakta:"Det är en vitstjärtad fjällripa med två kycklingar. Fjädrarna är bruna på sommaren och blir vita på vintern, så den gömmer sig både bland stenar och i snö.",ant:"Foto: Great Sand Dunes National Park and Preserve, public domain (Wikimedia Commons)"},
+   {src:"djur-stonefish.jpg",w:960,h:720,m:[[420,420]],r:250,f:"Hitta fisken! Den ligger helt stilla på botten.",tips:"Leta efter ett litet svart öga lite nedanför mitten av bilden.",fakta:"Det här är en stenfisk, en av världens giftigaste fiskar. Den ligger stilla och ser ut som en sten på botten. Man ska aldrig röra den.",ant:"Foto: Rickard Zerpe, CC BY 2.0 (Wikimedia Commons)"},];
+  for(let k=B.length-1;k>0;k--){const j=1+Math.floor(Math.random()*k);[B[k],B[j]]=[B[j],B[k]]}  // leoparden först, resten blandas
+  let i=0,hit=[],fel=0,klar=false;
+  host.innerHTML=`<div class="hitta"><div class="kick" id="hK"></div><h3 class="ill-q" id="hQ"></h3><div class="hitta-b" id="hB"><div class="hitta-w" id="hW"><img id="hI" alt="Foto av ett djur som gömmer sig" draggable="false"></div></div><p class="rit-t" id="hM"></p><p class="hitta-fakta" id="hF"></p>
   <div class="ill-kn"><button class="k" id="hT">💡 Tips</button><button class="k" id="hV">Visa var</button><button class="k ok" id="hN">Nästa bild ›</button></div><p class="kallan" id="hA"></p></div>`;
-  const Q=host.querySelector("#hQ"),Bx=host.querySelector("#hB"),Im=host.querySelector("#hI"),Mm=host.querySelector("#hM"),A=host.querySelector("#hA");
-  function ring(m,cls){const d=el("div",{class:"ring "+(cls||"")});d.style.left=(m[0]/1280*100)+"%";d.style.top=(m[1]/960*100)+"%";d.style.width=d.style.height=(2*B[i].r/1280*100)+"%";Bx.appendChild(d)}
-  function ladda(){const d=B[i];hit=[];fel=0;Q.textContent=d.f;Im.src=d.src;Mm.textContent="Tryck på bilden där du ser djuret.";A.textContent=d.ant;[...Bx.querySelectorAll(".ring")].forEach(r=>r.remove());}
+  const $=s=>host.querySelector(s),Q=$("#hQ"),W=$("#hW"),Im=$("#hI"),Mm=$("#hM"),A=$("#hA"),F=$("#hF");
+  function ring(m,cls){const d=B[i],e=document.createElement("div");e.className="ring "+(cls||"");e.style.left=(m[0]/d.w*100)+"%";e.style.top=(m[1]/d.h*100)+"%";e.style.width=(2*d.r/d.w*100)+"%";e.style.aspectRatio="1";W.appendChild(e)}
+  function ladda(){const d=B[i];hit=[];fel=0;klar=false;Q.textContent=d.f;Im.src="bilder/"+d.src;Mm.textContent="Tryck på bilden där du ser djuret.";A.textContent=d.ant;F.textContent="";$("#hK").textContent="BILD "+(i+1)+" / "+B.length;W.querySelectorAll(".ring").forEach(r=>r.remove())}
+  function klart(txt){klar=true;Mm.textContent=txt;F.textContent=B[i].fakta}
   Im.onclick=e=>{const d=B[i],b=Im.getBoundingClientRect(),px=(e.clientX-b.left)*d.w/b.width,py=(e.clientY-b.top)*d.h/b.height;
     const k=d.m.findIndex((m,j)=>!hit.includes(j)&&Math.hypot(px-m[0],py-m[1])<d.r*1.6);
-    if(k>=0){hit.push(k);ring(d.m[k],"ok");Mm.textContent=hit.length===d.m.length?"🎉 Du hittade "+(d.m.length>1?"båda!":"den!"):"Snyggt! En till!"}
-    else{fel++;Mm.textContent=fel>2?"Fortfarande inte. Prova 💡 Tips!":"Inte där. Titta noga!"}};
-  host.querySelector("#hT").onclick=()=>{Mm.textContent=B[i].tips};
-  host.querySelector("#hV").onclick=()=>{B[i].m.forEach((m,j)=>{if(!hit.includes(j)){ring(m,"visa");hit.push(j)}});Mm.textContent="Där var den!"};
-  host.querySelector("#hN").onclick=()=>{i=(i+1)%B.length;ladda()};
+    if(k>=0){hit.push(k);ring(d.m[k],"ok");if(hit.length===d.m.length)klart("🎉 Du hittade "+(d.m.length>1?"alla!":"den!"));else Mm.textContent="Snyggt! En till!"}
+    else if(!klar){fel++;Mm.textContent=fel>2?"Fortfarande inte. Prova 💡 Tips!":"Inte där. Titta noga!"}};
+  $("#hT").onclick=()=>{Mm.textContent=B[i].tips};
+  $("#hV").onclick=()=>{B[i].m.forEach((m,j)=>{if(!hit.includes(j)){ring(m,"visa");hit.push(j)}});klart("Där var den!")};
+  $("#hN").onclick=()=>{i=(i+1)%B.length;ladda()};
   ladda();return()=>{};
 }});
 

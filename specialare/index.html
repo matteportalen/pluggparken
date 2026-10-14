@@ -171,6 +171,15 @@ h1 span{color:#E0562B}
 .kv-ram iframe{width:100%;height:100%;border:0;display:block}
 .kv-not{margin:0;color:#c9cdea;font-size:.9rem;text-align:center;max-width:60ch}
 .kort .ik.bild{background-size:cover;background-position:center;font-size:1.6rem;color:#fff;text-shadow:0 2px 4px rgba(0,0,0,.6);align-content:center}
+/* ritloop i helskärm */
+#gv.mork div.rit{position:fixed;left:0;right:0;bottom:0;top:var(--top,67px);max-width:none;margin:0;padding:0;z-index:1}
+#gv.mork .rit #rC{position:absolute;inset:0;width:100%;max-width:none;height:100%;margin:0;border-radius:0;box-shadow:none;background:#070a11;cursor:crosshair;aspect-ratio:auto}
+.rit-t{position:absolute;top:12px;left:0;right:0;text-align:center;color:rgba(255,255,255,.75);font-size:.95rem;pointer-events:none;transition:opacity 1.5s;z-index:3;padding:0 16px;text-shadow:0 1px 8px #000}
+.rit-t.dim{opacity:0}
+.rit-ui{position:absolute;left:0;right:0;bottom:14px;display:flex;flex-direction:column;align-items:center;gap:8px;z-index:3;pointer-events:none;padding:0 10px}
+.rit-ui .k{pointer-events:auto}
+.rit-rad{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.rit-rad .k[hidden]{display:none}
 /* prova själv i mörk stil */
 #gv.mork{background:radial-gradient(ellipse at 50% -10%,color-mix(in srgb,var(--c,#345) 38%,#070a11),#070a11 62%);font-family:Inter,"Helvetica Neue",Arial,system-ui,sans-serif;color:#fff}
 #gv.mork .ill,#gv.mork .rit,#gv.mork .udda,#gv.mork .hitta,#gv.mork .tid{max-width:840px;margin:0 auto;padding:24px 18px 56px}
@@ -191,7 +200,12 @@ h1 span{color:#E0562B}
 @media(hover:hover){#gv.mork .udda-c:hover{background:rgba(255,255,255,.16);box-shadow:0 0 24px color-mix(in srgb,var(--c,#9bd) 60%,transparent)}}
 #gv.mork .udda-c:active{transform:scale(.95)}
 #gv.mork .udda-c.fel{background:rgba(229,72,77,.35);border-color:#e5484d}
-#gv.mork .hitta-b{border-radius:4px;box-shadow:0 0 110px -10px color-mix(in srgb,var(--c,#9bd) 70%,transparent),0 24px 70px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.14)}
+#gv.mork .hitta-b{display:flex;justify-content:center;box-shadow:none;border-radius:0}
+.hitta-w{position:relative;display:inline-block;line-height:0;border-radius:4px;box-shadow:0 0 110px -10px color-mix(in srgb,var(--c,#9bd) 70%,transparent),0 24px 70px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.14);max-width:100%}
+.hitta-w img{max-height:58vh;max-width:100%;border-radius:4px;display:block;cursor:crosshair}
+.hitta-w .ring{transform:none;translate:-50% -50%;animation:none}
+.hitta-fakta{min-height:3em;text-align:center;font-size:1rem;opacity:.85;max-width:60ch;margin:6px auto;line-height:1.4}
+#gv.mork .hitta-b.x{border-radius:4px;box-shadow:0 0 110px -10px color-mix(in srgb,var(--c,#9bd) 70%,transparent),0 24px 70px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.14)}
 #gv.mork .ring{border-color:#fff}
 #gv.mork .kallan{color:rgba(255,255,255,.5);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase}
 #gv.mork .tid{text-align:center}
