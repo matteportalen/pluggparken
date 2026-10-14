@@ -202,5 +202,117 @@ var LEKTIONER=[
 ["🧩","Tre delar","En atom består av en kärna i mitten med protoner och neutroner, och elektroner som susar runt."],
 ["💨","Nästan tom","Det mesta av en atom är tomrum. Om kärnan var en ärta skulle elektronerna vara flera hundra meter bort."],
 ["♻️","Gamla atomer","Atomerna i din kropp har funnits i miljarder år. Många bildades inne i stjärnor."],
-["⭐","Stjärnstoft","Du är alltså, på riktigt, gjord av stjärnstoft!"]]}
+["⭐","Stjärnstoft","Du är alltså, på riktigt, gjord av stjärnstoft!"]]},
+{id:"nobel",titel:"Nobelpriset",kat:"Historia",e:"🏅",c:"#B8860B",rutor:[
+["🧪","Alfred Nobel","Alfred Nobel var en svensk uppfinnare och företagare. År 1867 uppfann han dynamiten."],
+["📜","Testamentet","När han dog 1896 stod det i hans testamente att pengarna skulle bli ett pris till dem som gjort mest nytta för mänskligheten."],
+["🏅","Fem priser","Det första Nobelpriset delades ut 1901. Det finns priser i fysik, kemi, medicin, litteratur och fred. Ekonomipriset kom senare, 1969."],
+["🏛️","Stockholm och Oslo","Priserna delas ut den 10 december, den dag Nobel dog. Fredspriset delas ut i Oslo och de andra i Stockholm."],
+["🥇","Medaljen","Varje pristagare får en guldmedalj, ett diplom och prispengar."],
+["👩‍🔬","Marie Curie","Marie Curie var den första kvinnan som fick ett Nobelpris. Hon fick det två gånger: i fysik 1903 och i kemi 1911."]]},
+
+{id:"bitcoin",titel:"Bitcoin",kat:"Samhälle",e:"🪙",c:"#F7931A",rutor:[
+["💻","Pengar på datorn","Bitcoin är pengar som bara finns på datorer. Du kan inte hålla dem i handen."],
+["🕵️","Satoshi Nakamoto","Bitcoin startade år 2009. Den som skapade det kallade sig Satoshi Nakamoto. Ingen vet vem det egentligen är."],
+["⛓️","Blockkedjan","Ingen bank eller regering styr Bitcoin. Tusentals datorer håller reda på vem som äger vad i en gemensam bok som kallas blockkedjan."],
+["🔢","Bara 21 miljoner","Det kommer aldrig att finnas fler än 21 miljoner bitcoin. Det gör dem sällsynta, lite som guld."],
+["🍕","Pizzan","År 2010 köpte någon två pizzor för 10 000 bitcoin. Idag skulle de vara värda enormt mycket pengar."],
+["⚠️","Var försiktig","Priset går upp och ner väldigt snabbt. Man kan förlora mycket pengar. Fråga alltid en vuxen först."]]},
+
+{id:"digerdoden",titel:"Digerdöden",kat:"Historia",e:"🐀",c:"#6B4C3B",rutor:[
+["🏰","1300-talet","Digerdöden var en sjukdom som spred sig över Europa på 1300-talet."],
+["🚢","Från Asien","Den kom med handelsvägar och skepp och nådde Europa omkring år 1347."],
+["🐀","Råttor och loppor","Sjukdomen kallas pest. Bakterien spreds av loppor som levde på råttor och människor."],
+["⚰️","Många dog","Mellan en tredjedel och hälften av alla i Europa dog. Det var kanske 25 miljoner människor."],
+["⚒️","Världen förändrades","Efteråt var det brist på arbetare. De som levde kunde kräva bättre betalt, och samhället förändrades."],
+["💊","Idag finns medicin","Digerdöden nådde Sverige omkring år 1350. Idag kan pest botas med antibiotika."]]},
+
+{id:"elfte",titel:"11 september 2001",kat:"Historia",e:"🕊️",c:"#46607A",rutor:[
+["📅","En tisdag i september","Den 11 september 2001 attackerades USA av terrorister som kapade fyra flygplan."],
+["🏙️","Tvillingtornen","Två plan flög in i tvillingtornen i World Trade Center i New York. Tornen föll samman."],
+["🛩️","Fler platser","Ett tredje plan flög in i Pentagon nära Washington. Ett fjärde störtade på ett fält i Pennsylvania."],
+["🚒","Hjälparna","Nästan 3 000 människor dog. Brandmän och poliser sprang in för att hjälpa andra."],
+["🛃","Ny säkerhet","Efter attackerna ändrades säkerheten på flygplatser över hela världen. Därför går vi idag igenom säkerhetskontroller."],
+["🕯️","Minnesmärket","På platsen i New York finns nu ett minnesmärke med två stora fontäner. Namnen på alla som dog finns inristade."]]},
+
+{id:"vanallen",titel:"Strålningsbältena runt jorden",kat:"Rymden",e:"🛰️",c:"#5B3FA0",rutor:[
+["🌍","Två ringar","Runt jorden finns två stora ringar av laddade partiklar. De kallas Van Allen-bältena."],
+["🛰️","Upptäckten","De upptäcktes 1958 av den amerikanska satelliten Explorer 1. De är uppkallade efter forskaren James Van Allen."],
+["🧲","Fångade partiklar","Jordens magnetfält fångar partiklar från solen och håller dem kvar i bältena."],
+["☢️","Farlig strålning","Strålningen kan skada satelliter och astronauter. Rymdskepp som ska förbi bältena åker igenom dem snabbt."],
+["🛡️","Magnetfältet skyddar","Magnetfältet som skapar bältena skyddar också oss mot solens partiklar."],
+["📏","Hur stora?","Det inre bältet börjar ungefär 1 000 kilometer upp. Det yttre når nästan 60 000 kilometer ut."]]},
+
+{id:"kvant",titel:"Kvantfysik",kat:"Fysik",e:"⚛️",c:"#2E86AB",rutor:[
+["🔬","Det minsta","Kvantfysik är läran om de allra minsta sakerna: atomer och ännu mindre delar."],
+["🤯","Konstigt","Där fungerar världen på ett annat sätt än i vardagen. Reglerna känns ofta konstiga, även för forskare."],
+["🌊","Våg och partikel","Ljus kan vara både en våg och en ström av små partiklar, fotoner."],
+["🎲","Flera lägen","Enligt teorin kan en partikel ha flera möjliga lägen samtidigt, tills någon mäter den."],
+["❓","Osäkerhet","Man kan inte veta exakt både var en partikel är och hur fort den rör sig. Det är Heisenbergs osäkerhetsprincip."],
+["📱","Nytta idag","Kvantfysiken ligger bakom lasrar, datorer, mobiler och magnetkameror på sjukhus."]]},
+
+{id:"pirater",titel:"Pirater",kat:"Historia",e:"🏴‍☠️",c:"#4A4E69",rutor:[
+["🏴‍☠️","Sjörövare","Pirater är sjörövare som anfaller fartyg och stjäl det de har ombord."],
+["⚓","Guldåldern","Den mest kända tiden för pirater var omkring 1650 till 1730, särskilt i Karibien."],
+["💀","Jolly Roger","Piraterna hade ofta en svart flagga med dödskalle, kallad Jolly Roger, för att skrämma andra."],
+["👩‍✈️","Kända pirater","Svartskägg hette egentligen Edward Teach. Anne Bonny och Mary Read var två kvinnliga pirater."],
+["🗺️","Sanning och myter","De grävde nästan aldrig ner skatter och lät ingen gå på plankan. Det mesta kommer från böcker och filmer."],
+["🚤","Pirater idag","Pirater finns fortfarande, bland annat utanför Somalias kust. Idag använder de små snabba motorbåtar."]]},
+
+{id:"petrichor",titel:"Varför luktar det så speciellt när det regnar?",kat:"Natur",e:"🌧️",c:"#4C7F7A",rutor:[
+["🌧️","Petrichor","Doften när det börjar regna efter en torr period har ett eget namn: petrichor."],
+["📖","Ordet","Ordet kommer från grekiskan: petra betyder sten och ichor var vätskan i gudarnas ådror."],
+["🦠","Bakterier i jorden","Marken innehåller bakterier som gör ett ämne som heter geosmin. Det är lukten av jord."],
+["💧","Droppen och bubblorna","När en regndroppe träffar marken bildas små luftbubblor. De slungar ut doften i luften."],
+["👃","Vi är duktiga","Människor känner geosmin även när det bara finns några få delar på en biljon i luften."],
+["🌿","Växtoljor","Växter lagrar också oljor i torr jord. När det regnar lossnar de och blandas in i doften."]]},
+
+{id:"hajar",titel:"Hajar",kat:"Natur",e:"🦈",c:"#2C6E91",rutor:[
+["🦈","Äldre än dinosaurierna","Hajar har funnits i över 400 miljoner år. De är äldre än både dinosaurierna och träden."],
+["📏","Över 500 arter","Det finns över 500 olika hajarter, från små dvärghajar till jättelika valhajar."],
+["🐋","Valhajen","Valhajen är världens största fisk, upp till 12 meter lång. Den äter plankton och är ofarlig för människor."],
+["🦴","Inga ben","Hajar saknar riktiga ben. Skelettet är gjort av brosk, samma material som i din näsa och dina öron."],
+["🦷","Tusentals tänder","En haj byter tänder hela livet. Vissa arter kan få tusentals tänder under sitt liv."],
+["🌊","Hotade","Hajar har fått ett dåligt rykte. Människor dödar många fler hajar än tvärtom, och många arter är hotade."]]},
+
+{id:"morkmateria",titel:"Mörk materia",kat:"Rymden",e:"🌌",c:"#4B2E83",rutor:[
+["🔭","Det vi ser","Allt vi ser i rymden, stjärnor, planeter och gas, är bara ungefär 5 procent av universum."],
+["👻","Osynlig","Ungefär 27 procent är mörk materia. Vi kan inte se den, men vi vet att den finns."],
+["🌀","Galaxer snurrar för fort","Forskare märkte att galaxer snurrar så fort att de borde flyga isär. Något osynligt måste hålla dem ihop."],
+["👩‍🔬","Vera Rubin","Den amerikanska astronomen Vera Rubin mätte det här på 1970-talet och övertygade många forskare."],
+["🔍","Böjer ljuset","Mörk materia ger inget ljus, men dess tyngdkraft böjer ljuset från galaxer bakom den."],
+["❓","Ingen vet","Ingen vet ännu vad mörk materia är gjord av. Det är en av vetenskapens största gåtor."]]},
+
+{id:"vikingar",titel:"Vikingarna",kat:"Historia",e:"⚔️",c:"#8B5A2B",rutor:[
+["⏳","För tusen år sedan","Vikingatiden brukar räknas från omkring år 800 till 1050, alltså för ungefär tusen år sedan."],
+["⛵","Långskeppen","De seglade i långskepp, smala snabba skepp som kunde gå både på hav och i floder."],
+["🧭","Österut och västerut","Svenska vikingar reste mest österut mot dagens Ryssland och Ukraina. Danska och norska reste västerut."],
+["🌎","Leif Eriksson","Leif Eriksson nådde Nordamerika omkring år 1000, nästan 500 år före Columbus."],
+["🪖","Inga horn","Vikingarna hade inte horn på hjälmarna. Det kommer från teaterdräkter på 1800-talet."],
+["🪨","Runstenar","Runstenar berättar om vikingarna. I Sverige finns tusentals runstenar."]]},
+
+{id:"blackfisk",titel:"Bläckfisken",kat:"Natur",e:"🐙",c:"#B5446E",rutor:[
+["❤️","Tre hjärtan","Bläckfisken har åtta armar och tre hjärtan."],
+["🔵","Blått blod","Blodet är blått, eftersom det innehåller koppar i stället för järn."],
+["🎨","Byter färg","Den kan ändra färg och mönster på huden på en sekund för att gömma sig."],
+["🧠","Smart","Bläckfiskar är mycket smarta. De kan öppna burkar och hitta ut ur labyrinter."],
+["💨","Bläckmolnet","När bläckfisken är i fara sprutar den ut ett mörkt bläckmoln och simmar iväg."],
+["🕳️","Mjuk kropp","Den har inget skal och inget skelett. Därför kan den pressa sig genom mycket trånga hål."]]},
+
+{id:"iss",titel:"Rymdstationen ISS",kat:"Rymden",e:"🧑‍🚀",c:"#2F6DB5",rutor:[
+["🛰️","Ett hem i rymden","Den internationella rymdstationen, ISS, är både en bostad och ett laboratorium i rymden."],
+["⏱️","90 minuter","Den flyger ungefär 400 kilometer över jorden och åker ett varv runt jorden på cirka 90 minuter."],
+["🌅","Många soluppgångar","Därför ser astronauterna ungefär 16 soluppgångar och solnedgångar varje dygn."],
+["📐","Stor som en fotbollsplan","Stationen är ungefär lika stor som en fotbollsplan och väger över 400 ton."],
+["🤸","Allt svävar","På ISS svävar allt. Astronauterna tränar två timmar varje dag för att musklerna inte ska bli svaga."],
+["📅","Sedan år 2000","Människor har bott på stationen utan avbrott sedan år 2000."]]},
+
+{id:"mammutar",titel:"Ullhårsmammuten",kat:"Natur",e:"🦣",c:"#7A5C3E",rutor:[
+["🧊","Istidens djur","Ullhårsmammuten levde under istiden. De sista försvann för ungefär 4 000 år sedan."],
+["📏","Stora betar","Den var ungefär lika stor som en afrikansk elefant, med långa böjda betar som kunde bli flera meter."],
+["🧥","Päls mot kylan","Den hade tjock päls och ett tjockt lager fett som skydd mot kylan."],
+["🎨","Grottmålningar","Människor jagade mammutar och ritade dem på grottväggar."],
+["❄️","Frusna fynd","Hela mammutar har hittats frusna i Sibirien. Kalven Lyuba är över 40 000 år gammal."],
+["🧬","Tillbaka?","Forskare har tagit DNA från frusna mammutar och funderar på om man kan skapa mammutliknande djur. Ingen har lyckats ännu."]]}
+
 ];

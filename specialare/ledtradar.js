@@ -25,5 +25,20 @@ var LEDTRADAR={
 "stora-tal":["Om du räknade ett tal varje sekund skulle det ta många år.","En miljon sekunder är ungefär 11 dagar.","En miljard sekunder är nästan 32 år. Vad handlar det om?"],
 "kontinenter":["Jag flyttar mig, men så långsamt att du aldrig märker det.","Jag rör mig ungefär lika fort som dina naglar växer.","Jag handlar om jordens plattor som bär länder och hav."],
 "norrsken":["Jag dansar i grönt på natthimlen.","Jag kommer från solen, men syns bara långt uppe i norr.","Du kan se mig i Kiruna en mörk vinternatt."],
-"atom":["Du är gjord av mig, och det är allt annat också.","Jag är så liten att hundratusentals ryms på ett hårstrå.","Jag har en kärna i mitten och elektroner som susar runt."]
+"atom":["Du är gjord av mig, och det är allt annat också.","Jag är så liten att hundratusentals ryms på ett hårstrå.","Jag har en kärna i mitten och elektroner som susar runt."],
+"nobel":["Jag delas ut varje år, men mitt namn kommer från en man som uppfann dynamit.","Jag delas ut den 10 december i Stockholm och Oslo.","Jag är det mest kända priset i världen: fysik, kemi, medicin, litteratur och fred."],
+"bitcoin":["Jag är pengar som du aldrig kan hålla i handen.","Jag skapades år 2009 av någon som kallade sig Satoshi Nakamoto.","Ingen bank styr mig. Jag är en kryptovaluta."],
+"digerdoden":["Jag kom med skepp för över 650 år sedan.","Jag spreds av loppor på råttor.","Jag är pesten som dödade miljontals människor på 1300-talet."],
+"elfte":["Jag hände en tisdag morgon för mer än 20 år sedan.","Jag förändrade hur vi reser med flyg.","Jag handlar om en attack mot två höga torn i New York."],
+"vanallen":["Jag är osynlig och ligger runt hela jorden.","Jag består av laddade partiklar som fångats av jordens magnetfält.","Rymdfarare skyndar sig genom mig. Jag är ett bälte av strålning."],
+"kvant":["Jag handlar om det minsta som finns, och jag är konstig.","Hos mig kan en sak vara både en våg och en partikel.","Utan mig skulle det inte finnas lasrar eller mobiltelefoner."],
+"pirater":["Vi gillar guld, men vi grävde nästan aldrig ner det.","Vår flagga är svart med en dödskalle.","Vi seglade i Karibien och rövade fartyg. Ohoj!"],
+"petrichor":["Du känner mig bara ibland, när himlen öppnar sig.","Jag kommer från bakterier i marken och från oljor i växter.","Jag är lukten av jord efter ett regn."],
+"hajar":["Vi är äldre än dinosaurierna.","Vi har inga riktiga ben, bara brosk.","Vi byter tänder hela livet. Det finns en känd film om en av oss."],
+"morkmateria":["Jag är det mesta som finns, men ingen har sett mig.","Jag håller galaxer samman med min tyngd.","Jag ger inget ljus, men jag finns. Ingen vet vad jag är gjord av."],
+"vikingar":["Vi levde för cirka tusen år sedan i Norden.","Vi seglade i långskepp och reste både österut och västerut.","Vi hade inga horn på hjälmen, men vi skrev på runstenar."],
+"blackfisk":["Jag har tre hjärtan och blått blod.","Jag kan ändra färg på en sekund.","Jag har åtta armar och sprutar bläck."],
+"iss":["Jag åker runt jorden på ungefär 90 minuter.","Jag är stor som en fotbollsplan och svävar över era huvuden.","Människor har bott i mig sedan år 2000, i rymden."],
+"mammutar":["Jag levde när det var iskallt över stora delar av världen.","Jag hade långa, böjda betar och tjock päls.","Jag är släkt med elefanten och dog ut för länge sedan."]
+
 };
