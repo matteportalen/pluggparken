@@ -95,6 +95,52 @@ GREJER.push({id:"illusioner",titel:"Optiska illusioner",kat:"Hjärnan",e:"👁�
   V.onclick=()=>{r=!r;rita()};rita();return()=>{};
 }});
 
+/* ---------- Pengar i skala ---------- */
+GREJER.push({id:"pengar",titel:"Pengar i skala",kat:"Tal",e:"💰",c:"#2E8B57",mork:true,beskr:"En miljon, en miljard och en biljon kronor som sedelstaplar. Hur högt blir de?",start(host){
+  const S=[
+   {l:"1 miljon kronor",n:1e3,h:.1,t:"17 minuter",lon:"drygt 2 år och 9 månader",text:"1 000 sedlar à 1 000 kr. Stapeln är 10 centimeter hög och ryms i en hand. Det är en stor summa för en människa."},
+   {l:"10 miljoner kronor",n:1e4,h:1,t:"knappt 3 timmar",lon:"27 år och 9 månader",text:"10 000 sedlar. Stapeln är en meter hög, ungefär till ditt midjemått."},
+   {l:"100 miljoner kronor",n:1e5,h:10,t:"28 timmar",lon:"277 år",text:"100 000 sedlar. Stapeln är lika hög som ett tre våningar högt hus."},
+   {l:"1 miljard kronor",n:1e6,h:100,t:"11 dygn och 14 timmar",lon:"2 778 år",text:"1 miljon sedlar. Stapeln är 100 meter hög, nästan lika hög som ett tjugovåningshus. Så mycket har bara några hundra människor i Sverige."},
+   {l:"10 miljarder kronor",n:1e7,h:1e3,t:"116 dygn",lon:"27 778 år",text:"10 miljoner sedlar. Stapeln är en kilometer hög, högre än världens högsta byggnad."},
+   {l:"100 miljarder kronor",n:1e8,h:1e4,t:"3 år och 2 månader",lon:"277 778 år",text:"100 miljoner sedlar. Stapeln är 10 kilometer hög, lika högt som ett flygplan flyger."},
+   {l:"1 biljon kronor",n:1e9,h:1e5,t:"nästan 32 år",lon:"2,8 miljoner år",text:"1 000 miljarder, en miljard sedlar. Stapeln är 100 kilometer hög och når upp till gränsen mot rymden."}];
+  const LM=[[.17,"en mobil"],[1.3,"ett barn"],[10,"ett trevåningshus"],[190,"Turning Torso"],[828,"Burj Khalifa, världens högsta byggnad"],[8849,"Mount Everest"],[10500,"ett flygplan"],[1e5,"gränsen mot rymden"]];
+  host.innerHTML=`<div class="pg"><div class="kick">Pengar i skala · sedlar à 1 000 kr</div><h2 id="pL"></h2>
+  <div class="pg-st"><canvas id="pC" width="900" height="560"></canvas></div>
+  <p class="pg-t" id="pT"></p>
+  <div class="pg-rad"><div class="pg-box"><small>Tid att räkna sedlarna</small><b id="pTid"></b><span>en sedel i sekunden</span></div><div class="pg-box"><small>Så länge tar det att tjäna ihop</small><b id="pLon"></b><span>med 30 000 kr i månaden, före skatt</span></div></div>
+  <input type="range" id="pR" min="0" max="${S.length-1}" step="1" value="0" aria-label="Summa"><div class="pg-skala"><span>1 miljon</span><span>1 miljard</span><span>1 biljon</span></div>
+  <div class="ill-kn"><button class="k" id="pP">‹ Mindre</button><button class="k ok" id="pN">Mer ›</button></div>
+  <p class="pg-f">Sedlarna är räknade som 0,1 mm tjocka. Stapelns bredd är inte i skala: en riktig stapel skulle vara en tunn nål vid 100 km.</p></div>`;
+  const $=s=>host.querySelector(s),C=$("#pC"),x=C.getContext("2d");let i=0,anim=0,hv=S[0].h,raf=0;
+  const fmt=(m)=>m>=1000?(m/1000).toLocaleString("sv-SE",{maximumFractionDigits:1})+" km":m>=1?m.toLocaleString("sv-SE",{maximumFractionDigits:1})+" m":(m*100).toLocaleString("sv-SE",{maximumFractionDigits:0})+" cm";
+  function rita(){const W=C.width,H=C.height;x.clearRect(0,0,W,H);
+    const gy=H-50,top=40,view=hv*1.35,sc=(gy-top)/view;
+    const g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,"#0a1628");g.addColorStop(1,"#12263f");x.fillStyle=g;x.fillRect(0,0,W,H);
+    // stjärnor högt upp
+    if(hv>2e4){for(let k=0;k<50;k++){x.fillStyle=`rgba(255,255,255,${.2+((k*37)%10)/14})`;x.fillRect((k*173)%W,(k*91)%(H*.5),1.5,1.5)}}
+    // marken
+    x.fillStyle="#1b3b2a";x.fillRect(0,gy,W,H-gy);x.fillStyle="#2b6a45";x.fillRect(0,gy,W,3);
+    // landmärken som linjer
+    let lastY=1e9;[...LM].reverse().forEach(([m,n])=>{if(m>view*1.02||m<hv*.02)return;const y=gy-m*sc;if(Math.abs(lastY-y)<34)return;lastY=y;x.strokeStyle="rgba(255,255,255,.28)";x.setLineDash([6,8]);x.lineWidth=1.5;x.beginPath();x.moveTo(40,y);x.lineTo(W-40,y);x.stroke();x.setLineDash([]);
+      x.fillStyle="rgba(255,255,255,.85)";x.font="600 20px Inter,sans-serif";x.textAlign="left";x.fillText(`${n} · ${fmt(m)}`,52,y-8)});
+    // stapeln
+    const sw=Math.max(34,Math.min(70,W*.07)),sx=W*.62-sw/2,sh=Math.max(2,hv*sc);
+    const gr=x.createLinearGradient(sx,0,sx+sw,0);gr.addColorStop(0,"#6a4fa0");gr.addColorStop(.5,"#9b7ad6");gr.addColorStop(1,"#5a4090");x.fillStyle=gr;x.shadowColor="rgba(160,130,255,.7)";x.shadowBlur=28;x.fillRect(sx,gy-sh,sw,sh);x.shadowBlur=0;
+    x.strokeStyle="rgba(255,255,255,.18)";x.lineWidth=1;const step=Math.max(3,sh/Math.min(60,S[i].n/40));for(let y=gy;y>gy-sh;y-=step){x.beginPath();x.moveTo(sx,y);x.lineTo(sx+sw,y);x.stroke()}
+    x.fillStyle="#ffd86b";x.font="800 30px 'Source Serif 4',Georgia,serif";x.textAlign="left";x.fillText(fmt(hv),sx+sw+16,Math.max(top+26,gy-sh+10));
+    // människa 1,7 m
+    const hp=1.7*sc;if(hp>=6){const px=W*.62-sw/2-90;x.fillStyle="#cfd8ff";const hh=Math.max(hp,6);x.beginPath();x.arc(px,gy-hh+hh*.09,hh*.09,0,7);x.fill();x.fillRect(px-hh*.07,gy-hh+hh*.19,hh*.14,hh*.45);x.fillRect(px-hh*.07,gy-hh*.36,hh*.055,hh*.36);x.fillRect(px+hh*.015,gy-hh*.36,hh*.055,hh*.36);
+      x.fillStyle="rgba(255,255,255,.8)";x.font="600 18px Inter,sans-serif";x.textAlign="center";x.fillText("du, 1,7 m",px,gy+28)}
+    else{x.fillStyle="#cfd8ff";x.fillRect(W*.62-sw/2-90,gy-3,3,3);x.fillStyle="rgba(255,255,255,.7)";x.font="600 18px Inter,sans-serif";x.textAlign="center";x.fillText("du är den här pricken",W*.62-sw/2-90,gy+28)}}
+  function vis(n){i=Math.max(0,Math.min(S.length-1,n));$("#pR").value=i;const d=S[i];$("#pL").textContent=d.l;$("#pT").textContent=d.text;$("#pTid").textContent=d.t;$("#pLon").textContent=d.lon;
+    cancelAnimationFrame(raf);const from=hv,to=d.h,t0=performance.now(),dur=900;(function f(t){const k=Math.min(1,(t-t0)/dur),e=k*k*(3-2*k);hv=Math.exp(Math.log(from)+(Math.log(to)-Math.log(from))*e);rita();if(k<1)raf=requestAnimationFrame(f)})(t0)}
+  $("#pR").oninput=()=>vis(+$("#pR").value);$("#pP").onclick=()=>vis(i-1);$("#pN").onclick=()=>vis(i+1);
+  const key=e=>{if(!document.querySelector("#gv.on"))return;if(e.key==="ArrowRight")vis(i+1);else if(e.key==="ArrowLeft")vis(i-1)};document.addEventListener("keydown",key);
+  vis(0);return()=>{cancelAnimationFrame(raf);document.removeEventListener("keydown",key)};
+}});
+
 /* ---------- Spirograf och kalejdoskop (helskärm) ---------- */
 GREJER.push({id:"ritloop",titel:"Oändlig ritloop",kat:"Skapa",e:"🌀",c:"#7E57C2",mork:true,beskr:"Spirografen ritar själv, för alltid. Eller rita med kalejdoskop.",start(host){
   host.innerHTML=`<div class="rit"><canvas id="rC"></canvas><div class="rit-t" id="rTxt"></div>

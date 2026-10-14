@@ -178,7 +178,7 @@ var LEKTIONER=[
 ["📅","En miljard sekunder","1 miljard sekunder är ungefär 31 år och 8 månader! Det är en jättestor skillnad."],
 ["🧮","Mellan dem","Skillnaden mellan en miljon och en miljard är lika stor som mellan 11 dagar och nästan 32 år."],
 ["🌍","Biljon","En biljon är tusen miljarder. En biljon sekunder är över 31 000 år. Då levde mammutar och människor jagade med spjut."],
-["💡","Tänk på","Siffror ser ibland små ut, men de kan vara enorma. Nollorna gör hela skillnaden."]]},
+["💰","Pengar i skala","Hur högt blir en miljard kronor i sedlar? Prova Pengar i skala under Prova själv. En biljon kronor i 1 000-kronorssedlar blir en stapel som är 100 kilometer hög."]]},
 
 {id:"kontinenter",titel:"Kontinenterna rör sig",kat:"Natur",e:"🗺️",c:"#6B8E3A",rutor:[
 ["🗺️","Jordens pussel","Jordens yta består av stora bitar, plattor, som flyter på het sten. Länderna sitter fast på dem."],
