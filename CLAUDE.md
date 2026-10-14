@@ -91,6 +91,8 @@ Startsidan måste uppdateras på **fyra** ställen, annars följer framstegen in
 
 ## Gemensam design
 
+- **Fler ämnen-menyn** (`ovriga/index.html`) har samma stil som Matte-startsidan: ljusblå bakgrund, tavelgrön rubrikruta med trälist, vita kort med hård skugga (lärarens val okt 2026: en mörk meny kändes som en annan sajt). Sidhuvudet `.mph.ovriga` i `huvud.js` är tavelgrönt som Matte men något blåare. Rymdlabbet och Specialare är däremot medvetet mörka och filmiska.
+
 - **Ingen ruta med nya klistermärken när startsidan öppnas** (läraren gillade inte popuppen); man går själv in i Klistermärken, som visar "Nytt!". "Nytt!" på Garderoben och Klistermärken sitter som en **etikett på knappens hörn** (absolut placerad), så att raden inte blir bredare.
 - **Inga "Nytt!"-lappar på korten** (läraren: allt är nytt). Bara Garderoben och Klistermärken på startsidan visar "Nytt!" när det finns något nytt att hämta.
 
