@@ -1,0 +1,29 @@
+/* Ledtrådar till minilektionerna: första bilden i varje lektion. LEDTRADAR[lektion-id] = [svår, mellan, lätt].
+   Ledtråden får inte innehålla lektionens namn. */
+var LEDTRADAR={
+"titanic":["Jag var det största skeppet i världen när jag byggdes.","Jag sjönk på min allra första resa, i april 1912.","Jag krockade med ett isberg i Atlanten. Det finns en känd film om mig."],
+"bermuda":["Jag är ett område i havet där många tror att konstiga saker händer.","Jag ligger mellan Florida, Puerto Rico och en liten ö.","Jag har en form som en triangel. Sägnen säger att skepp och flygplan försvinner hos mig."],
+"himlen":["Du ser mig varje dag, men du tänker nästan aldrig på varför.","Solens ljus innehåller alla färger, men det är bara en färg som sprids mest.","Jag handlar om färgen på himlen en solig dag."],
+"marianer":["Jag är en plats på jorden dit nästan ingen människa har varit.","Jag ligger i Stilla havet och är djupare än Mount Everest är högt.","Jag är det djupaste stället på jorden, nästan 11 kilometer ner."],
+"vulkan":["Jag blir arg ibland och då kan jag spy eld.","Under mig är det så varmt att sten smälter.","Jag är ett berg som kan få utbrott med lava och aska."],
+"svartahal":["Jag är mörk och osynlig, men forskare har ändå tagit ett foto av mig.","Allt som kommer för nära mig kan aldrig komma ut igen.","Inte ens ljuset kommer undan mig. Jag finns i rymden."],
+"dinosaurier":["Vi levde på jorden långt innan det fanns människor.","Vissa av oss var stora som flera bussar, andra små som en kyckling.","En asteroid gjorde nästan slut på oss. Några av oss lever kvar som fåglar."],
+"pyramid":["Jag byggdes för ungefär 4 500 år sedan av tusentals arbetare.","Jag är gjord av över två miljoner stenblock.","Jag står i öknen i Egypten och är en grav åt en farao."],
+"blaval":["Jag är större än alla dinosaurier som någonsin har levt.","Jag blir 30 meter lång och väger över 100 ton.","Jag bor i havet och äter bara pyttesmå räkor. Jag är världens största djur."],
+"manen":["Du ser mig oftast på natten, men ibland också mitt på dagen.","Ibland är jag rund och ibland bara en tunn skära.","Jag snurrar runt jorden. Människor har gått på mig."],
+"regnbage":["Jag syns bara när två saker möts på himlen.","Jag har sju färger, men egentligen är jag en hel cirkel.","Jag kommer när solen skiner och det regnar samtidigt."],
+"bin":["Vi bor tillsammans, tiotusentals i samma hem.","Vi dansar för att visa varandra var maten finns.","Vi gör honung och surrar bland blommorna."],
+"vasa":["Jag var nyare och finare än alla andra skepp i min tid, men jag kom inte långt.","Jag sjönk 1628, redan efter drygt en kilometer.","Jag låg på botten i Stockholm i över 300 år och står nu på ett museum."],
+"everest":["Jag är högre än något annat på land, och det är iskallt hos mig.","Två män nådde min topp först år 1953.","Jag är världens högsta berg, 8 849 meter högt."],
+"illusioner":["Ibland ser du saker som inte finns.","Två streck som är lika långa kan se olika långa ut för dig.","Ögonen ser, men det är hjärnan som luras. Vad kallas det?"],
+"dygn":["Jag är ungefär 24 timmar lång här hos oss.","På Jupiter är jag bara 10 timmar.","På Venus är jag längre än ett år. Vad handlar det om?"],
+"antarktis":["Jag är den kallaste platsen på jorden, nästan minus 90 grader.","Jag är täckt av is som är mer än två kilometer tjock.","Pingviner bor hos mig, längst ner på jorden."],
+"snabbast":["Vi är rekordsnabba, men ingen av oss springer likadant.","Den ena störtdyker i över 300 kilometer i timmen.","Den andra springer 100 kilometer i timmen, men bara en liten stund."],
+"hjarnan":["Jag väger bara 1,4 kilo men styr hela dig.","Jag har runt 86 miljarder nervceller.","Jag ligger i ditt huvud och tänker just nu."],
+"kroppen":["Jag jobbar dygnet runt, och du kan inte stänga av mig.","Jag slår ungefär 100 000 gånger varje dygn.","Jag är det du är gjord av. Du har 206 ben och två ögon."],
+"blixt":["Jag är varmare än solens yta, men jag varar bara en bråkdel av en sekund.","Först ser du mig, sedan hör du mig.","Jag kommer i ett åskmoln. Du kan räkna sekunderna för att veta hur långt bort jag är."],
+"stora-tal":["Om du räknade ett tal varje sekund skulle det ta många år.","En miljon sekunder är ungefär 11 dagar.","En miljard sekunder är nästan 32 år. Vad handlar det om?"],
+"kontinenter":["Jag flyttar mig, men så långsamt att du aldrig märker det.","Jag rör mig ungefär lika fort som dina naglar växer.","Jag handlar om jordens plattor som bär länder och hav."],
+"norrsken":["Jag dansar i grönt på natthimlen.","Jag kommer från solen, men syns bara långt uppe i norr.","Du kan se mig i Kiruna en mörk vinternatt."],
+"atom":["Du är gjord av mig, och det är allt annat också.","Jag är så liten att hundratusentals ryms på ett hårstrå.","Jag har en kärna i mitten och elektroner som susar runt."]
+};

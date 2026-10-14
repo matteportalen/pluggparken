@@ -62,6 +62,12 @@ h1 span{color:#E0562B}
 .slide .foto figcaption{font-size:.72rem;opacity:.75;max-width:60ch;line-height:1.2}
 .slide .foto figcaption a{color:inherit}
 @media(min-width:900px){.slide{flex-direction:row;flex-wrap:wrap;gap:12px 28px}.slide .foto img{max-height:min(56vh,600px);max-width:min(52vw,820px)}.slide .tx{max-width:min(36vw,460px);display:flex;flex-direction:column;gap:12px;align-items:center}.slide .slut,.slide .gillar{flex-basis:100%;justify-content:center;text-align:center}}
+.slide ul{margin:0;padding:0;list-style:none;max-width:34ch;font-size:clamp(1.15rem,4vw,1.9rem);line-height:1.3;display:flex;flex-direction:column;gap:8px;text-align:left}
+.slide ul li{background:rgba(255,255,255,.14);border-radius:16px;padding:8px 16px 8px 40px;position:relative}
+.slide ul li::before{content:"";position:absolute;left:15px;top:.85em;width:12px;height:12px;border-radius:50%;background:#F2B707}
+.slide ul.led li::before{background:#fff}
+@media(min-width:900px){.slide ul{max-width:34ch;font-size:clamp(1.3rem,2.1vw,2rem)}.slide .tx{align-items:flex-start}.slide .tx h2{text-align:left;font-size:clamp(2rem,3.6vw,3.4rem)}.slide .tx .slut{justify-content:flex-start}}
+.slide img.susig{filter:blur(26px) saturate(1.2);clip-path:inset(0 round 18px);box-shadow:none}
 .slide .e{font-size:clamp(5rem,26vmin,11rem);line-height:1;filter:drop-shadow(0 8px 0 rgba(0,0,0,.18));animation:pop .45s cubic-bezier(.3,1.5,.5,1)}
 .slide h2{margin:0;font-size:clamp(1.8rem,7vw,3.4rem);line-height:1.05;text-shadow:0 3px 0 rgba(0,0,0,.2)}
 .slide p{margin:0;max-width:30ch;font-size:clamp(1.2rem,4.2vw,2rem);line-height:1.3;background:rgba(255,255,255,.14);border-radius:20px;padding:12px 18px}
@@ -168,6 +174,7 @@ h1 span{color:#E0562B}
 
 <script src="lektioner.js"></script>
 <script src="bilder.js"></script>
+<script src="ledtradar.js"></script>
 <script src="grejer.js"></script>
 <script src="klipp.js"></script>
 <script>
@@ -201,18 +208,33 @@ function hem(){
 $("#chips").onclick=e=>{const b=e.target.closest(".chip");if(b){filter=b.dataset.k;hem()}};
 $("#grid").onclick=e=>{const b=e.target.closest(".kort");if(!b)return;const a=ALLA.find(x=>x.id===b.dataset.id);location.hash=href(a)};
 /* bildspel */
+let ledt=0,svarat=false;
+const ledtLista=l=>(typeof LEDTRADAR!=="undefined"&&LEDTRADAR[l.id])||null;
+const punkter=t=>{const d=t.split(/(?<=[.!?])\s+(?=[A-ZÅÄÖ0-9"])/);return d.length>1?"<ul>"+d.map(x=>"<li>"+x+"</li>").join("")+"</ul>":"<p>"+t+"</p>"};
 function visaBild(){
-  const l=cur,r=l.rutor[idx],sist=idx===l.rutor.length-1;
-  const bi=(typeof BILDER!=="undefined"&&BILDER[l.id]||[])[idx];
-  const bild=bi?`<figure class="foto"><img src="bilder/${bi.f}" alt="${r[1]}" decoding="async"><figcaption><a href="${bi.s}" target="_blank" rel="noopener">${bi.k}</a></figcaption></figure>`:`<div class="e" aria-hidden="true">${r[0]}</div>`;
-  const nb=(typeof BILDER!=="undefined"&&BILDER[l.id]||[])[idx+1];if(nb){const im=new Image();im.src="bilder/"+nb.f}
-  $("#vyS").classList.toggle("sist",sist);$("#vyS").innerHTML=bild+`<div class="tx"><h2>${r[1]}</h2><p>${r[2]}</p></div>`+(sist?`<div class="gillar">Gillade du den? <span class="tum">${tumHtml(l.id)}</span></div><div class="slut"><button class="btn guld" id="sl1">🎲 Slumpa en till</button><button class="btn" id="sl2">Till listan</button></div>`:"");
-  $("#vyD").innerHTML=l.rutor.map((_,i)=>`<span class="prick${i===idx?" on":""}"></span>`).join("");
+  const l=cur,L=ledtLista(l),o=L?1:0,n=l.rutor.length+o,sist=idx===n-1;
+  const bildar=(typeof BILDER!=="undefined"&&BILDER[l.id])||[];
+  if(L&&idx===0){
+    const bi=bildar[0];
+    const tips=L.slice(0,ledt).map((t,i)=>`<li>${t}</li>`).join("");
+    $("#vyT").textContent=svarat?l.e+" "+l.titel:"🕵️ Mysterium";
+    $("#vyS").classList.remove("sist");
+    $("#vyS").innerHTML=(bi?`<figure class="foto"><img class="${svarat?"":"susig"}" src="bilder/${bi.f}" alt="" decoding="async">${svarat?`<figcaption><a href="${bi.s}" target="_blank" rel="noopener">${bi.k}</a></figcaption>`:""}</figure>`:`<div class="e" aria-hidden="true">${svarat?l.e:"❓"}</div>`)+
+     `<div class="tx"><h2>${svarat?l.titel:"Vad handlar det om?"}</h2>${tips?`<ul class="led">${tips}</ul>`:"<p>Tryck på knappen för första ledtråden.</p>"}<div class="slut">${svarat?"":(ledt<L.length?`<button class="btn guld" id="ledB">🔎 ${ledt?"Nästa ledtråd":"Första ledtråden"}</button>`:"")+`<button class="btn" id="svarB">Visa svaret</button>`}</div></div>`;
+    $("#ledB")&&($("#ledB").onclick=()=>{ledt++;visaBild()});$("#svarB")&&($("#svarB").onclick=()=>{svarat=true;visaBild()});
+  }else{
+    const i=idx-o,r=l.rutor[i];$("#vyT").textContent=l.e+" "+l.titel;
+    const bi=bildar[i];
+    const bild=bi?`<figure class="foto"><img src="bilder/${bi.f}" alt="${r[1]}" decoding="async"><figcaption><a href="${bi.s}" target="_blank" rel="noopener">${bi.k}</a></figcaption></figure>`:`<div class="e" aria-hidden="true">${r[0]}</div>`;
+    const nb=bildar[i+1];if(nb){const im=new Image();im.src="bilder/"+nb.f}
+    $("#vyS").classList.toggle("sist",sist);$("#vyS").innerHTML=bild+`<div class="tx"><h2>${r[1]}</h2>${punkter(r[2])}</div>`+(sist?`<div class="gillar">Gillade du den? <span class="tum">${tumHtml(l.id)}</span></div><div class="slut"><button class="btn guld" id="sl1">🎲 Slumpa en till</button><button class="btn" id="sl2">Till listan</button></div>`:"");
+  }
+  $("#vyD").innerHTML=Array.from({length:n},(_,i)=>`<span class="prick${i===idx?" on":""}"></span>`).join("");
   $("#vyP").disabled=idx===0;$("#vyN").disabled=sist;$("#vyN").style.visibility=sist?"hidden":"visible";
   if(sist){$("#sl1").onclick=()=>{let a;const P=pool();do{a=P[Math.random()*P.length|0]}while(a===l&&P.length>1);location.hash=href(a)};$("#sl2").onclick=()=>{location.hash=""}}
   history.replaceState(null,"","#l/"+l.id+"/"+(idx+1));
 }
-function oppnaL(l,i){cur=l;nu=l.id;uppdTum();idx=Math.max(0,Math.min(l.rutor.length-1,i));$("#vy").style.setProperty("--c",l.c);$("#vyT").textContent=l.e+" "+l.titel;$("#vy").classList.add("on");visaBild()}
+function oppnaL(l,i){const nyL=cur!==l||!$("#vy").classList.contains("on");cur=l;nu=l.id;uppdTum();if(nyL){ledt=0;svarat=false}const tot=l.rutor.length+(ledtLista(l)?1:0);idx=Math.max(0,Math.min(tot-1,i));if(idx>0)svarat=true;$("#vy").style.setProperty("--c",l.c);$("#vyT").textContent=l.e+" "+l.titel;$("#vy").classList.add("on");visaBild()}
 function stangAlla(){$("#kv").classList.remove("on");$("#kvR").innerHTML="";$("#vy").classList.remove("on");$("#gv").classList.remove("on");if(stang){try{stang()}catch(e){}stang=null}$("#gvB").innerHTML="";cur=null;nu=null;uppdTum()}
 function oppnaK(k){stangAlla();nu=k.id;uppdTum();$("#kvT").textContent="🎬 "+k.titel;$("#kvN").textContent="Spelas från YouTube"+(k.sprak==="en"?" (engelska)":"")+". Stäng med ✕ när klippet är slut, så hamnar du inte i andra klipp.";
   $("#kvR").innerHTML=`<iframe src="https://www.youtube-nocookie.com/embed/${k.id}?rel=0&modestbranding=1&playsinline=1" title="${k.titel.replace(/"/g,"")}" allow="accelerometer; autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;$("#kv").classList.add("on")}
@@ -224,7 +246,7 @@ function rut(){
   if(h[0]==="g"){const g=GREJER.find(x=>x.id===h[1]);if(g){oppnaG(g);return}}
   stangAlla();
 }
-function gaTill(d){if(!cur)return;const n=idx+d;if(n<0||n>=cur.rutor.length)return;idx=n;visaBild()}
+function gaTill(d){if(!cur)return;const n=idx+d,tot=cur.rutor.length+(ledtLista(cur)?1:0);if(n<0||n>=tot)return;idx=n;visaBild()}
 $("#vyN").onclick=()=>gaTill(1);$("#vyP").onclick=()=>gaTill(-1);
 $("#vyX").onclick=$("#gvX").onclick=$("#kvX").onclick=()=>{location.hash=""};
 $("#vyF").onclick=()=>{const e=document.documentElement;if(document.fullscreenElement)document.exitFullscreen();else if(e.requestFullscreen)e.requestFullscreen().catch(()=>{})};
