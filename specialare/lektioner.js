@@ -204,7 +204,7 @@ var LEKTIONER=[
 ["💨","Nästan tom","Det mesta av en atom är tomrum. Om kärnan var en ärta skulle elektronerna vara flera hundra meter bort."],
 ["♻️","Gamla atomer","Atomerna i din kropp har funnits i miljarder år. Många bildades inne i stjärnor."],
 ["⭐","Stjärnstoft","Du är alltså, på riktigt, gjord av stjärnstoft!"]]},
-{id:"nobel",lank:[["Lyssna: Alfred Nobel (Historierummet)","https://www.sverigesradio.se/avsnitt/historierummet-om-alfred-nobel"],["Lyssna: Marie Curie (Historierummet)","https://www.sverigesradio.se/avsnitt/historierummet-marie-curie"]],titel:"Nobelpriset",kat:"Historia",e:"🏅",c:"#B8860B",rutor:[
+{id:"nobel",lank:[["Läs mer: Marie Curie","#l/curie"],["Lyssna: Alfred Nobel (Historierummet)","https://www.sverigesradio.se/avsnitt/historierummet-om-alfred-nobel"],["Lyssna: Marie Curie (Historierummet)","https://www.sverigesradio.se/avsnitt/historierummet-marie-curie"]],titel:"Nobelpriset",kat:"Historia",e:"🏅",c:"#B8860B",rutor:[
 ["🧪","Alfred Nobel","Alfred Nobel var en svensk uppfinnare och företagare. År 1867 uppfann han dynamiten."],
 ["📜","Testamentet","När han dog 1896 stod det i hans testamente att pengarna skulle bli ett pris till dem som gjort mest nytta för mänskligheten."],
 ["🏅","Fem priser","Det första Nobelpriset delades ut 1901. Det finns priser i fysik, kemi, medicin, litteratur och fred. Ekonomipriset kom senare, 1969."],
@@ -465,6 +465,17 @@ var LEKTIONER=[
 ["🔥","Bränsle och syre","Raketer tar med sig både bränsle och syre, så att de kan brinna även där det inte finns luft."],
 ["🪜","Flera steg","För att nå rymden släpper raketen tomma tankar på vägen. Då blir den lättare och kan accelerera mer."],
 ["🛰️","Fart som en kula","För att stanna i bana runt jorden behövs en fart på ungefär 28 000 kilometer i timmen. Det är ungefär 8 kilometer per sekund."],
-["♻️","Raketer som landar","Sedan 2015 har man lyckats landa raketsteg efter uppskjutning så att de kan användas igen. Det sparar mycket pengar."]]}
+["♻️","Raketer som landar","Sedan 2015 har man lyckats landa raketsteg efter uppskjutning så att de kan användas igen. Det sparar mycket pengar."]]},
+
+{id:"curie",titel:"Marie Curie",kat:"Historia",e:"👩‍🔬",c:"#7A4FA3",rutor:[
+["👩‍🔬","Marie Curie","Marie Curie är en av historiens mest berömda forskare. Hon upptäckte två nya grundämnen och fick två Nobelpris."],
+["🇵🇱","Född i Polen","Hon föddes 1867 i Warszawa i Polen och hette då Maria Skłodowska. På den tiden fick kvinnor inte studera på universitetet där."],
+["🎓","Studier i Paris","År 1891 flyttade hon till Paris och läste fysik och matematik vid universitetet Sorbonne. Hon var fattig och bodde i ett litet, kallt rum."],
+["💑","Marie och Pierre","I Paris träffade hon fysikern Pierre Curie. De gifte sig 1895 och forskade tillsammans i ett enkelt, kallt laboratorium."],
+["☢️","Radium och polonium","År 1898 upptäckte de två nya grundämnen. Det ena kallade hon polonium, efter hennes hemland Polen. Det andra fick namnet radium. Det var Marie som hittade på ordet radioaktivitet."],
+["🏅","Två Nobelpris","År 1903 fick hon Nobelpriset i fysik tillsammans med Pierre och Henri Becquerel. År 1911 fick hon ett i kemi. Hon är den enda som fått Nobelpris i två olika vetenskaper."],
+["🚑","Röntgenbilar i kriget","Under första världskriget lät hon bygga bilar med röntgenapparater som åkte till fronten. Då kunde läkare se kulor och brutna ben hos sårade soldater."],
+["⚠️","Ett farligt arbete","På den tiden visste man inte att strålningen var farlig. Marie Curie dog 1934, troligen av sjukdom orsakad av strålningen. Hennes anteckningsböcker är fortfarande radioaktiva."],
+["👩‍👧","Dottern Irène","Hennes dotter Irène blev också forskare och fick Nobelpriset i kemi 1935. Familjen Curie har fått fem Nobelpris."]]}
 
 ];

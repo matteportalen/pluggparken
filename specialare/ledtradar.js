@@ -60,6 +60,7 @@ var LEDTRADAR={
 "tjernobyl":["Svenska mätare larmade första gången om mig, innan någon sa något.","En hel stad tömdes efter mig, men nu bor vargar där.","Jag är en kärnkraftsolycka i Ukraina 1986."],
 "svampar":["Det största jag har är gömt under marken, och jag kan täcka hundratals fotbollsplaner.","Jag är varken växt eller djur, men närmare släkt med djur.","Jag är en svamp, och det du ser är bara min hatt."],
 "spinnande":["Jag låter lugnt, men jag kommer ibland när något är obehagligt.","Jag kommer från struphuvudet och hörs som ett brummande.","Jag är det som katter gör när de trivs: jag spinner."],
-"raket":["Jag fungerar utan luft, och jag brinner inte som en vanlig eld.","Jag trycker ut het gas åt ena hållet och åker åt andra hållet.","Jag tar människor och satelliter till rymden. Jag är en raket."]
+"raket":["Jag fungerar utan luft, och jag brinner inte som en vanlig eld.","Jag trycker ut het gas åt ena hållet och åker åt andra hållet.","Jag tar människor och satelliter till rymden. Jag är en raket."],
+"curie":["Jag föddes i Polen, men blev berömd i Frankrike.","Jag upptäckte två grundämnen, och ett av dem är uppkallat efter mitt hemland.","Jag är forskaren som fick Nobelpris två gånger, och jag upptäckte radium."]
 
 };
