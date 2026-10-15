@@ -445,7 +445,7 @@ var LEKTIONER=[
 ["🍄","Varken växt eller djur","Svampar är ett eget rike. De är inte växter, de är faktiskt närmare släkt med djur."],
 ["🕸️","Mest under jord","Det du ser, svampen med hatt, är bara fruktkroppen. Den största delen är ett nät av tunna trådar, mycel, under marken."],
 ["🌲","Världens största levande varelse","I Oregon i USA växer en honungsskivling som täcker ungefär 9 kvadratkilometer, flera hundra fotbollsplaner. Den är flera tusen år gammal."],
-["🤝","Skogens nätverk","Mycelet kopplar ihop träd. Forskare tror att träden delar sockers och varnar varandra genom svamparna."],
+["🤝","Skogens nätverk","Mycelet kopplar ihop träd. Forskare tror att träden delar socker och varnar varandra genom svamparna."],
 ["♻️","Städare i naturen","Många svampar bryter ner döda träd och löv till jord. Utan dem skulle skogen vara full av gamla grenar."],
 ["💊","Medicin och mat","Penicillinet kommer från en mögelsvamp. Jäst är också en svamp, och vi äter champinjoner, kantareller och många fler. Men plocka aldrig svamp du inte är helt säker på, för vissa är giftiga."]]},
 
