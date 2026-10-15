@@ -467,7 +467,7 @@ var LEKTIONER=[
 ["🛰️","Fart som en kula","För att stanna i bana runt jorden behövs en fart på ungefär 28 000 kilometer i timmen. Det är ungefär 8 kilometer per sekund."],
 ["♻️","Raketer som landar","Sedan 2015 har man lyckats landa raketsteg efter uppskjutning så att de kan användas igen. Det sparar mycket pengar."]]},
 
-{id:"curie",titel:"Marie Curie",kat:"Historia",e:"👩‍🔬",c:"#7A4FA3",rutor:[
+{id:"curie",lank:[["Lyssna: Marie Curie (Historierummet)","https://www.sverigesradio.se/avsnitt/historierummet-marie-curie"]],titel:"Marie Curie",kat:"Historia",e:"👩‍🔬",c:"#7A4FA3",rutor:[
 ["👩‍🔬","Marie Curie","Marie Curie är en av historiens mest berömda forskare. Hon upptäckte två nya grundämnen och fick två Nobelpris."],
 ["🇵🇱","Född i Polen","Hon föddes 1867 i Warszawa i Polen och hette då Maria Skłodowska. På den tiden fick kvinnor inte studera på universitetet där."],
 ["🎓","Studier i Paris","År 1891 flyttade hon till Paris och läste fysik och matematik vid universitetet Sorbonne. Hon var fattig och bodde i ett litet, kallt rum."],
