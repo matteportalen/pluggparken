@@ -450,7 +450,7 @@ var LEKTIONER=[
 ["💊","Medicin och mat","Penicillinet kommer från en mögelsvamp. Jäst är också en svamp, och vi äter champinjoner, kantareller och många fler. Men plocka aldrig svamp du inte är helt säker på, för vissa är giftiga."]]},
 
 {id:"spinnande",titel:"Därför spinner katter",kat:"Natur",e:"🐱",c:"#B88A4A",rutor:[
-["🐱","Ett ljud som vibrerar","När katter spinner vibrerar det i kroppen. Ljudet ligger runt 25 till 150 gånger per sekund."],
+["🐱","Ett ljud som vibrerar","När katter spinner vibrerar det i kroppen. Kroppen skakar snabbt, 25 till 150 gånger varje sekund."],
 ["🧠","Hjärnan styr","Hjärnan skickar signaler till musklerna i struphuvudet, som öppnar och stänger stämspringan snabbt. Det ger ljudet, både när katten andas in och ut."],
 ["😌","Inte bara glad","Katter spinner när de trivs, men också när de är oroliga, har ont eller är hos veterinären. Det kan vara ett sätt att lugna sig själva."],
 ["🍼","Redan som kattungar","Kattungar börjar spinna när de är bara några dagar gamla. Det visar mamman att allt är bra och hjälper dem att hitta mjölken."],
