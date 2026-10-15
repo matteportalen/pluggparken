@@ -33,7 +33,8 @@ var LEKTIONER=[
 ["🏔️","Större än Mount Everest","Om man lade Mount Everest (8 849 meter) på botten av graven skulle det fortfarande vara mer än två kilometer vatten ovanför toppen."],
 ["⚖️","Enormt tryck","Där nere trycker vattnet med mer än 1 000 gånger så mycket som på land. Det är som om en elefant stod på ett frimärke."],
 ["🌑","Kolsvart och kallt","Solljuset når inte ner. Det är kolsvart och bara några grader varmt."],
-["🦐","Liv även där","Forskare har hittat små räkliknande djur och andra varelser som lever där nere. Liv finns nästan överallt!"]]},
+["🦐","Liv även där","Forskare har hittat små räkliknande djur och andra varelser som lever där nere. Liv finns nästan överallt!"],
+["🗑️","Även här finns vårt skräp","Forskare har hittat skräp på havets djupaste ställen, bland annat en plastpåse på nästan 11 kilometers djup i Marianergraven. Bilden visar en färgburk på en annan djup havsbotten. Skräp som vi kastar kan hamna väldigt långt bort. Vad kan vi göra för att skräpet inte ska hamna i havet?"]]},
 
 {id:"vulkan",titel:"Så fungerar en vulkan",kat:"Natur",e:"🌋",c:"#C4511F",rutor:[
 ["🌍","Jorden är het inuti","Långt ner under våra fötter är det så varmt att berg kan smälta. Smält berg kallas magma."],
