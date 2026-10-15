@@ -472,10 +472,10 @@ var LEKTIONER=[
 ["🇵🇱","Född i Polen","Hon föddes 1867 i Warszawa i Polen och hette då Maria Skłodowska. På den tiden fick kvinnor inte studera på universitetet där."],
 ["🎓","Studier i Paris","År 1891 flyttade hon till Paris och läste fysik och matematik vid universitetet Sorbonne. Hon var fattig och bodde i ett litet, kallt rum."],
 ["💑","Marie och Pierre","I Paris träffade hon fysikern Pierre Curie. De gifte sig 1895 och forskade tillsammans i ett enkelt, kallt laboratorium."],
-["☢️","Radium och polonium","År 1898 upptäckte de två nya grundämnen. Det ena kallade hon polonium, efter hennes hemland Polen. Det andra fick namnet radium. Det var Marie som hittade på ordet radioaktivitet."],
+["☢️","Radium och polonium","År 1898 upptäckte de två nya grundämnen. Det ena kallade hon polonium, efter hennes hemland Polen. Det andra fick namnet radium. Det var Marie som började använda ordet radioaktivitet."],
 ["🏅","Två Nobelpris","År 1903 fick hon Nobelpriset i fysik tillsammans med Pierre och Henri Becquerel. År 1911 fick hon ett i kemi. Hon är den enda som fått Nobelpris i två olika vetenskaper."],
 ["🚑","Röntgenbilar i kriget","Under första världskriget lät hon bygga bilar med röntgenapparater som åkte till fronten. Då kunde läkare se kulor och brutna ben hos sårade soldater."],
 ["⚠️","Ett farligt arbete","På den tiden visste man inte att strålningen var farlig. Marie Curie dog 1934, troligen av sjukdom orsakad av strålningen. Hennes anteckningsböcker är fortfarande radioaktiva."],
-["👩‍👧","Dottern Irène","Hennes dotter Irène blev också forskare och fick Nobelpriset i kemi 1935. Familjen Curie har fått fem Nobelpris."]]}
+["👩‍👧","Dottern Irène","Hennes dotter Irène blev också forskare och fick Nobelpriset i kemi 1935. Marie, Pierre, Irène och Irènes man Frédéric har alla fått Nobelpris."]]}
 
 ];
