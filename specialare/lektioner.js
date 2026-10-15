@@ -413,5 +413,57 @@ var LEKTIONER=[
 ["🌶️","Chili är inte en smak","Chili ger inte en smak utan en smärtsignal. Ämnet capsaicin aktiverar nerver som tror att munnen är het."],
 ["❄️","Mint känns kall","Menthol i mynta aktiverar nerver som känner kyla. Munnen blir inte kallare, men hjärnan tror det."],
 ["🫐","Mirakelbär","Mirakelbäret från Västafrika gör att sur mat smakar sött i ungefär en halvtimme. Du kan äta en citron som om det vore godis."]]}
+,
+{id:"orkan",titel:"Orkaner",kat:"Natur",e:"🌀",c:"#3A6EA5",rutor:[
+["🌊","Börjar över varmt hav","En orkan bildas över ett hav som är minst ungefär 26 grader varmt. Varm, fuktig luft stiger uppåt och bildar åskmoln."],
+["🔄","Snurrar","Jordens rotation får vindarna att börja snurra. På norra halvklotet snurrar de moturs, åt vänster."],
+["👁️","Ögat","I mitten finns ögat, ett område där det nästan är vindstilla och ibland sol. Runt ögat står ögonväggen med de allra starkaste vindarna."],
+["💨","Över 119 km/h","Man kallar det en orkan när vinden blåser över 119 kilometer i timmen. De starkaste når över 250 kilometer i timmen."],
+["🌍","Olika namn","Orkan heter tyfon i västra Stilla havet och cyklon i Indiska oceanen. Det är samma sorts storm."],
+["🔤","Stormar får namn","Stormarna får namn från listor i bokstavsordning, så att alla kan hålla reda på dem. Namnen kommer från världsmeteorologiska organisationen."],
+["🏠","Vattnet är farligast","Mest skada gör oftast stormfloden, när havet pressas in över land. Över land tappar orkanen sin kraft eftersom den inte får mer varmt vatten."]]},
+
+{id:"krakatau",titel:"Krakatau 1883",kat:"Historia",e:"🌋",c:"#B5452A",rutor:[
+["🏝️","En ö mellan Java och Sumatra","Krakatau var en vulkanö i Indonesien. I augusti 1883 började den få utbrott."],
+["💥","Den sista smällen","Den 27 augusti kom fyra jättelika explosioner. Den sista hördes över 4 500 kilometer bort, kanske det högsta ljud människor någonsin har hört."],
+["🌫️","Aska 80 km upp","Askan sköts upp mer än 70 kilometer, långt upp i atmosfären. På dagen blev det mörkt som natt."],
+["🌊","Jättelika flodvågor","Explosionerna skapade tsunamier som var över 30 meter höga. Mer än 36 000 människor dog."],
+["🌍","Tryckvågen gick runt jorden","Luftens tryckvåg gick flera varv runt jorden och syntes på mätinstrument över hela världen."],
+["🌅","Röda solnedgångar","Askan i atmosfären gjorde solnedgångarna röda och starka på många platser i flera år."],
+["👶","Krakataus barn","Ön sprängdes nästan helt. 1927 steg en ny vulkan upp ur havet på platsen. Den kallas Anak Krakatau, Krakataus barn."]]},
+
+{id:"tjernobyl",titel:"Tjernobyl",kat:"Historia",e:"☢️",c:"#6E7B52",rutor:[
+["⚡","Ett kärnkraftverk","Vid staden Tjernobyl i dagens Ukraina fanns ett stort kärnkraftverk med fyra reaktorer. Det drevs då av Sovjetunionen."],
+["💥","Natten den 26 april 1986","Under ett test gick något fel i reaktor 4. Det blev två explosioner och en stor brand."],
+["☁️","Ett radioaktivt moln","Explosionen släppte ut radioaktiva ämnen. Molnet spreds med vinden över stora delar av Europa."],
+["🇸🇪","Sverige märkte det först","Två dagar senare larmade mätare på kärnkraftverket Forsmark i Sverige. Då förstod man att något hade hänt, innan Sovjetunionen berättade det."],
+["🚌","Hela städer tömdes","Närmaste staden, Pripjat, tömdes på invånare, ungefär 50 000 människor. Totalt flyttades hundratusentals människor."],
+["🏗️","Ett stort skydd","Reaktorn täcktes med betong, och sedan 2016 med ett jättelikt stålvalv som skydd mot strålningen."],
+["🐺","Naturen tog tillbaka","I zonen runt kraftverket bor nästan inga människor. Där lever nu vargar, rådjur och vildhästar. Men ämnen finns kvar i marken, så området är fortfarande avspärrat."]]},
+
+{id:"svampar",titel:"Svampar",kat:"Natur",e:"🍄",c:"#8A5A3C",rutor:[
+["🍄","Varken växt eller djur","Svampar är ett eget rike. De är inte växter, de är faktiskt närmare släkt med djur."],
+["🕸️","Mest under jord","Det du ser, svampen med hatt, är bara fruktkroppen. Den största delen är ett nät av tunna trådar, mycel, under marken."],
+["🌲","Världens största levande varelse","I Oregon i USA växer en honungsskivling som täcker ungefär 9 kvadratkilometer, flera hundra fotbollsplaner. Den är flera tusen år gammal."],
+["🤝","Skogens nätverk","Mycelet kopplar ihop träd. Forskare tror att träden delar sockers och varnar varandra genom svamparna."],
+["♻️","Städare i naturen","Många svampar bryter ner döda träd och löv till jord. Utan dem skulle skogen vara full av gamla grenar."],
+["💊","Medicin och mat","Penicillinet kommer från en mögelsvamp. Jäst är också en svamp, och vi äter champinjoner, kantareller och många fler. Men plocka aldrig svamp du inte är helt säker på, för vissa är giftiga."]]},
+
+{id:"spinnande",titel:"Därför spinner katter",kat:"Natur",e:"🐱",c:"#B88A4A",rutor:[
+["🐱","Ett ljud som vibrerar","När katter spinner vibrerar det i kroppen. Ljudet ligger runt 25 till 150 gånger per sekund."],
+["🧠","Hjärnan styr","Hjärnan skickar signaler till musklerna i struphuvudet, som öppnar och stänger stämspringan snabbt. Det ger ljudet, både när katten andas in och ut."],
+["😌","Inte bara glad","Katter spinner när de trivs, men också när de är oroliga, har ont eller är hos veterinären. Det kan vara ett sätt att lugna sig själva."],
+["🍼","Redan som kattungar","Kattungar börjar spinna när de är bara några dagar gamla. Det visar mamman att allt är bra och hjälper dem att hitta mjölken."],
+["🦴","Kan det läka?","Vissa forskare tror att vibrationerna i spinnandet kan hjälpa kroppen att läka sig själv. Det är inte säkert än."],
+["🦁","Stora katter","Geparder och pumor kan spinna. Lejon, tigrar och jaguarer kan inte spinna på samma sätt, men de kan ryta."]]},
+
+{id:"raket",titel:"Hur fungerar en raket?",kat:"Rymden",e:"🚀",c:"#D1583A",rutor:[
+["💨","Gas åt ena hållet","En raket fungerar genom att trycka ut het gas bakåt, och då åker raketen framåt. Det kallas rekyl."],
+["📐","Newtons tredje lag","Newton upptäckte att varje kraft har en lika stor motkraft åt andra hållet. När gasen rusar ut åt ena hållet pressas raketen åt det andra."],
+["🌌","Även i tomma rymden","Raketer fungerar utan luft. De behöver inte trycka mot något, eftersom gasen själv ger kraften."],
+["🔥","Bränsle och syre","Raketer tar med sig både bränsle och syre, så att de kan brinna även där det inte finns luft."],
+["🪜","Flera steg","För att nå rymden släpper raketen tomma tankar på vägen. Då blir den lättare och kan accelerera mer."],
+["🛰️","Fart som en kula","För att stanna i bana runt jorden behövs en fart på ungefär 28 000 kilometer i timmen. Det är ungefär 8 kilometer per sekund."],
+["♻️","Raketer som landar","Sedan 2015 har man lyckats landa raketsteg efter uppskjutning så att de kan användas igen. Det sparar mycket pengar."]]}
 
 ];
