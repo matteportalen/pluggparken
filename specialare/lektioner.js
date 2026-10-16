@@ -44,12 +44,14 @@ var LEKTIONER=[
 ["⛰️","Berget växer","När lavan svalnar blir den hård sten. Utbrott efter utbrott bygger upp ett berg, en vulkan."],
 ["🇮🇸","Island","Island har många vulkaner, eftersom ön ligger där två jordplattor möts. Där finns även varma källor."]]},
 
-{id:"svartahal",titel:"Svarta hål",kat:"Rymden",e:"🕳️",c:"#34255E",rutor:[
+{id:"svartahal",lank:[["Titta: TON 618 mot Phoenix A, storleksjämförelse (YouTube)","https://www.youtube.com/watch?v=vtqWnq4RZUE"]],titel:"Svarta hål",kat:"Rymden",e:"🕳️",c:"#34255E",rutor:[
 ["🕳️","Ett hål i rymden?","Ett svart hål är inte riktigt ett hål. Det är en plats där väldigt mycket materia har trängts ihop på en liten yta."],
 ["🧲","Enormt stark dragning","Dragningskraften är så stark att inget kan komma ut, inte ens ljus. Det är därför det är svart."],
 ["⭐","Hur blir de till?","Många svarta hål bildas när en mycket stor stjärna får slut på bränsle och faller ihop."],
 ["🌌","I mitten av Vintergatan","Mitt i vår galax, Vintergatan, finns ett jättelikt svart hål. Det väger ungefär 4 miljoner gånger så mycket som solen."],
 ["📸","Första fotot","År 2019 tog forskare den första bilden av ett svart hål: en glödande ring runt en mörk mitt."],
+["🏆","Ett av de största","Ett av de största svarta hål vi känner till heter TON 618. Det ligger i mitten av en kvasar, en galax som lyser extra starkt, ungefär 10 miljarder ljusår bort. Det väger ungefär 40 till 66 miljarder gånger så mycket som solen. Siffran är osäker, eftersom forskare har mätt olika. På bilden syns kvasaren bara som en liten ljuspunkt."],
+["☀️","Jämfört med solen","Ett svart hål med solens vikt skulle bara vara några kilometer stort. TON 618 är över 100 000 gånger bredare än solen. Det är mycket större än hela vårt solsystem: Neptunus ligger bara 30 gånger längre bort än jorden, men TON 618:s gräns ligger 800 till 1 300 gånger längre bort."],
 ["😌","Ingen fara för oss","Det närmaste vi känner till ligger tusentals ljusår bort. Det kan inte hämta in jorden."]]},
 
 {id:"dinosaurier",titel:"Dinosaurierna",kat:"Natur",e:"🦖",c:"#5B8C3E",rutor:[
