@@ -2,6 +2,7 @@
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
+<script src="../../tema.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ordgåtan – Pluggparken</title>
 <meta name="description" content="Ordgåtan: läs ledtråden och skriv rätt ord. Tio ord per omgång, tre nivåer.">
@@ -61,13 +62,13 @@ h1{font-size:clamp(2.2rem,8vw,2.9rem);line-height:1;margin:10px 0 4px;font-weigh
 .pill{background:var(--card);border-radius:999px;padding:6px 14px;font-weight:800;box-shadow:0 3px 0 var(--line);white-space:nowrap}
 .sp{flex:1}
 .prickar{display:flex;gap:6px;justify-content:center;margin:0 0 12px}
-.prickar i{width:12px;height:12px;border-radius:50%;background:#CFE3D7}
-.prickar i.nu{background:var(--ink);transform:scale(1.25)}
+.prickar i{width:12px;height:12px;border-radius:50%;background:var(--lc-CFE3D7,#CFE3D7)}
+.prickar i.nu{background:var(--sel,var(--ink));transform:scale(1.25)}
 .prickar i.ratt{background:var(--good)}.prickar i.tips{background:var(--gold)}.prickar i.miss{background:#B9C3D9}
 .gata{position:relative;background:var(--lapp);border:3px solid var(--lapp-kant);border-radius:22px;padding:16px 18px 14px;box-shadow:0 5px 0 rgba(160,130,40,.25);text-align:center}
-.gata .info{font-weight:800;color:#8A6D12;font-size:.95rem}
+.gata .info{font-weight:800;color:var(--warn-ink,#8A6D12);font-size:.95rem}
 .gata .led{font-family:var(--las);font-size:clamp(1.35rem,5vw,1.8rem);line-height:1.3;margin:6px 0 2px;padding:0 40px}
-.gata .hor{position:absolute;top:10px;right:10px;width:44px;height:44px;border-radius:50%;background:#fff;box-shadow:0 3px 0 var(--lapp-kant);font-size:1.3rem}
+.gata .hor{position:absolute;top:10px;right:10px;width:44px;height:44px;border-radius:50%;background:var(--card,#fff);box-shadow:0 3px 0 var(--lapp-kant);font-size:1.3rem}
 .gata .djur{position:absolute;left:-6px;bottom:-14px;width:64px;height:64px;pointer-events:none}
 .gata .djur svg{width:100%;height:100%}
 .gata .djur.hopp{animation:hopp .6s}
@@ -75,25 +76,25 @@ h1{font-size:clamp(2.2rem,8vw,2.9rem);line-height:1;margin:10px 0 4px;font-weigh
 /* rutorna: ett riktigt textfält ligger ovanpå, osynligt, så att tangentbordet kommer upp */
 .rutbox{position:relative;margin:22px auto 6px;width:max-content;max-width:100%}
 .rutor{display:flex;gap:var(--rg,8px);justify-content:center;flex-wrap:nowrap}
-.ruta{width:var(--rs,58px);height:calc(var(--rs,58px)*1.14);border-radius:calc(var(--rs,58px)*.24);background:#fff;border:3px solid #C9D6EA;box-shadow:0 4px 0 #C9D6EA;display:grid;place-items:center;
+.ruta{width:var(--rs,58px);height:calc(var(--rs,58px)*1.14);border-radius:calc(var(--rs,58px)*.24);background:var(--card,#fff);border:3px solid var(--lc-C9D6EA,#C9D6EA);box-shadow:0 4px 0 var(--lc-C9D6EA,#C9D6EA);display:grid;place-items:center;
   font-family:var(--las);font-size:calc(var(--rs,58px)*.58);text-transform:uppercase;line-height:1;transition:background .2s,border-color .2s}
 .ruta.nu{border-color:var(--accent);box-shadow:0 4px 0 #9FB0FF}
 .rutbox.fokus .ruta.nu::after{content:"";width:3px;height:52%;background:var(--accent);border-radius:2px;animation:blink 1s steps(1) infinite}
 @keyframes blink{50%{opacity:0}}
-.ruta.visad{background:#FFE9A8;border-color:var(--gold);box-shadow:0 4px 0 #D9A400}
-.rutbox.ratt .ruta{background:#D7F2E1;border-color:var(--good);box-shadow:0 4px 0 var(--good-dark)}
+.ruta.visad{background:var(--warn-bg,#FFE9A8);border-color:var(--gold);box-shadow:0 4px 0 #D9A400}
+.rutbox.ratt .ruta{background:var(--lc-D7F2E1,#D7F2E1);border-color:var(--good);box-shadow:0 4px 0 var(--good-dark)}
 .rutbox.fel .ruta{background:var(--rosa);border-color:#F2A3A8;box-shadow:0 4px 0 #E59096}
 .rutbox.fel .rutor{animation:skak .4s}
-.rutbox.svar .ruta{background:#EEF1F7;border-color:#B9C3D9;box-shadow:0 4px 0 #B9C3D9;color:var(--muted)}
+.rutbox.svar .ruta{background:var(--lc-EEF1F7,#EEF1F7);border-color:#B9C3D9;box-shadow:0 4px 0 #B9C3D9;color:var(--muted)}
 @keyframes skak{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
 #inp{position:absolute;inset:0;width:100%;height:100%;opacity:0;font-size:16px;border:0;padding:0;color:transparent;background:transparent;caret-color:transparent}
 .hjalp{text-align:center;color:var(--muted);font-weight:700;min-height:1.6em;margin:6px 0 8px}
-.hjalp.ok{color:var(--good-dark)}.hjalp.fel{color:#B4232A}
+.hjalp.ok{color:var(--ok-ink,var(--good-dark))}.hjalp.fel{color:#B4232A}
 .knappar{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px}
 .kn{background:var(--card);border-radius:16px;padding:10px 16px;min-height:52px;font-weight:800;box-shadow:0 4px 0 var(--line)}
 .kn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
 .kn:disabled{opacity:.45;cursor:default;transform:none}
-.kn.tips{background:#FFF1C2;box-shadow:0 4px 0 #E6CB6B}
+.kn.tips{background:var(--lc-FFF1C2,#FFF1C2);box-shadow:0 4px 0 #E6CB6B}
 
 /* ---------- resultat ---------- */
 .res{text-align:center}
@@ -101,10 +102,10 @@ h1{font-size:clamp(2.2rem,8vw,2.9rem);line-height:1;margin:10px 0 4px;font-weigh
 .res h2{margin:4px 0 0;font-size:1.8rem;line-height:1.15}
 .stor{font-size:2.6rem;color:var(--gold);letter-spacing:4px}.stor .off{color:#D5DDEC}
 .siffror{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:10px 0}
-.siffror div{background:#F3FAF6;border-radius:16px;padding:8px 14px;min-width:96px}
+.siffror div{background:var(--lc-F3FAF6,#F3FAF6);border-radius:16px;padding:8px 14px;min-width:96px}
 .siffror b{display:block;font-size:1.5rem;line-height:1.1}.siffror small{color:var(--muted);font-weight:700}
 .lista{list-style:none;padding:0;margin:14px 0 0;text-align:left}
-.lista li{display:flex;gap:10px;align-items:baseline;padding:8px 4px;border-top:2px solid #EEF4F0}
+.lista li{display:flex;gap:10px;align-items:baseline;padding:8px 4px;border-top:2px solid var(--lc-EEF4F0,#EEF4F0)}
 .lista .m{flex:none;width:1.6em;text-align:center}
 .lista .o{font-family:var(--las);font-size:1.15rem;text-transform:uppercase;min-width:5.5em}
 .lista .l{color:var(--muted);font-size:.95rem;flex:1}

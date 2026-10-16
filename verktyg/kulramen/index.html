@@ -2,6 +2,7 @@
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
+<script src="../../tema.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Kulramen – Pluggparken</title>
 <meta name="description" content="Kulramen: räkna med kulor på en digital kulram med en, två eller tio rader.">
@@ -42,10 +43,10 @@ h1{font-size:2.3rem;line-height:1;margin:8px 0 4px;font-weight:800}
 .bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
 .seg{display:flex;background:var(--card);border-radius:14px;padding:3px;box-shadow:0 3px 0 var(--line)}
 .seg button{border-radius:11px;padding:7px 12px;font-weight:800;font-size:.95rem}
-.seg button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.seg button[aria-pressed="true"]{background:var(--sel,var(--ink));color:#fff}
 .btn{background:var(--card);border-radius:12px;padding:8px 12px;font-weight:800;box-shadow:0 3px 0 var(--line)}
 .btn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
-.btn[aria-pressed="true"]{background:var(--ink);color:#fff}
+.btn[aria-pressed="true"]{background:var(--sel,var(--ink));color:#fff}
 /* Kulramen */
 .frame{position:relative;display:flex;flex-direction:row-reverse;gap:10px;background:var(--card);border-radius:20px;padding:16px 12px 16px 10px;box-shadow:0 5px 0 var(--line);touch-action:none;user-select:none;-webkit-user-select:none}
 .total{flex:none;width:58px;display:flex;align-items:center;justify-content:center;border-right:4px solid #8FB2E8;border-top:4px solid #8FB2E8;border-bottom:4px solid #8FB2E8;border-radius:0 10px 10px 0;font-weight:800;font-size:1.7rem;color:var(--ink)}
@@ -55,7 +56,7 @@ h1{font-size:2.3rem;line-height:1;margin:8px 0 4px;font-weight:800}
 .bead{position:absolute;top:0;width:var(--bead);height:var(--bead);border-radius:50%;transition:left .22s cubic-bezier(.3,.8,.4,1);cursor:pointer;
   box-shadow:inset -3px -4px 0 rgba(0,0,0,.18),inset 3px 3px 0 rgba(255,255,255,.55),0 2px 0 rgba(29,43,83,.25)}
 .bead.r{background:radial-gradient(circle at 35% 30%,#FF8A8A,#E5484D 55%,#B8323A)}
-.bead.w{background:radial-gradient(circle at 35% 30%,#fff,#EEF2FA 60%,#C6D6F2);border:2px solid #8FB2E8}
+.bead.w{background:radial-gradient(circle at 35% 30%,var(--card,#fff),var(--info-bg,#EEF2FA) 60%,var(--lc-C6D6F2,#C6D6F2));border:2px solid #8FB2E8}
 .cnt{position:absolute;top:50%;transform:translateY(-50%);font-weight:800;font-size:clamp(.75rem,2.4vw,1rem);color:#fff;background:var(--accent);border-radius:999px;padding:0 7px;line-height:1.5;pointer-events:none;transition:left .22s;z-index:2}
 .cnt:empty{display:none}
 .rlabel{width:34px;flex:none;align-self:center;text-align:center;font-weight:800;color:var(--muted)}

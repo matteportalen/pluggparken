@@ -2,6 +2,7 @@
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
+<script src="../tema.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Tiobas – Pluggparken</title>
 <meta name="description" content="Tiobas: bygg tal med träklossar, växla och räkna addition och subtraktion med ental, tiotal, hundratal och tusental.">
@@ -47,7 +48,7 @@ h1{font-size:1.5rem;margin:0 6px 0 2px;font-weight:800;line-height:1}
 .tools{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap}
 .tbtn{background:var(--card);border-radius:12px;padding:5px 11px;font-weight:800;font-size:.95rem;box-shadow:0 3px 0 var(--line);min-height:40px;white-space:nowrap}
 .tbtn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
-.tbtn[aria-pressed="true"]{background:var(--ink);color:#fff;box-shadow:0 3px 0 #0E1838}
+.tbtn[aria-pressed="true"]{background:var(--sel,var(--ink));color:#fff;box-shadow:0 3px 0 #0E1838}
 .tbtn:disabled{opacity:.4}
 .total{font-weight:800;font-size:1.35rem;white-space:nowrap}
 .msg{min-height:1.35em;font-weight:700;color:var(--muted);font-size:1rem;text-align:center}
@@ -61,7 +62,7 @@ h1{font-size:1.5rem;margin:0 6px 0 2px;font-weight:800;line-height:1}
 .col h2{margin:0;padding:3px 4px;font-size:.95rem;text-align:center;color:#fff;font-weight:800;background:var(--c)}
 .area{flex:1;min-height:0;position:relative;cursor:pointer}
 .col{container-type:inline-size}
-.foot{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:5px;padding:4px;border-top:2px solid #EEF2FA}
+.foot{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:5px;padding:4px;border-top:2px solid var(--lc-EEF2FA,#EEF2FA)}
 .foot [data-up]{justify-self:end}.foot [data-down]{justify-self:start;grid-column:3}.foot .digit{grid-column:2}
 /* smala kolumner: mindre text, och i de smalaste står bara ⇐ 10 och 1 ⇒ */
 @container (max-width:230px){.xch{font-size:.72rem;padding:2px 5px;min-height:32px}.digit{font-size:1.25rem}}
@@ -69,7 +70,7 @@ h1{font-size:1.5rem;margin:0 6px 0 2px;font-weight:800;line-height:1}
 @container (max-width:125px){.foot{grid-template-columns:1fr 1fr;gap:3px}.foot .digit{grid-column:1/3;grid-row:1}.foot [data-up]{grid-column:1;grid-row:2;justify-self:center}.foot [data-down]{grid-column:2;grid-row:2;justify-self:center}.xch{font-size:.72rem;padding:1px 4px}}
 .digit{min-width:1.6em;text-align:center;font-weight:800;font-size:1.5rem;line-height:1.1}
 .digit.over{color:var(--bad)}
-.xch{border-radius:11px;padding:3px 9px;font-weight:800;font-size:.85rem;background:#F1F4FA;box-shadow:0 3px 0 var(--line);min-height:36px;white-space:nowrap}
+.xch{border-radius:11px;padding:3px 9px;font-weight:800;font-size:.85rem;background:var(--lc-F1F4FA,#F1F4FA);box-shadow:0 3px 0 var(--line);min-height:36px;white-space:nowrap}
 .xch:disabled{opacity:.35}
 .xch.hot{background:#FFE58A;box-shadow:0 3px 0 #D9A400;animation:pulse 1.2s ease-in-out infinite}
 @keyframes pulse{50%{transform:scale(1.06)}}
@@ -96,28 +97,28 @@ h1{font-size:1.5rem;margin:0 6px 0 2px;font-weight:800;line-height:1}
 .total.hid{visibility:hidden}
 #cset{font-size:1.2rem;padding:2px 10px}
 .cstep{font-weight:700;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.cstep .sn{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--ink);color:#fff;font-size:.85rem}
-.chip{background:#F1F4FA;border-radius:999px;padding:1px 9px;font-weight:800;font-size:.9rem;white-space:nowrap}
-.chip.done{background:#DDF5E7;color:var(--good-dark)}
-.chip.over{background:#FDE4E4;color:var(--bad)}
-.cstep .ok{color:var(--good-dark);font-weight:800;font-size:1.15rem}
+.cstep .sn{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--sel,var(--ink));color:#fff;font-size:.85rem}
+.chip{background:var(--lc-F1F4FA,#F1F4FA);border-radius:999px;padding:1px 9px;font-weight:800;font-size:.9rem;white-space:nowrap}
+.chip.done{background:var(--ok-bg,#DDF5E7);color:var(--ok-ink,var(--good-dark))}
+.chip.over{background:var(--err-bg,#FDE4E4);color:var(--bad)}
+.cstep .ok{color:var(--ok-ink,var(--good-dark));font-weight:800;font-size:1.15rem}
 .cans{width:5.6em;font:inherit;font-weight:800;font-size:1.1rem;padding:2px 8px;border:2px solid var(--accent);border-radius:10px;text-align:center;color:var(--ink)}
 .cbtns{margin-left:auto;display:flex;gap:6px;align-items:center}
 .cbtns .tbtn{min-height:36px}
 #cnew.hot{background:#FFE58A;box-shadow:0 3px 0 #D9A400}
 .x{flex:none;width:36px;height:36px;border-radius:10px;font-weight:800;color:var(--muted)}
 .cnote{flex-basis:100%;font-size:.92rem;color:#B86E00;font-weight:700;line-height:1.2;padding-bottom:2px}
-.sheet{position:absolute;right:0;top:calc(100% + 6px);z-index:15;background:#fff;border-radius:16px;box-shadow:0 8px 28px rgba(29,43,83,.28);padding:12px;display:grid;gap:10px;width:min(360px,calc(100vw - 24px))}
+.sheet{position:absolute;right:0;top:calc(100% + 6px);z-index:15;background:var(--card,#fff);border-radius:16px;box-shadow:0 8px 28px rgba(29,43,83,.28);padding:12px;display:grid;gap:10px;width:min(360px,calc(100vw - 24px))}
 .srow{display:grid;gap:4px}
-.seg{display:flex;background:#EEF2FA;border-radius:12px;padding:3px;gap:3px}
+.seg{display:flex;background:var(--info-bg,#EEF2FA);border-radius:12px;padding:3px;gap:3px}
 .seg button{flex:1;border-radius:9px;padding:6px 4px;font-weight:800;min-height:38px}
-.seg button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.seg button[aria-pressed="true"]{background:var(--sel,var(--ink));color:#fff}
 .own{display:flex;gap:6px;align-items:center}
 .own input{width:5em;font:inherit;font-weight:800;padding:5px 6px;border:2px solid var(--line);border-radius:10px;text-align:center}
 .snote{color:var(--bad);font-weight:700;font-size:.9rem;min-height:1em}
 
 /* Stående mobil: ett litet tips, inte i vägen */
-.tip{display:flex;align-items:center;gap:8px;background:#FFF4CC;border-radius:12px;padding:4px 6px 4px 10px;font-weight:700;font-size:.92rem;line-height:1.2}
+.tip{display:flex;align-items:center;gap:8px;background:var(--warn-bg,#FFF4CC);border-radius:12px;padding:4px 6px 4px 10px;font-weight:700;font-size:.92rem;line-height:1.2}
 .tip .phone{font-size:1.3rem;display:inline-block;animation:turn 2.4s ease-in-out infinite}
 @keyframes turn{0%,35%{transform:rotate(0)}65%,100%{transform:rotate(-90deg)}}
 @media (prefers-reduced-motion:reduce){.tip .phone{animation:none}}

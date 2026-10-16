@@ -2,6 +2,7 @@
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
+<script src="../../tema.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Läsflyt – Pluggparken</title>
 <meta name="description" content="Läsflyt: öva läsning tillsammans med en vuxen. Läs samma text flera gånger och se hur det går bättre.">
@@ -40,7 +41,7 @@ h2{font-size:1.3rem;margin:0 0 6px;line-height:1.2}
 .knapp{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:50px;padding:10px 22px;border-radius:16px;background:var(--good);color:#fff;font-weight:800;font-size:1.08rem;box-shadow:0 4px 0 var(--good-dark)}
 .knapp:active{transform:translateY(3px);box-shadow:0 1px 0 var(--good-dark)}
 .knapp.bla{background:var(--accent);box-shadow:0 4px 0 #2A3DB8}
-.knapp.vit{background:#fff;color:var(--ink);box-shadow:0 4px 0 var(--line)}
+.knapp.vit{background:var(--card,#fff);color:var(--ink);box-shadow:0 4px 0 var(--line)}
 .knapp.rod{background:var(--bad);box-shadow:0 4px 0 #B23237}
 .knapp:disabled{opacity:.45;pointer-events:none}
 .rad{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
@@ -51,46 +52,46 @@ h2{font-size:1.3rem;margin:0 0 6px;line-height:1.2}
 .niva b{display:block;font-size:1.1rem}
 .niva small{display:block;font-family:var(--las);font-size:.82rem;color:var(--muted);font-weight:700;min-height:2.3em}
 .niva .st{font-size:.8rem;letter-spacing:1px}
-.niva[aria-pressed="true"]{background:var(--ink);color:#fff;box-shadow:0 4px 0 #0E1735}
+.niva[aria-pressed="true"]{background:var(--sel,var(--ink));color:#fff;box-shadow:0 4px 0 #0E1735}
 .niva[aria-pressed="true"] small{color:#C6D6F2}
 .texter{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:10px}
 .tx{background:var(--card);border-radius:16px;box-shadow:0 3px 0 var(--line);overflow:hidden;text-align:left}
 .tx svg{display:block;width:100%;height:auto}
 .tx div{padding:6px 10px 8px;font-family:var(--las);font-size:.95rem;line-height:1.25}
 .tx small{display:block;font-family:var(--font);color:var(--muted);font-weight:700;font-size:.8rem}
-.tx small.ok{color:var(--good-dark)}
-details.sa{background:#fff;border-radius:16px;box-shadow:0 3px 0 var(--line);padding:10px 14px;margin:12px 0}
+.tx small.ok{color:var(--ok-ink,var(--good-dark))}
+details.sa{background:var(--card,#fff);border-radius:16px;box-shadow:0 3px 0 var(--line);padding:10px 14px;margin:12px 0}
 details.sa summary{font-weight:800;cursor:pointer}
 details.sa ol{margin:8px 0 2px;padding-left:22px}
-.vuxen{display:inline-flex;align-items:center;gap:6px;background:#FFF3C4;border-radius:999px;padding:2px 12px;font-weight:800;font-size:.9rem}
+.vuxen{display:inline-flex;align-items:center;gap:6px;background:var(--warn-bg,#FFF3C4);border-radius:999px;padding:2px 12px;font-weight:800;font-size:.9rem}
 /* passet */
 .steg{display:flex;gap:4px;margin:4px 0 10px}
-.steg i{flex:1;height:8px;border-radius:999px;background:#CFE7DA}
+.steg i{flex:1;height:8px;border-radius:999px;background:var(--lc-CFE7DA,#CFE7DA)}
 .steg i.klar{background:var(--good)}.steg i.nu{background:var(--accent)}
 .stegnamn{font-weight:800;font-size:1.25rem;margin:0}
 .instr{color:var(--muted);font-weight:700;margin:0 0 10px}
-.bild{border-radius:18px;overflow:hidden;box-shadow:0 3px 0 var(--line);margin:0 0 12px;background:#fff}
+.bild{border-radius:18px;overflow:hidden;box-shadow:0 3px 0 var(--line);margin:0 0 12px;background:var(--card,#fff)}
 .bild svg{display:block;width:100%;height:auto}
-.las{background:#fff;border-radius:22px;box-shadow:0 4px 0 var(--line);padding:18px 20px;font-family:var(--las);font-size:var(--ls,40px);line-height:1.75;word-spacing:.12em}
+.las{background:var(--card,#fff);border-radius:22px;box-shadow:0 4px 0 var(--line);padding:18px 20px;font-family:var(--las);font-size:var(--ls,40px);line-height:1.75;word-spacing:.12em}
 .las .w{border-radius:10px;padding:0 .08em;transition:background .15s}
 .las .w.nu{background:#FFE680;box-shadow:0 0 0 3px #FFE680}
 .las .w.hel{color:#7B61FF;text-decoration:underline 3px;text-underline-offset:.18em}
 .las.markera .w{cursor:pointer}
-.las .w.fel{color:var(--bad);text-decoration:line-through 3px;background:#FDE7EA}
+.las .w.fel{color:var(--bad);text-decoration:line-through 3px;background:var(--lc-FDE7EA,#FDE7EA)}
 .hela{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 12px}
-.hela span{font-family:var(--las);font-size:2.2rem;background:#fff;border-radius:16px;box-shadow:0 3px 0 var(--line);padding:4px 18px;color:#7B61FF}
-.panel{background:#FFFBEA;border-radius:20px;box-shadow:0 4px 0 #F1E2A8;padding:12px 14px;margin-top:14px}
+.hela span{font-family:var(--las);font-size:2.2rem;background:var(--card,#fff);border-radius:16px;box-shadow:0 3px 0 var(--line);padding:4px 18px;color:#7B61FF}
+.panel{background:var(--lc-FFFBEA,#FFFBEA);border-radius:20px;box-shadow:0 4px 0 #F1E2A8;padding:12px 14px;margin-top:14px}
 .panel h3{margin:0 0 6px;font-size:1rem;display:flex;align-items:center;gap:8px}
 .tempo{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-weight:700}
 .tempo input{flex:1;min-width:140px;accent-color:var(--accent);height:34px}
 .uppm{font-weight:800;font-size:1.15rem;text-align:center;margin:2px 0 4px}
 .klocka{font-size:2.2rem;font-weight:800;font-variant-numeric:tabular-nums;min-width:110px}
 .res{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:8px 0}
-.res div{background:#fff;border-radius:14px;padding:6px 8px;text-align:center}
+.res div{background:var(--card,#fff);border-radius:14px;padding:6px 8px;text-align:center}
 .res b{display:block;font-size:1.6rem;line-height:1.1}
 .res small{color:var(--muted);font-weight:700;font-size:.8rem}
 .bet{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
-.bet button{background:#fff;border-radius:999px;padding:6px 12px;font-weight:700;font-size:.92rem;box-shadow:0 2px 0 #F1E2A8}
+.bet button{background:var(--card,#fff);border-radius:999px;padding:6px 12px;font-weight:700;font-size:.92rem;box-shadow:0 2px 0 #F1E2A8}
 .bet button[aria-pressed="true"]{background:var(--good);color:#fff}
 .staplar{display:flex;align-items:flex-end;gap:12px;height:150px;margin:10px 0 4px;padding:0 4px}
 .stp{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;min-width:0}
@@ -99,11 +100,11 @@ details.sa ol{margin:8px 0 2px;padding-left:22px}
 .stp b{font-size:1.05rem;line-height:1.1}
 .stp small{color:var(--muted);font-weight:700;font-size:.78rem;text-align:center;line-height:1.15}
 .alt{display:grid;gap:10px;margin-top:10px}
-.alt button{background:#fff;border-radius:16px;box-shadow:0 4px 0 var(--line);padding:12px 16px;text-align:left;font-family:var(--las);font-size:1.6rem;min-height:56px}
-.alt button.ratt{background:#DCF5E6;box-shadow:0 4px 0 var(--good)}
+.alt button{background:var(--card,#fff);border-radius:16px;box-shadow:0 4px 0 var(--line);padding:12px 16px;text-align:left;font-family:var(--las);font-size:1.6rem;min-height:56px}
+.alt button.ratt{background:var(--ok-bg,#DCF5E6);box-shadow:0 4px 0 var(--good)}
 .alt button.tona{opacity:.35}
 .fraga{font-size:1.25rem;font-weight:800;display:flex;gap:10px;align-items:center}
-.ljud{width:44px;height:44px;border-radius:50%;background:#fff;box-shadow:0 3px 0 var(--line);font-size:1.2rem;flex:none}
+.ljud{width:44px;height:44px;border-radius:50%;background:var(--card,#fff);box-shadow:0 3px 0 var(--line);font-size:1.2rem;flex:none}
 .msg{min-height:1.5em;font-weight:800;margin-top:10px}
 .stjarnor{font-size:2.4rem;text-align:center;letter-spacing:4px}
 .topprad{display:flex;justify-content:space-between;align-items:center;gap:8px}

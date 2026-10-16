@@ -2,6 +2,7 @@
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
+<script src="../../tema.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Världskartan – Pluggparken</title>
 <meta name="description" content="Världskartan: lär dig världsdelarna och världshaven på en riktig karta, och var djuren bor.">
@@ -84,12 +85,12 @@ h2{font-size:1.5rem;margin:0 0 6px;line-height:1.15}
 @media(min-width:880px){.ex{grid-template-columns:minmax(0,1fr) 360px;align-items:start}}
 .tools{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 8px}
 .tb{background:var(--card);border-radius:12px;padding:6px 12px;font-weight:800;font-size:.95rem;box-shadow:0 3px 0 var(--line)}
-.tb[aria-pressed="true"]{background:var(--ink);color:#fff}
+.tb[aria-pressed="true"]{background:var(--sel,var(--ink));color:#fff}
 .info .head{display:flex;align-items:center;gap:10px}
 .info .head h2{margin:0;flex:1}
 .spk{flex:none;width:44px;height:44px;border-radius:50%;background:var(--bg);font-size:1.3rem;box-shadow:0 3px 0 var(--line)}
 .tag{display:inline-block;border-radius:999px;padding:0 10px;font-weight:800;font-size:.85rem;background:var(--c)}
-.fact{background:#FFF4CC;border-radius:12px;padding:6px 10px;margin:10px 0 0;font-weight:700;font-size:1rem}
+.fact{background:var(--warn-bg,#FFF4CC);border-radius:12px;padding:6px 10px;margin:10px 0 0;font-weight:700;font-size:1rem}
 .animals{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
 .animals figure{margin:0;text-align:center;font-weight:800;font-size:.9rem}
 .animals figcaption small{display:block;font-weight:700;color:var(--muted);font-size:.78rem;line-height:1.2}
@@ -97,14 +98,14 @@ h2{font-size:1.5rem;margin:0 0 6px;line-height:1.15}
 .hint{color:var(--muted);font-weight:700;font-size:.95rem;text-align:center;margin:6px 0 0}
 /* spel: frågan stor överst, kartan till vänster, panelen till höger */
 .task{position:sticky;top:calc(56px + env(safe-area-inset-top,0px));z-index:4;background:var(--card);border-radius:20px;padding:10px 14px 12px;box-shadow:0 5px 0 var(--line);margin:4px 0 12px;transition:background .15s}
-.task.ok{background:#DDF5E7}.task.bad{background:#FDE4E4}
+.task.ok{background:var(--ok-bg,#DDF5E7)}.task.bad{background:var(--err-bg,#FDE4E4)}
 .qrow{display:flex;gap:12px;align-items:center}
 .instr{flex:1;font-weight:800;font-size:clamp(1.3rem,3.2vw,2rem);line-height:1.15}
 .qf{width:64px;height:64px;object-fit:cover;border-radius:12px;box-shadow:0 2px 0 var(--line);flex:none;touch-action:none;cursor:grab}
 @media(min-width:880px){.qf{display:none}}
 @media(max-width:879px){.qphoto{display:none}}
 .info2{font-weight:800;color:var(--muted);white-space:nowrap}
-.pbar{height:8px;border-radius:4px;background:#E6ECF5;margin-top:8px;overflow:hidden}
+.pbar{height:8px;border-radius:4px;background:var(--lc-E6ECF5,#E6ECF5);margin-top:8px;overflow:hidden}
 .pbar i{display:block;height:100%;width:0;background:var(--good);border-radius:4px;transition:width .3s}
 .gwrap{display:grid;gap:12px}
 @media(min-width:880px){.gwrap{grid-template-columns:minmax(0,1fr) 320px;align-items:start}}
@@ -119,7 +120,7 @@ h2{font-size:1.5rem;margin:0 0 6px;line-height:1.15}
 .opts:empty{display:none}
 .opts button{background:var(--card);border-radius:16px;padding:12px 8px;font-weight:800;font-size:1.15rem;box-shadow:0 4px 0 var(--line);min-height:60px;line-height:1.15}
 .opts button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
-.opts button.right{background:#DDF5E7;color:var(--good-dark)}.opts button.bad{background:#FDE4E4;color:var(--bad)}
+.opts button.right{background:var(--ok-bg,#DDF5E7);color:var(--ok-ink,var(--good-dark))}.opts button.bad{background:var(--err-bg,#FDE4E4);color:var(--bad)}
 @media(min-width:880px){.opts{grid-template-columns:1fr}}
 .fb{font-weight:800;font-size:1.1rem;text-align:center}
 .fb:empty{display:none}
@@ -130,14 +131,14 @@ h2{font-size:1.5rem;margin:0 0 6px;line-height:1.15}
 .hist{display:flex;flex-wrap:wrap;gap:5px}
 .hist:empty{display:none}
 .hist span{background:var(--card);border-radius:999px;padding:1px 10px;font-weight:800;font-size:.85rem;box-shadow:0 2px 0 var(--line)}
-.hist .h-ok{color:var(--good-dark)}.hist .h-bad{color:var(--bad)}
+.hist .h-ok{color:var(--ok-ink,var(--good-dark))}.hist .h-bad{color:var(--bad)}
 .map .lift{fill-opacity:.55;stroke-width:3;cursor:grab;stroke-linejoin:round}
 .srch{display:flex;gap:8px}.srch input{flex:1;min-width:0;font:inherit;font-weight:700;border:2px solid var(--line);border-radius:12px;padding:6px 10px}
 .tm{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
 .lifted{display:flex;align-items:center;gap:8px;background:var(--card);border-radius:14px;padding:6px 10px;box-shadow:0 3px 0 var(--line);margin-bottom:6px}
 .lifted i{width:16px;height:16px;border-radius:5px;flex:none}.lifted span{flex:1;line-height:1.2}.lifted small{display:block;color:var(--muted);font-weight:700}
 .lifted button{width:34px;height:34px;border-radius:50%;background:var(--bg);font-weight:800}
-.cmp{background:#FFF4CC;border-radius:12px;padding:6px 10px;margin:4px 0 0;font-weight:700}
+.cmp{background:var(--warn-bg,#FFF4CC);border-radius:12px;padding:6px 10px;margin:4px 0 0;font-weight:700}
 .result{text-align:center;padding-top:16px}
 .rbig{font-size:clamp(3rem,15vw,4.4rem);font-weight:800;line-height:1;margin:6px 0}
 .big{display:block;width:100%;max-width:420px;margin:10px auto 0;padding:12px;border-radius:18px;background:var(--card);font-weight:800;font-size:1.15rem;box-shadow:0 4px 0 var(--line)}

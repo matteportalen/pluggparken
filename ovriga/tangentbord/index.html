@@ -2,6 +2,7 @@
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
+<script src="../../tema.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Tangentbordet – Pluggparken</title>
 <meta name="description" content="Tangentbordet: lär dig tangentbordet med rätt fingrar. Lektioner, alfabetet på tid, hitta tangenten och skriv orden.">
@@ -44,7 +45,7 @@ h2{margin:6px 0 10px}
 .lead{margin:0 0 16px;color:var(--muted);font-size:1.08rem}
 .card{background:var(--card);border-radius:22px;padding:16px;box-shadow:0 5px 0 var(--line)}
 .pill{background:var(--card);border-radius:999px;padding:6px 14px;font-weight:800;box-shadow:0 3px 0 var(--line);white-space:nowrap}
-.tips{background:#FFF6D6;border-radius:16px;padding:10px 14px;margin:0 0 14px;font-weight:700}
+.tips{background:var(--warn-bg,#FFF6D6);border-radius:16px;padding:10px 14px;margin:0 0 14px;font-weight:700}
 .tips button{margin-top:6px}
 
 /* ---------- startskärm och lektioner ---------- */
@@ -64,28 +65,28 @@ h2{margin:6px 0 10px}
 .lek b{display:block;line-height:1.2}.lek small{display:block;color:var(--muted);font-weight:700;font-family:var(--las);letter-spacing:1px}
 .val{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 14px}
 .val button{background:var(--card);border-radius:14px;padding:8px 14px;font-weight:800;box-shadow:0 3px 0 var(--line);border:2px solid transparent}
-.val button[aria-pressed="true"]{border-color:var(--good);background:#EAF8EF}
+.val button[aria-pressed="true"]{border-color:var(--good);background:var(--lc-EAF8EF,#EAF8EF)}
 
 /* ---------- spelet ---------- */
 .gtop{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
 .sp{flex:1}
 .rubrik{font-weight:800;font-size:1.15rem;margin:0 0 8px;text-align:center}
-.text{font-family:var(--las);font-size:clamp(1.5rem,3.6vw,2.2rem);line-height:1.7;letter-spacing:1px;background:#fff;border-radius:20px;padding:14px 18px;box-shadow:0 5px 0 var(--line);min-height:3.6em;word-break:break-word}
+.text{font-family:var(--las);font-size:clamp(1.5rem,3.6vw,2.2rem);line-height:1.7;letter-spacing:1px;background:var(--card,#fff);border-radius:20px;padding:14px 18px;box-shadow:0 5px 0 var(--line);min-height:3.6em;word-break:break-word}
 .text span{border-radius:6px;padding:0 1px;transition:background .1s}
-.text .ok{color:var(--good-dark)}
+.text .ok{color:var(--ok-ink,var(--good-dark))}
 .text .nu{background:#FFE39A;box-shadow:0 3px 0 var(--gold)}
 .text .fel{background:var(--rosa);color:#B4232A}
 .text .mell{display:inline-block;min-width:.55em}
-.text .mell.nu::after{content:"␣";color:#8A6D12;font-size:.7em}
-.stor{font-family:var(--las);font-size:clamp(4rem,14vw,7rem);line-height:1;text-align:center;background:#fff;border-radius:24px;padding:18px;box-shadow:0 5px 0 var(--line)}
+.text .mell.nu::after{content:"␣";color:var(--warn-ink,#8A6D12);font-size:.7em}
+.stor{font-family:var(--las);font-size:clamp(4rem,14vw,7rem);line-height:1;text-align:center;background:var(--card,#fff);border-radius:24px;padding:18px;box-shadow:0 5px 0 var(--line)}
 .stor.fel{animation:skak .35s;background:var(--rosa)}
 .ordrad{display:flex;gap:14px;justify-content:center;align-items:baseline;flex-wrap:wrap;font-family:var(--las)}
-.ordrad .nu{font-size:clamp(2.2rem,7vw,3.4rem);background:#fff;border-radius:18px;padding:6px 18px;box-shadow:0 5px 0 var(--line)}
-.ordrad .nu span.ok{color:var(--good-dark)}.ordrad .nu span.c{background:#FFE39A;border-radius:6px}.ordrad .nu span.fel{background:var(--rosa)}
+.ordrad .nu{font-size:clamp(2.2rem,7vw,3.4rem);background:var(--card,#fff);border-radius:18px;padding:6px 18px;box-shadow:0 5px 0 var(--line)}
+.ordrad .nu span.ok{color:var(--ok-ink,var(--good-dark))}.ordrad .nu span.c{background:#FFE39A;border-radius:6px}.ordrad .nu span.fel{background:var(--rosa)}
 .ordrad .sen{font-size:1.4rem;color:var(--muted)}
 @keyframes skak{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
 .siffror{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:12px 0}
-.siffror div{background:#fff;border-radius:16px;padding:6px 14px;min-width:92px;text-align:center;box-shadow:0 3px 0 var(--line)}
+.siffror div{background:var(--card,#fff);border-radius:16px;padding:6px 14px;min-width:92px;text-align:center;box-shadow:0 3px 0 var(--line)}
 .siffror b{display:block;font-size:1.35rem;line-height:1.1}.siffror small{color:var(--muted);font-weight:700}
 .hjalp{text-align:center;color:var(--muted);font-weight:700;min-height:1.5em;margin:6px 0}
 .dold-kb{display:flex;justify-content:center;margin-top:6px}
@@ -94,7 +95,7 @@ h2{margin:6px 0 10px}
 .kb{--u:min(56px,calc((100vw - 40px)/15));margin:12px auto 0;width:calc(var(--u)*15 + 8px);background:#2B3A63;border-radius:16px;padding:4px;box-shadow:0 6px 0 #18224A;user-select:none}
 .kbr{display:flex}
 .k{position:relative;height:calc(var(--u)*.92);margin:calc(var(--u)*.04);border-radius:calc(var(--u)*.16);display:grid;place-items:center;font-weight:800;font-size:calc(var(--u)*.42);line-height:1;
-  background:var(--f,#fff);color:var(--ink);box-shadow:0 calc(var(--u)*.07) 0 rgba(0,0,0,.28);transition:transform .06s,filter .1s;text-transform:uppercase}
+  background:var(--f,var(--card,#fff));color:var(--ink);box-shadow:0 calc(var(--u)*.07) 0 rgba(0,0,0,.28);transition:transform .06s,filter .1s;text-transform:uppercase}
 .k.liten{font-size:calc(var(--u)*.27);text-transform:none}
 .k.lp{--f:var(--lill)}.k.lr{--f:var(--ring)}.k.lm{--f:var(--lang)}.k.li{--f:var(--pek)}
 .k.rp{--f:var(--lill)}.k.rr{--f:var(--ring)}.k.rm{--f:var(--lang)}.k.ri{--f:var(--pek)}.k.t{--f:var(--tumme)}

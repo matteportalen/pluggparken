@@ -2,6 +2,7 @@
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
+<script src="../../tema.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ordgömman – Pluggparken</title>
 <meta name="description" content="Ordgömma: hitta de gömda orden. En ny ordgömma varje gång, i tio teman.">
@@ -47,20 +48,20 @@ h1{font-size:clamp(2.2rem,8vw,2.9rem);line-height:1;margin:10px 0 4px;font-weigh
 .tema:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(29,43,83,.16)}
 @media(hover:hover){.tema:hover{transform:translateY(-2px);box-shadow:0 7px 0 rgba(29,43,83,.16)}}
 .tema .em{position:absolute;font-size:2rem;line-height:1;pointer-events:none}
-.tema .namn{position:relative;align-self:flex-start;background:rgba(255,255,255,.94);border-radius:14px;padding:4px 12px;font-weight:800;font-size:1.2rem;line-height:1.2;box-shadow:0 3px 0 rgba(29,43,83,.15)}
+.tema .namn{position:relative;align-self:flex-start;background:var(--wa-94,rgba(255,255,255,.94));border-radius:14px;padding:4px 12px;font-weight:800;font-size:1.2rem;line-height:1.2;box-shadow:0 3px 0 rgba(29,43,83,.15)}
 .tema .namn small{display:block;font-weight:700;font-size:.85rem;color:var(--muted)}
-.tema .klar{position:absolute;top:10px;right:10px;background:#fff;border-radius:999px;padding:1px 10px;font-weight:800;font-size:.9rem;box-shadow:0 2px 0 rgba(29,43,83,.15)}
+.tema .klar{position:absolute;top:10px;right:10px;background:var(--card,#fff);border-radius:999px;padding:1px 10px;font-weight:800;font-size:.9rem;box-shadow:0 2px 0 rgba(29,43,83,.15)}
 .note{color:var(--muted);font-size:.95rem;margin-top:18px}
 /* temabakgrunder (även på korten) */
-.t-djur{background:linear-gradient(#BFE6FF 0 52%,#A8DB8F 52% 100%)}
-.t-frukt{background:repeating-linear-gradient(0deg,rgba(229,72,77,.16) 0 26px,transparent 26px 52px),repeating-linear-gradient(90deg,rgba(229,72,77,.16) 0 26px,transparent 26px 52px),#FFF6EE}
+.t-djur{background:linear-gradient(var(--lc-BFE6FF,#BFE6FF) 0 52%,#A8DB8F 52% 100%)}
+.t-frukt{background:repeating-linear-gradient(0deg,rgba(229,72,77,.16) 0 26px,transparent 26px 52px),repeating-linear-gradient(90deg,rgba(229,72,77,.16) 0 26px,transparent 26px 52px),var(--lc-FFF6EE,#FFF6EE)}
 .t-skola{background:radial-gradient(ellipse at 30% 20%,rgba(255,255,255,.08),transparent 60%),#2F5D46}
 .t-kropp{background:radial-gradient(circle,rgba(255,255,255,.55) 3px,transparent 4px) 0 0/34px 34px,#BFEDEE}
-.t-farg{background:radial-gradient(circle at 12% 18%,#FFD3D5 0 70px,transparent 71px),radial-gradient(circle at 88% 22%,#D4F2C4 0 90px,transparent 91px),radial-gradient(circle at 20% 85%,#CFE0FF 0 100px,transparent 101px),radial-gradient(circle at 85% 82%,#FFE9A8 0 80px,transparent 81px),radial-gradient(circle at 55% 50%,#EADCFF 0 60px,transparent 61px),#FFFFFF}
-.t-klader{background:linear-gradient(#CDE9FF,#EFF8FF)}
-.t-vader{background:linear-gradient(#8FCBFF,#DDF1FF 70%)}
-.t-landskap,.t-stader{background:linear-gradient(rgba(140,100,40,.10) 1px,transparent 1px) 0 0/60px 60px,linear-gradient(90deg,rgba(140,100,40,.10) 1px,transparent 1px) 0 0/60px 60px,radial-gradient(ellipse at center,#F7EDD3 40%,#E8D3A4)}
-.t-rymd{background:radial-gradient(circle,#fff 1px,transparent 1.6px) 0 0/53px 61px,radial-gradient(circle,rgba(255,255,255,.7) 1px,transparent 1.5px) 20px 30px/37px 43px,linear-gradient(#141B3D,#262C66)}
+.t-farg{background:radial-gradient(circle at 12% 18%,var(--lc-FFD3D5,#FFD3D5) 0 70px,transparent 71px),radial-gradient(circle at 88% 22%,var(--lc-D4F2C4,#D4F2C4) 0 90px,transparent 91px),radial-gradient(circle at 20% 85%,var(--lc-CFE0FF,#CFE0FF) 0 100px,transparent 101px),radial-gradient(circle at 85% 82%,var(--warn-bg,#FFE9A8) 0 80px,transparent 81px),radial-gradient(circle at 55% 50%,var(--lc-EADCFF,#EADCFF) 0 60px,transparent 61px),var(--card,#fff)}
+.t-klader{background:linear-gradient(var(--lc-CDE9FF,#CDE9FF),var(--lc-EFF8FF,#EFF8FF))}
+.t-vader{background:linear-gradient(#8FCBFF,var(--info-bg,#DDF1FF) 70%)}
+.t-landskap,.t-stader{background:linear-gradient(rgba(140,100,40,.10) 1px,transparent 1px) 0 0/60px 60px,linear-gradient(90deg,rgba(140,100,40,.10) 1px,transparent 1px) 0 0/60px 60px,radial-gradient(ellipse at center,var(--lc-F7EDD3,#F7EDD3) 40%,#E8D3A4)}
+.t-rymd{background:radial-gradient(circle,var(--card,#fff) 1px,transparent 1.6px) 0 0/53px 61px,radial-gradient(circle,rgba(255,255,255,.7) 1px,transparent 1.5px) 20px 30px/37px 43px,linear-gradient(#141B3D,#262C66)}
 .morkt{--fg:#fff}
 /* dekorationer runt pysselblocket */
 #deko{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
@@ -70,7 +71,7 @@ h1{font-size:clamp(2.2rem,8vw,2.9rem);line-height:1;margin:10px 0 4px;font-weigh
 #deko .lina{position:absolute;left:-2%;right:-2%;top:76px;height:40px;border-bottom:3px solid #9C7A4B;border-radius:0 0 50% 50%/0 0 100% 100%}
 /* spelet */
 .gtop{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:2px 0 12px}
-.pill{background:#fff;border-radius:999px;padding:6px 14px;font-weight:800;font-size:1rem;box-shadow:0 3px 0 rgba(29,43,83,.18);min-height:44px;display:inline-flex;align-items:center;gap:6px}
+.pill{background:var(--card,#fff);border-radius:999px;padding:6px 14px;font-weight:800;font-size:1rem;box-shadow:0 3px 0 rgba(29,43,83,.18);min-height:44px;display:inline-flex;align-items:center;gap:6px}
 .pill:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(29,43,83,.18)}
 .gtop .sp{flex:1}
 .gwrap{display:grid;gap:16px;align-items:start}
@@ -95,8 +96,8 @@ h1{font-size:clamp(2.2rem,8vw,2.9rem);line-height:1;margin:10px 0 4px;font-weigh
 .lista h3{margin:0 0 4px;font-size:1.25rem}
 .lista .hjalp{margin:0 0 10px;color:var(--muted);font-size:.92rem;line-height:1.3}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{font-family:var(--las);background:#F2F6FC;border-radius:12px;padding:4px 12px;font-weight:800;font-size:1.05rem;letter-spacing:.5px;min-height:40px;position:relative;transition:color .2s}
-.chip.hittad{color:#9AA5BD;background:#F6F8FB}
+.chip{font-family:var(--las);background:var(--lc-F2F6FC,#F2F6FC);border-radius:12px;padding:4px 12px;font-weight:800;font-size:1.05rem;letter-spacing:.5px;min-height:40px;position:relative;transition:color .2s}
+.chip.hittad{color:#9AA5BD;background:var(--lc-F6F8FB,#F6F8FB)}
 .chip.hittad::after{content:"";position:absolute;left:8px;right:8px;top:50%;height:3px;border-radius:2px;background:var(--c);transform:rotate(-3deg)}
 .klart{text-align:center}
 .klart .owl{width:120px;height:auto;margin:0 auto;display:block;animation:hopp .6s ease-in-out 3}
@@ -104,7 +105,7 @@ h1{font-size:clamp(2.2rem,8vw,2.9rem);line-height:1;margin:10px 0 4px;font-weigh
 .klart h2{margin:4px 0;font-size:1.6rem;line-height:1.15}
 .klart p{margin:0 0 12px;color:var(--muted)}
 .big{display:block;width:100%;border-radius:18px;padding:12px 16px;font-weight:800;font-size:1.15rem;background:var(--good);color:#fff;box-shadow:0 4px 0 var(--good-dark);margin-top:10px}
-.big.sek{background:#fff;color:var(--ink);box-shadow:0 4px 0 var(--line);border:2px solid var(--line)}
+.big.sek{background:var(--card,#fff);color:var(--ink);box-shadow:0 4px 0 var(--line);border:2px solid var(--line)}
 .big:active{transform:translateY(3px);box-shadow:none}
 body.morkt .gtop .pill,body.morkt .lista{color:var(--ink)}
 #fx{position:fixed;inset:0;pointer-events:none;z-index:50}

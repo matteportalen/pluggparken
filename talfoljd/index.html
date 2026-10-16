@@ -2,6 +2,7 @@
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
+<script src="../tema.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Talföljder – Pluggparken</title>
 <meta name="description" content="Talföljder: fyll i talen som fattas och hitta regeln när grodan hoppar över stenarna.">
@@ -32,7 +33,7 @@
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%}
 :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-body{background:linear-gradient(#E9F8EE,#D8F0E0 70%,#CDEBD7);background-attachment:fixed;color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+body{background:linear-gradient(var(--lc-E9F8EE,#E9F8EE),var(--lc-D8F0E0,#D8F0E0) 70%,var(--lc-CDEBD7,#CDEBD7));background-attachment:fixed;color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
 .wrap{max-width:640px;margin:0 auto;padding:12px 16px 48px}
 button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;border:0;background:none}
 button:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
@@ -68,13 +69,13 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
 .bank.l{left:0;border-radius:0 40% 40% 0/0 50% 50% 0}
 .bank.r{right:0;background:linear-gradient(270deg,#6CC35E,#58B04B);border-radius:40% 0 0 40%/50% 0 0 50%}
 .stones{position:absolute;left:28px;right:28px;bottom:20px;display:flex;gap:6px;align-items:flex-end}
-.stone{flex:1;min-width:0;height:58px;border-radius:50%/46%;background:radial-gradient(circle at 35% 28%,#EEF1F5,#B4BECB 70%);box-shadow:0 6px 0 #74839A,0 9px 10px rgba(0,40,80,.25);
+.stone{flex:1;min-width:0;height:58px;border-radius:50%/46%;background:radial-gradient(circle at 35% 28%,var(--lc-EEF1F5,#EEF1F5),#B4BECB 70%);box-shadow:0 6px 0 #74839A,0 9px 10px rgba(0,40,80,.25);
   display:grid;place-items:center;font-weight:800;font-size:clamp(1.05rem,4.6vw,1.5rem);line-height:1;padding:0 2px;white-space:nowrap;letter-spacing:-.5px}
-.stone.blank span{display:grid;place-items:center;min-width:72%;height:34px;border:2.5px dashed #7E8CA3;border-radius:10px;background:rgba(255,255,255,.55);color:var(--accent)}
-.stone.blank.sel span{border:3px solid var(--accent);background:#fff;box-shadow:0 0 0 4px rgba(61,90,254,.25)}
-.stone.blank.bad span{border-color:var(--bad);background:#FFE3E5;color:var(--bad)}
-.stone.filled{color:var(--good-dark)}
-.stone.shown{color:#B8323A}
+.stone.blank span{display:grid;place-items:center;min-width:72%;height:34px;border:2.5px dashed #7E8CA3;border-radius:10px;background:var(--wa-55,rgba(255,255,255,.55));color:var(--accent)}
+.stone.blank.sel span{border:3px solid var(--accent);background:var(--card,#fff);box-shadow:0 0 0 4px rgba(61,90,254,.25)}
+.stone.blank.bad span{border-color:var(--bad);background:var(--err-bg,#FFE3E5);color:var(--bad)}
+.stone.filled{color:var(--ok-ink,var(--good-dark))}
+.stone.shown{color:var(--err-ink,#B8323A)}
 #arcs{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
 #arcs text{font-family:var(--font)}
 .frog{position:absolute;left:0;top:0;font-size:42px;line-height:1;pointer-events:none;will-change:transform;filter:drop-shadow(0 3px 2px rgba(0,40,20,.3))}
@@ -82,13 +83,13 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
 .rule{display:flex;align-items:center;justify-content:center;gap:10px;margin:14px 0 0;background:var(--card);border-radius:18px;padding:10px;box-shadow:0 4px 0 var(--line);flex-wrap:wrap}
 .rule .lab{font-weight:800;font-size:1.15rem}
 .ops{display:flex;gap:6px}
-.ops button{width:54px;height:54px;border-radius:14px;font-size:1.9rem;font-weight:800;background:#F3FBF6;box-shadow:0 0 0 2px var(--line) inset,0 4px 0 var(--line)}
-.ops button[aria-pressed="true"]{background:var(--ink);color:#fff;box-shadow:0 4px 0 #0E1735}
-.rbox{min-width:76px;height:54px;border-radius:14px;border:3px solid var(--accent);display:grid;place-items:center;font-weight:800;font-size:1.7rem;padding:0 10px;background:#fff}
-.rule.done .rbox{border-color:var(--good);color:var(--good-dark)}
-.rule.bad .rbox{border-color:var(--bad);background:#FFE3E5}
-.feedback{min-height:1.5em;font-weight:800;font-size:1.08rem;margin:10px 0;text-align:center;color:var(--good-dark);line-height:1.3}
-.feedback.hint{background:#FFE9EC;color:#9B2C3A;border-radius:14px;padding:8px 12px}
+.ops button{width:54px;height:54px;border-radius:14px;font-size:1.9rem;font-weight:800;background:var(--lc-F3FBF6,#F3FBF6);box-shadow:0 0 0 2px var(--line) inset,0 4px 0 var(--line)}
+.ops button[aria-pressed="true"]{background:var(--sel,var(--ink));color:#fff;box-shadow:0 4px 0 #0E1735}
+.rbox{min-width:76px;height:54px;border-radius:14px;border:3px solid var(--accent);display:grid;place-items:center;font-weight:800;font-size:1.7rem;padding:0 10px;background:var(--card,#fff)}
+.rule.done .rbox{border-color:var(--good);color:var(--ok-ink,var(--good-dark))}
+.rule.bad .rbox{border-color:var(--bad);background:var(--err-bg,#FFE3E5)}
+.feedback{min-height:1.5em;font-weight:800;font-size:1.08rem;margin:10px 0;text-align:center;color:var(--ok-ink,var(--good-dark));line-height:1.3}
+.feedback.hint{background:var(--err-bg,#FFE9EC);color:var(--err-ink,#9B2C3A);border-radius:14px;padding:8px 12px}
 .pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .pad button{height:54px;border-radius:16px;background:var(--card);font-size:1.8rem;font-weight:800;box-shadow:0 4px 0 var(--line)}
 .pad button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
@@ -99,7 +100,7 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
 .rbig{font-size:clamp(3.2rem,16vw,4.6rem);font-weight:800;line-height:1;margin:6px 0}
 .rsub{color:var(--muted);font-size:1.15rem;margin:0 0 14px}
 .big{display:block;width:100%;padding:12px 16px;border-radius:18px;background:var(--card);box-shadow:0 4px 0 var(--line);font-weight:800;font-size:1.2rem;margin-top:12px}
-.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:14px;font-weight:700;z-index:6;max-width:90vw;text-align:center}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--sel,var(--ink));color:#fff;padding:10px 18px;border-radius:14px;font-weight:700;z-index:6;max-width:90vw;text-align:center}
 #fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:7}
 @media(max-width:420px){.stones{left:20px;right:20px;gap:4px}.bank{width:17px}.pad{gap:8px}.pad button{height:50px}}
 @media (prefers-reduced-motion:reduce){*{transition:none !important}}

@@ -2,6 +2,7 @@
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
+<script src="../../tema.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Draw it! – Pluggparken</title>
 <meta name="description" content="Draw it!: rita ett engelskt ord och se om datorn gissar rätt. Träna engelska ord för barn.">
@@ -54,19 +55,19 @@ h1{font-size:2.6rem;line-height:1;margin:12px 0 4px;font-weight:800}
 .task .draw{font-weight:800;color:var(--muted)}
 .task .en{font-family:var(--las);font-weight:700;font-size:clamp(1.8rem,7vw,2.4rem);line-height:1.1;color:var(--accent)}
 .task .sv{font-weight:800;color:#9C4DCC}
-.sm{padding:6px 12px;border-radius:12px;background:#EEF3FF;font-weight:800;font-size:.95rem}
-.timer{height:10px;border-radius:5px;background:#DCE5F7;overflow:hidden;margin:8px 0}
+.sm{padding:6px 12px;border-radius:12px;background:var(--lc-EEF3FF,#EEF3FF);font-weight:800;font-size:.95rem}
+.timer{height:10px;border-radius:5px;background:var(--lc-DCE5F7,#DCE5F7);overflow:hidden;margin:8px 0}
 .timer i{display:block;height:100%;background:linear-gradient(90deg,#2BB673,#F2B707,#E5484D);width:100%}
-.pad{position:relative;background:#fff;border-radius:22px;box-shadow:0 5px 0 var(--line);overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none}
+.pad{position:relative;background:var(--card,#fff);border-radius:22px;box-shadow:0 5px 0 var(--line);overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none}
 #cv{display:block;width:100%;height:min(58vh,520px);cursor:crosshair}
 .guess{position:absolute;left:12px;right:12px;bottom:10px;text-align:center;font-weight:800;font-size:1.25rem;color:var(--ink);pointer-events:none;text-shadow:0 1px 0 #fff}
-.guess.ok{color:var(--good-dark);font-size:1.5rem}
+.guess.ok{color:var(--ok-ink,var(--good-dark));font-size:1.5rem}
 .row2{display:flex;gap:10px;margin-top:10px}.row2>*{flex:1}
 .alt{padding:12px;border-radius:16px;background:var(--card);box-shadow:0 4px 0 var(--line);font-weight:800;font-size:1.05rem}
 .go{display:block;width:100%;margin-top:12px;padding:14px;border-radius:20px;font-weight:800;font-size:1.35rem;color:#fff;background:var(--good);box-shadow:0 5px 0 var(--good-dark)}
 .go:active{transform:translateY(3px);box-shadow:0 2px 0 var(--good-dark)}
 .card{position:fixed;inset:0;display:grid;place-items:center;background:rgba(29,43,83,.35);z-index:10}
-.card>div{background:#fff;border-radius:24px;padding:20px 26px;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.25);animation:pop .3s}
+.card>div{background:var(--card,#fff);border-radius:24px;padding:20px 26px;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.25);animation:pop .3s}
 @keyframes pop{from{transform:scale(.7);opacity:0}}
 .card .en{font-family:var(--las);font-weight:700;font-size:3rem;color:var(--accent);line-height:1.1}
 .card p{margin:4px 0;color:var(--muted);font-weight:800}
@@ -75,12 +76,12 @@ h1{font-size:2.6rem;line-height:1;margin:12px 0 4px;font-weight:800}
 .res h2{font-size:2rem;margin:8px 0}
 .gal{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
 @media(min-width:700px){.gal{grid-template-columns:repeat(6,1fr)}}
-.gal div{background:#fff;border-radius:16px;box-shadow:0 3px 0 var(--line);padding:6px;font-weight:800}
-.gal canvas{width:100%;height:auto;display:block;border-radius:10px;background:#fff}
-.gal .y{color:var(--good-dark)}.gal .n{color:#B8323A}
+.gal div{background:var(--card,#fff);border-radius:16px;box-shadow:0 3px 0 var(--line);padding:6px;font-weight:800}
+.gal canvas{width:100%;height:auto;display:block;border-radius:10px;background:var(--card,#fff)}
+.gal .y{color:var(--ok-ink,var(--good-dark))}.gal .n{color:var(--err-ink,#B8323A)}
 .gal small{display:block;color:var(--muted);font-size:.75rem;line-height:1.2}
 .load{text-align:center;color:var(--muted);font-weight:800;padding:20px}
-.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:14px;font-weight:700;z-index:30;max-width:90vw;text-align:center}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--sel,var(--ink));color:#fff;padding:10px 18px;border-radius:14px;font-weight:700;z-index:30;max-width:90vw;text-align:center}
 #fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:25}
 @media (prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important}}
 </style>

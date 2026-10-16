@@ -2,6 +2,7 @@
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
+<script src="../../tema.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Klockan – Pluggparken</title>
 <meta name="description" content="Klockan: ställ klockan, lär dig läsa tiden och mät hur lång tid något tar. Ett verktyg för barn.">
@@ -42,10 +43,10 @@ h1{font-size:2.3rem;line-height:1;margin:8px 0 4px;font-weight:800}
 .bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
 .btn{background:var(--card);border-radius:12px;padding:7px 12px;font-weight:800;font-size:.95rem;box-shadow:0 3px 0 var(--line)}
 .btn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
-.btn[aria-pressed="true"]{background:var(--ink);color:#fff}
+.btn[aria-pressed="true"]{background:var(--sel,var(--ink));color:#fff}
 .seg{display:flex;background:var(--card);border-radius:14px;padding:3px;box-shadow:0 3px 0 var(--line)}
 .seg button{border-radius:11px;padding:6px 12px;font-weight:800;font-size:.95rem}
-.seg button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.seg button[aria-pressed="true"]{background:var(--sel,var(--ink));color:#fff}
 .main{display:grid;gap:14px}
 @media(min-width:880px){.main{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);align-items:start}}
 .card{background:var(--card);border-radius:22px;padding:12px;box-shadow:0 5px 0 var(--line)}
@@ -61,7 +62,7 @@ h2{font-size:1.35rem;margin:0 0 6px}
 .mrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .go{background:var(--good);color:#fff;border-radius:14px;padding:8px 14px;font-weight:800;box-shadow:0 4px 0 var(--good-dark)}
 .go:active{transform:translateY(2px);box-shadow:0 2px 0 var(--good-dark)}
-.elapsed{font-weight:800;font-size:1.2rem;color:#C96A0C;min-height:1.5em;margin:6px 0 0}
+.elapsed{font-weight:800;font-size:1.2rem;color:var(--or-ink,#C96A0C);min-height:1.5em;margin:6px 0 0}
 .note{color:var(--muted);font-size:.95rem;margin-top:10px}
 .hide .digital,.hide .words{visibility:hidden}
 </style>

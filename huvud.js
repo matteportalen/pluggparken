@@ -136,11 +136,13 @@ body.mph-mini #quit{display:none}
   h.innerHTML=`${paStart?'':'<button class="mph-bk" aria-label="Tillbaka">←</button>'}<button class="mph-x" aria-label="Avsluta">✕</button>
     <button class="mph-logo" aria-label="Pluggparken, meny" aria-haspopup="true" aria-expanded="false">${LOGO_PP}<span class="t">Plugg<b>parken</b></span><span class="mph-burger" aria-hidden="true"><i style="font-style:normal">☰</i><em>Ämnen</em></span></button>
     <span class="mph-title">${titel?`<span class="mph-sep">›</span> ${ikon?ikon+' ':''}${esc(titel)}`:''}</span>
-    <span class="mph-right"><a class="mph-pet" href="${hem}#garderob" aria-label="Ditt djur och dina stjärnor">${pet}${namn?`<span class="mph-name">${esc(namn)}</span>`:''}<span>⭐&nbsp;<span class="mph-n">${MPStjarnor()}</span></span><span class="mph-mynt">🪙&nbsp;<span class="mph-m">${myntLas().m}</span></span></a><button class="mph-snd" aria-label="Ljud av eller på"></button></span>`;
+    <span class="mph-right"><a class="mph-pet" href="${hem}#garderob" aria-label="Ditt djur och dina stjärnor">${pet}${namn?`<span class="mph-name">${esc(namn)}</span>`:''}<span>⭐&nbsp;<span class="mph-n">${MPStjarnor()}</span></span><span class="mph-mynt">🪙&nbsp;<span class="mph-m">${myntLas().m}</span></span></a><button class="mph-snd" aria-label="Ljud av eller på"></button><button class="mph-tema" aria-label="Byt mellan ljust och mörkt läge"></button></span>`;
   document.body.prepend(h);
   const snd=h.querySelector('.mph-snd'),label=()=>{snd.textContent=window.Ljud&&!Ljud.on?'🔇':'🔊';};label();
   snd.onclick=()=>{if(!window.Ljud)return;Ljud.set(!Ljud.on);label();if(Ljud.on&&Ljud.ok)Ljud.ok();document.dispatchEvent(new Event('mp-ljud'));};
   document.addEventListener('mp-ljud-andrat',label);
+  const tm=h.querySelector('.mph-tema'),tlabel=()=>{const m=window.MPTema&&MPTema.get()==='mork';tm.textContent=m?'☀️':'🌙';tm.title=m?'Byt till ljust läge':'Byt till mörkt läge';};
+  if(window.MPTema){tlabel();tm.onclick=()=>{MPTema.toggle();tlabel();};document.addEventListener('mp-tema',tlabel);}else tm.remove();
   h.querySelector('.mph-x').onclick=()=>history.back();
   // tillbaka: inne i sidan ett steg bakåt (sidans egna knappar trycks via historiken), annars dit man kom ifrån
   const bk=h.querySelector('.mph-bk');
@@ -154,6 +156,7 @@ body.mph-mini #quit{display:none}
   ptl.onclick=e=>{e.stopPropagation();if(meny)return stang();
     meny=document.createElement('nav');meny.className='mph-menu';meny.setAttribute('aria-label','Meny');
     meny.innerHTML=PORTALER.map(p=>`<a href="${hem}${p.href}"${p===PORTAL?' aria-current="true"':''}>${p.logo}<span>${p.namn}<small>${p.sub}</small></span></a>`).join('');
+    if(window.MPTema){const mt=document.createElement('button');mt.className='mph-mt';mt.type='button';const ml=()=>{mt.innerHTML=MPTema.get()==='mork'?'<span>☀️</span><span>Ljust läge</span>':'<span>🌙</span><span>Mörkt läge</span>';};ml();mt.onclick=e=>{e.stopPropagation();MPTema.toggle();ml();};meny.appendChild(mt);}
     h.appendChild(meny);ptl.setAttribute('aria-expanded','true');meny.querySelector('a').focus({preventScroll:true});};
   document.addEventListener('click',e=>{if(meny&&!meny.contains(e.target))stang();});
   document.addEventListener('keydown',e=>{if(e.key==='Escape')stang();});

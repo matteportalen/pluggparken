@@ -2,6 +2,7 @@
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
+<script src="../../../tema.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Läsfelslabbet – Pluggparken</title>
 <meta name="robots" content="noindex">
@@ -28,22 +29,22 @@ h1{font-size:2rem;margin:10px 0 4px}
 .btn{padding:10px 16px;border-radius:14px;background:var(--accent);color:#fff;font-weight:800;box-shadow:0 4px 0 #2A3DB8}
 .btn:disabled{opacity:.5;cursor:default}
 .btn.g{background:var(--good);box-shadow:0 4px 0 var(--good-dark)}
-.btn.w{background:#fff;color:var(--ink);box-shadow:0 4px 0 var(--line)}
+.btn.w{background:var(--card,#fff);color:var(--ink);box-shadow:0 4px 0 var(--line)}
 .seg{display:inline-flex;background:var(--bg);border-radius:12px;padding:3px;gap:3px;flex-wrap:wrap}
 .seg button{padding:5px 10px;border-radius:9px;font-weight:800;font-size:.92rem}
-.seg button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.seg button[aria-pressed="true"]{background:var(--sel,var(--ink));color:#fff}
 .small{font-size:.88rem;color:var(--muted)}
 .prog{height:10px;border-radius:5px;background:var(--bg);overflow:hidden;margin-top:6px}.prog i{display:block;height:100%;width:0;background:var(--accent)}
 .stage{text-align:center;padding:10px 0}
 .word{font-family:"Andika",var(--font);font-size:4rem;font-weight:700;line-height:1.1}
 .tag{display:inline-block;border-radius:999px;padding:3px 14px;font-weight:800;margin-bottom:6px}
-.tag.r{background:#DDF5E7;color:var(--good-dark)}.tag.f{background:#FFE3E7;color:#B8323A}
+.tag.r{background:var(--ok-bg,#DDF5E7);color:var(--ok-ink,var(--good-dark))}.tag.f{background:var(--lc-FFE3E7,#FFE3E7);color:var(--err-ink,#B8323A)}
 .lamp{display:inline-flex;align-items:center;gap:6px;font-weight:800;color:var(--muted)}
-.lamp i{width:12px;height:12px;border-radius:50%;background:#C6D6F2}.lamp.on i{background:var(--good);box-shadow:0 0 0 4px rgba(30,158,94,.2)}.lamp.rec i{background:var(--bad);box-shadow:0 0 0 4px rgba(229,72,77,.2)}
+.lamp i{width:12px;height:12px;border-radius:50%;background:var(--lc-C6D6F2,#C6D6F2)}.lamp.on i{background:var(--good);box-shadow:0 0 0 4px rgba(30,158,94,.2)}.lamp.rec i{background:var(--bad);box-shadow:0 0 0 4px rgba(229,72,77,.2)}
 .res{font-size:1.15rem;font-weight:800;margin-top:8px;min-height:1.5em}
 table{width:100%;border-collapse:collapse;font-size:.95rem}
 th,td{text-align:left;padding:5px 6px;border-bottom:1px solid var(--line)}
-td.ok{color:var(--good-dark);font-weight:800}td.no{color:#B8323A;font-weight:800}
+td.ok{color:var(--ok-ink,var(--good-dark));font-weight:800}td.no{color:var(--err-ink,#B8323A);font-weight:800}
 .sum{font-weight:800;font-size:1.1rem}
 input[type=range]{width:220px}
 pre{white-space:pre-wrap;font-size:.8rem;background:var(--bg);border-radius:10px;padding:8px;max-height:200px;overflow:auto}
