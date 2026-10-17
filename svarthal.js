@@ -57,7 +57,8 @@ const V={on:true,busy:false,a:null};
 function voiceStop(){V.busy=false;if(V.a){try{V.a.pause();}catch(e){}V.a=null;}duck(false);}
 function duck(on){const L=window.Ljud;try{const g=L&&L.rymd&&L.rymd.g;if(g&&g.context)g.gain.setTargetAtTime(on?.16:.55,g.context.currentTime,.4);}catch(e){}}
 function voicePlay(si,ci){voiceStop();if(!V.on)return;const a=new Audio(BASE+"s"+si+"-"+(ci+1)+".mp3");a.preload="auto";V.a=a;V.busy=true;
-  const done=()=>{if(V.a===a){V.busy=false;V.a=null;duck(false);}};a.onended=done;a.onerror=done;duck(true);
+  const done=()=>{clearTimeout(V.t);if(V.a===a){V.busy=false;V.a=null;duck(false);}};a.onended=done;a.onerror=done;duck(true);
+  clearTimeout(V.t);V.t=setTimeout(done,16000);   // reservutgång: filmen får aldrig hänga om ljudet inte startar
   const p=a.play();if(p&&p.catch)p.catch(done);}
 
 /* ---------- Stjärnhimmel ---------- */
@@ -92,8 +93,8 @@ window.MPSvartHal={start(host,o){o=o||{};
   function setPlay(p){const was=playing;playing=p;$('[data-a="play"]').textContent=p?"⏸":"▶";
     if(!p){if(V.a){try{V.a.pause();}catch(e){}}}else if(was===false&&V.a){V.a.play().catch(()=>{V.busy=false;});}else if(p&&!V.a&&capShown>=0&&st<SC[si].d&&!V.busy){/* första starten eller efter hopp */voicePlay(si,capShown);}
     const L=snd();if(L&&L.rymd){if(p&&L.on)L.rymd.start();else L.rymd.stop&&L.rymd.stop();}}
-  function finish(){playing=false;$('[data-a="play"]').textContent="▶";ended=true;voiceStop();const L=snd();if(L&&L.rymd&&L.rymd.stop)L.rymd.stop();
-    const e=document.createElement("div");e.className="sh-end";e.innerHTML=`<div><h2>Inuti ett svart hål</h2><p>Flykthastighet, händelsehorisonten, den sista stabila banan och tidvattenkrafter. Fritt efter en förklaring av astrofysikern Neil deGrasse Tyson.</p><button class="sh-play" data-a="again">↻ Se filmen igen</button></div>`;root.appendChild(e);}
+  function finish(){playing=false;$('[data-a="play"]').textContent="▶";ended=true;voiceStop();document.dispatchEvent(new Event("mp-sh-slut"));const L=snd();if(L&&L.rymd&&L.rymd.stop)L.rymd.stop();
+    const e=document.createElement("div");e.className="sh-end";e.innerHTML=`<div><h2>Tack för att du har lyssnat</h2><p>Nu vet du lite mer om en av universums mest mystiska platser. Fortsätt vara nyfiken! Filmen handlar om flykthastighet, händelsehorisonten, den sista stabila banan och tidvattenkrafter, fritt efter en förklaring av astrofysikern Neil deGrasse Tyson.</p><button class="sh-play" data-a="again">↻ Se filmen igen</button></div>`;root.appendChild(e);if(V.on){const a=new Audio(BASE+"s8-1.mp3");V.a=a;V.busy=true;duck(true);const dn=()=>{if(V.a===a){V.busy=false;V.a=null;duck(false);}};a.onended=dn;a.onerror=dn;const p=a.play();if(p&&p.catch)p.catch(dn);}}
   root.addEventListener("click",ev=>{const b=ev.target.closest("[data-a],[data-i]");if(!b)return;
     if(b.dataset.i!=null){if(!started)start();goto(+b.dataset.i);return;}
     const a=b.dataset.a;
@@ -262,6 +263,7 @@ window.MPSvartHal={start(host,o){o=o||{};
     label("?",cx+wTop*.12+18,by+8,"#ffd86b","left",Math.max(26,s*.07));tag("Singulariteten",cx+wTop*.12+18+Math.max(26,s*.07)*.7,by+2,"#ffd86b","left");x.globalAlpha=1;}
   ];
   function cleanup(){if(!alive)return;alive=false;cancelAnimationFrame(raf);voiceStop();const L=snd();if(L&&L.rymd&&L.rymd.stop)L.rymd.stop();document.removeEventListener("keydown",key);document.removeEventListener("visibilitychange",vis);if(ro)ro.disconnect();root.remove();}
+  root.__slut=()=>{if(!started)start();finish();};
   // för tester: hoppa till en scen och en tid
   root.__seek=(i,tt)=>{if(!started)start();goto(i,false);setPlay(false);voiceStop();st=tt;const c=SC[si].cap;let n=0;c.forEach((q,j)=>{if(tt>=q[0])n=j;});showCap(n);draw();};
   draw();return cleanup;
