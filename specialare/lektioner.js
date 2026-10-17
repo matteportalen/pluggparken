@@ -44,7 +44,7 @@ var LEKTIONER=[
 ["⛰️","Berget växer","När lavan svalnar blir den hård sten. Utbrott efter utbrott bygger upp ett berg, en vulkan."],
 ["🇮🇸","Island","Island har många vulkaner, eftersom ön ligger där två jordplattor möts. Där finns även varma källor."]]},
 
-{id:"svartahal",lank:[["Titta: TON 618 mot Phoenix A, storleksjämförelse (YouTube)","https://www.youtube.com/watch?v=vtqWnq4RZUE"]],titel:"Svarta hål",kat:"Rymden",e:"🕳️",c:"#34255E",rutor:[
+{id:"svartahal",lank:[["Se filmen: Inuti ett svart hål","#g/svarthal"],["Titta: TON 618 mot Phoenix A, storleksjämförelse (YouTube)","https://www.youtube.com/watch?v=vtqWnq4RZUE"]],titel:"Svarta hål",kat:"Rymden",e:"🕳️",c:"#34255E",rutor:[
 ["🕳️","Ett hål i rymden?","Ett svart hål är inte riktigt ett hål. Det är en plats där väldigt mycket materia har trängts ihop på en liten yta."],
 ["🧲","Enormt stark dragning","Dragningskraften är så stark att inget kan komma ut, inte ens ljus. Det är därför det är svart."],
 ["⭐","Hur blir de till?","Många svarta hål bildas när en mycket stor stjärna får slut på bränsle och faller ihop."],

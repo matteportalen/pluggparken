@@ -95,6 +95,11 @@ GREJER.push({id:"illusioner",titel:"Optiska illusioner",kat:"Hjärnan",e:"👁�
   V.onclick=()=>{r=!r;rita()};rita();return()=>{};
 }});
 
+/* ---------- Inuti ett svart hål (film, motorn i ../svarthal.js) ---------- */
+GREJER.push({id:"svarthal",titel:"Inuti ett svart hål",kat:"Rymden",e:"🕳️",c:"#FF7A2F",mork:true,beskr:"En film i sju steg: flykthastighet, händelsehorisonten och vad som händer med den som faller in.",start(host){
+  if(!window.MPSvartHal){host.innerHTML='<p style="padding:30px">Filmen kunde inte laddas.</p>';return()=>{};}
+  return MPSvartHal.start(host,{});}});
+
 /* ---------- Pengar i skala ---------- */
 GREJER.push({id:"pengar",titel:"Pengar i skala",kat:"Tal",e:"💰",c:"#2E8B57",mork:true,beskr:"En miljon, en miljard och en biljon kronor som sedelstaplar. Hur högt blir de?",start(host){
   const S=[
