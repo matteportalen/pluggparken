@@ -176,12 +176,15 @@ var LEKTIONER=[
 ["🏠","Var säker","Gå inomhus när det åskar. Stå inte under ensamma höga träd."]]},
 
 {id:"stora-tal",grej:"pengar",titel:"Miljon, miljard och biljon",kat:"Tal",e:"🔢",c:"#2E7D5B",rutor:[
-["🔢","Stora tal","En miljon är 1 000 000. En miljard är tusen miljoner. Det är svårt att föreställa sig, så vi räknar med tid."],
-["⏱️","En miljon sekunder","1 miljon sekunder är ungefär 11 och en halv dag."],
-["📅","En miljard sekunder","1 miljard sekunder är ungefär 31 år och 8 månader! Det är en jättestor skillnad."],
-["🧮","Mellan dem","Skillnaden mellan en miljon och en miljard är lika stor som mellan 11 dagar och nästan 32 år."],
-["🌍","Biljon","En biljon är tusen miljarder. En biljon sekunder är över 31 000 år. Då levde mammutar och människor jagade med spjut."],
-["💰","Så högt blir pengarna","En miljard kronor i 1 000-kronorssedlar blir en stapel som är 100 meter hög. En biljon blir 100 kilometer, upp till gränsen mot rymden. Tryck på knappen nedan och se själv!"]]},
+["🔢","Stora tal","Tusen är 1 000, med 3 nollor. En miljon är 1 000 000, med 6 nollor. En miljard är 1 000 000 000, med 9 nollor. En biljon är 1 000 000 000 000, med 12 nollor. Varje steg är tusen gånger större än det förra. På bilden är kuben 1 000 pärlor, plattan 100 och staven 10."],
+["⏱️","En miljon sekunder","Ett dygn har 86 400 sekunder. En miljon sekunder är därför ungefär 11 och en halv dag. Om du räknade ett tal varje sekund dag och natt skulle du nå en miljon efter drygt en och en halv vecka."],
+["📅","En miljard sekunder","En miljard sekunder är ungefär 31 år och 8 månader. Om du räknade ett tal i sekunden utan att sova eller äta skulle du bli över 30 år äldre innan du nådde en miljard."],
+["🧮","Tusen gånger mer","En miljard är tusen gånger större än en miljon. Därför går det från 11 dagar till nästan 32 år när vi går från en miljon sekunder till en miljard sekunder. Det är en enorm skillnad, fast orden låter nästan lika."],
+["🌍","En biljon sekunder","En biljon sekunder är över 31 000 år. För så länge sedan levde ullhåriga mammutar, och människor jagade med spjut och bodde i grottor. Du skulle alltså ha behövt börja räkna redan då, och aldrig sluta, för att vara klar nu."],
+["💵","En miljon kronor","En 1 000-kronorssedel är bara 0,1 millimeter tjock. 1 000 sedlar à 1 000 kr blir en miljon kronor, och staplade ovanpå varandra är de 10 centimeter höga. Det ryms i handen. Bilden visar en hög med hundralappar i dollar, men tanken är densamma."],
+["🏙️","En miljard kronor","En miljard kronor är en miljon sedlar à 1 000 kr. Stapeln är 100 meter hög, ungefär som ett tjugovåningshus. Turning Torso i Malmö är 190 meter, så stapeln är lite mer än hälften så hög. Så mycket pengar äger bara ett fåtal personer i Sverige."],
+["🚀","En biljon kronor","En biljon kronor är en miljard sedlar à 1 000 kr. Stapeln blir 100 kilometer hög, och på 100 km höjd går den vanliga gränsen mot rymden. Det är tusen gånger högre än en miljard-stapeln."],
+["⏳","Räkna sedlarna","Om du räknar en sedel i sekunden tar en miljard kronor (en miljon sedlar) ungefär 11 dygn. En biljon kronor (en miljard sedlar) tar nästan 32 år. Det är samma tal som för sekunderna, och därför känns de lika svåra att föreställa sig. Tryck på knappen nedan och se hur högt stapeln blir!"]]},
 
 {id:"kontinenter",titel:"Kontinenterna rör sig",kat:"Natur",e:"🗺️",c:"#6B8E3A",rutor:[
 ["🗺️","Jordens pussel","Jordens yta består av stora bitar, plattor, som flyter på het sten. Länderna sitter fast på dem."],

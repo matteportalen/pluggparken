@@ -98,72 +98,102 @@ GREJER.push({id:"illusioner",titel:"Optiska illusioner",kat:"Hjärnan",e:"👁�
 /* ---------- Pengar i skala ---------- */
 GREJER.push({id:"pengar",titel:"Pengar i skala",kat:"Tal",e:"💰",c:"#2E8B57",mork:true,beskr:"En miljon, en miljard och en biljon kronor som sedelstaplar. Hur högt blir de?",start(host){
   const S=[
-   {l:"1 miljon kronor",n:1e3,h:.1,t:"17 minuter",lon:"drygt 2 år och 9 månader",text:"1 000 sedlar à 1 000 kr. Stapeln är 10 centimeter hög och ryms i en hand. Det är en stor summa för en människa."},
-   {l:"10 miljoner kronor",n:1e4,h:1,t:"knappt 3 timmar",lon:"27 år och 9 månader",text:"10 000 sedlar. Stapeln är en meter hög, ungefär till ditt midjemått."},
-   {l:"100 miljoner kronor",n:1e5,h:10,t:"28 timmar",lon:"277 år",text:"100 000 sedlar. Stapeln är lika hög som ett tre våningar högt hus."},
-   {l:"1 miljard kronor",n:1e6,h:100,t:"11 dygn och 14 timmar",lon:"2 778 år",text:"1 miljon sedlar. Stapeln är 100 meter hög, nästan lika hög som ett tjugovåningshus. Så mycket har bara några hundra människor i Sverige."},
-   {l:"10 miljarder kronor",n:1e7,h:1e3,t:"116 dygn",lon:"27 778 år",text:"10 miljoner sedlar. Stapeln är en kilometer hög, högre än världens högsta byggnad."},
+   {l:"1 miljon kronor",n:1e3,h:.1,t:"17 minuter",lon:"drygt 2 år och 9 månader",text:"1 000 sedlar à 1 000 kr. Stapeln är 10 centimeter hög, ungefär lika hög som din sko. Den ryms i en hand."},
+   {l:"10 miljoner kronor",n:1e4,h:1,t:"knappt 3 timmar",lon:"27 år och 9 månader",text:"10 000 sedlar. Stapeln är 1 meter hög, ungefär till din midja."},
+   {l:"100 miljoner kronor",n:1e5,h:10,t:"28 timmar",lon:"277 år",text:"100 000 sedlar. Stapeln är lika hög som ett hus med tre våningar."},
+   {l:"1 miljard kronor",n:1e6,h:100,t:"11 dygn och 14 timmar",lon:"2 778 år",text:"1 miljon sedlar. Stapeln är 100 meter hög, nästan som ett tjugovåningshus. Så mycket äger bara ett fåtal personer i Sverige."},
+   {l:"10 miljarder kronor",n:1e7,h:1e3,t:"116 dygn",lon:"27 778 år",text:"10 miljoner sedlar. Stapeln är 1 kilometer hög, högre än världens högsta byggnad."},
    {l:"100 miljarder kronor",n:1e8,h:1e4,t:"3 år och 2 månader",lon:"277 778 år",text:"100 miljoner sedlar. Stapeln är 10 kilometer hög, lika högt som ett flygplan flyger."},
-   {l:"1 biljon kronor",n:1e9,h:1e5,t:"nästan 32 år",lon:"2,8 miljoner år",text:"1 000 miljarder, en miljard sedlar. Stapeln är 100 kilometer hög och når upp till gränsen mot rymden."},
-   {l:"Elon Musk: ca 5 biljoner kronor",n:5e9,h:5e5,t:"nästan 159 år",lon:"ca 14 miljoner år",text:"Forbes räknar Elon Musk som världens rikaste person, med ungefär 500 miljarder dollar, alltså runt 5 biljoner kronor (siffran ändras hela tiden). Det blir 5 miljarder sedlar à 1 000 kr, en stapel som är 500 kilometer hög, högre än rymdstationen ISS."}];
+   {l:"1 biljon kronor",n:1e9,h:1e5,t:"nästan 32 år",lon:"2,8 miljoner år",text:"En miljard sedlar. Stapeln är 100 kilometer hög och når upp till gränsen mot rymden."},
+   {l:"Elon Musk: ca 5 biljoner kronor",n:5e9,h:5e5,t:"nästan 159 år",lon:"ca 14 miljoner år",text:"Forbes räknar Elon Musk som världens rikaste, med ca 500 miljarder dollar eller runt 5 biljoner kronor (siffran ändras). Det blir 5 miljarder sedlar och en stapel på 500 km, högre än rymdstationen ISS."}];
   const LM=[[.17,"en mobil"],[1.3,"ett barn"],[10,"ett trevåningshus"],[190,"Turning Torso"],[828,"Burj Khalifa, världens högsta byggnad"],[8849,"Mount Everest"],[10500,"ett flygplan"],[1e5,"gränsen mot rymden"],[4e5,"rymdstationen ISS"]];
-  host.innerHTML=`<div class="pg"><div class="kick" id="pK">Pengar i skala · sedlar à 1 000 kr</div><div class="ill-kn" style="margin:8px 0"><button class="k on" id="pM1">Kronor: sedelstaplar</button><button class="k" id="pM2">Dollar: lastpallar</button></div><h2 id="pL"></h2>
-  <div class="pg-st"><canvas id="pC" width="900" height="560"></canvas></div>
-  <p class="pg-t" id="pT"></p>
-  <div class="pg-rad"><div class="pg-box"><small id="pS1">Tid att räkna sedlarna</small><b id="pTid"></b><span id="pU1">en sedel i sekunden</span></div><div class="pg-box"><small id="pS2">Så länge tar det att tjäna ihop</small><b id="pLon"></b><span id="pU2">med 30 000 kr i månaden, före skatt</span></div></div>
-  <input type="range" id="pR" min="0" max="${S.length-1}" step="1" value="0" aria-label="Summa"><div class="pg-skala"><span>1 miljon</span><span>1 miljard</span><span>1 biljon</span><span>Rikaste</span></div>
-  <div class="ill-kn"><button class="k" id="pP">‹ Mindre</button><button class="k ok" id="pN">Mer ›</button></div>
-  <p class="pg-f">Sedlarna är räknade som 0,1 mm tjocka. Stapelns bredd är inte i skala: en riktig stapel skulle vara en tunn nål vid 100 km.</p></div>`;
-  const $=s=>host.querySelector(s),C=$("#pC"),x=C.getContext("2d");let i=0,anim=0,hv=S[0].h,raf=0,mode="k";
   const D=[
-   {l:"1 miljon dollar",p:.01,v:"10 kg",lb:"ryms i en handväska",text:"10 000 sedlar à 100 dollar. De är bara en liten kub, ungefär 22 cm hög, och ligger i en handväska."},
+   {l:"1 miljon dollar",p:.01,v:"10 kg",lb:"ryms i en handväska",text:"10 000 sedlar à 100 dollar. De är bara en liten kub, ungefär 22 cm hög, och ryms i en handväska."},
    {l:"10 miljoner dollar",p:.1,v:"100 kg",lb:"ryms i en stor resväska",text:"100 000 sedlar. En tiondels pall, ungefär en meter hög på en kvarts pall."},
    {l:"100 miljoner dollar",p:1,v:"1 ton",lb:"går på en pall",text:"1 miljon sedlar fyller en hel lastpall."},
    {l:"1 miljard dollar",p:10,v:"10 ton",lb:"en halv lastbil",text:"10 miljoner sedlar. Tio lastpallar i två rader."},
    {l:"10 miljarder dollar",p:100,v:"100 ton",lb:"ca 4 lastbilar",text:"100 miljoner sedlar. 100 lastpallar, som ett litet lager."},
    {l:"100 miljarder dollar",p:1000,v:"1 000 ton",lb:"ca 42 lastbilar",text:"1 000 lastpallar fyller en hel lagerhall."},
    {l:"1 biljon dollar",p:1e4,v:"10 000 ton",lb:"ca 420 lastbilar",text:"10 miljarder sedlar. 10 000 lastpallar. Det är tusen gånger mer än en miljard dollar, som är 10 pallar."},
-   {l:"Elon Musk: ca 500 miljarder dollar",p:5000,v:"5 000 ton",lb:"ca 210 lastbilar",text:"Forbes räknar Elon Musk som världens rikaste person, med ungefär 500 miljarder dollar (siffran ändras hela tiden). I 100-dollarssedlar blir det 5 miljarder sedlar, 5 000 lastpallar och en stapel som är 550 kilometer hög."}];
-  const SOURCE=S;
+   {l:"Elon Musk: ca 500 miljarder dollar",p:5000,v:"5 000 ton",lb:"ca 210 lastbilar",text:"Forbes räknar Elon Musk som världens rikaste, med ca 500 miljarder dollar (siffran ändras). I 100-dollarssedlar blir det 5 miljarder sedlar och 5 000 lastpallar, eller en stapel på 550 km."}];
+  const fmtN=n=>n.toLocaleString("sv-SE",{maximumFractionDigits:0});
+  const ord=n=>{for(const [u,s,p] of [[1e12,"biljon","biljoner"],[1e9,"miljard","miljarder"],[1e6,"miljon","miljoner"],[1e3,"tusen","tusen"]])if(n>=u){const v=n/u;if(v===1)return u===1e3?"tusen":"en "+s;return v.toLocaleString("sv-SE",{maximumFractionDigits:1})+" "+p;}return String(n)};
+  host.innerHTML=`<div class="pg"><div class="pg-st"><canvas id="pC"></canvas></div><div class="pg-side">
+  <div class="kick" id="pK"></div>
+  <div class="ill-kn"><button class="k on" id="pM1">Kronor: sedelstaplar</button><button class="k" id="pM2">Dollar: lastpallar</button></div>
+  <h2 id="pL"></h2>
+  <div class="pg-eq"><div class="r"><b id="pA"></b><span id="pAs"></span></div><div class="r op"><b id="pB"></b><span id="pBs"></span></div><div class="r tot"><b id="pSum"></b><span id="pSs"></span></div></div>
+  <div class="pg-h"><small id="pHs"></small><b id="pH"></b><span id="pHt"></span></div>
+  <p class="pg-t" id="pT"></p>
+  <div class="pg-rad"><div class="pg-box"><small id="pS1"></small><b id="pTid"></b><span id="pU1"></span></div><div class="pg-box"><small id="pS2"></small><b id="pLon"></b><span id="pU2"></span></div></div>
+  <input type="range" id="pR" min="0" max="${S.length-1}" step="1" value="0" aria-label="Summa"><div class="pg-skala"><span>1 miljon</span><span>1 miljard</span><span>1 biljon</span><span>Rikaste</span></div>
+  <div class="ill-kn"><button class="k" id="pP">‹ Mindre</button><button class="k ok" id="pN">Mer ›</button></div>
+  <p class="pg-f" id="pF"></p></div></div>`;
+  const $=s=>host.querySelector(s),C=$("#pC"),x=C.getContext("2d");let i=0,hv=S[0].h,raf=0,mode="k",W=600,H=500;
+  function fit(){const r=C.parentNode.getBoundingClientRect(),dpr=Math.min(2,window.devicePixelRatio||1);W=Math.max(280,r.width);H=Math.max(240,r.height);C.width=Math.round(W*dpr);C.height=Math.round(H*dpr);x.setTransform(dpr,0,0,dpr,0,0);}
   const fmt=(m)=>m>=1000?(m/1000).toLocaleString("sv-SE",{maximumFractionDigits:1})+" km":m>=1?m.toLocaleString("sv-SE",{maximumFractionDigits:1})+" m":(m*100).toLocaleString("sv-SE",{maximumFractionDigits:0})+" cm";
-  function rita(){const W=C.width,H=C.height;x.clearRect(0,0,W,H);
-    const gy=H-50,top=40,view=hv*1.35,sc=(gy-top)/view;
-    const g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,"#0a1628");g.addColorStop(1,"#12263f");x.fillStyle=g;x.fillRect(0,0,W,H);
-    // stjärnor högt upp
-    if(hv>2e4){for(let k=0;k<50;k++){x.fillStyle=`rgba(255,255,255,${.2+((k*37)%10)/14})`;x.fillRect((k*173)%W,(k*91)%(H*.5),1.5,1.5)}}
-    // marken
+  const bg=()=>{const g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,"#0a1628");g.addColorStop(1,"#12263f");x.fillStyle=g;x.fillRect(0,0,W,H);};
+  // en person i skala: ben och skor (syns även när bilden är så inzoomad att resten är utanför)
+  function person(px,gy,sc,label){const hh=1.7*sc,lw=Math.max(2,.085*sc),sl=.27*sc,sh=.085*sc;x.fillStyle="#cfd8ff";
+    if(hh>H-104){ // inzoomat: ett ben och en sko sedda från sidan, i rätt skala
+      const lx=px;x.fillStyle="#cfd8ff";x.fillRect(lx+sl*.1,gy-hh*.46,lw*1.15,hh*.46-sh*.7);
+      x.fillStyle="#7d8fe0";x.fillRect(lx,gy-sh*.3,sl,sh*.3);
+      x.fillStyle="#e9edff";x.beginPath();x.moveTo(lx,gy-sh*.3);x.lineTo(lx,gy-sh*1.05);x.lineTo(lx+sl*.4,gy-sh*1.2);x.quadraticCurveTo(lx+sl*.8,gy-sh*1.0,lx+sl,gy-sh*.45);x.lineTo(lx+sl,gy-sh*.3);x.closePath();x.fill();
+      x.fillStyle="rgba(255,255,255,.88)";x.font="600 16px Inter,sans-serif";x.textAlign="left";x.fillText(label||"din sko, ca 27 cm lång",lx,gy+27);return}
+    const bx=px+lw;x.beginPath();x.arc(bx,gy-hh+hh*.09,hh*.09,0,7);x.fill();x.fillRect(bx-hh*.07,gy-hh+hh*.19,hh*.14,hh*.45);x.fillRect(bx-hh*.07,gy-hh*.36,hh*.055,hh*.36);x.fillRect(bx+hh*.015,gy-hh*.36,hh*.055,hh*.36);
+    x.fillStyle="rgba(255,255,255,.85)";x.font="600 17px Inter,sans-serif";x.textAlign="center";x.fillText(hh>=6?"du, 1,7 m":"du är den här pricken",bx,gy+26);
+    if(hh<6){x.fillStyle="#cfd8ff";x.fillRect(bx-1.5,gy-3,3,3);}}
+  function rita(){const d=S[i];x.clearRect(0,0,W,H);bg();
+    const gy=H-46,top=64,h=hv;
+    // bildens höjd: så att en människa (1,7 m) och stapeln syns; för små staplar zoomas det in men fötterna syns hela tiden
+    const t=Math.max(0,Math.min(1,Math.log10(Math.max(h,.1))+1));let view=Math.max(h*1.35,.45*Math.pow(2.0/.45,t));
+    view=Math.max(view,(gy-top)/(W/.27*(W<520?.3:.34)));const sc=(gy-top)/view;
+    if(h>2e4){for(let k=0;k<60;k++){x.fillStyle=`rgba(255,255,255,${.2+((k*37)%10)/14})`;x.fillRect((k*173)%W,(k*91)%(H*.55),1.5,1.5)}}
     x.fillStyle="#1b3b2a";x.fillRect(0,gy,W,H-gy);x.fillStyle="#2b6a45";x.fillRect(0,gy,W,3);
-    // landmärken som linjer
-    let lastY=1e9;[...LM].reverse().forEach(([m,n])=>{if(m>view*1.02||m<hv*.02)return;const y=gy-m*sc;if(Math.abs(lastY-y)<34)return;lastY=y;x.strokeStyle="rgba(255,255,255,.28)";x.setLineDash([6,8]);x.lineWidth=1.5;x.beginPath();x.moveTo(40,y);x.lineTo(W-40,y);x.stroke();x.setLineDash([]);
-      x.fillStyle="rgba(255,255,255,.85)";x.font="600 20px Inter,sans-serif";x.textAlign="left";x.fillText(`${n} · ${fmt(m)}`,52,y-8)});
-    // stapeln
-    const sw=Math.max(34,Math.min(70,W*.07)),sx=W*.62-sw/2,sh=Math.max(2,hv*sc);
-    const gr=x.createLinearGradient(sx,0,sx+sw,0);gr.addColorStop(0,"#6a4fa0");gr.addColorStop(.5,"#9b7ad6");gr.addColorStop(1,"#5a4090");x.fillStyle=gr;x.shadowColor="rgba(160,130,255,.7)";x.shadowBlur=28;x.fillRect(sx,gy-sh,sw,sh);x.shadowBlur=0;
-    x.strokeStyle="rgba(255,255,255,.18)";x.lineWidth=1;const step=Math.max(3,sh/Math.min(60,S[i].n/40));for(let y=gy;y>gy-sh;y-=step){x.beginPath();x.moveTo(sx,y);x.lineTo(sx+sw,y);x.stroke()}
-    x.fillStyle="#ffd86b";x.font="800 30px 'Source Serif 4',Georgia,serif";x.textAlign="left";x.fillText(fmt(hv),sx+sw+16,Math.max(top+26,gy-sh+10));
-    // människa 1,7 m
-    const hp=1.7*sc;if(hp>=6){const px=W*.62-sw/2-90;x.fillStyle="#cfd8ff";const hh=Math.max(hp,6);x.beginPath();x.arc(px,gy-hh+hh*.09,hh*.09,0,7);x.fill();x.fillRect(px-hh*.07,gy-hh+hh*.19,hh*.14,hh*.45);x.fillRect(px-hh*.07,gy-hh*.36,hh*.055,hh*.36);x.fillRect(px+hh*.015,gy-hh*.36,hh*.055,hh*.36);
-      x.fillStyle="rgba(255,255,255,.8)";x.font="600 18px Inter,sans-serif";x.textAlign="center";x.fillText("du, 1,7 m",px,gy+28)}
-    else{x.fillStyle="#cfd8ff";x.fillRect(W*.62-sw/2-90,gy-3,3,3);x.fillStyle="rgba(255,255,255,.7)";x.font="600 18px Inter,sans-serif";x.textAlign="center";x.fillText("du är den här pricken",W*.62-sw/2-90,gy+28)}}
-  function ritaP(){const W=C.width,H=C.height,d=D[i];x.clearRect(0,0,W,H);const g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,"#0a1628");g.addColorStop(1,"#12263f");x.fillStyle=g;x.fillRect(0,0,W,H);
-    const gy=H-50;x.fillStyle="#1b3b2a";x.fillRect(0,gy,W,H-gy);x.fillStyle="#2b6a45";x.fillRect(0,gy,W,3);
+    // höjdlinjer med namn
+    let lastY=1e9;[...LM].reverse().forEach(([m,n])=>{if(m>view*1.02||m<h*.02)return;const y=gy-m*sc;if(y<top-4||Math.abs(lastY-y)<30)return;lastY=y;x.strokeStyle="rgba(255,255,255,.28)";x.setLineDash([6,8]);x.lineWidth=1.5;x.beginPath();x.moveTo(24,y);x.lineTo(W-24,y);x.stroke();x.setLineDash([]);
+      x.fillStyle="rgba(255,255,255,.85)";x.font="600 16px Inter,sans-serif";x.textAlign="right";x.fillText(`${n} · ${fmt(m)}`,W-30,y-7)});
+    const sw=Math.max(40,Math.min(120,.07*sc)),sx=W*(W<520?.52:.56)-sw/2,sh=Math.max(2,h*sc);
+    person(Math.max(10,sx-.27*sc-Math.min(70,W*.06)),gy,sc);
+    // stapeln: tio band, varje band en tiondel av sedlarna
+    const nb=10,bh=sh/nb;for(let b=0;b<nb;b++){const y1=gy-(b+1)*bh;x.fillStyle=b%2?"#9b7ad6":"#7b5cc4";if(b===0)x.shadowColor="rgba(160,130,255,.7)",x.shadowBlur=26;x.fillRect(sx,y1,sw,bh+.5);x.shadowBlur=0;}
+    x.strokeStyle="rgba(255,255,255,.28)";x.lineWidth=1;for(let b=1;b<nb;b++){const y=gy-b*bh;x.beginPath();x.moveTo(sx,y);x.lineTo(sx+sw,y);x.stroke();}
+    // linjal i cm när det är litet
+    if(view<=1){x.strokeStyle="rgba(255,255,255,.7)";x.fillStyle="rgba(255,255,255,.85)";x.font="600 14px Inter,sans-serif";x.textAlign="right";x.lineWidth=1.2;const mm=h>.3?.05:.01;
+      for(let m=0;m<=.45;m+=.01){const y=gy-m*sc;if(y<top)break;const big=Math.round(m*100)%5===0;x.beginPath();x.moveTo(sx-6,y);x.lineTo(sx-(big?20:12),y);x.stroke();if(big&&m>0)x.fillText(Math.round(m*100)+" cm",sx-26,y+5);}}
+    // höjdmarkering
+    const my=Math.max(top+4,gy-sh);x.strokeStyle="#ffd86b";x.lineWidth=2;x.beginPath();x.moveTo(sx+sw+4,my);x.lineTo(sx+sw+34,my);x.stroke();
+    x.fillStyle="#ffd86b";x.font="800 30px 'Source Serif 4',Georgia,serif";x.textAlign="left";x.fillText(fmt(h),sx+sw+42,my+10);
+    x.fillStyle="rgba(255,255,255,.88)";x.font="600 16px Inter,sans-serif";x.fillText(fmtN(d.n)+" sedlar",sx+sw+42,my+34);
+    // förklaring av banden
+    x.fillStyle="rgba(255,255,255,.75)";x.font="600 15px Inter,sans-serif";x.textAlign="left";x.font=`600 ${W<520?13:15}px Inter,sans-serif`;x.fillText(W<520?`Varje band = ${fmtN(d.n/10)} sedlar`:`Varje band i stapeln = ${fmtN(d.n/10)} sedlar = ${ord(d.n/10*1000)} kronor`,24,36);}
+  function ritaP(){const d=D[i];x.clearRect(0,0,W,H);bg();
+    const gy=H-46;x.fillStyle="#1b3b2a";x.fillRect(0,gy,W,H-gy);x.fillStyle="#2b6a45";x.fillRect(0,gy,W,3);
     const pallet=(px,py,w,h,fill)=>{x.fillStyle="#6b4a2a";x.fillRect(px,py,w,h*.13);x.fillStyle="#3f8f5c";x.shadowColor="rgba(120,220,160,.5)";x.shadowBlur=8;x.fillRect(px,py-h*.87*fill,w,h*.87*fill);x.shadowBlur=0;x.strokeStyle="rgba(255,255,255,.25)";x.lineWidth=1;x.strokeRect(px,py-h*.87,w,h*.87)};
-    const lab=(t,xx,yy,al)=>{x.fillStyle="rgba(255,255,255,.85)";x.font="600 20px Inter,sans-serif";x.textAlign=al||"center";x.fillText(t,xx,yy)};
-    if(d.p<=1){const pw=Math.min(W*.42,420),ph=pw*.9,px=W*.5-pw/2,py=gy-6;pallet(px,py,pw,ph,Math.max(.012,d.p));
-      const hp=ph/1.16*1.7;x.fillStyle="#cfd8ff";const hx=px-70,hh=Math.min(hp,gy-30);x.beginPath();x.arc(hx,gy-hh+hh*.09,hh*.09,0,7);x.fill();x.fillRect(hx-hh*.07,gy-hh+hh*.19,hh*.14,hh*.45);x.fillRect(hx-hh*.07,gy-hh*.36,hh*.055,hh*.36);x.fillRect(hx+hh*.015,gy-hh*.36,hh*.055,hh*.36);lab("du, 1,7 m",hx,gy+28);lab("1 lastpall = 100 miljoner dollar",px+pw/2,gy+28)}
-    else{const n=d.p,cols=n<=10?5:n<=100?20:n<=1000?50:100,rows=Math.ceil(n/cols),aw=W-100,ah=gy-70,cw=Math.min(aw/cols,ah/rows*1.3),ch=cw*.75,gw=cols*cw,gx=(W-gw)/2,gyt=gy-rows*ch-6;
+    const lab=(t,xx,yy,al)=>{x.fillStyle="rgba(255,255,255,.85)";x.font="600 17px Inter,sans-serif";x.textAlign=al||"center";x.fillText(t,xx,yy)};
+    if(d.p<=1){const pw=Math.min(W*.46,440),ph=pw*.9,px=W*.55-pw/2,py=gy-6;pallet(px,py,pw,ph,Math.max(.012,d.p));
+      const sc=ph/1.16,hp=1.7*sc;person(px-.27*sc-60,gy,Math.min(sc,(gy-70)/1.75),"du, 1,7 m");lab("1 lastpall = 1 miljon sedlar = 100 miljoner dollar",px+pw/2,gy+28)}
+    else{const n=d.p,cols=n<=10?5:n<=100?20:n<=1000?50:100,rows=Math.ceil(n/cols),aw=W-60,ah=gy-96,cw=Math.min(aw/cols,ah/rows*1.3),ch=cw*.75,gw=cols*cw,gx=(W-gw)/2,gyt=gy-rows*ch-6;
       for(let k=0;k<n;k++){const cx=gx+(k%cols)*cw,cy=gyt+Math.floor(k/cols)*ch;x.fillStyle="#3f8f5c";x.fillRect(cx+.5,cy+.5,Math.max(1,cw-1.2),Math.max(1,ch-1.2))}
-      lab(n.toLocaleString("sv-SE")+(n===1?" lastpall":" lastpallar")+" · varje ruta = 1 pall",W/2,gyt-14)}
-    x.fillStyle="#ffd86b";x.font="800 28px 'Source Serif 4',Georgia,serif";x.textAlign="right";x.fillText(d.l,W-24,40)}
-  function visP(){const d=D[i];$("#pL").textContent=d.l;$("#pT").textContent=d.text;$("#pTid").textContent=d.v;$("#pLon").textContent=d.lb;$("#pS1").textContent="Vikt (100-dollarssedlar)";$("#pU1").textContent="en sedel väger ungefär 1 gram";$("#pS2").textContent="Så mycket plats";$("#pU2").textContent="en lastbil tar ca 24 ton";ritaP()}
-  function setM(m){mode=m;$("#pM1").classList.toggle("on",m==="k");$("#pM2").classList.toggle("on",m==="d");$("#pK").textContent=m==="k"?"Pengar i skala · sedlar à 1 000 kr":"Pengar i skala · 100-dollarssedlar på lastpallar";
-    $(".pg-f").textContent=m==="k"?"Sedlarna är räknade som 0,1 mm tjocka. Stapelns bredd är inte i skala: en riktig stapel skulle vara en tunn nål vid 100 km.":"Ungefär 1 miljon sedlar per lastpall (1,2 × 1 × 1 m). Siffrorna är grova och kan vara olika beroende på hur man packar.";
+      lab(fmtN(n)+(n===1?" lastpall":" lastpallar")+" · varje ruta = 1 pall = 1 miljon sedlar",W/2,gyt-14)}
+    x.fillStyle="#ffd86b";x.font="800 26px 'Source Serif 4',Georgia,serif";x.textAlign="left";x.fillText(d.l,24,40)}
+  function stat(a,as,b,bs,s,ss,hs,hh,ht){$("#pA").textContent=a;$("#pAs").textContent=as;$("#pB").textContent=b;$("#pBs").textContent=bs;$("#pSum").textContent=s;$("#pSs").textContent=ss;$("#pHs").textContent=hs;$("#pH").textContent=hh;$("#pHt").textContent=ht}
+  function visP(){const d=D[i],sed=Math.round(d.p*1e6),usd=sed*100;$("#pL").textContent=d.l;$("#pT").textContent=d.text;
+    stat(fmtN(sed),"sedlar ("+ord(sed)+" sedlar)","× 100 dollar","varje sedel","= "+fmtN(usd)+" dollar",ord(usd)+" dollar","Lastpallar",d.p<1?"mindre än 1 pall":fmtN(d.p)+(d.p===1?" lastpall":" lastpallar"),"1 pall = 1 miljon sedlar");
+    $("#pTid").textContent=d.v;$("#pLon").textContent=d.lb;$("#pS1").textContent="Vikt";$("#pU1").textContent="en sedel väger ungefär 1 gram";$("#pS2").textContent="Så mycket plats";$("#pU2").textContent="en lastbil tar ca 24 ton";ritaP()}
+  function setM(m){mode=m;$("#pM1").classList.toggle("on",m==="k");$("#pM2").classList.toggle("on",m==="d");
+    $("#pK").textContent=m==="k"?"Pengar i skala · sedlar à 1 000 kr":"Pengar i skala · 100-dollarssedlar på lastpallar";
+    $("#pF").textContent=m==="k"?"En sedel räknas som 0,1 mm tjock. Stapelns bredd är bara ritad så att man ser den: en riktig stapel vid 100 km vore en tunn nål.":"Ungefär 1 miljon sedlar per lastpall (1,2 × 1 × 1 m). Siffrorna är grova och kan vara olika beroende på hur man packar.";
     vis(i)}
-  function vis(n){i=Math.max(0,Math.min(S.length-1,n));$("#pR").value=i;if(mode==="d"){cancelAnimationFrame(raf);visP();return}$("#pS1").textContent="Tid att räkna sedlarna";$("#pU1").textContent="en sedel i sekunden";$("#pS2").textContent="Så länge tar det att tjäna ihop";$("#pU2").textContent="med 30 000 kr i månaden, före skatt";const d=S[i];$("#pL").textContent=d.l;$("#pT").textContent=d.text;$("#pTid").textContent=d.t;$("#pLon").textContent=d.lon;
-    cancelAnimationFrame(raf);const from=hv,to=d.h,t0=performance.now(),dur=900;(function f(t){const k=Math.min(1,(t-t0)/dur),e=k*k*(3-2*k);hv=Math.exp(Math.log(from)+(Math.log(to)-Math.log(from))*e);rita();if(k<1)raf=requestAnimationFrame(f)})(t0)}
+  function vis(n){i=Math.max(0,Math.min(S.length-1,n));$("#pR").value=i;cancelAnimationFrame(raf);if(mode==="d"){visP();return}
+    const d=S[i],kr=d.n*1000;$("#pL").textContent=d.l;$("#pT").textContent=d.text;
+    stat(fmtN(d.n),"sedlar ("+ord(d.n)+" sedlar)","× 1 000 kr","för varje sedel","= "+fmtN(kr)+" kr",ord(kr)+" kronor","Stapelns höjd",fmt(d.h),"en sedel är 0,1 mm tjock");
+    $("#pS1").textContent="Tid att räkna sedlarna";$("#pTid").textContent=d.t;$("#pU1").textContent="en sedel i sekunden";$("#pS2").textContent="Så länge tar det att tjäna ihop";$("#pLon").textContent=d.lon;$("#pU2").textContent="med 30 000 kr i månaden, före skatt";
+    const from=hv,to=d.h,t0=performance.now(),dur=900;(function f(t){const k=Math.min(1,(t-t0)/dur),e=k*k*(3-2*k);hv=Math.exp(Math.log(from)+(Math.log(to)-Math.log(from))*e);rita();if(k<1)raf=requestAnimationFrame(f)})(t0)}
   $("#pM1").onclick=()=>setM("k");$("#pM2").onclick=()=>setM("d");$("#pR").oninput=()=>vis(+$("#pR").value);$("#pP").onclick=()=>vis(i-1);$("#pN").onclick=()=>vis(i+1);
-  const key=e=>{if(!document.querySelector("#gv.on"))return;if(e.key==="ArrowRight")vis(i+1);else if(e.key==="ArrowLeft")vis(i-1)};document.addEventListener("keydown",key);
-  vis(0);return()=>{cancelAnimationFrame(raf);document.removeEventListener("keydown",key)};
+  const key=e=>{if(!document.querySelector("#gv.on"))return;if(e.key==="ArrowRight"||e.key==="ArrowUp")vis(i+1);else if(e.key==="ArrowLeft"||e.key==="ArrowDown")vis(i-1)};document.addEventListener("keydown",key);
+  const ro=window.ResizeObserver?new ResizeObserver(()=>{fit();mode==="d"?ritaP():rita()}):null;if(ro)ro.observe(C.parentNode);
+  fit();setM("k");return()=>{cancelAnimationFrame(raf);document.removeEventListener("keydown",key);if(ro)ro.disconnect()};
 }});
 
 /* ---------- Spirograf och kalejdoskop (helskärm) ---------- */
