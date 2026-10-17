@@ -85,6 +85,20 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 .res .stars{font-size:2.6rem}
 .res p{color:var(--muted);font-weight:700}
 .alt2{display:block;width:100%;margin-top:12px;padding:12px;border-radius:18px;background:var(--card);box-shadow:0 4px 0 var(--line);font-weight:800;font-size:1.2rem}
+
+/* bankarta */
+.wl{margin:14px 0 4px}.wl h3{margin:0 0 8px;font-size:1.15rem;display:flex;align-items:center;gap:8px}.wl h3 .stars{font-size:1.1rem;margin-left:auto}
+.lvs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.lvb{background:var(--card);border-radius:16px;padding:8px 4px 6px;box-shadow:0 4px 0 var(--line);text-align:center;line-height:1.15}
+.lvb b{display:block;font-size:1.35rem}.lvb small{display:block;color:var(--muted);font-weight:700;font-size:.72rem;min-height:1.7em}.lvb .stars{font-size:.95rem;letter-spacing:0}
+.lvb[aria-pressed="true"]{box-shadow:0 0 0 3px var(--accent),0 4px 0 var(--line)}
+.lvb:disabled{opacity:.5;cursor:default}
+.pw{position:absolute;left:10px;top:calc(58px + env(safe-area-inset-top,0px));display:flex;gap:8px;pointer-events:none}
+.pw>*{pointer-events:auto}
+.pwb{min-width:84px;height:40px;border-radius:20px;background:rgba(59,42,20,.78);color:#fff;font-weight:800;font-size:.95rem;display:flex;align-items:center;justify-content:center;gap:5px;padding:0 10px;box-shadow:0 3px 0 rgba(0,0,0,.25)}
+.pwb b{color:#FFE7A3}.pwb.off{opacity:.45}.pwb.on{box-shadow:0 0 0 3px #FFE7A3,0 3px 0 rgba(0,0,0,.25)}
+.pwb.new{animation:pwn 1s ease-in-out 3}@keyframes pwn{50%{transform:scale(1.14)}}
+.banner{position:absolute;left:50%;top:calc(104px + env(safe-area-inset-top,0px));transform:translateX(-50%);background:rgba(190,40,40,.88);color:#fff;font-weight:800;padding:6px 18px;border-radius:14px;pointer-events:none;font-size:1.1rem}
 @media (prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important}}
 </style>
 </head>
@@ -94,16 +108,20 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
   <div class="hero"><canvas id="heroCv" aria-hidden="true"></canvas><div class="in"><h1>Kulbanan</h1><p>Kulorna rullar mot pyramiden! Skjut svaret till rätt ställe så att kulorna försvinner.</p></div></div>
   <div class="rule"><div class="balls"><span class="ball" style="--c:#2BB673">24</span><span class="ball num">4·6</span><span class="ball" style="--c:#2BB673">24</span></div>
     <p>Räkna ut talet i din vita kula och skjut den till samma tal i ormen. Tre lika bredvid varandra försvinner!</p></div>
+  <p class="lab" style="margin-bottom:0">Välj bana</p>
+  <div id="worlds"></div>
   <p class="lab">Vilka tabeller?</p>
   <div class="chips" id="tabs"></div>
   <button class="go" id="play">Starta ▶</button>
-  <p class="note">Din kula är vit tills du skjuter, då får den sin färg. Dra med fingret för att sikta och släpp för att skjuta (med mus: klicka). Tryck på djuret för att byta till nästa kula. Hinner kulorna in i pyramiden får du försöka igen.</p>
+  <p class="note">Din kula är vit tills du skjuter, då får den sin färg. Dra med fingret för att sikta och släpp för att skjuta (med mus: klicka). Tryck på djuret för att byta till nästa kula. Hinner kulorna in får du försöka igen. Klarar du en bana öppnas nästa, med fler kulor, högre fart och nya krafter.</p>
 </div>
 </section>
 <section id="game" class="screen" hidden>
   <canvas id="cv"></canvas>
   <div class="hud"><button class="hb" id="quit" aria-label="Avsluta">✕</button><span class="score" id="score">0</span><span class="prog"><i id="prog"></i></span><span class="sp"></span>
     <button class="hb" id="snd" aria-label="Ljud">🔊</button><button class="hb" id="pauseBtn" aria-label="Paus">⏸</button></div>
+  <div class="pw" id="pw"></div>
+  <div class="banner" id="banner" hidden></div>
   <div class="tip" id="tip" hidden></div>
   <div class="pause" id="pause" hidden><div><b>Paus</b><button class="go" id="resume">Fortsätt ▶</button><button class="alt" id="restart">Börja om</button></div></div>
 </section>
@@ -113,7 +131,8 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
   <div id="rStars"></div>
   <div class="big" id="rScore"></div>
   <p id="rSub"></p>
-  <button class="go" id="rAgain">Spela igen</button>
+  <button class="go" id="rNext" hidden>Nästa bana ▶</button>
+  <button class="alt2" id="rAgain">Spela igen</button>
   <button class="alt2" id="rHome">Till menyn</button>
 </div>
 </section>
@@ -125,15 +144,39 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
    Tre eller fler intill varandra med samma svar försvinner; kedjan sluter sig och samma svar i båda ändarna drar ihop den
    igen (kedjereaktion). Som i Bubbelskjutaren (lärarens önskan): ormen har svaren med en färg per tal, skjutkulan har uttrycket och är
    vit tills den skjuts ut, då får den sin färg. Skjutkulan väljs bland svar som finns i kedjan.
-   Prototyp: en bana, inga extrakrafter. */
+   Åtta banor i två världar (Öknen, Djungeln) med olika former, fart och längd; extrakrafter (broms, frys, regnbågskula) och fartpuffar. */
 const $=id=>document.getElementById(id);
 const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1)),pick=a=>a[Math.floor(Math.random()*a.length)];
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 const KEY="mattespel-kulbanan-v1";
-const data=(()=>{try{return Object.assign({stars:{},best:{},tab:"sma"},JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){return{stars:{},best:{},tab:"sma"}}})();
+const data=(()=>{try{return Object.assign({stars:{},best:{},betyg:{},tab:"sma",lvl:1},JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){return{stars:{},best:{},betyg:{},tab:"sma",lvl:1}}})();
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}};
 const reduced=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
 const TABS={sma:{name:"Små tabeller",desc:"2, 3, 4, 5 och 10",t:[2,3,4,5,10],vals:4},alla:{name:"Alla tabeller",desc:"2 till 10",t:[2,3,4,5,6,7,8,9,10],vals:5}};
+/*LEVELS-START*/
+const BANA1=[[-.08,.12],[.12,.09],[.26,.17],[.4,.08],[.56,.1],[.7,.2],[.86,.1],[.95,.26],[.88,.42],[.95,.6],[.9,.8],[.74,.92],[.58,.84],[.44,.94],[.26,.92],[.1,.84],[.06,.64],[.14,.47],[.07,.32],[.2,.27],[.33,.36],[.48,.3],[.66,.34],[.75,.5],[.7,.66],[.56,.75],[.4,.77],[.28,.66]];
+const flip=(P,fx,fy)=>P.map(([x,y])=>[fx?1-x:x,fy?1-y:y]);
+function spiralPts(turns,r0,r1,dir,th0){const N=Math.round(turns*14),P=[];
+  for(let i=0;i<=N;i++){const t=i/N,a=th0+dir*turns*2*Math.PI*t,r=r0+(r1-r0)*t;P.push([.5+r*Math.cos(a),.5+r*Math.sin(a)]);}
+  const f=P[0];return[[.5+(f[0]-.5)*1.4,.5+(f[1]-.5)*1.4],...P];}
+function zigPts(rows,y0,dy,xl,xr,tail){const P=[[-.08,y0]];
+  for(let i=0;i<rows;i++){const y=y0+i*dy,toR=i%2===0,a=toR?xl:xr,b=toR?xr:xl;P.push([a,y],[(a+b)/2,y],[b,y]);
+    if(i<rows-1)P.push([toR?xr+.06:xl-.06,y+dy/2]);}
+  return P.concat(tail);}
+const WORLDS={oken:{name:"Öknen",icon:"🏜️"},djungel:{name:"Djungeln",icon:"🌴"}};
+// n: kedjans längd som andel av banans längd, T: sekunder för hela banan, vals: antal olika svar (extra), surge: sekunder mellan fartpuffar (0 = inga)
+const BANOR=[
+ {n:1,world:"oken",name:"Slingan",pts:BANA1,sk:[.47,.55],T:130,vals:0,len:.62,surge:0,pw:1},
+ {n:2,world:"oken",name:"Snurran",pts:spiralPts(1.5,.46,.27,1,0),sk:[.5,.5],T:122,vals:0,len:.66,surge:0,pw:2},
+ {n:3,world:"oken",name:"Sicksacken",pts:zigPts(4,.07,.17,.1,.9,[[.02,.7],[.1,.84],[.26,.88]]),sk:[.64,.8],T:116,vals:1,len:.7,surge:16,pw:3},
+ {n:4,world:"oken",name:"Spegelslingan",pts:flip(BANA1,true,false),sk:[.53,.55],T:108,vals:1,len:.74,surge:14,pw:3},
+ {n:5,world:"djungel",name:"Floden",pts:flip(spiralPts(1.5,.46,.27,1,0),true,false),sk:[.5,.5],T:104,vals:1,len:.76,surge:13,pw:3},
+ {n:6,world:"djungel",name:"Djungelstigen",pts:flip(zigPts(4,.07,.17,.1,.9,[[.02,.7],[.1,.84],[.26,.88]]),true,false),sk:[.36,.8],T:98,vals:2,len:.8,surge:12,pw:3},
+ {n:7,world:"djungel",name:"Virvlen",pts:spiralPts(1.45,.46,.28,-1,Math.PI/2),sk:[.5,.5],T:92,vals:2,len:.84,surge:11,pw:3},
+ {n:8,world:"djungel",name:"Templet",pts:flip(BANA1,false,true),sk:[.47,.45],T:86,vals:2,len:.9,surge:10,pw:3}
+];
+/*LEVELS-END*/
+
 const PAL=["#E5484D","#2BB673","#3D8BFD","#F2A900","#7B61FF","#FF5FA2","#17AFC4","#9C6B3C"];
 
 /* ---------- Talen ----------
@@ -143,7 +186,7 @@ function exprMap(tabs){const m={};
   const ok={};for(const v in m){const pairs=new Set(m[v].map(([a,b])=>Math.min(a,b)+"x"+Math.max(a,b)));if(pairs.size>=2)ok[v]=m[v];}
   return ok;}
 // kedjan: rader om 1–3 kulor med samma svar, aldrig samma svar två rader i rad
-function makeQueue(cfg){const em=exprMap(cfg.t),vals=shuffle(Object.keys(em).map(Number)).slice(0,cfg.vals),q=[],vc={},pal=shuffle(PAL.slice());let last=null;
+function makeQueue(cfg){const em=exprMap(cfg.t),vals=shuffle(Object.keys(em).map(Number)).slice(0,cfg.vals+(cfg.extra||0)),q=[],vc={},pal=shuffle(PAL.slice());let last=null;
   vals.forEach((v,i)=>vc[v]=pal[i]);
   while(q.length<cfg.n){let v;do{v=pick(vals);}while(v===last);last=v;const len=pick([1,2,2,2,3,3]);
     for(let i=0;i<len&&q.length<cfg.n;i++)q.push({v,txt:String(v),col:vc[v]});}
@@ -152,9 +195,20 @@ function makeQueue(cfg){const em=exprMap(cfg.t),vals=shuffle(Object.keys(em).map
 /* ---------- Skärmar ---------- */
 function show(id){document.querySelectorAll(".screen").forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
 const starHtml=n=>`<span class="stars">${[1,2,3].map(i=>i<=n?"★":'<span class="off">★</span>').join("")}</span>`;
-function openHome(){stopGame();
-  $("tabs").innerHTML=Object.entries(TABS).map(([k,c])=>`<button class="chip" data-t="${k}" aria-pressed="${data.tab===k}"><b>${c.name}</b><small>${c.desc}</small>${starHtml(data.stars[k]||0)}${data.best[k]?` <span class="rec">🏆 ${data.best[k]}</span>`:""}</button>`).join("");
+const bet=n=>data.betyg[n]||0;
+const oppen=n=>n===1||bet(n-1)>0;
+function worldStars(w){const L=BANOR.filter(b=>b.world===w);return L.every(b=>bet(b.n)>0)?Math.min(...L.map(b=>bet(b.n))):0;}
+function syncStars(){for(const w in WORLDS)data.stars[w]=worldStars(w);}
+function nextLvl(){const f=BANOR.find(b=>bet(b.n)===0);return f?f.n:(data.lvl||1);}
+function openHome(){stopGame();syncStars();
+  if(!oppen(data.lvl||1))data.lvl=1;
+  $("worlds").innerHTML=Object.entries(WORLDS).map(([w,W])=>`<div class="wl"><h3><span>${W.icon} ${W.name}</span>${starHtml(worldStars(w))}</h3><div class="lvs">${BANOR.filter(b=>b.world===w).map(b=>
+    `<button class="lvb" data-l="${b.n}" aria-pressed="${data.lvl===b.n}"${oppen(b.n)?"":" disabled"}><b>${oppen(b.n)?b.n:"🔒"}</b><small>${b.name}</small>${starHtml(bet(b.n))}</button>`).join("")}</div></div>`).join("");
+  $("tabs").innerHTML=Object.entries(TABS).map(([k,c])=>`<button class="chip" data-t="${k}" aria-pressed="${data.tab===k}"><b>${c.name}</b><small>${c.desc}</small></button>`).join("");
+  $("play").textContent=`Starta bana ${data.lvl||1} ▶`;
   show("home");drawHero();}
+$("worlds").onclick=e=>{const b=e.target.closest("[data-l]");if(!b||b.disabled)return;data.lvl=+b.dataset.l;save();
+  $("worlds").querySelectorAll("[data-l]").forEach(x=>x.setAttribute("aria-pressed",+x.dataset.l===data.lvl));$("play").textContent=`Starta bana ${data.lvl} ▶`;};
 $("tabs").onclick=e=>{const b=e.target.closest("[data-t]");if(!b)return;data.tab=b.dataset.t;save();$("tabs").querySelectorAll("[data-t]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.t===data.tab));};
 $("play").onclick=()=>startGame();
 
@@ -163,30 +217,32 @@ const cv=$("cv"),cx=cv.getContext("2d");
 let K=null,raf=0,last=0,bg=null,pet=null;
 // elevens djur som bild
 function loadPet(){try{const svg=owlSVG(lasDjur(),"",true),img=new Image();img.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg.includes("xmlns")?svg:svg.replace("<svg",'<svg xmlns="http://www.w3.org/2000/svg"'));pet=img;}catch(e){pet=null;}}
-function startGame(){stopGame();loadPet();const cfg0=TABS[data.tab];
-  K={cfg:cfg0,queue:[],balls:[],shots:[],parts:[],floats:[],score:0,popped:0,misses:0,missRow:0,state:"play",
-    paused:false,t:0,cool:0,ang:-Math.PI/2,cur:null,next:null,idc:0,lose:0,danger:0};
+const POWERS=[{id:"broms",ic:"🐢",nm:"Broms"},{id:"frys",ic:"❄️",nm:"Frys"},{id:"regn",ic:"🌈",nm:"Regnbåge"}];
+function startGame(lv){stopGame();loadPet();const L=BANOR[((lv||data.lvl||1))-1]||BANOR[0],cfg0=TABS[data.tab];data.lvl=L.n;
+  K={cfg:cfg0,lv:L,queue:[],balls:[],shots:[],parts:[],floats:[],score:0,popped:0,misses:0,missRow:0,state:"play",
+    paused:false,t:0,cool:0,ang:-Math.PI/2,cur:null,next:null,idc:0,lose:0,danger:0,
+    pw:{broms:0,frys:0,regn:0},slow:0,freeze:0,surgeIn:L.surge?14:0,surge:0,sinceAward:0,awarded:0,rain:0,intro:{}};
   show("game");resize();
-  // kedjan och farten efter banans längd, så att spelet blir lika svårt på mobil och dator
-  const fits=K.path.len/K.d,cfg=Object.assign({},cfg0,{n:Math.max(22,Math.min(55,Math.round(fits*.65)))}),Q=makeQueue(cfg);
+  // kedjan efter banans längd, så att spelet blir lika svårt på mobil och dator
+  const fits=K.path.len/K.d,cfg=Object.assign({},cfg0,{n:Math.max(22,Math.min(64,Math.round(fits*L.len))),extra:L.vals}),Q=makeQueue(cfg);
   Object.assign(K,{cfg,queue:Q.q,vals:Q.vals,em:Q.em,vc:Q.vc,total:cfg.n});
-  K.cur=pickShot();K.next=pickShot();$("score").textContent="0";$("prog").style.width="0";$("pause").hidden=true;$("tip").hidden=true;
+  K.cur=pickShot();K.next=pickShot();$("score").textContent="0";$("prog").style.width="0";$("pause").hidden=true;$("tip").hidden=true;$("banner").hidden=true;renderPw();
+  tip(`Bana ${L.n}: ${L.name}`+(L.n===1?". Räkna ut talet i din vita kula och skjut det till samma tal i ormen!":""));
   sndIcon();last=performance.now();raf=requestAnimationFrame(loop);}
 function stopGame(){cancelAnimationFrame(raf);raf=0;if(K)K.state="stop";}
 
 /* banan: en slingrig väg runt hela planen (lärarens önskan: inte en perfekt cirkel) som slutar med en krok runt djuret.
    Punkterna är i en ruta 0–1 och dras ut till skärmens form; mellan dem en mjuk kurva (Catmull-Rom).
    Kulornas storlek räknas fram så att slingorna aldrig kommer för nära varandra eller djuret. */
-const BANA=[[-.08,.12],[.12,.09],[.26,.17],[.4,.08],[.56,.1],[.7,.2],[.86,.1],[.95,.26],[.88,.42],[.95,.6],[.9,.8],[.74,.92],[.58,.84],[.44,.94],[.26,.92],[.1,.84],[.06,.64],[.14,.47],[.07,.32],[.2,.27],[.33,.36],[.48,.3],[.66,.34],[.75,.5],[.7,.66],[.56,.75],[.4,.77],[.28,.66]];
-const SKYTT=[.47,.55];
+const BANA_UNUSED=[[-.08,.12],[.12,.09],[.26,.17],[.4,.08],[.56,.1],[.7,.2],[.86,.1],[.95,.26],[.88,.42],[.95,.6],[.9,.8],[.74,.92],[.58,.84],[.44,.94],[.26,.92],[.1,.84],[.06,.64],[.14,.47],[.07,.32],[.2,.27],[.33,.36],[.48,.3],[.66,.34],[.75,.5],[.7,.66],[.56,.75],[.4,.77],[.28,.66]];
 function spline(P,steps){const out=[];for(let i=0;i<P.length-1;i++){const p0=P[Math.max(0,i-1)],p1=P[i],p2=P[i+1],p3=P[Math.min(P.length-1,i+2)];
   for(let k=0;k<steps;k++){const t=k/steps,t2=t*t,t3=t2*t;out.push([0,1].map(c=>.5*(2*p1[c]+(-p0[c]+p2[c])*t+(2*p0[c]-5*p1[c]+4*p2[c]-p3[c])*t2+(-p0[c]+3*p1[c]-3*p2[c]+p3[c])*t3)));}}
   out.push(P[P.length-1]);return out;}
 function resize(){if(!K)return;const dpr=Math.min(2,window.devicePixelRatio||1),W=cv.clientWidth,H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr;cx.setTransform(dpr,0,0,dpr,0,0);
-  const top=58,mx=Math.max(24,W*.04),my=22,bw=W-2*mx,bh=H-top-2*my,X=x=>mx+x*bw,Y=y=>top+my+y*bh;
-  const pts=spline(BANA,40).map(([x,y])=>[X(x),Y(y)]);
+  const top=102,mx=Math.max(24,W*.04),my=22,bw=W-2*mx,bh=H-top-2*my,X=x=>mx+x*bw,Y=y=>top+my+y*bh;
+  const pts=spline(K.lv.pts,40).map(([x,y])=>[X(x),Y(y)]);
   const cum=[0];for(let i=1;i<pts.length;i++)cum.push(cum[i-1]+Math.hypot(pts[i][0]-pts[i-1][0],pts[i][1]-pts[i-1][1]));
-  const sX=X(SKYTT[0]),sY=Y(SKYTT[1]);
+  const sX=X(K.lv.sk[0]),sY=Y(K.lv.sk[1]);
   // minsta avstånd mellan två delar av banan som ligger långt ifrån varandra längs banan, och till djuret
   let sep=1e9,toS=1e9;const st=3;
   for(let a=0;a<pts.length;a+=st){toS=Math.min(toS,Math.hypot(pts[a][0]-sX,pts[a][1]-sY));
@@ -201,7 +257,8 @@ function posAt(s){const P=K.path;if(s<=0)return{x:P.pts[0][0],y:P.pts[0][1],a:0}
   const f=(s-P.cum[lo])/(P.cum[hi]-P.cum[lo]),a=P.pts[lo],b=P.pts[hi];return{x:a[0]+(b[0]-a[0])*f,y:a[1]+(b[1]-a[1])*f,a:Math.atan2(b[1]-a[1],b[0]-a[0])};}
 
 /* ---------- Bakgrunden: öken med pyramider (ritas en gång per storlek) ---------- */
-function makeBg(){const W=K.W,H=K.H,c=document.createElement("canvas"),dpr=Math.min(2,window.devicePixelRatio||1);c.width=W*dpr;c.height=H*dpr;const g=c.getContext("2d");g.setTransform(dpr,0,0,dpr,0,0);
+function makeBg(){return K.lv.world==="djungel"?makeBgJungle():makeBgDesert();}
+function makeBgDesert(){const W=K.W,H=K.H,c=document.createElement("canvas"),dpr=Math.min(2,window.devicePixelRatio||1);c.width=W*dpr;c.height=H*dpr;const g=c.getContext("2d");g.setTransform(dpr,0,0,dpr,0,0);
   const hz=H*.3;
   let gr=g.createLinearGradient(0,0,0,hz);gr.addColorStop(0,"#F6A65A");gr.addColorStop(.6,"#FBC77E");gr.addColorStop(1,"#FFE2A8");g.fillStyle=gr;g.fillRect(0,0,W,hz+2);
   // solen
@@ -233,8 +290,48 @@ function makeBg(){const W=K.W,H=K.H,c=document.createElement("canvas"),dpr=Math.
   // starten: en liten stentrappa vid kanten
   const s0=P.pts[0];g.fillStyle="#A87436";g.beginPath();g.arc(s0[0],s0[1],d*.75,0,Math.PI*2);g.fill();
   return c;}
+/* ---------- Djungeln: grönt, med träd, dimma och gamla tempel ---------- */
+function makeBgJungle(){const W=K.W,H=K.H,c=document.createElement("canvas"),dpr=Math.min(2,window.devicePixelRatio||1);c.width=W*dpr;c.height=H*dpr;const g=c.getContext("2d");g.setTransform(dpr,0,0,dpr,0,0);
+  const hz=H*.3;let seed=11;const r=()=>(seed=(seed*16807)%2147483647)/2147483647;
+  let gr=g.createLinearGradient(0,0,0,hz);gr.addColorStop(0,"#79CDB8");gr.addColorStop(.7,"#BFEBC9");gr.addColorStop(1,"#E4F8D2");g.fillStyle=gr;g.fillRect(0,0,W,hz+2);
+  const sx=W*.2,sy=hz*.4;gr=g.createRadialGradient(sx,sy,4,sx,sy,hz*.75);gr.addColorStop(0,"rgba(255,252,220,1)");gr.addColorStop(.2,"rgba(255,248,200,.9)");gr.addColorStop(.21,"rgba(255,244,190,.4)");gr.addColorStop(1,"rgba(255,240,190,0)");g.fillStyle=gr;g.fillRect(0,0,W,hz);
+  // fjärran kullar
+  const hill=(y,amp,col,ph)=>{g.fillStyle=col;g.beginPath();g.moveTo(0,hz+4);for(let x=0;x<=W;x+=8)g.lineTo(x,y+Math.sin(x/W*Math.PI*2+ph)*amp+Math.sin(x/W*Math.PI*5+ph)*amp*.35);g.lineTo(W,hz+4);g.fill();};
+  hill(hz-H*.07,H*.04,"#8CC79B",0.4);
+  // gamla tempel i dimman
+  const temple=(x,b,h,lit,sh)=>{const steps=4;for(let k=0;k<steps;k++){const w=b*(1-k/steps*.72),y0=hz-h*k/steps,y1=hz-h*(k+1)/steps;g.fillStyle=k%2?lit:sh;g.fillRect(x-w/2,y1,w,y0-y1+1);}
+    g.fillStyle="#6FA878";g.fillRect(x-b*.12,hz-h-b*.07,b*.24,b*.07);};
+  temple(W*.72,hz*1.1,hz*.5,"#9DB59C","#86A087");temple(W*.4,hz*.7,hz*.32,"#A8C0A6","#92AA92");
+  hill(hz-H*.02,H*.03,"#6FB57F",1.7);
+  // träd längs horisonten
+  const tree=(x,s,col)=>{g.fillStyle="#6B4A2A";g.fillRect(x-s*.05,hz-s*.5,s*.1,s*.5+2);g.fillStyle=col;for(let k=0;k<5;k++){g.beginPath();g.arc(x+(k-2)*s*.17,hz-s*.62+Math.abs(k-2)*s*.06,s*.24,0,Math.PI*2);g.fill();}};
+  for(let i=0;i<9;i++)tree(W*(.04+i*.115)+r()*18,H*(.1+r()*.07),i%2?"#2F7D4B":"#3A9157");
+  // marken
+  gr=g.createLinearGradient(0,hz,0,H);gr.addColorStop(0,"#5FAE58");gr.addColorStop(.35,"#4B9A4B");gr.addColorStop(1,"#3B813F");g.fillStyle=gr;g.fillRect(0,hz,W,H-hz);
+  g.fillStyle="#58A653";g.beginPath();g.moveTo(0,hz+H*.05);for(let x=0;x<=W;x+=8)g.lineTo(x,hz+H*.05+Math.sin(x/W*Math.PI*2.4)*7);g.lineTo(W,hz);g.lineTo(0,hz);g.fill();
+  // gräsrester, blommor och löv
+  for(let i=0;i<W*H/230;i++){const x=r()*W,y=hz+r()*(H-hz);g.strokeStyle=r()<.5?"rgba(20,80,35,.28)":"rgba(190,240,150,.22)";g.lineWidth=1.3;g.beginPath();g.moveTo(x,y);g.lineTo(x+(r()-.5)*4,y-3-r()*5);g.stroke();}
+  for(let i=0;i<W*H/9000;i++){const x=r()*W,y=hz+H*.1+r()*(H-hz-H*.1);g.fillStyle=["#FF8FB8","#FFD84D","#FFFFFF"][i%3];g.beginPath();g.arc(x,y,2.2,0,Math.PI*2);g.fill();}
+  // ormbunkar i hörnen
+  const fern=(x,y,s,ang)=>{g.save();g.translate(x,y);g.rotate(ang);g.fillStyle="#2F8A4A";for(let k=-3;k<=3;k++){g.save();g.rotate(k*.32);g.beginPath();g.ellipse(0,-s*.55,s*.11,s*.55,0,0,Math.PI*2);g.fill();g.restore();}g.restore();};
+  fern(W*.04,H*.96,Math.min(110,H*.16),.25);fern(W*.97,H*.93,Math.min(100,H*.15),-.3);fern(W*.5,H*1.01,Math.min(80,H*.12),0);
+  // banan: en jordstig med stenkant
+  const P=K.path,d=K.d;g.lineCap="round";g.lineJoin="round";
+  const trace=()=>{g.beginPath();P.pts.forEach((p,i)=>i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]));};
+  trace();g.strokeStyle="rgba(20,50,20,.4)";g.lineWidth=d*1.24;g.stroke();
+  trace();g.strokeStyle="#A88A66";g.lineWidth=d*1.1;g.stroke();
+  trace();g.strokeStyle="#8B6A47";g.lineWidth=d*.88;g.stroke();
+  g.setLineDash([2,d*.5]);trace();g.strokeStyle="rgba(255,235,190,.3)";g.lineWidth=2;g.stroke();g.setLineDash([]);
+  const s0=P.pts[0];g.fillStyle="#7F8F7A";g.beginPath();g.arc(s0[0],s0[1],d*.75,0,Math.PI*2);g.fill();
+  return c;}
+function drawTemple(){const P=K.path,e=P.pts[P.pts.length-1],d=K.d,s=d*1.9,x=e[0],y=e[1]+d*.25;
+  cx.fillStyle="rgba(10,40,15,.3)";cx.beginPath();cx.ellipse(x,y+s*.08,s*.95,s*.18,0,0,Math.PI*2);cx.fill();
+  const tiers=4;for(let k=0;k<tiers;k++){const w=s*(1-k/tiers*.7),y0=y-s*1.05*k/tiers,y1=y-s*1.05*(k+1)/tiers;cx.fillStyle=k%2?"#9DB59C":"#86A087";cx.fillRect(x-w,y1,w*2,y0-y1+1);cx.fillStyle="rgba(255,255,255,.12)";cx.fillRect(x-w,y1,w*2,2);}
+  cx.fillStyle="#4F9A5A";cx.fillRect(x-s*.9,y-s*.1,s*.25,s*.1);cx.fillRect(x+s*.5,y-s*.35,s*.22,s*.08);
+  const glow=K.danger;cx.fillStyle=`rgb(${30+glow*200},${25+glow*20},${15})`;cx.beginPath();cx.moveTo(x-d*.42,y);cx.lineTo(x-d*.42,y-d*.55);cx.quadraticCurveTo(x,y-d*.95,x+d*.42,y-d*.55);cx.lineTo(x+d*.42,y);cx.fill();
+  if(glow>0){cx.fillStyle=`rgba(255,80,40,${.25*glow*(.6+.4*Math.sin(K.t*8))})`;cx.beginPath();cx.arc(x,y-d*.4,d*1.3,0,Math.PI*2);cx.fill();}}
 // pyramiden där banan slutar (ritas varje bild, lyser rött när kulorna kommer nära)
-function drawGoal(){const P=K.path,e=P.pts[P.pts.length-1],d=K.d,s=d*1.9,x=e[0],y=e[1]+d*.25;
+function drawGoal(){if(K.lv.world==="djungel")return drawTemple();const P=K.path,e=P.pts[P.pts.length-1],d=K.d,s=d*1.9,x=e[0],y=e[1]+d*.25;
   cx.fillStyle="rgba(90,50,10,.25)";cx.beginPath();cx.ellipse(x,y+s*.08,s*.95,s*.18,0,0,Math.PI*2);cx.fill();
   cx.fillStyle="#C9935A";cx.beginPath();cx.moveTo(x-s,y);cx.lineTo(x,y-s*1.05);cx.lineTo(x+s,y);cx.fill();
   cx.fillStyle="#EDC27F";cx.beginPath();cx.moveTo(x-s,y);cx.lineTo(x,y-s*1.05);cx.lineTo(x+s*.1,y);cx.fill();
@@ -246,8 +343,10 @@ function drawGoal(){const P=K.path,e=P.pts[P.pts.length-1],d=K.d,s=d*1.9,x=e[0],
 function spawn(){while(K.queue.length&&(!K.balls.length||K.balls[0].s>-K.d*.5)){const q=K.queue.shift(),s=K.balls.length?K.balls[0].s-K.d:-K.d*.5;K.balls.unshift(Object.assign({s,g:1,id:K.idc++,touch:true},q));}}
 const need=(a,b)=>K.d*(a.g+b.g)/2;
 function speed(){const front=K.balls.length?K.balls[K.balls.length-1].s/K.path.len:0;
+  if(K.freeze>0)return 0;
   if(K.popped===0&&front<.28)return K.d*7;              // kulorna rullar in fort i början
-  return K.path.len/(K.cfg.vals>4?110:130)*(front>.85?.6:1);}  // hela banan på ca två minuter, saktare nära pyramiden
+  const T=K.lv.T*(K.cfg.vals>4?.85:1);                 // sekunder för hela banan (kortare på senare banor och med alla tabeller)
+  return K.path.len/T*(front>.85?.6:1)*(K.slow>0?.35:1)*(K.surge>0?2.3:1);}
 function stepChain(dt){const B=K.balls;if(!B.length)return;
   // segment som dras tillbaka (samma svar i båda ändarna av en lucka)
   for(let i=1;i<B.length;i++)if(B[i].back){const gap=B[i].s-B[i-1].s-need(B[i-1],B[i]);
@@ -263,7 +362,7 @@ function checkRun(i,combo){const B=K.balls;if(i<0||i>=B.length)return false;cons
   if(r-l+1<3)return false;
   const gone=B.splice(l,r-l+1);K.popped+=gone.filter(b=>!b.ins).length;const pts=gone.length*10*(1+combo);K.score+=pts;
   gone.forEach((b,k)=>{const p=posAt(b.s);burst(p.x,p.y,b.col);});
-  const mid=posAt(gone[gone.length>>1].s);K.floats.push({x:mid.x,y:mid.y,t:0,txt:`${v}! +${pts}`+(combo?` · kedja ×${combo+1}`:"")});
+  const mid=posAt(gone[gone.length>>1].s);K.floats.push({x:mid.x,y:mid.y,t:0,txt:`${v}! +${pts}`+(combo?` · kedja ×${combo+1}`:"")});award(gone.filter(b=>!b.ins).length+(combo?2:0));
   window.Ljud&&Ljud.pop&&Ljud.pop(combo*3+gone.length);if(combo&&window.Ljud&&Ljud.chime)Ljud.chime();
   $("score").textContent=K.score;$("prog").style.width=(K.popped/K.total*100)+"%";
   // luckan: samma svar i båda ändarna drar ihop kedjan igen
@@ -273,16 +372,31 @@ function checkRun(i,combo){const B=K.balls;if(i<0||i>=B.length)return false;cons
   return true;}
 function burst(x,y,col){if(reduced())return;for(let k=0;k<10;k++){const a=Math.random()*Math.PI*2,sp=60+Math.random()*160;K.parts.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-40,t:0,col,r:2+Math.random()*3});}}
 
+/* ---------- Extrakrafter ----------
+   Var tionde kula man tar bort ger en kraft: 🐢 Broms (kedjan går långsamt en stund), ❄️ Frys (kedjan står still en kort stund),
+   🌈 Regnbågskula (nästa skott blir samma tal som det den träffar, så att tre lika bildas). Fler krafter öppnas på senare banor. */
+function allowed(){return POWERS.slice(0,K.lv.pw);}
+function renderPw(){const el=$("pw");el.innerHTML=allowed().map(c=>`<button class="pwb${K.pw[c.id]?"":" off"}${K[c.id==="broms"?"slow":c.id==="frys"?"freeze":"rain"]>0?" on":""}" data-p="${c.id}" aria-label="${c.nm}"><span>${c.ic}</span><b>${K.pw[c.id]}</b></button>`).join("");}
+$("pw").addEventListener("pointerdown",e=>{const b=e.target.closest("[data-p]");if(!b||!K||K.state!=="play"||K.paused)return;e.preventDefault();usePower(b.dataset.p);});
+function usePower(id){if(!K.pw[id]){const c=POWERS.find(x=>x.id===id);tip(`${c.ic} ${c.nm}: du får en kraft var tionde kula du tar bort.`);return;}
+  if(id==="broms"){if(K.slow>0)return;K.pw.broms--;K.slow=6;tip("🐢 Broms: kedjan går långsamt en stund");}
+  else if(id==="frys"){if(K.freeze>0)return;K.pw.frys--;K.freeze=3.5;K.surge=0;tip("❄️ Frys: kedjan står still!");}
+  else{if(K.cur&&K.cur.rain)return;K.pw.regn--;K.cur={v:-1,txt:"?",rain:true};tip("🌈 Regnbågskulan blir samma tal som kulan den träffar");}
+  window.Ljud&&Ljud.magic&&Ljud.magic();renderPw();}
+function award(n){K.sinceAward+=n;if(K.sinceAward<10)return;K.sinceAward-=10;const a=allowed(),c=a[K.awarded++%a.length];K.pw[c.id]++;renderPw();
+  const b=document.querySelector(`[data-p="${c.id}"]`);if(b){b.classList.add("new");setTimeout(()=>b.classList.remove("new"),3200);}
+  tip(`Ny kraft: ${c.ic} ${c.nm}! Tryck på knappen uppe till vänster.`);window.Ljud&&Ljud.chime&&Ljud.chime();}
+
 /* ---------- Skjutkulan ---------- */
 // svar som finns bland kulorna man ser (annars bland dem som kommer)
 function present(){const vis=K.balls.filter(b=>b.s>0).map(b=>b.v);return vis.length?vis:K.queue.slice(0,8).map(b=>b.v);}
 // nytt uttryck vars svar finns i kedjan, inte samma uttryck som kulan före
 function pickShot(){const p=present();let o,k=0;do{const v=p.length?pick(p):pick(K.vals),e=pick(K.em[v]);o={v,txt:`${e[0]}·${e[1]}`};}while(k++<8&&[K.cur,K.next].some(c=>c&&c.txt===o.txt));return o;}
-function fixShot(o){if(o==null)return o;const p=present();return!p.length||p.includes(o.v)?o:pickShot();}
+function fixShot(o){if(o==null||o.rain)return o;const p=present();return!p.length||p.includes(o.v)?o:pickShot();}
 function aimAt(x,y){K.ang=Math.atan2(y-K.sy,x-K.sx);}
 function shoot(){if(K.state!=="play"||K.paused||K.cool>0||K.cur==null)return;
   const sp=Math.max(700,K.d*20),dx=Math.cos(K.ang),dy=Math.sin(K.ang),o=K.d*1.25;
-  K.shots.push({x:K.sx+dx*o,y:K.sy+dy*o,vx:dx*sp,vy:dy*sp,v:K.cur.v,txt:K.cur.txt});K.cur=K.next;K.next=pickShot();K.cool=.22;window.Ljud&&Ljud.shoot&&Ljud.shoot();}
+  K.shots.push({x:K.sx+dx*o,y:K.sy+dy*o,vx:dx*sp,vy:dy*sp,v:K.cur.v,txt:K.cur.txt,rain:K.cur.rain});K.cur=K.next;K.next=pickShot();K.cool=.22;window.Ljud&&Ljud.shoot&&Ljud.shoot();}
 function stepShots(dt){const B=K.balls,d=K.d;
   for(let k=K.shots.length-1;k>=0;k--){const s=K.shots[k];
     // flera små steg så att kulan inte hoppar förbi kedjan
@@ -292,19 +406,26 @@ function stepShots(dt){const B=K.balls,d=K.d;
     if(s.x<-d||s.y<-d||s.x>K.W+d||s.y>K.H+d)K.shots.splice(k,1);}}
 function insert(i,s){const B=K.balls,p=posAt(B[i].s),t=(s.x-p.x)*Math.cos(p.a)+(s.y-p.y)*Math.sin(p.a),front=t>0;
   const idx=front?i+1:i,prev=B[idx-1];
+  if(s.rain){const run=(a,dir,v)=>{let n=0;while(B[a]&&B[a].v===v&&B[a].g===1){n++;a+=dir;}return n;};
+    let bv=null,bn=-1;[B[idx-1],B[idx]].filter(Boolean).forEach(b=>{const n=1+run(idx-1,-1,b.v)+run(idx,1,b.v);if(n>bn){bn=n;bv=b.v;}});
+    if(bv!=null){s.v=bv;const e=K.em[bv];s.txt=e?`${e[0][0]}·${e[0][1]}`:String(bv);s.rainTxt=true;}}
   const nb={v:s.v,txt:String(s.v),col:K.vc[s.v],ins:true,g:0,fresh:true,id:K.idc++,fx:s.x,fy:s.y,touch:true};
-  K.floats.push({x:s.x,y:s.y,t:0,txt:`${s.txt.replace("·"," · ")} = ${s.v}`});
+  K.floats.push({x:s.x,y:s.y,t:0,txt:s.rain?`🌈 = ${s.v}`:`${s.txt.replace("·"," · ")} = ${s.v}`});
   nb.s=front?B[i].s+.01:(prev&&B[i].s-prev.s<=K.d+1?prev.s+K.d/2:B[i].s-K.d/2);
   B.splice(idx,0,nb);
   // hamnade kulan bredvid något med samma svar? annars räknas den som en miss (för stjärnorna)
   const nbV=[B[idx-1],B[idx+1]].filter(Boolean).map(b=>b.v);
-  if(nbV.includes(s.v)){K.missRow=0;}else{K.misses++;K.missRow++;
+  if(s.rain||nbV.includes(s.v)){K.missRow=0;}else{K.misses++;K.missRow++;
     if(K.missRow>=3){K.missRow=0;const ex=K.em[s.v]?K.em[s.v].slice(0,2).map(e=>`${e[0]} · ${e[1]}`).join(" och "):"";tip("Tips: räkna ut talet i den vita kulan först. Sedan skjuter du den till samma tal i ormen.");}}}
 let tipT;function tip(m){const t=$("tip");t.textContent=m;t.hidden=false;clearTimeout(tipT);tipT=setTimeout(()=>t.hidden=true,4200);}
 
 /* ---------- Loopen ---------- */
 function loop(now){raf=requestAnimationFrame(loop);const dt=Math.min(.05,(now-last)/1000);last=now;if(!K||K.paused)return draw();
   K.t+=dt;K.cool=Math.max(0,K.cool-dt);
+  if(K.state==="play"){const had=[K.slow>0,K.freeze>0];K.slow=Math.max(0,K.slow-dt);K.freeze=Math.max(0,K.freeze-dt);
+    if(K.lv.surge&&K.freeze<=0&&K.popped>0){if(K.surge>0){K.surge-=dt;if(K.surge<=0){K.surgeIn=K.lv.surge*(.8+Math.random()*.5);$("banner").hidden=true;}}
+      else{K.surgeIn-=dt;if(K.surgeIn<=0&&K.balls.length>6&&K.balls[K.balls.length-1].s/K.path.len<.7){K.surge=1.6;$("banner").textContent="⚠️ Fartpuff!";$("banner").hidden=false;window.Ljud&&Ljud.whoosh&&Ljud.whoosh();}else if(K.surgeIn<=0)K.surgeIn=2;}}
+    if(had[0]&&K.slow<=0||had[1]&&K.freeze<=0)renderPw();}
   if(K.state==="play"){spawn();stepChain(dt);stepShots(dt);
     const B=K.balls,front=B.length?B[B.length-1].s:0;K.danger=Math.max(0,Math.min(1,(front/K.path.len-.8)/.18));
     if(B.length&&front>=K.path.len){K.state="lose";K.lose=0;window.Ljud&&Ljud.whoosh&&Ljud.whoosh();}
@@ -314,6 +435,10 @@ function loop(now){raf=requestAnimationFrame(loop);const dt=Math.min(.05,(now-la
   K.floats.forEach(f=>{f.t+=dt;f.y-=30*dt;});K.floats=K.floats.filter(f=>f.t<1.3);
   draw();}
 function ballDraw(x,y,r,b){
+  if(b.rainbow){const g=cx.createLinearGradient(x-r,y-r,x+r,y+r);["#E5484D","#F2A900","#FFE066","#2BB673","#3D8BFD","#7B61FF"].forEach((c,i)=>g.addColorStop(i/5,c));
+    cx.fillStyle=g;cx.beginPath();cx.arc(x,y,r,0,Math.PI*2);cx.fill();cx.strokeStyle="#fff";cx.lineWidth=Math.max(2,r*.12);cx.stroke();
+    cx.fillStyle="rgba(255,255,255,.55)";cx.beginPath();cx.ellipse(x-r*.32,y-r*.42,r*.3,r*.17,-.5,0,Math.PI*2);cx.fill();
+    cx.font=`800 ${r*1.1}px "Baloo 2","Trebuchet MS",sans-serif`;cx.textAlign="center";cx.textBaseline="middle";cx.lineWidth=Math.max(2.5,r*.2);cx.strokeStyle="rgba(40,20,5,.6)";cx.strokeText("?",x,y+r*.05);cx.fillStyle="#fff";cx.fillText("?",x,y+r*.05);return;}
   const g=cx.createRadialGradient(x-r*.35,y-r*.4,r*.1,x,y,r);
   if(b.white){g.addColorStop(0,"#FFFFFF");g.addColorStop(.55,"#FBF6EA");g.addColorStop(1,"#D9CBAE");}
   else{g.addColorStop(0,"#FFFFFF");g.addColorStop(.18,b.col);g.addColorStop(1,shade(b.col,-.38));}
@@ -327,6 +452,7 @@ function ballDraw(x,y,r,b){
 function shade(hex,f){const n=parseInt(hex.slice(1),16);let r=n>>16,g=n>>8&255,b=n&255;const t=f<0?0:255,p=Math.abs(f);r=Math.round((t-r)*p+r);g=Math.round((t-g)*p+g);b=Math.round((t-b)*p+b);return`rgb(${r},${g},${b})`;}
 function draw(){if(!K)return;const W=K.W,H=K.H,d=K.d;cx.clearRect(0,0,W,H);if(bg)cx.drawImage(bg,0,0,W,H);drawGoal();
   // kulorna
+  if(K.freeze>0){cx.fillStyle="rgba(170,225,255,.18)";cx.fillRect(0,0,W,H);}
   K.balls.forEach(b=>{if(b.s<=0)return;const p=posAt(Math.min(b.s,K.path.len));let x=p.x,y=p.y;
     if(b.g<1&&b.fx!=null){x=b.fx+(p.x-b.fx)*b.g;y=b.fy+(p.y-b.fy)*b.g;}
     cx.fillStyle="rgba(80,45,10,.22)";cx.beginPath();cx.ellipse(x+2,y+d*.4,d*.42,d*.14,0,0,Math.PI*2);cx.fill();
@@ -334,18 +460,18 @@ function draw(){if(!K)return;const W=K.W,H=K.H,d=K.d;cx.clearRect(0,0,W,H);if(bg
   // skytten: djuret på en sandstensplatta
   const sx=K.sx,sy=K.sy,R=d*1.15;
   cx.fillStyle="rgba(90,50,10,.25)";cx.beginPath();cx.ellipse(sx,sy+R*.85,R*1.05,R*.3,0,0,Math.PI*2);cx.fill();
-  let g=cx.createRadialGradient(sx-R*.3,sy-R*.3,R*.2,sx,sy,R);g.addColorStop(0,"#F6DDA6");g.addColorStop(1,"#C99A55");cx.fillStyle=g;cx.beginPath();cx.arc(sx,sy,R,0,Math.PI*2);cx.fill();
-  cx.strokeStyle="#9E6E32";cx.lineWidth=3;cx.stroke();
+  const jg=K.lv.world==="djungel";let g=cx.createRadialGradient(sx-R*.3,sy-R*.3,R*.2,sx,sy,R);g.addColorStop(0,jg?"#C9D8C0":"#F6DDA6");g.addColorStop(1,jg?"#7E987C":"#C99A55");cx.fillStyle=g;cx.beginPath();cx.arc(sx,sy,R,0,Math.PI*2);cx.fill();
+  cx.strokeStyle=jg?"#4F6B4E":"#9E6E32";cx.lineWidth=3;cx.stroke();
   cx.strokeStyle="rgba(120,80,30,.45)";cx.lineWidth=2;for(let k=0;k<12;k++){const a=k/12*Math.PI*2;cx.beginPath();cx.moveTo(sx+Math.cos(a)*R*.82,sy+Math.sin(a)*R*.82);cx.lineTo(sx+Math.cos(a)*R*.95,sy+Math.sin(a)*R*.95);cx.stroke();}
   // siktlinje
   if(K.state==="play"){cx.setLineDash([3,9]);cx.strokeStyle="rgba(255,255,255,.65)";cx.lineWidth=2.5;cx.beginPath();cx.moveTo(sx+Math.cos(K.ang)*R*1.5,sy+Math.sin(K.ang)*R*1.5);cx.lineTo(sx+Math.cos(K.ang)*R*5,sy+Math.sin(K.ang)*R*5);cx.stroke();cx.setLineDash([]);}
   if(pet&&pet.complete&&pet.naturalWidth)cx.drawImage(pet,sx-R*.78,sy-R*.86,R*1.56,R*1.56);
   // kulan som ska skjutas, vid kanten åt det håll djuret siktar
   // skjutkulan är vit med uttrycket; den får sin färg först när den skjuts ut
-  if(K.cur!=null&&K.state==="play")ballDraw(sx+Math.cos(K.ang)*R*1.2,sy+Math.sin(K.ang)*R*1.2,d/2*1.08,{white:true,txt:K.cur.txt});
+  if(K.cur!=null&&K.state==="play")ballDraw(sx+Math.cos(K.ang)*R*1.2,sy+Math.sin(K.ang)*R*1.2,d/2*1.08,{white:true,txt:K.cur.txt,rainbow:K.cur.rain});
   // nästa kula på motsatt sida om siktet, så att den aldrig hamnar över kulan som ska skjutas
-  if(K.next!=null&&K.state==="play"){ballDraw(sx-Math.cos(K.ang)*R*.98,sy-Math.sin(K.ang)*R*.98,d*.36,{white:true,txt:K.next.txt});}
-  K.shots.forEach(s=>ballDraw(s.x,s.y,d/2,{col:K.vc[s.v],txt:s.txt}));
+  if(K.next!=null&&K.state==="play"){ballDraw(sx-Math.cos(K.ang)*R*.98,sy-Math.sin(K.ang)*R*.98,d*.36,{white:true,txt:K.next.txt,rainbow:K.next.rain});}
+  K.shots.forEach(s=>ballDraw(s.x,s.y,d/2,{col:K.vc[s.v],txt:s.txt,rainbow:s.rain&&!s.rainTxt}));
   K.parts.forEach(p=>{cx.globalAlpha=1-p.t/.7;cx.fillStyle=p.col;cx.beginPath();cx.arc(p.x,p.y,p.r,0,Math.PI*2);cx.fill();});cx.globalAlpha=1;
   K.floats.forEach(f=>{cx.globalAlpha=Math.min(1,2-f.t*1.5);cx.font=`800 ${Math.round(d*.5)}px "Baloo 2","Trebuchet MS",sans-serif`;cx.textAlign="center";cx.lineWidth=5;cx.strokeStyle="rgba(60,30,5,.7)";cx.strokeText(f.txt,f.x,f.y-d*.6);cx.fillStyle="#FFE7A3";cx.fillText(f.txt,f.x,f.y-d*.6);});cx.globalAlpha=1;}
 
@@ -370,7 +496,7 @@ document.addEventListener("keydown",e=>{if(!K||$("game").hidden||K.state!=="play
   else if(e.key===" "||e.key==="ArrowUp"){e.preventDefault();shoot();}else if(e.key==="Shift"||e.key==="s"){[K.cur,K.next]=[K.next,K.cur];}
   else if(e.key==="Escape"||e.key==="p")setPause(!K.paused);});
 function setPause(p){if(!K||K.state!=="play")return;K.paused=p;$("pause").hidden=!p;}
-$("pauseBtn").onclick=()=>setPause(true);$("resume").onclick=()=>setPause(false);$("restart").onclick=()=>startGame();
+$("pauseBtn").onclick=()=>setPause(true);$("resume").onclick=()=>setPause(false);$("restart").onclick=()=>startGame(K.lv.n);
 $("quit").onclick=()=>openHome();
 document.addEventListener("visibilitychange",()=>{if(document.hidden&&K&&K.state==="play")setPause(true);});
 addEventListener("resize",()=>{if(K&&!$("game").hidden)resize();});
@@ -379,18 +505,21 @@ function sndIcon(){const on=!window.Ljud||Ljud.on;$("snd").textContent=on?"🔊"
 $("snd").onclick=()=>{if(!window.Ljud)return;Ljud.set(!Ljud.on);sndIcon();if(Ljud.on&&Ljud.ok)Ljud.ok();document.dispatchEvent(new Event("mp-ljud"));};
 
 /* ---------- Slut ---------- */
-function finish(win){const k=data.tab;stopGame();
+function finish(win){const L=K.lv,n=L.n,k="b"+n;stopGame();
   // stjärnor efter andelen missar (slingor kan stå i vägen, därför i förhållande till kedjans längd)
-  let st=0;if(win){st=K.misses<=Math.max(2,Math.round(K.total*.1))?3:K.misses<=Math.round(K.total*.3)?2:1;const old=data.stars[k]||0;data.stars[k]=Math.max(old,st);}
+  let st=0;if(win){st=K.misses<=Math.max(2,Math.round(K.total*.1))?3:K.misses<=Math.round(K.total*.3)?2:1;data.betyg[n]=Math.max(bet(n),st);syncStars();if(n<BANOR.length)data.lvl=n+1;}
   const nyttRek=K.score>(data.best[k]||0);if(nyttRek)data.best[k]=K.score;data.played=(data.played||0)+1;save();
-  $("rTitle").textContent=win?"Alla kulor borta! 🎉":"Kulorna rullade in i pyramiden";
+  const W=BANOR.filter(b=>b.world===L.world),worldDone=win&&W.every(b=>bet(b.n)>0),nxt=BANOR[n];
+  $("rTitle").textContent=win?`Bana ${n} klar! 🎉`:"Kulorna rullade in";
   $("rStars").innerHTML=win?starHtml(st):"";
   $("rScore").textContent=`${K.score} poäng`;
-  $("rSub").textContent=win?(K.misses?`Du sköt ${K.misses} ${K.misses===1?"kula":"kulor"} där svaret inte passade.`:"Varje kula hamnade bredvid rätt svar!")+(nyttRek?" Nytt rekord!":"")
-    :`Du tog bort ${K.popped} av ${K.total} kulor.`+(nyttRek?" Nytt rekord!":"")+" Försök igen!";
-  $("rAgain").textContent=win?"Spela igen":"Försök igen";
+  $("rSub").innerHTML=win?(K.misses?`Du sköt ${K.misses} ${K.misses===1?"kula":"kulor"} där svaret inte passade.`:"Varje kula hamnade bredvid rätt svar!")+(nyttRek?" Nytt rekord!":"")
+      +(worldDone?` ${WORLDS[L.world].name} klar: ${starHtml(worldStars(L.world))}`:"")
+    :`Du tog bort ${K.popped} av ${K.total} kulor.`+(nyttRek?" Nytt rekord!":"")+" Försök igen! Tänk på krafterna uppe till vänster.";
+  $("rAgain").textContent=win?"Spela om banan":"Försök igen";
+  const rn=$("rNext");rn.hidden=!(win&&nxt);if(nxt)rn.textContent=`Nästa bana: ${nxt.name} ▶`;rn.onclick=()=>startGame(nxt.n);
   show("result");if(win&&window.Ljud&&Ljud.fanfare)Ljud.fanfare();}
-$("rAgain").onclick=()=>startGame();$("rHome").onclick=()=>openHome();
+$("rAgain").onclick=()=>startGame(K?K.lv.n:data.lvl);$("rHome").onclick=()=>openHome();
 
 /* ---------- Menyns bild ---------- */
 function drawHero(){const c=$("heroCv"),W=c.clientWidth,H=c.clientHeight;if(!W)return;const dpr=Math.min(2,window.devicePixelRatio||1);c.width=W*dpr;c.height=H*dpr;const g=c.getContext("2d");g.setTransform(dpr,0,0,dpr,0,0);
