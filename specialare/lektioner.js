@@ -435,7 +435,7 @@ var LEKTIONER=[
 ["🌅","Röda solnedgångar","Askan i atmosfären gjorde solnedgångarna röda och starka på många platser i flera år."],
 ["👶","Krakataus barn","Ön sprängdes nästan helt. 1927 steg en ny vulkan upp ur havet på platsen. Den kallas Anak Krakatau, Krakataus barn."]]},
 
-{id:"tjernobyl",titel:"Tjernobyl",kat:"Historia",e:"☢️",c:"#6E7B52",rutor:[
+{id:"tjernobyl",lank:[["Titta: Tjernobylolyckan, vad hände? (Snabb Fakta, YouTube)","https://www.youtube.com/watch?v=7xVhJQUjAx0"]],titel:"Tjernobyl",kat:"Historia",e:"☢️",c:"#6E7B52",rutor:[
 ["⚡","Ett kärnkraftverk","Vid staden Tjernobyl i dagens Ukraina fanns ett stort kärnkraftverk med fyra reaktorer. Det drevs då av Sovjetunionen."],
 ["💥","Natten den 26 april 1986","Under ett test gick något fel i reaktor 4. Det blev två explosioner och en stor brand."],
 ["☁️","Ett radioaktivt moln","Explosionen släppte ut radioaktiva ämnen. Molnet spreds med vinden över stora delar av Europa."],
