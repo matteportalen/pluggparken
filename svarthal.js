@@ -109,7 +109,7 @@ window.MPSvartHal={start(host,o){o=o||{};const D=o.def,SC=D?D.SC:SC0,M=Object.as
   document.addEventListener("keydown",key);
   const vis=()=>{if(document.hidden&&playing)setPlay(false);};document.addEventListener("visibilitychange",vis);
   sndIcon();
-  function loop(now){if(!alive)return;raf=requestAnimationFrame(loop);const dt=Math.min(.05,(now-last)/1000);last=now;
+  function loop(now){if(!alive)return;raf=requestAnimationFrame(loop);const dt=Math.min(.12,(now-last)/1000);last=now;
     if(playing){const s=SC[si],nxt=s.cap[capShown+1];
       // filmen väntar in rösten: tiden står still vid nästa text och vid scenens slut tills repliken är klar
       const hold=V.on&&V.busy&&((nxt&&st+dt>=nxt[0])||(!nxt&&st+dt>=s.d));

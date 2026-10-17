@@ -10,14 +10,14 @@ const TAU=Math.PI*2;
 /* ---------- Manus: nio scener (0 = inledning), undertexter med starttid i sekunder ---------- */
 const SC=[
  {k:"Inledning",d:8,cap:[[0.5,"Alla stjärnor har ett liv. De föds, lyser i miljarder år och dör. Följ med på resan, från gasmoln till svart hål."]]},
- {k:"01 · Ett moln av gas och damm",d:15.5,cap:[[0.8,"Allt börjar i ett jättelikt moln av gas och damm. Molnet kan vara många ljusår brett."],[7.7,"Tyngdkraften drar ihop det, bit för bit. Där gasen blir tätast börjar en ny stjärna formas."]]},
- {k:"02 · En stjärna tänds",d:14.8,cap:[[0.8,"Mitt i molnet blir gasen så hoptryckt att den blir varm, över 10 miljoner grader."],[6.5,"Då börjar atomerna smälta ihop, och det frigör enormt med energi. Stjärnan lyser!"]]},
- {k:"03 · Balans",d:16.4,cap:[[0.8,"Nu råder balans. Tyngdkraften pressar inåt, och hettan pressar lika hårt utåt."],[7.2,"Så kan solen lysa lugnt i 10 miljarder år. Idag är den 4,6 miljarder år gammal, ungefär halvvägs."]]},
- {k:"04 · En röd jätte",d:16.6,cap:[[0.8,"Om ungefär 5 miljarder år tar vätet i mitten slut. Då sväller solen till en röd jätte, över hundra gånger större än i dag."],[10.7,"Den slukar Merkurius och Venus, och jorden blir alldeles för het för liv."]]},
- {k:"05 · En vit dvärg",d:15.7,cap:[[0.8,"Sedan blåser stjärnan bort sina yttre lager, som ett vackert, glödande moln."],[6.1,"Kvar blir en vit dvärg, bara lika stor som jorden men nästan lika tung som solen. Den svalnar sakta i miljarder år."]]},
- {k:"06 · Jättestjärnor",d:16.6,cap:[[0.8,"Stjärnor som är mycket tyngre än solen lever fort. En blå jätte gör av med sitt bränsle på bara några miljoner år."],[8.6,"Sedan sväller den till en röd superjätte, som Betelgeuse i Orion, tusen gånger bredare än solen."]]},
- {k:"07 · Supernova",d:21.5,cap:[[0.8,"I mitten bygger stjärnan järn, och järn ger ingen energi. Då rasar kärnan ihop på mindre än en sekund."],[9.2,"Smällen kastar ut stjärnan i en supernova, som kan lysa starkare än en hel galax."],[15,"Järnet i ditt blod och kalciumet i dina ben har bildats inne i stjärnor."]]},
- {k:"08 · Neutronstjärna och svart hål",d:13,cap:[[0.8,"Kvar i mitten blir en neutronstjärna, så tät att en tesked väger miljarder ton."],[6.5,"Är stjärnan ännu tyngre fortsätter kärnan att rasa ihop, och då föds ett svart hål."]]}
+ {k:"01 · Ett moln av gas och damm",d:17,cap:[[0.8,"Allt börjar i ett jättelikt moln av gas och damm. Molnet kan vara många ljusår brett."],[8.5,"Tyngdkraften drar ihop det, bit för bit. Där gasen blir tätast börjar en ny stjärna formas."]]},
+ {k:"02 · En stjärna tänds",d:19,cap:[[0.8,"Mitt i molnet blir gasen så hoptryckt att den blir varm, över 10 miljoner grader."],[9.5,"Då börjar atomerna smälta ihop, och det frigör enormt med energi. Stjärnan lyser!"]]},
+ {k:"03 · Balans",d:19,cap:[[0.8,"Nu råder balans. Tyngdkraften pressar inåt, och hettan pressar lika hårt utåt."],[9.5,"Så kan solen lysa lugnt i 10 miljarder år. Idag är den 4,6 miljarder år gammal, ungefär halvvägs."]]},
+ {k:"04 · En röd jätte",d:19,cap:[[0.8,"Om ungefär 5 miljarder år tar vätet i mitten slut. Då sväller solen till en röd jätte, över hundra gånger större än i dag."],[10,"Den slukar Merkurius och Venus, och jorden blir alldeles för het för liv."]]},
+ {k:"05 · En vit dvärg",d:19,cap:[[0.8,"Sedan blåser stjärnan bort sina yttre lager, som ett vackert, glödande moln."],[9.5,"Kvar blir en vit dvärg, bara lika stor som jorden men nästan lika tung som solen. Den svalnar sakta i miljarder år."]]},
+ {k:"06 · Jättestjärnor",d:19,cap:[[0.8,"Stjärnor som är mycket tyngre än solen lever fort. En blå jätte gör av med sitt bränsle på bara några miljoner år."],[10,"Sedan sväller den till en röd superjätte, som Betelgeuse i Orion, tusen gånger bredare än solen."]]},
+ {k:"07 · Supernova",d:25,cap:[[0.8,"I mitten bygger stjärnan järn, och järn ger ingen energi. Då rasar kärnan ihop på mindre än en sekund."],[8.5,"Smällen kastar ut stjärnan i en supernova, som kan lysa starkare än en hel galax."],[16.5,"Järnet i ditt blod och kalciumet i dina ben har bildats inne i stjärnor."]]},
+ {k:"08 · Neutronstjärna och svart hål",d:21,cap:[[0.8,"Kvar i mitten blir en neutronstjärna, så tät att en tesked väger miljarder ton."],[10.5,"Är stjärnan ännu tyngre fortsätter kärnan att rasa ihop, och då föds ett svart hål."]]}
 ];
 const META={hud:"PLUGGPARKEN · RYMDARKIVET · FILM 03",titel:"En stjärnas liv",under:"En film i åtta steg · ca 3 minuter",
   slutRubrik:"Tack för att du har följt med",slutText:"Stjärnor föds och dör, och av deras rester bildas nya stjärnor, planeter och till slut även vi. Fortsätt vara nyfiken! Filmen följer solens och jättestjärnornas liv, och siffrorna är hämtade från NASA och vanliga astronomiböcker.",igen:"↻ Se filmen igen"};
@@ -70,14 +70,14 @@ function scenes(E){
 
   /* ---- 2 · Stjärnan tänds: ihopdragning, temperatur, fusion ---- */
   const s2=(t)=>{const{s,cx,cy,a,port}=S(),x=E.x,r=srand(4);
-    const col=cl(t/6.2,0,1),ign=cl((t-6)/1,0,1);                       // 0–9,5 s: molnet krymper och hettas upp
+    const col=cl(t/9.5,0,1),ign=cl((t-9.2)/1.2,0,1);                       // 0–9,5 s: molnet krymper och hettas upp
     const R0=s*.46,Rc=lerp(R0,s*.05,eo(col));
     x.save();x.globalCompositeOperation="lighter";
     for(let i=0;i<520;i++){const an=r()*TAU,d=(.2+r()*.8)*R0*(1-eo(col)*.82)*(.55+.45*Math.sin(i+t*.4)*0+.45),px=cx+Math.cos(an+t*.18*(1-d/R0))*d,py=cy+Math.sin(an+t*.18*(1-d/R0))*d*.85;
       const heat=cl(1-d/(R0*.45),0,1)*col;x.fillStyle=`rgba(255,${Math.round(150+heat*90)},${Math.round(110+heat*120)},${.12+.3*(1-d/R0)})`;x.fillRect(px,py,1.6+heat*1.4,1.6+heat*1.4);}
     x.restore();
     const core=s*.045*(1+.2*Math.sin(t*3)*0);glow(cx,cy,Rc*.7+core*3,"255,150,90",.55*col);
-    if(ign>0){const fl=Math.max(0,1-(t-6)/1.8);if(fl>0){x.save();x.globalCompositeOperation="lighter";const g=x.createRadialGradient(cx,cy,0,cx,cy,s*.7);g.addColorStop(0,`rgba(255,255,240,${.9*fl})`);g.addColorStop(1,"rgba(255,220,150,0)");x.fillStyle=g;x.fillRect(a.x,a.y,a.w,a.h);x.restore();}
+    if(ign>0){const fl=Math.max(0,1-(t-9.2)/1.8);if(fl>0){x.save();x.globalCompositeOperation="lighter";const g=x.createRadialGradient(cx,cy,0,cx,cy,s*.7);g.addColorStop(0,`rgba(255,255,240,${.9*fl})`);g.addColorStop(1,"rgba(255,220,150,0)");x.fillStyle=g;x.fillRect(a.x,a.y,a.w,a.h);x.restore();}
       star(cx,cy,s*.055*(.6+.4*ign),"255,252,235","255,214,120",ign);}
     else star(cx,cy,Math.max(3,Rc*.12),"255,200,160","255,120,70",col*.9);
     // temperatur
@@ -86,7 +86,7 @@ function scenes(E){
     tg("Temperatur i mitten",px,py-24,"#7fd6ff","left");
     tx((T<1000?T:T.toLocaleString("sv-SE").replace(/ /g," "))+" °C",px,py+6,ign>0?"#ffd86b":"#fff","left",Math.max(24,s*.07),700);
     // fusion: fyra väteatomer blir en heliumatom (efter tändningen)
-    if(t>6.6){const u=cl((t-6.8)/6,0,1),fx=cx+(port?0:s*.5),fy=port?cy+s*.45:cy,q=((t-6.8)*.4)%1;
+    if(t>9.8){const u=cl((t-10)/8,0,1),fx=cx+(port?0:s*.5),fy=port?cy+s*.45:cy,q=((t-10)*.35)%1;
       x.save();x.globalAlpha=eo(u*4);
       const pos=[[-1,-1],[1,-1],[-1,1],[1,1]],m=eo(Math.min(1,q*1.6)),Rr=s*.1;
       pos.forEach(([dx,dy])=>{disc(fx+dx*Rr*(1-m)*1.1,fy+dy*Rr*(1-m)*1.1,Math.max(3,s*.018),"rgba(140,200,255,1)");});
@@ -105,13 +105,13 @@ function scenes(E){
     x.save();x.globalAlpha=k;tx("Tyngdkraft",cx,cy-d1-len*.55-12,"#7fb2ff","center",14,700);tx("Tryck och hetta",cx,cy+d1+len*.55+14,"#ffa760","center",14,700);x.restore();
     // tidslinje över solens liv
     const lw=Math.min(a.w*.8,s*1.5),lx=cx-lw/2,ly=a.y+a.h*.9;
-    if(t>7.2){const f=eo((t-7.2)/2.5);x.save();x.globalAlpha=f;
+    if(t>8){const f=eo((t-8)/2.5);x.save();x.globalAlpha=f;
       x.fillStyle="rgba(127,214,255,.18)";x.fillRect(lx,ly-3,lw,6);x.fillStyle="#ffd86b";x.fillRect(lx,ly-3,lw*.46*f,6);
       tx("Födelse",lx,ly+20,"rgba(255,255,255,.7)","left",11);tx("10 miljarder år",lx+lw,ly+20,"rgba(255,255,255,.7)","right",11);
       glowDot(lx+lw*.46*f,ly,5,"rgba(255,216,107,1)");tx("Solen idag · 4,6 miljarder år",lx+lw*.46,ly-18,"#ffd86b","center",13,700);x.restore();}};
 
   /* ---- 4 · Röd jätte: solen sväller förbi Merkurius och Venus ---- */
-  const s4=(t)=>{const{s,cy,a,port}=S(),x=E.x,cx=a.x+a.w*(port?.5:.27),k=s*(port?.36:.42),f=eo((t-2)/9);
+  const s4=(t)=>{const{s,cy,a,port}=S(),x=E.x,cx=a.x+a.w*(port?.5:.27),k=s*(port?.36:.42),f=eo((t-3)/12);
     const P=[["Merkurius",.39,"#b5b5b5"],["Venus",.72,"#e8c27a"],["Jorden",1,"#4aa3ff"]];
     const R=lerp(s*.04,k*.9,f),ys=cy+(port?s*.25:0)*0;
     // banor och planeter
@@ -127,25 +127,25 @@ function scenes(E){
     tx(f<.3?"Solen idag":"Röd jätte",cx,cy-R-14,f<.3?"#ffe9a8":"#ff9a70","center",14,700);
     // förklaring till höger
     const px=port?a.x+a.w*.5:a.x+a.w*.62,py=a.y+(port?a.h*.93:a.h*.3);
-    if(t>2&&!port){x.save();x.globalAlpha=eo((t-2)/3);tg("Solens storlek",px,py-20,"#7fd6ff","left");
+    if(t>3&&!port){x.save();x.globalAlpha=eo((t-3)/3);tg("Solens storlek",px,py-20,"#7fd6ff","left");
       tx("Idag: 1 sol",px,py+8,"#fff","left",Math.max(18,s*.045),700);tx("Röd jätte: över 100 gånger större",px,py+8+Math.max(26,s*.07),"#ff9a70","left",Math.max(16,s*.04),700);x.restore();}};
 
   /* ---- 5 · Vit dvärg: planetarisk nebulosa, sedan jämförelse med jorden ---- */
-  const s5=(t)=>{const{s,cx,cy,a,port}=S(),x=E.x,f=eo(t/7),r=srand(13);
+  const s5=(t)=>{const{s,cx,cy,a,port}=S(),x=E.x,f=eo(t/10),r=srand(13);
     const R=s*.48*f;
     // skal i flera färger runt stjärnan, med klumpar
     x.save();x.globalCompositeOperation="lighter";
     const shells=[[.95,"90,230,255",.5],[.72,"140,255,170",.4],[.5,"255,120,200",.5]];
-    shells.forEach(([q,c,al],j)=>{const rr=R*q,fade=1-eo((t-8)/5)*.85;
+    shells.forEach(([q,c,al],j)=>{const rr=R*q,fade=1-eo((t-12)/6)*.85;
       x.strokeStyle=`rgba(${c},${al*.5*fade})`;x.lineWidth=Math.max(3,s*.05)*(1-j*.2);x.beginPath();x.ellipse(cx,cy,rr,rr*.88,.35,0,TAU);x.stroke();
       for(let i=0;i<50;i++){const an=r()*TAU,rd=rr*(1+(r()-.5)*.1),px=cx+Math.cos(an)*rd,py=cy+Math.sin(an)*rd*.88;
         const gg=x.createRadialGradient(px,py,0,px,py,s*.03);gg.addColorStop(0,`rgba(${c},${.28*fade})`);gg.addColorStop(1,`rgba(${c},0)`);x.fillStyle=gg;x.beginPath();x.arc(px,py,s*.03,0,TAU);x.fill();}});
     x.restore();
     // den lilla heta kärnan
     glow(cx,cy,s*.09,"200,225,255",.7);disc(cx,cy,Math.max(2.5,s*.012),"#fff");
-    if(t<8)tg("Planetarisk nebulosa",cx,cy+R*.95+22,"#7fd6ff","center");
+    if(t<12)tg("Planetarisk nebulosa",cx,cy+R*.95+22,"#7fd6ff","center");
     // jämförelse: vit dvärg och jorden i rätt storlek
-    if(t>6.4){const u=eo((t-6.4)/3),ex=cx+(port?-s*.2:-s*.22),wx=cx+(port?s*.2:s*.22),yy=cy+(port?s*.3:s*.28),Re=s*.07;
+    if(t>9.5){const u=eo((t-9.5)/3),ex=cx+(port?-s*.2:-s*.22),wx=cx+(port?s*.2:s*.22),yy=cy+(port?s*.3:s*.28),Re=s*.07;
       x.save();x.globalAlpha=u;
       const em=img(EARTH);x.save();x.beginPath();x.arc(ex,yy,Re,0,TAU);x.clip();if(ok(em))x.drawImage(em,ex-Re*2.2+(t*3%(Re*2)),yy-Re,Re*4.4,Re*2);else disc(ex,yy,Re,"#2f7fd0");
       const sh=x.createRadialGradient(ex-Re*.4,yy-Re*.4,Re*.2,ex,yy,Re*1.1);sh.addColorStop(0,"rgba(0,0,0,0)");sh.addColorStop(1,"rgba(0,0,10,.6)");x.fillStyle=sh;x.fillRect(ex-Re,yy-Re,Re*2,Re*2);x.restore();
@@ -161,7 +161,7 @@ function scenes(E){
       {n:"Röd superjätte",R:s*.34,c1:"255,200,150",c2:"230,70,40",life:"några miljoner år",lc:"#ff9a70"}];
     const xs=port?[cx-a.w*.28,cx+a.w*.18,cx]:[a.x+a.w*.14,a.x+a.w*.4,a.x+a.w*.72],ys=port?[a.y+a.h*.2,a.y+a.h*.3,a.y+a.h*.66]:[cy,cy,cy];
     const sc=port?[.55,.55,.5]:[1,1,1];
-    items.forEach((it,i)=>{const st=[0.5,3.5,8.6][i],f=eo((t-st)/2.5);if(f<=0)return;const R=it.R*sc[i]*f,px=xs[i],py=ys[i];
+    items.forEach((it,i)=>{const st=[0.5,4.5,10][i],f=eo((t-st)/2.5);if(f<=0)return;const R=it.R*sc[i]*f,px=xs[i],py=ys[i];
       x.save();x.globalAlpha=Math.min(1,f*1.4);
       if(i===2){const g=x.createRadialGradient(px,py,0,px,py,R);g.addColorStop(0,`rgba(${it.c1},1)`);g.addColorStop(1,`rgba(${it.c2},1)`);glow(px,py,R*1.7,"255,90,50",.4);x.fillStyle=g;x.beginPath();x.arc(px,py,R,0,TAU);x.fill();
         for(let q=0;q<26;q++){const rr=srand(q+3),an=rr()*TAU,d=rr()*R*.9,sx=px+Math.cos(an)*d,sy=py+Math.sin(an)*d;x.fillStyle="rgba(255,255,200,.07)";x.beginPath();x.arc(sx,sy,R*.1*(.6+rr()),0,TAU);x.fill();}}
@@ -170,12 +170,13 @@ function scenes(E){
       if(t>st+1.5){x.save();x.globalAlpha=eo((t-st-1.5)/2);
         const up=i===2&&!port,ly=up?py-R-16:py+R+26;tx(it.n,px,ly,"#fff","center",15,700);
         tx("Liv: "+it.life,px,ly+(up?-20:20),it.lc,"center",12,700);x.restore();}});
-    if(t>8.6){x.save();x.globalAlpha=eo((t-8.6)/3);tg("Tyngre stjärna = kortare liv",cx,a.y+a.h*(port?.1:.1),"#ffd86b","center");x.restore();}
-    if(t>12)tg("Betelgeuse",xs[2],ys[2]+items[2].R*sc[2]*.2,"rgba(255,255,255,.6)","center");};
+    if(t>9){x.save();x.globalAlpha=eo((t-9)/3);tg("Tyngre stjärna = kortare liv",cx,a.y+a.h*(port?.1:.1),"#ffd86b","center");x.restore();}
+    if(t>14.5)tg("Betelgeuse",xs[2],ys[2]+items[2].R*sc[2]*.2,"rgba(255,255,255,.6)","center");};
 
   /* ---- 7 · Supernova (ur Rymdlabbets film, anpassad till motorn) ---- */
-  let tmp=null;
-  const s7=(t)=>{const W=E.W,H=E.H,a=A(),x=E.x,cx=a.x+a.w/2,cy=a.y+a.h*.5,hh=a.h*1.15,uu=Math.min(Math.max(0,t-6.2),15.99),T=16,u=uu%T;
+  let tmp=null,SPR=null;
+  const sprite=(rgb)=>{if(!SPR)SPR={};if(!SPR[rgb]){const c=document.createElement('canvas');c.width=c.height=64;const g=c.getContext('2d'),gr=g.createRadialGradient(32,32,0,32,32,32);gr.addColorStop(0,`rgba(${rgb},1)`);gr.addColorStop(1,`rgba(${rgb},0)`);g.fillStyle=gr;g.fillRect(0,0,64,64);SPR[rgb]=c;}return SPR[rgb];};
+  const s7=(t)=>{const W=E.W,H=E.H,a=A(),x=E.x,cx=a.x+a.w/2,cy=a.y+a.h*.5,hh=a.h*1.15,uu=Math.min(t,15.99),T=16,u=uu%T;
     const c=x,ease=q=>q<0?0:q>1?1:q*q*(3-2*q),sm=Math.min(a.w,a.h);
     c.save();
     const shk=u>2.45&&u<4.6?Math.exp(-(u-2.45)*1.6)*hh*.018:0;if(shk>.2)c.translate((Math.random()-.5)*shk*2,(Math.random()-.5)*shk*2);
@@ -185,33 +186,34 @@ function scenes(E){
       c.fillStyle=`rgba(255,${230+25*k|0},${200+55*k|0},${.55+.4*k})`;c.beginPath();c.arc(cx,cy,rad*pul*.62,0,TAU);c.fill();}
     const tau=Math.max(0,u-2.45),R0=sm*.76,sp=Math.min(1,tau/13);
     if(tau>0){const r=srand(21);c.globalCompositeOperation="lighter";
-      for(let i=0;i<1300;i++){const an=r()*TAU,sv=Math.pow(r(),.5),tur=(r()-.5)*.35,rad=R0*sv*Math.pow(sp,.62)*(1+tur*.25)*(1+.18*Math.sin(an*5+i)),px=cx+Math.cos(an)*rad,py=cy+Math.sin(an)*rad;
-        const size=sm*(.01+r()*.045)*(.5+sp*1.2),al=(.1+r()*.18)*Math.min(1,tau*2)*(1-.55*sp)*(1-.7*ease((tau-2)/5));
-        const hot=1-sv,cr=hot>.7?[160,190,255]:hot>.4?[255,215,150]:sv>.85?[255,70,50]:[255,130,60];
-        const g=c.createRadialGradient(px,py,0,px,py,size);g.addColorStop(0,`rgba(${cr[0]},${cr[1]},${cr[2]},${al})`);g.addColorStop(1,`rgba(${cr[0]},${cr[1]},${cr[2]},0)`);c.fillStyle=g;c.beginPath();c.arc(px,py,size,0,TAU);c.fill();}
+      for(let i=0;i<450;i++){const an=r()*TAU,sv=Math.pow(r(),.5),tur=(r()-.5)*.35,rad=R0*sv*Math.pow(sp,.62)*(1+tur*.25)*(1+.18*Math.sin(an*5+i)),px=cx+Math.cos(an)*rad,py=cy+Math.sin(an)*rad;
+        const size=sm*(.02+r()*.09)*(.5+sp*1.2),al=(.2+r()*.4)*Math.min(1,tau*2)*(1-.55*sp)*(1-.7*ease((tau-2)/5));
+        const hot=1-sv,cr=hot>.7?"160,190,255":hot>.4?"255,215,150":sv>.85?"255,70,50":"255,130,60";
+        c.globalAlpha=Math.min(1,al);c.drawImage(sprite(cr),px-size,py-size,size*2,size*2);}
+      c.globalAlpha=1;
       c.lineWidth=Math.max(1,sm*.006);const r2=srand(5);
-      for(let i=0;i<80;i++){const a0=r2()*7,len=.25+r2()*.9,rad=R0*(.45+r2()*.5)*Math.pow(sp,.62),col=r2()<.5?"120,230,255":r2()<.5?"255,120,190":"255,170,90";
+      for(let i=0;i<45;i++){const a0=r2()*7,len=.25+r2()*.9,rad=R0*(.45+r2()*.5)*Math.pow(sp,.62),col=r2()<.5?"120,230,255":r2()<.5?"255,120,190":"255,170,90";
         c.strokeStyle=`rgba(${col},${.2*Math.min(1,tau)*(1-.5*sp)})`;c.beginPath();for(let k=0;k<=24;k++){const an=a0+len*k/24,rr=rad*(1+.05*Math.sin(k*.45+i*1.3)+.03*Math.sin(k*.17+i));const px=cx+Math.cos(an)*rr,py=cy+Math.sin(an)*rr;k?c.lineTo(px,py):c.moveTo(px,py);}c.stroke();}
-      const sr=R0*1.02*Math.pow(sp,.62);c.shadowColor="rgba(180,210,255,.9)";c.shadowBlur=sm*.03;c.strokeStyle=`rgba(190,215,255,${.32*(1-sp)})`;c.lineWidth=sm*.005;c.beginPath();c.arc(cx,cy,sr,0,TAU);c.stroke();c.shadowBlur=0;}
+      const sr=R0*1.02*Math.pow(sp,.62);c.strokeStyle=`rgba(190,215,255,${.32*(1-sp)})`;c.lineWidth=sm*.008;c.beginPath();c.arc(cx,cy,sr,0,TAU);c.stroke();}
     const snI=img(CASA);
     if(tau>1&&ok(snI)){const pa=ease((tau-1.2)/4.5),rv=ease((tau-1)/9);
-      if(!tmp)tmp=document.createElement("canvas");if(tmp.width!==W||tmp.height!==H){tmp.width=W;tmp.height=H;}
-      const t2=tmp.getContext("2d");t2.globalCompositeOperation="source-over";t2.clearRect(0,0,W,H);
+      if(!tmp)tmp=document.createElement("canvas");const hw=Math.round(W/2),hhh=Math.round(H/2);if(tmp.width!==hw||tmp.height!==hhh){tmp.width=hw;tmp.height=hhh;}
+      const t2=tmp.getContext("2d");t2.setTransform(.5,0,0,.5,0,0);t2.globalCompositeOperation="source-over";t2.clearRect(0,0,W,H);
       const ih=sm*(.85+.35*ease(tau/14)),iw=ih*snI.naturalWidth/snI.naturalHeight;t2.drawImage(snI,cx-iw/2,cy-ih/2,iw,ih);
       const rr=sm*(.08+.7*rv),m=t2.createRadialGradient(cx,cy,rr*.35,cx,cy,rr);m.addColorStop(0,"rgba(0,0,0,1)");m.addColorStop(1,"rgba(0,0,0,0)");
       t2.globalCompositeOperation="destination-in";t2.fillStyle=m;t2.fillRect(0,0,W,H);
-      c.globalCompositeOperation="lighter";c.globalAlpha=pa*.95;c.drawImage(tmp,0,0);c.globalAlpha=1;
+      c.globalCompositeOperation="lighter";c.globalAlpha=pa*.95;c.drawImage(tmp,0,0,W,H);c.globalAlpha=1;
       if(tau>7){c.globalCompositeOperation="source-over";cred("Så ser en riktig supernovarest ut: Cassiopeia A · NASA, CXC, STScI",Math.min(.6,(tau-7)*.3));}}
     const fl=u>2.4?Math.exp(-(u-2.4)*1.1)*Math.min(1,(u-2.4)*8):0;
-    if(tau>0){c.globalCompositeOperation="lighter";for(let k=0;k<3;k++){const q=tau-k*.55;if(q<=0)continue;const rr=R0*1.3*Math.pow(Math.min(1,q/6),.7),al=Math.max(0,.5*(1-q/6));if(al<=0)continue;c.strokeStyle=`rgba(${k?"255,190,140":"170,210,255"},${al})`;c.lineWidth=sm*(.01-k*.003);c.shadowColor="rgba(170,210,255,.9)";c.shadowBlur=sm*.04;c.beginPath();c.arc(cx,cy,rr,0,TAU);c.stroke();}c.shadowBlur=0;
+    if(tau>0){c.globalCompositeOperation="lighter";for(let k=0;k<3;k++){const q=tau-k*.55;if(q<=0)continue;const rr=R0*1.3*Math.pow(Math.min(1,q/6),.7),al=Math.max(0,.5*(1-q/6));if(al<=0)continue;c.strokeStyle=`rgba(${k?"255,190,140":"170,210,255"},${al})`;c.lineWidth=sm*(.014-k*.004);c.beginPath();c.arc(cx,cy,rr,0,TAU);c.stroke();}
       if(fl>.01){c.globalCompositeOperation="lighter";const g=c.createRadialGradient(cx,cy,0,cx,cy,sm*(.5+1.1*fl));g.addColorStop(0,`rgba(255,255,255,${Math.min(1,fl*1.1)})`);g.addColorStop(.25,`rgba(190,215,255,${fl*.7})`);g.addColorStop(1,"rgba(80,120,255,0)");c.fillStyle=g;c.fillRect(0,0,W,H);}}
     if(tau>1.5){const k=Math.min(1,(tau-1.5)/2),p=1+.25*Math.sin(u*14);c.globalCompositeOperation="lighter";const g=c.createRadialGradient(cx,cy,0,cx,cy,sm*.06*p);g.addColorStop(0,`rgba(220,235,255,${k})`);g.addColorStop(1,"rgba(110,160,255,0)");c.fillStyle=g;c.beginPath();c.arc(cx,cy,sm*.06*p,0,TAU);c.fill();}
     c.restore();
-    if(t>15){x.save();x.globalAlpha=eo((t-15)/2.5);tg("Järn · kalcium · syre",cx,a.y+a.h*.93,"#ffd86b","center");x.restore();}};
+    if(t>16.5){x.save();x.globalAlpha=eo((t-16.5)/2.5);tg("Järn · kalcium · syre",cx,a.y+a.h*.93,"#ffd86b","center");x.restore();}};
 
   /* ---- 8 · Neutronstjärna med strålar, sedan ett svart hål ---- */
   const s8=(t)=>{const{s,cx,cy,a,port}=S(),x=E.x,f=eo(t/3);
-    const ns=cl(1-eo((t-6.3)/2.5),0,1),bh=eo((t-6.9)/4);
+    const ns=cl(1-eo((t-10.2)/3),0,1),bh=eo((t-11.5)/4);
     if(ns>0){x.save();x.globalAlpha=ns;
       const R=s*.035,rot=t*5;
       x.save();x.globalCompositeOperation="lighter";
@@ -226,13 +228,13 @@ function scenes(E){
         const tx0=cx+(port?0:s*.7)*0;
       }
       x.restore();
-      if(t>3){x.save();x.globalAlpha=ns*eo((t-3)/2);
+      if(t>5){x.save();x.globalAlpha=ns*eo((t-5)/2.5);
         const bx=a.x+a.w*(port?.5:.2),by=a.y+a.h*(port?.12:.5);
         x.fillStyle="rgba(255,255,255,.07)";x.strokeStyle="rgba(127,214,255,.5)";x.lineWidth=1;
         const bw=Math.max(150,s*.4),bhh=Math.max(60,s*.15);x.fillRect(bx-bw/2,by-bhh/2,bw,bhh);x.strokeRect(bx-bw/2,by-bhh/2,bw,bhh);
         tx("1 tesked",bx,by-6,"#fff","center",Math.max(16,s*.04),700);tx("≈ 2 miljarder ton",bx,by+Math.max(18,s*.05),"#ffd86b","center",Math.max(14,s*.035),700);x.restore();}}
     if(bh>0){const R=s*.11*bh;hole(cx,cy,R,t,bh);
-      if(t>10.5){x.save();x.globalAlpha=eo((t-10.5)/2);tg("Svart hål",cx,cy+R*2.6,"#ffb070","center");x.restore();}}};
+      if(t>14){x.save();x.globalAlpha=eo((t-14)/2);tg("Svart hål",cx,cy+R*2.6,"#ffb070","center");x.restore();}}};
 
   return[s0,s1,s2,s3,s4,s5,s6,s7,s8];
 }
