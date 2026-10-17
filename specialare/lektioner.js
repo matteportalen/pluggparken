@@ -2,7 +2,7 @@
    Lägg till en ny lektion sist i listan. Varje bild i en lektion är [emoji, rubrik, text].
    kat: Rymden, Natur, Historia, Kroppen, Tal, Hjärnan  ·  c = färg på kortet  ·  e = ikon */
 var LEKTIONER=[
-{id:"titanic",titel:"Titanic",kat:"Historia",e:"🚢",c:"#3B6EA8",rutor:[
+{id:"titanic",lank:[["Titta: Hur sjönk Titanic? (Snabb Fakta, YouTube)","https://www.youtube.com/watch?v=5RdN_zdpTr4"]],titel:"Titanic",kat:"Historia",e:"🚢",c:"#3B6EA8",rutor:[
 ["🚢","Det största skeppet","Titanic var när hon byggdes det största skeppet i världen: ungefär 270 meter långt. Det är som 2,5 fotbollsplaner efter varandra."],
 ["🗓️","Jungfrufärden 1912","I april 1912 lämnade Titanic England på sin allra första resa. Hon skulle till New York. Ombord fanns över 2 000 människor."],
 ["🧊","Isberget","Sent en kall natt, den 14 april, såg man ett isberg alldeles för sent. Skeppet hann inte svänga och skrapade längs sidan."],
