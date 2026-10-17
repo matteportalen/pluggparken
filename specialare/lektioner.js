@@ -54,7 +54,7 @@ var LEKTIONER=[
 ["☀️","Jämfört med solen","Ett svart hål med solens vikt skulle bara vara några kilometer stort. TON 618 är över 100 000 gånger bredare än solen. Det är mycket större än hela vårt solsystem: Neptunus ligger bara 30 gånger längre bort än jorden, men TON 618:s gräns ligger 800 till 1 300 gånger längre bort."],
 ["😌","Ingen fara för oss","Det närmaste vi känner till ligger tusentals ljusår bort. Det kan inte hämta in jorden."]]},
 
-{id:"dinosaurier",titel:"Dinosaurierna",kat:"Natur",e:"🦖",c:"#5B8C3E",rutor:[
+{id:"dinosaurier",titel:"Dinosaurierna",kat:"Natur",e:"🦖",c:"#5B8C3E",film:"dinosaurier",rutor:[
 ["🦖","Jordens jättar","Dinosaurier levde på jorden i ungefär 165 miljoner år. Människan har bara funnits i några hundratusen år."],
 ["🦕","Alla storlekar","Vissa var stora som flera bussar efter varandra, andra var små som en kyckling."],
 ["🥚","De la ägg","Alla dinosaurier kläcktes ur ägg, precis som fåglar och krokodiler."],
