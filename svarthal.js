@@ -1,5 +1,5 @@
 /* Inuti ett svart hål: en film i åtta scener, ritad i kod (canvas). Delas av Specialare och Rymdlabbet.
-   Fritt efter en förklaring av astrofysikern Neil deGrasse Tyson; bilderna och texterna är egna.
+   Bilderna och texterna är egna.
    MPSvartHal.start(host,{overlay,onClose}) ritar filmen i host och returnerar en funktion som städar.
    overlay:true = hela fönstret med en egen ✕ (Rymdlabbet); annars fyller filmen ytan under sidhuvudet (Specialare).
    Berättarröst: inspelade repliker (ElevenLabs) i ljud/svarthal/s<scen>-<replik>.mp3; filmen väntar in rösten. Saknas en fil visas bara texten.
@@ -66,7 +66,7 @@ let STARS=[];
 function makeStars(){let s=7;const r=()=>(s=(s*16807)%2147483647)/2147483647;STARS=[];for(let i=0;i<520;i++)STARS.push({x:r(),y:r(),z:.2+r()*.8,tw:r()*TAU,c:r()<.15?"#ffd9b0":r()<.3?"#b8d8ff":"#ffffff"});}
 makeStars();
 
-window.MPSvartHal={start(host,o){o=o||{};const D=o.def,SC=D?D.SC:SC0,M=Object.assign({hud:"PLUGGPARKEN · RYMDARKIVET · FILM 01",titel:"Inuti ett svart hål",under:"En film i sju steg · ca 3 minuter",slutRubrik:"Tack för att du har lyssnat",slutText:"Nu vet du lite mer om en av universums mest mystiska platser. Fortsätt vara nyfiken! Filmen handlar om flykthastighet, händelsehorisonten, den sista stabila banan och tidvattenkrafter, fritt efter en förklaring av astrofysikern Neil deGrasse Tyson.",igen:"↻ Se filmen igen"},D&&D.meta);V.base=ROOT+"ljud/"+(D?D.ljud:"svarthal")+"/";
+window.MPSvartHal={start(host,o){o=o||{};const D=o.def,SC=D?D.SC:SC0,M=Object.assign({hud:"PLUGGPARKEN · RYMDARKIVET · FILM 01",titel:"Inuti ett svart hål",under:"En film i sju steg · ca 3 minuter",slutRubrik:"Tack för att du har lyssnat",slutText:"Nu vet du lite mer om en av universums mest mystiska platser. Fortsätt vara nyfiken! Filmen handlar om flykthastighet, händelsehorisonten, den sista stabila banan och tidvattenkrafter.",igen:"↻ Se filmen igen"},D&&D.meta);V.base=ROOT+"ljud/"+(D?D.ljud:"svarthal")+"/";
   if(!document.getElementById("sh-css")){const st=document.createElement("style");st.id="sh-css";st.textContent=CSS;document.head.appendChild(st);}
   const root=document.createElement("div");root.className="sh"+(o.overlay?" ov":"");
   root.innerHTML=`<canvas></canvas><div class="sh-cap"><div class="sh-kick"></div><div class="sh-txt"></div></div>
@@ -125,7 +125,7 @@ window.MPSvartHal={start(host,o){o=o||{};const D=o.def,SC=D?D.SC:SC0,M=Object.as
     const T=performance.now()/1000;for(const s of STARS){const px=((s.x+T*.002*s.z)%1)*W,py=s.y*H,a=.25+.55*s.z*(.7+.3*Math.sin(T*1.3+s.tw));x.globalAlpha=a;x.fillStyle=s.c;x.fillRect(px,py,s.z*1.6,s.z*1.6);}x.globalAlpha=1;}
   function hud(){const m=Math.max(12,Math.min(W,H)*.025),l=Math.min(W,H)*.05;x.strokeStyle="rgba(127,214,255,.35)";x.lineWidth=1;
     [[m,m,1,1],[W-m,m,-1,1],[m,H-m,1,-1],[W-m,H-m,-1,-1]].forEach(([a,b,sx,sy])=>{x.beginPath();x.moveTo(a,b+sy*l);x.lineTo(a,b);x.lineTo(a+sx*l,b);x.stroke();});
-    x.fillStyle="rgba(127,214,255,.7)";x.font="600 11px Inter,system-ui,sans-serif";x.textAlign="left";x.fillText("PLUGGPARKEN · RYMDARKIVET · FILM 01",m+l*.5,m+16);
+    x.fillStyle="rgba(127,214,255,.7)";x.font="600 11px Inter,system-ui,sans-serif";x.textAlign="left";x.fillText(M.hud,m+l*.5,m+16);
     x.textAlign="right";x.fillText(String(si).padStart(2,"0")+" / "+String(SC.length-1).padStart(2,"0"),W-m-l*.5-(o.overlay?52:0),m+16);}
   const font=(w,s)=>`${w} ${Math.round(s)}px Inter,system-ui,sans-serif`,serif=(s)=>`700 ${Math.round(s)}px "Source Serif 4",Georgia,serif`;
   function label(t,px,py,col,al,sz){x.font=font(600,sz||12);x.fillStyle=col||"rgba(255,255,255,.85)";x.textAlign=al||"left";x.fillText(t,px,py);}
