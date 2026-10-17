@@ -36,7 +36,7 @@ var LEKTIONER=[
 ["🦐","Liv även där","Forskare har hittat små räkliknande djur och andra varelser som lever där nere. Liv finns nästan överallt!"],
 ["🗑️","Även här finns vårt skräp","Forskare har hittat skräp på havets djupaste ställen, bland annat en plastpåse på nästan 11 kilometers djup i Marianergraven. Bilden visar en färgburk på en annan djup havsbotten. Skräp som vi kastar kan hamna väldigt långt bort. Vad kan vi göra för att skräpet inte ska hamna i havet?"]]},
 
-{id:"vulkan",titel:"Så fungerar en vulkan",kat:"Natur",e:"🌋",c:"#C4511F",rutor:[
+{id:"vulkan",titel:"Så fungerar en vulkan",kat:"Natur",e:"🌋",c:"#C4511F",film:"vulkan",rutor:[
 ["🌍","Jorden är het inuti","Långt ner under våra fötter är det så varmt att berg kan smälta. Smält berg kallas magma."],
 ["⬆️","Magman stiger","Magma är lättare än hårt berg, så den stiger uppåt genom sprickor, som en bubbla i en sirapsburk."],
 ["💥","Utbrott!","När magman når ytan eller trycket blir för stort kommer ett utbrott. Gaser, aska och het sten flyger upp."],
