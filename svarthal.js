@@ -33,15 +33,15 @@ const CSS=`
 .sh-end h2{font-family:"Source Serif 4",Georgia,serif;font-size:clamp(2rem,5vw,3.6rem);margin:0 0 8px;color:#ffd86b}
 .sh-end p{max-width:52ch;margin:0 auto 18px;color:rgba(255,255,255,.78);line-height:1.45;padding:0 16px}
 .sh-x{position:absolute;top:calc(12px + env(safe-area-inset-top,0px));right:14px;z-index:3}
-@media(max-width:700px){.sh-cap{bottom:84px}.sh-dot{width:16px}.sh-b{padding:0 10px}.sh-kick{font-size:.66rem}}
+@media(max-width:700px){.sh-cap{bottom:max(116px,16vh)}.sh-bar{flex-wrap:wrap;justify-content:center;gap:8px 8px;padding-top:8px}.sh-dots{order:-1;flex:1 0 100%;gap:4px}.sh-dot{width:20px}.sh-b{padding:0 12px}.sh-kick{font-size:.66rem}}
 @media(prefers-reduced-motion:reduce){.sh-txt span{animation:none;opacity:1;transform:none;filter:none}}`;
 
-const BASE=(()=>{try{return new URL("ljud/svarthal/",document.currentScript.src).href;}catch(e){return "/ljud/svarthal/";}})();
+const ROOT=(()=>{try{return new URL("./",document.currentScript.src).href;}catch(e){return "/";}})();
 const TAU=Math.PI*2,cl=(v,a,b)=>Math.max(a,Math.min(b,v)),lerp=(a,b,t)=>a+(b-a)*t,ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2,eo=t=>1-Math.pow(1-cl(t,0,1),3);
 const seg=(t,a,b)=>cl((t-a)/(b-a),0,1);
 
 /* ---------- Manus: åtta scener, undertexter med starttid i sekunder ---------- */
-const SC=[
+const SC0=[
  {k:"Inledning",d:7,cap:[[0,"Vad händer om man faller in i ett svart hål? Följ med på en resa i sju steg."]]},
  {k:"01 · Flykthastighet",d:21,cap:[[0,"Kasta en boll rakt upp. Den saktar in, vänder och faller ner igen."],[6.5,"Kastar du hårdare kommer den högre. Men jordens tyngdkraft drar alltid tillbaka den."],[13,"Vid 11,2 kilometer i sekunden kommer den aldrig tillbaka. Det kallas jordens flykthastighet."]]},
  {k:"02 · Mer tyngdkraft",d:25,cap:[[0,"Ju starkare tyngdkraft, desto snabbare måste man åka för att komma loss."],[8,"Pressa ihop massa på en allt mindre yta, så växer flykthastigheten: från månen till en neutronstjärna."],[17.5,"Blir den större än ljusets hastighet, 300 000 kilometer i sekunden, kan inte ens ljus komma ut. Då är det ett svart hål."]]},
@@ -53,10 +53,10 @@ const SC=[
 ];
 
 /* ---------- Röst: en inspelad fil per replik ---------- */
-const V={on:true,busy:false,a:null};
+const V={on:true,busy:false,a:null,base:ROOT+"ljud/svarthal/"};
 function voiceStop(){V.busy=false;if(V.a){try{V.a.pause();}catch(e){}V.a=null;}duck(false);}
 function duck(on){const L=window.Ljud;try{const g=L&&L.rymd&&L.rymd.g;if(g&&g.context)g.gain.setTargetAtTime(on?.16:.55,g.context.currentTime,.4);}catch(e){}}
-function voicePlay(si,ci){voiceStop();if(!V.on)return;const a=new Audio(BASE+"s"+si+"-"+(ci+1)+".mp3");a.preload="auto";V.a=a;V.busy=true;
+function voicePlay(si,ci){voiceStop();if(!V.on)return;const a=new Audio(V.base+"s"+si+"-"+(ci+1)+".mp3");a.preload="auto";V.a=a;V.busy=true;
   const done=()=>{clearTimeout(V.t);if(V.a===a){V.busy=false;V.a=null;duck(false);}};a.onended=done;a.onerror=done;duck(true);
   clearTimeout(V.t);V.t=setTimeout(done,16000);   // reservutgång: filmen får aldrig hänga om ljudet inte startar
   const p=a.play();if(p&&p.catch)p.catch(done);}
@@ -66,7 +66,7 @@ let STARS=[];
 function makeStars(){let s=7;const r=()=>(s=(s*16807)%2147483647)/2147483647;STARS=[];for(let i=0;i<520;i++)STARS.push({x:r(),y:r(),z:.2+r()*.8,tw:r()*TAU,c:r()<.15?"#ffd9b0":r()<.3?"#b8d8ff":"#ffffff"});}
 makeStars();
 
-window.MPSvartHal={start(host,o){o=o||{};
+window.MPSvartHal={start(host,o){o=o||{};const D=o.def,SC=D?D.SC:SC0,M=Object.assign({hud:"PLUGGPARKEN · RYMDARKIVET · FILM 01",titel:"Inuti ett svart hål",under:"En film i sju steg · ca 3 minuter",slutRubrik:"Tack för att du har lyssnat",slutText:"Nu vet du lite mer om en av universums mest mystiska platser. Fortsätt vara nyfiken! Filmen handlar om flykthastighet, händelsehorisonten, den sista stabila banan och tidvattenkrafter, fritt efter en förklaring av astrofysikern Neil deGrasse Tyson.",igen:"↻ Se filmen igen"},D&&D.meta);V.base=ROOT+"ljud/"+(D?D.ljud:"svarthal")+"/";
   if(!document.getElementById("sh-css")){const st=document.createElement("style");st.id="sh-css";st.textContent=CSS;document.head.appendChild(st);}
   const root=document.createElement("div");root.className="sh"+(o.overlay?" ov":"");
   root.innerHTML=`<canvas></canvas><div class="sh-cap"><div class="sh-kick"></div><div class="sh-txt"></div></div>
@@ -74,7 +74,7 @@ window.MPSvartHal={start(host,o){o=o||{};
    <div class="sh-dots">${SC.map((s,i)=>`<button class="sh-dot" data-i="${i}" aria-label="${s.k}"><i></i></button>`).join("")}</div>
    <button class="sh-b" data-a="voice" aria-label="Berättarröst av eller på">🗣 Röst</button><button class="sh-b" data-a="snd" aria-label="Ljud">🔊</button><button class="sh-b" data-a="fs" aria-label="Helskärm">⛶</button></div>
    ${o.overlay?'<button class="sh-b sh-x" data-a="close" aria-label="Stäng">✕</button>':""}
-   <div class="sh-start"><div><h2>Inuti ett svart hål</h2><p>En film i sju steg · ca 3 minuter</p><button class="sh-play" data-a="go">▶ Starta filmen</button>
+   <div class="sh-start"><div><h2>${M.titel}</h2><p>${M.under}</p><button class="sh-play" data-a="go">▶ Starta filmen</button>
    </div></div>`;
   host.appendChild(root);
   const C=root.querySelector("canvas"),x=C.getContext("2d"),$=s=>root.querySelector(s);
@@ -94,7 +94,7 @@ window.MPSvartHal={start(host,o){o=o||{};
     if(!p){if(V.a){try{V.a.pause();}catch(e){}}}else if(was===false&&V.a){V.a.play().catch(()=>{V.busy=false;});}else if(p&&!V.a&&capShown>=0&&st<SC[si].d&&!V.busy){/* första starten eller efter hopp */voicePlay(si,capShown);}
     const L=snd();if(L&&L.rymd){if(p&&L.on)L.rymd.start();else L.rymd.stop&&L.rymd.stop();}}
   function finish(){playing=false;$('[data-a="play"]').textContent="▶";ended=true;voiceStop();document.dispatchEvent(new Event("mp-sh-slut"));const L=snd();if(L&&L.rymd&&L.rymd.stop)L.rymd.stop();
-    const e=document.createElement("div");e.className="sh-end";e.innerHTML=`<div><h2>Tack för att du har lyssnat</h2><p>Nu vet du lite mer om en av universums mest mystiska platser. Fortsätt vara nyfiken! Filmen handlar om flykthastighet, händelsehorisonten, den sista stabila banan och tidvattenkrafter, fritt efter en förklaring av astrofysikern Neil deGrasse Tyson.</p><button class="sh-play" data-a="again">↻ Se filmen igen</button></div>`;root.appendChild(e);if(V.on){const a=new Audio(BASE+"s8-1.mp3");V.a=a;V.busy=true;duck(true);const dn=()=>{if(V.a===a){V.busy=false;V.a=null;duck(false);}};a.onended=dn;a.onerror=dn;const p=a.play();if(p&&p.catch)p.catch(dn);}}
+    const e=document.createElement("div");e.className="sh-end";e.innerHTML=`<div><h2>${M.slutRubrik}</h2><p>${M.slutText}</p><button class="sh-play" data-a="again">${M.igen}</button></div>`;root.appendChild(e);if(V.on){const a=new Audio(V.base+"s"+SC.length+"-1.mp3");V.a=a;V.busy=true;duck(true);const dn=()=>{if(V.a===a){V.busy=false;V.a=null;duck(false);}};a.onended=dn;a.onerror=dn;const p=a.play();if(p&&p.catch)p.catch(dn);}}
   root.addEventListener("click",ev=>{const b=ev.target.closest("[data-a],[data-i]");if(!b)return;
     if(b.dataset.i!=null){if(!started)start();goto(+b.dataset.i);return;}
     const a=b.dataset.a;
@@ -126,7 +126,7 @@ window.MPSvartHal={start(host,o){o=o||{};
   function hud(){const m=Math.max(12,Math.min(W,H)*.025),l=Math.min(W,H)*.05;x.strokeStyle="rgba(127,214,255,.35)";x.lineWidth=1;
     [[m,m,1,1],[W-m,m,-1,1],[m,H-m,1,-1],[W-m,H-m,-1,-1]].forEach(([a,b,sx,sy])=>{x.beginPath();x.moveTo(a,b+sy*l);x.lineTo(a,b);x.lineTo(a+sx*l,b);x.stroke();});
     x.fillStyle="rgba(127,214,255,.7)";x.font="600 11px Inter,system-ui,sans-serif";x.textAlign="left";x.fillText("PLUGGPARKEN · RYMDARKIVET · FILM 01",m+l*.5,m+16);
-    x.textAlign="right";x.fillText(String(si).padStart(2,"0")+" / 07",W-m-l*.5-(o.overlay?52:0),m+16);}
+    x.textAlign="right";x.fillText(String(si).padStart(2,"0")+" / "+String(SC.length-1).padStart(2,"0"),W-m-l*.5-(o.overlay?52:0),m+16);}
   const font=(w,s)=>`${w} ${Math.round(s)}px Inter,system-ui,sans-serif`,serif=(s)=>`700 ${Math.round(s)}px "Source Serif 4",Georgia,serif`;
   function label(t,px,py,col,al,sz){x.font=font(600,sz||12);x.fillStyle=col||"rgba(255,255,255,.85)";x.textAlign=al||"left";x.fillText(t,px,py);}
   function tag(t,px,py,col,al){label(t.toUpperCase(),px,py,col||"#7fd6ff",al,11);}
@@ -157,7 +157,7 @@ window.MPSvartHal={start(host,o){o=o||{};
   function astro(cx,top,h,n,gap,sx,sy,a){const w=h*.4*sx,H0=h*sy,ph=H0/n;x.save();x.globalAlpha=a==null?1:a;
     for(let i=0;i<n;i++){const sy0=AST.height*i/n,sh=AST.height/n,y=top+i*(ph+gap);x.drawImage(AST,0,sy0,AST.width,sh,cx-w/2,y,w,ph+.5);}x.restore();return top+n*ph+(n-1)*gap;}
 
-  const SCN=[
+  const SCN0=[
   // 0 · Inledning: ett svart hål tonar fram
   (t,k)=>{const a=A(),cx=a.x+a.w/2,cy=a.y+a.h*.52,s=Math.min(a.w,a.h);hole(cx,cy,s*(.1+.03*eo(t/6)),t,eo(t/2.5));
     x.font=serif(Math.max(26,s*.085));x.textAlign="center";x.globalAlpha=eo((t-.8)/2);const g=x.createLinearGradient(cx-s*.4,0,cx+s*.4,0);g.addColorStop(0,"#ffd86b");g.addColorStop(.5,"#fff");g.addColorStop(1,"#ffb070");x.fillStyle=g;x.fillText("Inuti ett svart hål",cx,a.y+a.h*.14+s*.05);
@@ -262,6 +262,9 @@ window.MPSvartHal={start(host,o){o=o||{};
     const by=ty+depth;x.save();x.globalCompositeOperation="lighter";const gg=x.createRadialGradient(cx,by,0,cx,by,s*.12);gg.addColorStop(0,"rgba(255,200,140,.55)");gg.addColorStop(1,"rgba(255,120,60,0)");x.fillStyle=gg;x.beginPath();x.arc(cx,by,s*.12,0,TAU);x.fill();x.restore();
     label("?",cx+wTop*.12+18,by+8,"#ffd86b","left",Math.max(26,s*.07));tag("Singulariteten",cx+wTop*.12+18+Math.max(26,s*.07)*.7,by+2,"#ffd86b","left");x.globalAlpha=1;}
   ];
+  // hjälpmedel som en ny film (o.def) kan rita med
+  const E={get x(){return x;},get W(){return W;},get H(){return H;},get dpr(){return dpr;},A,hole,planet,arrow,glowDot,label,tag,serif,font,eo,cl,lerp,ease,seg,TAU,get si(){return si;},bg};
+  const SCN=D?D.scenes(E):SCN0;
   function cleanup(){if(!alive)return;alive=false;cancelAnimationFrame(raf);voiceStop();const L=snd();if(L&&L.rymd&&L.rymd.stop)L.rymd.stop();document.removeEventListener("keydown",key);document.removeEventListener("visibilitychange",vis);if(ro)ro.disconnect();root.remove();}
   root.__slut=()=>{if(!started)start();finish();};
   // för tester: hoppa till en scen och en tid
