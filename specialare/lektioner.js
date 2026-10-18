@@ -111,7 +111,7 @@ var LEKTIONER=[
 ["🏗️","Upp igen","År 1961 lyftes skeppet upp. Det tog många år att bevara det."],
 ["🏛️","Ett museum","I dag står Vasa i ett eget museum i Stockholm. Det är det bäst bevarade skeppet från 1600-talet i världen."]]},
 
-{id:"everest",titel:"Mount Everest",kat:"Natur",e:"🏔️",c:"#6D8CA8",rutor:[
+{id:"everest",film:"everest",titel:"Mount Everest",kat:"Natur",e:"🏔️",c:"#6D8CA8",rutor:[
 ["🏔️","Världens högsta berg","Mount Everest är 8 849 meter högt och ligger mellan Nepal och Tibet."],
 ["🥶","Iskallt","Högst upp kan det vara långt under minus 30 grader. Där blåser också mycket kraftiga vindar."],
 ["😮‍💨","Lite syre","Högt upp är luften tunn. Det finns mycket mindre syre, så klättrarna bär ofta med sig syrgas."],
