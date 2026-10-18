@@ -26,9 +26,14 @@ function scenes(E){
   const L=MPFilmLib.make(E,{ROOT,prefix:"krakatau-",names:[1,2,3,4,5,6,7],KR});
   const {x,tx,tg,S,cred,photo,panel,grad,deep,sea,title}=L;
   const dot=(px,py,r,col)=>{const c=x();c.fillStyle=col;c.beginPath();c.arc(px,py,r,0,TAU);c.fill();};
+  const gl=(px,py,r,col)=>{const c=x();c.save();c.globalCompositeOperation="lighter";const g=c.createRadialGradient(px,py,0,px,py,Math.max(.1,r));g.addColorStop(0,col);g.addColorStop(1,"rgba(0,0,0,0)");c.fillStyle=g;c.beginPath();c.arc(px,py,Math.max(.1,r),0,TAU);c.fill();c.restore();};
+  const sparks=(px,py,r,t,n,col)=>{const Rr=L.srand(19);for(let i=0;i<n;i++){const an=-Math.PI/2+(Rr()-.5)*2.4,sp=.5+Rr()*.9,q=((t*sp*.6+Rr())%1),d=r*q*(1.4+Rr());gl(px+Math.cos(an)*d,py+Math.sin(an)*d+q*q*r*.8,Math.max(3,r*.07)*(1-q),col||`rgba(255,${150+Math.floor(80*Rr())},60,${(.9*(1-q)).toFixed(2)})`);}};
   const SEAS=["rgba(16,70,110,.8)","rgba(10,50,90,.85)","rgba(6,34,66,.9)"];
-  const volcano=(px,py,u,col,smoke,t)=>{const c=x();c.save();c.fillStyle=col||"#5a4636";c.beginPath();c.moveTo(px-u*3,py);c.lineTo(px-u*.5,py-u*2.6);c.lineTo(px+u*.5,py-u*2.6);c.lineTo(px+u*3,py);c.closePath();c.fill();
-    if(smoke){for(let i=0;i<10;i++){const p=((t*.4+i/10)%1);c.fillStyle=`rgba(90,90,100,${.6*(1-p)})`;c.beginPath();c.arc(px+Math.sin(i*2+t)*u*.5*p,py-u*2.6-p*u*5,u*(.5+p*1.5),0,TAU);c.fill();}}c.restore();};
+  const volcano=(px,py,u,col,smoke,t)=>{const c=x();c.save();const vg=c.createLinearGradient(0,py-u*2.6,0,py);vg.addColorStop(0,"#6a5444");vg.addColorStop(1,"#2e2018");c.fillStyle=vg;c.beginPath();c.moveTo(px-u*3,py);c.lineTo(px-u*.5,py-u*2.6);c.lineTo(px+u*.5,py-u*2.6);c.lineTo(px+u*3,py);c.closePath();c.fill();
+    if(smoke){gl(px,py-u*2.6,u*3.2,"rgba(255,120,40,.55)");c.strokeStyle="rgba(255,150,50,.8)";c.lineWidth=Math.max(1.5,u*.1);c.shadowColor="#ff8a30";c.shadowBlur=12;for(let k=-1;k<=1;k+=2){c.beginPath();c.moveTo(px+k*u*.3,py-u*2.6);c.quadraticCurveTo(px+k*u*1.2,py-u*1.4,px+k*u*(1.5+.3*Math.sin(t*2)),py);c.stroke();}c.shadowBlur=0;
+      for(let i=0;i<12;i++){const p=((t*.4+i/12)%1);c.fillStyle=`rgba(${90+Math.floor(70*(1-p))},${80+Math.floor(30*(1-p))},${90},${.6*(1-p)})`;c.beginPath();c.arc(px+Math.sin(i*2+t)*u*.5*p,py-u*2.6-p*u*5,u*(.5+p*1.5),0,TAU);c.fill();if(p<.35)gl(px+Math.sin(i*2+t)*u*.5*p,py-u*2.6-p*u*5,u*(.9+p*2),"rgba(255,130,40,"+(.35*(1-p/.35)).toFixed(2)+")");}
+      sparks(px,py-u*2.6,u*3,t,16);}
+    c.restore();};
 
   const s0=(t)=>{photo(2,t,7.1,1.12,.3);const f=title(t,"KRAKATAU","EN Ö SOM SPRANG I LUFTEN","#ffb878");cred(2,.55*f);};
 
@@ -43,10 +48,10 @@ function scenes(E){
   /* 2 · fyra explosioner, ljudet nådde 4 500 km */
   const s2=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.2)/1.1);photo(4,t,16.7,1.1,.15+.5*g);cred(4,.55*(1-g));
     if(g>0){c.save();c.globalAlpha=g;grad(a,[[0,"#1a1020"],[1,"#2a1a18"]]);
-      if(t<4.8){const w=Math.min(a.w*.8,s*1.5),lx=cx-w/2,r=Math.max(22,s*.06);for(let i=0;i<4;i++){const q=eo((t-2.8-i*.5)/.5);if(q<=0)continue;const px=lx+w*(.15+i*.23);c.globalAlpha=g*q;const gr=c.createRadialGradient(px,cy,0,px,cy,r*2);gr.addColorStop(0,"rgba(255,200,100,.9)");gr.addColorStop(1,"rgba(255,100,30,0)");c.fillStyle=gr;c.beginPath();c.arc(px,cy,r*2,0,TAU);c.fill();tx(String(i+1),px,cy+r*.5,"#fff","center",Math.max(24,r*1.2),700);}}
+      if(t<4.8){const w=Math.min(a.w*.8,s*1.5),lx=cx-w/2,r=Math.max(22,s*.06);for(let i=0;i<4;i++){const q=eo((t-2.8-i*.5)/.5);if(q<=0)continue;const px=lx+w*(.15+i*.23);c.globalAlpha=g*q;const gr=c.createRadialGradient(px,cy,0,px,cy,r*2);gr.addColorStop(0,"rgba(255,200,100,.9)");gr.addColorStop(1,"rgba(255,100,30,0)");c.fillStyle=gr;c.beginPath();c.arc(px,cy,r*2,0,TAU);c.fill();gl(px,cy,r*(3+(1-q)*3),"rgba(255,170,80,.45)");sparks(px,cy,r*3,t-i*.5,14);tx(String(i+1),px,cy+r*.5,"#fff","center",Math.max(24,r*1.2),700);}}
       else{const w=Math.min(a.w*.8,s*1.5),lx=cx-w/2,y=cy;const k=eo((t-5.2)/4);c.strokeStyle="rgba(255,255,255,.35)";c.lineWidth=3;c.beginPath();c.moveTo(lx,y);c.lineTo(lx+w,y);c.stroke();
         dot(lx,y,8,"#ffb878");tx("Krakatau",lx,y+Math.max(32,s*.07),"#ffb878","center",Math.max(14,s*.036),700);
-        for(let i=0;i<4;i++){const p=((k*1.2+i*.12)%1)*k;c.strokeStyle=`rgba(255,226,122,${.7*(1-p)})`;c.lineWidth=3;c.beginPath();c.arc(lx,y,w*p,-.6,.6);c.stroke();}
+        for(let i=0;i<4;i++){const p=((k*1.2+i*.12)%1)*k;c.save();c.shadowColor="#ffd070";c.shadowBlur=14;c.strokeStyle=`rgba(255,226,122,${.8*(1-p)})`;c.lineWidth=3;c.beginPath();c.arc(lx,y,w*p,-.6,.6);c.stroke();c.restore();}gl(lx,y,s*.1*(1+.2*Math.sin(t*6)),"rgba(255,170,70,.6)");
         if(t>9.5){c.globalAlpha=g*eo((t-9.5)/1);dot(lx+w,y,8,"#9fd0ff");tx("hördes här: ca 4 500 km",lx+w,y+Math.max(32,s*.07),"#9fd0ff","center",Math.max(14,s*.036),700);tx("≈ Stockholm–Dubai",cx,a.y+a.h*.14,"#ffd86b","center",Math.max(20,s*.055),700);}}
       c.restore();}};
 
@@ -54,7 +59,7 @@ function scenes(E){
   const s3=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.4)/1.1);photo(3,t,9.5,1.1,.15+.5*g);cred(3,.55*(1-g));
     if(g>0){c.save();c.globalAlpha=g;grad(a,[[0,"#06080f"],[.45,"#1a2a4a"],[1,"#8fb8e8"]]);const top=a.y+a.h*.08,bot=a.y+a.h*.9,H=bot-top,m=km=>bot-km/80*H,px=cx-Math.min(a.w*.2,s*.3);
       [[0,"0"],[10,"10 km"],[20,"20"],[40,"40"],[60,"60"],[80,"80 km"]].forEach(([km,l])=>{c.strokeStyle="rgba(255,255,255,.3)";c.lineWidth=1.5;c.beginPath();c.moveTo(px+30,m(km));c.lineTo(px+60,m(km));c.stroke();tx(l,px+70,m(km)+5,"rgba(255,255,255,.85)","left",Math.max(12,s*.03),600);});
-      const k=eo((t-3)/3),yy=lerp(bot,m(70),k);const gr=c.createLinearGradient(0,bot,0,yy);gr.addColorStop(0,"rgba(150,120,100,.9)");gr.addColorStop(1,"rgba(90,90,100,.5)");c.fillStyle=gr;c.beginPath();c.moveTo(px-18,bot);c.lineTo(px-6,yy);c.lineTo(px+6,yy);c.lineTo(px+18,bot);c.closePath();c.fill();
+      const k=eo((t-3)/3),yy=lerp(bot,m(70),k);const gr=c.createLinearGradient(0,bot,0,yy);gr.addColorStop(0,"rgba(150,120,100,.9)");gr.addColorStop(1,"rgba(90,90,100,.5)");c.fillStyle=gr;c.beginPath();c.moveTo(px-18,bot);c.lineTo(px-6,yy);c.lineTo(px+6,yy);c.lineTo(px+18,bot);c.closePath();c.fill();gl(px,bot,s*.25,"rgba(255,120,40,.5)");{const Rr=L.srand(23);for(let i=0;i<46;i++){const q=((t*.35+Rr())%1)*k,X=px+(Rr()-.5)*(30+q*120),Y=lerp(bot,yy,q);gl(X,Y,10+q*26,`rgba(${110+Math.floor(60*(1-q))},${100+Math.floor(30*(1-q))},110,${.3*(1-q*.4)})`);}gl(px,yy,s*.22*k,"rgba(150,150,170,.25)");}
       tx("askan: över 70 km",px,yy-Math.max(18,s*.04),"#ffd86b","center",Math.max(16,s*.042),700);tx("flygplan 10 km",px+Math.max(150,s*.3),m(10)+5,"#cfd8ff","left",Math.max(12,s*.03),600);
       c.restore();}};
 
@@ -70,8 +75,8 @@ function scenes(E){
   /* 5 · tryckvågen runt jorden, telegraf */
   const s5=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.4)/1.1);photo(6,t,13.1,1.1,.15+.5*g);cred(6,.55*(1-g));
     if(g>0){c.save();c.globalAlpha=g;grad(a,[[0,"#0a1224"],[1,"#162240"]]);const R=Math.max(40,Math.min(a.w*.18,a.h*.3,s*.34));
-      if(t<8.2){c.fillStyle="#1d5fb8";c.beginPath();c.arc(cx,cy,R,0,TAU);c.fill();dot(cx-R*.6,cy-R*.3,5,"#ffb878");
-        for(let i=0;i<4;i++){const p=((t*.18+i*.22)%1);c.strokeStyle=`rgba(255,226,122,${.7*(1-p)})`;c.lineWidth=3;c.beginPath();c.arc(cx,cy,R*(1.05+p*.7),0,TAU);c.stroke();}
+      if(t<8.2){{const cv=window.MPKlot&&MPKlot.jorden(300+t*6);gl(cx,cy,R*1.5,"rgba(110,170,255,.25)");if(cv)c.drawImage(cv,cx-R,cy-R,R*2,R*2);else{c.fillStyle="#1d5fb8";c.beginPath();c.arc(cx,cy,R,0,TAU);c.fill();}gl(cx-R*.45,cy+R*.1,R*.2,"rgba(255,170,70,.9)");dot(cx-R*.45,cy+R*.1,4,"#fff2c0");}
+        for(let i=0;i<4;i++){const p=((t*.18+i*.22)%1);c.save();c.shadowColor="#ffd070";c.shadowBlur=12;c.strokeStyle=`rgba(255,226,122,${.7*(1-p)})`;c.lineWidth=3;c.beginPath();c.arc(cx,cy,R*(1.05+p*.7),0,TAU);c.stroke();c.restore();}
         tx("tryckvågen gick flera varv runt jorden",cx,a.y+a.h*.1,"#ffd86b","center",Math.max(16,s*.042),700);}
       else{const w=Math.min(a.w*.8,s*1.5),lx=cx-w/2,y=cy;c.strokeStyle="rgba(255,255,255,.7)";c.lineWidth=3;c.beginPath();c.moveTo(lx,y);c.lineTo(lx+w,y);c.stroke();for(let i=0;i<=10;i++){const px=lx+w*i/10;c.beginPath();c.moveTo(px,y);c.lineTo(px,y+14);c.stroke();}
         const k=cl((t-8.4)/3,0,1);dot(lx+w*k,y,8,"#ffe27a");tx("telegraf",cx,y-Math.max(36,s*.08),"#ffd86b","center",Math.max(20,s*.055),700);tx("inom några timmar",cx,y+Math.max(50,s*.11),"#cfd8ff","center",Math.max(16,s*.042),700);}
@@ -80,7 +85,7 @@ function scenes(E){
   /* 6 · röda solnedgångar, temperatur, Skriet (teori) */
   const s6=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.4)/1.1);photo(2,t,16.8,1.1,.15+.5*g);cred(2,.55*(1-g));
     if(g>0){c.save();c.globalAlpha=g;grad(a,[[0,"#3a0a18"],[.35,"#c93a2a"],[.62,"#f0a050"],[.621,"#1a0e0a"],[1,"#0a0604"]]);
-      const gy=a.y+a.h*.62;dot(cx,gy-s*.03,Math.max(26,s*.07),"#ffd23c");
+      const gy=a.y+a.h*.62;gl(cx,gy-s*.03,s*.55,"rgba(255,140,50,.5)");gl(cx,gy-s*.03,s*.2,"rgba(255,230,150,.6)");dot(cx,gy-s*.03,Math.max(26,s*.07),"#ffd23c");{const Rr=L.srand(51);for(let i=0;i<50;i++){const X=a.x+((Rr()+t*.01*(.5+Rr()))%1)*a.w,Y=a.y+Rr()*gy*.95;gl(X,Y,6+Rr()*10,"rgba(160,60,40,.12)");}}
       if(t<10.5){const w=Math.min(a.w*.16,s*.2),th=a.h*.34,tx0=a.x+a.w*.12,top=a.y+a.h*.12;c.fillStyle="rgba(255,255,255,.18)";c.fillRect(tx0,top,18,th);const f=eo((t-4)/2);c.fillStyle="#4aa8ff";c.fillRect(tx0,top+th*(.35+.2*f),18,th*(.65-.2*f));tx("−1 °C",tx0+36,top+th*.55,"#fff","left",Math.max(20,s*.055),700);tx("under ett år",tx0+36,top+th*.55+Math.max(30,s*.065),"#cfd8ff","left",Math.max(13,s*.034),600);}
       else{c.strokeStyle="rgba(255,90,60,.8)";c.lineWidth=5;for(let i=0;i<5;i++){c.beginPath();for(let u=0;u<=40;u++){const px=a.x+a.w*u/40,py=a.y+a.h*(.18+i*.07)+Math.sin(u*.5+i+t*1.2)*10;u?c.lineTo(px,py):c.moveTo(px,py);}c.stroke();}c.globalAlpha=g*eo((t-10.5)/1);tx("Munch · Skriet (en teori)",cx,gy+Math.max(60,s*.13),"#ffd86b","center",Math.max(16,s*.042),700);}
       c.restore();}};
