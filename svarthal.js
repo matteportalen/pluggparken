@@ -56,7 +56,7 @@ const SC0=[
 const V={on:true,busy:false,a:null,base:ROOT+"ljud/svarthal/"};
 function voiceStop(){V.busy=false;if(V.a){try{V.a.pause();}catch(e){}V.a=null;}duck(false);}
 let MAT="rymd";/* Ljudmatta: meta.mat (MAT) = "rymd" (standard) eller ett namn i Ljud.ambient (t.ex. "vagor", "vulkan", "djungel") */
-function matStart(L){if(MAT!=="rymd"){if(L.ambient)L.ambient.start(MAT);}else if(L.rymd)L.rymd.start();}
+function matStart(L){if(MAT!=="rymd"){if(L.ambient&&!(L.ambient.g&&L.ambient.kind===MAT))L.ambient.start(MAT);}else if(L.rymd)L.rymd.start();}
 function matStop(L){if(L.rymd&&L.rymd.stop)L.rymd.stop();if(L.ambient&&L.ambient.stop&&MAT!=="rymd")L.ambient.stop();}
 function duck(on){const L=window.Ljud;try{const o=MAT!=="rymd"?L&&L.ambient:L&&L.rymd,g=o&&o.g;if(g&&g.context)g.gain.setTargetAtTime(on?.16:(MAT!=="rymd"?1:.55),g.context.currentTime,.4);}catch(e){}}
 const VOICE_VER="20261018";/* ändra när röstfiler byts ut, så att webbläsare inte spelar gamla cachade filer */
