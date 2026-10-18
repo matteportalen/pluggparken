@@ -451,15 +451,15 @@ function buildGalaxy(){
    LAY.oort=gPts(p,c,s,THREE.AdditiveBlending,.9,1);scene.add(LAY.oort);}
   // Andromeda, Triangulum och en dvärggalax-svärm: Lokala gruppen
   LAY.lg=new THREE.Group();scene.add(LAY.lg);
-  {const m31=mkGalaxy(GR*1.35,low?30000:55000,false);m31.position.copy(P31);m31.rotation.set(-1.0,.5,.3);LAY.lg.add(m31);
-   const tri=mkGalaxy(GR*.55,low?7000:14000,false);tri.position.copy(P31).add(new THREE.Vector3(150000,90000,-120000));tri.rotation.set(.6,0,.4);LAY.lg.add(tri);
-   const N=70,p=new Float32Array(N*3),c=new Float32Array(N*3),s=new Float32Array(N);for(let i=0;i<N;i++){const o=i<N/2?new THREE.Vector3(GX,0,0):P31.clone(),r=GR*(2+grnd()*5),a=grnd()*TAU2,b=Math.acos(2*grnd()-1);p[i*3]=o.x+r*Math.sin(b)*Math.cos(a);p[i*3+1]=o.y+r*Math.cos(b);p[i*3+2]=o.z+r*Math.sin(b)*Math.sin(a);c.set([.85,.88,1],i*3);s[i]=600+grnd()*1500;}
+  {const m31=mkGalaxy(GR*1.35,low?30000:55000,false);m31.position.copy(P31);m31.scale.setScalar(5);m31.rotation.set(-1.0,.5,.3);LAY.lg.add(m31);
+   const tri=mkGalaxy(GR*.55,low?7000:14000,false);tri.position.copy(P31).add(new THREE.Vector3(150000,90000,-120000));tri.scale.setScalar(5);tri.rotation.set(.6,0,.4);LAY.lg.add(tri);
+   const N=70,p=new Float32Array(N*3),c=new Float32Array(N*3),s=new Float32Array(N);for(let i=0;i<N;i++){const o=i<N/2?new THREE.Vector3(GX,0,0):P31.clone(),r=GR*(2+grnd()*5),a=grnd()*TAU2,b=Math.acos(2*grnd()-1);p[i*3]=o.x+r*Math.sin(b)*Math.cos(a);p[i*3+1]=o.y+r*Math.cos(b);p[i*3+2]=o.z+r*Math.sin(b)*Math.sin(a);c.set([.85,.88,1],i*3);s[i]=2500+grnd()*5000;}
    LAY.lg.add(gPts(p,c,s,THREE.AdditiveBlending,.9,2));}
   // Laniakea: galaxer som flödar längs trådar mot Den stora attraktorn
   {const N=low?4000:9000,p=new Float32Array(N*3),c=new Float32Array(N*3),s=new Float32Array(N),R2=3.1e7,att=new THREE.Vector3(-1.2e7,.4e7,.6e7),fil=[];
    for(let f=0;f<14;f++){const a=grnd()*TAU2,b=Math.acos(2*grnd()-1);fil.push(new THREE.Vector3(Math.sin(b)*Math.cos(a),Math.cos(b),Math.sin(b)*Math.sin(a)).multiplyScalar(R2*(.8+.4*grnd())));}
    for(let i=0;i<N;i++){let X;if(grnd()<.18){X=new THREE.Vector3(ggauss(),ggauss(),ggauss()).multiplyScalar(R2*.45);}else{const f=fil[Math.floor(grnd()*14)],t=Math.pow(grnd(),.7);X=f.clone().lerp(att,t).add(new THREE.Vector3(ggauss(),ggauss(),ggauss()).multiplyScalar(R2*.035*(1-t*.5)));}
-     p[i*3]=X.x;p[i*3+1]=X.y;p[i*3+2]=X.z;const w=grnd();c.set([1,.85+.1*w,.7+.25*w],i*3);s[i]=(i%40===0?4:1.6)*1.4e6;}
+     p[i*3]=X.x;p[i*3+1]=X.y;p[i*3+2]=X.z;const w=grnd();c.set([1,.85+.1*w,.7+.25*w],i*3);s[i]=(i%40===0?2.4:1)*1.1e6;}
    LAY.lan=gPts(p,c,s,THREE.AdditiveBlending,.9,2);scene.add(LAY.lan);}
   // det kosmiska nätet: trådar och tomrum
   {const NODE=70,nodes=[];for(let i=0;i<NODE;i++){let v;do{v=new THREE.Vector3(grnd()*2-1,grnd()*2-1,grnd()*2-1);}while(v.lengthSq()>1);nodes.push(v.multiplyScalar(3e8));}
