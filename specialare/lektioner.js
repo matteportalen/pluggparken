@@ -297,7 +297,7 @@ var LEKTIONER=[
 ["🪖","Inga horn","Vikingarna hade inte horn på hjälmarna. Det kommer från teaterdräkter på 1800-talet."],
 ["🪨","Runstenar","Runstenar berättar om vikingarna. I Sverige finns tusentals runstenar."]]},
 
-{id:"blackfisk",titel:"Bläckfisken",kat:"Natur",e:"🐙",c:"#B5446E",rutor:[
+{id:"blackfisk",film:"blackfisk",titel:"Bläckfisken",kat:"Natur",e:"🐙",c:"#B5446E",rutor:[
 ["❤️","Tre hjärtan","Bläckfisken har åtta armar och tre hjärtan."],
 ["🔵","Blått blod","Blodet är blått, eftersom det innehåller koppar i stället för järn."],
 ["🎨","Byter färg","Den kan ändra färg och mönster på huden på en sekund för att gömma sig."],
