@@ -117,6 +117,7 @@ dialog small{color:var(--muted)}
       <div class="spdw"><button class="b" id="slowH" aria-label="Långsammare">🐢</button><span class="spd" id="spdH"></span><button class="b" id="fastH" aria-label="Snabbare">🐇</button></div>
       <button class="b" id="names" aria-pressed="true">Namn</button>
       <button class="b" id="now">Idag</button>
+      <button class="b" id="hTour">🎬 Guidad resa</button>
       <button class="b go" id="toGal">🌌 Universum</button>
       <button class="b" id="about" aria-label="Om modellen">ℹ️</button>
     </div>
@@ -512,6 +513,7 @@ const STOP=[{ly:7e-4,s:0},{ly:2.7e-3,d:200,k:'Voyager 1',b:'Längst bort männis
  {ly:1.6e5,d:1e5,k:'Magellanska molnen',b:'Två dvärggalaxer · ca 160 000 ljusår'},{ly:2.5e6,k:'Andromeda',b:'Närmaste stora galax · 2,5 miljoner ljusår'},{ly:6e6,s:5},
  {ly:5.4e7,d:1e7,k:'Virgohopen',b:'Över 1 000 galaxer · 54 miljoner ljusår'},{ly:2.2e8,d:4e7,k:'Den stora attraktorn',b:'Drar åt sig galaxer · ca 220 miljoner ljusår'},{ly:7e8,s:6},
  {ly:1.4e9,d:3e8,k:'Sloanmuren',b:'En vägg av galaxer · över 1 miljard ljusår'},{ly:5e9,s:7},{ly:4.65e10,s:8}];
+STOP[0].pingK=.28;STOP[0].tgtPing=()=>{const e=PL.find(p=>p.id==='jorden');return e?e.obj.getWorldPosition(new THREE.Vector3()):new THREE.Vector3();};
 STOP.forEach(t=>{t.z=t.s!==undefined?GSTEG[t.s].z:zOf(t.d||dOfLy(t.ly));});
 (function(){const T=$('gTicks');STOP.forEach((t,n)=>{const i=document.createElement('i');if(t.s!==undefined)i.className='s';i.style.left=(t.z*100)+'%';i.title='Lyssna: '+(t.k||GSTEG[t.s].k);i.onclick=()=>tourStartAt(n);T.appendChild(i);});})();
 function gLy(){const l=Math.log(dOf(zC));let i=0;while(i<GSTEG.length-2&&l>Math.log(GSTEG[i+1].d))i++;const a=GSTEG[i],b=GSTEG[i+1],t=Math.max(0,Math.min(1,(l-Math.log(a.d))/(Math.log(b.d)-Math.log(a.d))));return Math.exp(glerp(Math.log(a.ly),Math.log(b.ly),t));}
@@ -534,12 +536,12 @@ function gUpd(dt){const ly=gLy();
 /* guidad resa med berättarröst */
 let tour=null;
 function tourEnd(done){if(!tour)return;clearInterval(tour.tm);clearTimeout(tour.to);if(tour.aud){tour.aud.onended=null;tour.aud.pause();}tour=null;gAuto=null;$('gTour').textContent='🎬 Guidad resa';$('gTour').setAttribute('aria-pressed','false');}
-function tourVoice(n,after){const t=tour;t.hl=STOP[n]||null;if(STOP[n])pingAt(STOP[n]);const fin=()=>{if(tour===t){t.hl=null;after();}};if(window.Ljud&&Ljud.on){const a=new Audio('../../ljud/resa/s'+n+'-1.mp3?v=2');t.aud=a;a.onended=fin;a.onerror=()=>{t.to=setTimeout(fin,6000)};a.play().catch(()=>{t.to=setTimeout(fin,6000)});}else t.to=setTimeout(fin,7000);}
+function tourVoice(n,after){const t=tour;t.hl=STOP[n]||null;if(STOP[n])pingAt(STOP[n]);const fin=()=>{if(tour===t){t.hl=null;after();}};if(window.Ljud&&Ljud.on){const a=new Audio('../../ljud/resa/s'+n+'-1.mp3?v=3');t.aud=a;a.onended=fin;a.onerror=()=>{t.to=setTimeout(fin,6000)};a.play().catch(()=>{t.to=setTimeout(fin,6000)});}else t.to=setTimeout(fin,7000);}
 function tourNext(){if(!tour)return;tour.i++;if(tour.i>=STOP.length){tourVoice(STOP.length,()=>{tourEnd();});return;}
   const to=STOP[tour.i].z,i=tour.i;gAuto=to===zT?null:{from:zT,to,t0:performance.now(),dur:Math.max(3200,Math.min(7500,Math.abs(to-zT)*38000))};
   clearInterval(tour.tm);tour.tm=setInterval(()=>{if(!tour)return;if(!gAuto&&Math.abs(zC-to)<.004){clearInterval(tour.tm);tourVoice(i,()=>{tour.to=setTimeout(tourNext,650);});}},120);}
 function tourStartAt(n){if(tour)tourEnd();tour={i:n-1};$('gTour').textContent='⏹ Stoppa resan';$('gTour').setAttribute('aria-pressed','true');$('gCard').hidden=false;tourNext();}
-function tourStart(){if(tour){tourEnd();return;}let n=0;STOP.forEach((t,i)=>{if(t.z<=zC+.012)n=i;});tourStartAt(n);return;tour={i:-1};$('gTour').textContent='⏹ Stoppa resan';$('gTour').setAttribute('aria-pressed','true');$('gCard').hidden=false;tourNext();}
+function tourStart(){if(tour){tourEnd();return;}tourStartAt(0);return;tour={i:-1};$('gTour').textContent='⏹ Stoppa resan';$('gTour').setAttribute('aria-pressed','true');$('gCard').hidden=false;tourNext();}
 $('gTour').onclick=tourStart;
 
 /* landmärkena får egna föremål och kameran riktas mot dem när man är vid stoppet */
@@ -581,8 +583,8 @@ const PDOT=new THREE.Sprite(new THREE.SpriteMaterial({map:sptex('soft'),color:0x
 scene.add(PING);scene.add(PDOT);
 function pingAt(t){if(!t||!t.tgt&&t.s===undefined){return;}pingStop=t;pingT=-.45;}
 function pingFrame(dt){if(!pingStop){if(PING.visible){PING.visible=false;PDOT.visible=false;}return;}pingT+=dt;if(pingT<0)return;if(pingT>3.6||mode!=='galaxy'){pingStop=null;PING.visible=false;PDOT.visible=false;return;}
-  const dz=dOf(zC),ph=(pingT%1.8)/1.8,env=sst(0,.25,pingT)*(1-sst(3.1,3.6,pingT)),pos=pingStop.tgt?pingStop.tgt():controls.target;
-  PING.visible=PDOT.visible=true;PING.position.copy(pos);PDOT.position.copy(pos);PING.scale.setScalar(dz*(.04+ph*.16));PING.material.opacity=(1-ph)*.95*env;PDOT.scale.setScalar(dz*.016);PDOT.material.opacity=(.55+.45*Math.sin(pingT*5))*env;}
+  const dz=dOf(zC),ph=(pingT%1.8)/1.8,env=sst(0,.25,pingT)*(1-sst(3.1,3.6,pingT)),pos=pingStop.tgtPing?pingStop.tgtPing():pingStop.tgt?pingStop.tgt():controls.target,pk=pingStop.pingK||1;
+  PING.visible=PDOT.visible=true;PING.position.copy(pos);PDOT.position.copy(pos);PING.scale.setScalar(dz*(.04+ph*.16)*pk);PING.material.opacity=(1-ph)*.95*env;PDOT.scale.setScalar(dz*.016*pk);PDOT.material.opacity=(.55+.45*Math.sin(pingT*5))*env;}
 function mkHw(){const T=STOP.filter(t=>t.tgt);T.forEach(t=>{let g=1;T.forEach(u=>{if(u!==t)g=Math.min(g,Math.abs(u.z-t.z));});t.hw=Math.max(.006,Math.min(t.hw||.022,g*.8));});}
 function mkFrame(dt){hlTime+=dt;pingFrame(dt);MKS.forEach(t=>{const o=1-sst(.012,.055,Math.abs(zC-t.z)),G=t.obj;G.g.visible=o>.01&&mode==='galaxy';if(!G.g.visible)return;G.mats.forEach(([m,b])=>m.opacity=b*o);
   const want=showNames&&((tour&&tour.hl===t)||(!tour&&Math.abs(zC-t.z)<.02))?1:0;G.f+=(want-G.f)*Math.min(1,dt*1.8);
@@ -639,6 +641,7 @@ function galFrame(now,dt){const inG=mode==='galaxy';
 function openGalaxy(auto){galSeen=false;focus=null;show('galaxy');controls.minDistance=8;controls.maxDistance=Infinity;zC=0;zT=0;gStep=-1;gAuto=auto?{from:0,to:1,t0:performance.now()+1600,dur:52000}:null;flyTo(null,GD0,.5);}
 function goGalZoom(to){tourEnd();gAuto={from:zT,to,t0:performance.now(),dur:Math.max(3000,Math.min(9000,Math.abs(to-zT)*26000))};}
 $('toGal').onclick=()=>openGalaxy(true);
+$('hTour').onclick=()=>{openGalaxy(false);tourStartAt(0);};
 /* sömlöst mellan solsystemet och universum: att zooma ut förbi sista avståndet fortsätter in i universumresan, och att zooma in igen går tillbaka */
 let galSeen=false;
 function fadeUI(id){const e=document.getElementById(id);e.classList.add('xf');setTimeout(()=>e.classList.remove('xf'),1000);}
