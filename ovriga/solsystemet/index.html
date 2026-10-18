@@ -62,6 +62,7 @@ button:focus-visible{outline:3px solid #FFC93C;outline-offset:2px}
 .card li{margin:3px 0;font-size:1.02rem}
 .card .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
 .card[hidden]{display:none}.card .cx{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;border:0;background:#E8EEFB;color:#1D2B53;font:800 15px/1 'Baloo 2',system-ui,sans-serif;cursor:pointer;display:grid;place-items:center}.card .cx:hover,.card .cx:focus-visible{background:#C9D6F5;outline:2px solid #3D5AFE}.card h2{padding-right:36px}
+.steps{display:flex;gap:5px;max-width:min(920px,100%);overflow-x:auto;padding:2px 2px 4px;scrollbar-width:thin}.b.st{min-height:34px;min-width:0;padding:2px 10px;font-size:.82rem;white-space:nowrap;background:rgba(12,18,44,.72);flex:0 0 auto}.b.st[aria-pressed=true]{background:#fff;color:var(--ink)}
 .lbl.g{pointer-events:none}.lbl.here{background:rgba(255,201,60,.92);color:#2a1a00;font-size:.95rem;padding:1px 12px;text-shadow:none}
 .rw{position:absolute;left:0;top:0;width:0;height:0;will-change:transform}.ring{position:absolute;left:-22px;top:-22px;width:44px;height:44px;border:3px solid #FFC93C;border-radius:50%;box-shadow:0 0 18px #FFC93C;animation:gpu 1.8s ease-out infinite}
 @keyframes gpu{0%{opacity:1;scale:.5}100%{opacity:0;scale:1.8}}@media (prefers-reduced-motion:reduce){.ring{animation:none}}
@@ -138,7 +139,8 @@ dialog small{color:var(--muted)}
   <div class="ui top"><button class="back" id="gBack">← Solsystemet</button><span class="chip" id="gDist"></span><span class="hint">Dra för att vrida. Scrolla, nyp eller använd reglaget för att zooma.</span></div>
   <div class="ui bottom">
     <div class="card" id="gCard"></div>
-    <label class="slider"><span>🪐</span><input type="range" id="gZoom" min="0" max="1000" value="0" aria-label="Zooma från solsystemet till Vintergatan"><span>🌌</span></label>
+    <div class="steps" id="gSteps"></div>
+    <label class="slider"><span>🪐</span><input type="range" id="gZoom" min="0" max="1000" value="0" aria-label="Zooma från solsystemet till Vintergatan"><span>🌠</span></label>
     <div class="bar"><button class="b go" id="gOut">🔭 Zooma ut</button><button class="b" id="gIn">🔬 Zooma in</button><button class="b" id="gNames" aria-pressed="true">Namn</button><button class="b" id="gAbout" aria-label="Om modellen">ℹ️</button></div>
   </div>
 </section>
@@ -149,7 +151,7 @@ dialog small{color:var(--muted)}
   <h3>Om modellen</h3>
   <p>Planeterna står där de är på riktigt just det datum som visas, och månens fas stämmer också.</p>
   <p><b>Men storlekar och avstånd är inte rätt.</b> I verkligheten är solen 109 gånger bredare än jorden, och planeterna ligger så långt ifrån varandra att de skulle bli osynliga prickar. Därför är allt ihoptryckt här.</p>
-  <p><b>Vintergatan:</b> ingen har sett vår galax utifrån, eftersom vi sitter inne i den. Den 3D-modell du ser när du zoomar ut är byggd på mätningar (spiralformen, avståndet till mitten på ca 26 000 ljusår och storleken på ca 100 000 ljusår), men var varje enskild stjärna ligger är påhittat. När du zoomar ut görs solen och planeterna mycket mindre än de är i solsystemsvyn, annars skulle de se ljusår stora ut.</p>
+  <p><b>Zooma ut:</b> ingen har sett Oortmolnet, Vintergatan utifrån eller det kosmiska nätet som en bild. Det du ser är modeller byggda på mätningar och simuleringar (till exempel spiralformen, avståndet till Vintergatans mitt på ca 26 000 ljusår, Andromedas avstånd och universums storlek), men var varje enskild stjärna eller galax ligger är påhittat. Storlekar och avstånd är också hoptryckta så att allt ska synas: solen och planeterna görs mindre och galaxerna större än de egentligen är.</p>
   <p><small>Bilderna på planeterna kommer från Solar System Scope (CC BY 4.0), byggda på data från NASA. 3D: three.js.</small></p>
   <form method="dialog"><button class="back" style="background:var(--good);color:#fff">Okej</button></form>
 </dialog>
@@ -400,85 +402,144 @@ $('about').onclick=()=>$('aboutDlg').showModal();
 document.querySelectorAll('[data-jump]').forEach(b=>b.onclick=()=>{const d=+b.dataset.jump;jump={from:t,to:t+d,s:performance.now(),dur:d<2?4000:d<40?7000:11000};playing=false;setPlayBtns();
   if(d>300){flyTo(earth,26,.9);}});
 
-/* ---------- Vintergatan: zooma ut från solsystemet ---------- */
-const GD0=95,GD1=34000,GR=11640,GX=-6050;           // kamerans avstånd (start/slut), galaxens radie, galaxens mitt (solen står i origo)
-const dOf=z=>GD0*Math.pow(GD1/GD0,z),sst=(a,b,v)=>{const q=Math.max(0,Math.min(1,(v-a)/(b-a)));return q*q*(3-2*q);};
+/* ---------- Från solsystemet till det observerbara universum: ett enda reglage ---------- */
+const GD0=95,DMAX=3e10,GL=Math.log(DMAX/GD0),GR=11640,GX=-6050;   // kamerans avstånd (start/slut), Vintergatans radie, dess mitt (solen står i origo)
+const dOf=z=>GD0*Math.exp(z*GL),zOf=d=>Math.log(d/GD0)/GL,sst=(a,b,v)=>{const q=Math.max(0,Math.min(1,(v-a)/(b-a)));return q*q*(3-2*q);};
+const lq=(d0,d1,d)=>sst(Math.log(d0),Math.log(d1),Math.log(d));      // mjuk övergång i logaritmisk skala
+const P31=new THREE.Vector3(.6,.3,-.75).normalize().multiplyScalar(582000);   // Andromeda: ca 2,5 miljoner ljusår bort i modellen
 const GDIR=new THREE.Vector3(0,.5,.866).normalize(),GDES=new THREE.Vector3(0,.88,.48).normalize();
-let galaxy=null,zC=0,zT=0,gAuto=null,galPtr=0,gStep=-1;
+let galaxy=null,LAY=null,zC=0,zT=0,gAuto=null,galPtr=0,gStep=-1;
 const GPX={value:700};
 let gseed=12345;const grnd=()=>{gseed=(gseed*16807)%2147483647;return(gseed-1)/2147483646;};const ggauss=()=>{let u=0;for(let i=0;i<4;i++)u+=grnd();return(u-2)/.58;};
-const glerp=(a,b,t)=>a+(b-a)*t;
+const glerp=(a,b,t)=>a+(b-a)*t,TAU2=Math.PI*2;
 function gMat(blend,op){return new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:blend,uniforms:{pxScale:GPX,op:{value:op}},
   vertexShader:`attribute float size;attribute vec3 color;varying vec3 vC;uniform float pxScale;void main(){vC=color;vec4 mv=modelViewMatrix*vec4(position,1.);gl_PointSize=clamp(size*pxScale/max(1.,-mv.z),1.1,34.);gl_Position=projectionMatrix*mv;}`,
   fragmentShader:`varying vec3 vC;uniform float op;void main(){vec2 p=gl_PointCoord-.5;float d=length(p)*2.;if(d>1.)discard;float a=pow(1.-d,2.2)*op;gl_FragColor=vec4(vC,a);}`});}
 function gResize(){GPX.value=innerHeight*renderer.getPixelRatio()/(2*Math.tan(camera.fov*DEG/2));}
-function gPts(pos,col,siz,blend,op,order){const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(pos,3));g.setAttribute('color',new THREE.BufferAttribute(col,3));g.setAttribute('size',new THREE.BufferAttribute(siz,1));const p=new THREE.Points(g,gMat(blend,op));p.frustumCulled=false;p.renderOrder=order||0;return p;}
-function buildGalaxy(){galaxy=new THREE.Group();galaxy.position.set(GX,0,0);galaxy.visible=false;scene.add(galaxy);
-  const SZ=GR/6000,N=low?60000:110000,pos=new Float32Array(N*3),col=new Float32Array(N*3),siz=new Float32Array(N),k=1/Math.tan(12*DEG),r0=GR*.06,h=GR*.32,TAU=Math.PI*2;
+function gPts(pos,col,siz,blend,op,order){const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(pos,3));g.setAttribute('color',new THREE.BufferAttribute(col,3));g.setAttribute('size',new THREE.BufferAttribute(siz,1));const p=new THREE.Points(g,gMat(blend,op));p.frustumCulled=false;p.renderOrder=order||0;p.userData.op=op;return p;}
+/* en spiralgalax: 4 logaritmiska armar, utbuktning, dammband och dis (full = med allt) */
+function mkGalaxy(R,N,full){const grp=new THREE.Group(),SZ=R/6000,pos=new Float32Array(N*3),col=new Float32Array(N*3),siz=new Float32Array(N),k=1/Math.tan(12*DEG),r0=R*.06,h=R*.32;
   for(let i=0;i<N;i++){let x,y,z,c,s;const u=grnd();
-    if(u<.2){const rr=Math.abs(ggauss())*GR*.075,a=grnd()*TAU,b=Math.acos(2*grnd()-1);x=rr*Math.sin(b)*Math.cos(a);z=rr*Math.sin(b)*Math.sin(a);y=rr*Math.cos(b)*.72;c=[1,.78+grnd()*.12,.5+grnd()*.15];s=10+grnd()*16;}
-    else{let r=-h*Math.log(1-grnd()*(1-Math.exp(-GR/h)));r=Math.max(r,GR*.03);let th;const arm=grnd()<.74;
-      if(arm){const a=Math.floor(grnd()*4);th=k*Math.log(r/r0)+a*Math.PI/2+ggauss()*(.17+.1*r/GR);}else th=grnd()*TAU;
-      x=r*Math.cos(th);z=r*Math.sin(th);y=ggauss()*GR*.011*(1+1.2*Math.exp(-r/(GR*.18)));
-      const f=r/GR,blue=arm?Math.max(0,Math.min(1,.35+f*.7)):.15;c=[glerp(1,.68,blue)*(.9+grnd()*.1),glerp(.88,.8,blue)*(.9+grnd()*.1),glerp(.66,1,blue)];
+    if(u<.2){const rr=Math.abs(ggauss())*R*.075,a=grnd()*TAU2,b=Math.acos(2*grnd()-1);x=rr*Math.sin(b)*Math.cos(a);z=rr*Math.sin(b)*Math.sin(a);y=rr*Math.cos(b)*.72;c=[1,.78+grnd()*.12,.5+grnd()*.15];s=10+grnd()*16;}
+    else{let r=-h*Math.log(1-grnd()*(1-Math.exp(-R/h)));r=Math.max(r,R*.03);let th;const arm=grnd()<.74;
+      if(arm){const a=Math.floor(grnd()*4);th=k*Math.log(r/r0)+a*Math.PI/2+ggauss()*(.17+.1*r/R);}else th=grnd()*TAU2;
+      x=r*Math.cos(th);z=r*Math.sin(th);y=ggauss()*R*.011*(1+1.2*Math.exp(-r/(R*.18)));
+      const f=r/R,blue=arm?Math.max(0,Math.min(1,.35+f*.7)):.15;c=[glerp(1,.68,blue)*(.9+grnd()*.1),glerp(.88,.8,blue)*(.9+grnd()*.1),glerp(.66,1,blue)];
       if(arm&&f>.25&&grnd()<.035){c=[1,.45+grnd()*.2,.7];s=22+grnd()*30;}else s=7+grnd()*15;}
     pos[i*3]=x;pos[i*3+1]=y;pos[i*3+2]=z;col.set(c,i*3);siz[i]=s*1.5*SZ;}
-  galaxy.add(gPts(pos,col,siz,THREE.AdditiveBlending,.95,1));
-  const M=low?9000:16000,dp=new Float32Array(M*3),dc=new Float32Array(M*3),ds=new Float32Array(M);
-  for(let i=0;i<M;i++){const r=GR*(.12+grnd()*.85),a=Math.floor(grnd()*4),th=k*Math.log(r/r0)+a*Math.PI/2-.2+ggauss()*.05;dp[i*3]=r*Math.cos(th);dp[i*3+1]=ggauss()*GR*.004;dp[i*3+2]=r*Math.sin(th);dc.set([.05,.03,.02],i*3);ds[i]=(60+grnd()*140)*SZ;}
-  galaxy.add(gPts(dp,dc,ds,THREE.NormalBlending,.2,2));
+  grp.add(gPts(pos,col,siz,THREE.AdditiveBlending,.95,1));
+  if(full){const M=low?9000:16000,dp=new Float32Array(M*3),dc=new Float32Array(M*3),ds=new Float32Array(M);
+    for(let i=0;i<M;i++){const r=R*(.12+grnd()*.85),a=Math.floor(grnd()*4),th=k*Math.log(r/r0)+a*Math.PI/2-.2+ggauss()*.05;dp[i*3]=r*Math.cos(th);dp[i*3+1]=ggauss()*R*.004;dp[i*3+2]=r*Math.sin(th);dc.set([.05,.03,.02],i*3);ds[i]=(60+grnd()*140)*SZ;}
+    grp.add(gPts(dp,dc,ds,THREE.NormalBlending,.2,2));}
   const H=700,hp=new Float32Array(H*3),hc=new Float32Array(H*3),hs=new Float32Array(H);
-  for(let i=0;i<H;i++){const r=GR*(.08+grnd()*.9),a=Math.floor(grnd()*4),th=k*Math.log(r/r0)+a*Math.PI/2+ggauss()*.12;hp[i*3]=r*Math.cos(th);hp[i*3+1]=ggauss()*GR*.01;hp[i*3+2]=r*Math.sin(th);hc.set([.55,.66,1].map(v=>v*(1.1-r/GR*.5)),i*3);hs[i]=(420+grnd()*620)*SZ;}
-  galaxy.add(gPts(hp,hc,hs,THREE.AdditiveBlending,.11,0));
-  galaxy.add(gPts(new Float32Array([0,0,0]),new Float32Array([1,.8,.55]),new Float32Array([2300*SZ]),THREE.AdditiveBlending,.55,0));
-  // stjärnor nära solen: Vintergatan syns som ett band när man är inne i den
-  const Q=4200,QR=420*SZ,qp=new Float32Array(Q*3),qc=new Float32Array(Q*3),qs=new Float32Array(Q);
-  for(let i=0;i<Q;i++){const r=Math.sqrt(grnd())*QR,a=grnd()*TAU;qp[i*3]=Math.cos(a)*r;qp[i*3+1]=ggauss()*26*SZ;qp[i*3+2]=Math.sin(a)*r;const w=grnd();qc.set([.75+.25*w,.85+.1*w,1-.3*w],i*3);qs[i]=(.8+grnd()*(i<120?3:1.2))*SZ;}
-  const near=gPts(qp,qc,qs,THREE.AdditiveBlending,.95,3);near.position.set(-GX,0,0);galaxy.add(near);}
+  for(let i=0;i<H;i++){const r=R*(.08+grnd()*.9),a=Math.floor(grnd()*4),th=k*Math.log(r/r0)+a*Math.PI/2+ggauss()*.12;hp[i*3]=r*Math.cos(th);hp[i*3+1]=ggauss()*R*.01;hp[i*3+2]=r*Math.sin(th);hc.set([.55,.66,1].map(v=>v*(1.1-r/R*.5)),i*3);hs[i]=(420+grnd()*620)*SZ;}
+  grp.add(gPts(hp,hc,hs,THREE.AdditiveBlending,.11,0));
+  grp.add(gPts(new Float32Array([0,0,0]),new Float32Array([1,.8,.55]),new Float32Array([2300*SZ]),THREE.AdditiveBlending,.55,0));
+  return grp;}
+function buildGalaxy(){
+  LAY={};
+  // Vintergatan, med stjärnor nära solen (så att den syns som ett band när man är inne i den)
+  galaxy=new THREE.Group();galaxy.position.set(GX,0,0);galaxy.visible=false;scene.add(galaxy);
+  galaxy.add(mkGalaxy(GR,low?60000:110000,true));
+  {const SZ=GR/6000,Q=4200,QR=420*SZ,qp=new Float32Array(Q*3),qc=new Float32Array(Q*3),qs=new Float32Array(Q);
+   for(let i=0;i<Q;i++){const r=(.3+.7*Math.sqrt(grnd()))*QR,a=grnd()*TAU2;qp[i*3]=Math.cos(a)*r;qp[i*3+1]=ggauss()*26*SZ;qp[i*3+2]=Math.sin(a)*r;const w=grnd();qc.set([.75+.25*w,.85+.1*w,1-.3*w],i*3);qs[i]=(.8+grnd()*(i<120?3:1.2))*SZ;}
+   const near=gPts(qp,qc,qs,THREE.AdditiveBlending,.95,3);near.position.set(-GX,0,0);galaxy.add(near);}
+  // Oortmolnet: ett klot av isiga kroppar runt solsystemet (finns bara i modeller)
+  {const N=low?3500:7000,p=new Float32Array(N*3),c=new Float32Array(N*3),s=new Float32Array(N);
+   for(let i=0;i<N;i++){const inner=grnd()<.45,r=inner?70+grnd()*60:110+grnd()*110;let th=grnd()*TAU2,ph=Math.acos(2*grnd()-1);if(inner){ph=Math.PI/2+ggauss()*.28;}
+     p[i*3]=r*Math.sin(ph)*Math.cos(th);p[i*3+1]=r*Math.cos(ph);p[i*3+2]=r*Math.sin(ph)*Math.sin(th);const w=grnd();c.set([.7+.25*w,.82+.15*w,1],i*3);s[i]=1.3+grnd()*2.2;}
+   LAY.oort=gPts(p,c,s,THREE.AdditiveBlending,.9,1);scene.add(LAY.oort);}
+  // Andromeda, Triangulum och en dvärggalax-svärm: Lokala gruppen
+  LAY.lg=new THREE.Group();scene.add(LAY.lg);
+  {const m31=mkGalaxy(GR*1.35,low?30000:55000,false);m31.position.copy(P31);m31.rotation.set(-1.0,.5,.3);LAY.lg.add(m31);
+   const tri=mkGalaxy(GR*.55,low?7000:14000,false);tri.position.copy(P31).add(new THREE.Vector3(150000,90000,-120000));tri.rotation.set(.6,0,.4);LAY.lg.add(tri);
+   const N=70,p=new Float32Array(N*3),c=new Float32Array(N*3),s=new Float32Array(N);for(let i=0;i<N;i++){const o=i<N/2?new THREE.Vector3(GX,0,0):P31.clone(),r=GR*(2+grnd()*5),a=grnd()*TAU2,b=Math.acos(2*grnd()-1);p[i*3]=o.x+r*Math.sin(b)*Math.cos(a);p[i*3+1]=o.y+r*Math.cos(b);p[i*3+2]=o.z+r*Math.sin(b)*Math.sin(a);c.set([.85,.88,1],i*3);s[i]=600+grnd()*1500;}
+   LAY.lg.add(gPts(p,c,s,THREE.AdditiveBlending,.9,2));}
+  // Laniakea: galaxer som flödar längs trådar mot Den stora attraktorn
+  {const N=low?4000:9000,p=new Float32Array(N*3),c=new Float32Array(N*3),s=new Float32Array(N),R2=3.1e7,att=new THREE.Vector3(-1.2e7,.4e7,.6e7),fil=[];
+   for(let f=0;f<14;f++){const a=grnd()*TAU2,b=Math.acos(2*grnd()-1);fil.push(new THREE.Vector3(Math.sin(b)*Math.cos(a),Math.cos(b),Math.sin(b)*Math.sin(a)).multiplyScalar(R2*(.8+.4*grnd())));}
+   for(let i=0;i<N;i++){let X;if(grnd()<.18){X=new THREE.Vector3(ggauss(),ggauss(),ggauss()).multiplyScalar(R2*.45);}else{const f=fil[Math.floor(grnd()*14)],t=Math.pow(grnd(),.7);X=f.clone().lerp(att,t).add(new THREE.Vector3(ggauss(),ggauss(),ggauss()).multiplyScalar(R2*.035*(1-t*.5)));}
+     p[i*3]=X.x;p[i*3+1]=X.y;p[i*3+2]=X.z;const w=grnd();c.set([1,.85+.1*w,.7+.25*w],i*3);s[i]=(i%40===0?4:1.6)*1.4e6;}
+   LAY.lan=gPts(p,c,s,THREE.AdditiveBlending,.9,2);scene.add(LAY.lan);}
+  // det kosmiska nätet: trådar och tomrum
+  {const NODE=70,nodes=[];for(let i=0;i<NODE;i++){let v;do{v=new THREE.Vector3(grnd()*2-1,grnd()*2-1,grnd()*2-1);}while(v.lengthSq()>1);nodes.push(v.multiplyScalar(3e8));}
+   const edges=[];nodes.forEach((a,i)=>{nodes.map((b,j)=>[j,a.distanceTo(b)]).filter(z=>z[0]!==i).sort((u,v)=>u[1]-v[1]).slice(0,3).forEach(z=>edges.push([i,z[0]]));});
+   const per=low?260:520,N=edges.length*per+NODE*350,p=new Float32Array(N*3),c=new Float32Array(N*3),s=new Float32Array(N);let n=0;
+   edges.forEach(([i,j])=>{for(let k=0;k<per;k++){const t=grnd(),X=nodes[i].clone().lerp(nodes[j],t).add(new THREE.Vector3(ggauss(),ggauss(),ggauss()).multiplyScalar(7e6));p[n*3]=X.x;p[n*3+1]=X.y;p[n*3+2]=X.z;const w=grnd();c.set([.55+.3*w,.65+.2*w,1],n*3);s[n]=(2+grnd()*2.5)*1e6;n++;}});
+   nodes.forEach(a=>{for(let k=0;k<350;k++){const X=a.clone().add(new THREE.Vector3(ggauss(),ggauss(),ggauss()).multiplyScalar(1.6e7));p[n*3]=X.x;p[n*3+1]=X.y;p[n*3+2]=X.z;c.set([1,.82,.6],n*3);s[n]=(3+grnd()*4)*1e6;n++;}});
+   LAY.web=gPts(p.slice(0,n*3),c.slice(0,n*3),s.slice(0,n),THREE.AdditiveBlending,.85,2);scene.add(LAY.web);}
+  // det observerbara universums kant: ett skal av bakgrundsstrålning (det äldsta ljuset)
+  {const N=low?25000:45000,p=new Float32Array(N*3),c=new Float32Array(N*3),s=new Float32Array(N),RU=1.08e10;
+   for(let i=0;i<N;i++){const a=grnd()*TAU2,b=Math.acos(2*grnd()-1),x=Math.sin(b)*Math.cos(a),y=Math.cos(b),z=Math.sin(b)*Math.sin(a);p[i*3]=x*RU;p[i*3+1]=y*RU;p[i*3+2]=z*RU;
+     const nz=.5+.25*Math.sin(x*6+1)+.25*Math.sin(y*9+z*5)+.2*Math.sin(z*14-x*7)*Math.sin(y*11),m=Math.max(0,Math.min(1,nz));c.set([glerp(.25,1,m),glerp(.35,.55,m),glerp(.9,.25,m)],i*3);s[i]=1.1e8;}
+   LAY.cmb=gPts(p,c,s,THREE.AdditiveBlending,.7,2);scene.add(LAY.cmb);}
+}
+/* stegen: avstånd för kameran, rubrik, fakta, och ungefärligt avstånd i ljusår */
 const GSTEG=[
- [0,'Solsystemet','Solen och åtta planeter',['Planeterna åker runt solen.','Ljuset från solen tar drygt fyra timmar till Neptunus, den yttersta planeten.']],
- [.2,'Utanför solsystemet','Solsystemet blir en prick',['Bortom planeterna är det nästan tomt.','Närmaste stjärna, Proxima Centauri, ligger 4,2 ljusår bort. Ljuset därifrån tar över fyra år.']],
- [.45,'Stjärnorna runt oss','Hundratals miljarder stjärnor',['Vi ser stjärnor åt alla håll.','Tillsammans bildar de Vintergatan, och vi sitter mitt inne i den.']],
- [.64,'Vintergatan','Vi bor i Orionarmen',['Solen ligger ungefär 26 000 ljusår från mitten.','Vi bor i en liten arm som kallas Orionarmen.']],
- [.86,'Hela Vintergatan','En spiralgalax',['Ungefär 100 000 ljusår tvärs över.','100 till 400 miljarder stjärnor.','Solen åker ett varv runt mitten på ungefär 230 miljoner år.']]];
-function gCardUpd(){let k=0;GSTEG.forEach((s,i)=>{if(zC>=s[0])k=i;});if(k===gStep)return;gStep=k;const s=GSTEG[k];
-  $('gCard').hidden=false;$('gCard').innerHTML=`<button class="cx" id="gX" aria-label="Stäng rutan" title="Stäng">✕</button><h2>🌌 ${s[2]}</h2><ul>${s[3].map(x=>`<li>${x}</li>`).join('')}</ul>`;$('gX').onclick=()=>{$('gCard').hidden=true};}
-function gDist(){const ly=Math.exp(glerp(Math.log(7e-4),Math.log(150000),zC));
+ {k:'Solsystemet',d:95,ly:7e-4,t:'Solen och åtta planeter',f:['Planeterna åker runt solen.','Ljuset från solen tar drygt fyra timmar till Neptunus, den yttersta planeten.']},
+ {k:'Oortmolnet',d:560,ly:1,t:'Oortmolnet',f:['Ett jättelikt klot av isiga kroppar runt hela solsystemet, ungefär 0,5 till 1,5 ljusår ut. Därifrån kommer en del kometer.','Rymdsonden Voyager 1 når molnets inre kant om ungefär 300 år.','Ingen har sett Oortmolnet. Det finns bara i modeller.']},
+ {k:'Närmaste stjärnorna',d:2500,ly:6,t:'Solsystemet blir en prick',f:['Bortom Oortmolnet är det nästan tomt.','Närmaste stjärna, Proxima Centauri, ligger 4,2 ljusår bort. Ljuset därifrån tar över fyra år.']},
+ {k:'Orionarmen',d:7500,ly:30000,t:'Vi bor i Orionarmen',f:['Solen ligger ungefär 26 000 ljusår från mitten.','Vi bor i en liten arm som kallas Orionarmen.']},
+ {k:'Vintergatan',d:34000,ly:150000,t:'Hela Vintergatan: en spiralgalax',f:['Ungefär 100 000 ljusår tvärs över.','100 till 400 miljarder stjärnor.','Solen åker ett varv runt mitten på ungefär 230 miljoner år.']},
+ {k:'Lokala gruppen',d:1.8e6,ly:6e6,t:'Lokala gruppen',f:['Vintergatan har grannar. Andromedagalaxen ligger ungefär 2,5 miljoner ljusår bort.','Tillsammans med Triangulum och över 50 mindre galaxer bildar de Lokala gruppen.','Andromeda och Vintergatan rör sig mot varandra och väntas krocka om ungefär 4 till 5 miljarder år.']},
+ {k:'Laniakea',d:8e7,ly:7e8,t:'Superhopen Laniakea',f:['Lokala gruppen är en liten del av Virgohopen, och den i sin tur av superhopen Laniakea.','Laniakea är ungefär 500 miljoner ljusår bred och har omkring 100 000 galaxer.','Galaxerna rör sig mot ett område som kallas Den stora attraktorn.']},
+ {k:'Kosmiska nätet',d:8e8,ly:5e9,t:'Det kosmiska nätet',f:['I ännu större skala bildar galaxerna ett nät av trådar med enorma tomrum emellan.','Trådarna kan vara hundratals miljoner ljusår långa.','Mellan trådarna finns nästan ingenting.']},
+ {k:'Universum',d:3e10,ly:4.65e10,t:'Det observerbara universum',f:['Det är allt ljus som hunnit hit sedan Big Bang för 13,8 miljarder år sedan, ungefär 93 miljarder ljusår tvärs över.','Det finns minst hundratals miljarder galaxer. Vi hamnar i mitten av det vi kan se, bara för att det är härifrån ljuset kommer.','Det yttersta skalet är bakgrundsstrålningen, det äldsta ljuset som finns.']}];
+GSTEG.forEach(s=>s.z=zOf(s.d));
+(function(){const bar=$('gSteps');GSTEG.forEach((s,i)=>{const b=document.createElement('button');b.className='b st';b.textContent=s.k;b.onclick=()=>{goGalZoom(s.z);};bar.appendChild(b);});})();
+function stepNu(){const l=Math.log(dOf(zC));let k=0,bd=1e9;GSTEG.forEach((s,i)=>{const dd=Math.abs(Math.log(s.d)-l);if(dd<bd){bd=dd;k=i;}});return k;}
+function gCardUpd(){const k=stepNu();if(k===gStep)return;gStep=k;const s=GSTEG[k];
+  $('gCard').hidden=false;$('gCard').innerHTML=`<button class="cx" id="gX" aria-label="Stäng rutan" title="Stäng">✕</button><h2>🌌 ${s.t}</h2><ul>${s.f.map(x=>`<li>${x}</li>`).join('')}</ul>`;$('gX').onclick=()=>{$('gCard').hidden=true};
+  [...$('gSteps').children].forEach((b,i)=>b.setAttribute('aria-pressed',i===k));}
+function gDist(){const l=Math.log(dOf(zC));let i=0;while(i<GSTEG.length-2&&l>Math.log(GSTEG[i+1].d))i++;const a=GSTEG[i],b=GSTEG[i+1],t=Math.max(0,Math.min(1,(l-Math.log(a.d))/(Math.log(b.d)-Math.log(a.d)))),ly=Math.exp(glerp(Math.log(a.ly),Math.log(b.ly),t));
   if(ly<.1)return'ca '+Math.round(ly*63241).toLocaleString('sv-SE')+' AU från solen';if(ly<10)return'ca '+ly.toFixed(1).replace('.',',')+' ljusår från solen';
+  if(ly>=1e9)return'ca '+(ly/1e9).toFixed(ly<1e10?1:0).replace('.',',')+' miljarder ljusår';if(ly>=1e6)return'ca '+(ly/1e6<10?(ly/1e6).toFixed(1).replace('.',','):Math.round(ly/1e6))+' miljoner ljusår';
   const r=ly<1000?10:ly<20000?500:5000;return'ca '+(Math.round(ly/r)*r).toLocaleString('sv-SE')+' ljusår från solen';}
-// namnlappar i galaxen
-const GLB=[['☀️ Du är här (solen)','here',()=>new THREE.Vector3(0,0,0),z=>z>.34,0,-34],['Orionarmen','',()=>new THREE.Vector3(0,0,0),z=>z>.62&&z<.97,70,10],['Mitten: ett jättelikt svart hål','',()=>new THREE.Vector3(GX,0,0),z=>z>.8,0,-8]].map(([t,c,fn,vis,ox,oy])=>{const e=document.createElement('div');e.className='lbl g '+c;e.textContent=t;$('labels').appendChild(e);return{e,fn,vis,ox,oy};});
+// namnlappar
+const GLB=[['☀️ Du är här','here',()=>new THREE.Vector3(0,0,0),d=>d>700,0,-34],['Oortmolnet','',()=>new THREE.Vector3(0,150,0),d=>d>250&&d<3500,0,0],['Orionarmen','',()=>new THREE.Vector3(0,0,0),d=>d>4500&&d<60000,70,10],['Mitten: ett jättelikt svart hål','',()=>new THREE.Vector3(GX,0,0),d=>d>14000&&d<150000,0,-8],
+  ['Vintergatan','',()=>new THREE.Vector3(GX,0,0),d=>d>400000&&d<9e6,0,-14],['Andromeda','',()=>P31.clone(),d=>d>600000&&d<2.5e7,0,-14],['Triangulum','',()=>P31.clone().add(new THREE.Vector3(150000,90000,-120000)),d=>d>1e6&&d<6e6,0,-10],
+  ['Vintergatan (och vi)','',()=>new THREE.Vector3(0,0,0),d=>d>2e7&&d<3e9,0,-14],['Den stora attraktorn','',()=>new THREE.Vector3(-1.2e7,.4e7,.6e7),d=>d>2e7&&d<4e8,0,-10],['Laniakea','',()=>new THREE.Vector3(0,3.2e7,0),d=>d>3e7&&d<9e8,0,0],
+  ['Det kosmiska nätet','',()=>new THREE.Vector3(0,3e8,0),d=>d>2e8&&d<5e9,0,0],['Det observerbara universums kant','',()=>new THREE.Vector3(1.08e10*.7,1.08e10*.7,0),d=>d>8e9,0,0]].map(([t,c,fn,vis,ox,oy])=>{const e=document.createElement('div');e.className='lbl g '+c;e.textContent=t;$('labels').appendChild(e);return{e,fn,vis,ox,oy};});
 const hereRing=document.createElement('div');hereRing.className='rw';hereRing.innerHTML='<div class="ring"></div>';$('labels').appendChild(hereRing);
-function gLabels(inG){const W=innerWidth,H=innerHeight;let hx=0,hy=0,hv=false;
-  GLB.forEach((l,i)=>{let vis=inG&&showNames&&l.vis(zC)||(i===0&&inG&&l.vis(zC));if(vis){v3.copy(l.fn()).project(camera);if(v3.z>1||v3.z<-1)vis=false;else{const X=(v3.x+1)/2*W,Y=(1-v3.y)/2*H;l.e.style.transform=`translate(${X+l.ox}px,${Y+l.oy}px) translate(-50%,-100%)`;if(i===0){hx=X;hy=Y;hv=true;}}}l.e.style.display=vis?'':'none';});
+function gLabels(inG,d){const W=innerWidth,H=innerHeight;let hx=0,hy=0,hv=false;
+  GLB.forEach((l,i)=>{let vis=inG&&(i===0||showNames)&&l.vis(d);if(vis){v3.copy(l.fn()).project(camera);if(v3.z>1||v3.z<-1)vis=false;else{const X=(v3.x+1)/2*W,Y=(1-v3.y)/2*H;l.e.style.transform=`translate(${X+l.ox}px,${Y+l.oy}px) translate(-50%,-100%)`;if(i===0){hx=X;hy=Y;hv=true;}}}l.e.style.display=vis?'':'none';});
   hereRing.style.display=hv?'':'none';if(hv)hereRing.style.transform=`translate(${hx}px,${hy}px)`;}
+const fadeB=(d,a0,a1,b0,b1)=>lq(a0,a1,d)*(1-lq(b0,b1,d));
 function galFrame(now,dt){const inG=mode==='galaxy';
   if(inG&&!galaxy)buildGalaxy();
   if(inG){
     if(gAuto&&!fly&&now>=gAuto.t0){const q=Math.min(1,(now-gAuto.t0)/gAuto.dur),e=q<.5?2*q*q:1-Math.pow(-2*q+2,2)/2;zT=gAuto.from+(gAuto.to-gAuto.from)*e;if(q>=1)gAuto=null;}
     zC+=(zT-zC)*Math.min(1,dt*(gAuto?9:5));controls.maxDistance=Infinity;controls.enableZoom=false;
-    if(!fly){controls.target.set(GX*sst(.56,1,zC),0,0);const off=camera.position.clone().sub(controls.target);
-      if(galPtr===0){const dn=off.clone().normalize();dn.lerp(zC>.4?GDES:GDIR,Math.min(1,dt*.7)).normalize();off.copy(dn);}
-      off.setLength(dOf(zC));camera.position.copy(controls.target).add(off);camera.lookAt(controls.target);}
+    if(!fly){const dz=dOf(zC),a=lq(4000,34000,dz),b=lq(34000,1.2e6,dz),c=lq(1.2e6,8e7,dz);
+      const tg=new THREE.Vector3(GX*a,0,0).lerp(P31.clone().multiplyScalar(.5),b).multiplyScalar(1-c);controls.target.copy(tg);const off=camera.position.clone().sub(controls.target);
+      if(galPtr===0&&dz<2e5){const dn=off.clone().normalize();dn.lerp(dz>3000?GDES:GDIR,Math.min(1,dt*.7)).normalize();off.copy(dn);}
+      off.setLength(dz);camera.position.copy(controls.target).add(off);camera.lookAt(controls.target);}
     $('gZoom').value=Math.round(zC*1000);gCardUpd();$('gDist').textContent=gDist();
   }else{controls.enableZoom=true;if(!fly&&controls.maxDistance!==220)controls.maxDistance=220;}
-  const d=camera.position.length();   // avstånd till solen: sol och planeter skalas upp med avståndet så att de förblir små prickar (aldrig ljusår breda)
-  const fz=1-sst(250,5000,d)*.97,k1=Math.max(1,d/223*fz),k2=Math.max(1,d/330*fz);   // solen och planeterna krymper till ingenting i Vintergatan
+  const d=camera.position.length();   // avstånd till solen: solen och planeterna krymper till ingenting när man zoomar ut
+  const fz=1-sst(250,5000,d)*.97,k1=Math.max(1,d/223*fz),k2=Math.max(1,d/330*fz);
   sun.scale.setScalar(k1);glow.scale.setScalar(Math.max(.01,26*(1-sst(300,4000,d))));
   PL.forEach(p=>{p.obj.scale.setScalar(k2);p.line.material.opacity=.28*(1-sst(250,900,d));});moonOrbit.material.opacity=mode==='earth'?.55:.25*(1-sst(250,900,d));
-  if(galaxy)galaxy.visible=inG||d>1500;
+  if(galaxy){const on=inG||d>1500,gk=Math.max(1,Math.pow(d/34000,.6));galaxy.visible=on&&d<4e8;galaxy.scale.setScalar(1);
+    const fl=fadeB(d,0,1,6e7,6e8);galaxy.children.forEach(g=>{if(g.isPoints)g.material.uniforms.op.value=g.userData.op*(g===galaxy.children[0]?1:1);});
+    if(LAY){const gS=gk;galaxy.position.set(GX*gS,0,0);galaxy.scale.setScalar(gS);
+      LAY.oort.visible=on&&(f=>f>.01)(fadeB(d,150,420,2500,9000));LAY.oort.material.uniforms.op.value=.9*fadeB(d,150,420,2500,9000);
+      const lgf=fadeB(d,9e4,6e5,2e8,1e9);LAY.lg.visible=on&&lgf>.01;LAY.lg.scale.setScalar(gS);LAY.lg.position.set(0,0,0);LAY.lg.children.forEach(g=>{if(g.isPoints)g.material.uniforms.op.value=.9*lgf;else g.children.forEach(h=>h.material.uniforms.op.value=h.userData.op*lgf);});
+      const lf=fadeB(d,2e6,2e7,1e9,6e9);LAY.lan.visible=on&&lf>.01;LAY.lan.material.uniforms.op.value=.9*lf;
+      const wk=Math.max(1,d/7e8),wf=fadeB(d,6e7,4e8,1e12,2e12);LAY.web.visible=on&&wf>.01;LAY.web.scale.setScalar(wk);LAY.web.material.uniforms.op.value=.85*wf;
+      const cf=fadeB(d,2e9,1.2e10,1e12,2e12);LAY.cmb.visible=on&&cf>.01;LAY.cmb.material.uniforms.op.value=.7*cf;}}
   const b=1-sst(300,1000,d);sky.visible=b>.02;sky.material.color.setRGB(.53*b,.56*b,.66*b);sky.position.copy(camera.position);
-  const nr=Math.max(.05,Math.min(40,d/600)),fr=d>1200?900000:2000;if(Math.abs(camera.near-nr)>.01||camera.far!==fr){camera.near=nr;camera.far=fr;camera.updateProjectionMatrix();}
-  gLabels(inG);}
-function openGalaxy(auto){focus=null;show('galaxy');controls.minDistance=8;controls.maxDistance=Infinity;zC=0;zT=0;gStep=-1;gAuto=auto?{from:0,to:1,t0:performance.now()+1600,dur:17000}:null;flyTo(null,GD0,.5);}
-function goGalZoom(to){gAuto={from:zT,to,t0:performance.now(),dur:Math.max(3500,Math.abs(to-zT)*17000)};}
+  const nr=Math.max(.05,Math.min(4e7,d/600)),fr=d>1200?Math.max(2e6,d*40):2000;if(Math.abs(camera.near-nr)>nr*.02||camera.far!==fr){camera.near=nr;camera.far=fr;camera.updateProjectionMatrix();}
+  gLabels(inG,d);}
+function openGalaxy(auto){focus=null;show('galaxy');controls.minDistance=8;controls.maxDistance=Infinity;zC=0;zT=0;gStep=-1;gAuto=auto?{from:0,to:1,t0:performance.now()+1600,dur:52000}:null;flyTo(null,GD0,.5);}
+function goGalZoom(to){gAuto={from:zT,to,t0:performance.now(),dur:Math.max(3000,Math.min(9000,Math.abs(to-zT)*26000))};}
 $('toGal').onclick=()=>openGalaxy(true);
-$('gOut').onclick=()=>goGalZoom(1);$('gIn').onclick=()=>goGalZoom(0);
+$('gOut').onclick=()=>{gAuto={from:zT,to:1,t0:performance.now(),dur:Math.max(5000,(1-zT)*52000)};};$('gIn').onclick=()=>{gAuto={from:zT,to:0,t0:performance.now(),dur:Math.max(4000,zT*30000)};};
 $('gZoom').oninput=e=>{zT=e.target.value/1000;gAuto=null;};
-canvas.addEventListener('wheel',e=>{if(mode!=='galaxy')return;e.preventDefault();zT=Math.max(0,Math.min(1,zT+e.deltaY*.0007));gAuto=null;},{passive:false});
+canvas.addEventListener('wheel',e=>{if(mode!=='galaxy')return;e.preventDefault();zT=Math.max(0,Math.min(1,zT+e.deltaY*.0004));gAuto=null;},{passive:false});
 const gpt=new Map();let gp0=0,gpz=0;
 canvas.addEventListener('pointerdown',e=>{galPtr++;gpt.set(e.pointerId,[e.clientX,e.clientY]);if(gpt.size===2){const a=[...gpt.values()];gp0=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]);gpz=zT;}});
-canvas.addEventListener('pointermove',e=>{if(!gpt.has(e.pointerId))return;gpt.set(e.pointerId,[e.clientX,e.clientY]);if(mode==='galaxy'&&gpt.size===2&&gp0>10){const a=[...gpt.values()],d=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]);zT=Math.max(0,Math.min(1,gpz-Math.log(d/gp0)*.45));gAuto=null;}});
+canvas.addEventListener('pointermove',e=>{if(!gpt.has(e.pointerId))return;gpt.set(e.pointerId,[e.clientX,e.clientY]);if(mode==='galaxy'&&gpt.size===2&&gp0>10){const a=[...gpt.values()],d=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]);zT=Math.max(0,Math.min(1,gpz-Math.log(d/gp0)*.2));gAuto=null;}});
 ['pointerup','pointercancel'].forEach(n=>canvas.addEventListener(n,e=>{if(gpt.delete(e.pointerId))galPtr=Math.max(0,galPtr-1);}));
 $('gBack').onclick=()=>{gAuto=null;goHome();};
 $('gNames').onclick=()=>{showNames=!showNames;$('gNames').setAttribute('aria-pressed',showNames);$('names').setAttribute('aria-pressed',showNames);};
