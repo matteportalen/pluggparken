@@ -222,7 +222,7 @@ var LEKTIONER=[
 ["🍕","Pizzan","År 2010 köpte någon två pizzor för 10 000 bitcoin. Idag skulle de vara värda enormt mycket pengar."],
 ["⚠️","Var försiktig","Priset går upp och ner väldigt snabbt. Man kan förlora mycket pengar. Fråga alltid en vuxen först."]]},
 
-{id:"digerdoden",titel:"Digerdöden",kat:"Historia",e:"🐀",c:"#6B4C3B",rutor:[
+{id:"digerdoden",film:"digerdoden",titel:"Digerdöden",kat:"Historia",e:"🐀",c:"#6B4C3B",rutor:[
 ["🏰","1300-talet","Digerdöden var en sjukdom som spred sig över Europa på 1300-talet."],
 ["🚢","Från Asien","Den kom med handelsvägar och skepp och nådde Europa omkring år 1347."],
 ["🐀","Råttor och loppor","Sjukdomen kallas pest. Bakterien spreds av loppor som levde på råttor och människor."],
