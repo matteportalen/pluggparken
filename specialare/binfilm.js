@@ -8,7 +8,7 @@ const SC=[
  {k:"01 · Ett stort samhälle",d:9.3,cap:[[0.8,"I en bikupa kan det bo 20 000 till 60 000 bin."],[5.3,"De jobbar tillsammans som en enda stor familj."]]},
  {k:"02 · En drottning",d:6.3,cap:[[0.8,"I varje kupa finns en drottning som lägger ägg, ibland över tusen om dagen."]]},
  {k:"03 · Dansen",d:9.3,cap:[[0.8,"När ett bi hittar blommor dansar det inne i kupan."],[4.6,"Dansens riktning och längd visar de andra var maten finns."]]},
- {k:"04 · Honung",d:9.9,cap:[[0.8,"Bina gör honung av nektar från blommor."],[3.8,"Ett enda bi gör bara ungefär en tolftedels tesked under hela sitt liv."]]},
+ {k:"04 · Honung",d:9.3,cap:[[0.8,"Bina gör honung av nektar från blommor."],[3.8,"Ett enda bi gör bara ungefär en tolftedels tesked under hela sitt liv."]]},
  {k:"05 · Bina hjälper oss",d:7.6,cap:[[0.8,"Bin för över pollen mellan blommor. Utan dem skulle många frukter och grönsaker inte bli till."]]},
  {k:"06 · Hjälp bina",d:6.6,cap:[[0.8,"Du kan hjälpa bin genom att plantera blommor och inte klippa gräsmattan så ofta."]]}
 ];
