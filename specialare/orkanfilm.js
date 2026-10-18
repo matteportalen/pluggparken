@@ -8,7 +8,7 @@ const SC=[
  {k:"01 · Varmt hav",d:10.7,cap:[[0.8,"En orkan bildas över ett hav som är minst ungefär 26 grader varmt."],[6.2,"Varm, fuktig luft stiger uppåt och bildar åskmoln."]]},
  {k:"02 · Snurrar",d:8.9,cap:[[0.8,"Jordens rotation får vindarna att börja snurra."],[4.3,"På norra halvklotet snurrar de moturs, åt vänster."]]},
  {k:"03 · Ögat",d:11.6,cap:[[0.8,"I mitten finns ögat, ett område där det nästan är vindstilla och ibland sol."],[6.7,"Runt ögat står ögonväggen med de allra starkaste vindarna."]]},
- {k:"04 · Över 119 km/h",d:9.9,cap:[[0.8,"Man kallar det en orkan när vinden blåser över 119 kilometer i timmen."],[6.3,"De starkaste når över 250."]]},
+ {k:"04 · Över 119 km/h",d:10.3,cap:[[0.8,"Man kallar det en orkan när vinden blåser över 119 kilometer i timmen."],[6.7,"De starkaste når över 250."]]},
  {k:"05 · Olika namn",d:14.5,cap:[[0.8,"Orkan heter tyfon i västra Stilla havet och cyklon i Indiska oceanen. Det är samma sorts storm."],[8.4,"Stormarna får namn från listor i bokstavsordning, så att alla kan hålla reda på dem."]]},
  {k:"06 · Vattnet",d:12.1,cap:[[0.8,"Mest skada gör oftast stormfloden, när havet pressas in över land."],[6.3,"Över land tappar orkanen sin kraft, eftersom den inte får mer varmt vatten."]]}
 ];
@@ -63,14 +63,14 @@ function scenes(E){
       c.restore();}};
 
   /* 4 · Över 119 km/h */
-  const s4=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.6)/1.1);photo(4,t,9.9,1.1,.1+.5*g);cred(4,.55*(1-g));
+  const s4=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.6)/1.1);photo(4,t,10.3,1.1,.1+.5*g);cred(4,.55*(1-g));
     if(g>0){c.save();c.globalAlpha=g;panel(a,1);
       const w=Math.min(a.w*.82,s*1.55),lx=cx-w/2,y=cy-s*.04,bh=Math.max(34,s*.09),px=v=>lx+v/300*w,k=eo((t-3.2)/1.6);
       c.fillStyle="rgba(255,255,255,.1)";c.fillRect(lx,y,w,bh);const gr=c.createLinearGradient(lx,0,lx+w,0);gr.addColorStop(0,"#7fd6ff");gr.addColorStop(.4,"#ffd86b");gr.addColorStop(1,"#ff5a5a");c.fillStyle=gr;c.fillRect(lx,y,w*(Math.min(1,k*250/300)),bh);
       [0,100,200,300].forEach(v=>{c.strokeStyle="rgba(255,255,255,.4)";c.lineWidth=1.5;c.beginPath();c.moveTo(px(v),y+bh);c.lineTo(px(v),y+bh+8);c.stroke();tx(String(v),px(v),y+bh+Math.max(26,s*.06),"rgba(255,255,255,.75)","center",Math.max(12,s*.03),600);});
       tx("km/h",lx+w,y+bh+Math.max(52,s*.115),"rgba(255,255,255,.6)","right",Math.max(12,s*.03),600);
       if(t>4.8){const q=eo((t-4.8)/.8);c.globalAlpha=g*q;c.strokeStyle="#fff";c.lineWidth=3;c.beginPath();c.moveTo(px(119),y-14);c.lineTo(px(119),y+bh);c.stroke();tx("orkan från 119",px(119),y-24,"#fff","center",Math.max(15,s*.04),700);}
-      if(t>6.3){const q=eo((t-6.3)/.8);c.globalAlpha=g*q;tx("över 250",px(250),y-24,"#ff9a8a","center",Math.max(15,s*.04),700);}
+      if(t>6.7){const q=eo((t-6.7)/.8);c.globalAlpha=g*q;tx("över 250",px(250),y-24,"#ff9a8a","center",Math.max(15,s*.04),700);}
       c.restore();}};
 
   /* 5 · Olika namn: tre regioner, och listan med namn */
