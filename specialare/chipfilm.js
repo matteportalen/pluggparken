@@ -26,6 +26,19 @@ function scenes(E){
   const L=MPFilmLib.make(E,{ROOT,prefix:"chip-",names:[1,2,3,4,5,6],KR});
   const {x,tx,tg,S,cred,photo,panel,grad,space,title}=L;
   const dot=(px,py,r,col)=>{const c=x();c.fillStyle=col;c.beginPath();c.arc(px,py,r,0,TAU);c.fill();};
+  const gl=(px,py,r,col)=>{const c=x();c.save();c.globalCompositeOperation="lighter";const g=c.createRadialGradient(px,py,0,px,py,r);g.addColorStop(0,col);g.addColorStop(1,"rgba(0,0,0,0)");c.fillStyle=g;c.beginPath();c.arc(px,py,r,0,TAU);c.fill();c.restore();};
+  /* kretsmönster: slumpade vinkelräta kopparbanor med glödande strömpulser */
+  const circuit=(px,py,w,t,seed)=>{const c=x(),r=L.srand(seed||5),n=26,lines=[];c.save();c.beginPath();c.rect(px-w/2,py-w/2,w,w);c.clip();const g=c.createLinearGradient(px-w/2,py-w/2,px+w/2,py+w/2);g.addColorStop(0,"#0c1830");g.addColorStop(1,"#1a2c52");c.fillStyle=g;c.fillRect(px-w/2,py-w/2,w,w);
+    for(let i=0;i<n;i++){let X=px-w/2+Math.floor(r()*20)/20*w,Y=py-w/2+Math.floor(r()*20)/20*w;const pts=[[X,Y]];for(let k=0;k<5;k++){if(k%2===0)X+=(r()<.5?-1:1)*Math.floor(1+r()*5)/20*w;else Y+=(r()<.5?-1:1)*Math.floor(1+r()*5)/20*w;pts.push([X,Y]);}lines.push(pts);}
+    c.lineWidth=Math.max(1.5,w*.008);c.lineJoin="round";lines.forEach((pts,i)=>{c.strokeStyle=i%3?"rgba(216,150,70,.65)":"rgba(120,200,255,.55)";c.beginPath();pts.forEach(([a,b],k)=>k?c.lineTo(a,b):c.moveTo(a,b));c.stroke();});
+    c.fillStyle="rgba(255,230,160,.5)";for(let i=0;i<60;i++){c.fillRect(px-w/2+Math.floor(r()*40)/40*w,py-w/2+Math.floor(r()*40)/40*w,w*.012,w*.012);}
+    lines.forEach((pts,i)=>{const p=((t*.5+i*.13)%1)*(pts.length-1),k=Math.floor(p),f=p-k,A=pts[k],B=pts[Math.min(pts.length-1,k+1)];gl(lerp(A[0],B[0],f),lerp(A[1],B[1],f),w*.05,i%3?"rgba(255,200,100,.9)":"rgba(120,220,255,.9)");});
+    c.restore();c.strokeStyle="rgba(200,215,240,.8)";c.lineWidth=Math.max(2,w*.012);c.strokeRect(px-w/2,py-w/2,w,w);};
+  /* kiselskiva (wafer): regnbågsskimmer, rutnät av chip */
+  const wafer=(px,py,r,t)=>{const c=x();c.save();c.shadowColor="rgba(120,160,255,.6)";c.shadowBlur=r*.2;c.fillStyle="#1a2440";c.beginPath();c.arc(px,py,r,0,TAU);c.fill();c.shadowBlur=0;c.beginPath();c.arc(px,py,r,0,TAU);c.clip();
+    if(c.createConicGradient){const cg=c.createConicGradient(t*.4,px,py);["#ff5a9a","#ffb040","#6aff9a","#40c0ff","#a070ff","#ff5a9a"].forEach((col,i,a)=>cg.addColorStop(i/(a.length-1),col));c.globalAlpha*=.55;c.fillStyle=cg;c.fillRect(px-r,py-r,r*2,r*2);c.globalAlpha=1;}
+    const n=14,cell=r*2/n;c.strokeStyle="rgba(10,16,34,.75)";c.lineWidth=Math.max(1,r*.012);for(let i=0;i<=n;i++){c.beginPath();c.moveTo(px-r+i*cell,py-r);c.lineTo(px-r+i*cell,py+r);c.moveTo(px-r,py-r+i*cell);c.lineTo(px+r,py-r+i*cell);c.stroke();}
+    const sh=c.createRadialGradient(px-r*.4,py-r*.4,r*.05,px,py,r);sh.addColorStop(0,"rgba(255,255,255,.35)");sh.addColorStop(.4,"rgba(255,255,255,0)");c.fillStyle=sh;c.fillRect(px-r,py-r,r*2,r*2);c.restore();c.strokeStyle="rgba(210,225,255,.8)";c.lineWidth=Math.max(2,r*.02);c.beginPath();c.arc(px,py,r,0,TAU);c.stroke();};
   const chipSq=(px,py,w,col,pins)=>{const c=x();c.save();c.fillStyle=col||"#2a3550";c.strokeStyle="#9fd0ff";c.lineWidth=Math.max(2,w*.03);c.fillRect(px-w/2,py-w/2,w,w);c.strokeRect(px-w/2,py-w/2,w,w);if(pins!==false){c.strokeStyle="#cfd5df";c.lineWidth=Math.max(2,w*.03);for(let i=0;i<8;i++){const o=-w*.4+i*w*.8/7;c.beginPath();c.moveTo(px+o,py-w/2);c.lineTo(px+o,py-w/2-w*.12);c.moveTo(px+o,py+w/2);c.lineTo(px+o,py+w/2+w*.12);c.moveTo(px-w/2,py+o);c.lineTo(px-w/2-w*.12,py+o);c.moveTo(px+w/2,py+o);c.lineTo(px+w/2+w*.12,py+o);c.stroke();}}c.restore();};
 
   const s0=(t)=>{photo(5,t,8.2,1.12,.3);const f=title(t,"MIKROCHIPET","FRÅN SAND TILL SMARTA MASKINER","#9fd0ff");cred(5,.55*f);};
@@ -53,7 +66,7 @@ function scenes(E){
     if(g>0){c.save();c.globalAlpha=g;space(a,1);const w=Math.max(120,Math.min(a.w*.26,a.h*.4,s*.46)),k=eo((t-3.6)/2.6);
       tx("1958 · Jack Kilby",cx,a.y+a.h*.12,"#ffd86b","center",Math.max(22,s*.06),700);
       const r=L.srand(7);for(let i=0;i<8;i++){const sx=cx+(r()-.5)*a.w*.7,sy=a.y+a.h*(.3+r()*.5),tx2=cx+(i%4-1.5)*w*.2,ty2=cy+(Math.floor(i/4)-.5)*w*.25;const px=lerp(sx,tx2,k),py=lerp(sy,ty2,k);c.fillStyle="#d9a84a";c.beginPath();c.arc(px,py,Math.max(8,w*.05),0,TAU);c.fill();}
-      c.globalAlpha=g*k;chipSq(cx,cy,w,"rgba(42,53,80,.85)");tx("första chipet",cx,cy+w*.9,"#9fd0ff","center",Math.max(16,s*.042),700);
+      c.globalAlpha=g*k;circuit(cx,cy,w*1.3,t,5);tx("första chipet",cx,cy+w*.9,"#9fd0ff","center",Math.max(16,s*.042),700);
       c.restore();}};
 
   /* 4 · sand blir chip */
@@ -62,8 +75,8 @@ function scenes(E){
       const steps=["sand","kisel","skiva","chip"];steps.forEach((nm,i)=>{const q=eo((t-3-i*1.1)/.7);if(q<=0)return;c.save();c.globalAlpha=g*q;const px=cx-w/2+gap*(i+.5);
         if(i===0){c.fillStyle="#e8c878";c.beginPath();c.moveTo(px-u,y+u*.6);c.lineTo(px,y-u*.8);c.lineTo(px+u,y+u*.6);c.closePath();c.fill();}
         else if(i===1){c.fillStyle="#9aa3b8";c.fillRect(px-u*.5,y-u*.9,u,u*1.6);c.beginPath();c.ellipse(px,y-u*.9,u*.5,u*.2,0,0,TAU);c.fill();}
-        else if(i===2){c.fillStyle="#8aa0c8";c.beginPath();c.arc(px,y,u*.9,0,TAU);c.fill();c.strokeStyle="rgba(255,255,255,.4)";c.lineWidth=2;for(let k=-3;k<=3;k++){c.beginPath();c.moveTo(px+k*u*.25,y-u*.85);c.lineTo(px+k*u*.25,y+u*.85);c.stroke();}}
-        else{chipSq(px,y,u*1.1,"#2a3550");}
+        else if(i===2){wafer(px,y,u*1.15,t);}
+        else{circuit(px,y,u*1.3,t,9);}
         tx(nm,px,y+u*1.7,"#fff","center",Math.max(15,s*.04),700);if(i<n-1){c.strokeStyle="rgba(255,255,255,.5)";c.lineWidth=3;c.beginPath();c.moveTo(px+u*1.2,y);c.lineTo(px+gap-u*1.2,y);c.stroke();}c.restore();});
       if(t>7.5){c.globalAlpha=g*eo((t-7.5)/1);tx("extremt rena rum",cx,a.y+a.h*.14,"#9be3b0","center",Math.max(19,s*.052),700);}
       c.restore();}};
