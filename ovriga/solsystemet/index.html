@@ -464,8 +464,9 @@ function buildGalaxy(){
    LAY.oort=gPts(p,c,s,THREE.AdditiveBlending,.9,1);scene.add(LAY.oort);}
   // Andromeda, Triangulum och en dvärggalax-svärm: Lokala gruppen
   LAY.lg=new THREE.Group();scene.add(LAY.lg);
-  {const m31=mkGalaxy(GR*1.35,low?30000:55000,false);m31.position.copy(P31);m31.scale.setScalar(5);m31.rotation.set(-1.0,.5,.3);LAY.lg.add(m31);
-   const tri=mkGalaxy(GR*.55,low?7000:14000,false);tri.position.copy(P31).add(new THREE.Vector3(150000,90000,-120000));tri.scale.setScalar(5);tri.rotation.set(.6,0,.4);LAY.lg.add(tri);
+  {const m31=mkGalaxy(GR*1.35,low?30000:55000,false);m31.position.copy(P31);m31.scale.setScalar(12);m31.rotation.set(-1.0,.5,.3);LAY.lg.add(m31);
+   const tri=mkGalaxy(GR*.55,low?7000:14000,false);tri.position.copy(P31).add(new THREE.Vector3(150000,90000,-120000));tri.scale.setScalar(9);tri.rotation.set(.6,0,.4);LAY.lg.add(tri);
+   [m31,tri].forEach(G=>G.children.forEach(ch=>{const A=ch.geometry.attributes.size;for(let i=0;i<A.array.length;i++)A.array[i]*=2.6;A.needsUpdate=true;}));
    const N=70,p=new Float32Array(N*3),c=new Float32Array(N*3),s=new Float32Array(N);for(let i=0;i<N;i++){const o=i<N/2?new THREE.Vector3(GX,0,0):P31.clone(),r=GR*(2+grnd()*5),a=grnd()*TAU2,b=Math.acos(2*grnd()-1);p[i*3]=o.x+r*Math.sin(b)*Math.cos(a);p[i*3+1]=o.y+r*Math.cos(b);p[i*3+2]=o.z+r*Math.sin(b)*Math.sin(a);c.set([.85,.88,1],i*3);s[i]=2500+grnd()*5000;}
    LAY.lg.add(gPts(p,c,s,THREE.AdditiveBlending,.9,2));}
   // Laniakea: galaxer som flödar längs trådar mot Den stora attraktorn
@@ -550,7 +551,7 @@ const MKS=[];
 function buildMarkers(){
   const def={'Voyager 1':['dot',.3],'Alfa Centauri':['duo',.2,.1],'Sirius':['sirius',.9],'Sjustjärnorna':['plej',2.2],'Orionnebulosan':['neb',5.7],'Magellanska molnen':['mag',2.4],'Virgohopen':['clus',-.4],'Den stora attraktorn':['attr',-1.7],'Sloanmuren':['wall',1.2]};
   STOP.forEach(t=>{if(!t.k)return;
-    if(t.k==='Andromeda'){t.tgt=()=>P31.clone().multiplyScalar(Math.max(1,Math.pow(dOf(zC)/34000,.6)));return;}
+    if(t.k==='Andromeda'){t.hw=.12;t.tgt=()=>P31.clone().multiplyScalar(.23*Math.max(1,Math.pow(dOf(zC)/34000,.6)));return;}
     if(t.k==='Sagittarius A*'){t.tgt=()=>galaxy.position.clone();
       const mats=[],g=new THREE.Group();spr(g,mats,'soft',0xff9a3c,GR*.5,0,0,0,.8);spr(g,mats,'soft',0xffd9a0,GR*.16,0,0,0,.95);spr(g,mats,'spike',0xffffff,GR*.2,0,0,0,.9);galaxy.add(g);t.obj={g,mats,galaxy:true};MKS.push(t);return;}
     const D=def[t.k];if(!D)return;const dd=dOfLy(t.ly),u=dd*.1,mats=[],g=new THREE.Group(),a=D[1]*2.399+1.1,pos=new THREE.Vector3(Math.cos(a),.15+.25*Math.sin(a*2),Math.sin(a)).multiplyScalar(dd*.55);
@@ -595,12 +596,12 @@ function galFrame(now,dt){const inG=mode==='galaxy';
     if(gAuto&&!fly&&now>=gAuto.t0){const q=Math.min(1,(now-gAuto.t0)/gAuto.dur),e=q<.5?2*q*q:1-Math.pow(-2*q+2,2)/2;zT=gAuto.from+(gAuto.to-gAuto.from)*e;if(q>=1)gAuto=null;}
     zC+=(zT-zC)*Math.min(1,dt*(gAuto?9:5));controls.maxDistance=Infinity;controls.enableZoom=false;
     if(!fly){const dz=dOf(zC),a=lq(4000,34000,dz),b=lq(34000,1.2e6,dz),c=lq(1.2e6,8e7,dz);
-      const tg=new THREE.Vector3(GX*a,0,0).lerp(P31.clone().multiplyScalar(.5),b).multiplyScalar(1-c);{let bt=null,bw=0;STOP.forEach(t=>{if(!t.tgt)return;const w=1-sst(0,.055,Math.abs(zC-t.z));if(w>bw){bw=w;bt=t;}});if(bt&&bw>0)tg.lerp(bt.tgt(),bw);}controls.target.copy(tg);const off=camera.position.clone().sub(controls.target);
+      const tg=new THREE.Vector3(GX*a,0,0).lerp(P31.clone().multiplyScalar(.5),b).multiplyScalar(1-c);{let W=0;const ws=[];STOP.forEach(t=>{if(!t.tgt)return;const w=1-sst(0,t.hw||.075,Math.abs(zC-t.z));if(w>0){ws.push([t,w]);W+=w;}});if(W>0){const k=Math.min(1,W),acc=new THREE.Vector3();ws.forEach(([t,w])=>acc.add(t.tgt().multiplyScalar(w/W)));tg.multiplyScalar(1-k).addScaledVector(acc,k);}}controls.target.copy(tg);const off=camera.position.clone().sub(controls.target);
       if(galPtr===0&&dz<2e5){const dn=off.clone().normalize();dn.lerp(dz>3000?GDES:GDIR,Math.min(1,dt*.7)).normalize();off.copy(dn);}
       off.setLength(dz);camera.position.copy(controls.target).add(off);camera.lookAt(controls.target);}
     $('gZoom').value=Math.round(zC*1000);gCardUpd();gUpd(dt);mkFrame();
   }else{controls.enableZoom=true;if(!fly&&mode==='home'&&controls.maxDistance!==220)controls.maxDistance=220;}
-  const d=camera.position.length();   // avstånd till solen: solen och planeterna krymper till ingenting när man zoomar ut
+  const d=inG&&!fly?dOf(zC):camera.position.length();   // i zoomen styr reglaget (inte avståndet till solen, kameran kan titta mot ett landmärke); annars avstånd till solen: solen och planeterna krymper till ingenting när man zoomar ut
   const fz=1-sst(250,5000,d)*.97,k1=Math.max(1,d/223*fz),k2=Math.max(1,d/330*fz);
   sun.scale.setScalar(k1);glow.scale.setScalar(Math.max(.01,26*(1-sst(300,4000,d))));
   PL.forEach(p=>{p.obj.scale.setScalar(k2);p.line.material.opacity=.28*(1-sst(250,900,d));});moonOrbit.material.opacity=mode==='earth'?.55:.25*(1-sst(250,900,d));
@@ -608,7 +609,7 @@ function galFrame(now,dt){const inG=mode==='galaxy';
     const fl=fadeB(d,0,1,6e7,6e8);galaxy.children.forEach(g=>{if(g.isPoints)g.material.uniforms.op.value=g.userData.op*(g===galaxy.children[0]?1:1);});
     if(LAY){const gS=gk;galaxy.position.set(GX*gS,0,0);galaxy.scale.setScalar(gS);
       LAY.oort.visible=on&&(f=>f>.01)(fadeB(d,150,420,2500,9000));LAY.oort.material.uniforms.op.value=.9*fadeB(d,150,420,2500,9000);
-      const lgf=fadeB(d,9e4,6e5,2e8,1e9);LAY.lg.visible=on&&lgf>.01;LAY.lg.scale.setScalar(gS);LAY.lg.position.set(0,0,0);LAY.lg.children.forEach(g=>{if(g.isPoints)g.material.uniforms.op.value=.9*lgf;else g.children.forEach(h=>h.material.uniforms.op.value=h.userData.op*lgf);});
+      const lgf=fadeB(d,9e4,6e5,2e8,1e9);LAY.lg.visible=on&&lgf>.01;LAY.lg.scale.setScalar(gS*.23);LAY.lg.position.set(0,0,0);LAY.lg.children.forEach(g=>{if(g.isPoints)g.material.uniforms.op.value=.9*lgf;else g.children.forEach(h=>h.material.uniforms.op.value=h.userData.op*lgf);});
       const lf=fadeB(d,2e6,2e7,1e9,6e9);LAY.lan.visible=on&&lf>.01;LAY.lan.material.uniforms.op.value=.9*lf;
       const wk=Math.max(1,d/7e8),wf=fadeB(d,6e7,4e8,1e12,2e12);LAY.web.visible=on&&wf>.01;LAY.web.scale.setScalar(wk);LAY.web.material.uniforms.op.value=.85*wf;
       const cf=fadeB(d,2e9,1.2e10,1e12,2e12);LAY.cmb.visible=on&&cf>.01;LAY.cmb.material.uniforms.op.value=.7*cf;}}
@@ -678,7 +679,7 @@ if(location.hash==='#jorden'){if(window.MPS)MPS.start('earth');openEarth();}
 if(location.hash==='#vintergatan'){if(window.MPS)MPS.start('galaxy');openGalaxy(true);$('gBack').textContent='← Rymdlabbet';$('gBack').onclick=toLab;}
 requestAnimationFrame(frame);
 // för test
-window.SOL={get fly(){return fly},get ov(){return ov},get zC(){return zC},get galaxy(){return galaxy},openGalaxy,goGalZoom,set zT(v){zT=v},get t(){return t},set t(v){t=v},openPlanet,openEarth,goHome,PL,SUN,phaseInfo,get mode(){return mode},camera,controls,setAge};
+window.SOL={get LAY(){return LAY},get fly(){return fly},get ov(){return ov},get zC(){return zC},get galaxy(){return galaxy},openGalaxy,goGalZoom,set zT(v){zT=v},get t(){return t},set t(v){t=v},openPlanet,openEarth,goHome,PL,SUN,phaseInfo,get mode(){return mode},camera,controls,setAge};
 </script>
 </body>
 </html>
