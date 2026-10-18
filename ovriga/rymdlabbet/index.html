@@ -1153,16 +1153,19 @@ function drawGiants(){const cv=$('gCv'),{c,w,h}=fitCanvas(cv,gLand()?Math.max(20
   if(far.length){c.fillStyle='rgba(201,212,242,.8)';c.font='700 13px "Inter", sans-serif';c.textAlign='left';c.fillText(`← ${far.length===1?far[0].n:far[far.length-1].n+' och '+(far.length-1)+' till'}: för små för att synas`,10,22);}
   if(gShow<.02){c.fillStyle='#FFC93C';c.font='800 15px "Inter", sans-serif';c.textAlign='center';c.fillText('Dra i reglaget eller tryck på Resa genom jättarna!',w/2,22);}}
 let gAud=null;
-function gStopAud(){if(gAud){gAud.onended=null;gAud.onerror=null;gAud.pause();gAud=null;}}
+function gTourLabel(){$('gTour').textContent=gTour?(gTour.paused?'▶ Fortsätt resan':'⏸ Pausa resan'):(Math.round(gZoom)>0?'▶ Resan härifrån':'▶ Resa genom jättarna');}
+function gNav(){if(gTour){gStopAud();gTour.paused=true;gTour.talk=false;}gTourLabel();}
+function gStopAud(){gVid++;if(gAud){gAud.onended=null;gAud.onerror=null;gAud.pause();gAud=null;}}
 /* berättarröst (ElevenLabs): ljud/jattar/s<index>-1.mp3, index = himlakroppens plats i listan, sist en avslutning; utan ljud går det på timer */
-function gVoice(n,tour,cb){gStopAud();if(!(window.Ljud&&Ljud.on)){setTimeout(()=>cb&&cb(),6500);return;}const a=new Audio('../../ljud/jattar/s'+n+'-1.mp3?v=2');a._tour=tour;gAud=a;let done=false;const fin=()=>{if(done)return;done=true;if(gAud===a)gAud=null;cb&&cb();};a.onended=fin;a.onerror=()=>setTimeout(fin,4000);a.play().catch(()=>setTimeout(fin,4000));}
+let gVid=0;
+function gVoice(n,tour,cb){gStopAud();const vid=++gVid;if(!(window.Ljud&&Ljud.on)){const tk=()=>{if(vid!==gVid)return;if(gTour&&gTour.paused)setTimeout(tk,500);else cb&&cb();};setTimeout(tk,6500);return;}const a=new Audio('../../ljud/jattar/s'+n+'-1.mp3?v=2');a._tour=tour;gAud=a;let done=false;const fin=()=>{if(done)return;done=true;if(gAud===a)gAud=null;cb&&cb();};a.onended=fin;a.onerror=()=>setTimeout(fin,4000);a.play().catch(()=>setTimeout(fin,4000));}
 function gLoop(){if(cur!=='jattar'){gRaf=0;gStopAud();if(G3)G3.stop();return;}
   if(!gTour&&gAud&&gAud._tour)gStopAud();
-  if(gTour){const n=performance.now(),T=gTour;if(!T.talk&&n>T.t0&&Math.abs(gZoom-gShow)<.01){const k=Math.round(gZoom);T.talk=true;gVoice(k,true,()=>{if(gTour!==T)return;if(k>=GI.length-1){gVoice(GI.length,true,()=>{if(gTour===T){gTour=null;$('gTour').textContent='▶ Resa genom jättarna';}});}else{gZoom=k+1;T.talk=false;T.t0=performance.now()+350;}});}}
+  if(gTour&&!gTour.paused){const n=performance.now(),T=gTour;if(!T.talk&&n>T.t0&&Math.abs(gZoom-gShow)<.01){const k=Math.round(gZoom);T.talk=true;gVoice(k,true,()=>{if(gTour!==T)return;if(k>=GI.length-1){gVoice(GI.length,true,()=>{if(gTour===T){gTour=null;gTourLabel();}});}else{gZoom=k+1;T.talk=false;T.t0=performance.now()+350;}});}}
   const d=gZoom-gShow;if(Math.abs(d)>.0005){gShow+=d*(gTour?.035:.07)+Math.sign(d)*.001;if(Math.abs(gZoom-gShow)<.0012)gShow=gZoom;$('gZoom').value=gShow;
     const k=Math.round(gShow);if(GI[k]!==gSel){gSel=GI[k];gUI();}drawGiants();}
   gRaf=requestAnimationFrame(gLoop);}
-function gUI(){$('gPick').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',GI[+b.dataset.i]===gSel));gText();}
+function gUI(){gTourLabel();$('gPick').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',GI[+b.dataset.i]===gSel));gText();}
 function gText(){const o=gSel;
   if(!o){$('gBig').textContent='Hur stora är stjärnorna?';$('gTxt').textContent='Här är jorden, Jupiter och solen. Solen är en ganska vanlig stjärna. Dra i reglaget, så kommer jättarna, och allra sist de största svarta hålen.';$('gInfo').hidden=true;return;}
   $('gBig').textContent=o.n+(o.typ==='bana'?'':o.r>=1.5?`: ${fmt(o.r,o.r<10?1:0)} gånger så bred som solen.`:'.');
@@ -1183,12 +1186,14 @@ const rotHint=document.createElement('div');rotHint.style.cssText='position:fixe
 function rotChk(){let off=false;try{off=sessionStorage.getItem('mp-vrid')==='1'}catch(e){}rotHint.style.display=(cur==='jattar'&&innerWidth<700&&innerHeight>innerWidth&&!off)?'flex':'none';}
 rotHint.querySelector('button').onclick=()=>{try{sessionStorage.setItem('mp-vrid','1')}catch(e){}rotChk();};addEventListener('resize',()=>{rotChk();if(cur==='jattar')drawGiants();});addEventListener('orientationchange',()=>setTimeout(()=>{rotChk();if(cur==='jattar')drawGiants();},250));
 function openGiants(){giants3d();if(G3)G3.start();setTimeout(rotChk,50);$('gPick').innerHTML=GI.map((o,i)=>`<button class="b" data-i="${i}">${o.typ==='bh'?'🕳️ ':o.typ==='bana'?'⭕ ':''}${o.n}</button>`).join('');
-  $('gPick').querySelectorAll('button').forEach(b=>b.onclick=()=>{gTour=null;$('gTour').textContent='▶ Resa genom jättarna';gZoom=+b.dataset.i;});
+  $('gPick').querySelectorAll('button').forEach(b=>b.onclick=()=>{gNav();gZoom=+b.dataset.i;});
   gSel=GI[Math.round(gShow)];$('gZoom').value=gShow;gUI();drawGiants();if(!gRaf)gRaf=requestAnimationFrame(gLoop);}
-$('gZoom').addEventListener('input',e=>{gTour=null;$('gTour').textContent='▶ Resa genom jättarna';gZoom=+e.target.value;gShow=gZoom;const k=Math.round(gShow);if(GI[k]!==gSel){gSel=GI[k];gUI();}drawGiants();});
-$('gTour').onclick=()=>{if(gTour){gTour=null;$('gTour').textContent='▶ Resa genom jättarna';return;}
-  gZoom=0;gShow=0;gSel=GI[0];gUI();gTour={talk:false,t0:performance.now()+1200};$('gTour').textContent='⏸ Stanna resan';};
-document.querySelector('[data-say="jattar"]').onclick=()=>{if(gAud&&!gAud._tour){gStopAud();return;}if(gTour)return;gVoice(Math.max(0,GI.indexOf(gSel)),false);};
+$('gZoom').addEventListener('input',e=>{gNav();gZoom=+e.target.value;gShow=gZoom;const k=Math.round(gShow);if(GI[k]!==gSel){gSel=GI[k];gUI();}drawGiants();});
+$('gTour').onclick=()=>{
+  if(!gTour){gStopAud();if(Math.round(gZoom)===0){gZoom=0;gShow=0;gSel=GI[0];gUI();}gTour={talk:false,t0:performance.now()+900,paused:false};gTourLabel();return;}
+  if(!gTour.paused){gTour.paused=true;if(gAud&&gAud._tour)gAud.pause();gTourLabel();return;}   // paus: rösten stannar där den är
+  gTour.paused=false;if(gAud&&gAud._tour&&gTour.talk){gAud.play();}else{gStopAud();gTour.talk=false;gTour.t0=performance.now()+300;}gTourLabel();};
+document.querySelector('[data-say="jattar"]').onclick=()=>{if(gAud&&!gAud._tour){gStopAud();return;}if(gTour&&!gTour.paused)return;gVoice(Math.max(0,GI.indexOf(gSel)),false);};
 
 /* =====================================================================
    Svarta hål: gummiduken
