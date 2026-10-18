@@ -62,6 +62,11 @@ button:focus-visible{outline:3px solid #FFC93C;outline-offset:2px}
 .card li{margin:3px 0;font-size:1.02rem}
 .card .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
 .card[hidden]{display:none}.card .cx{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;border:0;background:#E8EEFB;color:#1D2B53;font:800 15px/1 'Baloo 2',system-ui,sans-serif;cursor:pointer;display:grid;place-items:center}.card .cx:hover,.card .cx:focus-visible{background:#C9D6F5;outline:2px solid #3D5AFE}.card h2{padding-right:36px}
+.chip.tourb{cursor:pointer;border:0;color:#fff;font-family:inherit;background:linear-gradient(135deg,#7A5CFF,#3D5AFE);pointer-events:auto}.chip.tourb[aria-pressed=true]{background:#E5484D}
+.scl{position:relative;z-index:7;display:flex;flex-direction:column;align-items:flex-start;gap:2px;font-weight:800;font-size:.8rem;color:#C9D4F2;background:var(--glass);border-radius:10px;padding:4px 10px}.scl i{display:block;height:6px;border:2px solid #fff;border-top:0;box-sizing:border-box;width:100px;transition:width .15s}.scl b{font-weight:800}
+.lmb{background:linear-gradient(135deg,rgba(255,229,138,.95),rgba(255,190,90,.95));color:#2b2100;font-weight:800;font-size:.9rem;border-radius:999px;padding:5px 14px;box-shadow:0 4px 18px rgba(255,200,80,.35);transition:opacity .4s,transform .4s;pointer-events:none}.lmb.off{opacity:0;transform:translateY(8px)}
+.rel{position:relative;flex:1;display:flex;align-items:center}.rel input{width:100%}.ticks{position:absolute;left:9px;right:9px;top:1px;height:6px;pointer-events:none}.ticks i{position:absolute;top:0;width:3px;height:3px;border-radius:50%;background:#FFE58A;opacity:.9;transform:translateX(-50%)}.ticks i.s{width:5px;height:5px;top:-1px;background:#fff}
+#gWarp{position:fixed;inset:0;pointer-events:none;z-index:4;opacity:0;mix-blend-mode:screen;background:repeating-conic-gradient(from 0deg at 50% 44%,rgba(190,215,255,.17) 0 .35deg,transparent .35deg 2.6deg);-webkit-mask-image:radial-gradient(circle at 50% 44%,transparent 16%,#000 78%);mask-image:radial-gradient(circle at 50% 44%,transparent 16%,#000 78%)}
 .steps{display:flex;gap:5px;max-width:min(920px,100%);overflow-x:auto;padding:2px 2px 4px;scrollbar-width:thin}.b.st{min-height:34px;min-width:0;padding:2px 10px;font-size:.82rem;white-space:nowrap;background:rgba(12,18,44,.72);flex:0 0 auto}.b.st[aria-pressed=true]{background:#fff;color:var(--ink)}
 .lbl.g{pointer-events:none}.lbl.here{background:rgba(255,201,60,.92);color:#2a1a00;font-size:.95rem;padding:1px 12px;text-shadow:none}
 .rw{position:absolute;left:0;top:0;width:0;height:0;will-change:transform}.ring{position:absolute;left:-22px;top:-22px;width:44px;height:44px;border:3px solid #FFC93C;border-radius:50%;box-shadow:0 0 18px #FFC93C;animation:gpu 1.8s ease-out infinite}
@@ -86,7 +91,13 @@ dialog::backdrop{background:rgba(0,0,0,.55)}
 dialog h3{margin:0 0 6px}
 dialog p{margin:6px 0}
 dialog small{color:var(--muted)}
-@media (max-width:600px){.b{font-size:.9rem;padding:4px 9px}#galaxy .hint{display:none}#gCard{max-height:30vh;overflow:auto}#gCard li{font-size:.88rem}#gCard h2{font-size:1.2rem}.hint{font-size:.8rem}.card h2{font-size:1.35rem}.card li{font-size:.95rem}}
+#gCard{position:fixed;right:12px;top:calc(124px + env(safe-area-inset-top,0px));width:min(310px,calc(100vw - 24px));padding:0;background:rgba(10,16,40,.74);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#E9EEFF;border-radius:16px;box-shadow:0 0 0 1px rgba(255,255,255,.14),0 10px 30px rgba(0,0,0,.4);max-height:42vh;overflow:auto;opacity:0;transform:translateX(14px)}
+#gCard.in{opacity:1;transform:none;transition:opacity .5s,transform .5s}
+#gCard .ghead{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;border:0;background:none;color:inherit;font:800 1.05rem/1.2 'Baloo 2',system-ui,sans-serif;text-align:left;padding:10px 14px;cursor:pointer}
+#gCard .ghead i{font-style:normal;opacity:.7;font-size:.95rem}#gCard .ghead:hover i{opacity:1}
+#gCard ul{margin:0;padding:0 14px 12px 30px}#gCard li{font-size:.92rem;margin:4px 0;color:#CBD5F5}
+#gCard.min ul{display:none}#gCard.min{width:auto;max-width:min(310px,calc(100vw - 24px))}#gCard.min .ghead{font-size:.95rem;padding:7px 12px}
+@media (max-width:600px){.b{font-size:.9rem;padding:4px 9px}#galaxy .hint{display:none}#gCard{top:calc(232px + env(safe-area-inset-top,0px));right:auto;left:10px}#gCard.min{width:fit-content}.lmb{font-size:.8rem;padding:4px 12px}.hint{font-size:.8rem}.card h2{font-size:1.35rem}.card li{font-size:.95rem}}
 @media (prefers-reduced-motion:reduce){*{transition:none !important}}
 </style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
@@ -136,11 +147,13 @@ dialog small{color:var(--muted)}
 
 <!-- Zooma ut till Vintergatan -->
 <section id="galaxy" class="screen" hidden>
-  <div class="ui top"><button class="back" id="gBack">← Solsystemet</button><span class="chip" id="gDist"></span><span class="hint">Dra för att vrida. Scrolla, nyp eller använd reglaget för att zooma.</span></div>
+  <div id="gWarp"></div>
+  <div class="ui top"><button class="back" id="gBack">← Solsystemet</button><span class="chip" id="gDist"></span><button class="chip tourb" id="gTour">🎬 Guidad resa</button><span class="hint">Dra för att vrida. Scrolla, nyp eller använd reglaget för att zooma.</span><span class="scl" id="gScale"><i></i><b></b></span></div>
   <div class="ui bottom">
+    <div class="lmb" id="gLM" hidden></div>
     <div class="card" id="gCard"></div>
     <div class="steps" id="gSteps"></div>
-    <label class="slider"><span>🪐</span><input type="range" id="gZoom" min="0" max="1000" value="0" aria-label="Zooma från solsystemet till Vintergatan"><span>🌠</span></label>
+    <label class="slider"><span>🪐</span><span class="rel"><span class="ticks" id="gTicks"></span><input type="range" id="gZoom" min="0" max="1000" value="0" aria-label="Zooma från solsystemet till det observerbara universum"></span><span>🌠</span></label>
     <div class="bar"><button class="b go" id="gOut">🔭 Zooma ut</button><button class="b" id="gIn">🔬 Zooma in</button><button class="b" id="gNames" aria-pressed="true">Namn</button><button class="b" id="gAbout" aria-label="Om modellen">ℹ️</button></div>
   </div>
 </section>
@@ -335,10 +348,10 @@ function follow(){if(fly||!focus)return;const p=focusPos(focus),d=p.clone().sub(
 function show(id){document.querySelectorAll('.screen').forEach(s=>s.hidden=s.id!==id);mode=id;if(window.MPS)MPS.visa(id);
   moonOrbit.material.opacity=id==='earth'?.55:.25;rays.visible=id==='earth';
   PL.forEach(p=>{p.line.visible=id!=='earth';if(p.id!=='jorden')p.obj.visible=id!=='earth';});renderLabels(true);}
-function goHome(){focus=null;show('home');flyTo(null,95,.5);controls.minDistance=8;}
+function goHome(){focus=null;show('home');controls.maxDistance=220;ovHide();flyTo(null,95,.5);controls.minDistance=8;}
 function openPlanet(p){
   if(p.id==='jorden')return openEarth();
-  focus=p===SUN?sun:p.mesh;show('planet');controls.minDistance=p.r*1.6;flyTo(focus,p.r*(p.ring?6:4.2)+(p===SUN?14:0),.25);
+  focus=p===SUN?sun:p.mesh;show('planet');controls.minDistance=p.r*1.6;const pd=p.r*(p.ring?6:4.2)+(p===SUN?14:0);controls.maxDistance=pd*2.3;flyTo(focus,pd,.25);
   $('pCard').hidden=false;$('pCard').innerHTML=`<button class="cx" id="pX" aria-label="Stäng rutan" title="Stäng">✕</button><h2>${p===SUN?'☀️':'🪐'} ${p.n}</h2><ul>${p.f.map(x=>`<li>${x}</li>`).join('')}</ul>`;window.Ljud&&Ljud.pop&&Ljud.pop(3);$('pX').onclick=()=>{$('pCard').hidden=true};
 }
 function openEarth(){focus=earth;show('earth');controls.minDistance=1.6;
@@ -346,7 +359,7 @@ function openEarth(){focus=earth;show('earth');controls.minDistance=1.6;
   const s=earthSys.position.clone().multiplyScalar(-1).normalize(),side=new THREE.Vector3().crossVectors(s,new THREE.Vector3(0,1,0)).normalize();
   // avståndet så att hela månbanan får plats, även på en smal mobil i stående läge
   const hf=Math.atan(Math.tan(camera.fov/2*DEG)*camera.aspect);
-  flyTo(earth,Math.max(10.5,(MOON_A+.9)/Math.tan(hf)),.75,side.multiplyScalar(-1));updatePhase();window.Ljud&&Ljud.chime&&Ljud.chime();}
+  const ed=Math.max(10.5,(MOON_A+.9)/Math.tan(hf));controls.maxDistance=ed*2.3;flyTo(earth,ed,.75,side.multiplyScalar(-1));updatePhase();window.Ljud&&Ljud.chime&&Ljud.chime();}
 addEventListener('keydown',e=>{if(e.key==='Escape'&&mode==='planet'&&!$('pCard').hidden){$('pCard').hidden=true}});
 $('pBack').onclick=goHome;$('eBack').onclick=goHome;
 // tillbaka till Rymdlabbet: kom man därifrån går vi bakåt i historiken, annars öppnas labbet
@@ -480,16 +493,57 @@ const GSTEG=[
  {k:'Oortmolnet',d:560,ly:1,t:'Oortmolnet',f:['Ett jättelikt klot av isiga kroppar runt hela solsystemet, ungefär 0,5 till 1,5 ljusår ut. Därifrån kommer en del kometer.','Rymdsonden Voyager 1 når molnets inre kant om ungefär 300 år.','Ingen har sett Oortmolnet. Det finns bara i modeller.']},
  {k:'Närmaste stjärnorna',d:2500,ly:6,t:'Solsystemet blir en prick',f:['Bortom Oortmolnet är det nästan tomt.','Närmaste stjärna, Proxima Centauri, ligger 4,2 ljusår bort. Ljuset därifrån tar över fyra år.']},
  {k:'Orionarmen',d:7500,ly:30000,t:'Vi bor i Orionarmen',f:['Solen ligger ungefär 26 000 ljusår från mitten.','Vi bor i en liten arm som kallas Orionarmen.']},
- {k:'Vintergatan',d:34000,ly:150000,t:'Hela Vintergatan: en spiralgalax',f:['Ungefär 100 000 ljusår tvärs över.','100 till 400 miljarder stjärnor.','Solen åker ett varv runt mitten på ungefär 230 miljoner år.']},
+ {k:'Vintergatan',d:34000,ly:1e5,t:'Hela Vintergatan: en spiralgalax',f:['Ungefär 100 000 ljusår tvärs över.','100 till 400 miljarder stjärnor.','Solen åker ett varv runt mitten på ungefär 230 miljoner år.']},
  {k:'Lokala gruppen',d:1.8e6,ly:6e6,t:'Lokala gruppen',f:['Vintergatan har grannar. Andromedagalaxen ligger ungefär 2,5 miljoner ljusår bort.','Tillsammans med Triangulum och över 50 mindre galaxer bildar de Lokala gruppen.','Andromeda och Vintergatan rör sig mot varandra och väntas krocka om ungefär 4 till 5 miljarder år.']},
  {k:'Laniakea',d:8e7,ly:7e8,t:'Superhopen Laniakea',f:['Lokala gruppen är en liten del av Virgohopen, och den i sin tur av superhopen Laniakea.','Laniakea är ungefär 500 miljoner ljusår bred och har omkring 100 000 galaxer.','Galaxerna rör sig mot ett område som kallas Den stora attraktorn.']},
  {k:'Kosmiska nätet',d:8e8,ly:5e9,t:'Det kosmiska nätet',f:['I ännu större skala bildar galaxerna ett nät av trådar med enorma tomrum emellan.','Trådarna kan vara hundratals miljoner ljusår långa.','Mellan trådarna finns nästan ingenting.']},
  {k:'Universum',d:3e10,ly:4.65e10,t:'Det observerbara universum',f:['Det är allt ljus som hunnit hit sedan Big Bang för 13,8 miljarder år sedan, ungefär 93 miljarder ljusår tvärs över.','Det finns minst hundratals miljarder galaxer. Vi hamnar i mitten av det vi kan se, bara för att det är härifrån ljuset kommer.','Det yttersta skalet är bakgrundsstrålningen, det äldsta ljuset som finns.']}];
 GSTEG.forEach(s=>s.z=zOf(s.d));
 (function(){const bar=$('gSteps');GSTEG.forEach((s,i)=>{const b=document.createElement('button');b.className='b st';b.textContent=s.k;b.onclick=()=>{goGalZoom(s.z);};bar.appendChild(b);});})();
+
+/* resans stopp: landmärken och de nio stegen i ordning (ljudfilen s<index>-1.mp3 hör till stoppet) */
+function dOfLy(ly){const L=Math.log(ly);let i=0;while(i<GSTEG.length-2&&L>Math.log(GSTEG[i+1].ly))i++;const a=GSTEG[i],b=GSTEG[i+1],t=(L-Math.log(a.ly))/(Math.log(b.ly)-Math.log(a.ly));return Math.exp(glerp(Math.log(a.d),Math.log(b.d),t));}
+const STOP=[{ly:7e-4,s:0},{ly:2.7e-3,k:'Voyager 1',b:'Längst bort människan skickat något · ca 170 AU'},{ly:.03,k:'Oortmolnets inre kant',b:'Här börjar isbitarna'},{ly:1,s:1},
+ {ly:4.2,k:'Alfa Centauri',b:'Närmaste stjärnsystem · 4,2 ljusår'},{ly:6,s:2},{ly:8.6,k:'Sirius',b:'Himlens ljusstarkaste stjärna · 8,6 ljusår'},{ly:440,k:'Sjustjärnorna',b:'Ung stjärnhop · ca 440 ljusår'},
+ {ly:1350,k:'Orionnebulosan',b:'Här föds stjärnor · ca 1 350 ljusår'},{ly:26000,k:'Sagittarius A*',b:'Vintergatans svarta hål · 26 000 ljusår'},{ly:3e4,s:3},{ly:1e5,s:4},
+ {ly:1.6e5,k:'Magellanska molnen',b:'Två dvärggalaxer · ca 160 000 ljusår'},{ly:2.5e6,k:'Andromeda',b:'Närmaste stora galax · 2,5 miljoner ljusår'},{ly:6e6,s:5},
+ {ly:5.4e7,k:'Virgohopen',b:'Över 1 000 galaxer · 54 miljoner ljusår'},{ly:2.2e8,k:'Den stora attraktorn',b:'Drar åt sig galaxer · ca 220 miljoner ljusår'},{ly:7e8,s:6},
+ {ly:1.4e9,k:'Sloanmuren',b:'En vägg av galaxer · över 1 miljard ljusår'},{ly:5e9,s:7},{ly:4.65e10,s:8}];
+STOP.forEach(t=>{t.z=t.s!==undefined?GSTEG[t.s].z:zOf(dOfLy(t.ly));});
+(function(){const T=$('gTicks');STOP.forEach(t=>{const i=document.createElement('i');if(t.s!==undefined)i.className='s';i.style.left=(t.z*100)+'%';T.appendChild(i);});})();
+function gLy(){const l=Math.log(dOf(zC));let i=0;while(i<GSTEG.length-2&&l>Math.log(GSTEG[i+1].d))i++;const a=GSTEG[i],b=GSTEG[i+1],t=Math.max(0,Math.min(1,(l-Math.log(a.d))/(Math.log(b.d)-Math.log(a.d))));return Math.exp(glerp(Math.log(a.ly),Math.log(b.ly),t));}
+function fmtYears(y){if(y<1){const h=y*8766;if(h<1)return Math.max(1,Math.round(h*60))+' minuter';if(h<48)return Math.round(h)+' timmar';return Math.round(h/24)+' dygn';}
+  if(y<10)return y.toFixed(1).replace('.',',')+' år';if(y<1000)return Math.round(y)+' år';if(y<1e6){const r=y<2e4?500:5000;return(Math.round(y/r)*r).toLocaleString('sv-SE')+' år';}
+  if(y<1e9)return(y<1e7?(y/1e6).toFixed(1).replace('.',','):Math.round(y/1e6))+' miljoner år';return(y/1e9).toFixed(1).replace('.',',')+' miljarder år';}
+function fmtLen(L){if(L<.1){const a=L*63241;return Math.round(a).toLocaleString('sv-SE')+' AU';}if(L<2)return (L<1?L.toFixed(1).replace('.',','):'1')+' ljusår';
+  if(L<1e6)return Math.round(L).toLocaleString('sv-SE')+' ljusår';if(L<1e9)return Math.round(L/1e6).toLocaleString('sv-SE')+' miljoner ljusår';return Math.round(L/1e9).toLocaleString('sv-SE')+' miljarder ljusår';}
+let zPrev=0,lmK=null;
+function gUpd(dt){const ly=gLy();
+  $('gDist').innerHTML=`${gDist()}<br><small style="font-weight:700;opacity:.8">☀️ Ljuset därifrån har rest ${ly>1.38e10?'i universums ålder, 13,8 miljarder år':'i '+fmtYears(ly)}</small>`;
+  // skalstock
+  const px=Math.max(60,Math.min(140,innerWidth*.22)),Lraw=px*ly/GPX.value,e=Math.pow(10,Math.floor(Math.log10(Lraw))),m=Lraw/e,L=(m<1.5?1:m<3.5?2:m<7.5?5:10)*e;
+  $('gScale').firstChild.style.width=Math.round(L*GPX.value/ly)+'px';$('gScale').lastChild.textContent=fmtLen(L);
+  // landmärke i närheten
+  let near=null,bd=.011;STOP.forEach((t,i)=>{if(t.k){const d=Math.abs(t.z-zC);if(d<bd){bd=d;near=t;}}});
+  const lm=$('gLM');if(near){if(lmK!==near.k){lmK=near.k;lm.innerHTML='📍 <b>'+near.k+'</b> · '+near.b;lm.hidden=false;requestAnimationFrame(()=>lm.classList.remove('off'));}}else if(lmK!==null){lmK=null;lm.classList.add('off');setTimeout(()=>{if(lmK===null)lm.hidden=true;},400);}
+  // fartkänsla
+  const sp=Math.abs(zC-zPrev)/Math.max(dt,.008);zPrev=zC;const w=Math.min(.55,sp*6),W=$('gWarp');W.style.opacity=w.toFixed(3);W.style.transform='scale('+(1+w*.12).toFixed(3)+')';}
+/* guidad resa med berättarröst */
+let tour=null;
+function tourEnd(done){if(!tour)return;clearInterval(tour.tm);clearTimeout(tour.to);if(tour.aud){tour.aud.onended=null;tour.aud.pause();}tour=null;gAuto=null;$('gTour').textContent='🎬 Guidad resa';$('gTour').setAttribute('aria-pressed','false');}
+function tourVoice(n,after){const t=tour;const fin=()=>{if(tour===t)after();};if(window.Ljud&&Ljud.on){const a=new Audio('../../ljud/resa/s'+n+'-1.mp3?v=1');t.aud=a;a.onended=fin;a.onerror=()=>{t.to=setTimeout(fin,6000)};a.play().catch(()=>{t.to=setTimeout(fin,6000)});}else t.to=setTimeout(fin,7000);}
+function tourNext(){if(!tour)return;tour.i++;if(tour.i>=STOP.length){tourVoice(STOP.length,()=>{tourEnd();});return;}
+  const to=STOP[tour.i].z,i=tour.i;gAuto=to===zT?null:{from:zT,to,t0:performance.now(),dur:Math.max(3200,Math.min(7500,Math.abs(to-zT)*38000))};
+  clearInterval(tour.tm);tour.tm=setInterval(()=>{if(!tour)return;if(!gAuto&&Math.abs(zC-to)<.004){clearInterval(tour.tm);tourVoice(i,()=>{tour.to=setTimeout(tourNext,650);});}},120);}
+function tourStart(){if(tour){tourEnd();return;}tour={i:-1};$('gTour').textContent='⏹ Stoppa resan';$('gTour').setAttribute('aria-pressed','true');$('gCard').hidden=false;tourNext();}
+$('gTour').onclick=tourStart;
 function stepNu(){const l=Math.log(dOf(zC));let k=0,bd=1e9;GSTEG.forEach((s,i)=>{const dd=Math.abs(Math.log(s.d)-l);if(dd<bd){bd=dd;k=i;}});return k;}
-function gCardUpd(){const k=stepNu();if(k===gStep)return;gStep=k;const s=GSTEG[k];
-  $('gCard').hidden=false;$('gCard').innerHTML=`<button class="cx" id="gX" aria-label="Stäng rutan" title="Stäng">✕</button><h2>🌌 ${s.t}</h2><ul>${s.f.map(x=>`<li>${x}</li>`).join('')}</ul>`;$('gX').onclick=()=>{$('gCard').hidden=true};
+let gMin=innerWidth<700;   // infokortet är hhopfällt som standard på smala skärmar
+function gCardDraw(){const s=GSTEG[Math.max(0,gStep)],c=$('gCard');c.classList.toggle('min',gMin);
+  c.innerHTML=`<button class="ghead" id="gX" aria-expanded="${!gMin}" title="${gMin?'Visa mer':'Fäll ihop'}"><span>🌌 ${s.t}</span><i>${gMin?'ⓘ':'✕'}</i></button><ul>${s.f.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+  $('gX').onclick=()=>{gMin=!gMin;gCardDraw();};}
+function gCardUpd(){const k=stepNu();if(k===gStep)return;gStep=k;const c=$('gCard');c.hidden=false;
+  c.classList.remove('in');gCardDraw();void c.offsetWidth;c.classList.add('in');
   [...$('gSteps').children].forEach((b,i)=>b.setAttribute('aria-pressed',i===k));}
 function gDist(){const l=Math.log(dOf(zC));let i=0;while(i<GSTEG.length-2&&l>Math.log(GSTEG[i+1].d))i++;const a=GSTEG[i],b=GSTEG[i+1],t=Math.max(0,Math.min(1,(l-Math.log(a.d))/(Math.log(b.d)-Math.log(a.d)))),ly=Math.exp(glerp(Math.log(a.ly),Math.log(b.ly),t));
   if(ly<.1)return'ca '+Math.round(ly*63241).toLocaleString('sv-SE')+' AU från solen';if(ly<10)return'ca '+ly.toFixed(1).replace('.',',')+' ljusår från solen';
@@ -514,8 +568,8 @@ function galFrame(now,dt){const inG=mode==='galaxy';
       const tg=new THREE.Vector3(GX*a,0,0).lerp(P31.clone().multiplyScalar(.5),b).multiplyScalar(1-c);controls.target.copy(tg);const off=camera.position.clone().sub(controls.target);
       if(galPtr===0&&dz<2e5){const dn=off.clone().normalize();dn.lerp(dz>3000?GDES:GDIR,Math.min(1,dt*.7)).normalize();off.copy(dn);}
       off.setLength(dz);camera.position.copy(controls.target).add(off);camera.lookAt(controls.target);}
-    $('gZoom').value=Math.round(zC*1000);gCardUpd();$('gDist').textContent=gDist();
-  }else{controls.enableZoom=true;if(!fly&&controls.maxDistance!==220)controls.maxDistance=220;}
+    $('gZoom').value=Math.round(zC*1000);gCardUpd();gUpd(dt);
+  }else{controls.enableZoom=true;if(!fly&&mode==='home'&&controls.maxDistance!==220)controls.maxDistance=220;}
   const d=camera.position.length();   // avstånd till solen: solen och planeterna krymper till ingenting när man zoomar ut
   const fz=1-sst(250,5000,d)*.97,k1=Math.max(1,d/223*fz),k2=Math.max(1,d/330*fz);
   sun.scale.setScalar(k1);glow.scale.setScalar(Math.max(.01,26*(1-sst(300,4000,d))));
@@ -532,19 +586,28 @@ function galFrame(now,dt){const inG=mode==='galaxy';
   const nr=Math.max(.05,Math.min(4e7,d/600)),fr=d>1200?Math.max(2e6,d*40):2000;if(Math.abs(camera.near-nr)>nr*.02||camera.far!==fr){camera.near=nr;camera.far=fr;camera.updateProjectionMatrix();}
   gLabels(inG,d);}
 function openGalaxy(auto){focus=null;show('galaxy');controls.minDistance=8;controls.maxDistance=Infinity;zC=0;zT=0;gStep=-1;gAuto=auto?{from:0,to:1,t0:performance.now()+1600,dur:52000}:null;flyTo(null,GD0,.5);}
-function goGalZoom(to){gAuto={from:zT,to,t0:performance.now(),dur:Math.max(3000,Math.min(9000,Math.abs(to-zT)*26000))};}
+function goGalZoom(to){tourEnd();gAuto={from:zT,to,t0:performance.now(),dur:Math.max(3000,Math.min(9000,Math.abs(to-zT)*26000))};}
 $('toGal').onclick=()=>openGalaxy(true);
-$('gOut').onclick=()=>{gAuto={from:zT,to:1,t0:performance.now(),dur:Math.max(5000,(1-zT)*52000)};};$('gIn').onclick=()=>{gAuto={from:zT,to:0,t0:performance.now(),dur:Math.max(4000,zT*30000)};};
-$('gZoom').oninput=e=>{zT=e.target.value/1000;gAuto=null;};
-canvas.addEventListener('wheel',e=>{if(mode!=='galaxy')return;e.preventDefault();zT=Math.max(0,Math.min(1,zT+e.deltaY*.0004));gAuto=null;},{passive:false});
+$('gOut').onclick=()=>{tourEnd();gAuto={from:zT,to:1,t0:performance.now(),dur:Math.max(5000,(1-zT)*52000)};};$('gIn').onclick=()=>{tourEnd();gAuto={from:zT,to:0,t0:performance.now(),dur:Math.max(4000,zT*30000)};};
+$('gZoom').oninput=e=>{tourEnd();zT=e.target.value/1000;gAuto=null;};
+canvas.addEventListener('wheel',e=>{if(mode!=='galaxy')return;e.preventDefault();tourEnd();zT=Math.max(0,Math.min(1,zT+e.deltaY*.0004));gAuto=null;},{passive:false});
 const gpt=new Map();let gp0=0,gpz=0;
 canvas.addEventListener('pointerdown',e=>{galPtr++;gpt.set(e.pointerId,[e.clientX,e.clientY]);if(gpt.size===2){const a=[...gpt.values()];gp0=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]);gpz=zT;}});
-canvas.addEventListener('pointermove',e=>{if(!gpt.has(e.pointerId))return;gpt.set(e.pointerId,[e.clientX,e.clientY]);if(mode==='galaxy'&&gpt.size===2&&gp0>10){const a=[...gpt.values()],d=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]);zT=Math.max(0,Math.min(1,gpz-Math.log(d/gp0)*.2));gAuto=null;}});
+canvas.addEventListener('pointermove',e=>{if(!gpt.has(e.pointerId))return;gpt.set(e.pointerId,[e.clientX,e.clientY]);if(mode==='galaxy'&&gpt.size===2&&gp0>10){const a=[...gpt.values()],d=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]);tourEnd();zT=Math.max(0,Math.min(1,gpz-Math.log(d/gp0)*.2));gAuto=null;}});
 ['pointerup','pointercancel'].forEach(n=>canvas.addEventListener(n,e=>{if(gpt.delete(e.pointerId))galPtr=Math.max(0,galPtr-1);}));
-$('gBack').onclick=()=>{gAuto=null;goHome();};
+
+/* zooma ut från en himlakropp: ett extra scrollsteg eller nyp ut när kameran stannat på största avståndet tar en tillbaka till solsystemet */
+let ov=0;const ovT=document.createElement('div');ovT.className='lmb off';ovT.hidden=true;ovT.style.cssText='position:fixed;left:50%;top:calc(120px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:6;white-space:nowrap';ovT.textContent='🔭 Zooma ut mer för att komma tillbaka till solsystemet';document.body.appendChild(ovT);
+function ovHide(){ov=0;ovT.classList.add('off');setTimeout(()=>{if(ov===0)ovT.hidden=true;},400);}
+const ovAt=()=>(mode==='planet'||mode==='earth')&&!fly&&camera.position.distanceTo(controls.target)>controls.maxDistance*.96;
+function ovAdd(n){if(!ovAt()){if(ov>0)ovHide();return;}ov+=n;if(ov>0&&ovT.hidden){ovT.hidden=false;requestAnimationFrame(()=>ovT.classList.remove('off'));}if(ov>420){goHome();}}
+canvas.addEventListener('wheel',e=>{if(e.deltaY>0)ovAdd(e.deltaY);else if(ov>0)ovHide();},{passive:true});
+let ovLast=0;canvas.addEventListener('pointermove',e=>{if((mode!=='planet'&&mode!=='earth')||gpt.size!==2)return;const a=[...gpt.values()],d=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]);if(ovLast&&d<ovLast)ovAdd((ovLast-d)*4);else if(ovLast&&d>ovLast+3&&ov>0)ovHide();ovLast=d;});
+canvas.addEventListener('pointerup',()=>{ovLast=0;});
+$('gBack').onclick=()=>{tourEnd();gAuto=null;goHome();};
 $('gNames').onclick=()=>{showNames=!showNames;$('gNames').setAttribute('aria-pressed',showNames);$('names').setAttribute('aria-pressed',showNames);};
 $('gAbout').onclick=()=>$('aboutDlg').showModal();
-addEventListener('keydown',e=>{if(e.key==='Escape'&&mode==='galaxy'&&!$('gCard').hidden)$('gCard').hidden=true;});
+addEventListener('keydown',e=>{if(e.key==='Escape'&&mode==='galaxy'&&!gMin){gMin=true;gCardDraw();}});
 
 /* ---------- Loopen ---------- */
 function resize(){const w=innerWidth,h=innerHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();
@@ -581,12 +644,11 @@ rymd();addEventListener('pointerdown',rymd,{passive:true});addEventListener('key
 document.addEventListener('mp-ljud',()=>{if(window.Ljud&&Ljud.on)Ljud.rymd.start();else window.Ljud&&Ljud.rymd.stop();});
 document.addEventListener('visibilitychange',rymd);
 // direktlänk från Rymdlabbet (Månens faser): jordvyn blir sidans första steg, och tillbaka går till Rymdlabbet
-if(location.hash==='#jorden'){if(window.MPS)MPS.start('earth');openEarth();$('eBack').textContent='← Rymdlabbet';
-  $('eBack').onclick=toLab;}
+if(location.hash==='#jorden'){if(window.MPS)MPS.start('earth');openEarth();}
 if(location.hash==='#vintergatan'){if(window.MPS)MPS.start('galaxy');openGalaxy(true);$('gBack').textContent='← Rymdlabbet';$('gBack').onclick=toLab;}
 requestAnimationFrame(frame);
 // för test
-window.SOL={get zC(){return zC},get galaxy(){return galaxy},openGalaxy,goGalZoom,set zT(v){zT=v},get t(){return t},set t(v){t=v},openPlanet,openEarth,goHome,PL,SUN,phaseInfo,get mode(){return mode},camera,controls,setAge};
+window.SOL={get fly(){return fly},get ov(){return ov},get zC(){return zC},get galaxy(){return galaxy},openGalaxy,goGalZoom,set zT(v){zT=v},get t(){return t},set t(v){t=v},openPlanet,openEarth,goHome,PL,SUN,phaseInfo,get mode(){return mode},camera,controls,setAge};
 </script>
 </body>
 </html>
