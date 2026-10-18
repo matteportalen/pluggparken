@@ -1128,18 +1128,18 @@ function bhBall(c,x,y,r){const g=c.createRadialGradient(x,y,r*.95,x,y,r*2.6);g.a
 function gDrawObj(c,o,x,cy,r){if(o.typ==='bana'){c.save();c.setLineDash([8,7]);c.strokeStyle='rgba(201,212,242,.75)';c.lineWidth=2;c.beginPath();c.arc(x,cy,r,0,7);c.stroke();c.restore();return;}
   if(o.typ==='bh')bhBall(c,x,cy,r);else if(o.typ==='planet')ball(c,x,cy,r,BYID[o.p]);else starBall(c,x,cy,r,o.col,true);}
 function drawGiants(){const cv=$('gCv'),{c,w,h}=fitCanvas(cv,(cv.clientWidth||400)<500?340:440),{s,fx}=gCam(gShow,w,h),base=h-34,X=wx=>w*.58+(wx-fx)*s;
-  c.fillStyle='#05070F';c.fillRect(0,0,w,h);
-  const r0=srand(5);for(let k=0;k<110;k++){c.fillStyle=`rgba(255,255,255,${r0()*.5+.2})`;c.fillRect(r0()*w,r0()*h,1.5,1.5);}
+  const GL=!!G3;if(GL){c.clearRect(0,0,w,h);G3.set({w,h,s,fx,base});G3.draw();}else{c.fillStyle='#05070F';c.fillRect(0,0,w,h);
+  const r0=srand(5);for(let k=0;k<110;k++){c.fillStyle=`rgba(255,255,255,${r0()*.5+.2})`;c.fillRect(r0()*w,r0()*h,1.5,1.5);}}
   c.strokeStyle='rgba(201,212,242,.25)';c.lineWidth=1;c.beginPath();c.moveTo(0,base+.5);c.lineTo(w,base+.5);c.stroke();
   const vis=[];
   GI.forEach((o,i)=>{const r=o.r*s,x=X(G_POS[i]);if(r<.35||x+r<-4||x-r>w+4)return;const a=cl((r-.35)/2);
     c.globalAlpha=a;
-    if(r>h*6){ // mycket stor: bara kanten syns, rita enkelt
+    if(GL){/* ritas av 3D-lagret */}else if(r>h*6){ // mycket stor: bara kanten syns, rita enkelt
       if(o.typ==='bh'){c.fillStyle='#000';c.beginPath();c.arc(x,base-r,r,0,7);c.fill();c.strokeStyle='rgba(255,170,80,.9)';c.lineWidth=10;c.beginPath();c.arc(x,base-r,r+5,0,7);c.stroke();}
       else if(o.typ==='bana'){c.setLineDash([8,7]);c.strokeStyle='rgba(201,212,242,.75)';c.lineWidth=2;c.beginPath();c.arc(x,base-r,r,0,7);c.stroke();c.setLineDash([]);}
       else{c.fillStyle=o.col||'#fff';c.beginPath();c.arc(x,base-r,r,0,7);c.fill();}}
     else gDrawObj(c,o,x,base-r,r);
-    if(gSel===o&&r<h*3){c.strokeStyle='#FFC93C';c.lineWidth=3;c.beginPath();c.arc(x,base-r,r+5,0,7);c.stroke();}
+    if(gSel===o&&r<h*3&&!GL){c.strokeStyle='#FFC93C';c.lineWidth=3;c.beginPath();c.arc(x,base-r,r+5,0,7);c.stroke();}
     c.globalAlpha=1;vis.push({o,r,x,a});});
   // namn: under marklinjen, mitt under varje himlakropp som syns
   c.font='800 14px "Inter", sans-serif';c.textAlign='center';const placed=[];
@@ -1149,7 +1149,7 @@ function drawGiants(){const cv=$('gCv'),{c,w,h}=fitCanvas(cv,(cv.clientWidth||40
   const idx=Math.round(gShow),far=GI.slice(0,idx).filter((o,i)=>o.r*s<.35);
   if(far.length){c.fillStyle='rgba(201,212,242,.8)';c.font='700 13px "Inter", sans-serif';c.textAlign='left';c.fillText(`← ${far.length===1?far[0].n:far[far.length-1].n+' och '+(far.length-1)+' till'}: för små för att synas`,10,22);}
   if(gShow<.02){c.fillStyle='#FFC93C';c.font='800 15px "Inter", sans-serif';c.textAlign='center';c.fillText('Dra i reglaget eller tryck på Resa genom jättarna!',w/2,22);}}
-function gLoop(){if(cur!=='jattar'){gRaf=0;return;}
+function gLoop(){if(cur!=='jattar'){gRaf=0;if(G3)G3.stop();return;}
   if(gTour){const n=performance.now(),T=gTour;if(n>T.next&&Math.abs(gZoom-gShow)<.01){if(gZoom>=GI.length-1){gTour=null;$('gTour').textContent='▶ Resa genom jättarna';}else{gZoom=Math.round(gZoom)+1;T.next=n+(GI[gZoom].typ==='bana'?1800:2800);}}}
   const d=gZoom-gShow;if(Math.abs(d)>.0005){gShow+=d*(gTour?.035:.07)+Math.sign(d)*.001;if(Math.abs(gZoom-gShow)<.0012)gShow=gZoom;$('gZoom').value=gShow;
     const k=Math.round(gShow);if(GI[k]!==gSel){gSel=GI[k];gUI();}drawGiants();}
@@ -1160,12 +1160,17 @@ function gText(){const o=gSel;
   $('gBig').textContent=o.n+(o.typ==='bana'?'':o.r>=1.5?`: ${fmt(o.r,o.r<10?1:0)} gånger så bred som solen.`:'.');
   $('gTxt').textContent=`${o.t?o.t+' ':''}Om solen var en fotboll skulle ${o.typ==='bana'?'banan vara':o.n==='Solen'?'den vara':o.n+' vara'} ${o.fb}.`;
   $('gInfo').hidden=false;
-  const rows=[['Typ',o.typn],o.r>=1.5&&o.typ!=='bana'?['Bredd',`${fmt(o.r,o.r<10?1:0)} solar i rad`]:null,o.avst?['Avstånd från oss',o.avst]:null,o.temp?[o.typ==='bh'?'Tyngd':'Temperatur',o.temp]:null,['Om solen var en fotboll',o.fb]].filter(Boolean);
+  const dK=2*o.r*695700,fy=t=>{if(t<60)return fmt(t,t<1?2:t<10?1:0)+' sekunder';if(t<3600)return fmt(t/60,0)+' minuter';if(t<86400)return fmt(t/3600,t<36000?1:0)+' timmar';if(t<86400*400)return fmt(t/86400,0)+' dygn';const y=t/31557600;return y<1e6?fmt(y,0)+' år':fmt(y/1e6,1)+' miljoner år';},
+    extra=o.typ==='bana'?[]:[['Ljuset tar tvärs över',fy(dK/299792)],['Ett flygplan runt ekvatorn',fy(Math.PI*dK/900*3600)]];
+  const rows=[['Typ',o.typn],o.r>=1.5&&o.typ!=='bana'?['Bredd',`${fmt(o.r,o.r<10?1:0)} solar i rad`]:null,o.avst?['Avstånd från oss',o.avst]:null,o.temp?[o.typ==='bh'?'Tyngd':'Temperatur',o.temp]:null,...extra,['Om solen var en fotboll',o.fb]].filter(Boolean);
   $('gDl').innerHTML=rows.map(([a,b])=>`<dt>${a}</dt><dd>${b}</dd>`).join('');
   const tc=$('gThumb'),x=tc.getContext('2d');x.clearRect(0,0,240,240);x.fillStyle='#05070F';x.fillRect(0,0,240,240);
   if(o.typ==='bana'){x.setLineDash([8,7]);x.strokeStyle='rgba(201,212,242,.85)';x.lineWidth=3;x.beginPath();x.arc(120,120,90,0,7);x.stroke();x.setLineDash([]);starBall(x,120,120,10,'rgb(255,200,60)',true);ball(x,210,120,7,BYID[o.n.startsWith('Jorden')?'jorden':o.n.startsWith('Jupiter')?'jupiter':'neptunus']);}
   else gDrawObj(x,o,120,120,o.typ==='bh'?46:o.typ==='planet'?84:76);}
-function openGiants(){$('gPick').innerHTML=GI.map((o,i)=>`<button class="b" data-i="${i}">${o.typ==='bh'?'🕳️ ':o.typ==='bana'?'⭕ ':''}${o.n}</button>`).join('');
+let G3=null,G3tried=false;
+async function giants3d(){if(G3||G3tried)return;G3tried=true;try{const cv=$('gCv'),gl=document.createElement('canvas');gl.id='gGl';gl.style.cssText='position:absolute;left:0;top:0;width:100%;height:100%;display:block';cv.parentElement.insertBefore(gl,cv);cv.style.position='relative';cv.style.background='transparent';
+  const m=await import('./jattar3d.js');G3=await m.init(gl,{GI,POS:G_POS,IMG:IMGDIR});G3.start();drawGiants();}catch(e){console.warn('3D-jättar ej tillgängligt',e);const g=document.getElementById('gGl');if(g)g.remove();G3=null;$('gCv').style.background='';drawGiants();}}
+function openGiants(){giants3d();if(G3)G3.start();$('gPick').innerHTML=GI.map((o,i)=>`<button class="b" data-i="${i}">${o.typ==='bh'?'🕳️ ':o.typ==='bana'?'⭕ ':''}${o.n}</button>`).join('');
   $('gPick').querySelectorAll('button').forEach(b=>b.onclick=()=>{gTour=null;$('gTour').textContent='▶ Resa genom jättarna';gZoom=+b.dataset.i;});
   gSel=GI[Math.round(gShow)];$('gZoom').value=gShow;gUI();drawGiants();if(!gRaf)gRaf=requestAnimationFrame(gLoop);}
 $('gZoom').addEventListener('input',e=>{gTour=null;$('gTour').textContent='▶ Resa genom jättarna';gZoom=+e.target.value;gShow=gZoom;const k=Math.round(gShow);if(GI[k]!==gSel){gSel=GI[k];gUI();}drawGiants();});
