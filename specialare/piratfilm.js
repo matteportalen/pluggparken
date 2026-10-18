@@ -10,7 +10,7 @@ const SC=[
  {k:"03 · Jolly Roger",d:8,cap:[[0.8,"Piraterna hade ofta en svart flagga med dödskalle, kallad Jolly Roger, för att skrämma andra."]]},
  {k:"04 · Demokrati ombord",d:12.3,cap:[[0.8,"Ombord fick besättningen rösta. De valde sin kapten, och kunde också byta ut honom."],[6.7,"Bytet delades nästan lika, och den som blev skadad fick ersättning."]]},
  {k:"05 · Bytet",d:7.8,cap:[[0.8,"De stal mest socker, tobak, tyg och kryddor. Guld och silver var ovanligt."]]},
- {k:"06 · Kapare",d:8.8,cap:[[0.8,"Kapare hade kungens tillstånd att anfalla fiendens skepp. Pirater hade inget tillstånd, och därför var de brottslingar."]]},
+ {k:"06 · Kapare",d:9,cap:[[0.8,"Kapare hade kungens tillstånd att anfalla fiendens skepp. Pirater hade inget tillstånd, och därför var de brottslingar."]]},
  {k:"07 · Kända pirater",d:7.8,cap:[[0.8,"Svartskägg hette egentligen Edward Teach."],[3.8,"Anne Bonny och Mary Read var två kvinnliga pirater."]]},
  {k:"08 · Svarte Bart",d:7,cap:[[0.8,"Den mest framgångsrika hette Bartholomew Roberts. På tre år tog han över fyrahundra fartyg."]]},
  {k:"09 · Sanning och myter",d:8.2,cap:[[0.8,"De grävde nästan aldrig ner skatter och lät ingen gå på plankan."],[5.1,"Det mesta kommer från böcker och filmer."]]},
@@ -100,7 +100,7 @@ function scenes(E){
   /* 6 · Kapare mot pirater */
   const doc=(px,py,w,h,ok)=>{const c=x();c.save();c.fillStyle="#f2e6c4";c.fillRect(px-w/2,py-h/2,w,h);c.strokeStyle="#7a5a20";c.lineWidth=2;c.strokeRect(px-w/2,py-h/2,w,h);c.fillStyle="#9a7a40";for(let i=0;i<4;i++)c.fillRect(px-w*.36,py-h*.34+i*h*.16,w*.72,2);
     if(ok){c.fillStyle="#c93030";c.beginPath();c.arc(px+w*.22,py+h*.3,w*.12,0,TAU);c.fill();}else{c.strokeStyle="#d93030";c.lineWidth=5;c.beginPath();c.moveTo(px-w*.5,py-h*.5);c.lineTo(px+w*.5,py+h*.5);c.moveTo(px+w*.5,py-h*.5);c.lineTo(px-w*.5,py+h*.5);c.stroke();}c.restore();};
-  const s6=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2)/1);photo(1,t,8.8,1.12,.15+.5*g);cred(1,.55*(1-g));
+  const s6=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2)/1);photo(1,t,9,1.12,.15+.5*g);cred(1,.55*(1-g));
     if(g>0){c.save();c.globalAlpha=g;grad(a,[[0,"#13203c"],[1,"#2a3a58"]]);
       const pw=Math.min(a.w*.4,s*.7),dw=pw*.5,dh=dw*1.25,y=cy-s*.02,lx=cx-pw*.55,rx=cx+pw*.55;
       const q1=eo((t-2.4)/.8),q2=eo((t-5.2)/.8);
