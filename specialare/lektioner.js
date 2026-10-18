@@ -11,7 +11,7 @@ var LEKTIONER=[
 ["🔦","Hittat på havsbotten","Vraket hittades först 1985, nästan fyra kilometer ner. Där är det kolsvart och iskallt. Skeppet ligger i två delar."],
 ["💡","Visste du att …","… Titanic kallades \"osänkbart\" av många? Det är därför det blev en så stor nyhet när hon sjönk."]]},
 
-{id:"bermuda",titel:"Bermudatriangeln",kat:"Historia",e:"🔺",c:"#2E8B8B",rutor:[
+{id:"bermuda",film:"bermuda",titel:"Bermudatriangeln",kat:"Historia",e:"🔺",c:"#2E8B8B",rutor:[
 ["🔺","En mystisk triangel","Bermudatriangeln är ett område i Atlanten mellan Florida, Bermuda och Puerto Rico. Man säger att skepp och flygplan försvinner där."],
 ["📖","Hur myten började","Myten växte fram på 1950- och 60-talet, när tidningar och böcker skrev spännande berättelser om försvunna skepp och flygplan."],
 ["✈️","Flight 19","Den mest kända historien handlar om fem flygplan som försvann 1945. Piloterna blev vilsna i dåligt väder och fick slut på bränsle."],
