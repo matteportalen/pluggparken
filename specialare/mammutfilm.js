@@ -8,9 +8,9 @@ const SC=[
  {k:"01 · Istidens djur",d:11.2,cap:[[0.8,"Ullhårsmammuten levde under istiden. De sista försvann för ungefär 4 000 år sedan."],[7.4,"Då byggdes redan pyramiderna i Egypten."]]},
  {k:"02 · Stora betar",d:8.4,cap:[[0.8,"Den var ungefär lika stor som en afrikansk elefant, med långa böjda betar som kunde bli flera meter."]]},
  {k:"03 · Päls mot kylan",d:6,cap:[[0.8,"Den hade tjock päls och ett tjockt lager fett som skydd mot kylan."]]},
- {k:"04 · Grottmålningar",d:5.4,cap:[[0.8,"Människor jagade mammutar och ritade dem på grottväggar."]]},
- {k:"05 · Frusna fynd",d:8.6,cap:[[0.8,"Hela mammutar har hittats frusna i Sibirien."],[4.5,"Kalven Lyuba är över 40 000 år gammal."]]},
- {k:"06 · Tillbaka?",d:9.9,cap:[[0.8,"Forskare har tagit DNA från frusna mammutar och funderar på om man kan skapa mammutliknande djur."],[7.4,"Ingen har lyckats ännu."]]}
+ {k:"04 · Grottmålningar",d:5.3,cap:[[0.8,"Människor jagade mammutar och ritade dem på grottväggar."]]},
+ {k:"05 · Frusna fynd",d:8.5,cap:[[0.8,"Hela mammutar har hittats frusna i Sibirien."],[4.4,"Kalven Lyuba är över 40 000 år gammal."]]},
+ {k:"06 · Tillbaka?",d:10.1,cap:[[0.8,"Forskare har tagit DNA från frusna mammutar och funderar på om man kan skapa mammutliknande djur."],[7.6,"Ingen har lyckats ännu."]]}
 ];
 const META={mat:"slott",hud:"PLUGGPARKEN · SPECIALARE · FILM",titel:"Ullhårsmammuten",under:"En film i sju steg · ca 1,5 minut",
   slutRubrik:"Tack för att du har följt med",slutText:"Mammuten är borta, men vi lär oss om den än i dag. Filmen bygger på riktiga foton ur Wikimedia Commons. Källor står under bilderna.",igen:"↻ Se filmen igen"};
