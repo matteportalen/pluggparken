@@ -70,7 +70,7 @@ var LEKTIONER=[
 ["⚰️","En grav","Pyramiden byggdes som grav åt kungen, farao Cheops. De trodde att han skulle behöva sina saker i nästa liv."],
 ["🧭","Exakt byggd","Sidorna pekar nästan exakt mot norr, söder, öster och väster. Det är fantastiskt noggrant för så länge sedan."]]},
 
-{id:"blaval",titel:"Blåvalen",kat:"Natur",e:"🐋",c:"#2F7FB5",rutor:[
+{id:"blaval",film:"blaval",titel:"Blåvalen",kat:"Natur",e:"🐋",c:"#2F7FB5",rutor:[
 ["🐋","Det största djuret","Blåvalen är det största djur som någonsin har levt, större än alla dinosaurier."],
 ["📏","30 meter lång","Den kan bli ungefär 30 meter lång, som tre bussar efter varandra."],
 ["⚖️","Över 100 ton","En stor blåval väger mer än 100 ton. Bara tungan kan väga lika mycket som en elefant."],
