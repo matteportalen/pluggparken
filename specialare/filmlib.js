@@ -18,8 +18,12 @@ window.MPFilmLib={TAU,srand,
   const S=()=>{const a=A();return{a,s:Math.min(a.w,a.h),cx:a.x+a.w/2,cy:a.y+a.h/2,port:E.W<E.H*.9};};
   const cred=(n,a)=>{const c=x();c.save();c.globalAlpha=a==null?.6:a;c.fillStyle="#fff";let sz=11;c.font=font(600,sz);const tt=KR[n]||"",avail=E.W-2*Math.max(14,E.W*.03);while(sz>8&&c.measureText(tt).width>avail){sz-=.5;c.font=font(600,sz);}c.textAlign="right";c.fillText(tt,E.W-Math.max(14,E.W*.03),E.H-Math.max(96,E.H*.13));c.restore();};
   const photo=(n,t,dur,zoom,dim)=>{const c=x(),a=A(),im=img(n);if(!ok(im))return;const k=cl(t/Math.max(1,dur),0,1),z=lerp(1,zoom||1.12,k);
-    const sc=Math.max(a.w/im.naturalWidth,a.h/im.naturalHeight)*z,iw=im.naturalWidth*sc,ih=im.naturalHeight*sc;
-    c.save();c.beginPath();c.rect(a.x,a.y,a.w,a.h);c.clip();c.globalAlpha=eo(Math.max(0,t)/1.6);c.drawImage(im,a.x+a.w/2-iw/2,a.y+a.h/2-ih/2,iw,ih);
+    const ir=im.naturalWidth/im.naturalHeight,ar=a.w/a.h;
+    c.save();c.beginPath();c.rect(a.x,a.y,a.w,a.h);c.clip();c.globalAlpha=eo(Math.max(0,t)/1.6);
+    if(ir<ar*.85){/* stående bild i liggande ruta: hel bild i mitten (inte ihjälzoomad), suddig bakgrund */
+      const sb=Math.max(a.w/im.naturalWidth,a.h/im.naturalHeight)*1.15;try{c.filter="blur(22px)";}catch(e){}c.globalAlpha*=.55;c.drawImage(im,a.x+a.w/2-im.naturalWidth*sb/2,a.y+a.h/2-im.naturalHeight*sb/2,im.naturalWidth*sb,im.naturalHeight*sb);c.filter="none";c.globalAlpha=eo(Math.max(0,t)/1.6);
+      const hh=a.h*.9*(1+(z-1)*.35),ww=hh*ir;c.shadowColor="rgba(0,0,0,.6)";c.shadowBlur=30;c.drawImage(im,a.x+a.w/2-ww/2,a.y+a.h/2-hh/2,ww,hh);c.shadowBlur=0;}
+    else{const sc=Math.max(a.w/im.naturalWidth,a.h/im.naturalHeight)*z,iw=im.naturalWidth*sc,ih=im.naturalHeight*sc;c.drawImage(im,a.x+a.w/2-iw/2,a.y+a.h/2-ih/2,iw,ih);}
     c.fillStyle=`rgba(2,4,12,${dim||0})`;c.fillRect(a.x,a.y,a.w,a.h);
     const g=c.createRadialGradient(a.x+a.w/2,a.y+a.h/2,Math.min(a.w,a.h)*.3,a.x+a.w/2,a.y+a.h/2,Math.max(a.w,a.h)*.62);g.addColorStop(0,"rgba(2,3,10,0)");g.addColorStop(1,"rgba(2,3,10,.82)");c.fillStyle=g;c.fillRect(a.x,a.y,a.w,a.h);c.restore();};
   /* bakgrunder för egen grafik: grad(a,[[stopp,färg],…],al) */
