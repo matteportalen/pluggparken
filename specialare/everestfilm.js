@@ -9,11 +9,11 @@ const SC=[
  {k:"02 · Iskallt",d:7.9,cap:[[0.8,"Högst upp kan det vara långt under minus 30 grader. Där blåser också mycket kraftiga vindar."]]},
  {k:"03 · Lite syre",d:8.1,cap:[[0.8,"Högt upp är luften tunn. Det finns mycket mindre syre, så klättrarna bär ofta med sig syrgas."]]},
  {k:"04 · Första toppen",d:10,cap:[[0.8,"År 1953 nådde Edmund Hillary från Nya Zeeland och Tenzing Norgay från Nepal toppen för första gången."]]},
- {k:"05 · Sherpafolket",d:8.1,cap:[[0.8,"Sherpor som bor i bergen hjälper klättrare att hitta vägen och bära utrustning. De är vana vid höjden."]]},
+ {k:"05 · Sherpafolket",d:7.8,cap:[[0.8,"Sherpor som bor i bergen hjälper klättrare att hitta vägen och bära utrustning. De är vana vid höjden."]]},
  {k:"06 · Berget växer",d:6.9,cap:[[0.8,"Bergen i Himalaya trycks upp ännu i dag, ungefär 4 millimeter om året."]]}
 ];
 const META={hud:"PLUGGPARKEN · SPECIALARE · FILM",titel:"Mount Everest",under:"En film i sju steg · ca 1 minut",
-  slutRubrik:"Tack för att du har följt med",slutText:"Berget är fortfarande på väg uppåt. Filmen bygger på riktiga foton ur Wikimedia Commons. Källor står under bilderna.",igen:"↻ Se filmen igen"};
+  slutRubrik:"Tack för att du har följt med",slutText:"Himalaya växer fortfarande, år efter år. Filmen bygger på riktiga foton ur Wikimedia Commons. Källor står under bilderna.",igen:"↻ Se filmen igen"};
 const KR={1:"Foto: Vyacheslav Argenberg · CC BY 4.0 · Wikimedia Commons",2:"Foto: Daniel Oberhaus · CC BY-SA 4.0 · Wikimedia Commons",3:"Foto: Vlvescovo (Kami Rita Sherpa, 2010) · CC BY-SA 4.0 · Wikimedia Commons",4:"Foto: Jamling Tenzing Norgay · CC BY-SA 3.0 · Wikimedia Commons",5:"Foto: Goutam1962 · CC BY-SA 4.0 · Wikimedia Commons",6:"Foto: NASA · Public domain · Wikimedia Commons"};
 
 window.MPEverestFilm={start(host,o){
