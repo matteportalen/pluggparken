@@ -63,7 +63,9 @@ h2{font-size:1.6rem;line-height:1.1;margin:4px 0 6px}
 .grp{font-size:1.05rem;color:var(--gold);margin:18px 0 8px;letter-spacing:.3px}
 /* lägen */
 .lab{display:grid;gap:14px;align-items:start}
-@media(min-width:900px){.lab{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr)}}
+@media(min-width:900px){.lab{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr)}#jattar{margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding:0 18px}body:has(#jattar:not([hidden])){overflow-x:hidden}
+#jattar .lab{display:block;position:relative}#jattar .stage{border-radius:10px}
+#jattar .panel{position:absolute;right:14px;top:14px;width:min(350px,29vw);max-height:calc(100vh - 290px);overflow:auto;background:rgba(7,11,26,.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:rgba(255,255,255,.16);overflow-x:hidden}#jattar .ginfo{grid-template-columns:96px 1fr}#jattar .ginfo canvas{width:96px;height:96px}#jattar .ginfo dl{grid-template-columns:1fr;gap:0}#jattar .ginfo dt{margin-top:5px;font-size:.78rem;opacity:.7}#jattar .ginfo dd{margin:0}#jattar .note{display:none}}
 .panel{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:12px}
 .say{display:flex;gap:10px;align-items:flex-start;background:#fff;color:var(--ink);border-radius:18px;padding:10px 12px;font-size:1.02rem;line-height:1.35}
 .say p{margin:0}
@@ -1109,7 +1111,7 @@ const G_POS=(()=>{let x=0;return GI.map((o,i)=>{const gap=i?o.r*.35:0;const cx=x
 let gZoom=0,gShow=0,gSel=null,gRaf=0,gTour=null,gAuto=true;
 const cl=(x)=>Math.max(0,Math.min(1,x));
 function gCam(u,w,h){const i=Math.min(GI.length-2,Math.floor(u)),f=u-i,e=f*f*(3-2*f);
-  const D=Math.min(h,w*.95),sA=D*.27/GI[i].r,sB=D*.27/GI[i+1].r,s=Math.exp(Math.log(sA)+(Math.log(sB)-Math.log(sA))*e);
+  const D=Math.min(h,w*.95),sA=D*.35/GI[i].r,sB=D*.35/GI[i+1].r,s=Math.exp(Math.log(sA)+(Math.log(sB)-Math.log(sA))*e);
   // fokuspunkt: aktuell himlakropps högra kant, glider mot nästa
   const fA=G_POS[i],fB=G_POS[i+1],fx=fA+(fB-fA)*e;return{s,fx};}
 /* stjärna: solens yta i stjärnans färg, mörkare kant och glöd */
@@ -1127,8 +1129,8 @@ function bhBall(c,x,y,r){const g=c.createRadialGradient(x,y,r*.95,x,y,r*2.6);g.a
   c.fillStyle='#000';c.beginPath();c.arc(x,y,r,0,7);c.fill();c.strokeStyle='rgba(255,235,200,.9)';c.lineWidth=Math.max(1,r*.04);c.beginPath();c.arc(x,y,r*1.02,0,7);c.stroke();}
 function gDrawObj(c,o,x,cy,r){if(o.typ==='bana'){c.save();c.setLineDash([8,7]);c.strokeStyle='rgba(201,212,242,.75)';c.lineWidth=2;c.beginPath();c.arc(x,cy,r,0,7);c.stroke();c.restore();return;}
   if(o.typ==='bh')bhBall(c,x,cy,r);else if(o.typ==='planet')ball(c,x,cy,r,BYID[o.p]);else starBall(c,x,cy,r,o.col,true);}
-function drawGiants(){const cv=$('gCv'),{c,w,h}=fitCanvas(cv,(cv.clientWidth||400)<500?340:440),{s,fx}=gCam(gShow,w,h),base=h-34,X=wx=>w*.58+(wx-fx)*s;
-  const GL=!!G3;if(GL){c.clearRect(0,0,w,h);G3.set({w,h,s,fx,base});G3.draw();}else{c.fillStyle='#05070F';c.fillRect(0,0,w,h);
+function drawGiants(){const cv=$('gCv'),{c,w,h}=fitCanvas(cv,(cv.clientWidth||400)<500?360:Math.round(Math.max(480,Math.min(800,innerHeight-235)))),{s,fx}=gCam(gShow,w,h),base=h-34,cx=w*(innerWidth>=900?.40:.58),X=wx=>cx+(wx-fx)*s;
+  const GL=!!G3;if(GL){c.clearRect(0,0,w,h);G3.set({w,h,s,fx,base,cx});G3.draw();}else{c.fillStyle='#05070F';c.fillRect(0,0,w,h);
   const r0=srand(5);for(let k=0;k<110;k++){c.fillStyle=`rgba(255,255,255,${r0()*.5+.2})`;c.fillRect(r0()*w,r0()*h,1.5,1.5);}}
   c.strokeStyle='rgba(201,212,242,.25)';c.lineWidth=1;c.beginPath();c.moveTo(0,base+.5);c.lineTo(w,base+.5);c.stroke();
   const vis=[];

@@ -89,9 +89,9 @@ export async function init(canvas,opts){
     bgGeo.setAttribute('position',new THREE.BufferAttribute(pos,3));bgGeo.setAttribute('aSize',new THREE.BufferAttribute(sz,1));bgGeo.setAttribute('aPar',new THREE.BufferAttribute(par,1));bgGeo.setAttribute('aA',new THREE.BufferAttribute(aa,1));
     W=w;H=h;};
   let t0=performance.now();
-  function draw(){if(!P||disposed)return;const {w,h,s,fx,base}=P;if(w!==W||h!==H)resize(w,h);
+  function draw(){if(!P||disposed)return;const {w,h,s,fx,base,cx}=P;if(w!==W||h!==H)resize(w,h);
     const time=(performance.now()-t0)/1000;bgMat.uniforms.off.value=fx*s*.4;
-    objs.forEach((ob,i)=>{const o=ob.o,r=o.r*s,x=w*.58+(POS[i]-fx)*s,R=Math.min(r,h*8),ext=ob.ext;
+    objs.forEach((ob,i)=>{const o=ob.o,r=o.r*s,x=(cx||w*.58)+(POS[i]-fx)*s,R=Math.min(r,h*8),ext=ob.ext;
       if(r<.35||x+R*ext<-4||x-R*ext>w+4){ob.mesh.visible=false;return;}
       ob.mesh.visible=true;const yDown=base-R,sc=2*R*ext;ob.mesh.position.set(x,h-yDown,0);ob.mesh.scale.set(sc,sc,1);ob.mesh.renderOrder=-Math.round(r*1000)/1000;
       ob.mat.uniforms.time.value=time;ob.mat.uniforms.alpha.value=Math.max(0,Math.min(1,(r-.35)/2));
