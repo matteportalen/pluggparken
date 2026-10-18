@@ -62,6 +62,7 @@ button:focus-visible{outline:3px solid #FFC93C;outline-offset:2px}
 .card li{margin:3px 0;font-size:1.02rem}
 .card .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
 .card[hidden]{display:none}.card .cx{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;border:0;background:#E8EEFB;color:#1D2B53;font:800 15px/1 'Baloo 2',system-ui,sans-serif;cursor:pointer;display:grid;place-items:center}.card .cx:hover,.card .cx:focus-visible{background:#C9D6F5;outline:2px solid #3D5AFE}.card h2{padding-right:36px}
+.screen.xf .ui{animation:xfade .9s ease both}@keyframes xfade{from{opacity:0}to{opacity:1}}@media (prefers-reduced-motion:reduce){.screen.xf .ui{animation:none}}
 .chip.tourb{cursor:pointer;border:0;color:#fff;font-family:inherit;background:linear-gradient(135deg,#7A5CFF,#3D5AFE);pointer-events:auto}.chip.tourb[aria-pressed=true]{background:#E5484D}
 .scl{position:relative;z-index:7;display:flex;flex-direction:column;align-items:flex-start;gap:2px;font-weight:800;font-size:.8rem;color:#C9D4F2;background:var(--glass);border-radius:10px;padding:4px 10px}.scl i{display:block;height:6px;border:2px solid #fff;border-top:0;box-sizing:border-box;width:100px;transition:width .15s}.scl b{font-weight:800}
 .lmb{background:linear-gradient(135deg,rgba(255,229,138,.95),rgba(255,190,90,.95));color:#2b2100;font-weight:800;font-size:.9rem;border-radius:999px;padding:5px 14px;box-shadow:0 4px 18px rgba(255,200,80,.35);transition:opacity .4s,transform .4s;pointer-events:none}.lmb.off{opacity:0;transform:translateY(8px)}
@@ -108,14 +109,14 @@ dialog small{color:var(--muted)}
 
 <!-- Översikten -->
 <section id="home" class="screen">
-  <div class="ui top"><button class="back" id="hBack">← Rymdlabbet</button><span class="chip" id="date"></span><span class="hint" id="hHint">Dra för att vrida, nyp eller scrolla för att zooma. Tryck på en planet!</span></div>
+  <div class="ui top"><button class="back" id="hBack">← Rymdlabbet</button><span class="chip" id="date"></span><span class="hint" id="hHint">Dra för att vrida. Zooma ut för att komma ut i universum. Tryck på en planet!</span></div>
   <div class="ui bottom">
     <div class="bar">
       <button class="b" id="play" aria-label="Pausa">⏸</button>
       <div class="spdw"><button class="b" id="slowH" aria-label="Långsammare">🐢</button><span class="spd" id="spdH"></span><button class="b" id="fastH" aria-label="Snabbare">🐇</button></div>
       <button class="b" id="names" aria-pressed="true">Namn</button>
       <button class="b" id="now">Idag</button>
-      <button class="b go" id="toGal">🌌 Vintergatan</button>
+      <button class="b go" id="toGal">🌌 Universum</button>
       <button class="b" id="about" aria-label="Om modellen">ℹ️</button>
     </div>
   </div>
@@ -603,7 +604,7 @@ function galFrame(now,dt){const inG=mode==='galaxy';
   if(inG&&!galaxy)buildGalaxy();
   if(inG){
     if(gAuto&&!fly&&now>=gAuto.t0){const q=Math.min(1,(now-gAuto.t0)/gAuto.dur),e=q<.5?2*q*q:1-Math.pow(-2*q+2,2)/2;zT=gAuto.from+(gAuto.to-gAuto.from)*e;if(q>=1)gAuto=null;}
-    zC+=(zT-zC)*Math.min(1,dt*(gAuto?9:5));controls.maxDistance=Infinity;controls.enableZoom=false;
+    zC+=(zT-zC)*Math.min(1,dt*(gAuto?9:5));if(zC>.05)galSeen=true;if(galSeen&&zC<.024&&zT<.024&&!tour&&!gAuto&&!fly){homeSeam();return;}controls.maxDistance=Infinity;controls.enableZoom=false;
     if(!fly){const dz=dOf(zC),a=lq(4000,34000,dz),b=lq(34000,1.2e6,dz),c=lq(1.2e6,8e7,dz);
       const tg=new THREE.Vector3(GX*a,0,0).lerp(P31.clone().multiplyScalar(.5),b).multiplyScalar(1-c);{let W=0;const ws=[];STOP.forEach(t=>{if(!t.tgt)return;const w=1-sst(0,t.hw||.075,Math.abs(zC-t.z));if(w>0){ws.push([t,w]);W+=w;}});if(W>0){const k=Math.min(1,W),acc=new THREE.Vector3();ws.forEach(([t,w])=>acc.add(t.tgt().multiplyScalar(w/W)));tg.multiplyScalar(1-k).addScaledVector(acc,k);}}controls.target.copy(tg);const off=camera.position.clone().sub(controls.target);
       if(galPtr===0&&dz<2e5){const dn=off.clone().normalize();dn.lerp(dz>3000?GDES:GDIR,Math.min(1,dt*.7)).normalize();off.copy(dn);}
@@ -628,9 +629,14 @@ function galFrame(now,dt){const inG=mode==='galaxy';
 function openGalaxy(auto){focus=null;show('galaxy');controls.minDistance=8;controls.maxDistance=Infinity;zC=0;zT=0;gStep=-1;gAuto=auto?{from:0,to:1,t0:performance.now()+1600,dur:52000}:null;flyTo(null,GD0,.5);}
 function goGalZoom(to){tourEnd();gAuto={from:zT,to,t0:performance.now(),dur:Math.max(3000,Math.min(9000,Math.abs(to-zT)*26000))};}
 $('toGal').onclick=()=>openGalaxy(true);
+/* sömlöst mellan solsystemet och universum: att zooma ut förbi sista avståndet fortsätter in i universumresan, och att zooma in igen går tillbaka */
+let galSeen=false;
+function fadeUI(id){const e=document.getElementById(id);e.classList.add('xf');setTimeout(()=>e.classList.remove('xf'),1000);}
+function galaxySeam(){if(mode!=='home')return;const d=camera.position.distanceTo(controls.target);focus=null;show('galaxy');fadeUI('galaxy');controls.minDistance=8;controls.maxDistance=Infinity;zC=zT=zOf(Math.max(GD0,d));gStep=-1;gAuto=null;galSeen=true;ovHide();}
+function homeSeam(){if(mode!=='galaxy')return;const d=Math.max(30,camera.position.distanceTo(controls.target));tourEnd();gAuto=null;show('home');fadeUI('home');focus=null;controls.minDistance=8;controls.maxDistance=220;controls.target.set(0,0,0);camera.position.setLength(d);controls.update();galSeen=false;ovHide();}
 $('gOut').onclick=()=>{tourEnd();gAuto={from:zT,to:1,t0:performance.now(),dur:Math.max(5000,(1-zT)*52000)};};$('gIn').onclick=()=>{tourEnd();gAuto={from:zT,to:0,t0:performance.now(),dur:Math.max(4000,zT*30000)};};
 $('gZoom').oninput=e=>{tourEnd();zT=e.target.value/1000;gAuto=null;};
-canvas.addEventListener('wheel',e=>{if(mode!=='galaxy')return;e.preventDefault();tourEnd();zT=Math.max(0,Math.min(1,zT+e.deltaY*.0004));gAuto=null;},{passive:false});
+canvas.addEventListener('wheel',e=>{if(mode!=='galaxy')return;e.preventDefault();tourEnd();zT=Math.max(0,Math.min(1,zT+e.deltaY*.00025));gAuto=null;},{passive:false});
 const gpt=new Map();let gp0=0,gpz=0;
 canvas.addEventListener('pointerdown',e=>{galPtr++;gpt.set(e.pointerId,[e.clientX,e.clientY]);if(gpt.size===2){const a=[...gpt.values()];gp0=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]);gpz=zT;}});
 canvas.addEventListener('pointermove',e=>{if(!gpt.has(e.pointerId))return;gpt.set(e.pointerId,[e.clientX,e.clientY]);if(mode==='galaxy'&&gpt.size===2&&gp0>10){const a=[...gpt.values()],d=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]);tourEnd();zT=Math.max(0,Math.min(1,gpz-Math.log(d/gp0)*.2));gAuto=null;}});
@@ -639,10 +645,10 @@ canvas.addEventListener('pointermove',e=>{if(!gpt.has(e.pointerId))return;gpt.se
 /* zooma ut från en himlakropp: ett extra scrollsteg eller nyp ut när kameran stannat på största avståndet tar en tillbaka till solsystemet */
 let ov=0;const ovT=document.createElement('div');ovT.className='lmb off';ovT.hidden=true;ovT.style.cssText='position:fixed;left:50%;top:calc(120px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:6;white-space:nowrap';ovT.textContent='🔭 Zooma ut mer för att komma tillbaka till solsystemet';document.body.appendChild(ovT);
 function ovHide(){ov=0;ovT.classList.add('off');setTimeout(()=>{if(ov===0)ovT.hidden=true;},400);}
-const ovAt=()=>(mode==='planet'||mode==='earth')&&!fly&&camera.position.distanceTo(controls.target)>controls.maxDistance*.96;
-function ovAdd(n){if(!ovAt()){if(ov>0)ovHide();return;}ov+=n;if(ov>0&&ovT.hidden){ovT.hidden=false;requestAnimationFrame(()=>ovT.classList.remove('off'));}if(ov>420){goHome();}}
+const ovAt=()=>(mode==='planet'||mode==='earth'||mode==='home')&&!fly&&camera.position.distanceTo(controls.target)>controls.maxDistance*.96;
+function ovAdd(n){if(!ovAt()){if(ov>0)ovHide();return;}ov+=n;if(ov>0&&ovT.hidden){ovT.hidden=false;requestAnimationFrame(()=>ovT.classList.remove('off'));}ovT.textContent=mode==='home'?'🌌 Fortsätt zooma ut för att se hela universum':'🔭 Zooma ut mer för att komma tillbaka till solsystemet';if(ov>(mode==='home'?300:420)){if(mode==='home')galaxySeam();else goHome();}}
 canvas.addEventListener('wheel',e=>{if(e.deltaY>0)ovAdd(e.deltaY);else if(ov>0)ovHide();},{passive:true});
-let ovLast=0;canvas.addEventListener('pointermove',e=>{if((mode!=='planet'&&mode!=='earth')||gpt.size!==2)return;const a=[...gpt.values()],d=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]);if(ovLast&&d<ovLast)ovAdd((ovLast-d)*4);else if(ovLast&&d>ovLast+3&&ov>0)ovHide();ovLast=d;});
+let ovLast=0;canvas.addEventListener('pointermove',e=>{if((mode!=='planet'&&mode!=='earth'&&mode!=='home')||gpt.size!==2)return;const a=[...gpt.values()],d=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]);if(ovLast&&d<ovLast)ovAdd((ovLast-d)*4);else if(ovLast&&d>ovLast+3&&ov>0)ovHide();ovLast=d;});
 canvas.addEventListener('pointerup',()=>{ovLast=0;});
 $('gBack').onclick=()=>{tourEnd();gAuto=null;goHome();};
 $('gNames').onclick=()=>{showNames=!showNames;$('gNames').setAttribute('aria-pressed',showNames);$('names').setAttribute('aria-pressed',showNames);};
