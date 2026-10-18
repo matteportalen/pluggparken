@@ -127,7 +127,7 @@ var LEKTIONER=[
 ["📏","Mät själv","Det bästa sättet att vara säker är att mäta. Linjal slår ögonmått!"],
 ["🕵️","Gå till Illusioner","I Specialare finns en sida med illusioner du kan prova. Kolla om du kan lura hjärnan!"]]},
 
-{id:"dygn",titel:"Dygnet på andra planeter",kat:"Rymden",e:"🪐",c:"#7B5EA7",rutor:[
+{id:"dygn",film:"dygn",titel:"Dygnet på andra planeter",kat:"Rymden",e:"🪐",c:"#7B5EA7",rutor:[
 ["🌍","Ett dygn på jorden","Ett dygn är den tid det tar för en planet att snurra ett varv. På jorden är det 24 timmar."],
 ["🪐","Jupiter snurrar fort","Jupiter är störst av alla planeter men snurrar fortast. Ett dygn där är bara ungefär 10 timmar."],
 ["🔴","Mars","På Mars är ett dygn nästan som vårt: ungefär 24 timmar och 37 minuter."],
@@ -199,7 +199,7 @@ var LEKTIONER=[
 ["🟢","Färger","Syre ger grönt och ibland rött. Kväve kan ge blått och lila."],
 ["🇸🇪","Se det i Sverige","Bäst syns norrsken i norra Sverige, till exempel i Kiruna, en klar och mörk vinternatt."]]},
 
-{id:"atom",titel:"Allt är gjort av atomer",kat:"Tal",e:"⚛️",c:"#3B7DD8",rutor:[
+{id:"atom",film:"atom",titel:"Allt är gjort av atomer",kat:"Tal",e:"⚛️",c:"#3B7DD8",rutor:[
 ["⚛️","Små byggstenar","Allt omkring dig, du själv också, är gjort av atomer. De är otroligt små."],
 ["🔬","Hur små?","Du skulle kunna lägga flera hundra tusen atomer på rad över tjockleken av ett hårstrå."],
 ["🧩","Tre delar","En atom består av en kärna i mitten med protoner och neutroner, och elektroner som susar runt."],
@@ -262,7 +262,7 @@ var LEKTIONER=[
 ["🗺️","Sanning och myter","De grävde nästan aldrig ner skatter och lät ingen gå på plankan. Det mesta kommer från böcker och filmer."],
 ["🚤","Pirater idag","Pirater finns fortfarande, bland annat utanför Somalias kust. Idag använder de små snabba motorbåtar."]]},
 
-{id:"petrichor",titel:"Varför luktar det så speciellt när det regnar?",kat:"Natur",e:"🌧️",c:"#4C7F7A",rutor:[
+{id:"petrichor",film:"petrichor",titel:"Varför luktar det så speciellt när det regnar?",kat:"Natur",e:"🌧️",c:"#4C7F7A",rutor:[
 ["🌧️","Petrichor","Doften när det börjar regna efter en torr period har ett eget namn: petrichor."],
 ["📖","Ordet","Ordet kommer från grekiskan: petra betyder sten och ichor var vätskan i gudarnas ådror."],
 ["🦠","Bakterier i jorden","Marken innehåller bakterier som gör ett ämne som heter geosmin. Det är lukten av jord."],

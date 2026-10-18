@@ -15,5 +15,9 @@ function makeSphere(N){const n=N*N,rowIdx=new Uint16Array(n),lonIdx=new Uint16Ar
     for(let p=0;p<n;p++){const a=alpha[p],q=p*4;if(!a){o[q+3]=0;continue;}const s=lit===false?1:shade[p],u=(lonIdx[p]+rot)&1023,t=(rowIdx[p]*1024+u)*4;o[q]=d[t]*s;o[q+1]=d[t+1]*s;o[q+2]=d[t+2]*s;o[q+3]=a;}
     g.putImageData(id,0,0);return true;}};}
 let EARTH=null;img("2k_earth_daymap.jpg");
-window.MPKlot={jorden(rot){if(!EARTH)EARTH=makeSphere(300);return EARTH.draw("2k_earth_daymap.jpg",Math.round(rot)&1023,true)?EARTH.cv:null;}};
+const SPH={},TEXN={jorden:"2k_earth_daymap.jpg",jupiter:"2k_jupiter.jpg",mars:"2k_mars.jpg",venus:"2k_venus_atmosphere.jpg",manen:"2k_moon.jpg",merkurius:"2k_mercury.jpg",saturnus:"2k_saturn.jpg"};
+Object.keys(TEXN).forEach(k=>img(TEXN[k]));
+window.MPKlot={jorden(rot){if(!EARTH)EARTH=makeSphere(300);return EARTH.draw("2k_earth_daymap.jpg",Math.round(rot)&1023,true)?EARTH.cv:null;},
+  /* valfri planet: MPKlot.planet("jupiter",rot) ger en egen canvas per planet (flera i samma bild) */
+  planet(name,rot,lit){if(!SPH[name])SPH[name]=makeSphere(300);return SPH[name].draw(TEXN[name],Math.round(rot)&1023,lit)?SPH[name].cv:null;}};
 })();
