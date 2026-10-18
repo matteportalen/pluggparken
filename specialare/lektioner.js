@@ -361,7 +361,7 @@ var LEKTIONER=[
 ["🚢","Kabelfartyg","Särskilda fartyg lägger ut kablarna och lagar dem när de går sönder, ibland på flera kilometers djup."],
 ["📜","Den första kabeln","Den första kabeln över Atlanten lades 1858. Den skickade telegram, och ett meddelande tog många timmar."]]},
 
-{id:"chip",titel:"Mikrochipet",kat:"Tal",e:"🖥️",c:"#4A5D8F",rutor:[
+{id:"chip",film:"chip",titel:"Mikrochipet",kat:"Tal",e:"🖥️",c:"#4A5D8F",rutor:[
 ["🏢","Datorer stora som rum","De första datorerna på 1940-talet fyllde ett helt rum och vägde flera ton. De använde glasrör."],
 ["🔌","Transistorn","1947 uppfann forskare transistorn. Den är en liten strömbrytare som kan slå på och av tusentals gånger i sekunden."],
 ["🧱","Sand blir chip","Chip görs av kisel, som finns i sand. Det renas, skärs i skivor och bearbetas i extremt rena rum."],
