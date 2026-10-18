@@ -230,7 +230,7 @@ var LEKTIONER=[
 ["⚒️","Världen förändrades","Efteråt var det brist på arbetare. De som levde kunde kräva bättre betalt, och samhället förändrades."],
 ["💊","Idag finns medicin","Digerdöden nådde Sverige omkring år 1350. Idag kan pest botas med antibiotika."]]},
 
-{id:"elfte",titel:"11 september 2001",kat:"Historia",e:"🕊️",c:"#46607A",rutor:[
+{id:"elfte",film:"elfte",titel:"11 september 2001",kat:"Historia",e:"🕊️",c:"#46607A",rutor:[
 ["📅","En tisdag i september","Den 11 september 2001 attackerades USA av terrorister som kapade fyra flygplan."],
 ["🏙️","Tvillingtornen","Två plan flög in i tvillingtornen i World Trade Center i New York. Tornen föll samman."],
 ["🛩️","Fler platser","Ett tredje plan flög in i Pentagon nära Washington. Ett fjärde störtade på ett fält i Pennsylvania."],
