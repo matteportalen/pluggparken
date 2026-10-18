@@ -4,7 +4,7 @@
 (function(){
 const ROOT=MPFilmLib.root(document.currentScript),TAU=Math.PI*2;
 const SC=[
- {k:"Inledning",d:6.7,cap:[[0.5,"Svarta flaggor och snabba skepp. Det här är berättelsen om piraterna."]]},
+ {k:"Inledning",d:5.9,cap:[[0.5,"Svarta flaggor och snabba skepp. Det här är berättelsen om piraterna."]]},
  {k:"01 · Sjörövare",d:5.9,cap:[[0.8,"Pirater är sjörövare som anfaller fartyg och stjäl det de har ombord."]]},
  {k:"02 · Guldåldern",d:8.4,cap:[[0.8,"Den mest kända tiden för pirater var omkring 1650 till 1730, särskilt i Karibien."]]},
  {k:"03 · Jolly Roger",d:8,cap:[[0.8,"Piraterna hade ofta en svart flagga med dödskalle, kallad Jolly Roger, för att skrämma andra."]]},
@@ -42,7 +42,7 @@ function scenes(E){
     else{for(let i=0;i<2;i++){const sy=gy-58*u+i*24*u;c.beginPath();c.moveTo(cx-20*u,sy);c.quadraticCurveTo(cx,sy+4*u,cx+20*u,sy);c.lineTo(cx+18*u,sy+20*u);c.quadraticCurveTo(cx,sy+24*u,cx-18*u,sy+20*u);c.closePath();c.fill();}}
     c.restore();};
 
-  const s0=(t)=>{photo(1,t,6.7,1.12,.3);const f=title(t,"PIRATERNA","SJÖROVARE I SVART FLAGGA","#ffcf8a");cred(1,.55*f);};
+  const s0=(t)=>{photo(1,t,5.9,1.12,.3);const f=title(t,"PIRATERNA","SJÖROVARE I SVART FLAGGA","#ffcf8a");cred(1,.55*f);};
 
   /* 1 · Sjörövare: pirater jagar ett handelsfartyg */
   const s1=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-1.6)/1);photo(1,t,5.9,1.1,.15+.5*g);cred(1,.55*(1-g));
