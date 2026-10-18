@@ -66,6 +66,7 @@ h2{font-size:1.6rem;line-height:1.1;margin:4px 0 6px}
 @media(min-width:900px){.lab{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr)}#jattar{margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding:0 18px}body:has(#jattar:not([hidden])){overflow-x:hidden}
 #jattar .lab{display:block;position:relative}#jattar .stage{border-radius:10px}
 #jattar .panel{position:absolute;right:14px;top:14px;width:min(350px,29vw);max-height:calc(100vh - 290px);overflow:auto;background:rgba(7,11,26,.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:rgba(255,255,255,.16);overflow-x:hidden}#jattar .ginfo{grid-template-columns:96px 1fr}#jattar .ginfo canvas{width:96px;height:96px}#jattar .ginfo dl{grid-template-columns:1fr;gap:0}#jattar .ginfo dt{margin-top:5px;font-size:.78rem;opacity:.7}#jattar .ginfo dd{margin:0}#jattar .note{display:none}}
+@media (orientation:landscape) and (max-height:520px){body{padding-top:0}.wrap{padding:6px 8px 8px}#jattar{margin:0;padding:0}#jattar>h2{display:none}#jattar>.back{position:absolute;left:14px;top:14px;z-index:6;padding:4px 10px;font-size:.85rem;opacity:.9}#jattar .lab{display:block;position:relative}#jattar .stage{border-radius:8px}#jattar .slider{margin-top:4px}#jattar .ctrl{position:absolute;left:12px;bottom:44px;margin:0;z-index:5}#jattar .ctrl .b{padding:4px 10px;font-size:.8rem;min-height:0;background:rgba(7,11,26,.7);backdrop-filter:blur(8px)}#jattar #gPick{display:none}#jattar .panel{position:absolute;right:10px;top:10px;width:min(270px,34vw);max-height:calc(100vh - 110px);overflow:auto;padding:8px 10px;background:rgba(7,11,26,.62);backdrop-filter:blur(12px);border-color:rgba(255,255,255,.16)}#jattar .ginfo,#jattar .note{display:none}#jattar .say .big{font-size:1.1rem}#jattar .panel p{font-size:.85rem;margin:3px 0}}
 .panel{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:12px}
 .say{display:flex;gap:10px;align-items:flex-start;background:#fff;color:var(--ink);border-radius:18px;padding:10px 12px;font-size:1.02rem;line-height:1.35}
 .say p{margin:0}
@@ -468,7 +469,7 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;bac
 <script src="../../svarthal.js"></script>
 <script src="../../zoomfilm.js"></script>
 <script src="../../stjarnfilm.js"></script>
-<script src="../../huvud.js" data-titel="Rymdlabbet" data-ikon="🔭" data-hem="../../" data-portal="ovriga"></script>
+<script src="../../huvud.js" data-titel="Rymdlabbet" data-ikon="🔭" data-hem="../../" data-portal="ovriga" data-liggande="ja"></script>
 <script type="module">
 const $=id=>document.getElementById(id);
 const DEG=Math.PI/180;
@@ -512,7 +513,7 @@ let cur='home';
 function show(id){if('speechSynthesis' in window)speechSynthesis.cancel();document.querySelectorAll('.screen').forEach(s=>s.hidden=s.id!==id);cur=id;window.scrollTo(0,0);if(window.MPS)MPS.visa(id);
   if(id==='dag'||id==='arstid')open3D(id);else stop3D();
   if(id==='morker')openEcl();if(id==='storlek')openSize();if(id==='avstand')openDist();if(id==='ar')openYear();if(id==='vikt')openWeight();
-  if(id==='zoom')openZoom();if(id==='jattar')openGiants();if(id==='hal')openHole();if(id==='himmel')openNight();if(id==='liv')openLife();}
+  if(id==='zoom')openZoom();if(id==='jattar')openGiants();if(id==='hal')openHole();if(id==='himmel')openNight();if(id==='liv')openLife();try{rotChk()}catch(e){}}
 document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>show(b.dataset.go));
 // filmen Inuti ett svart hål (svarthal.js) öppnas över hela fönstret
 document.querySelectorAll('[data-film]').forEach(b=>b.onclick=()=>{const F={zoom:window.MPZoomFilm,stjarna:window.MPStjarnFilm}[b.dataset.film]||window.MPSvartHal;if(F){const prev=document.body.style.overflow;document.body.style.overflow='hidden';F.start(document.body,{overlay:true,onClose:()=>{document.body.style.overflow=prev;b.focus();}});}});
@@ -1129,7 +1130,7 @@ function bhBall(c,x,y,r){const g=c.createRadialGradient(x,y,r*.95,x,y,r*2.6);g.a
   c.fillStyle='#000';c.beginPath();c.arc(x,y,r,0,7);c.fill();c.strokeStyle='rgba(255,235,200,.9)';c.lineWidth=Math.max(1,r*.04);c.beginPath();c.arc(x,y,r*1.02,0,7);c.stroke();}
 function gDrawObj(c,o,x,cy,r){if(o.typ==='bana'){c.save();c.setLineDash([8,7]);c.strokeStyle='rgba(201,212,242,.75)';c.lineWidth=2;c.beginPath();c.arc(x,cy,r,0,7);c.stroke();c.restore();return;}
   if(o.typ==='bh')bhBall(c,x,cy,r);else if(o.typ==='planet')ball(c,x,cy,r,BYID[o.p]);else starBall(c,x,cy,r,o.col,true);}
-function drawGiants(){const cv=$('gCv'),{c,w,h}=fitCanvas(cv,(cv.clientWidth||400)<500?360:Math.round(Math.max(480,Math.min(800,innerHeight-235)))),{s,fx}=gCam(gShow,w,h),base=h-34,cx=w*(innerWidth>=900?.40:.58),X=wx=>cx+(wx-fx)*s;
+function drawGiants(){const cv=$('gCv'),{c,w,h}=fitCanvas(cv,gLand()?Math.max(200,innerHeight-96):(cv.clientWidth||400)<500?360:Math.round(Math.max(480,Math.min(800,innerHeight-235)))),{s,fx}=gCam(gShow,w,h),base=h-34,cx=w*(innerWidth>=900||gLand()?.38:.58),X=wx=>cx+(wx-fx)*s;
   const GL=!!G3;if(GL){c.clearRect(0,0,w,h);G3.set({w,h,s,fx,base,cx});G3.draw();}else{c.fillStyle='#05070F';c.fillRect(0,0,w,h);
   const r0=srand(5);for(let k=0;k<110;k++){c.fillStyle=`rgba(255,255,255,${r0()*.5+.2})`;c.fillRect(r0()*w,r0()*h,1.5,1.5);}}
   c.strokeStyle='rgba(201,212,242,.25)';c.lineWidth=1;c.beginPath();c.moveTo(0,base+.5);c.lineTo(w,base+.5);c.stroke();
@@ -1169,10 +1170,14 @@ function gText(){const o=gSel;
   const tc=$('gThumb'),x=tc.getContext('2d');x.clearRect(0,0,240,240);x.fillStyle='#05070F';x.fillRect(0,0,240,240);
   if(o.typ==='bana'){x.setLineDash([8,7]);x.strokeStyle='rgba(201,212,242,.85)';x.lineWidth=3;x.beginPath();x.arc(120,120,90,0,7);x.stroke();x.setLineDash([]);starBall(x,120,120,10,'rgb(255,200,60)',true);ball(x,210,120,7,BYID[o.n.startsWith('Jorden')?'jorden':o.n.startsWith('Jupiter')?'jupiter':'neptunus']);}
   else gDrawObj(x,o,120,120,o.typ==='bh'?46:o.typ==='planet'?84:76);}
+const gLand=()=>innerHeight<=520&&innerWidth>innerHeight;
 let G3=null,G3tried=false;
 async function giants3d(){if(G3||G3tried)return;G3tried=true;try{const cv=$('gCv'),gl=document.createElement('canvas');gl.id='gGl';gl.style.cssText='position:absolute;left:0;top:0;width:100%;height:100%;display:block';cv.parentElement.insertBefore(gl,cv);cv.style.position='relative';cv.style.background='transparent';
   const m=await import('./jattar3d.js');G3=await m.init(gl,{GI,POS:G_POS,IMG:IMGDIR});G3.start();drawGiants();}catch(e){console.warn('3D-jättar ej tillgängligt',e);const g=document.getElementById('gGl');if(g)g.remove();G3=null;$('gCv').style.background='';drawGiants();}}
-function openGiants(){giants3d();if(G3)G3.start();$('gPick').innerHTML=GI.map((o,i)=>`<button class="b" data-i="${i}">${o.typ==='bh'?'🕳️ ':o.typ==='bana'?'⭕ ':''}${o.n}</button>`).join('');
+const rotHint=document.createElement('div');rotHint.style.cssText='position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:60;background:rgba(10,16,40,.92);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:8px 14px;font:700 .9rem Inter,system-ui,sans-serif;display:none;gap:10px;align-items:center;white-space:nowrap';rotHint.innerHTML='📱 Vrid mobilen på tvären <button style="border:0;background:none;color:#fff;font-size:1rem;cursor:pointer" aria-label="Stäng">✕</button>';document.body.appendChild(rotHint);
+function rotChk(){let off=false;try{off=sessionStorage.getItem('mp-vrid')==='1'}catch(e){}rotHint.style.display=(cur==='jattar'&&innerWidth<700&&innerHeight>innerWidth&&!off)?'flex':'none';}
+rotHint.querySelector('button').onclick=()=>{try{sessionStorage.setItem('mp-vrid','1')}catch(e){}rotChk();};addEventListener('resize',()=>{rotChk();if(cur==='jattar')drawGiants();});addEventListener('orientationchange',()=>setTimeout(()=>{rotChk();if(cur==='jattar')drawGiants();},250));
+function openGiants(){giants3d();if(G3)G3.start();setTimeout(rotChk,50);$('gPick').innerHTML=GI.map((o,i)=>`<button class="b" data-i="${i}">${o.typ==='bh'?'🕳️ ':o.typ==='bana'?'⭕ ':''}${o.n}</button>`).join('');
   $('gPick').querySelectorAll('button').forEach(b=>b.onclick=()=>{gTour=null;$('gTour').textContent='▶ Resa genom jättarna';gZoom=+b.dataset.i;});
   gSel=GI[Math.round(gShow)];$('gZoom').value=gShow;gUI();drawGiants();if(!gRaf)gRaf=requestAnimationFrame(gLoop);}
 $('gZoom').addEventListener('input',e=>{gTour=null;$('gTour').textContent='▶ Resa genom jättarna';gZoom=+e.target.value;gShow=gZoom;const k=Math.round(gShow);if(GI[k]!==gSel){gSel=GI[k];gUI();}drawGiants();});
