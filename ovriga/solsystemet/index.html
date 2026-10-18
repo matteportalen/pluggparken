@@ -444,7 +444,7 @@ const GSTEG=[
 function gCardUpd(){let k=0;GSTEG.forEach((s,i)=>{if(zC>=s[0])k=i;});if(k===gStep)return;gStep=k;const s=GSTEG[k];
   $('gCard').hidden=false;$('gCard').innerHTML=`<button class="cx" id="gX" aria-label="Stäng rutan" title="Stäng">✕</button><h2>🌌 ${s[2]}</h2><ul>${s[3].map(x=>`<li>${x}</li>`).join('')}</ul>`;$('gX').onclick=()=>{$('gCard').hidden=true};}
 function gDist(){const ly=Math.exp(glerp(Math.log(7e-4),Math.log(150000),zC));
-  if(ly<.01)return'ca '+Math.round(ly*63241)+' AU från solen';if(ly<10)return'ca '+ly.toFixed(1).replace('.',',')+' ljusår från solen';
+  if(ly<.1)return'ca '+Math.round(ly*63241).toLocaleString('sv-SE')+' AU från solen';if(ly<10)return'ca '+ly.toFixed(1).replace('.',',')+' ljusår från solen';
   const r=ly<1000?10:ly<20000?500:5000;return'ca '+(Math.round(ly/r)*r).toLocaleString('sv-SE')+' ljusår från solen';}
 // namnlappar i galaxen
 const GLB=[['☀️ Du är här (solen)','here',()=>new THREE.Vector3(0,0,0),z=>z>.34,0,-34],['Orionarmen','',()=>new THREE.Vector3(0,0,0),z=>z>.62&&z<.97,70,10],['Mitten: ett jättelikt svart hål','',()=>new THREE.Vector3(GX,0,0),z=>z>.8,0,-8]].map(([t,c,fn,vis,ox,oy])=>{const e=document.createElement('div');e.className='lbl g '+c;e.textContent=t;$('labels').appendChild(e);return{e,fn,vis,ox,oy};});
@@ -463,8 +463,8 @@ function galFrame(now,dt){const inG=mode==='galaxy';
     $('gZoom').value=Math.round(zC*1000);gCardUpd();$('gDist').textContent=gDist();
   }else{controls.enableZoom=true;if(!fly&&controls.maxDistance!==220)controls.maxDistance=220;}
   const d=camera.position.length();   // avstånd till solen: sol och planeter skalas upp med avståndet så att de förblir små prickar (aldrig ljusår breda)
-  const k1=Math.max(1,d/450),k2=Math.max(1,d/330);
-  sun.scale.setScalar(k1);glow.scale.setScalar(glerp(26,5,sst(0,.5,Math.min(1,Math.log(Math.max(1,d/95))/Math.log(GD1/GD0)*1.0))));
+  const fz=1-sst(250,5000,d)*.97,k1=Math.max(1,d/223*fz),k2=Math.max(1,d/330*fz);   // solen och planeterna krymper till ingenting i Vintergatan
+  sun.scale.setScalar(k1);glow.scale.setScalar(Math.max(.01,26*(1-sst(300,4000,d))));
   PL.forEach(p=>{p.obj.scale.setScalar(k2);p.line.material.opacity=.28*(1-sst(250,900,d));});moonOrbit.material.opacity=mode==='earth'?.55:.25*(1-sst(250,900,d));
   if(galaxy)galaxy.visible=inG||d>1500;
   const b=1-sst(300,1000,d);sky.visible=b>.02;sky.material.color.setRGB(.53*b,.56*b,.66*b);sky.position.copy(camera.position);
