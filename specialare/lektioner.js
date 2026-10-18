@@ -417,7 +417,7 @@ var LEKTIONER=[
 ["❄️","Mint känns kall","Menthol i mynta aktiverar nerver som känner kyla. Munnen blir inte kallare, men hjärnan tror det."],
 ["🫐","Mirakelbär","Mirakelbäret från Västafrika gör att sur mat smakar sött i ungefär en halvtimme. Du kan äta en citron som om det vore godis."]]}
 ,
-{id:"orkan",titel:"Orkaner",kat:"Natur",e:"🌀",c:"#3A6EA5",rutor:[
+{id:"orkan",film:"orkan",titel:"Orkaner",kat:"Natur",e:"🌀",c:"#3A6EA5",rutor:[
 ["🌊","Börjar över varmt hav","En orkan bildas över ett hav som är minst ungefär 26 grader varmt. Varm, fuktig luft stiger uppåt och bildar åskmoln."],
 ["🔄","Snurrar","Jordens rotation får vindarna att börja snurra. På norra halvklotet snurrar de moturs, åt vänster."],
 ["👁️","Ögat","I mitten finns ögat, ett område där det nästan är vindstilla och ibland sol. Runt ögat står ögonväggen med de allra starkaste vindarna."],
