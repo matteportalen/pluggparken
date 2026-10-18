@@ -5,7 +5,7 @@
 const ROOT=MPFilmLib.root(document.currentScript),TAU=Math.PI*2;
 const SC=[
  {k:"Inledning",d:8.5,cap:[[0.5,"För nästan 700 år sedan drabbades Europa av en sjukdom som förändrade världen. Det här är berättelsen om digerdöden."]]},
- {k:"01 · Från Asien",d:11.9,cap:[[0.8,"Digerdöden spreds över Europa på 1300-talet. Den kom med handelsvägar och skepp."],[7.6,"Den nådde Europa omkring år 1347."]]},
+ {k:"01 · Från Asien",d:11.5,cap:[[0.8,"Digerdöden spreds över Europa på 1300-talet. Den kom med handelsvägar och skepp."],[7.6,"Den nådde Europa omkring år 1347."]]},
  {k:"02 · Pest",d:7.5,cap:[[0.8,"Sjukdomen kallas pest. Bakterien spreds av loppor som levde på råttor och på människor."]]},
  {k:"03 · Många dog",d:8,cap:[[0.8,"Mellan en tredjedel och hälften av alla i Europa dog. Det var kanske 25 miljoner människor."]]},
  {k:"04 · Världen förändrades",d:8.5,cap:[[0.8,"Efteråt var det brist på arbetare. De som levde kunde kräva bättre betalt, och samhället förändrades."]]},
