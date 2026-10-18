@@ -19,7 +19,7 @@ var LEKTIONER=[
 ["🌀","Farligt väder","Området har kraftiga stormar och starka strömmar. Det förklarar många av olyckorna, utan att det behövs något mystiskt."],
 ["🕵️","Varför lever myten?","Spännande historier sprids lätt, och en gåta är roligare än ett vanligt svar. Bra att tänka på: fråga alltid hur man vet något!"]]},
 
-{id:"himlen",titel:"Varför är himlen blå?",kat:"Natur",e:"🌤️",c:"#4A90D9",rutor:[
+{id:"himlen",film:"himlen",titel:"Varför är himlen blå?",kat:"Natur",e:"🌤️",c:"#4A90D9",rutor:[
 ["☀️","Solljus är alla färger","Solens ljus ser vitt ut, men det innehåller alla regnbågens färger blandade."],
 ["🌈","Ljus som vågor","Varje färg är en ljusvåg. Blått ljus har korta vågor och rött ljus har långa vågor."],
 ["🌬️","Luften studsar ljuset","Ljuset träffar luftens små molekyler. De sprider det korta blå ljuset åt alla håll, mycket mer än det röda."],
