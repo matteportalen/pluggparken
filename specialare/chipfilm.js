@@ -6,7 +6,7 @@ const ROOT=MPFilmLib.root(document.currentScript),TAU=Math.PI*2;
 const SC=[
  {k:"Inledning",d:8.2,cap:[[0.5,"Mer än tio miljarder strömbrytare på ett chip stort som en nagel. Det här är berättelsen om mikrochipet."]]},
  {k:"01 · Datorer stora som rum",d:12.7,cap:[[0.8,"De första datorerna, på 1940-talet, fyllde ett helt rum och vägde flera ton. De använde glasrör."],[8.7,"Datorn ENIAC hade nästan 18 000 glasrör."]]},
- {k:"02 · Transistorn",d:14.6,cap:[[0.8,"År 1947 uppfann forskare transistorn. Den är en liten strömbrytare som kan slå på och av tusentals gånger i sekunden."],[10.7,"Tre av dem fick senare Nobelpriset för uppfinningen."]]},
+ {k:"02 · Transistorn",d:14.3,cap:[[0.8,"År 1947 uppfann forskare transistorn. Den är en liten strömbrytare som kan slå på och av, tusentals gånger i sekunden."],[10.4,"Tre av dem fick senare Nobelpriset för uppfinningen."]]},
  {k:"03 · Det första chipet",d:9.7,cap:[[0.8,"År 1958 lyckades Jack Kilby sätta flera transistorer på samma bit material. Det blev det första chipet."]]},
  {k:"04 · Sand blir chip",d:9.7,cap:[[0.8,"Chip görs av kisel, som finns i sand. Det renas, skärs i skivor och bearbetas i extremt rena rum."]]},
  {k:"05 · Mindre än ett virus",d:8.1,cap:[[0.8,"Transistorerna är bara några miljondels millimeter stora. Ett hårstrå är tiotusentals gånger tjockare."]]},
@@ -40,12 +40,12 @@ function scenes(E){
       c.restore();}};
 
   /* 2 · transistorn: en liten strömbrytare */
-  const s2=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.4)/1.1);photo(2,t,14.6,1.1,.15+.5*g);cred(2,.55*(1-g));
+  const s2=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.4)/1.1);photo(2,t,14.3,1.1,.15+.5*g);cred(2,.55*(1-g));
     if(g>0){c.save();c.globalAlpha=g;space(a,1);
-      if(t<10.7){const on=Math.sin(t*(t>6?9:2.2))>0,w=Math.min(a.w*.4,s*.7),lx=cx-w/2,y=cy;c.strokeStyle="#cfd5df";c.lineWidth=5;c.beginPath();c.moveTo(lx,y);c.lineTo(lx+w*.3,y);c.moveTo(lx+w*.7,y);c.lineTo(lx+w,y);c.stroke();dot(lx+w*.3,y,7,"#fff");dot(lx+w*.7,y,7,"#fff");c.beginPath();c.moveTo(lx+w*.3,y);c.lineTo(lx+w*.7,on?y:y-w*.22);c.stroke();
+      if(t<10.4){const on=Math.sin(t*(t>6?9:2.2))>0,w=Math.min(a.w*.4,s*.7),lx=cx-w/2,y=cy;c.strokeStyle="#cfd5df";c.lineWidth=5;c.beginPath();c.moveTo(lx,y);c.lineTo(lx+w*.3,y);c.moveTo(lx+w*.7,y);c.lineTo(lx+w,y);c.stroke();dot(lx+w*.3,y,7,"#fff");dot(lx+w*.7,y,7,"#fff");c.beginPath();c.moveTo(lx+w*.3,y);c.lineTo(lx+w*.7,on?y:y-w*.22);c.stroke();
         const bx=lx+w+Math.max(40,s*.08);c.fillStyle=on?"#ffe27a":"#3a3f55";c.beginPath();c.arc(bx,y,Math.max(16,s*.04),0,TAU);c.fill();
         tx("1947",cx,a.y+a.h*.14,"#ffd86b","center",Math.max(30,s*.085),700);tx("på · av · på · av …",cx,y+Math.max(70,s*.15),"#cfd8ff","center",Math.max(16,s*.042),700);}
-      else{const q=eo((t-10.7)/1),r=Math.max(18,s*.045);c.globalAlpha=g*q;for(let i=0;i<3;i++){const px=cx+(i-1)*r*4;c.fillStyle="#d9a84a";c.beginPath();c.arc(px,cy,r,0,TAU);c.fill();c.fillStyle="#fff";c.fillRect(px-r*.1,cy-r*.9,r*.2,r*.5);c.font=`700 ${Math.round(r*.9)}px "Source Serif 4",Georgia,serif`;tx("★",px,cy+r*.3,"#8a5a10","center",r,700);}tx("Nobelpriset",cx,cy+r*2.4,"#ffd86b","center",Math.max(20,s*.055),700);}
+      else{const q=eo((t-10.4)/1),r=Math.max(18,s*.045);c.globalAlpha=g*q;for(let i=0;i<3;i++){const px=cx+(i-1)*r*4;c.fillStyle="#d9a84a";c.beginPath();c.arc(px,cy,r,0,TAU);c.fill();c.fillStyle="#fff";c.fillRect(px-r*.1,cy-r*.9,r*.2,r*.5);c.font=`700 ${Math.round(r*.9)}px "Source Serif 4",Georgia,serif`;tx("★",px,cy+r*.3,"#8a5a10","center",r,700);}tx("Nobelpriset",cx,cy+r*2.4,"#ffd86b","center",Math.max(20,s*.055),700);}
       c.restore();}};
 
   /* 3 · flera transistorer på samma bit: första chipet */
