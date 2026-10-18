@@ -46,7 +46,7 @@ function scenes(E){
   /* 1 · datorn som fyller ett rum, glasrör */
   const s1=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.4)/1.1);photo(1,t,12.7,1.1,.15+.5*g);cred(1,.55*(1-g));
     if(g>0){c.save();c.globalAlpha=g;grad(a,[[0,"#1a1c24"],[1,"#2a2d38"]]);const w=Math.min(a.w*.82,s*1.5),h=Math.min(a.h*.5,s*.6),lx=cx-w/2,y=cy-h*.55,cols=24,rows=10,cw=w/cols,ch=h/rows;
-      for(let r=0;r<rows;r++)for(let q=0;q<cols;q++){const gl=.5+.5*Math.sin(t*3+r*.9+q*1.3);c.fillStyle=`rgba(255,${180+gl*60|0},${90+gl*60|0},${.35+.4*gl})`;c.fillRect(lx+q*cw+cw*.3,y+r*ch+ch*.1,cw*.4,ch*.8);}
+      for(let r=0;r<rows;r++)for(let q=0;q<cols;q++){const f=.5+.5*Math.sin(t*3+r*.9+q*1.3),X=lx+q*cw+cw*.5,Y=y+r*ch+ch*.5,tw=cw*.3,th=ch*.42;gl(X,Y,cw*.9,`rgba(255,170,70,${.12+.2*f})`);const bg=c.createLinearGradient(X-tw,Y,X+tw,Y);bg.addColorStop(0,`rgba(255,200,120,${.25+.2*f})`);bg.addColorStop(.5,`rgba(255,235,190,${.5+.3*f})`);bg.addColorStop(1,`rgba(255,200,120,${.25+.2*f})`);c.fillStyle=bg;c.beginPath();c.ellipse(X,Y-th*.15,tw,th*.85,0,0,TAU);c.fill();c.fillStyle="rgba(110,110,120,.8)";c.fillRect(X-tw*.7,Y+th*.55,tw*1.4,th*.35);c.strokeStyle=`rgba(255,120,40,${.5+.5*f})`;c.lineWidth=1.2;c.beginPath();c.moveTo(X-tw*.25,Y+th*.5);c.lineTo(X,Y-th*.35);c.lineTo(X+tw*.25,Y+th*.5);c.stroke();}
       c.strokeStyle="rgba(255,255,255,.4)";c.lineWidth=3;c.strokeRect(lx,y,w,h);
       tx("ett helt rum",cx,a.y+a.h*.1,"#ffd86b","center",Math.max(19,s*.052),700);
       if(t>8.7){c.globalAlpha=g*eo((t-8.7)/1);const n=Math.round(18000*eo((t-8.9)/2));tx("ENIAC: "+n.toLocaleString("sv-SE").replace(/ /g," ")+" glasrör",cx,y+h+Math.max(40,s*.09),"#fff","center",Math.max(19,s*.052),700);}
@@ -56,9 +56,9 @@ function scenes(E){
   const s2=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.4)/1.1);photo(2,t,14.3,1.1,.15+.5*g);cred(2,.55*(1-g));
     if(g>0){c.save();c.globalAlpha=g;space(a,1);
       if(t<10.4){const on=Math.sin(t*(t>6?9:2.2))>0,w=Math.min(a.w*.4,s*.7),lx=cx-w/2,y=cy;c.strokeStyle="#cfd5df";c.lineWidth=5;c.beginPath();c.moveTo(lx,y);c.lineTo(lx+w*.3,y);c.moveTo(lx+w*.7,y);c.lineTo(lx+w,y);c.stroke();dot(lx+w*.3,y,7,"#fff");dot(lx+w*.7,y,7,"#fff");c.beginPath();c.moveTo(lx+w*.3,y);c.lineTo(lx+w*.7,on?y:y-w*.22);c.stroke();
-        const bx=lx+w+Math.max(40,s*.08);c.fillStyle=on?"#ffe27a":"#3a3f55";c.beginPath();c.arc(bx,y,Math.max(16,s*.04),0,TAU);c.fill();
+        const bx=lx+w+Math.max(40,s*.08);if(on)gl(bx,y,s*.22,"rgba(255,226,120,.6)");c.fillStyle=on?"#ffe27a":"#3a3f55";c.beginPath();c.arc(bx,y,Math.max(16,s*.04),0,TAU);c.fill();if(on){for(let i=0;i<5;i++){const q=((t*1.8+i*.2)%1);gl(lerp(lx,lx+w*.3,Math.min(1,q*3.3)),y,s*.02,"rgba(150,200,255,.9)");}}
         tx("1947",cx,a.y+a.h*.14,"#ffd86b","center",Math.max(30,s*.085),700);tx("på · av · på · av …",cx,y+Math.max(70,s*.15),"#cfd8ff","center",Math.max(16,s*.042),700);}
-      else{const q=eo((t-10.4)/1),r=Math.max(18,s*.045);c.globalAlpha=g*q;for(let i=0;i<3;i++){const px=cx+(i-1)*r*4;c.fillStyle="#d9a84a";c.beginPath();c.arc(px,cy,r,0,TAU);c.fill();c.fillStyle="#fff";c.fillRect(px-r*.1,cy-r*.9,r*.2,r*.5);c.font=`700 ${Math.round(r*.9)}px "Source Serif 4",Georgia,serif`;tx("★",px,cy+r*.3,"#8a5a10","center",r,700);}tx("Nobelpriset",cx,cy+r*2.4,"#ffd86b","center",Math.max(20,s*.055),700);}
+      else{const q=eo((t-10.4)/1),r=Math.max(18,s*.045);c.globalAlpha=g*q;for(let i=0;i<3;i++){const px=cx+(i-1)*r*4;gl(px,cy,r*2.2,"rgba(255,215,120,.3)");{const mg=c.createLinearGradient(px-r,cy-r,px+r,cy+r);mg.addColorStop(0,"#fff0b8");mg.addColorStop(.45,"#d9a84a");mg.addColorStop(1,"#7a5412");c.fillStyle=mg;}c.beginPath();c.arc(px,cy,r,0,TAU);c.fill();c.font=`700 ${Math.round(r*.9)}px "Source Serif 4",Georgia,serif`;tx("★",px,cy+r*.3,"#8a5a10","center",r,700);}tx("Nobelpriset",cx,cy+r*2.4,"#ffd86b","center",Math.max(20,s*.055),700);}
       c.restore();}};
 
   /* 3 · flera transistorer på samma bit: första chipet */
@@ -84,8 +84,8 @@ function scenes(E){
   /* 5 · hårstrå mot transistor */
   const s5=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.4)/1.1);photo(4,t,8.1,1.1,.15+.5*g);cred(4,.55*(1-g));
     if(g>0){c.save();c.globalAlpha=g;space(a,1);const w=Math.min(a.w*.7,s*1.3),lx=cx-w/2,y=cy-s*.08;
-      const q=eo((t-2.8)/1);c.fillStyle="#d9c7a8";c.fillRect(lx,y,w*q,Math.max(26,s*.07));tx("hårstrå",lx,y-Math.max(12,s*.03),"#d9c7a8","left",Math.max(15,s*.04),700);
-      if(t>4.5){const q2=eo((t-4.5)/1);c.globalAlpha=g*q2;c.fillStyle="#ffd23c";c.fillRect(lx,y+Math.max(90,s*.2),Math.max(2,w/10000*4)+2,Math.max(8,s*.02));tx("transistor",lx+Math.max(16,s*.04),y+Math.max(90,s*.2)+Math.max(8,s*.02)+Math.max(26,s*.06),"#ffd86b","left",Math.max(15,s*.04),700);}
+      const q=eo((t-2.8)/1);{const hh=Math.max(26,s*.07),hg=c.createLinearGradient(0,y,0,y+hh);hg.addColorStop(0,"#f0dfc0");hg.addColorStop(.5,"#c9b08a");hg.addColorStop(1,"#8a7452");c.fillStyle=hg;c.fillRect(lx,y,w*q,hh);}tx("hårstrå",lx,y-Math.max(12,s*.03),"#d9c7a8","left",Math.max(15,s*.04),700);
+      if(t>4.5){const q2=eo((t-4.5)/1);c.globalAlpha=g*q2;gl(lx+2,y+Math.max(90,s*.2)+4,s*.09,"rgba(255,210,60,.7)");c.fillStyle="#ffd23c";c.fillRect(lx,y+Math.max(90,s*.2),Math.max(2,w/10000*4)+2,Math.max(8,s*.02));c.strokeStyle="rgba(255,216,107,.7)";c.lineWidth=2;c.setLineDash([5,5]);c.beginPath();c.arc(lx+2,y+Math.max(90,s*.2)+4,s*.05*(1+.1*Math.sin(t*4)),0,TAU);c.stroke();c.setLineDash([]);tx("transistor",lx+Math.max(16,s*.04),y+Math.max(90,s*.2)+Math.max(8,s*.02)+Math.max(26,s*.06),"#ffd86b","left",Math.max(15,s*.04),700);}
       if(t>6){c.globalAlpha=g*eo((t-6)/1);tx("tiotusentals gånger smalare",cx,a.y+a.h*.88,"#cfd8ff","center",Math.max(17,s*.045),700);}
       c.restore();}};
 
@@ -93,19 +93,19 @@ function scenes(E){
   const s6=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.4)/1.1);photo(5,t,17.8,1.1,.15+.5*g);cred(5,.55*(1-g));
     if(g>0){c.save();c.globalAlpha=g;panel(a,1);
       if(t<12.3){const w=Math.min(a.w*.78,s*1.45),lx=cx-w/2,y1=cy-s*.12,y2=cy+s*.06,bh=Math.max(28,s*.07),lg=v=>Math.log10(v)/10;
-        const k1=eo((t-6.4)/1.4);c.fillStyle="#9fd0ff";c.fillRect(lx,y1,w*lg(2300)*k1,bh);tx("1971: drygt 2 000",lx,y1-Math.max(10,s*.026),"#9fd0ff","left",Math.max(15,s*.04),700);
-        const k2=eo((t-3)/2.5);c.fillStyle="#ffd23c";c.fillRect(lx,y2,w*lg(1e10)*k2,bh);tx("mobilchip: över 10 000 000 000",lx,y2-Math.max(10,s*.026),"#ffd86b","left",Math.max(15,s*.04),700);
+        const k1=eo((t-6.4)/1.4);gl(lx+w*lg(2300)*k1,y1+bh/2,bh*1.5,"rgba(159,208,255,.4)");c.fillStyle="#9fd0ff";c.fillRect(lx,y1,w*lg(2300)*k1,bh);tx("1971: drygt 2 000",lx,y1-Math.max(10,s*.026),"#9fd0ff","left",Math.max(15,s*.04),700);
+        const k2=eo((t-3)/2.5);gl(lx+w*lg(1e10)*k2,y2+bh/2,bh*1.8,"rgba(255,210,60,.5)");{const bg=c.createLinearGradient(lx,0,lx+w*lg(1e10),0);bg.addColorStop(0,"#b8860b");bg.addColorStop(1,"#ffd23c");c.fillStyle=bg;}c.fillRect(lx,y2,w*lg(1e10)*k2,bh);tx("mobilchip: över 10 000 000 000",lx,y2-Math.max(10,s*.026),"#ffd86b","left",Math.max(15,s*.04),700);
         tx("(skalan växer 10 gånger per steg)",cx,a.y+a.h*.88,"rgba(255,255,255,.55)","center",Math.max(12,s*.03),600);}
-      else{const q=eo((t-12.3)/1),r=Math.max(16,s*.04);c.globalAlpha=g*q;tx("× 2 vartannat år",cx,a.y+a.h*.18,"#ffd86b","center",Math.max(30,s*.085),700);for(let i=0;i<6;i++){const px=cx+(i-2.5)*r*3.2,sz=r*(.6+i*.35);c.fillStyle="#9fd0ff";c.fillRect(px-sz/2,cy+r*2-sz,sz,sz);}tx("Moores lag",cx,cy+r*3.4,"#cfd8ff","center",Math.max(18,s*.048),700);}
+      else{const q=eo((t-12.3)/1),r=Math.max(16,s*.04);c.globalAlpha=g*q;tx("× 2 vartannat år",cx,a.y+a.h*.18,"#ffd86b","center",Math.max(30,s*.085),700);for(let i=0;i<6;i++){const px=cx+(i-2.5)*r*3.2,sz=r*(.6+i*.35);gl(px,cy+r*2-sz/2,sz*1.2,"rgba(159,208,255,.25)");c.fillStyle="#9fd0ff";c.fillRect(px-sz/2,cy+r*2-sz,sz,sz);c.strokeStyle="rgba(220,240,255,.7)";c.lineWidth=1.5;c.strokeRect(px-sz/2,cy+r*2-sz,sz,sz);}tx("Moores lag",cx,cy+r*3.4,"#cfd8ff","center",Math.max(18,s*.048),700);}
       c.restore();}};
 
   /* 7 · därför är allt smart: mobil, bil, magnetkamera */
   const s7=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.2)/1.1);photo(6,t,7.7,1.1,.15+.5*g);cred(6,.55*(1-g));
     if(g>0){c.save();c.globalAlpha=g;space(a,1);const u=Math.max(20,Math.min(a.w*.045,s*.055));
       const q1=eo((t-2.8)/.7),q2=eo((t-3.8)/.7),q3=eo((t-4.8)/.7);
-      c.globalAlpha=g*q1;c.fillStyle="#e8ecf4";c.fillRect(cx-a.w*.24-u*.7,cy-u*1.4,u*1.4,u*2.8);c.fillStyle="#4a7ad9";c.fillRect(cx-a.w*.24-u*.55,cy-u*1.2,u*1.1,u*2.2);tx("mobil",cx-a.w*.24,cy+u*3,"#fff","center",Math.max(15,s*.04),700);
-      c.globalAlpha=g*q2;c.fillStyle="#d1383a";c.fillRect(cx-u*1.8,cy-u*.3,u*3.6,u*1.1);c.beginPath();c.moveTo(cx-u*1,cy-u*.3);c.lineTo(cx-u*.5,cy-u*1);c.lineTo(cx+u*.7,cy-u*1);c.lineTo(cx+u*1.2,cy-u*.3);c.closePath();c.fill();dot(cx-u*1,cy+u*.8,u*.35,"#222");dot(cx+u*1,cy+u*.8,u*.35,"#222");tx("bil",cx,cy+u*3,"#fff","center",Math.max(15,s*.04),700);
-      c.globalAlpha=g*q3;c.strokeStyle="#cfd5df";c.lineWidth=u*.5;c.beginPath();c.arc(cx+a.w*.24,cy,u*1.4,0,TAU);c.stroke();c.fillStyle="#7a8190";c.fillRect(cx+a.w*.24-u*.4,cy+u*.2,u*.8,u*.9);tx("magnetkamera",cx+a.w*.24,cy+u*3,"#fff","center",Math.max(15,s*.04),700);
+      c.globalAlpha=g*q1;gl(cx-a.w*.24,cy,u*3,"rgba(120,170,255,.3)");c.fillStyle="#e8ecf4";c.fillRect(cx-a.w*.24-u*.7,cy-u*1.4,u*1.4,u*2.8);c.fillStyle="#4a7ad9";c.fillRect(cx-a.w*.24-u*.55,cy-u*1.2,u*1.1,u*2.2);tx("mobil",cx-a.w*.24,cy+u*3,"#fff","center",Math.max(15,s*.04),700);
+      c.globalAlpha=g*q2;gl(cx+u*2.4,cy+u*.3,u*2.6,"rgba(255,240,170,.45)");c.fillStyle="#d1383a";c.fillRect(cx-u*1.8,cy-u*.3,u*3.6,u*1.1);c.beginPath();c.moveTo(cx-u*1,cy-u*.3);c.lineTo(cx-u*.5,cy-u*1);c.lineTo(cx+u*.7,cy-u*1);c.lineTo(cx+u*1.2,cy-u*.3);c.closePath();c.fill();dot(cx-u*1,cy+u*.8,u*.35,"#222");dot(cx+u*1,cy+u*.8,u*.35,"#222");tx("bil",cx,cy+u*3,"#fff","center",Math.max(15,s*.04),700);
+      c.globalAlpha=g*q3;gl(cx+a.w*.24,cy,u*(3.2+.4*Math.sin(t*4)),"rgba(120,200,255,.3)");c.strokeStyle="#cfd5df";c.lineWidth=u*.5;c.beginPath();c.arc(cx+a.w*.24,cy,u*1.4,0,TAU);c.stroke();c.fillStyle="#7a8190";c.fillRect(cx+a.w*.24-u*.4,cy+u*.2,u*.8,u*.9);tx("magnetkamera",cx+a.w*.24,cy+u*3,"#fff","center",Math.max(15,s*.04),700);
       c.restore();}};
 
   return[s0,s1,s2,s3,s4,s5,s6,s7];
