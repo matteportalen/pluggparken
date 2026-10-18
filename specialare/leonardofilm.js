@@ -27,7 +27,7 @@ function scenes(E){
   const parch=(a)=>grad(a,[[0,"#efe0bc"],[1,"#dcc895"]]);
   const pill=(t,px,py,col,sz,al)=>{const c=x();c.save();c.font=font(700,sz);const w=c.measureText(t).width+22,h=sz+14;c.globalAlpha=al==null?1:al;c.fillStyle="rgba(6,10,22,.8)";c.beginPath();c.roundRect?c.roundRect(px-w/2,py-h/2,w,h,h/2):c.rect(px-w/2,py-h/2,w,h);c.fill();c.fillStyle=col;c.textAlign="center";c.fillText(t,px,py+sz*.35);c.restore();};
 
-  const s0=(t)=>{photo(4,t,8.2,1.1,.3);const f=title(t,"LEONARDO DA VINCI","KONSTNÄR · UPPFINNARE · FORSKARE","#ffe0a8");cred(4,.55*f);};
+  const s0=(t)=>{photo(5,t,8.2,1.1,.3);const f=title(t,"LEONARDO DA VINCI","KONSTNÄR · UPPFINNARE · FORSKARE","#ffe0a8");cred(5,.55*f);};
 
   /* 1 · Över 500 år sedan: självporträtt, sedan livslinje */
   const s1=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-3)/1.1);photo(2,t,12.4,1.08,.1+.4*g);cred(2,.55*(1-g));
