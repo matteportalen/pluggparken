@@ -4,7 +4,7 @@
 (function(){
 const ROOT=MPFilmLib.root(document.currentScript),TAU=Math.PI*2;
 const SC=[
- {k:"Inledning",d:8.5,cap:[[0.5,"En jättelik, lurvig elefant som levde under istiden. Det här är berättelsen om ullhårsmammuten."]]},
+ {k:"Inledning",d:7.5,cap:[[0.5,"En jättelik, lurvig elefant som levde under istiden. Det här är berättelsen om ullhårsmammuten."]]},
  {k:"01 · Istidens djur",d:11.2,cap:[[0.8,"Ullhårsmammuten levde under istiden. De sista försvann för ungefär 4 000 år sedan."],[7.4,"Då byggdes redan pyramiderna i Egypten."]]},
  {k:"02 · Stora betar",d:8.4,cap:[[0.8,"Den var ungefär lika stor som en afrikansk elefant, med långa böjda betar som kunde bli flera meter."]]},
  {k:"03 · Päls mot kylan",d:6,cap:[[0.8,"Den hade tjock päls och ett tjockt lager fett som skydd mot kylan."]]},
