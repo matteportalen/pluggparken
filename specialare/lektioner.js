@@ -385,7 +385,7 @@ var LEKTIONER=[
 ["🔺","Minst fyra satelliter","Med avstånd till minst fyra satelliter kan mobilen räkna ut exakt var den är, ofta inom några meter."],
 ["🧠","Einstein hjälper till","Satelliternas klockor går lite fortare än klockor på jorden, enligt Einsteins relativitetsteori. Utan korrigering skulle GPS bli fel redan efter någon timme."]]},
 
-{id:"vaccin",titel:"Hur vaccin fungerar",kat:"Kroppen",e:"💉",c:"#3F8FB5",rutor:[
+{id:"vaccin",film:"vaccin",titel:"Hur vaccin fungerar",kat:"Kroppen",e:"💉",c:"#3F8FB5",rutor:[
 ["🐄","Från en ko","Ordet vaccin kommer från latinets vacca, som betyder ko. Det är en historia om kor och mjölkpigor."],
 ["👨‍⚕️","Edward Jenner","1796 såg läkaren Edward Jenner att mjölkpigor som fått kokoppor inte fick de farliga smittkopporna."],
 ["💉","Första vaccinet","Jenner provade att ge en pojke lite kokoppsvätska. Pojken blev inte sjuk av smittkoppor när han senare utsattes."],
