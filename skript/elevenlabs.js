@@ -15,7 +15,7 @@ if(pos.length<2){console.log("Användning: node skript/elevenlabs.js <manus.txt>
 const [manus,ut]=pos;
 function nyckel(){if(process.env.ELEVENLABS_API_KEY)return process.env.ELEVENLABS_API_KEY.trim();
   const f=path.join(__dirname,"..",".env.local");if(fs.existsSync(f)){const m=fs.readFileSync(f,"utf8").match(/^\s*ELEVENLABS_API_KEY\s*=\s*(.+?)\s*$/m);if(m)return m[1].replace(/^["']|["']$/g,"");}return null;}
-const rader=fs.readFileSync(manus,"utf8").split("\n").map(r=>r.match(/^(s\d+-\d+)\s+(.+)$/)).filter(Boolean).map(m=>({id:m[1],text:m[2].trim()}));
+const rader=fs.readFileSync(manus,"utf8").split("\n").map(r=>r.match(/^(s\d+-\d+)(?:\.mp3)?\s+(.+)$/)).filter(Boolean).map(m=>({id:m[1],text:m[2].trim()}));
 if(!rader.length){console.log("Hittade inga repliker i "+manus);process.exit(1);}
 const att=rader.filter(r=>om.length?om.includes(r.id):!fs.existsSync(path.join(ut,r.id+".mp3")));
 console.log(`${rader.length} repliker i manuset, ${att.length} att generera till ${ut}/`);
