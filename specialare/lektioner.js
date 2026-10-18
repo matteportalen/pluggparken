@@ -313,7 +313,7 @@ var LEKTIONER=[
 ["🤸","Allt svävar","På ISS svävar allt. Astronauterna tränar två timmar varje dag för att musklerna inte ska bli svaga."],
 ["📅","Sedan år 2000","Människor har bott på stationen utan avbrott sedan år 2000."]]},
 
-{id:"mammutar",titel:"Ullhårsmammuten",kat:"Natur",e:"🦣",c:"#7A5C3E",rutor:[
+{id:"mammutar",film:"mammutar",titel:"Ullhårsmammuten",kat:"Natur",e:"🦣",c:"#7A5C3E",rutor:[
 ["🧊","Istidens djur","Ullhårsmammuten levde under istiden. De sista försvann för ungefär 4 000 år sedan."],
 ["📏","Stora betar","Den var ungefär lika stor som en afrikansk elefant, med långa böjda betar som kunde bli flera meter."],
 ["🧥","Päls mot kylan","Den hade tjock päls och ett tjockt lager fett som skydd mot kylan."],
