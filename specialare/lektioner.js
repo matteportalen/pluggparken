@@ -345,7 +345,7 @@ var LEKTIONER=[
 ["🌆","Breakdance","Breakdance föddes i stadsdelen Bronx i New York på 1970-talet, bland unga som dansade till DJ:ns musik."],
 ["🏅","Olympiska spel","År 2024 blev breaking, som breakdance heter, en olympisk gren för första gången, i Paris."]]},
 
-{id:"webb",titel:"James Webb-teleskopet",kat:"Rymden",e:"🔭",c:"#C99A2E",rutor:[
+{id:"webb",film:"webb",titel:"James Webb-teleskopet",kat:"Rymden",e:"🔭",c:"#C99A2E",rutor:[
 ["🚀","Uppskjutet på juldagen","James Webb-teleskopet sköts upp den 25 december 2021. Det är det största och mest kraftfulla rymdteleskop som någonsin byggts."],
 ["📍","Långt bortom månen","Det befinner sig 1,5 miljoner kilometer från jorden, fyra gånger längre bort än månen."],
 ["🪞","Guldspegeln","Spegeln är 6,5 meter bred och består av 18 sexkantiga bitar av guldbelagd metall. Den fälldes ihop som origami för att få plats i raketen."],
