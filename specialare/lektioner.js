@@ -329,7 +329,7 @@ var LEKTIONER=[
 ["🏥","Räddade miljoner","Före penicillin kunde ett litet sår eller en lunginflammation vara livsfarligt. Nu kunde läkare bota bakterieinfektioner."],
 ["🏅","Nobelpris","Fleming, Florey och Chain fick Nobelpriset 1945. Men penicillin dödar bara bakterier, inte virus, och man ska aldrig äta antibiotika i onödan."]]},
 
-{id:"jast",titel:"Så jäser brödet",kat:"Natur",e:"🍞",c:"#C8933E",rutor:[
+{id:"jast",film:"jast",titel:"Så jäser brödet",kat:"Natur",e:"🍞",c:"#C8933E",rutor:[
 ["🌾","Ett av de äldsta matlagen","Människor har bakat bröd i över 10 000 år. De äldsta bröden var platta och hårda."],
 ["🦠","Jäst är levande","Jäst är en liten svamp som består av en enda cell. Den vaknar när den får det varmt, vått och sött."],
 ["🫧","Jästen äter socker","När jästen äter socker i degen gör den koldioxid, samma gas som finns i läsk. Det bildas tusentals små bubblor."],
