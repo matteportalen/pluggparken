@@ -5,8 +5,8 @@
 const ROOT=MPFilmLib.root(document.currentScript),TAU=Math.PI*2;
 const SC=[
  {k:"Inledning",d:8.2,cap:[[0.5,"Han var konstnär, uppfinnare och forskare, allt på en gång. Det här är berättelsen om Leonardo da Vinci."]]},
- {k:"01 · Över 500 år sedan",d:12.4,cap:[[0.8,"Leonardo da Vinci levde i Italien för över 500 år sedan, från 1452 till 1519."],[9.1,"Han är mest känd för målningen Mona Lisa."]]},
- {k:"02 · Mona Lisa",d:10.6,cap:[[0.8,"Mona Lisa hänger i Louvren i Paris och ses av miljontals människor varje år."],[6.5,"Hennes leende har fascinerat folk i hundratals år."]]},
+ {k:"01 · Över 500 år sedan",d:12.5,cap:[[0.8,"Leonardo da Vinci levde i Italien för över 500 år sedan, från 1452 till 1519."],[9.1,"Han är mest känd för målningen Mona Lisa."]]},
+ {k:"02 · Mona Lisa",d:10.1,cap:[[0.8,"Mona Lisa hänger i Louvren i Paris och ses av miljontals människor varje år."],[6.0,"Hennes leende har fascinerat folk i hundratals år."]]},
  {k:"03 · Spegelskrift",d:9.5,cap:[[0.8,"Leonardo skrev sina anteckningar i spegelskrift, från höger till vänster."],[6.2,"Man måste använda en spegel för att läsa dem."]]},
  {k:"04 · Flygmaskiner",d:10.8,cap:[[0.8,"Han ritade flygmaskiner, fallskärmar och pansarvagnar."],[4.5,"Det mesta byggdes aldrig på hans tid, men många idéer liknar saker som kom senare."]]},
  {k:"05 · Kroppen",d:8.8,cap:[[0.8,"Leonardo undersökte människokroppen för att kunna måla den rätt. Hans teckningar av muskler och ben är mycket exakta."]]},
@@ -40,10 +40,10 @@ function scenes(E){
       c.restore();}};
 
   /* 2 · Mona Lisa: målningen, Louvren och många besökare */
-  const s2=(t)=>{const{s,cx,cy,a,port}=S(),c=x();photo(1,t,10.6,1.1,.15);cred(1,.55);
+  const s2=(t)=>{const{s,cx,cy,a,port}=S(),c=x();photo(1,t,10.1,1.1,.15);cred(1,.55);
     const k=eo((t-2.6)/1);if(k>0){pill("Louvren, Paris",cx,a.y+a.h*.12,"#ffe0a8",Math.max(18,s*.048),k);}
     if(t>3.2){const n=Math.round(40*eo((t-3.2)/3)),r=L.srand(23);for(let i=0;i<n;i++){const px=a.x+a.w*(.06+.88*(i+r()*.4)/40),hm=Math.max(34,s*.09);man(px,a.y+a.h*.98,hm*(.8+r()*.3),"rgba(250,240,220,.85)",t+i,false);}tx("miljontals besökare varje år",cx,a.y+a.h*.8,"#fff","center",Math.max(15,s*.04),700);}
-    if(t>6.5){const q=eo((t-6.5)/1);pill("ett leende i hundratals år",cx,a.y+a.h*.22,"#fff",Math.max(16,s*.042),q);}};
+    if(t>6.0){const q=eo((t-6.0)/1);pill("ett leende i hundratals år",cx,a.y+a.h*.22,"#fff",Math.max(16,s*.042),q);}};
 
   /* 3 · Spegelskrift: spegelvänd text och en spegel */
   const s3=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.4)/1.1);photo(3,t,9.5,1.1,.15+.4*g);cred(3,.55*(1-g));
