@@ -10,7 +10,7 @@ const SC=[
  {k:"03 · Det första chipet",d:9.7,cap:[[0.8,"År 1958 lyckades Jack Kilby sätta flera transistorer på samma bit material. Det blev det första chipet."]]},
  {k:"04 · Sand blir chip",d:9.7,cap:[[0.8,"Chip görs av kisel, som finns i sand. Det renas, skärs i skivor och bearbetas i extremt rena rum."]]},
  {k:"05 · Mindre än ett virus",d:8.1,cap:[[0.8,"Transistorerna är bara några miljondels millimeter stora. Ett hårstrå är tiotusentals gånger tjockare."]]},
- {k:"06 · Miljarder i en mobil",d:17.5,cap:[[0.8,"Ett chip i en mobil är stort som en nagel och har mer än tio miljarder transistorer."],[6.2,"Det första mikroprocessorchipet, år 1971, hade drygt 2 000."],[12.0,"Antalet har fördubblats ungefär vartannat år. Det kallas Moores lag."]]},
+ {k:"06 · Miljarder i en mobil",d:17.8,cap:[[0.8,"Ett chip i en mobil är stort som en nagel och har mer än tio miljarder transistorer."],[6.2,"Det första mikroprocessorchipet, år 1971, hade drygt 2 000."],[12.3,"Antalet har fördubblats ungefär vartannat år. Det kallas Moores lag."]]},
  {k:"07 · Därför är allt smart",d:7.7,cap:[[0.8,"Utan chip skulle det inte finnas mobiler, bilar med datorer eller sjukhusens magnetkameror."]]}
 ];
 const META={hud:"PLUGGPARKEN · SPECIALARE · FILM",titel:"Mikrochipet",under:"En film i åtta steg · ca 1,8 minuter",
@@ -77,13 +77,13 @@ function scenes(E){
       c.restore();}};
 
   /* 6 · antal transistorer, Moores lag */
-  const s6=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.4)/1.1);photo(5,t,17.5,1.1,.15+.5*g);cred(5,.55*(1-g));
+  const s6=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.4)/1.1);photo(5,t,17.8,1.1,.15+.5*g);cred(5,.55*(1-g));
     if(g>0){c.save();c.globalAlpha=g;panel(a,1);
-      if(t<12.0){const w=Math.min(a.w*.78,s*1.45),lx=cx-w/2,y1=cy-s*.12,y2=cy+s*.06,bh=Math.max(28,s*.07),lg=v=>Math.log10(v)/10;
+      if(t<12.3){const w=Math.min(a.w*.78,s*1.45),lx=cx-w/2,y1=cy-s*.12,y2=cy+s*.06,bh=Math.max(28,s*.07),lg=v=>Math.log10(v)/10;
         const k1=eo((t-6.4)/1.4);c.fillStyle="#9fd0ff";c.fillRect(lx,y1,w*lg(2300)*k1,bh);tx("1971: drygt 2 000",lx,y1-Math.max(10,s*.026),"#9fd0ff","left",Math.max(15,s*.04),700);
         const k2=eo((t-3)/2.5);c.fillStyle="#ffd23c";c.fillRect(lx,y2,w*lg(1e10)*k2,bh);tx("mobilchip: över 10 000 000 000",lx,y2-Math.max(10,s*.026),"#ffd86b","left",Math.max(15,s*.04),700);
         tx("(skalan växer 10 gånger per steg)",cx,a.y+a.h*.88,"rgba(255,255,255,.55)","center",Math.max(12,s*.03),600);}
-      else{const q=eo((t-12)/1),r=Math.max(16,s*.04);c.globalAlpha=g*q;tx("× 2 vartannat år",cx,a.y+a.h*.18,"#ffd86b","center",Math.max(30,s*.085),700);for(let i=0;i<6;i++){const px=cx+(i-2.5)*r*3.2,sz=r*(.6+i*.35);c.fillStyle="#9fd0ff";c.fillRect(px-sz/2,cy+r*2-sz,sz,sz);}tx("Moores lag",cx,cy+r*3.4,"#cfd8ff","center",Math.max(18,s*.048),700);}
+      else{const q=eo((t-12.3)/1),r=Math.max(16,s*.04);c.globalAlpha=g*q;tx("× 2 vartannat år",cx,a.y+a.h*.18,"#ffd86b","center",Math.max(30,s*.085),700);for(let i=0;i<6;i++){const px=cx+(i-2.5)*r*3.2,sz=r*(.6+i*.35);c.fillStyle="#9fd0ff";c.fillRect(px-sz/2,cy+r*2-sz,sz,sz);}tx("Moores lag",cx,cy+r*3.4,"#cfd8ff","center",Math.max(18,s*.048),700);}
       c.restore();}};
 
   /* 7 · därför är allt smart: mobil, bil, magnetkamera */
