@@ -246,7 +246,7 @@ var LEKTIONER=[
 ["🛡️","Magnetfältet skyddar","Magnetfältet som skapar bältena skyddar också oss mot solens partiklar."],
 ["📏","Hur stora?","Det inre bältet börjar ungefär 1 000 kilometer upp. Det yttre når nästan 60 000 kilometer ut."]]},
 
-{id:"kvant",titel:"Kvantfysik",kat:"Fysik",e:"⚛️",c:"#2E86AB",rutor:[
+{id:"kvant",film:"kvant",titel:"Kvantfysik",kat:"Fysik",e:"⚛️",c:"#2E86AB",rutor:[
 ["🔬","Det minsta","Kvantfysik är läran om de allra minsta sakerna: atomer och ännu mindre delar."],
 ["🤯","Konstigt","Där fungerar världen på ett annat sätt än i vardagen. Reglerna känns ofta konstiga, även för forskare."],
 ["🌊","Våg och partikel","Ljus kan vara både en våg och en ström av små partiklar, fotoner."],
