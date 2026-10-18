@@ -24,13 +24,20 @@ function scenes(E){
   const {eo,cl,lerp,font}=E;
   const L=MPFilmLib.make(E,{ROOT,prefix:"mammutar-",names:[1,2,3,4,5,6],KR});
   const {x,tx,tg,S,cred,photo,panel,grad,man,title}=L;
+  const gl=(px,py,r,col)=>{const c=x();c.save();c.globalCompositeOperation="lighter";const g=c.createRadialGradient(px,py,0,px,py,Math.max(.1,r));g.addColorStop(0,col);g.addColorStop(1,"rgba(0,0,0,0)");c.fillStyle=g;c.beginPath();c.arc(px,py,Math.max(.1,r),0,TAU);c.fill();c.restore();};
+  const snow=(a,t,n,al)=>{const c=x(),Rr=L.srand(41);c.save();for(let i=0;i<n;i++){const sp=.05+Rr()*.12,ph=Rr(),X=a.x+((Rr()+t*(.02+sp*.2)+Math.sin(t+i)*.01)%1)*a.w,Y=a.y+((ph+t*sp)%1)*a.h,r=1+Rr()*2.4;c.fillStyle=`rgba(255,255,255,${(al||.8)*(.35+Rr()*.55)})`;c.beginPath();c.arc(X,Y,r,0,TAU);c.fill();}c.restore();};
+  const dot2=(px,py,r,col)=>{const c=x();c.fillStyle=col;c.beginPath();c.arc(px,py,Math.max(.1,r),0,TAU);c.fill();};
   /* mammut sedd från sidan, tittar åt höger. L = längd. o.fill=false ritar bara linjer. o.k = hur stor del (0..1 från vänster) som är ritad */
   const mammoth=(cx,gy,Ln,t,o)=>{const c=x(),u=Ln/100;o=o||{};c.save();if(o.k!=null){c.beginPath();c.rect(cx-60*u,gy-80*u,120*u*o.k,100*u);c.clip();}
     const fill=o.fill!==false,col=o.col||"#6b4a2e",line=o.line||"#3a2410";c.lineJoin="round";c.lineCap="round";c.strokeStyle=fill?line:(o.stroke||"#c98a4a");c.lineWidth=fill?Math.max(1.5,u*.9):Math.max(3,u*1.4);c.fillStyle=col;
     const body=()=>{c.beginPath();c.moveTo(cx-46*u,gy-30*u);c.bezierCurveTo(cx-46*u,gy-58*u,cx-18*u,gy-62*u,cx+4*u,gy-58*u);c.bezierCurveTo(cx+14*u,gy-70*u,cx+34*u,gy-68*u,cx+38*u,gy-50*u);c.bezierCurveTo(cx+44*u,gy-40*u,cx+42*u,gy-24*u,cx+40*u,gy-14*u);   // rygg, puckel, panna
       c.lineTo(cx+34*u,gy-14*u);c.bezierCurveTo(cx+36*u,gy-28*u,cx+32*u,gy-34*u,cx+26*u,gy-34*u);                                                           // snabel nedåt
       c.lineTo(cx+22*u,gy);c.lineTo(cx+14*u,gy);c.lineTo(cx+12*u,gy-26*u);c.lineTo(cx-10*u,gy-26*u);c.lineTo(cx-12*u,gy);c.lineTo(cx-20*u,gy);c.lineTo(cx-22*u,gy-24*u);c.lineTo(cx-36*u,gy-22*u);c.lineTo(cx-38*u,gy);c.lineTo(cx-46*u,gy);c.closePath();};
-    body();if(fill)c.fill();c.stroke();
+    body();if(fill)c.fill();
+    if(fill){c.save();body();c.clip();const sg=c.createLinearGradient(0,gy-70*u,0,gy);sg.addColorStop(0,"rgba(255,225,180,.28)");sg.addColorStop(.45,"rgba(0,0,0,0)");sg.addColorStop(1,"rgba(0,0,0,.5)");c.fillStyle=sg;c.fillRect(cx-60*u,gy-80*u,130*u,85*u);
+      c.strokeStyle="rgba(30,15,5,.45)";c.lineWidth=Math.max(.8,u*.45);for(let i=0;i<70;i++){const px=cx-44*u+i*1.3*u,py=gy-58*u+((i*37)%25)*u,sw=Math.sin(t*1.2+i*.7)*u*1.2;c.beginPath();c.moveTo(px,py);c.lineTo(px+sw,py+(14+((i*13)%10))*u);c.stroke();}c.restore();}
+    else{c.shadowColor=o.stroke||"#ffb060";c.shadowBlur=16;}
+    c.stroke();c.shadowBlur=0;
     // lång päls längs magen
     c.lineWidth=Math.max(1,u*.7);for(let i=0;i<18;i++){const px=cx-40*u+i*3.8*u,sw=Math.sin(t*1.5+i)*u*.8;c.beginPath();c.moveTo(px,gy-26*u);c.lineTo(px+sw,gy-17*u);c.stroke();}
     // betar
@@ -51,15 +58,15 @@ function scenes(E){
 
   /* 2 · Stora betar: mammut mot en människa */
   const s2=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-3)/1.1);photo(2,t,8.4,1.1,.15+.4*g);cred(2,.55*(1-g));
-    if(g>0){c.save();c.globalAlpha=g;grad(a,[[0,"#cfe0ee"],[1,"#eef4f8"]]);const gy=a.y+a.h*.78;c.fillStyle="#f6f9fc";c.fillRect(a.x,gy,a.w,a.y+a.h-gy);
+    if(g>0){c.save();c.globalAlpha=g;grad(a,[[0,"#1c2f52"],[.65,"#7fa0c4"],[1,"#d8e6f2"]]);const gy=a.y+a.h*.78;c.fillStyle="#1c2f52";c.globalAlpha*=.0;c.restore();c.save();c.globalAlpha=g;c.fillStyle="rgba(40,60,90,.55)";c.beginPath();c.moveTo(a.x,gy);for(let i=0;i<=24;i++)c.lineTo(a.x+i*a.w/24,gy-a.h*(.1+.16*Math.abs(Math.sin(i*1.3+1))));c.lineTo(a.x+a.w,gy);c.closePath();c.fill();c.fillStyle="#eef4f8";c.fillRect(a.x,gy,a.w,a.y+a.h-gy);snow(a,t,70,.7);
       const Ln=Math.min(a.w*.62,a.h*1.05),mx=cx-Ln*.1;mammoth(mx,gy,Ln,t,{});
       const k=eo((t-3.8)/1);c.globalAlpha=g*k;man(mx-Ln*.62,gy,Ln*.27,"#10223e",t,false);tx("människa",mx-Ln*.62,gy+Math.max(24,s*.055),"#10223e","center",Math.max(13,s*.032),700);
-      if(t>5){const q=eo((t-5)/1);c.globalAlpha=g*q;tx("betar: flera meter",mx+Ln*.5,gy-Ln*.72,"#7a4a1a","center",Math.max(15,s*.04),700);}
+      if(t>5){const q=eo((t-5)/1);c.globalAlpha=g*q;tx("betar: flera meter",mx+Ln*.5,gy-Ln*.72,"#ffd0a0","center",Math.max(15,s*.04),700);}
       c.restore();}};
 
   /* 3 · Päls mot kylan: lager av päls, fett och hud */
   const s3=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.4)/1.1);photo(3,t,6,1.1,.15+.4*g);cred(3,.55*(1-g));
-    if(g>0){c.save();c.globalAlpha=g;grad(a,[[0,"#243a5e"],[1,"#6a8ab8"]]);
+    if(g>0){c.save();c.globalAlpha=g;grad(a,[[0,"#182a48"],[1,"#5a7aa8"]]);snow(a,t,110,.85);tx("−30 °C",a.x+a.w*.14,a.y+a.h*.18,"#bfe0ff","center",Math.max(22,s*.06),700);
       const w=Math.min(a.w*.6,s*1.1),lx=cx-w/2,y=cy-s*.1,lh=Math.max(36,s*.1);
       const layers=[["päls","#7a5230",3],["fett","#f0d070",3.6],["kropp","#c97a6a",4.2]];
       layers.forEach(([n,col,st],i)=>{const q=eo((t-st)/.7);if(q<=0)return;const ly=y+i*lh;c.save();c.globalAlpha=g*q;c.fillStyle=col;c.fillRect(lx,ly,w,lh);
@@ -71,17 +78,17 @@ function scenes(E){
   /* 4 · Grottmålningar: en mammut ritas på grottväggen */
   const s4=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.2)/1.1);photo(4,t,5.4,1.1,.15+.4*g);cred(4,.55*(1-g));
     if(g>0){c.save();c.globalAlpha=g;grad(a,[[0,"#4a3a2c"],[1,"#2a2018"]]);const r=L.srand(8);c.fillStyle="rgba(0,0,0,.18)";for(let i=0;i<60;i++){c.beginPath();c.arc(a.x+r()*a.w,a.y+r()*a.h,3+r()*10,0,TAU);c.fill();}
-      const Ln=Math.min(a.w*.7,a.h*1.2),gy=cy+Ln*.25;mammoth(cx,gy,Ln,t,{fill:false,stroke:"#d98a4a",k:eo((t-2.6)/2.4)});
+      const fl=.85+.15*Math.sin(t*13)+.08*Math.sin(t*29),tX=a.x+a.w*.12,tY=a.y+a.h*.62;gl(tX,tY,s*.9*fl,"rgba(255,170,70,.35)");gl(tX,tY,s*.25*fl,"rgba(255,230,150,.6)");dot2(tX,tY,s*.012,"#fff3c0");for(let i=0;i<14;i++){const q=((t*.5+i*.13)%1);gl(tX+Math.sin(t*3+i)*s*.03*q,tY-q*s*.25,s*.012*(1-q),"rgba(255,190,90,"+(.9*(1-q)).toFixed(2)+")");}const Ln=Math.min(a.w*.7,a.h*1.2),gy=cy+Ln*.25;mammoth(cx,gy,Ln,t,{fill:false,stroke:"#ffb060",k:eo((t-2.6)/2.4)});
       tx("ritade dem på grottväggar",cx,a.y+a.h*.12,"#ffd0a0","center",Math.max(17,s*.045),700);
       c.restore();}};
 
   /* 5 · Frusna fynd: mammut i is, Lyuba */
   const s5=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.4)/1.1);photo(5,t,8.6,1.1,.15+.4*g);cred(5,.55*(1-g));
-    if(g>0){c.save();c.globalAlpha=g;grad(a,[[0,"#0d2a4a"],[1,"#1a4a78"]]);
+    if(g>0){c.save();c.globalAlpha=g;grad(a,[[0,"#0a2240"],[1,"#1a4a78"]]);snow(a,t,90,.8);
       const w=Math.min(a.w*.7,s*1.25),h=w*.58,lx=cx-w/2,ly=cy-h/2-s*.03;
       const ig=c.createLinearGradient(lx,ly,lx+w,ly+h);ig.addColorStop(0,"rgba(190,230,255,.55)");ig.addColorStop(1,"rgba(120,190,240,.45)");c.fillStyle=ig;c.strokeStyle="rgba(220,240,255,.8)";c.lineWidth=3;c.beginPath();c.roundRect?c.roundRect(lx,ly,w,h,14):c.rect(lx,ly,w,h);c.fill();c.stroke();
       mammoth(cx,ly+h*.9,w*.72,t,{col:"rgba(90,64,40,.85)"});
-      tx("Sibirien",cx,a.y+a.h*.1,"#cfe8ff","center",Math.max(19,s*.052),700);
+      for(let i=0;i<14;i++){const sx=lx+((i*53)%100)/100*w,sy=ly+((i*29)%100)/100*h,f=Math.max(0,Math.sin(t*2.2+i*1.7));gl(sx,sy,s*.03*f,"rgba(220,245,255,.9)");}tx("Sibirien",cx,a.y+a.h*.1,"#cfe8ff","center",Math.max(19,s*.052),700);
       if(t>4.5){const q=eo((t-4.5)/1);c.globalAlpha=g*q;tx("Lyuba: över 40 000 år",cx,ly+h+Math.max(36,s*.08),"#ffd86b","center",Math.max(18,s*.048),700);}
       c.restore();}};
 
@@ -89,7 +96,7 @@ function scenes(E){
   const s6=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-3.4)/1.1);photo(6,t,9.9,1.1,.15+.4*g);cred(6,.55*(1-g));
     if(g>0){c.save();c.globalAlpha=g;panel(a,1);
       const h=Math.min(a.h*.6,s*.8),w=Math.min(a.w*.3,s*.5),px=cx-(port?0:a.w*.14),top=cy-h/2-s*.02,n=26;
-      for(let i=0;i<n;i++){const q=i/(n-1),y=top+q*h,ph=q*TAU*2.2+t*1.4,dx=Math.sin(ph)*w/2,dz=Math.cos(ph);c.strokeStyle="rgba(255,255,255,.28)";c.lineWidth=3;c.beginPath();c.moveTo(px-dx,y);c.lineTo(px+dx,y);c.stroke();c.fillStyle=dz>0?"#ff8a5a":"#7fd6ff";c.beginPath();c.arc(px-dx,y,6,0,TAU);c.fill();c.fillStyle=dz>0?"#7fd6ff":"#ff8a5a";c.beginPath();c.arc(px+dx,y,6,0,TAU);c.fill();}
+      for(let i=0;i<n;i++){const q=i/(n-1),y=top+q*h,ph=q*TAU*2.2+t*1.4,dx=Math.sin(ph)*w/2,dz=Math.cos(ph);c.strokeStyle="rgba(255,255,255,.28)";c.lineWidth=3;c.beginPath();c.moveTo(px-dx,y);c.lineTo(px+dx,y);c.stroke();gl(px-dx,y,16,dz>0?"rgba(255,138,90,.45)":"rgba(127,214,255,.45)");gl(px+dx,y,16,dz>0?"rgba(127,214,255,.45)":"rgba(255,138,90,.45)");c.fillStyle=dz>0?"#ff8a5a":"#7fd6ff";c.beginPath();c.arc(px-dx,y,6,0,TAU);c.fill();c.fillStyle=dz>0?"#7fd6ff":"#ff8a5a";c.beginPath();c.arc(px+dx,y,6,0,TAU);c.fill();}
       tx("DNA",px,top-16,"#fff","center",Math.max(20,s*.055),700);
       const qx=cx+(port?0:a.w*.2),qy=cy+(port?h*.7:0);tx("?",qx,qy,"#ffd86b","center",Math.max(80,s*.3),700);
       if(t>7.4){const q=eo((t-7.4)/1);c.globalAlpha=g*q;tx("ingen har lyckats ännu",qx,qy+Math.max(36,s*.08),"#fff","center",Math.max(16,s*.042),700);}
