@@ -214,7 +214,7 @@ var LEKTIONER=[
 ["🥇","Medaljen","Varje pristagare får en guldmedalj, ett diplom och prispengar."],
 ["👩‍🔬","Marie Curie","Marie Curie var den första kvinnan som fick ett Nobelpris. Hon fick det två gånger: i fysik 1903 och i kemi 1911."]]},
 
-{id:"bitcoin",titel:"Bitcoin",kat:"Samhälle",e:"🪙",c:"#F7931A",rutor:[
+{id:"bitcoin",film:"bitcoin",titel:"Bitcoin",kat:"Samhälle",e:"🪙",c:"#F7931A",rutor:[
 ["💻","Pengar på datorn","Bitcoin är pengar som bara finns på datorer. Du kan inte hålla dem i handen."],
 ["🕵️","Satoshi Nakamoto","Bitcoin startade år 2009. Den som skapade det kallade sig Satoshi Nakamoto. Ingen vet vem det egentligen är."],
 ["⛓️","Blockkedjan","Ingen bank eller regering styr Bitcoin. Tusentals datorer håller reda på vem som äger vad i en gemensam bok som kallas blockkedjan."],
