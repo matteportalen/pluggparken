@@ -100,7 +100,7 @@
         Object.assign(this,{g,nodes:[n,l]});this.timer=setTimeout(bub,900);},
       stop(){if(!this.g)return;clearTimeout(this.timer);const c=ac(),t=c.currentTime;this.g.gain.setTargetAtTime(0.0001,t,.25);this.nodes.forEach(x=>{try{x.stop(t+1.2)}catch(e){}});this.g=null;}
     },
-    /* Bakgrundsljud för Skattjakten och Bubbelskjutaren: start('tradgarden' | 'grottan' | 'vintern' | 'havet' | 'vagor' | 'djungel' | 'godis' | 'vulkan' | 'slott'), stop() */
+    /* Bakgrundsljud för Skattjakten och Bubbelskjutaren: start('tradgarden' | 'grottan' | 'vintern' | 'havet' | 'klockor' | 'vagor' | 'djungel' | 'godis' | 'vulkan' | 'slott'), stop() */
     ambient:{
       start(kind){if(!isOn())return;this.stop(true);const c=ac();if(!c)return;
         const g=c.createGain();g.gain.setValueAtTime(0.0001,c.currentTime);g.gain.exponentialRampToValueAtTime(1,c.currentTime+2);g.connect(c.destination);
@@ -140,6 +140,12 @@
           /* Slottet: vind runt tornen och facklor som sprakar */
           wind('bandpass',520,.7,.03,.08,220);
           later(()=>{const n=1+Math.floor(Math.random()*4);for(let i=0;i<n;i++)blip(1800+Math.random()*2200,i*.05,.025,.015);},600,2200);
+        }else if(kind==='klockor'){
+          /* Medeltida stillhet (Digerdöden): djup, lugn ton och en avlägsen kyrkklocka som slår med lång efterklang */
+          [49,73.4].forEach((fr,i)=>{const o=c.createOscillator(),og=c.createGain();o.type='sine';o.frequency.value=fr;og.gain.value=i?.012:.02;o.connect(og).connect(g);o.start();nodes.push(o);});
+          wind('lowpass',200,.5,.012,.04,60);
+          const d=c.createDelay(1.8),fb=c.createGain(),eg=c.createGain();d.delayTime.value=.55;fb.gain.value=.4;eg.gain.value=.55;d.connect(fb).connect(d);d.connect(eg).connect(g);
+          later(()=>{[1,2.4,3.9].forEach((m,i)=>{blip(196*m,0,5-i,.05/(i+1),null,g);blip(196*m,0,5-i,.04/(i+1),null,d);});},8000,14000);
         }else if(kind==='vagor'){
           /* Vågor och vind över öppet hav (Titanic, vikingarna): långsamt sväljande brus, lite sprut och en och annan mås långt borta */
           wind('lowpass',430,.5,.06,.09,220);

@@ -11,7 +11,7 @@ const SC=[
  {k:"04 · Världen förändrades",d:8.5,cap:[[0.8,"Efteråt var det brist på arbetare. De som levde kunde kräva bättre betalt, och samhället förändrades."]]},
  {k:"05 · I dag",d:8.6,cap:[[0.8,"Digerdöden nådde Sverige omkring år 1350."],[5.1,"I dag kan pest botas med antibiotika."]]}
 ];
-const META={mat:"slott",hud:"PLUGGPARKEN · SPECIALARE · FILM",titel:"Digerdöden",under:"En film i sex steg · ca 1 minut",
+const META={mat:"klockor",hud:"PLUGGPARKEN · SPECIALARE · FILM",titel:"Digerdöden",under:"En film i sex steg · ca 1 minut",
   slutRubrik:"Tack för att du har följt med",slutText:"Tack vare forskning och medicin kan vi i dag bota pest. Filmen bygger på bilder ur Wikimedia Commons. Källor står under bilderna.",igen:"↻ Se filmen igen"};
 const KR={1:"Medeltida bokmålning, Pierart dou Tielt · Public domain · Wikimedia Commons",2:"Foto: Qkiel · CC BY-SA 4.0 · Wikimedia Commons",3:"Foto: Alex O'Neal · CC BY-SA 2.0 · Wikimedia Commons",5:"Medeltida bokmålning, 1200-talet · Public domain · Wikimedia Commons",6:"Foto: Maksym Kozlenko · CC BY-SA 4.0 · Wikimedia Commons"};
 
