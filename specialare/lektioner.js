@@ -377,7 +377,7 @@ var LEKTIONER=[
 ["🚁","Helikopter på Mars","Med Perseverance kom helikoptern Ingenuity. Den gjorde den första flygningen på en annan planet, i april 2021."],
 ["📡","Radiosignaler tar tid","Signalerna från jorden tar mellan 5 och 20 minuter att nå Mars. Därför kan man inte styra roboten med joystick."]]},
 
-{id:"gps",titel:"Så vet mobilen var du är",kat:"Tal",e:"📍",c:"#2B8A6B",rutor:[
+{id:"gps",film:"gps",titel:"Så vet mobilen var du är",kat:"Tal",e:"📍",c:"#2B8A6B",rutor:[
 ["📍","Hur vet kartan var du är?","Mobilen tar emot signaler från satelliter som flyger högt över jorden. Systemet heter GPS."],
 ["🛰️","Över 30 satelliter","GPS har ungefär 30 satelliter som flyger runt jorden på ungefär 20 000 kilometers höjd."],
 ["⏱️","Klockor i rymden","Varje satellit har en extremt exakt atomklocka. Den skickar ut tiden och var satelliten är."],
