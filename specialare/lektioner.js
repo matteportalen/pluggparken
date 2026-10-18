@@ -167,7 +167,7 @@ var LEKTIONER=[
 ["🦷","Tänder","Tandemaljen är det hårdaste ämnet i kroppen. Men den kan inte växa tillbaka, så borsta tänderna!"],
 ["👃","Näsan","Du kan känna igen tusentals olika dofter, och doften går direkt till de delar av hjärnan som sköter minnen."]]},
 
-{id:"blixt",titel:"Åska och blixt",kat:"Natur",e:"⚡",c:"#5C5CA8",rutor:[
+{id:"blixt",film:"blixt",titel:"Åska och blixt",kat:"Natur",e:"⚡",c:"#5C5CA8",rutor:[
 ["⛈️","Åskmoln","Inne i stora moln gnuggas isbitar och vattendroppar mot varandra. Då bildas elektricitet."],
 ["⚡","Blixten","När elektriciteten blir för stor hoppar den som en gnista, en blixt. Den kan gå mellan moln eller ner till marken."],
 ["🔥","Varmare än solen","Luften runt en blixt blir ungefär 30 000 grader varm, flera gånger varmare än solens yta."],
