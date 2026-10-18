@@ -27,6 +27,14 @@ function scenes(E){
   const {x,tx,tg,S,cred,photo,panel,grad,space,title}=L;
   const dot=(px,py,r,col)=>{const c=x();c.fillStyle=col;c.beginPath();c.arc(px,py,r,0,TAU);c.fill();};
   const coin=(px,py,r,al)=>{const c=x();c.save();c.globalAlpha*=al==null?1:al;c.fillStyle="#f7931a";c.strokeStyle="#b86a0e";c.lineWidth=Math.max(2,r*.12);c.beginPath();c.arc(px,py,r,0,TAU);c.fill();c.stroke();c.fillStyle="#fff";c.font=`700 ${Math.round(r*1.3)}px "Source Serif 4",Georgia,serif`;c.textAlign="center";c.textBaseline="middle";c.fillText("₿",px,py+r*.06);c.restore();};
+  const gl=(px,py,r,col)=>{const c=x();c.save();c.globalCompositeOperation="lighter";const g=c.createRadialGradient(px,py,0,px,py,r);g.addColorStop(0,col);g.addColorStop(1,"rgba(0,0,0,0)");c.fillStyle=g;c.beginPath();c.arc(px,py,r,0,TAU);c.fill();c.restore();};
+  const rnd=srand0=>{let q=srand0;return()=>{q=(q*16807)%2147483647;return(q-1)/2147483646;};};
+  /* nätverk av noder med glödande mynt som skickas direkt mellan dem */
+  const net=(a,t,u)=>{const c=x(),R=rnd(7),N=16,P=[];for(let i=0;i<N;i++){P.push([a.x+a.w*(.1+.8*R()),a.y+a.h*(.18+.7*R())]);}
+    c.save();c.lineWidth=1.2;for(let i=0;i<N;i++)for(let j=i+1;j<N;j++){const d=Math.hypot(P[i][0]-P[j][0],P[i][1]-P[j][1]);if(d<a.w*.28){c.strokeStyle=`rgba(120,170,255,${.28*(1-d/(a.w*.28))})`;c.beginPath();c.moveTo(P[i][0],P[i][1]);c.lineTo(P[j][0],P[j][1]);c.stroke();}}
+    for(let i=0;i<N;i++){const f=.6+.4*Math.sin(t*2+i);gl(P[i][0],P[i][1],u*1.4,`rgba(110,170,255,${.35*f})`);dot(P[i][0],P[i][1],u*.18,"#cfe3ff");}
+    for(let k=0;k<7;k++){const i=Math.floor(R()*N),j=(i+3+k)%N,q=((t*.45+k*.37)%1),X=lerp(P[i][0],P[j][0],q),Y=lerp(P[i][1],P[j][1],q);gl(X,Y,u*1.1,"rgba(247,147,26,.9)");dot(X,Y,u*.2,"#ffe0a8");}
+    c.restore();};
   const laptop=(px,py,u)=>{const c=x();c.save();c.fillStyle="#2a3550";c.fillRect(px-u*1.6,py-u*1.1,u*3.2,u*2.1);c.fillStyle="#0f1a30";c.fillRect(px-u*1.45,py-u*.95,u*2.9,u*1.8);c.fillStyle="#b8bfd0";c.fillRect(px-u*2,py+u*1.05,u*4,u*.22);c.restore();};
 
   const s0=(t)=>{photo(1,t,6.3,1.12,.3);const f=title(t,"BITCOIN","PENGAR PÅ DATORER","#ffcf8a");cred(1,.55*f);};
@@ -35,8 +43,7 @@ function scenes(E){
   const s1=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.4)/1.1);photo(1,t,10.5,1.1,.15+.5*g);cred(1,.55*(1-g));
     if(g>0){c.save();c.globalAlpha=g;space(a,1);const u=Math.max(18,Math.min(a.w*.04,s*.05));
       if(t<6.1){laptop(cx,cy,u*1.6);coin(cx,cy-u*.1,u*.9,eo((t-3)/.8));tx("finns bara på datorer",cx,a.y+a.h*.14,"#ffd86b","center",Math.max(19,s*.052),700);}
-      else{const k=cl((t-6.5)/3,0,1),lx=cx-a.w*.3,rx=cx+a.w*.3;laptop(lx,cy+u*.6,u);laptop(rx,cy+u*.6,u);c.strokeStyle="rgba(255,255,255,.35)";c.setLineDash([6,8]);c.lineWidth=2;c.beginPath();c.moveTo(lx+u*2.2,cy);c.lineTo(rx-u*2.2,cy);c.stroke();c.setLineDash([]);coin(lerp(lx+u*2.2,rx-u*2.2,eo(k)),cy,u*.5);
-        const bx=cx,by=a.y+a.h*.3;c.fillStyle="rgba(180,190,210,.5)";c.fillRect(bx-u*1.2,by-u*.7,u*2.4,u*1.4);c.beginPath();c.moveTo(bx-u*1.4,by-u*.7);c.lineTo(bx,by-u*1.5);c.lineTo(bx+u*1.4,by-u*.7);c.closePath();c.fill();c.strokeStyle="#ff6a5e";c.lineWidth=6;c.beginPath();c.moveTo(bx-u*1.5,by-u*1.4);c.lineTo(bx+u*1.5,by+u*.8);c.moveTo(bx+u*1.5,by-u*1.4);c.lineTo(bx-u*1.5,by+u*.8);c.stroke();tx("ingen bank",bx,by+u*2.2,"#ff9a8a","center",Math.max(15,s*.04),700);}
+      else{net(a,t,u);const bx=cx,by=a.y+a.h*.3;c.fillStyle="rgba(10,16,34,.8)";c.fillRect(bx-u*1.5,by-u*1.15,u*3,u*2.3);c.fillStyle="rgba(180,190,210,.6)";c.fillRect(bx-u*1.2,by-u*.7,u*2.4,u*1.4);c.beginPath();c.moveTo(bx-u*1.4,by-u*.7);c.lineTo(bx,by-u*1.5);c.lineTo(bx+u*1.4,by-u*.7);c.closePath();c.fill();c.strokeStyle="#ff6a5e";c.lineWidth=6;c.beginPath();c.moveTo(bx-u*1.5,by-u*1.4);c.lineTo(bx+u*1.5,by+u*.8);c.moveTo(bx+u*1.5,by-u*1.4);c.lineTo(bx-u*1.5,by+u*.8);c.stroke();tx("ingen bank",bx,by+u*2.2,"#ff9a8a","center",Math.max(15,s*.04),700);}
       c.restore();}};
 
   /* 2 · Satoshi Nakamoto: okänd */
@@ -49,12 +56,19 @@ function scenes(E){
       c.restore();}};
 
   /* 3 · blockkedjan */
+  const hex=(n)=>{let h=Math.imul(n+7,2654435761)>>>0,o="";for(let i=0;i<6;i++){h=(Math.imul(h,1664525)+1013904223)>>>0;o+=((h>>>20)&15).toString(16);}return o;};
   const s3=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.4)/1.1);photo(3,t,15.9,1.1,.15+.5*g);cred(3,.55*(1-g));
-    if(g>0){c.save();c.globalAlpha=g;space(a,1);const bw=Math.max(40,Math.min(a.w*.12,s*.16)),gap=bw*.35,n=Math.max(3,Math.floor(a.w*.88/(bw+gap))),n2=Math.min(n,6),lx=cx-(n2*bw+(n2-1)*gap)/2,y=cy-bw*.5;
+    if(g>0){c.save();c.globalAlpha=g;space(a,1);const bw=Math.max(54,Math.min(a.w*.13,s*.19)),gap=bw*.4,n=Math.max(3,Math.floor(a.w*.9/(bw+gap))),n2=Math.min(n,6),lx=cx-(n2*bw+(n2-1)*gap)/2,y=cy-bw*.5;
       const cnt=Math.min(n2,1+Math.floor((t-3)/1.1)+(t>11.4?1:0));
-      for(let i=0;i<Math.max(1,cnt);i++){const q=eo((t-3-i*1.1)/.6);if(q<=0&&i>0)continue;const px=lx+i*(bw+gap);c.save();c.globalAlpha=g*(i===0?1:Math.max(q,0));c.fillStyle="rgba(247,147,26,.18)";c.strokeStyle="#f7931a";c.lineWidth=3;c.fillRect(px,y,bw,bw);c.strokeRect(px,y,bw,bw);tx("block "+(i+1),px+bw/2,y+bw*.55,"#ffd86b","center",Math.max(12,bw*.2),700);if(i>0){c.strokeStyle="#9fd0ff";c.lineWidth=4;c.beginPath();c.moveTo(px-gap,y+bw/2);c.lineTo(px,y+bw/2);c.stroke();}c.restore();}
+      for(let i=0;i<Math.max(1,cnt);i++){const q=eo((t-3-i*1.1)/.6);if(q<=0&&i>0)continue;const px=lx+i*(bw+gap);c.save();c.globalAlpha=g*(i===0?1:Math.max(q,0));
+        gl(px+bw/2,y+bw/2,bw*1.1,"rgba(247,147,26,.28)");const gr=c.createLinearGradient(px,y,px,y+bw);gr.addColorStop(0,"rgba(247,147,26,.35)");gr.addColorStop(1,"rgba(60,30,5,.7)");c.fillStyle=gr;c.strokeStyle="#f7931a";c.lineWidth=2.5;c.fillRect(px,y,bw,bw);c.strokeRect(px,y,bw,bw);
+        tx("BLOCK "+(i+1),px+bw/2,y+bw*.2,"#ffd86b","center",Math.max(10,bw*.14),700);
+        const fs=Math.max(9,bw*.13);c.font=`500 ${fs}px ui-monospace,Menlo,monospace`;c.textAlign="center";c.fillStyle="rgba(255,235,200,.85)";c.fillText("hash",px+bw/2,y+bw*.42);c.fillStyle="#9fd0ff";c.fillText(hex(i+3).slice(0,6),px+bw/2,y+bw*.56);c.fillStyle="rgba(255,235,200,.6)";c.fillText("förra",px+bw/2,y+bw*.74);c.fillStyle="#9fd0ff";c.fillText(i?hex(i+2).slice(0,6):"000000",px+bw/2,y+bw*.88);
+        if(i>0){const pu=((t*.9+i*.3)%1);c.strokeStyle="rgba(159,208,255,.8)";c.lineWidth=4;c.beginPath();c.moveTo(px-gap,y+bw/2);c.lineTo(px,y+bw/2);c.stroke();gl(lerp(px-gap,px,pu),y+bw/2,bw*.35,"rgba(159,208,255,.9)");}
+        if(i===cnt-1&&t-3-i*1.1<1.4){for(let k=0;k<14;k++){const an=k*TAU/14,r=bw*(.5+(t-3-i*1.1)*.5);gl(px+bw/2+Math.cos(an)*r,y+bw/2+Math.sin(an)*r,bw*.12,"rgba(255,220,140,.9)");}}
+        c.restore();}
       tx("en gemensam bok som alla datorer har",cx,a.y+a.h*.14,"#cfd8ff","center",Math.max(17,s*.045),700);
-      if(t>11.4){c.globalAlpha=g*eo((t-11.4)/1);const sec=Math.min(10,Math.floor((t-11.4)*2.6));tx("nytt block ungefär var 10:e minut",cx,y+bw+Math.max(54,s*.12),"#ffd86b","center",Math.max(17,s*.045),700);}
+      if(t>11.4){c.globalAlpha=g*eo((t-11.4)/1);tx("nytt block ungefär var 10:e minut",cx,y+bw+Math.max(54,s*.12),"#ffd86b","center",Math.max(17,s*.045),700);}
       c.restore();}};
 
   /* 4 · 21 miljoner, 2140 */
@@ -76,12 +90,20 @@ function scenes(E){
       c.restore();}};
 
   /* 6 · priset går upp och ner */
+  const price=(()=>{const R=rnd(31),o=[];let v=.04;for(let i=0;i<260;i++){const q=i/259;const drift=q<.18?.004:q<.26?-.012:q<.5?.006:q<.58?-.016:q<.82?.007:q<.9?-.012:.004;v=Math.max(.01,Math.min(1,v+drift+(R()-.5)*.045));o.push(v);}const m=Math.max(...o);return o.map(z=>z/m);})();
   const s6=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.4)/1.1);photo(6,t,13.1,1.1,.15+.5*g);cred(6,.55*(1-g));
-    if(g>0){c.save();c.globalAlpha=g;panel(a,1);const w=Math.min(a.w*.82,s*1.5),h=Math.min(a.h*.46,s*.6),lx=cx-w/2,y0=cy+h*.5;
+    if(g>0){c.save();c.globalAlpha=g;panel(a,1);const w=Math.min(a.w*.84,s*1.55),h=Math.min(a.h*.5,s*.62),lx=cx-w/2,y0=cy+h*.5;
+      c.strokeStyle="rgba(255,255,255,.12)";c.lineWidth=1;for(let i=1;i<5;i++){c.beginPath();c.moveTo(lx,y0-h*i/4);c.lineTo(lx+w,y0-h*i/4);c.stroke();}
       c.strokeStyle="rgba(255,255,255,.5)";c.lineWidth=2;c.beginPath();c.moveTo(lx,y0-h);c.lineTo(lx,y0);c.lineTo(lx+w,y0);c.stroke();
-      const pts=[0,.02,.06,.04,.3,.15,.55,.3,.2,.5,.65,.85,.38,.5,.8,.62,.95,.55];const k=eo((t-3)/5);c.strokeStyle="#f7931a";c.lineWidth=4;c.beginPath();const N=pts.length-1;for(let i=0;i<=40*k;i++){const q=i/40,idx=q*N,i0=Math.floor(idx),f=idx-i0,v=pts[i0]+(pts[Math.min(N,i0+1)]-pts[i0])*f;const X=lx+q*w,Y=y0-v*h;i?c.lineTo(X,Y):c.moveTo(X,Y);}c.stroke();
-      if(t>5.5){c.globalAlpha=g*eo((t-5.5)/1);tx("−50 % eller mer, flera gånger",lx+w*.62,y0-h*1.05,"#ff9a8a","center",Math.max(14,s*.037),700);}
-      if(t>10.4){c.globalAlpha=g*eo((t-10.4)/1);tx("man kan förlora mycket pengar",cx,a.y+a.h*.9,"#ffd86b","center",Math.max(17,s*.045),700);}
+      const k=eo((t-3)/6.5),N=Math.floor(259*k)+1;
+      const X=i=>lx+i/259*w,Y=i=>y0-price[i]*h;
+      const fg=c.createLinearGradient(0,y0-h,0,y0);fg.addColorStop(0,"rgba(247,147,26,.35)");fg.addColorStop(1,"rgba(247,147,26,0)");c.fillStyle=fg;c.beginPath();c.moveTo(X(0),y0);for(let i=0;i<N;i++)c.lineTo(X(i),Y(i));c.lineTo(X(N-1),y0);c.closePath();c.fill();
+      c.save();c.shadowColor="#f7931a";c.shadowBlur=14;c.strokeStyle="#ffb04a";c.lineWidth=3;c.lineJoin="round";c.beginPath();for(let i=0;i<N;i++)i?c.lineTo(X(i),Y(i)):c.moveTo(X(i),Y(i));c.stroke();c.restore();
+      gl(X(N-1),Y(N-1),h*.16,"rgba(255,200,120,.9)");
+      const marks=[[0.22,"#ff7a6e","−50 %"],[0.54,"#ff7a6e","−50 %"],[0.37,"#7be39a","×2"],[0.7,"#7be39a","×2"]];
+      marks.forEach(([q,col,lab],mi)=>{const i=Math.floor(q*259);if(i<N){const f=eo((k*259-i)/12);c.save();c.globalAlpha*=f;gl(X(i),Y(i),h*.1,col==="#ff7a6e"?"rgba(255,90,80,.8)":"rgba(90,230,140,.8)");tx(lab,X(i),Y(i)+(col==="#ff7a6e"?h*.12:-h*.1),col,"center",Math.max(13,s*.035),700);c.restore();}});
+      if(t>5.5){c.globalAlpha=g*eo((t-5.5)/1);tx("upp och ner, väldigt snabbt",cx,y0-h*1.12,"#ffd86b","center",Math.max(15,s*.04),700);}
+      if(t>10.4){c.globalAlpha=g*eo((t-10.4)/1);tx("man kan förlora mycket pengar",cx,a.y+a.h*.92,"#ffd86b","center",Math.max(17,s*.045),700);}
       c.restore();}};
 
   /* 7 · el och fråga en vuxen */
