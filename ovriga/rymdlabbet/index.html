@@ -1155,7 +1155,7 @@ function drawGiants(){const cv=$('gCv'),{c,w,h}=fitCanvas(cv,gLand()?Math.max(20
 let gAud=null;
 function gStopAud(){if(gAud){gAud.onended=null;gAud.onerror=null;gAud.pause();gAud=null;}}
 /* berättarröst (ElevenLabs): ljud/jattar/s<index>-1.mp3, index = himlakroppens plats i listan, sist en avslutning; utan ljud går det på timer */
-function gVoice(n,tour,cb){gStopAud();if(!(window.Ljud&&Ljud.on)){setTimeout(()=>cb&&cb(),6500);return;}const a=new Audio('../../ljud/jattar/s'+n+'-1.mp3?v=1');a._tour=tour;gAud=a;let done=false;const fin=()=>{if(done)return;done=true;if(gAud===a)gAud=null;cb&&cb();};a.onended=fin;a.onerror=()=>setTimeout(fin,4000);a.play().catch(()=>setTimeout(fin,4000));}
+function gVoice(n,tour,cb){gStopAud();if(!(window.Ljud&&Ljud.on)){setTimeout(()=>cb&&cb(),6500);return;}const a=new Audio('../../ljud/jattar/s'+n+'-1.mp3?v=2');a._tour=tour;gAud=a;let done=false;const fin=()=>{if(done)return;done=true;if(gAud===a)gAud=null;cb&&cb();};a.onended=fin;a.onerror=()=>setTimeout(fin,4000);a.play().catch(()=>setTimeout(fin,4000));}
 function gLoop(){if(cur!=='jattar'){gRaf=0;gStopAud();if(G3)G3.stop();return;}
   if(!gTour&&gAud&&gAud._tour)gStopAud();
   if(gTour){const n=performance.now(),T=gTour;if(!T.talk&&n>T.t0&&Math.abs(gZoom-gShow)<.01){const k=Math.round(gZoom);T.talk=true;gVoice(k,true,()=>{if(gTour!==T)return;if(k>=GI.length-1){gVoice(GI.length,true,()=>{if(gTour===T){gTour=null;$('gTour').textContent='▶ Resa genom jättarna';}});}else{gZoom=k+1;T.talk=false;T.t0=performance.now()+350;}});}}
