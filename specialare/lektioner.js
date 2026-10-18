@@ -460,7 +460,7 @@ var LEKTIONER=[
 ["🦴","Kan det läka?","Vissa forskare tror att vibrationerna i spinnandet kan hjälpa kroppen att läka sig själv. Det är inte säkert än."],
 ["🦁","Stora katter","Geparder och pumor kan spinna. Lejon, tigrar och jaguarer kan inte spinna på samma sätt, men de kan ryta."]]},
 
-{id:"raket",titel:"Hur fungerar en raket?",kat:"Rymden",e:"🚀",c:"#D1583A",rutor:[
+{id:"raket",film:"raket",titel:"Hur fungerar en raket?",kat:"Rymden",e:"🚀",c:"#D1583A",rutor:[
 ["💨","Gas åt ena hållet","En raket fungerar genom att trycka ut het gas bakåt, och då åker raketen framåt. Det kallas rekyl."],
 ["📐","Newtons tredje lag","Newton upptäckte att varje kraft har en lika stor motkraft åt andra hållet. När gasen rusar ut åt ena hållet pressas raketen åt det andra."],
 ["🌌","Även i tomma rymden","Raketer fungerar utan luft. De behöver inte trycka mot något, eftersom gasen själv ger kraften."],
