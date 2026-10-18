@@ -6,11 +6,11 @@ const ROOT=MPFilmLib.root(document.currentScript),TAU=Math.PI*2;
 const SC=[
  {k:"Inledning",d:7.9,cap:[[0.5,"De växer i skogen, men de är varken växter eller djur. Det här är berättelsen om svamparna."]]},
  {k:"01 · Ett eget rike",d:7.8,cap:[[0.8,"Svampar är ett eget rike. De är inte växter, de är faktiskt närmare släkt med djur."]]},
- {k:"02 · Mest under jord",d:10.6,cap:[[0.8,"Det du ser, svampen med hatt, är bara fruktkroppen."],[4.8,"Den största delen är ett nät av tunna trådar, mycel, under marken."]]},
+ {k:"02 · Mest under jord",d:11.3,cap:[[0.8,"Det du ser, svampen med hatt, är bara fruktkroppen."],[4.8,"Den största delen är ett nät av tunna trådar, som kallas mycel, under marken."]]},
  {k:"03 · Den största",d:12.7,cap:[[0.8,"I Oregon i USA växer en honungsskivling som täcker ungefär 9 kvadratkilometer, mer än tusen fotbollsplaner."],[9.6,"Den är flera tusen år gammal."]]},
- {k:"04 · Skogens nätverk",d:8.6,cap:[[0.8,"Mycelet kopplar ihop träd. Forskare tror att träden delar socker och varnar varandra genom svamparna."]]},
+ {k:"04 · Skogens nätverk",d:8.4,cap:[[0.8,"Mycelet kopplar ihop träd. Forskare tror att träden delar socker och varnar varandra genom svamparna."]]},
  {k:"05 · Städare",d:9.7,cap:[[0.8,"Många svampar bryter ner döda träd och löv till jord. Utan dem skulle skogen vara full av gamla grenar."]]},
- {k:"06 · Mat och medicin",d:13.7,cap:[[0.8,"Penicillinet kommer från en mögelsvamp. Jäst är också en svamp, och vi äter champinjoner och kantareller."],[8.3,"Men plocka aldrig svamp du inte är helt säker på, för vissa är giftiga."]]}
+ {k:"06 · Mat och medicin",d:13.8,cap:[[0.8,"Penicillinet kommer från en mögelsvamp. Jäst är också en svamp, och vi äter champinjoner och kantareller."],[8.4,"Men plocka aldrig svamp du inte är helt säker på, för vissa är giftiga."]]}
 ];
 const META={mat:"tradgarden",hud:"PLUGGPARKEN · SPECIALARE · FILM",titel:"Svampar",under:"En film i sju steg · ca 1,5 minut",
   slutRubrik:"Tack för att du har följt med",slutText:"Under skogens golv finns en dold värld. Filmen bygger på riktiga foton ur Wikimedia Commons. Källor står under bilderna.",igen:"↻ Se filmen igen"};
@@ -88,7 +88,7 @@ function scenes(E){
     if(g>0){c.save();c.globalAlpha=g;panel(a,1);
       const w=Math.min(a.w*.8,s*1.3),h=Math.max(52,s*.12),y0=a.y+a.h*.14,items=[["penicillin","medicin","#9be3b0",3.5],["jäst","i brödet","#ffd86b",4.5],["champinjoner, kantareller","mat","#ffb090",5.5]];
       items.forEach(([n,sub,col,st],i)=>{const q=eo((t-st)/.8);if(q<=0)return;const y=y0+i*h*1.2;c.save();c.globalAlpha=g*q;c.fillStyle="rgba(255,255,255,.07)";c.strokeStyle=col;c.lineWidth=2;c.beginPath();c.roundRect?c.roundRect(cx-w/2,y,w,h,14):c.rect(cx-w/2,y,w,h);c.fill();c.stroke();tx(n,cx-w/2+18,y+h*.64,col,"left",Math.max(17,h*.36),700);tx(sub,cx+w/2-18,y+h*.62,"#fff","right",Math.max(14,h*.3),600);c.restore();});
-      if(t>8.3){const q=eo((t-8.3)/1),ty=y0+3*h*1.2+Math.max(30,s*.07),tr=Math.max(26,s*.07);c.globalAlpha=g*q;c.fillStyle="#ffd23c";c.strokeStyle="#7a3a00";c.lineWidth=4;c.beginPath();c.moveTo(cx,ty-tr);c.lineTo(cx+tr*1.1,ty+tr*.8);c.lineTo(cx-tr*1.1,ty+tr*.8);c.closePath();c.fill();c.stroke();tx("!",cx,ty+tr*.5,"#7a3a00","center",Math.max(30,tr),700);tx("plocka aldrig svamp du inte är säker på",cx,ty+tr*.8+Math.max(30,s*.07),"#fff","center",Math.max(16,s*.042),700);}
+      if(t>8.4){const q=eo((t-8.4)/1),ty=y0+3*h*1.2+Math.max(30,s*.07),tr=Math.max(26,s*.07);c.globalAlpha=g*q;c.fillStyle="#ffd23c";c.strokeStyle="#7a3a00";c.lineWidth=4;c.beginPath();c.moveTo(cx,ty-tr);c.lineTo(cx+tr*1.1,ty+tr*.8);c.lineTo(cx-tr*1.1,ty+tr*.8);c.closePath();c.fill();c.stroke();tx("!",cx,ty+tr*.5,"#7a3a00","center",Math.max(30,tr),700);tx("plocka aldrig svamp du inte är säker på",cx,ty+tr*.8+Math.max(30,s*.07),"#fff","center",Math.max(16,s*.042),700);}
       c.restore();}};
 
   return[s0,s1,s2,s3,s4,s5,s6];
