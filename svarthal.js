@@ -25,7 +25,7 @@ const CSS=`
 .sh-start{position:absolute;inset:0;display:grid;place-items:center;text-align:center;background:radial-gradient(ellipse at 50% 45%,rgba(255,140,60,.12),rgba(0,0,0,.6) 70%)}
 .sh-start h2{font-family:"Source Serif 4",Georgia,serif;font-size:clamp(2.2rem,6vw,4.6rem);margin:0 0 6px;line-height:1;background:linear-gradient(100deg,#ffd86b,#fff 55%,#ffb070);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .sh-start p{margin:0 0 22px;color:rgba(255,255,255,.75);font-size:1.05rem}
-.sh-play{height:56px;padding:0 30px;border-radius:28px;border:0;background:#fff;color:#08101e;font:800 1.15rem Inter,system-ui,sans-serif;cursor:pointer;box-shadow:0 0 40px rgba(255,200,120,.5)}
+.sh-extras{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:16px;padding:0 12px}.sh-play.sh-ex{height:46px;font-size:1rem;padding:0 22px;background:rgba(255,255,255,.12);color:#fff;box-shadow:none;border:1px solid rgba(255,255,255,.35)}.sh-play.sh-ex.guld{background:#f2b707;color:#08101e;border-color:#f2b707}.sh-play{height:56px;padding:0 30px;border-radius:28px;border:0;background:#fff;color:#08101e;font:800 1.15rem Inter,system-ui,sans-serif;cursor:pointer;box-shadow:0 0 40px rgba(255,200,120,.5)}
 .sh-opt{margin-top:14px;font-size:.92rem;color:rgba(255,255,255,.7)}
 .sh-opt label{cursor:pointer}
 .sh-end{position:absolute;inset:0;display:grid;place-items:center;text-align:center;background:rgba(0,0,0,.45);animation:she .8s ease}
@@ -98,8 +98,8 @@ window.MPSvartHal={start(host,o){o=o||{};const D=o.def,SC=D?D.SC:SC0,M=Object.as
     if(!p){if(V.a){try{V.a.pause();}catch(e){}}}else if(was===false&&V.a){V.a.play().catch(()=>{V.busy=false;});}else if(p&&!V.a&&capShown>=0&&st<SC[si].d&&!V.busy){/* första starten eller efter hopp */voicePlay(si,capShown);}
     const L=snd();if(L){if(p&&L.on)matStart(L);else matStop(L);}}
   function finish(){playing=false;$('[data-a="play"]').textContent="▶";ended=true;voiceStop();document.dispatchEvent(new Event("mp-sh-slut"));const L=snd();if(L)matStop(L);
-    const e=document.createElement("div");e.className="sh-end";e.innerHTML=`<div><h2>${M.slutRubrik}</h2><p>${M.slutText}</p><button class="sh-play" data-a="again">${M.igen}</button></div>`;root.appendChild(e);if(V.on){const a=new Audio(V.base+"s"+SC.length+"-1.mp3?v="+VOICE_VER);V.a=a;V.busy=true;duck(true);const dn=()=>{if(V.a===a){V.busy=false;V.a=null;duck(false);}};a.onended=dn;a.onerror=dn;const p=a.play();if(p&&p.catch)p.catch(dn);}}
-  root.addEventListener("click",ev=>{const b=ev.target.closest("[data-a],[data-i]");if(!b)return;
+    const e=document.createElement("div");e.className="sh-end";e.innerHTML=`<div><h2>${M.slutRubrik}</h2><p>${M.slutText}</p><button class="sh-play" data-a="again">${M.igen}</button>${(o.extra&&o.extra.length)?`<div class="sh-extras">${o.extra.map((x,i)=>`<button class="sh-play sh-ex${x.guld?" guld":""}" data-x="${i}">${x.t}</button>`).join("")}</div>`:""}</div>`;root.appendChild(e);if(V.on){const a=new Audio(V.base+"s"+SC.length+"-1.mp3?v="+VOICE_VER);V.a=a;V.busy=true;duck(true);const dn=()=>{if(V.a===a){V.busy=false;V.a=null;duck(false);}};a.onended=dn;a.onerror=dn;const p=a.play();if(p&&p.catch)p.catch(dn);}}
+  root.addEventListener("click",ev=>{const b=ev.target.closest("[data-a],[data-i],[data-x]");if(!b)return;if(b.dataset.x!=null){const ex=o.extra&&o.extra[+b.dataset.x];if(ex){cleanup();o.onClose&&o.onClose();ex.go();}return;}
     if(b.dataset.i!=null){if(!started)start();goto(+b.dataset.i);return;}
     const a=b.dataset.a;
     if(a==="go")start();else if(a==="again")goto(0);else if(a==="play"){if(!started)return start();if(ended)return goto(0);setPlay(!playing);}
