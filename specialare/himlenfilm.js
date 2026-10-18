@@ -26,16 +26,18 @@ function scenes(E){
   const L=MPFilmLib.make(E,{ROOT,prefix:"himlen-",names:[1,2,3,4,5,6],KR});
   const {x,tx,tg,S,cred,photo,panel,grad,space,title}=L;
   const dot=(px,py,r,col)=>{const c=x();c.fillStyle=col;c.beginPath();c.arc(px,py,r,0,TAU);c.fill();};
-  const wave=(lx,w,y,amp,cycles,t,col,lw)=>{const c=x();c.save();c.strokeStyle=col;c.lineWidth=lw||4;c.beginPath();for(let i=0;i<=160;i++){const q=i/160,X=lx+q*w,Y=y+Math.sin(q*TAU*cycles-t*3)*amp;i?c.lineTo(X,Y):c.moveTo(X,Y);}c.stroke();c.restore();};
+  const gl=(px,py,r,col)=>{const c=x();c.save();c.globalCompositeOperation="lighter";const g=c.createRadialGradient(px,py,0,px,py,r);g.addColorStop(0,col);g.addColorStop(1,"rgba(0,0,0,0)");c.fillStyle=g;c.beginPath();c.arc(px,py,r,0,TAU);c.fill();c.restore();};
+  const beam=(x0,y0,x1,y1,col,lw)=>{const c=x();c.save();c.globalCompositeOperation="lighter";c.lineCap="round";c.strokeStyle=col.replace("A",".18");c.lineWidth=lw*4;c.beginPath();c.moveTo(x0,y0);c.lineTo(x1,y1);c.stroke();c.strokeStyle=col.replace("A",".9");c.lineWidth=lw;c.beginPath();c.moveTo(x0,y0);c.lineTo(x1,y1);c.stroke();c.restore();};
+  const wave=(lx,w,y,amp,cycles,t,col,lw)=>{const c=x();c.save();c.shadowColor=col;c.shadowBlur=16;c.strokeStyle=col;c.lineWidth=lw||4;c.beginPath();for(let i=0;i<=160;i++){const q=i/160,X=lx+q*w,Y=y+Math.sin(q*TAU*cycles-t*3)*amp;i?c.lineTo(X,Y):c.moveTo(X,Y);}c.stroke();c.restore();};
 
   const s0=(t)=>{photo(4,t,7.2,1.12,.3);const f=title(t,"HIMLENS FÄRGER","VARFÖR BLÅ OCH VARFÖR RÖD","#cfe8ff");cred(4,.55*f);};
 
   /* 1 · vitt ljus delas i regnbågens färger */
   const s1=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.2)/1.1);photo(2,t,7,1.1,.15+.5*g);cred(2,.55*(1-g));
     if(g>0){c.save();c.globalAlpha=g;grad(a,[[0,"#0a1224"],[1,"#162240"]]);const w=Math.min(a.w*.7,s*1.3),lx=cx-w/2,pw=Math.max(60,s*.14);
-      c.strokeStyle="#fff";c.lineWidth=8;c.beginPath();c.moveTo(lx,cy);c.lineTo(cx-pw*.2,cy);c.stroke();
-      c.fillStyle="rgba(200,230,255,.35)";c.strokeStyle="rgba(255,255,255,.8)";c.lineWidth=3;c.beginPath();c.moveTo(cx-pw*.6,cy+pw*.6);c.lineTo(cx,cy-pw*.7);c.lineTo(cx+pw*.6,cy+pw*.6);c.closePath();c.fill();c.stroke();
-      const k=eo((t-3.4)/2),cols=["#ff3a3a","#ff9a3a","#ffe23a","#3acf5a","#3a9aff","#4a5aff","#9a5aff"];cols.forEach((col,i)=>{const an=(-.35+i*.1)*1,len=w*.5*k;c.strokeStyle=col;c.lineWidth=6;c.beginPath();c.moveTo(cx+pw*.25,cy);c.lineTo(cx+pw*.25+Math.cos(an)*len,cy+Math.sin(an)*len+i*0);c.stroke();});
+      const px0=cx-pw*.25,pyy=cy;beam(lx,cy,px0,cy,"rgba(255,255,255,A)",5);gl(lx,cy,pw*.8,"rgba(255,255,255,.3)");
+      const pg=c.createLinearGradient(cx-pw*.6,cy-pw*.7,cx+pw*.6,cy+pw*.6);pg.addColorStop(0,"rgba(230,245,255,.55)");pg.addColorStop(1,"rgba(120,170,230,.25)");c.fillStyle=pg;c.strokeStyle="rgba(255,255,255,.9)";c.lineWidth=3;c.beginPath();c.moveTo(cx-pw*.6,cy+pw*.6);c.lineTo(cx,cy-pw*.7);c.lineTo(cx+pw*.6,cy+pw*.6);c.closePath();c.fill();c.stroke();gl(cx,cy,pw*.9,"rgba(200,230,255,.12)");
+      const k=eo((t-3.4)/2),cols=["255,58,58","255,154,58","255,226,58","58,207,90","58,154,255","74,90,255","154,90,255"];cols.forEach((cc,i)=>{const an=-.28+i*.095,len=w*.5*k;beam(cx+pw*.3,cy+pw*.12,cx+pw*.3+Math.cos(an)*len,cy+pw*.12+Math.sin(an)*len,`rgba(${cc},A)`,4);gl(cx+pw*.3+Math.cos(an)*len,cy+pw*.12+Math.sin(an)*len,pw*.3*k,`rgba(${cc},.5)`);});
       tx("vitt ljus = alla färger",cx,a.y+a.h*.14,"#ffd86b","center",Math.max(20,s*.055),700);
       c.restore();}};
 
@@ -49,10 +51,13 @@ function scenes(E){
   /* 3 · luftens molekyler sprider blått */
   const s3=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.4)/1.1);photo(3,t,15.8,1.1,.15+.5*g);cred(3,.55*(1-g));
     if(g>0){c.save();c.globalAlpha=g;grad(a,[[0,"#0a1224"],[1,"#162240"]]);const w=Math.min(a.w*.8,s*1.5),lx=cx-w/2,y=cy;
-      const r=L.srand(5);c.fillStyle="rgba(200,220,255,.5)";for(let i=0;i<40;i++)dot(lx+w*.35+r()*w*.3,y-s*.25+r()*s*.5,Math.max(3,s*.008),"rgba(200,220,255,.55)");
-      c.strokeStyle="#ff4a3a";c.lineWidth=5;c.beginPath();c.moveTo(lx,y+s*.02);c.lineTo(lx+w,y+s*.02);c.stroke();
-      c.strokeStyle="#4a8aff";c.lineWidth=5;c.beginPath();c.moveTo(lx,y-s*.02);c.lineTo(lx+w*.5,y-s*.02);c.stroke();
-      const k=eo((t-3.6)/1.6);for(let i=0;i<9;i++){const an=-Math.PI/2+i*(Math.PI/8)-Math.PI*.1;c.globalAlpha=g*k;c.beginPath();c.moveTo(lx+w*.5,y-s*.02);c.lineTo(lx+w*.5+Math.cos(an)*s*.22*k,y-s*.02+Math.sin(an)*s*.22*k);c.stroke();}
+      const r=L.srand(5),zx0=lx+w*.3,zw=w*.4,zy0=y-s*.3,zh=s*.6;
+      c.fillStyle="rgba(120,170,255,.06)";c.fillRect(zx0,zy0,zw,zh);c.strokeStyle="rgba(150,190,255,.25)";c.setLineDash([6,8]);c.strokeRect(zx0,zy0,zw,zh);c.setLineDash([]);
+      const mol=[];for(let i=0;i<46;i++){const mx=zx0+r()*zw,my=zy0+r()*zh;mol.push([mx,my]);gl(mx,my,Math.max(6,s*.014),"rgba(190,215,255,.35)");dot(mx,my,Math.max(2,s*.005),"rgba(220,235,255,.8)");}
+      const k0=Math.max(0,t-3.4);
+      for(let i=0;i<14;i++){const lane=y-s*.2+i*(s*.4/13),blue=i%2===0,q=((k0*.32+i*.173)%1);if(k0<=0)break;const X=lx+q*w;
+        if(!blue){beam(X-s*.08,lane,X,lane,"rgba(255,70,50,A)",3);}
+        else{const hit=zx0+zw*(.25+.5*((i*37)%10)/10),dir=((i*53)%7-3)*.55+((i%4<2)?-1.2:1.2);if(X<hit){beam(X-s*.08,lane,X,lane,"rgba(90,150,255,A)",3);}else{const d=X-hit,an=dir,bx=hit+Math.cos(an)*d*.9,by=lane+Math.sin(an)*d*.9;if(d<w*.38){beam(bx-Math.cos(an)*s*.07,by-Math.sin(an)*s*.07,bx,by,"rgba(90,150,255,A)",3);gl(hit,lane,s*.04,"rgba(120,170,255,.6)");}}}}
       c.globalAlpha=g;tx("blått sprids åt alla håll",lx+w*.5,a.y+a.h*.14,"#7aaaff","center",Math.max(16,s*.042),700);tx("rött går rakt igenom",lx+w*.85,y+s*.14,"#ff8a7a","center",Math.max(14,s*.037),700);
       if(t>9.6){c.globalAlpha=g*eo((t-9.6)/1);tx("Lord Rayleigh · 1870-talet",cx,a.y+a.h*.9,"#ffd86b","center",Math.max(16,s*.042),700);}
       c.restore();}};
@@ -71,8 +76,9 @@ function scenes(E){
   const s5=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.4)/1.1);photo(5,t,9.8,1.1,.15+.5*g);cred(5,.55*(1-g));
     if(g>0){c.save();c.globalAlpha=g;grad(a,[[0,"#0a1224"],[1,"#162240"]]);const R=Math.min(a.w*.45,s*.8),ex=cx,ey=cy+s*.5;
       c.strokeStyle="rgba(120,180,255,.6)";c.lineWidth=Math.max(10,s*.03);c.beginPath();c.arc(ex,ey,R,Math.PI*1.05,Math.PI*1.95);c.stroke();c.fillStyle="#1d5fb8";c.beginPath();c.arc(ex,ey,R-Math.max(12,s*.035),0,TAU);c.fill();
-      const k=eo((t-3)/2);const sunAn=lerp(Math.PI*1.5,Math.PI*1.1,k);const sx=ex+Math.cos(sunAn)*R*1.5,sy=ey+Math.sin(sunAn)*R*1.5;dot(sx,sy,Math.max(12,s*.03),"#ffd23c");
+      const k=eo((t-3)/2);const sunAn=lerp(Math.PI*1.5,Math.PI*1.1,k);const sx=ex+Math.cos(sunAn)*R*1.5,sy=ey+Math.sin(sunAn)*R*1.5;gl(sx,sy,Math.max(40,s*.1),"rgba(255,210,80,.55)");dot(sx,sy,Math.max(12,s*.03),"#ffe680");
       const px=ex+Math.cos(Math.PI*1.5)*(R-Math.max(12,s*.035)),py=ey+Math.sin(Math.PI*1.5)*(R-Math.max(12,s*.035));const grd=c.createLinearGradient(sx,sy,px,py);grd.addColorStop(0,"#fff");grd.addColorStop(.5,"#ffb050");grd.addColorStop(1,"#ff4a3a");c.strokeStyle=grd;c.lineWidth=5;c.beginPath();c.moveTo(sx,sy);c.lineTo(px,py);c.stroke();dot(px,py,6,"#fff");
+      {const sw=Math.min(a.w*.2,s*.34),shh=Math.min(a.h*.3,s*.34),sx0=a.x+a.w*.82-sw/2,sy0=cy-shh/2;const sg=c.createLinearGradient(0,sy0,0,sy0+shh);const m=k;const mix=(c1,c2)=>c1.map((v,i)=>Math.round(lerp(v,c2[i],m)));const top=mix([40,110,210],[40,50,120]),bot=mix([150,200,255],[255,140,60]);sg.addColorStop(0,`rgb(${top})`);sg.addColorStop(1,`rgb(${bot})`);c.fillStyle=sg;c.fillRect(sx0,sy0,sw,shh);c.strokeStyle="rgba(255,255,255,.7)";c.lineWidth=2;c.strokeRect(sx0,sy0,sw,shh);tx("himlen",sx0+sw/2,sy0+shh+Math.max(22,s*.05),"#cfd8ff","center",Math.max(13,s*.034),700);}
       tx(k>.6?"lång väg: blått sprids bort":"kort väg: blått kvar",cx,a.y+a.h*.1,k>.6?"#ffb878":"#9fd0ff","center",Math.max(18,s*.048),700);
       c.restore();}};
 
