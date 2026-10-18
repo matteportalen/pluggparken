@@ -27,7 +27,7 @@ var LEKTIONER=[
 ["🌅","Röd solnedgång","När solen är lågt står ljuset längre väg genom luften. Det mesta blå sprids bort, och rött och orange blir kvar."],
 ["🌌","I rymden är det svart","Uppe i rymden finns ingen luft som sprider ljuset. Därför är himlen svart där, även mitt på dagen."]]},
 
-{id:"marianer",titel:"Det djupaste stället",kat:"Natur",e:"🌊",c:"#1C5D99",rutor:[
+{id:"marianer",film:"marianer",titel:"Det djupaste stället",kat:"Natur",e:"🌊",c:"#1C5D99",rutor:[
 ["🌊","Marianergraven","Det djupaste stället på jorden ligger i Stilla havet och heter Marianergraven. Det är en lång djup spricka i havsbotten."],
 ["📏","Nästan 11 kilometer","På det djupaste stället är det ungefär 10 900 meter ner. Det är längre än en flygplansresa är hög!"],
 ["🏔️","Större än Mount Everest","Om man lade Mount Everest (8 849 meter) på botten av graven skulle det fortfarande vara mer än två kilometer vatten ovanför toppen."],
