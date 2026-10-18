@@ -5,11 +5,11 @@
 const ROOT=MPFilmLib.root(document.currentScript),TAU=Math.PI*2;
 const SC=[
  {k:"Inledning",d:9.4,cap:[[0.5,"En enorm, snurrande storm som kan vara hundratals kilometer bred. Det här är berättelsen om orkaner."]]},
- {k:"01 · Varmt hav",d:11.1,cap:[[0.8,"En orkan bildas över ett hav som är minst ungefär 26 grader varmt."],[6.6,"Varm, fuktig luft stiger uppåt och bildar åskmoln."]]},
+ {k:"01 · Varmt hav",d:10.7,cap:[[0.8,"En orkan bildas över ett hav som är minst ungefär 26 grader varmt."],[6.2,"Varm, fuktig luft stiger uppåt och bildar åskmoln."]]},
  {k:"02 · Snurrar",d:8.9,cap:[[0.8,"Jordens rotation får vindarna att börja snurra."],[4.3,"På norra halvklotet snurrar de moturs, åt vänster."]]},
  {k:"03 · Ögat",d:11.6,cap:[[0.8,"I mitten finns ögat, ett område där det nästan är vindstilla och ibland sol."],[6.7,"Runt ögat står ögonväggen med de allra starkaste vindarna."]]},
  {k:"04 · Över 119 km/h",d:9.9,cap:[[0.8,"Man kallar det en orkan när vinden blåser över 119 kilometer i timmen."],[6.3,"De starkaste når över 250."]]},
- {k:"05 · Olika namn",d:14,cap:[[0.8,"Orkan heter tyfon i västra Stilla havet och cyklon i Indiska oceanen. Det är samma sorts storm."],[7.9,"Stormarna får namn från listor i bokstavsordning, så att alla kan hålla reda på dem."]]},
+ {k:"05 · Olika namn",d:14.5,cap:[[0.8,"Orkan heter tyfon i västra Stilla havet och cyklon i Indiska oceanen. Det är samma sorts storm."],[8.4,"Stormarna får namn från listor i bokstavsordning, så att alla kan hålla reda på dem."]]},
  {k:"06 · Vattnet",d:12.1,cap:[[0.8,"Mest skada gör oftast stormfloden, när havet pressas in över land."],[6.3,"Över land tappar orkanen sin kraft, eftersom den inte får mer varmt vatten."]]}
 ];
 const META={mat:"slott",hud:"PLUGGPARKEN · SPECIALARE · FILM",titel:"Orkaner",under:"En film i sju steg · ca 1,5 minut",
@@ -34,14 +34,14 @@ function scenes(E){
   const s0=(t)=>{photo(3,t,9.4,1.12,.2);const f=title(t,"ORKANER","JORDENS STÖRSTA STORMAR","#cfe8ff");cred(3,.55*f);};
 
   /* 1 · Varmt hav: värme som stiger och åskmoln */
-  const s1=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.6)/1.1);photo(1,t,11.1,1.08,.15+.4*g);cred(1,.55*(1-g));
+  const s1=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.6)/1.1);photo(1,t,10.7,1.08,.15+.4*g);cred(1,.55*(1-g));
     if(g>0){c.save();c.globalAlpha=g;grad(a,[[0,"#14305a"],[1,"#3a6aa8"]]);
       const gy=a.y+a.h*.66;sea(a,gy,t,1);
       // värme och uppåtpilar
       for(let i=0;i<6;i++){const px=a.x+a.w*(.14+.14*i),ph=(t*.5+i*.17)%1,py=gy-ph*a.h*.3;c.strokeStyle=`rgba(255,160,90,${.8*(1-ph)})`;c.lineWidth=4;c.lineCap="round";c.beginPath();c.moveTo(px,py+16);c.lineTo(px,py);c.stroke();c.beginPath();c.moveTo(px,py-6);c.lineTo(px-6,py+4);c.lineTo(px+6,py+4);c.fillStyle=c.strokeStyle;c.fill();}
       // termometer
       const tx0=a.x+a.w*.08,ty=a.y+a.h*.18,th=a.h*.34;c.fillStyle="rgba(255,255,255,.15)";c.fillRect(tx0-8,ty,16,th);c.fillStyle="#ff8a5a";c.fillRect(tx0-5,ty+th*.35,10,th*.65);tx("26°",tx0+18,ty+th*.38,"#ffd0b0","left",Math.max(20,s*.055),700);tx("minst",tx0+18,ty+th*.38-Math.max(22,s*.05),"#ffd0b0","left",Math.max(12,s*.03),600);
-      if(t>6.6){const q=eo((t-6.6)/2.4);c.globalAlpha=g*q;[[.35,.3,.1],[.5,.26,.14],[.68,.3,.11],[.58,.2,.09]].forEach(([dx,dy,r])=>{c.fillStyle="#d9dfee";c.beginPath();c.arc(a.x+a.w*dx,a.y+a.h*dy,Math.min(a.w,a.h)*r*q,0,TAU);c.fill();});tx("åskmoln",cx,a.y+a.h*.1,"#fff","center",Math.max(18,s*.05),700);}
+      if(t>6.2){const q=eo((t-6.2)/2.4);c.globalAlpha=g*q;[[.35,.3,.1],[.5,.26,.14],[.68,.3,.11],[.58,.2,.09]].forEach(([dx,dy,r])=>{c.fillStyle="#d9dfee";c.beginPath();c.arc(a.x+a.w*dx,a.y+a.h*dy,Math.min(a.w,a.h)*r*q,0,TAU);c.fill();});tx("åskmoln",cx,a.y+a.h*.1,"#fff","center",Math.max(18,s*.05),700);}
       c.restore();}};
 
   /* 2 · Snurrar moturs */
@@ -74,12 +74,12 @@ function scenes(E){
       c.restore();}};
 
   /* 5 · Olika namn: tre regioner, och listan med namn */
-  const s5=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-3.2)/1.1);photo(5,t,14,1.1,.1+.5*g);cred(5,.55*(1-g));
+  const s5=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-3.2)/1.1);photo(5,t,14.5,1.1,.1+.5*g);cred(5,.55*(1-g));
     if(g>0){c.save();c.globalAlpha=g;panel(a,1);
       const items=[["Orkan","Atlanten","#ffd86b",3.6],["Tyfon","västra Stilla havet","#7fd6ff",4.6],["Cyklon","Indiska oceanen","#9be3b0",5.6]],w=Math.min(a.w*.8,s*1.3),h=Math.max(52,s*.12),y0=a.y+a.h*.14;
       items.forEach(([n,r,col,st],i)=>{const q=eo((t-st)/.8);if(q<=0)return;const y=y0+i*h*1.2;c.save();c.globalAlpha=g*q;c.fillStyle="rgba(255,255,255,.07)";c.strokeStyle=col;c.lineWidth=2;c.beginPath();c.roundRect?c.roundRect(cx-w/2,y,w,h,14):c.rect(cx-w/2,y,w,h);c.fill();c.stroke();tx(n,cx-w/2+18,y+h*.64,col,"left",Math.max(20,h*.42),700);tx(r,cx+w/2-18,y+h*.62,"#fff","right",Math.max(15,h*.32),600);c.restore();});
       if(t>6.4){const q=eo((t-6.4)/1);c.globalAlpha=g*q;tx("samma sorts storm",cx,y0+3*h*1.2+Math.max(26,s*.06),"#fff","center",Math.max(16,s*.042),700);}
-      if(t>7.9){const nm=["Alberto","Beryl","Chris","Debby"],pw=Math.min(a.w*.18,s*.3),y=a.y+a.h*.84;nm.forEach((n,i)=>{const q=eo((t-8.2-i*.5)/.6);if(q<=0)return;c.save();c.globalAlpha=g*q;c.fillStyle="rgba(6,10,22,.8)";c.strokeStyle="#ffd86b";c.lineWidth=2;const px=cx+(i-1.5)*(pw+8);c.beginPath();c.roundRect?c.roundRect(px-pw/2,y,pw,Math.max(40,s*.09),12):c.rect(px-pw/2,y,pw,Math.max(40,s*.09),12);c.fill();c.stroke();tx(n,px,y+Math.max(27,s*.062),"#ffd86b","center",Math.max(14,s*.034),700);c.restore();});}
+      if(t>8.4){const nm=["Alberto","Beryl","Chris","Debby"],pw=Math.min(a.w*.18,s*.3),y=a.y+a.h*.84;nm.forEach((n,i)=>{const q=eo((t-8.7-i*.5)/.6);if(q<=0)return;c.save();c.globalAlpha=g*q;c.fillStyle="rgba(6,10,22,.8)";c.strokeStyle="#ffd86b";c.lineWidth=2;const px=cx+(i-1.5)*(pw+8);c.beginPath();c.roundRect?c.roundRect(px-pw/2,y,pw,Math.max(40,s*.09),12):c.rect(px-pw/2,y,pw,Math.max(40,s*.09),12);c.fill();c.stroke();tx(n,px,y+Math.max(27,s*.062),"#ffd86b","center",Math.max(14,s*.034),700);c.restore();});}
       c.restore();}};
 
   /* 6 · Vattnet: stormflod och orkanen som tynar över land */
