@@ -100,7 +100,7 @@
         Object.assign(this,{g,nodes:[n,l]});this.timer=setTimeout(bub,900);},
       stop(){if(!this.g)return;clearTimeout(this.timer);const c=ac(),t=c.currentTime;this.g.gain.setTargetAtTime(0.0001,t,.25);this.nodes.forEach(x=>{try{x.stop(t+1.2)}catch(e){}});this.g=null;}
     },
-    /* Bakgrundsljud för Skattjakten och Bubbelskjutaren: start('tradgarden' | 'grottan' | 'vintern' | 'havet' | 'djungel' | 'godis' | 'vulkan' | 'slott'), stop() */
+    /* Bakgrundsljud för Skattjakten och Bubbelskjutaren: start('tradgarden' | 'grottan' | 'vintern' | 'havet' | 'vagor' | 'djungel' | 'godis' | 'vulkan' | 'slott'), stop() */
     ambient:{
       start(kind){if(!isOn())return;this.stop(true);const c=ac();if(!c)return;
         const g=c.createGain();g.gain.setValueAtTime(0.0001,c.currentTime);g.gain.exponentialRampToValueAtTime(1,c.currentTime+2);g.connect(c.destination);
@@ -140,6 +140,11 @@
           /* Slottet: vind runt tornen och facklor som sprakar */
           wind('bandpass',520,.7,.03,.08,220);
           later(()=>{const n=1+Math.floor(Math.random()*4);for(let i=0;i<n;i++)blip(1800+Math.random()*2200,i*.05,.025,.015);},600,2200);
+        }else if(kind==='vagor'){
+          /* Vågor och vind över öppet hav (Titanic, vikingarna): långsamt sväljande brus, lite sprut och en och annan mås långt borta */
+          wind('lowpass',430,.5,.06,.09,220);
+          wind('bandpass',1100,.6,.012,.06,300);
+          later(()=>{const f=1900+Math.random()*500;blip(f,0,.32,.012,f*.62);if(Math.random()<.6)blip(f*.95,.4,.28,.01,f*.6);},9000,20000);
         }else if(kind==='havet'){
           /* Bubbelskjutaren under vatten: dovt brus som sväller och små bubblor */
           wind('lowpass',300,.6,.035,.06,110);

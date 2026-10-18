@@ -13,7 +13,7 @@ const SC=[
  {k:"05 · De finns kvar",d:9.5,cap:[[0.8,"Men några små dinosaurier överlevde, och de blev fåglar."],[5.2,"En höna är alltså en slags dinosaurie."]]},
  {k:"06 · Fossil",d:13.3,cap:[[0.8,"Allt det här vet vi tack vare fossil: ben och avtryck som har blivit till sten under miljoner år."],[8.9,"Forskare gräver fram dem och lär sig mer, år efter år."]]}
 ];
-const META={hud:"PLUGGPARKEN · SPECIALARE · FILM",titel:"Dinosaurierna",under:"En film i sex steg · ca 1,5 minut",
+const META={mat:"djungel",hud:"PLUGGPARKEN · SPECIALARE · FILM",titel:"Dinosaurierna",under:"En film i sex steg · ca 1,5 minut",
   slutRubrik:"Tack för att du har följt med",slutText:"Dinosaurierna är borta, men du kan se dem om du tittar på en fågel. Filmen bygger på riktiga foton ur Wikimedia Commons. Källor står under bilderna.",igen:"↻ Se filmen igen"};
 const KR={1:"Foto: Robosorne · CC BY-SA 3.0 · Wikimedia Commons",2:"Foto: Dosseman · CC BY-SA 4.0 · Wikimedia Commons",3:"Foto: Gary Todd · CC0 · Wikimedia Commons",4:"Konstnärens bild av en asteroidkrock: ESO/M. Kornmesser · CC BY 4.0 · Wikimedia Commons",5:"Foto: Thegreenj · CC BY-SA 3.0 · Wikimedia Commons",6:"Foto: Stuart Plotkin · CC BY-SA 3.0 · Wikimedia Commons"};
 const IMG={};function img(n){const u=ROOT+"bilder/dinosaurier-"+n+".jpg";if(!IMG[u]){const i=new Image();i.src=u;IMG[u]=i;}return IMG[u];}

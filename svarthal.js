@@ -3,7 +3,7 @@
    MPSvartHal.start(host,{overlay,onClose}) ritar filmen i host och returnerar en funktion som städar.
    overlay:true = hela fönstret med en egen ✕ (Rymdlabbet); annars fyller filmen ytan under sidhuvudet (Specialare).
    Berättarröst: inspelade repliker (ElevenLabs) i ljud/svarthal/s<scen>-<replik>.mp3; filmen väntar in rösten. Saknas en fil visas bara texten.
-   (Webbläsarens röst prövades och valdes bort av läraren.) Undertexter ord för ord. Ljudmatta: Ljud.rymd om ljud.js finns. */
+   (Webbläsarens röst prövades och valdes bort av läraren.) Undertexter ord för ord. Ljudmatta: Ljud.rymd om ljud.js finns, eller ett eget ljud med meta.mat (se matStart). */
 (function(){
 const CSS=`
 .sh{position:fixed;left:0;right:0;bottom:0;top:var(--top,67px);z-index:5;background:#03050a;color:#fff;font-family:Inter,"Helvetica Neue",Arial,system-ui,sans-serif;overflow:hidden;user-select:none;-webkit-user-select:none}
@@ -55,7 +55,10 @@ const SC0=[
 /* ---------- Röst: en inspelad fil per replik ---------- */
 const V={on:true,busy:false,a:null,base:ROOT+"ljud/svarthal/"};
 function voiceStop(){V.busy=false;if(V.a){try{V.a.pause();}catch(e){}V.a=null;}duck(false);}
-function duck(on){const L=window.Ljud;try{const g=L&&L.rymd&&L.rymd.g;if(g&&g.context)g.gain.setTargetAtTime(on?.16:.55,g.context.currentTime,.4);}catch(e){}}
+let MAT="rymd";/* Ljudmatta: meta.mat (MAT) = "rymd" (standard) eller ett namn i Ljud.ambient (t.ex. "vagor", "vulkan", "djungel") */
+function matStart(L){if(MAT!=="rymd"){if(L.ambient)L.ambient.start(MAT);}else if(L.rymd)L.rymd.start();}
+function matStop(L){if(L.rymd&&L.rymd.stop)L.rymd.stop();if(L.ambient&&L.ambient.stop&&MAT!=="rymd")L.ambient.stop();}
+function duck(on){const L=window.Ljud;try{const o=MAT!=="rymd"?L&&L.ambient:L&&L.rymd,g=o&&o.g;if(g&&g.context)g.gain.setTargetAtTime(on?.16:(MAT!=="rymd"?1:.55),g.context.currentTime,.4);}catch(e){}}
 const VOICE_VER="20261018";/* ändra när röstfiler byts ut, så att webbläsare inte spelar gamla cachade filer */
 function voicePlay(si,ci){voiceStop();if(!V.on)return;const a=new Audio(V.base+"s"+si+"-"+(ci+1)+".mp3?v="+VOICE_VER);a.preload="auto";V.a=a;V.busy=true;
   const done=()=>{clearTimeout(V.t);if(V.a===a){V.busy=false;V.a=null;duck(false);}};a.onended=done;a.onerror=done;duck(true);
@@ -67,7 +70,7 @@ let STARS=[];
 function makeStars(){let s=7;const r=()=>(s=(s*16807)%2147483647)/2147483647;STARS=[];for(let i=0;i<520;i++)STARS.push({x:r(),y:r(),z:.2+r()*.8,tw:r()*TAU,c:r()<.15?"#ffd9b0":r()<.3?"#b8d8ff":"#ffffff"});}
 makeStars();
 
-window.MPSvartHal={start(host,o){o=o||{};const D=o.def,SC=D?D.SC:SC0,M=Object.assign({hud:"PLUGGPARKEN · RYMDARKIVET · FILM 01",titel:"Inuti ett svart hål",under:"En film i sju steg · ca 3 minuter",slutRubrik:"Tack för att du har lyssnat",slutText:"Nu vet du lite mer om en av universums mest mystiska platser. Fortsätt vara nyfiken! Filmen handlar om flykthastighet, händelsehorisonten, den sista stabila banan och tidvattenkrafter.",igen:"↻ Se filmen igen"},D&&D.meta);V.base=ROOT+"ljud/"+(D?D.ljud:"svarthal")+"/";
+window.MPSvartHal={start(host,o){o=o||{};const D=o.def,SC=D?D.SC:SC0,M=Object.assign({hud:"PLUGGPARKEN · RYMDARKIVET · FILM 01",titel:"Inuti ett svart hål",under:"En film i sju steg · ca 3 minuter",slutRubrik:"Tack för att du har lyssnat",slutText:"Nu vet du lite mer om en av universums mest mystiska platser. Fortsätt vara nyfiken! Filmen handlar om flykthastighet, händelsehorisonten, den sista stabila banan och tidvattenkrafter.",igen:"↻ Se filmen igen"},D&&D.meta);MAT=M.mat||"rymd";V.base=ROOT+"ljud/"+(D?D.ljud:"svarthal")+"/";
   if(!document.getElementById("sh-css")){const st=document.createElement("style");st.id="sh-css";st.textContent=CSS;document.head.appendChild(st);}
   const root=document.createElement("div");root.className="sh"+(o.overlay?" ov":"");
   root.innerHTML=`<canvas></canvas><div class="sh-cap"><div class="sh-kick"></div><div class="sh-txt"></div></div>
@@ -93,8 +96,8 @@ window.MPSvartHal={start(host,o){o=o||{};const D=o.def,SC=D?D.SC:SC0,M=Object.as
     root.querySelectorAll(".sh-dot").forEach((d,k)=>d.classList.toggle("done",k<si));showCap(0);if(keepPlay!==false)setPlay(true);draw();}
   function setPlay(p){const was=playing;playing=p;$('[data-a="play"]').textContent=p?"⏸":"▶";
     if(!p){if(V.a){try{V.a.pause();}catch(e){}}}else if(was===false&&V.a){V.a.play().catch(()=>{V.busy=false;});}else if(p&&!V.a&&capShown>=0&&st<SC[si].d&&!V.busy){/* första starten eller efter hopp */voicePlay(si,capShown);}
-    const L=snd();if(L&&L.rymd){if(p&&L.on)L.rymd.start();else L.rymd.stop&&L.rymd.stop();}}
-  function finish(){playing=false;$('[data-a="play"]').textContent="▶";ended=true;voiceStop();document.dispatchEvent(new Event("mp-sh-slut"));const L=snd();if(L&&L.rymd&&L.rymd.stop)L.rymd.stop();
+    const L=snd();if(L){if(p&&L.on)matStart(L);else matStop(L);}}
+  function finish(){playing=false;$('[data-a="play"]').textContent="▶";ended=true;voiceStop();document.dispatchEvent(new Event("mp-sh-slut"));const L=snd();if(L)matStop(L);
     const e=document.createElement("div");e.className="sh-end";e.innerHTML=`<div><h2>${M.slutRubrik}</h2><p>${M.slutText}</p><button class="sh-play" data-a="again">${M.igen}</button></div>`;root.appendChild(e);if(V.on){const a=new Audio(V.base+"s"+SC.length+"-1.mp3?v="+VOICE_VER);V.a=a;V.busy=true;duck(true);const dn=()=>{if(V.a===a){V.busy=false;V.a=null;duck(false);}};a.onended=dn;a.onerror=dn;const p=a.play();if(p&&p.catch)p.catch(dn);}}
   root.addEventListener("click",ev=>{const b=ev.target.closest("[data-a],[data-i]");if(!b)return;
     if(b.dataset.i!=null){if(!started)start();goto(+b.dataset.i);return;}
@@ -102,7 +105,7 @@ window.MPSvartHal={start(host,o){o=o||{};const D=o.def,SC=D?D.SC:SC0,M=Object.as
     if(a==="go")start();else if(a==="again")goto(0);else if(a==="play"){if(!started)return start();if(ended)return goto(0);setPlay(!playing);}
     else if(a==="next"){if(!started)start();goto(si+1);}else if(a==="prev"){if(!started)start();goto(st>3?si:si-1);}
     else if(a==="voice"){V.on=!V.on;$('[data-a="voice"]').classList.toggle("off",!V.on);if(!V.on)voiceStop();}
-    else if(a==="snd"){const L=snd();if(L){L.set(!L.on);if(L.on&&playing&&L.rymd)L.rymd.start();else if(L.rymd&&L.rymd.stop)L.rymd.stop();document.dispatchEvent(new Event("mp-ljud-andrat"));}sndIcon();}
+    else if(a==="snd"){const L=snd();if(L){L.set(!L.on);if(L.on&&playing)matStart(L);else matStop(L);document.dispatchEvent(new Event("mp-ljud-andrat"));}sndIcon();}
     else if(a==="fs"){const el=document.fullscreenElement;if(el)document.exitFullscreen();else (root.requestFullscreen||root.webkitRequestFullscreen||function(){}).call(root);}
     else if(a==="close"){cleanup();o.onClose&&o.onClose();}});
   function start(){if(started)return;started=true;$(".sh-start").remove();goto(0);}
@@ -266,7 +269,7 @@ window.MPSvartHal={start(host,o){o=o||{};const D=o.def,SC=D?D.SC:SC0,M=Object.as
   // hjälpmedel som en ny film (o.def) kan rita med
   const E={get x(){return x;},get W(){return W;},get H(){return H;},get dpr(){return dpr;},A,hole,planet,arrow,glowDot,label,tag,serif,font,eo,cl,lerp,ease,seg,TAU,get si(){return si;},bg};
   const SCN=D?D.scenes(E):SCN0;
-  function cleanup(){if(!alive)return;alive=false;cancelAnimationFrame(raf);voiceStop();const L=snd();if(L&&L.rymd&&L.rymd.stop)L.rymd.stop();document.removeEventListener("keydown",key);document.removeEventListener("visibilitychange",vis);if(ro)ro.disconnect();root.remove();}
+  function cleanup(){if(!alive)return;alive=false;cancelAnimationFrame(raf);voiceStop();const L=snd();if(L)matStop(L);document.removeEventListener("keydown",key);document.removeEventListener("visibilitychange",vis);if(ro)ro.disconnect();root.remove();}
   root.__slut=()=>{if(!started)start();finish();};
   // för tester: hoppa till en scen och en tid
   root.__seek=(i,tt)=>{if(!started)start();goto(i,false);setPlay(false);voiceStop();st=tt;const c=SC[si].cap;let n=0;c.forEach((q,j)=>{if(tt>=q[0])n=j;});showCap(n);draw();};

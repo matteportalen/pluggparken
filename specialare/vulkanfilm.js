@@ -13,7 +13,7 @@ const SC=[
  {k:"05 · Berget växer",d:15.6,cap:[[0.8,"När lavan har svalnat blir den till sten. Utbrott efter utbrott bygger upp berget, lager för lager."],[8.7,"Så växer en vulkan under tusentals år, tills den blir ett högt berg, som Fuji i Japan."]]},
  {k:"06 · Island",d:15,cap:[[0.8,"Island har många vulkaner, eftersom ön ligger där två jordplattor möts."],[6.6,"Plattorna glider isär, och magma tränger upp i springan. Därför finns det även varma källor, som gejsern Geysir."]]}
 ];
-const META={hud:"PLUGGPARKEN · SPECIALARE · FILM",titel:"Så fungerar en vulkan",under:"En film i sex steg · ca 2 minuter",
+const META={mat:"vulkan",hud:"PLUGGPARKEN · SPECIALARE · FILM",titel:"Så fungerar en vulkan",under:"En film i sex steg · ca 2 minuter",
   slutRubrik:"Tack för att du har följt med",slutText:"En vulkan är ett fönster in till jordens heta inre. Filmen bygger på riktiga foton ur Wikimedia Commons. Källor står under bilderna.",igen:"↻ Se filmen igen"};
 const KR={1:"Illustration: Benoit Gougeon, Université de Montréal · Public domain · Wikimedia Commons",3:"Foto: James St. John · Public domain · Wikimedia Commons",4:"Foto: Christoph Strässler · CC BY-SA 2.0 · Wikimedia Commons",5:"Foto: Romain Guy · CC0 · Wikimedia Commons",6:"Foto: Jakub Hałun · CC BY-SA 4.0 · Wikimedia Commons"};
 const IMG={};function img(n){const u=ROOT+"bilder/vulkan-"+n+".jpg";if(!IMG[u]){const i=new Image();i.src=u;IMG[u]=i;}return IMG[u];}

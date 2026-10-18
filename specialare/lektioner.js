@@ -289,7 +289,7 @@ var LEKTIONER=[
 ["🔍","Böjer ljuset","Mörk materia ger inget ljus, men dess tyngdkraft böjer ljuset från galaxer bakom den."],
 ["❓","Ingen vet","Ingen vet ännu vad mörk materia är gjord av. Det är en av vetenskapens största gåtor."]]},
 
-{id:"vikingar",titel:"Vikingarna",kat:"Historia",e:"⚔️",c:"#8B5A2B",rutor:[
+{id:"vikingar",film:"vikingar",titel:"Vikingarna",kat:"Historia",e:"⚔️",c:"#8B5A2B",rutor:[
 ["⏳","För tusen år sedan","Vikingatiden brukar räknas från omkring år 800 till 1050, alltså för ungefär tusen år sedan."],
 ["⛵","Långskeppen","De seglade i långskepp, smala snabba skepp som kunde gå både på hav och i floder."],
 ["🧭","Österut och västerut","Svenska vikingar reste mest österut mot dagens Ryssland och Ukraina. Danska och norska reste västerut."],

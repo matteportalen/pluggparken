@@ -15,7 +15,7 @@ const SC=[
  {k:"05 · Livbåtarna",d:12.3,cap:[[0.8,"Det fanns livbåtar för ungefär hälften av alla ombord. Det räckte inte."],[5.9,"Efter olyckan ändrades reglerna. Nu måste varje skepp ha plats i livbåtar för alla ombord."]]},
  {k:"06 · Vraket",d:11.7,cap:[[0.8,"Vraket hittades först 1985, nästan fyra kilometer ner på havsbotten."],[6.7,"Där är det kolsvart och iskallt. Skeppet ligger i två delar."]]}
 ];
-const META={hud:"PLUGGPARKEN · SPECIALARE · FILM",titel:"Titanic",under:"En film i sex steg · ca 2 minuter",
+const META={mat:"vagor",hud:"PLUGGPARKEN · SPECIALARE · FILM",titel:"Titanic",under:"En film i sex steg · ca 2 minuter",
   slutRubrik:"Tack för att du har följt med",slutText:"Många kallade Titanic osänkbart, och just därför blev nyheten om olyckan så stor. Filmen bygger på riktiga foton och målningar ur Wikimedia Commons. Källor står under bilderna.",igen:"↻ Se filmen igen"};
 const KR=[
  "Foto: Robert John Welch · Public domain · Wikimedia Commons",
