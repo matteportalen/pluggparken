@@ -61,6 +61,8 @@
 .mph-menu a:hover,.mph-menu a:focus-visible{background:#EAF3FF;outline:0}
 .mph-menu a[aria-current="true"]::after{content:"✓";margin-left:auto;color:#1E9E5E}
 .mph-menu .mph-mark{width:30px;height:30px;filter:none}
+.mph-menu .mph-vann .mph-mark{border-radius:8px;object-fit:cover;flex:none}
+.mph-menu .mph-vann::after{content:"↗";margin-left:auto;color:#56668F;font-weight:800}
 @keyframes mph-ner{from{opacity:0;transform:translateY(-8px)}}
 .mph-menu small{display:block;font-weight:700;font-size:.8rem;color:#56668F}
 .mph.mini .mph-logo,.mph.mini .mph-right,.mph.mini .mph-sep{display:none}
@@ -155,7 +157,8 @@ body.mph-mini #quit{display:none}
   const stang=()=>{if(meny){meny.remove();meny=null;ptl.setAttribute('aria-expanded','false');}};
   ptl.onclick=e=>{e.stopPropagation();if(meny)return stang();
     meny=document.createElement('nav');meny.className='mph-menu';meny.setAttribute('aria-label','Meny');
-    meny.innerHTML=PORTALER.map(p=>`<a href="${hem}${p.href}"${p===PORTAL?' aria-current="true"':''}>${p.logo}<span>${p.namn}<small>${p.sub}</small></span></a>`).join('');
+    meny.innerHTML=PORTALER.map(p=>`<a href="${hem}${p.href}"${p===PORTAL?' aria-current="true"':''}>${p.logo}<span>${p.namn}<small>${p.sub}</small></span></a>`).join('')
+    meny.innerHTML+=`<a href="https://fritidsparken.se" target="_blank" rel="noopener" class="mph-vann"><img class="mph-mark" src="${hem}fritidsparken-logo.jpg" alt="" width="30" height="30"><span>Fritidsparken.se<small>Våra vänner: lek och aktiviteter</small></span></a>`;
     if(window.MPTema){const mt=document.createElement('button');mt.className='mph-mt';mt.type='button';const ml=()=>{mt.innerHTML=MPTema.get()==='mork'?'<span>☀️</span><span>Ljust läge</span>':'<span>🌙</span><span>Mörkt läge</span>';};ml();mt.onclick=e=>{e.stopPropagation();MPTema.toggle();ml();};meny.appendChild(mt);}
     h.appendChild(meny);ptl.setAttribute('aria-expanded','true');meny.querySelector('a').focus({preventScroll:true});};
   document.addEventListener('click',e=>{if(meny&&!meny.contains(e.target))stang();});
