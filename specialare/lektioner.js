@@ -183,7 +183,7 @@ var LEKTIONER=[
 ["🚀","En biljon kronor","1 miljard sedlar. Stapeln blir 100 km hög och når upp till gränsen mot rymden."],
 ["⏳","Räkna sedlarna","En sedel i sekunden: en miljard kronor tar 11 dygn, en biljon kronor nästan 32 år. Tryck på knappen och se hur högt stapeln blir!"]]},
 
-{id:"kontinenter",titel:"Kontinenterna rör sig",kat:"Natur",e:"🗺️",c:"#6B8E3A",rutor:[
+{id:"kontinenter",film:"kontinenter",titel:"Kontinenterna rör sig",kat:"Natur",e:"🗺️",c:"#6B8E3A",rutor:[
 ["🗺️","Jordens pussel","Jordens yta består av stora bitar, plattor, som flyter på het sten. Länderna sitter fast på dem."],
 ["🐌","Mycket långsamt","Plattorna rör sig ungefär några centimeter om året, ungefär lika fort som dina naglar växer."],
 ["🌎","Ett gammalt jätteland","För ungefär 300 miljoner år sedan satt nästan alla landområden ihop till en enda stor landmassa som kallas Pangea."],
