@@ -505,7 +505,7 @@ GSTEG.forEach(s=>s.z=zOf(s.d));
 
 /* resans stopp: landmärken och de nio stegen i ordning (ljudfilen s<index>-1.mp3 hör till stoppet) */
 function dOfLy(ly){const L=Math.log(ly);let i=0;while(i<GSTEG.length-2&&L>Math.log(GSTEG[i+1].ly))i++;const a=GSTEG[i],b=GSTEG[i+1],t=(L-Math.log(a.ly))/(Math.log(b.ly)-Math.log(a.ly));return Math.exp(glerp(Math.log(a.d),Math.log(b.d),t));}
-const STOP=[{ly:7e-4,s:0},{ly:2.7e-3,k:'Voyager 1',b:'Längst bort människan skickat något · ca 170 AU'},{ly:.03,k:'Oortmolnets inre kant',b:'Här börjar isbitarna'},{ly:1,s:1},
+const STOP=[{ly:7e-4,s:0},{ly:2.7e-3,d:200,k:'Voyager 1',b:'Längst bort människan skickat något · ca 170 AU'},{ly:.03,k:'Oortmolnets inre kant',b:'Här börjar isbitarna'},{ly:1,s:1},
  {ly:4.2,d:1000,k:'Alfa Centauri',b:'Närmaste stjärnsystem · 4,2 ljusår'},{ly:6,s:2},{ly:8.6,d:3200,k:'Sirius',b:'Himlens ljusstarkaste stjärna · 8,6 ljusår'},{ly:440,d:4400,k:'Sjustjärnorna',b:'Ung stjärnhop · ca 440 ljusår'},
  {ly:1350,d:5800,k:'Orionnebulosan',b:'Här föds stjärnor · ca 1 350 ljusår'},{ly:3e4,s:3},{ly:26000,d:10500,k:'Sagittarius A*',b:'Vintergatans svarta hål · 26 000 ljusår'},{ly:1e5,s:4},
  {ly:1.6e5,d:1e5,k:'Magellanska molnen',b:'Två dvärggalaxer · ca 160 000 ljusår'},{ly:2.5e6,k:'Andromeda',b:'Närmaste stora galax · 2,5 miljoner ljusår'},{ly:6e6,s:5},
@@ -561,8 +561,8 @@ function buildMarkers(){
     if(t.k==='Sagittarius A*'){t.tgt=()=>galaxy.position.clone();
       const mats=[],g=new THREE.Group();spr(g,mats,'soft',0xff9a3c,GR*.5,0,0,0,.8);spr(g,mats,'soft',0xffd9a0,GR*.16,0,0,0,.95);spr(g,mats,'spike',0xffffff,GR*.2,0,0,0,.9);galaxy.add(g);t.obj={g,mats,galaxy:true,f:0};MKS.push(t);return;}
     const D=def[t.k];if(!D)return;const dd=t.d||dOfLy(t.ly),u=dd*.1,mats=[],g=new THREE.Group(),a=STOP.indexOf(t)*.7+.4,pos=new THREE.Vector3(Math.cos(a),.12+.15*Math.sin(a*2),Math.sin(a)).multiplyScalar(dd*.3);
-    g.position.copy(pos);const k=D[0];
-    if(k==='dot'){const pr=spr(g,mats,'probe',0xffffff,u*1.7,0,0,0,1);pr.userData.spin=1;const pts=[];for(let i=0;i<=40;i++){const q=i/40;pts.push(new THREE.Vector3(pos.x*q,pos.y*q+Math.sin(q*Math.PI)*dd*.06,pos.z*q));}const ln=new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),new THREE.LineBasicMaterial({color:0xffd890,transparent:true,opacity:0,blending:THREE.AdditiveBlending,depthWrite:false}));ln.frustumCulled=false;scene.add(ln);t.line=ln;}
+    const k=D[0];if(k==='dot')pos.setLength(PL.find(p=>p.id==='neptunus').a*1.9);g.position.copy(pos);
+    if(k==='dot'){const pr=spr(g,mats,'probe',0xffffff,9,0,0,0,1);pr.userData.spin=1;const pts=[],cols=[];for(let i=0;i<=40;i++){const q=.62+.38*i/40,w=Math.pow(i/40,1.6);pts.push(new THREE.Vector3(pos.x*q,pos.y*q,pos.z*q));cols.push(1*w,.85*w,.5*w);}const lg=new THREE.BufferGeometry().setFromPoints(pts);lg.setAttribute('color',new THREE.BufferAttribute(new Float32Array(cols),3));const ln=new THREE.Line(lg,new THREE.LineBasicMaterial({vertexColors:true,transparent:true,opacity:0,blending:THREE.AdditiveBlending,depthWrite:false}));ln.frustumCulled=false;scene.add(ln);t.line=ln;}
     else if(k==='duo'){spr(g,mats,'spike',0xffc27a,u*1.5,-u*.28,0,0,1);spr(g,mats,'spike',0xfff0c8,u*1.2,u*.3,u*.05,0,1);spr(g,mats,'soft',0xff5a3c,u*.5,u*.9,u*.5,0,.9);}
     else if(k==='sirius'){spr(g,mats,'soft',0x9cc2ff,u*5,0,0,0,.45);spr(g,mats,'spike',0xe6f0ff,u*3.4,0,0,0,1);spr(g,mats,'soft',0xffffff,u*1.1,0,0,0,1);}
     else if(k==='plej'){spr(g,mats,'soft',0x6f9cff,u*8,0,0,0,.25);for(let i=0;i<9;i++){const r=u*(.4+grnd()*1.8),q=grnd()*TAU2;spr(g,mats,'spike',0xa8c8ff,u*(.5+grnd()*.9),Math.cos(q)*r,Math.sin(q)*r*.7,(grnd()-.5)*u,1);}}
@@ -571,7 +571,7 @@ function buildMarkers(){
     else if(k==='clus'){spr(g,mats,'soft',0xffd9a0,u*7,0,0,0,.3);for(let i=0;i<46;i++){const r=u*2.4*Math.pow(grnd(),.7),q=grnd()*TAU2,b=Math.acos(2*grnd()-1);spr(g,mats,'soft',i%5?0xffe2b0:0xaec8ff,u*(.25+grnd()*.35),r*Math.sin(b)*Math.cos(q),r*Math.cos(b),r*Math.sin(b)*Math.sin(q),.9);}spr(g,mats,'soft',0xffffff,u*1.5,0,0,0,.8);}
     else if(k==='attr'){spr(g,mats,'soft',0xb88cff,u*12,0,0,0,.28);spr(g,mats,'soft',0xffd070,u*5,0,0,0,.6);for(let i=0;i<40;i++){const r=u*(1+grnd()*4),q=grnd()*TAU2;spr(g,mats,'soft',0xffe6b8,u*(.2+grnd()*.3),Math.cos(q)*r,Math.sin(q)*r*.6,(grnd()-.5)*u*2,.9);}}
     else if(k==='wall'){for(let i=0;i<70;i++){const x=(grnd()-.5)*u*9;spr(g,mats,'soft',0xffe2b0,u*(.25+grnd()*.35),x,(grnd()-.5)*u*.9+Math.sin(x/u)*.35*u,(grnd()-.5)*u*.8,.9);}spr(g,mats,'soft',0xb0c8ff,u*3,0,0,0,.2);}
-    const halo=spr(g,[],'soft',k==='neb'?0xff90c8:k==='sirius'?0x9cc2ff:0xffe0a0,u*(k==='neb'?16:k==='clus'||k==='attr'||k==='wall'||k==='mag'?14:k==='plej'?12:7),0,0,0,0);halo.renderOrder=-1;
+    const halo=spr(g,[],'soft',k==='neb'?0xff90c8:k==='sirius'?0x9cc2ff:0xffe0a0,k==='dot'?16:u*(k==='neb'?16:k==='clus'||k==='attr'||k==='wall'||k==='mag'?14:k==='plej'?12:7),0,0,0,0);halo.renderOrder=-1;
     scene.add(g);t.obj={g,mats,halo,f:0};t.tgt=()=>g.position.clone();MKS.push(t);});
   mkHw();
 }
