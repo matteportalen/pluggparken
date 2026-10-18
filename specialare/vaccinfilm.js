@@ -28,6 +28,14 @@ function scenes(E){
   const dot=(px,py,r,col)=>{const c=x();c.fillStyle=col;c.beginPath();c.arc(px,py,r,0,TAU);c.fill();};
   const cow=(px,py,u)=>{const c=x();c.save();c.fillStyle="#f2efe6";c.beginPath();c.ellipse(px,py,u*2,u*1.2,0,0,TAU);c.fill();c.beginPath();c.ellipse(px+u*2.2,py-u*.6,u*.8,u*.65,0,0,TAU);c.fill();c.fillStyle="#2a2a30";[[-.7,-.2,.5],[.5,.2,.45],[-.2,.5,.3]].forEach(([dx,dy,r])=>{c.beginPath();c.ellipse(px+dx*u,py+dy*u,r*u,r*u*.8,0,0,TAU);c.fill();});c.fillRect(px-u*1.5,py+u*.8,u*.35,u*1.2);c.fillRect(px-u*.6,py+u*.9,u*.35,u*1.1);c.fillRect(px+u*.7,py+u*.9,u*.35,u*1.1);c.fillRect(px+u*1.4,py+u*.8,u*.35,u*1.2);c.fillStyle="#e8b0a0";c.beginPath();c.ellipse(px+u*2.7,py-u*.45,u*.35,u*.3,0,0,TAU);c.fill();c.fillStyle="#222";c.beginPath();c.arc(px+u*2.35,py-u*.8,u*.1,0,TAU);c.fill();c.fillStyle="#cfc7b0";c.fillRect(px+u*1.8,py-u*1.35,u*.15,u*.4);c.fillRect(px+u*2.3,py-u*1.35,u*.15,u*.4);c.restore();};
   const person=(px,py,u,col,hat)=>{const c=x();c.save();c.fillStyle=col;c.beginPath();c.arc(px,py-u*1.5,u*.55,0,TAU);c.fill();c.beginPath();c.moveTo(px-u*.9,py+u*1.2);c.lineTo(px-u*.5,py-u*.8);c.lineTo(px+u*.5,py-u*.8);c.lineTo(px+u*.9,py+u*1.2);c.closePath();c.fill();if(hat){c.fillStyle="#2a2a30";c.fillRect(px-u*.6,py-u*2.2,u*1.2,u*.25);c.fillRect(px-u*.35,py-u*2.7,u*.7,u*.55);}c.restore();};
+  /* mikroskopvärlden: röda blodkroppar (skålformade med skuggning), vit blodkropp, virus med taggar, antikroppar, allt med glöd */
+  const gl=(px,py,r,col)=>{const c=x();c.save();c.globalCompositeOperation="lighter";const g=c.createRadialGradient(px,py,0,px,py,r);g.addColorStop(0,col);g.addColorStop(1,"rgba(0,0,0,0)");c.fillStyle=g;c.beginPath();c.arc(px,py,r,0,TAU);c.fill();c.restore();};
+  const rbc=(px,py,r,rot)=>{const c=x();c.save();c.translate(px,py);c.rotate(rot||0);c.scale(1,.78);const g=c.createRadialGradient(-r*.2,-r*.2,r*.1,0,0,r);g.addColorStop(0,"#ff6a6a");g.addColorStop(.55,"#c42a35");g.addColorStop(1,"#6e1018");c.fillStyle=g;c.beginPath();c.arc(0,0,r,0,TAU);c.fill();const d=c.createRadialGradient(0,0,0,0,0,r*.55);d.addColorStop(0,"rgba(70,8,16,.7)");d.addColorStop(1,"rgba(70,8,16,0)");c.fillStyle=d;c.beginPath();c.arc(0,0,r*.55,0,TAU);c.fill();c.restore();};
+  const wbc=(px,py,r,t)=>{const c=x();c.save();for(let i=0;i<6;i++){const an=i*TAU/6+t*.6,rr=r*(1.05+.12*Math.sin(t*2+i));c.fillStyle="rgba(235,240,255,.55)";c.beginPath();c.arc(px+Math.cos(an)*rr*.7,py+Math.sin(an)*rr*.7,r*.45,0,TAU);c.fill();}
+    const g=c.createRadialGradient(px-r*.3,py-r*.3,r*.1,px,py,r);g.addColorStop(0,"#ffffff");g.addColorStop(1,"#b8c8e8");c.fillStyle=g;c.beginPath();c.arc(px,py,r,0,TAU);c.fill();c.fillStyle="rgba(110,100,190,.9)";c.beginPath();c.arc(px-r*.2,py,r*.5,0,TAU);c.arc(px+r*.25,py+r*.1,r*.4,0,TAU);c.fill();c.restore();gl(px,py,r*1.8,"rgba(180,210,255,.25)");};
+  const virusG=(px,py,r,col,t)=>{const c=x();c.save();gl(px,py,r*2.2,col.replace("1)",".35)"));const g=c.createRadialGradient(px-r*.3,py-r*.3,r*.1,px,py,r);g.addColorStop(0,"#ff9a8a");g.addColorStop(1,"#a8281c");c.fillStyle=g;c.beginPath();c.arc(px,py,r,0,TAU);c.fill();c.strokeStyle="#ff5a4a";c.lineWidth=Math.max(2,r*.1);for(let i=0;i<16;i++){const an=i*TAU/16+t*.15;c.beginPath();c.moveTo(px+Math.cos(an)*r,py+Math.sin(an)*r);c.lineTo(px+Math.cos(an)*r*1.4,py+Math.sin(an)*r*1.4);c.stroke();c.fillStyle="#ffb0a0";c.beginPath();c.arc(px+Math.cos(an)*r*1.45,py+Math.sin(an)*r*1.45,r*.12,0,TAU);c.fill();}c.restore();};
+  const ab=(px,py,u,ang,col)=>{const c=x();c.save();c.translate(px,py);c.rotate(ang||0);gl(0,0,u*2.2,"rgba(120,255,180,.4)");c.strokeStyle=col||"#9be3b0";c.lineWidth=Math.max(2,u*.28);c.lineCap="round";c.beginPath();c.moveTo(0,u);c.lineTo(0,0);c.lineTo(-u*.85,-u*.95);c.moveTo(0,0);c.lineTo(u*.85,-u*.95);c.stroke();c.restore();};
+  const vessel=(a,t)=>{const c=x();grad(a,[[0,"#3a0a14"],[.5,"#5a1420"],[1,"#2a060e"]]);const r=L.srand(2);for(let i=0;i<22;i++){const sp=.05+r()*.07,X=a.x+((r()*a.w+t*a.w*sp)%(a.w+80))-40,Y=a.y+a.h*(.12+r()*.76);rbc(X,Y,Math.max(14,a.h*.045)*(.7+r()*.5),t*.3+i);}};
   const antibody=(px,py,u,col)=>{const c=x();c.save();c.strokeStyle=col;c.lineWidth=Math.max(2,u*.22);c.lineCap="round";c.beginPath();c.moveTo(px,py+u);c.lineTo(px,py);c.lineTo(px-u*.8,py-u*.9);c.moveTo(px,py);c.lineTo(px+u*.8,py-u*.9);c.stroke();c.restore();};
   const virus=(px,py,r,col,spikes)=>{const c=x();c.save();c.fillStyle=col;c.strokeStyle=col;c.lineWidth=Math.max(2,r*.12);c.beginPath();c.arc(px,py,r,0,TAU);c.fill();if(spikes)for(let i=0;i<12;i++){const an=TAU/12*i;c.beginPath();c.moveTo(px+Math.cos(an)*r,py+Math.sin(an)*r);c.lineTo(px+Math.cos(an)*r*1.35,py+Math.sin(an)*r*1.35);c.stroke();dot(px+Math.cos(an)*r*1.4,py+Math.sin(an)*r*1.4,r*.13,col);}c.restore();};
 
@@ -63,16 +71,17 @@ function scenes(E){
         if(t>12.6){c.globalAlpha=g*eo((t-12.6)/1);tx("frivilliga · noggranna tester",cx,y+h+Math.max(56,s*.12),"#ffd86b","center",Math.max(16,s*.042),700);}}
       c.restore();}};
 
-  /* 5 · tränar kroppen: ofarlig bit, antikroppar, minne */
+  /* 5 · tränar kroppen: blodbanan, vit blodkropp lär sig, antikroppar, sedan skarpt virus bekämpas */
   const s5=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.4)/1.1);photo(6,t,12.9,1.1,.15+.5*g);cred(6,.55*(1-g));
-    if(g>0){c.save();c.globalAlpha=g;grad(a,[[0,"#1a2a4a"],[1,"#0a1428"]]);const r=Math.max(24,Math.min(a.w,a.h)*.12);
-      if(t<7.75){const cellx=cx+a.w*.18,celly=cy;c.fillStyle="rgba(240,240,255,.9)";c.beginPath();c.arc(cellx,celly,r*1.6,0,TAU);c.fill();c.fillStyle="#8fb0e0";c.beginPath();c.arc(cellx+r*.2,celly-r*.1,r*.6,0,TAU);c.fill();tx("immunförsvaret",cellx,celly+r*2.4,"#9fd0ff","center",Math.max(14,s*.036),700);
-        const k=eo((t-3)/1.4),vx=lerp(a.x+a.w*.1,cellx-r*2.6,k);c.globalAlpha=g;c.fillStyle="#ff9a8a";for(let i=0;i<5;i++){const an=-Math.PI/2+i*.4;dot(vx+Math.cos(an)*r*.5,celly+Math.sin(an)*r*.5,r*.18,"#ff9a8a");}
-        tx("ofarlig bit av sjukdomen",vx,celly-r*1.7,"#ffb0a0","center",Math.max(14,s*.036),700);
-        if(t>5){const q=eo((t-5)/1);c.globalAlpha=g*q;for(let i=0;i<4;i++)antibody(cellx-r*2.2+Math.sin(t*3+i)*3,celly-r*.9+i*r*.6,r*.3,"#9be3b0");tx("lär sig känna igen",cx,a.y+a.h*.88,"#9be3b0","center",Math.max(16,s*.042),700);}}
-      else{const q=eo((t-7.75)/1);c.globalAlpha=g*q;const vx=cx-a.w*.18;virus(vx,cy,r,"#d93030",true);tx("sjukdomen kommer",vx,cy+r*2.3,"#ffb0a0","center",Math.max(14,s*.036),700);
-        const k=eo((t-9)/1.5);for(let i=0;i<10;i++){const an=TAU/10*i;antibody(lerp(cx+a.w*.2,vx+Math.cos(an)*r*1.5,k),lerp(cy,cy+Math.sin(an)*r*1.5,k),r*.28,"#9be3b0");}
-        if(t>10.4){c.globalAlpha=g*eo((t-10.4)/1);tx("redo, tack vare minnet",cx,a.y+a.h*.88,"#ffd86b","center",Math.max(16,s*.042),700);}}
+    if(g>0){c.save();c.globalAlpha=g;vessel(a,t);const r=Math.max(32,Math.min(a.w*.09,a.h*.17,s*.15)),wx=cx+a.w*.12,wy=cy;
+      wbc(wx,wy+Math.sin(t*.8)*8,r,t);
+      if(t<7.75){const k=eo((t-3)/1.6),fx=lerp(a.x+a.w*.08,wx-r*1.9,k);for(let i=0;i<5;i++){const an=-Math.PI/2+i*.5;dot(fx+Math.cos(an)*r*.28,wy+Math.sin(an)*r*.28,r*.1,"#ff9a8a");}gl(fx,wy,r*.8,"rgba(255,150,130,.35)");
+        tx("ofarlig bit av sjukdomen",fx,wy-r*1.4,"#ffd0c0","center",Math.max(14,s*.036),700);tx("immunförsvaret",wx,wy+r*2.1,"#cfe0ff","center",Math.max(14,s*.036),700);
+        if(t>5){const q=eo((t-5)/1);c.save();c.globalAlpha=g*q;c.strokeStyle="rgba(155,255,190,.9)";c.lineWidth=4;for(let i=0;i<2;i++){const p=((t*.8+i*.5)%1);c.beginPath();c.arc(wx,wy,r*(1.1+p*1.4),0,TAU);c.globalAlpha=g*q*(1-p);c.stroke();}c.restore();for(let i=0;i<6;i++){const an=i*TAU/6+t,rr=r*(1.6+.2*Math.sin(t*2+i));ab(wx+Math.cos(an)*rr,wy+Math.sin(an)*rr,r*.2,an+Math.PI/2);}tx("lär sig känna igen",cx,a.y+a.h*.9,"#9be3b0","center",Math.max(16,s*.042),700);}}
+      else{const vx=cx-a.w*.18,vy=cy,vr=r*.9;const q=eo((t-7.75)/1);c.globalAlpha=g*q;virusG(vx,vy+Math.sin(t*1.3)*6,vr,"rgba(255,90,70,1)",t);
+        const k=eo((t-9)/1.8);for(let i=0;i<14;i++){const an=i*TAU/14+t*.2,rr=lerp(r*3.2,vr*1.55,k);ab(vx+Math.cos(an)*rr,vy+Math.sin(an)*rr,r*.2,an+Math.PI/2);}
+        tx("sjukdomen kommer",vx,vy+vr*2.6,"#ffb0a0","center",Math.max(14,s*.036),700);
+        if(t>10.4){c.globalAlpha=g*eo((t-10.4)/1);tx("redo, tack vare minnet",cx,a.y+a.h*.9,"#ffd86b","center",Math.max(16,s*.042),700);}}
       c.restore();}};
 
   /* 6 · utrotad: antal fall, tidslinje */
