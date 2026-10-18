@@ -10,7 +10,7 @@ const SC=[
  {k:"03 · Bakterierna",d:17.5,cap:[[0.8,"Men största delen av doften kommer från bakterier i jorden. De gör ett ämne som heter geosmin, och det betyder just lukten av jord."],[10.2,"Forskare tror att lukten lockar små djur, som hoppstjärtar, som sedan sprider bakteriernas sporer."]]},
  {k:"04 · Droppen",d:14.6,cap:[[0.8,"När en regndroppe träffar torr mark fångar den små luftfickor. De stiger som bubblor och spricker, och slungar ut doften i luften."],[9.7,"Det händer bäst vid lätt eller måttligt regn, på jord med små hål."]]},
  {k:"05 · Näsan",d:14.9,cap:[[0.8,"Vi människor är otroligt bra på att känna geosmin. Vi märker det när det bara finns några få delar på en biljon i luften."],[9.3,"Det är som att lösa upp en sockerbit i ungefär hundra stora simbassänger."]]},
- {k:"06 · Regnet",d:11.7,cap:[[0.8,"Så nästa gång det börjar regna efter en torr tid, stanna upp och känn efter. Du luktar bakterier, växtoljor och en droppe som träffar marken."]]}
+ {k:"06 · Regnet",d:11.0,cap:[[0.8,"Så nästa gång det börjar regna efter en torr tid, stanna upp och känn efter. Du luktar på bakterier, växtoljor och en droppe som träffar marken."]]}
 ];
 const META={mat:"tradgarden",hud:"PLUGGPARKEN · SPECIALARE · FILM",titel:"Petrikor",under:"En film i sju steg · ca 1,7 minuter",
   slutRubrik:"Tack för att du har följt med",slutText:"Regnets doft är bakterier, växtoljor och bubblor. Filmen bygger på bilder ur Wikimedia Commons. Källor står under bilderna.",igen:"↻ Se filmen igen"};
