@@ -87,7 +87,7 @@ var LEKTIONER=[
 ["🌗","Månens faser","Månen lyser inte själv, den reflekterar solljus. Vi ser olika mycket av den upplysta delen, och det ger månens faser."],
 ["🐢","Den flyttar sig","Månen flyttar sig långsamt bort från jorden, ungefär 4 centimeter om året. Ungefär så fort som dina naglar växer."]]},
 
-{id:"regnbage",titel:"Så blir en regnbåge",kat:"Natur",e:"🌈",c:"#8E4FC7",rutor:[
+{id:"regnbage",film:"regnbage",titel:"Så blir en regnbåge",kat:"Natur",e:"🌈",c:"#8E4FC7",rutor:[
 ["🌧️","Regn och sol","För en regnbåge behövs två saker samtidigt: regndroppar i luften och sol som lyser på dem."],
 ["💧","Droppen böjer ljuset","Solljuset går in i en regndroppe, böjs, studsar på insidan och går ut igen."],
 ["🌈","Färgerna skiljs åt","Varje färg böjs lite olika mycket. Därför delas det vita ljuset upp i röd, orange, gul, grön, blå och violett."],
