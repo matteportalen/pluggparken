@@ -7,7 +7,7 @@ const SC=[
  {k:"Inledning",d:9.1,cap:[[0.5,"Hon skulle bli det mäktigaste skeppet i kungens flotta, men hon sjönk redan på sin första resa. Det här är berättelsen om Vasa."]]},
  {k:"01 · Kungens skepp",d:9.6,cap:[[0.8,"Vasa var ett stort krigsskepp som kung Gustav II Adolf lät bygga."],[5.7,"Hon var rikt dekorerad med hundratals skulpturer."]]},
  {k:"02 · Jungfrufärden",d:10.9,cap:[[0.8,"Den 10 augusti 1628 seglade Vasa ut från Stockholm för första gången."],[7.1,"Tusentals människor stod på stranden och tittade."]]},
- {k:"03 · Vindpusten",d:11.1,cap:[[0.8,"Efter drygt en kilometer tog en vindpust tag i seglen."],[4.8,"Skeppet lutade, vatten kom in genom kanonportarna, och hon sjönk."]]},
+ {k:"03 · Vindpusten",d:11.2,cap:[[0.8,"Efter drygt en kilometer fick seglen en kraftig vindpust."],[4.9,"Skeppet lutade, vatten kom in genom kanonportarna, och hon sjönk."]]},
  {k:"04 · På botten",d:8.8,cap:[[0.8,"Vasa låg kvar på botten i över 300 år."],[4.2,"I Östersjön finns nästan ingen skeppsmask, så träet höll."]]},
  {k:"05 · Upp igen",d:6.9,cap:[[0.8,"År 1961 lyftes skeppet upp. Det tog många år att bevara det."]]},
  {k:"06 · Museet",d:9.6,cap:[[0.8,"I dag står Vasa i ett eget museum i Stockholm. Det är det bäst bevarade skeppet från 1600-talet i världen."]]}
