@@ -135,7 +135,7 @@ var LEKTIONER=[
 ["🤯","Längre än ett år","Venus tar ungefär 225 dygn på sig att åka runt solen. Ett dygn på Venus är alltså längre än ett år där!"],
 ["↩️","Baklänges","Venus snurrar dessutom åt andra hållet än de flesta planeter. Där går solen upp i väster."]]},
 
-{id:"antarktis",titel:"Antarktis",kat:"Natur",e:"🐧",c:"#5AB0D1",rutor:[
+{id:"antarktis",film:"antarktis",titel:"Antarktis",kat:"Natur",e:"🐧",c:"#5AB0D1",rutor:[
 ["🧊","Mest is","Antarktis är en kontinent längst ner på jorden där nästan allt är täckt av is."],
 ["📏","Tjock is","Isen är i genomsnitt över två kilometer tjock. På vissa ställen är den nästan fem kilometer."],
 ["🥶","Jordens kallaste","Den lägsta temperaturen som någonsin har mätts på jorden, ungefär minus 89 grader, mättes i Antarktis."],
