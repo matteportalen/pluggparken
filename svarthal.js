@@ -59,7 +59,7 @@ let MAT="rymd";/* Ljudmatta: meta.mat (MAT) = "rymd" (standard) eller ett namn i
 function matStart(L){if(MAT!=="rymd"){if(L.ambient&&!(L.ambient.g&&L.ambient.kind===MAT))L.ambient.start(MAT);}else if(L.rymd)L.rymd.start();}
 function matStop(L){if(L.rymd&&L.rymd.stop)L.rymd.stop();if(L.ambient&&L.ambient.stop&&MAT!=="rymd")L.ambient.stop();}
 function duck(on){const L=window.Ljud;try{const o=MAT!=="rymd"?L&&L.ambient:L&&L.rymd,g=o&&o.g;if(g&&g.context)g.gain.setTargetAtTime(on?.16:(MAT!=="rymd"?1:.55),g.context.currentTime,.4);}catch(e){}}
-const VOICE_VER="20261022";/* ändra när röstfiler byts ut, så att webbläsare inte spelar gamla cachade filer */
+const VOICE_VER="20261023";/* ändra när röstfiler byts ut, så att webbläsare inte spelar gamla cachade filer */
 function voicePlay(si,ci){voiceStop();if(!V.on)return;const a=new Audio(V.base+"s"+si+"-"+(ci+1)+".mp3?v="+VOICE_VER);a.preload="auto";V.a=a;V.busy=true;
   const done=()=>{clearTimeout(V.t);if(V.a===a){V.busy=false;V.a=null;duck(false);}};a.onended=done;a.onerror=done;duck(true);
   clearTimeout(V.t);V.t=setTimeout(done,16000);   // reservutgång: filmen får aldrig hänga om ljudet inte startar
