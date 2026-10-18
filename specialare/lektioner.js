@@ -409,7 +409,7 @@ var LEKTIONER=[
 ["🍮","Gelé som inte stelnar","Gelatin är också ett protein. Lägger du färsk ananas i gelé stelnar den inte, eftersom bromelain bryter ner gelatinet."],
 ["🥫","Burk går bra","Ananas på burk har värmts upp, och då slutar enzymet att fungera. Därför funkar den i gelé, och den sticker inte lika mycket."]]},
 
-{id:"smaklokar",titel:"Smaklökarna",kat:"Kroppen",e:"👅",c:"#D6546B",rutor:[
+{id:"smaklokar",film:"smaklokar",titel:"Smaklökarna",kat:"Kroppen",e:"👅",c:"#D6546B",rutor:[
 ["👅","Tusentals smaklökar","På tungan sitter ungefär 2 000 till 10 000 smaklökar. De byts ut ungefär var tionde till fjortonde dag."],
 ["🍬","Fem grundsmaker","Vi känner sött, surt, salt, bittert och umami, som är smaken av t.ex. parmesan och soja."],
 ["🗺️","Tungkartan stämmer inte","Man trodde att varje smak sitter på sin del av tungan. Det är fel. Alla smaker kan kännas på hela tungan."],
