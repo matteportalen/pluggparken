@@ -8,7 +8,7 @@ const SC=[
  {k:"01 · Mest is",d:6.8,cap:[[0.8,"Antarktis är en kontinent längst ner på jorden, där nästan allt är täckt av is."]]},
  {k:"02 · Tjock is",d:8.7,cap:[[0.8,"Isen är i genomsnitt över två kilometer tjock."],[4.6,"På vissa ställen är den nästan fem kilometer."]]},
  {k:"03 · Jordens kallaste",d:9.6,cap:[[0.8,"Den lägsta temperaturen som någonsin har mätts på jorden, ungefär minus 89 grader, mättes i Antarktis."]]},
- {k:"04 · Djuren",d:10.6,cap:[[0.8,"Pingviner bor där, och många andra djur lever i havet runt omkring."],[6.0,"Men inga isbjörnar. De bor i Arktis, längst upp."]]},
+ {k:"04 · Djuren",d:10.9,cap:[[0.8,"Pingviner bor där, och många andra djur lever i havet runt omkring."],[6.3,"Men inga isbjörnar. De bor i Arktis, längst upp."]]},
  {k:"05 · Ingen bor där",d:7.6,cap:[[0.8,"Det finns inga människor som bor där hela livet, bara forskare som stannar i några månader eller ett år."]]},
  {k:"06 · Fred och forskning",d:6.6,cap:[[0.8,"Länder har kommit överens om att Antarktis ska användas för fred och forskning."]]}
 ];
