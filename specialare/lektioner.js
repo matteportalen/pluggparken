@@ -393,7 +393,7 @@ var LEKTIONER=[
 ["🌍","Smittkoppor borta","Genom vaccinering försvann smittkopporna. 1980 förklarade WHO att sjukdomen var utrotad i hela världen."],
 ["🧒","Skyddar fler","Vaccin skyddar inte bara dig utan också människor som inte kan vaccineras, eftersom sjukdomen har svårare att sprida sig."]]},
 
-{id:"leonardo",titel:"Leonardo da Vinci",kat:"Historia",e:"🎨",c:"#8A6E3E",rutor:[
+{id:"leonardo",film:"leonardo",titel:"Leonardo da Vinci",kat:"Historia",e:"🎨",c:"#8A6E3E",rutor:[
 ["🎨","Konstnär och uppfinnare","Leonardo da Vinci levde i Italien för över 500 år sedan, 1452 till 1519. Han är mest känd för målningen Mona Lisa."],
 ["🖼️","Mona Lisa","Mona Lisa hänger i Louvren i Paris och ses av miljontals människor varje år. Hennes leende har fascinerat folk i hundratals år."],
 ["✍️","Spegelskrift","Leonardo skrev sina anteckningar i spegelskrift, från höger till vänster, så att man måste använda en spegel för att läsa dem."],
