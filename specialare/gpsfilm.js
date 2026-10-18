@@ -27,6 +27,10 @@ function scenes(E){
   const {x,tx,tg,S,cred,photo,panel,grad,space,title}=L;
   const dot=(px,py,r,col)=>{const c=x();c.fillStyle=col;c.beginPath();c.arc(px,py,r,0,TAU);c.fill();};
   const earth=(px,py,r)=>{const c=x();c.save();const g=c.createRadialGradient(px-r*.35,py-r*.35,r*.1,px,py,r);g.addColorStop(0,"#6fb4ff");g.addColorStop(.7,"#1d5fb8");g.addColorStop(1,"#0a2a66");c.fillStyle=g;c.beginPath();c.arc(px,py,r,0,TAU);c.fill();c.fillStyle="rgba(80,170,90,.85)";[[-.3,-.1,.28,.2],[.25,.2,.22,.16],[.05,-.45,.16,.1]].forEach(([dx,dy,w,h])=>{c.beginPath();c.ellipse(px+dx*r,py+dy*r,w*r,h*r,.5,0,TAU);c.fill();});c.restore();};
+  /* riktigt klot (texturer) med atmosfärsglöd; faller tillbaka på enkel jord tills bilden laddats */
+  const earthR=(px,py,r,rot)=>{const c=x(),cv=window.MPKlot&&MPKlot.jorden(rot||0);c.save();c.globalCompositeOperation="lighter";const g=c.createRadialGradient(px,py,r*.96,px,py,r*1.22);g.addColorStop(0,"rgba(110,170,255,.55)");g.addColorStop(1,"rgba(110,170,255,0)");c.fillStyle=g;c.beginPath();c.arc(px,py,r*1.22,0,TAU);c.fill();c.restore();
+    if(cv)c.drawImage(cv,px-r,py-r,r*2,r*2);else earth(px,py,r);};
+  const gl=(px,py,r,col)=>{const c=x();c.save();c.globalCompositeOperation="lighter";const g=c.createRadialGradient(px,py,0,px,py,r);g.addColorStop(0,col);g.addColorStop(1,"rgba(0,0,0,0)");c.fillStyle=g;c.beginPath();c.arc(px,py,r,0,TAU);c.fill();c.restore();};
   const sat=(px,py,u,ang)=>{const c=x();c.save();c.translate(px,py);c.rotate(ang||0);c.fillStyle="#cfd5df";c.fillRect(-u*.5,-u*.5,u,u);c.fillStyle="#4a7ad9";c.fillRect(-u*2.1,-u*.3,u*1.5,u*.6);c.fillRect(u*.6,-u*.3,u*1.5,u*.6);c.restore();};
   const phone=(px,py,u)=>{const c=x();c.save();c.fillStyle="#e8ecf4";c.fillRect(px-u*.6,py-u*1.1,u*1.2,u*2.2);c.fillStyle="#1d5fb8";c.fillRect(px-u*.5,py-u*.95,u*1,u*1.8);c.fillStyle="#ffd23c";c.beginPath();c.arc(px,py-u*.1,u*.22,0,TAU);c.fill();c.restore();};
 
@@ -34,19 +38,19 @@ function scenes(E){
 
   /* 1 · satelliter skickar, mobilen lyssnar */
   const s1=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.4)/1.1);photo(2,t,11.9,1.1,.15+.5*g);cred(2,.55*(1-g));
-    if(g>0){c.save();c.globalAlpha=g;space(a,1);const R=Math.max(40,Math.min(a.w*.12,a.h*.22,s*.2)),ex=cx,ey=cy+R*1.2;earth(ex,ey,R);
-      const px=ex,py=ey-R-2;phone(px,py-Math.max(10,s*.02),Math.max(8,R*.12));
-      [[-.7],[0],[.7]].forEach(([d],i)=>{const sx=cx+d*R*2.6,sy=cy-R*1.4-Math.abs(d)*R*.2;sat(sx,sy,Math.max(7,R*.1),d*.4);
-        if(t>4){const p=((t*.6+i*.3)%1);c.strokeStyle="rgba(255,226,122,.55)";c.lineWidth=2;c.beginPath();c.moveTo(sx,sy);c.lineTo(px,py);c.stroke();dot(lerp(sx,px,p),lerp(sy,py,p),4,"#ffe27a");}});
+    if(g>0){c.save();c.globalAlpha=g;space(a,1);const R=Math.max(70,Math.min(a.w*.2,a.h*.36,s*.34)),ex=cx,ey=cy+R*1.15,rot=300+t*14;earthR(ex,ey,R,rot);
+      const px=ex-R*.12,py=ey-R*.99;dot(px,py,Math.max(5,R*.035),"#ff4a4a");gl(px,py,Math.max(18,R*.12),"rgba(255,80,80,.9)");
+      [[-1.1,-1.55],[0,-1.9],[1.1,-1.55]].forEach(([dx,dy],i)=>{const sx=ex+dx*R*.9,sy=ey+dy*R*.9;sat(sx,sy,Math.max(7,R*.07),dx*.5);gl(sx,sy,Math.max(24,R*.18),"rgba(255,226,122,.55)");
+        if(t>4){for(let k=0;k<3;k++){const p=((t*.45+i*.31+k/3)%1);const X=lerp(sx,px,p),Y=lerp(sy,py,p);gl(X,Y,Math.max(10,R*.06)*(1-p*.4),"rgba(255,226,122,.9)");}c.strokeStyle="rgba(255,226,122,.18)";c.lineWidth=2;c.beginPath();c.moveTo(sx,sy);c.lineTo(px,py);c.stroke();}});
       tx("signaler ner till mobilen",cx,a.y+a.h*.1,"#ffd86b","center",Math.max(18,s*.048),700);
       if(t>7.8){c.globalAlpha=g*eo((t-7.8)/1);tx("mobilen lyssnar bara",cx,a.y+a.h*.92,"#9be3b0","center",Math.max(17,s*.045),700);}
       c.restore();}};
 
   /* 2 · 30 satelliter på 20 000 km, ett varv på 12 timmar */
   const s2=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.4)/1.1);photo(5,t,10.4,1.1,.15+.5*g);cred(5,.55*(1-g));
-    if(g>0){c.save();c.globalAlpha=g;space(a,1);const R=Math.max(30,Math.min(a.w*.1,a.h*.14,s*.14)),ex=cx,ey=cy+s*.02,OR=R*4.2;earth(ex,ey,R);
-      c.strokeStyle="rgba(255,255,255,.3)";c.setLineDash([6,8]);c.lineWidth=2;c.beginPath();c.arc(ex,ey,OR,0,TAU);c.stroke();c.setLineDash([]);
-      const n=30,rot=t*(t>7.3?.55:.12);for(let i=0;i<n;i++){const an=i*TAU/n+rot,rr=OR*(1+((i*7)%5-2)*.02);dot(ex+Math.cos(an)*rr,ey+Math.sin(an)*rr,Math.max(3,R*.07),"#ffe27a");}
+    if(g>0){c.save();c.globalAlpha=g;space(a,1);const R=Math.max(30,Math.min(a.w*.1,a.h*.14,s*.14)),ex=cx,ey=cy+s*.02,OR=R*4.2;earthR(ex,ey,R,300+t*20);
+      c.strokeStyle="rgba(255,255,255,.22)";c.setLineDash([6,8]);c.lineWidth=2;c.beginPath();c.arc(ex,ey,OR,0,TAU);c.stroke();c.setLineDash([]);
+      const n=30,rot=t*(t>7.3?.55:.12);for(let i=0;i<n;i++){const an=i*TAU/n+rot,rr=OR*(1+((i*7)%5-2)*.02),sx=ex+Math.cos(an)*rr,sy=ey+Math.sin(an)*rr;gl(sx,sy,Math.max(16,R*.35),"rgba(255,226,122,.65)");dot(sx,sy,Math.max(2.5,R*.05),"#fff");}
       tx("ca 30 satelliter · ca 20 000 km upp",cx,a.y+a.h*.1,"#ffd86b","center",Math.max(17,s*.045),700);
       if(t>7.3){c.globalAlpha=g*eo((t-7.3)/1);tx("ett varv ≈ 12 timmar",cx,a.y+a.h*.92,"#9be3b0","center",Math.max(17,s*.045),700);}
       c.restore();}};
@@ -65,7 +69,7 @@ function scenes(E){
     if(g>0){c.save();c.globalAlpha=g;space(a,1);const w=Math.min(a.w*.7,s*1.3),lx=cx-w/2,sy=cy-s*.05,py=cy+s*.05,sx=lx+w*.15,px2=lx+w*.85;
       sat(sx,sy-s*.08,Math.max(10,s*.03),0);phone(px2,py,Math.max(12,s*.035));
       c.strokeStyle="rgba(255,255,255,.4)";c.lineWidth=3;c.beginPath();c.moveTo(sx,sy-s*.08);c.lineTo(px2,py);c.stroke();
-      const p=((t*.4)%1);dot(lerp(sx,px2,p),lerp(sy-s*.08,py,p),6,"#ffe27a");
+      for(let k=0;k<4;k++){const p=((t*.4+k/4)%1);gl(lerp(sx,px2,p),lerp(sy-s*.08,py,p),Math.max(18,s*.05)*(1-p*.3),"rgba(255,226,122,.9)");}
       tx("tid × ljusets fart = avstånd",cx,a.y+a.h*.12,"#ffd86b","center",Math.max(19,s*.052),700);
       if(t>8.9){c.globalAlpha=g*eo((t-8.9)/1);tx("≈ 0,07 s",cx,a.y+a.h*.82,"#9be3b0","center",Math.max(30,s*.085),700);}
       c.restore();}};
@@ -74,7 +78,7 @@ function scenes(E){
   const s5=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.4)/1.1);photo(5,t,14.1,1.1,.15+.5*g);cred(5,.55*(1-g));
     if(g>0){c.save();c.globalAlpha=g;space(a,1);const mx=cx,my=cy+s*.04,R=Math.min(a.w*.2,a.h*.3,s*.34);
       const sats=[[-.9,-.95],[.95,-.7],[0,1.05],[1.05,.6]];
-      sats.forEach(([dx,dy],i)=>{if(i===3&&t<8.7)return;const sx=mx+dx*R,sy=my+dy*R,k=eo((t-3-i*.8)/1);if(i<3&&k<=0)return;const rr=Math.hypot(sx-mx,sy-my);c.globalAlpha=g*(i===3?eo((t-8.7)/.8):Math.max(0,k));c.strokeStyle=i===3?"#ff9a8a":"#9fd0ff";c.lineWidth=2.5;c.beginPath();c.arc(sx,sy,rr*Math.max(.2,k),0,TAU);c.stroke();sat(sx,sy,Math.max(7,s*.02),0);});
+      sats.forEach(([dx,dy],i)=>{if(i===3&&t<8.7)return;const sx=mx+dx*R,sy=my+dy*R,k=eo((t-3-i*.8)/1);if(i<3&&k<=0)return;const rr=Math.hypot(sx-mx,sy-my);c.globalAlpha=g*(i===3?eo((t-8.7)/.8):Math.max(0,k));c.save();c.globalCompositeOperation="lighter";c.strokeStyle=i===3?"rgba(255,130,110,.85)":"rgba(120,190,255,.85)";c.lineWidth=3;c.shadowColor=i===3?"#ff8a7a":"#7ac0ff";c.shadowBlur=14;c.beginPath();c.arc(sx,sy,rr*Math.max(.2,k),0,TAU);c.stroke();c.restore();sat(sx,sy,Math.max(7,s*.02),0);gl(sx,sy,Math.max(22,s*.05),"rgba(255,226,122,.5)");});
       c.globalAlpha=g;dot(mx,my,Math.max(7,s*.018),"#ffd23c");tx("du är här",mx,my+Math.max(24,s*.055),"#ffd86b","center",Math.max(14,s*.037),700);
       tx(t<8.7?"minst tre satelliter ger läget":"den fjärde rättar klockan",cx,a.y+a.h*.1,t<8.7?"#9fd0ff":"#ffb0a0","center",Math.max(17,s*.045),700);
       c.restore();}};
