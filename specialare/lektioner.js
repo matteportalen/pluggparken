@@ -305,7 +305,7 @@ var LEKTIONER=[
 ["💨","Bläckmolnet","När bläckfisken är i fara sprutar den ut ett mörkt bläckmoln och simmar iväg."],
 ["🕳️","Mjuk kropp","Den har inget skal och inget skelett. Därför kan den pressa sig genom mycket trånga hål."]]},
 
-{id:"iss",lank:[["Titta: ISS flyger förbi (YouTube)","https://youtu.be/f9QHSGpTEkY"]],titel:"Rymdstationen ISS",kat:"Rymden",e:"🧑‍🚀",c:"#2F6DB5",rutor:[
+{id:"iss",film:"iss",lank:[["Titta: ISS flyger förbi (YouTube)","https://youtu.be/f9QHSGpTEkY"]],titel:"Rymdstationen ISS",kat:"Rymden",e:"🧑‍🚀",c:"#2F6DB5",rutor:[
 ["🛰️","Ett hem i rymden","Den internationella rymdstationen, ISS, är både en bostad och ett laboratorium i rymden."],
 ["⏱️","90 minuter","Den flyger ungefär 400 kilometer över jorden och åker ett varv runt jorden på cirka 90 minuter."],
 ["🌅","Många soluppgångar","Därför ser astronauterna ungefär 16 soluppgångar och solnedgångar varje dygn."],
