@@ -7,8 +7,8 @@ const TAU=Math.PI*2;
 const SC=[
  {k:"Inledning",d:6.4,cap:[[0.5,"Vår närmaste granne i rymden lyser varje natt. Det här är berättelsen om månen."]]},
  {k:"01 · Vår granne",d:6.9,cap:[[0.8,"Månen är jordens enda naturliga måne. Den snurrar runt jorden hela tiden."]]},
- {k:"02 · Avståndet",d:9.3,cap:[[0.8,"Månen är ungefär 384 000 kilometer bort. Ljuset behöver drygt en sekund för att komma hit."]]},
- {k:"03 · Människor på månen",d:9.5,cap:[[0.8,"År 1969 gick Neil Armstrong och Buzz Aldrin på månen."],[6.4,"Resan dit tog ungefär tre dygn."]]},
+ {k:"02 · Avståndet",d:9.9,cap:[[0.8,"Månen är ungefär 384 000 kilometer bort. Ljuset behöver drygt en sekund för att komma hit."]]},
+ {k:"03 · Människor på månen",d:9.3,cap:[[0.8,"År 1969 gick Neil Armstrong och Buzz Aldrin på månen."],[6.2,"Resan dit tog ungefär tre dygn."]]},
  {k:"04 · Hoppa högt",d:8.3,cap:[[0.8,"På månen är tyngdkraften ungefär sex gånger svagare än hos oss."],[5.2,"Du skulle kunna hoppa många gånger högre."]]},
  {k:"05 · Fotspåren",d:7,cap:[[0.8,"Där finns ingen vind eller regn, så astronauternas fotspår ligger kvar i månens damm."]]},
  {k:"06 · Faserna",d:10.5,cap:[[0.8,"Månen lyser inte själv. Den speglar solens ljus."],[5.1,"Vi ser olika mycket av den upplysta delen, och det ger månens faser."]]},
