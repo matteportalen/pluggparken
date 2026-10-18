@@ -12,7 +12,7 @@ const SC=[
  {k:"05 · Två Nobelpris",d:16.1,cap:[[0.8,"År 1903 fick hon Nobelpriset i fysik, tillsammans med Pierre och Henri Becquerel. År 1911 fick hon ett i kemi."],[11.2,"Hon är den enda som fått Nobelpris i två olika vetenskaper."]]},
  {k:"06 · Röntgenbilar",d:12.1,cap:[[0.8,"Under första världskriget lät hon bygga bilar med röntgenapparater som åkte till fronten."],[6.8,"Då kunde läkare se kulor och brutna ben hos sårade soldater."]]},
  {k:"07 · Ett farligt arbete",d:17.4,cap:[[0.8,"På den tiden visste man inte att strålningen var farlig. Marie Curie dog 1934, troligen av sjukdom orsakad av strålningen."],[10.6,"Hennes anteckningsböcker är fortfarande radioaktiva, och förvaras i blyfodrade lådor."]]},
- {k:"08 · Dottern Irène",d:14.1,cap:[[0.8,"Hennes dotter Irène blev också forskare, och fick Nobelpriset i kemi 1935."],[7.6,"Marie, Pierre, Irène och Irènes man Frédéric har alla fått Nobelpris."]]}
+ {k:"08 · Dottern Irène",d:13.6,cap:[[0.8,"Hennes dotter Irène blev också forskare, och fick Nobelpriset i kemi 1935."],[7.5,"Marie, Pierre, Irène och Irènes man Frédéric har alla fått Nobelpris."]]}
 ];
 const META={hud:"PLUGGPARKEN · SPECIALARE · FILM",titel:"Marie Curie",under:"En film i nio steg · ca 2 minuter",
   slutRubrik:"Tack för att du har följt med",slutText:"Nyfikenhet och hårt arbete kan förändra världen. Filmen bygger på bilder ur Wikimedia Commons. Källor står under bilderna.",igen:"↻ Se filmen igen"};
@@ -91,9 +91,9 @@ function scenes(E){
       c.restore();}};
 
   /* 8 · dottern Irène, fyra Nobelpristagare */
-  const s8=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.4)/1.1);photo(9,t,14.1,1.1,.15+.5*g);cred(9,.55*(1-g));
+  const s8=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.4)/1.1);photo(9,t,13.6,1.1,.15+.5*g);cred(9,.55*(1-g));
     if(g>0){c.save();c.globalAlpha=g;grad(a,[[0,"#13203c"],[1,"#26324f"]]);const u=Math.max(16,Math.min(a.w*.035,s*.045));
-      if(t<7.6){const q=eo((t-3.2)/1);c.globalAlpha=g*q;medal(cx,cy-u*.5,u*2.4,"KEMI","1935","#c0c8d8");tx("Irène Joliot-Curie",cx,cy+u*4.4,"#e2c9ff","center",Math.max(18,s*.048),700);}
+      if(t<7.5){const q=eo((t-3.2)/1);c.globalAlpha=g*q;medal(cx,cy-u*.5,u*2.4,"KEMI","1935","#c0c8d8");tx("Irène Joliot-Curie",cx,cy+u*4.4,"#e2c9ff","center",Math.max(18,s*.048),700);}
       else{const n=4,names=["Marie","Pierre","Irène","Frédéric"],cols=["#e2c9ff","#9fd0ff","#ffb878","#9be3b0"];for(let i=0;i<n;i++){const q=eo((t-7.8-i*.5)/.6);if(q<=0)continue;const px=cx+(i-1.5)*u*5.2;c.globalAlpha=g*q;person(px,cy+u,u,cols[i]);medal(px,cy-u*2.9,u*.8,"","",cols[i]);tx("★",px,cy-u*2.6,"#6a4a10","center",u*1.1,700);tx(names[i],px,cy+u*3.4,cols[i],"center",Math.max(14,s*.037),700);}}
       c.restore();}};
 
