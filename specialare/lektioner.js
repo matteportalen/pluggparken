@@ -254,7 +254,7 @@ var LEKTIONER=[
 ["❓","Osäkerhet","Man kan inte veta exakt både var en partikel är och hur fort den rör sig. Det är Heisenbergs osäkerhetsprincip."],
 ["📱","Nytta idag","Kvantfysiken ligger bakom lasrar, datorer, mobiler och magnetkameror på sjukhus."]]},
 
-{id:"pirater",titel:"Pirater",kat:"Historia",e:"🏴‍☠️",c:"#4A4E69",rutor:[
+{id:"pirater",film:"pirater",titel:"Pirater",kat:"Historia",e:"🏴‍☠️",c:"#4A4E69",rutor:[
 ["🏴‍☠️","Sjörövare","Pirater är sjörövare som anfaller fartyg och stjäl det de har ombord."],
 ["⚓","Guldåldern","Den mest kända tiden för pirater var omkring 1650 till 1730, särskilt i Karibien."],
 ["💀","Jolly Roger","Piraterna hade ofta en svart flagga med dödskalle, kallad Jolly Roger, för att skrämma andra."],
