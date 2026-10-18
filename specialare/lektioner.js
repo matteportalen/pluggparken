@@ -62,7 +62,7 @@ var LEKTIONER=[
 ["🐦","De finns kvar!","Några små dinosaurier överlevde och blev fåglar. En höna är alltså en slags dinosaurie."],
 ["🔨","Fossil","Vi vet allt det här tack vare fossil: ben och avtryck som blivit till sten under miljoner år."]]},
 
-{id:"pyramid",titel:"Pyramiderna i Egypten",kat:"Historia",e:"🏜️",c:"#C99A2E",rutor:[
+{id:"pyramid",film:"pyramid",titel:"Pyramiderna i Egypten",kat:"Historia",e:"🏜️",c:"#C99A2E",rutor:[
 ["🏜️","Mitt i öknen","Vid Giza i Egypten står Cheopspyramiden. Den byggdes för ungefär 4 500 år sedan."],
 ["🪨","Miljontals stenblock","Pyramiden består av över två miljoner stenblock. Många av dem väger lika mycket som en bil."],
 ["📏","Högst i världen","I nästan 4 000 år var den det högsta byggnadsverket på jorden. Från början var den ungefär 146 meter hög."],
