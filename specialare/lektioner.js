@@ -321,7 +321,7 @@ var LEKTIONER=[
 ["❄️","Frusna fynd","Hela mammutar har hittats frusna i Sibirien. Kalven Lyuba är över 40 000 år gammal."],
 ["🧬","Tillbaka?","Forskare har tagit DNA från frusna mammutar och funderar på om man kan skapa mammutliknande djur. Ingen har lyckats ännu."]]}
 ,
-{id:"penicillin",titel:"Penicillinet",kat:"Kroppen",e:"💊",c:"#3E8E5A",rutor:[
+{id:"penicillin",film:"penicillin",titel:"Penicillinet",kat:"Kroppen",e:"💊",c:"#3E8E5A",rutor:[
 ["🧫","En bortglömd skål","År 1928 kom forskaren Alexander Fleming tillbaka från semestern till sitt labb i London. Han hade glömt en skål med bakterier."],
 ["🍄","Mögel som dödade","I skålen hade det växt mögel. Runt mögelfläcken var alla bakterier döda."],
 ["🔬","Penicillium","Mögel heter Penicillium. Det gör ett ämne som dödar bakterier. Fleming kallade ämnet penicillin."],

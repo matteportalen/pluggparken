@@ -31,6 +31,8 @@ function scenes(E){
     c.fillStyle="#e8b52a";c.beginPath();c.ellipse(px,py,r*.78,r,0,0,TAU);c.fill();c.strokeStyle="#a8741a";c.lineWidth=Math.max(1.5,r*.04);c.save();c.beginPath();c.ellipse(px,py,r*.78,r,0,0,TAU);c.clip();for(let i=-6;i<=6;i++){c.beginPath();c.moveTo(px+i*r*.28-r,py-r*1.1);c.lineTo(px+i*r*.28+r,py+r*1.1);c.moveTo(px+i*r*.28+r,py-r*1.1);c.lineTo(px+i*r*.28-r,py+r*1.1);c.stroke();}c.restore();
     if(face){c.fillStyle="#fff";[-1,1].forEach(sd=>{c.beginPath();c.arc(px+sd*r*.25,py-r*.15,r*.16,0,TAU);c.fill();});c.fillStyle="#222";[-1,1].forEach(sd=>{c.beginPath();c.arc(px+sd*r*.25+sd*r*.03,py-r*.13,r*.07,0,TAU);c.fill();});c.strokeStyle="#7a2a1a";c.lineWidth=Math.max(3,r*.06);c.beginPath();c.arc(px,py+r*.15,r*.28,.1*Math.PI,.9*Math.PI);c.stroke();c.fillStyle="#fff";for(let i=-2;i<=2;i++)c.fillRect(px+i*r*.1-r*.04,py+r*.2,r*.08,r*.08);}
     c.restore();};
+  const frame=(n,px,py,w,h)=>{const c=x(),im=L.img(n);if(!L.ok(im))return;const ir=im.width/im.height,fr=w/h;let sw,sh,sx,sy;if(ir>fr){sh=im.height;sw=sh*fr;sx=(im.width-sw)/2;sy=0;}else{sw=im.width;sh=sw/fr;sx=0;sy=(im.height-sh)/2;}
+    c.save();c.shadowColor="rgba(0,0,0,.35)";c.shadowBlur=24;c.beginPath();c.roundRect?c.roundRect(px-w/2,py-h/2,w,h,16):c.rect(px-w/2,py-h/2,w,h);c.fillStyle="#fff";c.fill();c.shadowBlur=0;c.clip();c.drawImage(im,sx,sy,sw,sh,px-w/2,py-h/2,w,h);c.restore();c.save();c.strokeStyle="rgba(255,255,255,.9)";c.lineWidth=4;c.beginPath();c.roundRect?c.roundRect(px-w/2,py-h/2,w,h,16):c.rect(px-w/2,py-h/2,w,h);c.stroke();c.restore();};
   const bead=(px,py,r,col)=>{dot(px,py,r,col);};
   const pac=(px,py,r,col,open,dir)=>{const c=x();c.save();c.fillStyle=col;c.beginPath();c.moveTo(px,py);const a0=open*.5,d=dir||1;c.arc(px,py,r,d>0?a0:Math.PI-a0*0-Math.PI+a0,d>0?TAU-a0:TAU-a0);c.closePath();c.fill();c.fillStyle="#222";c.beginPath();c.arc(px+r*.1,py-r*.45,r*.1,0,TAU);c.fill();c.restore();};
 
@@ -38,7 +40,7 @@ function scenes(E){
 
   /* 1 · svider i munnen */
   const s1=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.2)/1.1);photo(2,t,9.2,1.1,.15+.5*g);cred(2,.55*(1-g));
-    if(g>0){c.save();c.globalAlpha=g;grad(a,[[0,"#cfe9f7"],[1,"#eaf5fb"]]);const r=Math.max(40,Math.min(a.w*.12,a.h*.22,s*.2));pine(cx-r*1.6,cy+r*.3,r,true);
+    if(g>0){c.save();c.globalAlpha=g;grad(a,[[0,"#cfe9f7"],[1,"#eaf5fb"]]);const r=Math.max(40,Math.min(a.w*.12,a.h*.22,s*.2));frame(2,cx-r*1.7,cy+r*.3,r*2.8,r*2.3);
       const mx=cx+r*1.6,my=cy+r*.3;c.fillStyle="#e87a8a";c.beginPath();c.ellipse(mx,my,r*.9,r*.6,0,0,TAU);c.fill();c.fillStyle="#7a1a2a";c.beginPath();c.ellipse(mx,my+r*.05,r*.6,r*.3,0,0,TAU);c.fill();c.fillStyle="#f09aa8";c.beginPath();c.ellipse(mx,my+r*.15,r*.4,r*.18,0,0,TAU);c.fill();
       if(t>4){const q=eo((t-4)/.8);c.globalAlpha=g*q;c.strokeStyle="#ffb020";c.lineWidth=4;for(let i=0;i<5;i++){const an=-Math.PI/2+i*.5-1,rr=r*(1.15+(Math.sin(t*10+i)*.05));c.beginPath();c.moveTo(mx+Math.cos(an)*rr*.9,my+Math.sin(an)*rr*.7);c.lineTo(mx+Math.cos(an)*rr*1.25,my+Math.sin(an)*rr*1.05);c.stroke();}tx("svider!",mx,my-r*1.4,"#d1383a","center",Math.max(20,s*.055),700);}
       c.restore();}};
@@ -91,9 +93,8 @@ function scenes(E){
       c.restore();}};
 
   /* 7 · många små frukter, tid till mogen */
-  const s7=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.4)/1.1);photo(1,t,13.5,1.1,.15+.5*g);cred(1,.55*(1-g));
-    if(g>0){c.save();c.globalAlpha=g;grad(a,[[0,"#cfe9f7"],[1,"#eaf5fb"]]);const r=Math.max(50,Math.min(a.w*.12,a.h*.24,s*.22));pine(cx-a.w*.18,cy,r,false);
-      if(t>3.6){c.save();c.beginPath();c.ellipse(cx-a.w*.18,cy,r*.78,r,0,0,TAU);c.clip();const k=eo((t-3.6)/3);c.fillStyle=`rgba(255,255,255,${.35*k})`;c.fillRect(cx-a.w*.18-r*.4,cy-r*.3,r*.4,r*.4);c.restore();tx("varje ruta = en liten frukt",cx-a.w*.18,cy+r*1.4,"#1d2b53","center",Math.max(15,s*.04),700);}
+  const s7=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.4)/1.1);photo(3,t,13.5,1.1,.15+.5*g);cred(3,.55*(1-g));
+    if(g>0){c.save();c.globalAlpha=g;grad(a,[[0,"#cfe9f7"],[1,"#eaf5fb"]]);const r=Math.max(50,Math.min(a.w*.12,a.h*.24,s*.22));frame(3,cx-a.w*.18,cy,r*2.9,r*2.6);if(t>3.6){c.globalAlpha=g*eo((t-3.6)/1);tx("varje ruta = en liten frukt",cx-a.w*.18,cy+r*1.8,"#1d2b53","center",Math.max(15,s*.04),700);}
       if(t>8.1){const q=eo((t-8.1)/1),w=Math.min(a.w*.3,s*.5),lx=cx+a.w*.18-w/2,y=cy-s*.04;c.globalAlpha=g*q;c.strokeStyle="rgba(29,43,83,.4)";c.lineWidth=3;c.beginPath();c.moveTo(lx,y);c.lineTo(lx+w,y);c.stroke();const k=eo((t-8.4)/3);dot(lx+w*k,y,9,"#e8b52a");tx("planterad",lx,y+Math.max(30,s*.07),"#1d2b53","center",Math.max(12,s*.032),700);tx("mogen: 1,5–2 år",lx+w,y+Math.max(30,s*.07),"#1d2b53","center",Math.max(12,s*.032),700);}
       c.restore();}};
 
