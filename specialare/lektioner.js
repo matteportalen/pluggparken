@@ -78,7 +78,7 @@ var LEKTIONER=[
 ["🦐","Äter bara pyttesmå djur","Blåvalen äter krill, små räkliknande djur. En stor val äter flera ton krill varje dag."],
 ["🔊","Hörs långt","Blåvalens sång är en av de starkaste ljuden bland djuren och kan höras många kilometer bort under vatten."]]},
 
-{id:"manen",titel:"Månen",kat:"Rymden",e:"🌙",c:"#5C6BC0",rutor:[
+{id:"manen",film:"manen",titel:"Månen",kat:"Rymden",e:"🌙",c:"#5C6BC0",rutor:[
 ["🌙","Vår granne","Månen är jordens enda naturliga måne. Den snurrar runt jorden hela tiden."],
 ["📏","384 000 kilometer","Månen är ungefär 384 000 kilometer bort. Ljuset behöver drygt en sekund för att komma hit."],
 ["🚀","Människor har gått där","År 1969 gick Neil Armstrong och Buzz Aldrin på månen. Resan dit tog ungefär tre dygn."],
