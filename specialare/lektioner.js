@@ -369,7 +369,7 @@ var LEKTIONER=[
 ["📱","Miljarder i en mobil","Ett chip i en mobil är stort som en nagel och har mer än tio miljarder transistorer."],
 ["⚡","Därför är allt smart","Utan chip skulle det inte finnas mobiler, bilar med datorer eller sjukhusens magnetkameror."]]},
 
-{id:"mars",titel:"Robotar på Mars",kat:"Rymden",e:"🤖",c:"#B5532A",rutor:[
+{id:"mars",film:"mars",titel:"Robotar på Mars",kat:"Rymden",e:"🤖",c:"#B5532A",rutor:[
 ["🔴","Röd och död planet","Mars är kall, torr och full av damm. Ingen människa har varit där, men robotar har kört runt på ytan i många år."],
 ["🚙","Sojourner","1997 landade den första lilla roboten, Sojourner, som var ungefär lika stor som en mikrovågsugn."],
 ["🪨","Curiosity","Curiosity landade 2012. Den är stor som en bil och undersöker stenar för att hitta spår av vatten."],
