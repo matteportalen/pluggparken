@@ -56,11 +56,12 @@ button:focus-visible{outline:3px solid #FFC93C;outline-offset:2px}
 .lbl{position:absolute;left:0;top:0;transform:translate(-50%,-100%);pointer-events:auto;font-weight:800;font-size:.85rem;color:#fff;background:rgba(12,18,44,.55);border-radius:999px;padding:0 8px;white-space:nowrap;text-shadow:0 1px 2px #000;cursor:pointer;will-change:transform}
 .lbl.sun{background:rgba(120,70,0,.55)}
 /* faktakort */
-.card{background:#fff;color:var(--ink);border-radius:22px;padding:12px 16px 14px;box-shadow:0 8px 30px rgba(0,0,0,.45);width:min(560px,100%)}
+.card{position:relative;background:#fff;color:var(--ink);border-radius:22px;padding:12px 16px 14px;box-shadow:0 8px 30px rgba(0,0,0,.45);width:min(560px,100%)}
 .card h2{margin:0;font-size:1.6rem;line-height:1.1;display:flex;align-items:center;gap:8px}
 .card ul{margin:6px 0 4px;padding-left:1.1em}
 .card li{margin:3px 0;font-size:1.02rem}
 .card .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.card[hidden]{display:none}.card .cx{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;border:0;background:#E8EEFB;color:#1D2B53;font:800 15px/1 'Baloo 2',system-ui,sans-serif;cursor:pointer;display:grid;place-items:center}.card .cx:hover,.card .cx:focus-visible{background:#C9D6F5;outline:2px solid #3D5AFE}.card h2{padding-right:36px}
 /* jorden och månen */
 .phase{position:fixed;z-index:5;right:10px;top:calc(60px + env(safe-area-inset-top,0px));width:var(--ins);text-align:center;pointer-events:none}
 .phase .frame{width:var(--ins);height:var(--ins);border-radius:50%;box-shadow:0 0 0 3px rgba(255,255,255,.75),0 6px 20px rgba(0,0,0,.5)}
@@ -321,7 +322,7 @@ function goHome(){focus=null;show('home');flyTo(null,95,.5);controls.minDistance
 function openPlanet(p){
   if(p.id==='jorden')return openEarth();
   focus=p===SUN?sun:p.mesh;show('planet');controls.minDistance=p.r*1.6;flyTo(focus,p.r*(p.ring?6:4.2)+(p===SUN?14:0),.25);
-  $('pCard').innerHTML=`<h2>${p===SUN?'☀️':'🪐'} ${p.n}</h2><ul>${p.f.map(x=>`<li>${x}</li>`).join('')}</ul>`;window.Ljud&&Ljud.pop&&Ljud.pop(3);
+  $('pCard').hidden=false;$('pCard').innerHTML=`<button class="cx" id="pX" aria-label="Stäng rutan" title="Stäng">✕</button><h2>${p===SUN?'☀️':'🪐'} ${p.n}</h2><ul>${p.f.map(x=>`<li>${x}</li>`).join('')}</ul>`;window.Ljud&&Ljud.pop&&Ljud.pop(3);$('pX').onclick=()=>{$('pCard').hidden=true};
 }
 function openEarth(){focus=earth;show('earth');controls.minDistance=1.6;
   // kameran från sidan: solen till vänster, så att dag och natt syns tydligt
@@ -329,6 +330,7 @@ function openEarth(){focus=earth;show('earth');controls.minDistance=1.6;
   // avståndet så att hela månbanan får plats, även på en smal mobil i stående läge
   const hf=Math.atan(Math.tan(camera.fov/2*DEG)*camera.aspect);
   flyTo(earth,Math.max(10.5,(MOON_A+.9)/Math.tan(hf)),.75,side.multiplyScalar(-1));updatePhase();window.Ljud&&Ljud.chime&&Ljud.chime();}
+addEventListener('keydown',e=>{if(e.key==='Escape'&&mode==='planet'&&!$('pCard').hidden){$('pCard').hidden=true}});
 $('pBack').onclick=goHome;$('eBack').onclick=goHome;
 // tillbaka till Rymdlabbet: kom man därifrån går vi bakåt i historiken, annars öppnas labbet
 const toLab=()=>{if(/rymdlabbet/.test(document.referrer))history.back();else location.href='../rymdlabbet/';};
