@@ -401,7 +401,7 @@ var LEKTIONER=[
 ["🦴","Han studerade kroppen","Leonardo undersökte människokroppen för att kunna måla den rätt. Hans teckningar av muskler och ben är mycket exakta."],
 ["📓","Tusentals sidor","Av hans anteckningsböcker finns ungefär 7 000 sidor kvar, fulla av teckningar, idéer och tankar."]]}
 ,
-{id:"ananas",titel:"Ananasen äter tillbaka",kat:"Natur",e:"🍍",c:"#D9A521",rutor:[
+{id:"ananas",film:"ananas",titel:"Ananasen äter tillbaka",kat:"Natur",e:"🍍",c:"#D9A521",rutor:[
 ["🍍","Svider i munnen","Har du ätit ananas och känt att det svider eller sticker i munnen? Det beror på att ananasen faktiskt försöker smälta din mun."],
 ["🧪","Ett enzym","I ananasen finns ett ämne som heter bromelain. Det är ett enzym som bryter ner proteiner, samma sorts ämnen som tungan och kinderna består av."],
 ["👅","Små skador","Bromelain bryter ner lite av det yttersta skiktet i munnen. Det är en lindrig skada som läker på några timmar, och saliven skyddar dig."],
