@@ -103,7 +103,7 @@ var LEKTIONER=[
 ["🌸","Bina hjälper oss","Bin för över pollen mellan blommor. Utan dem skulle många frukter och grönsaker inte bli till."],
 ["🏡","Hjälp bina","Du kan hjälpa bin genom att plantera blommor och inte klippa gräsmattan så ofta."]]},
 
-{id:"vasa",titel:"Regalskeppet Vasa",kat:"Historia",e:"⚓",c:"#8B4513",rutor:[
+{id:"vasa",film:"vasa",titel:"Regalskeppet Vasa",kat:"Historia",e:"⚓",c:"#8B4513",rutor:[
 ["⚓","Ett kungligt skepp","Vasa var ett stort krigsskepp som kung Gustav II Adolf lät bygga. Hon var rikt dekorerad med hundratals skulpturer."],
 ["🌬️","Jungfrufärden 1628","Den 10 augusti 1628 seglade Vasa ut från Stockholm för första gången. Tusentals människor stod på stranden och tittade."],
 ["💨","En vindpust","Efter drygt en kilometer tog en vindpust tag i seglen. Skeppet lutade, vatten kom in genom kanonportarna och hon sjönk."],
