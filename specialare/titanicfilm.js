@@ -44,7 +44,8 @@ function scenes(E){
   const photo=(n,t,dur,zoom,dim,ox,oy)=>{const c=x(),a=A(),im=img(n);if(!ok(im))return;const k=cl(t/Math.max(1,dur),0,1),z=lerp(1,zoom||1.12,k);
     const sc=Math.max(a.w/im.naturalWidth,a.h/im.naturalHeight)*z,iw=im.naturalWidth*sc,ih=im.naturalHeight*sc;
     c.save();c.beginPath();c.rect(a.x,a.y,a.w,a.h);c.clip();c.globalAlpha=eo(t/1.6);
-    c.drawImage(im,a.x+a.w/2-iw/2+(ox||0)*k*a.w,a.y+a.h/2-ih/2+(oy||0)*k*a.h,iw,ih);
+    {const ir=im.naturalWidth/im.naturalHeight;if(ir<a.w/a.h*.85){const sb=Math.max(a.w/im.naturalWidth,a.h/im.naturalHeight)*1.15;try{c.filter="blur(22px)";}catch(e){}const ga=c.globalAlpha;c.globalAlpha=ga*.55;c.drawImage(im,a.x+a.w/2-im.naturalWidth*sb/2,a.y+a.h/2-im.naturalHeight*sb/2,im.naturalWidth*sb,im.naturalHeight*sb);c.filter="none";c.globalAlpha=ga;const hh=a.h*.9*(1+(z-1)*.35),ww=hh*ir;c.shadowColor="rgba(0,0,0,.6)";c.shadowBlur=30;c.drawImage(im,a.x+a.w/2-ww/2,a.y+a.h/2-hh/2,ww,hh);c.shadowBlur=0;}
+    else c.drawImage(im,a.x+a.w/2-iw/2+(ox||0)*k*a.w,a.y+a.h/2-ih/2+(oy||0)*k*a.h,iw,ih);}
     c.fillStyle=`rgba(2,4,12,${dim||0})`;c.fillRect(a.x,a.y,a.w,a.h);
     const g=c.createRadialGradient(a.x+a.w/2,a.y+a.h/2,Math.min(a.w,a.h)*.3,a.x+a.w/2,a.y+a.h/2,Math.max(a.w,a.h)*.62);g.addColorStop(0,"rgba(2,3,10,0)");g.addColorStop(1,"rgba(2,3,10,.82)");c.fillStyle=g;c.fillRect(a.x,a.y,a.w,a.h);c.restore();};
   const ship=(cx,cy,L,col,al,flip)=>{const c=x(),H=L*.11,u=L/100;c.save();c.globalAlpha=al==null?1:al;c.translate(cx,cy);if(flip)c.scale(-1,1);c.fillStyle=col||"#e8eef7";
