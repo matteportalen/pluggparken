@@ -270,7 +270,7 @@ var LEKTIONER=[
 ["👃","Vi är duktiga","Människor känner geosmin även när det bara finns några få delar på en biljon i luften."],
 ["🌿","Växtoljor","Växter lagrar också oljor i torr jord. När det regnar lossnar de och blandas in i doften."]]},
 
-{id:"hajar",titel:"Hajar",kat:"Natur",e:"🦈",c:"#2C6E91",rutor:[
+{id:"hajar",film:"hajar",titel:"Hajar",kat:"Natur",e:"🦈",c:"#2C6E91",rutor:[
 ["🦈","Äldre än dinosaurierna","Hajar har funnits i över 400 miljoner år. De är äldre än både dinosaurierna och träden."],
 ["📏","Över 500 arter","Det finns över 500 olika hajarter, från små dvärghajar till jättelika valhajar."],
 ["🐋","Valhajen","Valhajen är världens största fisk, upp till 12 meter lång. Den äter plankton och är ofarlig för människor."],
