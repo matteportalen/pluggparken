@@ -426,7 +426,7 @@ var LEKTIONER=[
 ["🔤","Stormar får namn","Stormarna får namn från listor i bokstavsordning, så att alla kan hålla reda på dem. Namnen kommer från världsmeteorologiska organisationen."],
 ["🏠","Vattnet är farligast","Mest skada gör oftast stormfloden, när havet pressas in över land. Över land tappar orkanen sin kraft eftersom den inte får mer varmt vatten."]]},
 
-{id:"krakatau",titel:"Krakatau 1883",kat:"Historia",e:"🌋",c:"#B5452A",rutor:[
+{id:"krakatau",film:"krakatau",titel:"Krakatau 1883",kat:"Historia",e:"🌋",c:"#B5452A",rutor:[
 ["🏝️","En ö mellan Java och Sumatra","Krakatau var en vulkanö i Indonesien. I augusti 1883 började den få utbrott."],
 ["💥","Den sista smällen","Den 27 augusti kom fyra jättelika explosioner. Den sista hördes över 4 500 kilometer bort, kanske det högsta ljud människor någonsin har hört."],
 ["🌫️","Aska 80 km upp","Askan sköts upp mer än 70 kilometer, långt upp i atmosfären. På dagen blev det mörkt som natt."],
