@@ -95,7 +95,7 @@ var LEKTIONER=[
 ["⭕","Egentligen en cirkel","En regnbåge är egentligen en hel cirkel. Från marken ser vi bara den övre halvan. Från ett flygplan kan man ibland se hela."],
 ["👀","Din egen regnbåge","Ingen ser exakt samma regnbåge som du. Din regnbåge beror på var just du står."]]},
 
-{id:"bin",titel:"Bin och honung",kat:"Natur",e:"🐝",c:"#E0A800",rutor:[
+{id:"bin",film:"bin",titel:"Bin och honung",kat:"Natur",e:"🐝",c:"#E0A800",rutor:[
 ["🐝","Ett stort samhälle","I en bikupa kan det bo 20 000 till 60 000 bin. De jobbar tillsammans som en enda stor familj."],
 ["👑","En drottning","I varje kupa finns en drottning som lägger ägg, ibland över tusen om dagen."],
 ["💃","Dansen","När ett bi hittar blommor dansar det inne i kupan. Dansens riktning och längd visar de andra var maten finns."],
