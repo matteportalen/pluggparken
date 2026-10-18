@@ -281,7 +281,7 @@ var LEKTIONER=[
 ["🦷","Ungar som äter varandra","Hos sandtigerhajen börjar de största ungarna äta sina syskon redan inne i mamman. Den som blir kvar är större och starkare när den föds."],
 ["🌊","Hotade","Hajar har fått ett dåligt rykte. Människor dödar många fler hajar än tvärtom, och många arter är hotade."]]},
 
-{id:"morkmateria",titel:"Mörk materia",kat:"Rymden",e:"🌌",c:"#4B2E83",rutor:[
+{id:"morkmateria",film:"morkmateria",titel:"Mörk materia",kat:"Rymden",e:"🌌",c:"#4B2E83",rutor:[
 ["🔭","Det vi ser","Allt vi ser i rymden, stjärnor, planeter och gas, är bara ungefär 5 procent av universum."],
 ["👻","Osynlig","Ungefär 27 procent är mörk materia. Vi kan inte se den, men vi vet att den finns."],
 ["🌀","Galaxer snurrar för fort","Forskare märkte att galaxer snurrar så fort att de borde flyga isär. Något osynligt måste hålla dem ihop."],
