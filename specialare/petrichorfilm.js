@@ -5,7 +5,7 @@
 const ROOT=MPFilmLib.root(document.currentScript),TAU=Math.PI*2;
 const SC=[
  {k:"Inledning",d:7.6,cap:[[0.5,"Doften av regn efter en torr period har ett eget namn. Det här är berättelsen om petrikor."]]},
- {k:"01 · Ordet",d:14.8,cap:[[0.8,"Ordet petrikor kommer från grekiskan. Petra betyder sten, och ikor var vätskan som flöt i gudarnas ådror."],[9,"Två australiska forskare hittade på ordet, år nitton-hundra-sextio-fyra."]]},
+ {k:"01 · Ordet",d:14.8,cap:[[0.8,"Ordet petrikor kommer från grekiskan. Petra betyder sten, och ikor var vätskan som flöt i gudarnas ådror."],[9,"Två australiska forskare hittade på ordet, år 1964."]]},
  {k:"02 · Växtoljor",d:9.0,cap:[[0.8,"De upptäckte att växter gör oljor under torra perioder. Oljorna samlas i jord och stenar, och lossnar när det regnar."]]},
  {k:"03 · Bakterierna",d:17.5,cap:[[0.8,"Men största delen av doften kommer från bakterier i jorden. De gör ett ämne som heter geosmin, och det betyder just lukten av jord."],[10.2,"Forskare tror att lukten lockar små djur, som hoppstjärtar, som sedan sprider bakteriernas sporer."]]},
  {k:"04 · Droppen",d:14.6,cap:[[0.8,"När en regndroppe träffar torr mark fångar den små luftfickor. De stiger som bubblor och spricker, och slungar ut doften i luften."],[9.7,"Det händer bäst vid lätt eller måttligt regn, på jord med små hål."]]},

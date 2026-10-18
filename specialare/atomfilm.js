@@ -6,10 +6,10 @@ const ROOT=MPFilmLib.root(document.currentScript),TAU=Math.PI*2;
 const SC=[
  {k:"Inledning",d:6.8,cap:[[0.5,"Allt omkring dig är byggt av något otroligt litet. Det här är berättelsen om atomerna."]]},
  {k:"01 · Små byggstenar",d:20.1,cap:[[0.8,"Allt du ser, och du själv, är gjort av atomer. De är så små att man inte kan se dem, inte ens i ett vanligt mikroskop."],[11.5,"Det finns ungefär hundra olika sorters atomer. Blandar man dem på olika sätt får man allt från luft och vatten till sten och hundar."]]},
- {k:"02 · Hur små?",d:12.2,cap:[[0.8,"Lägg atomerna på rad över ett enda hårstrå, och det ryms flera hundra tuusen."],[6.4,"En enda vattendroppe innehåller ungefär fem tuusen miljarder miljarder atomer."]]},
- {k:"03 · Tre delar",d:19.8,cap:[[0.8,"En atom har tre delar. I mitten sitter kärnan, med protoner och neutroner. Runt den susar elektronerna."],[10.2,"Antalet protoner avgör vilket ämne det är. En proton ger väte, sex ger kol, och sjuttionio ger guld."]]},
+ {k:"02 · Hur små?",d:12.2,cap:[[0.8,"Lägg atomerna på rad över ett enda hårstrå, och det ryms flera 100 000."],[6.4,"En enda vattendroppe innehåller ungefär 5 000 miljarder miljarder atomer."]]},
+ {k:"03 · Tre delar",d:19.8,cap:[[0.8,"En atom har tre delar. I mitten sitter kärnan, med protoner och neutroner. Runt den susar elektronerna."],[10.2,"Antalet protoner avgör vilket ämne det är. En proton ger väte, sex ger kol, och 79 ger guld."]]},
  {k:"04 · Nästan tom",d:15.3,cap:[[0.8,"Och en atom är nästan helt tom. Om kärnan var en ärta, skulle elektronerna sväva flera hundra meter bort."],[9.4,"Det som hindrar dig från att falla rakt igenom stolen är krafterna mellan elektronerna."]]},
- {k:"05 · Stjärnstoft",d:15.6,cap:[[0.8,"Väte bildades strax efter Big Bang, för tretton komma åtta miljarder år sedan."],[6,"Tyngre atomer, som kol, syre och järn, tillverkades inne i stjärnor. Guld bildas bland annat när neutronstjärnor krockar."]]},
+ {k:"05 · Stjärnstoft",d:15.6,cap:[[0.8,"Väte bildades strax efter Big Bang, för 13,8 miljarder år sedan."],[6,"Tyngre atomer, som kol, syre och järn, tillverkades inne i stjärnor. Guld bildas bland annat när neutronstjärnor krockar."]]},
  {k:"06 · Du",d:17.5,cap:[[0.8,"När stjärnor exploderade spreddes atomerna ut i rymden, och blev till nya stjärnor, planeter och till slut till dig."],[9.7,"I din kropp finns ungefär sju miljarder miljarder miljarder atomer. Du är, på riktigt, gjord av stjärnstoft."]]}
 ];
 const META={hud:"PLUGGPARKEN · SPECIALARE · FILM",titel:"Allt är gjort av atomer",under:"En film i sju steg · ca 1,8 minuter",

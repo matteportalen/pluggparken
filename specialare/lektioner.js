@@ -151,7 +151,7 @@ var LEKTIONER=[
 ["🏃","Och vi?","Den snabbaste människan har sprungit ungefär 44 kilometer i timmen, men bara en liten stund."],
 ["💨","Räkna ut!","En gepard som springer 100 kilometer i timmen tar ungefär 36 sekunder på sig för en kilometer. Kan du springa det?"]]},
 
-{id:"hjarnan",titel:"Din hjärna",kat:"Kroppen",e:"🧠",c:"#E57373",rutor:[
+{id:"hjarnan",film:"hjarnan",titel:"Din hjärna",kat:"Kroppen",e:"🧠",c:"#E57373",rutor:[
 ["🧠","Kroppens chef","Hjärnan styr allt du tänker, känner, rör dig och minns."],
 ["⚖️","Ganska liten","Hjärnan väger ungefär 1,4 kilo. Det är inte mycket, men den är otroligt komplicerad."],
 ["🔌","Miljarder trådar","Den har runt 86 miljarder nervceller som skickar små signaler till varandra."],
@@ -159,7 +159,7 @@ var LEKTIONER=[
 ["😴","Sömn","När du sover sorterar hjärnan det du lärt dig. Därför är sömn viktigt för att komma ihåg."],
 ["💪","Tränas som en muskel","Varje gång du lär dig något nytt bildas nya kopplingar mellan nervcellerna. Du blir smartare av att öva!"]]},
 
-{id:"kroppen",titel:"Snabbfakta om kroppen",kat:"Kroppen",e:"🫀",c:"#D4574E",rutor:[
+{id:"kroppen",film:"kroppen",titel:"Snabbfakta om kroppen",kat:"Kroppen",e:"🫀",c:"#D4574E",rutor:[
 ["🫀","Hjärtat jobbar","Hjärtat slår ungefär 100 000 gånger varje dygn, utan att du tänker på det."],
 ["🦴","Många ben","En vuxen människa har 206 ben. Ett bebisskelett har fler, som växer ihop."],
 ["👁️","Blinkningar","Vi blinkar ungefär 15 till 20 gånger varje minut, utan att tänka på det."],
@@ -175,7 +175,7 @@ var LEKTIONER=[
 ["🧮","Räkna avståndet","Ljuset är snabbare än ljudet. Räkna sekunderna mellan blixt och dån. Tre sekunder är ungefär en kilometer."],
 ["🏠","Var säker","Gå inomhus när det åskar. Stå inte under ensamma höga träd."]]},
 
-{id:"stora-tal",grej:"pengar",titel:"Miljon, miljard och biljon",kat:"Tal",e:"🔢",c:"#2E7D5B",rutor:[
+{id:"stora-tal",film:"storatal",grej:"pengar",titel:"Miljon, miljard och biljon",kat:"Tal",e:"🔢",c:"#2E7D5B",rutor:[
 ["🔢","Stora tal","Tusen är 1 000, en miljon 1 000 000, en miljard 1 000 000 000 och en biljon 1 000 000 000 000. Varje steg är 1 000 gånger större. På bilden är kuben 1 000 pärlor, plattan 100 och staven 10."],
 ["⏱️","Räkna i sekunder","1 miljon sekunder är ungefär 11 dygn. 1 miljard sekunder är ungefär 32 år. 1 biljon sekunder är över 31 000 år, då levde mammutar."],
 ["💵","En miljon kronor","1 000 sedlar à 1 000 kr. En sedel är 0,1 mm tjock, så stapeln blir 10 cm hög. Bilden visar dollar, men tanken är densamma."],
@@ -337,7 +337,7 @@ var LEKTIONER=[
 ["🔥","I ugnen","I ugnen utvidgas bubblorna och brödet växer. Vid ungefär 55 grader dör jästen, och degen blir fast och luftig."],
 ["🟤","Gyllene skorpa","Den bruna skorpan och den goda doften bildas när socker och proteiner reagerar med varandra i värmen. Det kallas Maillard-reaktionen."]]},
 
-{id:"dans",titel:"Dans genom tiderna",kat:"Historia",e:"💃",c:"#C2467A",rutor:[
+{id:"dans",film:"dans",titel:"Dans genom tiderna",kat:"Historia",e:"💃",c:"#C2467A",rutor:[
 ["🏺","Äldre än skriften","Människor har dansat i tusentals år. Gamla gravmålningar i Egypten visar dansare för över 4 000 år sedan."],
 ["🎭","Balett","Balett började vid furstehov i Italien för ungefär 500 år sedan. I Frankrike grundade kung Ludvig XIV en dansskola 1661."],
 ["🪗","Folkdans","I Sverige har man dansat folkdanser som polska och schottis i hundratals år, ofta till fiol och dragspel."],

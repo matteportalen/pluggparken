@@ -4,12 +4,12 @@
 (function(){
 const ROOT=MPFilmLib.root(document.currentScript),TAU=Math.PI*2;
 const SC=[
- {k:"Inledning",d:10.7,cap:[[0.5,"På jorden är ett dygn tjugofyra timmar. Men på andra planeter är dygnen helt olika. Det här är berättelsen om dygnet i solsystemet."]]},
- {k:"01 · Jorden",d:13.6,cap:[[0.8,"Ett dygn är den tid det tar för en planet att snurra ett varv. På jorden tar det tjugofyra timmar."],[7.5,"Vid ekvatorn åker du i ungefär sjutton hundra kilometer i timmen, bara genom att stå still."]]},
- {k:"02 · Jupiter",d:17.1,cap:[[0.8,"Jupiter är störst av alla planeter, men snurrar fortast. Ett dygn där är bara ungefär tio timmar."],[7.6,"Vid Jupiters ekvator rusar molnen runt i ungefär fyrtiofem tuusen kilometer i timmen. Farten gör planeten lite tillplattad."]]},
- {k:"03 · Mars",d:15.3,cap:[[0.8,"På Mars är ett dygn nästan som vårt: tjugofyra timmar och trettiosju minuter."],[6.8,"Forskare som styr rovrar på Mars lever på Mars-tid, och deras arbetsdag flyttar sig ungefär fyrtio minuter varje dag."]]},
- {k:"04 · Venus",d:7.9,cap:[[0.8,"Venus snurrar väldigt långsamt. Ett enda varv tar ungefär tvåhundra fyrtiotre jorddygn."]]},
- {k:"05 · Längre än ett år",d:16.9,cap:[[0.8,"Venus åker runt solen på ungefär tvåhundra tjugofem dygn. Ett varv runt sig själv tar alltså längre tid än ett helt år där."],[10.1,"Räknar man från soluppgång till soluppgång blir ett dygn på Venus ändå ungefär hundra sjutton jorddygn."]]},
+ {k:"Inledning",d:10.7,cap:[[0.5,"På jorden är ett dygn 24 timmar. Men på andra planeter är dygnen helt olika. Det här är berättelsen om dygnet i solsystemet."]]},
+ {k:"01 · Jorden",d:13.6,cap:[[0.8,"Ett dygn är den tid det tar för en planet att snurra ett varv. På jorden tar det 24 timmar."],[7.5,"Vid ekvatorn åker du i ungefär 1 700 kilometer i timmen, bara genom att stå still."]]},
+ {k:"02 · Jupiter",d:17.1,cap:[[0.8,"Jupiter är störst av alla planeter, men snurrar fortast. Ett dygn där är bara ungefär 10 timmar."],[7.6,"Vid Jupiters ekvator rusar molnen runt i ungefär 45 000 kilometer i timmen. Farten gör planeten lite tillplattad."]]},
+ {k:"03 · Mars",d:15.3,cap:[[0.8,"På Mars är ett dygn nästan som vårt: 24 timmar och 37 minuter."],[6.8,"Forskare som styr rovrar på Mars lever på Mars-tid, och deras arbetsdag flyttar sig ungefär 40 minuter varje dag."]]},
+ {k:"04 · Venus",d:7.9,cap:[[0.8,"Venus snurrar väldigt långsamt. Ett enda varv tar ungefär 243 jorddygn."]]},
+ {k:"05 · Längre än ett år",d:16.9,cap:[[0.8,"Venus åker runt solen på ungefär 225 dygn. Ett varv runt sig själv tar alltså längre tid än ett helt år där."],[10.1,"Räknar man från soluppgång till soluppgång blir ett dygn på Venus ändå ungefär 117 jorddygn."]]},
  {k:"06 · Baklänges",d:8.2,cap:[[0.8,"Venus snurrar dessutom åt andra hållet än de flesta planeter. På Venus går solen upp i väster."]]}
 ];
 const META={hud:"PLUGGPARKEN · SPECIALARE · FILM",titel:"Dygnet på andra planeter",under:"En film i sju steg · ca 1,8 minuter",
