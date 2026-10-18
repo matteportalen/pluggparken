@@ -5,7 +5,7 @@
 const ROOT=MPFilmLib.root(document.currentScript),TAU=Math.PI*2;
 const SC=[
  {k:"Inledning",d:8.6,cap:[[0.5,"Högst upp på jorden är luften tunn och vindarna iskalla. Det här är berättelsen om Mount Everest."]]},
- {k:"01 · Högst på jorden",d:7.6,cap:[[0.8,"Mount Everest är 8 849 meter högt och ligger mellan Nepal och Tibet."]]},
+ {k:"01 · Högst på jorden",d:7.8,cap:[[0.8,"Mount Everest är 8 849 meter högt och ligger mellan Nepal och Tibet."]]},
  {k:"02 · Iskallt",d:7.9,cap:[[0.8,"Högst upp kan det vara långt under minus 30 grader. Där blåser också mycket kraftiga vindar."]]},
  {k:"03 · Lite syre",d:8.1,cap:[[0.8,"Högt upp är luften tunn. Det finns mycket mindre syre, så klättrarna bär ofta med sig syrgas."]]},
  {k:"04 · Första toppen",d:10,cap:[[0.8,"År 1953 nådde Edmund Hillary från Nya Zeeland och Tenzing Norgay från Nepal toppen för första gången."]]},
