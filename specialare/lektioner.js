@@ -119,7 +119,7 @@ var LEKTIONER=[
 ["🎒","Sherpafolket","Sherpor som bor i bergen hjälper klättrare att hitta vägen och bära utrustning. De är vana vid höjden."],
 ["📈","Berget växer","Bergen i Himalaya trycks upp ännu i dag, ungefär 4 millimeter om året."]]},
 
-{id:"illusioner",titel:"Hjärnan luras",kat:"Hjärnan",e:"👁️",c:"#D14B8F",rutor:[
+{id:"illusioner",film:"illusioner",titel:"Hjärnan luras",kat:"Hjärnan",e:"👁️",c:"#D14B8F",rutor:[
 ["👁️","Ögon och hjärna","Ögonen tar emot ljus, men det är hjärnan som bestämmer vad vi ser."],
 ["🧠","Hjärnan gissar","Hjärnan gör hela tiden kloka gissningar, för att gå snabbt. Ofta har den rätt."],
 ["📐","Ibland gissar den fel","När bilden är gjord på ett särskilt sätt gissar hjärnan fel. Då ser vi en optisk illusion."],
