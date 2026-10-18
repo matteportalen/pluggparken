@@ -206,7 +206,7 @@ var LEKTIONER=[
 ["💨","Nästan tom","Det mesta av en atom är tomrum. Om kärnan var en ärta skulle elektronerna vara flera hundra meter bort."],
 ["♻️","Gamla atomer","Atomerna i din kropp har funnits i miljarder år. Många bildades inne i stjärnor."],
 ["⭐","Stjärnstoft","Du är alltså, på riktigt, gjord av stjärnstoft!"]]},
-{id:"nobel",lank:[["Läs mer: Marie Curie","#l/curie"],["Lyssna: Alfred Nobel (Historierummet)","https://www.sverigesradio.se/avsnitt/historierummet-om-alfred-nobel"],["Lyssna: Marie Curie (Historierummet)","https://www.sverigesradio.se/avsnitt/historierummet-marie-curie"]],titel:"Nobelpriset",kat:"Historia",e:"🏅",c:"#B8860B",rutor:[
+{id:"nobel",film:"nobel",lank:[["Läs mer: Marie Curie","#l/curie"],["Lyssna: Alfred Nobel (Historierummet)","https://www.sverigesradio.se/avsnitt/historierummet-om-alfred-nobel"],["Lyssna: Marie Curie (Historierummet)","https://www.sverigesradio.se/avsnitt/historierummet-marie-curie"]],titel:"Nobelpriset",kat:"Historia",e:"🏅",c:"#B8860B",rutor:[
 ["🧪","Alfred Nobel","Alfred Nobel var en svensk uppfinnare och företagare. År 1867 uppfann han dynamiten."],
 ["📜","Testamentet","När han dog 1896 stod det i hans testamente att pengarna skulle bli ett pris till dem som gjort mest nytta för mänskligheten."],
 ["🏅","Fem priser","Det första Nobelpriset delades ut 1901. Det finns priser i fysik, kemi, medicin, litteratur och fred. Ekonomipriset kom senare, 1969."],
