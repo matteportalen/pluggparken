@@ -238,7 +238,7 @@ var LEKTIONER=[
 ["🛃","Ny säkerhet","Efter attackerna ändrades säkerheten på flygplatser över hela världen. Därför går vi idag igenom säkerhetskontroller."],
 ["🕯️","Minnesmärket","På platsen i New York finns nu ett minnesmärke med två stora fontäner. Namnen på alla som dog finns inristade."]]},
 
-{id:"vanallen",titel:"Strålningsbältena runt jorden",kat:"Rymden",e:"🛰️",c:"#5B3FA0",rutor:[
+{id:"vanallen",film:"vanallen",titel:"Strålningsbältena runt jorden",kat:"Rymden",e:"🛰️",c:"#5B3FA0",rutor:[
 ["🌍","Två ringar","Runt jorden finns två stora ringar av laddade partiklar. De kallas Van Allen-bältena."],
 ["🛰️","Upptäckten","De upptäcktes 1958 av den amerikanska satelliten Explorer 1. De är uppkallade efter forskaren James Van Allen."],
 ["🧲","Fångade partiklar","Jordens magnetfält fångar partiklar från solen och håller dem kvar i bältena."],
