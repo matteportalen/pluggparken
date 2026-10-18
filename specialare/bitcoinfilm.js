@@ -88,7 +88,7 @@ function scenes(E){
   const s7=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.2)/1.1);photo(1,t,9.3,1.1,.15+.5*g);cred(1,.55*(1-g));
     if(g>0){c.save();c.globalAlpha=g;space(a,1);const u=Math.max(20,Math.min(a.w*.05,s*.06));
       c.fillStyle="#ffd23c";c.beginPath();c.moveTo(cx-a.w*.18+u*.4,cy-u*2);c.lineTo(cx-a.w*.18-u*.8,cy+u*.2);c.lineTo(cx-a.w*.18-u*.1,cy+u*.2);c.lineTo(cx-a.w*.18-u*.6,cy+u*2);c.lineTo(cx-a.w*.18+u*.9,cy-u*.5);c.lineTo(cx-a.w*.18+u*.2,cy-u*.5);c.closePath();c.fill();tx("mycket el",cx-a.w*.18,cy+u*3.1,"#ffd86b","center",Math.max(15,s*.04),700);
-      const bx=cx+a.w*.16,by=cy-u*.4;c.fillStyle="rgba(255,255,255,.9)";c.beginPath();c.roundRect?c.roundRect(bx-u*3,by-u*1.6,u*6,u*3,u*.5):c.rect(bx-u*3,by-u*1.6,u*6,u*3);c.fill();c.beginPath();c.moveTo(bx-u*1,by+u*1.4);c.lineTo(bx-u*1.8,by+u*2.4);c.lineTo(bx,by+u*1.4);c.closePath();c.fill();tx("Fråga en vuxen först",bx,by+u*.2,"#1d2b53","center",Math.max(15,u*.8),700);
+      const bx=cx+a.w*.16,by=cy-u*.4;c.fillStyle="rgba(255,255,255,.9)";c.beginPath();c.roundRect?c.roundRect(bx-u*4.2,by-u*1.6,u*8.4,u*3,u*.5):c.rect(bx-u*4.2,by-u*1.6,u*8.4,u*3);c.fill();c.beginPath();c.moveTo(bx-u*1,by+u*1.4);c.lineTo(bx-u*1.8,by+u*2.4);c.lineTo(bx,by+u*1.4);c.closePath();c.fill();tx("Fråga en vuxen först",bx,by+u*.2,"#1d2b53","center",Math.max(14,u*.7),700);
       c.restore();}};
 
   return[s0,s1,s2,s3,s4,s5,s6,s7];
