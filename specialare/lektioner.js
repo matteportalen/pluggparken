@@ -191,7 +191,7 @@ var LEKTIONER=[
 ["🏔️","Berg växer fram","När två plattor pressas mot varandra veckas marken och berg växer upp, som Himalaya."],
 ["🌋","Jordbävningar","När plattor hakar upp sig och sedan släpper kan det komma jordbävningar och vulkanutbrott."]]},
 
-{id:"norrsken",titel:"Norrsken",kat:"Rymden",e:"🌌",c:"#2F8F6B",rutor:[
+{id:"norrsken",film:"norrsken",titel:"Norrsken",kat:"Rymden",e:"🌌",c:"#2F8F6B",rutor:[
 ["🌌","Ljus på natthimlen","Norrsken är gröna, ibland rosa eller lila, ljusa slingor som dansar på natthimlen."],
 ["☀️","Det börjar på solen","Solen skickar ut små laddade partiklar hela tiden. De kallas solvind."],
 ["🧲","Jordens magnetfält","Jorden har ett magnetfält som leder partiklarna mot polerna."],
