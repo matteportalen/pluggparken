@@ -547,7 +547,7 @@ function tourNext(){if(!tour)return;tour.i++;if(tour.i>=STOP.length){tourVoice(S
   const to=STOP[tour.i].z,i=tour.i;gAuto=to===zT?null:{from:zT,to,t0:performance.now(),dur:Math.max(3200,Math.min(7500,Math.abs(to-zT)*38000))};
   clearInterval(tour.tm);tour.tm=setInterval(()=>{if(!tour)return;if(!gAuto&&Math.abs(zC-to)<.004){clearInterval(tour.tm);tourVoice(i,()=>{tour.to=setTimeout(tourNext,650);});}},120);}
 function tourStartAt(n){if(tour)tourEnd();tour={i:n-1};$('gTour').textContent='⏹ Stoppa resan';$('gTour').setAttribute('aria-pressed','true');$('gCard').hidden=false;tourNext();}
-function tourStart(){if(tour){tourEnd();return;}tourStartAt(0);return;tour={i:-1};$('gTour').textContent='⏹ Stoppa resan';$('gTour').setAttribute('aria-pressed','true');$('gCard').hidden=false;tourNext();}
+function tourStart(){if(tour){tourEnd();return;}startStory();return;tour={i:-1};$('gTour').textContent='⏹ Stoppa resan';$('gTour').setAttribute('aria-pressed','true');$('gCard').hidden=false;tourNext();}
 $('gTour').onclick=tourStart;
 
 /* landmärkena får egna föremål och kameran riktas mot dem när man är vid stoppet */
@@ -647,7 +647,10 @@ function galFrame(now,dt){const inG=mode==='galaxy';
 function openGalaxy(auto){galSeen=false;focus=null;show('galaxy');controls.minDistance=8;controls.maxDistance=Infinity;zC=0;zT=0;gStep=-1;gAuto=auto?{from:0,to:1,t0:performance.now()+1600,dur:52000}:null;flyTo(null,GD0,.5);}
 function goGalZoom(to){tourEnd();gAuto={from:zT,to,t0:performance.now(),dur:Math.max(3000,Math.min(9000,Math.abs(to-zT)*26000))};}
 $('toGal').onclick=()=>openGalaxy(true);
-$('hTour').onclick=()=>{openGalaxy(false);tourStartAt(0);};
+function startStory(){const go=()=>{openGalaxy(false);tourStartAt(0);};
+  if(!stLoad)stLoad=new Promise((res,rej)=>{const sc=document.createElement('script');sc.src='stockholm.js';sc.onload=res;sc.onerror=rej;document.head.appendChild(sc);});
+  stLoad.then(()=>window.MPStockholm.tour(go)).then(ok=>{if(ok===false)go();},()=>{stLoad=null;go();});}
+$('hTour').onclick=startStory;
 /* sömlöst mellan solsystemet och universum: att zooma ut förbi sista avståndet fortsätter in i universumresan, och att zooma in igen går tillbaka */
 let galSeen=false;
 function fadeUI(id){const e=document.getElementById(id);e.classList.add('xf');setTimeout(()=>e.classList.remove('xf'),1000);}

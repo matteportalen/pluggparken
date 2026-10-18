@@ -36,19 +36,19 @@ function cam(z){let i=0;while(i<PATH.length-2&&z>PATH[i+1][0])i++;const a=PATH[i
 function setZ(z,quick){z=Math.max(1.1,Math.min(16.4,z));if(!map)return;const c=cam(z);map.jumpTo(c);sync(z);}
 function sync(z){slider.value=Math.round((z-1.1)/(16.4-1.1)*1000);let k=0,bd=1e9;STEPS.forEach((s,i)=>{const d=Math.abs(s.z-z);if(d<bd){bd=d;k=i;}});if(k!==cur||!card.classList.contains('in')){cur=k;const s=STEPS[k];card.classList.remove('in');card.innerHTML=`<h2>📍 ${s.t}</h2><ul>${s.f.map(x=>`<li>${x}</li>`).join('')}</ul>`;void card.offsetWidth;card.classList.add('in');}
   [...chips.children].forEach((b,i)=>b.setAttribute('aria-pressed',i===cur));}
-function tween(to,ms){cancelAnimationFrame(rafT);const from=map.getZoom(),t0=performance.now();const f=n=>{const q=Math.min(1,(n-t0)/ms),e=sm(q);setZ(lerp(from,to,e));if(q<1)rafT=requestAnimationFrame(f);};rafT=requestAnimationFrame(f);}
+function tween(to,ms,cb){cancelAnimationFrame(rafT);const from=map.getZoom(),t0=performance.now();const f=n=>{const q=Math.min(1,(n-t0)/ms),e=sm(q);setZ(lerp(from,to,e));if(q<1)rafT=requestAnimationFrame(f);else if(cb)cb();};rafT=requestAnimationFrame(f);}
 function load(){if(loadP)return loadP;loadP=new Promise((res,rej)=>{const l=document.createElement('link');l.rel='stylesheet';l.href=CSSU;document.head.appendChild(l);const s=document.createElement('script');s.src=JS;s.onload=res;s.onerror=()=>rej(new Error('maplibre'));document.head.appendChild(s);});return loadP;}
 async function build(){
   const st=document.createElement('style');st.textContent=css;document.head.appendChild(st);
   ov=document.createElement('div');ov.id='mpsOv';ov.hidden=true;
   ov.innerHTML=`<div id="mpsMap"></div><div id="mpsMsg">Laddar kartan …</div>
-   <div class="top"><button class="bk" id="mpsBack">← Jorden</button><span class="ch">📍 Zooma in till Stockholm</span></div>
+   <div class="top"><button class="bk" id="mpsBack">← Jorden</button><span class="ch">📍 Zooma in till Stockholm</span><button class="bk" id="mpsTour" hidden>⏸ Pausa resan</button></div>
    <div id="mpsCard"></div>
    <div class="bot"><div id="mpsChips"></div><label class="sl"><span>🌍</span><input type="range" id="mpsZ" min="0" max="1000" value="0" aria-label="Zooma från jorden till Gamla stan"><span>🏙️</span></label></div>
    <div id="mpsCr">Satellitbilder: <a href="https://cloudless.eox.at" target="_blank" rel="noopener">EOxCloudless</a> by EOX IT Services GmbH (Contains modified Copernicus Sentinel data 2016), <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> · <a href="https://openfreemap.org" target="_blank" rel="noopener">OpenFreeMap</a> © <a href="https://openmaptiles.org/" target="_blank" rel="noopener">OpenMapTiles</a> Data from <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a></div>`;
   document.body.appendChild(ov);card=ov.querySelector('#mpsCard');slider=ov.querySelector('#mpsZ');chips=ov.querySelector('#mpsChips');
-  STEPS.forEach((s,i)=>{const b=document.createElement('button');b.textContent=s.k;b.onclick=()=>tween(s.z,Math.max(2500,Math.min(7000,Math.abs(s.z-map.getZoom())*900)));chips.appendChild(b);});
-  slider.oninput=()=>{cancelAnimationFrame(rafT);setZ(1.1+slider.value/1000*(16.4-1.1));};
+  STEPS.forEach((s,i)=>{const b=document.createElement('button');b.textContent=s.k;b.onclick=()=>endTour()||tween(s.z,Math.max(2500,Math.min(7000,Math.abs(s.z-map.getZoom())*900)));chips.appendChild(b);});
+  slider.oninput=()=>{endTour();cancelAnimationFrame(rafT);setZ(1.1+slider.value/1000*(16.4-1.1));};
   ov.querySelector('#mpsBack').onclick=close;
   addEventListener('keydown',e=>{if(e.key==='Escape'&&ov&&!ov.hidden)close();});
   ov.addEventListener('wheel',e=>{if(!map)return;if(e.deltaY>0&&map.getZoom()<1.25){ovAcc+=e.deltaY;if(ovAcc>360){ovAcc=0;close();}}else ovAcc=0;},{passive:true});
@@ -66,9 +66,18 @@ async function build(){
   map.on('dragstart',()=>{cancelAnimationFrame(rafT);});
 }
 function msg(t){const m=ov&&ov.querySelector('#mpsMsg');if(m){m.dataset.err='1';m.style.display='grid';m.textContent=t;}}
-async function open(cb){onClose=cb||null;if(!ov&&!booting){booting=true;try{await build();}catch(e){booting=false;if(!ov){const st=document.createElement('style');st.textContent=css;document.head.appendChild(st);}msg('Kartan behöver internet. Kontrollera uppkopplingen och försök igen.');}booting=false;}
+async function open(cb,noAuto){onClose=cb||null;if(!ov&&!booting){booting=true;try{await build();}catch(e){booting=false;if(!ov){const st=document.createElement('style');st.textContent=css;document.head.appendChild(st);}msg('Kartan behöver internet. Kontrollera uppkopplingen och försök igen.');}booting=false;}
   if(!ov)return;ov.hidden=false;requestAnimationFrame(()=>ov.classList.add('on'));document.body.style.overflow='hidden';
-  if(map){map.resize();setZ(1.1);setTimeout(()=>tween(9.4,6500),900);}}
-function close(){if(!ov)return;cancelAnimationFrame(rafT);ov.classList.remove('on');setTimeout(()=>{ov.hidden=true;document.body.style.overflow='';},700);if(onClose)onClose();}
-window.MPStockholm={open,close,get isOpen(){return !!ov&&!ov.hidden}};
+  if(map){map.resize();if(noAuto)setZ(16.4);else{setZ(1.1);setTimeout(()=>tween(9.4,6500),900);}}}
+/* berättelsen börjar här: Gamla stan → ut genom innerstaden, Stockholm, Sverige, Europa → jorden; sedan tar solsystemets berättelse över (done) */
+let T=null;
+function tAudio(file,cb){if(!(window.Ljud&&Ljud.on)){T.timer=true;const tk=()=>{if(!T||T.cb!==cb)return;if(T.paused)setTimeout(tk,500);else cb();};T.cb=cb;setTimeout(tk,6500);return;}
+  const a=new Audio('../../ljud/resa/'+file+'?v=3');T.aud=a;T.cb=cb;let d=false;const fin=()=>{if(d)return;d=true;if(T&&T.aud===a)T.aud=null;if(T&&T.cb===cb)cb();};a.onended=fin;a.onerror=()=>setTimeout(fin,4000);a.play().catch(()=>setTimeout(fin,4000));}
+function tStep(){if(!T)return;const i=T.i;T.target=i;sync(STEPS[i].z);tAudio('s'+(100+i)+'-1.mp3',()=>{if(!T)return;if(i===0){const d=T.done;endTour(true);if(d)d();close();return;}T.i=i-1;T.moving=true;tween(STEPS[i-1].z,Math.max(3200,Math.min(6500,Math.abs(STEPS[i].z-STEPS[i-1].z)*900)),()=>{if(T){T.moving=false;tStep();}});});}
+function endTour(keep){const was=!!T;if(T){if(T.aud){T.aud.onended=null;T.aud.pause();}T.cb=null;T=null;}const b=ov&&ov.querySelector('#mpsTour');if(b)b.hidden=true;return false&&was;}
+async function tour(done){await open(null,true);if(!ov||!map){if(ov)close();return false;}endTour();T={i:STEPS.length-1,done,paused:false};const b=ov.querySelector('#mpsTour');b.hidden=false;b.textContent='⏸ Pausa resan';
+  b.onclick=()=>{if(!T)return;if(!T.paused){T.paused=true;cancelAnimationFrame(rafT);if(T.aud)T.aud.pause();b.textContent='▶ Fortsätt resan';}else{T.paused=false;b.textContent='⏸ Pausa resan';if(T.moving){const i=T.i;tween(STEPS[i].z,3000,()=>{if(T){T.moving=false;tStep();}});}else if(T.aud)T.aud.play();else tStep();}};
+  setTimeout(()=>{if(T)tStep();},1100);return true;}
+function close(){endTour();if(!ov)return;cancelAnimationFrame(rafT);ov.classList.remove('on');setTimeout(()=>{ov.hidden=true;document.body.style.overflow='';},700);if(onClose)onClose();}
+window.MPStockholm={open,close,tour,get isOpen(){return !!ov&&!ov.hidden}};
 })();
