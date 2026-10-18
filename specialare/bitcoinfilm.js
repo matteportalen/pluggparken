@@ -10,8 +10,8 @@ const SC=[
  {k:"03 · Blockkedjan",d:15.9,cap:[[0.8,"Ingen bank eller regering styr Bitcoin. Tusentals datorer håller reda på vem som äger vad, i en gemensam bok som kallas blockkedjan."],[11.4,"Ungefär var tionde minut läggs ett nytt block till i kedjan."]]},
  {k:"04 · Bara 21 miljoner",d:14.2,cap:[[0.8,"Det kommer aldrig att finnas fler än 21 miljoner bitcoin. Det gör dem sällsynta, lite som guld."],[8.1,"Den sista bitcoinen beräknas skapas runt år 2140."]]},
  {k:"05 · Pizzan",d:11,cap:[[0.8,"Den 22 maj 2010 köpte någon två pizzor för 10 000 bitcoin."],[7.3,"Idag skulle de vara värda enormt mycket pengar."]]},
- {k:"06 · Priset",d:11.4,cap:[[0.8,"Priset går upp och ner väldigt snabbt. Flera gånger har det fallit med mer än hälften på kort tid."],[8.7,"Man kan förlora mycket pengar."]]},
- {k:"07 · Var försiktig",d:9.3,cap:[[0.8,"Att skapa nya bitcoin kräver också mycket el, så det diskuteras ur miljösynpunkt. Fråga alltid en vuxen först."]]}
+ {k:"06 · Priset",d:13.1,cap:[[0.8,"Priset går upp och ner väldigt snabbt. Flera gånger har det fallit med mer än hälften på kort tid."],[7.6,"Flera gånger har det också fördubblats."],[10.4,"Man kan förlora mycket pengar."]]},
+ {k:"07 · Volatilt",d:12.2,cap:[[0.8,"Att skapa nya bitcoin kräver också mycket el, så det diskuteras ur miljösynpunkt."],[6.6,"Bitcoin kallas volatilt, vilket betyder att priset svänger väldigt mycket."]]}
 ];
 const META={hud:"PLUGGPARKEN · SPECIALARE · FILM",titel:"Bitcoin",under:"En film i åtta steg · ca 1,6 minuter",
   slutRubrik:"Tack för att du har följt med",slutText:"Bitcoin är pengar utan bank, men det är ingen leksak. Filmen bygger på bilder ur Wikimedia Commons. Källor står under bilderna.",igen:"↻ Se filmen igen"};
@@ -76,19 +76,19 @@ function scenes(E){
       c.restore();}};
 
   /* 6 · priset går upp och ner */
-  const s6=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.4)/1.1);photo(6,t,11.4,1.1,.15+.5*g);cred(6,.55*(1-g));
+  const s6=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.4)/1.1);photo(6,t,13.1,1.1,.15+.5*g);cred(6,.55*(1-g));
     if(g>0){c.save();c.globalAlpha=g;panel(a,1);const w=Math.min(a.w*.82,s*1.5),h=Math.min(a.h*.46,s*.6),lx=cx-w/2,y0=cy+h*.5;
       c.strokeStyle="rgba(255,255,255,.5)";c.lineWidth=2;c.beginPath();c.moveTo(lx,y0-h);c.lineTo(lx,y0);c.lineTo(lx+w,y0);c.stroke();
       const pts=[0,.02,.06,.04,.3,.15,.55,.3,.2,.5,.65,.85,.38,.5,.8,.62,.95,.55];const k=eo((t-3)/5);c.strokeStyle="#f7931a";c.lineWidth=4;c.beginPath();const N=pts.length-1;for(let i=0;i<=40*k;i++){const q=i/40,idx=q*N,i0=Math.floor(idx),f=idx-i0,v=pts[i0]+(pts[Math.min(N,i0+1)]-pts[i0])*f;const X=lx+q*w,Y=y0-v*h;i?c.lineTo(X,Y):c.moveTo(X,Y);}c.stroke();
       if(t>5.5){c.globalAlpha=g*eo((t-5.5)/1);tx("−50 % eller mer, flera gånger",lx+w*.62,y0-h*1.05,"#ff9a8a","center",Math.max(14,s*.037),700);}
-      if(t>8.7){c.globalAlpha=g*eo((t-8.7)/1);tx("man kan förlora mycket pengar",cx,a.y+a.h*.9,"#ffd86b","center",Math.max(17,s*.045),700);}
+      if(t>10.4){c.globalAlpha=g*eo((t-10.4)/1);tx("man kan förlora mycket pengar",cx,a.y+a.h*.9,"#ffd86b","center",Math.max(17,s*.045),700);}
       c.restore();}};
 
   /* 7 · el och fråga en vuxen */
-  const s7=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.2)/1.1);photo(1,t,9.3,1.1,.15+.5*g);cred(1,.55*(1-g));
+  const s7=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.2)/1.1);photo(1,t,12.2,1.1,.15+.5*g);cred(1,.55*(1-g));
     if(g>0){c.save();c.globalAlpha=g;space(a,1);const u=Math.max(20,Math.min(a.w*.05,s*.06));
       c.fillStyle="#ffd23c";c.beginPath();c.moveTo(cx-a.w*.18+u*.4,cy-u*2);c.lineTo(cx-a.w*.18-u*.8,cy+u*.2);c.lineTo(cx-a.w*.18-u*.1,cy+u*.2);c.lineTo(cx-a.w*.18-u*.6,cy+u*2);c.lineTo(cx-a.w*.18+u*.9,cy-u*.5);c.lineTo(cx-a.w*.18+u*.2,cy-u*.5);c.closePath();c.fill();tx("mycket el",cx-a.w*.18,cy+u*3.1,"#ffd86b","center",Math.max(15,s*.04),700);
-      const bx=cx+a.w*.16,by=cy-u*.4;c.fillStyle="rgba(255,255,255,.9)";c.beginPath();c.roundRect?c.roundRect(bx-u*4.2,by-u*1.6,u*8.4,u*3,u*.5):c.rect(bx-u*4.2,by-u*1.6,u*8.4,u*3);c.fill();c.beginPath();c.moveTo(bx-u*1,by+u*1.4);c.lineTo(bx-u*1.8,by+u*2.4);c.lineTo(bx,by+u*1.4);c.closePath();c.fill();tx("Fråga en vuxen först",bx,by+u*.2,"#1d2b53","center",Math.max(14,u*.7),700);
+      const bx=cx+a.w*.16,by=cy-u*.4;c.fillStyle="rgba(255,255,255,.9)";c.beginPath();c.roundRect?c.roundRect(bx-u*4.2,by-u*1.6,u*8.4,u*3,u*.5):c.rect(bx-u*4.2,by-u*1.6,u*8.4,u*3);c.fill();c.beginPath();c.moveTo(bx-u*1,by+u*1.4);c.lineTo(bx-u*1.8,by+u*2.4);c.lineTo(bx,by+u*1.4);c.closePath();c.fill();tx("volatilt = svänger mycket",bx,by+u*.2,"#1d2b53","center",Math.max(14,u*.7),700);
       c.restore();}};
 
   return[s0,s1,s2,s3,s4,s5,s6,s7];
