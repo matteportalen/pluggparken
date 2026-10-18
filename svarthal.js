@@ -56,7 +56,8 @@ const SC0=[
 const V={on:true,busy:false,a:null,base:ROOT+"ljud/svarthal/"};
 function voiceStop(){V.busy=false;if(V.a){try{V.a.pause();}catch(e){}V.a=null;}duck(false);}
 function duck(on){const L=window.Ljud;try{const g=L&&L.rymd&&L.rymd.g;if(g&&g.context)g.gain.setTargetAtTime(on?.16:.55,g.context.currentTime,.4);}catch(e){}}
-function voicePlay(si,ci){voiceStop();if(!V.on)return;const a=new Audio(V.base+"s"+si+"-"+(ci+1)+".mp3");a.preload="auto";V.a=a;V.busy=true;
+const VOICE_VER="20261018";/* ändra när röstfiler byts ut, så att webbläsare inte spelar gamla cachade filer */
+function voicePlay(si,ci){voiceStop();if(!V.on)return;const a=new Audio(V.base+"s"+si+"-"+(ci+1)+".mp3?v="+VOICE_VER);a.preload="auto";V.a=a;V.busy=true;
   const done=()=>{clearTimeout(V.t);if(V.a===a){V.busy=false;V.a=null;duck(false);}};a.onended=done;a.onerror=done;duck(true);
   clearTimeout(V.t);V.t=setTimeout(done,16000);   // reservutgång: filmen får aldrig hänga om ljudet inte startar
   const p=a.play();if(p&&p.catch)p.catch(done);}
@@ -94,7 +95,7 @@ window.MPSvartHal={start(host,o){o=o||{};const D=o.def,SC=D?D.SC:SC0,M=Object.as
     if(!p){if(V.a){try{V.a.pause();}catch(e){}}}else if(was===false&&V.a){V.a.play().catch(()=>{V.busy=false;});}else if(p&&!V.a&&capShown>=0&&st<SC[si].d&&!V.busy){/* första starten eller efter hopp */voicePlay(si,capShown);}
     const L=snd();if(L&&L.rymd){if(p&&L.on)L.rymd.start();else L.rymd.stop&&L.rymd.stop();}}
   function finish(){playing=false;$('[data-a="play"]').textContent="▶";ended=true;voiceStop();document.dispatchEvent(new Event("mp-sh-slut"));const L=snd();if(L&&L.rymd&&L.rymd.stop)L.rymd.stop();
-    const e=document.createElement("div");e.className="sh-end";e.innerHTML=`<div><h2>${M.slutRubrik}</h2><p>${M.slutText}</p><button class="sh-play" data-a="again">${M.igen}</button></div>`;root.appendChild(e);if(V.on){const a=new Audio(V.base+"s"+SC.length+"-1.mp3");V.a=a;V.busy=true;duck(true);const dn=()=>{if(V.a===a){V.busy=false;V.a=null;duck(false);}};a.onended=dn;a.onerror=dn;const p=a.play();if(p&&p.catch)p.catch(dn);}}
+    const e=document.createElement("div");e.className="sh-end";e.innerHTML=`<div><h2>${M.slutRubrik}</h2><p>${M.slutText}</p><button class="sh-play" data-a="again">${M.igen}</button></div>`;root.appendChild(e);if(V.on){const a=new Audio(V.base+"s"+SC.length+"-1.mp3?v="+VOICE_VER);V.a=a;V.busy=true;duck(true);const dn=()=>{if(V.a===a){V.busy=false;V.a=null;duck(false);}};a.onended=dn;a.onerror=dn;const p=a.play();if(p&&p.catch)p.catch(dn);}}
   root.addEventListener("click",ev=>{const b=ev.target.closest("[data-a],[data-i]");if(!b)return;
     if(b.dataset.i!=null){if(!started)start();goto(+b.dataset.i);return;}
     const a=b.dataset.a;
