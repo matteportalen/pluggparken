@@ -353,7 +353,7 @@ var LEKTIONER=[
 ["🌌","De första galaxerna","Eftersom ljuset behöver tid ser teleskopet tillbaka i tiden. Det kan se galaxer som lyste över 13 miljarder år sedan."],
 ["📸","Första bilderna","I juli 2022 kom de första bilderna. De visade tusentals galaxer i en liten fläck av himlen och färgglada moln där stjärnor föds."]]},
 
-{id:"sjokablar",titel:"Internet ligger på havsbotten",kat:"Tal",e:"🌐",c:"#1F7A8C",rutor:[
+{id:"sjokablar",film:"sjokablar",titel:"Internet ligger på havsbotten",kat:"Tal",e:"🌐",c:"#1F7A8C",rutor:[
 ["🌐","Är internet i luften?","Nej. Nästan allt internet mellan länderna går genom kablar som ligger på havsbotten."],
 ["📏","Över en miljon kilometer","Det finns ungefär 500 kablar som tillsammans är över en miljon kilometer långa. Det är mer än två gånger till månen."],
 ["💡","Ljus i glasfiber","Inuti kablarna finns glasfibertrådar. Informationen skickas som ljusblixtar, tusentals miljoner varje sekund."],
