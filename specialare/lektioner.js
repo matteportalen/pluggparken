@@ -143,7 +143,7 @@ var LEKTIONER=[
 ["🔬","Ingen bor där","Det finns inga människor som bor där hela livet, bara forskare som stannar i några månader eller ett år."],
 ["🤝","Till för forskning","Länder har kommit överens om att Antarktis ska användas för fred och forskning."]]},
 
-{id:"snabbast",titel:"De snabbaste djuren",kat:"Natur",e:"🦅",c:"#3C8D6E",rutor:[
+{id:"snabbast",film:"snabbast",titel:"De snabbaste djuren",kat:"Natur",e:"🦅",c:"#3C8D6E",rutor:[
 ["🦅","Pilgrimsfalken","Snabbast i världen är pilgrimsfalken. När den störtdyker efter en fågel kan den komma upp i över 300 kilometer i timmen."],
 ["🐆","Geparden","Snabbast på marken är geparden: upp till ungefär 100 kilometer i timmen. Men bara i korta sprintar."],
 ["🐟","Snabb i havet","Seglarfisken tillhör de snabbaste fiskarna, kanske runt 100 kilometer i timmen. Den är svår att mäta."],
