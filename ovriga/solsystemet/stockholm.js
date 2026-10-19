@@ -35,25 +35,25 @@ const lerp=(a,b,t)=>a+(b-a)*t,sm=t=>t*t*(3-2*t);
 function cam(z){let i=0;while(i<PATH.length-2&&z>PATH[i+1][0])i++;const a=PATH[i],b=PATH[i+1],t=sm(Math.max(0,Math.min(1,(z-a[0])/(b[0]-a[0]))));
   return{center:[lerp(a[1][0],b[1][0],t),lerp(a[1][1],b[1][1],t)],zoom:z,pitch:lerp(a[2],b[2],t),bearing:lerp(a[3],b[3],t)};}
 function setZ(z,quick){z=Math.max(1.1,Math.min(ZMAX,z));if(!map)return;const c=cam(z);map.jumpTo(c);sync(z);}
-function sync(z){slider.value=Math.round((z-1.1)/(ZMAX-1.1)*1000);let k=0,bd=1e9;STEPS.forEach((s,i)=>{const d=Math.abs(s.z-z);if(d<bd){bd=d;k=i;}});if(k!==cur||!card.classList.contains('in')){cur=k;const s=STEPS[k];card.classList.remove('in');card.innerHTML=`<h2>📍 ${s.t}</h2><ul>${s.f.map(x=>`<li>${x}</li>`).join('')}</ul>`;void card.offsetWidth;card.classList.add('in');}
-  [...chips.children].forEach((b,i)=>b.setAttribute('aria-pressed',i===cur));}
+function sync(z){slider.value=Math.round((ZMAX-z)/(ZMAX-1.1)*1000);let k=0,bd=1e9;STEPS.forEach((s,i)=>{const d=Math.abs(s.z-z);if(d<bd){bd=d;k=i;}});if(k!==cur||!card.classList.contains('in')){cur=k;const s=STEPS[k];card.classList.remove('in');card.innerHTML=`<h2>📍 ${s.t}</h2><ul>${s.f.map(x=>`<li>${x}</li>`).join('')}</ul>`;void card.offsetWidth;card.classList.add('in');}
+  [...chips.children].forEach((b,i)=>b.setAttribute('aria-pressed',STEPS.length-1-i===cur));}
 function tween(to,ms,cb){cancelAnimationFrame(rafT);const from=map.getZoom(),t0=performance.now();const f=n=>{const q=Math.min(1,(n-t0)/ms),e=sm(q);setZ(lerp(from,to,e));if(q<1)rafT=requestAnimationFrame(f);else if(cb)cb();};rafT=requestAnimationFrame(f);}
 function load(){if(loadP)return loadP;loadP=new Promise((res,rej)=>{const l=document.createElement('link');l.rel='stylesheet';l.href=CSSU;document.head.appendChild(l);const s=document.createElement('script');s.src=JS;s.onload=res;s.onerror=()=>rej(new Error('maplibre'));document.head.appendChild(s);});return loadP;}
 async function build(){
   const st=document.createElement('style');st.textContent=css;document.head.appendChild(st);
   ov=document.createElement('div');ov.id='mpsOv';ov.hidden=true;
   ov.innerHTML=`<div id="mpsMap"></div><div id="mpsMsg">Laddar kartan …</div>
-   <div class="top"><button class="bk" id="mpsBack">← Jorden</button><span class="ch">📍 Zooma in till Stockholm</span><button class="bk" id="mpsTour" hidden>⏸ Pausa resan</button><button class="bk" id="mpsFart" title="Hastighet på resan" aria-label="Hastighet på resan">1×</button></div>
+   <div class="top"><button class="bk" id="mpsBack">← Jorden</button><span class="ch">📍 Zooma in till Stockholm</span><button class="bk" id="mpsTour" hidden>⏸ Pausa resan</button><button class="bk" id="mpsSkip" hidden title="Snabbspola till nästa del av berättelsen">⏭ Nästa del</button><button class="bk" id="mpsFart" title="Hastighet på resan" aria-label="Hastighet på resan">1×</button></div>
    <div id="mpsCard"></div>
-   <div class="bot"><div id="mpsChips"></div><label class="sl"><span>🌍</span><input type="range" id="mpsZ" min="0" max="1000" value="0" aria-label="Zooma från jorden till Smedslättsskolan"><span>🏙️</span></label></div>
+   <div class="bot"><div id="mpsChips"></div><label class="sl"><span>🏙️</span><input type="range" id="mpsZ" min="0" max="1000" value="0" aria-label="Zooma från Smedslättsskolan ut till jorden"><span>🌍</span></label></div>
    <div id="mpsCr">Satellitbilder: <a href="https://cloudless.eox.at" target="_blank" rel="noopener">EOxCloudless</a> by EOX IT Services GmbH (Contains modified Copernicus Sentinel data 2016), <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> · <a href="https://openfreemap.org" target="_blank" rel="noopener">OpenFreeMap</a> © <a href="https://openmaptiles.org/" target="_blank" rel="noopener">OpenMapTiles</a> Data from <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a></div>`;
   document.body.appendChild(ov);card=ov.querySelector('#mpsCard');slider=ov.querySelector('#mpsZ');chips=ov.querySelector('#mpsChips');
-  STEPS.forEach((s,i)=>{const b=document.createElement('button');b.textContent=s.k;b.onclick=()=>endTour()||tween(s.z,Math.max(2500,Math.min(7000,Math.abs(s.z-map.getZoom())*900)));chips.appendChild(b);});
-  slider.oninput=()=>{endTour();cancelAnimationFrame(rafT);setZ(1.1+slider.value/1000*(ZMAX-1.1));};
+  [...STEPS].reverse().forEach(s=>{const b=document.createElement('button');b.textContent=s.k;b.onclick=()=>endTour()||tween(s.z,Math.max(2500,Math.min(7000,Math.abs(s.z-map.getZoom())*900)));chips.appendChild(b);});
+  slider.oninput=()=>{endTour();cancelAnimationFrame(rafT);setZ(ZMAX-slider.value/1000*(ZMAX-1.1));};
   ov.querySelector('#mpsBack').onclick=close;
   const fb=ov.querySelector('#mpsFart');fb.textContent=fartTxt();fb.onclick=()=>{const n=FARTER[(FARTER.indexOf(rate())+1)%FARTER.length];try{localStorage.setItem('pluggparken-resa-fart',n);}catch(e){}window.dispatchEvent(new Event('mpfart'));};
   addEventListener('keydown',e=>{if(e.key==='Escape'&&ov&&!ov.hidden)close();});
-  ov.addEventListener('wheel',e=>{if(!map)return;if(e.deltaY>0&&map.getZoom()<1.25){ovAcc+=e.deltaY;if(ovAcc>360){ovAcc=0;close();}}else ovAcc=0;},{passive:true});
+  ov.addEventListener('wheel',e=>{if(!map)return;if(!T&&e.deltaY>0&&map.getZoom()<1.25){ovAcc+=e.deltaY;if(ovAcc>360){ovAcc=0;close();}}else ovAcc=0;},{passive:true});
   await load();
   const style=await (await fetch(STYLE)).json();
   style.projection={type:'globe'};style.sources.eox={type:'raster',tiles:[EOX],tileSize:256,maxzoom:12,attribution:''};
@@ -67,7 +67,7 @@ async function build(){
   const hideMsg=()=>{const m=ov.querySelector('#mpsMsg');if(!m.dataset.err)m.style.display='none';};map.once('load',hideMsg);map.once('idle',hideMsg);setTimeout(hideMsg,3500);
   const el=document.createElement('div');el.className='mpsPin';el.innerHTML='<span>📍</span><b>Smedslättsskolan</b>';new maplibregl.Marker({element:el,anchor:'bottom'}).setLngLat(SCHOOL).addTo(map);
   const pinVis=()=>{el.style.opacity=map.getZoom()>13.5?1:0;};map.on('zoom',pinVis);pinVis();
-  map.on('dragstart',()=>{cancelAnimationFrame(rafT);});
+  map.on('dragstart',()=>{if(!T)cancelAnimationFrame(rafT);});
 }
 function msg(t){const m=ov&&ov.querySelector('#mpsMsg');if(m){m.dataset.err='1';m.style.display='grid';m.textContent=t;}}
 async function open(cb,noAuto){onClose=cb||null;if(!ov&&!booting){booting=true;try{await build();}catch(e){booting=false;if(!ov){const st=document.createElement('style');st.textContent=css;document.head.appendChild(st);}msg('Kartan behöver internet. Kontrollera uppkopplingen och försök igen.');}booting=false;}
@@ -82,8 +82,8 @@ window.addEventListener('mpfart',()=>{const b=ov&&ov.querySelector('#mpsFart');i
 function tAudio(file,cb){if(!(window.Ljud&&Ljud.on)){T.timer=true;const tk=()=>{if(!T||T.cb!==cb)return;if(T.paused)setTimeout(tk,500);else cb();};T.cb=cb;setTimeout(tk,6500/rate());return;}
   const a=new Audio('../../ljud/resa/'+file+'?v=4');T.aud=a;T.cb=cb;let d=false;const fin=()=>{if(d)return;d=true;if(T&&T.aud===a)T.aud=null;if(T&&T.cb===cb)cb();};a.playbackRate=rate();a.preservesPitch=true;a.onended=fin;a.onerror=()=>setTimeout(fin,4000);a.play().catch(()=>setTimeout(fin,4000));}
 function tStep(){if(!T)return;const i=T.i;T.target=i;sync(STEPS[i].z);tAudio('s'+(100+i)+'-1.mp3',()=>{if(!T)return;if(i===0){const d=T.done;endTour(true);if(d)d();close();return;}T.i=i-1;T.moving=true;tween(STEPS[i-1].z,Math.max(3200,Math.min(6500,Math.abs(STEPS[i].z-STEPS[i-1].z)*900))/rate(),()=>{if(T){T.moving=false;tStep();}});});}
-function endTour(keep){const was=!!T;if(T){if(T.aud){T.aud.onended=null;T.aud.pause();}T.cb=null;T=null;}const b=ov&&ov.querySelector('#mpsTour');if(b)b.hidden=true;return false&&was;}
-async function tour(done){await open(null,true);if(!ov||!map){if(ov)close();return false;}endTour();T={i:STEPS.length-1,done,paused:false};const b=ov.querySelector('#mpsTour');b.hidden=false;b.textContent='⏸ Pausa resan';
+function endTour(keep){const was=!!T;if(T){if(T.aud){T.aud.onended=null;T.aud.pause();}T.cb=null;T=null;}const b=ov&&ov.querySelector('#mpsTour');if(b)b.hidden=true;const k=ov&&ov.querySelector('#mpsSkip');if(k)k.hidden=true;return false&&was;}
+async function tour(done){await open(null,true);if(!ov||!map){if(ov)close();return false;}endTour();T={i:STEPS.length-1,done,paused:false};const b=ov.querySelector('#mpsTour');b.hidden=false;b.textContent='⏸ Pausa resan';const sk=ov.querySelector('#mpsSkip');sk.hidden=false;sk.onclick=()=>{if(!T)return;if(T.aud){T.aud.onended=null;T.aud.pause();T.aud=null;}T.cb=null;T.paused=false;cancelAnimationFrame(rafT);const pb=ov.querySelector('#mpsTour');pb.textContent='⏸ Pausa resan';const i=T.i;if(i===0){const d=T.done;endTour(true);if(d)d();close();return;}T.i=i-1;T.moving=true;sync(STEPS[i-1].z);tween(STEPS[i-1].z,1800/rate(),()=>{if(T){T.moving=false;tStep();}});};
   b.onclick=()=>{if(!T)return;if(!T.paused){T.paused=true;cancelAnimationFrame(rafT);if(T.aud)T.aud.pause();b.textContent='▶ Fortsätt resan';}else{T.paused=false;b.textContent='⏸ Pausa resan';if(T.moving){const i=T.i;tween(STEPS[i].z,3000,()=>{if(T){T.moving=false;tStep();}});}else if(T.aud)T.aud.play();else tStep();}};
   setTimeout(()=>{if(T)tStep();},1100);return true;}
 function close(){endTour();if(!ov)return;cancelAnimationFrame(rafT);ov.classList.remove('on');setTimeout(()=>{ov.hidden=true;document.body.style.overflow='';},700);if(onClose)onClose();}

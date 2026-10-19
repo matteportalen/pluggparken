@@ -172,7 +172,7 @@ dialog small{color:var(--muted)}
   <div id="gWarp"></div>
   <figure id="gFoto" hidden><button class="fx" id="gFotoX" aria-label="Dölj bilden">✕</button><button class="fi" id="gFotoI" aria-label="Förstora bilden"><img alt=""></button><figcaption><b></b><span class="ft"></span><em class="fk"></em></figcaption></figure>
   <div id="gLb" hidden><button class="lx" aria-label="Stäng">✕</button><figure><img alt=""><figcaption><b></b><span class="ft"></span><em class="fk"></em><a target="_blank" rel="noopener">Källa och licens ↗</a></figcaption></figure></div>
-  <div class="ui top"><button class="back" id="gBack">← Solsystemet</button><span class="chip" id="gDist"></span><button class="chip tourb" id="gTour">🎬 Guidad resa</button><button class="chip fartb" id="gSpd" title="Hastighet på resan" aria-label="Hastighet på resan">1×</button><span class="hint">Dra för att vrida. Scrolla, nyp eller använd reglaget för att zooma.</span><span class="scl" id="gScale"><i></i><b></b></span></div>
+  <div class="ui top"><button class="back" id="gBack">← Solsystemet</button><span class="chip" id="gDist"></span><button class="chip tourb" id="gTour">🎬 Guidad resa</button><button class="chip fartb" id="gSkip" hidden title="Snabbspola till nästa del av berättelsen">⏭ Nästa del</button><button class="chip fartb" id="gSpd" title="Hastighet på resan" aria-label="Hastighet på resan">1×</button><span class="hint">Dra för att vrida. Scrolla, nyp eller använd reglaget för att zooma.</span><span class="scl" id="gScale"><i></i><b></b></span></div>
   <div class="ui bottom">
     <div class="lmb" id="gLM" hidden></div>
     <div class="card" id="gCard"></div>
@@ -562,7 +562,7 @@ function gUpd(dt){const ly=gLy();
   const sp=Math.abs(zC-zPrev)/Math.max(dt,.008);zPrev=zC;const w=Math.min(.55,sp*6),W=$('gWarp');W.style.opacity=w.toFixed(3);W.style.transform='scale('+(1+w*.12).toFixed(3)+')';}
 /* guidad resa med berättarröst */
 let tour=null;
-function tourEnd(done){if(!tour)return;clearInterval(tour.tm);clearTimeout(tour.to);if(tour.aud){tour.aud.onended=null;tour.aud.pause();}tour=null;gAuto=null;$('gTour').textContent='🎬 Guidad resa';$('gTour').setAttribute('aria-pressed','false');}
+function tourEnd(done){$('gSkip').hidden=true;if(!tour)return;clearInterval(tour.tm);clearTimeout(tour.to);if(tour.aud){tour.aud.onended=null;tour.aud.pause();}tour=null;gAuto=null;$('gTour').textContent='🎬 Guidad resa';$('gTour').setAttribute('aria-pressed','false');}
 const FARTER=[1,1.25,1.5,2],fmtF=v=>String(v).replace('.',',')+'×';
 const readFart=()=>{try{const v=+localStorage.getItem('pluggparken-resa-fart');if(FARTER.includes(v))return v;}catch(e){}return 1;};
 let rSpd=readFart();
@@ -572,9 +572,10 @@ function tourVoice(n,after){const t=tour;t.hl=STOP[n]||null;if(STOP[n])pingAt(ST
 function tourNext(){if(!tour)return;tour.i++;if(tour.i>=STOP.length){tourVoice(STOP.length,()=>{tourEnd();});return;}
   const to=STOP[tour.i].z,i=tour.i;gAuto=to===zT?null:{from:zT,to,t0:performance.now(),dur:Math.max(3200,Math.min(7500,Math.abs(to-zT)*38000))/rSpd};
   clearInterval(tour.tm);tour.tm=setInterval(()=>{if(!tour)return;if(!gAuto&&Math.abs(zC-to)<.004){clearInterval(tour.tm);tourVoice(i,()=>{tour.to=setTimeout(tourNext,650/rSpd);});}},120);}
-function tourStartAt(n){if(tour)tourEnd();tour={i:n-1};$('gTour').textContent='⏹ Stoppa resan';$('gTour').setAttribute('aria-pressed','true');$('gCard').hidden=false;tourNext();}
+function tourStartAt(n){if(tour)tourEnd();tour={i:n-1};$('gSkip').hidden=false;$('gTour').textContent='⏹ Stoppa resan';$('gTour').setAttribute('aria-pressed','true');$('gCard').hidden=false;tourNext();}
 function tourStart(){if(tour){tourEnd();return;}startStory();return;tour={i:-1};$('gTour').textContent='⏹ Stoppa resan';$('gTour').setAttribute('aria-pressed','true');$('gCard').hidden=false;tourNext();}
 $('gTour').onclick=tourStart;
+$('gSkip').onclick=()=>{if(!tour)return;clearInterval(tour.tm);clearTimeout(tour.to);if(tour.aud){tour.aud.onended=null;tour.aud.pause();tour.aud=null;}tour.hl=null;tourNext();};
 
 /* landmärkena får egna föremål och kameran riktas mot dem när man är vid stoppet */
 const SPT={};
