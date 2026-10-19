@@ -50,7 +50,7 @@ async function build(){
   document.body.appendChild(ov);card=ov.querySelector('#mpsCard');slider=ov.querySelector('#mpsZ');chips=ov.querySelector('#mpsChips');
   [...STEPS].reverse().forEach(s=>{const b=document.createElement('button');b.textContent=s.k;b.onclick=()=>endTour()||tween(s.z,Math.max(2500,Math.min(7000,Math.abs(s.z-map.getZoom())*900)));chips.appendChild(b);});
   slider.oninput=()=>{endTour();cancelAnimationFrame(rafT);setZ(ZMAX-slider.value/1000*(ZMAX-1.1));};
-  ov.querySelector('#mpsBack').onclick=close;ov.querySelector('#mpsGo').onclick=()=>{if(window.MPStory)window.MPStory.start();};
+  ov.querySelector('#mpsBack').onclick=close;ov.querySelector('#mpsGo').onclick=()=>{if(window.MPStory)window.MPStory.start();else tour(()=>{});};
   const fb=ov.querySelector('#mpsFart');fb.textContent=fartTxt();fb.onclick=()=>{const n=FARTER[(FARTER.indexOf(rate())+1)%FARTER.length];try{localStorage.setItem('pluggparken-resa-fart',n);}catch(e){}window.dispatchEvent(new Event('mpfart'));};
   addEventListener('keydown',e=>{if(e.key==='Escape'&&ov&&!ov.hidden)close();});
   ov.addEventListener('wheel',e=>{if(!map)return;if(!T&&e.deltaY>0&&map.getZoom()<1.25){ovAcc+=e.deltaY;if(ovAcc>360){ovAcc=0;close();}}else ovAcc=0;},{passive:true});
