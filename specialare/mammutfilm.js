@@ -25,23 +25,12 @@ function scenes(E){
   const {eo,cl,lerp,font}=E;
   const L=MPFilmLib.make(E,{ROOT,prefix:"mammutar-",names:[1,2,3,4,5,6],KR});
   const {x,tx,S,cred,srand}=L;
+  const FX=MPFilmFX.make(E,L),{kb,glow}=FX;
   const sm=k=>{k=cl(k,0,1);return k*k*(3-2*k);};
   const serif=(w,sz)=>`${w} ${Math.round(sz)}px "Source Serif 4",Georgia,serif`;
 
-  /* foto i rutan med kamerarörelse: z = zoom, fx/fy = punkt i bilden (0..1) som ligger i mitten. Smal ruta: hela bredden syns (inte ihjälbeskuren),
-     med en suddig kopia bakom. Ger en funktion som räknar bildens punkter (i bildpunkter) till skärmen, så att grafik kan ligga på fotot. */
-  const kb=(n,a,o,al)=>{const c=x(),im=L.img(n);if(!L.ok(im))return null;const iw=im.naturalWidth,ih=im.naturalHeight,ir=iw/ih,narrow=a.w/a.h<ir*.72;
-    c.save();c.beginPath();c.rect(a.x,a.y,a.w,a.h);c.clip();c.globalAlpha=al==null?1:al;
-    let sc,ox,oy;
-    if(o.fit){const sb=Math.max(a.w/iw,a.h/ih);try{c.filter="blur(18px) brightness(.5)";}catch(e){}c.drawImage(im,a.x+a.w/2-iw*sb/2,a.y+a.h/2-ih*sb/2,iw*sb,ih*sb);c.filter="none";
-      sc=Math.min(a.w/iw,a.h/ih)*(o.z||1);ox=a.x+a.w/2-(o.fx==null?.5:o.fx)*iw*sc;oy=a.y+a.h/2-(o.fy==null?.5:o.fy)*ih*sc;}
-    else if(narrow){const sb=Math.max(a.w/iw,a.h/ih);try{c.filter="blur(18px) brightness(.55)";}catch(e){}c.drawImage(im,a.x+a.w/2-iw*sb/2,a.y+a.h/2-ih*sb/2,iw*sb,ih*sb);c.filter="none";
-      sc=a.w/iw*(o.z||1)*1.0;ox=a.x+a.w/2-(o.fx==null?.5:o.fx)*iw*sc;oy=a.y+a.h*.46-(o.fy==null?.5:o.fy)*ih*sc;ox=Math.min(a.x,Math.max(a.x+a.w-iw*sc,ox));}
-    else{sc=Math.max(a.w/iw,a.h/ih)*(o.z||1);ox=a.x+a.w/2-(o.fx==null?.5:o.fx)*iw*sc;oy=a.y+a.h/2-(o.fy==null?.5:o.fy)*ih*sc;ox=Math.min(a.x,Math.max(a.x+a.w-iw*sc,ox));oy=Math.min(a.y,Math.max(a.y+a.h-ih*sc,oy));}
-    c.drawImage(im,ox,oy,iw*sc,ih*sc);c.restore();return{X:v=>ox+v*sc,Y:v=>oy+v*sc,sc};};
   const vign=(a,k)=>{const c=x(),g=c.createRadialGradient(a.x+a.w/2,a.y+a.h/2,Math.min(a.w,a.h)*.28,a.x+a.w/2,a.y+a.h/2,Math.max(a.w,a.h)*.66);g.addColorStop(0,"rgba(2,3,10,0)");g.addColorStop(1,`rgba(2,3,10,${k==null?.8:k})`);c.fillStyle=g;c.fillRect(a.x,a.y,a.w,a.h);};
   const dim=(a,k,col)=>{const c=x();c.fillStyle=col||`rgba(3,6,16,${k})`;c.fillRect(a.x,a.y,a.w,a.h);};
-  const glow=(px,py,r,col)=>{const c=x();if(r<=.5)return;c.save();c.globalCompositeOperation="lighter";const g=c.createRadialGradient(px,py,0,px,py,r);g.addColorStop(0,col);g.addColorStop(1,"rgba(0,0,0,0)");c.fillStyle=g;c.beginPath();c.arc(px,py,r,0,TAU);c.fill();c.restore();};
   const clip=a=>{const c=x();c.save();c.beginPath();c.rect(a.x,a.y,a.w,a.h);c.clip();};
   /* snö: små flingor långt bort och stora, suddiga flingor nära kameran (djup) */
   const snow=(a,t,n,wind,al)=>{const c=x(),R=srand(41);clip(a);for(let i=0;i<n;i++){const z=R(),sp=.04+z*.16,ph=R(),ph2=R(),X=a.x+(((ph2+t*(wind||.02)*(.5+z))%1)+1)%1*a.w,Y=a.y+((ph+t*sp)%1)*a.h,r=.8+z*z*3.2;c.fillStyle=`rgba(235,245,255,${(al||.8)*(.25+z*.6)})`;c.beginPath();c.arc(X+Math.sin(t*1.3+i)*6*z,Y,r,0,TAU);c.fill();}

@@ -1,5 +1,5 @@
-/* James Webb-teleskopet: minilektionen som film (nio scener, ca 2 minuter), NASA-bilder ur Wikimedia Commons blandade med egen grafik (canvas).
-   Använder filmmotorn i ../svarthal.js och filmlib.js. Röst: ../ljud/webb/s<scen>-<replik>.mp3 (ElevenLabs, Paul Axel).
+/* James Webb-teleskopet: minilektionen som film (nio scener, ca 2 minuter): NASA-foton med motion graphics (kamerarörelser, lysande linjer, guldspegeln som byggs, riktiga jordklot).
+   Använder filmmotorn i ../svarthal.js, filmlib.js och filmfx.js. Röst: ../ljud/webb/s<scen>-<replik>.mp3 (ElevenLabs, Paul Axel).
    Bilderna: bilder/webb-1..6.jpg. MPWebbFilm.start(host,{overlay,onClose}). Ljudmatta: rymd (standard). */
 (function(){
 const ROOT=MPFilmLib.root(document.currentScript),TAU=Math.PI*2;
@@ -16,7 +16,7 @@ const SC=[
 ];
 const META={hud:"PLUGGPARKEN · SPECIALARE · FILM",titel:"James Webb-teleskopet",under:"En film i nio steg · ca 2 minuter",
   slutRubrik:"Tack för att du har följt med",slutText:"Webb hjälper oss att se hur universum började. Filmen bygger på bilder från NASA, ESA och CSA ur Wikimedia Commons. Källor står under bilderna.",igen:"↻ Se filmen igen"};
-const KR={1:"Foto: Bill Ingalls/NASA (Ariane 5 med Webb) · Public domain · Wikimedia Commons",2:"Foto: NASA/MSFC/David Higginbotham/Emmett Given (spegelbitar) · Public domain · Wikimedia Commons",3:"Foto: Chris Gunn/NASA (speglarna) · CC BY 2.0 · Wikimedia Commons",4:"Foto: NASA Goddard (solskyddet) · Public domain · Wikimedia Commons",5:"Bild: NASA, ESA, CSA och STScI (Webbs första djupa fält) · Public domain · Wikimedia Commons",6:"Bild: NASA, ESA, CSA och STScI (Kosmiska klipporna i Carinanebulosan) · Public domain · Wikimedia Commons"};
+const KR={1:"Foto: Bill Ingalls/NASA (Ariane 5 med Webb) · Public domain · Wikimedia Commons",2:"Foto: NASA/MSFC/David Higginbotham/Emmett Given (spegelbitar) · Public domain · Wikimedia Commons",3:"Foto: Chris Gunn/NASA (speglarna) · CC BY 2.0 · Wikimedia Commons",4:"Foto: NASA Goddard (solskyddet) · Public domain · Wikimedia Commons",5:"Bild: NASA, ESA, CSA och STScI (Webbs första djupa fält) · Public domain · Wikimedia Commons",6:"Bild: NASA, ESA, CSA och STScI (Kosmiska klipporna i Carinanebulosan) · Public domain · Wikimedia Commons",7:"Jord och måne: Solar System Scope · CC BY 4.0"};
 
 window.MPWebbFilm={start(host,o){
   return MPSvartHal.start(host,Object.assign({},o||{},{def:{SC,meta:META,ljud:"webb",scenes:E=>scenes(E)}}));
@@ -25,103 +25,147 @@ window.MPWebbFilm={start(host,o){
 function scenes(E){
   const {eo,cl,lerp,font}=E;
   const L=MPFilmLib.make(E,{ROOT,prefix:"webb-",names:[1,2,3,4,5,6],KR});
-  const {x,tx,tg,S,cred,photo,panel,grad,space,title}=L;
-  const earth=(px,py,r)=>{const c=x();c.save();const g=c.createRadialGradient(px-r*.35,py-r*.35,r*.1,px,py,r);g.addColorStop(0,"#6fb4ff");g.addColorStop(.7,"#1d5fb8");g.addColorStop(1,"#0a2a66");c.fillStyle=g;c.beginPath();c.arc(px,py,r,0,TAU);c.fill();c.restore();};
-  const sun=(px,py,r)=>{const c=x();c.save();const g=c.createRadialGradient(px,py,r*.2,px,py,r*2.6);g.addColorStop(0,"rgba(255,230,140,.9)");g.addColorStop(.35,"rgba(255,170,60,.35)");g.addColorStop(1,"rgba(255,170,60,0)");c.fillStyle=g;c.beginPath();c.arc(px,py,r*2.6,0,TAU);c.fill();c.fillStyle="#ffd24c";c.beginPath();c.arc(px,py,r,0,TAU);c.fill();c.restore();};
-  const hex=(px,py,r,col,al)=>{const c=x();c.save();c.globalAlpha*=al==null?1:al;c.fillStyle=col;c.strokeStyle="rgba(80,50,0,.7)";c.lineWidth=1.5;c.beginPath();for(let i=0;i<6;i++){const an=TAU/6*i+TAU/12;i?c.lineTo(px+Math.cos(an)*r,py+Math.sin(an)*r):c.moveTo(px+Math.cos(an)*r,py+Math.sin(an)*r);}c.closePath();c.fill();c.stroke();c.restore();};
-  /* spegelns 18 bitar: 1 mitt-hål saknas; 6 + 12 i två ringar */
-  const mirrorPos=(r)=>{const p=[],h=r*Math.sqrt(3);for(let i=0;i<6;i++){const an=TAU/6*i;p.push([Math.cos(an)*h,Math.sin(an)*h]);}for(let i=0;i<12;i++){const an=TAU/12*i+TAU/24;const d=i%2?h*1.732:h*2;p.push([Math.cos(an)*d*(i%2?1:1),Math.sin(an)*d]);}return p;};
-  const mirror=(cx,cy,r,t,shine)=>{const pos=mirrorPos(r);pos.forEach(([dx,dy],i)=>{const sh=shine?.5+.5*Math.sin(t*2+i*.6):0;hex(cx+dx,cy+dy,r,`rgb(${220+sh*25|0},${170+sh*40|0},${40+sh*30|0})`);});};
+  const F=MPFilmFX.make(E,L);
+  const {x,tx,S,cred}=L,{sm,serif,kb,vign,dim,glow,clip,snow,stars,trace,curve,chip,bigNum,fmt,spike,goldHex,hexPath,sphere,ring,ping,beam,rgba}=F;
+  const GOLD="#ffd86b";
+  // speglarnas 18 bitar: 6 i inre ringen och 12 i yttre ringen (mitten saknas)
+  const mpos=r=>{const p=[],h=r*Math.sqrt(3);for(let i=0;i<6;i++){const an=TAU/6*i;p.push([Math.cos(an)*h,Math.sin(an)*h]);}for(let i=0;i<12;i++){const an=TAU/12*i,d=i%2?h*1.732:h*2;p.push([Math.cos(an)*d,Math.sin(an)*d]);}return p;};
 
-  const s0=(t)=>{photo(1,t,7.9,1.12,.3);const f=title(t,"JAMES WEBB","ETT GYLLENE ÖGA I RYMDEN","#ffd86b");cred(1,.55*f);};
+  /* 0 · Inledning: guldspegeln i Webbs renrum, kameran glider uppför spegeln, glimtar, titel */
+  const s0=(t)=>{const{a,s}=S(),c=x(),p=cl(t/7.9,0,1);kb(3,a,{z:lerp(1,1.12,sm(p)),fx:.5,fy:lerp(.74,.4,sm(p))},eo(t/1.4));
+    // glimtar på spegelbitarna (bildens punkter)
+    vign(a,.78);const pts=[[235,420],[225,560],[330,330],[440,370],[530,330],[640,350],[655,500],[440,660],[540,670],[310,520]];
+    pts.forEach(([u,v],i)=>{const ph=((t*.42+i*.137)%1),al=Math.sin(Math.PI*ph);if(al<.05)return;const px=a.x+a.w*(.3+.4*((u-140)/640)),py=a.y+a.h*(.15+.7*((v-160)/700));spike(px,py,s*.075*al,al*.9,"rgba(255,235,170,.95)");});
+    F.titleSweep(t,a,"JAMES WEBB","ETT GYLLENE ÖGA I RYMDEN",GOLD,a.y+a.h*.82);cred(3,.5*eo(t/2));};
 
-  /* 1 · uppskjutning, sedan resan */
-  const s1=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-3)/1.1);photo(1,t,15.5,1.1,.15+.5*g);cred(1,.55*(1-g));
-    if(g>0){c.save();c.globalAlpha=g;space(a,1);
-      if(t<9.2){const q=eo((t-3.4)/1);c.globalAlpha=g*q;tx("25 december",cx,cy-s*.04,"#ffd86b","center",Math.max(26,s*.075),700);tx("2021",cx,cy+s*.06,"#fff","center",Math.max(40,s*.12),700);tx("uppskjutning från Franska Guyana",cx,cy+s*.2,"#9fd0ff","center",Math.max(14,s*.036),600);}
-      else{const w=Math.min(a.w*.8,s*1.4),lx=cx-w/2,y=cy,k=cl((t-9.6)/5,0,1);
-        earth(lx,y,Math.max(16,s*.04));tx("jorden",lx,y+Math.max(34,s*.08),"#9fd0ff","center",Math.max(12,s*.03),700);
-        c.setLineDash([6,8]);c.strokeStyle="rgba(255,255,255,.4)";c.lineWidth=2;c.beginPath();c.moveTo(lx+30,y);c.lineTo(lx+w,y);c.stroke();c.setLineDash([]);
-        dot(lx+w,y,8,"#ffd23c");tx("sin plats",lx+w,y+Math.max(34,s*.08),"#ffd86b","center",Math.max(12,s*.03),700);
-        const px=lerp(lx+30,lx+w,eo(k));c.fillStyle="#ffd23c";c.fillRect(px-7,y-5,14,10);if(k<.6)tx("veckas ut …",px,y-Math.max(22,s*.05),"#fff","center",Math.max(12,s*.03),600);
-        tx("ca 1 månad",cx,y-Math.max(60,s*.14),"#fff","center",Math.max(20,s*.055),700);}
+  /* 1 · Uppskjutningen: raketen på startplattan, nedräkning och eldsken, sedan resan till L2 med dagräknare */
+  const s1=(t)=>{const{a,s,cx,cy,port}=S(),c=x();
+    if(t<9.6){const k=cl((t-5.4)/4.2,0,1),T=kb(1,a,{z:lerp(1.05,1.25,sm(k)),fx:.45,fy:lerp(.88,.2,sm(k))},eo(t/1));vign(a,.7);
+      // nedräkning, sedan tändning vid raketens fot
+      const n=Math.ceil(4-t*1.1);if(t<3.6&&n>0){const ph=(t*1.1)%1;bigNum(String(n),cx,cy-s*.05,Math.min(a.w*.2,s*.34),"#9fd0ff",.9*(1-ph*.6)*eo(t/.4));}
+      if(T&&t>3.6){const q=sm((t-3.6)/2.2),bx=T.X(395),by=T.Y(980),fl=.85+.15*Math.sin(t*40);glow(bx,by,s*(.2+.5*q)*fl,"rgba(255,170,70,.55)");glow(bx,by,s*(.1+.22*q)*fl,"rgba(255,240,200,.9)");
+        clip(a);const R=F.srand(3);for(let i=0;i<44;i++){const f=((t*.8+R())%1)*q,sx=bx+(R()-.5)*s*.5*(.3+f),sy=by+f*s*.6;glow(sx,sy,s*(.02+R()*.03)*(1-f*.5),`rgba(255,${160+R()*70|0},80,${.5*(1-f)})`);}c.restore();}
+      if(t>6.4){const q=eo((t-6.4)/.9);bigNum("25 december 2021",cx,a.y+a.h*.16,Math.min(a.w*.08,s*.12),GOLD,q);tx("UPPSKJUTNING FRÅN FRANSKA GUYANA",cx,a.y+a.h*.16+Math.max(26,s*.06),`rgba(159,208,255,${q})`,"center",Math.max(11,s*.026),700);}
+      cred(1,.45);}
+    else{const q=cl((t-9.6)/5.9,0,1),g=eo((t-9.6)/.8);c.save();c.globalAlpha=g;stars(a,1,t,120);
+      const lx=a.x+a.w*.14,rx=a.x+a.w*.86,y=cy+s*.04,r=Math.max(18,s*.06);sphere("jorden",lx,y,r,t*14,true);tx("JORDEN",lx,y+r+Math.max(22,s*.05),"rgba(159,208,255,.9)","center",Math.max(10,s*.024),700);
+      // banan: en lång, mjuk båge ut till L2
+      const path=curve([[lx+r*.8,y],[lerp(lx,rx,.3),y-s*.1],[lerp(lx,rx,.65),y-s*.04],[rx,y]],10);trace(path,q,GOLD,3,false);
+      const mp=path[Math.min(path.length-1,Math.floor(q*(path.length-1)))];goldHexSmall(mp[0],mp[1],Math.max(7,s*.022),t,q);
+      ping(rx,y,t-12,s,GOLD,q>.9?1:0);tx("L2 · 1,5 miljoner km",rx,y+Math.max(34,s*.075),"rgba(255,216,107,.95)","center",Math.max(11,s*.026),700);
+      const day=Math.round(29*sm(q));bigNum("dag "+day,cx,a.y+a.h*.18,Math.min(a.w*.12,s*.19),GOLD,1);
+      const ev=[[.02,"solpanelen öppnas"],[.12,"solskyddet fälls ut"],[.42,"spegeln veckas ut"],[.97,"framme!"]];let cur=null;ev.forEach(e=>{if(sm(q)>=e[0])cur=e;});if(cur){chip(cur[1],cx,a.y+a.h*.18+Math.max(34,s*.075),"rgba(255,216,107,.8)",Math.max(12,s*.032),1);}
+      c.restore();cred(7,.35*g);}};
+  const goldHexSmall=(px,py,r,t,q)=>{const c=x();glow(px,py,r*4,"rgba(255,210,110,.5)");c.save();goldHex(px,py,r,t*.7,1);c.restore();};
+
+  /* 2 · Långt bortom månen: riktiga klot, skalan 4 månavstånd och Webb som följer jorden runt solen */
+  const s2=(t)=>{const{a,s,cx,cy,port}=S(),c=x(),g=eo(t/.8);stars(a,1,t,130);
+    if(t<7.6){const lx=a.x+a.w*.1,rx=a.x+a.w*.9,w=rx-lx,y=cy+s*.02,px=km=>lx+km/1500000*w,r=Math.max(14,s*.05);
+      c.save();c.globalAlpha=g;sphere("jorden",lx,y,r,t*16,true);
+      // linjalen: fyra gånger avståndet till månen
+      c.strokeStyle="rgba(255,255,255,.3)";c.lineWidth=2;const ly=y+r+Math.max(30,s*.07);c.beginPath();c.moveTo(lx,ly);c.lineTo(rx,ly);c.stroke();
+      for(let i=0;i<=4;i++){const k=sm((t-1.8-i*.5)/.5);if(k<=0)continue;const X=px(i*384400);c.strokeStyle=`rgba(255,216,107,${k})`;c.lineWidth=2;c.beginPath();c.moveTo(X,ly-8);c.lineTo(X,ly+8);c.stroke();if(i>0)tx(i+"×",X,ly+Math.max(26,s*.06),`rgba(255,216,107,${k})`,"center",Math.max(12,s*.03),700);}
+      const mk=sm((t-1)/1);sphere("manen",px(384400),y,Math.max(7,r*.27)*mk+.01,t*3,true);tx("MÅNEN",px(384400),y-Math.max(26,s*.06),`rgba(207,213,223,${mk})`,"center",Math.max(10,s*.024),700);
+      const wq=sm((t-3.3)/3.2),wx=lerp(lx+r,px(1500000),wq);trace([[lx+r*1.1,y],[wx,y]],1,GOLD,2.5,false);goldHexSmall(wx,y,Math.max(7,s*.02),t,wq);if(wq>.05)tx("WEBB",wx,y-Math.max(24,s*.05),GOLD,"center",Math.max(11,s*.026),700);
+      bigNum(fmt(1500000*wq)+" km",cx,a.y+a.h*.2,Math.min(a.w*.11,s*.17),GOLD,eo((t-3)/.5));
+      c.restore();}
+    else{const q=sm((t-7.6)/1.2),sx=a.x+a.w*.2,y=cy+s*.02;c.save();c.globalAlpha=q;
+      glow(sx,y,s*.55,"rgba(255,170,60,.3)");glow(sx,y,s*.2,"rgba(255,230,150,.8)");c.fillStyle="#fff3c0";c.beginPath();c.arc(sx,y,s*.04,0,TAU);c.fill();tx("SOLEN",sx,y+s*.1,"rgba(255,216,107,.9)","center",Math.max(10,s*.024),700);
+      const orb=Math.min(a.w*.5,s*.8),ang=(t-7.6)*.35,ex=sx+Math.cos(ang)*orb*.9,ey=y+Math.sin(ang)*orb*.28;
+      c.strokeStyle="rgba(255,255,255,.18)";c.setLineDash([6,8]);c.beginPath();c.ellipse(sx,y,orb*.9,orb*.28,0,0,TAU);c.stroke();c.setLineDash([]);
+      sphere("jorden",ex,ey,Math.max(10,s*.035),t*30,true);
+      // Webb längre bort från solen än jorden, hela tiden bakom jorden
+      const dx=ex-sx,dy=ey-y,dl=Math.hypot(dx,dy),wx=ex+dx/dl*Math.max(34,s*.1),wy=ey+dy/dl*Math.max(34,s*.1);goldHexSmall(wx,wy,Math.max(7,s*.018),t,0);
+      c.strokeStyle="rgba(255,230,140,.3)";c.lineWidth=2;c.beginPath();c.moveTo(sx,y);c.lineTo(wx,wy);c.stroke();
+      tx("WEBB",wx+(dx>0?18:-18),wy-14,GOLD,dx>0?"left":"right",Math.max(11,s*.026),700);
+      chip("solen, jorden och månen alltid bakom",cx,a.y+a.h*.88,"rgba(207,216,255,.7)",Math.max(12,s*.03),eo((t-9)/.8));c.restore();}};
+
+  /* 3 · Guldspegeln: 18 bitar flyger in, mått, ihopvikning som origami, guldlagret mot ett hårstrå */
+  const s3=(t)=>{const{a,s,cx,cy,port}=S(),c=x();
+    if(t<2.6){const p=cl(t/2.6,0,1);kb(3,a,{z:lerp(1.05,1.25,p),fx:.5,fy:lerp(.6,.38,p)},1);vign(a,.7);}
+    else if(t<12.3){const g=sm((t-2)/1.2);kb(3,a,{z:1.2,fx:.5,fy:.4},1-g);stars(a,g,t,100);const r=Math.max(13,Math.min(a.w*(port?.12:.07),a.h*.09)),my=cy-s*.02,pos=mpos(r);
+      const fold=sm((t-8.6)/2.4);pos.forEach(([dx,dy],i)=>{const k=sm((t-2.8-i*.17)/.9);if(k<=0)return;const wing=i>=6&&Math.abs(dx)>r*2.2,fx=wing?(dx>0?-1:1)*Math.abs(dx)*.55*fold:0,ang=TAU*(1-k)*(i%2?1:-1)*.5,sx0=cx+Math.cos(i*.9)*s*.9*(1-k),sy0=my+Math.sin(i*1.7)*s*.7*(1-k);
+        c.save();c.translate(lerp(sx0,cx+dx+fx,k),lerp(sy0,my+dy,k));c.rotate(ang);c.globalAlpha=k;goldHex(0,0,r*(wing?1-fold*.1:1),(t*.35+i*.07),1);c.restore();});
+      glow(cx,my,s*.45,"rgba(255,200,90,.14)");
+      if(t>7&&t<8.8){const q=sm((t-7)/1);c.save();c.strokeStyle=`rgba(159,208,255,${q})`;c.lineWidth=2;const w=r*Math.sqrt(3)*4,y2=my+r*Math.sqrt(3)*2.5;c.beginPath();c.moveTo(cx-w/2*q,y2);c.lineTo(cx+w/2*q,y2);c.moveTo(cx-w/2,y2-8);c.lineTo(cx-w/2,y2+8);c.moveTo(cx+w/2,y2-8);c.lineTo(cx+w/2,y2+8);c.stroke();c.restore();bigNum("6,5 m",cx,y2+Math.max(40,s*.09),Math.max(26,s*.08),"#9fd0ff",q);}
+      const cn=Math.min(18,Math.floor(Math.max(0,t-2.8)/.17));if(t<7)chip(cn+" av 18 bitar",cx,a.y+a.h*.1,"rgba(255,216,107,.8)",Math.max(13,s*.034),eo((t-3)/.6));
+      if(t>8.6)chip("ihopvikt som origami för raketen",cx,a.y+a.h*.1,"rgba(255,216,107,.8)",Math.max(13,s*.034),eo((t-8.6)/.7));}
+    else{const q=sm((t-12.3)/1.2);stars(a,1,t,80);dim(a,0);c.save();c.globalAlpha=q;const w=Math.min(a.w*.78,s*1.4),lx=cx-w/2,y=cy-s*.06;
+      // förstoringsglas: hårstrået (bred bit) och guldlagret (smal tråd), proportionen 1 000 : 1
+      const hh=Math.max(46,s*.14),hg=c.createLinearGradient(0,y-hh/2,0,y+hh/2);hg.addColorStop(0,"#8a6a48");hg.addColorStop(.5,"#d9c09a");hg.addColorStop(1,"#6a4e30");c.fillStyle=hg;c.fillRect(lx,y-hh/2,w,hh);tx("ETT HÅRSTRÅ · ca 0,07 mm",cx,y-hh/2-Math.max(14,s*.03),"rgba(217,192,154,.95)","center",Math.max(11,s*.026),700);
+      const gk=sm((t-14.2)/1);const gy=y+hh/2+Math.max(46,s*.12);c.globalAlpha=q*gk;c.shadowColor="#ffd86b";c.shadowBlur=16;c.fillStyle="#ffd86b";c.fillRect(lx,gy,w,Math.max(1.5,hh/1000*8));c.shadowBlur=0;tx("GULDLAGRET · ca 1 000 gånger tunnare",cx,gy+Math.max(30,s*.07),"rgba(255,216,107,.95)","center",Math.max(11,s*.026),700);
+      c.restore();}
+    cred(t<2.6?3:7,.35);};
+
+  /* 4 · Iskallt: kylans termometer, solskyddets storlek mot en tennisplan, fem lager som glider isär */
+  const s4=(t)=>{const{a,s,cx,cy,port}=S(),c=x();
+    if(t<9){const p=cl(t/9,0,1);kb(4,a,{z:lerp(1.02,1.28,sm(p)),fx:lerp(.35,.62,sm(p)),fy:.5},1);c.save();c.globalCompositeOperation="soft-light";c.fillStyle="rgba(60,120,220,.5)";c.fillRect(a.x,a.y,a.w,a.h);c.restore();vign(a,.8);
+      // termometer
+      const th=a.h*.58,tx0=a.x+a.w*(port?.12:.14),top=a.y+a.h*.14,k=sm((t-1)/4),val=Math.round(lerp(20,-230,k));
+      c.save();c.fillStyle="rgba(8,14,32,.7)";c.strokeStyle="rgba(159,208,255,.7)";c.lineWidth=2;c.beginPath();c.roundRect?c.roundRect(tx0-18,top-10,36,th+54,18):c.rect(tx0-18,top-10,36,th+54);c.fill();c.stroke();
+      const lg=c.createLinearGradient(0,top,0,top+th);lg.addColorStop(0,"#ff7a5a");lg.addColorStop(1,"#4aa8ff");c.fillStyle=lg;const lvl=th*(.08+.9*(1-k));c.fillRect(tx0-7,top+th-lvl,14,lvl);c.beginPath();c.arc(tx0,top+th+16,19,0,TAU);c.fillStyle=k>.5?"#4aa8ff":"#ff9a6a";c.fill();c.restore();glow(tx0,top+th+16,s*.12,"rgba(80,170,255,.35)");
+      bigNum(val+" °C",tx0+(port?28:46),top+th*.5,Math.min(a.w*.1,s*.15),"#7fd6ff",eo(t/.6),"left");
+      tx("TELESKOPET SER VÄRME (INFRARÖTT)",tx0+(port?28:46),top+th*.5+Math.max(26,s*.06),"rgba(191,232,255,.85)","left",Math.max(10,s*.022),700);
+      snow(a,t,60,.02,.5);}
+    else if(t<13.5){const g=sm((t-9)/.8);stars(a,1,t,80);c.save();c.globalAlpha=g;const w=Math.min(a.w*.8,s*1.5),h=w*.46,lx=cx-w/2,y=cy-h/2;
+      c.fillStyle="#1f6b44";c.fillRect(lx,y,w,h);c.strokeStyle="rgba(255,255,255,.9)";c.lineWidth=2;c.strokeRect(lx+w*.04,y+h*.07,w*.92,h*.86);c.beginPath();c.moveTo(cx,y+h*.07);c.lineTo(cx,y+h*.93);c.moveTo(lx+w*.04,y+h*.5);c.lineTo(lx+w*.96,y+h*.5);c.stroke();
+      const k=sm((t-10)/1.2);c.save();c.globalAlpha=g*k;const sw=w*.9,sh=h*.7;c.translate(cx,cy);c.rotate(-.12);const sg=c.createLinearGradient(-sw/2,0,sw/2,0);sg.addColorStop(0,"rgba(170,185,215,.92)");sg.addColorStop(.5,"rgba(240,245,255,.95)");sg.addColorStop(1,"rgba(150,165,200,.92)");c.fillStyle=sg;c.shadowColor="rgba(190,210,255,.8)";c.shadowBlur=24;c.beginPath();c.moveTo(-sw/2,0);c.lineTo(-sw*.12,-sh/2);c.lineTo(sw/2,0);c.lineTo(-sw*.12,sh/2);c.closePath();c.fill();c.restore();
+      tx("TENNISPLAN",cx,y+h+Math.max(26,s*.06),"rgba(155,227,176,.95)","center",Math.max(11,s*.026),700);tx("SOLSKYDDET · ca 21 × 14 m",cx,y-Math.max(14,s*.03),"rgba(210,225,255,.95)","center",Math.max(11,s*.026),700);c.restore();}
+    else{stars(a,1,t,80);const w=Math.min(a.w*.62,s*1.1),lh=Math.max(30,s*.07),by=cy-lh*1.5,k0=13.5;
+      // värmen från solen uppifrån stoppas lager för lager
+      const hot=sm((t-k0)/1);c.save();for(let i=0;i<4;i++){const hh=((t*.9+i*.25)%1);c.globalAlpha=hot*(1-hh)*.8;glow(cx-w*.3+i*w*.2,by-s*.16+hh*s*.12,s*.04,"rgba(255,170,70,.6)");}c.restore();
+      for(let i=0;i<5;i++){const q=sm((t-k0-.2-i*.5)/.8);if(q<=0)continue;const yy=by+i*lh*lerp(.55,1,q)-(1-q)*s*.1,al=q;c.save();c.globalAlpha=al;const lg=c.createLinearGradient(cx-w/2,yy,cx+w/2,yy+lh*.5);lg.addColorStop(0,"#b9c4de");lg.addColorStop(.5,"#f4f7ff");lg.addColorStop(1,"#9aa8c8");c.fillStyle=lg;c.beginPath();c.moveTo(cx-w/2,yy+lh*.3);c.lineTo(cx-w*.1,yy);c.lineTo(cx+w/2,yy+lh*.3);c.lineTo(cx-w*.1,yy+lh*.55);c.closePath();c.fill();c.strokeStyle="rgba(120,140,190,.8)";c.lineWidth=1.5;c.stroke();
+        tx(String(i+1),cx+w/2+Math.max(16,s*.04),yy+lh*.34,"#ffd86b","left",Math.max(14,s*.04),700);c.restore();}
+      bigNum("5 lager",cx,a.y+a.h*.14,Math.min(a.w*.09,s*.14),GOLD,sm((t-k0-2)/.8));}
+    cred(4,.35);};
+
+  /* 5 · Webb och Hubble: dammet som släpper igenom infrarött ljus, sedan spegelstorlekarna */
+  const s5=(t)=>{const{a,s,cx,cy,port}=S(),c=x();
+    if(t<9.6){const k=sm((t-2)/4.5),T=kb(6,a,{z:lerp(1.02,1.14,sm(t/9.6)),fx:.5,fy:.5},1);if(!T)return;
+      // vänster del = "vanligt ljus" (dammet skymmer, förenklad illustration), höger del = infrarött (Webb); skiljelinjen glider
+      const sx=a.x+a.w*lerp(.8,.45,k);c.save();c.beginPath();c.rect(a.x,a.y,sx-a.x,a.h);c.clip();c.fillStyle="rgba(4,6,14,.78)";c.fillRect(a.x,a.y,a.w,a.h);c.globalCompositeOperation="saturation";c.fillStyle="rgba(120,120,120,1)";c.fillRect(a.x,a.y,a.w,a.h);c.restore();
+      c.save();c.globalCompositeOperation="lighter";const lg=c.createLinearGradient(sx-6,0,sx+6,0);lg.addColorStop(0,"rgba(255,216,107,0)");lg.addColorStop(.5,"rgba(255,226,140,.95)");lg.addColorStop(1,"rgba(255,216,107,0)");c.fillStyle=lg;c.fillRect(sx-6,a.y,12,a.h);c.restore();glow(sx,cy,s*.12,"rgba(255,216,107,.3)");
+      vign(a,.7);chip("VANLIGT LJUS · dammet skymmer (förenklad bild)",a.x+a.w*(port?.04:.06),a.y+a.h*.1,"rgba(159,208,255,.8)",Math.max(10,s*.026),eo((t-1)/.6),true);chip("INFRARÖTT · Webb ser igenom",a.x+a.w*(port?.98:.95)-(port?190:240),a.y+a.h*.9,"rgba(255,216,107,.85)",Math.max(11,s*.028),eo((t-5)/.6),true);cred(6,.35);}
+    else{const g=sm((t-9.6)/.8);stars(a,1,t,100);c.save();c.globalAlpha=g;const R2=Math.min(a.w*.36,a.h*.38),gx=cx-(port?0:R2*1.2),wx=cx+(port?0:R2*1.2),y1=port?cy-R2*1.15:cy,y2=port?cy+R2*1.15:cy,k=sm((t-10)/1.4);
+      const hr=R2*(2.4/6.5);[[gx,y1,hr,"#9fd0ff","HUBBLE · 2,4 m",false],[wx,y2,R2,GOLD,"WEBB · 6,5 m",true]].forEach(([px,py,r,col,n,gold])=>{
+        const rr=r*k;glow(px,py,rr*1.5,rgba(col,.2));if(gold){c.save();hexPath(c,px,py,rr*.98,TAU/12);c.restore();const pos=mpos(rr/4.05);pos.forEach(([dx,dy],i)=>goldHex(px+dx,py+dy,rr/4.05*.98,t*.3+i*.06,1));}
+        else{const hg=c.createRadialGradient(px-rr*.3,py-rr*.3,rr*.1,px,py,rr);hg.addColorStop(0,"#e8f2ff");hg.addColorStop(1,"#6a86b8");c.fillStyle=hg;c.beginPath();c.arc(px,py,rr,0,TAU);c.fill();c.strokeStyle="rgba(255,255,255,.7)";c.lineWidth=2;c.stroke();}
+        tx(n,px,py+rr+Math.max(26,s*.06),col,"center",Math.max(12,s*.032),700);});
+      if(t>12.6)chip("ungefär 6 gånger mer ljus",cx,a.y+a.h*.1,"rgba(255,216,107,.85)",Math.max(14,s*.038),eo((t-12.6)/.8));c.restore();}};
+
+  /* 6 · Tillbaka i tiden: djupa fältet, ljuset som reser, räknare till 13 miljarder år */
+  const s6=(t)=>{const{a,s,cx,cy,port}=S(),c=x(),p=cl(t/11.1,0,1);const T=kb(5,a,{z:lerp(1.04,2.6,sm(p)),fx:lerp(.5,.52,p),fy:lerp(.5,.52,p)},1);dim(a,.12);vign(a,.8);
+    if(T){[[540,243],[726,268],[640,520],[375,525],[230,708],[772,355]].forEach(([u,v],i)=>{const q=t-1.6-i*.6;ping(T.X(u),T.Y(v),q,s,"#ffb06b",q>0?1:0);});}
+    const k=sm((t-1)/6.5),yrs=13.4*k;bigNum(yrs.toFixed(1).replace(".",",")+" miljarder år",cx,a.y+a.h*.14,Math.min(a.w*.08,s*.12),"#ffd86b",eo(t/.6));
+    tx("SÅ LÄNGE HAR LJUSET FÄRDATS",cx,a.y+a.h*.14+Math.max(26,s*.06),"rgba(255,216,107,.85)","center",Math.max(10,s*.024),700);
+    // tidslinjen längst ner
+    const w=Math.min(a.w*.8,s*1.5),lx=cx-w/2,y=a.y+a.h*.88;c.save();c.strokeStyle="rgba(255,255,255,.35)";c.lineWidth=2;c.beginPath();c.moveTo(lx,y);c.lineTo(lx+w,y);c.stroke();c.restore();
+    tx("BIG BANG",lx,y+Math.max(24,s*.055),"rgba(255,255,255,.7)","left",Math.max(10,s*.024),700);tx("I DAG",lx+w,y+Math.max(24,s*.055),"rgba(255,255,255,.7)","right",Math.max(10,s*.024),700);
+    const px=lerp(lx,lx+w,1-k*13.4/13.8);glow(px,y,s*.05,"rgba(255,216,107,.8)");trace([[lx,y],[px,y]],1,"#ffd86b",2,false);};
+
+  /* 7 · Andra världar: planeten som passerar framför sin stjärna, ljuset genom luften och ett spektrum med koldioxid */
+  const s7=(t)=>{const{a,s,cx,cy,port}=S(),c=x();stars(a,1,t,110);
+    const sx=a.x+a.w*(port?.5:.2),sy=a.y+a.h*(port?.28:.4),sr=Math.max(26,s*.09);glow(sx,sy,sr*3.2,"rgba(255,170,70,.28)");const sg=c.createRadialGradient(sx,sy,0,sx,sy,sr);sg.addColorStop(0,"#fff6d0");sg.addColorStop(.7,"#ffb347");sg.addColorStop(1,"#ff8a2a");c.fillStyle=sg;c.beginPath();c.arc(sx,sy,sr,0,TAU);c.fill();
+    const pq=sm((t-1)/3),pr=Math.max(10,s*.034),px=lerp(sx-sr*1.9,sx+sr*1.9,pq),py=sy+Math.sin(pq*Math.PI)*0*sr;c.fillStyle="#102a52";c.beginPath();c.arc(px,py,pr,0,TAU);c.fill();c.save();c.globalCompositeOperation="lighter";c.strokeStyle="rgba(150,210,255,.8)";c.lineWidth=Math.max(2,pr*.4);c.beginPath();c.arc(px,py,pr+2,0,TAU);c.stroke();c.restore();
+    tx("EN ANNAN STJÄRNA OCH DESS PLANET",sx,sy-sr*1.9,"rgba(207,216,255,.9)","center",Math.max(10,s*.024),700);
+    // ljuskurvan: stjärnans ljus dippar när planeten passerar
+    const gw=Math.min(a.w*(port?.8:.36),s*.7),gx=port?cx-gw/2:a.x+a.w*.06,gy=port?a.y+a.h*.58:sy+sr*2.6,gh=Math.max(40,s*.1);c.save();c.strokeStyle="rgba(255,255,255,.2)";c.lineWidth=1;c.beginPath();c.moveTo(gx,gy);c.lineTo(gx+gw,gy);c.stroke();c.restore();
+    const lc=[];for(let i=0;i<=40;i++){const q=i/40,d=Math.abs(q-.5);lc.push([gx+gw*q,gy-gh*.5+(d<.2?gh*.18*(1-Math.pow(d/.2,4)):0)*-1+gh*.0]);}trace(lc,pq,"rgba(255,216,107,.95)",2.5,true);
+    // spektrum med koldioxid vid 4,3 mikrometer
+    if(t>5){const q=sm((t-5)/1),sw=Math.min(a.w*(port?.84:.46),s*.9),spx=port?cx-sw/2:a.x+a.w*.5,spy=port?a.y+a.h*.78:cy-s*.02,sh=Math.max(40,s*.1);c.save();c.globalAlpha=q;
+      c.fillStyle="rgba(8,14,32,.72)";c.strokeStyle="rgba(159,208,255,.5)";c.lineWidth=1.5;c.beginPath();c.roundRect?c.roundRect(spx-14,spy-sh-34,sw+28,sh+74,14):c.rect(spx-14,spy-sh-34,sw+28,sh+74);c.fill();c.stroke();
+      tx("HUR MYCKET LJUS VI SER",spx,spy-sh-12,"rgba(159,208,255,.9)","left",Math.max(9,s*.02),700);
+      const pts=[];for(let i=0;i<=60;i++){const u=i/60,dip=Math.exp(-Math.pow((u-.62)/.035,2))*.75;pts.push([spx+sw*u,spy-sh*(.55+.1*Math.sin(u*9)-dip*.5)]);}
+      const kk=sm((t-5.4)/2);trace(pts,kk,"#7fd6ff",2.5,true);c.globalAlpha=q;
+      if(t>6.6){const dq=sm((t-6.6)/.8),dx=spx+sw*.62,dy=spy-sh*.28;ring(dx,dy,Math.max(12,s*.035)*(1+.1*Math.sin(t*5)),dq,GOLD,2);chip("koldioxid · 4,3 µm",dx,spy+Math.max(30,s*.062),"rgba(255,216,107,.85)",Math.max(11,s*.028),dq);}
       c.restore();}};
-  const dot=(px,py,r,col)=>{const c=x();c.fillStyle=col;c.beginPath();c.arc(px,py,r,0,TAU);c.fill();};
 
-  /* 2 · långt bortom månen */
-  const s2=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.4)/1.1);photo(1,t,14.5,1.1,.15+.5*g);cred(1,.55*(1-g));
-    if(g>0){c.save();c.globalAlpha=g;space(a,1);const w=Math.min(a.w*.8,s*1.4),lx=cx-w/2,y=cy,px=km=>lx+km/1500000*w;
-      if(t<7.6){earth(px(0),y,Math.max(14,s*.032));c.strokeStyle="rgba(255,255,255,.3)";c.lineWidth=2;c.beginPath();c.moveTo(lx,y+Math.max(40,s*.09));c.lineTo(lx+w,y+Math.max(40,s*.09));c.stroke();
-        const k1=eo((t-2.8)/1),k2=eo((t-4.4)/1.4);c.globalAlpha=g*k1;dot(px(384000),y,7,"#cfd5df");tx("månen",px(384000),y-Math.max(26,s*.06),"#cfd5df","center",Math.max(13,s*.034),700);
-        c.globalAlpha=g*k2;dot(px(1500000),y,8,"#ffd23c");tx("Webb",px(1500000),y-Math.max(26,s*.06),"#ffd86b","center",Math.max(15,s*.04),700);tx("4 × avståndet till månen",px(750000),y+Math.max(72,s*.16),"#ffd86b","center",Math.max(14,s*.037),700);}
-      else{const sx=a.x+a.w*.12;sun(sx,y,Math.max(16,s*.04));const ex=cx-a.w*.02;earth(ex,y,Math.max(12,s*.028));dot(ex+Math.max(18,s*.05),y-Math.max(10,s*.026),5,"#cfd5df");dot(ex+Math.max(70,s*.17),y,7,"#ffd23c");
-        c.strokeStyle="rgba(255,230,140,.5)";c.lineWidth=2;c.setLineDash([5,7]);c.beginPath();c.moveTo(sx+40,y);c.lineTo(ex+Math.max(70,s*.17),y);c.stroke();c.setLineDash([]);
-        tx("solen",sx,y+Math.max(50,s*.1),"#ffd86b","center",Math.max(13,s*.034),700);tx("jorden och månen",ex,y+Math.max(40,s*.085),"#9fd0ff","center",Math.max(12,s*.03),700);tx("Webb",ex+Math.max(70,s*.17),y-Math.max(26,s*.06),"#ffd86b","center",Math.max(14,s*.038),700);
-        if(t>9)tx("alltid skuggan bakom sig",cx,a.y+a.h*.86,"#cfd8ff","center",Math.max(15,s*.04),700);}
-      c.restore();}};
-
-  /* 3 · guldspegeln */
-  const s3=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.4)/1.1);photo(3,t,18.8,1.1,.15+.5*g);cred(3,.55*(1-g));
-    if(g>0){c.save();c.globalAlpha=g;space(a,1);const r=Math.max(14,Math.min(a.w,a.h)*.075);
-      if(t<12.3){const fold=t>8.5?eo((t-8.5)/2.2)*(t>11?1-eo((t-11)/1)*0:1):0;
-        const pos=mirrorPos(r),sc=t>8.5?1-fold*.1:1;pos.forEach(([dx,dy],i)=>{const outer=i>=6;const shift=outer?(1-fold*.0):1;const sh=.5+.5*Math.sin(t*2+i*.6);const dd=outer?(1-fold*.25):1;hexAt(cx+dx*dd,cy+dy*dd*(outer?1-fold*.2:1),r*(outer?1-fold*.15:1),sh);});
-        if(t<8.5)tx("6,5 meter · 18 bitar",cx,a.y+a.h*.92,"#ffd86b","center",Math.max(17,s*.045),700);else tx("ihopvikt som origami",cx,a.y+a.h*.92,"#ffd86b","center",Math.max(17,s*.045),700);}
-      else{const q=eo((t-12.3)/1);c.globalAlpha=g*q;const w=Math.min(a.w*.7,s*1.2),lx=cx-w/2,y=cy-s*.06;
-        c.fillStyle="#d9c7a8";c.fillRect(lx,y-Math.max(10,s*.026),w,Math.max(20,s*.052));tx("hårstrå",cx,y-Math.max(26,s*.06),"#d9c7a8","center",Math.max(14,s*.037),700);
-        c.fillStyle="#ffd23c";c.fillRect(lx,y+Math.max(70,s*.16),w,2);tx("guldlagret",cx,y+Math.max(70,s*.16)+Math.max(28,s*.065),"#ffd86b","center",Math.max(14,s*.037),700);}
-      c.restore();}};
-  const hexAt=(px,py,r,sh)=>{hex(px,py,r,`rgb(${220+sh*25|0},${170+sh*40|0},${40+sh*30|0})`);};
-
-  /* 4 · iskallt, solskydd, fem lager */
-  const s4=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.4)/1.1);photo(4,t,18.9,1.1,.15+.5*g);cred(4,.55*(1-g));
-    if(g>0){c.save();c.globalAlpha=g;space(a,1);
-      if(t<9){const th=a.h*.55,tx0=cx-a.w*.12,top=a.y+a.h*.14,fill=eo((t-3)/2.4);c.fillStyle="rgba(255,255,255,.12)";c.fillRect(tx0,top,28,th);c.fillStyle="#4aa8ff";c.fillRect(tx0,top+th*(1-.15-.0*fill)-th*.05*fill+th*.0,28,th*(.15+.05*fill));c.beginPath();c.arc(tx0+14,top+th+14,22,0,TAU);c.fill();
-        tx("−230°",tx0+80,top+th+22,"#9fd0ff","left",Math.max(26,s*.075),700);tx("iskallt",tx0+80,top+th*.4,"#cfe8ff","left",Math.max(17,s*.045),700);}
-      else if(t<13.5){const w=Math.min(a.w*.6,s*1.1),h=w*.42,lx=cx-w/2,y=cy-h/2,k=eo((t-9.4)/1.2);c.fillStyle="#2d8a4a";c.globalAlpha=g*.9;c.fillRect(lx,y,w,h);c.strokeStyle="#fff";c.lineWidth=2;c.strokeRect(lx+4,y+4,w-8,h-8);c.beginPath();c.moveTo(cx,y+4);c.lineTo(cx,y+h-4);c.stroke();tx("tennisplan",cx,y+h+Math.max(26,s*.06),"#9be3b0","center",Math.max(14,s*.037),700);
-        c.globalAlpha=g*k;c.fillStyle="rgba(200,210,235,.85)";c.beginPath();c.moveTo(cx,y-h*.1);c.lineTo(cx+w*.52,cy);c.lineTo(cx,y+h*1.1);c.lineTo(cx-w*.52,cy);c.closePath();c.fill();tx("solskydd",cx,cy+5,"#1a2a4a","center",Math.max(16,s*.042),700);}
-      else{const w=Math.min(a.w*.6,s*1.1),lx=cx-w/2,y=cy-s*.14;for(let i=0;i<5;i++){const q=eo((t-13.8-i*.45)/.6);if(q<=0)continue;c.globalAlpha=g*q;c.fillStyle=`rgba(${190+i*10},${200+i*8},${230},.9)`;c.fillRect(lx,y+i*Math.max(24,s*.055),w*q,Math.max(8,s*.018));tx(String(i+1),lx-24,y+i*Math.max(24,s*.055)+Math.max(10,s*.02),"#fff","right",Math.max(13,s*.034),700);}
-        c.globalAlpha=g;tx("5 lager",cx,y+5*Math.max(24,s*.055)+Math.max(30,s*.07),"#ffd86b","center",Math.max(18,s*.048),700);}
-      c.restore();}};
-
-  /* 5 · Webb och Hubble: damm och spegelbredd */
-  const s5=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.6)/1.1);photo(6,t,15.6,1.1,.15+.5*g);cred(6,.55*(1-g));
-    if(g>0){c.save();c.globalAlpha=g;space(a,1);
-      if(t<9.6){const bw=Math.min(a.w*.36,s*.62),bh=bw*.8,lx=cx-bw*1.15,rx=cx+bw*.15,y=cy-bh/2,r=L.srand(4);
-        [[lx,"Hubble","vanligt ljus",false],[rx,"Webb","infrarött",true]].forEach(([px,n,sub,ir],ix)=>{c.fillStyle="rgba(8,12,30,.9)";c.fillRect(px,y,bw,bh);c.strokeStyle=ir?"#ffd86b":"#9fd0ff";c.lineWidth=2;c.strokeRect(px,y,bw,bh);
-          for(let i=0;i<22;i++){const sx=px+8+(r()*(bw-16)),sy=y+8+(r()*(bh-16));const inCloud=Math.hypot(sx-(px+bw/2),sy-(y+bh/2))<bw*.32;c.fillStyle=inCloud&&!ir?"rgba(255,255,255,.0)":"#fff";c.beginPath();c.arc(sx,sy,1.8,0,TAU);c.fill();}
-          const cg=c.createRadialGradient(px+bw/2,y+bh/2,0,px+bw/2,y+bh/2,bw*.38);cg.addColorStop(0,ir?"rgba(150,90,60,.18)":"rgba(120,70,40,.95)");cg.addColorStop(1,"rgba(120,70,40,0)");c.fillStyle=cg;c.fillRect(px,y,bw,bh);
-          tx(n,px+bw/2,y-Math.max(18,s*.04),ir?"#ffd86b":"#9fd0ff","center",Math.max(17,s*.045),700);tx(sub,px+bw/2,y+bh+Math.max(24,s*.055),"#cfd8ff","center",Math.max(13,s*.034),600);});}
-      else{const q=eo((t-9.6)/1),w=Math.min(a.w*.7,s*1.2),lx=cx-w/2,y=cy-s*.1,u=w/6.5;c.globalAlpha=g*q;
-        c.fillStyle="#9fd0ff";c.fillRect(lx,y,u*2.4,Math.max(20,s*.05));tx("Hubble ca 2,4 m",lx,y-Math.max(10,s*.026),"#9fd0ff","left",Math.max(14,s*.037),700);
-        c.fillStyle="#ffd23c";c.fillRect(lx,y+Math.max(80,s*.18),u*6.5,Math.max(20,s*.05));tx("Webb 6,5 m",lx,y+Math.max(80,s*.18)-Math.max(10,s*.026),"#ffd86b","left",Math.max(14,s*.037),700);}
-      c.restore();}};
-
-  /* 6 · tillbaka i tiden */
-  const s6=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2.6)/1.1);photo(2,t,11.1,1.1,.15+.5*g);cred(2,.55*(1-g));
-    if(g>0){c.save();c.globalAlpha=g;panel(a,1);const w=Math.min(a.w*.84,s*1.6),lx=cx-w/2,y=cy,px=yr=>lx+(13.8-yr)/13.8*w;
-      c.strokeStyle="rgba(255,255,255,.4)";c.lineWidth=3;c.beginPath();c.moveTo(lx,y);c.lineTo(lx+w,y);c.stroke();
-      [[13.8,"Big bang"],[10,"10"],[5,"5"],[0,"i dag"]].forEach(([yr,n])=>{c.beginPath();c.moveTo(px(yr),y-8);c.lineTo(px(yr),y+8);c.stroke();tx(n,px(yr),y+Math.max(30,s*.065),"rgba(255,255,255,.8)","center",Math.max(12,s*.03),600);});
-      tx("miljarder år sedan",cx,y+Math.max(60,s*.13),"rgba(255,255,255,.55)","center",Math.max(12,s*.03),600);
-      const k=eo((t-3.4)/3);c.fillStyle="#ffd23c";c.beginPath();c.arc(px(13.2),y,9+Math.sin(t*3)*2,0,TAU);c.fill();tx("galaxens ljus",px(13.2),y-Math.max(30,s*.07),"#ffd86b","center",Math.max(13,s*.034),700);
-      const lx2=lerp(px(13.2),px(0),k);c.strokeStyle="#ffd23c";c.lineWidth=3;c.beginPath();c.moveTo(px(13.2),y+14);c.lineTo(lx2,y+14);c.stroke();c.fillStyle="#fff";c.beginPath();c.arc(lx2,y+14,5,0,TAU);c.fill();
-      if(t>7){c.globalAlpha=g*eo((t-7)/1);tx("över 13 miljarder år",cx,a.y+a.h*.14,"#fff","center",Math.max(20,s*.055),700);}
-      c.restore();}};
-
-  /* 7 · andra världar: planet, spektrum, koldioxid */
-  const s7=(t)=>{const{s,cx,cy,a,port}=S(),c=x();const g=eo((t-2)/1.1);photo(4,t,12.6,1.1,.15+.5*g);cred(4,.55*(1-g));
-    if(g>0){c.save();c.globalAlpha=g;space(a,1);const y=cy-s*.1;sun(cx-Math.min(a.w*.26,s*.46),y,Math.max(18,s*.045));
-      const px=cx+Math.min(a.w*.12,s*.2)+Math.sin(t*.8)*8,pr=Math.max(10,s*.026);c.fillStyle="#2a73c8";c.beginPath();c.arc(px,y,pr,0,TAU);c.fill();c.strokeStyle="rgba(143,208,255,.6)";c.lineWidth=3;c.beginPath();c.arc(px,y,pr+4,0,TAU);c.stroke();
-      tx("en annan stjärna och dess planet",cx,a.y+a.h*.12,"#cfd8ff","center",Math.max(15,s*.04),700);
-      const sw=Math.min(a.w*.7,s*1.2),sx=cx-sw/2,sy=y+Math.max(70,s*.15),sh=Math.max(20,s*.05);
-      const gr=c.createLinearGradient(sx,0,sx+sw,0);["#a02020","#e0802a","#e8d030","#40b050","#3080d0","#7040b0"].forEach((cl2,i,arr)=>gr.addColorStop(i/(arr.length-1),cl2));c.globalAlpha=g*eo((t-3)/1);c.fillStyle=gr;c.fillRect(sx,sy,sw,sh);
-      c.fillStyle="#000";[[.3,.014],[.55,.01],[.7,.012]].forEach(([p,w],i)=>{const q=i===0?(t>5.3?eo((t-5.3)/1):0):1;c.globalAlpha=g*q*.9;c.fillRect(sx+sw*p,sy,sw*w,sh);});
-      if(t>5.3){c.globalAlpha=g*eo((t-5.3)/1);tx("koldioxid",sx+sw*.3,sy+sh+Math.max(30,s*.07),"#ffd86b","center",Math.max(15,s*.04),700);c.strokeStyle="#ffd86b";c.lineWidth=2;c.beginPath();c.moveTo(sx+sw*.3,sy+sh+6);c.lineTo(sx+sw*.3,sy+sh+Math.max(14,s*.034));c.stroke();}
-      c.restore();}};
-
-  /* 8 · första bilderna */
-  const s8=(t)=>{const{s,cx,cy,a,port}=S(),c=x();photo(5,t,8.9,1.12,.1);cred(5,.55);
-    const f=eo((t-1.4)/1.2);c.save();c.globalAlpha=f;tx("juli 2022",cx,a.y+a.h*.12,"#ffd86b","center",Math.max(24,s*.07),700);c.restore();
-    if(t>3){const q=eo((t-3)/1),n=Math.floor(q*(t>5?1000+(t-5)*0:1000));c.save();c.globalAlpha=q;tx("tusentals galaxer i en liten fläck",cx,a.y+a.h*.9,"#fff","center",Math.max(15,s*.04),700);c.restore();}};
+  /* 8 · Första bilderna: djupa fältet, åttauddiga stjärnor, ljuspunkter som tänds en och en */
+  const s8=(t)=>{const{a,s,cx,cy,port}=S(),c=x(),p=cl(t/8.9,0,1);const T=kb(5,a,{z:lerp(1.2,1,sm(p)),fx:.5,fy:lerp(.45,.5,p)},eo(t/1.2));vign(a,.7);
+    if(T){[[388,350,1],[790,572,.7],[120,832,.8],[860,820,.8],[425,775,.6],[70,55,.6],[165,5,.5]].forEach(([u,v,k],i)=>{const q=sm((t-1-i*.35)/.9);spike(T.X(u),T.Y(v),s*.16*k*q,q*(.8+.2*Math.sin(t*3+i)),"rgba(190,210,255,.95)");});}
+    const f=eo((t-1.4)/1.2);bigNum("juli 2022",cx,a.y+a.h*.13,Math.min(a.w*.09,s*.14),GOLD,f);
+    if(t>3.2){const q=eo((t-3.2)/1);const n=Math.floor(sm((t-3.2)/3.5)*1000);chip("tusentals galaxer i en liten fläck",cx,a.y+a.h*.92,"rgba(255,255,255,.7)",Math.max(13,s*.034),q);}
+    cred(5,.4);};
 
   return[s0,s1,s2,s3,s4,s5,s6,s7,s8];
 }

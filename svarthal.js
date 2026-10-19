@@ -88,7 +88,7 @@ window.MPSvartHal={start(host,o){o=o||{};const D=o.def,SC=D?D.SC:SC0,M=Object.as
   host.appendChild(root);
   const C=root.querySelector("canvas"),x=C.getContext("2d"),$=s=>root.querySelector(s);
   let W=800,H=600,dpr=1,si=0,st=0,playing=false,started=false,raf=0,last=0,capShown=-1,ended=false,alive=true;
-  function fit(){const r=root.getBoundingClientRect();dpr=Math.min(2,window.devicePixelRatio||1);W=r.width;H=r.height;C.width=Math.round(W*dpr);C.height=Math.round(H*dpr);x.setTransform(dpr,0,0,dpr,0,0);}
+  function fit(){const r=root.getBoundingClientRect();dpr=Math.min(1.5,window.devicePixelRatio||1);W=r.width;H=r.height;C.width=Math.round(W*dpr);C.height=Math.round(H*dpr);x.setTransform(dpr,0,0,dpr,0,0);}
   fit();const ro=window.ResizeObserver?new ResizeObserver(()=>{fit();draw();}):null;if(ro)ro.observe(root);
   // ytan där bilden ritas (ovanför texten), och en skala
   const A=()=>{const port=W<H*.9;return port?{x:0,y:H*.06,w:W,h:H*.56}:{x:W*.02,y:H*.04,w:W*.96,h:H*.74};};
