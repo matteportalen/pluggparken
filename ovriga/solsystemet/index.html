@@ -391,7 +391,7 @@ function openEarth(){focus=earth;show('earth');controls.minDistance=1.6;
 addEventListener('keydown',e=>{if(e.key==='Escape'&&mode==='planet'&&!$('pCard').hidden){$('pCard').hidden=true}});
 /* Zooma in från jorden ända till Stockholm (kartvy med MapLibre, stockholm.js laddas först när den behövs) */
 let stIn=0,stLoad=null;
-function openStockholm(){if(!stLoad)stLoad=new Promise((res,rej)=>{const sc=document.createElement('script');sc.src='stockholm.js?v=10';sc.onload=res;sc.onerror=rej;document.head.appendChild(sc);});stLoad.then(()=>{if(mode==='earth'&&!xin&&!xf&&!matchMedia('(prefers-reduced-motion:reduce)').matches)earthZoomIn();else window.MPStockholm.open();},()=>{alert('Kartan kunde inte laddas. Kontrollera uppkopplingen.');stLoad=null;});}
+function openStockholm(){if(!stLoad)stLoad=new Promise((res,rej)=>{const sc=document.createElement('script');sc.src='stockholm.js?v=13';sc.onload=res;sc.onerror=rej;document.head.appendChild(sc);});stLoad.then(()=>{if(mode==='earth'&&!xin&&!xf&&!matchMedia('(prefers-reduced-motion:reduce)').matches)earthZoomIn();else window.MPStockholm.open();},()=>{alert('Kartan kunde inte laddas. Kontrollera uppkopplingen.');stLoad=null;});}
 $('eSthlm').onclick=openStockholm;
 canvas.addEventListener('wheel',e=>{if(mode==='earth'&&e.deltaY<0&&!fly&&camera.position.distanceTo(controls.target)<controls.minDistance*1.06){stIn-=e.deltaY;if(stIn>380){stIn=0;openStockholm();}}else stIn=0;},{passive:true});
 $('pBack').onclick=goHome;$('eBack').onclick=goHome;
@@ -739,9 +739,9 @@ function goGalZoom(to){tourEnd();gAuto={from:zT,to,t0:performance.now(),dur:Math
 $('toGal').onclick=()=>openGalaxy(true);
 function startStory(){const go=()=>{openGalaxy(false);tourStartAt(0);};
   const goMap=()=>{const v=(window.MPStockholm.view&&window.MPStockholm.view())||{z:1.1,lng:16,lat:38};if(matchMedia('(prefers-reduced-motion:reduce)').matches||!earth){go();return;}window.MPStockholm.slowClose=true;openGalaxy(false);earthPullback(v);tourStartAt(0);};
-  if(!stLoad)stLoad=new Promise((res,rej)=>{const sc=document.createElement('script');sc.src='stockholm.js?v=10';sc.onload=res;sc.onerror=rej;document.head.appendChild(sc);});
+  if(!stLoad)stLoad=new Promise((res,rej)=>{const sc=document.createElement('script');sc.src='stockholm.js?v=13';sc.onload=res;sc.onerror=rej;document.head.appendChild(sc);});
   stLoad.then(()=>window.MPStockholm.tour(goMap)).then(ok=>{if(ok===false)go();},()=>{stLoad=null;go();});}
-$('hTour').onclick=startStory;
+$('hTour').onclick=startStory;window.MPStory={start:startStory};
 $('gSpd').onclick=()=>{const n=FARTER[(FARTER.indexOf(rSpd)+1)%FARTER.length];try{localStorage.setItem('pluggparken-resa-fart',n);}catch(e){}window.dispatchEvent(new Event('mpfart'));};
 fartUI();
 /* sömlöst mellan solsystemet och universum: att zooma ut förbi sista avståndet fortsätter in i universumresan, och att zooma in igen går tillbaka */
