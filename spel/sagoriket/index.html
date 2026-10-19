@@ -264,6 +264,8 @@ function bygg(vid,nr){const V=VARLDAR.find(v=>v.id===vid),lista=BANOR[vid][nr];
   // tre stjärnor, utspridda bland platserna; övriga platser blir mynt
   const sp=obj.stjPlats,val=sp.length<=3?sp:[sp[0],sp[Math.floor(sp.length/2)],sp[sp.length-1]];
   obj.stjarnor=val.map(s=>({x:s.x,y:s.y,tagen:false}));sp.filter(s=>!val.includes(s)).forEach(s=>obj.mynt.push(s));
+  // mynt, stjärnor, nycklar och frukter som hamnat inne i marken lyfts upp till närmaste fria ruta ovanför
+  [obj.mynt,obj.stjarnor,obj.nycklar,obj.frukter].forEach(l=>l.forEach(m=>{while(m.y>0&&grid[m.y]&&grid[m.y][m.x]&&grid[m.y][m.x]!==".")m.y--;}));
   obj.mynt.forEach(m=>m.tagen=false);obj.fiender.forEach(f=>{f.trollad=0;f.dx=f.x;});obj.nycklarMax=obj.nycklar.length;
   return Object.assign({V,vid,nr,grid,cols,w:cols*T,h:ROWS*T},obj);}
 function byggBoss(vid){const V=VARLDAR.find(v=>v.id===vid),B=BOSSAR[vid],cols=22,grid=[];
