@@ -43,7 +43,7 @@ async function build(){
   const st=document.createElement('style');st.textContent=css;document.head.appendChild(st);
   ov=document.createElement('div');ov.id='mpsOv';ov.hidden=true;
   ov.innerHTML=`<div id="mpsMap"></div><div id="mpsMsg">Laddar kartan …</div>
-   <div class="top"><button class="bk" id="mpsBack">← Jorden</button><span class="ch">📍 Zooma in till Stockholm</span><button class="bk" id="mpsTour" hidden>⏸ Pausa resan</button></div>
+   <div class="top"><button class="bk" id="mpsBack">← Jorden</button><span class="ch">📍 Zooma in till Stockholm</span><button class="bk" id="mpsTour" hidden>⏸ Pausa resan</button><button class="bk" id="mpsFart" title="Hastighet på resan" aria-label="Hastighet på resan">1×</button></div>
    <div id="mpsCard"></div>
    <div class="bot"><div id="mpsChips"></div><label class="sl"><span>🌍</span><input type="range" id="mpsZ" min="0" max="1000" value="0" aria-label="Zooma från jorden till Smedslättsskolan"><span>🏙️</span></label></div>
    <div id="mpsCr">Satellitbilder: <a href="https://cloudless.eox.at" target="_blank" rel="noopener">EOxCloudless</a> by EOX IT Services GmbH (Contains modified Copernicus Sentinel data 2016), <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> · <a href="https://openfreemap.org" target="_blank" rel="noopener">OpenFreeMap</a> © <a href="https://openmaptiles.org/" target="_blank" rel="noopener">OpenMapTiles</a> Data from <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a></div>`;
@@ -51,6 +51,7 @@ async function build(){
   STEPS.forEach((s,i)=>{const b=document.createElement('button');b.textContent=s.k;b.onclick=()=>endTour()||tween(s.z,Math.max(2500,Math.min(7000,Math.abs(s.z-map.getZoom())*900)));chips.appendChild(b);});
   slider.oninput=()=>{endTour();cancelAnimationFrame(rafT);setZ(1.1+slider.value/1000*(ZMAX-1.1));};
   ov.querySelector('#mpsBack').onclick=close;
+  const fb=ov.querySelector('#mpsFart');fb.textContent=fartTxt();fb.onclick=()=>{const n=FARTER[(FARTER.indexOf(rate())+1)%FARTER.length];try{localStorage.setItem('pluggparken-resa-fart',n);}catch(e){}window.dispatchEvent(new Event('mpfart'));};
   addEventListener('keydown',e=>{if(e.key==='Escape'&&ov&&!ov.hidden)close();});
   ov.addEventListener('wheel',e=>{if(!map)return;if(e.deltaY>0&&map.getZoom()<1.25){ovAcc+=e.deltaY;if(ovAcc>360){ovAcc=0;close();}}else ovAcc=0;},{passive:true});
   await load();
@@ -74,9 +75,13 @@ async function open(cb,noAuto){onClose=cb||null;if(!ov&&!booting){booting=true;t
   if(map){map.resize();if(noAuto)setZ(ZMAX);else{setZ(1.1);setTimeout(()=>tween(9.4,6500),900);}}}
 /* berättelsen börjar här: Gamla stan → ut genom innerstaden, Stockholm, Sverige, Europa → jorden; sedan tar solsystemets berättelse över (done) */
 let T=null;
-function tAudio(file,cb){if(!(window.Ljud&&Ljud.on)){T.timer=true;const tk=()=>{if(!T||T.cb!==cb)return;if(T.paused)setTimeout(tk,500);else cb();};T.cb=cb;setTimeout(tk,6500);return;}
-  const a=new Audio('../../ljud/resa/'+file+'?v=4');T.aud=a;T.cb=cb;let d=false;const fin=()=>{if(d)return;d=true;if(T&&T.aud===a)T.aud=null;if(T&&T.cb===cb)cb();};a.onended=fin;a.onerror=()=>setTimeout(fin,4000);a.play().catch(()=>setTimeout(fin,4000));}
-function tStep(){if(!T)return;const i=T.i;T.target=i;sync(STEPS[i].z);tAudio('s'+(100+i)+'-1.mp3',()=>{if(!T)return;if(i===0){const d=T.done;endTour(true);if(d)d();close();return;}T.i=i-1;T.moving=true;tween(STEPS[i-1].z,Math.max(3200,Math.min(6500,Math.abs(STEPS[i].z-STEPS[i-1].z)*900)),()=>{if(T){T.moving=false;tStep();}});});}
+const FARTER=[1,1.25,1.5,2];
+const rate=()=>{try{const v=+localStorage.getItem('pluggparken-resa-fart');if(FARTER.includes(v))return v;}catch(e){}return 1;};
+const fartTxt=()=>String(rate()).replace('.',',')+'×';
+window.addEventListener('mpfart',()=>{const b=ov&&ov.querySelector('#mpsFart');if(b)b.textContent=fartTxt();if(T&&T.aud)T.aud.playbackRate=rate();});
+function tAudio(file,cb){if(!(window.Ljud&&Ljud.on)){T.timer=true;const tk=()=>{if(!T||T.cb!==cb)return;if(T.paused)setTimeout(tk,500);else cb();};T.cb=cb;setTimeout(tk,6500/rate());return;}
+  const a=new Audio('../../ljud/resa/'+file+'?v=4');T.aud=a;T.cb=cb;let d=false;const fin=()=>{if(d)return;d=true;if(T&&T.aud===a)T.aud=null;if(T&&T.cb===cb)cb();};a.playbackRate=rate();a.preservesPitch=true;a.onended=fin;a.onerror=()=>setTimeout(fin,4000);a.play().catch(()=>setTimeout(fin,4000));}
+function tStep(){if(!T)return;const i=T.i;T.target=i;sync(STEPS[i].z);tAudio('s'+(100+i)+'-1.mp3',()=>{if(!T)return;if(i===0){const d=T.done;endTour(true);if(d)d();close();return;}T.i=i-1;T.moving=true;tween(STEPS[i-1].z,Math.max(3200,Math.min(6500,Math.abs(STEPS[i].z-STEPS[i-1].z)*900))/rate(),()=>{if(T){T.moving=false;tStep();}});});}
 function endTour(keep){const was=!!T;if(T){if(T.aud){T.aud.onended=null;T.aud.pause();}T.cb=null;T=null;}const b=ov&&ov.querySelector('#mpsTour');if(b)b.hidden=true;return false&&was;}
 async function tour(done){await open(null,true);if(!ov||!map){if(ov)close();return false;}endTour();T={i:STEPS.length-1,done,paused:false};const b=ov.querySelector('#mpsTour');b.hidden=false;b.textContent='⏸ Pausa resan';
   b.onclick=()=>{if(!T)return;if(!T.paused){T.paused=true;cancelAnimationFrame(rafT);if(T.aud)T.aud.pause();b.textContent='▶ Fortsätt resan';}else{T.paused=false;b.textContent='⏸ Pausa resan';if(T.moving){const i=T.i;tween(STEPS[i].z,3000,()=>{if(T){T.moving=false;tStep();}});}else if(T.aud)T.aud.play();else tStep();}};

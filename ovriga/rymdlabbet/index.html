@@ -387,7 +387,7 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;bac
   <div class="lab">
     <div><div class="stage"><canvas id="gCv" height="440"></canvas></div>
       <div class="slider"><span>🌍</span><input type="range" id="gZoom" min="0" max="16" step="0.001" aria-label="Zooma ut"><span>🕳️</span></div>
-      <div class="ctrl"><button class="b go" id="gTour">▶ Resa genom jättarna</button></div>
+      <div class="ctrl"><button class="b go" id="gTour">▶ Resa genom jättarna</button><button class="b" id="gSpd" title="Hastighet på resan" aria-label="Hastighet på resan">1×</button></div>
       <div class="chips" id="gPick" style="margin-top:8px"></div>
     </div>
     <div class="panel">
@@ -1157,12 +1157,15 @@ function gTourLabel(){$('gTour').textContent=gTour?(gTour.paused?'▶ Fortsätt 
 function gNav(){if(gTour){gStopAud();gTour.paused=true;gTour.talk=false;}gTourLabel();}
 function gStopAud(){gVid++;if(gAud){gAud.onended=null;gAud.onerror=null;gAud.pause();gAud=null;}}
 /* berättarröst (ElevenLabs): ljud/jattar/s<index>-1.mp3, index = himlakroppens plats i listan, sist en avslutning; utan ljud går det på timer */
+const G_FARTER=[1,1.25,1.5,2];
+const gRate=()=>{try{const v=+localStorage.getItem('pluggparken-resa-fart');if(G_FARTER.includes(v))return v;}catch(e){}return 1;};
+const gFartUI=()=>{const b=$('gSpd');if(b)b.textContent=String(gRate()).replace('.',',')+'×';if(gAud)gAud.playbackRate=gRate();};
 let gVid=0;
-function gVoice(n,tour,cb){gStopAud();const vid=++gVid;if(!(window.Ljud&&Ljud.on)){const tk=()=>{if(vid!==gVid)return;if(gTour&&gTour.paused)setTimeout(tk,500);else cb&&cb();};setTimeout(tk,6500);return;}const a=new Audio('../../ljud/jattar/s'+n+'-1.mp3?v=3');a._tour=tour;gAud=a;let done=false;const fin=()=>{if(done)return;done=true;if(gAud===a)gAud=null;cb&&cb();};a.onended=fin;a.onerror=()=>setTimeout(fin,4000);a.play().catch(()=>setTimeout(fin,4000));}
+function gVoice(n,tour,cb){gStopAud();const vid=++gVid;if(!(window.Ljud&&Ljud.on)){const tk=()=>{if(vid!==gVid)return;if(gTour&&gTour.paused)setTimeout(tk,500);else cb&&cb();};setTimeout(tk,6500/gRate());return;}const a=new Audio('../../ljud/jattar/s'+n+'-1.mp3?v=3');a._tour=tour;a.playbackRate=gRate();a.preservesPitch=true;gAud=a;let done=false;const fin=()=>{if(done)return;done=true;if(gAud===a)gAud=null;cb&&cb();};a.onended=fin;a.onerror=()=>setTimeout(fin,4000);a.play().catch(()=>setTimeout(fin,4000));}
 function gLoop(){if(cur!=='jattar'){gRaf=0;gStopAud();if(G3)G3.stop();return;}
   if(!gTour&&gAud&&gAud._tour)gStopAud();
   if(gTour&&!gTour.paused){const n=performance.now(),T=gTour;if(!T.talk&&n>T.t0&&Math.abs(gZoom-gShow)<.01){const k=Math.round(gZoom);T.talk=true;gVoice(k,true,()=>{if(gTour!==T)return;if(k>=GI.length-1){gVoice(GI.length,true,()=>{if(gTour===T){gTour=null;gTourLabel();}});}else{gZoom=k+1;T.talk=false;T.t0=performance.now()+350;}});}}
-  const d=gZoom-gShow;if(Math.abs(d)>.0005){gShow+=d*(gTour?.035:.07)+Math.sign(d)*.001;if(Math.abs(gZoom-gShow)<.0012)gShow=gZoom;$('gZoom').value=gShow;
+  const d=gZoom-gShow;if(Math.abs(d)>.0005){gShow+=d*(gTour?.035*gRate():.07)+Math.sign(d)*.001;if(Math.abs(gZoom-gShow)<.0012)gShow=gZoom;$('gZoom').value=gShow;
     const k=Math.round(gShow);if(GI[k]!==gSel){gSel=GI[k];gUI();}drawGiants();}
   gRaf=requestAnimationFrame(gLoop);}
 function gUI(){gTourLabel();$('gPick').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',GI[+b.dataset.i]===gSel));gText();}
@@ -1193,6 +1196,7 @@ $('gTour').onclick=()=>{
   if(!gTour){gStopAud();if(Math.round(gZoom)===0){gZoom=0;gShow=0;gSel=GI[0];gUI();}gTour={talk:false,t0:performance.now()+900,paused:false};gTourLabel();return;}
   if(!gTour.paused){gTour.paused=true;if(gAud&&gAud._tour)gAud.pause();gTourLabel();return;}   // paus: rösten stannar där den är
   gTour.paused=false;if(gAud&&gAud._tour&&gTour.talk){gAud.play();}else{gStopAud();gTour.talk=false;gTour.t0=performance.now()+300;}gTourLabel();};
+$('gSpd').onclick=()=>{const n=G_FARTER[(G_FARTER.indexOf(gRate())+1)%G_FARTER.length];try{localStorage.setItem('pluggparken-resa-fart',n);}catch(e){}gFartUI();};gFartUI();
 document.querySelector('[data-say="jattar"]').onclick=()=>{if(gAud&&!gAud._tour){gStopAud();return;}if(gTour&&!gTour.paused)return;gVoice(Math.max(0,GI.indexOf(gSel)),false);};
 
 /* =====================================================================
