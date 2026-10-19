@@ -87,5 +87,5 @@ async function tour(done){await open(null,true);if(!ov||!map){if(ov)close();retu
   b.onclick=()=>{if(!T)return;if(!T.paused){T.paused=true;cancelAnimationFrame(rafT);if(T.aud)T.aud.pause();b.textContent='▶ Fortsätt resan';}else{T.paused=false;b.textContent='⏸ Pausa resan';if(T.moving){const i=T.i;tween(STEPS[i].z,3000,()=>{if(T){T.moving=false;tStep();}});}else if(T.aud)T.aud.play();else tStep();}};
   setTimeout(()=>{if(T)tStep();},1100);return true;}
 function close(){endTour();if(!ov)return;cancelAnimationFrame(rafT);ov.classList.remove('on');setTimeout(()=>{ov.hidden=true;document.body.style.overflow='';},700);if(onClose)onClose();}
-window.MPStockholm={open,close,tour,get isOpen(){return !!ov&&!ov.hidden}};
+window.MPStockholm={open,close,tour,view(){if(!map)return null;const c=map.getCenter();return{z:map.getZoom(),lng:c.lng,lat:c.lat};},get isOpen(){return !!ov&&!ov.hidden}};
 })();
