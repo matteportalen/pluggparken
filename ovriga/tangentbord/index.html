@@ -122,7 +122,8 @@ h2{margin:6px 0 10px}
 .big{display:block;width:100%;margin-top:12px;padding:14px;border-radius:20px;font-weight:800;font-size:1.3rem;color:#fff;background:var(--good);box-shadow:0 5px 0 var(--good-dark)}
 .big.sek{background:var(--card);color:var(--ink);box-shadow:0 4px 0 var(--line)}
 .big:active{transform:translateY(3px)}
-#mjuk{position:fixed;left:0;bottom:0;width:1px;height:1px;opacity:0;border:0;padding:0;font-size:16px}
+#mjuk{position:absolute;left:0;top:0;width:1px;height:1px;opacity:0;border:0;padding:0;font-size:16px}
+@media (pointer:coarse){#gYta{position:sticky;top:6px;z-index:6}}
 #fx{position:fixed;inset:0;pointer-events:none;z-index:50}
 @media (prefers-reduced-motion:reduce){.k.mal{animation:none;box-shadow:0 0 0 3px #fff,0 0 0 6px var(--accent)}.stor.fel{animation:none}}
 </style>
@@ -233,7 +234,10 @@ const PEK=matchMedia("(pointer:coarse)").matches&&!matchMedia("(pointer:fine)").
 let mjukt=false;
 $("mjukBtn").onclick=()=>{mjukt=true;$("pekTips").hidden=true;fokusMjuk();};
 // fältet har fokus under hela spelet: tecken som kommer som text (å, ä, ö på vissa datorer, skärmtangentbord) fångas där
-function fokusMjuk(){try{$("mjuk").focus({preventScroll:true});}catch(e){}}
+function fokusMjuk(){try{$("mjuk").focus({preventScroll:true});}catch(e){}tillToppen();}
+/* på mobil och surfplatta skrollar webbläsaren ner när skärmtangentbordet fälls upp; texten ska alltid synas, så vi skrollar tillbaka */
+function tillToppen(){if(!matchMedia("(pointer:coarse)").matches||$("game").hidden)return;[0,120,350,700].forEach(t=>setTimeout(()=>{if(!$("game").hidden)window.scrollTo(0,0);},t));}
+if(window.visualViewport)visualViewport.addEventListener("resize",tillToppen);
 
 /* ---------- Skärmar ---------- */
 function show(id){document.querySelectorAll(".screen").forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
