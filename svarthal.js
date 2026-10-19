@@ -54,15 +54,20 @@ const SC0=[
 
 /* ---------- Röst: en inspelad fil per replik ---------- */
 const V={on:true,busy:false,a:null,base:ROOT+"ljud/svarthal/"};
+/* Hastighet (delas med resorna i Solsystemet och Jättarna): 1×, 1,25×, 1,5×, 2× */
+const FARTER=[1,1.25,1.5,2];
+function fart(){try{const v=+localStorage.getItem("pluggparken-resa-fart");if(FARTER.includes(v))return v;}catch(e){}return 1;}
+const fartTxt=()=>String(fart()).replace(".",",")+"×";
+function rate(a){try{a.preservesPitch=true;a.mozPreservesPitch=true;a.webkitPreservesPitch=true;a.playbackRate=fart();}catch(e){}}
 function voiceStop(){V.busy=false;if(V.a){try{V.a.pause();}catch(e){}V.a=null;}duck(false);}
 let MAT="rymd";/* Ljudmatta: meta.mat (MAT) = "rymd" (standard) eller ett namn i Ljud.ambient (t.ex. "vagor", "vulkan", "djungel") */
 function matStart(L){if(MAT!=="rymd"){if(L.ambient&&!(L.ambient.g&&L.ambient.kind===MAT))L.ambient.start(MAT);}else if(L.rymd)L.rymd.start();}
 function matStop(L){if(L.rymd&&L.rymd.stop)L.rymd.stop();if(L.ambient&&L.ambient.stop&&MAT!=="rymd")L.ambient.stop();}
 function duck(on){const L=window.Ljud;try{const o=MAT!=="rymd"?L&&L.ambient:L&&L.rymd,g=o&&o.g;if(g&&g.context)g.gain.setTargetAtTime(on?.16:(MAT!=="rymd"?1:.55),g.context.currentTime,.4);}catch(e){}}
 const VOICE_VER="20261054";/* ändra när röstfiler byts ut, så att webbläsare inte spelar gamla cachade filer */
-function voicePlay(si,ci){voiceStop();if(!V.on)return;const a=new Audio(V.base+"s"+si+"-"+(ci+1)+".mp3?v="+VOICE_VER);a.preload="auto";V.a=a;V.busy=true;
+function voicePlay(si,ci){voiceStop();if(!V.on)return;const a=new Audio(V.base+"s"+si+"-"+(ci+1)+".mp3?v="+VOICE_VER);a.preload="auto";rate(a);V.a=a;V.busy=true;
   const done=()=>{clearTimeout(V.t);if(V.a===a){V.busy=false;V.a=null;duck(false);}};a.onended=done;a.onerror=done;duck(true);
-  clearTimeout(V.t);V.t=setTimeout(done,16000);   // reservutgång: filmen får aldrig hänga om ljudet inte startar
+  clearTimeout(V.t);V.t=setTimeout(done,16000/fart());   // reservutgång: filmen får aldrig hänga om ljudet inte startar
   const p=a.play();if(p&&p.catch)p.catch(done);}
 
 /* ---------- Stjärnhimmel ---------- */
@@ -76,7 +81,7 @@ window.MPSvartHal={start(host,o){o=o||{};const D=o.def,SC=D?D.SC:SC0,M=Object.as
   root.innerHTML=`<canvas></canvas><div class="sh-cap"><div class="sh-kick"></div><div class="sh-txt"></div></div>
    <div class="sh-bar"><button class="sh-b" data-a="prev" aria-label="Förra scenen">⏮</button><button class="sh-b" data-a="play" aria-label="Pausa">⏸</button><button class="sh-b" data-a="next" aria-label="Nästa scen">⏭</button>
    <div class="sh-dots">${SC.map((s,i)=>`<button class="sh-dot" data-i="${i}" aria-label="${s.k}"><i></i></button>`).join("")}</div>
-   <button class="sh-b" data-a="voice" aria-label="Berättarröst av eller på">🗣 Röst</button><button class="sh-b" data-a="snd" aria-label="Ljud">🔊</button><button class="sh-b" data-a="fs" aria-label="Helskärm">⛶</button></div>
+   <button class="sh-b" data-a="fart" aria-label="Uppspelningshastighet">1×</button><button class="sh-b" data-a="voice" aria-label="Berättarröst av eller på">🗣 Röst</button><button class="sh-b" data-a="snd" aria-label="Ljud">🔊</button><button class="sh-b" data-a="fs" aria-label="Helskärm">⛶</button></div>
    ${o.overlay?'<button class="sh-b sh-x" data-a="close" aria-label="Stäng">✕</button>':""}
    <div class="sh-start"><div><h2>${M.titel}</h2><p>${M.under}</p><button class="sh-play" data-a="go">▶ Starta filmen</button>
    </div></div>`;
@@ -98,12 +103,13 @@ window.MPSvartHal={start(host,o){o=o||{};const D=o.def,SC=D?D.SC:SC0,M=Object.as
     if(!p){if(V.a){try{V.a.pause();}catch(e){}}}else if(was===false&&V.a){V.a.play().catch(()=>{V.busy=false;});}else if(p&&!V.a&&capShown>=0&&st<SC[si].d&&!V.busy){/* första starten eller efter hopp */voicePlay(si,capShown);}
     const L=snd();if(L){if(p&&L.on)matStart(L);else matStop(L);}}
   function finish(){playing=false;$('[data-a="play"]').textContent="▶";ended=true;voiceStop();document.dispatchEvent(new Event("mp-sh-slut"));const L=snd();if(L)matStop(L);
-    const e=document.createElement("div");e.className="sh-end";e.innerHTML=`<div><h2>${M.slutRubrik}</h2><p>${M.slutText}</p><button class="sh-play" data-a="again">${M.igen}</button>${(o.extra&&o.extra.length)?`<div class="sh-extras">${o.extra.map((x,i)=>`<button class="sh-play sh-ex${x.guld?" guld":""}" data-x="${i}">${x.t}</button>`).join("")}</div>`:""}</div>`;root.appendChild(e);if(V.on){const a=new Audio(V.base+"s"+SC.length+"-1.mp3?v="+VOICE_VER);V.a=a;V.busy=true;duck(true);const dn=()=>{if(V.a===a){V.busy=false;V.a=null;duck(false);}};a.onended=dn;a.onerror=dn;const p=a.play();if(p&&p.catch)p.catch(dn);}}
+    const e=document.createElement("div");e.className="sh-end";e.innerHTML=`<div><h2>${M.slutRubrik}</h2><p>${M.slutText}</p><button class="sh-play" data-a="again">${M.igen}</button>${(o.extra&&o.extra.length)?`<div class="sh-extras">${o.extra.map((x,i)=>`<button class="sh-play sh-ex${x.guld?" guld":""}" data-x="${i}">${x.t}</button>`).join("")}</div>`:""}</div>`;root.appendChild(e);if(V.on){const a=new Audio(V.base+"s"+SC.length+"-1.mp3?v="+VOICE_VER);rate(a);V.a=a;V.busy=true;duck(true);const dn=()=>{if(V.a===a){V.busy=false;V.a=null;duck(false);}};a.onended=dn;a.onerror=dn;const p=a.play();if(p&&p.catch)p.catch(dn);}}
   root.addEventListener("click",ev=>{const b=ev.target.closest("[data-a],[data-i],[data-x]");if(!b)return;if(b.dataset.x!=null){const ex=o.extra&&o.extra[+b.dataset.x];if(ex){cleanup();o.onClose&&o.onClose();ex.go();}return;}
     if(b.dataset.i!=null){if(!started)start();goto(+b.dataset.i);return;}
     const a=b.dataset.a;
     if(a==="go")start();else if(a==="again")goto(0);else if(a==="play"){if(!started)return start();if(ended)return goto(0);setPlay(!playing);}
     else if(a==="next"){if(!started)start();goto(si+1);}else if(a==="prev"){if(!started)start();goto(st>3?si:si-1);}
+    else if(a==="fart"){const n=FARTER[(FARTER.indexOf(fart())+1)%FARTER.length];try{localStorage.setItem("pluggparken-resa-fart",n);}catch(e){}window.dispatchEvent(new Event("mpfart"));}
     else if(a==="voice"){V.on=!V.on;$('[data-a="voice"]').classList.toggle("off",!V.on);if(!V.on)voiceStop();}
     else if(a==="snd"){const L=snd();if(L){L.set(!L.on);if(L.on&&playing)matStart(L);else matStop(L);document.dispatchEvent(new Event("mp-ljud-andrat"));}sndIcon();}
     else if(a==="fs"){const el=document.fullscreenElement;if(el)document.exitFullscreen();else (root.requestFullscreen||root.webkitRequestFullscreen||function(){}).call(root);}
@@ -113,7 +119,8 @@ window.MPSvartHal={start(host,o){o=o||{};const D=o.def,SC=D?D.SC:SC0,M=Object.as
   document.addEventListener("keydown",key);
   const vis=()=>{if(document.hidden&&playing)setPlay(false);};document.addEventListener("visibilitychange",vis);
   sndIcon();
-  function loop(now){if(!alive)return;raf=requestAnimationFrame(loop);const dt=Math.min(.12,(now-last)/1000);last=now;
+  const fartUI=()=>{if(!alive)return;$('[data-a="fart"]').textContent=fartTxt();if(V.a)rate(V.a);};fartUI();window.addEventListener("mpfart",fartUI);
+  function loop(now){if(!alive)return;raf=requestAnimationFrame(loop);const dt=Math.min(.12,(now-last)/1000)*fart();last=now;
     if(playing){const s=SC[si],nxt=s.cap[capShown+1];
       // filmen väntar in rösten: tiden står still vid nästa text och vid scenens slut tills repliken är klar
       const hold=V.on&&V.busy&&((nxt&&st+dt>=nxt[0])||(!nxt&&st+dt>=s.d));
@@ -269,7 +276,7 @@ window.MPSvartHal={start(host,o){o=o||{};const D=o.def,SC=D?D.SC:SC0,M=Object.as
   // hjälpmedel som en ny film (o.def) kan rita med
   const E={get x(){return x;},get W(){return W;},get H(){return H;},get dpr(){return dpr;},A,hole,planet,arrow,glowDot,label,tag,serif,font,eo,cl,lerp,ease,seg,TAU,get si(){return si;},bg};
   const SCN=D?D.scenes(E):SCN0;
-  function cleanup(){if(!alive)return;alive=false;cancelAnimationFrame(raf);voiceStop();const L=snd();if(L)matStop(L);document.removeEventListener("keydown",key);document.removeEventListener("visibilitychange",vis);if(ro)ro.disconnect();root.remove();}
+  function cleanup(){if(!alive)return;alive=false;cancelAnimationFrame(raf);voiceStop();const L=snd();if(L)matStop(L);document.removeEventListener("keydown",key);document.removeEventListener("visibilitychange",vis);window.removeEventListener("mpfart",fartUI);if(ro)ro.disconnect();root.remove();}
   root.__slut=()=>{if(!started)start();finish();};
   // för tester: hoppa till en scen och en tid
   root.__seek=(i,tt)=>{if(!started)start();goto(i,false);setPlay(false);voiceStop();st=tt;const c=SC[si].cap;let n=0;c.forEach((q,j)=>{if(tt>=q[0])n=j;});showCap(n);draw();};
