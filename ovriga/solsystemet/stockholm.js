@@ -75,7 +75,7 @@ async function open(cb,noAuto){onClose=cb||null;if(!ov&&!booting){booting=true;t
 /* berättelsen börjar här: Gamla stan → ut genom innerstaden, Stockholm, Sverige, Europa → jorden; sedan tar solsystemets berättelse över (done) */
 let T=null;
 function tAudio(file,cb){if(!(window.Ljud&&Ljud.on)){T.timer=true;const tk=()=>{if(!T||T.cb!==cb)return;if(T.paused)setTimeout(tk,500);else cb();};T.cb=cb;setTimeout(tk,6500);return;}
-  const a=new Audio('../../ljud/resa/'+file+'?v=3');T.aud=a;T.cb=cb;let d=false;const fin=()=>{if(d)return;d=true;if(T&&T.aud===a)T.aud=null;if(T&&T.cb===cb)cb();};a.onended=fin;a.onerror=()=>setTimeout(fin,4000);a.play().catch(()=>setTimeout(fin,4000));}
+  const a=new Audio('../../ljud/resa/'+file+'?v=4');T.aud=a;T.cb=cb;let d=false;const fin=()=>{if(d)return;d=true;if(T&&T.aud===a)T.aud=null;if(T&&T.cb===cb)cb();};a.onended=fin;a.onerror=()=>setTimeout(fin,4000);a.play().catch(()=>setTimeout(fin,4000));}
 function tStep(){if(!T)return;const i=T.i;T.target=i;sync(STEPS[i].z);tAudio('s'+(100+i)+'-1.mp3',()=>{if(!T)return;if(i===0){const d=T.done;endTour(true);if(d)d();close();return;}T.i=i-1;T.moving=true;tween(STEPS[i-1].z,Math.max(3200,Math.min(6500,Math.abs(STEPS[i].z-STEPS[i-1].z)*900)),()=>{if(T){T.moving=false;tStep();}});});}
 function endTour(keep){const was=!!T;if(T){if(T.aud){T.aud.onended=null;T.aud.pause();}T.cb=null;T=null;}const b=ov&&ov.querySelector('#mpsTour');if(b)b.hidden=true;return false&&was;}
 async function tour(done){await open(null,true);if(!ov||!map){if(ov)close();return false;}endTour();T={i:STEPS.length-1,done,paused:false};const b=ov.querySelector('#mpsTour');b.hidden=false;b.textContent='⏸ Pausa resan';

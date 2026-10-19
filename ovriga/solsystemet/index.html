@@ -542,7 +542,7 @@ function gUpd(dt){const ly=gLy();
 /* guidad resa med berättarröst */
 let tour=null;
 function tourEnd(done){if(!tour)return;clearInterval(tour.tm);clearTimeout(tour.to);if(tour.aud){tour.aud.onended=null;tour.aud.pause();}tour=null;gAuto=null;$('gTour').textContent='🎬 Guidad resa';$('gTour').setAttribute('aria-pressed','false');}
-function tourVoice(n,after){const t=tour;t.hl=STOP[n]||null;if(STOP[n])pingAt(STOP[n]);const fin=()=>{if(tour===t){t.hl=null;after();}};if(window.Ljud&&Ljud.on){const a=new Audio('../../ljud/resa/s'+n+'-1.mp3?v=3');t.aud=a;a.onended=fin;a.onerror=()=>{t.to=setTimeout(fin,6000)};a.play().catch(()=>{t.to=setTimeout(fin,6000)});}else t.to=setTimeout(fin,7000);}
+function tourVoice(n,after){const t=tour;t.hl=STOP[n]||null;if(STOP[n])pingAt(STOP[n]);const fin=()=>{if(tour===t){t.hl=null;after();}};if(window.Ljud&&Ljud.on){const a=new Audio('../../ljud/resa/s'+n+'-1.mp3?v=4');t.aud=a;a.onended=fin;a.onerror=()=>{t.to=setTimeout(fin,6000)};a.play().catch(()=>{t.to=setTimeout(fin,6000)});}else t.to=setTimeout(fin,7000);}
 function tourNext(){if(!tour)return;tour.i++;if(tour.i>=STOP.length){tourVoice(STOP.length,()=>{tourEnd();});return;}
   const to=STOP[tour.i].z,i=tour.i;gAuto=to===zT?null:{from:zT,to,t0:performance.now(),dur:Math.max(3200,Math.min(7500,Math.abs(to-zT)*38000))};
   clearInterval(tour.tm);tour.tm=setInterval(()=>{if(!tour)return;if(!gAuto&&Math.abs(zC-to)<.004){clearInterval(tour.tm);tourVoice(i,()=>{tour.to=setTimeout(tourNext,650);});}},120);}
