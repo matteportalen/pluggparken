@@ -94,6 +94,24 @@ dialog h3{margin:0 0 6px}
 dialog p{margin:6px 0}
 dialog small{color:var(--muted)}
 #gCard{position:fixed;right:12px;top:calc(124px + env(safe-area-inset-top,0px));width:min(310px,calc(100vw - 24px));padding:0;background:rgba(10,16,40,.74);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#E9EEFF;border-radius:16px;box-shadow:0 0 0 1px rgba(255,255,255,.14),0 10px 30px rgba(0,0,0,.4);max-height:42vh;overflow:auto;opacity:0;transform:translateX(14px)}
+/* Riktiga foton vid landmärkena i resan */
+#gFoto{position:fixed;left:12px;top:calc(124px + env(safe-area-inset-top,0px));width:min(260px,calc(100vw - 24px));margin:0;background:rgba(10,16,40,.74);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#E9EEFF;border-radius:16px;box-shadow:0 0 0 1px rgba(255,255,255,.14),0 10px 30px rgba(0,0,0,.4);overflow:hidden;opacity:0;transform:translateX(-16px) scale(.97);pointer-events:none;transition:opacity .6s,transform .6s;z-index:5}
+#gFoto.in{opacity:1;transform:none;pointer-events:auto}
+#gFoto .fi{display:block;width:100%;padding:0;border:0;background:#04060f;cursor:zoom-in;position:relative}
+#gFoto .fi img{display:block;width:100%;height:min(20vh,150px);object-fit:cover}
+#gFoto .fi::after{content:"🔍";position:absolute;right:8px;bottom:8px;font-size:.9rem;background:rgba(10,16,40,.7);border-radius:999px;padding:2px 7px}
+#gFoto .fx{position:absolute;top:6px;right:6px;z-index:2;width:28px;height:28px;border:0;border-radius:50%;background:rgba(10,16,40,.7);color:#fff;font-size:.8rem;cursor:pointer}
+#gFoto figcaption,#gLb figcaption{padding:8px 12px 10px;font-size:.84rem;line-height:1.3}
+#gFoto b,#gLb b{display:block;font:800 1rem/1.2 'Baloo 2',system-ui,sans-serif}
+#gFoto .ft,#gLb .ft{display:block;color:#CBD5F5;margin-top:2px}
+#gFoto .fk,#gLb .fk{display:block;font-style:normal;font-size:.7rem;color:#8FA0D8;margin-top:5px}
+#gLb{position:fixed;inset:0;z-index:30;background:rgba(2,4,12,.92);display:flex;align-items:center;justify-content:center;padding:16px;cursor:zoom-out}
+#gLb figure{margin:0;max-width:min(94vw,1100px);text-align:center}
+#gLb img{max-width:100%;max-height:72vh;border-radius:10px;box-shadow:0 10px 50px rgba(0,0,0,.6)}
+#gLb figcaption{color:#E9EEFF;font-size:.95rem}#gLb a{color:#9FC0FF;font-size:.8rem;display:inline-block;margin-top:6px}
+#gLb .lx{position:absolute;top:calc(12px + env(safe-area-inset-top,0px));right:14px;width:42px;height:42px;border:0;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;font-size:1.1rem;cursor:pointer}
+@media (orientation:landscape) and (max-height:520px){#gFoto{top:calc(52px + env(safe-area-inset-top,0px));left:10px;width:min(190px,30vw)}#gFoto .fi img{height:90px}#gFoto .ft{display:none}}
+@media (max-width:700px) and (orientation:portrait){#gFoto{top:calc(232px + env(safe-area-inset-top,0px));left:auto;right:10px;width:140px}#gFoto .fi img{height:88px}#gFoto .ft,#gFoto .fk{display:none}#gFoto figcaption{padding:5px 9px 7px}#gFoto b{font-size:.78rem;overflow-wrap:anywhere}}
 #gCard.in{opacity:1;transform:none;transition:opacity .5s,transform .5s}
 #gCard .ghead{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;border:0;background:none;color:inherit;font:800 1.05rem/1.2 'Baloo 2',system-ui,sans-serif;text-align:left;padding:10px 14px;cursor:pointer}
 #gCard .ghead i{font-style:normal;opacity:.7;font-size:.95rem}#gCard .ghead:hover i{opacity:1}
@@ -152,6 +170,8 @@ dialog small{color:var(--muted)}
 <!-- Zooma ut till Vintergatan -->
 <section id="galaxy" class="screen" hidden>
   <div id="gWarp"></div>
+  <figure id="gFoto" hidden><button class="fx" id="gFotoX" aria-label="Dölj bilden">✕</button><button class="fi" id="gFotoI" aria-label="Förstora bilden"><img alt=""></button><figcaption><b></b><span class="ft"></span><em class="fk"></em></figcaption></figure>
+  <div id="gLb" hidden><button class="lx" aria-label="Stäng">✕</button><figure><img alt=""><figcaption><b></b><span class="ft"></span><em class="fk"></em><a target="_blank" rel="noopener">Källa och licens ↗</a></figcaption></figure></div>
   <div class="ui top"><button class="back" id="gBack">← Solsystemet</button><span class="chip" id="gDist"></span><button class="chip tourb" id="gTour">🎬 Guidad resa</button><button class="chip fartb" id="gSpd" title="Hastighet på resan" aria-label="Hastighet på resan">1×</button><span class="hint">Dra för att vrida. Scrolla, nyp eller använd reglaget för att zooma.</span><span class="scl" id="gScale"><i></i><b></b></span></div>
   <div class="ui bottom">
     <div class="lmb" id="gLM" hidden></div>
@@ -598,7 +618,31 @@ function pingFrame(dt){if(!pingStop){if(PING.visible){PING.visible=false;PDOT.vi
   const dz=dOf(zC),ph=(pingT%1.8)/1.8,env=sst(0,.25,pingT)*(1-sst(3.1,3.6,pingT)),pos=pingStop.tgtPing?pingStop.tgtPing():pingStop.tgt?pingStop.tgt():controls.target,pk=pingStop.pingK||1;
   PING.visible=PDOT.visible=true;PING.position.copy(pos);PDOT.position.copy(pos);PING.scale.setScalar(dz*(.04+ph*.16)*pk);PING.material.opacity=(1-ph)*.95*env;PDOT.scale.setScalar(dz*.016*pk);PDOT.material.opacity=(.55+.45*Math.sin(pingT*5))*env;}
 function mkHw(){const T=STOP.filter(t=>t.tgt);T.forEach(t=>{let g=1;T.forEach(u=>{if(u!==t)g=Math.min(g,Math.abs(u.z-t.z));});t.hw=Math.max(.006,Math.min(t.hw||.022,g*.8));});}
-function mkFrame(dt){hlTime+=dt;pingFrame(dt);MKS.forEach(t=>{const o=1-sst(.012,.055,Math.abs(zC-t.z)),G=t.obj;G.g.visible=o>.01&&mode==='galaxy';if(!G.g.visible)return;G.mats.forEach(([m,b])=>m.opacity=b*o);
+/* Foton vid landmärkena: ett glaskort tonas in när rösten (eller man själv) är vid landmärket */
+const FOTON={'Voyager 1':['foton/voyager.jpg','Så tänker sig konstnären Voyager 1','Sonden åkte iväg 1977 och är nu längre bort än något annat vi skickat.','NASA/JPL-Caltech','Public domain','konst','An_artist%E2%80%99s_concept_of_the_Voyager_spacecraft.jpg'],
+ 'Oortmolnets inre kant':['foton/oort.jpg','Oortmolnet och Kuiperbältet','Konstnärlig bild: ett jättelikt klot av isbitar runt hela solsystemet.','NASA/ESA och A. Feild (STScI)','Public domain','konst','Relationship_of_the_Kuiper_Belt_to_the_Oort_Cloud_(opo0204i).jpg'],
+ 'Alfa Centauri':['../../specialare/bilder/storlek-13.jpg','Himlen kring Alfa Centauri','De två ljusa stjärnorna längst ner är Alfa Centauri. Den lilla röda Proxima är närmast oss.','ESO och Digitized Sky Survey 2','CC BY 4.0','','The_sky_around_Alpha_Centauri_and_Proxima_Centauri_(eso1629i).jpg'],
+ 'Sirius':['foton/sirius.jpg','Sirius A och lilla Sirius B','Hubble såg den ljusa stjärnan och den lilla vita dvärgen bredvid.','NASA, ESA, H. Bond (STScI) och M. Barstow (Univ. of Leicester)','Public domain','','The_Dog_Star,_Sirius_A,_and_its_tiny_companion_(heic0516a).tiff'],
+ 'Sjustjärnorna':['foton/plejaderna.jpg','Plejaderna, Sjustjärnorna','Unga blå stjärnor omgivna av gasmoln. Foto från Hubble.','NASA, ESA, AURA/Caltech och Palomar Observatory','Public domain','','Pleiades_large.jpg'],
+ 'Orionnebulosan':['foton/orion.jpg','Orionnebulosan','Här föds nya stjärnor i ett moln av gas. Foto från Hubble.','NASA, ESA och M. Robberto (STScI/ESA)','Public domain','','Orion_Nebula_-_Hubble_2006_mosaic.jpg'],
+ 'Sagittarius A*':['foton/sgra.jpg','Vintergatans svarta hål','Den första bilden av Sagittarius A*, tagen 2022 av teleskop över hela jorden. Ljusringen är het gas runt hålet.','EHT Collaboration','CC BY 4.0','','Sag_A*.jpg'],
+ 'Magellanska molnen':['foton/magellan.jpg','Magellanska molnen','De två ljusa fläckarna är dvärggalaxer som kretsar kring Vintergatan.','Y. Beletsky (LCO) och D. Martinez-Delgado/ESO','CC BY 4.0','','Deep_View_of_the_Large_and_Small_Magellanic_Clouds.jpg'],
+ 'Andromeda':['foton/andromeda.jpg','Andromedagalaxen','Vår närmaste stora grannegalax, med hundratals miljarder stjärnor.','Adam Evans','CC BY 2.0','','Andromeda_Galaxy_(with_h-alpha).jpg'],
+ 'Virgohopen':['foton/virgo.jpg','Virgohopen','En del av en hop med över tusen galaxer. Varje ljusfläck är en hel galax.','NOIRLab/NSF/AURA','CC BY 4.0','','Cluster_of_galaxies_in_Virgo_(noao-virgo).jpg'],
+ 'Den stora attraktorn':['../../specialare/bilder/rl-laniakea.jpg','Laniakea, vårt superhopområde','Konstnärlig karta: galaxerna flödar mot Den stora attraktorn.','Ivanov','CC BY-SA 4.0','konst','Laniakea_with_Galaktika.jpg'],
+ 'Sloanmuren':['foton/natet.jpg','Det kosmiska nätet','Beräknad karta: galaxerna ligger längs trådar i ett jättelikt nät. Sloanmuren är en av de största trådarna.','NASA, ESA och J. Burchett och O. Elek (UC Santa Cruz)','CC BY 4.0','sim','Map_of_the_Cosmic_Web_Generated_from_Slime_Mould_Algorithm.jpg']};
+let fotoNu=null,fotoDold=null;
+const fotoEl=$('gFoto');
+function fotoVisa(k){const f=FOTON[k];if(!f)return;const im=fotoEl.querySelector('img');im.src=f[0];im.alt=f[1];fotoEl.querySelector('b').textContent=f[1];fotoEl.querySelector('.ft').textContent=f[2];
+  fotoEl.querySelector('.fk').textContent='Bild: '+f[3]+' · '+f[4]+' · Wikimedia Commons'+(f[5]==='konst'?' · konstnärlig bild':f[5]==='sim'?' · beräknad karta':'');fotoEl.hidden=false;void fotoEl.offsetWidth;fotoEl.classList.add('in');}
+function fotoFrame(){let a=null,bd=9;if(mode==='galaxy'&&showNames)for(const t of STOP){if(!t.k||!FOTON[t.k])continue;if(tour){if(tour.hl===t)a=t.k;}else{const d=Math.abs(zC-t.z);if(d<.02&&d<bd){bd=d;a=t.k;}}}
+  if(a===fotoNu)return;fotoNu=a;if(a!==fotoDold)fotoDold=null;
+  if(a&&a!==fotoDold)fotoVisa(a);else fotoEl.classList.remove('in');}
+$('gFotoX').onclick=e=>{e.stopPropagation();fotoDold=fotoNu;fotoEl.classList.remove('in');};
+function lbOpen(){const f=FOTON[fotoNu||fotoDold];if(!f)return;const L=$('gLb');L.querySelector('img').src=f[0];L.querySelector('b').textContent=f[1];L.querySelector('.ft').textContent=f[2];
+  L.querySelector('.fk').textContent='Bild: '+f[3]+' · '+f[4]+(f[5]==='konst'?' · konstnärlig bild':f[5]==='sim'?' · beräknad karta':'');L.querySelector('a').href='https://commons.wikimedia.org/wiki/File:'+f[6];L.hidden=false;}
+$('gFotoI').onclick=lbOpen;$('gLb').onclick=e=>{if(e.target.tagName!=='A')$('gLb').hidden=true;};
+function mkFrame(dt){hlTime+=dt;pingFrame(dt);fotoFrame();MKS.forEach(t=>{const o=1-sst(.012,.055,Math.abs(zC-t.z)),G=t.obj;G.g.visible=o>.01&&mode==='galaxy';if(!G.g.visible)return;G.mats.forEach(([m,b])=>m.opacity=b*o);
   const want=showNames&&((tour&&tour.hl===t)||(!tour&&Math.abs(zC-t.z)<.02))?1:0;G.f+=(want-G.f)*Math.min(1,dt*1.8);
   if(G.halo)G.halo.material.opacity=G.f*o*(.2+.05*Math.sin(hlTime*2.2));if(t.line)t.line.material.opacity=G.f*o*.55;
   G.g.children.forEach(c=>{if(c.userData.spin)c.material.rotation+=dt*.35;});});}
@@ -683,7 +727,7 @@ canvas.addEventListener('pointerup',()=>{ovLast=0;});
 $('gBack').onclick=()=>{tourEnd();gAuto=null;goHome();};
 $('gNames').onclick=()=>{showNames=!showNames;$('gNames').setAttribute('aria-pressed',showNames);$('names').setAttribute('aria-pressed',showNames);};
 $('gAbout').onclick=()=>$('aboutDlg').showModal();
-addEventListener('keydown',e=>{if(e.key==='Escape'&&mode==='galaxy'&&!gMin){gMin=true;gCardDraw();}});
+addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('gLb').hidden){$('gLb').hidden=true;e.stopImmediatePropagation();return;}if(e.key==='Escape'&&mode==='galaxy'&&!gMin){gMin=true;gCardDraw();}});
 
 /* tips: vrid mobilen på tvären (bilden blir större) */
 const rotHint=document.createElement('div');rotHint.style.cssText='position:fixed;left:50%;top:calc(112px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:30;background:rgba(10,16,40,.92);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:7px 14px;font:700 .85rem "Baloo 2",system-ui,sans-serif;display:none;gap:10px;align-items:center;white-space:nowrap';rotHint.innerHTML='📱 Vrid mobilen på tvären <button style="border:0;background:none;color:#fff;font-size:1rem;cursor:pointer" aria-label="Stäng">✕</button>';document.body.appendChild(rotHint);
