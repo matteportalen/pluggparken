@@ -70,7 +70,11 @@ async function build(){
   map.on('dragstart',()=>{if(!T)cancelAnimationFrame(rafT);});
 }
 function msg(t){const m=ov&&ov.querySelector('#mpsMsg');if(m){m.dataset.err='1';m.style.display='grid';m.textContent=t;}}
-async function open(cb,noAuto){onClose=cb||null;if(!ov&&!booting){booting=true;try{await build();}catch(e){booting=false;if(!ov){const st=document.createElement('style');st.textContent=css;document.head.appendChild(st);}msg('Kartan behöver internet. Kontrollera uppkopplingen och försök igen.');}booting=false;}
+async function ensure(){while(booting)await new Promise(r=>setTimeout(r,50));if(!ov&&!booting){booting=true;try{await build();}catch(e){booting=false;if(!ov){const st=document.createElement('style');st.textContent=css;document.head.appendChild(st);}msg('Kartan behöver internet. Kontrollera uppkopplingen och försök igen.');}booting=false;}}
+/* inzoomning från den 3D-ritade jorden: kartan förbereds dolt, tonas in över jorden (jorden i solsystemet och kartklotet har samma storlek) och zoomar sedan in mot skolan */
+async function openIn(){onClose=null;await ensure();if(!ov||!map)return false;ov.hidden=false;ov.style.transition='opacity 1.7s cubic-bezier(.45,0,.55,1)';map.resize();setZ(1.1);requestAnimationFrame(()=>ov.classList.add('on'));document.body.style.overflow='hidden';setTimeout(()=>{if(ov)ov.style.transition='';},1800);return true;}
+function zoomIn(){if(!map||!ov)return;const m=ov.querySelector('#mpsMap');m.style.transform='';map.setMinZoom(0.8);tween(9.4,6500/rate());}
+async function open(cb,noAuto){onClose=cb||null;await ensure();
   if(!ov)return;ov.hidden=false;requestAnimationFrame(()=>ov.classList.add('on'));document.body.style.overflow='hidden';
   if(map){map.resize();if(noAuto)setZ(ZMAX);else{setZ(1.1);setTimeout(()=>tween(9.4,6500),900);}}}
 /* berättelsen börjar här: Gamla stan → ut genom innerstaden, Stockholm, Sverige, Europa → jorden; sedan tar solsystemets berättelse över (done) */
@@ -90,5 +94,5 @@ function close(){endTour();if(!ov)return;cancelAnimationFrame(rafT);const slow=!
   if(slow){ov.style.transition='opacity '+ms+'ms cubic-bezier(.45,0,.55,1)';ov.classList.add('xfade');}ov.classList.remove('on');
   setTimeout(()=>{ov.hidden=true;document.body.style.overflow='';ov.style.transition='';ov.classList.remove('xfade');const m=ov.querySelector('#mpsMap');m.style.transform='';if(map)map.setMinZoom(0.8);},ms+80);if(onClose)onClose();}
 function follow(z,dx,dy){if(!map||!ov||ov.hidden)return;map.setMinZoom(0);map.jumpTo({zoom:Math.max(0,z)});const m=ov.querySelector('#mpsMap');m.style.transform=`translate(${dx.toFixed(1)}px,${dy.toFixed(1)}px)`;}
-window.MPStockholm={open,close,tour,follow,view(){if(!map)return null;const c=map.getCenter();return{z:map.getZoom(),lng:c.lng,lat:c.lat};},get isOpen(){return !!ov&&!ov.hidden}};
+window.MPStockholm={open,close,tour,follow,openIn,zoomIn,prepare:()=>ensure(),view(){if(!map)return null;const c=map.getCenter();return{z:map.getZoom(),lng:c.lng,lat:c.lat};},get isOpen(){return !!ov&&!ov.hidden}};
 })();
