@@ -63,6 +63,7 @@ button:focus-visible{outline:3px solid #FFC93C;outline-offset:2px}
 .card .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
 .card[hidden]{display:none}.card .cx{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;border:0;background:#E8EEFB;color:#1D2B53;font:800 15px/1 'Baloo 2',system-ui,sans-serif;cursor:pointer;display:grid;place-items:center}.card .cx:hover,.card .cx:focus-visible{background:#C9D6F5;outline:2px solid #3D5AFE}.card h2{padding-right:36px}
 .screen.xf .ui{animation:xfade .9s ease both}@keyframes xfade{from{opacity:0}to{opacity:1}}@media (prefers-reduced-motion:reduce){.screen.xf .ui{animation:none}}
+.chip.skipb{cursor:pointer;border:0;color:#fff;font-family:inherit;background:rgba(10,16,40,.74);pointer-events:auto;text-align:center}
 .chip.fartb{cursor:pointer;border:0;color:#fff;font-family:inherit;background:rgba(10,16,40,.74);pointer-events:auto;min-width:46px;text-align:center}
 .chip.tourb{cursor:pointer;border:0;color:#fff;font-family:inherit;background:linear-gradient(135deg,#7A5CFF,#3D5AFE);pointer-events:auto}.chip.tourb[aria-pressed=true]{background:#E5484D}
 .scl{position:relative;z-index:7;display:flex;flex-direction:column;align-items:flex-start;gap:2px;font-weight:800;font-size:.8rem;color:#C9D4F2;background:var(--glass);border-radius:10px;padding:4px 10px}.scl i{display:block;height:6px;border:2px solid #fff;border-top:0;box-sizing:border-box;width:100px;transition:width .15s}.scl b{font-weight:800}
@@ -172,7 +173,7 @@ dialog small{color:var(--muted)}
   <div id="gWarp"></div>
   <figure id="gFoto" hidden><button class="fx" id="gFotoX" aria-label="Dölj bilden">✕</button><button class="fi" id="gFotoI" aria-label="Förstora bilden"><img alt=""></button><figcaption><b></b><span class="ft"></span><em class="fk"></em></figcaption></figure>
   <div id="gLb" hidden><button class="lx" aria-label="Stäng">✕</button><figure><img alt=""><figcaption><b></b><span class="ft"></span><em class="fk"></em><a target="_blank" rel="noopener">Källa och licens ↗</a></figcaption></figure></div>
-  <div class="ui top"><button class="back" id="gBack">← Solsystemet</button><span class="chip" id="gDist"></span><button class="chip tourb" id="gTour">🎬 Guidad resa</button><button class="chip fartb" id="gSkip" hidden title="Snabbspola till nästa del av berättelsen">⏭ Nästa del</button><button class="chip fartb" id="gSpd" title="Hastighet på resan" aria-label="Hastighet på resan">1×</button><span class="hint">Dra för att vrida. Scrolla, nyp eller använd reglaget för att zooma.</span><span class="scl" id="gScale"><i></i><b></b></span></div>
+  <div class="ui top"><button class="back" id="gBack">← Solsystemet</button><span class="chip" id="gDist"></span><button class="chip tourb" id="gTour">🎬 Guidad resa</button><button class="chip skipb" id="gSkip" hidden title="Snabbspola till nästa del av berättelsen">⏭ Nästa del</button><button class="chip fartb" id="gSpd" title="Hastighet på resan" aria-label="Hastighet på resan">1×</button><span class="hint">Dra för att vrida. Scrolla, nyp eller använd reglaget för att zooma.</span><span class="scl" id="gScale"><i></i><b></b></span></div>
   <div class="ui bottom">
     <div class="lmb" id="gLM" hidden></div>
     <div class="card" id="gCard"></div>
@@ -391,7 +392,7 @@ function openEarth(){focus=earth;show('earth');controls.minDistance=1.6;
 addEventListener('keydown',e=>{if(e.key==='Escape'&&mode==='planet'&&!$('pCard').hidden){$('pCard').hidden=true}});
 /* Zooma in från jorden ända till Stockholm (kartvy med MapLibre, stockholm.js laddas först när den behövs) */
 let stIn=0,stLoad=null;
-function openStockholm(){if(!stLoad)stLoad=new Promise((res,rej)=>{const sc=document.createElement('script');sc.src='stockholm.js?v=13';sc.onload=res;sc.onerror=rej;document.head.appendChild(sc);});stLoad.then(()=>{if(mode==='earth'&&!xin&&!xf&&!matchMedia('(prefers-reduced-motion:reduce)').matches)earthZoomIn();else window.MPStockholm.open();},()=>{alert('Kartan kunde inte laddas. Kontrollera uppkopplingen.');stLoad=null;});}
+function openStockholm(){if(!stLoad)stLoad=new Promise((res,rej)=>{const sc=document.createElement('script');sc.src='stockholm.js?v=14';sc.onload=res;sc.onerror=rej;document.head.appendChild(sc);});stLoad.then(()=>{if(mode==='earth'&&!xin&&!xf&&!matchMedia('(prefers-reduced-motion:reduce)').matches)earthZoomIn();else window.MPStockholm.open();},()=>{alert('Kartan kunde inte laddas. Kontrollera uppkopplingen.');stLoad=null;});}
 $('eSthlm').onclick=openStockholm;
 canvas.addEventListener('wheel',e=>{if(mode==='earth'&&e.deltaY<0&&!fly&&camera.position.distanceTo(controls.target)<controls.minDistance*1.06){stIn-=e.deltaY;if(stIn>380){stIn=0;openStockholm();}}else stIn=0;},{passive:true});
 $('pBack').onclick=goHome;$('eBack').onclick=goHome;
@@ -739,7 +740,7 @@ function goGalZoom(to){tourEnd();gAuto={from:zT,to,t0:performance.now(),dur:Math
 $('toGal').onclick=()=>openGalaxy(true);
 function startStory(){const go=()=>{openGalaxy(false);tourStartAt(0);};
   const goMap=()=>{const v=(window.MPStockholm.view&&window.MPStockholm.view())||{z:1.1,lng:16,lat:38};if(matchMedia('(prefers-reduced-motion:reduce)').matches||!earth){go();return;}window.MPStockholm.slowClose=true;openGalaxy(false);earthPullback(v);tourStartAt(0);};
-  if(!stLoad)stLoad=new Promise((res,rej)=>{const sc=document.createElement('script');sc.src='stockholm.js?v=13';sc.onload=res;sc.onerror=rej;document.head.appendChild(sc);});
+  if(!stLoad)stLoad=new Promise((res,rej)=>{const sc=document.createElement('script');sc.src='stockholm.js?v=14';sc.onload=res;sc.onerror=rej;document.head.appendChild(sc);});
   stLoad.then(()=>window.MPStockholm.tour(goMap)).then(ok=>{if(ok===false)go();},()=>{stLoad=null;go();});}
 $('hTour').onclick=startStory;window.MPStory={start:startStory};
 $('gSpd').onclick=()=>{const n=FARTER[(FARTER.indexOf(rSpd)+1)%FARTER.length];try{localStorage.setItem('pluggparken-resa-fart',n);}catch(e){}window.dispatchEvent(new Event('mpfart'));};
