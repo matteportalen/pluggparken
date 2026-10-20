@@ -73,13 +73,19 @@ h1{font-size:1.9rem;margin:8px 0 2px;display:flex;align-items:center;gap:10px}
 .snurr{animation:spin 1s linear infinite;transform-box:fill-box;transform-origin:center}
 .blink{animation:blink 1.2s ease-in-out infinite}
 .gung{animation:bob 1.6s ease-in-out infinite;transform-box:fill-box}
+@keyframes zz{0%{opacity:0;transform:translate(0,6px)}25%{opacity:1}100%{opacity:0;transform:translate(12px,-22px)}}
+@keyframes intill{0%{transform:translate(-110px,44px);opacity:0}15%{opacity:1}55%{transform:translate(-44px,-36px)}100%{transform:translate(0,0)}}
+@keyframes vagga{0%,100%{transform:rotate(-2.2deg)}50%{transform:rotate(2.2deg)}}
+.zz{font-weight:800;fill:#fff;stroke:#1D2B53;stroke-width:.8px;paint-order:stroke;font-family:var(--font);animation:zz 3s ease-in-out infinite;transform-box:fill-box;pointer-events:none}
+.intill{animation:intill .8s ease-in-out}
+.vagga{animation:vagga 3.4s ease-in-out infinite;transform-origin:325px 112px}
 @media (prefers-reduced-motion:reduce){*{animation:none !important}}
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1><span aria-hidden="true">🏠</span>Mitt rum</h1>
-  <p class="lead" id="lead">Här bor ditt djur. Tryck på sakerna i rummet!</p>
+  <p class="lead" id="lead">Här bor ditt djur. Tryck på sakerna i rummet, och på sängen när det är dags att sova!</p>
   <div class="room" id="room"></div>
   <div class="bar"><span class="mynt" id="mynt">🪙 0</span><button class="inred" id="inred" aria-pressed="false">🛒 Inred</button></div>
   <div class="panel" id="panel" hidden>
@@ -206,19 +212,43 @@ function husdjur(id,pa){
   if(id==="spoke")return`<g data-fx="husdjur"><g class="gung"><path d="M334 262 V236 Q334 214 350 214 Q366 214 366 236 V262 l-5 -5 l-5 5 l-6 -5 l-6 5 l-5 -5z" fill="#fff" stroke="#D5DDEC" stroke-width="2"/><ellipse cx="344" cy="234" rx="3" ry="4" fill="${INK}"/><ellipse cx="356" cy="234" rx="3" ry="4" fill="${INK}"/><ellipse cx="350" cy="245" rx="4" ry="${pa?5:3}" fill="${INK}"/></g></g>`;
   if(id==="kyckling")return`<g data-fx="husdjur"><g class="${pa?"gung":""}"><ellipse cx="350" cy="262" rx="15" ry="13" fill="#FFD84D"/><circle cx="350" cy="240" r="11" fill="#FFD84D"/><circle cx="346" cy="238" r="1.8" fill="${INK}"/><circle cx="354" cy="238" r="1.8" fill="${INK}"/><path d="M347 243 h6 l-3 4z" fill="#FF9F43"/><path d="M336 260 q-6 -2 -4 6" stroke="#E8B820" stroke-width="2" fill="none"/><path d="M344 275 v4 M356 275 v4" stroke="#FF9F43" stroke-width="2"/></g></g>`;
   return"";}
+/* Djuret sover i sängen (tryck på sängen). Sparas inte: nästa gång är det uppe igen. */
+let sover=false,nySov=false;
+const SENG={enkel:{cx:301,cy:137,c:"#3D8BFD",e:"#2A6FD6",b:[308,124,392,206]},himmel:{cx:301,cy:137,c:"#7B61FF",e:"#5A44D6",b:[308,124,392,206]},
+  raket:{cx:304,cy:150,c:"#3D8BFD",e:"#2A6FD6",b:[312,134,374,200]},hangmatta:{cx:318,cy:128,c:"#FF9F43",e:"#D97A1E",b:null}};
+function ligger(bed,cfg){
+  const g=SENG[bed]||SENG.enkel;
+  let s=owlSVG(Object.assign({},cfg,{back:"ingen",hand:"ingen",glasses:"inga"})).replace(/^<svg[^>]*>/,"").replace(/<\/svg>$/,"").replace(/<ellipse cx="60" cy="112"[^>]*\/>/,"");
+  if((cfg.animal||"uggla")==="robot")s=s.replace(/fill="#7CF0B1"/g,'fill="#1D2B53"');
+  else s=s.replace(/<circle cx="(42|78)" cy="50" r="\d+" fill="#fff"\/>/g,"").replace(/<circle cx="(45|75)" cy="52" r="7" fill="#1D2B53"\/>/g,"").replace(/<circle cx="(47\.5|77\.5)" cy="49\.5" r="2\.4" fill="#fff"\/>/g,"")+`<path d="M32 51 Q42 60 52 51 M68 51 Q78 60 88 51" stroke="#1D2B53" stroke-width="3.5" stroke-linecap="round" fill="none"/>`;
+  const djur=`<g transform="translate(${g.cx} ${g.cy}) rotate(-90) scale(.65) translate(-60 -63)">${s}</g>`;
+  let filt;
+  if(g.b){const[x0,y0,x1,y1]=g.b;
+    filt=`<path d="M${x0} ${y0+12} Q${x0} ${y0} ${x0+12} ${y0} H${x1-10} Q${x1} ${y0} ${x1} ${y0+10} V${y1} H${x0} Z" fill="${g.c}" stroke="${g.e}" stroke-width="2"/><path d="M${x0+8} ${y0+16} H${x1-8} M${x0+8} ${y0+30} H${x1-8}" stroke="rgba(255,255,255,.55)" stroke-width="4" stroke-linecap="round"/>`;}
+  else filt=`<path d="M304 146 Q326 150 374 130 L380 144 Q340 194 306 176 Z" fill="${g.c}" stroke="${g.e}" stroke-width="2"/><path d="M312 158 Q338 164 372 142" stroke="rgba(255,255,255,.55)" stroke-width="4" fill="none" stroke-linecap="round"/>`;
+  const zx=g.cx-30,zy=g.cy-26;
+  const zz=[[0,12],[.9,15],[1.8,19]].map(([d,fs],i)=>`<text class="zz" x="${zx+i*9}" y="${zy-i*11}" font-size="${fs}" style="animation-delay:${d}s">z</text>`).join("");
+  return{djur,filt,zz};
+}
 function draw(){const v=vis(),cfg=window.lasDjur?lasDjur():{},fx=data.fx;
   const djur=window.owlSVG?owlSVG(cfg).replace(/^<svg[^>]*>/,"").replace(/<\/svg>$/,""):"";
-  $("room").innerHTML=`<svg viewBox="0 0 400 300" role="img" aria-label="Mitt rum">${tapet(v.tapet)}${golv(v.golv)}${fonster(v.fonster,fx.gardin)}${tavla(v.tavla,cfg)}${hylla(v.hylla)}${vaxt(v.vaxt)}${sang(v.sang)}${matta(v.matta)}
-    <g data-fx="djur" id="djurG"><g transform="translate(166 162) scale(.62)">${djur}</g></g>${husdjur(v.husdjur,fx.hus)}${tak(v.tak,fx.lampa)}
-    ${v.tak!=="inget"&&!fx.lampa?`<rect width="400" height="300" fill="#0E1735" opacity=".25" pointer-events="none"/>`:""}</svg>`;
+  const lig=sover&&window.owlSVG?ligger(v.sang,cfg):null;
+  const ligG=lig?`<g class="${nySov?"intill":""}" data-fx="djur" id="djurG">${lig.djur}${lig.filt}</g>`:"";
+  const bedLayer=lig&&v.sang==="hangmatta"?`<g class="vagga">${sang(v.sang)}${ligG}</g>`:sang(v.sang);
+  const djurLayer=lig?(v.sang==="hangmatta"?"":ligG)+lig.zz:`<g data-fx="djur" id="djurG"><g transform="translate(166 162) scale(.62)">${djur}</g></g>`;
+  $("room").innerHTML=`<svg viewBox="0 0 400 300" role="img" aria-label="Mitt rum">${tapet(v.tapet)}${golv(v.golv)}${fonster(v.fonster,fx.gardin)}${tavla(v.tavla,cfg)}${hylla(v.hylla)}${vaxt(v.vaxt)}${bedLayer}${matta(v.matta)}
+    ${djurLayer}${husdjur(v.husdjur,fx.hus)}${tak(v.tak,fx.lampa)}
+    ${sover||(v.tak!=="inget"&&!fx.lampa)?`<rect width="400" height="300" fill="#0E1735" opacity=".25" pointer-events="none"/>`:""}</svg>`;
   const m=MPMynt.get();$("mynt").textContent=`🪙 ${m.m} mynt`;}
 // tryck på saker i rummet
 $("room").addEventListener("click",e=>{const g=e.target.closest("[data-fx]");if(!g)return;const f=g.dataset.fx,L=window.Ljud;
   if(f==="gardin"){data.fx.gardin=!data.fx.gardin;save();draw();L&&L.whoosh&&L.whoosh();return;}
-  if(f==="lampa"){data.fx.lampa=!data.fx.lampa;save();draw();L&&L.pop&&L.pop();return;}
+  if(f==="lampa"){data.fx.lampa=!data.fx.lampa;if(data.fx.lampa)sover=false;save();draw();L&&L.pop&&L.pop();return;}
+  if(f==="sang"){sover=!sover;nySov=sover;draw();nySov=false;if(sover)L&&L.chime&&L.chime();else{L&&L.hop&&L.hop();const d=$("djurG");if(d)d.classList.add("hopp");}return;}
   if(f==="husdjur"){data.fx.hus=!data.fx.hus;save();draw();L&&L.chirp&&L.chirp();return;}
   if(f==="pumpor"){data.fx.pumpa=data.fx.pumpa===false;save();draw();L&&L.pop&&L.pop();return;}
   if(f==="fisk"){g.querySelectorAll(".fisk").forEach(x=>{x.classList.add("fort");setTimeout(()=>x.classList.remove("fort"),2500);});L&&L.pop&&L.pop();return;}
+  if(f==="djur"&&sover){sover=false;draw();L&&L.hop&&L.hop();const d=$("djurG");if(d)d.classList.add("hopp");return;}
   if(f==="djur"){const d=$("djurG");d.classList.remove("hopp");void d.getBBox();d.classList.add("hopp");L&&L.hop&&L.hop();return;}
   g.classList.remove("sway");void g.getBBox();g.classList.add("sway");L&&L.pop&&L.pop();});
 
