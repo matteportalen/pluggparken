@@ -282,6 +282,43 @@ const keyHat=(k,...body)=>ch(bl("event_key",{KEY:k}),...body);
 const chx=n=>bl("motion_chx",{},{X:iN(n)}),chy=n=>bl("motion_chy",{},{Y:iN(n)});
 const forever=(...body)=>bl("ctrl_forever",{},{DO:{block:ch(...body)}});
 const D0=-180;
+const VR=n=>({id:"g_"+encodeURIComponent(n)});
+const WSV=(vars,...st)=>Object.assign(WS(...st),{variables:vars.map(n=>({name:n,id:"g_"+encodeURIComponent(n)}))});
+const Bk=b=>({block:b});
+const asIn=v=>typeof v==="string"?iT(v):typeof v==="number"?iN(v):v;
+const setv=(n,v)=>bl("variables_set",{VAR:VR(n)},{VALUE:asIn(v)});
+const getv=n=>Bk(bl("variables_get",{VAR:VR(n)}));
+const chv=(n,d)=>bl("math_change",{VAR:VR(n)},{DELTA:asIn(d)});
+const sayb=t=>bl("look_say",{},{TEXT:asIn(t)});
+const sayf=(t,sec)=>bl("look_sayfor",{},{TEXT:asIn(t),SECS:iN(sec)});
+const vant=sec=>bl("ctrl_wait",{},{SECS:iN(sec)});
+const ljud=n=>bl("sound_play",{S:n});
+const iff=(c,...body)=>bl("ctrl_if",{},{IF:Bk(c),DO:Bk(ch(...body))});
+const ife=(c,a,b)=>bl("ctrl_ifelse",{},{IF:Bk(c),DO:Bk(a),ELSE:Bk(b)});
+const touch_=t=>bl("sense_touch",{TARGET:t});
+const cmp_=(op,a,b)=>bl("op_cmp",{OP:op},{A:asIn(a),B:asIn(b)});
+const or_=(a,b)=>bl("op_or",{},{A:Bk(a),B:Bk(b)});
+const ar_=(op,a,b)=>Bk(bl("op_arith",{OP:op},{A:asIn(a),B:asIn(b)}));
+const join_=(a,b)=>Bk(bl("op_join",{},{A:asIn(a),B:asIn(b)}));
+const rnd_=(a,b)=>Bk(bl("op_random",{},{A:iN(a),B:iN(b)}));
+const ans_=()=>Bk(bl("sense_answer"));
+const ask_=q=>bl("sense_ask",{},{Q:asIn(q)});
+const send_=m=>bl("event_send",{MSG:m});
+const onMsg=(m,...body)=>ch(bl("event_msg",{MSG:m}),...body);
+const gotoR=y=>bl("motion_goto",{},{X:rnd_(-200,200),Y:y===undefined?rnd_(-140,140):iN(y)});
+const glide_=(sec,x,y)=>bl("motion_glide",{},{SECS:iN(sec),X:iN(x),Y:iN(y)});
+const maxVar=()=>{const v=Object.values(VARS).map(num);return v.length?Math.max(...v):-1e9;};
+const minVar=()=>{const v=Object.values(VARS).map(num);return v.length?Math.min(...v):1e9;};
+const sumOk=(s,op)=>{const a=parseFloat(s.ans[0]),b=parseFloat(s.ans[1]);
+  if(s.asks<2||s.ans.length<2||!isFinite(a)||!isFinite(b)||s.lastSaid==="")return false;
+  if(!op)return isFinite(parseFloat(s.lastSaid))&&num(s.lastSaid)===a+b;
+  const o=String(s.ans[2]||"").trim();
+  const t=/^(\+|plus)$/i.test(o)?a+b:/^(-|−|minus)$/i.test(o)?a-b:/^(\*|·|×|x|gånger)$/i.test(o)?a*b:null;
+  return t!==null&&String(s.lastSaid).trim()===String(t);};
+const starScript=()=>WS(ch(start(),forever(iff(touch_("__djur"),gotoR()))));
+const arrows=()=>[keyHat("up",chy(10)),keyHat("down",chy(-10)),keyHat("left",chx(-10)),keyHat("right",chx(10))];
+const TAB3=[3,6,9,12,15,18,21,24,27,30];
+const tabBonus=s=>{const a=num(s.ans[0]);return a>0&&[...s.saidNums].filter(n=>num(n)%a===0).length>=8;};
 const MISSIONS=[
  {id:"hej",titel:"Säg hej",kort:"Få djuret att prata",
   mal:"Få djuret att säga något när du trycker på 🏁 eller Kör. Dra ett <b>säg</b>-block från Utseende och sätt fast det under det gula blocket.",
@@ -359,6 +396,105 @@ const MISSIONS=[
   ok:(s,p)=>s.asks>=1&&s.answers>=1&&s.said.size>=1&&(p.types.has("ctrl_if")||p.types.has("ctrl_ifelse"))&&p.types.has("op_cmp"),
   bonus2:(s,p)=>s.asks>=1&&s.answers>=1&&p.types.has("op_random")&&p.types.has("op_join"),
   sol:[WS(ch(start(),bl("sense_ask",{},{Q:iT("Hur mycket är 6 · 7?")}),bl("ctrl_ifelse",{},{IF:{block:bl("op_cmp",{OP:"EQ"},{A:{block:bl("sense_answer")},B:iN(42)})},DO:{block:bl("look_sayfor",{},{TEXT:iT("Rätt! Snyggt!"),SECS:iN(2)})},ELSE:{block:bl("look_sayfor",{},{TEXT:iT("Inte riktigt, det är 42"),SECS:iN(2)})}})))]}
+ ,{id:"poang",titel:"Räkna poäng",kort:"Din första variabel",
+  mal:"Stjärnan hoppar när du nuddar den. Gör en variabel som heter <b>poäng</b>: den börjar på 0 och går upp ett steg varje gång djuret nuddar stjärnan. Styr med pilarna.",
+  bonus:"Bonus: få tre poäng.",
+  tips:["Gå till <b>Variabler</b>, tryck <b>Skapa variabel</b> och döp den till poäng. Sätt den till 0 när 🏁 klickas.","För alltid: <b>om nuddar Stjärnan så ändra poäng med 1</b>. Poängen syns uppe i scenen."],
+  sprites:[{k:"djur",x:-150,y:-90},{k:"e",e:"⭐",n:"Stjärnan",x:130,y:80}],
+  start:[WS(...arrows(),start()),starScript()],
+  ok:s=>maxVar()>=1&&s.touchHits>=1,bonus2:()=>maxVar()>=3,
+  sol:[WSV(["poäng"],...arrows(),ch(start(),setv("poäng",0),forever(iff(touch_("Stjärnan"),chv("poäng",1),ljud("ok"),vant(.5))))),starScript()],
+  tryckTangenter:true},
+ {id:"nedrakning",titel:"Nedräkning",kort:"En variabel som räknar ner",
+  mal:"Gör en nedräkning. Börja på 10, låt djuret säga talet, minska det med 1 och upprepa. Räkna ner minst fem tal.",
+  bonus:"Bonus: avsluta med att säga &quot;Start!&quot; och spela ett ljud.",
+  tips:["Skapa variabeln <b>tid</b> och sätt den till 10. I ett <b>upprepa 10 gånger</b>: säg tid, vänta en kort stund, <b>ändra tid med −1</b>.","Efter loopen: spela <b>Fanfar</b> och säg <b>Start!</b>."],
+  sprites:[{k:"djur",x:0,y:0}],start:[WS(start())],
+  ok:(s,p)=>s.saidNums.size>=5&&p.types.has("math_change"),
+  bonus2:s=>s.sounds>=1&&[...s.said].some(t=>/start/i.test(t)),
+  sol:[WSV(["tid"],ch(start(),setv("tid",10),rep(10,sayb(getv("tid")),vant(.3),chv("tid",-1)),ljud("fanfare"),sayb("Start!")))]},
+ {id:"meddelande",titel:"Prata med varandra",kort:"Skicka meddelanden",
+  mal:"Figurer kan prata med varandra genom att skicka <b>meddelanden</b>. Låt djuret säga hej och sedan skicka meddelandet <b>hej</b>. Då ska katten svara.",
+  bonus:"Bonus: katten svarar och skickar meddelandet <b>tack</b>. Djuret ska reagera på det.",
+  tips:["Djuret: <b>när 🏁 klickas</b>, <b>säg … i 2 sek</b>, <b>skicka hej</b>. Katten har redan ett <b>när jag får hej</b>. Bygg vidare under det (välj katten nere till vänster).","Bonus: katten skickar <b>tack</b> när den svarat. Djuret behöver ett eget <b>när jag får tack</b>-block."],
+  sprites:[{k:"djur",x:-120,y:0},{k:"e",e:"🐱",n:"Katten",x:120,y:0}],
+  start:[WS(start()),WS(bl("event_msg",{MSG:"hej"}))],
+  ok:s=>s.broadcasts>=1&&s.msgRecv>=1&&s.said.size>=2,bonus2:s=>s.msgRecv>=2,
+  sol:[WS(ch(start(),sayf("Hej Katten!",2),send_("hej")),onMsg("tack",sayf("Varsågod!",2))),WS(onMsg("hej",sayf("Hej på dig!",2),send_("tack")))]},
+ {id:"kedja",titel:"Dominokedjan",kort:"Tre figurer i en kedja",
+  mal:"Bygg en kedja. Djuret skickar <b>a</b>. Bananen får a, glider ner och skickar <b>b</b>. Fisken får b, glider ner och säger något.",
+  bonus:"Bonus: låt kedjan gå runt. Figurerna glider tillbaka upp, och fisken skickar <b>a</b> igen.",
+  tips:["Bananen: <b>när jag får a</b>, <b>glid 1 sek till x −60 y −100</b>, <b>skicka b</b>. Fisken gör likadant med b. Välj figur nere till vänster.","Bonus: glid tillbaka till y 110 och låt fisken skicka <b>a</b> sist."],
+  sprites:[{k:"djur",x:-180,y:110},{k:"e",e:"🍌",n:"Bananen",x:-60,y:110},{k:"e",e:"🐟",n:"Fisken",x:60,y:110}],
+  start:[WS(start()),WS(bl("event_msg",{MSG:"a"})),WS(bl("event_msg",{MSG:"b"}))],
+  ok:s=>s.msgRecv>=2&&s.otherMoved>=100,bonus2:s=>s.msgRecv>=5,
+  sol:[WS(ch(start(),vant(.5),sayf("Nu börjar vi!",1),send_("a"))),
+       WS(onMsg("a",glide_(1,-60,-100),send_("b"),glide_(1,-60,110))),
+       WS(onMsg("b",glide_(1,60,-100),sayf("Klart!",1),glide_(1,60,110),send_("a")))]},
+ {id:"tabell",titel:"Tabellmaskinen",kort:"Variabel och upprepa",
+  mal:"Låt djuret säga <b>3:ans tabell</b>: 3, 6, 9 … upp till 30. Använd en variabel som växer med 3 varje varv.",
+  bonus:"Bonus: fråga vilken tabell man vill ha och säg den i stället.",
+  tips:["Skapa <b>svar</b> och sätt den till 0. Upprepa 10 gånger: <b>ändra svar med 3</b>, säg svar i en halv sekund.","Bonus: spara svaret på frågan i variabeln <b>tabell</b> och ändra svar med <b>tabell</b> i stället för 3."],
+  sprites:[{k:"djur",x:0,y:0}],start:[WS(start())],
+  ok:s=>TAB3.every(n=>s.saidNums.has(String(n)))||tabBonus(s),bonus2:s=>tabBonus(s),
+  sol:[WSV(["tabell","svar"],ch(start(),ask_("Vilken tabell?"),setv("tabell",ans_()),setv("svar",0),rep(10,chv("svar",getv("tabell")),sayf(getv("svar"),.3))))]},
+ {id:"summa",titel:"Miniräknaren",kort:"Fråga två tal och räkna",
+  mal:"Låt djuret fråga efter två tal och säga vad de blir tillsammans. Skriv talen på scenen när det frågar.",
+  bonus:"Bonus: fråga även vilket räknesätt man vill ha (+, − eller ·) och räkna rätt.",
+  tips:["Spara varje svar i en variabel: <b>sätt a till svar</b>. Säg sedan <b>a + b</b> med ett <b>+</b>-block från Räkna.","Bonus: tredje frågan sparas i <b>tecken</b>. Använd <b>om tecken = + så … annars …</b> och nästla en till för − och ·."],
+  sprites:[{k:"djur",x:0,y:0}],start:[WS(start())],
+  ok:s=>sumOk(s,false)||sumOk(s,true),bonus2:s=>sumOk(s,true),
+  sol:[WSV(["a","b","tecken"],ch(start(),ask_("Första talet?"),setv("a",ans_()),ask_("Andra talet?"),setv("b",ans_()),ask_("Räknesätt? (+, − eller ·)"),setv("tecken",ans_()),
+     ife(cmp_("EQ",getv("tecken"),"+"),sayb(ar_("ADD",getv("a"),getv("b"))),
+       ife(or_(cmp_("EQ",getv("tecken"),"-"),cmp_("EQ",getv("tecken"),"−")),sayb(ar_("SUB",getv("a"),getv("b"))),sayb(ar_("MUL",getv("a"),getv("b")))))))]},
+ {id:"fangaspel",titel:"Fånga stjärnorna",kort:"Stjärnor faller, du fångar",
+  mal:"Stjärnan ska falla uppifrån. Fångar djuret den får du en poäng och en ny stjärna börjar falla från en ny plats. Fånga tre stjärnor! Styr med ← →.",
+  bonus:"Bonus: fånga sex stjärnor.",
+  tips:["Bygg i Stjärnans block (välj den nere till vänster). För alltid: <b>ändra y med −3</b>. Om <b>nuddar</b> djuret: ändra poäng med 1 och <b>gå till</b> ett slumptal på x och 160 på y.","Missar du? Lägg till <b>om y-läge &lt; −170</b> som flyttar stjärnan till toppen igen."],
+  sprites:[{k:"djur",x:0,y:-130},{k:"e",e:"⭐",n:"Stjärnan",x:60,y:160}],
+  start:[WS(keyHat("left",chx(-12)),keyHat("right",chx(12))),WS(start())],
+  ok:()=>maxVar()>=3,bonus2:()=>maxVar()>=6,
+  sol:[WS(keyHat("left",chx(-12)),keyHat("right",chx(12))),
+       WSV(["poäng"],ch(start(),setv("poäng",0),forever(chy(-3),iff(touch_("__djur"),chv("poäng",1),ljud("ok"),gotoR(160)),iff(cmp_("LT",Bk(bl("motion_y")),-170),gotoR(160)))))],
+  tryckTangenter:true,bg:"natt"},
+ {id:"liv",titel:"Spöket och tre liv",kort:"Liv som går ner",
+  mal:"Djuret har <b>tre liv</b>. Gör en variabel <b>liv</b> som börjar på 3 och minskar med 1 varje gång djuret nuddar spöket. Styr med pilarna.",
+  bonus:"Bonus: när liven är slut ska djuret säga Game over och <b>stoppa allt</b>.",
+  tips:["För alltid: <b>om nuddar Spöket</b> så ändra liv med −1 och <b>vänta 1 sek</b>. Annars förlorar du alla liv på en gång.","Bonus: en till <b>om</b>-sats: om <b>liv ≤ 0</b>, säg Game over och <b>stoppa allt</b>."],
+  sprites:[{k:"djur",x:-150,y:-100},{k:"e",e:"👻",n:"Spöket",x:100,y:60}],
+  start:[WS(...arrows(),start()),WS(ch(start(),bl("motion_point",{},{DIR:iN(40)}),forever(mv(4),bl("motion_bounce"))))],
+  ok:(s,p)=>s.touchHits>=1&&minVar()<=2&&p.types.has("math_change"),
+  bonus2:s=>s.stops>=1&&[...s.said].some(t=>/game over/i.test(t)),
+  sol:[WSV(["liv"],...arrows(),ch(start(),setv("liv",3),forever(
+        iff(touch_("Spöket"),chv("liv",-1),ljud("bad"),sayf("Aj!",1),vant(1)),
+        iff(cmp_("LE",getv("liv"),0),sayb("Game over"),ljud("fanfare"),bl("ctrl_stop"))))),
+       WS(ch(start(),bl("motion_point",{},{DIR:iN(40)}),forever(mv(4),bl("motion_bounce"))))],
+  tryckTangenter:true},
+ {id:"gissa",titel:"Gissa talet",kort:"Slumptal och en loop",
+  mal:"Djuret tänker på ett hemligt tal mellan 1 och 10. Du gissar, och djuret säger om det är för högt eller för lågt. Upprepa tills du gissat rätt.",
+  bonus:"Bonus: räkna hur många gissningar du behövde med en variabel.",
+  tips:["Spara det hemliga talet i en variabel <b>hemlig</b> (slumptal). Använd <b>upprepa tills svar = hemlig</b> och <b>fråga … och vänta</b> inuti.","Inuti loopen: <b>om svar &gt; hemlig så säg För högt, annars om …</b>. Räkna med <b>ändra gissningar med 1</b>."],
+  sprites:[{k:"djur",x:0,y:0}],start:[WS(start())],
+  ok:(s,p)=>s.asks>=2&&s.ans.length>=2&&p.types.has("op_random")&&p.types.has("op_cmp")&&s.ifs>=1&&(p.types.has("ctrl_until")||p.types.has("ctrl_forever")||p.types.has("ctrl_repeat")),
+  bonus2:(s,p)=>p.types.has("math_change")&&s.asks>=2,
+  sol:[WSV(["hemlig","gissningar"],ch(start(),setv("hemlig",rnd_(1,10)),setv("gissningar",0),
+     bl("ctrl_until",{},{COND:Bk(cmp_("EQ",ans_(),getv("hemlig"))),DO:Bk(ch(ask_("Gissa ett tal mellan 1 och 10"),chv("gissningar",1),
+       ife(cmp_("GT",ans_(),getv("hemlig")),sayf("För högt!",1.5),ife(cmp_("LT",ans_(),getv("hemlig")),sayf("För lågt!",1.5),sayf("Rätt!",2)))))}),
+     sayf(join_("Du behövde ",join_(getv("gissningar")," gissningar")),3)))]},
+ {id:"matteprov",titel:"Mitt matteprov",kort:"Egen övning med poäng",
+  mal:"Gör ett litet matteprov med tre frågor. Talen slumpas, rätt svar ger poäng, och till slut säger djuret hur många poäng du fick.",
+  bonus:"Bonus: spela ett ljud vid rätt och fel, och säg poängen med ordet <b>poäng</b>.",
+  tips:["Upprepa 3 gånger. Slumpa <b>a</b> och <b>b</b> (2 till 9), fråga med <b>sätt ihop</b> och jämför svar med <b>a × b</b>.","Rätt: ändra poäng med 1. I slutet, utanför loopen: <b>säg sätt ihop &quot;Poäng: &quot; och poäng</b>."],
+  sprites:[{k:"djur",x:0,y:0}],start:[WS(start())],
+  ok:(s,p)=>s.asks>=3&&s.ans.length>=3&&p.types.has("op_random")&&p.types.has("op_arith")&&p.types.has("op_cmp")&&(p.types.has("math_change")||p.types.has("variables_set"))&&(p.types.has("ctrl_repeat")||p.types.has("ctrl_until")||p.types.has("ctrl_forever")),
+  bonus2:s=>s.sounds>=1&&[...s.said].some(t=>/poäng/i.test(t)),
+  sol:[WSV(["a","b","poäng"],ch(start(),setv("poäng",0),
+     rep(3,setv("a",rnd_(2,9)),setv("b",rnd_(2,9)),
+       ask_(join_(join_(join_("Hur mycket är ",getv("a"))," · "),getv("b"))),
+       ife(cmp_("EQ",ans_(),ar_("MUL",getv("a"),getv("b"))),
+         ch(chv("poäng",1),ljud("ok"),sayf("Rätt!",1)),
+         ch(ljud("bad"),sayf(join_("Nej, det är ",ar_("MUL",getv("a"),getv("b"))),2)))),
+     sayf(join_("Poäng: ",getv("poäng")),3)))]}
 ];
 
 /* ---------------- tillstånd ---------------- */
@@ -386,7 +522,7 @@ function renderStart(){
 }
 $("mis").addEventListener("click",e=>{const b=e.target.closest(".mcard");if(b)openMission(MISSIONS[+b.dataset.i]);});
 $("friBtn").addEventListener("click",()=>openMission(null));
-$("homeBtn").addEventListener("click",()=>{stopRun();flush();renderStart();show("start");});
+$("homeBtn").addEventListener("click",()=>{stopRun(true);flush();renderStart();show("start");});
 
 /* ---------------- editorn ---------------- */
 function ensureWs(){
@@ -439,7 +575,7 @@ function openMission(m){
   ensureWs();
   $("bgSel").value=P.bg;
   renderMbox();renderTray();loadWsFor(0);
-  resetStage();stopRun();
+  resetStage();stopRun(true);hideWin();
   setTimeout(()=>{Blockly.svgResize(ws);ws.scrollCenter&&ws.scrollCenter();},30);
   $("dpad").classList.toggle("on",!!(m&&m.tryckTangenter)||!m);
   needDraw=true;updCnt();
@@ -503,7 +639,7 @@ $("bgSel").addEventListener("change",()=>{P.bg=$("bgSel").value;live&&live.forEa
 let live=[],bgLive="eng";
 function resetStage(){
   live=P.sprites.map(s=>({ref:s,x:s.x,y:s.y,dir:s.dir,size:s.size,vis:s.vis,say:null,pen:{down:false,color:"#1D2B53",size:3}}));
-  bgLive=P.bg;VARS={};ANS.pending=false;
+  bgLive=P.bg;VARS={};ANS.pending=false;ANS.value="";
   pctx.clearRect(0,0,480,360);
   $("ask").hidden=true;
   needDraw=true;
@@ -606,7 +742,8 @@ function setPos(sp,x,y){
 function turn(sp,deg){sp.dir=((sp.dir+deg)%360+360)%360;ST.turned+=Math.abs(deg);if(sp.pen.down){ST.penTurn+=Math.abs(deg);ST.penTurns++;}}
 function* body(stack,sp,th){for(let b=stack;b;b=b.next&&b.next.block){yield* step(b,sp,th);if(th.dead)return;}}
 function* wait(sec,th){const end=T+sec;while(T<end){yield;if(th.dead)return;}}
-function sayTxt(sp,t){const s=fmt(t);sp.say={text:s,until:Infinity};ST.said.add(s);if(/[0-9]/.test(s))ST.saidNum=true;}
+function sayTxt(sp,t,q){const s=fmt(t);sp.say={text:s,until:Infinity};ST.said.add(s);if(/[0-9]/.test(s))ST.saidNum=true;
+  if(!q){ST.lastSaid=s;if(/^-?\d+(\.\d+)?$/.test(s.trim()))ST.saidNums.add(s.trim());}}
 function* step(b,sp,th){
   const f=b.fields||{},i=b.inputs||{},e=k=>ev(vv(i[k]),sp);
   switch(b.type){
@@ -646,9 +783,9 @@ function* step(b,sp,th){
     case "ctrl_until":while(!ev(vv(i.COND),sp)){yield* body(sub(i.DO),sp,th);if(th.dead)return;yield;if(th.dead)return;}break;
     case "ctrl_if":ST.ifs++;if(ev(vv(i.IF),sp))yield* body(sub(i.DO),sp,th);break;
     case "ctrl_ifelse":ST.ifs++;if(ev(vv(i.IF),sp))yield* body(sub(i.DO),sp,th);else yield* body(sub(i.ELSE),sp,th);break;
-    case "ctrl_stop":stopThreads();return;
+    case "ctrl_stop":ST.stops++;stopThreads();return;
     case "event_send":broadcast(f.MSG);break;
-    case "sense_ask":{const q=fmt(e("Q"));sayTxt(sp,q);ST.asks++;ANS.pending=true;showAsk();
+    case "sense_ask":{const q=fmt(e("Q"));sayTxt(sp,q,true);ST.asks++;ANS.pending=true;showAsk();
       while(ANS.pending){yield;if(th.dead){hideAsk();return;}}
       ST.answers++;sp.say=null;break;}
     case "variables_set":VARS[vname(curState,(f.VAR||{}).id)]=ev(vv(i.VALUE),sp);break;
@@ -669,9 +806,9 @@ function startThread(i,hat){
   th.gen=(function*(){curState=th.state;yield* body(hat.next&&hat.next.block,live[i],th);})();
   TH.push(th);
 }
-function broadcast(m){P.sprites.forEach((s,i)=>hatsOf(s).forEach(h=>{if(h.type==="event_msg"&&String((h.fields||{}).MSG).toLowerCase()===String(m).toLowerCase())startThread(i,h);}));}
+function broadcast(m){ST.broadcasts++;P.sprites.forEach((s,i)=>hatsOf(s).forEach(h=>{if(h.type==="event_msg"&&String((h.fields||{}).MSG).toLowerCase()===String(m).toLowerCase()){ST.msgRecv++;startThread(i,h);}}));}
 function stopThreads(){TH.forEach(t=>t.dead=true);}
-function newStats(){return{moved:0,otherMoved:0,turned:0,penLen:0,penTurn:0,penTurns:0,said:new Set(),saidNum:false,sounds:0,bounces:0,touchHits:0,keys:new Set(),asks:0,answers:0,ifs:0,pos:new Set(),x0:0,dist0:999};}
+function newStats(){return{moved:0,otherMoved:0,turned:0,penLen:0,penTurn:0,penTurns:0,said:new Set(),saidNum:false,sounds:0,bounces:0,touchHits:0,keys:new Set(),asks:0,answers:0,ifs:0,saidNums:new Set(),lastSaid:"",ans:[],broadcasts:0,msgRecv:0,stops:0,pos:new Set(),x0:0,dist0:999};}
 function startRun(){
   flushWs();
   resetStage();stopThreads();TH=[];T=0;winShown=false;hideWin();
@@ -680,7 +817,8 @@ function startRun(){
   P.sprites.forEach((s,i)=>hatsOf(s).forEach(h=>{if(h.type==="event_start")startThread(i,h);}));
   snd("chime");
 }
-function stopRun(){
+function stopRun(nc){
+  if(!nc&&RUN&&mission&&ST)checkMission();
   stopThreads();TH=[];RUN=false;hideAsk();
   $("runBtn").textContent="▶ Kör";$("runBtn").classList.remove("stop");
 }
@@ -693,7 +831,7 @@ function frame(){
   P.sprites.forEach((s,i)=>hatsOf(s).forEach(h=>{
     if(h.type==="event_key"&&keysDown[(h.fields||{}).KEY]&&!TH.some(t=>!t.dead&&t.hat===idOf(h)&&t.si===i)){ST.keys.add(h.fields.KEY);startThread(i,h);}
   }));
-  TH.forEach(t=>{if(t.dead)return;const r=t.gen.next();if(r.done)t.dead=true;});
+  TH.forEach(t=>{if(t.dead)return;curState=t.state;const r=t.gen.next();if(r.done)t.dead=true;});
   TH=TH.filter(t=>!t.dead);
   live.forEach(s=>{if(s.say&&s.say.until<=T)s.say=null;});
   if(!TH.length){
@@ -725,12 +863,12 @@ function showWin(stars,b2){
 }
 function hideWin(){$("win").hidden=true;}
 $("winStay").addEventListener("click",hideWin);
-$("winNext").addEventListener("click",()=>{hideWin();stopRun();flush();const idx=MISSIONS.indexOf(mission);openMission(MISSIONS[idx+1]);});
+$("winNext").addEventListener("click",()=>{hideWin();stopRun(true);flush();const idx=MISSIONS.indexOf(mission);openMission(MISSIONS[idx+1]);});
 
 /* fråga och vänta */
 function showAsk(){$("ask").hidden=false;$("askIn").value="";setTimeout(()=>$("askIn").focus(),30);}
 function hideAsk(){$("ask").hidden=true;}
-function answerAsk(){if(!ANS.pending)return;ANS.value=$("askIn").value;ANS.pending=false;hideAsk();}
+function answerAsk(){if(!ANS.pending)return;ANS.value=$("askIn").value;ST.ans.push(ANS.value);ANS.pending=false;hideAsk();}
 $("askOk").addEventListener("click",answerAsk);
 $("askIn").addEventListener("keydown",e=>{if(e.key==="Enter")answerAsk();e.stopPropagation();});
 
@@ -777,7 +915,7 @@ function loop(ts){
 }
 requestAnimationFrame(loop);
 
-window.__kv={frame,MISSIONS,openMission,startRun,stopRun,loadWsFor,flushWs,get P(){return P},get live(){return live},get ST(){return ST},get RUN(){return RUN},keysDown,data,get ws(){return ws}};
+window.__kv={frame,MISSIONS,openMission,startRun,stopRun,loadWsFor,flushWs,get P(){return P},get live(){return live},get ST(){return ST},get RUN(){return RUN},keysDown,data,get ws(){return ws},get VARS(){return VARS},get ANS(){return ANS}};
 renderStart();
 show("start");
 if(window.MPS&&MPS.start)MPS.start("start");
