@@ -612,7 +612,7 @@ const INTROS={
 
 /* ---------------- tillstånd ---------------- */
 let ws=null,P=null,cur=0,mission=null,loading=false,saveT=0;
-let DEMO=null,demoSaved=null,INTRO=null,MINIS=[],FMINIS=[];
+let DEMO=null,demoSaved=null,INTRO=null,MINIS=[],FMINIS=[],visited=new Set();
 let needDraw=true;
 const stage=$("stage"),sctx=stage.getContext("2d");
 const penC=document.createElement("canvas");penC.width=480;penC.height=360;const pctx=penC.getContext("2d");
@@ -682,7 +682,7 @@ function openMission(m){
   mission=m;winShown=false;pend=null;clearTimeout(winTimer);ranOnce=false;GUIDE=null;INTRO=null;setHi(null);closeFacit();
   const base=m?(data.prog[m.id]||null):data.fri;
   P=base||(m?projFrom(m):projFree());
-  P.vars=P.vars||[];cur=0;
+  P.vars=P.vars||[];cur=0;visited=new Set([P.sprites[0].id]);
   $("mTitel").textContent=m?m.titel:"Fri duk";
   initDjur();
   show("bygg");
@@ -705,7 +705,8 @@ function renderMbox(){
   if(INTRO){renderIntro();return;}
   b.hidden=false;tipN=0;
   const io=INTRO_OF[mission.id];
-  b.innerHTML=`<p>${mission.mal}</p><p class="bonus">${mission.bonus}</p><div id="tipArea"></div><div class="mbtns"><button class="spk" id="spkBtn" aria-label="Läs upp uppdraget">🔊</button><button class="tipbtn" id="tipBtn">💡 Tips</button>${io?'<button class="tipbtn" id="inBtn">❓ Förklara</button>':""}<button class="tipbtn" id="facBtn">📖 Facit</button></div>`;
+  const flera=mission.sprites.length>1?`<p class="bonus">🧩 Här finns flera figurer. Varje figur har egna block: välj figur nere till vänster (${P.sprites.slice(1).map(x=>x.name).join(", ")}).</p>`:"";
+  b.innerHTML=`<p>${mission.mal}</p><p class="bonus">${mission.bonus}</p>${flera}<div id="tipArea"></div><div class="mbtns"><button class="spk" id="spkBtn" aria-label="Läs upp uppdraget">🔊</button><button class="tipbtn" id="tipBtn">💡 Tips</button>${io?'<button class="tipbtn" id="inBtn">❓ Förklara</button>':""}<button class="tipbtn" id="facBtn">📖 Facit</button></div>`;
   $("tipBtn").onclick=giveTip;
   $("spkBtn").onclick=()=>speak(mission.mal+" "+mission.bonus);
   $("facBtn").onclick=openFacit;
@@ -772,11 +773,19 @@ function useSolution(){
   if(!confirm("Då byts dina block ut mot facit. Vill du det?"))return;
   mission.sol.forEach((w,i)=>{if(P.sprites[i])P.sprites[i].ws=JSON.parse(JSON.stringify(w));});
   closeFacit();loadWsFor(cur);flushWs();updCnt();
+  if(P.sprites.length>1){
+    /* visa figuren som har mest block i facit, och säg att de andra figurerna har egna block */
+    let best=0,mx=0;mission.sol.forEach((w,i)=>{const n=JSON.stringify(w).length;if(P.sprites[i]&&n>mx){mx=n;best=i;}});
+    visited=new Set([P.sprites[cur].id]);
+    if(best!==cur)switchSprite(best);else renderTray();
+    showHelp("Facit lades in. Varje figur har egna block: du ser nu "+P.sprites[cur].name+". Välj de andra figurerna nere till vänster för att se deras block.");
+  }
 }
 function solToFri(){
   if(data.fri&&!confirm("Din fria duk byts ut mot facit. Vill du det?"))return;
   data.fri=projFrom({sprites:mission.sprites,start:mission.sol,bg:mission.bg});save();
   closeFacit();stopRun(true);flush();openMission(null);
+  if(P.sprites.length>1){showHelp("Facit lades i Fri duk. Blocken för "+P.sprites.slice(1).map(x=>x.name).join(" och ")+" ligger under den figuren, nere till vänster.");}
 }
 $("facX").addEventListener("click",closeFacit);$("facClose").addEventListener("click",closeFacit);
 $("facUse").addEventListener("click",useSolution);$("facFri").addEventListener("click",solToFri);
@@ -828,6 +837,7 @@ function renderTray(){
   P.sprites.forEach((s,i)=>{
     const b=document.createElement("button");b.className="sp"+(i===cur?" on":"");b.setAttribute("aria-label",s.name);
     b.innerHTML=(s.kind==="djur"&&djurSvg?`<img alt="" src="data:image/svg+xml;charset=utf-8,${encodeURIComponent(djurSvg)}">`:s.e)+`<small>${s.name}</small>`;
+    if(P.sprites.length>1&&i!==cur&&!visited.has(s.id))b.classList.add("kvhi");
     b.onclick=()=>switchSprite(i);t.appendChild(b);
   });
   if(!mission||mission.id==="fanga"||true){
@@ -847,7 +857,7 @@ function addSprite(k){
   flushWs();
   let name=k[1],n=2;while(P.sprites.some(s=>s.name===name))name=k[1]+" "+n++;
   P.sprites.push({id:"s"+Date.now(),kind:"emoji",e:k[0],name,x:Math.round(Math.random()*300-150),y:Math.round(Math.random()*200-100),dir:90,size:100,vis:true,ws:WS()});
-  cur=P.sprites.length-1;renderTray();loadWsFor(cur);resetStage();flush();needDraw=true;
+  cur=P.sprites.length-1;visited.add(P.sprites[cur].id);renderTray();loadWsFor(cur);resetStage();flush();needDraw=true;
 }
 function delSprite(){
   if(P.sprites.length<2)return;
@@ -856,7 +866,7 @@ function delSprite(){
 }
 function switchSprite(i){
   if(i===cur)return;
-  flushWs();cur=i;renderTray();loadWsFor(i);
+  flushWs();cur=i;visited.add(P.sprites[i].id);renderTray();loadWsFor(i);
 }
 $("bgSel").innerHTML=BGS.map(b=>`<option value="${b[1]}">${b[0]}</option>`).join("");
 $("bgSel").addEventListener("change",()=>{P.bg=$("bgSel").value;live&&live.forEach(s=>s);bgLive=P.bg;flush();needDraw=true;});
