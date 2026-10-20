@@ -740,6 +740,13 @@ function setPos(sp,x,y){
   if(sp===live[0]){ST.pos.add(Math.round(x/20)+","+Math.round(y/20));}
 }
 function turn(sp,deg){sp.dir=((sp.dir+deg)%360+360)%360;ST.turned+=Math.abs(deg);if(sp.pen.down){ST.penTurn+=Math.abs(deg);ST.penTurns++;}}
+/* Långa förflyttningar går i små steg (högst 6 per bild) så att man ser djuret gå i stället för att hoppa dit */
+function* slide(sp,dx,dy,th){
+  const len=Math.hypot(dx,dy);
+  if(len<=6){setPos(sp,sp.x+dx,sp.y+dy);return;}
+  const n=Math.ceil(len/6),sx=dx/n,sy=dy/n;
+  for(let k=0;k<n;k++){setPos(sp,sp.x+sx,sp.y+sy);if(k<n-1){yield;if(th.dead)return;}}
+}
 function* body(stack,sp,th){for(let b=stack;b;b=b.next&&b.next.block){yield* step(b,sp,th);if(th.dead)return;}}
 function* wait(sec,th){const end=T+sec;while(T<end){yield;if(th.dead)return;}}
 function sayTxt(sp,t,q){const s=fmt(t);sp.say={text:s,until:Infinity};ST.said.add(s);if(/[0-9]/.test(s))ST.saidNum=true;
@@ -747,14 +754,14 @@ function sayTxt(sp,t,q){const s=fmt(t);sp.say={text:s,until:Infinity};ST.said.ad
 function* step(b,sp,th){
   const f=b.fields||{},i=b.inputs||{},e=k=>ev(vv(i[k]),sp);
   switch(b.type){
-    case "motion_move":{const n=num(e("STEPS")),r=sp.dir*Math.PI/180;setPos(sp,sp.x+n*Math.sin(r),sp.y+n*Math.cos(r));break;}
+    case "motion_move":{const n=num(e("STEPS")),r=sp.dir*Math.PI/180;yield* slide(sp,n*Math.sin(r),n*Math.cos(r),th);break;}
     case "motion_right":turn(sp,num(e("DEG")));break;
     case "motion_left":turn(sp,-num(e("DEG")));break;
     case "motion_goto":setPos(sp,num(e("X")),num(e("Y")));break;
     case "motion_setx":setPos(sp,num(e("X")),sp.y);break;
     case "motion_sety":setPos(sp,sp.x,num(e("Y")));break;
-    case "motion_chx":setPos(sp,sp.x+num(e("X")),sp.y);break;
-    case "motion_chy":setPos(sp,sp.x,sp.y+num(e("Y")));break;
+    case "motion_chx":yield* slide(sp,num(e("X")),0,th);break;
+    case "motion_chy":yield* slide(sp,0,num(e("Y")),th);break;
     case "motion_point":sp.dir=((num(e("DIR"))%360)+360)%360;break;
     case "motion_glide":{const sec=Math.max(.02,num(e("SECS"))),x0=sp.x,y0=sp.y,x1=num(e("X")),y1=num(e("Y")),t0=T;
       while(T-t0<sec){const k=(T-t0)/sec;setPos(sp,x0+(x1-x0)*k,y0+(y1-y0)*k);yield;if(th.dead)return;}setPos(sp,x1,y1);break;}
