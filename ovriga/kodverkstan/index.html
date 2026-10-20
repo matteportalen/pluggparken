@@ -97,15 +97,26 @@ h1{font-size:2.6rem;line-height:1;margin:14px 0 4px;font-weight:800}
 .del{color:var(--bad);font-weight:700;font-size:.9rem;padding:4px 8px}
 #blockly{height:70vh;min-height:440px;border-radius:16px;overflow:hidden;box-shadow:0 4px 0 var(--line);background:#fff}
 @media(min-width:720px){#blockly{height:calc(100vh - 150px);min-height:540px}}
-#win{position:absolute;inset:0;background:rgba(29,43,83,.55);display:grid;place-items:center;padding:14px;line-height:1.3;z-index:5}
-#win .card{background:var(--card);border-radius:20px;padding:18px 20px;text-align:center;box-shadow:0 5px 0 var(--line);max-width:340px}
-#win h2{margin:0 0 4px;font-size:1.9rem;font-weight:800}
-#win .stars{font-size:2.2rem}
-#win p{margin:4px 0 10px;color:var(--muted);font-size:1rem}
-#win .row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
-#win .row button{border-radius:12px;padding:6px 14px;font-weight:800}
+#win{position:absolute;left:0;right:0;bottom:0;line-height:1.25;z-index:5}
+#win .card{background:var(--card);padding:8px 12px 10px;box-shadow:0 -3px 0 var(--line);display:flex;flex-wrap:wrap;align-items:center;gap:2px 12px}
+#win h2{margin:0;font-size:1.4rem;font-weight:800}
+#win .stars{font-size:1.5rem}
+#win p{margin:0;flex-basis:100%;color:var(--muted);font-size:.95rem}
+#win p small{font-size:.9rem}
+#win .row{display:flex;gap:8px;flex-wrap:wrap;margin-left:auto}
+#win .row button{border-radius:12px;padding:5px 14px;font-weight:800}
 #win .row .p{background:var(--good);color:#fff;box-shadow:0 3px 0 var(--good-dark)}
 #win .row .s{background:var(--bg);color:var(--ink)}
+@keyframes kvglow{0%,100%{filter:drop-shadow(0 0 0 rgba(255,184,0,0))}50%{filter:drop-shadow(0 0 8px #FFB800) drop-shadow(0 0 2px #FFB800)}}
+.kvhi{animation:kvglow 1s ease-in-out infinite}
+g.kvhi>.blocklyPath{stroke:#FFB800!important;stroke-width:5px!important}
+div.kvhi,button.kvhi{outline:4px solid #FFB800;outline-offset:2px;border-radius:12px}
+.gd .gn{font-weight:800;color:var(--pur);font-size:.95rem}
+.gd p{font-size:1.2rem;font-weight:700;margin:2px 0 8px}
+.gdr{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.skip{color:var(--muted);text-decoration:underline;font-size:.9rem;padding:4px}
+.spk{background:var(--card);border-radius:999px;width:36px;height:36px;font-size:1.1rem;box-shadow:0 2px 0 var(--line);margin-right:4px;vertical-align:middle}
+.go{font-size:1.3rem!important;padding:10px 26px!important}
 .err{background:#FFE9EA;color:#8A1D22;border-radius:14px;padding:12px 14px;margin:12px 0}
 .blocklyToolboxDiv{font-family:var(--font)!important}
 .blocklyText,.blocklyFlyoutLabelText{font-family:"Baloo 2","Trebuchet MS",sans-serif!important}
@@ -130,7 +141,7 @@ h1{font-size:2.6rem;line-height:1;margin:14px 0 4px;font-weight:800}
         <canvas id="stage" width="480" height="360" aria-label="Scenen"></canvas>
         <div id="xy"></div>
         <div id="ask" hidden><input id="askIn" type="text" autocomplete="off" aria-label="Svar"><button id="askOk">OK</button></div>
-        <div id="win" hidden><div class="card"><h2>Klart!</h2><div class="stars" id="winStars"></div><p id="winTxt"></p><div class="row"><button class="p" id="winNext">Nästa uppdrag ▶</button><button class="s" id="winStay">Fortsätt bygga</button></div></div></div>
+        <div id="win" hidden><div class="card"><h2>Klart!</h2><div class="stars" id="winStars"></div><div class="row"><button class="p" id="winNext">Nästa uppdrag ▶</button><button class="s" id="winStay">Fortsätt bygga</button></div><p id="winTxt"></p></div></div>
       </div>
       <div id="dpad" aria-label="Piltangenter"><button data-k="left">←</button><button data-k="up">↑</button><button data-k="down">↓</button><button data-k="right">→</button><button data-k="space">␣</button></div>
       <div class="ctl">
@@ -320,7 +331,7 @@ const arrows=()=>[keyHat("up",chy(10)),keyHat("down",chy(-10)),keyHat("left",chx
 const TAB3=[3,6,9,12,15,18,21,24,27,30];
 const tabBonus=s=>{const a=num(s.ans[0]);return a>0&&[...s.saidNums].filter(n=>num(n)%a===0).length>=8;};
 const MISSIONS=[
- {id:"hej",titel:"Säg hej",kort:"Få djuret att prata",
+ {id:"hej",guide:true,titel:"Säg hej",kort:"Få djuret att prata",
   mal:"Få djuret att säga något när du trycker på 🏁 eller Kör. Dra ett <b>säg</b>-block från Utseende och sätt fast det under det gula blocket.",
   bonus:"Bonus: få djuret att säga två olika saker efter varandra.",
   tips:["Blocken ska sitta ihop, som legobitar. Dra <b>säg Hej!</b> så att det klickar fast under <b>när 🏁 klickas</b>.","Vill du säga två saker? Använd <b>säg … i 2 sek</b> två gånger, så hinner man läsa."],
@@ -497,12 +508,19 @@ const MISSIONS=[
      sayf(join_("Poäng: ",getv("poäng")),3)))]}
 ];
 
+/* Tidiga uppdrag visar bara de kategorier som behövs, så att en nybörjare inte drunknar i block */
+const CATS={hej:["Händelser","Utseende"],promenad:["Händelser","Rörelse","Kontroll"],dans:["Händelser","Rörelse","Ljud","Kontroll"],
+  kvadrat:["Händelser","Rörelse","Penna","Kontroll"],stjarna:["Händelser","Rörelse","Penna","Kontroll"],piltangenter:["Händelser","Rörelse"],
+  fanga:["Händelser","Rörelse","Utseende","Ljud","Kontroll","Känna av","Räkna"],studs:["Händelser","Rörelse","Ljud","Kontroll","Känna av"],
+  slump:["Händelser","Rörelse","Utseende","Kontroll","Räkna"],matte:["Händelser","Utseende","Kontroll","Känna av","Räkna","Variabler"]};
+const toolboxFor=cats=>({kind:"categoryToolbox",contents:TOOLBOX.contents.filter(c=>!cats||cats.includes(c.name))});
+
 /* ---------------- tillstånd ---------------- */
 let ws=null,P=null,cur=0,mission=null,loading=false,saveT=0;
 let needDraw=true;
 const stage=$("stage"),sctx=stage.getContext("2d");
 const penC=document.createElement("canvas");penC.width=480;penC.height=360;const pctx=penC.getContext("2d");
-let RUN=false,TH=[],T=0,VARS={},ANS={pending:false,value:""},keysDown={},ST=null,winShown=false,starsNow=0;
+let RUN=false,TH=[],T=0,VARS={},ANS={pending:false,value:""},keysDown={},ST=null,winShown=false,starsNow=0,pend=null,winTimer=0,ranOnce=false;
 const idOf=n=>{if(n.id)return n.id;if(!idMap.has(n))idMap.set(n,"auto"+(++idN));return idMap.get(n);};
 
 function newSprite(def,i){
@@ -565,7 +583,7 @@ function updCnt(){
   $("cnt").textContent="Block: "+n;
 }
 function openMission(m){
-  mission=m;winShown=false;
+  mission=m;winShown=false;pend=null;clearTimeout(winTimer);ranOnce=false;GUIDE=null;setHi(null);
   const base=m?(data.prog[m.id]||null):data.fri;
   P=base||(m?projFrom(m):projFree());
   P.vars=P.vars||[];cur=0;
@@ -573,20 +591,59 @@ function openMission(m){
   initDjur();
   show("bygg");
   ensureWs();
+  try{ws.updateToolbox(toolboxFor(m&&CATS[m.id]));}catch(e){console.error(e);}
   $("bgSel").value=P.bg;
+  if(m&&m.guide&&!(data.stars[m.id]>0))GUIDE={s1:false,i:-1};
   renderMbox();renderTray();loadWsFor(0);
   resetStage();stopRun(true);hideWin();
   setTimeout(()=>{Blockly.svgResize(ws);ws.scrollCenter&&ws.scrollCenter();},30);
   $("dpad").classList.toggle("on",!!(m&&m.tryckTangenter)||!m);
-  needDraw=true;updCnt();
+  needDraw=true;updCnt();tick300();
 }
 function renderMbox(){
   const b=$("mBox");
   if(!mission){b.hidden=true;return;}
+  if(GUIDE){renderGuide();return;}
   b.hidden=false;tipN=0;
-  b.innerHTML=`<p>${mission.mal}</p><p class="bonus">${mission.bonus}</p><div id="tipArea"></div><button class="tipbtn" id="tipBtn">💡 Tips</button>`;
+  b.innerHTML=`<p>${mission.mal}</p><p class="bonus">${mission.bonus}</p><div id="tipArea"></div><button class="spk" id="spkBtn" aria-label="Läs upp uppdraget">🔊</button><button class="tipbtn" id="tipBtn">💡 Tips</button>`;
   $("tipBtn").onclick=giveTip;
+  $("spkBtn").onclick=()=>speak(mission.mal+" "+mission.bonus);
 }
+/* uppläsning (bara när man trycker på 🔊) */
+let svVoice=null;function loadVoices(){try{svVoice=speechSynthesis.getVoices().find(v=>/^sv/i.test(v.lang))||null}catch(e){}}
+if("speechSynthesis" in window){loadVoices();speechSynthesis.onvoiceschanged=loadVoices;}
+function speak(html){if(!("speechSynthesis" in window))return;speechSynthesis.cancel();const d=document.createElement("div");d.innerHTML=html;const u=new SpeechSynthesisUtterance(d.textContent);u.lang="sv-SE";if(svVoice)u.voice=svVoice;speechSynthesis.speak(u);}
+/* guide för första uppdraget: pulserande markering visar vad man ska göra */
+let GUIDE=null,gEl=null;
+const toolEl=n=>{try{const it=ws.getToolbox().getToolboxItems().find(x=>x.getName&&x.getName()===n);return it?it.getDiv():null;}catch(e){return null;}};
+const catSel=n=>{try{const it=ws.getToolbox().getSelectedItem();return !!it&&it.getName()===n;}catch(e){return false;}};
+const flyBlk=t=>{try{const fl=ws.getFlyout();if(!fl||!fl.isVisible())return null;const b=fl.getWorkspace().getTopBlocks(false).find(x=>x.type===t);return b?b.getSvgRoot():null;}catch(e){return null;}};
+const hatHas=t=>ws.getAllBlocks(false).some(b=>b.type==="event_start"&&b.getNextBlock()&&b.getNextBlock().type===t);
+const GSTEPS=[
+  {t:"Tryck på <b>Utseende</b> i menyn till vänster.",hi:()=>toolEl("Utseende")},
+  {t:"Dra blocket <b>säg Hej!</b> ut på arbetsytan. Släpp det precis under det gula blocket, så att de klickar ihop.",hi:()=>flyBlk("look_say")},
+  {t:"Tryck på den gröna knappen <b>▶ Kör</b>.",hi:()=>$("runBtn")},
+  {t:"Titta på scenen! Djuret säger det du byggde. Nu har du gjort ett program. 🎉",hi:()=>null}];
+function setHi(el){if(gEl&&gEl!==el)gEl.classList.remove("kvhi");gEl=el||null;if(gEl)gEl.classList.add("kvhi");}
+function endGuide(){GUIDE=null;setHi(null);renderMbox();}
+function renderGuide(){
+  const i=Math.max(0,GUIDE.i),st=GSTEPS[i],b=$("mBox");b.hidden=false;
+  b.innerHTML=`<div class="gd"><span class="gn">Steg ${i+1} av ${GSTEPS.length}</span><p>${st.t}</p><div class="gdr"><button class="spk" id="spkBtn" aria-label="Läs upp">🔊</button>${i===GSTEPS.length-1?'<button class="tipbtn" id="gdDone">Jag fattar! Fortsätt ▶</button>':'<button class="skip" id="gdSkip">Hoppa över guiden</button>'}</div></div>`;
+  $("spkBtn").onclick=()=>speak(st.t);
+  const d=$("gdDone");if(d)d.onclick=endGuide;const k=$("gdSkip");if(k)k.onclick=endGuide;
+}
+function tick300(){
+  if($("bygg").hidden||!ws)return;
+  let target=null;
+  if(GUIDE){
+    GUIDE.s1=GUIDE.s1||catSel("Utseende");
+    const has=hatHas("look_say"),i=has?(ranOnce?3:2):(GUIDE.s1?1:0);
+    if(i!==GUIDE.i){GUIDE.i=i;renderGuide();}
+    target=GSTEPS[i].hi();
+  }else if(mission&&!RUN&&!ranOnce&&ws.getAllBlocks(false).filter(b=>!b.isShadow()).length>=2)target=$("runBtn");
+  setHi(target);
+}
+setInterval(tick300,300);
 let tipN=0;
 function giveTip(){
   const a=$("tipArea");
@@ -818,7 +875,7 @@ function stopThreads(){TH.forEach(t=>t.dead=true);}
 function newStats(){return{moved:0,otherMoved:0,turned:0,penLen:0,penTurn:0,penTurns:0,said:new Set(),saidNum:false,sounds:0,bounces:0,touchHits:0,keys:new Set(),asks:0,answers:0,ifs:0,saidNums:new Set(),lastSaid:"",ans:[],broadcasts:0,msgRecv:0,stops:0,pos:new Set(),x0:0,dist0:999};}
 function startRun(){
   flushWs();
-  resetStage();stopThreads();TH=[];T=0;winShown=false;hideWin();
+  resetStage();stopThreads();TH=[];T=0;winShown=false;hideWin();pend=null;clearTimeout(winTimer);ranOnce=true;
   ST=newStats();
   RUN=true;$("runBtn").textContent="■ Stopp";$("runBtn").classList.add("stop");
   P.sprites.forEach((s,i)=>hatsOf(s).forEach(h=>{if(h.type==="event_start")startThread(i,h);}));
@@ -826,6 +883,7 @@ function startRun(){
 }
 function stopRun(nc){
   if(!nc&&RUN&&mission&&ST)checkMission();
+  if(nc){clearTimeout(winTimer);pend=null;}else if(pend&&!winShown){clearTimeout(winTimer);winTimer=setTimeout(showPend,900);}
   stopThreads();TH=[];RUN=false;hideAsk();
   $("runBtn").textContent="▶ Kör";$("runBtn").classList.remove("stop");
 }
@@ -855,15 +913,17 @@ function checkMission(){
   const b2=!!mission.bonus2(ST,pi);
   const stars=b2?2:1;
   if(stars>(data.stars[mission.id]||0)){data.stars[mission.id]=stars;save();if(window.MPS&&MPS.sparat)MPS.sparat();}
-  if(!winShown||(stars>starsNow)){
-    const first=!winShown;winShown=true;starsNow=stars;
-    if(first)showWin(stars,b2);else if(b2){showWin(2,true);}
-  }
+  /* Vinstrutan väntar en stund så att man hinner se vad som hände i scenen */
+  if(!winShown){
+    if(!pend){pend={stars,b2};clearTimeout(winTimer);winTimer=setTimeout(showPend,2500);}
+    else{pend.stars=Math.max(pend.stars,stars);pend.b2=pend.b2||b2;}
+  }else if(stars>starsNow&&b2){starsNow=stars;showWin(2,true);}
 }
+function showPend(){if(!pend||winShown)return;winShown=true;starsNow=pend.stars;const p=pend;pend=null;showWin(p.stars,p.b2);}
 function showWin(stars,b2){
   snd("fanfare");
   $("winStars").textContent="★".repeat(stars)+"☆".repeat(2-stars);
-  $("winTxt").innerHTML=b2?"Du klarade uppdraget och bonusen!":"Bra jobbat! Vill du klara bonusen också?<br><small>"+mission.bonus+"</small>";
+  $("winTxt").innerHTML=b2?"Du klarade uppdraget och bonusen!":"<small>"+mission.bonus+"</small>";
   const idx=MISSIONS.indexOf(mission);
   $("winNext").hidden=idx<0||idx>=MISSIONS.length-1;
   $("win").hidden=false;
@@ -922,7 +982,7 @@ function loop(ts){
 }
 requestAnimationFrame(loop);
 
-window.__kv={frame,MISSIONS,openMission,startRun,stopRun,loadWsFor,flushWs,get P(){return P},get live(){return live},get ST(){return ST},get RUN(){return RUN},keysDown,data,get ws(){return ws},get VARS(){return VARS},get ANS(){return ANS}};
+window.__kv={frame,MISSIONS,openMission,startRun,stopRun,loadWsFor,flushWs,get P(){return P},get live(){return live},get ST(){return ST},get RUN(){return RUN},keysDown,data,get ws(){return ws},get VARS(){return VARS},TOOLBOX,CATS,get ANS(){return ANS}};
 renderStart();
 show("start");
 if(window.MPS&&MPS.start)MPS.start("start");
