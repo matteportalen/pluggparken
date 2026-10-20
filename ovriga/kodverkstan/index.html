@@ -109,6 +109,22 @@ h1{font-size:2.6rem;line-height:1;margin:14px 0 4px;font-weight:800}
 #win .row .s{background:var(--bg);color:var(--ink)}
 @keyframes kvglow{0%,100%{filter:drop-shadow(0 0 0 rgba(255,184,0,0))}50%{filter:drop-shadow(0 0 8px #FFB800) drop-shadow(0 0 2px #FFB800)}}
 .kvhi{animation:kvglow 1s ease-in-out infinite}
+.mini{height:90px;border-radius:12px;background:#fff;margin:4px 0 6px;box-shadow:inset 0 0 0 2px var(--line);position:relative}
+.minil{font-size:.8rem;font-weight:800;color:var(--muted);margin-top:4px}
+#facit{position:fixed;inset:0;z-index:300;background:rgba(29,43,83,.6);display:grid;place-items:center;padding:12px}
+.facc{background:var(--card);border-radius:20px;box-shadow:0 5px 0 var(--line);width:min(760px,100%);max-height:92vh;overflow:auto;padding:14px 16px}
+.fach{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:1.25rem}
+.fach button{font-size:1.3rem;padding:2px 8px}
+.facs{margin:4px 0 8px;color:var(--muted);font-size:.98rem}
+.facc h3{margin:8px 0 0;font-size:1rem;color:var(--pur)}
+.facf{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.facf button{border-radius:12px;padding:7px 14px;font-weight:800}
+.facf .p{background:var(--good);color:#fff;box-shadow:0 3px 0 var(--good-dark)}
+.facf .m{background:var(--pur);color:#fff;box-shadow:0 3px 0 #5A35C9}
+.facf .s{background:var(--bg);color:var(--ink)}
+#hjalp{position:fixed;left:12px;right:12px;bottom:14px;z-index:310;max-width:520px;margin:0 auto;background:#FFF6D6;color:#5A4300;border-radius:14px;padding:10px 14px;box-shadow:0 4px 0 #E7C968;display:flex;gap:8px;align-items:flex-start;font-weight:700;line-height:1.3}
+#hjalp button{font-size:1.1rem;padding:0 4px}
+.mbtns{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:4px}
 g.kvhi>.blocklyPath{stroke:#FFB800!important;stroke-width:5px!important}
 div.kvhi,button.kvhi{outline:4px solid #FFB800;outline-offset:2px;border-radius:12px}
 .gd .gn{font-weight:800;color:var(--pur);font-size:.95rem}
@@ -157,6 +173,8 @@ div.kvhi,button.kvhi{outline:4px solid #FFB800;outline-offset:2px;border-radius:
 </section>
 </div>
 
+<div id="facit" hidden role="dialog" aria-label="Facit"><div class="facc"><div class="fach"><b id="facT"></b><button id="facX" aria-label="Stäng">✕</button></div><p class="facs">Så här kan det se ut. Det finns flera sätt att lösa uppdraget, och du får gärna ändra bitarna själv.</p><div id="facBody"></div><div class="facf"><button class="p" id="facUse">📋 Använd i min bana</button><button class="m" id="facFri">🧪 Öppna i Fri duk och ändra själv</button><button class="s" id="facClose">Stäng</button></div></div></div>
+<div id="hjalp" hidden role="status"><span id="hjalpT"></span><button id="hjalpX" aria-label="Stäng">✕</button></div>
 <script src="../../ljud.js"></script>
 <script src="../../djur.js"></script>
 <script src="../../huvud.js" data-titel="Kodverkstan" data-ikon="🧩" data-portal="ovriga"></script>
@@ -166,7 +184,7 @@ div.kvhi,button.kvhi{outline:4px solid #FFB800;outline-offset:2px;border-radius:
 <script>
 "use strict";
 const KEY="mattespel-kodverkstan-v1";
-const data=(()=>{try{return Object.assign({stars:{},prog:{},fri:null},JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){return{stars:{},prog:{},fri:null}}})();
+const data=(()=>{try{return Object.assign({stars:{},prog:{},fri:null,seen:{}},JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){return{stars:{},prog:{},fri:null,seen:{}}}})();
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}};
 const $=id=>document.getElementById(id);
 function show(id){document.querySelectorAll(".screen").forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
@@ -239,6 +257,63 @@ HAT("event_msg","när jag får %1",[{type:"field_input",name:"MSG",text:"hej"}])
 Blockly.Blocks.sense_touch={init(){
   this.appendDummyInput().appendField("nuddar").appendField(new Blockly.FieldDropdown(()=>targetOpts()),"TARGET").appendField("?");
   this.setOutput(true,"Boolean");this.setColour(SE);this.setInputsInline(true);}};
+/* Förklaring på varje block: syns när man pekar på blocket, och via högerklick / håll in fingret: ❓ Vad gör det här? */
+const TOOLTIPS={
+  event_start:"Programmet startar här när du trycker på Kör.",
+  event_key:"Väntar på att du trycker på en viss tangent. Då görs blocken under.",
+  event_click:"Görs när du trycker på figuren på scenen (efter att du tryckt Kör).",
+  event_msg:"Väntar på ett meddelande från en annan figur. Då görs blocken under.",
+  event_send:"Skickar ett meddelande som alla figurer kan höra.",
+  motion_move:"Djuret går framåt så många steg som du skriver, åt det håll det tittar.",
+  motion_right:"Djuret vrider sig åt höger. Ett helt varv är 360 grader.",
+  motion_left:"Djuret vrider sig åt vänster. Ett helt varv är 360 grader.",
+  motion_goto:"Djuret hoppar direkt till en plats. x är åt sidan och y är uppåt.",
+  motion_setx:"Sätter djurets plats i sidled (x) till ett tal.",
+  motion_sety:"Sätter djurets plats uppåt och nedåt (y) till ett tal.",
+  motion_chx:"Flyttar djuret åt sidan. Plus är åt höger, minus åt vänster.",
+  motion_chy:"Flyttar djuret uppåt eller nedåt. Plus är uppåt, minus nedåt.",
+  motion_point:"Djuret tittar åt ett håll: 90 är åt höger, 0 uppåt, 180 nedåt och 270 åt vänster.",
+  motion_glide:"Djuret glider mjukt till en plats på så många sekunder du skriver.",
+  motion_bounce:"Om djuret nuddar kanten vänder det om och studsar.",
+  motion_x:"Ger djurets plats i sidled (x) som ett tal.",
+  motion_y:"Ger djurets plats uppåt och nedåt (y) som ett tal.",
+  motion_dir:"Ger vilket håll djuret tittar åt, som ett tal.",
+  look_say:"Visar en pratbubbla med texten, tills något annat sägs.",
+  look_sayfor:"Visar en pratbubbla en stund och tar sedan bort den.",
+  look_size:"Gör djuret större eller mindre. 100 är vanlig storlek.",
+  look_chsize:"Gör djuret lite större (plus) eller mindre (minus).",
+  look_show:"Visar djuret igen.",look_hide:"Gömmer djuret.",
+  look_backdrop:"Byter bakgrund på scenen.",
+  sound_play:"Spelar ett ljud.",
+  pen_down:"Sätter ner pennan. Nu ritar djuret en linje när det rör sig.",
+  pen_up:"Lyfter pennan. Nu ritar djuret inte längre.",
+  pen_clear:"Suddar allt som ritats.",
+  pen_color:"Väljer färg på pennan.",
+  pen_size:"Väljer hur tjock pennan är.",
+  ctrl_wait:"Väntar så här många sekunder innan nästa block.",
+  ctrl_repeat:"Gör allt inuti så här många gånger.",
+  ctrl_forever:"Gör allt inuti om och om igen, tills du trycker Stopp.",
+  ctrl_until:"Gör allt inuti om och om igen, tills det som står i hålet är sant.",
+  ctrl_if:"Gör det som sitter inuti bara om det som står i hålet är sant.",
+  ctrl_ifelse:"Gör det första om det är sant, annars det andra.",
+  ctrl_stop:"Stoppar hela programmet.",
+  sense_ask:"Djuret ställer en fråga och väntar på att du skriver ett svar.",
+  sense_answer:"Det du skrev senast när djuret frågade.",
+  sense_key:"Är sant om tangenten är nedtryckt just nu.",
+  sense_touch:"Är sant om djuret nuddar den andra figuren (eller kanten).",
+  op_arith:"Räknar ihop, tar bort, multiplicerar eller delar två tal.",
+  op_mod:"Ger det som blir över när man delar (resten).",
+  op_random:"Ger ett slumpat heltal mellan de två talen, ett nytt varje gång.",
+  op_cmp:"Jämför två saker. Är sant om det stämmer.",
+  op_and:"Sant bara om båda sidor är sanna.",
+  op_or:"Sant om minst en sida är sann.",
+  op_not:"Vänder på sant och falskt.",
+  op_join:"Sätter ihop två texter eller tal till en text."};
+Object.keys(TOOLTIPS).forEach(t=>{const b=Blockly.Blocks[t];if(!b)return;const init=b.init;b.init=function(){init.call(this);this.setTooltip(TOOLTIPS[t]);};});
+function showHelp(txt){$("hjalpT").textContent=txt;$("hjalp").hidden=false;clearTimeout(showHelp.t);showHelp.t=setTimeout(()=>{$("hjalp").hidden=true;},9000);}
+$("hjalpX").addEventListener("click",()=>{$("hjalp").hidden=true;});
+try{Blockly.ContextMenuRegistry.registry.register({id:"kvhelp",scopeType:Blockly.ContextMenuRegistry.ScopeType.BLOCK,weight:1,displayText:"❓ Vad gör det här?",
+  preconditionFn:sc=>TOOLTIPS[sc.block.type]?"enabled":"hidden",callback:sc=>showHelp(TOOLTIPS[sc.block.type])});}catch(e){console.warn(e);}
 
 const N=n=>({shadow:{type:"math_number",fields:{NUM:n}}});
 const Tx=t=>({shadow:{type:"text",fields:{TEXT:t}}});
@@ -346,11 +421,11 @@ const MISSIONS=[
   ok:s=>s.moved>=200,bonus2:s=>s.moved>=200&&Math.abs(s.x0-100)<=1.5,
   sol:[WS(ch(start(),mv(280)))]},
  {id:"dans",titel:"Dansa!",kort:"Snurra ett varv",
-  mal:"Få djuret att snurra ett helt varv (360°) och spela ett ljud.",
-  bonus:"Bonus: klara det med ett <b>upprepa</b>-block i stället för många lika block.",
-  tips:["Ett helt varv är 360 grader. Använd <b>vrid ↻ 15 grader</b> flera gånger.","Upprepa 24 gånger med 15 grader blir 360. Du kan också upprepa 4 gånger med 90 grader."],
+  mal:"Få djuret att snurra ett helt varv. Ett helt varv är 360 grader.",
+  bonus:"Bonus: låt djuret snurra så att man ser det, med ett <b>upprepa</b>-block, och spela ett ljud.",
+  tips:["Prova först ett enda block: <b>vrid ↻ 360 grader</b>. Då klarar du uppdraget, men djuret snurrar för fort för att man ska se det.","För att se djuret snurra: sätt <b>vrid ↻ 15 grader</b> i ett <b>upprepa 24 gånger</b> (24 · 15 = 360). Lägg gärna till ett <b>vänta</b> så syns det bättre."],
   sprites:[{k:"djur",x:0,y:0}],start:[WS(start())],
-  ok:s=>s.turned>=360&&s.sounds>=1,bonus2:(s,p)=>s.turned>=360&&s.sounds>=1&&p.types.has("ctrl_repeat"),
+  ok:s=>s.turned>=360,bonus2:(s,p)=>s.sounds>=1&&p.types.has("ctrl_repeat"),
   sol:[WS(ch(start(),bl("sound_play",{S:"magic"}),rep(24,rt(15),bl("ctrl_wait",{},{SECS:iN(0.05)}))))]},
  {id:"kvadrat",titel:"Rita en kvadrat",kort:"Pennan ritar när djuret går",
   mal:"Använd pennan och låt djuret rita en kvadrat. Börja med <b>penna ner</b>.",
@@ -515,8 +590,29 @@ const CATS={hej:["Händelser","Utseende"],promenad:["Händelser","Rörelse","Kon
   slump:["Händelser","Rörelse","Utseende","Kontroll","Räkna"],matte:["Händelser","Utseende","Kontroll","Känna av","Räkna","Variabler"]};
 const toolboxFor=cats=>({kind:"categoryToolbox",contents:TOOLBOX.contents.filter(c=>!cats||cats.includes(c.name))});
 
+/* Förklarande kort första gången en ny sak dyker upp (och via ❓ Förklara): text, blocken och en demo som körs på scenen */
+const INTRO_OF={kvadrat:"penna",dans:"upprepa",piltangenter:"tangent",fanga:"villkor",slump:"slump",matte:"fraga",poang:"variabel",meddelande:"meddelande"};
+const INTROS={
+  penna:{t:"Pennan",x:"Pennan ritar en linje där djuret går. <b>penna ner</b> börjar rita och <b>penna upp</b> slutar. Pennan ritar bara när den är nere och djuret rör sig.",
+    ws:[WS(ch(start(),bl("pen_down"),mv(100),rt(90),mv(100)))]},
+  upprepa:{t:"Upprepa",x:"Vill du göra samma sak flera gånger? Sätt det inuti ett <b>upprepa</b>-block. Här vrids djuret 90 grader fyra gånger, och fyra gånger 90 är ett helt varv.",
+    ws:[WS(ch(start(),rep(4,rt(90),vant(.5))))]},
+  tangent:{t:"Tangenter",x:"Ett gult tangent-block väntar på att du trycker på en tangent. Då görs blocken under det. Tryck på <b>Kör</b> först, sedan på tangenterna. Här trycks ↑ åt dig.",
+    ws:[WS(keyHat("up",chy(10)))],keys:["up"],ms:2200},
+  villkor:{t:"Om … så",x:"Med <b>om … så</b> kollar djuret något, till exempel om det nuddar stjärnan, och gör bara då det som sitter inuti. För att kolla hela tiden sätter man det i ett <b>för alltid</b>.",
+    ws:[WS(ch(start(),glide_(1.5,130,80)),ch(start(),forever(iff(touch_("Stjärnan"),sayb("Nuddar!")))))],ms:3200},
+  slump:{t:"Slumptal",x:"<b>slumptal från … till …</b> ger ett nytt tal varje gång. Här får djuret slumpade platser, så det hoppar till ett nytt ställe varje gång.",
+    ws:[WS(ch(start(),rep(4,gotoR(),vant(.6))))],ms:3600},
+  fraga:{t:"Fråga och svar",x:"Med <b>fråga … och vänta</b> kan djuret fråga dig något. Det du skriver hamnar i blocket <b>svar</b>. Prova: skriv ditt namn när djuret frågar!",
+    ws:[WS(ch(start(),ask_("Vad heter du?"),sayf(join_("Hej ",ans_()),3)))],ms:12000},
+  variabel:{t:"Variabler",x:"En variabel är som en låda med ett namn. I lådan ligger ett tal som du kan ändra. Här heter lådan <b>poäng</b>: den börjar på 0 och går upp ett steg tre gånger. Du ser den uppe i scenen.",
+    ws:[WSV(["poäng"],ch(start(),setv("poäng",0),rep(3,chv("poäng",1),vant(.8))))],ms:3600},
+  meddelande:{t:"Meddelanden",x:"Figurer pratar med varandra genom meddelanden. Ett <b>skicka hej</b> hörs av alla figurer som har ett <b>när jag får hej</b>.",
+    ws:[WS(ch(start(),sayf("Hej Katten!",1.5),send_("hej"))),WS(onMsg("hej",sayf("Hej på dig!",1.5)))],ms:4500}};
+
 /* ---------------- tillstånd ---------------- */
 let ws=null,P=null,cur=0,mission=null,loading=false,saveT=0;
+let DEMO=null,demoSaved=null,INTRO=null,MINIS=[],FMINIS=[];
 let needDraw=true;
 const stage=$("stage"),sctx=stage.getContext("2d");
 const penC=document.createElement("canvas");penC.width=480;penC.height=360;const pctx=penC.getContext("2d");
@@ -540,7 +636,7 @@ function renderStart(){
 }
 $("mis").addEventListener("click",e=>{const b=e.target.closest(".mcard");if(b)openMission(MISSIONS[+b.dataset.i]);});
 $("friBtn").addEventListener("click",()=>openMission(null));
-$("homeBtn").addEventListener("click",()=>{stopRun(true);flush();renderStart();show("start");});
+$("homeBtn").addEventListener("click",()=>{stopRun(true);clearMinis(MINIS);closeFacit();flush();renderStart();show("start");});
 
 /* ---------------- editorn ---------------- */
 function ensureWs(){
@@ -567,14 +663,14 @@ function loadWsFor(i){
   Blockly.svgResize(ws);updCnt();
 }
 function flushWs(){
-  if(!ws||!P)return;
+  if(!ws||!P||DEMO)return;
   const st=Blockly.serialization.workspaces.save(ws);
   P.sprites[cur].ws=st;
   (st.variables||[]).forEach(v=>{if(!P.vars.includes(v.name))P.vars.push(v.name);});
   flush();
 }
 function flush(){
-  if(!P)return;
+  if(!P||DEMO)return;
   if(mission)data.prog[mission.id]=P;else data.fri=P;
   save();
 }
@@ -583,7 +679,7 @@ function updCnt(){
   $("cnt").textContent="Block: "+n;
 }
 function openMission(m){
-  mission=m;winShown=false;pend=null;clearTimeout(winTimer);ranOnce=false;GUIDE=null;setHi(null);
+  mission=m;winShown=false;pend=null;clearTimeout(winTimer);ranOnce=false;GUIDE=null;INTRO=null;setHi(null);closeFacit();
   const base=m?(data.prog[m.id]||null):data.fri;
   P=base||(m?projFrom(m):projFree());
   P.vars=P.vars||[];cur=0;
@@ -594,6 +690,7 @@ function openMission(m){
   try{ws.updateToolbox(toolboxFor(m&&CATS[m.id]));}catch(e){console.error(e);}
   $("bgSel").value=P.bg;
   if(m&&m.guide&&!(data.stars[m.id]>0))GUIDE={s1:false,i:-1};
+  else if(m&&INTRO_OF[m.id]&&!(data.seen&&data.seen[INTRO_OF[m.id]]))INTRO={id:INTRO_OF[m.id]};
   renderMbox();renderTray();loadWsFor(0);
   resetStage();stopRun(true);hideWin();
   setTimeout(()=>{Blockly.svgResize(ws);ws.scrollCenter&&ws.scrollCenter();},30);
@@ -603,12 +700,87 @@ function openMission(m){
 function renderMbox(){
   const b=$("mBox");
   if(!mission){b.hidden=true;return;}
+  clearMinis(MINIS);
   if(GUIDE){renderGuide();return;}
+  if(INTRO){renderIntro();return;}
   b.hidden=false;tipN=0;
-  b.innerHTML=`<p>${mission.mal}</p><p class="bonus">${mission.bonus}</p><div id="tipArea"></div><button class="spk" id="spkBtn" aria-label="Läs upp uppdraget">🔊</button><button class="tipbtn" id="tipBtn">💡 Tips</button>`;
+  const io=INTRO_OF[mission.id];
+  b.innerHTML=`<p>${mission.mal}</p><p class="bonus">${mission.bonus}</p><div id="tipArea"></div><div class="mbtns"><button class="spk" id="spkBtn" aria-label="Läs upp uppdraget">🔊</button><button class="tipbtn" id="tipBtn">💡 Tips</button>${io?'<button class="tipbtn" id="inBtn">❓ Förklara</button>':""}<button class="tipbtn" id="facBtn">📖 Facit</button></div>`;
   $("tipBtn").onclick=giveTip;
   $("spkBtn").onclick=()=>speak(mission.mal+" "+mission.bonus);
+  $("facBtn").onclick=openFacit;
+  if(io)$("inBtn").onclick=()=>{INTRO={id:io};renderMbox();};
 }
+/* små skrivskyddade blockbilder (förklaringskort och facit): en bild per block-stapel, så att ingenting hamnar över varandra */
+function mini(el,state){
+  const w=Blockly.inject(el,{readOnly:true,renderer:"zelos",sounds:false,media:"https://cdn.jsdelivr.net/npm/blockly@11.2.2/media/",
+    move:{scrollbars:false,drag:false,wheel:false},zoom:{startScale:.8},trashcan:false});
+  try{Blockly.serialization.workspaces.load(JSON.parse(JSON.stringify(state)),w);}catch(e){console.error(e);}
+  el.style.height="90px";Blockly.svgResize(w);
+  const fit=()=>{try{
+    let bb=w.getBlocksBoundingBox();const bw=(bb.right-bb.left)*w.scale,av=el.clientWidth-20;
+    if(bw>av&&av>40){w.setScale(w.scale*av/bw);bb=w.getBlocksBoundingBox();}
+    el.style.height=Math.min(420,Math.max(50,(bb.bottom-bb.top)*w.scale+26))+"px";Blockly.svgResize(w);w.scrollCenter();}catch(e){}};
+  setTimeout(fit,60);setTimeout(fit,350);
+  return w;
+}
+function miniAll(parent,state,arr){
+  (state.blocks.blocks||[]).forEach(b=>{
+    const d=document.createElement("div");d.className="mini";parent.appendChild(d);
+    arr.push(mini(d,{blocks:{languageVersion:0,blocks:[Object.assign({},b,{x:12,y:12})]},variables:state.variables||[]}));});
+}
+function clearMinis(arr){arr.splice(0).forEach(w=>{try{w.dispose();}catch(e){}});}
+function renderIntro(){
+  const I=INTROS[INTRO.id],b=$("mBox");b.hidden=false;data.seen=data.seen||{};data.seen[INTRO.id]=1;save();
+  b.innerHTML=`<div class="gd"><span class="gn">Ny sak: ${I.t}</span><p style="font-size:1.05rem">${I.x}</p><div id="minis"></div><div class="gdr"><button class="spk" id="spkBtn" aria-label="Läs upp">🔊</button><button class="tipbtn" id="inDemo">▶ Visa mig</button><button class="skip" id="inOk">Okej, jag provar själv</button></div></div>`;
+  I.ws.forEach((w,k)=>{if(!(w.blocks.blocks||[]).length)return;
+    if(I.ws.length>1&&P.sprites[k]){const l=document.createElement("div");l.className="minil";l.textContent=P.sprites[k].name;$("minis").appendChild(l);}
+    miniAll($("minis"),w,MINIS);});
+  $("spkBtn").onclick=()=>speak(I.x);
+  $("inDemo").onclick=()=>startDemo(I);
+  $("inOk").onclick=()=>{stopRun(true);INTRO=null;renderMbox();};
+}
+/* demo: kör ett litet exempelprogram på scenen utan att röra elevens egna block */
+function startDemo(d){
+  flushWs();stopRun(true);
+  demoSaved=P.sprites.map(s=>s.ws);
+  P.sprites.forEach((s,i)=>{s.ws=JSON.parse(JSON.stringify(d.ws[i]||WS()));});
+  DEMO=d;
+  resetStage();stopThreads();TH=[];T=0;ST=newStats();winShown=false;hideWin();pend=null;clearTimeout(winTimer);
+  RUN=true;$("runBtn").textContent="■ Stopp";$("runBtn").classList.add("stop");
+  P.sprites.forEach((s,i)=>hatsOf(s).forEach(h=>{if(h.type==="event_start")startThread(i,h);}));
+  if(d.keys){d.keys.forEach(k=>keysDown[k]=true);setTimeout(()=>d.keys.forEach(k=>keysDown[k]=false),1200);}
+  setTimeout(()=>{if(DEMO===d)stopRun(true);},d.ms||5000);
+}
+function endDemo(){
+  if(!DEMO)return;
+  const sv=demoSaved;DEMO=null;demoSaved=null;
+  if(P&&sv)P.sprites.forEach((s,i)=>{s.ws=sv[i];});
+}
+/* facit: lösningen som riktiga block */
+function openFacit(){
+  stopRun(true);flushWs();
+  $("facT").textContent="Facit: "+mission.titel;
+  const body=$("facBody");body.innerHTML="";clearMinis(FMINIS);
+  $("facit").hidden=false;
+  mission.sol.forEach((w,i)=>{if(!(w.blocks.blocks||[]).length)return;
+    if(mission.sol.length>1&&P.sprites[i]){const h=document.createElement("h3");h.textContent=P.sprites[i].name;body.appendChild(h);}
+    miniAll(body,w,FMINIS);});
+}
+function closeFacit(){$("facit").hidden=true;clearMinis(FMINIS);}
+function useSolution(){
+  if(!confirm("Då byts dina block ut mot facit. Vill du det?"))return;
+  mission.sol.forEach((w,i)=>{if(P.sprites[i])P.sprites[i].ws=JSON.parse(JSON.stringify(w));});
+  closeFacit();loadWsFor(cur);flushWs();updCnt();
+}
+function solToFri(){
+  if(data.fri&&!confirm("Din fria duk byts ut mot facit. Vill du det?"))return;
+  data.fri=projFrom({sprites:mission.sprites,start:mission.sol,bg:mission.bg});save();
+  closeFacit();stopRun(true);flush();openMission(null);
+}
+$("facX").addEventListener("click",closeFacit);$("facClose").addEventListener("click",closeFacit);
+$("facUse").addEventListener("click",useSolution);$("facFri").addEventListener("click",solToFri);
+$("facit").addEventListener("click",e=>{if(e.target===$("facit"))closeFacit();});
 /* uppläsning (bara när man trycker på 🔊) */
 let svVoice=null;function loadVoices(){try{svVoice=speechSynthesis.getVoices().find(v=>/^sv/i.test(v.lang))||null}catch(e){}}
 if("speechSynthesis" in window){loadVoices();speechSynthesis.onvoiceschanged=loadVoices;}
@@ -640,7 +812,7 @@ function tick300(){
     const has=hatHas("look_say"),i=has?(ranOnce?3:2):(GUIDE.s1?1:0);
     if(i!==GUIDE.i){GUIDE.i=i;renderGuide();}
     target=GSTEPS[i].hi();
-  }else if(mission&&!RUN&&!ranOnce&&ws.getAllBlocks(false).filter(b=>!b.isShadow()).length>=2)target=$("runBtn");
+  }else if(mission&&!RUN&&!DEMO&&!ranOnce&&ws.getAllBlocks(false).filter(b=>!b.isShadow()).length>=2)target=$("runBtn");
   setHi(target);
 }
 setInterval(tick300,300);
@@ -648,11 +820,8 @@ let tipN=0;
 function giveTip(){
   const a=$("tipArea");
   if(tipN<mission.tips.length){a.insertAdjacentHTML("beforeend",`<div class="tip">${mission.tips[tipN]}</div>`);tipN++;
-    if(tipN>=mission.tips.length)$("tipBtn").textContent="🧩 Visa en lösning";return;}
-  if(confirm("Då byts dina block ut mot ett exempel. Vill du det?")){
-    mission.sol.forEach((w,i)=>{if(P.sprites[i])P.sprites[i].ws=JSON.parse(JSON.stringify(w));});
-    loadWsFor(cur);flushWs();updCnt();
-  }
+    if(tipN>=mission.tips.length)$("tipBtn").textContent="📖 Visa facit";return;}
+  openFacit();
 }
 function renderTray(){
   const t=$("tray");t.innerHTML="";
@@ -874,6 +1043,7 @@ function broadcast(m){ST.broadcasts++;P.sprites.forEach((s,i)=>hatsOf(s).forEach
 function stopThreads(){TH.forEach(t=>t.dead=true);}
 function newStats(){return{moved:0,otherMoved:0,turned:0,penLen:0,penTurn:0,penTurns:0,said:new Set(),saidNum:false,sounds:0,bounces:0,touchHits:0,keys:new Set(),asks:0,answers:0,ifs:0,saidNums:new Set(),lastSaid:"",ans:[],broadcasts:0,msgRecv:0,stops:0,pos:new Set(),x0:0,dist0:999};}
 function startRun(){
+  if(DEMO)stopRun(true);
   flushWs();
   resetStage();stopThreads();TH=[];T=0;winShown=false;hideWin();pend=null;clearTimeout(winTimer);ranOnce=true;
   ST=newStats();
@@ -882,10 +1052,11 @@ function startRun(){
   snd("chime");
 }
 function stopRun(nc){
-  if(!nc&&RUN&&mission&&ST)checkMission();
+  if(!nc&&RUN&&mission&&ST&&!DEMO)checkMission();
   if(nc){clearTimeout(winTimer);pend=null;}else if(pend&&!winShown){clearTimeout(winTimer);winTimer=setTimeout(showPend,900);}
   stopThreads();TH=[];RUN=false;hideAsk();
   $("runBtn").textContent="▶ Kör";$("runBtn").classList.remove("stop");
+  endDemo();
 }
 $("runBtn").addEventListener("click",()=>{RUN?stopRun():startRun();});
 
@@ -903,7 +1074,7 @@ function frame(){
     const waits=P.sprites.some(s=>hatsOf(s).some(h=>/^event_(key|click|msg)$/.test(h.type)));
     if(!waits&&RUN){stopRun();}
   }
-  if(mission&&ST&&Math.round(T*60)%10===0)checkMission();
+  if(mission&&ST&&!DEMO&&Math.round(T*60)%10===0)checkMission();
 }
 function checkMission(){
   const a=live[0];if(!a)return;
@@ -944,7 +1115,7 @@ const KEYMAP={" ":"space",ArrowUp:"up",ArrowDown:"down",ArrowLeft:"left",ArrowRi
 const kname=k=>KEYMAP[k]||(k.length===1?k.toLowerCase():null);
 window.addEventListener("keydown",e=>{
   if(e.target&&/INPUT|TEXTAREA|SELECT/.test(e.target.tagName))return;
-  if(e.key==="Escape"){if(!$("win").hidden){hideWin();return;}}
+  if(e.key==="Escape"){if(!$("facit").hidden){closeFacit();return;}if(!$("hjalp").hidden){$("hjalp").hidden=true;return;}if(!$("win").hidden){hideWin();return;}}
   const k=kname(e.key);if(!k)return;
   if(RUN&&(k==="space"||k.length>1))e.preventDefault();
   keysDown[k]=true;
