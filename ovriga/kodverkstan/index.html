@@ -236,6 +236,7 @@ Blockly.defineBlocksWithJsonArray([
   S("motion_right","vrid ↻ %1 grader",[V("DEG")],MO),
   S("motion_left","vrid ↺ %1 grader",[V("DEG")],MO),
   S("motion_goto","gå till x: %1 y: %2",[V("X"),V("Y")],MO),
+  S("motion_jump","hoppa direkt till x: %1 y: %2",[V("X"),V("Y")],MO),
   S("motion_setx","sätt x till %1",[V("X")],MO),
   S("motion_sety","sätt y till %1",[V("Y")],MO),
   S("motion_chx","ändra x med %1",[V("X")],MO),
@@ -291,7 +292,8 @@ const TOOLTIPS={
   motion_move:"Djuret går framåt så många steg som du skriver, åt det håll det tittar.",
   motion_right:"Djuret vrider sig åt höger. Ett helt varv är 360 grader.",
   motion_left:"Djuret vrider sig åt vänster. Ett helt varv är 360 grader.",
-  motion_goto:"Djuret hoppar direkt till en plats. x är åt sidan och y är uppåt.",
+  motion_goto:"Djuret åker till platsen, så man ser färden. x är åt sidan och y är uppåt.",
+  motion_jump:"Djuret dyker upp på platsen direkt, utan färd. Bra när något ska börja om, till exempel en stjärna som ska hamna högst upp igen.",
   motion_setx:"Sätter djurets plats i sidled (x) till ett tal.",
   motion_sety:"Sätter djurets plats uppåt och nedåt (y) till ett tal.",
   motion_chx:"Flyttar djuret åt sidan. Plus är åt höger, minus åt vänster.",
@@ -346,7 +348,7 @@ const TOOLBOX={kind:"categoryToolbox",contents:[
   {kind:"category",name:"Händelser",colour:EV,contents:[blk("event_start"),blk("event_key"),blk("event_click"),blk("event_msg"),blk("event_send")]},
   {kind:"category",name:"Rörelse",colour:MO,contents:[
     blk("motion_move",{STEPS:N(10)}),blk("motion_right",{DEG:N(15)}),blk("motion_left",{DEG:N(15)}),
-    blk("motion_goto",{X:N(0),Y:N(0)}),blk("motion_glide",{SECS:N(1),X:N(100),Y:N(50)}),
+    blk("motion_goto",{X:N(0),Y:N(0)}),blk("motion_jump",{X:N(0),Y:N(0)}),blk("motion_glide",{SECS:N(1),X:N(100),Y:N(50)}),
     blk("motion_point",{DIR:N(90)}),blk("motion_chx",{X:N(10)}),blk("motion_setx",{X:N(0)}),
     blk("motion_chy",{Y:N(10)}),blk("motion_sety",{Y:N(0)}),blk("motion_bounce"),
     blk("motion_x"),blk("motion_y"),blk("motion_dir")]},
@@ -415,7 +417,7 @@ const ans_=()=>Bk(bl("sense_answer"));
 const ask_=q=>bl("sense_ask",{},{Q:asIn(q)});
 const send_=m=>bl("event_send",{MSG:m});
 const onMsg=(m,...body)=>ch(bl("event_msg",{MSG:m}),...body);
-const gotoR=y=>bl("motion_goto",{},{X:rnd_(-200,200),Y:y===undefined?rnd_(-140,140):iN(y)});
+const gotoR=y=>bl("motion_jump",{},{X:rnd_(-200,200),Y:y===undefined?rnd_(-140,140):iN(y)});
 const glide_=(sec,x,y)=>bl("motion_glide",{},{SECS:iN(sec),X:iN(x),Y:iN(y)});
 const maxVar=()=>{const v=Object.values(VARS).map(num);return v.length?Math.max(...v):-1e9;};
 const minVar=()=>{const v=Object.values(VARS).map(num);return v.length?Math.min(...v):1e9;};
@@ -476,13 +478,13 @@ const MISSIONS=[
  {id:"fanga",titel:"Fånga stjärnan",kort:"Om djuret nuddar stjärnan",
   mal:"Styr djuret med pilarna. När det <b>nuddar</b> stjärnan ska det säga något och spela ett ljud.",
   bonus:"Bonus: stjärnan ska hoppa till en ny plats när du fångat den.",
-  tips:["Behöver du <b>för alltid</b> och <b>om … så</b>? Frågan är: <b>nuddar Stjärnan?</b>","Bonus: välj stjärnan nere till höger. Där kan den ha en egen loop med <b>nuddar</b> och <b>gå till x y</b> med slumptal."],
+  tips:["Behöver du <b>för alltid</b> och <b>om … så</b>? Frågan är: <b>nuddar Stjärnan?</b>","Bonus: välj stjärnan nere till höger. Där kan den ha en egen loop med <b>nuddar</b> och <b>hoppa direkt till x y</b> med slumptal."],
   sprites:[{k:"djur",x:-150,y:-90},{k:"e",e:"⭐",n:"Stjärnan",x:130,y:80}],
   start:[WS(keyHat("up",chy(10)),keyHat("down",chy(-10)),keyHat("left",chx(-10)),keyHat("right",chx(10)),ch(start())),WS()],
   ok:s=>s.touchHits>=1&&(s.sounds>=1||s.said.size>=1),bonus2:s=>s.touchHits>=1&&s.otherMoved>=60,
   sol:[WS(keyHat("up",chy(10)),keyHat("down",chy(-10)),keyHat("left",chx(-10)),keyHat("right",chx(10)),
         ch(start(),forever(bl("ctrl_if",{},{IF:{block:bl("sense_touch",{TARGET:"Stjärnan"})},DO:{block:ch(bl("sound_play",{S:"ok"}),bl("look_sayfor",{},{TEXT:iT("Fångad!"),SECS:iN(1)}))}})))),
-      WS(ch(start(),forever(bl("ctrl_if",{},{IF:{block:bl("sense_touch",{TARGET:"__djur"})},DO:{block:bl("motion_goto",{},{X:{block:bl("op_random",{},{A:iN(-200),B:iN(200)})},Y:{block:bl("op_random",{},{A:iN(-140),B:iN(140)})}})}}))))],
+      WS(ch(start(),forever(bl("ctrl_if",{},{IF:{block:bl("sense_touch",{TARGET:"__djur"})},DO:{block:bl("motion_jump",{},{X:{block:bl("op_random",{},{A:iN(-200),B:iN(200)})},Y:{block:bl("op_random",{},{A:iN(-140),B:iN(140)})}})}}))))],
   tryckTangenter:true},
  {id:"studs",titel:"Studsboll",kort:"Bollen studsar mot kanten",
   mal:"Få bollen att röra sig och studsa mot kanterna, minst tre gånger.",
@@ -494,10 +496,10 @@ const MISSIONS=[
  {id:"slump",titel:"Hoppande djur",kort:"Slumpa plats",
   mal:"Låt djuret hoppa till en ny slumpad plats varje sekund. Scenen går från x −240 till 240 och y −180 till 180.",
   bonus:"Bonus: låt djuret säga vilket x det hamnade på.",
-  tips:["Använd <b>gå till x y</b> och sätt in <b>slumptal från … till …</b> i båda rutorna.","Sätt in <b>x-läge</b> i ett <b>sätt ihop</b>-block för att säga talet."],
+  tips:["Använd <b>hoppa direkt till x y</b> och sätt in <b>slumptal från … till …</b> i båda rutorna.","Sätt in <b>x-läge</b> i ett <b>sätt ihop</b>-block för att säga talet."],
   sprites:[{k:"djur",x:0,y:0}],start:[WS(start())],
   ok:s=>s.pos.size>=4,bonus2:s=>s.pos.size>=4&&s.saidNum,
-  sol:[WS(ch(start(),forever(bl("motion_goto",{},{X:{block:bl("op_random",{},{A:iN(-200),B:iN(200)})},Y:{block:bl("op_random",{},{A:iN(-140),B:iN(140)})}}),bl("look_say",{},{TEXT:{block:bl("op_join",{},{A:iT("x är "),B:{block:bl("motion_x")}})}}),bl("ctrl_wait",{},{SECS:iN(1)}))))],bg:"rut"},
+  sol:[WS(ch(start(),forever(bl("motion_jump",{},{X:{block:bl("op_random",{},{A:iN(-200),B:iN(200)})},Y:{block:bl("op_random",{},{A:iN(-140),B:iN(140)})}}),bl("look_say",{},{TEXT:{block:bl("op_join",{},{A:iT("x är "),B:{block:bl("motion_x")}})}}),bl("ctrl_wait",{},{SECS:iN(1)}))))],bg:"rut"},
  {id:"matte",titel:"Min egen matteövning",kort:"Fråga, kolla svar, ge beröm",
   mal:"Låt djuret fråga &quot;Hur mycket är 6 · 7?&quot;, vänta på svaret och säga om det var rätt. Skriv svaret på scenen när det frågar.",
   bonus:"Bonus: slumpa talen så att frågan blir ny varje gång du kör.",
@@ -560,7 +562,7 @@ const MISSIONS=[
  {id:"fangaspel",titel:"Fånga stjärnorna",kort:"Stjärnor faller, du fångar",
   mal:"Stjärnan ska falla uppifrån. Fångar djuret den får du en poäng och en ny stjärna börjar falla från en ny plats. Fånga tre stjärnor! Styr med ← →.",
   bonus:"Bonus: fånga sex stjärnor.",
-  tips:["Bygg i Stjärnans block (välj den nere till vänster). För alltid: <b>ändra y med −3</b>. Om <b>nuddar</b> djuret: ändra poäng med 1 och <b>gå till</b> ett slumptal på x och 160 på y.","Missar du? Lägg till <b>om y-läge &lt; −170</b> som flyttar stjärnan till toppen igen."],
+  tips:["Bygg i Stjärnans block (välj den nere till vänster). För alltid: <b>ändra y med −3</b>. Om <b>nuddar</b> djuret: ändra poäng med 1 och <b>hoppa direkt till</b> ett slumptal på x och 160 på y.","Missar du? Lägg till <b>om y-läge &lt; −170</b> som flyttar stjärnan till toppen igen."],
   sprites:[{k:"djur",x:0,y:-130},{k:"e",e:"⭐",n:"Stjärnan",x:60,y:160}],
   start:[WS(keyHat("left",chx(-12)),keyHat("right",chx(12))),WS(start())],
   ok:()=>maxVar()>=3,bonus2:()=>maxVar()>=6,
@@ -1054,6 +1056,7 @@ function* step(b,sp,th){
     case "motion_right":yield* rotate(sp,num(e("DEG")),th);break;
     case "motion_left":yield* rotate(sp,-num(e("DEG")),th);break;
     case "motion_goto":{const tx=Math.max(-300,Math.min(300,num(e("X")))),ty=Math.max(-240,Math.min(240,num(e("Y"))));yield* slide(sp,tx-sp.x,ty-sp.y,th,16);break;}
+    case "motion_jump":setPos(sp,Math.max(-300,Math.min(300,num(e("X")))),Math.max(-240,Math.min(240,num(e("Y")))));break;
     case "motion_setx":yield* slide(sp,Math.max(-300,Math.min(300,num(e("X"))))-sp.x,0,th,16);break;
     case "motion_sety":yield* slide(sp,0,Math.max(-240,Math.min(240,num(e("Y"))))-sp.y,th,16);break;
     case "motion_chx":yield* slide(sp,num(e("X")),0,th,10);break;
