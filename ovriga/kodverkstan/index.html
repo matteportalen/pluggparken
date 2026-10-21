@@ -446,8 +446,8 @@ const MISSIONS=[
   sol:[WS(ch(start(),mv(280)))]},
  {id:"dans",titel:"Dansa!",kort:"Snurra ett varv",
   mal:"Få djuret att snurra ett helt varv. Ett helt varv är 360 grader.",
-  bonus:"Bonus: låt djuret snurra så att man ser det, med ett <b>upprepa</b>-block, och spela ett ljud.",
-  tips:["Prova först ett enda block: <b>vrid ↻ 360 grader</b>. Då klarar du uppdraget, men djuret snurrar för fort för att man ska se det.","För att se djuret snurra: sätt <b>vrid ↻ 15 grader</b> i ett <b>upprepa 24 gånger</b> (24 · 15 = 360). Lägg gärna till ett <b>vänta</b> så syns det bättre."],
+  bonus:"Bonus: klara det med ett <b>upprepa</b>-block och spela ett ljud medan djuret snurrar.",
+  tips:["Prova först ett enda block: <b>vrid ↻ 360 grader</b>. Då snurrar djuret ett helt varv.","Bonus: sätt <b>vrid ↻ 15 grader</b> i ett <b>upprepa 24 gånger</b> (24 · 15 = 360) och lägg till <b>spela ljudet</b> före loopen."],
   sprites:[{k:"djur",x:0,y:0}],start:[WS(start())],
   ok:s=>s.turned>=360,bonus2:(s,p)=>s.sounds>=1&&p.types.has("ctrl_repeat"),
   sol:[WS(ch(start(),bl("sound_play",{S:"magic"}),rep(24,rt(15),bl("ctrl_wait",{},{SECS:iN(0.05)}))))]},
@@ -1015,7 +1015,13 @@ function setPos(sp,x,y){
   sp.x=x;sp.y=y;
   if(sp===live[0]){ST.pos.add(Math.round(x/20)+","+Math.round(y/20));}
 }
-function turn(sp,deg){sp.dir=((sp.dir+deg)%360+360)%360;ST.turned+=Math.abs(deg);if(sp.pen.down){ST.penTurn+=Math.abs(deg);ST.penTurns++;}}
+function turnStep(sp,deg){sp.dir=((sp.dir+deg)%360+360)%360;ST.turned+=Math.abs(deg);if(sp.pen.down)ST.penTurn+=Math.abs(deg);}
+/* vridningar går i små steg (högst 10 grader per bild) så att man ser djuret snurra */
+function* rotate(sp,deg,th){
+  const n=Math.max(1,Math.ceil(Math.abs(deg)/10)),d=deg/n;
+  for(let k=0;k<n;k++){turnStep(sp,d);if(k<n-1){yield;if(th.dead)return;}}
+  if(sp.pen.down)ST.penTurns++;
+}
 /* Långa förflyttningar går i små steg (högst 6 per bild) så att man ser djuret gå i stället för att hoppa dit */
 function* slide(sp,dx,dy,th){
   const len=Math.hypot(dx,dy);
@@ -1031,8 +1037,8 @@ function* step(b,sp,th){
   const f=b.fields||{},i=b.inputs||{},e=k=>ev(vv(i[k]),sp);
   switch(b.type){
     case "motion_move":{const n=num(e("STEPS")),r=sp.dir*Math.PI/180;yield* slide(sp,n*Math.sin(r),n*Math.cos(r),th);break;}
-    case "motion_right":turn(sp,num(e("DEG")));break;
-    case "motion_left":turn(sp,-num(e("DEG")));break;
+    case "motion_right":yield* rotate(sp,num(e("DEG")),th);break;
+    case "motion_left":yield* rotate(sp,-num(e("DEG")),th);break;
     case "motion_goto":setPos(sp,num(e("X")),num(e("Y")));break;
     case "motion_setx":setPos(sp,num(e("X")),sp.y);break;
     case "motion_sety":setPos(sp,sp.x,num(e("Y")));break;
