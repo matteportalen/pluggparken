@@ -1007,13 +1007,13 @@ function touching(sp,target){
   if(!o||o===sp||!o.vis||!sp.vis)return false;
   const r2=24*o.size/100;return Math.hypot(o.x-sp.x,o.y-sp.y)<r+r2;
 }
-function setPos(sp,x,y){
+function setPos(sp,x,y,quiet){
   x=Math.max(-300,Math.min(300,x));y=Math.max(-240,Math.min(240,y));
   const dx=x-sp.x,dy=y-sp.y;
   if(sp.pen.down){pctx.strokeStyle=sp.pen.color;pctx.lineWidth=sp.pen.size;pctx.lineCap="round";pctx.beginPath();pctx.moveTo(px(sp.x),py(sp.y));pctx.lineTo(px(x),py(y));pctx.stroke();ST.penLen+=Math.hypot(dx,dy);}
   const d=Math.hypot(dx,dy);if(sp===live[0])ST.moved+=d;else ST.otherMoved+=d;
   sp.x=x;sp.y=y;
-  if(sp===live[0]){ST.pos.add(Math.round(x/20)+","+Math.round(y/20));}
+  if(sp===live[0]&&!quiet){ST.pos.add(Math.round(x/20)+","+Math.round(y/20));}
 }
 function turnStep(sp,deg){sp.dir=((sp.dir+deg)%360+360)%360;ST.turned+=Math.abs(deg);if(sp.pen.down)ST.penTurn+=Math.abs(deg);}
 /* vridningar går i små steg (högst 10 grader per bild) så att man ser djuret snurra */
@@ -1023,11 +1023,25 @@ function* rotate(sp,deg,th){
   if(sp.pen.down)ST.penTurns++;
 }
 /* Långa förflyttningar går i små steg (högst 6 per bild) så att man ser djuret gå i stället för att hoppa dit */
-function* slide(sp,dx,dy,th){
+function* slide(sp,dx,dy,th,speed){
+  speed=speed||6;
   const len=Math.hypot(dx,dy);
-  if(len<=6){setPos(sp,sp.x+dx,sp.y+dy);return;}
-  const n=Math.ceil(len/6),sx=dx/n,sy=dy/n;
-  for(let k=0;k<n;k++){setPos(sp,sp.x+sx,sp.y+sy);if(k<n-1){yield;if(th.dead)return;}}
+  if(len<=speed){setPos(sp,sp.x+dx,sp.y+dy);return;}
+  const n=Math.ceil(len/speed),sx=dx/n,sy=dy/n;
+  for(let k=0;k<n;k++){setPos(sp,sp.x+sx,sp.y+sy,k<n-1);if(k<n-1){yield;if(th.dead)return;}}
+}
+/* alla förflyttningar, vridningar och storleksändringar syns som rörelse (inget hoppar direkt) */
+function* pointTo(sp,target,th){
+  let d=((target-sp.dir+540)%360)-180;
+  const n=Math.max(1,Math.ceil(Math.abs(d)/10)),st=d/n;
+  for(let k=0;k<n;k++){sp.dir=((sp.dir+st)%360+360)%360;if(k<n-1){yield;if(th.dead)return;}}
+  sp.dir=((target%360)+360)%360;
+}
+function* sizeTo(sp,target,th){
+  target=Math.max(10,Math.min(500,target));
+  const d=target-sp.size,n=Math.max(1,Math.ceil(Math.abs(d)/6)),st=d/n;
+  for(let k=0;k<n;k++){sp.size+=st;if(k<n-1){yield;if(th.dead)return;}}
+  sp.size=target;
 }
 function* body(stack,sp,th){for(let b=stack;b;b=b.next&&b.next.block){yield* step(b,sp,th);if(th.dead)return;}}
 function* wait(sec,th){const end=T+sec;while(T<end){yield;if(th.dead)return;}}
@@ -1039,12 +1053,12 @@ function* step(b,sp,th){
     case "motion_move":{const n=num(e("STEPS")),r=sp.dir*Math.PI/180;yield* slide(sp,n*Math.sin(r),n*Math.cos(r),th);break;}
     case "motion_right":yield* rotate(sp,num(e("DEG")),th);break;
     case "motion_left":yield* rotate(sp,-num(e("DEG")),th);break;
-    case "motion_goto":setPos(sp,num(e("X")),num(e("Y")));break;
-    case "motion_setx":setPos(sp,num(e("X")),sp.y);break;
-    case "motion_sety":setPos(sp,sp.x,num(e("Y")));break;
-    case "motion_chx":yield* slide(sp,num(e("X")),0,th);break;
-    case "motion_chy":yield* slide(sp,0,num(e("Y")),th);break;
-    case "motion_point":sp.dir=((num(e("DIR"))%360)+360)%360;break;
+    case "motion_goto":{const tx=Math.max(-300,Math.min(300,num(e("X")))),ty=Math.max(-240,Math.min(240,num(e("Y"))));yield* slide(sp,tx-sp.x,ty-sp.y,th,16);break;}
+    case "motion_setx":yield* slide(sp,Math.max(-300,Math.min(300,num(e("X"))))-sp.x,0,th,16);break;
+    case "motion_sety":yield* slide(sp,0,Math.max(-240,Math.min(240,num(e("Y"))))-sp.y,th,16);break;
+    case "motion_chx":yield* slide(sp,num(e("X")),0,th,10);break;
+    case "motion_chy":yield* slide(sp,0,num(e("Y")),th,10);break;
+    case "motion_point":yield* pointTo(sp,num(e("DIR")),th);break;
     case "motion_glide":{const sec=Math.max(.02,num(e("SECS"))),x0=sp.x,y0=sp.y,x1=num(e("X")),y1=num(e("Y")),t0=T;
       while(T-t0<sec){const k=(T-t0)/sec;setPos(sp,x0+(x1-x0)*k,y0+(y1-y0)*k);yield;if(th.dead)return;}setPos(sp,x1,y1);break;}
     case "motion_bounce":{const r=24*sp.size/100;let hit=false;
@@ -1055,8 +1069,8 @@ function* step(b,sp,th){
       if(hit)ST.bounces++;break;}
     case "look_say":sayTxt(sp,e("TEXT"));break;
     case "look_sayfor":{sayTxt(sp,e("TEXT"));const mine=sp.say;yield* wait(num(e("SECS")),th);if(sp.say===mine)sp.say=null;break;}
-    case "look_size":sp.size=Math.max(10,Math.min(500,num(e("SIZE"))));break;
-    case "look_chsize":sp.size=Math.max(10,Math.min(500,sp.size+num(e("SIZE"))));break;
+    case "look_size":yield* sizeTo(sp,num(e("SIZE")),th);break;
+    case "look_chsize":yield* sizeTo(sp,sp.size+num(e("SIZE")),th);break;
     case "look_show":sp.vis=true;break;
     case "look_hide":sp.vis=false;break;
     case "look_backdrop":bgLive=f.BG||"eng";break;
