@@ -160,7 +160,7 @@ div.kvhi,button.kvhi{outline:4px solid #FFB800;outline-offset:2px;border-radius:
       </div>
       <div id="dpad" aria-label="Piltangenter"><button data-k="left">←</button><button data-k="up">↑</button><button data-k="down">↓</button><button data-k="right">→</button><button data-k="space">␣</button></div>
       <div class="ctl">
-        <button class="go" id="runBtn">▶ Kör</button>
+        <button class="go" id="runBtn">🏁 Kör</button>
         <label for="bgSel">Bakgrund</label><select id="bgSel"></select>
         <span class="cnt" id="cnt"></span>
       </div>
@@ -804,7 +804,7 @@ const hatHas=t=>ws.getAllBlocks(false).some(b=>b.type==="event_start"&&b.getNext
 const GSTEPS=[
   {t:"Tryck på <b>Utseende</b> i menyn till vänster.",hi:()=>toolEl("Utseende")},
   {t:"Dra blocket <b>säg Hej!</b> ut på arbetsytan. Släpp det precis under det gula blocket, så att de klickar ihop.",hi:()=>flyBlk("look_say")},
-  {t:"Tryck på den gröna knappen <b>▶ Kör</b>.",hi:()=>$("runBtn")},
+  {t:"Tryck på den gröna knappen <b>🏁 Kör</b>.",hi:()=>$("runBtn")},
   {t:"Titta på scenen! Djuret säger det du byggde. Nu har du gjort ett program. 🎉",hi:()=>null}];
 function setHi(el){if(gEl&&gEl!==el)gEl.classList.remove("kvhi");gEl=el||null;if(gEl)gEl.classList.add("kvhi");}
 function endGuide(){GUIDE=null;setHi(null);renderMbox();}
@@ -1060,13 +1060,12 @@ function startRun(){
   ST=newStats();
   RUN=true;$("runBtn").textContent="■ Stopp";$("runBtn").classList.add("stop");
   P.sprites.forEach((s,i)=>hatsOf(s).forEach(h=>{if(h.type==="event_start")startThread(i,h);}));
-  snd("chime");
 }
 function stopRun(nc){
   if(!nc&&RUN&&mission&&ST&&!DEMO)checkMission();
   if(nc){clearTimeout(winTimer);pend=null;}else if(pend&&!winShown){clearTimeout(winTimer);winTimer=setTimeout(showPend,900);}
   stopThreads();TH=[];RUN=false;hideAsk();
-  $("runBtn").textContent="▶ Kör";$("runBtn").classList.remove("stop");
+  $("runBtn").textContent="🏁 Kör";$("runBtn").classList.remove("stop");
   endDemo();
 }
 $("runBtn").addEventListener("click",()=>{RUN?stopRun():startRun();});
