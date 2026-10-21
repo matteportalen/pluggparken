@@ -162,6 +162,7 @@ div.kvhi,button.kvhi{outline:4px solid #FFB800;outline-offset:2px;border-radius:
 .facf{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 #hjalp{position:fixed;left:12px;right:12px;bottom:14px;z-index:310;max-width:520px;margin:0 auto;background:#FFF6D6;color:#5A4300;border-radius:14px;padding:10px 14px;box-shadow:0 4px 0 #E7C968;display:flex;gap:8px;align-items:flex-start;font-weight:700;line-height:1.3}
 #hjalp button{font-size:1.1rem;padding:0 4px}
+#hjalp #hjalpU{flex:none;background:#fff;border-radius:999px;padding:3px 12px;font-size:.9rem;font-weight:800}
 </style>
 </head>
 <body>
@@ -198,7 +199,7 @@ div.kvhi,button.kvhi{outline:4px solid #FFB800;outline-offset:2px;border-radius:
 </div>
 
 <div id="facit" hidden role="dialog" aria-label="Facit"><div class="facc"><div class="fach"><b id="facT"></b><button id="facX" aria-label="Stäng">✕</button></div><p class="facs">Så här kan det se ut. Det finns flera sätt att lösa uppdraget, och du får gärna ändra bitarna själv.</p><div id="facBody"></div><div class="facf"><button class="p" id="facUse">📋 Använd i min bana</button><button class="m" id="facFri">🧪 Öppna i Fri duk och ändra själv</button><button class="s" id="facClose">Stäng</button></div></div></div>
-<div id="hjalp" hidden role="status"><span id="hjalpT"></span><button id="hjalpX" aria-label="Stäng">✕</button></div>
+<div id="hjalp" hidden role="status"><span id="hjalpT"></span><button id="hjalpU" hidden>↩ Ångra</button><button id="hjalpX" aria-label="Stäng">✕</button></div>
 <script src="../../ljud.js"></script>
 <script src="../../djur.js"></script>
 <script src="../../huvud.js" data-titel="Kodverkstan" data-ikon="🧩" data-portal="ovriga"></script>
@@ -333,7 +334,7 @@ const TOOLTIPS={
   op_not:"Vänder på sant och falskt.",
   op_join:"Sätter ihop två texter eller tal till en text."};
 Object.keys(TOOLTIPS).forEach(t=>{const b=Blockly.Blocks[t];if(!b)return;const init=b.init;b.init=function(){init.call(this);this.setTooltip(TOOLTIPS[t]);};});
-function showHelp(txt){$("hjalpT").textContent=txt;$("hjalp").hidden=false;clearTimeout(showHelp.t);showHelp.t=setTimeout(()=>{$("hjalp").hidden=true;},9000);}
+function showHelp(txt,undo){$("hjalpT").textContent=txt;const u=$("hjalpU");u.hidden=!undo;u.onclick=undo?()=>{undo();$("hjalp").hidden=true;}:null;$("hjalp").hidden=false;clearTimeout(showHelp.t);showHelp.t=setTimeout(()=>{$("hjalp").hidden=true;},undo?14000:9000);}
 $("hjalpX").addEventListener("click",()=>{$("hjalp").hidden=true;});
 try{Blockly.ContextMenuRegistry.registry.register({id:"kvhelp",scopeType:Blockly.ContextMenuRegistry.ScopeType.BLOCK,weight:1,displayText:"❓ Vad gör det här?",
   preconditionFn:sc=>TOOLTIPS[sc.block.type]?"enabled":"hidden",callback:sc=>showHelp(TOOLTIPS[sc.block.type])});}catch(e){console.warn(e);}
@@ -806,7 +807,10 @@ function openFacit(){
 }
 function closeFacit(){$("facit").hidden=true;clearMinis(FMINIS);}
 function useSolution(){
-  if(!confirm("Då byts dina block ut mot facit. Vill du det?"))return;
+  /* ingen varningsruta: i stället sparas dina block så att du kan trycka Ångra */
+  flushWs();
+  const backup=P.sprites.map(x=>JSON.parse(JSON.stringify(x.ws||WS())));
+  const undo=()=>{P.sprites.forEach((x,i)=>{if(backup[i])x.ws=JSON.parse(JSON.stringify(backup[i]));});loadWsFor(cur);flushWs();updCnt();renderTray();};
   mission.sol.forEach((w,i)=>{if(P.sprites[i])P.sprites[i].ws=JSON.parse(JSON.stringify(w));});
   closeFacit();loadWsFor(cur);flushWs();updCnt();
   if(P.sprites.length>1){
@@ -814,8 +818,8 @@ function useSolution(){
     let best=0,mx=0;mission.sol.forEach((w,i)=>{const n=JSON.stringify(w).length;if(P.sprites[i]&&n>mx){mx=n;best=i;}});
     visited=new Set([P.sprites[cur].id]);
     if(best!==cur)switchSprite(best);else renderTray();
-    showHelp("Facit lades in. Varje figur har egna block: du ser nu "+P.sprites[cur].name+". Välj de andra figurerna nere till vänster för att se deras block.");
-  }
+    showHelp("Facit lades in. Varje figur har egna block: du ser nu "+P.sprites[cur].name+". Välj de andra figurerna nere till vänster för att se deras block.",undo);
+  }else showHelp("Facit lades in.",undo);
 }
 function solToFri(){
   if(data.fri&&!confirm("Din fria duk byts ut mot facit. Vill du det?"))return;
