@@ -64,6 +64,8 @@ button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid var(
 .hb.mo{background:#4C7DE8}.hb.lo{background:#8D5CE8}
 .hv svg{width:88px;height:auto;display:block}
 @media(max-width:600px){.hero{grid-template-columns:1fr;padding:18px}.hv{display:none}.hero h1{font-size:2.2rem}}
+.mobnote{display:flex;gap:10px;align-items:center;background:#FFF6D6;color:#5A4300;border-radius:14px;padding:10px 14px;margin-bottom:12px;font-size:.98rem;font-weight:700;line-height:1.3}
+.mobnote button{flex:none;background:#fff;border-radius:999px;padding:5px 14px;font-weight:800;color:#5A4300}
 .grp{margin-top:18px}
 .grp h2{margin:0 0 8px;font-size:1rem;font-weight:800;color:var(--muted)}
 .gcard{background:var(--card);border-radius:var(--r);box-shadow:0 4px 0 var(--line);overflow:hidden}
@@ -165,6 +167,7 @@ div.kvhi,button.kvhi{outline:4px solid #FFB800;outline-offset:2px;border-radius:
 <body>
 <div class="wrap">
 <section id="start" class="screen narrow">
+  <div class="mobnote" id="mobnote" hidden><span>💻 Kodverkstan är gjord för <b>dator eller surfplatta</b>. På en liten mobil blir det trångt, men du kan prova ändå.</span><button id="mobOk">Okej</button></div>
   <div class="hero" id="hero"></div>
   <div id="mis"></div>
   <p class="note">Tips: tryck på <b>Kör</b> för att se vad dina block gör. Dra djuret på scenen för att byta startplats.</p>
@@ -659,12 +662,14 @@ const IKON={hej:"👋",promenad:"🚶",dans:"💃",kvadrat:"🟦",stjarna:"⭐",
 const GRUPPER=[["Första stegen",["hej","promenad","dans","kvadrat","stjarna"]],["Styr och spela",["piltangenter","fanga","studs","slump","matte"]],["Variabler och logik",["poang","nedrakning","meddelande","kedja","tabell","summa","fangaspel","liv","gissa","matteprov"]]];
 function renderStart(){
   initDjur();
+  try{$("mobnote").hidden=!(matchMedia("(max-width:719px)").matches&&!sessionStorage.getItem("kv-mobil"));}catch(e){}
   const klara=MISSIONS.filter(m=>(data.stars[m.id]||0)>0).length,st=MISSIONS.reduce((a,m)=>a+(data.stars[m.id]||0),0);
   $("hero").innerHTML=`<div><h1>Kodverkstan</h1><p>Bygg program med block och få ditt djur att dansa, rita och spela.</p><span class="hprog"><span>${klara} av ${MISSIONS.length} klara</span><span>★ ${st}</span></span></div><div class="hv"><div class="hbl"><span class="hb hat">när 🏁 klickas</span><span class="hb mo">gå 100 steg</span><span class="hb lo">säg Hej!</span></div>${djurSvg||""}</div>`;
   const row=(m,i)=>`<button class="mcard" data-i="${i}"><span class="ic">${IKON[m.id]||"🧩"}</span><span class="tx"><b><span class="no">${i+1}</span>${m.titel}</b><small>${m.kort}</small></span>${starsHtml(data.stars[m.id]||0)}</button>`;
   $("mis").innerHTML=`<div class="grp"><div class="gcard"><button class="mcard" data-fri="1"><span class="ic pur">🧩</span><span class="tx"><b>Fri duk</b><small>Bygg vad du vill. Det sparas åt dig.</small></span></button></div></div>`+
     GRUPPER.map(([t,ids])=>`<div class="grp"><h2>${t}</h2><div class="gcard">${ids.map(id=>{const i=MISSIONS.findIndex(m=>m.id===id);return i<0?"":row(MISSIONS[i],i);}).join("")}</div></div>`).join("");
 }
+$("mobOk").addEventListener("click",()=>{$("mobnote").hidden=true;try{sessionStorage.setItem("kv-mobil","1");}catch(e){}});
 $("mis").addEventListener("click",e=>{const b=e.target.closest(".mcard");if(!b)return;if(b.dataset.fri)openMission(null);else openMission(MISSIONS[+b.dataset.i]);});
 $("homeBtn").addEventListener("click",()=>{stopRun(true);clearMinis(MINIS);closeFacit();flush();renderStart();show("start");});
 

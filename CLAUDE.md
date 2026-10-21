@@ -141,6 +141,7 @@ Startsidan måste uppdateras på **fyra** ställen, annars följer framstegen in
 - **Säger läraren "börja inte" eller "bolla idéer", bygg ingenting.** Föreslå, förklara och fråga, och vänta på "kör". Ibland vill läraren att du först förklarar vad du har förstått.
 - Hög kvalitetsribba. Hellre ta bort något än behålla något som känns billigt. Var ärlig när något inte håller måttet.
 - Korta, tydliga svar på svenska. Säg alltid **vilka filer som ändrats och var de ska ligga**.
+- **Kodverkstan är för dator och surfplatta** (lärarens fynd okt 2026: ”det här är ingen aktivitet för liten mobilskärm ändå”): på mobil (under 720 px) visas en vänlig ruta ”gjord för dator eller surfplatta … du kan prova ändå”; layouten på mobil är inte prioriterad.
 - **Rymdlabbet och liknande utforskande övningar får prioritera dator**; är något lite sämre på mobil är det okej, men lösningar som fungerar på mobil är alltid välkomna. Matteövningarna ska fungera fullt ut på mobil och surfplatta.
 - Testa alltid ordentligt innan leverans: kör `node --check` på skripten och spela igenom övningar och spel i en headless webbläsare (Playwright) i både mobilstorlek (390 × 844) och datorstorlek.
 - Tänk på delade skol-iPads och Chromebooks, och på yngre barn som inte läser säkert.
