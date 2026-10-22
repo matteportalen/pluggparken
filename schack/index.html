@@ -127,6 +127,42 @@ h1,h2,h3{font-family:var(--serif);margin:0}
 .res .big{font-size:4rem;line-height:1}.res h2{font-size:2.1rem;margin:6px 0}.res .st{font-size:2.2rem;letter-spacing:4px;color:var(--gold);margin:8px 0 14px}
 .res p{color:var(--muted);max-width:28em;margin:6px auto}
 .res .acts{justify-content:center;margin-top:14px}
+
+.map{max-width:640px;margin:0 auto;position:relative;border-radius:24px;overflow:hidden;border:1px solid var(--line);background:linear-gradient(180deg,#0E3B5E,#0A2744 55%,#0A1F3A);box-shadow:inset 0 0 60px rgba(0,0,0,.4),0 14px 34px rgba(0,0,0,.35)}
+.map::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 36px 10px at 20px 14px,rgba(255,255,255,.08) 0 60%,transparent 62%) 0 0/90px 60px,radial-gradient(ellipse 28px 8px at 60px 44px,rgba(255,255,255,.06) 0 60%,transparent 62%) 0 0/90px 60px;animation:wv 14s linear infinite}
+@keyframes wv{to{background-position:90px 0,90px 0}}
+.map svg.path{position:absolute;inset:0;width:100%;height:100%}
+.map svg.path path{fill:none;vector-effect:non-scaling-stroke;stroke-linecap:round}
+.map .dash{stroke:rgba(255,255,255,.28);stroke-width:4;stroke-dasharray:2 12}
+.map .gold{stroke:var(--gold);stroke-width:5;stroke-dasharray:2 11;filter:drop-shadow(0 0 4px rgba(232,196,104,.6))}
+.deco{position:absolute;font-size:1.5rem;opacity:.55;pointer-events:none;animation:bob 4s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-6px) rotate(3deg)}}
+.isl{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:3px;width:130px;text-align:center}
+.isl .land{position:relative;width:78px;height:70px;display:grid;place-items:center;border-radius:46% 54% 52% 48%/58% 46% 54% 42%;background:radial-gradient(circle at 35% 28%,var(--c1),var(--c2) 62%,var(--c3));box-shadow:0 0 0 6px #F0DCA0,0 0 0 8px rgba(0,0,0,.18),0 12px 16px rgba(0,0,0,.45);transition:transform .2s}
+.isl:hover .land{transform:scale(1.07)}
+.isl .land img{width:46px;height:46px;filter:drop-shadow(0 3px 3px rgba(0,0,0,.45));margin-top:-4px}
+.isl .num{position:absolute;left:-6px;top:-6px;width:26px;height:26px;border-radius:50%;background:#fff;color:#1b2540;font-weight:800;font-size:.85rem;display:grid;place-items:center;box-shadow:0 2px 5px rgba(0,0,0,.4)}
+.isl .nm{font-family:var(--serif);font-weight:700;font-size:.92rem;line-height:1.1;text-shadow:0 2px 4px rgba(0,0,0,.7)}
+.isl .stz{font-size:.78rem;letter-spacing:1px;color:var(--gold);min-height:1.1em}
+.isl .stz i{font-style:normal;opacity:.3}
+.t-lesson{--c1:#9BE070;--c2:#4FAF4A;--c3:#2E7D3B}
+.t-pat{--c1:#C8A6FF;--c2:#8A63E0;--c3:#5A3DA8}
+.t-mate{--c1:#7FE3DC;--c2:#2FAFA8;--c3:#1B7C7A}
+.t-vs{--c1:#FFC180;--c2:#E8803C;--c3:#B04C1E}
+.isl.lock{cursor:default}
+.isl.lock .land{filter:grayscale(1) brightness(.55)}
+.isl.lock .land::after{content:"🔒";position:absolute;font-size:1.5rem}
+.isl.lock .land img{opacity:.35}
+.isl.lock .nm{opacity:.55}
+.isl.cur .land{animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 6px #F0DCA0,0 0 0 14px rgba(232,196,104,.45),0 12px 16px rgba(0,0,0,.45)}}
+.isl.cur::after{content:"Spela!";position:absolute;top:-22px;background:var(--gold);color:#2A2108;font-weight:800;font-size:.8rem;border-radius:999px;padding:1px 10px;animation:bob 1.6s ease-in-out infinite}
+.isl.new .land{animation:newp 1.1s ease-out}
+@keyframes newp{0%{transform:scale(.4);opacity:0}60%{transform:scale(1.2)}100%{transform:scale(1)}}
+.isl.shake{animation:sh .35s}
+@keyframes sh{25%{margin-left:-8px}75%{margin-left:8px}}
+.sec.sub{margin:16px 0 6px}.sec.sub h3{font-size:1.1rem;color:var(--ink)}.sec.sub small{color:var(--muted);font-weight:500}
+@media(prefers-reduced-motion:reduce){.map::before,.deco,.isl.cur .land,.isl.cur::after{animation:none}}
 @media(prefers-reduced-motion:reduce){.pc{transition:none}.s.hint::before{animation:none}.dots i{animation:none}}
 @media(max-width:899px){.gright .status{order:-1}}
 @media(max-width:560px){.hero{padding:20px 16px 18px}.hero .pcs{opacity:.35}.card.wide{grid-column:span 2}}
@@ -144,15 +180,14 @@ h1,h2,h3{font-family:var(--serif);margin:0}
     <p>Lär dig hur pjäserna går, lös schackmatt och spela hela partier. Ett steg i taget.</p>
     <div class="pcs"><img src="bilder/dn.svg" alt=""><img src="bilder/lk.svg" alt=""><img src="bilder/lq.svg" alt=""></div>
   </div>
-  <div class="sec"><span class="n">1</span><h2>Lär känna pjäserna</h2><small>Hur går de, och hur tar man?</small></div>
-  <div class="cards" id="hLearn"></div>
-  <div class="sec"><span class="n">2</span><h2>Schackmatt i ett drag</h2><small>Hitta draget som vinner</small></div>
+  <div class="sec"><h2>Äventyret</h2><small id="advN"></small></div>
+  <div class="map" id="map"></div>
+  <div class="sec" style="margin-top:30px"><h2>Spela fritt</h2><small>Träna mer, när du vill</small></div>
+  <div class="sec sub"><h3>Schackmatt i ett drag</h3></div>
   <div class="cards" id="hMate"></div>
-  <div class="sec"><span class="n">3</span><h2>Klassiska mattmönster</h2><small>Lär dig känna igen de berömda</small></div>
-  <div class="cards" id="hPat"></div>
-  <div class="sec"><span class="n">4</span><h2>Minischack</h2><small>5 × 5 rutor, färre pjäser</small></div>
+  <div class="sec sub"><h3>Minischack <small>5 × 5 rutor</small></h3></div>
   <div class="cards" id="hMini"></div>
-  <div class="sec"><span class="n">5</span><h2>Hela partiet</h2><small>8 × 8 rutor, alla regler</small></div>
+  <div class="sec sub"><h3>Hela partiet <small>8 × 8 rutor, alla regler</small></h3></div>
   <div class="cards" id="hFull"></div>
   <p class="credit">Pjäserna är ritade av Colin M. L. Burnett (Wikimedia Commons, CC BY-SA 3.0). Datorn är egenbyggd och tänker 1–3 drag fram.</p>
 </section>
@@ -223,20 +258,77 @@ const LESSON={
 };
 const ORDER=['p','r','b','n','q','k'];
 
+/* ---------- äventyret: öar ---------- */
+let ADV=null;
+const ISL=[
+ {n:'Bondeön',t:'lesson',p:'p'},{n:'Tornön',t:'lesson',p:'r'},{n:'Löparön',t:'lesson',p:'b'},{n:'Springarön',t:'lesson',p:'n'},{n:'Damön',t:'lesson',p:'q'},{n:'Kungön',t:'lesson',p:'k'},
+ {n:'Ryggradsön',t:'pat',pats:[0,1,2]},{n:'Trappön',t:'pat',pats:[3,4]},{n:'Hjälparön',t:'pat',pats:[5,6,7]},{n:'Hörnön',t:'pat',pats:[8,9,10]},
+ {n:'Mattskogen',t:'mate',level:1},{n:'Löparviken',t:'pat',pats:[11,12]},{n:'Bondebyn',t:'pat',pats:[13,14]},{n:'Pusselberget',t:'mate',level:2},
+ {n:'Minihamnen',t:'vs',kind:'mini',level:1},{n:'Minifästet',t:'vs',kind:'mini',level:2},{n:'Pusselvulkanen',t:'mate',level:3},{n:'Minislottet',t:'vs',kind:'mini',level:3},
+ {n:'Stora hamnen',t:'vs',kind:'full',level:1},{n:'Stora fästet',t:'vs',kind:'full',level:2},{n:'Mästarborgen',t:'vs',kind:'full',level:3}
+];
+const ISLIMG={lesson:i=>'bilder/l'+i.p+'.svg',pat:()=>'bilder/lk.svg',mate:()=>'bilder/lq.svg',vs:i=>i.kind==='mini'?'bilder/ln.svg':'bilder/lr.svg'};
+function islStars(i){
+  const x=ISL[i];
+  if(x.t==='lesson')return D.stars['l-'+x.p]||0;
+  if(x.t==='mate')return D.stars['m'+x.level]||0;
+  if(x.t==='pat')return x.pats.every(k=>D.stars['k-'+MPSchackMonster[k].id])?1:0;
+  return D.stars[x.kind+x.level]?1:0;
+}
+const islMax=i=>ISL[i].t==='lesson'||ISL[i].t==='mate'?3:1;
+const islDone=i=>islStars(i)>0;
+const islOpen=i=>i===0||islDone(i-1);
+function curIsland(){for(let i=0;i<ISL.length;i++)if(!islDone(i))return i;return ISL.length-1;}
+const XP=[50,24,66,34,72,28,60,22,68,38,74,30,58,24,66,36,70,28,56,34,50];
+function renderMap(){
+  const el=$('map');if(!el)return;
+  const N=ISL.length,RH=128,H=N*RH+30,cur=curIsland();
+  el.style.height=H+'px';
+  const pt=i=>[XP[i%XP.length],70+i*RH];
+  let d='',g='';
+  for(let i=0;i<N;i++){const [x,y]=pt(i);
+    if(i===0){d='M'+x+' '+y;g=d;continue;}
+    const [px,py]=pt(i-1),seg=` C${px} ${py+RH/2},${x} ${y-RH/2},${x} ${y}`;
+    d+=seg;if(i<=cur&&islDone(i-1))g+=seg;else if(i-1<cur&&i<=cur)g+=seg;}
+  const doneCount=ISL.filter((_,i)=>islDone(i)).length;
+  $('advN').textContent=doneCount+' av '+N+' öar klara';
+  let h=`<svg class="path" viewBox="0 0 100 ${H}" preserveAspectRatio="none"><path class="dash" d="${d}"/><path class="gold" d="${g}"/></svg>`;
+  const deco=['⛵','🐋','🌊','🐬','⛵','🌊','🦈','⛵'];
+  for(let i=0;i<N;i++){const [x,y]=pt(i);const ox=x>50?x-38:x+30;h+=`<span class="deco" style="left:${Math.max(4,Math.min(88,ox))}%;top:${y+40}px;animation-delay:${i*.4}s">${deco[i%deco.length]}</span>`;}
+  const seen=D.seenIsl==null?0:D.seenIsl;
+  for(let i=0;i<N;i++){const [x,y]=pt(i),x0=ISL[i],open=islOpen(i),done=islDone(i);
+    const n=islStars(i),mx=islMax(i);
+    h+=`<button class="isl t-${x0.t} ${open?'':'lock'} ${i===cur&&open?'cur':''} ${open&&i<=cur&&i>seen&&i===cur?'new':''}" data-isl="${i}" style="left:${x}%;top:${y}px" aria-label="${x0.n}${open?'':' (låst)'}"><span class="land"><img src="${ISLIMG[x0.t](x0)}" alt=""><b class="num">${i+1}</b></span><span class="nm">${x0.n}</span><span class="stz">${done?'⭐'.repeat(n)+'<i>'+'☆'.repeat(mx-n)+'</i>':''}</span></button>`;}
+  el.innerHTML=h;
+  D.seenIsl=cur;save();
+}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('.isl');if(!b)return;
+  const i=+b.dataset.isl;
+  if(!islOpen(i)){b.classList.remove('shake');void b.offsetWidth;b.classList.add('shake');if(L().bad)L().bad();return;}
+  openIsland(i);
+});
+function openIsland(i){
+  const x=ISL[i];ADV=i;
+  if(x.t==='lesson')openLesson(x.p);
+  else if(x.t==='mate')openMate(x.level);
+  else if(x.t==='vs')openVs(x.kind,x.level);
+  else{const l=x.pats,k=l.findIndex(j=>!D.stars['k-'+MPSchackMonster[j].id]);openPat(l[k<0?0:k]);}
+}
+function scrollToCur(){const e=document.querySelector('.isl.cur')||document.querySelector('.isl[data-isl="'+curIsland()+'"]');if(e)e.scrollIntoView({block:'center',behavior:'smooth'});}
+
 /* ---------- startsidan ---------- */
 function home(){
-  $('hLearn').innerHTML=ORDER.map(p=>{const n=D.stars['l-'+p]||0;return `<button class="card" data-l="${p}"><img src="bilder/l${p}.svg" alt=""><b>${LESSON[p].t}</b>${stars(n,3)}</button>`;}).join('');
+  renderMap();
   $('hMate').innerHTML=[1,2,3].map(l=>`<button class="card" data-m="${l}"><img src="bilder/lk.svg" alt=""><b>${LV[l]}</b><small>${['Dam eller torn mot en kung','Två pjäser mot en kung','Flera pjäser, svart försvarar sig'][l-1]}</small>${stars(D.stars['m'+l]||0,3)}</button>`).join('');
-  $('hPat').innerHTML=MPSchackMonster.map((m,i)=>{const d=D.stars['k-'+m.id];return `<button class="card" data-pat="${i}"><span class="ico">${d?'✅':(i+1)}</span><b>${d?m.namn:'Mönster '+(i+1)}</b><small>${d?'Klart!':'Hitta matten'}</small></button>`;}).join('');
   $('hMini').innerHTML=[1,2,3].map(l=>`<button class="card" data-v="mini${l}"><img src="bilder/${['ln','lb','lq'][l-1]}.svg" alt=""><b>${LV[l]}</b><small>Du är vit. Vinn mot datorn!</small>${stars(D.stars['mini'+l]||0,1)}</button>`).join('');
   $('hFull').innerHTML=[1,2,3].map(l=>`<button class="card" data-v="full${l}"><img src="bilder/${['lr','lb','lk'][l-1]}.svg" alt=""><b>${LV[l]}</b><small>Du är vit. Alla regler.</small>${stars(D.stars['full'+l]||0,1)}</button>`).join('')
     +`<button class="card wide" data-two="1"><span class="ico">🤝</span><b>Två spelare</b><small>Spela mot en kompis på samma skärm.</small></button>`;
 }
 document.addEventListener('click',e=>{
   const c=e.target.closest('.card');if(!c)return;
-  if(c.dataset.l)openLesson(c.dataset.l);
-  else if(c.dataset.m)openMate(+c.dataset.m);
-  else if(c.dataset.pat)openPat(+c.dataset.pat);
+  ADV=null;
+  if(c.dataset.m)openMate(+c.dataset.m);
   else if(c.dataset.v){const k=c.dataset.v.slice(0,-1),l=+c.dataset.v.slice(-1);openVs(k,l);}
   else if(c.dataset.two)openTwo();
 });
@@ -463,6 +555,11 @@ function end(st){
   setTimeout(()=>result({emoji,title,text,stars:win&&G.kind?{n:1,max:1}:null,again}),1700);
 }
 function result(r){
+  if(ADV!=null){const done=islDone(ADV),last=ADV+1>=ISL.length;
+    if(done&&!last){r.again=()=>openIsland(ADV+1);r.nextText='Nästa ö: '+ISL[ADV+1].n+' ▶';}
+    else if(!done){r.nextText='Försök igen';}
+    $('rHome').textContent='Till kartan';}
+  else $('rHome').textContent='Till schackmenyn';
   $('rEmoji').textContent=r.emoji;$('rTitle').textContent=r.title;$('rText').textContent=r.text;
   $('rStars').innerHTML=r.stars?'⭐'.repeat(r.stars.n)+'<span style="opacity:.25">'+'☆'.repeat(r.stars.max-r.stars.n)+'</span>':'';
   $('rAgain').textContent=r.nextText||'Spela igen';
@@ -613,22 +710,29 @@ function openPat(i){
   const mates=M.legal(S).filter(x=>{const N=M.make(S,x);return !M.legal(N).length&&M.inCheck(N,'b');});
   G={mode:'mate',pat:i,kind:'k-'+m.id,flip:false,sel:-1,legal:[],last:null,hist:[],busy:false,over:false,round:0,total:1,errs:0,pErr:0,moves:0,hint:null,S:M.copy(S),puz:{S,mates}};
   show('game');names2();build(G.S);marks();
-  $('prog').innerHTML=`<span>Mönster ${i+1} av ${MPSchackMonster.length}</span>`;
+  {const l=ADV!=null&&ISL[ADV].t==='pat'?ISL[ADV].pats:null;$('prog').innerHTML=l?`<span>${ISL[ADV].n}: mönster ${l.indexOf(i)+1} av ${l.length}</span>`:`<span>Mönster ${i+1} av ${MPSchackMonster.length}</span>`;}
   $('gTitle').textContent='Mattmönster '+(i+1);
   $('gSub').textContent='Vit drar. Hitta draget som sätter svarts kung schackmatt!';
   say('Vit ska dra. Hitta schackmatt i ett drag.','');
   acts([{id:'hint',t:'💡 Tips',f:()=>{G.errs+=1;G.hint=[G.puz.mates[0].f];marks();say('💡 Flytta pjäsen på den blinkande rutan.','warn');}},{id:'rs',t:'↺ Ställ tillbaka',f:resetPuz}]);
 }
+function patNext(i){
+  if(ADV!=null&&ISL[ADV].t==='pat'){const l=ISL[ADV].pats,k=l.indexOf(i);return k+1<l.length?l[k+1]:-2;}
+  return i+1<MPSchackMonster.length?i+1:-1;
+}
 function patDone(ok){
-  const i=G.pat,m=MPSchackMonster[i],nx=i+1<MPSchackMonster.length;
+  const i=G.pat,m=MPSchackMonster[i],nx=patNext(i);
   G.busy=true;
   if(ok){addStars(G.kind,1);if(L().fanfare)L().fanfare();}
   $('gTitle').textContent=m.namn;$('gSub').textContent=m.text;
   say(ok?'<b>Schackmatt!</b> Det här mönstret heter <b>'+m.namn+'</b>.':'Så här såg lösningen ut: <b>'+m.namn+'</b>.',ok?'good':'warn');
-  acts([{id:'nx',t:nx?'Nästa mönster ▶':'Till menyn',p:1,f:()=>nx?openPat(i+1):toHome()},{id:'rs',t:'↺ Prova igen',f:()=>openPat(i)}]);
+  const retry={id:'rs',t:'↺ Prova igen',f:()=>openPat(i)};
+  if(!ok){acts([Object.assign({p:1},retry)]);return;}
+  if(nx===-2)acts([{id:'nx',t:'Ön är klar! ▶',p:1,f:()=>result({emoji:'🏝️',title:ISL[ADV].n+' är klar!',text:'Du kan nu '+ISL[ADV].pats.length+' nya mattmönster. En ny ö väntar!',stars:{n:1,max:1},again:toHome})},retry]);
+  else acts([{id:'nx',t:nx>=0?'Nästa mönster ▶':'Till menyn',p:1,f:()=>nx>=0?openPat(nx):toHome()},retry]);
 }
 /* ---------- gemensamt ---------- */
-function toHome(){G=null;home();show('home');}
+function toHome(){G=null;home();show('home');setTimeout(scrollToCur,120);}
 $('quit').onclick=toHome;$('rHome').onclick=toHome;
 $('rulesBtn').onclick=()=>{$('rules').hidden=false;};
 $('rulesOk').onclick=()=>{$('rules').hidden=true;};
