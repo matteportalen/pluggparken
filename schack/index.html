@@ -461,13 +461,13 @@ function go(m,dropped){
 }
 function sound(cap,N){const l=L();if(l.clonk)l.clonk();if(G.mode!=='lesson'&&M.inCheck(N,N.turn)&&l.ok)setTimeout(()=>l.ok(),120);}
 function think(){
-  G.busy=true;statusLine();
+  const me=G;G.busy=true;statusLine();
   const t0=Date.now();
   setTimeout(()=>{
-    if(!G||G.over)return;
-    const m=M.pick(G.S,G.level);
+    if(G!==me||me.over)return;
+    const m=M.pick(me.S,me.level);
     const wait=Math.max(0,500-(Date.now()-t0));
-    setTimeout(()=>{if(!G||G.over)return;G.busy=false;if(m)go(m);},wait);
+    setTimeout(()=>{if(G!==me||me.over)return;me.busy=false;if(m)go(m);},wait);
   },30);
 }
 function caps(){
