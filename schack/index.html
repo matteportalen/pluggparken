@@ -148,9 +148,11 @@ h1,h2,h3{font-family:var(--serif);margin:0}
   <div class="cards" id="hLearn"></div>
   <div class="sec"><span class="n">2</span><h2>Schackmatt i ett drag</h2><small>Hitta draget som vinner</small></div>
   <div class="cards" id="hMate"></div>
-  <div class="sec"><span class="n">3</span><h2>Minischack</h2><small>5 × 5 rutor, färre pjäser</small></div>
+  <div class="sec"><span class="n">3</span><h2>Klassiska mattmönster</h2><small>Lär dig känna igen de berömda</small></div>
+  <div class="cards" id="hPat"></div>
+  <div class="sec"><span class="n">4</span><h2>Minischack</h2><small>5 × 5 rutor, färre pjäser</small></div>
   <div class="cards" id="hMini"></div>
-  <div class="sec"><span class="n">4</span><h2>Hela partiet</h2><small>8 × 8 rutor, alla regler</small></div>
+  <div class="sec"><span class="n">5</span><h2>Hela partiet</h2><small>8 × 8 rutor, alla regler</small></div>
   <div class="cards" id="hFull"></div>
   <p class="credit">Pjäserna är ritade av Colin M. L. Burnett (Wikimedia Commons, CC BY-SA 3.0). Datorn är egenbyggd och tänker 1–3 drag fram.</p>
 </section>
@@ -193,6 +195,7 @@ h1,h2,h3{font-family:var(--serif);margin:0}
 </div></div>
 
 <script src="motor.js"></script>
+<script src="monster.js"></script>
 <script>
 (function(){
 "use strict";
@@ -224,6 +227,7 @@ const ORDER=['p','r','b','n','q','k'];
 function home(){
   $('hLearn').innerHTML=ORDER.map(p=>{const n=D.stars['l-'+p]||0;return `<button class="card" data-l="${p}"><img src="bilder/l${p}.svg" alt=""><b>${LESSON[p].t}</b>${stars(n,3)}</button>`;}).join('');
   $('hMate').innerHTML=[1,2,3].map(l=>`<button class="card" data-m="${l}"><img src="bilder/lk.svg" alt=""><b>${LV[l]}</b><small>${['Dam eller torn mot en kung','Två pjäser mot en kung','Flera pjäser, svart försvarar sig'][l-1]}</small>${stars(D.stars['m'+l]||0,3)}</button>`).join('');
+  $('hPat').innerHTML=MPSchackMonster.map((m,i)=>{const d=D.stars['k-'+m.id];return `<button class="card" data-pat="${i}"><span class="ico">${d?'✅':(i+1)}</span><b>${d?m.namn:'Mönster '+(i+1)}</b><small>${d?'Klart!':'Hitta matten'}</small></button>`;}).join('');
   $('hMini').innerHTML=[1,2,3].map(l=>`<button class="card" data-v="mini${l}"><img src="bilder/${['ln','lb','lq'][l-1]}.svg" alt=""><b>${LV[l]}</b><small>Du är vit. Vinn mot datorn!</small>${stars(D.stars['mini'+l]||0,1)}</button>`).join('');
   $('hFull').innerHTML=[1,2,3].map(l=>`<button class="card" data-v="full${l}"><img src="bilder/${['lr','lb','lk'][l-1]}.svg" alt=""><b>${LV[l]}</b><small>Du är vit. Alla regler.</small>${stars(D.stars['full'+l]||0,1)}</button>`).join('')
     +`<button class="card wide" data-two="1"><span class="ico">🤝</span><b>Två spelare</b><small>Spela mot en kompis på samma skärm.</small></button>`;
@@ -232,6 +236,7 @@ document.addEventListener('click',e=>{
   const c=e.target.closest('.card');if(!c)return;
   if(c.dataset.l)openLesson(c.dataset.l);
   else if(c.dataset.m)openMate(+c.dataset.m);
+  else if(c.dataset.pat)openPat(+c.dataset.pat);
   else if(c.dataset.v){const k=c.dataset.v.slice(0,-1),l=+c.dataset.v.slice(-1);openVs(k,l);}
   else if(c.dataset.two)openTwo();
 });
@@ -585,6 +590,7 @@ function mateAfter(m,N){
   const L2=M.legal(N);
   if(!L2.length&&M.inCheck(N,'b')){
     G.busy=true;if(L().fanfare)L().fanfare();
+    if(G.pat!=null){patDone(true);return;}
     say('<b>Schackmatt!</b> Kungen kan inte komma undan.','good');
     setTimeout(nextPuzzle,1500);return;
   }
@@ -592,7 +598,7 @@ function mateAfter(m,N){
   const msg=!L2.length?'Det blev <b>patt</b>: svart kan inte dra men står inte i schack. Det blir lika, inte matt.':M.inCheck(N,'b')?'Det blev schack, men kungen kan komma undan. Prova ett annat drag.':'Det är inte schack. Matt kräver att kungen hotas och inte kan fly.';
   say(msg,'bad');
   setTimeout(()=>{
-    if(G.pErr>=2){const s=G.puz.mates[0];G.hint=[s.f,s.t];say('Här är lösningen: flytta från den första blå rutan till den andra.','warn');G.S=M.copy(G.puz.S);sync();marks();setTimeout(()=>{G.busy=false;nextPuzzle();},2600);}
+    if(G.pErr>=2){const s=G.puz.mates[0];G.hint=[s.f,s.t];say('Här är lösningen: flytta från den första blå rutan till den andra.','warn');G.S=M.copy(G.puz.S);sync();marks();setTimeout(()=>{G.busy=false;if(G.pat!=null)patDone(false);else nextPuzzle();},2600);}
     else{resetPuz();say('Försök igen! Vit ska dra.','');}
   },1400);
 }
@@ -601,6 +607,26 @@ function mateDone(){
   result({emoji:'♚',title:'Bra matt-spanat!',text:G.errs===0?'Inga fel alls!':'Du gjorde '+G.errs+' missar eller tips. Färre ger fler stjärnor.',stars:{n,max:3},again:()=>openMate(G.level),nextText:'Nya pussel'});
 }
 
+/* ---------- klassiska mattmönster ---------- */
+function openPat(i){
+  const m=MPSchackMonster[i],S=M.fromPieces(m.pcs,'w');
+  const mates=M.legal(S).filter(x=>{const N=M.make(S,x);return !M.legal(N).length&&M.inCheck(N,'b');});
+  G={mode:'mate',pat:i,kind:'k-'+m.id,flip:false,sel:-1,legal:[],last:null,hist:[],busy:false,over:false,round:0,total:1,errs:0,pErr:0,moves:0,hint:null,S:M.copy(S),puz:{S,mates}};
+  show('game');names2();build(G.S);marks();
+  $('prog').innerHTML=`<span>Mönster ${i+1} av ${MPSchackMonster.length}</span>`;
+  $('gTitle').textContent='Mattmönster '+(i+1);
+  $('gSub').textContent='Vit drar. Hitta draget som sätter svarts kung schackmatt!';
+  say('Vit ska dra. Hitta schackmatt i ett drag.','');
+  acts([{id:'hint',t:'💡 Tips',f:()=>{G.errs+=1;G.hint=[G.puz.mates[0].f];marks();say('💡 Flytta pjäsen på den blinkande rutan.','warn');}},{id:'rs',t:'↺ Ställ tillbaka',f:resetPuz}]);
+}
+function patDone(ok){
+  const i=G.pat,m=MPSchackMonster[i],nx=i+1<MPSchackMonster.length;
+  G.busy=true;
+  if(ok){addStars(G.kind,1);if(L().fanfare)L().fanfare();}
+  $('gTitle').textContent=m.namn;$('gSub').textContent=m.text;
+  say(ok?'<b>Schackmatt!</b> Det här mönstret heter <b>'+m.namn+'</b>.':'Så här såg lösningen ut: <b>'+m.namn+'</b>.',ok?'good':'warn');
+  acts([{id:'nx',t:nx?'Nästa mönster ▶':'Till menyn',p:1,f:()=>nx?openPat(i+1):toHome()},{id:'rs',t:'↺ Prova igen',f:()=>openPat(i)}]);
+}
 /* ---------- gemensamt ---------- */
 function toHome(){G=null;home();show('home');}
 $('quit').onclick=toHome;$('rHome').onclick=toHome;
