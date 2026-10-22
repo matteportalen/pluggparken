@@ -719,7 +719,7 @@ function nextTask(){
 }
 function taskUI(){
   const n=G.task.targets.length;
-  $('gSub').textContent=G.task.chase?`Svarta bönder går mot din sida efter varje drag! Ta alla ${G.task.n} innan de blir damer, och låt dem inte ta din pjäs (de tar snett framåt).`:n===1?'Ta den svarta pjäsen med så få drag som möjligt.':`Ta alla ${n} svarta pjäser med så få drag som möjligt.`;
+  $('gSub').textContent=G.task.chase?`Efter varje drag av dig går en svart bonde ett steg framåt. Ta alla ${G.task.n} innan någon blir dam, och låt dem inte ta din pjäs (de tar snett framåt).`:n===1?'Ta den svarta pjäsen med så få drag som möjligt.':`Ta alla ${n} svarta pjäser med så få drag som möjligt.`;
   say(`Det går att klara på <b>${G.task.opt}</b> drag. Du har gjort <b>${G.moves}</b>.`,'');
   acts([{id:'hint',t:'💡 Tips',f:lessonHint},{id:'rs',t:'↺ Börja om uppdraget',f:()=>{G.extra+=1;G.S=M.copy(G.task.S);G.moves=0;G.last=null;G.hint=null;sync();marks();taskUI();}}]);
 }
@@ -742,7 +742,7 @@ function pawnPhase(){
       return;
     }
     G.busy=false;marks();
-    say(`Det går att klara på <b>${G.task.opt}</b> drag. Du har gjort <b>${G.moves}</b>. Bönderna har gått ett steg!`,'');
+    say(`Det går att klara på <b>${G.task.opt}</b> drag. Du har gjort <b>${G.moves}</b>. En bonde har gått ett steg!`,'');
   },480);
 }
 function lessonHint(){

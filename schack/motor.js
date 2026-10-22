@@ -290,17 +290,19 @@ function makeEnd(kind){
 }
 /* Jaktläge (Lär känna pjäserna): svarta bönder går mot din sida efter varje drag. Tar de din pjäs eller når sista raden är det slut. */
 function chaseStep(b,W,H){
-  const nb=b.slice(),moves=[];let fail=null;
-  for(let r=H-1;r>=0&&!fail;r--)for(let c=0;c<W&&!fail;c++){
-    if(nb[r*W+c]!=='p')continue;
-    const rr=r+1;if(rr>=H)continue;
-    let took=false;
+  // motståndaren gör ETT drag: tar din pjäs om den kan, annars går den bonde som kommit längst
+  const nb=b.slice();
+  for(let r=H-1;r>=0;r--)for(let c=0;c<W;c++){
+    if(nb[r*W+c]!=='p')continue;const rr=r+1;if(rr>=H)continue;
     for(const dc of[-1,1]){const cc=c+dc;if(cc<0||cc>=W)continue;const t=nb[rr*W+cc];
-      if(t&&isW(t)){nb[rr*W+cc]='p';nb[r*W+c]=null;moves.push({f:r*W+c,t:rr*W+cc,cap:true});fail='tagen';took=true;break;}}
-    if(took)break;
-    if(!nb[rr*W+c]){nb[rr*W+c]='p';nb[r*W+c]=null;const pm={f:r*W+c,t:rr*W+c,promo:rr===H-1};moves.push(pm);if(pm.promo)fail='dam';}
+      if(t&&isW(t)){nb[rr*W+cc]='p';nb[r*W+c]=null;return {b:nb,moves:[{f:r*W+c,t:rr*W+cc,cap:true}],fail:'tagen'};}}
   }
-  return {b:nb,moves,fail};
+  for(let r=H-1;r>=0;r--)for(let c=0;c<W;c++){
+    if(nb[r*W+c]!=='p')continue;const rr=r+1;if(rr>=H||nb[rr*W+c])continue;
+    nb[rr*W+c]='p';nb[r*W+c]=null;const promo=rr===H-1;
+    return {b:nb,moves:[{f:r*W+c,t:rr*W+c,promo}],fail:promo?'dam':null};
+  }
+  return {b:nb,moves:[],fail:null};
 }
 function solveChase(S,start,limit){
   const W=S.W,H=S.H;
