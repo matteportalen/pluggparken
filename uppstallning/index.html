@@ -96,7 +96,7 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
 .ans.ok{border-color:var(--good);color:var(--ok-ink,var(--good-dark));background:var(--ok-bg,#DDF5E7)}
 .ans.bad{border-color:var(--bad);color:var(--bad);background:var(--err-bg,#FDE4E4)}
 .ans.lead{border-style:dashed;opacity:.6}
-.vxinfo{display:flex;gap:4px 10px;flex-wrap:wrap;align-items:baseline;justify-content:center;text-align:left;background:var(--info-bg,#FFF6D6);border:2px solid #F2B707;border-radius:12px;padding:6px 10px;margin:8px auto 4px;max-width:460px;font-size:.88rem;line-height:1.35;color:var(--ink)}.vxinfo[hidden]{display:none}.vxinfo b{white-space:nowrap}.feedback{min-height:1.5em;font-weight:800;font-size:1.02rem;margin-top:4px;text-align:center;line-height:1.3}
+.vxinfo{display:flex;gap:10px;align-items:center;justify-content:center;background:var(--info-bg,#FFF6D6);border:2px solid #F2B707;border-radius:14px;padding:6px 12px;margin:8px auto 4px;max-width:360px;font-size:.95rem;line-height:1.25;color:var(--ink);text-align:left}.vxinfo[hidden]{display:none}.vxinfo b{white-space:nowrap}.feedback{min-height:1.5em;font-weight:800;font-size:1.02rem;margin-top:4px;text-align:center;line-height:1.3}
 .feedback.good{color:var(--ok-ink,var(--good-dark))}.feedback.tip{color:var(--err-ink,#B8323A)}.feedback.neutral{color:var(--muted)}
 .pad{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .pad button{height:54px;border-radius:14px;background:var(--card);font-size:1.7rem;font-weight:800;box-shadow:0 4px 0 var(--line)}
@@ -179,7 +179,7 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
 <section id="game" class="screen" hidden>
   <div class="gtop"><button class="back" id="quit">← Avsluta</button><button class="qbtn" id="qbtn" aria-label="Så här räknar du">?</button><span class="info" id="info"></span></div>
   <div class="progress"><i id="prog"></i></div>
-  <div class="vxinfo" id="vxinfo" hidden><b>💡 Så växlar du</b><span>Går det inte att räkna, till exempel 2 − 7? Tryck på siffran i första talet i kolumnen till vänster (där siffran du tar ifrån står). Då flyttas ett till kolumnen intill och en 10 skrivs ovanför.</span></div>
+  <div class="vxinfo" id="vxinfo" hidden><svg viewBox="0 0 150 80" width="128" height="68" aria-hidden="true"><text x="22" y="52" font-size="30" font-weight="800" text-anchor="middle" fill="#1D2B53" font-family="Baloo 2,sans-serif">5</text><path d="M10 40L34 22" stroke="#E5484D" stroke-width="4" stroke-linecap="round"/><rect x="6" y="20" width="32" height="38" rx="8" fill="none" stroke="#F2B707" stroke-width="3" stroke-dasharray="5 4"><animate attributeName="opacity" values="1;.3;1" dur="1.2s" repeatCount="indefinite"/></rect><text x="112" y="52" font-size="30" font-weight="800" text-anchor="middle" fill="#1D2B53" font-family="Baloo 2,sans-serif">2</text><text x="112" y="22" font-size="19" font-weight="800" text-anchor="middle" fill="#E5484D" font-family="Baloo 2,sans-serif">10</text><path d="M42 34C60 8 84 6 98 14" fill="none" stroke="#3D5AFE" stroke-width="3.5" stroke-linecap="round"/><path d="M92 8l8 7-10 3z" fill="#3D5AFE"/><text x="8" y="78" font-size="18">👆</text></svg><span><b>Går det inte?</b><br>Tryck på siffran till vänster. Den ger 10 till nästa.</span></div>
   <div class="task" id="task">
     <div class="instr"><button class="spk" id="spk" aria-label="Läs upp">🔊</button><span id="instr"></span></div>
     <div class="content" id="content"></div>
