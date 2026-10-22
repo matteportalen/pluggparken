@@ -380,7 +380,7 @@ document.addEventListener("visibilitychange",()=>{if(document.hidden&&!$("game")
 /* ---------- Klart ---------- */
 function klar(){lage="klar";const kvar=tid,andel=kvar/tidMax,stj=andel>=.4?3:andel>=.15?2:1,id=String(LV.nr+1);
   data.betyg[id]=Math.max(data.betyg[id]||0,stj);data.best[id]=Math.max(data.best[id]||0,Math.round(kvar*10)/10);save();
-  window.MPMynt&&MPMynt.runda(2);L().fanfare&&L().fanfare();
+  window.MPMynt&&MPMynt.runda();L().fanfare&&L().fanfare();
   $("kRub").textContent=`${LV.R.namn}: klart! 🎉`;
   $("kStj").innerHTML=[1,2,3].map(i=>i<=stj?"⭐":'<span class="av">⭐</span>').join("");
   const vi=LV.R.v,vs=data.stars["v"+(vi+1)]||0;

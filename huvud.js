@@ -107,13 +107,13 @@ body.mph-mini #quit{display:none}
   };
   /* ---------- Mynt (matteportalen-mynt) ----------
      Stjärnorna visar vad man kan och samlas för alltid; mynten tjänas på att träna och används i Garderoben.
-     Ny stjärna = 10 mynt (räknas här, på alla sidor), avklarad runda = 2 mynt (när sidan visar skärmen "result"),
-     dagens första runda = 5 extra. Första gången: 5 mynt per stjärna man redan har.
+     Ny stjärna = 20 mynt (räknas här, på alla sidor), avklarad runda = 6 mynt (när sidan visar skärmen "result"),
+     dagens första runda = 10 extra. Första gången: 5 mynt per stjärna man redan har.
      {m: mynt nu, tj: tjänat totalt, sedd: stjärnor som redan gett mynt, kopt: köpta saker "plats:id" (null = inte flyttat än), dag, senast} */
   const MK='matteportalen-mynt',idag=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');};
   function myntLas(){let m=get(MK);const s=MPStjarnor();
     if(!m||typeof m.m!=='number'){m={m:5*s,tj:5*s,sedd:s,kopt:null,dag:'',senast:0};myntSpara(m);}
-    else if(s>m.sedd){const n=(s-m.sedd)*10;m.m+=n;m.tj+=n;m.sedd=s;myntSpara(m);myntVisa(n);}
+    else if(s>m.sedd){const n=(s-m.sedd)*20;m.m+=n;m.tj+=n;m.sedd=s;myntSpara(m);myntVisa(n);}
     else if(s<m.sedd){m.sedd=s;myntSpara(m);}
     return m;}
   function myntSpara(m){try{localStorage.setItem(MK,JSON.stringify(m));}catch(e){}}
@@ -122,7 +122,7 @@ body.mph-mini #quit{display:none}
   window.MPMynt={
     get(){return myntLas();},
     // en avklarad runda (anropas av huvud.js när skärmen "result" visas, eller av en sida själv)
-    runda(n){const m=myntLas(),nu=Date.now();if(nu-(m.senast||0)<15000)return 0;let f=n==null?2:n;if(m.dag!==idag()){f+=5;m.dag=idag();}
+    runda(n){const m=myntLas(),nu=Date.now();if(nu-(m.senast||0)<15000)return 0;let f=n==null?6:n;if(m.dag!==idag()){f+=10;m.dag=idag();}
       m.m+=f;m.tj+=f;m.senast=nu;myntSpara(m);myntVisa(f);return f;},
     kop(id,pris){const m=myntLas();if(m.m<pris)return false;m.m-=pris;m.kopt=[...new Set([...(m.kopt||[]),id])];myntSpara(m);const el=document.querySelector('.mph-m');if(el)el.textContent=m.m;return true;},
     spara:myntSpara};
