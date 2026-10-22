@@ -133,6 +133,16 @@ function evalS(S){
     else if(t==='p'){const adv=w?(H-1-r):r;v+=adv*adv*2+(6-Math.abs(c-(W-1)/2)*2)*0;}
     else if(t==='k'){const endg=false;v+=endg?0:(w?(H-1-r):r)<=0?8:-4*((w?(H-1-r):r));}
     s+=w?v:-v;}
+  // slutspel: har ena sidan bara kungen jagar den andra kungen mot kanten
+  const wOnly=!b.some(p=>p&&isW(p)&&p!=='K'),bOnly=!b.some(p=>p&&!isW(p)&&p!=='k');
+  if(wOnly!==bOnly){
+    const wk=b.indexOf('K'),bk=b.indexOf('k');
+    if(wk>=0&&bk>=0){
+      const dist=(a,c)=>Math.max(Math.abs(Math.floor(a/W)-Math.floor(c/W)),Math.abs(a%W-c%W));
+      const cd=i=>Math.abs(i%W-(W-1)/2)+Math.abs(Math.floor(i/W)-(H-1)/2);
+      if(bOnly)s+=cd(bk)*14+(8-dist(wk,bk))*6;else s-=cd(wk)*14+(8-dist(wk,bk))*6;
+    }
+  }
   return s;
 }
 function ordered(S,L){
@@ -164,6 +174,8 @@ function pick(S,level){
   const L=legal(S);if(!L.length)return null;
   const mini=S.W<8;
   const cfg=level===1?{d:1,noise:140,rnd:.22}:level===2?{d:2,noise:35,rnd:0}:{d:mini?5:3,noise:0,rnd:0};
+  const wO=!S.b.some(p=>p&&isW(p)&&p!=='K'),bO=!S.b.some(p=>p&&!isW(p)&&p!=='k');
+  if(level===3&&wO!==bO)cfg.noise=7; // slutspel: bryt upprepningar
   if(Math.random()<cfg.rnd)return L[Math.floor(Math.random()*L.length)];
   const sgn=S.turn==='w'?1:-1;let best=null,bv=-Infinity;const nodes={n:0};
   for(const m of ordered(S,L)){
@@ -229,6 +241,88 @@ function solveCapture(S,start,targets,limit){
   return null;
 }
 
-const api={newState,fromPieces,sqName,copy,attacked,inCheck,kingIdx,pseudo,make,legal,status,key,evalS,pick,makeMate1,solveCapture,lessonMoves,isW,colOf,VAL,material};
+function mateMoves(S){return legal(S).filter(m=>{const N=make(S,m);return !legal(N).length&&inCheck(N,N.turn);});}
+/* vit (den som drar) tvingar matt i två drag: nycklar = första drag som alltid leder till matt i nästa */
+function forcedKeys(S){
+  const keys=[];
+  for(const m of legal(S)){
+    const N=make(S,m),R=legal(N);
+    if(!R.length)continue;
+    if(R.every(r=>mateMoves(make(N,r)).length>0))keys.push(m);
+  }
+  return keys;
+}
+/* hängande pjäser: pjäser för sidan som inte drar som motståndaren kan ta med vinst */
+function hanging(S){
+  const me=S.turn==='w'?'b':'w',res=[];
+  for(const m of legal(S)){
+    if(!m.cap)continue;
+    const N=make(S,m),vc=VAL[m.cap.toLowerCase()],va=VAL[S.b[m.f].toLowerCase()];
+    const defended=attacked(N,m.t,me);
+    const gain=defended?vc-va:vc;
+    if(gain>=100||(!defended&&vc>=100))res.push({sq:m.t,p:m.cap,by:S.b[m.f],gain,defended,m});
+  }
+  res.sort((a,b)=>b.gain-a.gain);
+  return res;
+}
+function scoreMove(S,m,depth){const nodes={n:0};return -search(make(S,m),(depth||2)-1,-Infinity,Infinity,1,nodes);}
+function analyse(S,depth){
+  const L=legal(S);if(!L.length)return null;let best=null,bv=-Infinity;const all=[];
+  for(const m of ordered(S,L)){const v=scoreMove(S,m,depth);all.push([m,v]);if(v>bv){bv=v;best=m;}}
+  return {best,bv,all};
+}
+/* slutspel: vit kung + dam/torn mot svart kung */
+function makeEnd(kind){
+  for(let t=0;t<5000;t++){
+    const pcs={},used=new Set(),put=p=>{for(let k=0;k<40;k++){const n=String.fromCharCode(97+rnd(8))+(1+rnd(8));if(!used.has(n)){used.add(n);pcs[n]=p;return;}}};
+    put('K');put('k');(kind==='kq'?['Q']:kind==='krr'?['R','R']:['R']).forEach(put);
+    const S=fromPieces(pcs,'w');
+    const wk=kingIdx(S,'w'),bk=kingIdx(S,'b');
+    if(Math.abs(Math.floor(wk/8)-Math.floor(bk/8))<2&&Math.abs(wk%8-bk%8)<2)continue;
+    if(inCheck(S,'b')||inCheck(S,'w'))continue;
+    // svart ska inte kunna ta pjäsen direkt
+    const cs=legal(Object.assign(copy(S),{turn:'b'}));
+    if(cs.some(m=>m.cap))continue;
+    if(mateMoves(S).length)continue;
+    return S;
+  }
+  return null;
+}
+/* Jaktläge (Lär känna pjäserna): svarta bönder går mot din sida efter varje drag. Tar de din pjäs eller når sista raden är det slut. */
+function chaseStep(b,W,H){
+  const nb=b.slice(),moves=[];let fail=null;
+  for(let r=H-1;r>=0&&!fail;r--)for(let c=0;c<W&&!fail;c++){
+    if(nb[r*W+c]!=='p')continue;
+    const rr=r+1;if(rr>=H)continue;
+    let took=false;
+    for(const dc of[-1,1]){const cc=c+dc;if(cc<0||cc>=W)continue;const t=nb[rr*W+cc];
+      if(t&&isW(t)){nb[rr*W+cc]='p';nb[r*W+c]=null;moves.push({f:r*W+c,t:rr*W+cc,cap:true});fail='tagen';took=true;break;}}
+    if(took)break;
+    if(!nb[rr*W+c]){nb[rr*W+c]='p';nb[r*W+c]=null;const pm={f:r*W+c,t:rr*W+c,promo:rr===H-1};moves.push(pm);if(pm.promo)fail='dam';}
+  }
+  return {b:nb,moves,fail};
+}
+function solveChase(S,start,limit){
+  const W=S.W,H=S.H;
+  const keyOf=(pos,b)=>pos+':'+b.map(x=>x||'.').join('');
+  const nodes=[{pos:start,b:S.b,par:-1,t:-1}],seen=new Set([keyOf(start,S.b)]);
+  for(let h=0;h<nodes.length;h++){
+    const st=nodes[h];let depth=0;for(let k=h;nodes[k].par>=0;k=nodes[k].par)depth++;
+    if(depth>=limit)continue;
+    const T=copy(S);T.b=st.b.slice();
+    for(const m of lessonMoves(T,st.pos)){
+      const nb=st.b.slice();nb[m.t]=nb[st.pos];nb[st.pos]=null;
+      let left=nb.some(p=>p&&!isW(p));
+      if(!left){let k=h;const path=[m.t];while(nodes[k].par>=0){path.unshift(nodes[k].pos);k=nodes[k].par;}path.unshift(start);
+        // path[0]=start, path[1]=första draget
+        const full=[];let kk=h;const rev=[m.t];while(nodes[kk].par>=0){rev.push(nodes[kk].pos);kk=nodes[kk].par;}rev.reverse();return {d:depth+1,path:[start].concat(rev)};}
+      const r=chaseStep(nb,W,H);if(r.fail)continue;
+      const k2=keyOf(m.t,r.b);if(seen.has(k2))continue;seen.add(k2);
+      nodes.push({pos:m.t,b:r.b,par:h});
+    }
+  }
+  return null;
+}
+const api={chaseStep,solveChase,mateMoves,forcedKeys,hanging,scoreMove,analyse,makeEnd,newState,fromPieces,sqName,copy,attacked,inCheck,kingIdx,pseudo,make,legal,status,key,evalS,pick,makeMate1,solveCapture,lessonMoves,isW,colOf,VAL,material};
 if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.MPSchack=api;
 })(typeof window!=='undefined'?window:globalThis);

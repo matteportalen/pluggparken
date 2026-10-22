@@ -95,6 +95,7 @@ h1,h2,h3{font-family:var(--serif);margin:0}
 .s.tgt::after{content:"";position:absolute;left:36%;top:36%;width:28%;height:28%;border-radius:50%;background:rgba(40,40,40,.28)}
 .s.tgt.cap::after{left:0;top:0;width:100%;height:100%;border-radius:50%;background:none;border:calc(var(--bs)/80) solid rgba(40,40,40,.3);box-shadow:inset 0 0 0 calc(var(--bs)/16) rgba(0,0,0,0);clip-path:none}
 .s.star::before{content:"";position:absolute;inset:0;background:radial-gradient(circle,rgba(255,220,80,.55),transparent 65%)}
+#arrows{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:6}
 #pcs{position:absolute;inset:0;pointer-events:none}
 .pc{position:absolute;left:0;top:0;width:calc(100%/var(--W));height:calc(100%/var(--H));transition:transform .26s cubic-bezier(.3,.7,.3,1),opacity .25s;filter:drop-shadow(0 2px 2px rgba(0,0,0,.4));will-change:transform;user-select:none;-webkit-user-drag:none}
 .pc.gone{opacity:0;transform-origin:center}
@@ -128,6 +129,11 @@ h1,h2,h3{font-family:var(--serif);margin:0}
 .res p{color:var(--muted);max-width:28em;margin:6px auto}
 .res .acts{justify-content:center;margin-top:14px}
 
+.advcard{width:100%;display:flex;align-items:center;gap:14px;text-align:left;border-radius:20px;padding:16px 18px;margin:0 0 10px;background:linear-gradient(135deg,#0F4C75,#0A2744);border:1px solid rgba(232,196,104,.45);box-shadow:0 8px 22px rgba(0,0,0,.35),inset 0 0 40px rgba(232,196,104,.07);transition:transform .15s}
+.advcard:hover{transform:translateY(-2px)}.advcard:active{transform:translateY(1px)}
+.advtxt{flex:1;display:flex;flex-direction:column;gap:4px}.advtxt b{font-family:var(--serif);font-size:1.45rem;color:var(--gold)}.advtxt small{color:var(--muted)}
+.advbar{display:block;height:8px;border-radius:99px;background:rgba(255,255,255,.12);overflow:hidden;margin-top:2px}.advbar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold2),var(--gold));border-radius:99px}
+.advgo{background:linear-gradient(180deg,#F3D783,var(--gold) 60%,var(--gold2));color:#2A2108;font-weight:800;border-radius:14px;padding:10px 18px;box-shadow:0 4px 0 #7A5F1E;white-space:nowrap}
 .map{max-width:640px;margin:0 auto;position:relative;border-radius:24px;overflow:hidden;border:1px solid var(--line);background:linear-gradient(180deg,#0E3B5E,#0A2744 55%,#0A1F3A);box-shadow:inset 0 0 60px rgba(0,0,0,.4),0 14px 34px rgba(0,0,0,.35)}
 .map::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 36px 10px at 20px 14px,rgba(255,255,255,.08) 0 60%,transparent 62%) 0 0/90px 60px,radial-gradient(ellipse 28px 8px at 60px 44px,rgba(255,255,255,.06) 0 60%,transparent 62%) 0 0/90px 60px;animation:wv 14s linear infinite}
 @keyframes wv{to{background-position:90px 0,90px 0}}
@@ -180,11 +186,14 @@ h1,h2,h3{font-family:var(--serif);margin:0}
     <p>Lär dig hur pjäserna går, lös schackmatt och spela hela partier. Ett steg i taget.</p>
     <div class="pcs"><img src="bilder/dn.svg" alt=""><img src="bilder/lk.svg" alt=""><img src="bilder/lq.svg" alt=""></div>
   </div>
-  <div class="sec"><h2>Äventyret</h2><small id="advN"></small></div>
-  <div class="map" id="map"></div>
+  <button class="advcard" id="advCard"><span class="advtxt"><b>Äventyret</b><small id="advN2"></small><span class="advbar"><i id="advBar"></i></span></span><span class="advgo">Spela ▶</span></button>
   <div class="sec" style="margin-top:30px"><h2>Spela fritt</h2><small>Träna mer, när du vill</small></div>
   <div class="sec sub"><h3>Schackmatt i ett drag</h3></div>
   <div class="cards" id="hMate"></div>
+  <div class="sec sub"><h3>Matt i två drag</h3></div>
+  <div class="cards" id="hMate2"></div>
+  <div class="sec sub"><h3>Slutspel <small>Sätt matt med få pjäser</small></h3></div>
+  <div class="cards" id="hEnd"></div>
   <div class="sec sub"><h3>Minischack <small>5 × 5 rutor</small></h3></div>
   <div class="cards" id="hMini"></div>
   <div class="sec sub"><h3>Hela partiet <small>8 × 8 rutor, alla regler</small></h3></div>
@@ -192,12 +201,18 @@ h1,h2,h3{font-family:var(--serif);margin:0}
   <p class="credit">Pjäserna är ritade av Colin M. L. Burnett (Wikimedia Commons, CC BY-SA 3.0). Datorn är egenbyggd och tänker 1–3 drag fram.</p>
 </section>
 
+<section id="mapscr" class="screen" hidden>
+  <div class="gtop"><button class="pill back" id="mapBack">← Schackmenyn</button></div>
+  <div class="sec"><h2>Äventyret</h2><small id="advN"></small></div>
+  <div class="map" id="map"></div>
+</section>
+
 <section id="game" class="screen" hidden>
   <div class="gtop"><button class="pill" id="quit">← Avsluta</button><span class="sp"></span><span class="prog" id="prog"></span><button class="pill" id="rulesBtn">? Regler</button></div>
   <div class="gwrap">
     <div class="gleft">
       <div class="pbar top" id="topBar"><span class="dot"></span><span id="topName"></span><span class="caps" id="topCaps"></span></div>
-      <div class="board" id="board"><div id="sq"></div><div id="pcs"></div></div>
+      <div class="board" id="board"><div id="sq"></div><div id="pcs"></div><svg id="arrows" aria-hidden="true"></svg></div>
       <div class="pbar bot" id="botBar"><span class="dot"></span><span id="botName"></span><span class="caps" id="botCaps"></span></div>
     </div>
     <div class="gright">
@@ -210,7 +225,7 @@ h1,h2,h3{font-family:var(--serif);margin:0}
 
 <section id="result" class="screen" hidden>
   <div class="res"><div class="big" id="rEmoji"></div><h2 id="rTitle"></h2><div class="st" id="rStars"></div><p id="rText"></p>
-    <div class="acts"><button class="btn" id="rAgain">Spela igen</button><button class="pill" id="rHome">Till schackmenyn</button></div></div>
+    <div class="acts"><button class="btn" id="rAgain">Spela igen</button><button class="pill" id="rExtra" hidden></button><button class="pill" id="rHome">Till schackmenyn</button></div></div>
 </section>
 </div>
 
@@ -231,6 +246,7 @@ h1,h2,h3{font-family:var(--serif);margin:0}
 
 <script src="motor.js"></script>
 <script src="monster.js"></script>
+<script src="mate2.js"></script>
 <script>
 (function(){
 "use strict";
@@ -264,18 +280,21 @@ const ISL=[
  {n:'Bondeön',t:'lesson',p:'p'},{n:'Tornön',t:'lesson',p:'r'},{n:'Löparön',t:'lesson',p:'b'},{n:'Springarön',t:'lesson',p:'n'},{n:'Damön',t:'lesson',p:'q'},{n:'Kungön',t:'lesson',p:'k'},
  {n:'Ryggradsön',t:'pat',pats:[0,1,2]},{n:'Trappön',t:'pat',pats:[3,4]},{n:'Hjälparön',t:'pat',pats:[5,6,7]},{n:'Hörnön',t:'pat',pats:[8,9,10]},
  {n:'Mattskogen',t:'mate',level:1},{n:'Löparviken',t:'pat',pats:[11,12]},{n:'Bondebyn',t:'pat',pats:[13,14]},{n:'Pusselberget',t:'mate',level:2},
+ {n:'Tvåstegsviken',t:'mate2',level:1},{n:'Tvåstegsberget',t:'mate2',level:2},{n:'Damklippan',t:'end',kind:'kq'},{n:'Tornrevet',t:'end',kind:'krr'},
  {n:'Minihamnen',t:'vs',kind:'mini',level:1},{n:'Minifästet',t:'vs',kind:'mini',level:2},{n:'Pusselvulkanen',t:'mate',level:3},{n:'Minislottet',t:'vs',kind:'mini',level:3},
  {n:'Stora hamnen',t:'vs',kind:'full',level:1},{n:'Stora fästet',t:'vs',kind:'full',level:2},{n:'Mästarborgen',t:'vs',kind:'full',level:3}
 ];
-const ISLIMG={lesson:i=>'bilder/l'+i.p+'.svg',pat:()=>'bilder/lk.svg',mate:()=>'bilder/lq.svg',vs:i=>i.kind==='mini'?'bilder/ln.svg':'bilder/lr.svg'};
+const ISLIMG={mate2:()=>'bilder/lb.svg',end:i=>i.kind==='kq'?'bilder/lq.svg':'bilder/lr.svg',lesson:i=>'bilder/l'+i.p+'.svg',pat:()=>'bilder/lk.svg',mate:()=>'bilder/lq.svg',vs:i=>i.kind==='mini'?'bilder/ln.svg':'bilder/lr.svg'};
 function islStars(i){
   const x=ISL[i];
   if(x.t==='lesson')return D.stars['l-'+x.p]||0;
   if(x.t==='mate')return D.stars['m'+x.level]||0;
+  if(x.t==='mate2')return D.stars['n'+x.level]||0;
+  if(x.t==='end')return D.stars['e'+x.kind]||0;
   if(x.t==='pat')return x.pats.every(k=>D.stars['k-'+MPSchackMonster[k].id])?1:0;
   return D.stars[x.kind+x.level]?1:0;
 }
-const islMax=i=>ISL[i].t==='lesson'||ISL[i].t==='mate'?3:1;
+const islMax=i=>['lesson','mate','mate2','end'].includes(ISL[i].t)?3:1;
 const islDone=i=>islStars(i)>0;
 const islOpen=i=>i===0||islDone(i-1);
 function curIsland(){for(let i=0;i<ISL.length;i++)if(!islDone(i))return i;return ISL.length-1;}
@@ -298,7 +317,7 @@ function renderMap(){
   const seen=D.seenIsl==null?0:D.seenIsl;
   for(let i=0;i<N;i++){const [x,y]=pt(i),x0=ISL[i],open=islOpen(i),done=islDone(i);
     const n=islStars(i),mx=islMax(i);
-    h+=`<button class="isl t-${x0.t} ${open?'':'lock'} ${i===cur&&open?'cur':''} ${open&&i<=cur&&i>seen&&i===cur?'new':''}" data-isl="${i}" style="left:${x}%;top:${y}px" aria-label="${x0.n}${open?'':' (låst)'}"><span class="land"><img src="${ISLIMG[x0.t](x0)}" alt=""><b class="num">${i+1}</b></span><span class="nm">${x0.n}</span><span class="stz">${done?'⭐'.repeat(n)+'<i>'+'☆'.repeat(mx-n)+'</i>':''}</span></button>`;}
+    h+=`<button class="isl t-${x0.t==='mate2'?'mate':x0.t==='end'?'lesson':x0.t} ${open?'':'lock'} ${i===cur&&open?'cur':''} ${open&&i<=cur&&i>seen&&i===cur?'new':''}" data-isl="${i}" style="left:${x}%;top:${y}px" aria-label="${x0.n}${open?'':' (låst)'}"><span class="land"><img src="${ISLIMG[x0.t](x0)}" alt=""><b class="num">${i+1}</b></span><span class="nm">${x0.n}</span><span class="stz">${done?'⭐'.repeat(n)+'<i>'+'☆'.repeat(mx-n)+'</i>':''}</span></button>`;}
   el.innerHTML=h;
   D.seenIsl=cur;save();
 }
@@ -312,15 +331,22 @@ function openIsland(i){
   const x=ISL[i];ADV=i;
   if(x.t==='lesson')openLesson(x.p);
   else if(x.t==='mate')openMate(x.level);
+  else if(x.t==='mate2')openMate2(x.level);
+  else if(x.t==='end')openEnd(x.kind);
   else if(x.t==='vs')openVs(x.kind,x.level);
   else{const l=x.pats,k=l.findIndex(j=>!D.stars['k-'+MPSchackMonster[j].id]);openPat(l[k<0?0:k]);}
 }
+function openMap(){renderMap();show('mapscr');setTimeout(scrollToCur,150);}
+function toMap(){G=null;openMap();}
+$('advCard').onclick=openMap;$('mapBack').onclick=()=>{G=null;home();show('home');};
 function scrollToCur(){const e=document.querySelector('.isl.cur')||document.querySelector('.isl[data-isl="'+curIsland()+'"]');if(e)e.scrollIntoView({block:'center',behavior:'smooth'});}
 
 /* ---------- startsidan ---------- */
 function home(){
-  renderMap();
+  {const N=ISL.length,d=ISL.filter((_,i)=>islDone(i)).length;$('advN2').textContent=d+' av '+N+' öar klara. Nästa: '+ISL[curIsland()].n;$('advBar').style.width=Math.round(d/N*100)+'%';}
   $('hMate').innerHTML=[1,2,3].map(l=>`<button class="card" data-m="${l}"><img src="bilder/lk.svg" alt=""><b>${LV[l]}</b><small>${['Dam eller torn mot en kung','Två pjäser mot en kung','Flera pjäser, svart försvarar sig'][l-1]}</small>${stars(D.stars['m'+l]||0,3)}</button>`).join('');
+  $('hMate2').innerHTML=[1,2].map(l=>`<button class="card" data-m2="${l}"><img src="bilder/lq.svg" alt=""><b>${LV[l]}</b><small>${['Dam eller två torn mot en kung','Flera pjäser, svart försvarar sig'][l-1]}</small>${stars(D.stars['n'+l]||0,3)}</button>`).join('');
+  $('hEnd').innerHTML=[['kq','lq','Kung och dam','Sätt matt på en ensam kung'],['krr','lr','Två torn','Trappmatt mot en kung']].map(x=>`<button class="card" data-end="${x[0]}"><img src="bilder/${x[1]}.svg" alt=""><b>${x[2]}</b><small>${x[3]}</small>${stars(D.stars['e'+x[0]]||0,3)}</button>`).join('');
   $('hMini').innerHTML=[1,2,3].map(l=>`<button class="card" data-v="mini${l}"><img src="bilder/${['ln','lb','lq'][l-1]}.svg" alt=""><b>${LV[l]}</b><small>Du är vit. Vinn mot datorn!</small>${stars(D.stars['mini'+l]||0,1)}</button>`).join('');
   $('hFull').innerHTML=[1,2,3].map(l=>`<button class="card" data-v="full${l}"><img src="bilder/${['lr','lb','lk'][l-1]}.svg" alt=""><b>${LV[l]}</b><small>Du är vit. Alla regler.</small>${stars(D.stars['full'+l]||0,1)}</button>`).join('')
     +`<button class="card wide" data-two="1"><span class="ico">🤝</span><b>Två spelare</b><small>Spela mot en kompis på samma skärm.</small></button>`;
@@ -329,6 +355,8 @@ document.addEventListener('click',e=>{
   const c=e.target.closest('.card');if(!c)return;
   ADV=null;
   if(c.dataset.m)openMate(+c.dataset.m);
+  else if(c.dataset.m2)openMate2(+c.dataset.m2);
+  else if(c.dataset.end)openEnd(c.dataset.end);
   else if(c.dataset.v){const k=c.dataset.v.slice(0,-1),l=+c.dataset.v.slice(-1);openVs(k,l);}
   else if(c.dataset.two)openTwo();
 });
@@ -367,6 +395,14 @@ function marks(){
   if(G.sel>=0){mark(G.sel,'sel');G.legal.forEach(m=>{mark(m.t,'tgt');if(G.S.b[m.t]||m.fl==='ep')mark(m.t,'cap');});}
   if(G.mode!=='lesson'&&M.inCheck(G.S,G.S.turn))mark(M.kingIdx(G.S,G.S.turn),'chk');
   if(G.hint)G.hint.forEach(i=>mark(i,'hint'));
+  arrows(G.arr);
+}
+function arrows(list){
+  const S=G.S,W=S.W,H=S.H,svg=$('arrows');svg.setAttribute('viewBox',`0 0 ${W*100} ${H*100}`);
+  const c=i=>{const [cc,r]=pos(i);return [(cc+.5)*100,(r+.5)*100];};
+  svg.innerHTML=(list||[]).map(a=>{const [x1,y1]=c(a.f),[x2,y2]=c(a.t),dx=x2-x1,dy=y2-y1,len=Math.hypot(dx,dy)||1,ux=dx/len,uy=dy/len;
+    const tx=x2-ux*8,ty=y2-uy*8,bx=tx-ux*38,by=ty-uy*38;
+    return `<g fill="${a.c}" stroke="${a.c}" opacity=".85"><line x1="${x1}" y1="${y1}" x2="${bx}" y2="${by}" stroke-width="15" stroke-linecap="round"/><polygon points="${tx},${ty} ${bx-uy*24},${by+ux*24} ${bx+uy*24},${by-ux*24}" stroke="none"/></g>`;}).join('');
 }
 function movesFrom(i){
   if(G.mode==='lesson')return M.lessonMoves(G.S,i).filter(m=>!m.p||m.p==='q');
@@ -374,6 +410,7 @@ function movesFrom(i){
 }
 function mayMove(){
   if(G.busy||G.over)return false;
+  if(G.mode==='analys')return false;
   if(G.mode==='two')return true;
   if(G.mode==='lesson')return G.phase==='visa'||G.phase==='task';
   return G.S.turn==='w';
@@ -446,8 +483,8 @@ function go(m,dropped){
   const cap=m.fl==='ep'?(M.isW(S.b[m.f])?'p':'P'):S.b[m.t];
   G.sel=-1;G.legal=[];G.hint=null;
   if(G.mode==='mate'||G.mode==='lesson'){visual(S,m,N);G.S=N;G.last={f:m.f,t:m.t};G.moves=(G.moves||0)+1;sound(cap,N);marks();
-    if(G.mode==='lesson')lessonAfter(m);else mateAfter(m,N);return;}
-  G.hist.push({S:S,last:G.last,capW:G.capW.slice(),capB:G.capB.slice(),rep:Object.assign({},G.rep)});
+    if(G.mode==='lesson')lessonAfter(m);else if(G.m2)m2After(m,N);else mateAfter(m,N);return;}
+  G.hist.push({S:S,m:m,last:G.last,capW:G.capW.slice(),capB:G.capB.slice(),rep:Object.assign({},G.rep)});
   visual(S,m,N);
   if(cap){(M.isW(S.b[m.f])?G.capW:G.capB).push(cap);}
   G.S=N;G.last={f:m.f,t:m.t};
@@ -455,6 +492,8 @@ function go(m,dropped){
   sound(cap,N);marks();caps();
   const st=M.status(N),rep=G.rep[k]>=3;
   if(st==='matt'||st==='patt'||st==='remi50'||st==='remimat'||rep){end(rep&&st==='pågår'?'rep':st);return;}
+  if(G.end&&G.hist.filter(h=>h.S.turn==='w').length>=G.limit&&N.turn==='b'){end('limit');return;}
+  if(G.mode==='vs'&&!G.end&&S.turn==='w'&&D.hjalp!==false){const w=warnAfter(N);if(w){showWarn(w);return;}}
   statusLine();
   if(G.mode!=='two'&&N.turn==='b')think();
   else if(G.mode==='two'&&G.autoflip){setTimeout(()=>{G.flip=!G.flip;build(G.S);marks();caps();},450);}
@@ -482,10 +521,10 @@ function statusLine(){
   if(G.mode==='two'){t=(S.turn==='w'?'Vits':'Svarts')+' tur';if(M.inCheck(S,S.turn))t+=' – schack!';}
   else if(G.busy){t='Datorn tänker <span class="dots"><i></i><i></i><i></i></span>';}
   else{t='Din tur';if(M.inCheck(S,'w')){t+=' – schack! Rädda kungen.';c='warn';}}
-  el.className='status '+c;el.innerHTML=t;
+  el.className='status '+c;el.innerHTML='<span>'+t+'</span>';
   $('topBar').classList.toggle('on',(S.turn==='b')!==!!G.flip&&!G.over);$('botBar').classList.toggle('on',(S.turn==='w')!==!!G.flip&&!G.over);
 }
-function say(t,c){const el=$('status');el.className='status '+(c||'');el.innerHTML=t;}
+function say(t,c){const el=$('status');el.className='status '+(c||'');el.innerHTML='<span>'+t+'</span>';}
 
 /* ---------- vanliga partier ---------- */
 function names(){document.querySelector('.gleft').classList.remove('nb');
@@ -507,10 +546,44 @@ function openVs(kind,level){
   $('gTitle').textContent=(kind==='mini'?'Minischack':'Schack')+' – '+LV[level];
   $('gSub').textContent=kind==='mini'?'5 × 5 rutor. Ingen rockad, bönderna går ett steg. Sätt datorns kung schackmatt!':'Du spelar vit och börjar. Sätt datorns kung schackmatt!';
   statusLine();
-  acts([
-    {id:'hint',t:'💡 Tips',f:hintVs},{id:'undo',t:'↶ Ångra',f:undo},{id:'res',t:'🏳️ Ge upp',f:()=>{if(confirm('Vill du ge upp partiet?'))end('resign');}},{id:'again',t:'🔄 Nytt parti',f:()=>openVs(kind,level)}
-  ]);
+  vsActs();
   G.again=()=>openVs(kind,level);
+}
+function vsActs(){
+  const kind=G.kind,level=G.level;
+  acts([
+    {id:'hint',t:'💡 Tips',f:hintVs},{id:'undo',t:'↶ Ångra',f:undo},{id:'help',t:'🧑‍🏫 Hjälp: '+(D.hjalp===false?'av':'på'),f:()=>{D.hjalp=D.hjalp===false?true:false;save();$('a_help').textContent='🧑‍🏫 Hjälp: '+(D.hjalp===false?'av':'på');}},
+    {id:'res',t:'🏳️ Ge upp',f:()=>{if(confirm('Vill du ge upp partiet?'))end('resign');}},{id:'again',t:'🔄 Nytt parti',f:()=>G.again()}
+  ]);
+}
+/* varning efter ditt drag (hjälpen) */
+const NAMN_DIN={p:'Din bonde',r:'Ditt torn',b:'Din löpare',n:'Din springare',q:'Din dam',k:'Din kung'};
+const NAMN_EN={p:'en bonde',r:'ett torn',b:'en löpare',n:'en springare',q:'en dam',k:'en kung'};
+function warnAfter(N){
+  if(M.status(N)!=='pågår')return null;
+  const mt=M.mateMoves(N);
+  if(mt.length)return {t:'Pass upp! Datorn kan sätta <b>schackmatt</b> i nästa drag.',arr:[{f:mt[0].f,t:mt[0].t,c:'#E5484D'}]};
+  const h=M.hanging(N);
+  if(h.length){const x=h[0],who=NAMN_DIN[x.p.toLowerCase()],by=NAMN_EN[x.by.toLowerCase()];
+    return {t:`Pass upp! ${who} på <b>${M.sqName(N,x.sq)}</b> kan tas av ${by}`+(x.defended?`, som är värd mindre än din pjäs. Du kan ta tillbaka, men du förlorar mer.`:` och du kan inte ta tillbaka.`),arr:[{f:x.m.f,t:x.m.t,c:'#E5484D'}],sq:x.sq};}
+  return null;
+}
+function showWarn(w){
+  G.busy=true;G.arr=w.arr;marks();
+  say('⚠️ '+w.t,'warn');
+  acts([{id:'tb',t:'↶ Ta tillbaka draget',p:1,f:()=>{G.arr=null;const h=G.hist.pop();G.S=h.S;G.last=h.last;G.capW=h.capW;G.capB=h.capB;G.rep=h.rep;G.busy=false;sync();marks();caps();statusLine();vsActs();}},
+        {id:'pl',t:'Spela ändå',f:()=>{G.arr=null;marks();vsActs();think();}}]);
+}
+function openEnd(kind){
+  const S=M.makeEnd(kind);
+  newGame({mode:'vs',kind:'e'+kind,level:3,S});
+  G.end=kind;G.limit=30;G.again=()=>openEnd(kind);
+  $('topName').textContent='Svarts kung (datorn)';$('botName').textContent='Du (vit)';
+  $('gTitle').textContent=kind==='kq'?'Kung och dam mot kung':'Två torn mot kung';
+  $('gSub').textContent='Sätt matt på högst '+G.limit+' drag. Driv svarts kung mot kanten. Se upp så det inte blir patt!';
+  statusLine();
+  acts([{id:'hint',t:'💡 Tips',f:hintVs},{id:'undo',t:'↶ Ångra',f:undo},{id:'again',t:'🔄 Ny ställning',f:()=>G.again()}]);
+  $('prog').innerHTML='<span>Mål: matt på färre drag ger fler stjärnor</span>';
 }
 function openTwo(){
   newGame({mode:'two',kind:'full',level:0,S:M.newState('full')});
@@ -545,14 +618,19 @@ function end(st){
     else if(whiteWon){title='Du vann!';emoji='🏆';text='Schackmatt! Datorns kung kunde inte komma undan.';win=true;}
     else{title='Datorn vann';emoji='🤖';text='Du blev schackmatt. Prova igen, eller välj en lättare nivå eller tryck på Tips under partiet.';}
   }else if(st==='patt'){title='Patt';emoji='🤝';text='Den som skulle dra kunde inte göra något drag men stod inte i schack. Då blir det lika.';}
+  else if(st==='limit'){title='Slut på drag';emoji='⏱️';text='Du fick '+G.limit+' drag på dig. Prova igen: driv kungen mot kanten först!';}
   else if(st==='resign'){title='Du gav upp';emoji='🏳️';text='Det är okej! Prova igen när du vill.';}
   else if(st==='rep'){title='Lika';emoji='🤝';text='Samma ställning kom tre gånger. Då blir det lika.';}
   else{title='Lika';emoji='🤝';text=st==='remimat'?'Det finns för lite material kvar för att kunna ge matt.':'Det har gått 50 drag utan att något tagits eller någon bonde flyttats. Då blir det lika.';}
   say('<b>'+title+'</b> '+(st==='matt'?'Schackmatt!':''),win?'good':st==='matt'?'bad':'warn');
-  if(win&&G.kind){const had=D.stars[G.kind+G.level]||0;addStars(G.kind+G.level,1);D.vinster=(D.vinster||0)+1;save();}
+  let sN=null;
+  if(win&&G.end){const n=G.hist.filter(h=>h.S.turn==='w').length,par=G.end==='kq'?[10,16]:[8,14];sN=n<=par[0]?3:n<=par[1]?2:1;addStars(G.kind,sN);text='Schackmatt på '+n+' drag! '+(sN===3?'Så få drag går knappt att klara.':'Prova igen för att klara det på färre drag.');}
+  else if(win&&G.kind){addStars(G.kind+G.level,1);D.vinster=(D.vinster||0)+1;save();}
   if(win&&L().fanfare)L().fanfare();
   const again=G.again;
-  setTimeout(()=>result({emoji,title,text,stars:win&&G.kind?{n:1,max:1}:null,again}),1700);
+  const myMoves=G.hist.filter(h=>h.S.turn==='w').length;
+  const extra=(G.mode==='vs'&&!G.end&&myMoves>=4)?{t:'🔍 Se mina misstag',f:analyseGame}:null;
+  setTimeout(()=>result({emoji,title,text,stars:win&&G.end?{n:sN,max:3}:win&&G.kind?{n:1,max:1}:null,again,extra}),1700);
 }
 function result(r){
   if(ADV!=null){const done=islDone(ADV),last=ADV+1>=ISL.length;
@@ -563,6 +641,7 @@ function result(r){
   $('rEmoji').textContent=r.emoji;$('rTitle').textContent=r.title;$('rText').textContent=r.text;
   $('rStars').innerHTML=r.stars?'⭐'.repeat(r.stars.n)+'<span style="opacity:.25">'+'☆'.repeat(r.stars.max-r.stars.n)+'</span>':'';
   $('rAgain').textContent=r.nextText||'Spela igen';
+  $('rExtra').hidden=!r.extra;if(r.extra){$('rExtra').textContent=r.extra.t;$('rExtra').onclick=r.extra.f;}
   $('rAgain').onclick=r.again||toHome;
   show('result');
 }
@@ -614,6 +693,17 @@ function genTask(p,round){
   }
   return null;
 }
+function genChase(p,round){
+  const cnt=p==='p'?2:round===1?2:3;
+  for(let t=0;t<4000;t++){
+    const b=Array(64).fill(null),used=new Set(),start=(4+R(4))*8+R(8);b[start]=p.toUpperCase();used.add(start);
+    for(let k=0;k<cnt;k++){let q;do{q=(1+R(3))*8+R(8);}while(used.has(q));used.add(q);b[q]='p';}
+    const S=M.copy(M.fromPieces({}));S.b=b;S.turn='w';
+    const sol=M.solveChase(S,start,7);
+    if(sol&&sol.d>=cnt&&(p==='p'||sol.d>=3))return {S,start,targets:[],opt:sol.d,chase:true,n:cnt};
+  }
+  return null;
+}
 function startTasks(p){
   G.round=-1;G.extra=0;G.total=4;G.phase='task';
   nextTask();
@@ -624,20 +714,42 @@ function progDots(){
 function nextTask(){
   G.round++;G.busy=false;
   if(G.round>=G.total)return lessonDone();
-  const t=genTask(G.piece,G.round);G.task=t;G.S=M.copy(t.S);G.moves=0;G.tasksDone=false;G.restarts=0;G.hint=null;G.last=null;G.sel=-1;G.legal=[];
+  const t=G.round>=1?(genChase(G.piece,G.round)||genTask(G.piece,G.round)):genTask(G.piece,G.round);G.task=t;G.S=M.copy(t.S);G.moves=0;G.tasksDone=false;G.restarts=0;G.hint=null;G.last=null;G.sel=-1;G.legal=[];
   sync();marks();progDots();taskUI();
 }
 function taskUI(){
   const n=G.task.targets.length;
-  $('gSub').textContent=n===1?'Ta den svarta pjäsen med så få drag som möjligt.':`Ta alla ${n} svarta pjäser med så få drag som möjligt.`;
+  $('gSub').textContent=G.task.chase?`Svarta bönder går mot din sida efter varje drag! Ta alla ${G.task.n} innan de blir damer, och låt dem inte ta din pjäs (de tar snett framåt).`:n===1?'Ta den svarta pjäsen med så få drag som möjligt.':`Ta alla ${n} svarta pjäser med så få drag som möjligt.`;
   say(`Det går att klara på <b>${G.task.opt}</b> drag. Du har gjort <b>${G.moves}</b>.`,'');
   acts([{id:'hint',t:'💡 Tips',f:lessonHint},{id:'rs',t:'↺ Börja om uppdraget',f:()=>{G.extra+=1;G.S=M.copy(G.task.S);G.moves=0;G.last=null;G.hint=null;sync();marks();taskUI();}}]);
+}
+function pawnPhase(){
+  G.busy=true;
+  setTimeout(()=>{
+    if(!G||G.mode!=='lesson')return;
+    const r=M.chaseStep(G.S.b,8,8);
+    r.moves.forEach(pm=>{
+      const e=elAt[pm.f];elAt[pm.f]=null;
+      if(pm.cap&&elAt[pm.t]){const c=elAt[pm.t];c.classList.add('gone');setTimeout(()=>c.remove(),300);}
+      if(e){e.dataset.i=pm.t;setPos(e,pm.t);elAt[pm.t]=e;if(pm.promo)setTimeout(()=>{e.src=img('q');},260);}
+    });
+    const N=M.copy(G.S);N.b=r.b;G.S=N;
+    if(L().clonk)L().clonk();
+    if(r.fail){
+      if(L().bad)L().bad();
+      say(r.fail==='tagen'?'Aj! En bonde tog din pjäs. Bönderna tar snett framåt, så håll dig inte där.':'En bonde nådde sista raden och blev en dam! Ta bönderna i tid.','bad');
+      acts([{id:'rs',t:'↺ Försök igen',p:1,f:()=>{G.extra+=1;G.S=M.copy(G.task.S);G.moves=0;G.last=null;G.hint=null;G.busy=false;sync();marks();taskUI();}}]);
+      return;
+    }
+    G.busy=false;marks();
+    say(`Det går att klara på <b>${G.task.opt}</b> drag. Du har gjort <b>${G.moves}</b>. Bönderna har gått ett steg!`,'');
+  },480);
 }
 function lessonHint(){
   if(G.tasksDone)return;
   const S=G.S,pos0=S.b.findIndex(p=>p&&M.isW(p));
   const targets=[];S.b.forEach((p,i)=>{if(p&&!M.isW(p))targets.push(i);});
-  const sol=M.solveCapture(S,pos0,targets,8);
+  const sol=G.task.chase?M.solveChase(S,pos0,8):M.solveCapture(S,pos0,targets,8);
   if(!sol||sol.path.length<2)return;
   G.hint=[sol.path[1]];G.sel=-1;G.legal=[];marks();
   say('💡 Det blinkande rutan är ett bra nästa drag.','warn');
@@ -648,7 +760,7 @@ function lessonAfter(m){
     if(!left){say('Bra! Du tog alla. Tryck på <b>Börja om</b> för att prova igen, eller gå vidare till uppdragen.','good');}
     return;
   }
-  if(left){say(`Det går att klara på <b>${G.task.opt}</b> drag. Du har gjort <b>${G.moves}</b>.`,'');return;}
+  if(left){if(G.task.chase){pawnPhase();return;}say(`Det går att klara på <b>${G.task.opt}</b> drag. Du har gjort <b>${G.moves}</b>.`,'');return;}
   G.tasksDone=true;G.over=false;
   const extra=Math.max(0,G.moves-G.task.opt);G.extra+=extra;
   if(L().ok)L().ok();
@@ -674,14 +786,61 @@ function openMate(level){
 function nextPuzzle(){
   G.round++;
   if(G.round>=G.total)return mateDone();
-  const p=M.makeMate1(G.level);G.puz=p;G.S=M.copy(p.S);G.last=null;G.sel=-1;G.legal=[];G.hint=null;G.busy=false;G.pErr=0;G.moves=0;
+  let p;
+  if(G.m2){const list=MPSchackMate2[G.level];G.used=G.used||[];let k;do{k=Math.floor(Math.random()*list.length);}while(G.used.includes(k)&&G.used.length<list.length);G.used.push(k);const S0=M.fromPieces(list[k].pcs,'w');p={S:S0,mates:M.forcedKeys(S0)};G.stage=1;}
+  else p=M.makeMate1(G.level);
+  G.puz=p;G.S=M.copy(p.S);G.last=null;G.sel=-1;G.legal=[];G.hint=null;G.busy=false;G.pErr=0;G.moves=0;
   if(!G.built){G.built=true;}
   build(G.S);marks();progDots();
-  $('gSub').textContent='Vit drar. Hitta draget som sätter svarts kung schackmatt!';
-  say('Vit ska dra. Hitta schackmatt i ett drag.','');
-  acts([{id:'hint',t:'💡 Tips',f:()=>{G.errs+=1;G.hint=[G.puz.mates[0].f];marks();say('💡 Flytta pjäsen på den blinkande rutan.','warn');}},{id:'rs',t:'↺ Ställ tillbaka',f:resetPuz},{id:'rulesb',t:'? Vad är matt?',f:()=>{$('rules').hidden=false;}}]);
+  $('gSub').textContent=G.m2?'Vit drar och sätter matt i två drag. Hitta första draget som tvingar matt, vad svart än svarar.':'Vit drar. Hitta draget som sätter svarts kung schackmatt!';
+  say(G.m2?'Vit ska dra. Matt i två drag: ditt drag, svarts svar, och ditt matt-drag.':'Vit ska dra. Hitta schackmatt i ett drag.','');
+  mateActs();
+}
+function mateActs(){
+  acts([{id:'hint',t:'💡 Tips',f:()=>{G.errs+=1;const hm=G.m2&&G.stage===2?M.mateMoves(G.S)[0]:G.puz.mates[0];G.hint=[hm.f];marks();say('💡 Flytta pjäsen på den blinkande rutan.','warn');}},{id:'rs',t:'↺ Ställ tillbaka',f:()=>{G.stage=1;resetPuz();}},{id:'rulesb',t:'? Vad är matt?',f:()=>{$('rules').hidden=false;}}]);
+}
+/* efter ett fel: meddelandet står kvar tills man själv trycker */
+function failChoice(retryMsg,onRetry,solve){
+  G.busy=true;
+  const retry=()=>{G.busy=false;onRetry();say(retryMsg,'');mateActs();};
+  const list=[{id:'try',t:'↺ Försök igen',p:!solve,f:retry}];
+  if(solve)list.unshift({id:'sol',t:'Visa lösningen',p:1,f:solve});
+  acts(list);
+}
+function showSolution(msg){
+  const s=G.puz.mates[0];G.S=M.copy(G.puz.S);G.stage=1;sync();G.hint=[s.f,s.t];G.arr=[{f:s.f,t:s.t,c:'#3FCB8B'}];G.busy=true;marks();
+  say(msg,'warn');
+  acts([{id:'nx',t:'Nästa ▶',p:1,f:()=>{G.arr=null;G.busy=false;if(G.pat!=null)patDone(false);else nextPuzzle();}}]);
 }
 function resetPuz(){G.S=M.copy(G.puz.S);G.last=null;G.sel=-1;G.legal=[];G.hint=null;G.busy=false;sync();marks();}
+function openMate2(level){
+  G={mode:'mate',m2:true,stage:1,kind:'n'+level,level,flip:false,sel:-1,legal:[],last:null,hist:[],busy:false,over:false,round:-1,total:6,errs:0,hint:null,S:null,arr:null};
+  show('game');names2();
+  $('gTitle').textContent='Matt i två drag – '+LV[level];
+  nextPuzzle();
+}
+function m2After(m,N){
+  if(G.stage===1){
+    const R=M.legal(N);
+    if(!R.length||R.some(r=>!M.mateMoves(M.make(N,r)).length)){
+      G.errs+=1;G.pErr+=1;G.busy=true;if(L().bad)L().bad();
+      say('Svart kan klara sig efter det draget. Hitta draget som tvingar matt i nästa drag, vad svart än gör.','bad');
+      failChoice('Försök igen! Tänk: svart ska inte kunna undkomma.',()=>{G.stage=1;resetPuz();},G.pErr>=2?()=>showSolution('Här är första draget. Svart kan göra vad som helst, du sätter ändå matt i nästa.'):null);
+      return;
+    }
+    G.busy=true;say('Bra! Nu svarar svart …','');
+    setTimeout(()=>{const r=R[Math.floor(Math.random()*R.length)],N2=M.make(N,r);visual(N,r,N2);G.S=N2;G.last={f:r.f,t:r.t};G.s2=M.copy(N2);G.stage=2;G.busy=false;marks();sound(null,N2);say('Nu kan du sätta matt! Hitta draget.','good');},750);
+    return;
+  }
+  // steg 2: måste vara matt
+  if(!M.legal(N).length&&M.inCheck(N,'b')){
+    G.busy=true;if(L().fanfare)L().fanfare();say('<b>Schackmatt!</b> Du tvingade matt i två drag.','good');
+    setTimeout(nextPuzzle,1600);return;
+  }
+  G.errs+=1;G.busy=true;if(L().bad)L().bad();
+  say('Det var inte matt. Titta på svarts kung: vilka rutor kan den gå till?','bad');
+  failChoice('Försök igen: sätt matt!',()=>{G.S=M.copy(G.s2);G.last=null;G.sel=-1;G.legal=[];sync();marks();},null);
+}
 function mateAfter(m,N){
   const mates=G.puz.mates.some(x=>x.f===m.f&&x.t===m.t&&(x.p||null)===(m.p||null));
   const L2=M.legal(N);
@@ -694,14 +853,11 @@ function mateAfter(m,N){
   G.errs+=1;G.pErr+=1;G.busy=true;if(L().bad)L().bad();
   const msg=!L2.length?'Det blev <b>patt</b>: svart kan inte dra men står inte i schack. Det blir lika, inte matt.':M.inCheck(N,'b')?'Det blev schack, men kungen kan komma undan. Prova ett annat drag.':'Det är inte schack. Matt kräver att kungen hotas och inte kan fly.';
   say(msg,'bad');
-  setTimeout(()=>{
-    if(G.pErr>=2){const s=G.puz.mates[0];G.hint=[s.f,s.t];say('Här är lösningen: flytta från den första blå rutan till den andra.','warn');G.S=M.copy(G.puz.S);sync();marks();setTimeout(()=>{G.busy=false;if(G.pat!=null)patDone(false);else nextPuzzle();},2600);}
-    else{resetPuz();say('Försök igen! Vit ska dra.','');}
-  },1400);
+  failChoice('Försök igen! Vit ska dra.',resetPuz,G.pErr>=2?()=>showSolution('Här är lösningen: flytta från den första blå rutan till den andra.'):null);
 }
 function mateDone(){
   const n=G.errs<=1?3:G.errs<=4?2:1;addStars(G.kind,n);if(L().fanfare)L().fanfare();
-  result({emoji:'♚',title:'Bra matt-spanat!',text:G.errs===0?'Inga fel alls!':'Du gjorde '+G.errs+' missar eller tips. Färre ger fler stjärnor.',stars:{n,max:3},again:()=>openMate(G.level),nextText:'Nya pussel'});
+  result({emoji:'♚',title:'Bra matt-spanat!',text:G.errs===0?'Inga fel alls!':'Du gjorde '+G.errs+' missar eller tips. Färre ger fler stjärnor.',stars:{n,max:3},again:()=>G.m2?openMate2(G.level):openMate(G.level),nextText:'Nya pussel'});
 }
 
 /* ---------- klassiska mattmönster ---------- */
@@ -732,14 +888,58 @@ function patDone(ok){
   else acts([{id:'nx',t:nx>=0?'Nästa mönster ▶':'Till menyn',p:1,f:()=>nx>=0?openPat(nx):toHome()},retry]);
 }
 /* ---------- gemensamt ---------- */
-function toHome(){G=null;home();show('home');setTimeout(scrollToCur,120);}
-$('quit').onclick=toHome;$('rHome').onclick=toHome;
+function analyseGame(){
+  const hs=G.hist.filter(h=>h.S.turn==='w'&&h.m);
+  const g0=G;
+  G={mode:'analys',S:M.copy(g0.S),flip:false,sel:-1,legal:[],last:null,hist:[],busy:true,over:true,hint:null,arr:null,list:[],k:0,capW:[],capB:[]};
+  show('game');names2();build(G.S);$('prog').innerHTML='';
+  $('gTitle').textContent='Dina misstag';$('gSub').textContent='Datorn går igenom ditt parti …';
+  say('Analyserar <span class="dots"><i></i><i></i><i></i></span>','');acts([]);
+  const me=G,res=[];let i=0;
+  (function step(){
+    if(G!==me)return;
+    if(i>=hs.length)return fin();
+    const h=hs[i],a=M.analyse(h.S,2);
+    if(a){const act=a.all.find(x=>x[0].f===h.m.f&&x[0].t===h.m.t&&(x[0].p||null)===(h.m.p||null));
+      if(act){const loss=a.bv-act[1];if(loss>=200&&!(a.best.f===h.m.f&&a.best.t===h.m.t))res.push({n:i+1,S:h.S,m:h.m,best:a.best,loss});}}
+    i++;setTimeout(step,0);
+  })();
+  function fin(){
+    res.sort((x,y)=>y.loss-x.loss);me.list=res.slice(0,5).sort((x,y)=>x.n-y.n);me.k=0;
+    if(!me.list.length){$('gTitle').textContent='Bra spelat!';$('gSub').textContent='Jag hittade inga stora misstag i ditt parti.';say('Inga stora misstag! 👏','good');acts([{id:'h',t:'Till menyn',p:1,f:toHome}]);return;}
+    showMiss();
+  }
+}
+function whyPlayed(S,m){
+  const N=M.make(S,m);
+  if(M.mateMoves(N).length)return 'Efter det draget kunde datorn sätta matt.';
+  const h=M.hanging(N);
+  if(h.length)return NAMN_DIN[h[0].p.toLowerCase()]+' på '+M.sqName(N,h[0].sq)+' kunde tas av '+NAMN_EN[h[0].by.toLowerCase()]+'.';
+  return 'Datorn fick en fördel efter det draget.';
+}
+function whyBest(S,b){
+  if(M.mateMoves(S).some(x=>x.f===b.f&&x.t===b.t))return 'Du kunde sätta matt!';
+  if(b.cap)return 'Du kunde ta '+NAMN_EN[b.cap.toLowerCase()]+'.';
+  return 'Det draget var starkare.';
+}
+function showMiss(){
+  const x=G.list[G.k],S=x.S,pn=p=>({p:'bonden',r:'tornet',b:'löparen',n:'springaren',q:'damen',k:'kungen'})[p.toLowerCase()];
+  G.S=M.copy(S);G.last=null;G.arr=[{f:x.m.f,t:x.m.t,c:'#E5484D'},{f:x.best.f,t:x.best.t,c:'#3FCB8B'}];
+  sync();marks();
+  $('gTitle').textContent='Misstag '+(G.k+1)+' av '+G.list.length+' (drag '+x.n+')';
+  $('gSub').innerHTML=`Du flyttade ${pn(S.b[x.m.f])} till <b>${M.sqName(S,x.m.t)}</b> (röd pil). ${whyPlayed(S,x.m)}<br>Bättre var ${pn(S.b[x.best.f])} till <b>${M.sqName(S,x.best.t)}</b> (grön pil). ${whyBest(S,x.best)}`;
+  say(G.k+1<G.list.length?'Tryck på Nästa för nästa misstag.':'Det var alla. Bra jobbat att titta igenom dem!',G.k+1<G.list.length?'':'good');
+  acts([{id:'pr',t:'◀ Förra',f:()=>{if(G.k>0){G.k--;showMiss();}}},{id:'nx',t:'Nästa ▶',p:1,f:()=>{if(G.k+1<G.list.length){G.k++;showMiss();}else toHome();}},{id:'h',t:'Till menyn',f:toHome}]);
+  $('a_pr').disabled=G.k===0;
+}
+function toHome(){G=null;home();show('home');}
+$('quit').onclick=()=>ADV!=null?toMap():toHome();$('rHome').onclick=()=>ADV!=null?toMap():toHome();
 $('rulesBtn').onclick=()=>{$('rules').hidden=false;};
 $('rulesOk').onclick=()=>{$('rules').hidden=true;};
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('promo').hidden)$('promo').hidden=true;else if(!$('rules').hidden)$('rules').hidden=true;}});
 $('rules').addEventListener('click',e=>{if(e.target===$('rules'))$('rules').hidden=true;});
 home();
-window.__sk={get G(){return G;},M,openVs,openLesson,openMate,openTwo,go,choose,genTask,end};
+window.__sk={get G(){return G;},M,openMate2,openEnd,analyseGame,openVs,openLesson,openMate,openTwo,go,choose,genTask,end};
 })();
 </script>
 </body>
