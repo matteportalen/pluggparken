@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<script src="../tema.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tre i rad – Pluggparken</title>
+<meta name="description" content="Tre i rad: få tre i rad före datorn eller en kompis. Tre nivåer, och en större bräda där du behöver fyra i rad.">
+<link rel="canonical" href="https://pluggparken.se/trerirad/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Pluggparken">
+<meta property="og:locale" content="sv_SE">
+<meta property="og:title" content="Tre i rad – Pluggparken">
+<meta property="og:description" content="Tre i rad: få tre i rad före datorn eller en kompis. Tre nivåer, och en större bräda där du behöver fyra i rad.">
+<meta property="og:url" content="https://pluggparken.se/trerirad/">
+<meta property="og:image" content="https://pluggparken.se/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#1F3A35">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/apple-touch-icon.png" sizes="180x180">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FFF2E4;--ink:#2B2A52;--muted:#6B6A8F;--card:#FFFFFF;--line:#F0D9C0;--x:#FF5E7E;--o:#3D7BFF;--gold:#F2B707;--font:"Baloo 2","Trebuchet MS",system-ui,sans-serif;--bs:420px}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:620px;margin:0 auto;padding:12px 16px 48px}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;border:0;background:none}
+button:focus-visible{outline:3px solid var(--o);outline-offset:3px}
+[hidden]{display:none !important}
+.hero{border-radius:24px;padding:20px 20px 18px;background:linear-gradient(135deg,#FF8A4C,#FF5E7E);color:#fff;box-shadow:0 6px 0 #B03A52;position:relative;overflow:hidden;margin:6px 0 18px}
+.hero h1{margin:0;font-size:2.4rem;line-height:1.05;text-shadow:0 2px 0 rgba(0,0,0,.15)}
+.hero p{margin:4px 0 0;font-weight:600;max-width:20em}
+.hero svg{position:absolute;right:12px;top:50%;transform:translateY(-50%);width:104px;height:104px;opacity:.95}
+h2{font-size:1.25rem;margin:18px 0 8px}
+.row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.opt{background:var(--card);border-radius:18px;padding:12px 8px;text-align:center;box-shadow:0 4px 0 var(--line);border:2px solid transparent;font-weight:700;transition:transform .1s}
+.opt:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.opt.on{border-color:var(--o);box-shadow:0 4px 0 #9DB8FF}
+.opt small{display:block;color:var(--muted);font-weight:500;line-height:1.2;font-size:.82rem}
+.opt .st{display:block;font-size:.95rem;letter-spacing:1px;margin-top:2px}
+.opt .st i{opacity:.25;font-style:normal}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.go{display:block;width:100%;margin-top:18px;background:linear-gradient(180deg,#4DDB93,#1E9E5E);color:#fff;border-radius:20px;padding:14px;font-size:1.3rem;font-weight:800;box-shadow:0 5px 0 #157548}
+.go:active{transform:translateY(4px);box-shadow:0 1px 0 #157548}
+.gtop{display:flex;align-items:center;gap:8px;margin:2px 0 10px}
+.chip{display:flex;align-items:center;gap:8px;background:var(--card);border-radius:999px;padding:6px 14px 6px 8px;box-shadow:0 3px 0 var(--line);font-weight:800;border:3px solid transparent;transition:border-color .2s,transform .2s}
+.chip.on{border-color:var(--gold);transform:scale(1.05)}
+.chip svg{width:26px;height:26px}
+.vs{flex:1;text-align:center;color:var(--muted);font-weight:800}
+.board{position:relative;margin:0 auto;width:var(--bs);height:var(--bs);display:grid;gap:7px;padding:7px;background:#3E4A83;border-radius:22px;box-shadow:0 7px 0 #262F5C,0 16px 30px rgba(38,47,92,.25);touch-action:manipulation}
+.cell{background:#FFF9F0;border-radius:14px;display:grid;place-items:center;transition:background .15s;position:relative}
+.cell:hover:not(.full){background:#FFFFFF}
+.cell.full{cursor:default}
+.cell svg{width:78%;height:78%;overflow:visible}
+.cell .m{stroke-linecap:round;fill:none;stroke-width:12}
+.cell .m.x{stroke:var(--x)}.cell .m.o{stroke:var(--o)}
+.cell .m{stroke-dasharray:1;stroke-dashoffset:1;animation:draw .35s ease-out forwards}
+.cell .m.b{animation-delay:.18s}
+@keyframes draw{to{stroke-dashoffset:0}}
+.cell.win{background:#FFF0B3;animation:pop .5s ease-out}
+@keyframes pop{40%{transform:scale(1.1)}}
+.cell.hintc::after{content:"";position:absolute;inset:18%;border-radius:50%;border:4px dashed var(--gold);animation:hp 1s infinite}
+@keyframes hp{50%{opacity:.3}}
+.msg{margin:14px auto 0;max-width:var(--bs);min-height:3.2em;text-align:center;font-weight:800;font-size:1.2rem}
+.acts{display:flex;gap:10px;justify-content:center;margin-top:10px;flex-wrap:wrap}
+.pill{background:var(--card);border-radius:999px;padding:8px 18px;font-weight:800;box-shadow:0 3px 0 var(--line)}
+.pill:active{transform:translateY(2px)}
+.res{text-align:center;padding:30px 8px}
+.res .big{font-size:4.5rem;line-height:1}.res h2{font-size:2rem;margin:8px 0}.res .st{font-size:2.2rem;letter-spacing:4px}
+.res p{color:var(--muted)}
+@media(prefers-reduced-motion:reduce){.cell .m{animation:none;stroke-dashoffset:0}.cell.win,.cell.hintc::after{animation:none}}
+</style>
+</head>
+<body>
+<script src="../ljud.js"></script>
+<script src="../djur.js"></script>
+<script src="../huvud.js" data-titel="Tre i rad" data-ikon="⭕"></script>
+<div class="wrap">
+<section id="home" class="screen">
+  <div class="hero"><h1>Tre i rad</h1><p>Få tre i rad före datorn eller en kompis!</p>
+    <svg viewBox="0 0 60 60" aria-hidden="true"><path d="M21 6v48M39 6v48M6 21h48M6 39h48" stroke="#fff" stroke-width="3.5" stroke-linecap="round" opacity=".9"/><path d="M9 9l9 9M18 9l-9 9" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/><circle cx="30" cy="30" r="6" fill="none" stroke="#FFE07A" stroke-width="3.5"/><path d="M42 42l9 9M51 42l-9 9" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/></svg></div>
+  <h2>Hur stor bräda?</h2>
+  <div class="row2" id="oSize"></div>
+  <h2>Vem spelar du mot?</h2>
+  <div class="row" id="oLvl"></div>
+  <div class="row2" style="margin-top:10px"><button class="opt" id="oTwo">🤝 Två spelare<small>Samma skärm, turas om</small></button><span></span></div>
+  <button class="go" id="goBtn">Spela!</button>
+</section>
+<section id="game" class="screen" hidden>
+  <div class="gtop"><div class="chip" id="cA"></div><span class="vs">mot</span><div class="chip" id="cB"></div></div>
+  <div class="board" id="board"></div>
+  <div class="msg" id="msg"></div>
+  <div class="acts" id="acts"></div>
+</section>
+<section id="result" class="screen" hidden>
+  <div class="res"><div class="big" id="rEmoji"></div><h2 id="rTitle"></h2><div class="st" id="rStars"></div><p id="rText"></p>
+    <div class="acts"><button class="go" style="width:auto;padding:12px 26px;margin-top:6px" id="rAgain">Spela igen</button><button class="pill" id="rHome">Till menyn</button></div></div>
+</section>
+</div>
+<script>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id),L=()=>window.Ljud||{};
+const KEY='mattespel-trerirad-v1';
+let D;try{D=JSON.parse(localStorage.getItem(KEY))||{};}catch(e){D={};}
+D.stars=D.stars||{};D.cfg=D.cfg||{size:3,lvl:2};
+function save(){try{localStorage.setItem(KEY,JSON.stringify(D));}catch(e){}}
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
+const LV=['','Lätt','Mellan','Svår'];
+const XS='<svg viewBox="0 0 100 100"><path class="m x" pathLength="1" d="M20 20L80 80"/><path class="m x b" pathLength="1" d="M80 20L20 80"/></svg>';
+const OS='<svg viewBox="0 0 100 100"><circle class="m o" pathLength="1" cx="50" cy="50" r="31"/></svg>';
+const XI='<svg viewBox="0 0 100 100"><path d="M20 20L80 80M80 20L20 80" stroke="#FF5E7E" stroke-width="14" stroke-linecap="round"/></svg>';
+const OI='<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="31" fill="none" stroke="#3D7BFF" stroke-width="14"/></svg>';
+let G=null,sel=D.cfg;
+/* ---------- val ---------- */
+function home(){
+  const st=n=>'⭐'.repeat(n)+'<i>'+'☆'.repeat(1-n)+'</i>';
+  $('oSize').innerHTML=[3,5].map(n=>`<button class="opt ${sel.size===n?'on':''}" data-s="${n}">${n} × ${n}<small>${n===3?'Tre i rad':'Fyra i rad'}</small></button>`).join('');
+  $('oLvl').innerHTML=[1,2,3].map(l=>`<button class="opt ${sel.lvl===l&&!sel.two?'on':''}" data-l="${l}">${['😀','🤔','🧠'][l-1]} ${LV[l]}<small>${['Gör ibland misstag','Blockerar och vinner','Går inte att slå på 3 × 3'][l-1]}</small><span class="st">${st(D.stars[sel.size+'-'+l]||0)}</span></button>`).join('');
+  $('oTwo').classList.toggle('on',!!sel.two);
+}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('.opt');if(!b||b.id==='oTwo'&&false)return;
+  if(b.dataset.s){sel.size=+b.dataset.s;home();}
+  else if(b.dataset.l){sel.lvl=+b.dataset.l;sel.two=false;home();}
+  else if(b.id==='oTwo'){sel.two=true;home();}
+});
+$('goBtn').onclick=()=>{D.cfg=sel;save();start(true);};
+/* ---------- regler ---------- */
+let LINES=[];
+function mkLines(N,K){
+  const out=[];
+  for(let r=0;r<N;r++)for(let c=0;c<N;c++)for(const [dr,dc] of[[0,1],[1,0],[1,1],[1,-1]]){
+    const er=r+dr*(K-1),ec=c+dc*(K-1);if(er<0||er>=N||ec<0||ec>=N)continue;
+    out.push(Array.from({length:K},(_,k)=>(r+dr*k)*N+c+dc*k));
+  }
+  return out;
+}
+function winner(b){for(const l of LINES){const v=b[l[0]];if(v&&l.every(i=>b[i]===v))return {p:v,l};}return null;}
+/* ---------- datorn ---------- */
+function evalB(b,me){
+  let s=0;
+  for(const l of LINES){let a=0,o=0;for(const i of l){if(b[i]===me)a++;else if(b[i])o++;}
+    if(a&&!o)s+=Math.pow(10,a);else if(o&&!a)s-=Math.pow(10,o);}
+  return s;
+}
+function ab(b,turn,me,d,alpha,beta,N){
+  const w=winner(b);if(w)return w.p===me?100000+d:-100000-d;
+  const em=[];for(let i=0;i<b.length;i++)if(!b[i])em.push(i);
+  if(!em.length)return 0;if(d===0)return evalB(b,me);
+  const c=(N-1)/2;em.sort((x,y)=>Math.abs(x%N-c)+Math.abs(Math.floor(x/N)-c)-Math.abs(y%N-c)-Math.abs(Math.floor(y/N)-c));
+  if(turn===me){let v=-Infinity;for(const i of em){b[i]=turn;v=Math.max(v,ab(b,3-turn,me,d-1,alpha,beta,N));b[i]=0;alpha=Math.max(alpha,v);if(alpha>=beta)break;}return v;}
+  let v=Infinity;for(const i of em){b[i]=turn;v=Math.min(v,ab(b,3-turn,me,d-1,alpha,beta,N));b[i]=0;beta=Math.min(beta,v);if(alpha>=beta)break;}return v;
+}
+function bestMove(b,turn,level,N){
+  const em=[];b.forEach((v,i)=>{if(!v)em.push(i);});
+  const tryWin=p=>{for(const i of em){b[i]=p;const w=winner(b);b[i]=0;if(w)return i;}return -1;};
+  const c=(N-1)/2,center=em.slice().sort((x,y)=>Math.abs(x%N-c)+Math.abs(Math.floor(x/N)-c)-Math.abs(y%N-c)-Math.abs(Math.floor(y/N)-c));
+  if(level===1&&Math.random()<.5)return em[Math.floor(Math.random()*em.length)];
+  if(level<=2){let m=tryWin(turn);if(m<0)m=tryWin(3-turn);if(m>=0)return m;
+    return center[Math.floor(Math.random()*Math.min(center.length,level===1?4:2))];}
+  const depth=N===3?9:4;let best=-1,bv=-Infinity;
+  for(const i of center){b[i]=turn;const v=ab(b,3-turn,turn,depth-1,-Infinity,Infinity,N)+Math.random()*.01;b[i]=0;if(v>bv){bv=v;best=i;}}
+  return best;
+}
+/* ---------- spel ---------- */
+function start(first){
+  const N=sel.size,K=N===3?3:4;LINES=mkLines(N,K);
+  const prev=G&&G.N===N&&G.two===!!sel.two?G:null;
+  G={N,K,b:Array(N*N).fill(0),turn:1,two:!!sel.two,lvl:sel.lvl,over:false,busy:false,human:1,hint:-1};
+  // vid nytt parti mot datorn turas man om att börja
+  if(prev&&!first)G.human=prev.human===1?2:1;
+  show('game');
+  const bs=Math.max(240,Math.min(innerWidth-40,innerHeight-300,460));document.documentElement.style.setProperty('--bs',bs+'px');
+  const B=$('board');B.style.gridTemplateColumns=`repeat(${N},1fr)`;B.style.gridTemplateRows=`repeat(${N},1fr)`;
+  B.innerHTML=G.b.map((_,i)=>`<button class="cell" data-i="${i}" aria-label="Ruta ${i+1}"></button>`).join('');
+  const nm=G.two?['Spelare 1','Spelare 2']:G.human===1?['Du','Datorn']:['Datorn','Du'];
+  $('cA').innerHTML=XI+'<span>'+nm[0]+'</span>';$('cB').innerHTML=OI+'<span>'+nm[1]+'</span>';
+  acts();stat();
+  if(!G.two&&G.human!==1)comp();
+}
+function acts(){
+  $('acts').innerHTML='<button class="pill" id="aHint">💡 Tips</button><button class="pill" id="aNew">🔄 Nytt parti</button>';
+  $('aNew').onclick=()=>start(false);
+  $('aHint').onclick=()=>{if(G.over||G.busy||(!G.two&&G.turn!==G.human))return;
+    document.querySelectorAll('.cell').forEach(c=>c.classList.remove('hintc'));
+    const m=bestMove(G.b.slice(),G.turn,3,G.N);const e=document.querySelector(`.cell[data-i="${m}"]`);if(e)e.classList.add('hintc');};
+  if(G.two)$('aHint').hidden=true;
+}
+function stat(){
+  $('cA').classList.toggle('on',!G.over&&G.turn===1);$('cB').classList.toggle('on',!G.over&&G.turn===2);
+  if(G.over)return;
+  $('msg').textContent=G.two?(G.turn===1?'Spelare 1:s tur (X)':'Spelare 2:s tur (O)'):(G.turn===G.human?'Din tur':'Datorn tänker …');
+}
+$('board').addEventListener('click',e=>{
+  const c=e.target.closest('.cell');if(!c||!G||G.over||G.busy)return;
+  if(!G.two&&G.turn!==G.human)return;
+  const i=+c.dataset.i;if(G.b[i])return;
+  place(i);
+});
+function place(i){
+  const p=G.turn;G.b[i]=p;
+  const c=document.querySelector(`.cell[data-i="${i}"]`);c.innerHTML=p===1?XS:OS;c.classList.add('full');
+  document.querySelectorAll('.cell').forEach(x=>x.classList.remove('hintc'));
+  if(L().clonk)L().clonk();
+  const w=winner(G.b);
+  if(w){G.over=true;w.l.forEach(k=>document.querySelector(`.cell[data-i="${k}"]`).classList.add('win'));return finish(w.p);}
+  if(G.b.every(v=>v)){G.over=true;return finish(0);}
+  G.turn=3-p;stat();
+  if(!G.two&&G.turn!==G.human)comp();
+}
+function comp(){
+  G.busy=true;stat();
+  setTimeout(()=>{if(!G||G.over)return;G.busy=false;const m=bestMove(G.b.slice(),G.turn,G.lvl,G.N);if(m>=0)place(m);},520);
+}
+function finish(w){
+  stat();$('cA').classList.remove('on');$('cB').classList.remove('on');
+  let title,emoji,text,win=false;
+  if(w===0){title='Oavgjort';emoji='🤝';text='Brädet blev fullt. Bra kämpat!';}
+  else if(G.two){title=(w===1?'Spelare 1':'Spelare 2')+' vann!';emoji='🏆';text='Tre i rad!';if(G.N===5)text='Fyra i rad!';}
+  else if(w===G.human){title='Du vann!';emoji='🏆';text=G.N===5?'Fyra i rad!':'Tre i rad!';win=true;}
+  else{title='Datorn vann';emoji='🤖';text='Prova igen! Tryck på Tips om du vill ha hjälp.';}
+  $('msg').textContent=title+' '+(w===0?'':'🎉');
+  if(win){const k=G.N+'-'+G.lvl;if(!D.stars[k]){D.stars[k]=1;save();}if(L().fanfare)L().fanfare();}else if(w===0&&L().chime){}
+  const nm=G.two?'Spela igen':'Spela igen';
+  setTimeout(()=>{
+    $('rEmoji').textContent=emoji;$('rTitle').textContent=title;$('rText').textContent=text;
+    $('rStars').innerHTML=win?'⭐':'';
+    $('rAgain').onclick=()=>start(false);
+    show('result');
+  },1400);
+}
+function toHome(){G=null;home();show('home');}
+$('rHome').onclick=toHome;
+home();
+window.__tr={get G(){return G;},start,place,bestMove,mkLines,winner};
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Schack – Pluggparken</title>
+<meta name="description" content="Schack: lär dig hur pjäserna går, lös schackmatt i ett drag, spela minischack och hela partier mot datorn eller en kompis.">
+<link rel="canonical" href="https://pluggparken.se/schack/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Pluggparken">
+<meta property="og:locale" content="sv_SE">
+<meta property="og:title" content="Schack – Pluggparken">
+<meta property="og:description" content="Schack: lär dig hur pjäserna går, lös schackmatt i ett drag, spela minischack och hela partier mot datorn eller en kompis.">
+<meta property="og:url" content="https://pluggparken.se/schack/">
+<meta property="og:image" content="https://pluggparken.se/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#1F3A35">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/apple-touch-icon.png" sizes="180x180">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0E1523;--bg2:#18223A;--ink:#EEF2FA;--muted:#9FAECB;--gold:#E8C468;--gold2:#B8923A;--line:rgba(255,255,255,.12);
+  --glass:rgba(255,255,255,.07);--good:#3FCB8B;--bad:#FF6B6B;--accent:#6C8CFF;
+  --lt:#F0E1C5;--dk:#B58A62;--bs:560px;
+  --font:"Baloo 2","Trebuchet MS",system-ui,sans-serif;--serif:"Source Serif 4",Georgia,serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{background:radial-gradient(1200px 700px at 70% -10%,#26345A 0%,transparent 60%),radial-gradient(900px 600px at 0% 100%,#1B2A4A 0%,transparent 55%),var(--bg);background-attachment:fixed;color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;border:0;background:none}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+[hidden]{display:none !important}
+.wrap{max-width:980px;margin:0 auto;padding:12px 16px 56px}
+h1,h2,h3{font-family:var(--serif);margin:0}
+.hero{position:relative;overflow:hidden;border-radius:22px;padding:26px 22px 24px;margin:6px 0 18px;background:linear-gradient(135deg,#1E2B4D 0%,#101A33 60%,#0B1226 100%);border:1px solid var(--line);box-shadow:0 18px 40px rgba(0,0,0,.35)}
+.hero::before{content:"";position:absolute;inset:0;background:repeating-conic-gradient(rgba(255,255,255,.035) 0 25%,transparent 0 50%) 0 0/64px 64px;mask-image:linear-gradient(100deg,transparent 35%,#000 100%);-webkit-mask-image:linear-gradient(100deg,transparent 35%,#000 100%)}
+.hero h1{font-size:clamp(2.2rem,6vw,3.4rem);letter-spacing:.01em;background:linear-gradient(180deg,#FFF1C9,var(--gold) 55%,var(--gold2));-webkit-background-clip:text;background-clip:text;color:transparent;position:relative}
+.hero p{margin:4px 0 0;color:var(--muted);max-width:32em;position:relative}
+.hero .pcs{position:absolute;right:10px;bottom:-6px;display:flex;align-items:flex-end;gap:0}
+.hero .pcs img{width:clamp(60px,12vw,110px);filter:drop-shadow(0 6px 10px rgba(0,0,0,.5))}
+.hero .pcs img:nth-child(2){width:clamp(80px,16vw,140px);margin:0 -14px}
+.sec{margin:20px 0 8px;display:flex;align-items:baseline;gap:10px}
+.sec h2{font-size:1.35rem}.sec small{color:var(--muted)}
+.sec .n{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--gold);color:#2A2108;font-weight:800;font-size:.95rem;flex:none}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.card{position:relative;text-align:left;background:var(--glass);border:1px solid var(--line);border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:2px;transition:transform .15s,background .15s,border-color .15s;backdrop-filter:blur(6px)}
+.card:hover{transform:translateY(-2px);background:rgba(255,255,255,.11);border-color:rgba(232,196,104,.5)}
+.card:active{transform:translateY(1px)}
+.card img{width:54px;height:54px;filter:drop-shadow(0 4px 6px rgba(0,0,0,.45))}
+.card b{font-size:1.05rem}.card small{color:var(--muted);line-height:1.25;font-size:.8rem}
+.card .st{margin-top:4px;font-size:.9rem;letter-spacing:1px;color:var(--gold)}
+.card .st i{color:rgba(255,255,255,.22);font-style:normal}
+.card.wide{grid-column:span 2}
+.card .ico{font-size:2rem;line-height:1.1}
+.credit{margin:26px 0 0;color:var(--muted);font-size:.78rem}
+.credit a{color:var(--muted)}
+/* spelskärmen */
+.gtop{display:flex;align-items:center;gap:10px;margin:4px 0 8px}
+.pill{background:var(--glass);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-weight:700;font-size:.95rem;transition:background .15s}
+.pill:hover{background:rgba(255,255,255,.14)}
+.pill[disabled]{opacity:.4;cursor:default}
+.gtop .sp{flex:1}
+.gwrap{display:grid;gap:14px;grid-template-columns:1fr;justify-items:center}
+@media(min-width:900px){.gwrap{grid-template-columns:auto 1fr;align-items:start;justify-items:stretch;gap:28px}}
+.gleft{display:flex;flex-direction:column;gap:8px;align-items:center}
+.pbar{display:flex;align-items:center;gap:10px;width:var(--bs);min-height:34px;font-weight:700;color:var(--muted)}
+.pbar .dot{width:12px;height:12px;border-radius:50%;flex:none}
+.pbar.top .dot{background:#2A2A2E;border:2px solid #aaa}.pbar.bot .dot{background:#F3F3F3;border:2px solid #777}
+.pbar.on{color:var(--ink)}.gleft.nb .pbar{display:none}
+.pbar .caps{display:flex;margin-left:auto}
+.pbar .caps img{width:22px;height:22px;margin-left:-8px}
+.pbar .caps em{font-style:normal;margin-left:8px;color:var(--gold);font-size:.9rem}
+.board{position:relative;width:var(--bs);height:var(--bs);margin:12px;border-radius:4px;touch-action:none;user-select:none;-webkit-user-select:none;
+  box-shadow:0 0 0 9px #55371F,0 0 0 11px #2D1B0F,0 0 0 12px rgba(255,255,255,.08),0 22px 46px rgba(0,0,0,.55)}
+.board::after{content:"";position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 18px rgba(0,0,0,.35)}
+#sq{position:absolute;inset:0;display:grid}
+.s{position:relative;display:block}
+.s.l{background:linear-gradient(135deg,#F4E7CC,#EBD8B6)}
+.s.d{background:linear-gradient(135deg,#B98F66,#AD8059)}
+.s i.co{position:absolute;font-style:normal;font-size:calc(var(--bs)/42);font-weight:800;opacity:.75;pointer-events:none;font-family:var(--font)}
+.s.l i.co{color:#9A7048}.s.d i.co{color:#F2E4C8}
+.s i.f{right:4%;bottom:2%}.s i.r{left:4%;top:2%}
+.s.last::before{content:"";position:absolute;inset:0;background:rgba(255,214,64,.42)}
+.s.sel::before{content:"";position:absolute;inset:0;background:rgba(80,200,120,.5)}
+.s.chk::before{content:"";position:absolute;inset:0;background:radial-gradient(circle,rgba(255,30,30,.95) 0,rgba(230,30,30,.55) 40%,transparent 72%)}
+.s.hint::before{content:"";position:absolute;inset:6%;border:4px solid #3C7DFF;border-radius:50%;animation:hp 1s ease-in-out infinite}
+@keyframes hp{50%{transform:scale(1.12);opacity:.5}}
+.s.tgt::after{content:"";position:absolute;left:36%;top:36%;width:28%;height:28%;border-radius:50%;background:rgba(40,40,40,.28)}
+.s.tgt.cap::after{left:0;top:0;width:100%;height:100%;border-radius:50%;background:none;border:calc(var(--bs)/80) solid rgba(40,40,40,.3);box-shadow:inset 0 0 0 calc(var(--bs)/16) rgba(0,0,0,0);clip-path:none}
+.s.star::before{content:"";position:absolute;inset:0;background:radial-gradient(circle,rgba(255,220,80,.55),transparent 65%)}
+#pcs{position:absolute;inset:0;pointer-events:none}
+.pc{position:absolute;left:0;top:0;width:calc(100%/var(--W));height:calc(100%/var(--H));transition:transform .26s cubic-bezier(.3,.7,.3,1),opacity .25s;filter:drop-shadow(0 2px 2px rgba(0,0,0,.4));will-change:transform;user-select:none;-webkit-user-drag:none}
+.pc.gone{opacity:0;transform-origin:center}
+.pc.drag{transition:none;z-index:9;filter:drop-shadow(0 10px 10px rgba(0,0,0,.5));cursor:grabbing}
+.pc.fly{z-index:5}
+.gright{display:flex;flex-direction:column;gap:12px;width:100%;max-width:560px}
+.tcard{background:var(--glass);border:1px solid var(--line);border-radius:18px;padding:14px 16px}
+.tcard h2{font-size:1.5rem;display:flex;align-items:center;gap:10px}
+.tcard h2 img{width:42px;height:42px}
+.tcard p{margin:6px 0 0;color:var(--muted)}
+.status{min-height:56px;border-radius:14px;padding:10px 14px;background:rgba(108,140,255,.14);border:1px solid rgba(108,140,255,.35);font-weight:700;display:flex;align-items:center;gap:10px}
+.status.good{background:rgba(63,203,139,.15);border-color:rgba(63,203,139,.5)}
+.status.bad{background:rgba(255,107,107,.15);border-color:rgba(255,107,107,.5)}
+.status.warn{background:rgba(232,196,104,.15);border-color:rgba(232,196,104,.5)}
+.dots{display:inline-flex;gap:3px}.dots i{width:6px;height:6px;border-radius:50%;background:currentColor;animation:db 1s infinite}.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+@keyframes db{0%,60%,100%{opacity:.25}30%{opacity:1}}
+.acts{display:flex;flex-wrap:wrap;gap:8px}
+.btn{background:linear-gradient(180deg,#F3D783,var(--gold) 60%,var(--gold2));color:#2A2108;border-radius:14px;padding:10px 18px;font-weight:800;box-shadow:0 4px 0 #7A5F1E,0 8px 16px rgba(0,0,0,.35);transition:transform .1s,box-shadow .1s}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #7A5F1E}
+.prog{display:flex;gap:6px;align-items:center;color:var(--muted);font-weight:700}
+.prog i{width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,.18)}.prog i.on{background:var(--gold)}.prog i.ok{background:var(--good)}
+.ov{position:fixed;inset:0;background:rgba(5,8,16,.72);backdrop-filter:blur(4px);display:grid;place-items:center;z-index:60;padding:16px}
+.ov .box{background:linear-gradient(180deg,#1E2A4A,#141D36);border:1px solid var(--line);border-radius:20px;padding:20px;max-width:520px;width:100%;box-shadow:0 24px 60px rgba(0,0,0,.6);max-height:90vh;overflow:auto}
+.ov h2{margin-bottom:8px}.ov ul{margin:8px 0;padding-left:20px;color:var(--ink)}.ov li{margin:5px 0}
+.promo{display:flex;gap:10px;justify-content:center;margin-top:10px}
+.promo button{background:var(--glass);border:1px solid var(--line);border-radius:14px;padding:6px}
+.promo button:hover{background:rgba(255,255,255,.16);border-color:var(--gold)}
+.promo img{width:68px;height:68px;display:block}
+.res{text-align:center;padding:24px 8px}
+.res .big{font-size:4rem;line-height:1}.res h2{font-size:2.1rem;margin:6px 0}.res .st{font-size:2.2rem;letter-spacing:4px;color:var(--gold);margin:8px 0 14px}
+.res p{color:var(--muted);max-width:28em;margin:6px auto}
+.res .acts{justify-content:center;margin-top:14px}
+@media(prefers-reduced-motion:reduce){.pc{transition:none}.s.hint::before{animation:none}.dots i{animation:none}}
+@media(max-width:899px){.gright .status{order:-1}}
+@media(max-width:560px){.hero{padding:20px 16px 18px}.hero .pcs{opacity:.35}.card.wide{grid-column:span 2}}
+</style>
+</head>
+<body>
+<script src="../ljud.js"></script>
+<script src="../djur.js"></script>
+<script src="../huvud.js" data-titel="Schack" data-ikon="♟️"></script>
+<div class="wrap">
+
+<section id="home" class="screen">
+  <div class="hero">
+    <h1>Schack</h1>
+    <p>Lär dig hur pjäserna går, lös schackmatt och spela hela partier. Ett steg i taget.</p>
+    <div class="pcs"><img src="bilder/dn.svg" alt=""><img src="bilder/lk.svg" alt=""><img src="bilder/lq.svg" alt=""></div>
+  </div>
+  <div class="sec"><span class="n">1</span><h2>Lär känna pjäserna</h2><small>Hur går de, och hur tar man?</small></div>
+  <div class="cards" id="hLearn"></div>
+  <div class="sec"><span class="n">2</span><h2>Schackmatt i ett drag</h2><small>Hitta draget som vinner</small></div>
+  <div class="cards" id="hMate"></div>
+  <div class="sec"><span class="n">3</span><h2>Minischack</h2><small>5 × 5 rutor, färre pjäser</small></div>
+  <div class="cards" id="hMini"></div>
+  <div class="sec"><span class="n">4</span><h2>Hela partiet</h2><small>8 × 8 rutor, alla regler</small></div>
+  <div class="cards" id="hFull"></div>
+  <p class="credit">Pjäserna är ritade av Colin M. L. Burnett (Wikimedia Commons, CC BY-SA 3.0). Datorn är egenbyggd och tänker 1–3 drag fram.</p>
+</section>
+
+<section id="game" class="screen" hidden>
+  <div class="gtop"><button class="pill" id="quit">← Avsluta</button><span class="sp"></span><span class="prog" id="prog"></span><button class="pill" id="rulesBtn">? Regler</button></div>
+  <div class="gwrap">
+    <div class="gleft">
+      <div class="pbar top" id="topBar"><span class="dot"></span><span id="topName"></span><span class="caps" id="topCaps"></span></div>
+      <div class="board" id="board"><div id="sq"></div><div id="pcs"></div></div>
+      <div class="pbar bot" id="botBar"><span class="dot"></span><span id="botName"></span><span class="caps" id="botCaps"></span></div>
+    </div>
+    <div class="gright">
+      <div class="tcard"><h2 id="gTitle"></h2><p id="gSub"></p></div>
+      <div class="status" id="status"></div>
+      <div class="acts" id="acts"></div>
+    </div>
+  </div>
+</section>
+
+<section id="result" class="screen" hidden>
+  <div class="res"><div class="big" id="rEmoji"></div><h2 id="rTitle"></h2><div class="st" id="rStars"></div><p id="rText"></p>
+    <div class="acts"><button class="btn" id="rAgain">Spela igen</button><button class="pill" id="rHome">Till schackmenyn</button></div></div>
+</section>
+</div>
+
+<div class="ov" id="promo" hidden><div class="box"><h2>Bonden blev en ny pjäs!</h2><p>Vilken pjäs vill du ha?</p><div class="promo" id="promoBtns"></div></div></div>
+<div class="ov" id="rules" hidden><div class="box">
+  <h2>Så spelar man schack</h2>
+  <ul>
+    <li><b>Mål:</b> sätt motståndarens kung <b>schackmatt</b>. Då är kungen hotad (schack) och kan inte komma undan.</li>
+    <li><b>Schack:</b> kungen är hotad. Du måste rädda den: flytta bort den, ta hotet eller ställ något i vägen.</li>
+    <li><b>Patt:</b> den som ska dra är inte i schack men kan inte göra något lagligt drag. Då blir det lika.</li>
+    <li><b>Rockad:</b> kungen går två steg mot ett torn och tornet hoppar över. Går bara om varken kungen eller tornet har flyttats och inget står i vägen.</li>
+    <li><b>En passant:</b> om en bonde går två steg och landar bredvid din bonde kan du ta den, som om den bara gått ett steg. Bara direkt efteråt.</li>
+    <li><b>Bondeomvandling:</b> når en bonde sista raden blir den en dam, torn, löpare eller springare.</li>
+    <li>Tryck på en pjäs för att se vart den får gå, eller dra den. Prickarna visar rutorna.</li>
+  </ul>
+  <div class="acts"><button class="btn" id="rulesOk">Okej</button></div>
+</div></div>
+
+<script src="motor.js"></script>
+<script>
+(function(){
+"use strict";
+const M=MPSchack,$=id=>document.getElementById(id),L=()=>window.Ljud||{};
+const KEY='mattespel-schack-v1';
+let D;try{D=JSON.parse(localStorage.getItem(KEY))||{};}catch(e){D={};}
+D.stars=D.stars||{};
+function save(){try{localStorage.setItem(KEY,JSON.stringify(D));}catch(e){}}
+function addStars(k,n){if(n>(D.stars[k]||0)){D.stars[k]=n;save();}}
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
+const img=p=>'bilder/'+(M.isW(p)?'l':'d')+p.toLowerCase()+'.svg';
+const NAMES={p:'Bonden',r:'Tornet',b:'Löparen',n:'Springaren',q:'Damen',k:'Kungen'};
+const LV=['','Lätt','Mellan','Svår'];
+const stars=(n,max)=>'<span class="st">'+'⭐'.repeat(n)+'<i>'+'☆'.repeat(max-n)+'</i></span>';
+
+/* ---------- lektioner ---------- */
+const LESSON={
+  p:{t:'Bonden',d:'Bonden går ett steg framåt. Första draget får den gå två steg. Den tar snett framåt. Kommer den till andra sidan blir den en dam!',
+     start:{e2:'P',d3:'p',f3:'p'}},
+  r:{t:'Tornet',d:'Tornet går rakt, hur långt som helst: framåt, bakåt och åt sidorna. Det kan inte hoppa över andra pjäser.',start:{d4:'R',d7:'p',g4:'p'}},
+  b:{t:'Löparen',d:'Löparen går snett, hur långt som helst. Den stannar alltid på samma färg som den började på.',start:{d4:'B',g7:'p',b2:'p'}},
+  n:{t:'Springaren',d:'Springaren hoppar i ett L: två rutor rakt och ett steg åt sidan. Den är den enda som kan hoppa över andra pjäser.',start:{d4:'N',e6:'p',c2:'p'}},
+  q:{t:'Damen',d:'Damen går som tornet och löparen tillsammans: rakt eller snett, hur långt som helst. Den starkaste pjäsen!',start:{d4:'Q',d7:'p',g7:'p',a4:'p'}},
+  k:{t:'Kungen',d:'Kungen går ett steg åt valfritt håll. Den är viktigast: förlorar du kungen är partiet slut.',start:{e4:'K',e5:'p',d3:'p'}}
+};
+const ORDER=['p','r','b','n','q','k'];
+
+/* ---------- startsidan ---------- */
+function home(){
+  $('hLearn').innerHTML=ORDER.map(p=>{const n=D.stars['l-'+p]||0;return `<button class="card" data-l="${p}"><img src="bilder/l${p}.svg" alt=""><b>${LESSON[p].t}</b>${stars(n,3)}</button>`;}).join('');
+  $('hMate').innerHTML=[1,2,3].map(l=>`<button class="card" data-m="${l}"><img src="bilder/lk.svg" alt=""><b>${LV[l]}</b><small>${['Dam eller torn mot en kung','Två pjäser mot en kung','Flera pjäser, svart försvarar sig'][l-1]}</small>${stars(D.stars['m'+l]||0,3)}</button>`).join('');
+  $('hMini').innerHTML=[1,2,3].map(l=>`<button class="card" data-v="mini${l}"><img src="bilder/${['ln','lb','lq'][l-1]}.svg" alt=""><b>${LV[l]}</b><small>Du är vit. Vinn mot datorn!</small>${stars(D.stars['mini'+l]||0,1)}</button>`).join('');
+  $('hFull').innerHTML=[1,2,3].map(l=>`<button class="card" data-v="full${l}"><img src="bilder/${['lr','lb','lk'][l-1]}.svg" alt=""><b>${LV[l]}</b><small>Du är vit. Alla regler.</small>${stars(D.stars['full'+l]||0,1)}</button>`).join('')
+    +`<button class="card wide" data-two="1"><span class="ico">🤝</span><b>Två spelare</b><small>Spela mot en kompis på samma skärm.</small></button>`;
+}
+document.addEventListener('click',e=>{
+  const c=e.target.closest('.card');if(!c)return;
+  if(c.dataset.l)openLesson(c.dataset.l);
+  else if(c.dataset.m)openMate(+c.dataset.m);
+  else if(c.dataset.v){const k=c.dataset.v.slice(0,-1),l=+c.dataset.v.slice(-1);openVs(k,l);}
+  else if(c.dataset.two)openTwo();
+});
+
+/* ---------- brädet ---------- */
+let G=null,elAt=[];
+function fit(){
+  const w=innerWidth,h=innerHeight;let bs;
+  if(w>=900)bs=Math.min(h-240,w-480,660);else bs=Math.min(w-48,h-330,560);
+  document.documentElement.style.setProperty('--bs',Math.max(250,Math.floor(bs/8)*8)+'px');
+}
+addEventListener('resize',fit);fit();
+function pos(i){const W=G.S.W,H=G.S.H;let c=i%W,r=Math.floor(i/W);if(G.flip){c=W-1-c;r=H-1-r;}return [c,r];}
+function setPos(el,i){const [c,r]=pos(i);el.style.transform=`translate(${c*100}%,${r*100}%)`;}
+function build(S){
+  const W=S.W,H=S.H,b=$('board');b.style.setProperty('--W',W);b.style.setProperty('--H',H);
+  const sq=$('sq');sq.style.gridTemplateColumns=`repeat(${W},1fr)`;sq.style.gridTemplateRows=`repeat(${H},1fr)`;
+  let h='';
+  for(let dr=0;dr<H;dr++)for(let dc=0;dc<W;dc++){
+    const c=G.flip?W-1-dc:dc,r=G.flip?H-1-dr:dr,i=r*W+c;
+    h+=`<span class="s ${(dr+dc)%2?'d':'l'}" data-i="${i}">${dc===0?`<i class="co r">${H-r}</i>`:''}${dr===H-1?`<i class="co f">${String.fromCharCode(97+c)}</i>`:''}</span>`;
+  }
+  sq.innerHTML=h;sync();
+}
+function sync(){
+  const S=G.S;$('pcs').innerHTML='';elAt=Array(S.W*S.H).fill(null);
+  S.b.forEach((p,i)=>{if(p)elAt[i]=mk(p,i);});
+}
+function mk(p,i){const e=document.createElement('img');e.className='pc';e.src=img(p);e.alt='';e.draggable=false;e.dataset.i=i;setPos(e,i);$('pcs').appendChild(e);return e;}
+function sqEl(i){return $('sq').querySelector(`[data-i="${i}"]`);}
+function marks(){
+  $('sq').querySelectorAll('.s').forEach(s=>s.className='s '+(s.classList.contains('d')?'d':'l'));
+  const mark=(i,c)=>{if(i>=0){const e=sqEl(i);if(e)e.classList.add(c);}};
+  if(G.last){mark(G.last.f,'last');mark(G.last.t,'last');}
+  (G.stars||[]).forEach(i=>mark(i,'star'));
+  if(G.sel>=0){mark(G.sel,'sel');G.legal.forEach(m=>{mark(m.t,'tgt');if(G.S.b[m.t]||m.fl==='ep')mark(m.t,'cap');});}
+  if(G.mode!=='lesson'&&M.inCheck(G.S,G.S.turn))mark(M.kingIdx(G.S,G.S.turn),'chk');
+  if(G.hint)G.hint.forEach(i=>mark(i,'hint'));
+}
+function movesFrom(i){
+  if(G.mode==='lesson')return M.lessonMoves(G.S,i).filter(m=>!m.p||m.p==='q');
+  return M.legal(G.S,i);
+}
+function mayMove(){
+  if(G.busy||G.over)return false;
+  if(G.mode==='two')return true;
+  if(G.mode==='lesson')return G.phase==='visa'||G.phase==='task';
+  return G.S.turn==='w';
+}
+/* peka och dra */
+let drag=null;
+function sqAt(x,y){
+  const r=$('board').getBoundingClientRect(),W=G.S.W,H=G.S.H;
+  const dc=Math.floor((x-r.left)/r.width*W),dr=Math.floor((y-r.top)/r.height*H);
+  if(dc<0||dc>=W||dr<0||dr>=H)return -1;
+  const c=G.flip?W-1-dc:dc,rr=G.flip?H-1-dr:dr;return rr*W+c;
+}
+$('board').addEventListener('pointerdown',e=>{
+  if(!G||!mayMove())return;
+  const i=sqAt(e.clientX,e.clientY);if(i<0)return;
+  e.preventDefault();
+  if(G.sel>=0){const m=G.legal.filter(m=>m.t===i);if(m.length){choose(m);return;}}
+  const p=G.S.b[i],mineTurn=G.mode==='lesson'?(p&&M.isW(p)):(p&&M.colOf(p)===G.S.turn);
+  if(mineTurn){
+    if(G.sel===i&&!drag){/* andra trycket på samma pjäs: avmarkera efter släpp */}
+    select(i);
+    const el=elAt[i];
+    if(el){drag={el,from:i,x0:e.clientX,y0:e.clientY,moved:false,id:e.pointerId};try{$('board').setPointerCapture(e.pointerId);}catch(_){}}
+  }else{deselect();}
+});
+$('board').addEventListener('pointermove',e=>{
+  if(!drag)return;
+  if(!drag.moved&&Math.hypot(e.clientX-drag.x0,e.clientY-drag.y0)<6)return;
+  drag.moved=true;drag.el.classList.add('drag');
+  const r=$('board').getBoundingClientRect(),s=r.width/G.S.W;
+  drag.el.style.transform=`translate(${e.clientX-r.left-s/2}px,${e.clientY-r.top-s/2}px)`;
+  drag.el.style.width=drag.el.style.height=s+'px';
+});
+function endDrag(e){
+  if(!drag)return;const d=drag;drag=null;
+  d.el.classList.remove('drag');d.el.style.width=d.el.style.height='';
+  if(!d.moved){return;}
+  const i=sqAt(e.clientX,e.clientY),m=i<0?[]:G.legal.filter(m=>m.t===i);
+  if(m.length&&i!==d.from)choose(m,true);else{setPos(d.el,d.from);}
+}
+$('board').addEventListener('pointerup',endDrag);
+$('board').addEventListener('pointercancel',e=>{if(drag){setPos(drag.el,drag.from);drag.el.classList.remove('drag');drag=null;}});
+function select(i){G.sel=i;G.legal=movesFrom(i);G.hint=null;marks();}
+function deselect(){G.sel=-1;G.legal=[];marks();}
+function choose(ms,dropped){
+  if(ms.length>1&&ms[0].p){ // bondeomvandling
+    const w=M.isW(G.S.b[ms[0].f]);
+    $('promoBtns').innerHTML=ms.map(m=>`<button data-p="${m.p}"><img src="${img(w?m.p.toUpperCase():m.p)}" alt="${m.p}"></button>`).join('');
+    $('promo').hidden=false;
+    $('promoBtns').onclick=ev=>{const b=ev.target.closest('button');if(!b)return;$('promo').hidden=true;go(ms.find(m=>m.p===b.dataset.p),dropped);};
+    if(dropped&&drag==null){}
+    return;
+  }
+  go(ms[0],dropped);
+}
+/* ---------- ett drag ---------- */
+function visual(S,m,N){
+  const W=S.W,w=M.isW(S.b[m.f]);
+  const capSq=m.fl==='ep'?m.t+(w?W:-W):(S.b[m.t]?m.t:-1);
+  if(capSq>=0&&elAt[capSq]){const e=elAt[capSq];elAt[capSq]=null;e.classList.add('gone');setTimeout(()=>e.remove(),300);}
+  const e=elAt[m.f];elAt[m.f]=null;
+  if(e){e.classList.add('fly');e.dataset.i=m.t;setPos(e,m.t);elAt[m.t]=e;setTimeout(()=>e.classList.remove('fly'),300);
+    const np=N.b[m.t];if(np!==S.b[m.f])setTimeout(()=>{e.src=img(np);},200);}
+  if(m.fl==='ck'){const r=elAt[m.t+1];elAt[m.t+1]=null;elAt[m.t-1]=r;if(r){setPos(r,m.t-1);r.dataset.i=m.t-1;}}
+  if(m.fl==='cq'){const r=elAt[m.t-2];elAt[m.t-2]=null;elAt[m.t+1]=r;if(r){setPos(r,m.t+1);r.dataset.i=m.t+1;}}
+}
+function lessonMake(S,m){const N=M.copy(S);N.b[m.t]=m.p?'Q':N.b[m.f];N.b[m.f]=null;N.turn='w';return N;}
+function go(m,dropped){
+  const S=G.S,N=G.mode==='lesson'?lessonMake(S,m):M.make(S,m);
+  const cap=m.fl==='ep'?(M.isW(S.b[m.f])?'p':'P'):S.b[m.t];
+  G.sel=-1;G.legal=[];G.hint=null;
+  if(G.mode==='mate'||G.mode==='lesson'){visual(S,m,N);G.S=N;G.last={f:m.f,t:m.t};G.moves=(G.moves||0)+1;sound(cap,N);marks();
+    if(G.mode==='lesson')lessonAfter(m);else mateAfter(m,N);return;}
+  G.hist.push({S:S,last:G.last,capW:G.capW.slice(),capB:G.capB.slice(),rep:Object.assign({},G.rep)});
+  visual(S,m,N);
+  if(cap){(M.isW(S.b[m.f])?G.capW:G.capB).push(cap);}
+  G.S=N;G.last={f:m.f,t:m.t};
+  const k=M.key(N);G.rep[k]=(G.rep[k]||0)+1;
+  sound(cap,N);marks();caps();
+  const st=M.status(N),rep=G.rep[k]>=3;
+  if(st==='matt'||st==='patt'||st==='remi50'||st==='remimat'||rep){end(rep&&st==='pågår'?'rep':st);return;}
+  statusLine();
+  if(G.mode!=='two'&&N.turn==='b')think();
+  else if(G.mode==='two'&&G.autoflip){setTimeout(()=>{G.flip=!G.flip;build(G.S);marks();caps();},450);}
+}
+function sound(cap,N){const l=L();if(l.clonk)l.clonk();if(G.mode!=='lesson'&&M.inCheck(N,N.turn)&&l.ok)setTimeout(()=>l.ok(),120);}
+function think(){
+  G.busy=true;statusLine();
+  const t0=Date.now();
+  setTimeout(()=>{
+    if(!G||G.over)return;
+    const m=M.pick(G.S,G.level);
+    const wait=Math.max(0,500-(Date.now()-t0));
+    setTimeout(()=>{if(!G||G.over)return;G.busy=false;if(m)go(m);},wait);
+  },30);
+}
+function caps(){
+  const val=a=>a.reduce((s,p)=>s+M.VAL[p.toLowerCase()],0);
+  const show=(arr,other)=>arr.slice().sort((a,b)=>M.VAL[b.toLowerCase()]-M.VAL[a.toLowerCase()]).map(p=>`<img src="${img(p)}" alt="">`).join('')+(val(arr)>val(other)?`<em>+${Math.round((val(arr)-val(other))/100)}</em>`:'');
+  // capW = svarta pjäser som vit tagit
+  const bot=G.flip?G.capB:G.capW,top=G.flip?G.capW:G.capB;
+  $('botCaps').innerHTML=show(bot,top);$('topCaps').innerHTML=show(top,bot);
+}
+function statusLine(){
+  const S=G.S,el=$('status');let t='',c='';
+  if(G.mode==='two'){t=(S.turn==='w'?'Vits':'Svarts')+' tur';if(M.inCheck(S,S.turn))t+=' – schack!';}
+  else if(G.busy){t='Datorn tänker <span class="dots"><i></i><i></i><i></i></span>';}
+  else{t='Din tur';if(M.inCheck(S,'w')){t+=' – schack! Rädda kungen.';c='warn';}}
+  el.className='status '+c;el.innerHTML=t;
+  $('topBar').classList.toggle('on',(S.turn==='b')!==!!G.flip&&!G.over);$('botBar').classList.toggle('on',(S.turn==='w')!==!!G.flip&&!G.over);
+}
+function say(t,c){const el=$('status');el.className='status '+(c||'');el.innerHTML=t;}
+
+/* ---------- vanliga partier ---------- */
+function names(){document.querySelector('.gleft').classList.remove('nb');
+  if(G.mode==='two'){$('topName').textContent=G.flip?'Vit':'Svart';$('botName').textContent=G.flip?'Svart':'Vit';}
+  else{$('topName').textContent='Datorn ('+LV[G.level]+')';$('botName').textContent='Du (vit)';}
+}
+function acts(list){
+  $('acts').innerHTML=list.map(a=>`<button class="${a.p?'btn':'pill'}" id="a_${a.id}">${a.t}</button>`).join('');
+  list.forEach(a=>{$('a_'+a.id).onclick=a.f;});
+}
+function newGame(base){
+  G={mode:base.mode,kind:base.kind,level:base.level,S:base.S,flip:false,sel:-1,legal:[],last:null,hist:[],capW:[],capB:[],rep:{},busy:false,over:false,autoflip:false,hint:null};
+  G.rep[M.key(G.S)]=1;
+  show('game');$('prog').innerHTML='';
+  build(G.S);names();caps();marks();
+}
+function openVs(kind,level){
+  newGame({mode:'vs',kind,level,S:M.newState(kind)});
+  $('gTitle').textContent=(kind==='mini'?'Minischack':'Schack')+' – '+LV[level];
+  $('gSub').textContent=kind==='mini'?'5 × 5 rutor. Ingen rockad, bönderna går ett steg. Sätt datorns kung schackmatt!':'Du spelar vit och börjar. Sätt datorns kung schackmatt!';
+  statusLine();
+  acts([
+    {id:'hint',t:'💡 Tips',f:hintVs},{id:'undo',t:'↶ Ångra',f:undo},{id:'res',t:'🏳️ Ge upp',f:()=>{if(confirm('Vill du ge upp partiet?'))end('resign');}},{id:'again',t:'🔄 Nytt parti',f:()=>openVs(kind,level)}
+  ]);
+  G.again=()=>openVs(kind,level);
+}
+function openTwo(){
+  newGame({mode:'two',kind:'full',level:0,S:M.newState('full')});
+  $('gTitle').textContent='Två spelare';$('gSub').textContent='Vit börjar. Lämna över skärmen efter varje drag.';
+  statusLine();
+  acts([
+    {id:'undo',t:'↶ Ångra',f:undo},{id:'flip',t:'🔃 Vänd brädet',f:()=>{G.flip=!G.flip;build(G.S);names();marks();caps();statusLine();}},
+    {id:'auto',t:'↻ Vänd automatiskt: av',f:()=>{G.autoflip=!G.autoflip;$('a_auto').textContent='↻ Vänd automatiskt: '+(G.autoflip?'på':'av');}},
+    {id:'again',t:'🔄 Nytt parti',f:openTwo}
+  ]);
+  G.again=openTwo;
+}
+function undo(){
+  if(!G||G.busy&&G.mode!=='two')return;
+  const n=G.mode==='two'?1:(G.S.turn==='w'?2:1);
+  if(G.over)return;
+  let h=null;for(let k=0;k<n&&G.hist.length;k++)h=G.hist.pop();
+  if(!h)return;
+  G.S=h.S;G.last=h.last;G.capW=h.capW;G.capB=h.capB;G.rep=h.rep;G.sel=-1;G.legal=[];G.hint=null;G.busy=false;
+  sync();marks();caps();statusLine();
+}
+function hintVs(){
+  if(G.busy||G.over||G.S.turn!=='w')return;
+  const m=M.pick(G.S,3);if(!m)return;
+  G.hint=[m.f,m.t];G.sel=-1;G.legal=[];marks();say('💡 Prova att flytta pjäsen från den första blå rutan till den andra.','warn');
+}
+function end(st){
+  G.over=true;G.busy=false;marks();
+  const S=G.S;let title,emoji,text,win=false,good=false;
+  if(st==='matt'){const whiteWon=S.turn==='b';
+    if(G.mode==='two'){title=(whiteWon?'Vit':'Svart')+' vann!';emoji='🏆';text='Schackmatt. Bra spelat av båda!';}
+    else if(whiteWon){title='Du vann!';emoji='🏆';text='Schackmatt! Datorns kung kunde inte komma undan.';win=true;}
+    else{title='Datorn vann';emoji='🤖';text='Du blev schackmatt. Prova igen, eller välj en lättare nivå eller tryck på Tips under partiet.';}
+  }else if(st==='patt'){title='Patt';emoji='🤝';text='Den som skulle dra kunde inte göra något drag men stod inte i schack. Då blir det lika.';}
+  else if(st==='resign'){title='Du gav upp';emoji='🏳️';text='Det är okej! Prova igen när du vill.';}
+  else if(st==='rep'){title='Lika';emoji='🤝';text='Samma ställning kom tre gånger. Då blir det lika.';}
+  else{title='Lika';emoji='🤝';text=st==='remimat'?'Det finns för lite material kvar för att kunna ge matt.':'Det har gått 50 drag utan att något tagits eller någon bonde flyttats. Då blir det lika.';}
+  say('<b>'+title+'</b> '+(st==='matt'?'Schackmatt!':''),win?'good':st==='matt'?'bad':'warn');
+  if(win&&G.kind){const had=D.stars[G.kind+G.level]||0;addStars(G.kind+G.level,1);D.vinster=(D.vinster||0)+1;save();}
+  if(win&&L().fanfare)L().fanfare();
+  const again=G.again;
+  setTimeout(()=>result({emoji,title,text,stars:win&&G.kind?{n:1,max:1}:null,again}),1700);
+}
+function result(r){
+  $('rEmoji').textContent=r.emoji;$('rTitle').textContent=r.title;$('rText').textContent=r.text;
+  $('rStars').innerHTML=r.stars?'⭐'.repeat(r.stars.n)+'<span style="opacity:.25">'+'☆'.repeat(r.stars.max-r.stars.n)+'</span>':'';
+  $('rAgain').textContent=r.nextText||'Spela igen';
+  $('rAgain').onclick=r.again||toHome;
+  show('result');
+}
+
+/* ---------- lär känna pjäserna ---------- */
+function openLesson(p){
+  const Lz=LESSON[p];
+  const S=M.fromPieces(Lz.start,'w');
+  G={mode:'lesson',kind:'l-'+p,piece:p,S,flip:false,sel:-1,legal:[],last:null,hist:[],busy:false,over:false,phase:'visa',hint:null,start0:Lz.start,extra:0};
+  show('game');build(S);names2();
+  $('gTitle').innerHTML=`<img src="bilder/l${p}.svg" alt="">${Lz.t}`;
+  $('gSub').textContent=Lz.d;
+  say('Tryck på pjäsen eller dra den. Prickarna visar vart den får gå, och ringarna vad den kan ta. Prova!','');
+  $('prog').innerHTML='';
+  acts([{id:'go',t:'Börja uppdragen ▶',p:1,f:()=>startTasks(p)},{id:'rs',t:'↺ Börja om',f:()=>openLesson(p)}]);
+  marks();
+}
+function names2(){document.querySelector('.gleft').classList.add('nb');$('topName').textContent='';$('botName').textContent='';$('topCaps').innerHTML='';$('botCaps').innerHTML='';$('topBar').classList.remove('on');$('botBar').classList.remove('on');}
+function R(n){return Math.floor(Math.random()*n);}
+const SQUARES=64;
+function genTask(p,round){
+  const cnt=p==='k'?[1,1,2,2][round]:[1,1,2,3][round];
+  const lo=[1,2,3,3][round],hi=[4,4,5,6][round];
+  const kinds=['p','n','b','r','q'];
+  for(let tries=0;tries<600;tries++){
+    const b=Array(64).fill(null),targets=[];let start;
+    if(p==='p'){
+      let c=R(8),r=6;start=r*8+c;b[start]='P';
+      let ok=true;
+      for(let k=0;k<cnt&&ok;k++){
+        // 0–1 steg rakt fram, sedan ett diagonalt tag
+        if(Math.random()<.4&&r-2>=0&&k>0){r-=1;}
+        const dcs=[-1,1].filter(d=>c+d>=0&&c+d<8);
+        if(r-1<1){ok=false;break;}
+        const dc=dcs[R(dcs.length)];r-=1;c+=dc;const t=r*8+c;
+        b[t]=kinds[R(kinds.length)];targets.push(t);
+      }
+      if(!ok)continue;
+    }else{
+      start=R(64);b[start]=p.toUpperCase();
+      const used=new Set([start]);
+      for(let k=0;k<cnt;k++){let t;do{t=R(64);}while(used.has(t));used.add(t);b[t]=kinds[R(kinds.length)];targets.push(t);}
+    }
+    const S=M.copy(M.fromPieces({}));S.b=b;S.turn='w';
+    const sol=M.solveCapture(S,start,targets,8);
+    if(!sol)continue;
+    if(p!=='p'&&(sol.d<lo||sol.d>hi)&&tries<500)continue;
+    return {S,start,targets,opt:sol.d};
+  }
+  return null;
+}
+function startTasks(p){
+  G.round=-1;G.extra=0;G.total=4;G.phase='task';
+  nextTask();
+}
+function progDots(){
+  $('prog').innerHTML=Array.from({length:G.total},(_,i)=>`<i class="${i<G.round?'ok':i===G.round?'on':''}"></i>`).join('')+` <span>Uppdrag ${Math.min(G.round+1,G.total)} av ${G.total}</span>`;
+}
+function nextTask(){
+  G.round++;G.busy=false;
+  if(G.round>=G.total)return lessonDone();
+  const t=genTask(G.piece,G.round);G.task=t;G.S=M.copy(t.S);G.moves=0;G.tasksDone=false;G.restarts=0;G.hint=null;G.last=null;G.sel=-1;G.legal=[];
+  sync();marks();progDots();taskUI();
+}
+function taskUI(){
+  const n=G.task.targets.length;
+  $('gSub').textContent=n===1?'Ta den svarta pjäsen med så få drag som möjligt.':`Ta alla ${n} svarta pjäser med så få drag som möjligt.`;
+  say(`Det går att klara på <b>${G.task.opt}</b> drag. Du har gjort <b>${G.moves}</b>.`,'');
+  acts([{id:'hint',t:'💡 Tips',f:lessonHint},{id:'rs',t:'↺ Börja om uppdraget',f:()=>{G.extra+=1;G.S=M.copy(G.task.S);G.moves=0;G.last=null;G.hint=null;sync();marks();taskUI();}}]);
+}
+function lessonHint(){
+  if(G.tasksDone)return;
+  const S=G.S,pos0=S.b.findIndex(p=>p&&M.isW(p));
+  const targets=[];S.b.forEach((p,i)=>{if(p&&!M.isW(p))targets.push(i);});
+  const sol=M.solveCapture(S,pos0,targets,8);
+  if(!sol||sol.path.length<2)return;
+  G.hint=[sol.path[1]];G.sel=-1;G.legal=[];marks();
+  say('💡 Det blinkande rutan är ett bra nästa drag.','warn');
+}
+function lessonAfter(m){
+  const left=G.S.b.some(p=>p&&!M.isW(p));
+  if(G.phase==='visa'){
+    if(!left){say('Bra! Du tog alla. Tryck på <b>Börja om</b> för att prova igen, eller gå vidare till uppdragen.','good');}
+    return;
+  }
+  if(left){say(`Det går att klara på <b>${G.task.opt}</b> drag. Du har gjort <b>${G.moves}</b>.`,'');return;}
+  G.tasksDone=true;G.over=false;
+  const extra=Math.max(0,G.moves-G.task.opt);G.extra+=extra;
+  if(L().ok)L().ok();
+  say(extra===0?'🌟 <b>Perfekt!</b> Det gick inte att göra på färre drag.':`<b>Klart på ${G.moves} drag.</b> Det gick att göra på ${G.task.opt}. Prova gärna igen!`,extra===0?'good':'warn');
+  acts([{id:'nx',t:G.round+1>=G.total?'Se resultatet ▶':'Nästa uppdrag ▶',p:1,f:nextTask},{id:'rs',t:'↺ Prova igen',f:()=>{G.extra+=1;G.tasksDone=false;G.S=M.copy(G.task.S);G.moves=0;G.last=null;sync();marks();taskUI();}}]);
+  G.busy=true;
+}
+function lessonDone(){
+  const n=G.extra===0?3:G.extra<=3?2:1;
+  addStars(G.kind,n);
+  const p=G.piece,i=ORDER.indexOf(p),nxt=ORDER[i+1];
+  if(L().fanfare)L().fanfare();
+  result({emoji:'🎓',title:LESSON[p].t+' – klart!',text:n===3?'Alla uppdrag på minsta möjliga antal drag. Du kan verkligen '+LESSON[p].t.toLowerCase()+'!':'Bra jobbat! Prova igen för att klara alla uppdrag på så få drag som möjligt.',stars:{n,max:3},again:nxt?()=>openLesson(nxt):()=>openLesson(p),nextText:nxt?'Nästa: '+LESSON[nxt].t+' ▶':'Spela om'});
+}
+
+/* ---------- schackmatt i ett drag ---------- */
+function openMate(level){
+  G={mode:'mate',kind:'m'+level,level,flip:false,sel:-1,legal:[],last:null,hist:[],busy:false,over:false,round:-1,total:6,errs:0,hint:null,S:null};
+  show('game');names2();
+  $('gTitle').textContent='Schackmatt i ett drag – '+LV[level];
+  nextPuzzle();
+}
+function nextPuzzle(){
+  G.round++;
+  if(G.round>=G.total)return mateDone();
+  const p=M.makeMate1(G.level);G.puz=p;G.S=M.copy(p.S);G.last=null;G.sel=-1;G.legal=[];G.hint=null;G.busy=false;G.pErr=0;G.moves=0;
+  if(!G.built){G.built=true;}
+  build(G.S);marks();progDots();
+  $('gSub').textContent='Vit drar. Hitta draget som sätter svarts kung schackmatt!';
+  say('Vit ska dra. Hitta schackmatt i ett drag.','');
+  acts([{id:'hint',t:'💡 Tips',f:()=>{G.errs+=1;G.hint=[G.puz.mates[0].f];marks();say('💡 Flytta pjäsen på den blinkande rutan.','warn');}},{id:'rs',t:'↺ Ställ tillbaka',f:resetPuz},{id:'rulesb',t:'? Vad är matt?',f:()=>{$('rules').hidden=false;}}]);
+}
+function resetPuz(){G.S=M.copy(G.puz.S);G.last=null;G.sel=-1;G.legal=[];G.hint=null;G.busy=false;sync();marks();}
+function mateAfter(m,N){
+  const mates=G.puz.mates.some(x=>x.f===m.f&&x.t===m.t&&(x.p||null)===(m.p||null));
+  const L2=M.legal(N);
+  if(!L2.length&&M.inCheck(N,'b')){
+    G.busy=true;if(L().fanfare)L().fanfare();
+    say('<b>Schackmatt!</b> Kungen kan inte komma undan.','good');
+    setTimeout(nextPuzzle,1500);return;
+  }
+  G.errs+=1;G.pErr+=1;G.busy=true;if(L().bad)L().bad();
+  const msg=!L2.length?'Det blev <b>patt</b>: svart kan inte dra men står inte i schack. Det blir lika, inte matt.':M.inCheck(N,'b')?'Det blev schack, men kungen kan komma undan. Prova ett annat drag.':'Det är inte schack. Matt kräver att kungen hotas och inte kan fly.';
+  say(msg,'bad');
+  setTimeout(()=>{
+    if(G.pErr>=2){const s=G.puz.mates[0];G.hint=[s.f,s.t];say('Här är lösningen: flytta från den första blå rutan till den andra.','warn');G.S=M.copy(G.puz.S);sync();marks();setTimeout(()=>{G.busy=false;nextPuzzle();},2600);}
+    else{resetPuz();say('Försök igen! Vit ska dra.','');}
+  },1400);
+}
+function mateDone(){
+  const n=G.errs<=1?3:G.errs<=4?2:1;addStars(G.kind,n);if(L().fanfare)L().fanfare();
+  result({emoji:'♚',title:'Bra matt-spanat!',text:G.errs===0?'Inga fel alls!':'Du gjorde '+G.errs+' missar eller tips. Färre ger fler stjärnor.',stars:{n,max:3},again:()=>openMate(G.level),nextText:'Nya pussel'});
+}
+
+/* ---------- gemensamt ---------- */
+function toHome(){G=null;home();show('home');}
+$('quit').onclick=toHome;$('rHome').onclick=toHome;
+$('rulesBtn').onclick=()=>{$('rules').hidden=false;};
+$('rulesOk').onclick=()=>{$('rules').hidden=true;};
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('promo').hidden)$('promo').hidden=true;else if(!$('rules').hidden)$('rules').hidden=true;}});
+$('rules').addEventListener('click',e=>{if(e.target===$('rules'))$('rules').hidden=true;});
+home();
+window.__sk={get G(){return G;},M,openVs,openLesson,openMate,openTwo,go,choose,genTask,end};
+})();
+</script>
+</body>
+</html>

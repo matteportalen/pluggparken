@@ -96,7 +96,7 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
 .ans.ok{border-color:var(--good);color:var(--ok-ink,var(--good-dark));background:var(--ok-bg,#DDF5E7)}
 .ans.bad{border-color:var(--bad);color:var(--bad);background:var(--err-bg,#FDE4E4)}
 .ans.lead{border-style:dashed;opacity:.6}
-.vxinfo{display:flex;gap:4px 10px;flex-wrap:wrap;align-items:baseline;justify-content:center;text-align:left;background:var(--info-bg,#FFF6D6);border:2px solid #F2B707;border-radius:12px;padding:6px 10px;margin:6px auto 0;max-width:460px;font-size:.88rem;line-height:1.35;color:var(--ink)}.vxinfo[hidden]{display:none}.vxinfo b{white-space:nowrap}.feedback{min-height:1.5em;font-weight:800;font-size:1.02rem;margin-top:4px;text-align:center;line-height:1.3}
+.vxinfo{display:flex;gap:4px 10px;flex-wrap:wrap;align-items:baseline;justify-content:center;text-align:left;background:var(--info-bg,#FFF6D6);border:2px solid #F2B707;border-radius:12px;padding:6px 10px;margin:8px auto 4px;max-width:460px;font-size:.88rem;line-height:1.35;color:var(--ink)}.vxinfo[hidden]{display:none}.vxinfo b{white-space:nowrap}.feedback{min-height:1.5em;font-weight:800;font-size:1.02rem;margin-top:4px;text-align:center;line-height:1.3}
 .feedback.good{color:var(--ok-ink,var(--good-dark))}.feedback.tip{color:var(--err-ink,#B8323A)}.feedback.neutral{color:var(--muted)}
 .pad{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .pad button{height:54px;border-radius:14px;background:var(--card);font-size:1.7rem;font-weight:800;box-shadow:0 4px 0 var(--line)}
@@ -179,10 +179,10 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
 <section id="game" class="screen" hidden>
   <div class="gtop"><button class="back" id="quit">← Avsluta</button><button class="qbtn" id="qbtn" aria-label="Så här räknar du">?</button><span class="info" id="info"></span></div>
   <div class="progress"><i id="prog"></i></div>
+  <div class="vxinfo" id="vxinfo" hidden><b>💡 Så växlar du</b><span>Går det inte att räkna, till exempel 2 − 7? Tryck på siffran i första talet i kolumnen till vänster (där siffran du tar ifrån står). Då flyttas ett till kolumnen intill och en 10 skrivs ovanför.</span></div>
   <div class="task" id="task">
     <div class="instr"><button class="spk" id="spk" aria-label="Läs upp">🔊</button><span id="instr"></span></div>
     <div class="content" id="content"></div>
-    <div class="vxinfo" id="vxinfo" hidden><b>💡 Så växlar du</b><span>Går det inte att räkna, till exempel 2 − 7? Tryck på siffran i första talet i kolumnen till vänster (där siffran du tar ifrån står). Då flyttas ett till kolumnen intill och en 10 skrivs ovanför.</span></div>
     <div class="feedback" id="feedback" aria-live="polite"></div>
   </div>
   <div class="pad" id="pad">
