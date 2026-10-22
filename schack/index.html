@@ -169,6 +169,10 @@ h1,h2,h3{font-family:var(--serif);margin:0}
 @keyframes sh{25%{margin-left:-8px}75%{margin-left:8px}}
 .sec.sub{margin:16px 0 6px}.sec.sub h3{font-size:1.1rem;color:var(--ink)}.sec.sub small{color:var(--muted);font-weight:500}
 @media(prefers-reduced-motion:reduce){.map::before,.deco,.isl.cur .land,.isl.cur::after{animation:none}}
+.clk{margin-left:12px;font-variant-numeric:tabular-nums;font-weight:800;font-size:1.3rem;background:rgba(255,255,255,.08);border-radius:10px;padding:1px 12px;color:var(--ink);min-width:74px;text-align:center}
+.clk.on{background:var(--gold);color:#2A2108}.clk.low{background:#E5484D;color:#fff;animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.55}}
+.chips{display:flex;flex-wrap:wrap;gap:8px}.chips button{background:var(--glass);border:2px solid var(--line);border-radius:12px;padding:6px 14px;font-weight:700}.chips button.on{border-color:var(--gold);background:rgba(232,196,104,.2)}
 @media(prefers-reduced-motion:reduce){.pc{transition:none}.s.hint::before{animation:none}.dots i{animation:none}}
 @media(max-width:899px){.gright .status{order:-1}}
 @media(max-width:560px){.hero{padding:20px 16px 18px}.hero .pcs{opacity:.35}.card.wide{grid-column:span 2}}
@@ -211,9 +215,9 @@ h1,h2,h3{font-family:var(--serif);margin:0}
   <div class="gtop"><button class="pill" id="quit">← Avsluta</button><span class="sp"></span><span class="prog" id="prog"></span><button class="pill" id="rulesBtn">? Regler</button></div>
   <div class="gwrap">
     <div class="gleft">
-      <div class="pbar top" id="topBar"><span class="dot"></span><span id="topName"></span><span class="caps" id="topCaps"></span></div>
+      <div class="pbar top" id="topBar"><span class="dot"></span><span id="topName"></span><span class="caps" id="topCaps"></span><span class="clk" id="topClk" hidden></span></div>
       <div class="board" id="board"><div id="sq"></div><div id="pcs"></div><svg id="arrows" aria-hidden="true"></svg></div>
-      <div class="pbar bot" id="botBar"><span class="dot"></span><span id="botName"></span><span class="caps" id="botCaps"></span></div>
+      <div class="pbar bot" id="botBar"><span class="dot"></span><span id="botName"></span><span class="caps" id="botCaps"></span><span class="clk" id="botClk" hidden></span></div>
     </div>
     <div class="gright">
       <div class="tcard"><h2 id="gTitle"></h2><p id="gSub"></p></div>
@@ -230,6 +234,9 @@ h1,h2,h3{font-family:var(--serif);margin:0}
 </div>
 
 <div class="ov" id="promo" hidden><div class="box"><h2>Bonden blev en ny pjäs!</h2><p>Vilken pjäs vill du ha?</p><div class="promo" id="promoBtns"></div></div></div>
+<div class="ov" id="tset" hidden><div class="box"><h2>Tid per spelare</h2><p>Vill ni spela med klocka? Den som får slut på tid förlorar.</p>
+  <div class="chips" id="tChips"></div><h3 style="margin:12px 0 6px;font-size:1.05rem">Extra tid för varje drag</h3><div class="chips" id="tInc"></div>
+  <div class="acts" style="margin-top:14px"><button class="btn" id="tGo">Starta partiet</button></div></div></div>
 <div class="ov" id="rules" hidden><div class="box">
   <h2>Så spelar man schack</h2>
   <ul>
@@ -488,6 +495,7 @@ function go(m,dropped){
   visual(S,m,N);
   if(cap){(M.isW(S.b[m.f])?G.capW:G.capB).push(cap);}
   G.S=N;G.last={f:m.f,t:m.t};
+  if(G.clock)clockMove(S.turn);
   const k=M.key(N);G.rep[k]=(G.rep[k]||0)+1;
   sound(cap,N);marks();caps();
   const st=M.status(N),rep=G.rep[k]>=3;
@@ -527,7 +535,7 @@ function statusLine(){
 function say(t,c){const el=$('status');el.className='status '+(c||'');el.innerHTML='<span>'+t+'</span>';}
 
 /* ---------- vanliga partier ---------- */
-function names(){document.querySelector('.gleft').classList.remove('nb');
+function names(){document.querySelector('.gleft').classList.remove('nb');if(!(G&&G.clock))$('topClk').hidden=$('botClk').hidden=true;
   if(G.mode==='two'){$('topName').textContent=G.flip?'Vit':'Svart';$('botName').textContent=G.flip?'Svart':'Vit';}
   else{$('topName').textContent='Datorn ('+LV[G.level]+')';$('botName').textContent='Du (vit)';}
 }
@@ -588,13 +596,70 @@ function openEnd(kind){
 function openTwo(){
   newGame({mode:'two',kind:'full',level:0,S:M.newState('full')});
   $('gTitle').textContent='Två spelare';$('gSub').textContent='Vit börjar. Lämna över skärmen efter varje drag.';
-  statusLine();
+  statusLine();clockUI();
   acts([
-    {id:'undo',t:'↶ Ångra',f:undo},{id:'flip',t:'🔃 Vänd brädet',f:()=>{G.flip=!G.flip;build(G.S);names();marks();caps();statusLine();}},
+    {id:'undo',t:'↶ Ångra',f:undo},{id:'flip',t:'🔃 Vänd brädet',f:()=>{G.flip=!G.flip;build(G.S);names();marks();caps();statusLine();clockShow();}},
     {id:'auto',t:'↻ Vänd automatiskt: av',f:()=>{G.autoflip=!G.autoflip;$('a_auto').textContent='↻ Vänd automatiskt: '+(G.autoflip?'på':'av');}},
     {id:'again',t:'🔄 Nytt parti',f:openTwo}
   ]);
   G.again=openTwo;
+  openTimeSet();
+}
+/* ---------- schackklocka (två spelare) ---------- */
+const MINS=[0,3,5,10,15],INCS=[0,2,5];
+function openTimeSet(){
+  const c=D.tid||{min:10,inc:0};
+  const draw=()=>{
+    $('tChips').innerHTML=MINS.map(m=>`<button class="${c.min===m?'on':''}" data-m="${m}">${m?m+' min':'Ingen tid'}</button>`).join('');
+    $('tInc').innerHTML=INCS.map(i=>`<button class="${c.inc===i?'on':''}" data-i="${i}" ${c.min?'':'disabled'}>${i?'+'+i+' s':'Ingen'}</button>`).join('');
+  };
+  draw();$('tset').hidden=false;
+  $('tChips').onclick=e=>{const b=e.target.closest('button');if(!b)return;c.min=+b.dataset.m;draw();};
+  $('tInc').onclick=e=>{const b=e.target.closest('button');if(!b||b.disabled)return;c.inc=+b.dataset.i;draw();};
+  $('tGo').onclick=()=>{$('tset').hidden=true;D.tid=c;save();startClock(c);};
+}
+function startClock(c){
+  if(!G||G.mode!=='two')return;
+  if(!c.min){G.clock=null;clockUI();return;}
+  const me=G;
+  G.clock={w:c.min*60000,b:c.min*60000,inc:c.inc*1000,running:null,last:0,paused:false};
+  clockUI();
+  G.clock.timer=setInterval(()=>{
+    if(G!==me||me.over){clearInterval(me.clock&&me.clock.timer);return;}
+    const k=me.clock;if(!k.running||k.paused)return;
+    const now=Date.now();k[k.running]-=now-k.last;k.last=now;
+    if(k[k.running]<=0){k[k.running]=0;clockShow();clearInterval(k.timer);me.flagLoser=k.running;end('flag');return;}
+    clockShow();
+  },200);
+}
+function clockUI(){
+  const k=G&&G.clock;
+  $('topClk').hidden=$('botClk').hidden=!k;
+  if(k){clockShow();
+    const list=[{id:'undo',t:'↶ Ångra',f:undo},{id:'pause',t:'⏸ Paus',f:togglePause},{id:'flip',t:'🔃 Vänd brädet',f:()=>{G.flip=!G.flip;build(G.S);names();marks();caps();statusLine();clockShow();}},
+      {id:'auto',t:'↻ Vänd automatiskt: '+(G.autoflip?'på':'av'),f:()=>{G.autoflip=!G.autoflip;$('a_auto').textContent='↻ Vänd automatiskt: '+(G.autoflip?'på':'av');}},{id:'again',t:'🔄 Nytt parti',f:()=>{clearInterval(k.timer);openTwo();}}];
+    acts(list);}
+}
+function fmt(ms){const t=Math.max(0,Math.ceil(ms/1000)),m=Math.floor(t/60),s=t%60;return m+':'+String(s).padStart(2,'0');}
+function clockShow(){
+  const k=G&&G.clock;if(!k)return;
+  const bot=G.flip?'b':'w',top=G.flip?'w':'b';
+  for(const [el,col] of[[$('topClk'),top],[$('botClk'),bot]]){
+    el.textContent=fmt(k[col]);el.classList.toggle('on',k.running===col&&!k.paused);el.classList.toggle('low',k[col]<30000&&k[col]>0&&k.running===col);
+  }
+}
+function clockMove(mover){
+  const k=G.clock;if(!k)return;
+  const now=Date.now();
+  if(k.running){k[k.running]-=now-k.last;}
+  k[mover]+=k.inc;
+  k.running=mover==='w'?'b':'w';k.last=now;clockShow();
+}
+function togglePause(){
+  const k=G.clock;if(!k||!k.running||G.over)return;
+  if(!k.paused){k[k.running]-=Date.now()-k.last;k.paused=true;G.busy=true;say('⏸ Pausad. Klockorna står still.','warn');$('a_pause').textContent='▶ Fortsätt';}
+  else{k.paused=false;k.last=Date.now();G.busy=false;statusLine();$('a_pause').textContent='⏸ Paus';}
+  clockShow();
 }
 function undo(){
   if(!G||G.busy&&G.mode!=='two')return;
@@ -603,6 +668,7 @@ function undo(){
   let h=null;for(let k=0;k<n&&G.hist.length;k++)h=G.hist.pop();
   if(!h)return;
   G.S=h.S;G.last=h.last;G.capW=h.capW;G.capB=h.capB;G.rep=h.rep;G.sel=-1;G.legal=[];G.hint=null;G.busy=false;
+  if(G.clock&&G.clock.running){const k=G.clock;k[k.running]-=Date.now()-k.last;k.running=G.S.turn;k.last=Date.now();}
   sync();marks();caps();statusLine();
 }
 function hintVs(){
@@ -618,10 +684,17 @@ function end(st){
     else if(whiteWon){title='Du vann!';emoji='🏆';text='Schackmatt! Datorns kung kunde inte komma undan.';win=true;}
     else{title='Datorn vann';emoji='🤖';text='Du blev schackmatt. Prova igen, eller välj en lättare nivå eller tryck på Tips under partiet.';}
   }else if(st==='patt'){title='Patt';emoji='🤝';text='Den som skulle dra kunde inte göra något drag men stod inte i schack. Då blir det lika.';}
+  else if(st==='flag'){const loser=G.flagLoser,winner=loser==='w'?'b':'w';
+    const mate=S.b.some(p=>p&&p.toLowerCase()!=='k'&&(winner==='w'?M.isW(p):!M.isW(p))&&!(false));
+    const ps=S.b.filter(p=>p&&p.toLowerCase()!=='k'&&(winner==='w'?M.isW(p):!M.isW(p))).map(p=>p.toLowerCase());
+    const canMate=ps.some(x=>x==='p'||x==='q'||x==='r')||ps.length>=2;
+    if(canMate){title=(winner==='w'?'Vit':'Svart')+' vann på tid!';emoji='⏱️';text=(loser==='w'?'Vit':'Svart')+' fick slut på tid.';}
+    else{title='Lika';emoji='🤝';text=(loser==='w'?'Vit':'Svart')+' fick slut på tid, men motståndaren har för lite pjäser för att kunna sätta matt. Då blir det lika.';}}
   else if(st==='limit'){title='Slut på drag';emoji='⏱️';text='Du fick '+G.limit+' drag på dig. Prova igen: driv kungen mot kanten först!';}
   else if(st==='resign'){title='Du gav upp';emoji='🏳️';text='Det är okej! Prova igen när du vill.';}
   else if(st==='rep'){title='Lika';emoji='🤝';text='Samma ställning kom tre gånger. Då blir det lika.';}
   else{title='Lika';emoji='🤝';text=st==='remimat'?'Det finns för lite material kvar för att kunna ge matt.':'Det har gått 50 drag utan att något tagits eller någon bonde flyttats. Då blir det lika.';}
+  if(G.clock){clearInterval(G.clock.timer);}
   say('<b>'+title+'</b> '+(st==='matt'?'Schackmatt!':''),win?'good':st==='matt'?'bad':'warn');
   let sN=null;
   if(win&&G.end){const n=G.hist.filter(h=>h.S.turn==='w').length,par=G.end==='kq'?[10,16]:[8,14];sN=n<=par[0]?3:n<=par[1]?2:1;addStars(G.kind,sN);text='Schackmatt på '+n+' drag! '+(sN===3?'Så få drag går knappt att klara.':'Prova igen för att klara det på färre drag.');}
@@ -659,7 +732,7 @@ function openLesson(p){
   acts([{id:'go',t:'Börja uppdragen ▶',p:1,f:()=>startTasks(p)},{id:'rs',t:'↺ Börja om',f:()=>openLesson(p)}]);
   marks();
 }
-function names2(){document.querySelector('.gleft').classList.add('nb');$('topName').textContent='';$('botName').textContent='';$('topCaps').innerHTML='';$('botCaps').innerHTML='';$('topBar').classList.remove('on');$('botBar').classList.remove('on');}
+function names2(){document.querySelector('.gleft').classList.add('nb');$('topClk').hidden=$('botClk').hidden=true;$('topName').textContent='';$('botName').textContent='';$('topCaps').innerHTML='';$('botCaps').innerHTML='';$('topBar').classList.remove('on');$('botBar').classList.remove('on');}
 function R(n){return Math.floor(Math.random()*n);}
 const SQUARES=64;
 function genTask(p,round){
@@ -936,7 +1009,7 @@ function toHome(){G=null;home();show('home');}
 $('quit').onclick=()=>ADV!=null?toMap():toHome();$('rHome').onclick=()=>ADV!=null?toMap():toHome();
 $('rulesBtn').onclick=()=>{$('rules').hidden=false;};
 $('rulesOk').onclick=()=>{$('rules').hidden=true;};
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('promo').hidden)$('promo').hidden=true;else if(!$('rules').hidden)$('rules').hidden=true;}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('promo').hidden)$('promo').hidden=true;else if(!$('tset').hidden)$('tGo').click();else if(!$('rules').hidden)$('rules').hidden=true;}});
 $('rules').addEventListener('click',e=>{if(e.target===$('rules'))$('rules').hidden=true;});
 home();
 window.__sk={get G(){return G;},M,openMate2,openEnd,analyseGame,openVs,openLesson,openMate,openTwo,go,choose,genTask,end};
