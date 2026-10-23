@@ -769,7 +769,7 @@ function genTask(p,round){
 function genChase(p,round){
   const cnt=p==='p'?2:round===1?2:3;
   for(let t=0;t<4000;t++){
-    const b=Array(64).fill(null),used=new Set(),start=(4+R(4))*8+R(8);b[start]=p.toUpperCase();used.add(start);
+    const b=Array(64).fill(null),used=new Set(),start=(4+R(p==='p'?3:4))*8+R(8);b[start]=p.toUpperCase();used.add(start); // bonden börjar aldrig på första raden
     for(let k=0;k<cnt;k++){let q;do{q=(1+R(3))*8+R(8);}while(used.has(q));used.add(q);b[q]='p';}
     const S=M.copy(M.fromPieces({}));S.b=b;S.turn='w';
     const sol=M.solveChase(S,start,7);
