@@ -5,9 +5,8 @@
 "use strict";
 const ROT=new URL('.',document.currentScript.src).href;
 const IDX=[
- ['lillaplus/','Tiokompisar','Träna par som blir 10 i Lilla plus & minus','🔟','tiokompisar tio kompisar 10 summa tio talkamrater','Matte'],
  ['lillaplus/','Lilla plus & minus','Huvudräkning med tal upp till 10','🐔','addition subtraktion plus minus hönsgård ägg räkna','Matte'],
- ['tiotal/','Tiotalsövergång','Räkna via tiotalet med tioruta och tallinje','🚌','tiotalsövergång addition subtraktion plus minus över tio tiokompisar buss tioruta hundraruta','Matte'],
+ ['tiotal/','Tiotalsövergång','Räkna via tiotalet med tioruta och tallinje','🚌','tiotalsövergång 10 addition subtraktion plus minus över tio tiokompisar buss tioruta hundraruta','Matte'],
  ['uppstallning/','Uppställning','Addition och subtraktion som i boken, med minnessiffra och växling','📝','uppställning minnessiffra växling skriftlig addition subtraktion plus minus låna','Matte'],
  ['multiplikation/','Multiplikation','Tabellerna 1–10. Samla medaljer','✖️','gånger tabeller multiplikationstabellen bageri medaljer','Matte'],
  ['division/','Division','Dela lika, med och utan rest','➗','dividera dela lika rest kalas påsar','Matte'],
