@@ -2091,6 +2091,8 @@ function confetti(){
   (function f(now){x.clearRect(0,0,W2,H2);P.forEach(p=>{p.vy+=.45;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore();});
     if(now-t0<2800)requestAnimationFrame(f);else{x.clearRect(0,0,W2,H2);c.hidden=true;}})(t0);
 }
+/* direktlänk från sökningen: spel/#bub, #tower, #mem, #tug, #car, #frog öppnar spelet */
+setTimeout(()=>{const m={bub:"btnBub",tower:"btnTower",mem:"btnMem",tug:"btnTug",car:"btnCar",frog:"btnFrog"}[location.hash.slice(1)];if(m){if(window.MPS)MPS.start("choose");const b=$(m);if(b)b.click();}},0);
 </script>
 </body>
 </html>

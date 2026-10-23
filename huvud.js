@@ -54,6 +54,8 @@
 @keyframes mph-up{0%{opacity:0;transform:translate(-50%,10px)}15%{opacity:1;transform:translate(-50%,24px)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,30px)}}
 @media(max-width:400px){.mph.has-title .mph-mynt{display:none}}
 .mph-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:9em}
+.mph-sok{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.18)!important;font-size:1.1rem;flex:none}
+@media(max-width:419px){.mph-sok{display:none}}
 .mph-snd{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.18)!important;font-size:1.15rem;flex:none}
 .mph.ovriga{background:linear-gradient(110deg,#17302F 0%,#1C3F3D 50%,#25605C 100%);box-shadow:0 3px 0 #7E5129}
 .mph-menu{position:absolute;top:calc(100% + 6px);left:10px;animation:mph-ner .18s ease-out;background:#fff;color:#1D2B53;border-radius:18px;padding:6px;box-shadow:0 10px 30px rgba(29,43,83,.25),0 3px 0 #C6D6F2;min-width:240px;z-index:30}
@@ -138,8 +140,16 @@ body.mph-mini #quit{display:none}
   h.innerHTML=`${paStart?'':'<button class="mph-bk" aria-label="Tillbaka">←</button>'}<button class="mph-x" aria-label="Avsluta">✕</button>
     <button class="mph-logo" aria-label="Pluggparken, meny" aria-haspopup="true" aria-expanded="false">${LOGO_PP}<span class="t">Plugg<b>parken</b></span><span class="mph-burger" aria-hidden="true"><i style="font-style:normal">☰</i><em>Ämnen</em></span></button>
     <span class="mph-title">${titel?`<span class="mph-sep">›</span> ${ikon?ikon+' ':''}${esc(titel)}`:''}</span>
-    <span class="mph-right"><a class="mph-pet" href="${hem}#garderob" aria-label="Ditt djur och dina stjärnor">${pet}${namn?`<span class="mph-name">${esc(namn)}</span>`:''}<span>⭐&nbsp;<span class="mph-n">${MPStjarnor()}</span></span><span class="mph-mynt">🪙&nbsp;<span class="mph-m">${myntLas().m}</span></span></a><button class="mph-snd" aria-label="Ljud av eller på"></button><button class="mph-tema" aria-label="Byt mellan ljust och mörkt läge"></button></span>`;
+    <span class="mph-right"><a class="mph-pet" href="${hem}#garderob" aria-label="Ditt djur och dina stjärnor">${pet}${namn?`<span class="mph-name">${esc(namn)}</span>`:''}<span>⭐&nbsp;<span class="mph-n">${MPStjarnor()}</span></span><span class="mph-mynt">🪙&nbsp;<span class="mph-m">${myntLas().m}</span></span></a><button class="mph-sok" aria-label="Sök övning" title="Sök (tryck /)">🔍</button><button class="mph-snd" aria-label="Ljud av eller på"></button><button class="mph-tema" aria-label="Byt mellan ljust och mörkt läge"></button></span>`;
   document.body.prepend(h);
+  // sökning: sok.js hämtas först när den behövs
+  const rotUrl=new URL('.',(me&&me.src)||location.href).href;
+  window.MPSokOpen=function(){
+    if(window.MPSok)return MPSok.open();
+    const sc=document.createElement('script');sc.src=rotUrl+'sok.js?v=1';sc.onload=()=>MPSok.open();document.head.appendChild(sc);};
+  h.querySelector('.mph-sok').onclick=()=>MPSokOpen();
+  document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('[data-sok]');if(t){e.preventDefault();MPSokOpen();}});
+  document.addEventListener('keydown',e=>{if(e.key==='/'&&!e.ctrlKey&&!e.metaKey&&!e.altKey){const a=document.activeElement,tag=a&&a.tagName;if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT'||(a&&a.isContentEditable))return;if(window.MPSok&&document.querySelector('.sok-ov'))return;e.preventDefault();MPSokOpen();}});
   const snd=h.querySelector('.mph-snd'),label=()=>{snd.textContent=window.Ljud&&!Ljud.on?'🔇':'🔊';};label();
   snd.onclick=()=>{if(!window.Ljud)return;Ljud.set(!Ljud.on);label();if(Ljud.on&&Ljud.ok)Ljud.ok();document.dispatchEvent(new Event('mp-ljud'));};
   document.addEventListener('mp-ljud-andrat',label);
@@ -159,6 +169,7 @@ body.mph-mini #quit{display:none}
     meny=document.createElement('nav');meny.className='mph-menu';meny.setAttribute('aria-label','Meny');
     meny.innerHTML=PORTALER.map(p=>`<a href="${hem}${p.href}"${p===PORTAL?' aria-current="true"':''}>${p.logo}<span>${p.namn}<small>${p.sub}</small></span></a>`).join('')
     meny.innerHTML+=`<a href="https://fritidsparken.se" target="_blank" rel="noopener" class="mph-vann"><img class="mph-mark" src="${hem}fritidsparken-logo.jpg" alt="" width="30" height="30"><span>Fritidsparken.se<small>Våra vänner: lek och aktiviteter</small></span></a>`;
+    {const sk=document.createElement('button');sk.className='mph-mt';sk.type='button';sk.innerHTML='<span>🔍</span><span>Sök övning</span>';sk.onclick=e=>{e.stopPropagation();stang();MPSokOpen();};meny.appendChild(sk);}
     if(window.MPTema){const mt=document.createElement('button');mt.className='mph-mt';mt.type='button';const ml=()=>{mt.innerHTML=MPTema.get()==='mork'?'<span>☀️</span><span>Ljust läge</span>':'<span>🌙</span><span>Mörkt läge</span>';};ml();mt.onclick=e=>{e.stopPropagation();MPTema.toggle();ml();};meny.appendChild(mt);}
     h.appendChild(meny);ptl.setAttribute('aria-expanded','true');meny.querySelector('a').focus({preventScroll:true});};
   document.addEventListener('click',e=>{if(meny&&!meny.contains(e.target))stang();});
