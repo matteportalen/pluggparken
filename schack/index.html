@@ -756,7 +756,7 @@ function genTask(p,round){
     }else{
       start=R(64);b[start]=p.toUpperCase();
       const used=new Set([start]);
-      for(let k=0;k<cnt;k++){let t;do{t=R(64);}while(used.has(t));used.add(t);b[t]=kinds[R(kinds.length)];targets.push(t);}
+      for(let k=0;k<cnt;k++){let t;do{t=R(64);}while(used.has(t));used.add(t);const edge=t<8||t>=56;b[t]=edge?['n','b','r','q'][R(4)]:kinds[R(kinds.length)];targets.push(t);} // bönder står aldrig på första eller sista raden
     }
     const S=M.copy(M.fromPieces({}));S.b=b;S.turn='w';
     const sol=M.solveCapture(S,start,targets,8);
