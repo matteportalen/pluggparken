@@ -5,14 +5,15 @@
 "use strict";
 const ROT=new URL('.',document.currentScript.src).href;
 const IDX=[
+ ['lillaplus/','Tiokompisar','Träna par som blir 10 i Lilla plus & minus','🔟','tiokompisar tio kompisar 10 summa tio talkamrater','Matte'],
  ['lillaplus/','Lilla plus & minus','Huvudräkning med tal upp till 10','🐔','addition subtraktion plus minus hönsgård ägg räkna','Matte'],
- ['tiotal/','Tiotalsövergång','Räkna via tiotalet med tioruta och tallinje','🚌','tiotalsövergång addition subtraktion plus minus över tio buss tioruta hundraruta','Matte'],
+ ['tiotal/','Tiotalsövergång','Räkna via tiotalet med tioruta och tallinje','🚌','tiotalsövergång addition subtraktion plus minus över tio tiokompisar buss tioruta hundraruta','Matte'],
  ['uppstallning/','Uppställning','Addition och subtraktion som i boken, med minnessiffra och växling','📝','uppställning minnessiffra växling skriftlig addition subtraktion plus minus låna','Matte'],
  ['multiplikation/','Multiplikation','Tabellerna 1–10. Samla medaljer','✖️','gånger tabeller multiplikationstabellen bageri medaljer','Matte'],
  ['division/','Division','Dela lika, med och utan rest','➗','dividera dela lika rest kalas påsar','Matte'],
  ['delaupp/','Dela upp och dela','Dela upp täljaren i delar som är lätta att dela','🧱','division uppdelning täljare nämnare klossar','Matte'],
  ['kortdivision/','Kort division','Dela siffra för siffra med rest','➗','liggande stolen trappan division siffra för siffra rest decimaler','Matte'],
- ['hundraruta/','Hundrarutan','Steg åt sidan är ett, steg upp och ner är tio','💯','hundra ruta tal hoppa tiohopp trasig hundrarutan','Matte'],
+ ['hundraruta/','Hundrarutan','Steg åt sidan är ett, steg upp och ner är tio','💯','hundra ruta 100 tal hoppa tiohopp trasig hundrarutan','Matte'],
  ['talfoljd/','Talföljder','Hitta mönstret och hjälp grodan över bäcken','🐸','mönster tal grodan regel ökar minskar','Matte'],
  ['vagen/','Vågen','Likhetstecknet: lika mycket på båda sidor','⚖️','likhetstecken balans lika mycket ekvation våg','Matte'],
  ['gomda/','Gömda tal','Djuren har gömt tal. Lista ut vilka','🎁','ekvation okänt tal djur gåta lista ut','Matte'],
@@ -41,7 +42,7 @@ const IDX=[
  ['spel/#frog','Grodhoppet','Hoppa med grodan','🐸','groda hopp tallinje','Spelhörnan'],
  ['hundraruta/#verktyg','Hundrarutan (verktyg)','Markera tal och hoppa','💯','hundra ruta verktyg hoppa','Verktygslådan'],
  ['verktyg/tallinjen/','Tallinjen','Hoppa fram och tillbaka på en tallinje','📏','tallinje hoppa addition subtraktion','Verktygslådan'],
- ['verktyg/kulramen/','Kulramen','Räkna med röda och vita kulor','🔴','kulram räknehjälp kulor','Verktygslådan'],
+ ['verktyg/kulramen/','Kulramen','Räkna med röda och vita kulor','🔴','kulram räknehjälp kulor tio tiokompisar','Verktygslådan'],
  ['verktyg/brakvaggen/','Bråkväggen','Bråkstavar från en hel till tolftedelar','🧱','bråk vägg stavar procent decimal linjal','Verktygslådan'],
  ['verktyg/klockan/','Klockan (verktyg)','Dra i visarna och mät tid','🕒','klocka visare mäta tid tidsblock','Verktygslådan'],
  ['tiobas/','Tiobas','Träklossar: ental, tiostavar, hundraplattor och tusenkuber','🧱','tiobasmaterial klossar ental tiotal hundratal tusental växla','Verktygslådan'],
@@ -140,7 +141,16 @@ const norm=s=>s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[
 const E=IDX.map(r=>({u:r[0],n:r[1],t:r[2],i:r[3],p:r[5]||'',nn:norm(r[1]),nw:norm(r[1]).split(' '),kw:norm(r[4]||'').split(' ').filter(Boolean),tw:norm(r[2]+' '+(r[5]||'')).split(' ').filter(Boolean)}));
 function lev(a,b){if(Math.abs(a.length-b.length)>2)return 9;const m=[];for(let i=0;i<=a.length;i++){m[i]=[i];}for(let j=1;j<=b.length;j++)m[0][j]=j;
   for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++)m[i][j]=Math.min(m[i-1][j]+1,m[i][j-1]+1,m[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return m[a.length][b.length];}
+/* siffror i sökningen: 100 hittar Hundrarutan, 10 hittar tiokompisar och tiotal osv. */
+const NUM={'1':['ett'],'2':['tva'],'3':['tre'],'4':['fyra'],'5':['fem'],'6':['sex'],'7':['sju'],'8':['atta'],'9':['nio'],
+ '10':['tio','tiokompisar','tiotal'],'20':['tjugo'],'50':['femtio'],'100':['hundra','hundrarutan'],'1000':['tusen','tusental'],'1000000':['miljon']};
 function tokScore(t,e){
+  let b=tokScore1(t,e);
+  if(NUM[t])for(const sy of NUM[t])b=Math.max(b,Math.round(tokScore1(sy,e)*.95));
+  return b;
+}
+function tokScore1(t,e){
+  if(/^\d+$/.test(t)){if(e.kw.includes(t))return 120;if(e.nw.includes(t))return 90;return e.tw.includes(t)?14:0;}
   if(e.nn.startsWith(t))return 100;
   let best=0;
   for(const w of e.nw){if(w===t)best=Math.max(best,90);else if(w.startsWith(t))best=Math.max(best,80);else if(t.length>=3&&w.includes(t))best=Math.max(best,40);}
@@ -151,7 +161,7 @@ function tokScore(t,e){
   return best;
 }
 function sok(q){
-  const ts=norm(q).split(' ').filter(x=>x.length>1);if(!ts.length)return [];
+  const ts=norm(q).split(' ').filter(x=>x.length>1||/\d/.test(x));if(!ts.length)return [];
   const out=[];
   for(const e of E){let s=0,ok=true;for(const t of ts){const x=tokScore(t,e);if(!x){ok=false;break;}s+=x;}
     if(ok)out.push([s,e]);}
