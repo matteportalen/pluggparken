@@ -195,6 +195,9 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 .dots4 i.on{background:var(--sel,var(--ink))}
 .dots4.shake{animation:shk .35s}
 @keyframes shk{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.kinfo{list-style:none;padding:0;margin:8px 0;display:grid;gap:6px;font-size:.95rem}
+.kbox{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:baseline;text-align:left;background:var(--soft,#F1F6FF);border-radius:16px;padding:14px 16px;margin:6px 0}.kbox span{color:var(--muted);font-weight:700;font-size:.9rem}.kbox b{font-size:1.5rem;letter-spacing:.02em;overflow-wrap:anywhere}
+.lc-konto{margin-top:6px;font-size:1.05rem;font-weight:800}.lc-konto span{display:block;font-weight:600;color:#56668F;font-size:.85rem}
 .pinmsg{min-height:1.3em;color:#E5484D;font-weight:800;text-align:center;margin:4px 0}
 .pinmsg.ok{color:#1E9E5E}
 .pinpad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:6px}
@@ -326,7 +329,8 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
   <div class="who" id="whoGrid"></div>
   <button class="gobtn newbtn" id="whoNew">＋ Skapa ny profil</button>
   <button class="qrbtn" id="scanBtn">📷 Jag har ett inloggningskort (QR-kod)</button>
-  <div class="pinfo"><span aria-hidden="true">ℹ️</span><p>Din profil sparas bara i den här webbläsaren. Flera kan ha egna profiler här. Vill du spela på en annan dator eller iPad? Välj <b>Ta med min profil</b> under din profil, skriv ut inloggningskortet med QR-koden och skanna det där.</p></div>
+  <button class="qrbtn" id="kontoIn">☁️ Logga in med mitt konto</button>
+  <div class="pinfo"><span aria-hidden="true">ℹ️</span><p>Din profil sparas i den här webbläsaren. Flera kan ha egna profiler här. Vill du spela på en annan dator eller iPad? Skapa ett <b>konto</b> under din profil, så sparas framstegen också i molnet och du loggar in med användarnamn och lösenord. Du kan också skriva ut inloggningskortet och skanna det.</p></div>
   <div class="pinfo" id="hamtaGammal" hidden><span aria-hidden="true">🚚</span><p>Har du spelat på <b>matteportalen.github.io</b>? Pluggparken har flyttat hit. <a href="https://matteportalen.github.io/" style="color:var(--accent);font-weight:800">Hämta dina framsteg därifrån</a></p></div>
   <button class="guestlink" id="guestBtn">Fortsätt som gäst</button>
 </div></div>
@@ -353,6 +357,7 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
   <div class="top"><h2 id="profName"></h2><button class="close" data-close aria-label="Stäng">✕</button></div>
   <div class="plist">
     <button class="tool" id="pSwitch"><span class="ic">👥</span><span><b>Byt profil</b><small>Låt någon annan träna</small></span></button>
+    <button class="tool" id="pKonto"><span class="ic">☁️</span><span><b id="pKontoB">Skapa ett konto</b><small id="pKontoS">Spara framstegen och spela på flera enheter</small></span></button>
     <button class="tool" id="pCard"><span class="ic">🪪</span><span><b>Ta med min profil</b><small>Skriv ut ditt inloggningskort med QR-kod</small></span></button>
     <button class="tool" id="pMove"><span class="ic">📲</span><span><b>Flytta mina framsteg</b><small>Till en annan dator eller surfplatta</small></span></button>
     <button class="tool" id="pImport"><span class="ic">📥</span><span><b>Hämta framsteg</b><small>Har du en flyttkod? Lägg in den här</small></span></button>
@@ -367,10 +372,40 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
     <div class="lc-head"><span class="lc-owl" id="lcOwl"></span><span><b>Pluggparken</b><small>Mitt inloggningskort</small></span></div>
     <div class="lc-qr" id="lcQr"></div>
     <div class="lc-name" id="lcName"></div>
+    <div class="lc-konto" id="lcKonto" hidden></div>
     <p class="lc-how">Logga in: tryck på <b>Logga in med QR-kod</b> och håll upp kortet framför kameran.</p>
   </div>
   <p class="pnote noprint" id="lcNote"></p>
   <div class="noprint" style="display:flex;gap:8px;margin-top:10px"><button class="gobtn" id="lcPrint" style="margin:0">🖨️ Skriv ut</button></div>
+</div></div>
+
+<div class="modal" id="mKIn" hidden><div class="sheet" role="dialog" aria-label="Logga in med konto" style="max-width:420px">
+  <div class="top"><h2>Logga in med konto</h2><button class="close" id="kInClose" aria-label="Stäng">✕</button></div>
+  <label class="plabel" for="kInNamn">Användarnamn</label>
+  <input id="kInNamn" class="pinput" style="width:100%" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="Till exempel katt-317">
+  <label class="plabel" for="kInKod" style="margin-top:10px">Lösenord</label>
+  <input id="kInKod" class="pinput" style="width:100%" autocomplete="current-password" autocapitalize="none" autocorrect="off" spellcheck="false">
+  <p class="pinmsg" id="kInMsg"></p>
+  <button class="gobtn" id="kInGo">Logga in</button>
+  <p class="pnote">Står på ditt inloggningskort. Har du inget konto? Tryck på din profil och välj <b>Skapa ett konto</b>.</p>
+</div></div>
+
+<div class="modal" id="mKNy" hidden><div class="sheet" role="dialog" aria-label="Skapa konto" style="max-width:440px">
+  <div class="top"><h2>☁️ Skapa ett konto</h2><button class="close" data-close aria-label="Stäng">✕</button></div>
+  <p style="margin:0 0 8px">Med ett konto sparas dina framsteg också i molnet. Då kan du logga in på en annan dator eller iPad och fortsätta där du var.</p>
+  <ul class="kinfo"><li>✅ Du får ett påhittat användarnamn och ett lösenord.</li><li>🚫 Inga riktiga namn och ingen e-post sparas.</li><li>🇸🇪 Servern ligger i Sverige.</li><li>🗑️ Du kan radera kontot när du vill.</li><li>📝 Skriv upp namnet och lösenordet, eller skriv ut ditt kort. Lösenordet går inte att få tillbaka om det försvinner.</li></ul>
+  <p class="pinmsg" id="kNyMsg"></p>
+  <button class="gobtn" id="kNyGo">Skapa mitt konto</button>
+</div></div>
+
+<div class="modal" id="mKInfo" hidden><div class="sheet" role="dialog" aria-label="Mitt konto" style="max-width:440px;text-align:center">
+  <div class="top"><h2>☁️ Mitt konto</h2><button class="close" data-close aria-label="Stäng">✕</button></div>
+  <div class="kbox"><span>Användarnamn</span><b id="kiNamn"></b><span>Lösenord</span><b id="kiKod"></b></div>
+  <p class="pnote" id="kiSenast"></p>
+  <button class="gobtn" id="kiKort">🪪 Skriv ut mitt kort</button>
+  <button class="qrbtn" id="kiSynk">🔄 Synka nu</button>
+  <button class="linkbtn" id="kiUt" style="display:block;margin:12px auto 0">Koppla bort kontot från den här enheten</button>
+  <button class="linkbtn" id="kiDel" style="display:block;margin:6px auto 0;color:#E5484D">Radera kontot för alltid</button>
 </div></div>
 
 <div class="modal" id="mScan" hidden><div class="sheet" role="dialog" aria-label="Logga in med QR-kod" style="max-width:440px;text-align:center">
@@ -418,6 +453,7 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 
 <script src="ljud.js"></script>
 <script src="djur.js"></script>
+<script src="konto.js?v=1"></script>
 <script src="huvud.js" data-hem="./" data-nav="av"></script>
 <script>
 const $=id=>document.getElementById(id);
@@ -693,8 +729,7 @@ $("bubble").textContent=`${hi} ${msg}`;
 <script>
 /* ============ Elevprofiler (allt sparas bara på den här enheten) ============ */
 (function(){
-const PKEYS=["mattespel-sifferslottet-v1","mattespel-sagoriket-v1","mattespel-lasflyt-v1","mattespel-pengar-v1","mattespel-multiplikation-v1","matteportalen-rum","mattespel-division-v1","mattespel-klockan-v1","mattespel-tiotal-v1","mattespel-taluppfattning-v1","mattespel-lillaplus-v1",
-  "mattespel-spel-v1","mattespel-geometri-v1","mattespel-brak-v1","mattespel-hundraruta-v1","mattespel-uppstallning-v1","np3-resultat","mattespel-skattjakten-v1","mattespel-sverigekartan-v1","mattespel-ordgomma-v1","mattespel-hogfrekventa-v1","mattespel-europa-v1","mattespel-varlden-v1","mattespel-talfoljd-v1","mattespel-rutjakten-v1","mattespel-brakbitar-v1","mattespel-kortdivision-v1","mattespel-vagen-v1","mattespel-gomda-v1","mattespel-kulbanan-v1","mattespel-affaren-v1","mattespel-rita-v1","mattespel-ordgatan-v1","mattespel-tangentbord-v1","mattespel-delaupp-v1","mattespel-matning-v1","mattespel-kodverkstan-v1","mattespel-schack-v1","mattespel-trerirad-v1","matteportalen-mynt","matteportalen-uggla","matteportalen-klister","matteportalen-dagar"];
+const PKEYS=MPKonto.PKEYS;
 const lsGet=k=>{try{return localStorage.getItem(k)}catch(e){return null}},lsSet=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},lsDel=k=>{try{localStorage.removeItem(k)}catch(e){}};
 const jGet=k=>{try{return JSON.parse(lsGet(k)||"null")}catch(e){return null}},jSet=(k,v)=>lsSet(k,JSON.stringify(v));
 const ssGet=k=>{try{return sessionStorage.getItem(k)}catch(e){return null}},ssSet=(k,v)=>{try{sessionStorage.setItem(k,v)}catch(e){}};
@@ -788,7 +823,7 @@ function adultReset(p){
 const act=active(),me=act&&act!=="gast"?byId(act):null;
 function chip(){
   const w=$("whoChip");
-  if(me)w.innerHTML=`<span class="mini">${owlOf(me.id)}</span>${esc(me.name)} ▾`;
+  if(me)w.innerHTML=`<span class="mini">${owlOf(me.id)}</span>${esc(me.name)}${me.konto?" ☁️":""} ▾`;
   else if(act==="gast")w.innerHTML=`👤 Gäst ▾`;
   else w.innerHTML=list().length?"👥 Välj profil":"👤 Logga in";
 }
@@ -853,7 +888,8 @@ function cardData(){
   return out;
 }
 $("pCard").onclick=async()=>{
-  stash();const code=await pack({v:1,n:me.name,h:me.pinH,s:me.salt,d:cardData()}),url=cardURL(code);
+  stash();const code=await pack({v:1,n:me.name,h:me.pinH,s:me.salt,d:cardData(),...(me.konto?{k:me.konto}:{})}),url=cardURL(code);
+  $("lcKonto").hidden=!me.konto;if(me.konto)$("lcKonto").innerHTML=`<span>Konto</span>${esc(me.konto.namn)} · ${esc(me.konto.kod)}`;
   $("lcOwl").innerHTML=owlOf(me.id);$("lcName").textContent=me.name;$("lcQr").innerHTML="";$("lcNote").textContent="";openM("mCard");
   if(url.length>2900){$("lcNote").textContent="Du har samlat så mycket att koden blev för stor för ett kort. Använd Flytta mina framsteg i stället.";return;}
   try{await loadScript("https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js");
@@ -863,29 +899,13 @@ $("pCard").onclick=async()=>{
 };
 $("lcPrint").onclick=()=>window.print();
 // Sammanslagning: för varje övning behålls den version som kommit längst, så att kortet aldrig tar bort framsteg.
-function progressOf(v){try{const o=JSON.parse(v);let n=0;const walk=x=>{if(typeof x==="number")n+=x;else if(x&&typeof x==="object")Object.values(x).forEach(walk);};
-  walk(o.stars||{});walk(o.fly||{});walk(o.mem||{});walk(o.car||{});walk(o.space||{});walk(o.frog||{});walk(o.tower||{});walk(o.skatt||{});walk(o.kiosk||{});
-  n+=Object.keys(o.facts||{}).length+(o.days||[]).length+(o.seen||[]).length+(Array.isArray(o)?o.length:0)+Object.keys(o.race||{}).length+Object.keys(o.blitz||{}).length;return n;}catch(e){return 0;}}
-function mergeBundles(a,b){const out=Object.assign({},a);
-  Object.keys(b).forEach(k=>{if(!(k in a)){out[k]=b[k];return;}
-    if(k==="matteportalen-dagar"||k==="matteportalen-klister"){try{const x=JSON.parse(a[k]),y=JSON.parse(b[k]),f=k==="matteportalen-dagar"?"days":"seen";
-      x[f]=[...new Set([...(x[f]||[]),...(y[f]||[])])].sort();out[k]=JSON.stringify(x);}catch(e){}return;}
-    // Läsflyt: läsningarna läggs ihop (inget försvinner), bokstäverna: senaste markeringen vinner
-    if(k==="mattespel-lasflyt-v1"){try{const x=JSON.parse(a[k]),y=JSON.parse(b[k]),o=Object.assign({},x);
-      o.las={...(x.las||{})};Object.entries(y.las||{}).forEach(([id,r])=>{const m=new Map([...(o.las[id]||[]),...r].map(e=>[e.d,e]));o.las[id]=[...m.values()].sort((p,q)=>p.d-q.d).slice(-20);});
-      ["stars","pass"].forEach(f=>{o[f]={...(x[f]||{})};Object.entries(y[f]||{}).forEach(([n,v])=>{o[f][n]=Math.max(o[f][n]||0,v);});});
-      o.bokst={...(x.bokst||{})};Object.entries(y.bokst||{}).forEach(([bk,v])=>{if(!o.bokst[bk]||(v.d||0)>(o.bokst[bk].d||0))o.bokst[bk]=v;});
-      o.fr={...(y.fr||{}),...(x.fr||{})};out[k]=JSON.stringify(o);}catch(e){}return;}
-    if(k==="matteportalen-mynt"){try{const x=JSON.parse(a[k]),y=JSON.parse(b[k]),o=(y.tj||0)>(x.tj||0)?y:x;
-      o.kopt=[...new Set([...(x.kopt||[]),...(y.kopt||[])])];out[k]=JSON.stringify(o);}catch(e){}return;}
-    if(progressOf(b[k])>progressOf(a[k]))out[k]=b[k];});
-  return out;}
+const mergeBundles=MPKonto.merge;
 function loginWithCard(o){
   const ps=list();let p=ps.find(x=>x.salt===o.s);
   if(p){const cur=p.id===owner()?snapLive():(jGet("mp-bundle-"+p.id)||{}),merged=mergeBundles(cur,o.d);
-    if(p.id===owner())loadLive(merged);else jSet("mp-bundle-"+p.id,merged);}
+    if(p.id===owner())loadLive(merged);else jSet("mp-bundle-"+p.id,merged);if(o.k){p.konto=o.k;saveList(ps);}}
   else{let name=o.n;while(ps.some(x=>x.name.toLowerCase()===name.toLowerCase()))name+=" 2";
-    p={id:"p"+Date.now().toString(36),name,salt:o.s,pinH:o.h,created:Date.now()};ps.push(p);saveList(ps);jSet("mp-bundle-"+p.id,o.d);}
+    p={id:"p"+Date.now().toString(36),name,salt:o.s,pinH:o.h,created:Date.now(),...(o.k?{konto:o.k}:{})};ps.push(p);saveList(ps);jSet("mp-bundle-"+p.id,o.d);}
   window.Ljud&&Ljud.magic();switchTo(p.id);
 }
 /* Kameran */
@@ -925,8 +945,47 @@ function importBundle(o){
   history.replaceState(null,"",location.pathname);try{sessionStorage.removeItem("mp-active")}catch(e){}location.reload();
 }
 
+/* ---------- Konton i molnet (konto.js) ---------- */
+const sparaKonto=(id,k)=>{const ps=list(),q=ps.find(x=>x.id===id);if(!q)return;if(k)q.konto=k;else delete q.konto;saveList(ps);};
+const nar=t=>{if(!t)return"inte än";const m=Math.round((Date.now()-t)/60000);return m<1?"nyss":m<60?`för ${m} min sedan`:new Date(t).toLocaleString("sv-SE",{dateStyle:"short",timeStyle:"short"});};
+function visaKonto(){const k=me.konto;$("kiNamn").textContent=k.namn;$("kiKod").textContent=k.kod;
+  $("kiSenast").textContent="Senast synkat: "+nar(MPKonto.senast())+". Framstegen sparas av sig själva.";openM("mKInfo");}
+$("pKonto").onclick=()=>{if(me.konto)visaKonto();else{$("kNyMsg").textContent="";openM("mKNy");}};
+$("kNyGo").onclick=async()=>{const b=$("kNyGo");b.disabled=true;$("kNyMsg").textContent="";stash();
+  try{const r=await MPKonto.skapa(me);if(!r.ok)throw 0;me.konto={namn:r.namn,kod:r.kod};sparaKonto(me.id,me.konto);MPKonto.synka();window.Ljud&&Ljud.magic();visaKonto();chip();kontoRad();}
+  catch(e){$("kNyMsg").textContent="Det gick inte att skapa kontot. Kontrollera internet och försök igen.";}b.disabled=false;};
+$("kiKort").onclick=()=>$("pCard").click();
+$("kiSynk").onclick=async()=>{$("kiSenast").textContent="Synkar …";stash();const r=await MPKonto.synka({skriv:true});
+  if(r.ok){if(r.andrad){location.reload();return;}$("kiSenast").textContent="Klart! Senast synkat: nyss.";}else $("kiSenast").textContent=r.fel==="natet"?"Ingen kontakt med servern. Försök igen senare.":"Lösenordet stämmer inte längre. Koppla bort kontot och logga in igen.";};
+$("kiUt").onclick=()=>{if(!confirm("Koppla bort kontot från den här enheten? Framstegen finns kvar här och i kontot. Du kan logga in igen med användarnamn och lösenord."))return;sparaKonto(me.id,null);delete me.konto;closeAll();chip();kontoRad();};
+$("kiDel").onclick=async()=>{if(!confirm(`Radera kontot ${me.konto.namn} för alltid? Framstegen i molnet försvinner. Det som finns på den här enheten finns kvar.`))return;
+  const r=await MPKonto.radera(me.konto.namn,me.konto.kod).catch(()=>({fel:"natet"}));if(!r.ok){alert("Det gick inte att radera kontot. Försök igen senare.");return;}
+  sparaKonto(me.id,null);delete me.konto;closeAll();chip();kontoRad();alert("Kontot är raderat.");};
+function kontoRad(){if(!me)return;$("pKontoB").textContent=me.konto?"Mitt konto":"Skapa ett konto";$("pKontoS").textContent=me.konto?`☁️ ${me.konto.namn} · sparas av sig själv`:"Spara framstegen och spela på flera enheter";}
+// logga in på en ny enhet: finns profilen redan här slås framstegen ihop, annars skapas den
+$("kontoIn").onclick=()=>{$("kInNamn").value="";$("kInKod").value="";$("kInMsg").textContent="";openM("mKIn");setTimeout(()=>$("kInNamn").focus(),50);};
+$("kInClose").onclick=openWho;
+$("kInKod").addEventListener("keydown",e=>{if(e.key==="Enter")$("kInGo").click();});
+$("kInGo").onclick=async()=>{const n=$("kInNamn").value.trim().toLowerCase(),k=$("kInKod").value.trim().toLowerCase();
+  if(!n||!k){$("kInMsg").textContent="Skriv både användarnamn och lösenord.";return;}
+  $("kInGo").disabled=true;$("kInMsg").textContent="";let r;try{r=await MPKonto.hamta(n,k);}catch(e){r={fel:"natet"};}$("kInGo").disabled=false;
+  if(!r.ok){$("kInMsg").textContent=r.fel==="sparrad"?"För många försök. Vänta 15 minuter och försök igen.":r.fel==="natet"?"Ingen kontakt med servern. Kontrollera internet.":"Användarnamnet eller lösenordet stämmer inte.";window.Ljud&&Ljud.bad();return;}
+  const o=r.data||{},d=o.d||{},ps=list();let p=ps.find(x=>x.konto&&x.konto.namn===r.namn)||(o.s&&ps.find(x=>x.salt===o.s));
+  if(p){const cur=p.id===owner()?snapLive():(jGet("mp-bundle-"+p.id)||{}),m=mergeBundles(cur,d);if(p.id===owner())loadLive(m);else jSet("mp-bundle-"+p.id,m);p.konto={namn:r.namn,kod:k};}
+  else{let name=o.n||r.namn;while(ps.some(x=>x.name.toLowerCase()===name.toLowerCase()))name+=" 2";
+    // som när första profilen skapas: det som redan finns på en enhet utan profiler följer med
+    const forst=!ps.length&&!owner();
+    p={id:"p"+Date.now().toString(36),name,salt:o.s||("s"+Date.now().toString(36)),pinH:o.h||"",created:Date.now(),konto:{namn:r.namn,kod:k}};ps.push(p);
+    if(forst){loadLive(mergeBundles(snapLive(),d));setOwner(p.id);}else jSet("mp-bundle-"+p.id,d);}
+  if(!p.pinH){p.pinH=hash("0000"+p.salt);}
+  saveList(ps);
+  window.Ljud&&Ljud.magic();switchTo(p.id);};
+
 /* ---------- Start ---------- */
-chip();
+chip();kontoRad();
+// synka när startsidan öppnas: hämta, slå ihop och skicka tillbaka. Ändrades något här laddas sidan om en gång.
+if(me&&me.konto){MPKonto.synka({skriv:true}).then(r=>{if(r&&r.andrad){let k=0;try{k=+(sessionStorage.getItem("mp-synkom")||0)}catch(e){}
+  if(Date.now()-k>60000){try{sessionStorage.setItem("mp-synkom",String(Date.now()))}catch(e){}location.reload();}}});}
 if(location.hash.startsWith("#kort=")){unpack(location.hash.replace("#kort=","")).then(loginWithCard).catch(()=>{alert("Inloggningskortet fungerade inte.");history.replaceState(null,"",location.pathname);});}
 else if(location.hash.startsWith("#flytta=")){unpack(location.hash).then(importBundle).catch(()=>{alert("Flyttkoden fungerade inte.");history.replaceState(null,"",location.pathname);});}
 else if(list().length&&!act)openWho();

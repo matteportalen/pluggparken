@@ -127,7 +127,7 @@ body.mph-mini #quit{display:none}
     get(){return myntLas();},
     // en avklarad runda (anropas av huvud.js när skärmen "result" visas, eller av en sida själv)
     runda(n){const m=myntLas(),nu=Date.now();if(nu-(m.senast||0)<15000)return 0;let f=n==null?6:n;if(m.dag!==idag()){f+=10;m.dag=idag();}
-      m.m+=f;m.tj+=f;m.senast=nu;myntSpara(m);myntVisa(f);return f;},
+      m.m+=f;m.tj+=f;m.senast=nu;myntSpara(m);myntVisa(f);window.MPKonto&&MPKonto.puffa();return f;},
     kop(id,pris){const m=myntLas();if(m.m<pris)return false;m.m-=pris;m.kopt=[...new Set([...(m.kopt||[]),id])];myntSpara(m);const el=document.querySelector('.mph-m');if(el)el.textContent=m.m;return true;},
     spara:myntSpara};
   function profilnamn(){try{const a=sessionStorage.getItem('mp-active');if(!a||a==='gast')return'';const p=(JSON.parse(localStorage.getItem('mp-profiles')||'[]')||[]).find(x=>x.id===a);return p?p.name:'';}catch(e){return''}}
@@ -146,6 +146,9 @@ body.mph-mini #quit{display:none}
   document.body.prepend(h);
   // sökning: sok.js hämtas först när den behövs
   const rotUrl=new URL('.',(me&&me.src)||location.href).href;
+  // konton i molnet: konto.js laddas bara om profilen på enheten har ett konto
+  try{const ow=localStorage.getItem('mp-owner'),ps=JSON.parse(localStorage.getItem('mp-profiles')||'[]'),p=ow&&ps.find(x=>x.id===ow);
+    if(p&&p.konto&&!window.MPKonto){const k=document.createElement('script');k.src=rotUrl+'konto.js?v=1';document.head.appendChild(k);}}catch(e){}
   window.MPSokOpen=function(){
     if(window.MPSok)return MPSok.open();
     const sc=document.createElement('script');sc.src=rotUrl+'sok.js?v=1';sc.onload=()=>MPSok.open();document.head.appendChild(sc);};
