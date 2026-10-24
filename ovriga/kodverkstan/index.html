@@ -126,7 +126,9 @@ button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid var(
 .sp small{position:absolute;bottom:-1px;left:0;right:0;font-size:.62rem;line-height:1;color:var(--muted);text-align:center;font-weight:700}
 .sp.add{color:var(--pur);font-weight:800;font-size:1.8rem}
 .picker{display:flex;flex-wrap:wrap;gap:6px;background:var(--soft);border-radius:14px;padding:8px}
-.picker button{width:46px;height:46px;font-size:1.6rem;border-radius:12px;background:#fff}
+.picker button{width:52px;height:52px;font-size:1.6rem;border-radius:12px;background:#fff;display:grid;place-items:center}.picker button img{width:40px;height:40px;object-fit:contain}
+.ptabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}.ptabs button{padding:4px 12px;border-radius:999px;background:var(--soft);font-weight:700;font-size:.85rem;color:var(--ink)}.ptabs button.on{background:var(--pur);color:#fff}.ptabs button.egen{background:#fff;border:2px dashed var(--pur);color:var(--pur)}
+.cost{display:flex;align-items:center;gap:6px;flex-wrap:wrap;width:100%;margin-top:4px;font-size:.8rem;color:var(--muted)}.cost .cs{width:40px;height:40px;border-radius:10px;background:var(--soft);border:3px solid transparent;position:relative;display:grid;place-items:center}.cost .cs.on{border-color:var(--pur);background:#fff}.cost .cs img{width:28px;height:28px;object-fit:contain}.cost .cs small{position:absolute;right:2px;bottom:0;font-size:.6rem;font-weight:800}.cost .cs.add{color:var(--pur);font-weight:800;font-size:1.3rem}
 .del{color:var(--bad);font-weight:700;font-size:.9rem;padding:4px 8px}
 .right{overflow:hidden;display:flex;flex-direction:column}
 .wsh{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;font-weight:800}
@@ -273,8 +275,16 @@ Blockly.defineBlocksWithJsonArray([
   R("op_or","%1 eller %2",[V("A","Boolean"),V("B","Boolean")],OP,"Boolean"),
   R("op_not","inte %1",[V("A","Boolean")],OP,"Boolean"),
   R("op_join","sätt ihop %1 och %2",[V("A",null),V("B",null)],OP,"String"),
+  S("look_costume","byt till kostym nummer %1",[V("N")],LO),
+  S("look_nextcostume","nästa kostym",[],LO),
+  R("look_costumenum","kostymnummer",[],LO,"Number"),
+  S("ctrl_clone","skapa en klon av mig",[],CO),
+  {type:"ctrl_delclone",message0:"ta bort den här klonen",colour:CO,previousStatement:null},
   S("event_send","skicka %1",[{type:"field_input",name:"MSG",text:"hej"}],EV)
 ]);
+HAT("event_clone","när jag startar som klon",[]);
+function spriteOpts(){const o=spriteNames().map(n=>[n,n]);return o.length?o:[["–","__none"]];}
+["x","y"].forEach(a=>{Blockly.Blocks["sense_"+a+"of"]={init(){this.appendDummyInput().appendField(a+"-läge för").appendField(new Blockly.FieldDropdown(()=>spriteOpts()),"TARGET");this.setOutput(true,"Number");this.setColour(SE);this.setInputsInline(true);}};});
 HAT("event_start","när 🏁 klickas",[]);
 HAT("event_key","när tangenten %1 trycks",[DD("KEY",KEYS)]);
 HAT("event_click","när jag klickas",[]);
@@ -327,6 +337,14 @@ const TOOLTIPS={
   sense_answer:"Det du skrev senast när djuret frågade.",
   sense_key:"Är sant om tangenten är nedtryckt just nu.",
   sense_touch:"Är sant om djuret nuddar den andra figuren (eller kanten).",
+  look_costume:"Byter utseende på figuren: kostym 1, 2, 3 och så vidare. Bra för att få någon att gå eller blinka.",
+  look_nextcostume:"Byter till figurens nästa kostym. Efter den sista kommer den första igen.",
+  look_costumenum:"Ger numret på kostymen figuren har just nu.",
+  ctrl_clone:"Skapar en kopia av figuren som kan göra egna saker (se blocket när jag startar som klon). Bara originalet kan skapa kloner.",
+  ctrl_delclone:"Tar bort klonen som gör det här. Originalet påverkas inte.",
+  event_clone:"Görs av varje klon när den skapas. Här får klonen sitt eget jobb, till exempel att falla ner från himlen.",
+  sense_xof:"Ger en annan figurs plats i sidled (x). Bra när något ska börja där en annan figur står.",
+  sense_yof:"Ger en annan figurs plats uppåt och nedåt (y).",
   op_arith:"Räknar ihop, tar bort, multiplicerar eller delar två tal.",
   op_mod:"Ger det som blir över när man delar (resten).",
   op_random:"Ger ett slumpat heltal mellan de två talen, ett nytt varje gång.",
@@ -345,7 +363,7 @@ const N=n=>({shadow:{type:"math_number",fields:{NUM:n}}});
 const Tx=t=>({shadow:{type:"text",fields:{TEXT:t}}});
 const blk=(type,inputs,fields)=>({kind:"block",type,inputs,fields});
 const TOOLBOX={kind:"categoryToolbox",contents:[
-  {kind:"category",name:"Händelser",colour:EV,contents:[blk("event_start"),blk("event_key"),blk("event_click"),blk("event_msg"),blk("event_send")]},
+  {kind:"category",name:"Händelser",colour:EV,contents:[blk("event_start"),blk("event_key"),blk("event_click"),blk("event_msg"),blk("event_send"),blk("event_clone")]},
   {kind:"category",name:"Rörelse",colour:MO,contents:[
     blk("motion_move",{STEPS:N(10)}),blk("motion_right",{DEG:N(15)}),blk("motion_left",{DEG:N(15)}),
     blk("motion_goto",{X:N(0),Y:N(0)}),blk("motion_jump",{X:N(0),Y:N(0)}),blk("motion_glide",{SECS:N(1),X:N(100),Y:N(50)}),
@@ -354,12 +372,12 @@ const TOOLBOX={kind:"categoryToolbox",contents:[
     blk("motion_x"),blk("motion_y"),blk("motion_dir")]},
   {kind:"category",name:"Utseende",colour:LO,contents:[
     blk("look_say",{TEXT:Tx("Hej!")}),blk("look_sayfor",{TEXT:Tx("Hej!"),SECS:N(2)}),
-    blk("look_size",{SIZE:N(100)}),blk("look_chsize",{SIZE:N(10)}),blk("look_show"),blk("look_hide"),blk("look_backdrop")]},
+    blk("look_size",{SIZE:N(100)}),blk("look_chsize",{SIZE:N(10)}),blk("look_show"),blk("look_hide"),blk("look_backdrop"),blk("look_costume",{N:N(2)}),blk("look_nextcostume"),blk("look_costumenum")]},
   {kind:"category",name:"Ljud",colour:SO,contents:[blk("sound_play")]},
   {kind:"category",name:"Penna",colour:PE,contents:[blk("pen_down"),blk("pen_up"),blk("pen_clear"),blk("pen_color"),blk("pen_size",{N:N(3)})]},
   {kind:"category",name:"Kontroll",colour:CO,contents:[
-    blk("ctrl_wait",{SECS:N(1)}),blk("ctrl_repeat",{TIMES:N(10)}),blk("ctrl_forever"),blk("ctrl_if"),blk("ctrl_ifelse"),blk("ctrl_until"),blk("ctrl_stop")]},
-  {kind:"category",name:"Känna av",colour:SE,contents:[blk("sense_touch"),blk("sense_key"),blk("sense_ask",{Q:Tx("Hur mycket är 6 · 7?")}),blk("sense_answer")]},
+    blk("ctrl_wait",{SECS:N(1)}),blk("ctrl_repeat",{TIMES:N(10)}),blk("ctrl_forever"),blk("ctrl_if"),blk("ctrl_ifelse"),blk("ctrl_until"),blk("ctrl_stop"),blk("ctrl_clone"),blk("ctrl_delclone")]},
+  {kind:"category",name:"Känna av",colour:SE,contents:[blk("sense_touch"),blk("sense_key"),blk("sense_ask",{Q:Tx("Hur mycket är 6 · 7?")}),blk("sense_answer"),blk("sense_xof"),blk("sense_yof")]},
   {kind:"category",name:"Räkna",colour:OP,contents:[
     blk("op_arith",{A:N(1),B:N(1)}),blk("op_random",{A:N(1),B:N(10)}),blk("op_mod",{A:N(10),B:N(3)}),
     blk("op_cmp",{A:N(1),B:N(1)}),blk("op_and"),blk("op_or"),blk("op_not"),
@@ -368,7 +386,16 @@ const TOOLBOX={kind:"categoryToolbox",contents:[
 ]};
 
 /* ---------------- figurer ---------------- */
-const KATALOG=[["⭐","Stjärnan"],["🍎","Äpplet"],["🐟","Fisken"],["🚀","Raketen"],["🎈","Ballongen"],["⚽","Bollen"],["🦋","Fjärilen"],["🍌","Bananen"],["🐶","Hunden"],["🐱","Katten"],["🐸","Grodan"],["🌟","Glansen"],["🚗","Bilen"],["🌼","Blomman"]];
+/* bilder (Kenney, CC0): figurer med flera kostymer, djur, småkryp, rymd, saker och fordon. c = [fil, bredd, höjd] per kostym */
+const KAT={"adventurer":{"n":"Äventyraren","k":"Figurer","c":[["adventurer_1.webp",80,110],["adventurer_2.webp",80,110],["adventurer_3.webp",80,110],["adventurer_4.webp",80,110],["adventurer_5.webp",80,110],["adventurer_6.webp",80,110]]},"female":{"n":"Äventyrerskan","k":"Figurer","c":[["female_1.webp",80,110],["female_2.webp",80,110],["female_3.webp",80,110],["female_4.webp",80,110],["female_5.webp",80,110],["female_6.webp",80,110]]},"player":{"n":"Spelaren","k":"Figurer","c":[["player_1.webp",80,110],["player_2.webp",80,110],["player_3.webp",80,110],["player_4.webp",80,110],["player_5.webp",80,110],["player_6.webp",80,110]]},"soldier":{"n":"Soldaten","k":"Figurer","c":[["soldier_1.webp",80,110],["soldier_2.webp",80,110],["soldier_3.webp",80,110],["soldier_4.webp",80,110],["soldier_5.webp",80,110],["soldier_6.webp",80,110]]},"zombie":{"n":"Zombien","k":"Figurer","c":[["zombie_1.webp",80,110],["zombie_2.webp",80,110],["zombie_3.webp",80,110],["zombie_4.webp",80,110],["zombie_5.webp",80,110],["zombie_6.webp",80,110]]},"robot":{"n":"Roboten","k":"Figurer","c":[["robot_1.webp",113,92],["robot_2.webp",114,108],["robot_3.webp",114,105],["robot_4.webp",128,116],["robot_5.webp",113,92]]},"dog":{"n":"Hunden","k":"Djur","c":[["dog_1.webp",106,128]]},"pig":{"n":"Grisen","k":"Djur","c":[["pig_1.webp",128,115]]},"rabbit":{"n":"Kaninen","k":"Djur","c":[["rabbit_1.webp",95,128]]},"panda":{"n":"Pandan","k":"Djur","c":[["panda_1.webp",128,96]]},"penguin":{"n":"Pingvinen","k":"Djur","c":[["penguin_1.webp",128,118]]},"frog":{"n":"Grodan","k":"Djur","c":[["frog_1.webp",116,128]]},"monkey":{"n":"Apan","k":"Djur","c":[["monkey_1.webp",128,96]]},"elephant":{"n":"Elefanten","k":"Djur","c":[["elephant_1.webp",128,109]]},"giraffe":{"n":"Giraffen","k":"Djur","c":[["giraffe_1.webp",122,128]]},"duck":{"n":"Ankan","k":"Djur","c":[["duck_1.webp",128,127]]},"owl":{"n":"Ugglan","k":"Djur","c":[["owl_1.webp",128,128]]},"bear":{"n":"Björnen","k":"Djur","c":[["bear_1.webp",128,111]]},"cow":{"n":"Kon","k":"Djur","c":[["cow_1.webp",128,114]]},"horse":{"n":"Hästen","k":"Djur","c":[["horse_1.webp",118,128]]},"parrot":{"n":"Papegojan","k":"Djur","c":[["parrot_1.webp",128,127]]},"zebra":{"n":"Zebran","k":"Djur","c":[["zebra_1.webp",117,128]]},"snake":{"n":"Ormen","k":"Djur","c":[["snake_1.webp",116,128]]},"whale":{"n":"Valen","k":"Djur","c":[["whale_1.webp",115,128]]},"bee":{"n":"Biet","k":"Småkryp","c":[["bee_1.webp",128,128],["bee_2.webp",128,128]]},"fly":{"n":"Flugan","k":"Småkryp","c":[["fly_1.webp",128,128],["fly_2.webp",128,128]]},"ladybug":{"n":"Nyckelpigan","k":"Småkryp","c":[["ladybug_1.webp",128,128],["ladybug_2.webp",128,128]]},"mouse":{"n":"Musen","k":"Småkryp","c":[["mouse_1.webp",128,128],["mouse_2.webp",128,128]]},"snail":{"n":"Snigeln","k":"Småkryp","c":[["snail_1.webp",128,128],["snail_2.webp",128,128]]},"worm":{"n":"Masken","k":"Småkryp","c":[["worm_1.webp",128,128],["worm_2.webp",128,128]]},"slime":{"n":"Geléklumpen","k":"Småkryp","c":[["slime_1.webp",128,128],["slime_2.webp",128,128]]},"fish":{"n":"Fisken","k":"Småkryp","c":[["fish_1.webp",128,128],["fish_2.webp",128,128]]},"ghost":{"n":"Spöket","k":"Småkryp","c":[["ghost_1.webp",51,73],["ghost_2.webp",51,73]]},"ship":{"n":"Rymdskeppet","k":"Rymd","c":[["ship_1.webp",99,75],["ship_2.webp",99,75],["ship_3.webp",99,75],["ship_4.webp",112,75]]},"rocket":{"n":"Raketen","k":"Rymd","c":[["rocket_1.webp",42,128]]},"ufo":{"n":"Ufot","k":"Rymd","c":[["ufo_1.webp",124,123],["ufo_2.webp",124,127]]},"alien":{"n":"Rymdmonstret","k":"Rymd","c":[["alien_1.webp",93,84],["alien_2.webp",93,84],["alien_3.webp",93,84]]},"meteor":{"n":"Meteoriten","k":"Rymd","c":[["meteor_1.webp",101,84],["meteor_2.webp",101,84]]},"laser":{"n":"Laserstrålen","k":"Rymd","c":[["laser_1.webp",9,54],["laser_2.webp",9,54]]},"star":{"n":"Stjärnan","k":"Saker","c":[["star_1.webp",128,128]]},"coin":{"n":"Myntet","k":"Saker","c":[["coin_1.webp",128,128],["coin_2.webp",128,128],["coin_3.webp",128,128]]},"gem":{"n":"Diamanten","k":"Saker","c":[["gem_1.webp",128,128],["gem_2.webp",128,128],["gem_3.webp",128,128],["gem_4.webp",128,128]]},"key":{"n":"Nyckeln","k":"Saker","c":[["key_1.webp",128,128],["key_2.webp",128,128],["key_3.webp",128,128],["key_4.webp",128,128]]},"flag":{"n":"Flaggan","k":"Saker","c":[["flag_1.webp",128,128],["flag_2.webp",128,128]]},"heart":{"n":"Hjärtat","k":"Saker","c":[["heart_1.webp",70,70]]},"carrot":{"n":"Moroten","k":"Saker","c":[["carrot_1.webp",78,70],["carrot_2.webp",78,70]]},"ball":{"n":"Bollen","k":"Saker","c":[["ball_1.webp",70,70],["ball_2.webp",70,70]]},"car":{"n":"Bilen","k":"Fordon","c":[["car_1.webp",69,128]]},"car2":{"n":"Blå bil","k":"Fordon","c":[["car2_1.webp",68,128]]},"moto":{"n":"Motorcykeln","k":"Fordon","c":[["moto_1.webp",44,100]]}};
+const KATKAT=["Djur","Figurer","Småkryp","Rymd","Saker","Fordon"];
+const EMO={"⭐":"star","🌟":"star","⚽":"ball","👻":"ghost","🐟":"fish","🚀":"rocket","🐶":"dog","🐸":"frog","🚗":"car"};
+function costumesOf(r){
+  if(r.kind==="bild"){const k=KAT[r.img];return k?k.c.map(x=>({src:"bilder/"+x[0],w:x[1],h:x[2]})):[];}
+  if(r.kind==="egen")return (r.imgs||[]).map(x=>({src:x.d,w:x.w,h:x.h}));
+  return [];
+}
+const IMGC={};function getImg(src){let im=IMGC[src];if(!im){im=new Image();im.onload=()=>{needDraw=true;};im.src=src;IMGC[src]=im;}return im;}
 let djurImg=null,djurNamn="Djuret",djurSvg="";
 function initDjur(){
   try{
@@ -609,6 +636,74 @@ const MISSIONS=[
      sayf(join_("Poäng: ",getv("poäng")),3)))]}
 ];
 
+/* ---------------- exempel att remixa ---------------- */
+const hideb=()=>bl("look_hide"),showb=()=>bl("look_show");
+const cosb=n=>bl("look_costume",{},{N:iN(n)}),nextb=()=>bl("look_nextcostume");
+const cloneb=()=>bl("ctrl_clone"),delb=()=>bl("ctrl_delclone");
+const onClone=(...body)=>ch(bl("event_clone"),...body);
+const xof=n=>Bk(bl("sense_xof",{TARGET:n})),yof=n=>Bk(bl("sense_yof",{TARGET:n}));
+const jump_=(x,y)=>bl("motion_jump",{},{X:asIn(x),Y:asIn(y)});
+const myX=()=>Bk(bl("motion_x")),myY=()=>Bk(bl("motion_y"));
+const chxv=v=>bl("motion_chx",{},{X:asIn(v)}),chyv=v=>bl("motion_chy",{},{Y:asIn(v)});
+const exm=o=>Object.assign({ex:true,tips:[],ok:()=>false,bonus2:()=>false},o,{sol:o.start});
+const EXEMPEL=[
+ exm({id:"ex_skjut",titel:"Rymdskjutare",kort:"Skjut meteoriter med klonade lasrar",ikon:"🚀",grupp:"Spel",
+  mal:"Ett färdigt spel! Styr rymdskeppet med ← →, skjut med mellanslag och undvik meteoriterna. Du har tre liv. Tryck <b>🏁 Kör</b> och prova först.",
+  bonus:"Ändra själv: gör meteoriterna snabbare (ändra y med −4 i Meteoritens block), ge dig själv fler liv, eller byt kostym på skeppet (<b>byt till kostym nummer 2</b>).",
+  sprites:[{k:"b",img:"ship",n:"Rymdskeppet",x:0,y:-140},{k:"b",img:"meteor",n:"Meteoriten",x:0,y:60},{k:"b",img:"laser",n:"Laserstrålen",x:0,y:0}],bg:"rymd",tryckTangenter:true,
+  start:[WSV(["poäng","liv"],ch(start(),setv("poäng",0),setv("liv",3),forever(iff(cmp_("LE",getv("liv"),0),sayb("Game over!"),ljud("bad"),bl("ctrl_stop")))),keyHat("left",chx(-12)),keyHat("right",chx(12)),keyHat("space",send_("skjut"),vant(.3))),
+         WSV(["poäng","liv"],ch(start(),hideb(),forever(vant(.8),cloneb())),onClone(jump_(rnd_(-200,200),170),showb(),forever(chy(-4),iff(touch_("Laserstrålen"),chv("poäng",1),ljud("pop"),delb()),iff(touch_("Rymdskeppet"),chv("liv",-1),ljud("bad"),delb()),iff(cmp_("LT",myY(),-175),delb())))),
+         WSV(["poäng","liv"],ch(start(),hideb()),onMsg("skjut",cloneb()),onClone(jump_(xof("Rymdskeppet"),ar_("ADD",yof("Rymdskeppet"),30)),showb(),forever(chy(10),iff(cmp_("GT",myY(),175),delb()))))]}),
+ exm({id:"ex_jakt",titel:"Musen och hunden",kort:"Hunden jagar musen och blir snabbare",ikon:"🐭",grupp:"Spel",
+  mal:"Musen styrs med piltangenterna. Hunden jagar den och blir snabbare och snabbare. Hur länge klarar du dig? Tryck <b>🏁 Kör</b>.",
+  bonus:"Ändra själv: ändra hur fort hunden blir snabbare (<b>ändra fart med 0,3</b>), byt hunden mot en annan figur, eller gör musen snabbare.",
+  sprites:[{k:"b",img:"mouse",n:"Musen",x:-150,y:-80},{k:"b",img:"dog",n:"Hunden",x:150,y:80}],bg:"eng",tryckTangenter:true,
+  start:[WSV(["tid","fart"],ch(start(),setv("tid",0),forever(vant(1),chv("tid",1))),ch(start(),setv("fart",2),forever(vant(1.5),chv("fart",.3))),keyHat("up",chy(5),nextb()),keyHat("down",chy(-5),nextb()),keyHat("left",chx(-5),nextb()),keyHat("right",chx(5),nextb())),
+         WSV(["tid","fart"],ch(start(),forever(iff(cmp_("GT",xof("Musen"),myX()),chxv(getv("fart"))),iff(cmp_("LT",xof("Musen"),myX()),chxv(ar_("SUB",0,getv("fart")))),iff(cmp_("GT",yof("Musen"),myY()),chyv(getv("fart"))),iff(cmp_("LT",yof("Musen"),myY()),chyv(ar_("SUB",0,getv("fart")))),iff(touch_("Musen"),sayb(join_("Fångad! Du klarade ",join_(getv("tid")," sekunder"))),ljud("bad"),bl("ctrl_stop")))))]}),
+ exm({id:"ex_hoppa",titel:"Hoppa över snigeln",kort:"Hoppa med mellanslag, undvik hindren",ikon:"🐌",grupp:"Spel",
+  mal:"Spelaren springer och hoppar med mellanslag. Hoppa över snigeln! Varje snigel du klarar ger en poäng, och du har tre liv.",
+  bonus:"Ändra själv: gör snigeln snabbare (<b>ändra x med −5</b>), hoppa högre (ändra 9 i hoppet), eller byt snigeln mot en bi eller en fluga.",
+  sprites:[{k:"b",img:"player",n:"Spelaren",x:-150,y:-90},{k:"b",img:"snail",n:"Snigeln",x:240,y:-105}],bg:"eng",tryckTangenter:true,
+  start:[WSV(["poäng","liv"],ch(start(),setv("poäng",0),setv("liv",3),forever(ife(cmp_("EQ",myY(),-90),ch(cosb(2),vant(.15),cosb(3),vant(.15)),cosb(4)))),keyHat("space",iff(cmp_("EQ",myY(),-90),ljud("hop"),rep(12,chy(9)),rep(12,chy(-9)))),ch(start(),forever(iff(cmp_("LE",getv("liv"),0),sayb("Game over!"),ljud("bad"),bl("ctrl_stop"))))),
+         WSV(["poäng","liv"],ch(start(),forever(chx(-5),iff(cmp_("LT",myX(),-235),jump_(260,-105),chv("poäng",1)),iff(touch_("Spelaren"),chv("liv",-1),ljud("bad"),jump_(260,-105),vant(.5)))),ch(start(),forever(vant(.2),nextb())))]}),
+ exm({id:"ex_mynt",titel:"Fånga mynten",kort:"Mynt regnar, du har 30 sekunder",ikon:"🪙",grupp:"Spel",
+  mal:"Mynt faller från himlen. Styr roboten med ← → och fånga så många du hinner på 30 sekunder.",
+  bonus:"Ändra själv: fler eller färre mynt (ändra vänta 0,5), längre tid (ändra 30), eller byt roboten mot Spelaren eller en björn.",
+  sprites:[{k:"b",img:"robot",n:"Roboten",x:0,y:-130},{k:"b",img:"coin",n:"Myntet",x:0,y:100}],bg:"himmel",tryckTangenter:true,
+  start:[WSV(["poäng","tid"],ch(start(),setv("poäng",0),setv("tid",30),rep(30,vant(1),chv("tid",-1)),sayb(join_("Tiden är slut! Poäng: ",getv("poäng"))),ljud("fanfare"),bl("ctrl_stop")),keyHat("left",chx(-12),cosb(2)),keyHat("right",chx(12),cosb(3))),
+         WSV(["poäng","tid"],ch(start(),hideb(),forever(vant(.5),cloneb())),onClone(jump_(rnd_(-210,210),170),showb(),forever(chy(-4),iff(touch_("Roboten"),chv("poäng",1),ljud("ok"),delb()),iff(cmp_("LT",myY(),-175),delb()))),ch(start(),forever(vant(.2),nextb())))]}),
+ exm({id:"ex_fest",titel:"Dansfesten",kort:"Tre djur dansar i tur och ordning",ikon:"🎉",grupp:"Filmer",
+  mal:"En liten film där tre djur dansar i tur och ordning. De pratar med varandra med meddelanden. Tryck <b>🏁 Kör</b> och titta!",
+  bonus:"Ändra själv: lägg till en fjärde dansare, gör dansen längre (ändra upprepa 12), eller byt ljud och bakgrund.",
+  sprites:[{k:"b",img:"monkey",n:"Apan",x:-130,y:-40},{k:"b",img:"penguin",n:"Pingvinen",x:0,y:-40},{k:"b",img:"panda",n:"Pandan",x:130,y:-40}],bg:"natt",
+  start:[WS(ch(start(),sayf("Dags för fest!",2),send_("dansa1")),onMsg("dansa1",rep(4,chy(25),vant(.15),chy(-25),vant(.15)),send_("dansa2")),onMsg("alla",ljud("magic"),rep(12,rt(30),vant(.05)))),
+         WS(onMsg("dansa2",sayf("Min tur!",1),rep(12,rt(30),vant(.05)),send_("dansa3")),onMsg("alla",rep(12,lt(30),vant(.05)))),
+         WS(onMsg("dansa3",sayf("Nu dansar vi alla!",1.5),send_("alla"),rep(12,rt(30),vant(.05)),ljud("fanfare")))]}),
+ exm({id:"ex_mote",titel:"Mötet",kort:"Tre figurer pratar och byter kostym",ikon:"🎬",grupp:"Filmer",
+  mal:"En kort film med tre figurer som pratar. De byter kostym när de går, blir rädda och jublar. Tryck <b>🏁 Kör</b>!",
+  bonus:"Ändra själv: skriv egna repliker i <b>säg</b>-blocken, byt kostym med <b>byt till kostym nummer</b> (1–6), eller låt zombien bli arg i stället för snäll.",
+  sprites:[{k:"b",img:"soldier",n:"Soldaten",x:-200,y:-50},{k:"b",img:"female",n:"Stina",x:40,y:-50},{k:"b",img:"zombie",n:"Zombien",x:220,y:-50}],bg:"eng",
+  start:[WS(ch(start(),rep(7,cosb(2),chx(10),vant(.12),cosb(3),chx(10),vant(.12)),cosb(1),sayf("Hallå? Är någon här?",2),send_("hej1")),onMsg("hej2",sayf("Trevligt att träffas! Vad är det där borta?",2.5),send_("zombie")),onMsg("rädd",cosb(6),sayf("Hjälp, en zombie!",1.5),rep(12,chx(-12),vant(.05)))),
+         WS(onMsg("hej1",sayf("Hej! Jag heter Stina.",2),send_("hej2")),onMsg("rädd",sayf("Vänta, han ser snäll ut!",2)),onMsg("slut",cosb(5),sayf("Visst, vi kan vara vänner!",2.5),ljud("fanfare"))),
+         WS(ch(start(),hideb()),onMsg("zombie",showb(),sayf("Ruuuh!",1.2),rep(8,chx(-10),vant(.1)),send_("rädd"),vant(3),sayf("Hej, vill ni vara vänner?",2.5),send_("slut")))]}),
+ exm({id:"ex_hav",titel:"Havet",kort:"Ett stim av fiskar simmar förbi",ikon:"🐟",grupp:"Filmer",
+  mal:"En liten film om havet: fiskar simmar förbi (kloner!) och valen glider långsamt över himlen. Tryck <b>🏁 Kör</b>.",
+  bonus:"Ändra själv: fler fiskar (ändra vänta 0,6), fiskarna simmar fortare (ändra x med −3), eller byt fisken mot en groda eller en anka.",
+  sprites:[{k:"b",img:"fish",n:"Fisken",x:0,y:0},{k:"b",img:"whale",n:"Valen",x:-150,y:110,size:200}],bg:"hav",
+  start:[WS(ch(start(),hideb(),forever(vant(.6),cloneb())),onClone(jump_(260,rnd_(-150,50)),showb(),forever(rep(6,chx(-3)),nextb(),iff(cmp_("LT",myX(),-250),delb())))),
+         WS(ch(start(),forever(glide_(6,150,110),glide_(6,-150,90))))]}),
+ exm({id:"ex_quiz",titel:"Frågesport",kort:"Ugglan frågar, eleven jublar eller suckar",ikon:"❓",grupp:"Filmer",
+  mal:"Ugglan ställer tre frågor. Svarar du rätt jublar Eleven, svarar du fel blir hen ledsen. Till slut får du se poängen.",
+  bonus:"Ändra själv: skriv egna frågor och svar, lägg till fler frågor, eller låt en annan figur reagera.",
+  sprites:[{k:"b",img:"owl",n:"Ugglan",x:-100,y:-30},{k:"b",img:"player",n:"Eleven",x:100,y:-60}],bg:"himmel",
+  start:[WSV(["poäng"],ch(start(),setv("poäng",0),
+           ask_("Hur mycket är 7 · 8?"),ife(cmp_("EQ",ans_(),56),ch(send_("rätt"),chv("poäng",1)),send_("fel")),vant(2),
+           ask_("Vilken stad är Sveriges huvudstad?"),ife(cmp_("EQ",ans_(),"Stockholm"),ch(send_("rätt"),chv("poäng",1)),send_("fel")),vant(2),
+           ask_("Hur många dagar har en vecka?"),ife(cmp_("EQ",ans_(),7),ch(send_("rätt"),chv("poäng",1)),send_("fel")),vant(2),
+           sayf(join_("Du fick ",join_(getv("poäng")," poäng av 3!")),4))),
+         WS(onMsg("rätt",cosb(5),ljud("ok"),sayf("Rätt!",1.2),cosb(1)),onMsg("fel",cosb(6),ljud("bad"),sayf("Aj, fel!",1.2),cosb(1)))]})
+];
+
 /* Tidiga uppdrag visar bara de kategorier som behövs, så att en nybörjare inte drunknar i block */
 const CATS={hej:["Händelser","Utseende"],promenad:["Händelser","Rörelse","Kontroll"],dans:["Händelser","Rörelse","Ljud","Kontroll"],
   kvadrat:["Händelser","Rörelse","Penna","Kontroll"],stjarna:["Händelser","Rörelse","Penna","Kontroll"],piltangenter:["Händelser","Rörelse"],
@@ -618,7 +713,8 @@ const KC={"Händelser":"ev","Rörelse":"mo","Utseende":"lo","Ljud":"so","Penna":
 TOOLBOX.contents.forEach(c=>{c.cssConfig={container:"blocklyToolboxCategory kvc kvc-"+KC[c.name]};});
 /* kategoriernas färg från blocken (används av ikonerna i menyn) */
 function paintToolbox(){try{ws.getToolbox().getToolboxItems().forEach(it=>{const d=it.getDiv();if(!d)return;const row=d.firstElementChild;const c=row&&row.style.borderLeftColor;if(c)d.style.setProperty("--kc",c);});}catch(e){}}
-const toolboxFor=cats=>({kind:"categoryToolbox",contents:TOOLBOX.contents.filter(c=>!cats||cats.includes(c.name))});
+const AVANCERAT=new Set(["look_costume","look_nextcostume","look_costumenum","ctrl_clone","ctrl_delclone","event_clone","sense_xof","sense_yof"]);
+const toolboxFor=cats=>({kind:"categoryToolbox",contents:TOOLBOX.contents.filter(c=>!cats||cats.includes(c.name)).map(c=>cats?Object.assign({},c,{contents:(c.contents||[]).filter(b=>!AVANCERAT.has(b.type))}):c)});
 
 /* Förklarande kort första gången en ny sak dyker upp (och via ❓ Förklara): text, blocken och en demo som körs på scenen */
 const INTRO_OF={kvadrat:"penna",dans:"upprepa",piltangenter:"tangent",fanga:"villkor",slump:"slump",matte:"fraga",poang:"variabel",meddelande:"meddelande"};
@@ -651,6 +747,8 @@ const idOf=n=>{if(n.id)return n.id;if(!idMap.has(n))idMap.set(n,"auto"+(++idN));
 
 function newSprite(def,i){
   if(def.k==="djur")return{id:"s"+i+"_"+Date.now()%100000,kind:"djur",name:djurNamn,x:def.x,y:def.y,dir:90,size:100,vis:true,ws:null};
+  if(def.k==="b")return{id:"s"+i+"_"+Date.now()%100000,kind:"bild",img:def.img,name:def.n||(KAT[def.img]||{}).n||"Figur",x:def.x,y:def.y,dir:90,size:def.size||100,vis:true,cos:0,ws:null};
+  if(def.k==="e"&&EMO[def.e]&&KAT[EMO[def.e]])return{id:"s"+i+"_"+Date.now()%100000,kind:"bild",img:EMO[def.e],name:def.n,x:def.x,y:def.y,dir:90,size:100,vis:true,cos:0,ws:null};
   return{id:"s"+i+"_"+Date.now()%100000,kind:"emoji",e:def.e,name:def.n,x:def.x,y:def.y,dir:90,size:100,vis:true,ws:null};
 }
 function projFrom(m){
@@ -670,10 +768,11 @@ function renderStart(){
   $("hero").innerHTML=`<div><h1>Kodverkstan</h1><p>Bygg program med block och få ditt djur att dansa, rita och spela.</p><span class="hprog"><span>${klara} av ${MISSIONS.length} klara</span><span>★ ${st}</span></span></div><div class="hv"><div class="hbl"><span class="hb hat">när 🏁 klickas</span><span class="hb mo">gå 100 steg</span><span class="hb lo">säg Hej!</span></div>${djurSvg||""}</div>`;
   const row=(m,i)=>`<button class="mcard" data-i="${i}"><span class="ic">${IKON[m.id]||"🧩"}</span><span class="tx"><b><span class="no">${i+1}</span>${m.titel}</b><small>${m.kort}</small></span>${starsHtml(data.stars[m.id]||0)}</button>`;
   $("mis").innerHTML=`<div class="grp"><div class="gcard"><button class="mcard" data-fri="1"><span class="ic pur">🧩</span><span class="tx"><b>Fri duk</b><small>Bygg vad du vill. Det sparas åt dig.</small></span></button></div></div>`+
-    GRUPPER.map(([t,ids])=>`<div class="grp"><h2>${t}</h2><div class="gcard">${ids.map(id=>{const i=MISSIONS.findIndex(m=>m.id===id);return i<0?"":row(MISSIONS[i],i);}).join("")}</div></div>`).join("");
+    GRUPPER.map(([t,ids])=>`<div class="grp"><h2>${t}</h2><div class="gcard">${ids.map(id=>{const i=MISSIONS.findIndex(m=>m.id===id);return i<0?"":row(MISSIONS[i],i);}).join("")}</div></div>`).join("")+
+    ["Spel","Filmer"].map(g=>`<div class="grp"><h2>${g==="Spel"?"Färdiga spel att remixa":"Färdiga filmer att remixa"}</h2><div class="gcard">${EXEMPEL.map((m,i)=>m.grupp===g?`<button class="mcard" data-ex="${i}"><span class="ic">${m.ikon}</span><span class="tx"><b>${m.titel}</b><small>${m.kort}</small></span><span class="stars" style="font-size:.8rem;color:var(--pur)">Remixa ▶</span></button>`:"").join("")}</div></div>`).join("");
 }
 $("mobOk").addEventListener("click",()=>{$("mobnote").hidden=true;try{sessionStorage.setItem("kv-mobil","1");}catch(e){}});
-$("mis").addEventListener("click",e=>{const b=e.target.closest(".mcard");if(!b)return;if(b.dataset.fri)openMission(null);else openMission(MISSIONS[+b.dataset.i]);});
+$("mis").addEventListener("click",e=>{const b=e.target.closest(".mcard");if(!b)return;if(b.dataset.ex){openMission(EXEMPEL[+b.dataset.ex]);return;}if(b.dataset.fri)openMission(null);else openMission(MISSIONS[+b.dataset.i]);});
 $("homeBtn").addEventListener("click",()=>{stopRun(true);clearMinis(MINIS);closeFacit();flush();renderStart();show("start");});
 
 /* ---------------- editorn ---------------- */
@@ -747,6 +846,7 @@ function renderMbox(){
   const flera=mission.sprites.length>1?`<p class="bonus">🧩 Här finns flera figurer. Varje figur har egna block: välj figur nere till vänster (${P.sprites.slice(1).map(x=>x.name).join(", ")}).</p>`:"";
   b.innerHTML=`<p>${mission.mal}</p><p class="bonus">${mission.bonus}</p>${flera}<div id="tipArea"></div><div class="mbtns"><button class="spk" id="spkBtn" aria-label="Läs upp uppdraget">🔊</button><button class="tipbtn" id="tipBtn">💡 Tips</button>${io?'<button class="tipbtn" id="inBtn">❓ Förklara</button>':""}<button class="tipbtn" id="facBtn">📖 Facit</button></div>`;
   $("tipBtn").onclick=giveTip;
+  if(mission.ex){$("tipBtn").hidden=true;$("facBtn").textContent="↺ Visa originalet";}
   $("spkBtn").onclick=()=>speak(mission.mal+" "+mission.bonus);
   $("facBtn").onclick=openFacit;
   if(io)$("inBtn").onclick=()=>{INTRO={id:io};renderMbox();};
@@ -788,7 +888,7 @@ function startDemo(d){
   DEMO=d;
   resetStage();stopThreads();TH=[];T=0;ST=newStats();winShown=false;hideWin();pend=null;clearTimeout(winTimer);
   RUN=true;$("runBtn").textContent="■ Stopp";$("runBtn").classList.add("stop");
-  P.sprites.forEach((s,i)=>hatsOf(s).forEach(h=>{if(h.type==="event_start")startThread(i,h);}));
+  live.forEach(lv=>hatsOf(lv.ref).forEach(h=>{if(h.type==="event_start")startThread(lv,h);}));
   if(d.keys){d.keys.forEach(k=>keysDown[k]=true);setTimeout(()=>d.keys.forEach(k=>keysDown[k]=false),1200);}
   setTimeout(()=>{if(DEMO===d)stopRun(true);},d.ms||5000);
 }
@@ -800,7 +900,7 @@ function endDemo(){
 /* facit: lösningen som riktiga block */
 function openFacit(){
   stopRun(true);flushWs();
-  $("facT").textContent="Facit: "+mission.titel;
+  $("facT").textContent=(mission.ex?"Original: ":"Facit: ")+mission.titel;
   const body=$("facBody");body.innerHTML="";clearMinis(FMINIS);
   $("facit").hidden=false;
   mission.sol.forEach((w,i)=>{if(!(w.blocks.blocks||[]).length)return;
@@ -878,7 +978,7 @@ function renderTray(){
   const t=$("tray");t.innerHTML="";
   P.sprites.forEach((s,i)=>{
     const b=document.createElement("button");b.className="sp"+(i===cur?" on":"");b.setAttribute("aria-label",s.name);
-    b.innerHTML=(s.kind==="djur"&&djurSvg?`<img alt="" src="data:image/svg+xml;charset=utf-8,${encodeURIComponent(djurSvg)}">`:s.e)+`<small>${s.name}</small>`;
+    b.innerHTML=(s.kind==="djur"&&djurSvg?`<img alt="" src="data:image/svg+xml;charset=utf-8,${encodeURIComponent(djurSvg)}">`:(s.kind==="bild"||s.kind==="egen")&&costumesOf(s)[0]?`<img alt="" src="${costumesOf(s)[0].src}">`:s.e)+`<small>${s.name}</small>`;
     if(P.sprites.length>1&&i!==cur&&!visited.has(s.id))b.classList.add("kvhi");
     b.onclick=()=>switchSprite(i);t.appendChild(b);
   });
@@ -888,17 +988,45 @@ function renderTray(){
   if(P.sprites.length>1){
     const d=document.createElement("button");d.className="del";d.textContent="Ta bort "+P.sprites[cur].name;d.onclick=delSprite;t.appendChild(d);
   }
+  const cs=costumesOf(P.sprites[cur]);
+  if(cs.length>1||P.sprites[cur].kind==="egen"){
+    const row=document.createElement("div");row.className="cost";row.innerHTML="<b>Kostymer:</b>";
+    cs.forEach((c,i)=>{const b=document.createElement("button");b.className="cs"+((P.sprites[cur].cos||0)===i?" on":"");b.innerHTML=`<img alt="" src="${c.src}"><small>${i+1}</small>`;b.setAttribute("aria-label","Kostym "+(i+1));b.onclick=()=>{P.sprites[cur].cos=i;if(live[cur])live[cur].cos=i;flush();renderTray();needDraw=true;};row.appendChild(b);});
+    if(P.sprites[cur].kind==="egen"){const a=document.createElement("button");a.className="cs add";a.textContent="＋";a.setAttribute("aria-label","Lägg till egen bild som kostym");a.onclick=()=>pickOwn(true);row.appendChild(a);}
+    t.appendChild(row);
+  }
 }
 function togglePicker(){
   const box=$("pickerBox");
   if(box.innerHTML){box.innerHTML="";return;}
-  box.innerHTML='<div class="picker">'+KATALOG.map((k,i)=>`<button data-i="${i}" aria-label="${k[1]}">${k[0]}</button>`).join("")+"</div>";
-  box.onclick=e=>{const b=e.target.closest("button");if(!b)return;addSprite(KATALOG[+b.dataset.i]);box.innerHTML="";};
+  box.innerHTML='<div class="ptabs">'+KATKAT.map((c,i)=>`<button data-c="${c}" class="${i?"":"on"}">${c}</button>`).join("")+'<button data-egen="1" class="egen">📷 Egen bild</button></div><div class="picker" id="pickGrid"></div>';
+  const fill=c=>{$("pickGrid").innerHTML=Object.keys(KAT).filter(id=>KAT[id].k===c).map(id=>`<button data-id="${id}" aria-label="${KAT[id].n}"><img alt="" src="bilder/${KAT[id].c[0][0]}"></button>`).join("");};
+  fill(KATKAT[0]);
+  box.onclick=e=>{const b=e.target.closest("button");if(!b)return;
+    if(b.dataset.egen){pickOwn(false);return;}
+    if(b.dataset.c){box.querySelectorAll(".ptabs button").forEach(x=>x.classList.toggle("on",x===b));fill(b.dataset.c);return;}
+    if(b.dataset.id){addSprite({img:b.dataset.id});box.innerHTML="";}};
+}
+/* egen bild: förminskas och stannar i den här webbläsaren (skickas ingenstans) */
+function readOwn(file){return new Promise((res,rej)=>{const url=URL.createObjectURL(file),im=new Image();
+  im.onload=()=>{const m=Math.max(im.width,im.height),sc=Math.min(1,160/m),w=Math.max(1,Math.round(im.width*sc)),h=Math.max(1,Math.round(im.height*sc));
+    const cv=document.createElement("canvas");cv.width=w;cv.height=h;cv.getContext("2d").drawImage(im,0,0,w,h);URL.revokeObjectURL(url);res({d:cv.toDataURL("image/webp",.85),w,h});};
+  im.onerror=()=>{URL.revokeObjectURL(url);rej();};im.src=url;});}
+function pickOwn(asCostume){
+  const inp=document.createElement("input");inp.type="file";inp.accept="image/*";
+  inp.onchange=()=>{const f=inp.files&&inp.files[0];if(!f)return;
+    readOwn(f).then(d=>{
+      if(asCostume){const r=P.sprites[cur];if(r.kind!=="egen")return;r.imgs.push(d);flush();renderTray();needDraw=true;}
+      else{addSprite({egen:d});$("pickerBox").innerHTML="";}
+    }).catch(()=>showHelp("Bilden gick inte att läsa. Prova en annan bild."));};
+  inp.click();
 }
 function addSprite(k){
   flushWs();
-  let name=k[1],n=2;while(P.sprites.some(s=>s.name===name))name=k[1]+" "+n++;
-  P.sprites.push({id:"s"+Date.now(),kind:"emoji",e:k[0],name,x:Math.round(Math.random()*300-150),y:Math.round(Math.random()*200-100),dir:90,size:100,vis:true,ws:WS()});
+  const base=k.egen?"Min bild":(KAT[k.img]||{}).n||"Figur";let name=base,n=2;while(P.sprites.some(s=>s.name===name))name=base+" "+n++;
+  const sp={id:"s"+Date.now(),name,x:Math.round(Math.random()*300-150),y:Math.round(Math.random()*200-100),dir:90,size:100,vis:true,cos:0,ws:WS()};
+  if(k.egen){sp.kind="egen";sp.imgs=[k.egen];}else{sp.kind="bild";sp.img=k.img;}
+  P.sprites.push(sp);
   cur=P.sprites.length-1;visited.add(P.sprites[cur].id);renderTray();loadWsFor(cur);resetStage();flush();needDraw=true;
 }
 function delSprite(){
@@ -916,7 +1044,7 @@ $("bgSel").addEventListener("change",()=>{P.bg=$("bgSel").value;live&&live.forEa
 /* ---------------- scenen ---------------- */
 let live=[],bgLive="eng";
 function resetStage(){
-  live=P.sprites.map(s=>({ref:s,x:s.x,y:s.y,dir:s.dir,size:s.size,vis:s.vis,say:null,pen:{down:false,color:"#1D2B53",size:3}}));
+  live=P.sprites.map(s=>({ref:s,x:s.x,y:s.y,dir:s.dir,size:s.size,vis:s.vis,say:null,cos:s.cos||0,pen:{down:false,color:"#1D2B53",size:3}}));
   bgLive=P.bg;VARS={};ANS.pending=false;ANS.value="";
   pctx.clearRect(0,0,480,360);
   $("ask").hidden=true;
@@ -944,6 +1072,10 @@ function drawSprite(c,s){
   if(s.ref.kind==="djur"){
     if(djurImg&&djurImg.complete&&djurImg.naturalWidth){const w=58*sc,h=68*sc;c.drawImage(djurImg,-w/2,-h/2,w,h);}
     else{c.font=(40*sc)+"px sans-serif";c.textAlign="center";c.textBaseline="middle";c.fillText("🐾",0,0);}
+  }else if(s.ref.kind==="bild"||s.ref.kind==="egen"){
+    const cs=costumesOf(s.ref);
+    if(cs.length){const co=cs[((s.cos||0)%cs.length+cs.length)%cs.length],im=getImg(co.src);
+      if(im.complete&&im.naturalWidth){const f=58*sc/Math.max(cs[0].w,cs[0].h);c.drawImage(im,-co.w*f/2,-co.h*f/2,co.w*f,co.h*f);}}
   }else{c.font=(46*sc)+"px sans-serif";c.textAlign="center";c.textBaseline="middle";c.fillText(s.ref.e,0,2*sc);}
   c.restore();
 }
@@ -994,6 +1126,9 @@ function ev(n,sp){
     case "motion_x":return Math.round(sp.x*100)/100;
     case "motion_y":return Math.round(sp.y*100)/100;
     case "motion_dir":return sp.dir;
+    case "look_costumenum":return (sp.cos||0)+1;
+    case "sense_xof":{const o=live.find(q=>!q.isClone&&q.ref.name===f.TARGET);return o?Math.round(o.x):0;}
+    case "sense_yof":{const o=live.find(q=>!q.isClone&&q.ref.name===f.TARGET);return o?Math.round(o.y):0;}
     case "sense_answer":return ANS.value;
     case "sense_key":return !!keysDown[f.KEY];
     case "sense_touch":{const r=touching(sp,f.TARGET);if(r)ST.touchHits++;return r;}
@@ -1005,9 +1140,10 @@ function ev(n,sp){
 function touching(sp,target){
   const r=24*sp.size/100;
   if(target==="__edge")return sp.x+r>=240||sp.x-r<=-240||sp.y+r>=180||sp.y-r<=-180;
-  let o;if(target==="__djur")o=live.find(s=>s.ref.kind==="djur");else o=live.find(s=>s.ref.name===target);
-  if(!o||o===sp||!o.vis||!sp.vis)return false;
-  const r2=24*o.size/100;return Math.hypot(o.x-sp.x,o.y-sp.y)<r+r2;
+  if(!sp.vis)return false;
+  const list=target==="__djur"?live.filter(s=>s.ref.kind==="djur"):live.filter(s=>s.ref.name===target);
+  for(const o of list){if(o===sp||!o.vis)continue;const r2=24*o.size/100;if(Math.hypot(o.x-sp.x,o.y-sp.y)<r+r2)return true;}
+  return false;
 }
 function setPos(sp,x,y,quiet){
   x=Math.max(-300,Math.min(300,x));y=Math.max(-240,Math.min(240,y));
@@ -1074,6 +1210,10 @@ function* step(b,sp,th){
     case "look_sayfor":{sayTxt(sp,e("TEXT"));const mine=sp.say;yield* wait(num(e("SECS")),th);if(sp.say===mine)sp.say=null;break;}
     case "look_size":yield* sizeTo(sp,num(e("SIZE")),th);break;
     case "look_chsize":yield* sizeTo(sp,sp.size+num(e("SIZE")),th);break;
+    case "look_costume":{const n=costumesOf(sp.ref).length;if(n)sp.cos=(((Math.round(num(e("N")))-1)%n)+n)%n;break;}
+    case "look_nextcostume":{const n=costumesOf(sp.ref).length;if(n)sp.cos=((sp.cos||0)+1)%n;break;}
+    case "ctrl_clone":makeClone(sp);break;
+    case "ctrl_delclone":if(sp.isClone){sp.dead=true;th.dead=true;}return;
     case "look_show":sp.vis=true;break;
     case "look_hide":sp.vis=false;break;
     case "look_backdrop":bgLive=f.BG||"eng";break;
@@ -1106,13 +1246,20 @@ function progInfo(){
   return{types,count};
 }
 function hatsOf(s){return ((s.ws&&s.ws.blocks&&s.ws.blocks.blocks)||[]).filter(b=>/^event_/.test(b.type)&&b.type!=="event_send");}
-function startThread(i,hat){
-  TH.forEach(t=>{if(t.hat===idOf(hat)&&t.si===i)t.dead=true;});
-  const th={hat:idOf(hat),si:i,dead:false,gen:null,state:P.sprites[i].ws};
-  th.gen=(function*(){curState=th.state;yield* body(hat.next&&hat.next.block,live[i],th);})();
+function startThread(sp,hat){
+  TH.forEach(t=>{if(t.hat===idOf(hat)&&t.sp===sp)t.dead=true;});
+  const th={hat:idOf(hat),sp,dead:false,gen:null,state:sp.ref.ws};
+  th.gen=(function*(){curState=th.state;yield* body(hat.next&&hat.next.block,sp,th);})();
   TH.push(th);
 }
-function broadcast(m){ST.broadcasts++;P.sprites.forEach((s,i)=>hatsOf(s).forEach(h=>{if(h.type==="event_msg"&&String((h.fields||{}).MSG).toLowerCase()===String(m).toLowerCase()){ST.msgRecv++;startThread(i,h);}}));}
+/* kloner: bara originalet kan skapa dem, högst 80 åt gången; varje klon kör sina "när jag startar som klon"-block */
+function makeClone(sp){
+  if(sp.isClone||live.length>=80)return;
+  const c={ref:sp.ref,x:sp.x,y:sp.y,dir:sp.dir,size:sp.size,vis:sp.vis,say:null,cos:sp.cos||0,pen:Object.assign({},sp.pen),isClone:true,dead:false};
+  live.push(c);if(ST)ST.clones=(ST.clones||0)+1;
+  hatsOf(sp.ref).forEach(h=>{if(h.type==="event_clone")startThread(c,h);});
+}
+function broadcast(m){ST.broadcasts++;live.slice().forEach(lv=>hatsOf(lv.ref).forEach(h=>{if(h.type==="event_msg"&&String((h.fields||{}).MSG).toLowerCase()===String(m).toLowerCase()){ST.msgRecv++;startThread(lv,h);}}));}
 function stopThreads(){TH.forEach(t=>t.dead=true);}
 function newStats(){return{moved:0,otherMoved:0,turned:0,penLen:0,penTurn:0,penTurns:0,said:new Set(),saidNum:false,sounds:0,bounces:0,touchHits:0,keys:new Set(),asks:0,answers:0,ifs:0,saidNums:new Set(),lastSaid:"",ans:[],broadcasts:0,msgRecv:0,stops:0,pos:new Set(),x0:0,dist0:999};}
 function startRun(){
@@ -1121,7 +1268,7 @@ function startRun(){
   resetStage();stopThreads();TH=[];T=0;winShown=false;hideWin();pend=null;clearTimeout(winTimer);ranOnce=true;
   ST=newStats();
   RUN=true;$("runBtn").textContent="■ Stopp";$("runBtn").classList.add("stop");
-  P.sprites.forEach((s,i)=>hatsOf(s).forEach(h=>{if(h.type==="event_start")startThread(i,h);}));
+  live.forEach(lv=>hatsOf(lv.ref).forEach(h=>{if(h.type==="event_start")startThread(lv,h);}));
 }
 function stopRun(nc){
   if(!nc&&RUN&&mission&&ST&&!DEMO)checkMission();
@@ -1136,10 +1283,12 @@ let kdh=false;
 function frame(){
   T+=1/60;
   // tangent-händelser
-  P.sprites.forEach((s,i)=>hatsOf(s).forEach(h=>{
-    if(h.type==="event_key"&&keysDown[(h.fields||{}).KEY]&&!TH.some(t=>!t.dead&&t.hat===idOf(h)&&t.si===i)){ST.keys.add(h.fields.KEY);startThread(i,h);}
+  live.filter(lv=>!lv.isClone).forEach(lv=>hatsOf(lv.ref).forEach(h=>{
+    if(h.type==="event_key"&&keysDown[(h.fields||{}).KEY]&&!TH.some(t=>!t.dead&&t.hat===idOf(h)&&t.sp===lv)){ST.keys.add(h.fields.KEY);startThread(lv,h);}
   }));
   TH.forEach(t=>{if(t.dead)return;curState=t.state;const r=t.gen.next();if(r.done)t.dead=true;});
+  TH.forEach(t=>{if(t.sp.dead)t.dead=true;});
+  if(live.some(q=>q.dead))live=live.filter(q=>!q.dead);
   TH=TH.filter(t=>!t.dead);
   live.forEach(s=>{if(s.say&&s.say.until<=T)s.say=null;});
   if(!TH.length){
@@ -1204,7 +1353,7 @@ function stagePt(e){const r=stage.getBoundingClientRect();return[(e.clientX-r.le
 function hit(x,y){for(let i=live.length-1;i>=0;i--){const s=live[i];if(s.vis&&Math.hypot(s.x-x,s.y-y)<28*s.size/100+4)return i;}return -1;}
 stage.addEventListener("pointerdown",e=>{
   const[x,y]=stagePt(e);const h=hit(x,y);
-  if(RUN){if(h>=0){P.sprites.forEach((s,i)=>{if(i===h)hatsOf(s).forEach(hat=>{if(hat.type==="event_click")startThread(i,hat);});});}return;}
+  if(RUN){if(h>=0){const lv=live[h];hatsOf(lv.ref).forEach(hat=>{if(hat.type==="event_click")startThread(lv,hat);});}return;}
   if(h>=0){drag={i:h,dx:live[h].x-x,dy:live[h].y-y};stage.setPointerCapture(e.pointerId);}
 });
 stage.addEventListener("pointermove",e=>{
@@ -1225,7 +1374,7 @@ function loop(ts){
 }
 requestAnimationFrame(loop);
 
-window.__kv={frame,MISSIONS,openMission,startRun,stopRun,loadWsFor,flushWs,get P(){return P},get live(){return live},get ST(){return ST},get RUN(){return RUN},keysDown,data,get ws(){return ws},get VARS(){return VARS},TOOLBOX,CATS,get ANS(){return ANS}};
+window.__kv={frame,readOwn,addSprite,costumesOf,EXEMPEL,MISSIONS,openMission,startRun,stopRun,loadWsFor,flushWs,get P(){return P},get live(){return live},get ST(){return ST},get RUN(){return RUN},keysDown,data,get ws(){return ws},get VARS(){return VARS},TOOLBOX,CATS,get ANS(){return ANS}};
 renderStart();
 show("start");
 if(window.MPS&&MPS.start)MPS.start("start");

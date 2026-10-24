@@ -62,7 +62,7 @@ const IDX=[
  ['schack/','Schack','Lär dig pjäserna, hitta matt och spela mot datorn','♟️','pjäser matt matt i ett drag matt i två drag mattmönster parti slutspel äventyr ö kung dam torn springare löpare bonde klocka två spelare','Logik och strategi'],
  ['trerirad/','Tre i rad','Få tre i rad före datorn eller en kompis','⭕','kryss och ring luffarschack fyra i rad två spelare','Logik och strategi'],
  ['ovriga/tangentbord/','Tangentbordet','Lär dig skriva med rätt fingrar','⌨️','skriva tangenter tiofingersystemet alfabetet','Digitalt'],
- ['ovriga/kodverkstan/','Kodverkstan','Bygg program med block och styr ditt djur','🧩','kodning kod programmera programmering scratch block algoritm spel','Digitalt'],
+ ['ovriga/kodverkstan/','Kodverkstan','Bygg program med block och styr ditt djur','🧩','kodning kod programmera programmering scratch block algoritm spel klon kloner kostym exempel remixa film bilder egen bild','Digitalt'],
  ['specialare/','Specialare','Minilektioner om coola saker','🎁','lektioner filmer fakta mysterium ledtrådar','Utforska']
 ];
 /*LEKTIONER-START*/
