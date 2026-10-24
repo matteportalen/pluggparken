@@ -198,7 +198,9 @@ body.mph-mini #quit{display:none}
   ['gesturestart','gesturechange','gestureend'].forEach(t=>document.addEventListener(t,e=>{if(zoomLas)e.preventDefault();},{passive:false}));
   document.addEventListener('touchmove',e=>{if(zoomLas&&e.touches.length>1)e.preventDefault();},{passive:false});
   if(window.visualViewport)visualViewport.addEventListener('resize',zoomKnapp);
-  function mode(id){zoomSkydd(djup(id)===2||helskarm.includes(id));const full=helskarm.includes(id);h.classList.toggle('dold',full);h.classList.toggle('mini',id==='game'&&!full);document.body.classList.toggle('mph-mini',id==='game'&&!full);}
+  const spelSida=/\/(spel|rutjakten)(\/|$)/.test(location.pathname); // Spelhörnan och spelen i den: zoomskydd på alla skärmar
+  zoomSkydd(spelSida);
+  function mode(id){zoomSkydd(spelSida||djup(id)===2||helskarm.includes(id));const full=helskarm.includes(id);h.classList.toggle('dold',full);h.classList.toggle('mini',id==='game'&&!full);document.body.classList.toggle('mph-mini',id==='game'&&!full);}
   function tryckTillbaka(){
     const sc=document.getElementById(cur.mp);if(!sc)return false;
     for(const sel of BACK){const b=sc.querySelector(sel);if(b){b.click();return true;}}
