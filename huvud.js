@@ -56,6 +56,8 @@
 .mph-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:9em}
 .mph-sok{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.18)!important;font-size:1.1rem;flex:none}
 @media(max-width:419px){.mph-sok{display:none}}
+html.mph-nozoom,html.mph-nozoom body{touch-action:pan-x pan-y}
+.mph-zoomut{position:fixed;right:12px;bottom:max(12px,env(safe-area-inset-bottom));z-index:99998;border:0;border-radius:999px;padding:10px 18px;font:800 1rem/1 "Baloo 2",sans-serif;background:#F2B707;color:#2A2108;box-shadow:0 4px 0 #7A5F1E,0 8px 20px rgba(0,0,0,.35);cursor:pointer}
 .mph-snd{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.18)!important;font-size:1.15rem;flex:none}
 .mph.ovriga{background:linear-gradient(110deg,#17302F 0%,#1C3F3D 50%,#25605C 100%);box-shadow:0 3px 0 #7E5129}
 .mph-menu{position:absolute;top:calc(100% + 6px);left:10px;animation:mph-ner .18s ease-out;background:#fff;color:#1D2B53;border-radius:18px;padding:6px;box-shadow:0 10px 30px rgba(29,43,83,.25),0 3px 0 #C6D6F2;min-width:240px;z-index:30}
@@ -187,7 +189,16 @@ body.mph-mini #quit{display:none}
   const navOn=ds.nav!=='av';
   let cur={mp:'home',d:0,i:0},st=[0],ign=0,fix=null,popping=false;
   if(navOn)history.replaceState(cur,'');
-  function mode(id){const full=helskarm.includes(id);h.classList.toggle('dold',full);h.classList.toggle('mini',id==='game'&&!full);document.body.classList.toggle('mph-mini',id==='game'&&!full);}
+  /* Zoomskydd (iPad): på spelskärmar går det inte att nypa in bilden av misstag, och är den redan inzoomad finns knappen "Zooma ut" */
+  const vm=document.querySelector('meta[name="viewport"]'),vmOrig=vm&&vm.content;let zoomLas=false,zbtn=null;
+  const skala=()=>(window.visualViewport&&visualViewport.scale)||1;
+  function zoomaUt(){if(!vm)return;vm.content='width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover';setTimeout(()=>{vm.content=vmOrig;zoomKnapp();},250);}
+  function zoomKnapp(){const visa=zoomLas&&skala()>1.03;if(visa&&!zbtn){zbtn=document.createElement('button');zbtn.className='mph-zoomut';zbtn.textContent='🔍 Zooma ut';zbtn.onclick=zoomaUt;document.body.appendChild(zbtn);}else if(!visa&&zbtn){zbtn.remove();zbtn=null;}}
+  function zoomSkydd(på){zoomLas=!!på;document.documentElement.classList.toggle('mph-nozoom',zoomLas);if(zoomLas&&skala()>1.03)zoomaUt();zoomKnapp();}
+  ['gesturestart','gesturechange','gestureend'].forEach(t=>document.addEventListener(t,e=>{if(zoomLas)e.preventDefault();},{passive:false}));
+  document.addEventListener('touchmove',e=>{if(zoomLas&&e.touches.length>1)e.preventDefault();},{passive:false});
+  if(window.visualViewport)visualViewport.addEventListener('resize',zoomKnapp);
+  function mode(id){zoomSkydd(djup(id)===2||helskarm.includes(id));const full=helskarm.includes(id);h.classList.toggle('dold',full);h.classList.toggle('mini',id==='game'&&!full);document.body.classList.toggle('mph-mini',id==='game'&&!full);}
   function tryckTillbaka(){
     const sc=document.getElementById(cur.mp);if(!sc)return false;
     for(const sel of BACK){const b=sc.querySelector(sel);if(b){b.click();return true;}}
