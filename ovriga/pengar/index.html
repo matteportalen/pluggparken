@@ -2,7 +2,6 @@
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
-<script src="../../tema.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Pengar och sparande – Pluggparken</title>
 <meta name="description" content="Pengar och sparande: ta reda på hur sparande, fonder och aktier fungerar med en tidsmaskin tillbaka till 2007.">
@@ -17,124 +16,164 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#1F3A35">
+<meta name="theme-color" content="#0A101E">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/apple-touch-icon.png" sizes="180x180">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#EEF6F1;--ink:#1D2B53;--muted:#56668F;--card:#fff;--line:#C9E2D4;--good:#1E9E5E;--good-dark:#157548;--bad:#E5484D;--accent:#3D5AFE;--gold:#F2B707;
-  --up:#16A34A;--down:#DC2626;--font:"Baloo 2","Trebuchet MS",system-ui,sans-serif}
+:root{--bg:#0A101E;--bg2:#121B33;--ink:#EAF0FA;--muted:#93A3C2;--card:rgba(255,255,255,.06);--card2:rgba(255,255,255,.1);--line:rgba(255,255,255,.12);
+  --good:#2FCB8A;--good-dark:#1A8F60;--bad:#FF6B6B;--accent:#6C8CFF;--gold:#E8C468;--gold2:#B8923A;--up:#35D69A;--down:#FF6B6B;
+  --font:"Inter","Trebuchet MS",system-ui,sans-serif;--serif:"Source Serif 4",Georgia,serif}
 *{box-sizing:border-box}
 html,body{margin:0}
-body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.4;-webkit-tap-highlight-color:transparent}
-.wrap{max-width:860px;margin:0 auto;padding:10px 16px 48px}
+body{background:radial-gradient(1100px 600px at 80% -10%,#1F3566 0%,transparent 60%),radial-gradient(900px 500px at 0% 100%,#10315A 0%,transparent 55%),var(--bg);background-attachment:fixed;color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.45;-webkit-tap-highlight-color:transparent;font-variant-numeric:tabular-nums}
+.wrap{max-width:900px;margin:0 auto;padding:10px 16px 56px}
 button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;touch-action:manipulation}
-button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 [hidden]{display:none !important}
-h1{font-size:clamp(1.9rem,7vw,2.6rem);line-height:1.05;margin:8px 0 4px}
-h2{font-size:1.35rem;margin:0 0 6px;line-height:1.2}
-.lead{margin:0 0 14px;color:var(--muted);font-weight:700}
-.card{background:var(--card);border-radius:20px;box-shadow:0 4px 0 var(--line);padding:14px}
-.big{display:flex;gap:14px;align-items:center;text-align:left;width:100%;background:var(--card);border-radius:22px;box-shadow:0 5px 0 var(--line);padding:14px;margin-bottom:14px}
-.big:active{transform:translateY(3px);box-shadow:0 2px 0 var(--line)}
-.big .ic{flex:none;width:76px;height:76px;border-radius:20px;display:grid;place-items:center;font-size:2.6rem;transform:rotate(-4deg);box-shadow:inset 0 -5px 0 rgba(0,0,0,.15)}
-.big b{display:block;font-size:1.35rem;line-height:1.15}
-.big small{display:block;color:var(--muted);font-weight:700;line-height:1.3}
-.big .st{display:block;margin-top:2px;font-size:1rem;letter-spacing:1px}
-.tag{display:inline-block;background:var(--lc-E3F2EA,#E3F2EA);color:var(--ok-ink,var(--good-dark));border-radius:999px;padding:0 9px;font-size:.8rem;font-weight:800;margin-left:6px;vertical-align:middle}
-.info{color:var(--muted);font-size:.85rem;font-weight:700;margin:6px 0 0}
-.knapp{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:48px;padding:10px 20px;border-radius:16px;background:var(--good);color:#fff;font-weight:800;font-size:1.05rem;box-shadow:0 4px 0 var(--good-dark)}
-.knapp:active{transform:translateY(3px);box-shadow:0 1px 0 var(--good-dark)}
-.knapp.bla{background:var(--accent);box-shadow:0 4px 0 #2A3DB8}
-.knapp.vit{background:var(--card,#fff);color:var(--ink);box-shadow:0 4px 0 var(--line)}
-.knapp:disabled{opacity:.45;pointer-events:none}
-.back{font-weight:800;color:var(--muted);padding:6px 0;margin-bottom:4px}
+h1,h2,h3{font-family:var(--serif);margin:0}
+h2{font-size:1.5rem;margin:0 0 8px;line-height:1.2}
+.lead,.lead2{margin:0 0 14px;color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;backdrop-filter:blur(8px)}
+.hero{position:relative;overflow:hidden;border-radius:24px;padding:26px 22px 22px;margin:6px 0 18px;background:linear-gradient(135deg,#17305E 0%,#0E1B38 60%,#0A1226 100%);border:1px solid var(--line);box-shadow:0 18px 40px rgba(0,0,0,.35)}
+.hero h1{font-size:clamp(2rem,6vw,3rem);line-height:1.05;background:linear-gradient(180deg,#FFF1C9,var(--gold) 55%,var(--gold2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin:6px 0 0;color:var(--muted);max-width:30em}
+.hero svg{position:absolute;right:-6px;bottom:-4px;width:min(46%,330px);height:auto;opacity:.9}
+.big{display:flex;flex-direction:column;gap:10px;text-align:left;width:100%;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px;margin-bottom:14px;transition:transform .15s,border-color .15s,background .15s}
+.big:hover{transform:translateY(-2px);background:var(--card2);border-color:rgba(232,196,104,.5)}
+.big:active{transform:translateY(1px)}
+.big .rubrad{display:flex;align-items:center;gap:12px}
+.big .ic{flex:none;width:52px;height:52px;border-radius:16px;display:grid;place-items:center;font-size:1.8rem;background:rgba(255,255,255,.08)}
+.big b{display:block;font-family:var(--serif);font-size:1.35rem;line-height:1.15}
+.big small{display:block;color:var(--muted);line-height:1.35}
+.big .st{display:block;letter-spacing:2px;color:var(--gold);margin-top:2px}
+.big svg.mg{width:100%;height:84px;display:block}
+.tag{display:inline-block;background:rgba(232,196,104,.16);color:var(--gold);border-radius:999px;padding:0 9px;font-size:.75rem;font-weight:700;margin-left:6px;vertical-align:middle;font-family:var(--font)}
+.info{color:var(--muted);font-size:.85rem;margin:6px 0 0}
+.knapp{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:46px;padding:10px 20px;border-radius:14px;background:linear-gradient(180deg,#3FE0A0,var(--good) 60%,var(--good-dark));color:#06281B;font-weight:800;box-shadow:0 4px 0 #0F5C3D,0 8px 16px rgba(0,0,0,.3)}
+.knapp:active{transform:translateY(3px);box-shadow:0 1px 0 #0F5C3D}
+.knapp.bla{background:linear-gradient(180deg,#8DA6FF,var(--accent) 60%,#4A66E0);color:#fff;box-shadow:0 4px 0 #2A3DB8,0 8px 16px rgba(0,0,0,.3)}
+.knapp.vit{background:var(--card2);color:var(--ink);border:1px solid var(--line);box-shadow:none}
+.knapp.rod{background:linear-gradient(180deg,#FF8E8E,var(--bad) 60%,#D84545);color:#fff;box-shadow:0 4px 0 #8E2B2B}
+.knapp:disabled{opacity:.4;pointer-events:none}
+.back{font-weight:700;color:var(--muted);padding:6px 0;margin-bottom:4px}
 .rad{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .up{color:var(--up)}.down{color:var(--down)}
-/* ---------- Spargrisen ---------- */
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 8px}.chips button{padding:5px 14px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-weight:700;font-size:.85rem}.chips button[aria-pressed="true"]{background:rgba(232,196,104,.2);border-color:var(--gold);color:var(--gold)}
+/* Spargrisen */
 .jars{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0}
-.jar{background:var(--card);border-radius:18px;box-shadow:0 4px 0 var(--line);padding:10px 6px;text-align:center;display:flex;flex-direction:column;align-items:center}
+.jar{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:10px 6px;text-align:center;display:flex;flex-direction:column;align-items:center}
 .jar .em{font-size:2.2rem;line-height:1}
-.jar b{font-size:1rem;line-height:1.15}
-.jar .tub{width:54px;height:150px;border-radius:12px;background:var(--lc-EEF2F8,#EEF2F8);margin:8px 0;position:relative;overflow:hidden;box-shadow:inset 0 0 0 3px var(--lc-DCE4F0,#DCE4F0)}
-.jar .fyll{position:absolute;left:0;right:0;bottom:0;border-radius:0 0 10px 10px;transition:height .25s}
-.jar .kr{font-size:1.35rem;font-weight:800;line-height:1.1}
-.jar .glass{font-size:.95rem;font-weight:700;color:var(--muted);min-height:2.6em}
-.ar{font-size:2.2rem;font-weight:800;text-align:center;margin:4px 0 0}
-input[type=range]{width:100%;accent-color:var(--good);height:36px}
-.prat{background:var(--lc-FFF8E1,#FFF8E1);border-radius:16px;padding:10px 14px;font-weight:700;min-height:3.2em;margin:8px 0}
-/* ---------- Tidsmaskinen ---------- */
+.jar b{font-size:.95rem;line-height:1.15}
+.jar .tub{width:54px;height:150px;border-radius:12px;background:rgba(255,255,255,.07);margin:8px 0;position:relative;overflow:hidden;box-shadow:inset 0 0 0 2px rgba(255,255,255,.12)}
+.jar .fyll{position:absolute;left:0;right:0;bottom:0;border-radius:0 0 10px 10px;transition:height .25s;box-shadow:0 0 18px currentColor}
+.jar .kr{font-family:var(--serif);font-size:1.4rem;font-weight:700;line-height:1.1}
+.jar .glass{font-size:.9rem;color:var(--muted);min-height:2.6em}
+.ar{font-family:var(--serif);font-size:2.4rem;font-weight:700;text-align:center;margin:4px 0 0;color:var(--gold)}
+input[type=range]{width:100%;accent-color:var(--gold);height:36px}
+select{font:inherit;background:var(--card2);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:6px 10px}
+.prat{background:rgba(232,196,104,.1);border:1px solid rgba(232,196,104,.3);border-radius:16px;padding:10px 14px;font-weight:600;min-height:3.2em;margin:8px 0}
+/* Tidsmaskinen */
 .lista{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
 @media(min-width:640px){.lista{grid-template-columns:repeat(2,minmax(0,1fr))}}
-.pl{min-width:0;display:flex;align-items:center;gap:10px;background:var(--card);border-radius:16px;box-shadow:0 3px 0 var(--line);padding:8px 10px;text-align:left;width:100%}
-.pl .em{flex:none;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:1.5rem;background:var(--lc-F1F5FB,#F1F5FB)}
+.pl{min-width:0;display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:8px 10px;text-align:left;width:100%;transition:background .15s,border-color .15s}
+button.pl:hover,.pl[role=button]:hover{background:var(--card2);border-color:rgba(232,196,104,.4)}
+.pl .em{flex:none;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:1.5rem;background:rgba(255,255,255,.08)}
 .pl .tx{flex:1;min-width:0}
 .pl b{display:block;line-height:1.15}
-.pl small{display:block;color:var(--muted);font-weight:700;font-size:.8rem;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pl small{display:block;color:var(--muted);font-size:.78rem;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pl .hog{flex:none;text-align:right;font-weight:800;line-height:1.15}
 .pl .hog small{text-align:right}
-.pl.las{opacity:.55}
+.pl.las{opacity:.5}
 .stepper{display:flex;align-items:center;gap:4px;flex:none}
-.stepper button{width:40px;height:40px;border-radius:12px;background:var(--lc-EEF2F8,#EEF2F8);font-weight:800;font-size:1.3rem}
-.stepper span{min-width:62px;text-align:center;font-weight:800}
-.kvar{position:sticky;bottom:0;background:var(--bg);padding:10px 0;display:flex;gap:10px;align-items:center;flex-wrap:wrap;z-index:3}
-.kvar b{font-size:1.1rem}
-.topp{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;flex-wrap:wrap}
-.datum{font-size:1.05rem;font-weight:800;color:var(--muted);text-transform:capitalize}
-.varde{font-size:clamp(2rem,8vw,2.6rem);font-weight:800;line-height:1}
+.stepper button{width:40px;height:40px;border-radius:12px;background:var(--card2);border:1px solid var(--line);font-weight:800;font-size:1.3rem}
+.stepper span{min-width:64px;text-align:center;font-weight:800}
+.kvar{position:sticky;bottom:0;background:linear-gradient(180deg,transparent,var(--bg) 30%);padding:14px 0 10px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;z-index:3}
+.kvar b{font-size:1.05rem}
+.port{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:12px}
+.port .lbl{color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;font-weight:700;margin-top:2px}
+.datum{font-size:.95rem;font-weight:700;color:var(--muted);text-transform:capitalize}
+.varde{font-family:var(--serif);font-size:clamp(2.1rem,8vw,2.9rem);font-weight:700;line-height:1.05}
 .forandr{font-weight:800}
+.p-r{display:flex;align-items:center;gap:12px}
+.p-r canvas{width:104px;height:104px}
+.leg{display:grid;gap:3px;font-size:.78rem;color:var(--muted)}.leg span{display:flex;align-items:center;gap:6px;white-space:nowrap}.leg i{width:10px;height:10px;border-radius:3px;flex:none}
 .graf{position:relative;margin:8px 0 4px}
-.graf canvas{display:block;width:100%;height:220px;touch-action:pan-y}
-.spel{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:6px 0 12px}
+.graf canvas{display:block;width:100%;height:230px;touch-action:pan-y}
+.spel{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0 12px}
 .spel .knapp{min-width:120px}
-.bar{height:8px;background:var(--lc-E3EAF4,#E3EAF4);border-radius:999px;overflow:hidden;flex:1;min-width:120px}
-.bar i{display:block;height:100%;background:var(--good);width:0}
-.sub{font-weight:800;color:var(--muted);margin:14px 0 6px;font-size:1rem}
-/* bladet med en aktie */
-.blad{position:fixed;inset:0;background:rgba(29,43,83,.45);display:flex;align-items:flex-end;justify-content:center;z-index:50}
-.blad>div{background:var(--card,#fff);width:100%;max-width:620px;max-height:92vh;overflow:auto;border-radius:24px 24px 0 0;padding:16px 16px 22px}
+.bar{height:8px;background:rgba(255,255,255,.1);border-radius:999px;overflow:hidden;flex:1;min-width:120px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold2),var(--gold));width:0}
+.sub{font-family:var(--serif);font-weight:700;color:var(--ink);margin:18px 0 6px;font-size:1.1rem}
+.sub small{font-family:var(--font);color:var(--muted);font-weight:500;font-size:.8rem}
+.logg{display:grid;gap:6px}.logg .lr{display:flex;gap:10px;align-items:center;background:var(--card);border:1px dashed var(--line);border-radius:12px;padding:6px 12px;font-size:.88rem}.logg .lr b{white-space:nowrap}.logg .lr span.d{color:var(--muted);min-width:78px;text-transform:capitalize}.logg .lr .kr{margin-left:auto;font-weight:800}
+.fakta{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;width:min(560px,calc(100vw - 24px));z-index:40;background:linear-gradient(180deg,#22345F,#162447);border:1px solid rgba(232,196,104,.4);border-radius:18px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;box-shadow:0 14px 40px rgba(0,0,0,.5);animation:upp .35s ease-out}
+.fakta .ik{font-size:1.8rem;line-height:1}.fakta b{font-family:var(--serif);font-size:1.05rem;display:block}.fakta p{margin:2px 0 0;font-size:.9rem;color:#C9D4EA}.fakta button{margin-left:auto;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.1);flex:none}
+@keyframes upp{from{transform:translate(-50%,24px);opacity:0}}
+/* bladet */
+.blad{position:fixed;inset:0;background:rgba(4,8,18,.7);backdrop-filter:blur(4px);display:flex;align-items:flex-end;justify-content:center;z-index:50}
+.blad>div{background:linear-gradient(180deg,#18274A,#0F1A33);border:1px solid var(--line);width:100%;max-width:640px;max-height:92vh;overflow:auto;border-radius:24px 24px 0 0;padding:16px 16px 22px;box-shadow:0 -10px 50px rgba(0,0,0,.5)}
 @media(min-width:700px){.blad{align-items:center}.blad>div{border-radius:24px}}
-.blad .stang{float:right;width:44px;height:44px;border-radius:50%;background:var(--lc-EEF2F8,#EEF2F8);font-size:1.2rem;font-weight:800}
+.blad .stang{float:right;width:44px;height:44px;border-radius:50%;background:var(--card2);font-size:1.1rem;font-weight:800}
 .perioder{display:flex;gap:6px;margin:6px 0}
-.perioder button{flex:1;padding:6px 0;border-radius:999px;background:var(--lc-EEF2F8,#EEF2F8);font-weight:800;font-size:.9rem}
-.perioder button[aria-pressed="true"]{background:var(--sel,var(--ink));color:#fff}
-.kurs{font-size:1.9rem;font-weight:800;line-height:1}
+.perioder button{flex:1;padding:6px 0;border-radius:999px;background:var(--card);border:1px solid var(--line);font-weight:700;font-size:.88rem}
+.perioder button[aria-pressed="true"]{background:var(--gold);color:#2A2108;border-color:var(--gold)}
+.kurs{font-family:var(--serif);font-size:2rem;font-weight:700;line-height:1}
 .nyckel{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;font-size:.9rem;margin:8px 0}
-.nyckel span{color:var(--muted);font-weight:700}
+.nyckel span{color:var(--muted)}
 .nyckel b{text-align:right}
-.hand{background:var(--lc-F4F8F6,#F4F8F6);border-radius:16px;padding:10px 12px;margin-top:10px}
+.hand{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:16px;padding:10px 12px;margin-top:10px}
 .handel{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-.handel .knapp{flex:1;min-width:130px;padding:8px 10px;font-size:.98rem}
-.byt{display:grid;gap:6px}.byt .pl{box-shadow:none;background:var(--lc-F4F8F6,#F4F8F6)}.byt .stepper button{height:38px;background:var(--card,#fff);box-shadow:0 2px 0 var(--line)}
-.handel .knapp.rod{background:var(--bad);box-shadow:0 4px 0 #B23237}
+.handel .knapp{flex:1;min-width:130px;padding:8px 10px;font-size:.95rem}
+.byt{display:grid;gap:6px}.byt .pl{background:rgba(255,255,255,.04)}.byt .stepper button{height:38px}
+.kvitto{margin-top:10px;background:#F8F4E8;color:#2B2A20;border-radius:6px;padding:10px 14px;font-family:"Courier New",monospace;font-size:.85rem;box-shadow:0 8px 20px rgba(0,0,0,.4);position:relative;animation:upp2 .4s ease-out}
+.kvitto::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:6px;background:linear-gradient(135deg,#F8F4E8 50%,transparent 50%) 0 0/12px 6px,linear-gradient(225deg,#F8F4E8 50%,transparent 50%) 0 0/12px 6px}
+.kvitto b{font-size:.95rem}.kvitto .rr{display:flex;justify-content:space-between;gap:10px}
+@keyframes upp2{from{transform:translateY(-8px);opacity:0}}
+.om{margin-top:14px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:16px;padding:12px 14px}
+.om h3{font-size:1.05rem;margin-bottom:6px}.om .fakt{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;font-size:.88rem;margin:6px 0}.om .fakt span{color:var(--muted)}.om p{margin:6px 0;font-size:.92rem}
+.om ul{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:5px}.om li{display:flex;gap:10px;font-size:.88rem}.om li b{color:var(--gold);min-width:44px}.om li.nu b{color:#8DA6FF}
 /* händelser */
-.hand-ev{position:fixed;inset:0;background:rgba(29,43,83,.5);display:grid;place-items:center;z-index:60;padding:16px}
-.hand-ev>div{background:var(--card,#fff);border-radius:24px;padding:18px;max-width:480px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,.25)}
+.hand-ev{position:fixed;inset:0;background:rgba(4,8,18,.7);backdrop-filter:blur(4px);display:grid;place-items:center;z-index:60;padding:16px}
+.hand-ev>div{background:linear-gradient(180deg,#1C2D55,#111C38);border:1px solid var(--line);border-radius:24px;padding:20px;max-width:480px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.6)}
 .hand-ev .ik{font-size:2.6rem;line-height:1}
 .hand-ev p{margin:8px 0}
 .hand-ev .val{display:grid;gap:8px;margin-top:12px}
 .hand-ev .val .knapp{width:100%}
 /* resultat */
 .jmf{display:grid;gap:8px;margin:10px 0}
-.jr{display:grid;grid-template-columns:minmax(110px,40%) 1fr;gap:8px;align-items:center;font-weight:700;font-size:.92rem}
+.jr{display:grid;grid-template-columns:minmax(110px,40%) 1fr;gap:8px;align-items:center;font-weight:600;font-size:.88rem}
 .jr .st{height:26px;border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding:0 8px;color:#fff;font-weight:800;min-width:92px;white-space:nowrap}
-.jr.du{font-weight:800}
+.jr.du{font-weight:800;color:var(--gold)}
+.tidslinje{position:relative;margin:8px 0 0;padding-left:22px}.tidslinje::before{content:"";position:absolute;left:7px;top:4px;bottom:4px;width:2px;background:linear-gradient(180deg,var(--gold),rgba(232,196,104,.15))}
+.tidslinje .t{position:relative;margin-bottom:10px;font-size:.92rem}.tidslinje .t::before{content:"";position:absolute;left:-20px;top:5px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:3px solid var(--gold)}
+.tidslinje .t.k::before{border-color:#35D69A}.tidslinje .t.s::before{border-color:#FF6B6B}.tidslinje .t.e::before{border-color:#8DA6FF}
+.tidslinje .t small{display:block;color:var(--muted)}
+.fkort{display:grid;gap:8px;margin-top:8px}.fkort div{display:flex;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:8px 12px;font-size:.88rem}.fkort b{display:block}
 /* frågor */
-.fraga{font-size:1.25rem;font-weight:800;margin:4px 0 12px}
+.fraga{font-family:var(--serif);font-size:1.3rem;font-weight:700;margin:4px 0 12px}
 .alt{display:grid;gap:10px}
-.alt button{background:var(--card);border-radius:16px;box-shadow:0 4px 0 var(--line);padding:12px 14px;text-align:left;font-weight:700;min-height:52px}
-.alt button.ratt{background:var(--ok-bg,#DCF5E6);box-shadow:0 4px 0 var(--good)}
-.alt button.fel{background:var(--lc-FDE7EA,#FDE7EA);box-shadow:0 4px 0 #F2A7AF}
-.forkl{margin-top:12px;font-weight:700;min-height:1.5em}
+.alt button{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px;text-align:left;font-weight:600;min-height:52px}
+.alt button:hover{background:var(--card2)}
+.alt button.ratt{background:rgba(47,203,138,.18);border-color:var(--good)}
+.alt button.fel{background:rgba(255,107,107,.15);border-color:var(--bad)}
+.forkl{margin-top:12px;font-weight:600;min-height:1.5em}
 .prickar{display:flex;gap:6px;margin:4px 0 10px}
-.prickar i{width:12px;height:12px;border-radius:50%;background:var(--lc-D5DDEC,#D5DDEC)}
-.prickar i.ok{background:var(--good)}.prickar i.f{background:#F2A7AF}.prickar i.nu{background:var(--accent)}
+.prickar i{width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,.18)}
+.prickar i.ok{background:var(--good)}.prickar i.f{background:var(--bad)}.prickar i.nu{background:var(--gold)}
 .stjarnor{font-size:2.6rem;text-align:center;letter-spacing:4px;margin:8px 0}
-.kalla{color:var(--muted);font-size:.8rem;font-weight:700;margin-top:18px}
-@media(max-width:400px){.stepper button{width:36px;height:36px}.stepper span{min-width:54px;font-size:.9rem}.pl .em{width:36px;height:36px;font-size:1.25rem}}
+.kalla{color:var(--muted);font-size:.78rem;margin-top:18px}
+/* sparmål */
+.mmal{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin:8px 0}
+.mmal button{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px;text-align:center;font-weight:700;transition:background .15s,border-color .15s}
+.mmal button b{display:block;font-family:var(--serif);color:var(--gold);font-size:1.05rem}.mmal button .e{font-size:1.7rem;display:block}
+.mmal button[aria-pressed="true"]{background:rgba(232,196,104,.18);border-color:var(--gold)}
+.mrad{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:8px;font-weight:700}.mrad b{font-family:var(--serif);font-size:1.3rem;color:var(--gold)}
+.mres{display:grid;gap:8px;margin:10px 0}.mres .r{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px}.mres .r i{width:12px;height:12px;border-radius:3px;flex:none}.mres .r b{flex:1}.mres .r span{text-align:right;font-weight:700}
+@media(max-width:400px){.stepper button{width:36px;height:36px}.stepper span{min-width:54px;font-size:.9rem}.pl .em{width:36px;height:36px;font-size:1.25rem}.p-r canvas{width:84px;height:84px}}
 @media (prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important}}
 </style>
 </head>
@@ -143,11 +182,32 @@ input[type=range]{width:100%;accent-color:var(--good);height:36px}
 
 <!-- ================= Startskärm ================= -->
 <section id="home">
-  <h1>💰 Pengar och sparande</h1>
-  <p class="lead">Vad händer med pengar när tiden går? Spara, vänta och se, med riktiga siffror från verkligheten.</p>
-  <button class="big" id="gaSpar"><span class="ic" style="background:#FFD6E4">🐷</span><span><b>Spargrisen eller banken? <span class="tag">åk 3–5</span></b><small>Du har 100 kr. Spara i spargrisen, på banken eller i en fond, och spola fram tio år.</small><span class="st" id="stSpar"></span></span></button>
-  <button class="big" id="gaTid"><span class="ic" style="background:#D6E4FF">⏳</span><span><b>Tidsmaskinen <span class="tag">åk 6–9</span></b><small>Det är 2007 och du har 10 000 kr. Köp riktiga aktier, fonder och bitcoin, och se vad som hände ända till i dag.</small><span class="st" id="stTid"></span></span></button>
+  <div class="hero"><h1>Pengar och sparande</h1><p>Vad händer med pengar när tiden går? Spara, vänta och se, med riktiga siffror från verkligheten.</p>
+    <svg viewBox="0 0 330 150" aria-hidden="true" id="heroSvg"></svg></div>
+  <button class="big" id="gaSpar"><span class="rubrad"><span class="ic">🐷</span><span><b>Spargrisen eller banken? <span class="tag">åk 3–5</span></b><small>Du har 100 kr. Spara i spargrisen, på banken eller i en fond, och spola fram tio år.</small><span class="st" id="stSpar"></span></span></span><svg class="mg" id="mgSpar" viewBox="0 0 600 84" preserveAspectRatio="none" aria-hidden="true"></svg></button>
+  <button class="big" id="gaMal"><span class="rubrad"><span class="ic">🎯</span><span><b>Spara till ett mål <span class="tag">åk 4–7</span></b><small>Välj något du vill ha och hur mycket du sparar varje månad. Hur lång tid tar det, och vad händer med priset?</small><span class="st" id="stMal"></span></span></span><svg class="mg" id="mgMal" viewBox="0 0 600 84" preserveAspectRatio="none" aria-hidden="true"></svg></button>
+  <button class="big" id="gaTid"><span class="rubrad"><span class="ic">⏳</span><span><b>Tidsmaskinen <span class="tag">åk 6–9</span></b><small>Det är 2007 och du har 10 000 kr. Köp riktiga aktier, fonder och bitcoin, och se vad som hände ända till i dag.</small><span class="st" id="stTid"></span></span></span><svg class="mg" id="mgTid" viewBox="0 0 600 84" preserveAspectRatio="none" aria-hidden="true"></svg></button>
   <p class="info">Allt är på låtsas. Siffrorna är verkliga kurser från 2007 till 2026, men ingen vet hur det går i framtiden.</p>
+</section>
+
+<!-- ================= Sparmål ================= -->
+<section id="mal" hidden>
+  <button class="back" data-home>← Tillbaka</button>
+  <h2>🎯 Spara till ett mål</h2>
+  <p class="lead">Välj vad du sparar till och hur mycket du lägger undan varje månad. Vi räknar med riktiga räntor och kurser från det år du börjar.</p>
+  <div class="mmal" id="mMal"></div>
+  <div class="card">
+    <div class="mrad"><span>Du sparar varje månad</span><b id="mKrTxt"></b></div>
+    <input type="range" id="mKr" min="100" max="3000" step="100" value="500" aria-label="Kronor per månad">
+    <div class="rad" style="justify-content:space-between;margin-top:6px">
+      <label class="info" style="margin:0">Du börjar <select id="mStart"><option value="2007">januari 2007</option><option value="2012">januari 2012</option><option value="2015" selected>januari 2015</option><option value="2020">januari 2020</option></select></label>
+      <label class="info" style="margin:0"><input type="checkbox" id="mInfl" checked> Priset följer inflationen</label>
+    </div>
+  </div>
+  <div class="card" style="margin-top:12px"><div class="graf"><canvas id="mGraf" aria-label="Hur sparandet växer"></canvas></div><div class="mres" id="mRes"></div></div>
+  <div class="prat" id="mPrat"></div>
+  <div class="rad" style="justify-content:center"><button class="knapp" id="mFragor">Svara på frågorna ›</button></div>
+  <p class="kalla">Sparkontot har bankernas genomsnittliga ränta för hushåll (SCB). Fonden är Indexfond Sverige (iShares MSCI Sweden) i kronor. Inflationen är konsumentprisindex (SCB).</p>
 </section>
 
 <!-- ================= Spargrisen ================= -->
@@ -178,19 +238,25 @@ input[type=range]{width:100%;accent-color:var(--good);height:36px}
 <!-- ================= Tidsmaskinen: resan ================= -->
 <section id="game" hidden>
   <button class="back" id="quit">← Avsluta</button>
-  <div class="topp">
-    <div><div class="datum" id="gDatum"></div><div class="varde" id="gVarde"></div><div class="forandr" id="gFor"></div></div>
+  <div class="card port">
+    <div><div class="datum" id="gDatum"></div><div class="lbl">Min portfölj</div><div class="varde" id="gVarde"></div><div class="forandr" id="gFor"></div></div>
+    <div class="p-r"><canvas id="gDonut" width="208" height="208" aria-label="Hur pengarna är fördelade"></canvas><div class="leg" id="gLeg"></div></div>
   </div>
-  <div class="graf"><canvas id="gGraf" aria-label="Hur mycket dina pengar är värda"></canvas></div>
+  <div class="card">
+    <div class="chips" id="gJmf"><span class="info" style="margin:0 4px 0 0;align-self:center">Jämför med:</span><button data-j="spar" aria-pressed="false">🏦 Bara sparkonto</button><button data-j="sv" aria-pressed="false">🇸🇪 Bara indexfond</button></div>
+    <div class="graf"><canvas id="gGraf" aria-label="Hur mycket dina pengar är värda"></canvas></div>
+  </div>
   <div class="spel">
     <button class="knapp bla" id="gPlay">▶ Spela</button>
     <button class="knapp vit" id="gFart">⏩ Snabbare</button>
     <div class="bar" aria-hidden="true"><i id="gBar"></i></div>
   </div>
-  <div class="sub">Det här äger du <small style="font-weight:700">(tryck för att köpa eller sälja)</small></div>
+  <div class="sub">Det här äger du <small>(tryck för att köpa, sälja eller läsa om bolaget)</small></div>
   <div class="lista" id="gAger"></div>
   <div class="sub">Köp något nytt</div>
   <div class="lista" id="gKop"></div>
+  <div class="sub">Dina affärer</div>
+  <div class="logg" id="gLogg"></div>
 </section>
 
 <!-- ================= Tidsmaskinen: resultat ================= -->
@@ -208,6 +274,10 @@ input[type=range]{width:100%;accent-color:var(--good);height:36px}
   <div class="card"><p style="margin:0 0 8px;font-weight:700">10 000 kr i Indexfond Sverige i januari, efter tio år:</p><div class="jmf" id="rAr"></div><p class="info" id="rArInfo"></p></div>
   <div class="sub">Det som gick bäst och sämst från 2007</div>
   <div class="card" id="rBast"></div>
+  <div class="sub">Vad hände? Din resa</div>
+  <div class="card"><div class="tidslinje" id="rTid"></div></div>
+  <div class="sub" id="rFaktaRub">Faktakort du fick på vägen</div>
+  <div class="card"><div class="fkort" id="rFakta"></div></div>
   <p class="info">Det här var historien. Ingen vet hur det går i framtiden, och det som gick bäst förra gången kan gå dåligt nästa gång.</p>
   <div class="rad" style="justify-content:center;margin-top:12px"><button class="knapp" id="rFragor">Svara på frågorna ›</button></div>
 </section>
@@ -278,6 +348,40 @@ const INFO={
   bitcoin:["₿","Krypto","Digitala pengar utan bank. Ingen äger företag när man köper bitcoin, och priset svänger väldigt mycket."]};
 const ORDN=["sverige","usa","varlden","volvo","hm","ericsson","investor","astra","atlas","embracer","spotify","apple","microsoft","tesla","nintendo","bitcoin"];
 const finns=(a,i)=>A[a].v[i]!=null;
+/* Om bolaget: grundat, land, vad de gör, korta fakta (f = före 2007) och händelser under resan (h = [månad, text], syns som guldprickar i grafen) */
+const OM={
+  spar:{s:"Sparande på banken",t:"Banken lånar ut pengarna till andra och ger dig ränta. Pengar på ett bankkonto är skyddade av staten (insättningsgarantin) upp till 1 050 000 kr per person och bank.",h:[["2022-04","Riksbanken började höja räntan efter många år nära noll, och räntan på sparkonton steg."]]},
+  sverige:{s:"Fond med stora svenska bolag",t:"En indexfond följer ett index, en lista med stora företag. Den här följer Sveriges största börsbolag, till exempel Volvo, Ericsson och H&M.",f:[["1986","OMX Stockholm 30, ett av Sveriges viktigaste börsindex, började räknas ut."]]},
+  usa:{s:"Fond med 500 stora amerikanska bolag",t:"Fonden följer S&P 500, ett index med 500 av USA:s största företag, till exempel Apple och Microsoft.",f:[["1957","S&P 500 började räknas ut med 500 bolag."]]},
+  varlden:{s:"Fond med företag i hela världen",t:"Fonden följer ett index med ungefär 2 500 företag i närmare 50 länder. Det är ett av de mest utspridda sätten att spara."},
+  volvo:{g:"1927",l:"Sverige, Göteborg",s:"Lastbilar, bussar och byggmaskiner",t:"AB Volvo gör tunga fordon. Personbilarna (Volvo Cars) är ett annat bolag, så aktien är inte samma sak som en Volvo-bil.",f:[["1927","Den första Volvo-bilen byggdes i Göteborg."],["1999","Personbilarna såldes till Ford. AB Volvo behöll lastbilar och bussar."]],h:[["2010-08","Ford sålde Volvo Cars vidare till den kinesiska koncernen Geely."]]},
+  hm:{g:"1947",l:"Sverige, Stockholm",s:"Kläder",t:"H&M säljer kläder i tusentals butiker i många länder och på nätet.",f:[["1947","Den första butiken öppnade i Västerås och hette Hennes."],["1974","Aktien började säljas på Stockholmsbörsen."]],h:[["2020-04","Många butiker stängde en tid på grund av corona, och försäljningen föll kraftigt."]]},
+  ericsson:{g:"1876",l:"Sverige, Stockholm",s:"Utrustning till mobilnät",t:"Ericsson bygger delarna i mobilnäten som gör att telefonen får täckning och snabbt internet.",f:[["1876","Lars Magnus Ericsson öppnade en verkstad för telegrafapparater i Stockholm."],["1981","Ericssons utrustning användes när Sveriges första mobilnät (NMT) startade."]],h:[["2012-02","Sony köpte Ericssons halva av mobiltelefonbolaget Sony Ericsson."]]},
+  investor:{g:"1916",l:"Sverige, Stockholm",s:"Äger delar i många företag",t:"Investor äger stora delar av bolag som Atlas Copco, AstraZeneca och Ericsson. Aktien blir därför lite som en egen liten fond.",f:[["1916","Investor grundades av familjen Wallenberg."]],h:[["2018-06","Atlas Copco delade ut gruvbolaget Epiroc, och Investor fick Epiroc-aktier."]]},
+  astra:{g:"1999",l:"Storbritannien, Cambridge (rötter i Södertälje)",s:"Läkemedel",t:"AstraZeneca forskar fram och säljer mediciner, bland annat mot cancer och hjärtsjukdomar.",f:[["1913","Astra startades i Södertälje."],["1999","Svenska Astra och brittiska Zeneca slogs ihop."]],h:[["2020-12","Ett coronavaccin som AstraZeneca tog fram med Oxfords universitet godkändes i Storbritannien."]]},
+  atlas:{g:"1873",l:"Sverige, Nacka",s:"Kompressorer, pumpar och verktyg",t:"Atlas Copco gör maskiner för industrin, till exempel kompressorer som trycker ihop luft och verktyg till fabriker.",f:[["1873","Företaget startades i Stockholm för att bygga järnvägsmaterial."]],h:[["2018-06","Gruvdelen blev ett eget bolag, Epiroc."]]},
+  embracer:{g:"2008",l:"Sverige, Karlstad",s:"Datorspel",t:"Embracer (som förut hette THQ Nordic) växte snabbt genom att köpa väldigt många spelföretag. Det gjorde aktien mycket svängig.",h:[["2022-08","Embracer köpte bland annat spelserien Tomb Raider."],["2023-06","En stor investering i bolaget blev inte av, och Embracer började spara och sälja delar."]]},
+  spotify:{g:"2006",l:"Sverige, Stockholm",s:"Musik och poddar",t:"Spotify startades av Daniel Ek och Martin Lorentzon. Man lyssnar via internet i stället för att köpa skivor.",f:[["2008","Tjänsten öppnade för lyssnare."]],h:[["2018-04","Spotify började säljas på börsen i New York."],["2019-02","Spotify köpte poddbolaget Gimlet."]]},
+  apple:{g:"1976",l:"USA, Kalifornien",s:"iPhone, datorer och tjänster",t:"Apple gör iPhone, iPad och Mac. Det är ett av de mest värdefulla företagen i världen.",f:[["1976","Startades av Steve Jobs, Steve Wozniak och Ronald Wayne."],["1984","Den första Macintosh-datorn kom."]],h:[["2007-06","Den första iPhone började säljas."],["2010-04","Den första iPad började säljas."]]},
+  microsoft:{g:"1975",l:"USA, Washington",s:"Windows, Office, Xbox och Minecraft",t:"Microsoft gör program och molntjänster som väldigt många datorer använder.",f:[["1975","Startades av Bill Gates och Paul Allen."],["2001","Den första Xbox kom."]],h:[["2014-09","Microsoft köpte Minecraft och det svenska spelbolaget Mojang."],["2016-12","Microsoft köpte nätverket LinkedIn."]]},
+  tesla:{g:"2003",l:"USA, Texas",s:"Elbilar och batterier",t:"Tesla gör elbilar. Elon Musk gick in tidigt som investerare men var inte den som startade företaget.",f:[["2003","Startades av Martin Eberhard och Marc Tarpenning."]],h:[["2010-06","Teslas aktie började säljas på börsen."],["2012-06","Den första Model S levererades."],["2017-07","Den första Model 3 levererades."]]},
+  nintendo:{g:"1889",l:"Japan, Kyoto",s:"Spel och spelkonsoler",t:"Nintendo gör spel som Mario och Zelda och konsolerna man spelar dem på.",f:[["1889","Startade som en tillverkare av spelkort."],["1981","Donkey Kong kom, och där syntes Mario för första gången."]],h:[["2017-03","Nintendo Switch började säljas."]]},
+  bitcoin:{g:"2009",l:"Ingen (ett nätverk av datorer)",s:"Digitala pengar",t:"Bitcoin skapades av en okänd person eller grupp som kallar sig Satoshi Nakamoto. Det kan bara finnas 21 miljoner bitcoin.",f:[["2009","De första bitcoin skapades."],["2010","Någon betalade 10 000 bitcoin för två pizzor."]],h:[["2016-07","Halvering: nya bitcoin börjar skapas hälften så fort."],["2020-05","Halvering igen."],["2021-11","Priset nådde ett rekord som stod sig i över två år."],["2022-11","Kryptobörsen FTX gick i konkurs och priset rasade."]]}};
+const PAL=["#6C8CFF","#35D69A","#E8C468","#FF8FA3","#5CC8FF","#B48CFF","#FFB36B","#7BE0C9","#FF6B6B","#A0E86B","#F06CCB","#8DE0FF"];
+const COL=a=>a==="spar"?"#8FA0C2":PAL[ORDN.indexOf(a)%PAL.length];
+const GLOB=[["2008-10","Finanskrisen"],["2020-03","Corona"],["2022-06","Inflationen"]];
+/* faktakort som dyker upp under resan */
+const FAKTA=[
+  {m:"2007-03",ik:"🏢",r:"Vad är en aktie?",t:"En aktie är en liten bit av ett företag. Äger du aktier i Volvo äger du en pytteliten del av Volvo."},
+  {m:"2007-09",ik:"🌱",r:"Ränta på ränta",t:"Räntan läggs till pengarna, och nästa år får du ränta på allt. Så växer pengarna snabbare och snabbare."},
+  {m:"2008-05",ik:"🧺",r:"Lägg inte alla ägg i samma korg",t:"Köper du många olika saker påverkas du mindre när ett företag går dåligt. Det kallas att sprida riskerna."},
+  {m:"2009-06",ik:"⏳",r:"Tålamod",t:"Efter ett ras tar det tid innan det vänder. Den som sparar länge hinner oftast vara med när det vänder."},
+  {m:"2011-03",ik:"💸",r:"Utdelning",t:"Många företag delar ut en del av vinsten till dem som äger aktier. Det heter utdelning, och den är redan inräknad i våra kurser."},
+  {m:"2013-05",ik:"🏷️",r:"Avgifter",t:"Fonder tar en avgift varje år. 1 % låter lite, men över många år blir det mycket pengar."},
+  {m:"2015-03",ik:"📉",r:"Inflation",t:"När priserna stiger räcker samma pengar till mindre. Inflationen äter upp pengar som bara ligger stilla."},
+  {m:"2017-05",ik:"🎢",r:"Risk och belöning",t:"Det som kan ge mycket pengar kan också förlora mycket. En enda aktie svänger mer än en fond."},
+  {m:"2019-04",ik:"🛡️",r:"Insättningsgarantin",t:"Pengar på ett bankkonto är skyddade av staten upp till 1 050 000 kr per person och bank. Aktier och fonder har inte det skyddet."},
+  {m:"2024-02",ik:"🔮",r:"Ingen vet framtiden",t:"Det som gick bra förut kan gå dåligt nästa gång. Historien är bra att lära av, men den är inget facit."}];
 const fran=a=>mi(A[a].fran);
 
 /* ---------- Grafen (som på bankernas sajter) ---------- */
@@ -289,34 +393,39 @@ function rita(cv,o){
   ex.forEach(e=>{for(let i=a;i<=b;i++)if(e.v[i]!=null){lo=Math.min(lo,e.v[i]);hi=Math.max(hi,e.v[i]);}});
   if(o.bas!=null){lo=Math.min(lo,o.bas);hi=Math.max(hi,o.bas);}
   if(!isFinite(lo))return;if(hi===lo){hi+=1;lo-=1;}const pad=(hi-lo)*.08;lo-=pad;hi+=pad;
-  const PL=4,PR=58,PT=10,PB=24,w=W-PL-PR,h=H-PT-PB,X=i=>PL+(b===a?w:(i-a)/(b-a)*w),Y=y=>PT+(1-(y-lo)/(hi-lo))*h;
-  c.font='700 12px "Baloo 2",system-ui';c.textBaseline="middle";
-  // rutnät och värden till höger
+  c.font='600 12px Inter,system-ui';c.textBaseline="middle";
   const steg=(()=>{const r=(hi-lo)/4,p=Math.pow(10,Math.floor(Math.log10(r))),m=r/p;return(m<1.5?1:m<3?2:m<7?5:10)*p;})();
-  for(let y=Math.ceil(lo/steg)*steg;y<=hi;y+=steg){c.strokeStyle="#E8EEF6";c.lineWidth=1;c.beginPath();c.moveTo(PL,Y(y));c.lineTo(PL+w,Y(y));c.stroke();
-    c.fillStyle="#8792AE";c.textAlign="left";c.fillText(o.fmt?o.fmt(y):kurs(y),PL+w+6,Y(y));}
+  let PR=40;for(let y=Math.ceil(lo/steg)*steg;y<=hi;y+=steg)PR=Math.max(PR,c.measureText(o.fmt?o.fmt(y):kurs(y)).width+12);
+  const PL=4,PT=10,PB=24,w=W-PL-PR,h=H-PT-PB,X=i=>PL+(b===a?w:(i-a)/(b-a)*w),Y=y=>PT+(1-(y-lo)/(hi-lo))*h;
+  // rutnät och värden till höger
+  for(let y0=Math.ceil(lo/steg)*steg;y0<=hi;y0+=steg){const y=Math.abs(y0)<steg/1e6?0:y0;c.strokeStyle="rgba(255,255,255,.07)";c.lineWidth=1;c.beginPath();c.moveTo(PL,Y(y));c.lineTo(PL+w,Y(y));c.stroke();
+    c.fillStyle="#8FA0C2";c.textAlign="left";c.fillText(o.fmt?o.fmt(y):kurs(y),PL+w+6,Y(y));}
   // år under
   const ar=[];for(let i=a;i<=b;i++)if(M[i].endsWith("-01")||i===a)ar.push(i);
-  const hopp=Math.max(1,Math.ceil(ar.length/(w/52)));c.textAlign="center";c.fillStyle="#8792AE";
+  const hopp=Math.max(1,Math.ceil(ar.length/(w/52)));c.textAlign="center";c.fillStyle="#8FA0C2";
   ar.forEach((i,k)=>{if(M[i].endsWith("-01")&&k%hopp===0)c.fillText(M[i].slice(0,4),Math.min(Math.max(X(i),16),PL+w-16),H-10);});
   if(b-a<14){c.fillText(datum(a),PL+40,H-10);}
   // startlinje
   const s0=o.bas!=null?o.bas:v[a];
-  c.setLineDash([4,4]);c.strokeStyle="#AEB9CC";c.beginPath();c.moveTo(PL,Y(s0));c.lineTo(PL+w,Y(s0));c.stroke();c.setLineDash([]);
+  c.setLineDash([4,4]);c.strokeStyle="rgba(255,255,255,.25)";c.beginPath();c.moveTo(PL,Y(s0));c.lineTo(PL+w,Y(s0));c.stroke();c.setLineDash([]);
   ex.forEach(e=>{c.strokeStyle=e.col;c.lineWidth=2;c.setLineDash(e.dash||[6,5]);c.beginPath();let f=true;for(let i=a;i<=b;i++){if(e.v[i]==null)continue;f?c.moveTo(X(i),Y(e.v[i])):c.lineTo(X(i),Y(e.v[i]));f=false;}c.stroke();c.setLineDash([]);});
-  const upp=v[b]>=s0,col=o.col||(upp?"#16A34A":"#DC2626");
-  const g=c.createLinearGradient(0,PT,0,PT+h);g.addColorStop(0,upp?"rgba(22,163,74,.22)":"rgba(220,38,38,.2)");g.addColorStop(1,"rgba(255,255,255,0)");
+  const upp=v[b]>=s0,col=o.col||(upp?"#35D69A":"#FF6B6B");
+  const g=c.createLinearGradient(0,PT,0,PT+h);g.addColorStop(0,o.col?"rgba(53,214,154,.22)":upp?"rgba(53,214,154,.25)":"rgba(255,107,107,.22)");g.addColorStop(1,"rgba(10,16,30,0)");
   c.beginPath();let f=true,i0=a;for(let i=a;i<=b;i++){if(v[i]==null)continue;if(f){c.moveTo(X(i),Y(v[i]));i0=i;f=false;}else c.lineTo(X(i),Y(v[i]));}
-  c.strokeStyle=col;c.lineWidth=2.5;c.lineJoin="round";c.stroke();
+  c.strokeStyle=col;c.lineWidth=2.5;c.lineJoin="round";c.shadowColor=col;c.shadowBlur=8;c.stroke();c.shadowBlur=0;
   c.lineTo(X(b),PT+h);c.lineTo(X(i0),PT+h);c.closePath();c.fillStyle=g;c.fill();
+  // händelser i världen (streckade) och för bolaget (guldprickar)
+  if(o.glob)GLOB.forEach(([m,t])=>{const i=mi(m);if(i<a||i>b)return;const x=X(i);c.strokeStyle="rgba(232,196,104,.3)";c.lineWidth=1;c.setLineDash([2,4]);c.beginPath();c.moveTo(x,PT);c.lineTo(x,PT+h);c.stroke();c.setLineDash([]);
+    c.fillStyle="rgba(232,196,104,.75)";c.font='600 10px Inter,system-ui';c.textAlign="left";c.fillText(t,Math.min(x+3,PL+w-62),PT+7);});
+  if(o.ev)o.ev.forEach(([m])=>{const i=mi(m);if(i<a||i>b||v[i]==null)return;const x=X(i),y=Y(v[i]);c.fillStyle="#E8C468";c.strokeStyle="#0A101E";c.lineWidth=2;c.beginPath();c.arc(x,y,5,0,7);c.fill();c.stroke();});
   // pekare: visa datum och värde där fingret är
   if(o.hover!=null&&o.hover>=a&&o.hover<=b&&v[o.hover]!=null){const x=X(o.hover),y=Y(v[o.hover]);
-    c.strokeStyle="#1D2B53";c.lineWidth=1;c.beginPath();c.moveTo(x,PT);c.lineTo(x,PT+h);c.stroke();
+    c.strokeStyle="rgba(255,255,255,.45)";c.lineWidth=1;c.beginPath();c.moveTo(x,PT);c.lineTo(x,PT+h);c.stroke();
     c.fillStyle="#fff";c.strokeStyle=col;c.lineWidth=3;c.beginPath();c.arc(x,y,5,0,7);c.fill();c.stroke();
-    const t1=datum(o.hover),t2=o.fmt?o.fmt(v[o.hover]):kurs(v[o.hover])+" kr";c.font='800 13px "Baloo 2",system-ui';
+    const t1=datum(o.hover),t2=o.fmt?o.fmt(v[o.hover]):kurs(v[o.hover])+" kr";c.font='800 13px Inter,system-ui';
     const tw=Math.max(c.measureText(t1).width,c.measureText(t2).width)+16,tx=Math.min(Math.max(x-tw/2,PL),PL+w-tw);
-    c.fillStyle="rgba(29,43,83,.92)";c.beginPath();c.roundRect?c.roundRect(tx,PT,tw,38,8):c.rect(tx,PT,tw,38);c.fill();
-    c.fillStyle="#fff";c.textAlign="center";c.fillText(t2,tx+tw/2,PT+12);c.font='700 11px "Baloo 2",system-ui';c.fillText(t1,tx+tw/2,PT+28);}
+    c.fillStyle="rgba(12,20,40,.95)";c.strokeStyle="rgba(232,196,104,.6)";c.lineWidth=1;c.beginPath();c.roundRect?c.roundRect(tx,PT,tw,38,8):c.rect(tx,PT,tw,38);c.fill();c.stroke();
+    c.fillStyle="#fff";c.textAlign="center";c.fillText(t2,tx+tw/2,PT+12);c.font='600 11px Inter,system-ui';c.fillText(t1,tx+tw/2,PT+28);}
   cv._g={a,b,X:x=>Math.round(a+(x-PL)/w*(b-a))};
 }
 // fingret eller musen på grafen
@@ -328,17 +437,32 @@ function pekbar(cv,omrita){
   cv.addEventListener("pointerup",e=>{if(e.pointerType!=="mouse")setTimeout(()=>omrita(null),1200);});
 }
 
+function donut(cv,parts){const dpr=window.devicePixelRatio||1,S=cv.clientWidth||104;cv.width=S*dpr;cv.height=S*dpr;const c=cv.getContext("2d");c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,S,S);
+  const tot=parts.reduce((x,p)=>x+p.v,0)||1,R=S/2-3,r=R*.62;let a0=-Math.PI/2;
+  parts.forEach(p=>{const a1=a0+p.v/tot*Math.PI*2;c.beginPath();c.arc(S/2,S/2,R,a0,a1);c.arc(S/2,S/2,r,a1,a0,true);c.closePath();c.fillStyle=p.c;c.fill();a0=a1;});
+  c.fillStyle="#EAF0FA";c.font='700 12px Inter,system-ui';c.textAlign="center";c.textBaseline="middle";c.fillText(parts.length+(parts.length===1?" sak":" saker"),S/2,S/2);}
+function linje(svg,serier){const W=svg.viewBox.baseVal.width,H=svg.viewBox.baseVal.height;let lo=Infinity,hi=-Infinity;serier.forEach(x=>x.v.forEach(y=>{lo=Math.min(lo,y);hi=Math.max(hi,y);}));if(hi===lo)hi=lo+1;const pd=(hi-lo)*.12;lo-=pd;hi+=pd;
+  svg.innerHTML="<defs>"+serier.map((x,k)=>`<linearGradient id="${svg.id}g${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${x.col}" stop-opacity=".35"/><stop offset="1" stop-color="${x.col}" stop-opacity="0"/></linearGradient>`).join("")+"</defs>"+
+    serier.map((x,k)=>{const n=x.v.length,d="M"+x.v.map((y,i)=>(i/(n-1)*W).toFixed(1)+","+(H-(y-lo)/(hi-lo)*H).toFixed(1)).join(" L");
+      return(x.fill?`<path d="${d} L${W},${H} L0,${H} Z" fill="url(#${svg.id}g${k})"/>`:"")+`<path d="${d}" fill="none" stroke="${x.col}" stroke-width="${x.w||2.5}" ${x.dash?`stroke-dasharray="${x.dash}"`:""} vector-effect="non-scaling-stroke" stroke-linejoin="round"/>`;}).join("");}
+const ur=(v,a,b,steg)=>{const o=[];for(let i=a;i<=b;i+=steg)if(v[i]!=null)o.push(v[i]);return o;};
+let minisKlar=false;
+function minis(){if(minisKlar)return;minisKlar=true;
+  linje($("heroSvg"),[{v:ur(A.sverige.v,0,N-1,2),col:"#E8C468",fill:1,w:3}]);
+  linje($("mgTid"),[{v:ur(A.sverige.v,0,N-1,2),col:"#35D69A",fill:1},{v:ur(A.spar.v.map(x=>x*A.sverige.v[0]),0,N-1,2),col:"#5CC8FF",dash:"5 5",w:2}]);
+  const s0=mi("2015-01");linje($("mgSpar"),[{v:ur(A.varlden.v.map(x=>x/A.varlden.v[s0]*100),s0,s0+120,2),col:"#35D69A",fill:1},{v:ur(A.spar.v.map(x=>x/A.spar.v[s0]*100),s0,s0+120,2),col:"#5CC8FF",w:2},{v:ur(A.spar.v.map(()=>100),s0,s0+120,2),col:"#FF8FA3",dash:"4 5",w:2}]);
+  const sp=[],mal=[];let bb=0;for(let k=0;k<48;k++){bb=bb*1.002+300;sp.push(bb);mal.push(12000);}linje($("mgMal"),[{v:sp,col:"#5CC8FF",fill:1},{v:mal,col:"#E8C468",dash:"8 6",w:2}]);}
 /* ---------- Skärmar ---------- */
-const SKARMAR=["home","spar","tval","game","result","fragor","klar"];
+const SKARMAR=["home","spar","mal","tval","game","result","fragor","klar"];
 let skarm="home";
 function show(id){SKARMAR.forEach(s=>$(s).hidden=s!==id);skarm=id;window.MPS&&MPS.visa(id);window.scrollTo(0,0);
-  if(id!=="game")paus();if(id==="home")hem();}
+  if(id!=="game"){paus();const fk=document.querySelector(".fakta");if(fk)fk.remove();}if(id==="home")hem();}
 document.addEventListener("click",e=>{if(e.target.closest("[data-home]"))show("home");});
-function hem(){$("stSpar").textContent=stjTxt(data.stars.spar)+(data.stars.spar?"":" Frågor ger stjärnor");$("stTid").textContent=stjTxt(data.stars.tid)+(data.stars.tid?"":" Frågor ger stjärnor");}
+function hem(){minis();$("stMal").textContent=stjTxt(data.stars.mal)+(data.stars.mal?"":" Frågor ger stjärnor");$("stSpar").textContent=stjTxt(data.stars.spar)+(data.stars.spar?"":" Frågor ger stjärnor");$("stTid").textContent=stjTxt(data.stars.tid)+(data.stars.tid?"":" Frågor ger stjärnor");}
 
 /* ================= Spargrisen ================= */
 const S0=mi("2015-01"),GLASS=20;
-const JARS=[["gris","🐷","Spargrisen","#FF7EB6"],["spar","🏦","Sparkontot","#3D8BFD"],["varlden","📈","Fonden","#1E9E5E"]];
+const JARS=[["gris","🐷","Spargrisen","#FF8FA3"],["spar","🏦","Sparkontot","#5CC8FF"],["varlden","📈","Fonden","#35D69A"]];
 let sMax=0,sTimer=null;
 function sVarde(k,i){if(k==="gris")return 100;return 100*A[k].v[i]/A[k].v[S0];}
 function sRita(){const t=+$("sReg").value,i=S0+t,ar=M[i].slice(0,4);sMax=Math.max(sMax,t);
@@ -363,6 +487,27 @@ $("sSpela").onclick=()=>{if(sTimer){stopS();return;}if(+$("sReg").value>=120)$("
 $("gaSpar").onclick=()=>{sMax=0;$("sReg").value=0;stopS();sRita();show("spar");};
 $("sFragor").onclick=()=>{stopS();startFragor("spar");};
 
+/* ================= Sparmål ================= */
+const MALEN=[["🚲","Ny cykel",4000],["📱","Ny mobil",9000],["🎮","Dator för spel",15000],["🚗","Körkort",25000],["✈️","Resa jorden runt",60000]];
+let MS=2;
+const langd=m=>{m=m+1;const y=Math.floor(m/12),r=m%12;return(y?y+" år":"")+(y&&r?" ":"")+(r?r+" mån":"");};
+function mRita(){const[em,namn,pris]=MALEN[MS],per=+$("mKr").value,s=mi($("mStart").value+"-01"),infl=$("mInfl").checked;
+  $("mKrTxt").textContent=kr(per);
+  $("mMal").innerHTML=MALEN.map(([e,n,p],k)=>`<button data-k="${k}" aria-pressed="${k===MS}"><span class="e">${e}</span>${n}<b>${kr(p)}</b></button>`).join("");
+  const sp=Array(N).fill(null),fo=Array(N).fill(null),gr=Array(N).fill(null),mal=Array(N).fill(null);let b=0,u=0;
+  for(let i=s;i<N;i++){if(i>s)b*=1+K.ranta[i-1]/1200;b+=per;u+=per/A.sverige.v[i];sp[i]=b;fo[i]=u*A.sverige.v[i];gr[i]=per*(i-s+1);mal[i]=infl?pris*K.kpi[i]/K.kpi[s]:pris;}
+  const nar=arr=>{for(let i=s;i<N;i++)if(arr[i]>=mal[i])return i;return -1;};
+  const rr=[["🐷 Spargrisen",gr,"#FF8FA3"],["🏦 Sparkontot",sp,"#5CC8FF"],["📈 Indexfond",fo,"#35D69A"]];
+  $("mRes").innerHTML=rr.map(([n,arr,c])=>{const i=nar(arr);return`<div class="r"><i style="background:${c}"></i><b>${n}</b><span>${i<0?"Når inte målet före september 2026<br><small class=\"info\">har då "+kr(arr[N-1])+"</small>":langd(i-s)+`<br><small class="info" style="text-transform:capitalize">${datum(i)}</small>`}</span></div>`;}).join("");
+  const sl=Math.min(N-1,Math.max(...rr.map(r=>{const i=nar(r[1]);return i<0?N-1:i;}))+6);
+  rita($("mGraf"),{v:fo,a:s,b:Math.max(sl,s+6),fmt:x=>kr(x),col:"#35D69A",jmf:[{v:sp,col:"#5CC8FF",dash:[]},{v:gr,col:"#FF8FA3",dash:[4,5]},{v:mal,col:"#E8C468",dash:[8,6]}]});
+  const ip=nar(sp),pn=Math.round(mal[ip<0?N-1:ip]);
+  $("mPrat").textContent=infl?`${namn} kostar ${kr(pris)} när du börjar. Priserna stiger med tiden, så när du har sparat ihop kostar det ungefär ${kr(pn)}. Den gula streckade linjen är priset. Fonden kan gå både upp och ner på vägen.`:`Utan inflation kostar ${namn.toLowerCase()} lika mycket hela tiden. Bocka i "Priset följer inflationen" för att se hur det brukar vara på riktigt.`;}
+$("mMal").onclick=e=>{const b=e.target.closest("[data-k]");if(!b)return;MS=+b.dataset.k;mRita();};
+["mKr","mStart","mInfl"].forEach(id=>$(id).addEventListener("input",mRita));$("mStart").addEventListener("change",mRita);
+$("gaMal").onclick=()=>{show("mal");mRita();};
+$("mFragor").onclick=()=>startFragor("mal");
+
 /* ================= Tidsmaskinen ================= */
 const START=10000,G={i:0,u:{},cash:START,kost:{},hist:[],tid:null,fart:1,skugg:[],val:{},sedd:{}};
 let valKr={};
@@ -380,14 +525,19 @@ $("valLista").onclick=e=>{const p=e.target.closest("[data-p]"),m=e.target.closes
   if(m){const a=m.dataset.m;if(valKr[a]){valKr[a]-=1000;if(!valKr[a])delete valKr[a];}valRita();return;}
   const r=e.target.closest("[data-a]");if(r&&finns(r.dataset.a,0))blad(r.dataset.a,0,true);};
 $("gaTid").onclick=()=>{valKr={};valRita();show("tval");};
-$("startTid").onclick=()=>{Object.assign(G,{i:0,u:{},cash:START,kost:{},hist:[START],fart:1,skugg:[],val:{},sedd:{}});
-  for(const a in valKr){G.u[a]=valKr[a]/A[a].v[0];G.kost[a]=valKr[a];G.cash-=valKr[a];}
+$("startTid").onclick=()=>{Object.assign(G,{i:0,u:{},cash:START,kost:{},hist:[START],fart:1,skugg:[],val:{},sedd:{},logg:[],fakta:[],jmf:{}});
+  for(const a in valKr){G.u[a]=valKr[a]/A[a].v[0];G.kost[a]=valKr[a];G.cash-=valKr[a];G.logg.push({i:0,t:"kop",a,x:valKr[a]});}
+  $("gJmf").querySelectorAll("[data-j]").forEach(b=>b.setAttribute("aria-pressed","false"));
   $("gFart").textContent="⏩ Snabbare";show("game");gRita();setTimeout(spela,500);};
 
 // en månad framåt
 function steg(){if(G.i>=N-1){slut();return;}
   G.cash*=1+K.ranta[G.i]/1200;G.skugg.forEach(s=>{s.cash*=1+K.ranta[G.i]/1200;});
-  G.i++;G.hist[G.i]=varde();gRita();handelse();}
+  G.i++;G.hist[G.i]=varde();gRita();
+  const fk=FAKTA.find(f=>f.m===M[G.i]);if(fk&&!G.fakta.includes(fk)){G.fakta.push(fk);visaFakta(fk);}
+  handelse();}
+function visaFakta(f){const o=document.querySelector(".fakta");if(o)o.remove();const d=document.createElement("div");d.className="fakta";d.setAttribute("role","status");
+  d.innerHTML=`<span class="ik">${f.ik}</span><span><b>💡 ${f.r}</b><p>${f.t}</p></span><button aria-label="Stäng">✕</button>`;document.body.appendChild(d);d.querySelector("button").onclick=()=>d.remove();setTimeout(()=>{if(d.isConnected)d.remove();},12000);}
 function spela(){if(G.tid||skarm!=="game")return;$("gPlay").textContent="⏸ Pausa";G.tid=setInterval(steg,G.fart>1?70:260);}
 function paus(){clearInterval(G.tid);G.tid=null;$("gPlay").textContent=G.i>=N-1?"✓ Klart":"▶ Spela";}
 $("gPlay").onclick=()=>{if(G.i>=N-1){slut();return;}G.tid?paus():spela();};
@@ -396,19 +546,28 @@ $("quit").onclick=()=>{paus();show("home");};
 let gHover=null;
 function gRita(){const v=varde(),f=v/START-1;
   $("gDatum").textContent=datum(G.i);$("gVarde").textContent=kr(v);
-  $("gFor").textContent=`${pr(f)} sedan januari 2007`;$("gFor").className="forandr "+(f>=0?"up":"down");
+  const dk=v-START;$("gFor").textContent=`${pr(f)} (${dk>=0?"+":"−"}${kr(Math.abs(dk))}) sedan januari 2007`;$("gFor").className="forandr "+(f>=0?"up":"down");
   $("gBar").style.width=(G.i/(N-1)*100)+"%";
-  rita($("gGraf"),{v:G.hist,a:0,b:Math.max(G.i,1),bas:START,hover:gHover,fmt:x=>kr(x)});
+  gGraf();
   const ager=Object.keys(G.u).filter(a=>G.u[a]>1e-9);
+  const parts=[{n:"Sparkonto",v:G.cash,c:COL("spar")}].concat(ager.map(a=>({n:A[a].n,v:G.u[a]*A[a].v[G.i],c:COL(a)}))).filter(x=>x.v>1);
+  donut($("gDonut"),parts);$("gLeg").innerHTML=[...parts].sort((x,y)=>y.v-x.v).slice(0,5).map(x=>`<span><i style="background:${x.c}"></i>${x.n} ${Math.round(x.v/v*100)} %</span>`).join("")+(parts.length>5?`<span>+ ${parts.length-5} till</span>`:"");
+  const af=(G.logg||[]).filter(l=>l.t==="kop"||l.t==="salj");
+  $("gLogg").innerHTML=af.length?af.slice(-6).reverse().map(l=>`<div class="lr"><span class="d">${datum(l.i)}</span><b>${l.t==="kop"?"🛒 Köpte":"💰 Sålde"} ${A[l.a].n}</b><span class="kr${l.t==="salj"?" up":""}">${kr(l.x)}</span></div>`).join("")+(af.length>6?`<p class="info">… och ${af.length-6} till.</p>`:""):`<p class="info">Inga affärer ännu. Tryck på något du vill köpa eller sälja.</p>`;
   $("gAger").innerHTML=`<button class="pl" data-a="spar">${radHTML("spar",G.i,`<span class="hog">${kr(G.cash)}<small>ränta ${K.ranta[G.i].toFixed(1).replace(".",",")} %</small></span>`)}</button>`+
     ager.map(a=>{const vv=G.u[a]*A[a].v[G.i],ff=vv/G.kost[a]-1;return`<button class="pl" data-a="${a}">${radHTML(a,G.i,`<span class="hog">${kr(vv)}<small class="${ff>=0?"up":"down"}">${pr(ff,0)}</small></span>`)}</button>`;}).join("");
   $("gKop").innerHTML=ORDN.filter(a=>!ager.includes(a)).map(a=>finns(a,G.i)?`<button class="pl" data-a="${a}">${radHTML(a,G.i,`<span class="hog">${kurs(A[a].v[G.i])} kr<small>${A[a].fran>M[0]&&G.i-fran(a)<6?"Ny!":"kurs"}</small></span>`)}</button>`:`<div class="pl las">${radHTML(a,G.i,`<span class="hog"><small>Kan köpas<br>från ${A[a].fran.slice(0,4)}</small></span>`)}</div>`).join("");}
-pekbar($("gGraf"),h=>{gHover=h;rita($("gGraf"),{v:G.hist,a:0,b:Math.max(G.i,1),bas:START,hover:h,fmt:x=>kr(x)});});
+function gJmfLinjer(){const L2=[];const upp=(v,col)=>({v:v.map((x,i)=>i<=G.i&&x!=null?x:null),col,dash:[6,5]});
+  if(G.jmf.spar)L2.push(upp(A.spar.v.map(x=>START*x/A.spar.v[0]),"#5CC8FF"));
+  if(G.jmf.sv)L2.push(upp(A.sverige.v.map(x=>START*x/A.sverige.v[0]),"#B48CFF"));return L2;}
+function gGraf(){rita($("gGraf"),{v:G.hist,a:0,b:Math.max(G.i,1),bas:START,hover:gHover,fmt:x=>kr(x),jmf:gJmfLinjer(),glob:true});}
+pekbar($("gGraf"),h=>{gHover=h;gGraf();});
+$("gJmf").onclick=e=>{const b=e.target.closest("[data-j]");if(!b)return;G.jmf[b.dataset.j]=!G.jmf[b.dataset.j];b.setAttribute("aria-pressed",String(!!G.jmf[b.dataset.j]));gGraf();};
 document.addEventListener("click",e=>{const r=e.target.closest("#gAger [data-a],#gKop [data-a]");if(!r)return;paus();blad(r.dataset.a,G.i,false);});
 
 /* ---------- Bladet med en aktie eller fond: kurs, perioder, köp och sälj ---------- */
 let bl=null;
-function blad(a,i,bara){bl={a,i,bara,per:a==="spar"?"max":"1",hover:null};
+function blad(a,i,bara){document.querySelectorAll(".blad").forEach(x=>x.remove());bl={a,i,bara,per:a==="spar"?"max":"1",hover:null};
   const d=document.createElement("div");d.className="blad";d.innerHTML=`<div role="dialog" aria-label="${A[a].n}"><button class="stang" aria-label="Stäng">✕</button><div id="bInne"></div></div>`;
   document.body.appendChild(d);d.onclick=e=>{if(e.target===d||e.target.closest(".stang"))stangBlad();};
   bRita();}
@@ -431,18 +590,22 @@ function bRita(){const{a,i,per}=bl,[em,typ,txt]=INFO[a],v=A[a].v,f0=fran(a);
     if(andra.length)h+=`<div class="sub" style="margin-top:12px">💱 Sälj något annat för att få pengar</div><div class="byt">${andra.map(x=>{const vx=G.u[x]*A[x].v[i];
       return`<div class="pl"><span class="em">${INFO[x][0]}</span><span class="tx"><b>${A[x].n}</b><small class="${vx>=G.kost[x]?"up":"down"}">${kr(vx)} (${pr(vx/G.kost[x]-1,0)})</small></span><span class="stepper" style="gap:6px"><button data-ann="${x}" data-b="1000" style="width:auto;padding:0 10px;font-size:.9rem">Sälj 1 000</button><button data-ann="${x}" data-b="alla" style="width:auto;padding:0 10px;font-size:.9rem">Allt</button></span></div>`;}).join("")}</div>`;}
   if(bl.bara)h+=`<div class="info">Kursen visas fram till januari 2007. Resten får du se när tidsmaskinen startar!</div>`;
+  const om=OM[a];if(om){const hh=(om.h||[]).filter(x=>mi(x[0])<=i);
+    h+=`<div class="om"><h3>${a==="spar"?"Om sparkontot":a==="sverige"||a==="usa"||a==="varlden"?"Om fonden":a==="bitcoin"?"Om bitcoin":"Om bolaget"}</h3>${om.g?`<div class="fakt"><span>Grundat</span><b>${om.g}</b><span>Land</span><b>${om.l}</b><span>Gör</span><b>${om.s}</b></div>`:`<div class="fakt"><span>Vad</span><b>${om.s}</b></div>`}<p>${om.t}</p>${(om.f||[]).length||hh.length?`<ul>${(om.f||[]).map(x=>`<li><b>${x[0]}</b><span>${x[1]}</span></li>`).join("")}${hh.map(x=>`<li class="nu"><b>${x[0].slice(0,4)}</b><span>${x[1]}</span></li>`).join("")}</ul>`:""}${hh.length?`<p class="info">De gula prickarna i grafen visar när det hände.</p>`:""}</div>`;}
   $("bInne").innerHTML=h;
-  const cv=$("bGraf"),o={v:a==="spar"?v.map(x=>x*100/v[s]):v,a:s,b:i,hover:bl.hover,fmt:a==="spar"?x=>x.toFixed(1).replace(".",",")+" kr":null};rita(cv,o);
+  const cv=$("bGraf"),o={v:a==="spar"?v.map(x=>x*100/v[s]):v,a:s,b:i,hover:bl.hover,fmt:a==="spar"?x=>x.toFixed(1).replace(".",",")+" kr":null,ev:(OM[a]&&OM[a].h)||[],glob:true};rita(cv,o);
   pekbar(cv,hh=>{o.hover=hh;rita(cv,o);});
   $("bInne").querySelectorAll("[data-per]").forEach(b=>b.onclick=()=>{bl.per=b.dataset.per;bRita();});
   const msg=t=>{const m=$("bMsg");if(m)m.textContent=t;};
-  $("bInne").querySelectorAll("[data-kop]").forEach(b=>b.onclick=()=>{const x=b.dataset.kop==="alla"?G.cash:1000;kop(a,x);bRita();msg(`Köpt ${A[a].n} för ${kr(x)}. 🛒`);});
-  $("bInne").querySelectorAll("[data-salj]").forEach(b=>b.onclick=()=>{const x=salj(a,b.dataset.salj==="alla"?Infinity:1000);bRita();msg(`Sålt för ${kr(x)}. Pengarna finns på sparkontot.`);});
-  $("bInne").querySelectorAll("[data-ann]").forEach(b=>b.onclick=()=>{const x=salj(b.dataset.ann,b.dataset.b==="alla"?Infinity:1000);bRita();msg(`Du sålde ${A[b.dataset.ann].n} för ${kr(x)}. Nu har du ${kr(G.cash)} att köpa för.`);});}
-function kop(a,belopp){belopp=Math.min(belopp,G.cash);if(belopp<=0)return;G.u[a]=(G.u[a]||0)+belopp/A[a].v[G.i];G.kost[a]=(G.kost[a]||0)+belopp;G.cash-=belopp;L().kaching&&L().kaching();}
+  const kv=(typ,x,aa)=>{const m=$("bMsg");if(m)m.innerHTML=`<div class="kvitto"><b>KVITTO · PLUGGBANKEN</b><div class="rr"><span style="text-transform:capitalize">${datum(G.i)}</span><span>${typ}</span></div><div class="rr"><span>${A[aa].n}</span><span>${kr(x)}</span></div><div class="rr"><span>Kurs</span><span>${kurs(A[aa].v[G.i])} kr</span></div><div class="rr"><span>På sparkontot nu</span><span>${kr(G.cash)}</span></div></div>`;};
+  $("bInne").querySelectorAll("[data-kop]").forEach(b=>b.onclick=()=>{const x=Math.min(b.dataset.kop==="alla"?G.cash:1000,G.cash);kop(a,x);bRita();kv("KÖP",x,a);});
+  $("bInne").querySelectorAll("[data-salj]").forEach(b=>b.onclick=()=>{const x=salj(a,b.dataset.salj==="alla"?Infinity:1000);bRita();kv("SÄLJ",x,a);});
+  $("bInne").querySelectorAll("[data-ann]").forEach(b=>b.onclick=()=>{const aa=b.dataset.ann,x=salj(aa,b.dataset.b==="alla"?Infinity:1000);bRita();kv("SÄLJ",x,aa);});}
+const stor=t=>t.charAt(0).toUpperCase()+t.slice(1);
+function kop(a,belopp){belopp=Math.min(belopp,G.cash);if(belopp<=0||!finns(a,G.i))return;L().kaching&&L().kaching();(G.logg=G.logg||[]).push({i:G.i,t:"kop",a,x:belopp});G.u[a]=(G.u[a]||0)+belopp/A[a].v[G.i];G.kost[a]=(G.kost[a]||0)+belopp;G.cash-=belopp;L().kaching&&L().kaching();}
 // sälj för ett belopp (Infinity = allt); det man betalade minskar i samma andel. Ger beloppet.
 function salj(a,belopp=Infinity){if(!G.u[a])return 0;const p=A[a].v[G.i],ag=G.u[a]*p;let x=Math.min(belopp,ag);if(ag-x<100)x=ag;
-  if(x>=ag){delete G.u[a];delete G.kost[a];}else{G.kost[a]*=1-x/ag;G.u[a]-=x/p;}G.cash+=x;L().pop&&L().pop();return x;}
+  if(x>=ag){delete G.u[a];delete G.kost[a];}else{G.kost[a]*=1-x/ag;G.u[a]-=x/p;}G.cash+=x;(G.logg=G.logg||[]).push({i:G.i,t:"salj",a,x});L().pop&&L().pop();return x;}
 function saljAllt(){Object.keys(G.u).forEach(a=>salj(a));}
 const iAktier=()=>Object.keys(G.u).reduce((s,a)=>s+G.u[a]*A[a].v[G.i],0);
 
@@ -454,12 +617,12 @@ const sv=(a,b)=>A.sverige.v[mi(b)]/A.sverige.v[mi(a)]-1;
 // skuggportfölj: hur det hade gått om man inte gjort något
 const skugga=id=>{G.skugg.push({id,i:G.i,u:{...G.u},cash:G.cash});};
 const skuggV=id=>{const s=G.skugg.find(x=>x.id===id);return s?vardeI(G.i,s.u,s.cash):null;};
-function kris(id,rub,txt){const ag=iAktier();skugga(id);
+function kris(id,rub,txt){const ag=iAktier();skugga(id);L().fall&&L().fall();
   if(ag<500){ruta("📉",rub,`<p>${txt}</p><p>Du har nästan inga aktier eller fonder, så dina pengar påverkas inte så mycket. Den som äger aktier är ofta orolig nu.</p>`,[["Fortsätt",null]]);G.val[id]="ingen";return;}
   ruta("📉",rub,`<p>${txt}</p><p>Dina aktier och fonder är värda <b>${kr(ag)}</b> nu. Vad gör du?</p>`,[
-    ["😱 Sälj allt och lägg pengarna på sparkontot",()=>{G.val[id]="salj";saljAllt();},"vit"],
-    ["😌 Vänta och gör ingenting",()=>{G.val[id]="vanta";},"bla"],
-    ...(G.cash>=1000?[["🛒 Köp mer för 1 000 kr från sparkontot",()=>{G.val[id]="kop";kop("sverige",1000);},""]]:[])]);}
+    ["😱 Sälj allt och lägg pengarna på sparkontot",()=>{G.val[id]="salj";G.logg.push({i:G.i,t:"val",txt:rub+" Du blev rädd och sålde allt."});saljAllt();},"vit"],
+    ["😌 Vänta och gör ingenting",()=>{G.val[id]="vanta";G.logg.push({i:G.i,t:"val",txt:rub+" Du väntade lugnt."});},"bla"],
+    ...(G.cash>=1000?[["🛒 Köp mer för 1 000 kr från sparkontot",()=>{G.val[id]="kop";G.logg.push({i:G.i,t:"val",txt:rub+" Du köpte mer när det var billigt."});kop("sverige",1000);},""]]:[])]);}
 function efter(id,ar,rub){const val=G.val[id];if(!val||val==="ingen")return;const s=G.skugg.find(x=>x.id===id),nu=varde(),utan=skuggV(id),diff=nu-utan;
   let t;if(val==="salj")t=`<p>Du sålde allt när börsen rasade. Börsen har sedan dess gått upp <b>${pr(A.sverige.v[G.i]/A.sverige.v[s.i]-1,0)}</b>.</p><p>Om du hade väntat hade du haft <b>${kr(utan)}</b> i stället för ${kr(nu)}. Det är ${kr(Math.abs(diff))} ${diff<0?"mindre":"mer"} för att du sålde.</p><p>Den som säljer när det rasar säljer billigt. Det är lätt att bli rädd, men börsen har hittills alltid kommit tillbaka efter ett ras, även om det kan ta lång tid.</p>`;
   else if(val==="vanta")t=`<p>Du väntade lugnt. Börsen har gått upp <b>${pr(A.sverige.v[G.i]/A.sverige.v[s.i]-1,0)}</b> sedan raset.</p><p>Dina pengar är nu värda <b>${kr(nu)}</b>. Att vänta är ofta det svåraste och det bästa när man sparar länge.</p>`;
@@ -477,7 +640,7 @@ const EV={
   "2020-03":()=>kris("k20","Corona!",`En ny sjukdom sprids i hela världen. Skolor och butiker stänger. Indexfond Sverige har rasat <b>${pr(sv("2020-01","2020-03"),0)}</b> på två månader.`),
   "2021-03":()=>efter("k20",1,"Ett år efter coronaraset"),
   "2021-11":()=>{const u=A.bitcoin.v[G.i]/A.bitcoin.v[G.i-12]-1;skugga("btc");
-    ruta("🚀","Alla pratar om bitcoin!",`<p>Bitcoin har gått upp <b>${pr(u,0)}</b> på ett år. Kompisar och vuxna säger att man måste köpa nu.</p><p>Vill du köpa?</p>`,[["Köp bitcoin för 1 000 kr",()=>{G.val.btc="kop";kop("bitcoin",1000);},"bla"],["Nej, jag väntar",()=>{G.val.btc="nej";}]]);},
+    ruta("🚀","Alla pratar om bitcoin!",`<p>Bitcoin har gått upp <b>${pr(u,0)}</b> på ett år. Kompisar och vuxna säger att man måste köpa nu.</p><p>Vill du köpa?</p>`,[["Köp bitcoin för 1 000 kr",()=>{G.val.btc="kop";G.logg.push({i:G.i,t:"val",txt:"Alla pratade om bitcoin. Du köpte."});kop("bitcoin",1000);},"bla"],["Nej, jag väntar",()=>{G.val.btc="nej";G.logg.push({i:G.i,t:"val",txt:"Alla pratade om bitcoin. Du väntade."});}]]);},
   "2022-11":()=>{const d=A.bitcoin.v[G.i]/A.bitcoin.v[mi("2021-11")]-1;
     ruta("📉","Bitcoin har rasat",`<p>Bitcoin är värd <b>${pr(d,0)}</b> jämfört med för ett år sedan, när alla pratade om den.</p><p>${G.val.btc==="kop"?"Du köpte när alla var glada. Det är vanligt att priset redan har stigit mycket när alla pratar om något.":"Du köpte inte när alla pratade om den. Det som har gått upp mycket kan också gå ner mycket."}</p>`,[["Fortsätt",null]]);},
   "2022-10":()=>{const g=20*K.kpi[G.i]/K.kpi[0];ruta("🛒","Allt blir dyrare",`<p>Priserna i affären har stigit snabbt det senaste året (inflation). En glass som kostade 20 kr i januari 2007 kostar nu ungefär <b>${g.toFixed(0)} kr</b>.</p><p>Pengar som bara ligger stilla räcker till mindre och mindre. Räntan på sparkontot är bara ${K.ranta[G.i].toFixed(1).replace(".",",")} %.</p>`,[["Fortsätt",null]]);},
@@ -504,8 +667,15 @@ function slut(){paus();if(skarm!=="game")return;const v=varde(),f=v/START-1;
   const fr07=ORDN.filter(a=>fran(a)===0).map(a=>[a,bara(a)]).sort((x,y)=>y[1]-x[1]);
   const b=fr07[0],s=fr07[fr07.length-1];
   $("rBast").innerHTML=`<p style="margin:0 0 6px">${INFO[b[0]][0]} <b>${A[b[0]].n}</b>: 10 000 kr blev <b class="up">${kr(b[1])}</b>.</p><p style="margin:0 0 6px">${INFO[s[0]][0]} <b>${A[s[0]].n}</b>: 10 000 kr blev <b class="${s[1]>=START?"up":"down"}">${kr(s[1])}</b>.</p><p class="info" style="margin:0">Bitcoin räknas inte här eftersom den inte fanns att köpa 2007. 1 000 kr i bitcoin i oktober 2014 hade blivit ${kr(1000*A.bitcoin.v[N-1]/A.bitcoin.v[mi("2014-10")])}, men på vägen rasade den flera gånger med mer än hälften.</p>`;
+  const rad=[];const lg=G.logg||[];
+  const forst=lg.filter(l=>l.i===0&&l.t==="kop");if(forst.length)rad.push({i:0,k:"k",t:"Du köpte "+forst.map(l=>A[l.a].n+" för "+kr(l.x)).join(", ")+"."});else rad.push({i:0,k:"",t:"Du lät alla pengar ligga på sparkontot."});
+  lg.filter(l=>l.i>0).forEach(l=>{if(l.t==="val")rad.push({i:l.i,k:"e",t:l.txt});else rad.push({i:l.i,k:l.t==="kop"?"k":"s",t:(l.t==="kop"?"Du köpte ":"Du sålde ")+A[l.a].n+" för "+kr(l.x)+"."});});
+  const komp=[];rad.forEach(x=>{const p=komp[komp.length-1];if(p&&p.i===x.i&&p.k===x.k&&x.k!=="e"){p.t=p.t.replace(/\.$/,"")+", "+x.t.replace(/^Du (köpte|sålde) /,"").replace(/\.$/,"")+".";}else komp.push({...x});});
+  komp.push({i:N-1,k:"",t:"Dina pengar är värda "+kr(v)+"."});
+  $("rTid").innerHTML=(komp.length>16?komp.slice(0,8).concat([{i:-1,k:"",t:"…"}],komp.slice(-7)):komp).map(x=>`<div class="t ${x.k}"><small>${x.i>=0?stor(datum(x.i))+(x.i>0&&x.i<N-1&&G.hist[x.i]?" · portföljen "+kr(G.hist[x.i]):""):""}</small>${x.t}</div>`).join("");
+  $("rFakta").innerHTML=(G.fakta||[]).map(f=>`<div><span style="font-size:1.4rem">${f.ik}</span><span><b>${f.r}</b>${f.t}</span></div>`).join("");$("rFaktaRub").hidden=$("rFakta").parentNode.hidden=!(G.fakta||[]).length;
   show("result");L().fanfare&&L().fanfare();
-  setTimeout(()=>rita($("rGraf"),{v:G.hist,a:0,b:N-1,bas:START,fmt:x=>kr(x),jmf:[{v:A.sverige.v.map(x=>START*x/A.sverige.v[0]),col:"#9AA6C2"}]}),30);}
+  setTimeout(()=>rita($("rGraf"),{v:G.hist,a:0,b:N-1,bas:START,fmt:x=>kr(x),glob:true,jmf:[{v:A.sverige.v.map(x=>START*x/A.sverige.v[0]),col:"#B48CFF"}]}),30);}
 $("rHome").onclick=()=>show("home");
 $("rFragor").onclick=()=>startFragor("tid");
 
@@ -518,6 +688,11 @@ const FR={
   ()=>({q:"Vad är ränta?",a:["Pengar banken ger dig för att du sparar där","En avgift du betalar för att ha en spargris","Ett annat ord för fond"],r:0,f:"Banken lånar ut dina pengar till andra och ger dig lite betalt för det. Det kallas ränta."}),
   ()=>({q:"Fonden har gått ner. Du ska inte använda pengarna förrän om många år. Vad är klokt?",a:["Vänta, fonder brukar komma tillbaka med tiden","Ta ut pengarna direkt","Köpa godis för allt"],r:0,f:"Om man sparar länge hinner fonden ofta komma tillbaka. Därför ska man bara spara i fond pengar man inte behöver snart."}),
   ()=>({q:"Vad äger man när man har en fond?",a:["Små bitar av många företag","En egen bank","En stor påse med pengar"],r:0,f:"En fond köper små bitar (aktier) av många företag. När företagen går bra blir fonden värd mer."})],
+  mal:[
+  ()=>({q:"Vad gör att du når ditt sparmål snabbare?",a:["Att spara lite mer varje månad","Att vänta och hoppas","Att handla mer"],r:0,f:"Ju mer du lägger undan varje månad, desto fortare når du målet. Även små belopp blir mycket med tiden."}),
+  ()=>({q:"Priserna stiger med inflationen. Vad betyder det för ditt mål?",a:["Saken blir lite dyrare medan du sparar","Saken blir billigare","Ingenting händer"],r:0,f:"Det mesta blir lite dyrare varje år. Därför behöver man ofta spara lite mer än priset man såg när man började."}),
+  ()=>({q:"Du sparar till något du vill köpa om ett år. Var är pengarna tryggast?",a:["På ett sparkonto","I en enda aktie","I bitcoin"],r:0,f:"På kort tid kan aktier och fonder vara nere just när du behöver pengarna. Ett sparkonto går inte ner i kronor."}),
+  ()=>({q:"Varför växer pengarna på sparkontot men inte i spargrisen?",a:["Banken ger ränta","Spargrisen äter pengar","Banken trycker egna pengar"],r:0,f:"Banken lånar ut pengarna och betalar dig ränta för det. I spargrisen växer pengarna inte alls."})],
  tid:[
   ()=>({q:"Börsen rasade 2008 och 2020. Vad hände sedan?",a:["Den kom tillbaka och steg igen","Den stannade nere för alltid","Alla pengar i fonder försvann"],r:0,f:"Båda gångerna kom börsen tillbaka. 2008 tog det några år, 2020 bara några månader. Den som sålde i panik missade uppgången."}),
   ()=>({q:"Varför är en indexfond oftast mindre riskabel än en enda aktie?",a:["Pengarna sprids på många företag","Den har alltid hög ränta","Den kan inte gå ner"],r:0,f:"Om ett företag går dåligt, som Embracer, är det bara en liten del av fonden. Fonden kan också gå ner, men den rasar sällan lika mycket som en enda aktie."}),
@@ -529,7 +704,7 @@ const FR={
   ()=>({q:"Alla pratar om en aktie som har gått upp jättemycket. Vad är klokt att tänka på?",a:["Den kan redan vara dyr, och den kan gå ner","Köp så mycket som möjligt direkt","Den kan inte gå ner nu"],r:0,f:"När alla pratar om något har priset ofta redan stigit mycket. Som bitcoin 2021: ett år senare var den värd mindre än hälften."})]};
 let F=null;
 function blanda(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
-function startFragor(del){const lista=del==="spar"?[FR.spar[0],...blanda(FR.spar.slice(1)).slice(0,3)]:blanda(FR.tid).slice(0,4);
+function startFragor(del){const lista=del==="spar"?[FR.spar[0],...blanda(FR.spar.slice(1)).slice(0,3)]:blanda(FR[del]).slice(0,del==="mal"?3:4);
   F={del,q:lista.map(f=>{const x=f(),ord=blanda(x.a.map((t,j)=>[t,j===x.r]));return{q:x.q,a:ord,f:x.f};}),n:0,fel:[]};show("fragor");fRita();}
 function fRita(){const x=F.q[F.n];$("fPrick").innerHTML=F.q.map((_,j)=>`<i class="${j<F.n?(F.fel[j]?"f":"ok"):j===F.n?"nu":""}"></i>`).join("");
   $("fFraga").textContent=x.q;$("fForkl").textContent="";$("fNasta").hidden=true;
@@ -542,13 +717,13 @@ $("fNasta").onclick=()=>{if(F.n<F.q.length-1){F.n++;fRita();return;}
   $("kStj").textContent=stjTxt(st);$("kRub").textContent=fel===0?"Alla rätt direkt! 🎉":"Bra jobbat!";
   $("kTxt").textContent=fel===0?"Du förstår hur pengar växer.":`${F.q.length-fel} av ${F.q.length} rätt på första försöket.`;
   show("klar");if(fel===0)konfetti();L().fanfare&&L().fanfare();};
-$("fTill").onclick=()=>show(F.del==="spar"?"spar":"result");
-$("kIgen").onclick=()=>{if(F.del==="spar")$("gaSpar").click();else $("gaTid").click();};
+$("fTill").onclick=()=>show(F.del==="spar"?"spar":F.del==="mal"?"mal":"result");
+$("kIgen").onclick=()=>{if(F.del==="spar")$("gaSpar").click();else if(F.del==="mal")$("gaMal").click();else $("gaTid").click();};
 function konfetti(){if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;
   for(let k=0;k<40;k++){const e=document.createElement("span");e.textContent=["🪙","⭐","💰","✨"][k%4];
     e.style.cssText=`position:fixed;top:-30px;left:${Math.random()*100}vw;font-size:${18+Math.random()*16}px;z-index:99;pointer-events:none`;document.body.appendChild(e);
     e.animate([{transform:"translateY(0) rotate(0)"},{transform:`translateY(${innerHeight+60}px) rotate(${Math.random()*720-360}deg)`}],{duration:1800+Math.random()*1400,easing:"ease-in"}).onfinish=()=>e.remove();}}
-window.addEventListener("resize",()=>{if(skarm==="game")gRita();if(bl)bRita();if(skarm==="spar")sRita();});
+window.addEventListener("resize",()=>{if(skarm==="mal")mRita();if(skarm==="game")gRita();if(bl)bRita();if(skarm==="spar")sRita();});
 document.addEventListener("visibilitychange",()=>{if(document.hidden)paus();});
 show("home");
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&document.querySelector(".blad .stang"))stangBlad();});
