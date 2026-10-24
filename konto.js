@@ -67,6 +67,7 @@ document.addEventListener("visibilitychange",()=>{if(document.visibilityState===
 
 window.MPKonto={PKEYS,merge,progressOf,snap,paket,minProfil,synka,puffa,
   skapa:p=>rpc("pp_skapa",{p_data:paket(p,snap())}),
+  skapaMed:(p,d)=>rpc("pp_skapa",{p_data:paket(p,d)}),
   hamta:(n,k)=>rpc("pp_hamta",{p_namn:String(n).trim().toLowerCase(),p_kod:String(k).trim()}),
   radera:(n,k)=>rpc("pp_radera",{p_namn:n,p_kod:k}),
   senast:()=>+(lsGet("mp-konto-senast")||0)};

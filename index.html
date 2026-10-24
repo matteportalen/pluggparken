@@ -195,9 +195,11 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 .dots4 i.on{background:var(--sel,var(--ink))}
 .dots4.shake{animation:shk .35s}
 @keyframes shk{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+[hidden]{display:none!important}
 .kinfo{list-style:none;padding:0;margin:8px 0;display:grid;gap:6px;font-size:.95rem}
 .kbox{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:baseline;text-align:left;background:var(--soft,#F1F6FF);border-radius:16px;padding:14px 16px;margin:6px 0}.kbox span{color:var(--muted);font-weight:700;font-size:.9rem}.kbox b{font-size:1.5rem;letter-spacing:.02em;overflow-wrap:anywhere}
-.lc-konto{margin-top:6px;font-size:1.05rem;font-weight:800}.lc-konto span{display:block;font-weight:600;color:#56668F;font-size:.85rem}
+.lc-konto{margin:10px auto 0;display:grid;grid-template-columns:auto auto;justify-content:center;gap:4px 14px;text-align:left;font-size:1.5rem;font-weight:800}.lc-konto span{font-weight:600;color:#56668F;font-size:.9rem;align-self:center}
+.kny{background:#E8F7EE;color:#157548;border-radius:14px;padding:10px 12px;font-weight:700;font-size:.92rem;margin:6px 0}
 .pinmsg{min-height:1.3em;color:#E5484D;font-weight:800;text-align:center;margin:4px 0}
 .pinmsg.ok{color:#1E9E5E}
 .pinpad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:6px}
@@ -327,10 +329,11 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 <div class="modal" id="mWho" hidden><div class="sheet" role="dialog" aria-label="Vem tränar?">
   <h2 style="text-align:center">Vem tränar idag?</h2>
   <div class="who" id="whoGrid"></div>
-  <button class="gobtn newbtn" id="whoNew">＋ Skapa ny profil</button>
-  <button class="qrbtn" id="scanBtn">📷 Jag har ett inloggningskort (QR-kod)</button>
-  <button class="qrbtn" id="kontoIn">☁️ Logga in med mitt konto</button>
-  <div class="pinfo"><span aria-hidden="true">ℹ️</span><p>Din profil sparas i den här webbläsaren. Flera kan ha egna profiler här. Vill du spela på en annan dator eller iPad? Skapa ett <b>konto</b> under din profil, så sparas framstegen också i molnet och du loggar in med användarnamn och lösenord. Du kan också skriva ut inloggningskortet och skanna det.</p></div>
+  <button class="gobtn" id="kontoIn">☁️ Logga in</button>
+  <button class="qrbtn" id="kontoNy">＋ Skapa ett nytt konto</button>
+  <button id="whoNew" hidden></button>
+  <button class="guestlink" id="scanBtn" style="margin-top:10px">📷 Jag har ett kort med QR-kod</button>
+  <div class="pinfo"><span aria-hidden="true">ℹ️</span><p>Med ett konto sparas dina poäng i molnet. Då kan du logga in på en annan dator eller iPad och fortsätta där du var. Du får ett påhittat användarnamn och lösenord. Inga riktiga namn och ingen e-post.</p></div>
   <div class="pinfo" id="hamtaGammal" hidden><span aria-hidden="true">🚚</span><p>Har du spelat på <b>matteportalen.github.io</b>? Pluggparken har flyttat hit. <a href="https://matteportalen.github.io/" style="color:var(--accent);font-weight:800">Hämta dina framsteg därifrån</a></p></div>
   <button class="guestlink" id="guestBtn">Fortsätt som gäst</button>
 </div></div>
@@ -356,13 +359,11 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 <div class="modal" id="mProf" hidden><div class="sheet" role="dialog" aria-label="Min profil" style="max-width:420px">
   <div class="top"><h2 id="profName"></h2><button class="close" data-close aria-label="Stäng">✕</button></div>
   <div class="plist">
-    <button class="tool" id="pSwitch"><span class="ic">👥</span><span><b>Byt profil</b><small>Låt någon annan träna</small></span></button>
-    <button class="tool" id="pKonto"><span class="ic">☁️</span><span><b id="pKontoB">Skapa ett konto</b><small id="pKontoS">Spara framstegen och spela på flera enheter</small></span></button>
-    <button class="tool" id="pCard"><span class="ic">🪪</span><span><b>Ta med min profil</b><small>Skriv ut ditt inloggningskort med QR-kod</small></span></button>
-    <button class="tool" id="pMove"><span class="ic">📲</span><span><b>Flytta mina framsteg</b><small>Till en annan dator eller surfplatta</small></span></button>
-    <button class="tool" id="pImport"><span class="ic">📥</span><span><b>Hämta framsteg</b><small>Har du en flyttkod? Lägg in den här</small></span></button>
+    <button class="tool" id="pKonto"><span class="ic">☁️</span><span><b id="pKontoB">Skapa ett konto</b><small id="pKontoS">Dina poäng följer med. Spela på flera enheter.</small></span></button>
+    <button class="tool" id="pUt"><span class="ic">🚪</span><span><b>Logga ut</b><small>Låt någon annan spela</small></span></button>
     <button class="tool" id="pPin"><span class="ic">🔑</span><span><b>Byt kod</b><small>Välj en ny kod med 4 siffror</small></span></button>
-    <button class="tool" id="pDel"><span class="ic">🗑️</span><span><b>Ta bort profilen</b><small>Allt för den här profilen raderas</small></span></button>
+    <button class="tool" id="pDel"><span class="ic">🗑️</span><span><b id="pDelB">Ta bort profilen</b><small id="pDelS">Allt för den här profilen raderas</small></span></button>
+    <button id="pSwitch" hidden></button><button id="pCard" hidden></button><button id="pMove" hidden></button><button id="pImport" hidden></button>
   </div>
 </div></div>
 
@@ -373,7 +374,7 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
     <div class="lc-qr" id="lcQr"></div>
     <div class="lc-name" id="lcName"></div>
     <div class="lc-konto" id="lcKonto" hidden></div>
-    <p class="lc-how">Logga in: tryck på <b>Logga in med QR-kod</b> och håll upp kortet framför kameran.</p>
+    <p class="lc-how" id="lcHow">Logga in på pluggparken.se: tryck på <b>Logga in</b> och skriv användarnamnet och lösenordet.</p>
   </div>
   <p class="pnote noprint" id="lcNote"></p>
   <div class="noprint" style="display:flex;gap:8px;margin-top:10px"><button class="gobtn" id="lcPrint" style="margin:0">🖨️ Skriv ut</button></div>
@@ -387,7 +388,7 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
   <input id="kInKod" class="pinput" style="width:100%" placeholder="Till exempel pannkaka" autocomplete="current-password" autocapitalize="none" autocorrect="off" spellcheck="false">
   <p class="pinmsg" id="kInMsg"></p>
   <button class="gobtn" id="kInGo">Logga in</button>
-  <p class="pnote">Står på ditt inloggningskort. Har du inget konto? Tryck på din profil och välj <b>Skapa ett konto</b>.</p>
+  <p class="pnote">Står på ditt kort. Har du inget konto? Gå tillbaka och tryck på <b>Skapa ett nytt konto</b>.</p>
 </div></div>
 
 <div class="modal" id="mKNy" hidden><div class="sheet" role="dialog" aria-label="Skapa konto" style="max-width:440px">
@@ -402,10 +403,11 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
   <div class="top"><h2>☁️ Mitt konto</h2><button class="close" data-close aria-label="Stäng">✕</button></div>
   <div class="kbox"><span>Användarnamn</span><b id="kiNamn"></b><span>Lösenord</span><b id="kiKod"></b></div>
   <p class="pnote" id="kiSenast"></p>
-  <button class="gobtn" id="kiKort">🪪 Skriv ut mitt kort</button>
+  <p class="kny" id="kiNy" hidden>🎉 Ditt konto är klart! Skriv upp namnet och lösenordet, eller skriv ut kortet. Lösenordet går inte att få tillbaka om det försvinner.</p>
+  <button class="gobtn" id="kiKort">🖨️ Skriv ut mitt kort</button>
+  <button class="qrbtn" id="kiSpela" hidden>▶ Börja spela</button>
   <button class="qrbtn" id="kiSynk">🔄 Synka nu</button>
-  <button class="linkbtn" id="kiUt" style="display:block;margin:12px auto 0">Koppla bort kontot från den här enheten</button>
-  <button class="linkbtn" id="kiDel" style="display:block;margin:6px auto 0;color:#E5484D">Radera kontot för alltid</button>
+  <button id="kiUt" hidden></button><button id="kiDel" hidden></button>
 </div></div>
 
 <div class="modal" id="mScan" hidden><div class="sheet" role="dialog" aria-label="Logga in med QR-kod" style="max-width:440px;text-align:center">
@@ -775,7 +777,7 @@ function openWho(){
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 $("whoNew").onclick=()=>openNew();
 $("whoGrid").onclick=e=>{const b=e.target.closest("button");if(!b)return;
-  const p=byId(b.dataset.id);askPin(`Hej ${p.name}! Skriv din kod.`,owlOf(p.id),v=>{if(hash(v+p.salt)!==p.pinH){$("pinMsg").textContent="Fel kod. Försök igen.";return false;}switchTo(p.id);return true;},
+  const p=byId(b.dataset.id);if(p.konto){oppnaIn(p.konto.namn);return;}askPin(`Hej ${p.name}! Skriv din kod.`,owlOf(p.id),v=>{if(hash(v+p.salt)!==p.pinH){$("pinMsg").textContent="Fel kod. Försök igen.";return false;}switchTo(p.id);return true;},
     {cancel:openWho,forgot:()=>adultReset(p)});};
 $("guestBtn").onclick=()=>{if(!list().length&&!owner()){closeAll();return;}switchTo("gast");};
 // Escape stänger rutan (som knappen ✕ eller Avbryt): koden och kameran går tillbaka till profilvalet; profilvalet går tillbaka till förra profilen eller fortsätter som gäst
@@ -827,18 +829,21 @@ function chip(){
   else if(act==="gast")w.innerHTML=`👤 Gäst ▾`;
   else w.innerHTML=list().length?"👥 Välj profil":"👤 Logga in";
 }
-$("whoChip").onclick=()=>{if(me){$("profName").textContent=me.name;["pCard","pMove","pPin","pDel"].forEach(i=>$(i).hidden=false);openM("mProf");}
-  else if(act==="gast"){$("profName").textContent="Gäst";["pCard","pMove","pPin","pDel"].forEach(i=>$(i).hidden=true);openM("mProf");}
+$("whoChip").onclick=()=>{if(me){$("profName").textContent=me.name+(me.konto&&me.konto.namn!==me.name?` (${me.konto.namn})`:"");$("pPin").hidden=!!me.konto||!me.pinH;$("pDel").hidden=false;kontoRad();openM("mProf");}
+  else if(act==="gast"){$("profName").textContent="Gäst";$("pPin").hidden=$("pDel").hidden=true;kontoRad();openM("mProf");}
   else openWho();};
+// logga ut: spara (och synka) först, sedan till "Vem tränar idag?"
+$("pUt").onclick=async()=>{stash();if(me&&me.konto)await Promise.race([MPKonto.synka(),new Promise(r=>setTimeout(r,2500))]);
+  window.__forrigeProfil=null;try{sessionStorage.removeItem("mp-active")}catch(e){}openWho();};
 $("pSwitch").onclick=()=>{window.__forrigeProfil=active();stash();try{sessionStorage.removeItem("mp-active")}catch(e){}openWho();};
 $("pPin").onclick=()=>askPin("Skriv din nuvarande kod",owlOf(me.id),v=>{if(hash(v+me.salt)!==me.pinH){$("pinMsg").textContent="Fel kod.";return false;}
   askPin("Välj en ny kod",owlOf(me.id),n=>{const ps=list(),q=ps.find(x=>x.id===me.id);q.pinH=hash(n+q.salt);saveList(ps);closeAll();alert("Klart! Din nya kod är sparad.");return true;});return true;});
-$("pDel").onclick=()=>askPin(`Skriv koden för att ta bort ${me.name}`,owlOf(me.id),v=>{if(hash(v+me.salt)!==me.pinH){$("pinMsg").textContent="Fel kod.";return false;}
+$("pDel").onclick=()=>{if(me&&me.konto){raderaKonto();return;}askPin(`Skriv koden för att ta bort ${me.name}`,owlOf(me.id),v=>{if(hash(v+me.salt)!==me.pinH){$("pinMsg").textContent="Fel kod.";return false;}
   if(!confirm(`Vill du verkligen ta bort ${me.name}? Alla stjärnor och klistermärken för profilen försvinner.`)){closeAll();return true;}
   saveList(list().filter(p=>p.id!==me.id));lsDel("mp-bundle-"+me.id);if(owner()===me.id){clearLive();setOwner(null);}
-  try{sessionStorage.removeItem("mp-active")}catch(e){}location.reload();return true;});
+  try{sessionStorage.removeItem("mp-active")}catch(e){}location.reload();return true;});};
 
-/* ---------- Flyttkod ---------- */
+/* ---------- Flyttkod (bara gamla länkar #flytta= och #kort= tas emot, knapparna är borttagna) ---------- */
 const b64u=bytes=>{let s="";bytes.forEach(b=>s+=String.fromCharCode(b));return btoa(s).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");};
 const unb64u=s=>{s=s.replace(/-/g,"+").replace(/_/g,"/");while(s.length%4)s+="=";const bin=atob(s);return Uint8Array.from(bin,c=>c.charCodeAt(0));};
 async function pack(obj){
@@ -888,7 +893,9 @@ function cardData(){
   return out;
 }
 $("pCard").onclick=async()=>{
-  stash();const code=await pack({v:1,n:me.name,h:me.pinH,s:me.salt,d:cardData(),...(me.konto?{k:me.konto}:{})}),url=cardURL(code);
+  if(me&&me.konto){$("lcOwl").innerHTML=owlOf(me.id);$("lcName").textContent=me.name;$("lcQr").innerHTML="";$("lcQr").hidden=true;$("lcHow").hidden=false;
+    $("lcKonto").hidden=false;$("lcKonto").innerHTML=`<span>Användarnamn</span>${esc(me.konto.namn)}<span>Lösenord</span>${esc(me.konto.kod)}`;$("lcNote").textContent="";openM("mCard");return;}
+  $("lcQr").hidden=false;stash();const code=await pack({v:1,n:me.name,h:me.pinH,s:me.salt,d:cardData(),...(me.konto?{k:me.konto}:{})}),url=cardURL(code);
   $("lcKonto").hidden=!me.konto;if(me.konto)$("lcKonto").innerHTML=`<span>Konto</span>${esc(me.konto.namn)} · ${esc(me.konto.kod)}`;
   $("lcOwl").innerHTML=owlOf(me.id);$("lcName").textContent=me.name;$("lcQr").innerHTML="";$("lcNote").textContent="";openM("mCard");
   if(url.length>2900){$("lcNote").textContent="Du har samlat så mycket att koden blev för stor för ett kort. Använd Flytta mina framsteg i stället.";return;}
@@ -948,38 +955,60 @@ function importBundle(o){
 /* ---------- Konton i molnet (konto.js) ---------- */
 const sparaKonto=(id,k)=>{const ps=list(),q=ps.find(x=>x.id===id);if(!q)return;if(k)q.konto=k;else delete q.konto;saveList(ps);};
 const nar=t=>{if(!t)return"inte än";const m=Math.round((Date.now()-t)/60000);return m<1?"nyss":m<60?`för ${m} min sedan`:new Date(t).toLocaleString("sv-SE",{dateStyle:"short",timeStyle:"short"});};
-function visaKonto(){const k=me.konto;$("kiNamn").textContent=k.namn;$("kiKod").textContent=k.kod;
-  $("kiSenast").textContent="Senast synkat: "+nar(MPKonto.senast())+". Framstegen sparas av sig själva.";openM("mKInfo");}
-$("pKonto").onclick=()=>{if(me.konto)visaKonto();else{$("kNyMsg").textContent="";openM("mKNy");}};
+function visaKonto(k,ny){$("kiNamn").textContent=k.namn;$("kiKod").textContent=k.kod;$("kiNy").hidden=!ny;$("kiSpela").hidden=!ny;$("kiSynk").hidden=!!ny;
+  $("kiSenast").textContent=ny?"":"Senast sparat i molnet: "+nar(MPKonto.senast())+". Det sker av sig självt.";openM("mKInfo");}
+function kontoRad(){const k=me&&me.konto;$("pKontoB").textContent=k?"Mitt konto":"Skapa ett konto";$("pKontoS").textContent=k?`☁️ ${k.namn} · sparas av sig självt`:"Dina poäng följer med. Spela på flera enheter.";
+  $("pDelB").textContent=k?"Radera kontot":"Ta bort profilen";$("pDelS").textContent=k?"Kontot och poängen i molnet raderas":"Allt för den här profilen raderas";}
+// Skapa konto. Från profilmenyn: den här profilen (eller gästen) får kontot och poängen följer med.
+// Från "Vem tränar idag?": ett nytt konto; på en enhet utan profiler följer gästens poäng med.
+let skapaFran="meny";
+$("pKonto").onclick=()=>{if(me&&me.konto){visaKonto(me.konto);return;}skapaFran="meny";$("kNyMsg").textContent="";openM("mKNy");};
+$("kontoNy").onclick=()=>{skapaFran="ny";$("kNyMsg").textContent="";openM("mKNy");};
 $("kNyGo").onclick=async()=>{const b=$("kNyGo");b.disabled=true;$("kNyMsg").textContent="";stash();
-  try{const r=await MPKonto.skapa(me);if(!r.ok)throw 0;me.konto={namn:r.namn,kod:r.kod};sparaKonto(me.id,me.konto);MPKonto.synka();window.Ljud&&Ljud.magic();visaKonto();chip();kontoRad();}
-  catch(e){$("kNyMsg").textContent="Det gick inte att skapa kontot. Kontrollera internet och försök igen.";}b.disabled=false;};
-$("kiKort").onclick=()=>$("pCard").click();
-$("kiSynk").onclick=async()=>{$("kiSenast").textContent="Synkar …";stash();const r=await MPKonto.synka({skriv:true});
-  if(r.ok){if(r.andrad){location.reload();return;}$("kiSenast").textContent="Klart! Senast synkat: nyss.";}else $("kiSenast").textContent=r.fel==="natet"?"Ingen kontakt med servern. Försök igen senare.":"Lösenordet stämmer inte längre. Koppla bort kontot och logga in igen.";};
-$("kiUt").onclick=()=>{if(!confirm("Koppla bort kontot från den här enheten? Framstegen finns kvar här och i kontot. Du kan logga in igen med användarnamn och lösenord."))return;sparaKonto(me.id,null);delete me.konto;closeAll();chip();kontoRad();};
-$("kiDel").onclick=async()=>{if(!confirm(`Radera kontot ${me.konto.namn} för alltid? Framstegen i molnet försvinner. Det som finns på den här enheten finns kvar.`))return;
-  const r=await MPKonto.radera(me.konto.namn,me.konto.kod).catch(()=>({fel:"natet"}));if(!r.ok){alert("Det gick inte att radera kontot. Försök igen senare.");return;}
-  sparaKonto(me.id,null);delete me.konto;closeAll();chip();kontoRad();alert("Kontot är raderat.");};
-function kontoRad(){if(!me)return;$("pKontoB").textContent=me.konto?"Mitt konto":"Skapa ett konto";$("pKontoS").textContent=me.konto?`☁️ ${me.konto.namn} · sparas av sig själv`:"Spara framstegen och spela på flera enheter";}
-// logga in på en ny enhet: finns profilen redan här slås framstegen ihop, annars skapas den
-$("kontoIn").onclick=()=>{$("kInNamn").value="";$("kInKod").value="";$("kInMsg").textContent="";openM("mKIn");setTimeout(()=>$("kInNamn").focus(),50);};
+  const ow=owner(),gast=!ow||ow==="gast",ps=list();
+  let p,d;
+  if(skapaFran==="meny"&&me){p=me;d=snapLive();}
+  else{p={id:"p"+Date.now().toString(36)+Math.floor(Math.random()*1e4).toString(36),name:"",salt:"",pinH:"",created:Date.now()};p.salt=p.id;
+    d=(skapaFran==="meny"&&act==="gast")||(gast&&!ps.length)?snapLive():{};}
+  let r;try{r=await MPKonto.skapaMed(p,d);}catch(e){r={fel:"natet"};}b.disabled=false;
+  if(!r.ok){$("kNyMsg").textContent=r.fel==="natet"?"Det behövs internet för att skapa ett konto. Försök igen.":"Det gick inte att skapa kontot. Försök igen.";return;}
+  const k={namn:r.namn,kod:r.kod};window.Ljud&&Ljud.magic();
+  if(p===me){me.konto=k;sparaKonto(me.id,k);MPKonto.synka();chip();kontoRad();visaKonto(k,true);$("kiSpela").hidden=true;$("kiSynk").hidden=false;return;}
+  p.name=r.namn;p.konto=k;ps.push(p);saveList(ps);
+  if(Object.keys(d).length){lsDel("mp-bundle-gast");setOwner(p.id);}   // gästens poäng blir kontots
+  else{clearLive();setOwner(p.id);}
+  ssSet("mp-active",p.id);MPKonto.synka();visaKonto(k,true);};
+$("kiSpela").onclick=()=>{history.replaceState(null,"",location.pathname);location.reload();};
+$("kiKort").onclick=()=>{if(!$("kiSpela").hidden){const k={namn:$("kiNamn").textContent,kod:$("kiKod").textContent};
+    $("lcOwl").innerHTML="";$("lcName").textContent=k.namn;$("lcQr").hidden=true;$("lcKonto").hidden=false;$("lcKonto").innerHTML=`<span>Användarnamn</span>${esc(k.namn)}<span>Lösenord</span>${esc(k.kod)}`;$("lcNote").textContent="";openM("mCard");return;}
+  $("pCard").click();};
+$("kiSynk").onclick=async()=>{$("kiSenast").textContent="Sparar …";stash();const r=await MPKonto.synka({skriv:true});
+  if(r.ok){if(r.andrad){location.reload();return;}$("kiSenast").textContent="Klart! Allt är sparat i molnet.";}else $("kiSenast").textContent=r.fel==="natet"?"Ingen kontakt med servern. Försök igen senare.":"Lösenordet stämmer inte. Logga ut och logga in igen.";};
+async function raderaKonto(){if(!confirm(`Radera kontot ${me.konto.namn}? Poängen i molnet och på den här enheten försvinner för alltid.`))return;
+  if(!confirm("Är du helt säker? Det går inte att ångra."))return;
+  const r=await MPKonto.radera(me.konto.namn,me.konto.kod).catch(()=>({fel:"natet"}));
+  if(!r.ok&&r.fel!=="kod"){alert(r.fel==="natet"?"Det behövs internet för att radera kontot. Försök igen.":"Kontot är spärrat en stund efter för många fel lösenord. Försök igen senare.");return;}
+  saveList(list().filter(p=>p.id!==me.id));lsDel("mp-bundle-"+me.id);if(owner()===me.id){clearLive();setOwner(null);}
+  try{sessionStorage.removeItem("mp-active")}catch(e){}alert("Kontot är raderat.");location.reload();}
+// logga in: kontots profil finns redan på enheten → bara lösenordet behövs; annars hämtas allt från molnet
+function oppnaIn(namn){$("kInNamn").value=namn||"";$("kInKod").value="";$("kInMsg").textContent="";openM("mKIn");setTimeout(()=>$(namn?"kInKod":"kInNamn").focus(),50);}
+$("kontoIn").onclick=()=>oppnaIn("");
 $("kInClose").onclick=openWho;
 $("kInKod").addEventListener("keydown",e=>{if(e.key==="Enter")$("kInGo").click();});
+$("kInNamn").addEventListener("keydown",e=>{if(e.key==="Enter")$("kInKod").focus();});
 $("kInGo").onclick=async()=>{const n=$("kInNamn").value.trim().toLowerCase(),k=$("kInKod").value.trim().toLowerCase();
   if(!n||!k){$("kInMsg").textContent="Skriv både användarnamn och lösenord.";return;}
+  const lok=list().find(x=>x.konto&&x.konto.namn===n);
+  if(lok&&lok.konto.kod===k){switchTo(lok.id);return;}   // poängen hämtas från molnet när startsidan laddas
   $("kInGo").disabled=true;$("kInMsg").textContent="";let r;try{r=await MPKonto.hamta(n,k);}catch(e){r={fel:"natet"};}$("kInGo").disabled=false;
   if(!r.ok){$("kInMsg").textContent=r.fel==="sparrad"?"För många försök. Vänta en stund och försök igen, eller be en vuxen titta på ditt kort.":r.fel==="natet"?"Ingen kontakt med servern. Kontrollera internet.":"Användarnamnet eller lösenordet stämmer inte.";window.Ljud&&Ljud.bad();return;}
   const o=r.data||{},d=o.d||{},ps=list();let p=ps.find(x=>x.konto&&x.konto.namn===r.namn)||(o.s&&ps.find(x=>x.salt===o.s));
   if(p){const cur=p.id===owner()?snapLive():(jGet("mp-bundle-"+p.id)||{}),m=mergeBundles(cur,d);if(p.id===owner())loadLive(m);else jSet("mp-bundle-"+p.id,m);p.konto={namn:r.namn,kod:k};}
   else{let name=o.n||r.namn;while(ps.some(x=>x.name.toLowerCase()===name.toLowerCase()))name+=" 2";
-    // som när första profilen skapas: det som redan finns på en enhet utan profiler följer med
-    const forst=!ps.length&&!owner();
+    const forst=!ps.length&&(!owner()||owner()==="gast");   // på en enhet utan profiler följer gästens poäng med
     p={id:"p"+Date.now().toString(36),name,salt:o.s||("s"+Date.now().toString(36)),pinH:o.h||"",created:Date.now(),konto:{namn:r.namn,kod:k}};ps.push(p);
-    if(forst){loadLive(mergeBundles(snapLive(),d));setOwner(p.id);}else jSet("mp-bundle-"+p.id,d);}
-  if(!p.pinH){p.pinH=hash("0000"+p.salt);}
-  saveList(ps);
-  window.Ljud&&Ljud.magic();switchTo(p.id);};
+    if(forst){loadLive(mergeBundles(snapLive(),d));lsDel("mp-bundle-gast");setOwner(p.id);}else jSet("mp-bundle-"+p.id,d);}
+  saveList(ps);window.Ljud&&Ljud.magic();switchTo(p.id);};
 
 /* ---------- Start ---------- */
 chip();kontoRad();
