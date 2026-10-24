@@ -78,6 +78,9 @@ select{font:inherit;background:var(--card2);color:var(--ink);border:1px solid va
 .prat{background:rgba(232,196,104,.1);border:1px solid rgba(232,196,104,.3);border-radius:16px;padding:10px 14px;font-weight:600;min-height:3.2em;margin:8px 0}
 /* Tidsmaskinen */
 .lista{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+.satt{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:4px 0 14px}.satt button{text-align:left;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px;display:grid;gap:2px;color:var(--ink)}.satt .e{font-size:1.5rem}.satt b{font-size:1rem}.satt small{color:var(--muted);font-size:.82rem;line-height:1.3}.satt button[aria-pressed="true"]{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 24px rgba(232,196,104,.18)}@media(max-width:420px){.satt{grid-template-columns:1fr}}
+.pl .val{flex:none;font-weight:800;font-size:.85rem;color:var(--muted)}.pl.vald{border-color:var(--gold)}.pl.vald .val{color:var(--gold)}
+.mman{margin-top:8px;font-size:.86rem;color:var(--muted);line-height:1.35}.mman b{color:var(--ink)}.mman i{font-style:normal;color:var(--gold);font-weight:800}
 .grp-h{grid-column:1/-1;margin:10px 2px 0;font:700 .72rem Inter,system-ui;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}.grp-h:first-child{margin-top:0}
 @media(min-width:640px){.lista{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .pl{min-width:0;display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:8px 10px;text-align:left;width:100%;transition:background .15s,border-color .15s}
@@ -230,17 +233,31 @@ button.pl:hover,.pl[role=button]:hover{background:var(--card2);border-color:rgba
   <button class="back" data-home>← Tillbaka</button>
   <h2>⏳ Januari 2007</h2>
   <p class="prat" style="margin:0 0 8px">⚠️ Vi börjar i januari 2007, precis före en av de största börskrascherna någonsin. Det var en av de sämsta tidpunkterna att börja spara i aktier. Vad händer med dina pengar?</p>
+  <div class="satt" id="tSatt" role="group" aria-label="Hur vill du spara?">
+    <button data-s="klump" aria-pressed="true"><span class="e">💰</span><b>10 000 kr på en gång</b><small>Du får alla pengar nu och väljer vad du köper.</small></button>
+    <button data-s="man" aria-pressed="false"><span class="e">📅</span><b>Spara varje månad</b><small>Du sätter in lite pengar varje månad, som de flesta gör.</small></button>
+  </div>
+  <div id="tKlump">
   <p class="lead" style="margin-bottom:8px">Du har <b>10 000 kr</b>. Vad vill du köpa? Tryck på + för att lägga 1 000 kr. Det du inte använder hamnar på sparkontot och får ränta. Tryck på en rad för att se kursen.</p>
   <div class="lista" id="valLista"></div>
   <div class="kvar"><b id="kvarTxt"></b><button class="knapp" id="startTid">▶ Starta tidsmaskinen</button></div>
   <p class="info">Fler saker går att köpa senare, till exempel Spotify och bitcoin. Du kan köpa och sälja när du vill under resan.</p>
+  </div>
+  <div id="tMan" hidden>
+    <p class="lead" style="margin-bottom:6px">Hur mycket sätter du in varje månad?</p>
+    <div class="chips" id="mBel"><button data-b="100" aria-pressed="false">100 kr</button><button data-b="300" aria-pressed="true">300 kr</button><button data-b="500" aria-pressed="false">500 kr</button></div>
+    <p class="lead" style="margin:10px 0 6px">Vart ska pengarna gå varje månad?</p>
+    <div class="lista" id="manLista"></div>
+    <div class="kvar"><b id="manTxt"></b><button class="knapp" id="startMan">▶ Starta tidsmaskinen</button></div>
+    <p class="info">Du kan byta vart pengarna går när du vill under resan, och köpa och sälja som vanligt.</p>
+  </div>
 </section>
 
 <!-- ================= Tidsmaskinen: resan ================= -->
 <section id="game" hidden>
   <button class="back" id="quit">← Avsluta</button>
   <div class="card port">
-    <div><div class="datum" id="gDatum"></div><div class="lbl">Min portfölj</div><div class="varde" id="gVarde"></div><div class="forandr" id="gFor"></div></div>
+    <div><div class="datum" id="gDatum"></div><div class="lbl">Min portfölj</div><div class="varde" id="gVarde"></div><div class="forandr" id="gFor"></div><div class="mman" id="gMan" hidden></div></div>
     <div class="p-r"><canvas id="gDonut" width="208" height="208" aria-label="Hur pengarna är fördelade"></canvas><div class="leg" id="gLeg"></div></div>
   </div>
   <div class="card">
@@ -265,9 +282,9 @@ button.pl:hover,.pl[role=button]:hover{background:var(--card2);border-color:rgba
   <button class="back" id="rHome">← Till början</button>
   <h2>⏳ September 2026: framme!</h2>
   <div class="card">
-    <div class="datum" style="text-transform:none">Dina 10 000 kr är nu värda</div>
+    <div class="datum" style="text-transform:none" id="rRub">Dina 10 000 kr är nu värda</div>
     <div class="varde" id="rVarde"></div><div class="forandr" id="rFor"></div>
-    <div class="graf"><canvas id="rGraf"></canvas></div><div class="info">Heldragen linje: dina pengar. Streckad: om du bara hade köpt Indexfond Sverige.</div>
+    <div class="graf"><canvas id="rGraf"></canvas></div><div class="info" id="rGrafInfo">Heldragen linje: dina pengar. Streckad: om du bara hade köpt Indexfond Sverige.</div>
   </div>
   <div class="sub">Vad hade hänt om du gjort så här i stället?</div>
   <div class="card"><div class="jmf" id="rJmf"></div><p class="info" id="rJmfInfo"></p></div>
@@ -462,11 +479,11 @@ function rita(cv,o){
   // år under
   const ar=[];for(let i=a;i<=b;i++)if(M[i].endsWith("-01")||i===a)ar.push(i);
   const hopp=Math.max(1,Math.ceil(ar.length/(w/52)));c.textAlign="center";c.fillStyle="#8FA0C2";
-  ar.forEach((i,k)=>{if(M[i].endsWith("-01")&&k%hopp===0)c.fillText(M[i].slice(0,4),Math.min(Math.max(X(i),16),PL+w-16),H-10);});
+  ar.forEach((i,k)=>{if(M[i].endsWith("-01")&&k%hopp===0&&!(b-a<14&&X(i)-PL<95))c.fillText(M[i].slice(0,4),Math.min(Math.max(X(i),16),PL+w-16),H-10);});
   if(b-a<14){c.fillText(datum(a),PL+40,H-10);}
   // startlinje
   const s0=o.bas!=null?o.bas:v[a];
-  c.setLineDash([4,4]);c.strokeStyle="rgba(255,255,255,.25)";c.beginPath();c.moveTo(PL,Y(s0));c.lineTo(PL+w,Y(s0));c.stroke();c.setLineDash([]);
+  if(!o.utanStart){c.setLineDash([4,4]);c.strokeStyle="rgba(255,255,255,.25)";c.beginPath();c.moveTo(PL,Y(s0));c.lineTo(PL+w,Y(s0));c.stroke();c.setLineDash([]);}
   ex.forEach(e=>{c.strokeStyle=e.col;c.lineWidth=2;c.setLineDash(e.dash||[6,5]);c.beginPath();let f=true;for(let i=a;i<=b;i++){if(e.v[i]==null)continue;f?c.moveTo(X(i),Y(e.v[i])):c.lineTo(X(i),Y(e.v[i]));f=false;}c.stroke();c.setLineDash([]);});
   const upp=v[b]>=s0,col=o.col||(upp?"#35D69A":"#FF6B6B");
   const g=c.createLinearGradient(0,PT,0,PT+h);g.addColorStop(0,o.col?"rgba(53,214,154,.22)":upp?"rgba(53,214,154,.25)":"rgba(255,107,107,.22)");g.addColorStop(1,"rgba(10,16,30,0)");
@@ -568,7 +585,13 @@ $("gaMal").onclick=()=>{show("mal");mRita();};
 $("mFragor").onclick=()=>startFragor("mal");
 
 /* ================= Tidsmaskinen ================= */
-const START=10000,G={i:0,u:{},cash:START,kost:{},hist:[],tid:null,fart:1,skugg:[],val:{},sedd:{}};
+const START=10000,G={i:0,u:{},cash:START,kost:{},hist:[],tid:null,fart:1,skugg:[],val:{},sedd:{},satt:"klump",man:300,till:"sverige",ins:[START]};
+let tSatt="klump",tMan=300,tTill="sverige";
+// insättning varje månad: till sparkontot eller köp av en placering (u = andelar, kost = betalt)
+function satIn(st,till,x){if(till==="spar"||!finns(till,G.i))st.cash+=x;else{st.u[till]=(st.u[till]||0)+x/A[till].v[G.i];if(st.kost)st.kost[till]=(st.kost[till]||0)+x;}}
+// värdet över tiden om man sparat x kr varje månad i a från start (för jämförelser), avg = avgift per år
+function manSerie(a,x,avg=0){const o=[];let u=0;for(let i=0;i<N;i++){const p=A[a].v[i];if(p==null){o.push(null);continue;}u=u*(1-avg/12)+x/p;o.push(u*p);}return o;}
+const insatt=()=>G.ins[G.i];
 let valKr={};
 function vardeI(i,u,cash){let v=cash;for(const a in u)v+=u[a]*A[a].v[i];return v;}
 const varde=()=>vardeI(G.i,G.u,G.cash);
@@ -578,21 +601,39 @@ function valRita(){const anv=Object.values(valKr).reduce((x,y)=>x+y,0);
   $("valLista").innerHTML=grupperat(ORDN,a=>{const ok=finns(a,0);
     return`<div class="pl${ok?"":" las"}" data-a="${a}" role="button" tabindex="0">${radHTML(a,0,ok?`<span class="stepper"><button data-m="${a}" aria-label="Mindre ${A[a].n}">−</button><span>${(valKr[a]||0).toLocaleString("sv-SE")} kr</span><button data-p="${a}" aria-label="Mer ${A[a].n}">+</button></span>`:`<span class="hog"><small>Kan köpas<br>från ${A[a].fran.slice(0,4)}</small></span>`)}</div>`;});
   $("kvarTxt").textContent=`Sparkontot: ${kr(START-anv)}`;}
+function manRita(){
+  $("mBel").querySelectorAll("[data-b]").forEach(b=>b.setAttribute("aria-pressed",String(+b.dataset.b===tMan)));
+  const rad=a=>`<div class="pl${a===tTill?" vald":""}" data-t="${a}" role="button" tabindex="0">${radHTML(a,0,`<span class="val">${a===tTill?"● Vald":"○"}</span>`)}</div>`;
+  $("manLista").innerHTML=`<h3 class="grp-h">Sparkonto</h3>`+rad("spar")+grupperat(ORDN.filter(a=>finns(a,0)),rad);
+  $("manTxt").textContent=`${kr(tMan)} varje månad → ${A[tTill].n}`;}
+$("tSatt").onclick=e=>{const b=e.target.closest("[data-s]");if(!b)return;tSatt=b.dataset.s;
+  $("tSatt").querySelectorAll("[data-s]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));
+  $("tKlump").hidden=tSatt!=="klump";$("tMan").hidden=tSatt!=="man";if(tSatt==="man")manRita();};
+$("mBel").onclick=e=>{const b=e.target.closest("[data-b]");if(!b)return;tMan=+b.dataset.b;manRita();};
+$("manLista").onclick=e=>{const r=e.target.closest("[data-t]");if(!r)return;tTill=r.dataset.t;L().pop&&L().pop();manRita();};
 $("valLista").onclick=e=>{const p=e.target.closest("[data-p]"),m=e.target.closest("[data-m]");
   const anv=Object.values(valKr).reduce((x,y)=>x+y,0);
   if(p){if(anv+1000<=START){valKr[p.dataset.p]=(valKr[p.dataset.p]||0)+1000;L().pop&&L().pop();}valRita();return;}
   if(m){const a=m.dataset.m;if(valKr[a]){valKr[a]-=1000;if(!valKr[a])delete valKr[a];}valRita();return;}
   const r=e.target.closest("[data-a]");if(r&&finns(r.dataset.a,0))blad(r.dataset.a,0,true);};
 $("gaTid").onclick=()=>{valKr={};valRita();show("tval");};
-$("startTid").onclick=()=>{Object.assign(G,{i:0,u:{},cash:START,kost:{},hist:[START],fart:1,skugg:[],val:{},sedd:{},logg:[],fakta:[],jmf:{}});
-  for(const a in valKr){G.u[a]=valKr[a]/A[a].v[0];G.kost[a]=valKr[a];G.cash-=valKr[a];G.logg.push({i:0,t:"kop",a,x:valKr[a]});}
+function startResa(){
   $("gJmf").querySelectorAll("[data-j]").forEach(b=>b.setAttribute("aria-pressed","false"));
-  $("gFart").textContent="⏩ Snabbare";show("game");gRita();setTimeout(spela,500);};
+  $("gMan").hidden=G.satt!=="man";
+  $("gFart").textContent="⏩ Snabbare";show("game");gRita();setTimeout(spela,500);}
+$("startTid").onclick=()=>{Object.assign(G,{i:0,u:{},cash:START,kost:{},hist:[START],fart:1,skugg:[],val:{},sedd:{},logg:[],fakta:[],jmf:{},satt:"klump",ins:Array(N).fill(START)});
+  for(const a in valKr){G.u[a]=valKr[a]/A[a].v[0];G.kost[a]=valKr[a];G.cash-=valKr[a];G.logg.push({i:0,t:"kop",a,x:valKr[a]});}
+  startResa();};
+$("startMan").onclick=()=>{Object.assign(G,{i:0,u:{},cash:0,kost:{},fart:1,skugg:[],val:{},sedd:{},logg:[],fakta:[],jmf:{},satt:"man",man:tMan,till:tTill,ins:[tMan]});
+  satIn(G,G.till,G.man);G.hist=[varde()];G.logg.push({i:0,t:"start",a:G.till,x:G.man});
+  startResa();};
 
 // en månad framåt
 function steg(){if(G.i>=N-1){slut();return;}
   G.cash*=1+K.ranta[G.i]/1200;G.skugg.forEach(s=>{s.cash*=1+K.ranta[G.i]/1200;});
-  G.i++;G.hist[G.i]=varde();gRita();
+  G.i++;
+  if(G.satt==="man"){satIn(G,G.till,G.man);G.skugg.forEach(s=>satIn(s,s.till,G.man));G.ins[G.i]=G.ins[G.i-1]+G.man;}else G.ins[G.i]=START;
+  G.hist[G.i]=varde();gRita();
   const fk=FAKTA.find(f=>f.m===M[G.i]);if(fk&&!G.fakta.includes(fk)){G.fakta.push(fk);visaFakta(fk);}
   handelse();}
 function visaFakta(f){const o=document.querySelector(".fakta");if(o)o.remove();const d=document.createElement("div");d.className="fakta";d.setAttribute("role","status");
@@ -603,9 +644,10 @@ $("gPlay").onclick=()=>{if(G.i>=N-1){slut();return;}G.tid?paus():spela();};
 $("gFart").onclick=()=>{G.fart=G.fart>1?1:4;$("gFart").textContent=G.fart>1?"🐢 Lugnare":"⏩ Snabbare";if(G.tid){paus();spela();}};
 $("quit").onclick=()=>{paus();show("home");};
 let gHover=null;
-function gRita(){const v=varde(),f=v/START-1;
+function gRita(){const v=varde(),ins=insatt(),f=v/ins-1;
   $("gDatum").textContent=datum(G.i);$("gVarde").textContent=kr(v);
-  const dk=v-START;$("gFor").textContent=`${pr(f)} (${dk>=0?"+":"−"}${kr(Math.abs(dk))}) sedan januari 2007`;$("gFor").className="forandr "+(f>=0?"up":"down");
+  const dk=v-ins;$("gFor").textContent=G.satt==="man"?`${dk>=0?"+":"−"}${kr(Math.abs(dk))} (${pr(f)}) ${dk>=0?"mer":"mindre"} än du har satt in`:`${pr(f)} (${dk>=0?"+":"−"}${kr(Math.abs(dk))}) sedan januari 2007`;$("gFor").className="forandr "+(f>=0?"up":"down");
+  if(G.satt==="man")$("gMan").innerHTML=`📅 <b>${kr(G.man)}</b> varje månad till <b>${A[G.till].n}</b><br>Du har satt in <i>${kr(ins)}</i> hittills`;
   $("gBar").style.width=(G.i/(N-1)*100)+"%";
   gGraf();
   const ager=Object.keys(G.u).filter(a=>G.u[a]>1e-9);
@@ -614,12 +656,14 @@ function gRita(){const v=varde(),f=v/START-1;
   const af=(G.logg||[]).filter(l=>l.t==="kop"||l.t==="salj");
   $("gLogg").innerHTML=af.length?af.slice(-6).reverse().map(l=>`<div class="lr"><span class="d">${datum(l.i)}</span><b>${l.t==="kop"?"🛒 Köpte":"💰 Sålde"} ${A[l.a].n}</b><span class="kr${l.t==="salj"?" up":""}">${kr(l.x)}</span></div>`).join("")+(af.length>6?`<p class="info">… och ${af.length-6} till.</p>`:""):`<p class="info">Inga affärer ännu. Tryck på något du vill köpa eller sälja.</p>`;
   $("gAger").innerHTML=`<button class="pl" data-a="spar">${radHTML("spar",G.i,`<span class="hog">${kr(G.cash)}<small>ränta ${K.ranta[G.i].toFixed(1).replace(".",",")} %</small></span>`)}</button>`+
-    ager.map(a=>{const vv=G.u[a]*A[a].v[G.i],ff=vv/G.kost[a]-1;return`<button class="pl" data-a="${a}">${radHTML(a,G.i,`<span class="hog">${kr(vv)}<small class="${ff>=0?"up":"down"}">${pr(ff,0)}</small></span>`)}</button>`;}).join("");
+    ager.map(a=>{const vv=G.u[a]*A[a].v[G.i],ff=vv/G.kost[a]-1;return`<button class="pl${G.satt==="man"&&G.till===a?" vald":""}" data-a="${a}">${radHTML(a,G.i,`<span class="hog">${kr(vv)}<small class="${ff>=0?"up":"down"}">${pr(ff,0)}</small></span>`)}</button>`;}).join("");
   $("gKop").innerHTML=grupperat(ORDN.filter(a=>!ager.includes(a)),a=>finns(a,G.i)?`<button class="pl" data-a="${a}">${radHTML(a,G.i,`<span class="hog">${kurs(A[a].v[G.i])} kr<small>${A[a].fran>M[0]&&G.i-fran(a)<6?"Ny!":"kurs"}</small></span>`)}</button>`:`<div class="pl las">${radHTML(a,G.i,`<span class="hog"><small>Kan köpas<br>från ${A[a].fran.slice(0,4)}</small></span>`)}</div>`,G.i);}
 function gJmfLinjer(){const L2=[];const upp=(v,col)=>({v:v.map((x,i)=>i<=G.i&&x!=null?x:null),col,dash:[6,5]});
-  if(G.jmf.spar)L2.push(upp(A.spar.v.map(x=>START*x/A.spar.v[0]),"#5CC8FF"));
-  if(G.jmf.sv)L2.push(upp(A.sverige.v.map(x=>START*x/A.sverige.v[0]),"#B48CFF"));return L2;}
-function gGraf(){rita($("gGraf"),{v:G.hist,a:0,b:Math.max(G.i,1),bas:START,hover:gHover,fmt:x=>kr(x),jmf:gJmfLinjer(),glob:true});}
+  const man=G.satt==="man";
+  if(man)L2.push({v:G.ins.map((x,i)=>i<=G.i?x:null),col:"#E8C468",dash:[3,4]});
+  if(G.jmf.spar)L2.push(upp(man?manSerie("spar",G.man):A.spar.v.map(x=>START*x/A.spar.v[0]),"#5CC8FF"));
+  if(G.jmf.sv)L2.push(upp(man?manSerie("sverige",G.man):A.sverige.v.map(x=>START*x/A.sverige.v[0]),"#B48CFF"));return L2;}
+function gGraf(){rita($("gGraf"),{v:G.hist,a:0,b:Math.max(G.i,1),bas:G.satt==="man"?insatt():START,utanStart:G.satt==="man",hover:gHover,fmt:x=>kr(x),jmf:gJmfLinjer(),glob:true});}
 pekbar($("gGraf"),h=>{gHover=h;gGraf();});
 $("gJmf").onclick=e=>{const b=e.target.closest("[data-j]");if(!b)return;G.jmf[b.dataset.j]=!G.jmf[b.dataset.j];b.setAttribute("aria-pressed",String(!!G.jmf[b.dataset.j]));gGraf();};
 document.addEventListener("click",e=>{const r=e.target.closest("#gAger [data-a],#gKop [data-a]");if(!r)return;paus();blad(r.dataset.a,G.i,false);});
@@ -634,7 +678,7 @@ function stangBlad(){const d=document.querySelector(".blad");if(d)d.remove();bl=
 function bRita(){const{a,i,per}=bl,[em,typ,txt]=INFO[a],v=A[a].v,f0=fran(a);
   const ant={"1":12,"3":36,"5":60,max:9999}[per],s=Math.max(f0,i-ant),ff=i>s?v[i]/v[s]-1:0;
   let h=`<h2>${em} ${A[a].n}</h2><div class="info" style="margin:0 0 6px">${typ} · ${txt}</div>`;
-  if(a==="spar")h+=`<div class="kurs">${K.ranta[i].toFixed(2).replace(".",",")} %</div><div class="info">ränta per år i ${datum(i)}. Grafen visar hur 100 kr på kontot har växt.</div>`;
+  if(a==="spar")h+=`<div class="kurs">${K.ranta[i].toFixed(2).replace(".",",")} %</div><div class="info">ränta per år i ${datum(i)}. Grafen visar hur 100 kr på kontot har växt.</div>`+(G.satt==="man"&&!bl.bara&&skarm==="game"?(G.till==="spar"?`<p class="info" style="color:var(--gold)">📅 Hit går dina ${kr(G.man)} varje månad.</p>`:`<div class="handel"><button class="knapp vit" data-till="spar">📅 Spara på sparkontot varje månad i stället</button></div>`):"");
   else h+=`<div class="kurs">${kurs(v[i])} kr</div><div class="forandr ${ff>=0?"up":"down"}">${pr(ff)} <span style="color:var(--muted);font-weight:700">${per==="max"?"sedan "+M[s].slice(0,4):s===f0&&i-s<ant?"sedan "+datum(s):"senaste "+(per==="1"?"året":per+" åren")}</span></div>`;
   h+=`<div class="perioder">${[["1","1 år"],["3","3 år"],["5","5 år"],["max","Max"]].map(([k,n])=>`<button data-per="${k}" aria-pressed="${k===per}">${n}</button>`).join("")}</div>
     <div class="graf"><canvas id="bGraf"></canvas></div>`;
@@ -645,6 +689,7 @@ function bRita(){const{a,i,per}=bl,[em,typ,txt]=INFO[a],v=A[a].v,f0=fran(a);
     h+=`<div class="hand">${ag>0?`Du äger <b>${kr(ag)}</b> <span class="${ag>=G.kost[a]?"up":"down"}" style="font-weight:800">(${pr(ag/G.kost[a]-1,0)})</span>. Du betalade ${kr(G.kost[a])}.`:"Du äger ingen än."}<br>På sparkontot: <b>${kr(c)}</b>
       <div class="handel"><button class="knapp" data-kop="1000" ${c<1000?"disabled":""}>Köp för 1 000 kr</button>${c>=2000?`<button class="knapp" data-kop="alla">Köp för allt (${kr(c)})</button>`:""}</div>
       ${ag>0?`<div class="handel"><button class="knapp rod" data-salj="1000">Sälj för 1 000 kr</button><button class="knapp rod" data-salj="alla">Sälj allt (${kr(ag)})</button></div>`:""}
+      ${G.satt==="man"?(G.till===a?`<p class="info" style="margin:8px 0 0;color:var(--gold)">📅 Hit går dina ${kr(G.man)} varje månad.</p>`:`<div class="handel"><button class="knapp vit" data-till="${a}">📅 Spara här varje månad i stället</button></div>`):""}
       <div class="info" id="bMsg">${c<1000?"Du har för lite på sparkontot. Sälj något annat nedanför för att få pengar.":""}</div></div>`;
     if(andra.length)h+=`<div class="sub" style="margin-top:12px">💱 Sälj något annat för att få pengar</div><div class="byt">${andra.map(x=>{const vx=G.u[x]*A[x].v[i];
       return`<div class="pl"><span class="em">${INFO[x][0]}</span><span class="tx"><b>${A[x].n}</b><small class="${vx>=G.kost[x]?"up":"down"}">${kr(vx)} (${pr(vx/G.kost[x]-1,0)})</small></span><span class="stepper" style="gap:6px"><button data-ann="${x}" data-b="1000" style="width:auto;padding:0 10px;font-size:.9rem">Sälj 1 000</button><button data-ann="${x}" data-b="alla" style="width:auto;padding:0 10px;font-size:.9rem">Allt</button></span></div>`;}).join("")}</div>`;}
@@ -657,6 +702,7 @@ function bRita(){const{a,i,per}=bl,[em,typ,txt]=INFO[a],v=A[a].v,f0=fran(a);
   $("bInne").querySelectorAll("[data-per]").forEach(b=>b.onclick=()=>{bl.per=b.dataset.per;bRita();});
   const msg=t=>{const m=$("bMsg");if(m)m.textContent=t;};
   const kv=(typ,x,aa)=>{const m=$("bMsg");if(m)m.innerHTML=`<div class="kvitto"><b>KVITTO · PLUGGBANKEN</b><div class="rr"><span style="text-transform:capitalize">${datum(G.i)}</span><span>${typ}</span></div><div class="rr"><span>${A[aa].n}</span><span>${kr(x)}</span></div><div class="rr"><span>Kurs</span><span>${kurs(A[aa].v[G.i])} kr</span></div><div class="rr"><span>På sparkontot nu</span><span>${kr(G.cash)}</span></div></div>`;};
+  $("bInne").querySelectorAll("[data-till]").forEach(b=>b.onclick=()=>{G.till=b.dataset.till;G.logg.push({i:G.i,t:"till",a:G.till,x:G.man});L().pop&&L().pop();bRita();gRita();});
   $("bInne").querySelectorAll("[data-kop]").forEach(b=>b.onclick=()=>{const x=Math.min(b.dataset.kop==="alla"?G.cash:1000,G.cash);kop(a,x);bRita();kv("KÖP",x,a);});
   $("bInne").querySelectorAll("[data-salj]").forEach(b=>b.onclick=()=>{const x=salj(a,b.dataset.salj==="alla"?Infinity:1000);bRita();kv("SÄLJ",x,a);});
   $("bInne").querySelectorAll("[data-ann]").forEach(b=>b.onclick=()=>{const aa=b.dataset.ann,x=salj(aa,b.dataset.b==="alla"?Infinity:1000);bRita();kv("SÄLJ",x,aa);});}
@@ -674,17 +720,17 @@ function ruta(ik,rub,txt,knappar){paus();const d=document.createElement("div");d
   document.body.appendChild(d);d.querySelectorAll("[data-j]").forEach(b=>b.onclick=()=>{d.remove();const fn=knappar[+b.dataset.j][1];fn&&fn();gRita();if(!document.querySelector(".hand-ev,.blad"))spela();});}
 const sv=(a,b)=>A.sverige.v[mi(b)]/A.sverige.v[mi(a)]-1;
 // skuggportfölj: hur det hade gått om man inte gjort något
-const skugga=id=>{G.skugg.push({id,i:G.i,u:{...G.u},cash:G.cash});};
+const skugga=id=>{G.skugg.push({id,i:G.i,u:{...G.u},cash:G.cash,till:G.till});};
 const skuggV=id=>{const s=G.skugg.find(x=>x.id===id);return s?vardeI(G.i,s.u,s.cash):null;};
 function kris(id,rub,txt){const ag=iAktier();skugga(id);L().fall&&L().fall();
   if(ag<500){ruta("📉",rub,`<p>${txt}</p><p>Du har nästan inga aktier eller fonder, så dina pengar påverkas inte så mycket. Den som äger aktier är ofta orolig nu.</p>`,[["Fortsätt",null]]);G.val[id]="ingen";return;}
   ruta("📉",rub,`<p>${txt}</p><p>Dina aktier och fonder är värda <b>${kr(ag)}</b> nu. Vad gör du?</p>`,[
-    ["😱 Sälj allt och lägg pengarna på sparkontot",()=>{G.val[id]="salj";G.logg.push({i:G.i,t:"val",txt:rub+" Du blev rädd och sålde allt."});saljAllt();},"vit"],
-    ["😌 Vänta och gör ingenting",()=>{G.val[id]="vanta";G.logg.push({i:G.i,t:"val",txt:rub+" Du väntade lugnt."});},"bla"],
+    ["😱 Sälj allt och lägg pengarna på sparkontot"+(G.satt==="man"&&G.till!=="spar"?" (även det du sparar varje månad)":""),()=>{G.val[id]="salj";G.logg.push({i:G.i,t:"val",txt:rub+" Du blev rädd och sålde allt."});saljAllt();if(G.satt==="man")G.till="spar";},"vit"],
+    [G.satt==="man"?"😌 Vänta och fortsätt spara som vanligt":"😌 Vänta och gör ingenting",()=>{G.val[id]="vanta";G.logg.push({i:G.i,t:"val",txt:rub+" Du väntade lugnt."});},"bla"],
     ...(G.cash>=1000?[["🛒 Köp mer för 1 000 kr från sparkontot",()=>{G.val[id]="kop";G.logg.push({i:G.i,t:"val",txt:rub+" Du köpte mer när det var billigt."});kop("sverige",1000);},""]]:[])]);}
 function efter(id,ar,rub){const val=G.val[id];if(!val||val==="ingen")return;const s=G.skugg.find(x=>x.id===id),nu=varde(),utan=skuggV(id),diff=nu-utan;
-  let t;if(val==="salj")t=`<p>Du sålde allt när börsen rasade. Börsen har sedan dess gått upp <b>${pr(A.sverige.v[G.i]/A.sverige.v[s.i]-1,0)}</b>.</p><p>Om du hade väntat hade du haft <b>${kr(utan)}</b> i stället för ${kr(nu)}. Det är ${kr(Math.abs(diff))} ${diff<0?"mindre":"mer"} för att du sålde.</p><p>Den som säljer när det rasar säljer billigt. Det är lätt att bli rädd, men börsen har hittills alltid kommit tillbaka efter ett ras, även om det kan ta lång tid.</p>`;
-  else if(val==="vanta")t=`<p>Du väntade lugnt. Börsen har gått upp <b>${pr(A.sverige.v[G.i]/A.sverige.v[s.i]-1,0)}</b> sedan raset.</p><p>Dina pengar är nu värda <b>${kr(nu)}</b>. Att vänta är ofta det svåraste och det bästa när man sparar länge.</p>`;
+  let t;if(val==="salj")t=`${G.satt==="man"&&s.till!=="spar"?"<p>📅 Efter raset gick dina månadspengar till sparkontot i stället, så de köpte inget när det var billigt.</p>":""}<p>Du sålde allt när börsen rasade. Börsen har sedan dess gått upp <b>${pr(A.sverige.v[G.i]/A.sverige.v[s.i]-1,0)}</b>.</p><p>Om du hade väntat hade du haft <b>${kr(utan)}</b> i stället för ${kr(nu)}. Det är ${kr(Math.abs(diff))} ${diff<0?"mindre":"mer"} för att du sålde.</p><p>Den som säljer när det rasar säljer billigt. Det är lätt att bli rädd, men börsen har hittills alltid kommit tillbaka efter ett ras, även om det kan ta lång tid.</p>`;
+  else if(val==="vanta")t=`<p>Du väntade lugnt. Börsen har gått upp <b>${pr(A.sverige.v[G.i]/A.sverige.v[s.i]-1,0)}</b> sedan raset.</p><p>Dina pengar är nu värda <b>${kr(nu)}</b>. Att vänta är ofta det svåraste och det bästa när man sparar länge.</p>${G.satt==="man"&&s.till!=="spar"?`<p>📅 Medan det var billigt köpte dina ${kr(G.man)} varje månad fler andelar än vanligt. Nu är de andelarna värda mycket mer.</p>`:""}`;
   else t=`<p>Du köpte mer när det var billigt. Indexfond Sverige har gått upp <b>${pr(A.sverige.v[G.i]/A.sverige.v[s.i]-1,0)}</b> sedan du köpte.</p><p>Att köpa när andra är rädda kan löna sig, men ingen vet i förväg hur långt ner det går.</p>`;
   ruta("🔎",rub,t,[["Fortsätt",null]]);}
 function ny(a,txt){ruta(INFO[a][0],`Nytt: ${A[a].n}!`,`<p>${txt}</p><p>Kurs: <b>${kurs(A[a].v[G.i])} kr</b>. På sparkontot har du ${kr(G.cash)}.${G.cash<1000&&Object.keys(G.u).length?" Vill du köpa kan du sälja något du äger.":""}</p>`,[["Titta, sälj och köp",()=>{setTimeout(()=>{paus();blad(a,G.i,false);},50);},"bla"],["Fortsätt resan",null]]);}
@@ -716,12 +762,15 @@ function bara(a){return START*A[a].v[N-1]/A[a].v[fran(a)];}
 function slut(){paus();if(skarm!=="game")return;const v=varde(),f=v/START-1;
   if(document.querySelector(".hand-ev"))return;
   $("rVarde").textContent=kr(v);$("rFor").textContent=pr(f)+" på knappt 20 år";$("rFor").className="forandr "+(f>=0?"up":"down");
+  $("rRub").textContent="Dina 10 000 kr är nu värda";$("rGrafInfo").textContent="Heldragen linje: dina pengar. Streckad: om du bara hade köpt Indexfond Sverige.";
+  if(G.satt==="man")slutMan(v);else{
   const avg=START*Math.pow(1-.013/12,N-1)*A.sverige.v[N-1]/A.sverige.v[0];
   const rader=[["Ditt val",v,"#3D5AFE",1],["Bara sparkontot",bara("spar"),"#3D8BFD"],["Bara indexfond Sverige",bara("sverige"),"#1E9E5E"],["Samma fond med hög avgift (1,5 %)",avg,"#7FBF9B"],
     ["Bara indexfond USA",bara("usa"),"#1E9E5E"],["Spargrisen (vad 10 000 kr räcker till i dag)",START*K.kpi[0]/K.kpi[N-1],"#FF7EB6"]];
   const top=Math.max(...rader.map(r=>r[1]));
   $("rJmf").innerHTML=rader.map(([n,x,c,du])=>`<div class="jr${du?" du":""}"><span>${n}</span><span class="st" style="width:${Math.max(18,x/top*100)}%;background:${c}">${kr(x)}</span></div>`).join("");
   $("rJmfInfo").textContent=`Indexfonderna har redan låg avgift (0,1–0,5 % per år). Med 1,5 % i avgift varje år hade samma fond gett ${kr(bara("sverige")-avg)} mindre. Spargrisen har kvar 10 000 kr, men priserna har stigit, så pengarna räcker bara till lika mycket som ${kr(START*K.kpi[0]/K.kpi[N-1])} gjorde 2007.`;
+  }
   // startåren 2005–2016, tio år var
   const AS=K.arSverige,ar=[];for(let y=AS.fran;y+10<=AS.fran+AS.v.length-1;y++)ar.push([y,START*AS.v[y+10-AS.fran]/AS.v[y-AS.fran]]);
   const arTop=Math.max(...ar.map(x=>x[1])),arS=[...ar].sort((x,y)=>x[1]-y[1]),alla=ar.every(x=>x[1]>START);
@@ -731,14 +780,27 @@ function slut(){paus();if(skarm!=="game")return;const v=varde(),f=v/START-1;
   const b=fr07[0],s=fr07[fr07.length-1];
   $("rBast").innerHTML=`<p style="margin:0 0 6px">${INFO[b[0]][0]} <b>${A[b[0]].n}</b>: 10 000 kr blev <b class="up">${kr(b[1])}</b>.</p><p style="margin:0 0 6px">${INFO[s[0]][0]} <b>${A[s[0]].n}</b>: 10 000 kr blev <b class="${s[1]>=START?"up":"down"}">${kr(s[1])}</b>.</p><p class="info" style="margin:0 0 6px">Ingen kunde veta 2007 vilket bolag som skulle gå bäst eller sämst. Med en indexfond äger man lite av alla, både vinnarna och förlorarna.</p><p class="info" style="margin:0">Bitcoin räknas inte här eftersom den inte fanns att köpa 2007. 1 000 kr i bitcoin i oktober 2014 hade blivit ${kr(1000*A.bitcoin.v[N-1]/A.bitcoin.v[mi("2014-10")])}, men på vägen rasade den flera gånger med mer än hälften.</p>`;
   const rad=[];const lg=G.logg||[];
-  const forst=lg.filter(l=>l.i===0&&l.t==="kop");if(forst.length)rad.push({i:0,k:"k",t:"Du köpte "+forst.map(l=>A[l.a].n+" för "+kr(l.x)).join(", ")+"."});else rad.push({i:0,k:"",t:"Du lät alla pengar ligga på sparkontot."});
-  lg.filter(l=>l.i>0).forEach(l=>{if(l.t==="val")rad.push({i:l.i,k:"e",t:l.txt});else rad.push({i:l.i,k:l.t==="kop"?"k":"s",t:(l.t==="kop"?"Du köpte ":"Du sålde ")+A[l.a].n+" för "+kr(l.x)+"."});});
+  const forst=lg.filter(l=>l.i===0&&l.t==="kop"),st=lg.find(l=>l.t==="start");if(st)rad.push({i:0,k:"k",t:`Du började spara ${kr(st.x)} varje månad i ${A[st.a].n}.`});else if(forst.length)rad.push({i:0,k:"k",t:"Du köpte "+forst.map(l=>A[l.a].n+" för "+kr(l.x)).join(", ")+"."});else rad.push({i:0,k:"",t:"Du lät alla pengar ligga på sparkontot."});
+  lg.filter(l=>l.i>0).forEach(l=>{if(l.t==="val")rad.push({i:l.i,k:"e",t:l.txt});else if(l.t==="till")rad.push({i:l.i,k:"e",t:`Från nu sparade du ${kr(l.x)} varje månad i ${A[l.a].n}.`});else rad.push({i:l.i,k:l.t==="kop"?"k":"s",t:(l.t==="kop"?"Du köpte ":"Du sålde ")+A[l.a].n+" för "+kr(l.x)+"."});});
   const komp=[];rad.forEach(x=>{const p=komp[komp.length-1];if(p&&p.i===x.i&&p.k===x.k&&x.k!=="e"){p.t=p.t.replace(/\.$/,"")+", "+x.t.replace(/^Du (köpte|sålde) /,"").replace(/\.$/,"")+".";}else komp.push({...x});});
   komp.push({i:N-1,k:"",t:"Dina pengar är värda "+kr(v)+"."});
   $("rTid").innerHTML=(komp.length>16?komp.slice(0,8).concat([{i:-1,k:"",t:"…"}],komp.slice(-7)):komp).map(x=>`<div class="t ${x.k}"><small>${x.i>=0?stor(datum(x.i))+(x.i>0&&x.i<N-1&&G.hist[x.i]?" · portföljen "+kr(G.hist[x.i]):""):""}</small>${x.t}</div>`).join("");
   $("rFakta").innerHTML=(G.fakta||[]).map(f=>`<div><span style="font-size:1.4rem">${f.ik}</span><span><b>${f.r}</b>${f.t}</span></div>`).join("");$("rFaktaRub").hidden=$("rFakta").parentNode.hidden=!(G.fakta||[]).length;
   show("result");L().fanfare&&L().fanfare();
-  setTimeout(()=>rita($("rGraf"),{v:G.hist,a:0,b:N-1,bas:START,fmt:x=>kr(x),glob:true,jmf:[{v:A.sverige.v.map(x=>START*x/A.sverige.v[0]),col:"#B48CFF"}]}),30);}
+  setTimeout(()=>rita($("rGraf"),G.satt==="man"?{v:G.hist,a:0,b:N-1,bas:G.ins[N-1],utanStart:true,fmt:x=>kr(x),glob:true,jmf:[{v:G.ins,col:"#E8C468",dash:[3,4]},{v:manSerie("sverige",G.man),col:"#B48CFF"}]}:{v:G.hist,a:0,b:N-1,bas:START,fmt:x=>kr(x),glob:true,jmf:[{v:A.sverige.v.map(x=>START*x/A.sverige.v[0]),col:"#B48CFF"}]}),30);}
+// resultatet när man har sparat varje månad
+function slutMan(v){const ins=G.ins[N-1],x=G.man,f=v/ins-1,sist=a=>{const s=manSerie(a,x);return s[N-1];};
+  $("rRub").textContent=`Du satte in ${kr(ins)} (${kr(x)} i månaden). Nu är pengarna värda`;
+  $("rFor").textContent=`${v>=ins?"+":"−"}${kr(Math.abs(v-ins))} (${pr(f)}) ${v>=ins?"mer":"mindre"} än du satte in`;
+  $("rGrafInfo").textContent="Heldragen linje: dina pengar. Gul streckad: det du har satt in. Lila streckad: om du hade sparat allt i Indexfond Sverige.";
+  const klump=ins*A.sverige.v[N-1]/A.sverige.v[0],avg=manSerie("sverige",x,.013)[N-1];
+  const rader=[["Ditt val",v,"#3D5AFE",1],["Spargrisen (bara det du satte in)",ins,"#FF7EB6"],["Bara sparkontot",sist("spar"),"#3D8BFD"],["Bara indexfond Sverige",sist("sverige"),"#1E9E5E"],
+    ["Samma fond med hög avgift (1,5 %)",avg,"#7FBF9B"],["Bara indexfond USA",sist("usa"),"#1E9E5E"],[`Allt på en gång i januari 2007 (${kr(ins)} i Indexfond Sverige)`,klump,"#B48CFF"]];
+  const top=Math.max(...rader.map(r=>r[1]));
+  $("rJmf").innerHTML=rader.map(([n,y,c,du])=>`<div class="jr${du?" du":""}"><span>${n}</span><span class="st" style="width:${Math.max(18,y/top*100)}%;background:${c}">${kr(y)}</span></div>`).join("");
+  // hur många fler andelar 300 kr köpte när börsen låg som lägst 2008–2009
+  let lag=Infinity;for(let i=mi("2008-06");i<=mi("2009-12");i++)lag=Math.min(lag,A.sverige.v[i]);const ggr=A.sverige.v[0]/lag;
+  $("rJmfInfo").textContent=`När börsen låg som lägst under finanskrisen köpte ${kr(x)} i Indexfond Sverige ungefär ${ggr.toFixed(1).replace(".",",")} gånger så många andelar som i januari 2007. Den som fortsatte spara köpte billigt. Att sätta in allt på en gång i januari 2007 hade gett ${klump>sist("sverige")?"mer":"mindre"}, men då hade man behövt ha alla pengar redan från början, och man köpte allt precis före kraschen. Spargrisen har bara det du satte in, och priserna har stigit under tiden.`;}
 $("rHome").onclick=()=>show("home");
 $("rFragor").onclick=()=>startFragor("tid");
 
@@ -751,6 +813,9 @@ const FR={
   ()=>({q:"Vad är ränta?",a:["Pengar banken ger dig för att du sparar där","En avgift du betalar för att ha en spargris","Ett annat ord för fond"],r:0,f:"Banken lånar ut dina pengar till andra och ger dig lite betalt för det. Det kallas ränta."}),
   ()=>({q:"Fonden har gått ner. Du ska inte använda pengarna förrän om många år. Vad är klokt?",a:["Vänta, fonder brukar komma tillbaka med tiden","Ta ut pengarna direkt","Köpa godis för allt"],r:0,f:"Om man sparar länge hinner fonden ofta komma tillbaka. Därför ska man bara spara i fond pengar man inte behöver snart."}),
   ()=>({q:"Vad äger man när man har en fond?",a:["Små bitar av många företag","En egen bank","En stor påse med pengar"],r:0,f:"En fond köper små bitar (aktier) av många företag. När företagen går bra blir fonden värd mer."})],
+  man:[
+  ()=>({q:"Du sparar lika mycket varje månad. Vad händer när börsen rasar?",a:["Du får fler andelar för samma pengar","Du får färre andelar","Pengarna försvinner"],r:0,f:"När priset är lågt räcker samma pengar till fler andelar. När börsen sedan går upp är de billiga andelarna värda mycket mer."}),
+  ()=>({q:"Vad betyder ränta på ränta?",a:["Du får ränta även på den ränta du redan har fått","Banken tar ränta två gånger","Räntan blir mindre varje år"],r:0,f:"Varje år växer inte bara pengarna du satte in, utan också det de redan har vuxit med. Därför blir det mycket efter många år."})],
   mal:[
   ()=>({q:"Vad gör att du når ditt sparmål snabbare?",a:["Att spara lite mer varje månad","Att vänta och hoppas","Att handla mer"],r:0,f:"Ju mer du lägger undan varje månad, desto fortare når du målet. Även små belopp blir mycket med tiden."}),
   ()=>({q:"Priserna stiger med inflationen. Vad betyder det för ditt mål?",a:["Saken blir lite dyrare medan du sparar","Saken blir billigare","Ingenting händer"],r:0,f:"Det mesta blir lite dyrare varje år. Därför behöver man ofta spara lite mer än priset man såg när man började."}),
@@ -767,7 +832,7 @@ const FR={
   ()=>({q:"Alla pratar om en aktie som har gått upp jättemycket. Vad är klokt att tänka på?",a:["Den kan redan vara dyr, och den kan gå ner","Köp så mycket som möjligt direkt","Den kan inte gå ner nu"],r:0,f:"När alla pratar om något har priset ofta redan stigit mycket. Som bitcoin 2021: ett år senare var den värd mindre än hälften."})]};
 let F=null;
 function blanda(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
-function startFragor(del){const lista=del==="spar"?[FR.spar[0],...blanda(FR.spar.slice(1)).slice(0,3)]:blanda(FR[del]).slice(0,del==="mal"?3:4);
+function startFragor(del){const lista=del==="spar"?[FR.spar[0],...blanda(FR.spar.slice(1)).slice(0,3)]:del==="tid"&&G.satt==="man"?[...FR.man,...blanda(FR.tid.filter(f=>!/ränta på ränta/i.test(f().q))).slice(0,2)]:blanda(FR[del]).slice(0,del==="mal"?3:4);
   F={del,q:lista.map(f=>{const x=f(),ord=blanda(x.a.map((t,j)=>[t,j===x.r]));return{q:x.q,a:ord,f:x.f};}),n:0,fel:[]};show("fragor");fRita();}
 function fRita(){const x=F.q[F.n];$("fPrick").innerHTML=F.q.map((_,j)=>`<i class="${j<F.n?(F.fel[j]?"f":"ok"):j===F.n?"nu":""}"></i>`).join("");
   $("fFraga").textContent=x.q;$("fForkl").textContent="";$("fNasta").hidden=true;
