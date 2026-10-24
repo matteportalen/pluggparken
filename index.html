@@ -382,9 +382,9 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 <div class="modal" id="mKIn" hidden><div class="sheet" role="dialog" aria-label="Logga in med konto" style="max-width:420px">
   <div class="top"><h2>Logga in med konto</h2><button class="close" id="kInClose" aria-label="Stäng">✕</button></div>
   <label class="plabel" for="kInNamn">Användarnamn</label>
-  <input id="kInNamn" class="pinput" style="width:100%" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="Till exempel katt-317">
+  <input id="kInNamn" class="pinput" style="width:100%" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="Till exempel tokigkatt">
   <label class="plabel" for="kInKod" style="margin-top:10px">Lösenord</label>
-  <input id="kInKod" class="pinput" style="width:100%" autocomplete="current-password" autocapitalize="none" autocorrect="off" spellcheck="false">
+  <input id="kInKod" class="pinput" style="width:100%" placeholder="Till exempel pannkaka" autocomplete="current-password" autocapitalize="none" autocorrect="off" spellcheck="false">
   <p class="pinmsg" id="kInMsg"></p>
   <button class="gobtn" id="kInGo">Logga in</button>
   <p class="pnote">Står på ditt inloggningskort. Har du inget konto? Tryck på din profil och välj <b>Skapa ett konto</b>.</p>
@@ -393,7 +393,7 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 <div class="modal" id="mKNy" hidden><div class="sheet" role="dialog" aria-label="Skapa konto" style="max-width:440px">
   <div class="top"><h2>☁️ Skapa ett konto</h2><button class="close" data-close aria-label="Stäng">✕</button></div>
   <p style="margin:0 0 8px">Med ett konto sparas dina framsteg också i molnet. Då kan du logga in på en annan dator eller iPad och fortsätta där du var.</p>
-  <ul class="kinfo"><li>✅ Du får ett påhittat användarnamn och ett lösenord.</li><li>🚫 Inga riktiga namn och ingen e-post sparas.</li><li>🇸🇪 Servern ligger i Sverige.</li><li>🗑️ Du kan radera kontot när du vill.</li><li>📝 Skriv upp namnet och lösenordet, eller skriv ut ditt kort. Lösenordet går inte att få tillbaka om det försvinner.</li></ul>
+  <ul class="kinfo"><li>✅ Du får ett påhittat användarnamn och ett lösenord, till exempel <b>tokigkatt</b> och <b>pannkaka</b>.</li><li>🚫 Inga riktiga namn och ingen e-post sparas.</li><li>🇸🇪 Servern ligger i Sverige.</li><li>🗑️ Du kan radera kontot när du vill.</li><li>📝 Skriv upp namnet och lösenordet, eller skriv ut ditt kort. Lösenordet går inte att få tillbaka om det försvinner.</li></ul>
   <p class="pinmsg" id="kNyMsg"></p>
   <button class="gobtn" id="kNyGo">Skapa mitt konto</button>
 </div></div>
@@ -969,7 +969,7 @@ $("kInKod").addEventListener("keydown",e=>{if(e.key==="Enter")$("kInGo").click()
 $("kInGo").onclick=async()=>{const n=$("kInNamn").value.trim().toLowerCase(),k=$("kInKod").value.trim().toLowerCase();
   if(!n||!k){$("kInMsg").textContent="Skriv både användarnamn och lösenord.";return;}
   $("kInGo").disabled=true;$("kInMsg").textContent="";let r;try{r=await MPKonto.hamta(n,k);}catch(e){r={fel:"natet"};}$("kInGo").disabled=false;
-  if(!r.ok){$("kInMsg").textContent=r.fel==="sparrad"?"För många försök. Vänta 15 minuter och försök igen.":r.fel==="natet"?"Ingen kontakt med servern. Kontrollera internet.":"Användarnamnet eller lösenordet stämmer inte.";window.Ljud&&Ljud.bad();return;}
+  if(!r.ok){$("kInMsg").textContent=r.fel==="sparrad"?"För många försök. Vänta en stund och försök igen, eller be en vuxen titta på ditt kort.":r.fel==="natet"?"Ingen kontakt med servern. Kontrollera internet.":"Användarnamnet eller lösenordet stämmer inte.";window.Ljud&&Ljud.bad();return;}
   const o=r.data||{},d=o.d||{},ps=list();let p=ps.find(x=>x.konto&&x.konto.namn===r.namn)||(o.s&&ps.find(x=>x.salt===o.s));
   if(p){const cur=p.id===owner()?snapLive():(jGet("mp-bundle-"+p.id)||{}),m=mergeBundles(cur,d);if(p.id===owner())loadLive(m);else jSet("mp-bundle-"+p.id,m);p.konto={namn:r.namn,kod:k};}
   else{let name=o.n||r.namn;while(ps.some(x=>x.name.toLowerCase()===name.toLowerCase()))name+=" 2";
