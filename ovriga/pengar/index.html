@@ -78,6 +78,7 @@ select{font:inherit;background:var(--card2);color:var(--ink);border:1px solid va
 .prat{background:rgba(232,196,104,.1);border:1px solid rgba(232,196,104,.3);border-radius:16px;padding:10px 14px;font-weight:600;min-height:3.2em;margin:8px 0}
 /* Tidsmaskinen */
 .lista{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+.grp-h{grid-column:1/-1;margin:10px 2px 0;font:700 .72rem Inter,system-ui;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}.grp-h:first-child{margin-top:0}
 @media(min-width:640px){.lista{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .pl{min-width:0;display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:8px 10px;text-align:left;width:100%;transition:background .15s,border-color .15s}
 button.pl:hover,.pl[role=button]:hover{background:var(--card2);border-color:rgba(232,196,104,.4)}
@@ -307,7 +308,7 @@ button.pl:hover,.pl[role=button]:hover{background:var(--card2);border-color:rgba
 </div>
 <script src="../../ljud.js"></script>
 <script src="../../djur.js"></script>
-<script src="kurser.js"></script>
+<script src="kurser.js?v=2"></script>
 <script src="../../huvud.js" data-hem="../../" data-titel="Pengar och sparande" data-ikon="💰" data-portal="ovriga"></script>
 <script>
 /* Pengar och sparande: Spargrisen eller banken? (åk 3–5) och Tidsmaskinen (åk 6–9).
@@ -345,8 +346,40 @@ const INFO={
   microsoft:["💻","Aktie","Windows, Xbox och Minecraft."],
   tesla:["🚗","Aktie","Elbilar."],
   nintendo:["🍄","Aktie","Mario, Zelda och Switch."],
+  seb:["🏦","Aktie","En stor svensk bank för företag och privatpersoner."],
+  swedbank:["🏛️","Aktie","En stor svensk bank med rötter i sparbankerna."],
+  sandvik:["⚙️","Aktie","Verktyg och maskiner för gruvor och fabriker."],
+  essity:["🧻","Aktie","Blöjor, toapapper och mensskydd, t.ex. Libero och Libresse."],
+  telia:["📶","Aktie","Mobil, bredband och tv."],
+  abb:["🤖","Aktie","Robotar, elmotorer och laddare till elbilar."],
+  hexagon:["📐","Aktie","Instrument och program som mäter saker väldigt noga."],
+  boliden:["⛏️","Aktie","Gruvor och smältverk för koppar, zink och guld."],
+  skf:["🔩","Aktie","Kullager som gör att hjul och maskiner snurrar lätt."],
+  electrolux:["🧺","Aktie","Kylskåp, spisar och tvättmaskiner."],
+  assa:["🔑","Aktie","Lås, dörrar och nyckelkort."],
+  paradox:["🎲","Aktie","Strategispel, t.ex. Europa Universalis och Cities: Skylines."],
+  thule:["🚲","Aktie","Takboxar, cykelhållare och barnvagnar."],
+  autoliv:["🛡️","Aktie","Krockkuddar och bilbälten."],
+  amazon:["📦","Aktie","Nätbutik och molntjänster."],
+  alphabet:["🔍","Aktie","Google, YouTube och Android."],
+  netflix:["🎬","Aktie","Filmer och serier via internet."],
+  nvidia:["🖥️","Aktie","Grafikkort och datorchip till spel och AI."],
+  disney:["🏰","Aktie","Filmer, Disney+ och nöjesparker. Äger Marvel och Star Wars."],
+  coca:["🥤","Aktie","Läsk, t.ex. Coca-Cola och Fanta."],
+  mcd:["🍔","Aktie","Hamburgerrestauranger i hela världen."],
+  nike:["👟","Aktie","Skor och sportkläder."],
+  sony:["🎮","Aktie","PlayStation, kameror, musik och film."],
+  toyota:["🚙","Aktie","Bilar, bland annat hybridbilar."],
+  novo:["💉","Aktie","Mediciner mot diabetes, t.ex. insulin."],
+  roblox:["🧱","Aktie","Spelplattform där vem som helst kan bygga egna spel."],
   bitcoin:["₿","Krypto","Digitala pengar utan bank. Ingen äger företag när man köper bitcoin, och priset svänger väldigt mycket."]};
-const ORDN=["sverige","usa","varlden","volvo","hm","ericsson","investor","astra","atlas","embracer","spotify","apple","microsoft","tesla","nintendo","bitcoin"];
+const GRUPPER=[["Fonder",["sverige","usa","varlden"]],
+  ["Svenska bolag",["volvo","hm","ericsson","investor","astra","atlas","seb","swedbank","sandvik","essity","telia","abb","hexagon","boliden","skf","electrolux","assa","autoliv","thule","embracer","paradox","spotify"]],
+  ["Bolag i andra länder",["apple","microsoft","amazon","alphabet","nvidia","netflix","disney","coca","mcd","nike","sony","nintendo","toyota","tesla","novo","roblox"]],
+  ["Krypto",["bitcoin"]]];
+const ORDN=GRUPPER.flatMap(g=>g[1]);
+// listan med rubriker: rad(a) ger html för en placering, tomma grupper hoppas över
+const grupperat=(lista,rad,i=0)=>GRUPPER.map(([n,ids])=>{const f=ids.filter(a=>lista.includes(a)),h=f.filter(a=>finns(a,i)).concat(f.filter(a=>!finns(a,i))).map(rad).join("");return h?`<h3 class="grp-h">${n}</h3>${h}`:"";}).join("");
 const finns=(a,i)=>A[a].v[i]!=null;
 /* Om bolaget: grundat, land, vad de gör, korta fakta (f = före 2007) och händelser under resan (h = [månad, text], syns som guldprickar i grafen) */
 const OM={
@@ -366,6 +399,32 @@ const OM={
   microsoft:{g:"1975",l:"USA, Washington",s:"Windows, Office, Xbox och Minecraft",t:"Microsoft gör program och molntjänster som väldigt många datorer använder.",f:[["1975","Startades av Bill Gates och Paul Allen."],["2001","Den första Xbox kom."]],h:[["2014-09","Microsoft köpte Minecraft och det svenska spelbolaget Mojang."],["2016-12","Microsoft köpte nätverket LinkedIn."]]},
   tesla:{g:"2003",l:"USA, Texas",s:"Elbilar och batterier",t:"Tesla gör elbilar. Elon Musk gick in tidigt som investerare men var inte den som startade företaget.",f:[["2003","Startades av Martin Eberhard och Marc Tarpenning."]],h:[["2010-06","Teslas aktie började säljas på börsen."],["2012-06","Den första Model S levererades."],["2017-07","Den första Model 3 levererades."]]},
   nintendo:{g:"1889",l:"Japan, Kyoto",s:"Spel och spelkonsoler",t:"Nintendo gör spel som Mario och Zelda och konsolerna man spelar dem på.",f:[["1889","Startade som en tillverkare av spelkort."],["1981","Donkey Kong kom, och där syntes Mario för första gången."]],h:[["2017-03","Nintendo Switch började säljas."]]},
+  seb:{g:"1856",l:"Sverige, Stockholm",s:"Bank",t:"SEB lånar ut pengar och tar hand om sparande för både företag och privatpersoner.",f:[["1856","André Oscar Wallenberg startade Stockholms Enskilda Bank."],["1972","Banken slogs ihop med Skandinaviska Banken och blev SEB."]]},
+  swedbank:{g:"1820",l:"Sverige, Sundbyberg",s:"Bank",t:"Swedbank kommer från sparbankerna, som startades för att vanligt folk skulle kunna spara.",f:[["1820","Sveriges första sparbank öppnade i Göteborg."],["2006","Banken bytte namn till Swedbank."]],h:[["2009-09","Banken förlorade mycket på lån i Baltikum och behövde nya pengar från ägarna."],["2019-02","Det kom fram att banken kan ha använts för penningtvätt, och aktien föll."]]},
+  sandvik:{g:"1862",l:"Sverige, Sandviken",s:"Verktyg och gruvmaskiner",t:"Sandvik gör verktyg som skär i metall och maskiner som borrar i gruvor.",f:[["1862","Göran Fredrik Göransson startade ett stålverk i Sandviken."]]},
+  essity:{g:"2017",l:"Sverige, Stockholm",s:"Hygienprodukter",t:"Essity gör bland annat Libero, Libresse, Tena och Tork. Det var förut en del av skogsbolaget SCA.",f:[["1929","SCA, som Essity kommer från, grundades."]],h:[["2017-06","Essity delades av från SCA och började säljas på börsen."]]},
+  telia:{g:"1853",l:"Sverige, Solna",s:"Mobil och bredband",t:"Telia började som statens telegrafverk. I dag säljer de mobilabonnemang, bredband och tv.",f:[["1853","Den första telegraflinjen i Sverige byggdes av staten (Telegrafverket, senare Televerket)."],["1993","Televerket blev bolaget Telia."]],h:[["2016-04","TeliaSonera bytte namn till Telia Company."]]},
+  abb:{g:"1988",l:"Schweiz, Zürich (rötter i Västerås)",s:"Robotar och elteknik",t:"ABB gör industrirobotar, elmotorer och laddstationer. Mycket av forskningen sker i Västerås.",f:[["1883","ASEA startades i Västerås."],["1988","ASEA och schweiziska Brown Boveri slogs ihop till ABB."]]},
+  hexagon:{l:"Sverige, Stockholm",s:"Mätteknik",t:"Hexagon gör instrument och program som mäter och skapar 3D-modeller, till exempel för bilfabriker och byggen."},
+  boliden:{g:"1924",l:"Sverige, Stockholm",s:"Gruvor och metaller",t:"Boliden bryter malm och gör metaller som koppar, zink och guld. Koppar behövs i allt som har el.",f:[["1924","Guld hittades i Boliden i Västerbotten."]]},
+  skf:{g:"1907",l:"Sverige, Göteborg",s:"Kullager",t:"Ett kullager är en ring med små kulor som gör att något kan snurra lätt. Det finns i bilar, cyklar och vindkraftverk.",f:[["1907","Sven Wingquist uppfann ett nytt kullager och startade SKF."]]},
+  electrolux:{g:"1919",l:"Sverige, Stockholm",s:"Vitvaror",t:"Electrolux gör kylskåp, spisar och tvättmaskiner. Aktien har gått sämre än de flesta i den här listan.",f:[["1919","Axel Wenner-Gren var med och startade bolaget, som sålde dammsugare."]],h:[["2020-03","Delen för restauranger blev ett eget bolag, Electrolux Professional."]]},
+  assa:{g:"1994",l:"Sverige, Stockholm",s:"Lås och dörrar",t:"Assa Abloy är världens största företag för lås. Bolaget har vuxit genom att köpa väldigt många mindre låsföretag.",f:[["1994","Svenska ASSA och finska Abloy slogs ihop."]]},
+  paradox:{g:"2004",l:"Sverige, Stockholm",s:"Datorspel",t:"Paradox gör och säljer strategispel som Europa Universalis, Crusader Kings och Cities: Skylines.",h:[["2016-05","Paradox började säljas på börsen."]]},
+  thule:{g:"1942",l:"Sverige, Malmö (startade i Hillerstorp)",s:"Takboxar och cykelhållare",t:"Thule började som en liten firma i Småland och säljer i dag i över hundra länder.",f:[["1942","Thule startades i Hillerstorp i Småland."]],h:[["2014-11","Thule började säljas på börsen."]]},
+  autoliv:{g:"1953",l:"Sverige, Stockholm (rötter i Vårgårda)",s:"Säkerhet i bilar",t:"Autoliv gör krockkuddar och bilbälten. Det är världens största företag för krockkuddar och bilbälten.",f:[["1953","Företaget startade i Vårgårda i Västergötland."]],h:[["2018-06","Delen för elektronik blev ett eget bolag, Veoneer."]]},
+  amazon:{g:"1994",l:"USA, Seattle",s:"Nätbutik och molntjänster",t:"Amazon började sälja böcker på internet. I dag tjänar de mycket pengar på att hyra ut datorer på internet (molnet).",f:[["1994","Jeff Bezos startade Amazon i sitt garage."]],h:[["2007-11","Läsplattan Kindle började säljas."]]},
+  alphabet:{g:"1998",l:"USA, Kalifornien",s:"Google, YouTube och Android",t:"Alphabet äger Google. De tjänar mest pengar på reklam som syns när man söker och tittar på YouTube.",f:[["1998","Larry Page och Sergey Brin startade Google."],["2006","Google köpte YouTube."]],h:[["2008-10","Den första mobilen med Android började säljas."],["2015-10","Bolaget delades upp och moderbolaget fick namnet Alphabet."]]},
+  netflix:{g:"1997",l:"USA, Kalifornien",s:"Film och serier",t:"Netflix började med att skicka dvd-skivor med posten. Nu visar de film och serier via internet.",f:[["1997","Reed Hastings och Marc Randolph startade Netflix."]],h:[["2007-01","Netflix började visa film via internet."],["2012-10","Netflix kom till Sverige."]]},
+  nvidia:{g:"1993",l:"USA, Kalifornien",s:"Datorchip",t:"Nvidia gör grafikkort till spel. Samma sorts chip visade sig vara perfekta för AI, och då ville alla köpa dem.",f:[["1993","Jensen Huang och två vänner startade Nvidia."]],h:[["2017-03","Nintendo Switch började säljas, med ett chip från Nvidia."],["2023-05","Efterfrågan på chip för AI växte väldigt snabbt och aktien steg kraftigt."]]},
+  disney:{g:"1923",l:"USA, Kalifornien",s:"Film och nöjesparker",t:"Disney gör filmer och äger nöjesparker, Pixar, Marvel och Star Wars.",f:[["1923","Walt och Roy Disney startade företaget."],["1928","Musse Pigg kom för första gången."]],h:[["2009-08","Disney köpte Marvel."],["2012-10","Disney köpte Lucasfilm och Star Wars."],["2019-11","Disney+ startade i USA."]]},
+  coca:{g:"1892",l:"USA, Atlanta",s:"Läsk",t:"Coca-Cola säljer läsk i nästan alla länder. Sådana bolag brukar gå stadigt, eftersom folk köper läsk även när det går dåligt.",f:[["1886","Drycken Coca-Cola blandades första gången, på ett apotek i Atlanta."]]},
+  mcd:{g:"1940",l:"USA, Chicago",s:"Snabbmat",t:"McDonald’s har restauranger i över hundra länder. Många restauranger ägs av andra som betalar för att använda namnet.",f:[["1940","Bröderna McDonald öppnade sin första restaurang."],["1973","Den första McDonald’s i Sverige öppnade i Stockholm."]]},
+  nike:{g:"1964",l:"USA, Oregon",s:"Skor och sportkläder",t:"Nike tillverkar inte själva, utan låter fabriker i andra länder göra skorna.",f:[["1964","Phil Knight och tränaren Bill Bowerman startade bolaget."],["1971","Namnet Nike och märket som ser ut som en bock kom."]]},
+  sony:{g:"1946",l:"Japan, Tokyo",s:"Spel, elektronik och underhållning",t:"Sony gör PlayStation, kameror och tv-apparater och äger stora musik- och filmbolag.",f:[["1979","Walkman, en kassettspelare man kunde ha i fickan, kom."],["1994","Den första PlayStation kom."]],h:[["2012-02","Sony köpte Ericssons halva av Sony Ericsson."],["2013-11","PlayStation 4 började säljas."],["2020-11","PlayStation 5 började säljas."]]},
+  toyota:{g:"1937",l:"Japan, Toyota",s:"Bilar",t:"Toyota säljer flest bilar i världen. De var först med att sälja många hybridbilar.",f:[["1997","Prius, den första hybridbilen i stor skala, kom."]],h:[["2011-03","En stor jordbävning i Japan stoppade bilfabrikerna en tid."]]},
+  novo:{g:"1923",l:"Danmark, Bagsværd",s:"Mediciner",t:"Novo Nordisk gör insulin till människor med diabetes och mediciner som Ozempic och Wegovy.",f:[["1923","Ett av bolagen som blev Novo Nordisk började göra insulin."],["1989","Novo och Nordisk slogs ihop."]],h:[["2021-06","Medicinen Wegovy, som hjälper mot fetma, godkändes i USA och aktien steg mycket."]]},
+  roblox:{g:"2004",l:"USA, Kalifornien",s:"Spelplattform",t:"På Roblox bygger spelarna själva spelen. Bolaget tjänar pengar när spelare köper Robux.",f:[["2006","Roblox öppnade för spelare."]],h:[["2021-03","Roblox började säljas på börsen i New York."]]},
   bitcoin:{g:"2009",l:"Ingen (ett nätverk av datorer)",s:"Digitala pengar",t:"Bitcoin skapades av en okänd person eller grupp som kallar sig Satoshi Nakamoto. Det kan bara finnas 21 miljoner bitcoin.",f:[["2009","De första bitcoin skapades."],["2010","Någon betalade 10 000 bitcoin för två pizzor."]],h:[["2016-07","Halvering: nya bitcoin börjar skapas hälften så fort."],["2020-05","Halvering igen."],["2021-11","Priset nådde ett rekord som stod sig i över två år."],["2022-11","Kryptobörsen FTX gick i konkurs och priset rasade."]]}};
 const PAL=["#6C8CFF","#35D69A","#E8C468","#FF8FA3","#5CC8FF","#B48CFF","#FFB36B","#7BE0C9","#FF6B6B","#A0E86B","#F06CCB","#8DE0FF"];
 const COL=a=>a==="spar"?"#8FA0C2":PAL[ORDN.indexOf(a)%PAL.length];
@@ -516,8 +575,8 @@ const varde=()=>vardeI(G.i,G.u,G.cash);
 function radHTML(a,i,hog,extra=""){const[em,typ,txt]=INFO[a];return`<span class="em">${em}</span><span class="tx"><b>${A[a].n}</b><small>${typ} · ${txt}</small></span>${hog}${extra}`;}
 // välj i januari 2007
 function valRita(){const anv=Object.values(valKr).reduce((x,y)=>x+y,0);
-  $("valLista").innerHTML=ORDN.map(a=>{const ok=finns(a,0);
-    return`<div class="pl${ok?"":" las"}" data-a="${a}" role="button" tabindex="0">${radHTML(a,0,ok?`<span class="stepper"><button data-m="${a}" aria-label="Mindre ${A[a].n}">−</button><span>${(valKr[a]||0).toLocaleString("sv-SE")} kr</span><button data-p="${a}" aria-label="Mer ${A[a].n}">+</button></span>`:`<span class="hog"><small>Kan köpas<br>från ${A[a].fran.slice(0,4)}</small></span>`)}</div>`;}).join("");
+  $("valLista").innerHTML=grupperat(ORDN,a=>{const ok=finns(a,0);
+    return`<div class="pl${ok?"":" las"}" data-a="${a}" role="button" tabindex="0">${radHTML(a,0,ok?`<span class="stepper"><button data-m="${a}" aria-label="Mindre ${A[a].n}">−</button><span>${(valKr[a]||0).toLocaleString("sv-SE")} kr</span><button data-p="${a}" aria-label="Mer ${A[a].n}">+</button></span>`:`<span class="hog"><small>Kan köpas<br>från ${A[a].fran.slice(0,4)}</small></span>`)}</div>`;});
   $("kvarTxt").textContent=`Sparkontot: ${kr(START-anv)}`;}
 $("valLista").onclick=e=>{const p=e.target.closest("[data-p]"),m=e.target.closest("[data-m]");
   const anv=Object.values(valKr).reduce((x,y)=>x+y,0);
@@ -556,7 +615,7 @@ function gRita(){const v=varde(),f=v/START-1;
   $("gLogg").innerHTML=af.length?af.slice(-6).reverse().map(l=>`<div class="lr"><span class="d">${datum(l.i)}</span><b>${l.t==="kop"?"🛒 Köpte":"💰 Sålde"} ${A[l.a].n}</b><span class="kr${l.t==="salj"?" up":""}">${kr(l.x)}</span></div>`).join("")+(af.length>6?`<p class="info">… och ${af.length-6} till.</p>`:""):`<p class="info">Inga affärer ännu. Tryck på något du vill köpa eller sälja.</p>`;
   $("gAger").innerHTML=`<button class="pl" data-a="spar">${radHTML("spar",G.i,`<span class="hog">${kr(G.cash)}<small>ränta ${K.ranta[G.i].toFixed(1).replace(".",",")} %</small></span>`)}</button>`+
     ager.map(a=>{const vv=G.u[a]*A[a].v[G.i],ff=vv/G.kost[a]-1;return`<button class="pl" data-a="${a}">${radHTML(a,G.i,`<span class="hog">${kr(vv)}<small class="${ff>=0?"up":"down"}">${pr(ff,0)}</small></span>`)}</button>`;}).join("");
-  $("gKop").innerHTML=ORDN.filter(a=>!ager.includes(a)).map(a=>finns(a,G.i)?`<button class="pl" data-a="${a}">${radHTML(a,G.i,`<span class="hog">${kurs(A[a].v[G.i])} kr<small>${A[a].fran>M[0]&&G.i-fran(a)<6?"Ny!":"kurs"}</small></span>`)}</button>`:`<div class="pl las">${radHTML(a,G.i,`<span class="hog"><small>Kan köpas<br>från ${A[a].fran.slice(0,4)}</small></span>`)}</div>`).join("");}
+  $("gKop").innerHTML=grupperat(ORDN.filter(a=>!ager.includes(a)),a=>finns(a,G.i)?`<button class="pl" data-a="${a}">${radHTML(a,G.i,`<span class="hog">${kurs(A[a].v[G.i])} kr<small>${A[a].fran>M[0]&&G.i-fran(a)<6?"Ny!":"kurs"}</small></span>`)}</button>`:`<div class="pl las">${radHTML(a,G.i,`<span class="hog"><small>Kan köpas<br>från ${A[a].fran.slice(0,4)}</small></span>`)}</div>`,G.i);}
 function gJmfLinjer(){const L2=[];const upp=(v,col)=>({v:v.map((x,i)=>i<=G.i&&x!=null?x:null),col,dash:[6,5]});
   if(G.jmf.spar)L2.push(upp(A.spar.v.map(x=>START*x/A.spar.v[0]),"#5CC8FF"));
   if(G.jmf.sv)L2.push(upp(A.sverige.v.map(x=>START*x/A.sverige.v[0]),"#B48CFF"));return L2;}
@@ -591,7 +650,7 @@ function bRita(){const{a,i,per}=bl,[em,typ,txt]=INFO[a],v=A[a].v,f0=fran(a);
       return`<div class="pl"><span class="em">${INFO[x][0]}</span><span class="tx"><b>${A[x].n}</b><small class="${vx>=G.kost[x]?"up":"down"}">${kr(vx)} (${pr(vx/G.kost[x]-1,0)})</small></span><span class="stepper" style="gap:6px"><button data-ann="${x}" data-b="1000" style="width:auto;padding:0 10px;font-size:.9rem">Sälj 1 000</button><button data-ann="${x}" data-b="alla" style="width:auto;padding:0 10px;font-size:.9rem">Allt</button></span></div>`;}).join("")}</div>`;}
   if(bl.bara)h+=`<div class="info">Kursen visas fram till januari 2007. Resten får du se när tidsmaskinen startar!</div>`;
   const om=OM[a];if(om){const hh=(om.h||[]).filter(x=>mi(x[0])<=i);
-    h+=`<div class="om"><h3>${a==="spar"?"Om sparkontot":a==="sverige"||a==="usa"||a==="varlden"?"Om fonden":a==="bitcoin"?"Om bitcoin":"Om bolaget"}</h3>${om.g?`<div class="fakt"><span>Grundat</span><b>${om.g}</b><span>Land</span><b>${om.l}</b><span>Gör</span><b>${om.s}</b></div>`:`<div class="fakt"><span>Vad</span><b>${om.s}</b></div>`}<p>${om.t}</p>${(om.f||[]).length||hh.length?`<ul>${(om.f||[]).map(x=>`<li><b>${x[0]}</b><span>${x[1]}</span></li>`).join("")}${hh.map(x=>`<li class="nu"><b>${x[0].slice(0,4)}</b><span>${x[1]}</span></li>`).join("")}</ul>`:""}${hh.length?`<p class="info">De gula prickarna i grafen visar när det hände.</p>`:""}</div>`;}
+    h+=`<div class="om"><h3>${a==="spar"?"Om sparkontot":a==="sverige"||a==="usa"||a==="varlden"?"Om fonden":a==="bitcoin"?"Om bitcoin":"Om bolaget"}</h3><div class="fakt">${om.g?`<span>Grundat</span><b>${om.g}</b>`:""}${om.l?`<span>Land</span><b>${om.l}</b>`:""}<span>${om.l?"Gör":"Vad"}</span><b>${om.s}</b></div><p>${om.t}</p>${(om.f||[]).length||hh.length?`<ul>${(om.f||[]).map(x=>`<li><b>${x[0]}</b><span>${x[1]}</span></li>`).join("")}${hh.map(x=>`<li class="nu"><b>${x[0].slice(0,4)}</b><span>${x[1]}</span></li>`).join("")}</ul>`:""}${hh.length?`<p class="info">De gula prickarna i grafen visar när det hände.</p>`:""}</div>`;}
   $("bInne").innerHTML=h;
   const cv=$("bGraf"),o={v:a==="spar"?v.map(x=>x*100/v[s]):v,a:s,b:i,hover:bl.hover,fmt:a==="spar"?x=>x.toFixed(1).replace(".",",")+" kr":null,ev:(OM[a]&&OM[a].h)||[],glob:true};rita(cv,o);
   pekbar(cv,hh=>{o.hover=hh;rita(cv,o);});
@@ -635,6 +694,10 @@ const EV={
   "2010-10":()=>efter("k08",2,"Två år efter finanskrisen"),
   "2010-07":()=>ny("tesla","Ett nytt företag som gör elbilar börjar säljas på börsen. Många tror inte på elbilar."),
   "2014-10":()=>ny("bitcoin","Bitcoin är digitala pengar som inte styrs av någon bank. Den kan gå upp och ner väldigt mycket på kort tid."),
+  "2014-12":()=>ny("thule","Thule från Småland, som gör takboxar och cykelhållare, börjar säljas på börsen."),
+  "2016-06":()=>ny("paradox","Spelföretaget Paradox från Stockholm börjar säljas på börsen."),
+  "2017-07":()=>ny("essity","Essity, som gör blöjor och toapapper, delas av från SCA och blir ett eget bolag på börsen."),
+  "2021-04":()=>ny("roblox","Roblox, där barn bygger och spelar varandras spel, börjar säljas på börsen i New York."),
   "2016-11":()=>ny("embracer","Ett svenskt datorspelsföretag börjar säljas på börsen."),
   "2018-04":()=>ny("spotify","Spotify från Stockholm börjar säljas på börsen i New York."),
   "2020-03":()=>kris("k20","Corona!",`En ny sjukdom sprids i hela världen. Skolor och butiker stänger. Indexfond Sverige har rasat <b>${pr(sv("2020-01","2020-03"),0)}</b> på två månader.`),
@@ -666,7 +729,7 @@ function slut(){paus();if(skarm!=="game")return;const v=varde(),f=v/START-1;
   $("rArInfo").textContent=`Sämst var att börja ${arS[0][0]} (${kr(arS[0][1])}) och bäst ${arS[arS.length-1][0]} (${kr(arS[arS.length-1][1])}). ${alla?"Alla startår gav mer pengar efter tio år, men hur mycket berodde på när man började.":"Några startår gav mindre pengar efter tio år."} Ju längre man sparar, desto mindre betyder det vilket år man började. Ingen kan veta i förväg om det är ett bra år att börja.`;
   const fr07=ORDN.filter(a=>fran(a)===0).map(a=>[a,bara(a)]).sort((x,y)=>y[1]-x[1]);
   const b=fr07[0],s=fr07[fr07.length-1];
-  $("rBast").innerHTML=`<p style="margin:0 0 6px">${INFO[b[0]][0]} <b>${A[b[0]].n}</b>: 10 000 kr blev <b class="up">${kr(b[1])}</b>.</p><p style="margin:0 0 6px">${INFO[s[0]][0]} <b>${A[s[0]].n}</b>: 10 000 kr blev <b class="${s[1]>=START?"up":"down"}">${kr(s[1])}</b>.</p><p class="info" style="margin:0">Bitcoin räknas inte här eftersom den inte fanns att köpa 2007. 1 000 kr i bitcoin i oktober 2014 hade blivit ${kr(1000*A.bitcoin.v[N-1]/A.bitcoin.v[mi("2014-10")])}, men på vägen rasade den flera gånger med mer än hälften.</p>`;
+  $("rBast").innerHTML=`<p style="margin:0 0 6px">${INFO[b[0]][0]} <b>${A[b[0]].n}</b>: 10 000 kr blev <b class="up">${kr(b[1])}</b>.</p><p style="margin:0 0 6px">${INFO[s[0]][0]} <b>${A[s[0]].n}</b>: 10 000 kr blev <b class="${s[1]>=START?"up":"down"}">${kr(s[1])}</b>.</p><p class="info" style="margin:0 0 6px">Ingen kunde veta 2007 vilket bolag som skulle gå bäst eller sämst. Med en indexfond äger man lite av alla, både vinnarna och förlorarna.</p><p class="info" style="margin:0">Bitcoin räknas inte här eftersom den inte fanns att köpa 2007. 1 000 kr i bitcoin i oktober 2014 hade blivit ${kr(1000*A.bitcoin.v[N-1]/A.bitcoin.v[mi("2014-10")])}, men på vägen rasade den flera gånger med mer än hälften.</p>`;
   const rad=[];const lg=G.logg||[];
   const forst=lg.filter(l=>l.i===0&&l.t==="kop");if(forst.length)rad.push({i:0,k:"k",t:"Du köpte "+forst.map(l=>A[l.a].n+" för "+kr(l.x)).join(", ")+"."});else rad.push({i:0,k:"",t:"Du lät alla pengar ligga på sparkontot."});
   lg.filter(l=>l.i>0).forEach(l=>{if(l.t==="val")rad.push({i:l.i,k:"e",t:l.txt});else rad.push({i:l.i,k:l.t==="kop"?"k":"s",t:(l.t==="kop"?"Du köpte ":"Du sålde ")+A[l.a].n+" för "+kr(l.x)+"."});});
