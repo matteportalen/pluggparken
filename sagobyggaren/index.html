@@ -298,7 +298,7 @@ const ORDG=[["en gång","långt borta","fridfull","gammal","hemlig","glittrade"]
 const ORDT={slott:["kungen","tornet","kronan","trollstav","riddare","slottsporten","hemlighet","fest"],troll:["mossig","dimma","mullrade","trollkonst","skugga","stig","gran","gömställe"],djur:["äventyr","utforskade","hoppade","spännande","vänner","upptäckte","nyfiken","stig"]};
 const ORDE={drake:["eldsprutande","fjäll","rytande","flög"],troll:["stor","mullrade","trollkonst","stenig"],prinsessa:["krona","bugade","festklänning"],riddare:["rustning","svärd","galopperade"],nyckel:["rostig","dörr","lås"],skatt:["guld","kista","gömställe"],spoke:["genomskinligt","tjuta","svävade"],stjarna:["önskade","glittrade","himlen"],ufo:["rymden","blinkade","landade"]};
 const IDEER=["Någon är inte den han eller hon ser ut att vara.","Ett mystiskt brev dyker upp.","Det börjar regna glitter.","Ett litet djur visar vägen.","Hjälten får en magisk förmåga i en enda dag.","Någon är rädd för något helt oväntat.","Det finns en hemlig dörr.","Tiden stannar i en minut.","Allt var ett missförstånd.","Hjälten tappar något viktigt."];
-const IDEERT={slott:["Kungen har tappat sin krona.","Slottet har en hemlig trappa.","Draken är egentligen förtrollad."],troll:["Trollet har tappat sin mössa.","Trollet gråter för att det är ensamt.","Skogen börjar viska."],djur:["En stjärna ramlar ner mitt framför dem.","Alla djur börjar prata.","Vägen försvinner."]};
+const IDEERT={slott:["Någon hittar en hemlig trappa som ingen sett förut.","Någon har ett hemligt uppdrag från kungen."],troll:["Skogen börjar viska.","Ett ljus tänds mitt i mörkret."],djur:["Alla djur börjar prata.","Vägen framför dem försvinner."]};
 const STARTARE=[["Det var en gång","En dag","Långt borta"],["Plötsligt","Då","Men så"],["Först","Då blev","Så"],["Till slut","Sedan","Och så"]];
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const C=t=>t.charAt(0).toUpperCase()+t.slice(1);
@@ -350,10 +350,16 @@ function inspo(i){const h=G.v,p=G.p,e=G.e,T=G.tema||TEMAN[0];
   fragor=[...(FRAGA[i](h,p,e)),...(i===0?[h.q,...(TEMAFRAGA[T.id]||[])]:i===1?(e.q||[]):[])].filter(Boolean);
   inspI=Math.floor(Math.random()*fragor.length);visaFraga();$("ideaT").hidden=true;
   const ord=[...ORDG[i].slice(0,4),...(ORDE[e.id]||[]).slice(0,3),...(ORDT[T.id]||[]).slice(0,4)];
-  $("ordw").hidden=!fritt();$("ord").innerHTML=ord.map(w=>`<button type="button" data-w="${w}">${w}</button>`).join("");}
+  $("ordw").hidden=!fritt();$("idea").hidden=!fritt();$("ord").innerHTML=ord.map(w=>`<button type="button" data-w="${w}">${w}</button>`).join("");}
 function visaFraga(){$("iq").innerHTML=`<b>💡 Tänk på:</b>${esc(fragor[inspI%fragor.length])}`;}
 $("inspN").onclick=()=>{inspI++;visaFraga();window.Ljud&&Ljud.pop&&Ljud.pop(1);};
-$("idea").onclick=()=>{const T=G.tema||TEMAN[0],L=[...IDEER,...(IDEERT[T.id]||[]),...(IDEERT[T.id]||[])];const d=$("ideaT");d.textContent="🎲 "+pick(L);d.hidden=false;window.Ljud&&Ljud.chime&&Ljud.chime();};
+// idéer som hör ihop med hjälten, platsen och händelsen och med vilken sida man skriver (och bara när man skriver själv)
+const IDEE=(i,h,p,e,T)=>{const H=C(h.def);return [
+ [`Beskriv något ovanligt som finns ${p.prep}.`,`${H} har en hemlighet som ingen annan känner till. Vilken?`,`${H} längtar efter något. Vad?`],
+ [`Det visar sig att ${e.obj} egentligen behöver hjälp.`,`Plötsligt händer något oväntat som gör allt svårare.`,`Någon annan dyker upp och ser vad som hände. Vem?`,...(IDEERT[T.id]||[])],
+ [`${H} får en idé som ingen tänkt på förut. Vilken?`,`Någon hjälper ${h.def}, men på ett överraskande sätt. Vem?`,`Det första försöket misslyckas. Vad gör ${h.def} sedan?`,...(IDEERT[T.id]||[])],
+ [`Avsluta med en liten överraskning som ingen väntat sig.`,`${H} har lärt sig något nytt. Vad?`,`Sluta med en mening som börjar: Och ända sedan dess …`]][i];};
+$("idea").onclick=()=>{const T=G.tema||TEMAN[0],d=$("ideaT");d.textContent="🎲 "+pick(IDEE(G.sida,G.v,G.p,G.e,T));d.hidden=false;window.Ljud&&Ljud.chime&&Ljud.chime();};
 $("ord").onclick=e=>{const b=e.target.closest("[data-w]");if(!b)return;const t=$("txt");t.value=(t.value&&!/\s$/.test(t.value)?t.value+" ":t.value)+b.dataset.w+" ";t.focus();t.oninput();};
 $("alt").onclick=e=>{const b=e.target.closest("[data-j]");if(!b)return;G.t[G.sida]=alternativ(G.sida,G.v,G.p,G.e)[+b.dataset.j];
   [...$("alt").children].forEach(x=>x.classList.toggle("v",x===b));$("bFram").disabled=false;window.Ljud&&Ljud.pop&&Ljud.pop(2);$("hittills").innerHTML=G.t.slice(0,G.sida).map(esc).join(" ");};
