@@ -88,11 +88,11 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 .scen{position:relative;aspect-ratio:3/2;border-radius:22px;overflow:hidden;box-shadow:0 4px 0 var(--line);background:linear-gradient(#8FD0FF,#DDF1FF 70%)}
 .scen .bgimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:bottom;mix-blend-mode:multiply}
 .scen .sp{position:absolute;bottom:13%;width:24%;aspect-ratio:1;object-fit:contain;filter:drop-shadow(0 4px 0 rgba(0,0,0,.14));animation:sPop .5s ease-out both}
-.scen .hero{left:14%}.scen .ev{left:60%}
-.scen.s1 .hero{left:38%;width:26%}
-.scen.s2 .hero{left:12%}.scen.s2 .ev{left:62%;animation-delay:.25s}
-.scen.s3 .hero{left:26%;width:30%}.scen.s3 .ev{left:58%;width:20%;animation-delay:.1s}
-.scen.s4 .hero{left:30%;width:28%}.scen.s4 .ev{left:58%;width:22%}
+.scen .hjalte{left:14%}.scen .ev{left:60%}
+.scen.s1 .hjalte{left:38%;width:26%}
+.scen.s2 .hjalte{left:12%}.scen.s2 .ev{left:62%;animation-delay:.25s}
+.scen.s3 .hjalte{left:26%;width:30%}.scen.s3 .ev{left:58%;width:20%;animation-delay:.1s}
+.scen.s4 .hjalte{left:30%;width:28%}.scen.s4 .ev{left:58%;width:22%}
 .scen .dek{position:absolute;width:11%;aspect-ratio:1;object-fit:contain;animation:flyt 2.6s ease-in-out infinite}
 .scen .sky{position:absolute;top:8%;width:9%}
 @keyframes sPop{from{transform:scale(.4) translateY(14px);opacity:0}}
@@ -236,7 +236,7 @@ function alternativ(sida,h,p,e){const H=C(h.def),mote=e.typ==="mote";
        :[`Till slut gick ${h.def} hem och visade alla sina vänner.`,`${H} gömde ${e.pr} på en hemlig plats.`,`Och så levde ${h.def} lyckligt i alla sina dagar.`]][sida];}
 function scen(p,h,e,sida,liten){const s=sida+1;
   const dek=sida===3?`<img class="dek" style="left:12%;top:12%" src="bilder/star_1.webp" alt=""><img class="dek" style="left:78%;top:22%;animation-delay:.7s" src="bilder/heart_1.webp" alt="">`:"";
-  return `<div class="scen s${s}${liten?" liten":""}"><img class="bgimg" src="bilder/bg_${p.bg}.jpg" alt=""><img class="sp hero" src="bilder/${h.img}.webp" alt="${h.def}">${sida>=1?`<img class="sp ev" src="bilder/${e.img}.webp" alt="">`:""}${dek}</div>`;}
+  return `<div class="scen s${s}${liten?" liten":""}"><img class="bgimg" src="bilder/bg_${p.bg}.jpg" alt=""><img class="sp hjalte" src="bilder/${h.img}.webp" alt="${h.def}">${sida>=1?`<img class="sp ev" src="bilder/${e.img}.webp" alt="">`:""}${dek}</div>`;}
 const grid=$("gridVal");let steg=0;
 function begin(lvl){G={lvl,v:null,p:null,e:null,t:[],sida:0};steg=0;show("game");visa("val");}
 function visa(v){const m={val:"vVal",byg:"vByg",bok:"vBok",mina:"vMina"};["vVal","vByg","vBok","vMina"].forEach(x=>$(x).hidden=x!==m[v]);
