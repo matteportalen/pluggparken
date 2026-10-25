@@ -483,7 +483,7 @@ html[data-tema="mork"] .herosok{background:#1A2748;color:#A3B0D6}
 const $=id=>document.getElementById(id);
 const get=k=>{try{return JSON.parse(localStorage.getItem(k)||"null")}catch(e){return null}};
 const put=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
-const show=(id,t)=>{const el=$(id);if(t){el.textContent=t;el.hidden=false}};
+const show=(id,t)=>{const el=$(id);if(el&&t){el.textContent=t;el.hidden=false}};
 const fmt=ms=>(ms/1000).toFixed(1).replace(".",",")+" s";
 const sum=o=>Object.values(o||{}).reduce((s,v)=>s+(typeof v==="number"?v:sum(v)),0);
 const T10=[1,2,3,4,5,6,7,8,9,10];
