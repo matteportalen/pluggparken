@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<script src="../tema.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Knepiga ljud – Pluggparken</title>
+<meta name="description" content="Knepiga ljud: ng, tj, sj och ck. Titta på bilden och välj rätt bokstäver. Tryck eller dra bokstäverna till luckan.">
+<link rel="canonical" href="https://pluggparken.se/knepigaljud/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Pluggparken">
+<meta property="og:locale" content="sv_SE">
+<meta property="og:title" content="Knepiga ljud – Pluggparken">
+<meta property="og:description" content="Knepiga ljud: ng, tj, sj och ck. Titta på bilden och välj rätt bokstäver.">
+<meta property="og:url" content="https://pluggparken.se/knepigaljud/">
+<meta property="og:image" content="https://pluggparken.se/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#1F3A35">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/apple-touch-icon.png" sizes="180x180">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Andika:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EAF3FF; --ink:#1D2B53; --muted:#56668F; --card:#FFFFFF; --line:#C6D6F2; --soft:#F1F6FF;
+  --good:#1E9E5E; --good-dark:#157548; --bad:#E5484D; --accent:#3D5AFE; --gold:#F2B707; --hero1:#7B61FF; --hero2:#5A3FE0; --heroS:#3D2AA8;
+  --font:"Baloo 2","Trebuchet MS",system-ui,sans-serif; --ord:"Andika","Baloo 2",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:680px;margin:0 auto;padding:12px 16px 48px}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;border:0;background:none}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+[hidden]{display:none!important}
+.hero{display:flex;gap:16px;align-items:center;background:linear-gradient(135deg,var(--hero1),var(--hero2));color:#fff;border-radius:24px;padding:18px;box-shadow:0 5px 0 var(--heroS);margin:6px 0 16px}
+.hero svg{flex:none;width:130px;height:auto;filter:drop-shadow(0 3px 0 rgba(0,0,0,.15))}
+.hero h1{margin:0;font-size:clamp(1.7rem,6vw,2.3rem);line-height:1.05}
+.hero p{margin:6px 0 0;font-weight:600;opacity:.95}
+.niv{display:grid;gap:10px}
+.niv button{display:flex;align-items:center;gap:14px;background:var(--card);border-radius:18px;padding:12px 14px;box-shadow:0 4px 0 var(--line);text-align:left;width:100%}
+.niv button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.niv .nr{flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-weight:800;font-size:1.4rem;color:#fff}
+.niv b{display:block;font-size:1.12rem;line-height:1.15}
+.niv small{display:block;color:var(--muted);font-weight:600;font-size:.88rem;line-height:1.25}
+.niv .st{margin-left:auto;flex:none;color:var(--gold);font-size:1.15rem;letter-spacing:1px}
+.niv .st .off{color:var(--line)}
+.info{color:var(--muted);font-size:.9rem;margin:14px 2px 0}
+.topp{display:flex;align-items:center;gap:10px;margin:4px 0 10px}
+.dots{display:flex;gap:6px;flex:1;flex-wrap:wrap}
+.dots i{width:12px;height:12px;border-radius:50%;background:var(--line)}
+.dots i.ok{background:var(--good)}.dots i.f{background:var(--bad)}.dots i.nu{background:var(--gold)}
+.niva-t{font-weight:800;color:var(--muted);font-size:.9rem}
+.pet{flex:none;width:48px;height:52px;pointer-events:none}.pet svg{width:100%;height:100%}
+.pet.hopp{animation:hopp .55s ease}
+@keyframes hopp{40%{transform:translateY(-18px)}}
+.kort{background:var(--card);border-radius:22px;box-shadow:0 4px 0 var(--line);padding:16px}
+.fb{text-align:center;font-weight:700;margin:12px 0 0;min-height:2.6em;font-size:1.05rem}
+.fb.ratt{color:var(--good-dark)}.fb.fel{color:#B4232A}
+.knapp{display:inline-block;background:var(--good);color:#fff;border-radius:16px;padding:12px 26px;font-weight:800;font-size:1.15rem;box-shadow:0 5px 0 var(--good-dark);margin:6px}
+.knapp.vit{background:var(--card);color:var(--ink);box-shadow:0 5px 0 var(--line)}
+.knapp.bla{background:var(--accent);box-shadow:0 5px 0 #2A3FB8}
+.knapp:disabled{opacity:.4;pointer-events:none}
+.knapp:active{transform:translateY(3px)}
+.lyssna{display:inline-flex;align-items:center;gap:6px;background:var(--soft);border-radius:999px;padding:6px 14px;font-weight:700;font-size:.95rem;box-shadow:0 2px 0 var(--line)}
+.res{text-align:center}
+.res .stj{font-size:3rem;letter-spacing:6px;color:var(--gold);margin:8px 0}
+.res .stj .off{color:var(--line)}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:50}
+@media(max-width:420px){.hero svg{width:96px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.mening{font-family:var(--ord);font-size:clamp(1.3rem,5.4vw,1.7rem);font-weight:700;text-align:center;line-height:1.5;padding:18px 8px 14px}
+.mening .lucka{display:inline-block;min-width:3.4em;border-bottom:4px solid var(--accent);color:transparent;margin:0 4px}
+.mening .lucka.bokst{color:var(--accent);font-weight:800}
+.mening .ifylld{color:var(--good-dark);border-bottom-color:var(--good)}
+.dubb{color:#E5484D}
+.fraga{text-align:center;font-weight:800;line-height:1.4;margin:0 4px 12px;font-size:1.05rem}
+.fraga small{display:block;font-weight:600;color:var(--muted);margin-top:4px;font-size:.88rem}
+.val.vok button{font-family:inherit;font-size:1.2rem;line-height:1.25}
+.val.vok button small{display:block;font-family:var(--ord);font-size:.95rem;font-weight:600;color:var(--muted);margin-top:2px}
+.rep{display:inline-block;background:#FFF1C2;border:2px solid var(--gold);color:#7A5B00;border-radius:999px;padding:1px 10px;font-size:.78rem;font-weight:800;margin-bottom:6px}
+.ratt-ruta{padding:4px 2px}
+.ratt-ruta h3{margin:0 0 6px;font-size:1.25rem;text-align:center}
+.ratt-text{font-family:var(--ord);font-size:clamp(1.15rem,4.6vw,1.45rem);font-weight:700;line-height:2.1;text-align:left;padding:8px 6px}
+.ratt-text .w{display:inline-block;padding:0 5px;margin:0 1px;border-radius:10px;border:2px solid transparent;cursor:pointer}
+.ratt-text .w.v{background:#FFF1C2;border-color:var(--gold)}
+.ratt-text .w.hit{background:#E6F7EE;border-color:var(--good);color:var(--good-dark)}
+.ratt-text .w.miss{background:#FFE9D2;border-color:#F2780C}
+.ratt-text .w.falsk{background:#FDE7E8;border-color:#F0A3A6}
+.ratt-text.klar .w{pointer-events:none}
+.ratt-sum{background:var(--soft);border-radius:16px;padding:10px 14px;margin-top:10px;font-weight:600;line-height:1.5}
+
+.val{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.val button{min-height:78px;border-radius:20px;background:var(--card);box-shadow:0 5px 0 var(--line);border:3px solid var(--line);font-family:var(--ord);font-size:1.5rem;font-weight:700;color:var(--ink)}
+.val button:active{transform:translateY(3px);box-shadow:0 2px 0 var(--line)}
+.val button.ratt{background:#E6F7EE;border-color:var(--good);box-shadow:0 5px 0 var(--good)}
+.val button.fel{background:#FDE7E8;border-color:#F0A3A6;box-shadow:0 5px 0 #F0A3A6}
+.val button:disabled{pointer-events:none}
+.regel{background:var(--soft);border-radius:16px;padding:10px 14px;margin-top:12px;font-weight:600;font-size:1rem;display:none}
+.regel.visas{display:block}
+.regel b{color:var(--good-dark)}
+.rad2{display:flex;gap:6px;justify-content:center;margin-top:10px;flex-wrap:wrap}
+
+
+.bildrad{display:grid;justify-items:center;gap:8px;margin:2px 0 4px}
+.bildrad img{width:150px;height:150px;object-fit:contain;filter:drop-shadow(0 6px 0 rgba(29,43,83,.12))}
+.ordrad{font-family:var(--ord);font-size:clamp(2rem,10vw,3.1rem);font-weight:700;text-align:center;letter-spacing:.04em;margin:6px 0 14px;min-height:1.4em;color:var(--ink)}
+.ordrad .lucka{display:inline-block;min-width:1.5em;height:1.25em;vertical-align:-.18em;border:3px dashed var(--accent);border-radius:12px;margin:0 3px;padding:0 6px;color:transparent;background:var(--soft);transition:background .15s,border-color .15s}
+.ordrad .lucka.over{background:#E3EAFF;border-style:solid}
+.ordrad .lucka.fylld{color:var(--good-dark);border-style:solid;border-color:var(--good);background:#E6F7EE;font-weight:800}
+.ordrad .lucka.fel{color:#B4232A;border-color:#F0A3A6;background:#FDE7E8;animation:skak .35s}
+.val.tiles{grid-template-columns:repeat(auto-fit,minmax(86px,1fr))}
+.tile{min-height:70px;border-radius:18px;background:var(--card);box-shadow:0 5px 0 var(--line);border:3px solid var(--line);font-family:var(--ord);font-size:1.7rem;font-weight:700;color:var(--ink);touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
+.tile:active{cursor:grabbing}
+.tile.lyft{opacity:.35}
+.tile.ghost{opacity:.95;box-shadow:0 12px 24px rgba(0,0,0,.25);transform-origin:center;cursor:grabbing}
+.tile.ratt{background:#E6F7EE;border-color:var(--good);box-shadow:0 5px 0 var(--good)}
+.tile.fel{background:#FDE7E8;border-color:#F0A3A6;box-shadow:0 5px 0 #F0A3A6;opacity:.6;pointer-events:none}
+.tile:disabled{pointer-events:none}
+@keyframes skak{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.regelknapp{position:absolute;right:12px;top:10px;background:var(--soft);border-radius:999px;padding:3px 12px;font-weight:800;font-size:.85rem;color:var(--ink)}
+#kortQ{position:relative}
+.lara-ex{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:6px 0 14px}
+.lara-ex figure{margin:0;text-align:center;font-family:var(--ord);font-weight:700;width:104px}
+.lara-ex img{width:72px;height:72px;object-fit:contain}
+.lara-ex b{color:var(--accent)}
+.rep{display:inline-block;background:#FFF1C2;border:2px solid var(--gold);color:#7A5B00;border-radius:999px;padding:1px 10px;font-size:.78rem;font-weight:800;margin-bottom:4px}
+</style>
+</head>
+<body>
+<script src="../ljud.js"></script>
+<script src="../djur.js"></script>
+<script src="../huvud.js" data-titel="Knepiga ljud" data-ikon="🔊"></script>
+<main class="wrap">
+
+<section class="screen" id="home">
+  <div class="hero">
+    <svg viewBox="0 0 120 64" aria-hidden="true"><rect x="2" y="2" width="116" height="60" rx="10" fill="#fff"/><image href="bilder/1f9f2.svg" x="8" y="8" width="40" height="40"/><text x="78" y="33" text-anchor="middle" font-family="Andika, Baloo 2, sans-serif" font-weight="700" font-size="17" fill="#1D2B53">ma<tspan fill="#fff" stroke="#3D5AFE" stroke-width="1">_</tspan>net</text><text x="78" y="52" text-anchor="middle" font-family="Andika, Baloo 2, sans-serif" font-weight="700" font-size="12" fill="#3D5AFE">ng, n eller g?</text></svg>
+    <div><h1>Knepiga ljud</h1><p>Titta på bilden och välj rätt bokstäver. Samma ljud kan skrivas på flera sätt.</p></div>
+  </div>
+  <div class="niv" id="niv"></div>
+  <p class="info">Tryck på bokstäverna eller dra dem till luckan. Tryck på 🔊 för att höra ordet. Efter varje ord visas en regel och fler ord som stavas likadant.</p>
+</section>
+
+<section class="screen" id="game" hidden>
+  <div class="topp"><div class="dots" id="dots"></div><span class="niva-t" id="nivT"></span><span class="pet" id="pet"></span></div>
+  <div class="kort" id="laraK" hidden>
+    <h3 id="laraN" style="margin:0 0 6px;text-align:center"></h3>
+    <p id="laraT" style="text-align:center;font-weight:700;line-height:1.45;margin:0 4px 10px"></p>
+    <div class="lara-ex" id="laraEx"></div>
+    <div style="text-align:center"><button class="knapp" id="laraGo" type="button">Börja öva ▶</button></div>
+  </div>
+  <div class="kort" id="kortQ">
+    <button class="regelknapp" id="bRegel" type="button">ℹ️ Regeln</button>
+    <div class="bildrad"><img id="bild" alt="" width="150" height="150"><button class="lyssna" id="bLas" type="button" aria-label="Lyssna på ordet">🔊 Lyssna</button></div>
+    <div class="ordrad" id="ordrad" aria-live="polite"></div>
+    <div class="val" id="val"></div>
+    <div class="regel" id="regel"></div>
+  </div>
+  <div class="fb" id="fb" aria-live="polite"></div>
+  <div class="rad2"><button class="knapp bla" id="bNasta" type="button" hidden>Nästa ▶</button></div>
+</section>
+
+<section class="screen res" id="result" hidden>
+  <h2 id="rRub" style="margin:10px 0 0">Bra jobbat!</h2>
+  <div class="stj" id="rStj"></div>
+  <p id="rTxt" style="font-weight:700;margin:0 0 14px"></p>
+  <button class="knapp" id="rIgen">Spela igen</button>
+  <button class="knapp vit" id="rHome">Välj nivå</button>
+</section>
+
+</main>
+<canvas id="fx" hidden></canvas>
+<script>
+const $=id=>document.getElementById(id);
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const KEY="mattespel-knepigaljud-v1";
+const data=(()=>{try{return Object.assign({stars:{}},JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){return{stars:{}}}})();
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}};
+const reduced=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
+const LJUD=["ng", "tj", "sj", "ck"];const NAMN={"ng": {"namn": "ng-ljudet", "txt": "ng, n eller g?", "col": "#2BB673", "bild": "1f9f2"}, "tj": {"namn": "tj-ljudet", "txt": "tj eller k?", "col": "#FF9F43", "bild": "1f95d"}, "sj": {"namn": "sj-ljudet", "txt": "sj, skj, stj, sk, ch eller sch?", "col": "#7B61FF", "bild": "2b50"}, "ck": {"namn": "ck och k", "txt": "ck eller k?", "col": "#E5484D", "bild": "1f511"}};
+const stjHtml=n=>[1,2,3].map(i=>i<=n?"★":'<span class="off">★</span>').join("");
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
+function hem(){
+  $("niv").innerHTML=LJUD.map(l=>`<button data-l="${l}"><span class="nr" style="background:${NAMN[l].col};padding:0"><img src="bilder/${NAMN[l].bild}.svg" alt="" width="44" height="44" style="width:44px;height:44px"></span><span><b>${NAMN[l].namn}</b><small>${NAMN[l].txt}</small></span><span class="st">${stjHtml(data.stars[l]||0)}</span></button>`).join("");
+  if(window.speechSynthesis)speechSynthesis.cancel();show("home");}
+$("niv").onclick=e=>{const b=e.target.closest("[data-l]");if(b)begin(b.dataset.l);};
+// uppläsning bara när man trycker (svensk röst)
+let svVoice=null;function laddaRoster(){try{svVoice=speechSynthesis.getVoices().find(v=>/^sv/i.test(v.lang))||null}catch(e){}}
+if("speechSynthesis" in window){laddaRoster();speechSynthesis.onvoiceschanged=laddaRoster;}
+function lasUpp(t){if(!("speechSynthesis" in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="sv-SE";if(svVoice)u.voice=svVoice;u.rate=.9;speechSynthesis.speak(u);}
+function prickar(n,i,res){$("dots").innerHTML=Array.from({length:n},(_,j)=>`<i class="${j<i?(res[j]?"ok":"f"):j===i?"nu":""}"></i>`).join("");}
+function haj(){const p=$("pet");if(!p)return;p.classList.remove("hopp");void p.offsetWidth;p.classList.add("hopp");}
+function resultat(st,txt){const old=data.stars[G.lvl]||0;data.stars[G.lvl]=Math.max(old,st);save();
+  $("rStj").innerHTML=stjHtml(st);$("rRub").textContent=st===3?"Perfekt! 🎉":st===2?"Bra jobbat!":"Bra kämpat!";$("rTxt").textContent=txt;
+  show("result");if(st===3){window.Ljud&&Ljud.fanfare&&Ljud.fanfare();confetti();}else window.Ljud&&Ljud.chime&&Ljud.chime();}
+$("rIgen").onclick=()=>begin(G.lvl);$("rHome").onclick=hem;
+function confetti(){if(reduced())return;const cols=["#3D8BFD","#FF9F43","#2BB673","#FFC93C","#7B61FF","#FF6B6B"];
+  const c=$("fx"),x=c.getContext("2d"),dpr=window.devicePixelRatio||1,W=innerWidth,H=innerHeight;c.width=W*dpr;c.height=H*dpr;x.setTransform(dpr,0,0,dpr,0,0);c.hidden=false;
+  const P=Array.from({length:150},()=>({x:W/2+(Math.random()-.5)*120,y:H*.3,vx:(Math.random()-.5)*16,vy:-Math.random()*15-4,r:Math.random()*7+5,c:pick(cols),a:Math.random()*6,va:(Math.random()-.5)*.4}));
+  let t=0;(function f(){x.clearRect(0,0,W,H);P.forEach(p=>{p.vy+=.45;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore();});
+    if(++t<150)requestAnimationFrame(f);else c.hidden=true;})();}
+let G=null;
+const RUND=8;
+const W={"ng": [["pingvin", "1f427", "pi", "ng", "vin", "ng-ljudet skrivs oftast ng: pingvin, ring, tunga, pengar."], ["ring", "1f48d", "ri", "ng", "", "ng-ljudet skrivs oftast ng: ring, pingvin, tunga, pengar."], ["tunga", "1f445", "tu", "ng", "a", "ng-ljudet skrivs oftast ng: tunga, ring, pingvin, pengar."], ["pengar", "1f4b0", "pe", "ng", "ar", "ng-ljudet skrivs oftast ng: pengar, ring, finger, tunga."], ["finger", "261d", "fi", "ng", "er", "ng-ljudet skrivs oftast ng: finger, ring, tunga, pengar."], ["ängel", "1f47c", "ä", "ng", "el", "ng-ljudet skrivs oftast ng: ängel, finger, ring, tunga."], ["magnet", "1f9f2", "ma", "g", "net", "Före n skrivs ng-ljudet med bara g: magnet, regn, vagn."], ["regn", "1f327", "re", "g", "n", "Före n skrivs ng-ljudet med bara g: regn, magnet, vagn."], ["vagn", "1f683", "va", "g", "n", "Före n skrivs ng-ljudet med bara g: vagn, regn, magnet."], ["ankare", "2693", "a", "n", "kare", "Före k skrivs ng-ljudet med bara n: ankare, bank, tänka."], ["bank", "1f3e6", "ba", "n", "k", "Före k skrivs ng-ljudet med bara n: bank, ankare, tänka."], ["tänka", "1f914", "tä", "n", "ka", "Före k skrivs ng-ljudet med bara n: tänka, bank, ankare."]], "tj": [["tjur", "1f402", "", "tj", "ur", "tj-ljudet skrivs tj i ord som tjur och tjej."], ["tjej", "1f469", "", "tj", "ej", "tj-ljudet skrivs tj i ord som tjej och tjur."], ["kiwi", "1f95d", "", "k", "iwi", "Före i, e, y, ä och ö skrivs tj-ljudet ofta med k: kiwi, kyss, kex."], ["kyckling", "1f425", "", "k", "yckling", "Före i, e, y, ä och ö skrivs tj-ljudet ofta med k: kyckling, kiwi, kex."], ["känguru", "1f998", "", "k", "änguru", "Före i, e, y, ä och ö skrivs tj-ljudet ofta med k: känguru, kiwi, kyss."], ["kyss", "1f48b", "", "k", "yss", "Före i, e, y, ä och ö skrivs tj-ljudet ofta med k: kyss, kex, kiwi."], ["kex", "1f36a", "", "k", "ex", "Före i, e, y, ä och ö skrivs tj-ljudet ofta med k: kex, kyss, kiwi."], ["kyrka", "26ea", "", "k", "yrka", "Före i, e, y, ä och ö skrivs tj-ljudet ofta med k: kyrka, kyss, kex."], ["kärlek", "2764", "", "k", "ärlek", "Före i, e, y, ä och ö skrivs tj-ljudet ofta med k: kärlek, känguru, kiwi."], ["käglor", "1f3b3", "", "k", "äglor", "Före i, e, y, ä och ö skrivs tj-ljudet ofta med k: käglor, kärlek, kex."]], "sj": [["sjal", "1f9e3", "", "sj", "al", "sj-ljudet skrivs ofta sj: sjal, sjukhus, sjunga, sjuk, sju."], ["sjukhus", "1f3e5", "", "sj", "ukhus", "sj-ljudet skrivs ofta sj: sjukhus, sjal, sjunga, sjuk, sju."], ["sjunga", "1f3a4", "", "sj", "unga", "sj-ljudet skrivs ofta sj: sjunga, sjal, sjukhus, sjuk, sju."], ["sjuk", "1f912", "", "sj", "uk", "sj-ljudet skrivs ofta sj: sjuk, sjukhus, sjal, sjunga, sju."], ["sju", "0037_20e3", "", "sj", "u", "sj-ljudet skrivs ofta sj: sju, sjuk, sjal, sjunga."], ["skjorta", "1f455", "", "skj", "orta", "Ibland skrivs sj-ljudet skj: skjorta, skjuta."], ["stjärna", "2b50", "", "stj", "ärna", "Ibland skrivs sj-ljudet stj: stjärna, stjäla."], ["sked", "1f944", "", "sk", "ed", "Före e, i, y, ä och ö skrivs sj-ljudet ofta sk: sked, skina, skinka."], ["skidor", "1f3bf", "", "sk", "idor", "Före e, i, y, ä och ö skrivs sj-ljudet ofta sk: skidor, sked, skina."], ["choklad", "1f36b", "", "ch", "oklad", "I några ord från andra språk skrivs sj-ljudet ch: choklad, chef, chans."], ["schack", "265f", "", "sch", "ack", "I några få ord skrivs sj-ljudet sch: schack, schampo."]], "ck": [["nyckel", "1f511", "ny", "ck", "el", "Efter kort vokal skriver vi ck: nyckel, socka, jacka, klocka."], ["socka", "1f9e6", "so", "ck", "a", "Efter kort vokal skriver vi ck: socka, nyckel, jacka, klocka."], ["jacka", "1f9e5", "ja", "ck", "a", "Efter kort vokal skriver vi ck: jacka, socka, nyckel, klocka."], ["klocka", "23f0", "klo", "ck", "a", "Efter kort vokal skriver vi ck: klocka, jacka, socka, nyckel."], ["flicka", "1f467", "fli", "ck", "a", "Efter kort vokal skriver vi ck: flicka, klocka, jacka, socka."], ["lock", "1f512", "lo", "ck", "", "Efter kort vokal skriver vi ck: lock, klocka, jacka, nyckel."], ["ryggsäck", "1f392", "ryggsä", "ck", "", "Efter kort vokal skriver vi ck: ryggsäck, lock, klocka, jacka."], ["mackor", "1f96a", "ma", "ck", "or", "Efter kort vokal skriver vi ck: mackor, lock, jacka, klocka."], ["bok", "1f4d6", "bo", "k", "", "Efter lång vokal skriver vi bara k: bok, cykel, mjölk."], ["cykel", "1f6b2", "cy", "k", "el", "Efter lång vokal skriver vi bara k: cykel, bok, mjölk."], ["mjölk", "1f95b", "mjöl", "k", "", "Efter lång vokal skriver vi bara k: mjölk, bok, cykel."]]};
+const OPT={"ng": ["ng", "n", "g"], "tj": ["tj", "k", "kj", "ch"], "sj": ["sj", "skj", "stj", "sk", "ch", "sch"], "ck": ["ck", "kk", "k"]};
+const LARA={"ng": {"namn": "ng-ljudet", "text": "Samma ljud kan skrivas på tre sätt: ng (ring), n före k (tänka, bank) och g före n (magnet, regn).", "ex": ["ring", "tänka", "magnet"]}, "tj": {"namn": "tj-ljudet", "text": "Ljudet i tjur skrivs tj. Före e, i, y, ä och ö skrivs det ofta med bara k: kiwi, kyss, kex, känguru.", "ex": ["tjur", "kiwi", "kyss"]}, "sj": {"namn": "sj-ljudet", "text": "sj-ljudet kan skrivas på många sätt: sj (sjal), skj (skjorta), stj (stjärna), sk före e, i, y, ä, ö (sked), ch (choklad) och sch (schack).", "ex": ["sjal", "stjärna", "sked", "choklad"]}, "ck": {"namn": "ck och k", "text": "Efter en kort vokal skriver vi ck (dubbelt k): nyckel, jacka. Efter en lång vokal skriver vi bara k: bok, cykel.", "ex": ["nyckel", "jacka", "bok"]}};
+const CODE={};Object.values(W).forEach(L=>L.forEach(w=>CODE[w[0]]=w[1]));
+const sv=()=>{data.svara=data.svara||{};return data.svara;};
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function begin(lj){
+  // ord som missats förut kommer tillbaka (högst två), tills de gått rätt två rundor i rad
+  const sd=(sv()[lj]=sv()[lj]||{}),pool=W[lj];
+  const aterv=shuffle(pool.filter(w=>sd[w[0]]>0)).slice(0,2);
+  const nya=shuffle(pool.filter(w=>!aterv.includes(w))).slice(0,RUND-aterv.length);
+  const kv=shuffle(nya.map(x=>({x,retry:false})).concat(aterv.map(x=>({x,retry:false,rep:true}))));
+  G={lvl:lj,i:0,fel:0,res:[],kv,retries:0,gjort:false};
+  $("nivT").textContent=NAMN[lj].namn;$("pet").innerHTML=owlSVG(lasDjur());show("game");
+  data.sett=data.sett||{};
+  if(!data.sett[lj]){visaLara(lj,true);}else{$("laraK").hidden=true;$("kortQ").hidden=false;nasta();}}
+function visaLara(lj,start){const L=LARA[lj];$("laraN").textContent=L.namn;$("laraT").textContent=L.text;
+  $("laraEx").innerHTML=L.ex.map(o=>{const w=W[lj].find(x=>x[0]===o);return `<figure><img src="bilder/${w[1]}.svg" alt=""><div>${esc(w[2])}<b>${esc(w[3])}</b>${esc(w[4])}</div></figure>`;}).join("");
+  $("laraK").hidden=false;$("kortQ").hidden=true;$("fb").textContent="";$("bNasta").hidden=true;$("laraGo").dataset.start=start?"1":"";window.scrollTo(0,0);}
+$("laraGo").onclick=()=>{data.sett=data.sett||{};data.sett[G.lvl]=1;save();$("laraK").hidden=true;$("kortQ").hidden=false;if($("laraGo").dataset.start==="1"){$("laraGo").dataset.start="";nasta();}};
+$("bRegel").onclick=()=>visaLara(G.lvl,false);
+function antal(){return G.kv.length;}
+function nasta(){if(window.speechSynthesis)speechSynthesis.cancel();if(G.i>=G.kv.length){slut();return;}
+  const q=G.q=G.kv[G.i];G.gjort=false;G.fel1=false;prickar(antal(),G.i,G.res);
+  const [ord,kod,fore,ratt,efter]=q.x;
+  $("bild").src="bilder/"+kod+".svg";$("bild").alt="";
+  $("ordrad").innerHTML=`${esc(fore)}<span class="lucka" id="lucka">${esc(ratt)}</span>${esc(efter)}`;
+  $("fb").textContent="";$("fb").className="fb";$("regel").className="regel";$("bNasta").hidden=true;
+  // alternativ: rätt + de andra i ljudet (sj har sex, vi visar fyra)
+  let alt=OPT[G.lvl].slice();if(alt.length>4){const ov=shuffle(alt.filter(a=>a!==ratt)).slice(0,3);alt=ov.concat([ratt]);}
+  $("val").className="val tiles";$("val").innerHTML=shuffle(alt).map(o=>`<button class="tile" data-o="${o}" type="button">${o}</button>`).join("");
+  if(q.rep)$("fb").innerHTML='<span class="rep">↩ Ett ord du övade på förut</span>';
+  $("bLas").onclick=()=>lasUpp(ord);}
+function valj(o,knapp){if(G.gjort)return;const [ord,kod,fore,ratt,efter,regel]=G.q.x,r=o===ratt,L=$("lucka");
+  if(r){G.gjort=true;const sd=(sv()[G.lvl]=sv()[G.lvl]||{}),key=ord;
+    L.textContent=o;L.className="lucka fylld";knapp.classList.add("ratt");$("val").querySelectorAll("button").forEach(x=>x.disabled=true);
+    window.Ljud&&Ljud.ok&&Ljud.ok();haj();
+    if(G.fel1){G.res[G.i]=false;sd[key]=2;}else{G.res[G.i]=true;if(G.q.rep&&!G.q.retry){sd[key]=(sd[key]||1)-1;if(sd[key]<=0)delete sd[key];}}
+    save();$("fb").className="fb ratt";$("fb").textContent=G.fel1?"Nu blev det rätt!":"Rätt!";
+    const rg=$("regel");rg.innerHTML=`<b>${esc(ord)}</b>: ${esc(regel)}`;rg.className="regel visas";
+    $("bNasta").hidden=false;$("bNasta").focus({preventScroll:true});G.i++;prickar(antal(),G.i,G.res);}
+  else{if(!G.fel1){G.fel1=true;if(!G.q.retry){G.fel++;if(G.retries<3){G.retries++;G.kv.push({x:G.q.x,retry:true});}}}
+    knapp.classList.add("fel");L.textContent=o;L.className="lucka fel";setTimeout(()=>{if(!G.gjort){L.textContent=ratt;L.className="lucka";}},650);
+    window.Ljud&&Ljud.bad&&Ljud.bad();$("fb").className="fb fel";$("fb").textContent="Inte riktigt. Lyssna på ordet och prova en annan.";}}
+// tryck eller dra: en bricka som flyttas minst 8 px dras, annars är det ett tryck
+$("val").addEventListener("pointerdown",e=>{const b=e.target.closest(".tile");if(!b||b.disabled||G.gjort||b.classList.contains("fel"))return;e.preventDefault();
+  const sx=e.clientX,sy=e.clientY,r=b.getBoundingClientRect();let ghost=null,moved=false;
+  const over=ev=>{const lr=$("lucka").getBoundingClientRect();return ev.clientX>lr.left-24&&ev.clientX<lr.right+24&&ev.clientY>lr.top-24&&ev.clientY<lr.bottom+24;};
+  const mv=ev=>{const dx=ev.clientX-sx,dy=ev.clientY-sy;
+    if(!moved&&Math.hypot(dx,dy)>8){moved=true;ghost=b.cloneNode(true);ghost.classList.add("ghost");ghost.style.cssText=`position:fixed;left:${r.left}px;top:${r.top}px;width:${r.width}px;height:${r.height}px;z-index:70;pointer-events:none;margin:0`;document.body.appendChild(ghost);b.classList.add("lyft");}
+    if(ghost){ghost.style.transform=`translate(${dx}px,${dy}px) scale(1.06)`;$("lucka").classList.toggle("over",over(ev));}};
+  const up=ev=>{window.removeEventListener("pointermove",mv);window.removeEventListener("pointerup",up);window.removeEventListener("pointercancel",up);
+    const dropped=moved&&over(ev);if(ghost)ghost.remove();b.classList.remove("lyft");const lu=$("lucka");lu&&lu.classList.remove("over");
+    if(!moved||dropped)valj(b.dataset.o,b);};
+  window.addEventListener("pointermove",mv);window.addEventListener("pointerup",up);window.addEventListener("pointercancel",up);});
+$("bNasta").onclick=nasta;
+function slut(){const st=G.fel===0?3:G.fel<=2?2:1;const kvar=Object.keys(sv()[G.lvl]||{}).length;
+  resultat(st,`${RUND-G.fel} av ${RUND} rätt på första försöket i ${NAMN[G.lvl].namn}.${kvar?` ${kvar} ord kommer tillbaka nästa gång så att de sätter sig.`:""}${st<3?" Spela igen och se om du kan få alla rätt!":""}`);}
+document.addEventListener("keydown",e=>{if($("game").hidden)return;if(e.key==="Enter"&&!$("bNasta").hidden)$("bNasta").click();});
+window.__kl={W,begin};
+
+hem();
+</script>
+</body>
+</html>

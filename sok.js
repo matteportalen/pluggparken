@@ -54,6 +54,7 @@ const IDX=[
  ['ordgissning/','Ordgissning','Gissa det hemliga ordet, grönt gult grått, som Wordle','🔤','wordle gissa ord bokstäver ordlek ledtråd svenska stava','Svenska'],
  ['dubbelteckning/','Dubbelteckning','Kamma eller kama? Stavning med två konsonanter','✍️','dubbelteckning stavning dubbla konsonanter kamma kama ck stava svenska kort vokal lång vokal','Svenska'],
  ['sagobyggaren/','Sagobyggaren','bygg en saga med slott, drake, prinsessa och troll','📖','saga berättelse skriva hjälte bok slott drake prinsessa riddare troll sagobok fantasi','Svenska'],
+ ['knepigaljud/','Knepiga ljud','ng, tj, sj och ck: välj rätt bokstäver till bilden','🔊','stavning ljud ng tj sj ck kiwi kyss skjorta stjärna nyckel stava','Svenska'],
  ['ovriga/ordgatan/','Ordgåtan','Läs ledtråden och gissa ordet','❓','ordgåta ledtråd gissa ord krysslösning','Svenska'],
  ['ovriga/hogfrekventa/','Högfrekventa ord','De 200 vanligaste orden, blixtläs och hitta ordet','📖','läsa ord blixtläsning helordsläsning ord på en minut läsfel mikrofon','Svenska'],
  ['ovriga/bokstaver/','Bokstäver','Kolla av vilka bokstäver man kan','🔤','bokstäver ljud abc läsinlärning','Svenska'],
