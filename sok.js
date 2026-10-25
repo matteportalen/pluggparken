@@ -49,6 +49,7 @@ const IDX=[
  ['geometri/#spegel','Spegelmåla','Rita, och spegeln ritar andra halvan','🪞','symmetri rita kalejdoskop spegel måla','Verktygslådan'],
  ['ovriga/','Fler ämnen','Svenska, NO, SO, engelska och mer','📚','ämnen andra ämnen','Fler ämnen'],
  ['ovriga/ordgomma/','Ordgömman','Hitta de gömda orden i tio teman','🔤','ordsök ord gömda bokstäver tema','Svenska'],
+ ['meningsbyggaren/','Meningsbyggaren','Sätt orden i rätt ordning, stor bokstav och skiljetecken','🧩','mening meningar ord ordning stor bokstav punkt frågetecken utropstecken skiljetecken grammatik skriva svenska','Svenska'],
  ['ovriga/ordgatan/','Ordgåtan','Läs ledtråden och gissa ordet','❓','ordgåta ledtråd gissa ord krysslösning','Svenska'],
  ['ovriga/hogfrekventa/','Högfrekventa ord','De 200 vanligaste orden, blixtläs och hitta ordet','📖','läsa ord blixtläsning helordsläsning ord på en minut läsfel mikrofon','Svenska'],
  ['ovriga/bokstaver/','Bokstäver','Kolla av vilka bokstäver man kan','🔤','bokstäver ljud abc läsinlärning','Svenska'],

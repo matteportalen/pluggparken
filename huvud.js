@@ -101,7 +101,7 @@ body.mph-mini #quit{display:none}
     return T10.map(T=>{if(T10.every(n=>lv(n,T)===3))return 3;if(T10.every(n=>lv(n,T)>=2))return 2;if(T10.every(n=>h(n,T).some(x=>x[0])))return 1;return 0});
   }
   // stjärnor per övning (samma regler som startsidan); k = mappens namn, "spel:<spel>" för spelen i Spelhörnan, "spelhornan" för alla där
-  const STJ=['tiointe','klockan','geometri','brak','uppstallning','hundraruta','tiotal','taluppfattning','sverigekartan','ordgomma','europa','varlden','talfoljd','rutjakten','brakbitar','kortdivision','vagen','gomda','kulbanan','affaren','hogfrekventa','rita','ordgatan','tangentbord','kodverkstan','delaupp','matning','pengar','lasflyt','sagoriket','sifferslottet','schack','trerirad'];
+  const STJ=['meningsbyggaren','tiointe','klockan','geometri','brak','uppstallning','hundraruta','tiotal','taluppfattning','sverigekartan','ordgomma','europa','varlden','talfoljd','rutjakten','brakbitar','kortdivision','vagen','gomda','kulbanan','affaren','hogfrekventa','rita','ordgatan','tangentbord','kodverkstan','delaupp','matning','pengar','lasflyt','sagoriket','sifferslottet','schack','trerirad'];
   const SPELSUB=['fly','mem','car','space','frog','tower','skatt','kiosk','bubbel','tug'];
   const SPELHORNAN=['skattjakten','kulbanan','sagoriket','sifferslottet','affaren','rutjakten'];
   function stjFor(k){

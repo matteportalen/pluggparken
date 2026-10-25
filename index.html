@@ -560,6 +560,7 @@ const bbt=get("mattespel-brakbitar-v1");S.bitar=(bbt&&bbt.stars)||{};
 {const du=get("mattespel-delaupp-v1");const s=sum((du&&du.stars)||{});S.stars+=s;if(s)show("bDela",`⭐ ${s} stjärnor`);} // Dela upp och dela
 {const mn=get("mattespel-matning-v1");const s=sum((mn&&mn.stars)||{});S.stars+=s;if(s)show("bMatning",`⭐ ${s} stjärnor`);} // Mätning
 {const t10=get("mattespel-tiointe-v1");S.stars+=sum((t10&&t10.stars)||{});} // 10 eller inte 10?
+{const x=get("mattespel-meningsbyggaren-v1");S.stars+=sum((x&&x.stars)||{});} // Meningsbyggaren (Fler ämnen)
 const kdv=get("mattespel-kortdivision-v1");S.kort=(kdv&&kdv.stars)||{};
 {const s=sum(S.kort);S.stars+=s;if(s)show("bKort",`⭐ ${s} stjärnor`)}
 const rj=get("mattespel-rutjakten-v1");S.rut=(rj&&rj.stars)||{};S.stars+=sum(S.rut); // Rutjakten (i Spelhörnan)
@@ -569,7 +570,7 @@ $("sStars").textContent=S.stars;
 /* ---------- Dagar i rad (en dag räknas när något har tränats) ---------- */
 const day=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
 const today=day(new Date()),yest=day(new Date(Date.now()-864e5));
-const snap=["mattespel-tiointe-v1","mattespel-sifferslottet-v1","mattespel-sagoriket-v1","mattespel-lasflyt-v1","mattespel-pengar-v1","mattespel-uppstallning-v1","mattespel-hundraruta-v1","mattespel-brak-v1","mattespel-geometri-v1","mattespel-spel-v1","mattespel-multiplikation-v1","mattespel-division-v1","mattespel-klockan-v1","mattespel-tiotal-v1","mattespel-taluppfattning-v1","mattespel-lillaplus-v1","np3-resultat","mattespel-skattjakten-v1","mattespel-sverigekartan-v1","mattespel-ordgomma-v1","mattespel-hogfrekventa-v1","mattespel-europa-v1","mattespel-varlden-v1","mattespel-talfoljd-v1","mattespel-rutjakten-v1","mattespel-brakbitar-v1","mattespel-kortdivision-v1","mattespel-vagen-v1","mattespel-gomda-v1","mattespel-kulbanan-v1","mattespel-affaren-v1","mattespel-rita-v1","mattespel-ordgatan-v1","mattespel-tangentbord-v1","mattespel-delaupp-v1","mattespel-matning-v1","mattespel-kodverkstan-v1","mattespel-schack-v1","mattespel-trerirad-v1"].map(k=>localStorage.getItem(k)||"").join("|");
+const snap=["mattespel-meningsbyggaren-v1","mattespel-tiointe-v1","mattespel-sifferslottet-v1","mattespel-sagoriket-v1","mattespel-lasflyt-v1","mattespel-pengar-v1","mattespel-uppstallning-v1","mattespel-hundraruta-v1","mattespel-brak-v1","mattespel-geometri-v1","mattespel-spel-v1","mattespel-multiplikation-v1","mattespel-division-v1","mattespel-klockan-v1","mattespel-tiotal-v1","mattespel-taluppfattning-v1","mattespel-lillaplus-v1","np3-resultat","mattespel-skattjakten-v1","mattespel-sverigekartan-v1","mattespel-ordgomma-v1","mattespel-hogfrekventa-v1","mattespel-europa-v1","mattespel-varlden-v1","mattespel-talfoljd-v1","mattespel-rutjakten-v1","mattespel-brakbitar-v1","mattespel-kortdivision-v1","mattespel-vagen-v1","mattespel-gomda-v1","mattespel-kulbanan-v1","mattespel-affaren-v1","mattespel-rita-v1","mattespel-ordgatan-v1","mattespel-tangentbord-v1","mattespel-delaupp-v1","mattespel-matning-v1","mattespel-kodverkstan-v1","mattespel-schack-v1","mattespel-trerirad-v1"].map(k=>localStorage.getItem(k)||"").join("|");
 let fp=0;for(let i=0;i<snap.length;i++)fp=(fp*31+snap.charCodeAt(i))|0;
 const st=get("matteportalen-dagar")||{fp:null,days:[]};
 if(st.fp!==null&&st.fp!==fp&&!st.days.includes(today))st.days.push(today);
