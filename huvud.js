@@ -87,15 +87,30 @@ body.mph-mini #quit{display:none}
   const LOGO='<svg class="mph-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" aria-hidden="true"><rect x="2" y="2" width="96" height="96" rx="24" fill="#fff"/><rect x="12" y="12" width="35" height="35" rx="9" fill="#2BB673"/><rect x="53" y="12" width="35" height="35" rx="9" fill="#FF6B6B"/><rect x="12" y="53" width="35" height="35" rx="9" fill="#7B61FF"/><rect x="53" y="53" width="35" height="35" rx="9" fill="#FF9F43"/><g stroke="#fff" stroke-width="6" stroke-linecap="round"><path d="M29.5 21v17M21 29.5h17M62 29.5h17M23.5 64.5l12 12M35.5 64.5l-12 12M62 70.5h17"/></g><circle cx="70.5" cy="62" r="3.6" fill="#fff"/><circle cx="70.5" cy="79" r="3.6" fill="#fff"/></svg>';
   /* Loggan för Fler ämnen: blad, vattendroppe, planet och sol i samma sorts rutor */
   const LOGO_NO='<svg class="mph-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" aria-hidden="true"><rect x="2" y="2" width="96" height="96" rx="24" fill="#fff"/><rect x="12" y="12" width="35" height="35" rx="9" fill="#2BB673"/><rect x="53" y="12" width="35" height="35" rx="9" fill="#3D8BFD"/><rect x="12" y="53" width="35" height="35" rx="9" fill="#7B61FF"/><rect x="53" y="53" width="35" height="35" rx="9" fill="#FF9F43"/><path d="M21 39C21 26 29 20 39 20C39 32 33 39 21 39Z" fill="#fff"/><path d="M21 39L31 29" stroke="#2BB673" stroke-width="2.5" stroke-linecap="round"/><path d="M70.5 19C70.5 19 61 30 61 35.5A9.5 9.5 0 0 0 80 35.5C80 30 70.5 19 70.5 19Z" fill="#fff"/><circle cx="29.5" cy="70.5" r="7.5" fill="#fff"/><ellipse cx="29.5" cy="70.5" rx="14" ry="4.5" fill="none" stroke="#fff" stroke-width="2.6" transform="rotate(-20 29.5 70.5)"/><circle cx="70.5" cy="70.5" r="7" fill="#fff"/><g stroke="#fff" stroke-width="3.2" stroke-linecap="round"><path d="M70.5 56v4M70.5 81v4M56 70.5h4M81 70.5h4M60.3 60.3l2.8 2.8M77.9 77.9l2.8 2.8M60.3 80.7l2.8-2.8M77.9 63.1l2.8-2.8"/></g></svg>';
-  const PORTALER=[{id:'matte',namn:'Matte',sub:'Räkna, spela och utforska',kort:'Matte',ikon:'🔢',href:'',logo:LOGO},{id:'ovriga',namn:'Fler ämnen',sub:'Svenska, NO, SO, engelska och mer',kort:'Fler ämnen',ikon:'🌍',href:'ovriga/',logo:LOGO_NO}];
+  const PORTALER=[{id:'matte',namn:'Matte',sub:'Räkna, spela och utforska',kort:'Matte',ikon:'🔢',href:'v1/',logo:LOGO},{id:'ovriga',namn:'Fler ämnen',sub:'Svenska, NO, SO, engelska och mer',kort:'Fler ämnen',ikon:'🌍',href:'ovriga/',logo:LOGO_NO}];
   const PORTAL=PORTALER.find(p=>p.id===ds.portal)||PORTALER[0];
-  // nya menyn med ämnena (utkastet i ny/): sidan anger data-meny="ny" och data-amne="<id>"
+  /* ---------- Designval: nya (ämnen på första sidan) eller gamla (v1: Matte och Fler ämnen) ----------
+     Valet sparas i localStorage "pluggparken-design" ("v1" = gamla). Alla länkar i menyn och tillbaka-knappen följer valet. */
+  const DESIGN=(()=>{try{return localStorage.getItem('pluggparken-design')==='v1'?'v1':'ny';}catch(e){return'ny';}})();
   const em=e=>`<span class="mph-em" aria-hidden="true">${e}</span>`;
-  const NYMENY=[{id:'hem',namn:'Välj ämne',sub:'Alla ämnen',href:'ny/',logo:em('🏠')},{id:'matte',namn:'Matematik',sub:'Räkna, spela och utforska',href:'ny/matte/',logo:em('🔢')},
-    {id:'svenska',namn:'Svenska',sub:'Ord, stavning, läsning och sagor',href:'ny/svenska/',logo:em('📖')},{id:'rymd',namn:'Rymd och natur',sub:'Rymdlabbet och planeterna',href:'ovriga/rymdlabbet/',logo:em('🔭')},
-    {id:'so',namn:'SO',sub:'Kartor, länder och platser',href:'ny/so/',logo:em('🗺️')},{id:'special',namn:'Specialare',sub:'Minilektioner om spännande ämnen',href:'specialare/',logo:em('🎁')},
-    {id:'fler',namn:'Fler ämnen',sub:'Engelska, logik, kod och pengar',href:'ny/fler/',logo:em('🧩')}];
-  const MENY=ds.meny==='ny'?NYMENY:PORTALER,MENYNU=ds.meny==='ny'?(NYMENY.find(p=>p.id===ds.amne)||null):PORTAL;
+  const NYMENY=[{id:'hem',namn:'Välj ämne',sub:'Alla ämnen',href:'',logo:em('🏠')},{id:'matte',namn:'Matematik',sub:'Räkna, spela och utforska',href:'matte/',logo:em('🔢')},
+    {id:'svenska',namn:'Svenska',sub:'Ord, stavning, läsning och sagor',href:'svenska/',logo:em('📖')},{id:'rymd',namn:'Rymdlabbet',sub:'Planeterna, stjärnorna och svarta hål',href:'ovriga/rymdlabbet/',logo:em('🔭')},
+    {id:'so',namn:'SO',sub:'Kartor, länder och platser',href:'so/',logo:em('🗺️')},{id:'special',namn:'Specialare',sub:'Minilektioner om spännande ämnen',href:'specialare/',logo:em('🎁')},
+    {id:'fler',namn:'Fler ämnen',sub:'Engelska, logik, kod och pengar',href:'fler/',logo:em('🧩')}];
+  // vilket ämne en sida hör till (för menyn och tillbaka-knappen)
+  const REL=location.pathname.replace(/^\//,'').replace(/index\.html$/,'');
+  function amneAv(){const seg=REL.split('/'),top=seg[0],sub=seg[1]||'';
+    if(REL==='')return'hem';
+    if(['matte','svenska','so','fler'].includes(top)&&seg.length<=2)return top;
+    if(top==='ovriga'){if(/^(ordgomma|ordgatan|hogfrekventa|lasflyt|bokstaver)$/.test(sub))return'svenska';if(/^(sverigekartan|europa|varlden)$/.test(sub))return'so';
+      if(/^(rymdlabbet|solsystemet|vintergatan)$/.test(sub))return'rymd';return'fler';}
+    if(/^(meningsbyggaren|ordkedjan|ordgissning|dubbelteckning|knepigaljud|sagobyggaren)$/.test(top))return'svenska';
+    if(/^(schack|trerirad)$/.test(top))return'fler';
+    if(top==='specialare')return'special';
+    if(/^(mittrum|flytta)$/.test(top))return'hem';
+    return'matte';}
+  const AMNE=amneAv(),EGENSIDA=['matte','svenska','so','fler','hem'].includes(AMNE)&&REL.split('/').filter(Boolean).length<=1;   // sidan är ämnets egen sida
+  const MENY=DESIGN==='ny'?NYMENY:PORTALER,MENYNU=DESIGN==='ny'?(NYMENY.find(p=>p.id===AMNE)||null):PORTAL;
   window.MPLogo=LOGO_PP;
   // loggan som ikon i webbläsarfliken
   if(!document.querySelector('link[rel="icon"]')){const l=document.createElement('link');l.rel='icon';l.type='image/svg+xml';l.href='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(LOGO_FAV);document.head.appendChild(l);}
@@ -163,7 +178,7 @@ body.mph-mini #quit{display:none}
   if(!document.getElementById('mph-css')){const st=document.createElement('style');st.id='mph-css';st.textContent=CSS;document.head.appendChild(st);}
   const h=document.createElement('header');h.className='mph'+(titel?' has-title':'')+(ds.liggande==='ja'?' liggande':'')+(PORTAL.id!=='matte'?' '+PORTAL.id:'');
   const pet=window.lasDjur&&window.owlSVG?owlSVG(lasDjur()):'',namn=profilnamn();
-  const hemUrl=new URL(hem+(ds.start!=null?ds.start:PORTAL.href),location.href),paStart=hemUrl.pathname.replace(/index\.html$/,'')===location.pathname.replace(/index\.html$/,'');
+  const hemUrl=new URL(hem+(ds.start!=null?ds.start:DESIGN==='ny'?(EGENSIDA?'':NYMENY.find(p=>p.id===AMNE).href):PORTAL.href),location.href),paStart=hemUrl.pathname.replace(/index\.html$/,'')===location.pathname.replace(/index\.html$/,'');
   h.innerHTML=`${paStart?'':'<button class="mph-bk" aria-label="Tillbaka">←</button>'}<button class="mph-x" aria-label="Avsluta">✕</button>
     <button class="mph-logo" aria-label="Pluggparken, meny" aria-haspopup="true" aria-expanded="false">${LOGO_PP}<span class="t">Plugg<b>parken</b></span><span class="mph-burger" aria-hidden="true"><i style="font-style:normal">☰</i><em>Ämnen</em></span></button>
     <span class="mph-title">${titel?`<span class="mph-sep">›</span> ${ikon?ikon+' ':''}${esc(titel)}`:''}</span>
@@ -204,7 +219,9 @@ body.mph-mini #quit{display:none}
   if(bk)bk.onclick=()=>{
     if(navOn&&cur.i>0){history.back();return;}
     let fran=null;try{fran=document.referrer?new URL(document.referrer):null;}catch(e){}
-    if(fran&&fran.origin===location.origin&&fran.pathname!==location.pathname)history.back();else location.href=hemUrl.href;};
+    // ämnessidans ←: upp till första sidan (bakåt i historiken bara om man kom därifrån, annars byt ut sidan så att ← inte hoppar fram och tillbaka)
+    if(DESIGN==='ny'&&EGENSIDA){if(fran&&fran.origin===location.origin&&fran.pathname===hemUrl.pathname)history.back();else location.replace(hemUrl.href);return;}
+    if(fran&&fran.origin===location.origin&&fran.pathname!==location.pathname)history.back();else location.replace(hemUrl.href);};
   // menyn bakom loggan
   const ptl=h.querySelector('.mph-logo');let meny=null;
   const stang=()=>{if(meny){meny.remove();meny=null;ptl.setAttribute('aria-expanded','false');}};
@@ -212,6 +229,8 @@ body.mph-mini #quit{display:none}
     meny=document.createElement('nav');meny.className='mph-menu';meny.setAttribute('aria-label','Meny');
     meny.innerHTML=MENY.map(p=>`<a href="${hem}${p.href}"${p===MENYNU?' aria-current="true"':''}>${p.logo}<span>${p.namn}<small>${p.sub}</small></span></a>`).join('')
     meny.innerHTML+=`<a href="https://fritidsparken.se" target="_blank" rel="noopener" class="mph-vann"><img class="mph-mark" src="${hem}fritidsparken-logo.jpg" alt="" width="30" height="30"><span>Fritidsparken.se<small>Våra vänner: lek och aktiviteter</small></span></a>`;
+    {const dv=document.createElement('button');dv.className='mph-mt';dv.type='button';dv.innerHTML=DESIGN==='ny'?'<span>🕰️</span><span>Gamla designen</span>':'<span>✨</span><span>Prova nya designen</span>';
+      dv.onclick=e=>{e.stopPropagation();try{localStorage.setItem('pluggparken-design',DESIGN==='ny'?'v1':'ny');}catch(x){}location.href=hem+(DESIGN==='ny'?'v1/':'');};meny.appendChild(dv);}
     {const sk=document.createElement('button');sk.className='mph-mt';sk.type='button';sk.innerHTML='<span>🔍</span><span>Sök övning</span>';sk.onclick=e=>{e.stopPropagation();stang();MPSokOpen();};meny.appendChild(sk);}
     if(window.MPTema){const mt=document.createElement('button');mt.className='mph-mt';mt.type='button';const ml=()=>{mt.innerHTML=MPTema.get()==='mork'?'<span>☀️</span><span>Ljust läge</span>':'<span>🌙</span><span>Mörkt läge</span>';};ml();mt.onclick=e=>{e.stopPropagation();MPTema.toggle();ml();};meny.appendChild(mt);}
     h.appendChild(meny);ptl.setAttribute('aria-expanded','true');meny.querySelector('a').focus({preventScroll:true});};
