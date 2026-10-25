@@ -84,8 +84,18 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 /* ---------- Framsteg ---------- */
 .wrap{max-width:1040px;margin:0 auto;padding:0 16px 40px}
 /* kompakt rad: stjärnor, garderoben och klistermärken */
-.mini{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 6px;position:relative;z-index:2}
-@media(min-width:700px){.mini{display:flex;flex-wrap:wrap;justify-content:flex-start}}
+.mini{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 10px;position:relative;z-index:2}
+@media(min-width:700px){.mini{grid-template-columns:repeat(4,minmax(0,1fr))}}
+/* sökfältet och profilen överst */
+.toprad{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:18px 0 18px;position:relative;z-index:1}
+.sokf{flex:1 1 260px;display:flex;align-items:center;gap:10px;min-height:52px;text-align:left;background:var(--card,#fff);color:var(--muted,#56668F);border:2px solid var(--line,#C6D6F2);border-radius:16px;padding:10px 16px;font:inherit;font-weight:600;font-size:1.05rem;cursor:pointer;box-shadow:0 3px 0 var(--line,#C6D6F2)}
+.sokf:hover{border-color:var(--accent,#3D5AFE)}.sokf .ic{font-size:1.25rem}
+.toprad .whoami{margin:0;flex:none}
+.toprad .chip{min-height:48px;padding:6px 14px 6px 6px}
+@media(max-width:560px){.toprad .whoami{order:-1;width:100%;justify-content:flex-end}.toprad{margin-top:12px;gap:8px}}
+.mini .stars{justify-content:center}.mini .stw{display:grid;grid-template-columns:auto auto;gap:0 14px;justify-items:center}
+.mini .sv{display:flex;align-items:center;gap:4px}.mini .sv b{font-size:1.25rem}.mini .sv i{font-style:normal;font-size:1.05rem}
+.mini .stw small{grid-column:1/-1;text-align:center}
 .mini>*{display:flex;align-items:center;gap:8px;background:var(--card);border:0;border-radius:14px;padding:6px 12px;box-shadow:0 3px 0 var(--line);font:inherit;color:inherit;text-align:left;min-width:0;min-height:48px}
 .mini button,.mini a{cursor:pointer;position:relative;text-decoration:none}
 @media(max-width:360px){.mini button small,.mini a small{display:none}.mini button .ic,.mini a .ic{display:none}.mini button b{font-size:.9rem;word-break:keep-all;overflow-wrap:normal}.mini>*{padding:6px 8px}}
@@ -96,9 +106,8 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 .mini b{display:block;font-size:.98rem;line-height:1.1;white-space:nowrap}
 .mini small{display:block;color:var(--muted);font-weight:700;font-size:.78rem;line-height:1.15}
 .mini .stars b{font-size:1.25rem}
-.mini>.whoami{background:none;box-shadow:none;padding:0;margin:0;grid-column:1/-1;justify-content:flex-end;min-height:0}
-@media(min-width:700px){.mini>.whoami{order:9;margin-left:auto}}
-@media(max-width:699px){.mini{margin-top:-14px}}
+
+@media(max-width:699px){.mini{margin-top:0}}
 @media(max-width:420px){.mini>*{padding:6px 8px;gap:6px}.mini b{font-size:.88rem}.mini small{font-size:.72rem}}
 @media(max-width:360px){.mini b{white-space:normal;overflow-wrap:anywhere;font-size:.8rem}.mini .ic{font-size:1.1rem}}
 /* rubriker för korten */
@@ -197,7 +206,8 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 @keyframes shk{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
 [hidden]{display:none!important}
 .kinfo{list-style:none;padding:0;margin:8px 0;display:grid;gap:6px;font-size:.95rem}
-.kbox{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:baseline;text-align:left;background:var(--soft,#F1F6FF);border-radius:16px;padding:14px 16px;margin:6px 0}.kbox span{color:var(--muted);font-weight:700;font-size:.9rem}.kbox b{font-size:1.5rem;letter-spacing:.02em;overflow-wrap:anywhere}
+.kbox{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:baseline;text-align:left;background:var(--soft,#F1F6FF);border-radius:16px;padding:14px 16px;margin:6px 0}.kbox span{color:var(--muted);font-weight:700;font-size:.9rem}.kbox b{font-size:1.5rem;letter-spacing:.02em;overflow-wrap:break-word;min-width:0}
+@media(max-width:480px){.kbox{grid-template-columns:1fr;gap:0}.kbox span{margin-top:6px}.kbox span:first-child{margin-top:0}.kbox b{font-size:1.45rem}}
 .lc-konto{margin:10px auto 0;display:grid;grid-template-columns:auto auto;justify-content:center;gap:4px 14px;text-align:left;font-size:1.5rem;font-weight:800}.lc-konto span{font-weight:600;color:#56668F;font-size:.9rem;align-self:center}
 .kny{background:#E8F7EE;color:#157548;border-radius:14px;padding:10px 12px;font-weight:700;font-size:.92rem;margin:6px 0}
 .pinmsg{min-height:1.3em;color:#E5484D;font-weight:800;text-align:center;margin:4px 0}
@@ -264,13 +274,16 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
     </div>
   </div>
 </header>
-<div style="max-width:980px;margin:14px auto 0;padding:0 16px"><button type="button" data-sok aria-label="Sök övning eller spel" style="display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:var(--card,#fff);color:var(--muted,#56668F);border:2px solid var(--line,#C6D6F2);border-radius:16px;padding:11px 16px;font:inherit;font-weight:600;font-size:1.05rem;cursor:pointer;box-shadow:0 3px 0 var(--line,#C6D6F2)"><span style="font-size:1.25rem">🔍</span><span style="flex:1">Sök övning eller spel …</span></button></div>
+
 
 
 <main class="wrap">
-  <div class="mini">
+  <div class="toprad">
+    <button type="button" class="sokf" data-sok aria-label="Sök övning eller spel"><span class="ic" aria-hidden="true">🔍</span><span>Sök övning eller spel …</span></button>
     <div class="whoami"><button class="chip" id="whoChip"></button></div>
-    <div class="stars" title="Stjärnor och mynt"><span><b style="white-space:nowrap"><span id="sStars">0</span>⭐ <span id="sMynt">0</span>🪙</b><small id="sTitel">stjärnor och mynt</small></span></div>
+  </div>
+  <div class="mini">
+    <div class="stars" title="Stjärnor och mynt"><span class="stw"><span class="sv"><b id="sStars">0</b><i>⭐</i></span><span class="sv"><b id="sMynt">0</b><i>🪙</i></span><small id="sTitel">stjärnor och mynt</small></span></div>
     <button id="btnWard"><span class="ic">👗</span><span><b>Garderoben<span class="new" id="newWard" hidden>Nytt!</span></b><small id="wardInfo">Välj djur och kläder</small></span></button>
     <a href="mittrum/" id="btnRum"><span class="ic">🏠</span><span><b>Mitt rum</b><small>Inred med mynt</small></span></a>
     <button id="btnAlbum"><span class="ic">📒</span><span><b>Klistermärken<span class="new" id="newAlbum" hidden>Nytt!</span></b><small id="albumInfo">0 av 0</small></span></button>
@@ -408,6 +421,17 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
   <button class="qrbtn" id="kiSpela" hidden>▶ Börja spela</button>
   <button class="qrbtn" id="kiSynk">🔄 Synka nu</button>
   <button id="kiUt" hidden></button><button id="kiDel" hidden></button>
+</div></div>
+
+<div class="modal" id="mRad" hidden><div class="sheet" role="dialog" aria-label="Radera kontot" style="max-width:420px">
+  <div class="top"><h2>🗑️ Radera kontot</h2><button class="close" data-close aria-label="Stäng">✕</button></div>
+  <p style="margin:0 0 8px">Om du raderar kontot <b id="radNamn"></b> försvinner <b>alla stjärnor, mynt, kläder och framsteg</b>, både i molnet och på den här enheten. Det går inte att ångra.</p>
+  <p class="pnote" style="text-align:left;margin:0 0 6px">Är du säker? Räkna ut uppgiften för att radera.</p>
+  <label class="plabel" for="radSvar" id="radFraga"></label>
+  <input id="radSvar" class="pinput" style="width:100%" inputmode="numeric" autocomplete="off">
+  <p class="pinmsg" id="radMsg"></p>
+  <button class="gobtn" id="radGo" style="background:#E5484D;box-shadow:0 5px 0 #A8282C">Radera allt för alltid</button>
+  <button class="guestlink" data-close>Nej, behåll mitt konto</button>
 </div></div>
 
 <div class="modal" id="mScan" hidden><div class="sheet" role="dialog" aria-label="Logga in med QR-kod" style="max-width:440px;text-align:center">
@@ -984,12 +1008,17 @@ $("kiKort").onclick=()=>{if(!$("kiSpela").hidden){const k={namn:$("kiNamn").text
   $("pCard").click();};
 $("kiSynk").onclick=async()=>{$("kiSenast").textContent="Sparar …";stash();const r=await MPKonto.synka({skriv:true});
   if(r.ok){if(r.andrad){location.reload();return;}$("kiSenast").textContent="Klart! Allt är sparat i molnet.";}else $("kiSenast").textContent=r.fel==="natet"?"Ingen kontakt med servern. Försök igen senare.":"Lösenordet stämmer inte. Logga ut och logga in igen.";};
-async function raderaKonto(){if(!confirm(`Radera kontot ${me.konto.namn}? Poängen i molnet och på den här enheten försvinner för alltid.`))return;
-  if(!confirm("Är du helt säker? Det går inte att ångra."))return;
-  const r=await MPKonto.radera(me.konto.namn,me.konto.kod).catch(()=>({fel:"natet"}));
-  if(!r.ok&&r.fel!=="kod"){alert(r.fel==="natet"?"Det behövs internet för att radera kontot. Försök igen.":"Kontot är spärrat en stund efter för många fel lösenord. Försök igen senare.");return;}
+// radera: en mattefråga (multiplikation) som försäkran om att man förstår att allt försvinner
+let radA=0,radB=0;
+function raderaKonto(){radA=3+Math.floor(Math.random()*7);radB=3+Math.floor(Math.random()*7);
+  $("radNamn").textContent=me.konto.namn;$("radFraga").textContent=`Vad är ${radA} · ${radB}?`;$("radSvar").value="";$("radMsg").textContent="";openM("mRad");setTimeout(()=>$("radSvar").focus(),50);}
+$("radSvar").addEventListener("keydown",e=>{if(e.key==="Enter")$("radGo").click();});
+$("radGo").onclick=async()=>{if(parseInt($("radSvar").value,10)!==radA*radB){$("radMsg").textContent="Det var inte rätt svar. Kontot finns kvar.";window.Ljud&&Ljud.bad();return;}
+  $("radGo").disabled=true;const r=await MPKonto.radera(me.konto.namn,me.konto.kod).catch(()=>({fel:"natet"}));
+  $("radGo").disabled=false;
+  if(!r.ok&&r.fel!=="kod"){$("radMsg").textContent=r.fel==="natet"?"Det behövs internet för att radera kontot. Försök igen.":"Kontot är spärrat en stund efter för många fel lösenord. Försök igen senare.";return;}
   saveList(list().filter(p=>p.id!==me.id));lsDel("mp-bundle-"+me.id);if(owner()===me.id){clearLive();setOwner(null);}
-  try{sessionStorage.removeItem("mp-active")}catch(e){}alert("Kontot är raderat.");location.reload();}
+  try{sessionStorage.removeItem("mp-active")}catch(e){}alert("Kontot är raderat.");location.reload();};
 // logga in: kontots profil finns redan på enheten → bara lösenordet behövs; annars hämtas allt från molnet
 function oppnaIn(namn){$("kInNamn").value=namn||"";$("kInKod").value="";$("kInMsg").textContent="";openM("mKIn");setTimeout(()=>$(namn?"kInKod":"kInNamn").focus(),50);}
 $("kontoIn").onclick=()=>oppnaIn("");

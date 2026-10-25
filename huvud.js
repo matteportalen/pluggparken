@@ -50,6 +50,7 @@
 .mph-pet{min-width:0;display:flex;align-items:center;gap:4px;background:rgba(255,255,255,.18);border-radius:999px;padding:2px 10px 2px 2px;font-weight:800;min-height:40px}
 .mph-pet svg{width:34px;height:auto;display:block;flex:none}
 .mph-mynt{position:relative;white-space:nowrap}
+.mph-stj{display:inline-block;width:max-content;margin-top:6px;background:var(--warn-bg,#FFF4CC);color:var(--warn-ink,#8A5A00);border-radius:999px;padding:1px 10px;font-weight:800;font-size:.82rem;line-height:1.5}.mph-stj.noll{background:var(--soft,#EEF2FA);color:var(--muted,#56668F);font-weight:700}.gamecard .mph-stj{background:rgba(255,255,255,.22);color:#fff}.gamecard .mph-stj.noll{background:rgba(255,255,255,.14);color:rgba(255,255,255,.85)}@media(min-width:760px){.glist .gamecard .mph-stj{background:var(--warn-bg,#FFF4CC);color:var(--warn-ink,#8A5A00)}.glist .gamecard .mph-stj.noll{background:var(--soft,#EEF2FA);color:var(--muted,#56668F)}}
 .mph-plus{position:absolute;left:50%;top:-4px;transform:translateX(-50%);background:#F2B707;color:#1D2B53;border-radius:999px;padding:0 8px;font-size:.85rem;white-space:nowrap;animation:mph-up 1.6s ease-out forwards;pointer-events:none}
 @keyframes mph-up{0%{opacity:0;transform:translate(-50%,10px)}15%{opacity:1;transform:translate(-50%,24px)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,30px)}}
 @media(max-width:400px){.mph.has-title .mph-mynt{display:none}}
@@ -99,16 +100,23 @@ body.mph-mini #quit{display:none}
     const lv=(a,b)=>{const x=h(a,b);if(!x.length)return 0;const l=x.slice(-2);if(l.length===2&&l[0][0]&&l[1][0])return(l[0][1]<3000&&l[1][1]<3000)?3:2;return 1};
     return T10.map(T=>{if(T10.every(n=>lv(n,T)===3))return 3;if(T10.every(n=>lv(n,T)>=2))return 2;if(T10.every(n=>h(n,T).some(x=>x[0])))return 1;return 0});
   }
+  // stjärnor per övning (samma regler som startsidan); k = mappens namn, "spel:<spel>" för spelen i Spelhörnan, "spelhornan" för alla där
+  const STJ=['klockan','geometri','brak','uppstallning','hundraruta','tiotal','taluppfattning','sverigekartan','ordgomma','europa','varlden','talfoljd','rutjakten','brakbitar','kortdivision','vagen','gomda','kulbanan','affaren','hogfrekventa','rita','ordgatan','tangentbord','kodverkstan','delaupp','matning','pengar','lasflyt','sagoriket','sifferslottet','schack','trerirad'];
+  const SPELSUB=['fly','mem','car','space','frog','tower','skatt','kiosk','bubbel','tug'];
+  const SPELHORNAN=['skattjakten','kulbanan','sagoriket','sifferslottet','affaren','rutjakten'];
+  function stjFor(k){
+    if(k==='multiplikation'){const mu=get('mattespel-multiplikation-v1');return mu&&mu.facts?medalsFrom((a,b)=>mu.facts[Math.min(a,b)+'x'+Math.max(a,b)]||[]).reduce((a,b)=>a+b,0):0;}
+    if(k==='division'){const dv=get('mattespel-division-v1');return dv&&dv.facts?medalsFrom((q,d)=>dv.facts[d+':'+q+':0']||[]).reduce((a,b)=>a+b,0):0;}
+    if(k==='skattjakten'){const sj=get('mattespel-skattjakten-v1');return Object.values((sj&&sj.stars)||{}).reduce((a,b)=>a+(+b||0),0);}
+    if(k.startsWith('spel:')){const sp=get('mattespel-spel-v1')||{};return Object.values(sp[k.slice(5)]||{}).reduce((a,r)=>a+((r&&r.stars)||0),0);}
+    if(k==='spelhornan')return SPELSUB.reduce((a,x)=>a+stjFor('spel:'+x),0)+SPELHORNAN.reduce((a,x)=>a+stjFor(x),0);
+    if(STJ.includes(k)){const d=get('mattespel-'+k+'-v1');return sum((d&&d.stars)||{});}
+    return null;}
+  window.MPStjarnorFor=stjFor;
   window.MPStjarnor=function(){
-    let n=0;
-    const mu=get('mattespel-multiplikation-v1');if(mu&&mu.facts)n+=medalsFrom((a,b)=>mu.facts[Math.min(a,b)+'x'+Math.max(a,b)]||[]).reduce((a,b)=>a+b,0);
-    const dv=get('mattespel-division-v1');if(dv&&dv.facts)n+=medalsFrom((q,d)=>dv.facts[d+':'+q+':0']||[]).reduce((a,b)=>a+b,0);
-    const sp=get('mattespel-spel-v1')||{};
-    n+=['fly','mem','car','space','frog','tower','skatt','kiosk','bubbel','tug'].flatMap(k=>Object.values(sp[k]||{})).reduce((a,r)=>a+((r&&r.stars)||0),0);
-    ['klockan','geometri','brak','uppstallning','hundraruta','tiotal','taluppfattning','sverigekartan','ordgomma','europa','varlden','talfoljd','rutjakten','brakbitar','kortdivision','vagen','gomda','kulbanan','affaren','hogfrekventa','rita','ordgatan','tangentbord','kodverkstan','delaupp','matning','pengar','lasflyt','sagoriket','sifferslottet','schack','trerirad'].forEach(k=>{const d=get('mattespel-'+k+'-v1');n+=sum((d&&d.stars)||{});});
-    const sj=get('mattespel-skattjakten-v1');n+=Object.values((sj&&sj.stars)||{}).reduce((a,b)=>a+(+b||0),0);
-    return n;
+    return stjFor('multiplikation')+stjFor('division')+SPELSUB.reduce((a,x)=>a+stjFor('spel:'+x),0)+STJ.reduce((a,x)=>a+stjFor(x),0)+stjFor('skattjakten');
   };
+
   /* ---------- Mynt (matteportalen-mynt) ----------
      Stjärnorna visar vad man kan och samlas för alltid; mynten tjänas på att träna och används i Garderoben.
      Ny stjärna = 20 mynt (räknas här, på alla sidor), avklarad runda = 6 mynt (när sidan visar skärmen "result"),
@@ -146,6 +154,19 @@ body.mph-mini #quit{display:none}
   document.body.prepend(h);
   // sökning: sok.js hämtas först när den behövs
   const rotUrl=new URL('.',(me&&me.src)||location.href).href;
+  // stjärnlapp på varje kort som ger stjärnor: "⭐ 5 stjärnor" (grå "☆ 0 stjärnor" om inga än)
+  const KNAPP={btnBub:'spel:bubbel',btnTower:'spel:tower',btnMem:'spel:mem',btnTug:'spel:tug',btnCar:'spel:car',btnFrog:'spel:frog'};
+  const rotSti=new URL(rotUrl).pathname;
+  function kortNyckel(el){if(el.id&&KNAPP[el.id])return KNAPP[el.id];const h=el.getAttribute('href');if(!h||/^(https?:)?\/\//.test(h)&&!h.startsWith(location.origin))return null;
+    let p=new URL(h,location.href).pathname;if(!p.startsWith(rotSti))return null;p=p.slice(rotSti.length).replace(/index\.html$/,'').replace(/\/$/,'');
+    if(p==='spel')return'spelhornan';return p.split('/').pop()||null;}
+  function stjLappar(){document.querySelectorAll('a.card,a.gamecard,button.gamecard').forEach(el=>{if(el.querySelector('.mph-stj'))return;
+    const k=kortNyckel(el);if(!k)return;const n=stjFor(k);if(n==null)return;
+    const t=el.querySelector('.txt')||el.querySelector('.tx')||[...el.children].find(c=>c.querySelector&&c.querySelector('b'));if(!t)return;
+    const gammal=t.querySelector('.badge');if(gammal&&(gammal.hidden||/^⭐/.test(gammal.textContent.trim())))gammal.hidden=true;
+    const c=document.createElement('span');c.className='mph-stj'+(n?'':' noll');c.textContent=n?`⭐ ${n} ${n===1?'stjärna':'stjärnor'}`:'☆ 0 stjärnor';
+    c.setAttribute('aria-label',`${n} ${n===1?'stjärna':'stjärnor'} i den här övningen`);t.appendChild(c);});}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',stjLappar);else setTimeout(stjLappar,0);
   // konton i molnet: konto.js laddas bara om profilen på enheten har ett konto
   try{const ow=localStorage.getItem('mp-owner'),ps=JSON.parse(localStorage.getItem('mp-profiles')||'[]'),p=ow&&ps.find(x=>x.id===ow);
     if(p&&p.konto&&!window.MPKonto){const k=document.createElement('script');k.src=rotUrl+'konto.js?v=1';document.head.appendChild(k);}}catch(e){}

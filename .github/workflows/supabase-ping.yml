@@ -1,10 +1,14 @@
 # Håller gratisprojektet hos Supabase vaket: det pausas annars efter en vecka utan användning.
 # Anropar den ofarliga funktionen pp_ping (returnerar bara 1) var tredje dag. Nyckeln är den publika.
+# GitHub stänger av schemalagda körningar i repon där ingen har checkat in något på 60 dagar,
+# därför gör den här körningen en tom incheckning (inga filer ändras) om det gått 50 dagar sedan den senaste.
 name: Supabase ping
 on:
   schedule:
     - cron: "17 6 */3 * *"
   workflow_dispatch:
+permissions:
+  contents: write
 jobs:
   ping:
     runs-on: ubuntu-latest
@@ -14,3 +18,15 @@ jobs:
           curl -sf -X POST "https://tjbifeckuielfbbaoxnj.supabase.co/rest/v1/rpc/pp_ping" \
             -H "apikey: sb_publishable_IRMsYh9XN-71eITjSOxFZg_mCqikRdt" \
             -H "Content-Type: application/json" -d '{}'
+      - uses: actions/checkout@v4
+      - name: Håll schemat igång
+        run: |
+          senast=$(git log -1 --format=%ct)
+          dagar=$(( ( $(date +%s) - senast ) / 86400 ))
+          echo "Senaste incheckningen för $dagar dagar sedan"
+          if [ "$dagar" -ge 50 ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit --allow-empty -m "Håller den schemalagda pingen igång (inga ändringar)"
+            git push
+          fi
