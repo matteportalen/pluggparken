@@ -51,6 +51,7 @@ const IDX=[
  ['ovriga/ordgomma/','Ordgömman','Hitta de gömda orden i tio teman','🔤','ordsök ord gömda bokstäver tema','Svenska'],
  ['meningsbyggaren/','Meningsbyggaren','Sätt orden i rätt ordning, stor bokstav och skiljetecken','🧩','mening meningar ord ordning stor bokstav punkt frågetecken utropstecken skiljetecken grammatik skriva svenska','Svenska'],
  ['ordkedjan/','Ordkedjan','Skriv ett ord som börjar på sista bokstaven i förra ordet','⛓️','ordkedja ord bokstav kedja katt tak kaka ordlek svenska stava','Svenska'],
+ ['ordgissning/','Ordgissning','Gissa det hemliga ordet, grönt gult grått, som Wordle','🔤','wordle gissa ord bokstäver ordlek ledtråd svenska stava','Svenska'],
  ['ovriga/ordgatan/','Ordgåtan','Läs ledtråden och gissa ordet','❓','ordgåta ledtråd gissa ord krysslösning','Svenska'],
  ['ovriga/hogfrekventa/','Högfrekventa ord','De 200 vanligaste orden, blixtläs och hitta ordet','📖','läsa ord blixtläsning helordsläsning ord på en minut läsfel mikrofon','Svenska'],
  ['ovriga/bokstaver/','Bokstäver','Kolla av vilka bokstäver man kan','🔤','bokstäver ljud abc läsinlärning','Svenska'],
