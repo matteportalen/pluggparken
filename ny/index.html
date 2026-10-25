@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<base href="../">
+<script src="tema.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Välj ämne – Pluggparken (utkast)</title>
+<meta name="description" content="Pluggparken: matteövningar, spel och fler ämnen för barn i åk 1–6. Träna tabeller, klockan, bråk, uppställning och division, spela spel, utforska rymden och Sverige och öva läsning. Gratis och utan inloggning.">
+<meta name="robots" content="noindex">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Pluggparken">
+<meta property="og:locale" content="sv_SE">
+<meta property="og:title" content="Pluggparken – matte, spel och fler ämnen för barn">
+<meta property="og:description" content="Pluggparken: matteövningar, spel och fler ämnen för barn i åk 1–6. Träna tabeller, klockan, bråk, uppställning och division, spela spel, utforska rymden och Sverige och öva läsning. Gratis och utan inloggning.">
+<meta property="og:url" content="https://pluggparken.se/">
+<meta property="og:image" content="https://pluggparken.se/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#1F3A35">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon-192.png" type="image/png" sizes="192x192">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/apple-touch-icon.png" sizes="180x180">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Pluggparken","alternateName":"Lekparken för hjärnan","url":"https://pluggparken.se/","inLanguage":"sv","description":"Matteövningar, spel och fler ämnen för barn i åk 1–6."}</script>
+<style>
+:root{
+  --bg:#EAF3FF; --ink:#1D2B53; --muted:#56668F; --card:#FFFFFF; --line:#C6D6F2;
+  --sun:#FFC93C; --font:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+a{color:inherit}
+a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+
+/* ---------- Rubrik ---------- */
+/* griffeltavlan (lärarens val okt 2026): tavelgrön med suddmärken, kritad rubrik, kritteckningar och en kritränna med kritor och tavelsudd */
+.hero{position:relative;overflow:hidden;color:#fff;background:radial-gradient(ellipse 40% 70% at 20% 40%,rgba(255,255,255,.05),transparent 70%),radial-gradient(ellipse 45% 50% at 72% 90%,rgba(255,255,255,.035),transparent 70%),#1F3A35;
+  padding:calc(4px + env(safe-area-inset-top,0px)) 16px 18px}
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:10px;background:#7E5129;border-top:3px solid #5E3B1C}
+.park{position:absolute;inset:0;pointer-events:none}
+.park-in{position:relative;max-width:1040px;height:100%;margin:0 auto}
+.park svg{position:absolute;display:block;height:auto}
+.park .d-lampa{width:58px;top:6px;left:40%}
+.park .d-planet{width:62px;top:16px;left:52%}
+.park .d-abc{width:58px;bottom:20px;left:47%}
+.park .d-st1{width:16px;top:10px;left:47%}
+.park .d-st2{width:12px;top:8px;left:62%}
+.park .d-kritor{width:84px;bottom:12px;left:24%}
+.park .d-sudd{width:54px;bottom:12px;left:38%}
+@media(max-width:899px){.park .d-abc,.park .d-st1,.park .d-st2,.park .d-sudd{display:none}}
+@media(max-width:699px){.park .d-planet{display:none}.park .d-lampa{left:auto;right:calc(16vw + 30px);top:10px;width:34px}.park .d-kritor{left:auto;right:calc(16vw + 76px);width:58px}}
+@media(max-width:369px){.park .d-lampa,.park .d-kritor{display:none}}
+.hero-in{position:relative;z-index:1;max-width:1040px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.title{flex:1;min-width:0}
+.title h1{margin:0;font-weight:800;line-height:.95;font-size:clamp(1.7rem,7vw,2.3rem);letter-spacing:-1px}
+.title h1 .k1,.title h1 .p2{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='7' height='7'%3E%3Ccircle cx='1.5' cy='2' r='.8' fill='%231F3A35' fill-opacity='.55'/%3E%3Ccircle cx='5' cy='5.5' r='.6' fill='%231F3A35' fill-opacity='.45'/%3E%3Ccircle cx='4.5' cy='1' r='.4' fill='%231F3A35' fill-opacity='.4'/%3E%3C/svg%3E");-webkit-background-clip:text;background-clip:text;color:transparent}
+.title h1 .k1{background-color:#F3F0E4}
+.title h1 .p2{background-color:#F4D35E;display:block;position:relative}
+.title h1 .p2::after{content:"";position:absolute;left:4%;right:2%;bottom:.04em;height:.18em;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 170 10' preserveAspectRatio='none'%3E%3Cpath d='M2 6C42 1 82 7 122 3S162 5 168 4' fill='none' stroke='%23F4D35E' stroke-width='3.2' stroke-linecap='round'/%3E%3Cpath d='M6 9C46 5 86 10 128 7' fill='none' stroke='%23F4D35E' stroke-width='1.4' stroke-linecap='round' stroke-opacity='.45'/%3E%3C/svg%3E") no-repeat center/100% 100%}
+/* betalappen: sidan är under uppbyggnad (lärarens önskan) */
+.title h1{position:relative;display:inline-block;padding-right:6px}
+.betalapp{position:absolute;right:-44px;top:-15px;transform:rotate(12deg);background:#FFE14D;color:#6A4A00;font-size:.8rem;letter-spacing:1px;text-transform:uppercase;font-weight:800;line-height:1;padding:5px 10px 4px;border-radius:4px;box-shadow:0 3px 6px rgba(0,0,0,.22);text-shadow:none}
+.betalapp::before{content:"";position:absolute;left:50%;top:-5px;width:26px;height:9px;margin-left:-13px;background:var(--wa-55,rgba(255,255,255,.55));transform:rotate(-4deg);border-radius:2px}
+@media(min-width:370px){.title h1 .p2{display:inline}}
+@media(max-width:369px){.betalapp{top:2px;right:-52px}}
+.title p{margin:7px 0 0;font-size:clamp(.88rem,3.3vw,1rem);font-weight:700;color:#C9DCD5}
+.owlwrap{flex:none;display:flex;flex-direction:row;align-items:center;gap:12px}
+.owlwrap .owlbtn{width:clamp(62px,16vw,82px);flex:none}
+.bubble{position:relative;background:var(--card,#fff);color:var(--ink);border-radius:14px;padding:4px 8px;font-weight:700;font-size:.72rem;line-height:1.25;text-align:center;box-shadow:0 4px 0 rgba(0,0,0,.12)}
+.bubble{max-width:170px}
+.bubble::after{content:"";position:absolute;right:-9px;top:50%;transform:translateY(-50%);border:9px solid transparent;border-left-color:#fff;border-right:0}
+@media(max-width:519px){.bubble{display:none}}
+.owlbtn{display:block;width:100%;padding:0;border:0;background:none;cursor:pointer;position:relative;font:inherit}
+.owl{width:100%;height:auto;display:block;animation:tilt 5s ease-in-out infinite;transform-origin:50% 90%}
+.owltag{white-space:nowrap;position:absolute;right:-8px;bottom:2px;background:var(--card,#fff);color:var(--ink);border-radius:999px;padding:0 8px;font-weight:800;font-size:.75rem;box-shadow:0 3px 0 rgba(0,0,0,.15)}
+@keyframes tilt{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+
+/* ---------- Framsteg ---------- */
+.wrap{max-width:1040px;margin:0 auto;padding:0 16px 40px}
+/* kompakt rad: stjärnor, garderoben och klistermärken */
+.mini{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 10px;position:relative;z-index:2}
+@media(min-width:700px){.mini{grid-template-columns:repeat(4,minmax(0,1fr))}}
+/* sökfältet och profilen överst */
+.toprad{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:18px 0 18px;position:relative;z-index:1}
+.sokf{flex:1 1 260px;display:flex;align-items:center;gap:10px;min-height:52px;text-align:left;background:var(--card,#fff);color:var(--muted,#56668F);border:2px solid var(--line,#C6D6F2);border-radius:16px;padding:10px 16px;font:inherit;font-weight:600;font-size:1.05rem;cursor:pointer;box-shadow:0 3px 0 var(--line,#C6D6F2)}
+.sokf:hover{border-color:var(--accent,#3D5AFE)}.sokf .ic{font-size:1.25rem}
+.toprad .whoami{margin:0;flex:none}
+.toprad .chip{min-height:48px;padding:6px 14px 6px 6px}
+@media(max-width:560px){.toprad .whoami{order:-1;width:100%;justify-content:flex-end}.toprad{margin-top:12px;gap:8px}}
+.mini .stars{justify-content:center}.mini .stw{display:grid;grid-template-columns:auto auto;gap:0 14px;justify-items:center}
+.mini .sv{display:flex;align-items:center;gap:4px}.mini .sv b{font-size:1.25rem}.mini .sv i{font-style:normal;font-size:1.05rem}
+.mini .stw small{grid-column:1/-1;text-align:center}
+.mini>*{display:flex;align-items:center;gap:8px;background:var(--card);border:0;border-radius:14px;padding:6px 12px;box-shadow:0 3px 0 var(--line);font:inherit;color:inherit;text-align:left;min-width:0;min-height:48px}
+.mini button,.mini a{cursor:pointer;position:relative;text-decoration:none}
+@media(max-width:360px){.mini button small,.mini a small{display:none}.mini button .ic,.mini a .ic{display:none}.mini button b{font-size:.9rem;word-break:keep-all;overflow-wrap:normal}.mini>*{padding:6px 8px}}
+/* "Nytt!" sitter som en etikett på knappens hörn och tar ingen plats på raden */
+.mini .new{position:absolute;top:-9px;right:-6px;margin:0;transform:rotate(6deg);box-shadow:0 2px 0 rgba(29,43,83,.2);z-index:1}
+.mini a:active,.mini button:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
+.mini .ic{font-size:1.35rem;line-height:1;flex:none}
+.mini b{display:block;font-size:.98rem;line-height:1.1;white-space:nowrap}
+.mini small{display:block;color:var(--muted);font-weight:700;font-size:.78rem;line-height:1.15}
+.mini .stars b{font-size:1.25rem}
+
+@media(max-width:699px){.mini{margin-top:0}}
+@media(max-width:420px){.mini>*{padding:6px 8px;gap:6px}.mini b{font-size:.88rem}.mini small{font-size:.72rem}}
+@media(max-width:360px){.mini b{white-space:normal;overflow-wrap:anywhere;font-size:.8rem}.mini .ic{font-size:1.1rem}}
+/* rubriker för korten */
+.grp{display:flex;align-items:center;gap:8px;font-size:1.2rem;font-weight:800;margin:22px 0 10px;color:var(--ink)}
+.grp span{font-size:1.4rem}
+
+/* ---------- Övningar ---------- */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+@media(max-width:360px){.cards{grid-template-columns:1fr}}
+.card{display:flex;align-items:center;gap:14px;background:var(--card);border-radius:20px;padding:12px 14px 12px 12px;text-decoration:none;
+  box-shadow:0 5px 0 var(--line);transition:transform .08s,box-shadow .08s}
+.card:active{transform:translateY(3px);box-shadow:0 2px 0 var(--line)}
+@media(hover:hover){.card:hover{transform:translateY(-2px);box-shadow:0 7px 0 var(--line)}}
+.tile{flex:none;width:72px;height:72px;border-radius:18px;background:var(--c);color:#fff;display:grid;place-items:center;
+  font-weight:800;font-size:1.9rem;line-height:1;box-shadow:0 4px 0 rgba(29,43,83,.25);transform:rotate(-4deg)}
+.card:nth-child(even) .tile{transform:rotate(4deg)}
+.tile.sm{font-size:1.45rem}
+.card .txt{flex:1;min-width:0}
+.card b{display:block;font-size:1.3rem;line-height:1.15}
+.card small{display:block;color:var(--muted);font-size:.95rem;line-height:1.3;margin-top:2px}
+.badge{display:inline-block;margin-top:6px;background:var(--warn-bg,#FFF4CC);color:#8A5A00;border-radius:999px;padding:1px 10px;font-weight:700;font-size:.85rem}
+.badge[hidden]{display:none}
+.chev{flex:none;color:#B4C0D8;font-size:1.6rem;font-weight:800}
+.cards.gap{margin-top:34px}
+.more{display:flex;align-items:center;gap:12px;margin:26px auto 0;max-width:560px;padding:12px 16px;border-radius:18px;background:var(--lc-E3F6EA,#E3F6EA);color:#1D2B53;text-decoration:none;font-weight:700;font-size:1rem;line-height:1.3;box-shadow:0 0 0 2px var(--line,#BFE0CB) inset,0 4px 0 var(--line,#BFE0CB)}
+.more:active{transform:translateY(3px);box-shadow:0 0 0 2px var(--line,#BFE0CB) inset,0 1px 0 var(--line,#BFE0CB)}
+.more .mi{font-size:2rem;line-height:1}
+.more b{display:block;color:var(--ok-ink,#157548);font-size:1.1rem}
+.foot{margin-top:26px;color:var(--muted);font-size:.85rem;text-align:center}
+.tools{display:flex;gap:10px;margin:0 0 18px}
+.tool{flex:1;display:flex;align-items:center;gap:10px;background:var(--card);border:0;border-radius:18px;padding:10px 12px;box-shadow:0 4px 0 var(--line);font:inherit;color:inherit;text-align:left;cursor:pointer;min-width:0}
+.tool:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.tool .ic{font-size:1.7rem;line-height:1;flex:none}
+.tool b{display:block;font-size:1rem;line-height:1.15;overflow-wrap:anywhere}
+.tool small{display:block;color:var(--muted);font-weight:700;font-size:.8rem}
+.new{display:inline-block;background:#FF5FA2;color:#fff;border-radius:999px;padding:0 7px;font-size:.72rem;font-weight:800;margin-left:4px;vertical-align:middle}
+.new[hidden]{display:none}
+.soundbtn{display:inline-block;margin-top:10px;border:0;border-radius:999px;background:var(--card);box-shadow:0 3px 0 var(--line);padding:6px 14px;font:inherit;font-weight:800;color:var(--ink);cursor:pointer}
+.modal{position:fixed;inset:0;background:rgba(29,43,83,.55);display:grid;place-items:center;z-index:20;padding:14px}
+.modal[hidden]{display:none}
+.sheet{background:var(--card,#fff);border-radius:24px;width:100%;max-width:520px;max-height:92vh;overflow:auto;padding:14px 16px 18px;box-shadow:0 8px 0 rgba(0,0,0,.15)}
+.sheet h2{margin:0;font-size:1.7rem;line-height:1.1}
+.sheet .top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px}
+.close{border:0;background:var(--bg);border-radius:999px;width:42px;height:42px;font-size:1.3rem;cursor:pointer;flex:none}
+.preview{width:150px;margin:0 auto 6px;display:block}
+.sheet .owl{animation:none}
+.tabsw{display:flex;gap:6px;margin:6px 0 10px;flex-wrap:wrap}
+.tabsw button{flex:1;border:0;border-radius:12px;background:var(--bg);padding:8px 4px;font:inherit;font-weight:800;font-size:.95rem;cursor:pointer;color:var(--ink)}
+.tabsw button[aria-pressed="true"]{background:var(--sel,var(--ink));color:#fff}
+.items{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.item{border:0;border-radius:16px;background:var(--bg);padding:6px 4px 4px;cursor:pointer;font:inherit;color:var(--ink);box-shadow:0 3px 0 var(--line)}
+.item svg{width:100%;height:auto;display:block}
+.item small{display:block;font-weight:800;font-size:.8rem;line-height:1.2}
+.item.sel{outline:3px solid var(--accent,#3D5AFE);background:var(--info-bg,#EEF1FF)}
+.item.locked{cursor:default}
+.item{position:relative}.item .sasm{position:absolute;top:4px;right:6px;font-size:1rem}
+.tabsw button.sas{background:var(--lc-FFF1D6,#FFF1D6);color:#8A4B00}.tabsw button.sas[aria-pressed="true"]{background:#E06A00;color:#fff}
+.sasinfo{grid-column:1/-1;margin:0;font-weight:700;color:var(--muted);text-align:center;font-size:.92rem}
+.item.locked svg{opacity:.7}
+.item.locked small b{color:#9A7A00}
+.item.fraga{box-shadow:0 0 0 3px var(--gold),0 3px 0 var(--line);background:var(--warn-bg,#FFF6D6)}
+.item.locked small{color:var(--muted)}
+.stickers{display:grid;grid-template-columns:repeat(auto-fill,minmax(98px,1fr));gap:10px;margin-top:8px}
+.stk{background:var(--bg);border-radius:16px;padding:8px 4px 6px;text-align:center}
+.stk .em{font-size:2.4rem;display:block;line-height:1.2}
+.stk b{font-size:.85rem;display:block;line-height:1.15;overflow-wrap:anywhere;hyphens:auto}
+.stk small{font-size:.72rem;color:var(--muted);display:block;line-height:1.15;margin-top:2px;overflow-wrap:anywhere;hyphens:auto}
+.stk.off .em{filter:grayscale(1);opacity:.25}
+.stk.off b{color:var(--muted)}
+.stk.fresh{background:var(--warn-bg,#FFF4CC);animation:pop .5s ease-out}
+@keyframes pop{0%{transform:scale(.6)}70%{transform:scale(1.1)}100%{transform:scale(1)}}
+.newlist{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:10px 0}
+.newlist .stk{width:120px}
+.gobtn{display:block;width:100%;margin-top:12px;border:0;border-radius:16px;padding:12px;background:#1E9E5E;color:#fff;font:inherit;font-weight:800;font-size:1.2rem;box-shadow:0 5px 0 #157548;cursor:pointer}
+@media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
+.whoami{display:flex;justify-content:flex-end;margin:-10px 0 8px;position:relative;z-index:3}
+.chip{display:inline-flex;align-items:center;gap:6px;background:var(--card);border:0;border-radius:999px;padding:4px 12px 4px 4px;box-shadow:0 3px 0 var(--line);font:inherit;font-weight:800;color:var(--ink);cursor:pointer}
+.chip .mini{width:30px;height:34px;display:inline-block}
+.chip .mini svg{width:100%;height:100%}
+.who{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:12px;margin-top:10px}
+.who button{border:0;border-radius:18px;background:var(--bg);padding:8px 6px 10px;font:inherit;font-weight:800;color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--line)}
+.who button svg{width:80px;height:auto;display:block;margin:0 auto}
+.pnote{color:var(--muted);font-size:.9rem;text-align:center;margin:10px 0 0}
+.newbtn{font-size:1.3rem;padding:14px}
+.qrbtn{display:block;width:100%;margin-top:12px;border:0;border-radius:16px;padding:11px 12px;background:var(--card,#fff);color:#2A3FB8;font:inherit;font-weight:800;font-size:1.05rem;box-shadow:0 0 0 2px #3D5AFE inset,0 4px 0 var(--lc-C6D0FF,#C6D0FF);cursor:pointer}
+.qrbtn:active,.newbtn:active{transform:translateY(3px)}
+.om{margin:26px 0 0;color:var(--muted);font-size:.9rem;line-height:1.5}.om h2{margin:0 0 4px;font-size:1rem;color:var(--ink)}.om p{margin:0;max-width:46em}
+.pinfo{display:flex;gap:10px;align-items:flex-start;margin-top:14px;background:var(--lc-EAF3FF,#EAF3FF);border-radius:14px;padding:10px 12px;text-align:left}
+.pinfo span{font-size:1.2rem;line-height:1.3}
+.pinfo p{margin:0;color:var(--ink);font-size:.88rem;font-weight:600;line-height:1.35}
+.guestlink{display:block;margin:12px auto 0;border:0;background:none;font:inherit;font-weight:700;font-size:.95rem;color:var(--muted);text-decoration:underline;cursor:pointer;padding:6px 10px}
+.dots4{display:flex;justify-content:center;gap:14px;margin:10px 0 4px}
+.dots4 i{width:20px;height:20px;border-radius:50%;border:3px solid var(--ink);display:block}
+.dots4 i.on{background:var(--sel,var(--ink))}
+.dots4.shake{animation:shk .35s}
+@keyframes shk{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+[hidden]{display:none!important}
+.kinfo{list-style:none;padding:0;margin:8px 0;display:grid;gap:6px;font-size:.95rem}
+.kbox{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:baseline;text-align:left;background:var(--soft,#F1F6FF);border-radius:16px;padding:14px 16px;margin:6px 0}.kbox span{color:var(--muted);font-weight:700;font-size:.9rem}.kbox b{font-size:1.5rem;letter-spacing:.02em;overflow-wrap:break-word;min-width:0}
+@media(max-width:480px){.kbox{grid-template-columns:1fr;gap:0}.kbox span{margin-top:6px}.kbox span:first-child{margin-top:0}.kbox b{font-size:1.45rem}}
+.lc-konto{margin:10px auto 0;display:grid;grid-template-columns:auto auto;justify-content:center;gap:4px 14px;text-align:left;font-size:1.5rem;font-weight:800}.lc-konto span{font-weight:600;color:#56668F;font-size:.9rem;align-self:center}
+.kny{background:#E8F7EE;color:#157548;border-radius:14px;padding:10px 12px;font-weight:700;font-size:.92rem;margin:6px 0}
+.pinmsg{min-height:1.3em;color:#E5484D;font-weight:800;text-align:center;margin:4px 0}
+.pinmsg.ok{color:#1E9E5E}
+.pinpad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:6px}
+.pinpad button{height:60px;border-radius:16px;border:0;background:var(--bg);font:inherit;font-size:1.8rem;font-weight:800;color:var(--ink);box-shadow:0 3px 0 var(--line);cursor:pointer}
+.linkbtn{border:0;background:none;color:var(--muted);text-decoration:underline;font:inherit;font-size:.95rem;margin-top:10px;cursor:pointer}
+.plabel{display:block;font-weight:800;margin:6px 0 4px}
+.pinput{flex:1;min-width:0;font:inherit;font-size:1.2rem;border:3px solid var(--line);border-radius:14px;padding:8px 12px;color:var(--ink)}
+.pinput:focus{outline:none;border-color:#3D5AFE}
+.dice{border:0;border-radius:14px;background:var(--bg);font-size:1.6rem;width:54px;cursor:pointer;box-shadow:0 3px 0 var(--line)}
+.plist{display:grid;gap:10px;margin-top:6px}
+.qrbox{display:grid;place-items:center;min-height:40px}
+.qrbox img,.qrbox canvas{border:8px solid #fff;border-radius:8px;box-shadow:0 3px 0 var(--line)}
+.pcode{width:100%;min-height:80px;font:inherit;font-size:.8rem;border:3px solid var(--line);border-radius:12px;padding:8px;word-break:break-all;color:var(--ink)}
+.logincard{width:100%;max-width:340px;margin:6px auto 0;border:3px dashed var(--line,#C6D6F2);border-radius:18px;padding:14px 14px 12px;background:var(--card,#fff)}
+.lc-head{display:flex;align-items:center;gap:10px;justify-content:center;text-align:left}
+.lc-head b{display:block;font-size:1.2rem;line-height:1.1}.lc-head small{color:var(--muted);font-weight:700}
+.lc-owl{width:54px;display:block}.lc-owl svg{width:54px;height:auto;display:block}
+.lc-qr{display:grid;place-items:center;margin:10px auto 4px;min-height:60px}
+.lc-qr img,.lc-qr canvas{width:230px!important;height:230px!important;image-rendering:pixelated}
+.lc-name{font-size:1.7rem;font-weight:800;line-height:1.1;margin:4px 0}
+.lc-how{font-size:.85rem;color:var(--muted);margin:6px 0 0}
+.scanbox{position:relative;border-radius:16px;overflow:hidden;background:#1D2B53;aspect-ratio:1;max-width:340px;margin:0 auto}
+.scanbox video{width:100%;height:100%;object-fit:cover;display:block}
+.scanframe{position:absolute;inset:18%;border:4px solid #FFC93C;border-radius:16px;box-shadow:0 0 0 999px rgba(29,43,83,.35)}
+@page{size:A4 portrait;margin:1.2cm}
+@media print{
+  html,body{height:auto!important;min-height:0!important;background:var(--card,#fff)!important}
+  body>*:not(#mCard){display:none!important}
+  #mCard{position:static!important;display:block!important;background:none!important;padding:0!important;inset:auto!important}
+  #mCard .sheet{box-shadow:none!important;max-width:none!important;max-height:none!important;overflow:visible!important;padding:0!important;background:none!important}
+  #mCard .noprint{display:none!important}
+  .logincard{margin:0 auto;width:13cm;max-width:none;border:2px dashed #999;padding:.8cm .6cm .6cm;page-break-inside:avoid;break-inside:avoid}
+  .lc-owl,.lc-owl svg{width:1.8cm!important}
+  .lc-head b{font-size:20pt}.lc-head small{font-size:12pt}
+  .lc-qr{margin:.5cm auto .3cm}
+  .lc-qr img,.lc-qr canvas{width:10cm!important;height:10cm!important}
+  .lc-name{font-size:26pt}
+  .lc-how{font-size:11pt}
+}
+.komlabel{display:block;text-align:left;font-weight:700;margin:10px 4px 0;font-size:.95rem;line-height:1.3}
+.komlabel input{width:20px;height:20px;vertical-align:-4px;margin-right:6px;accent-color:var(--accent)}
+.komlabel small{display:block;color:var(--muted);font-weight:600;font-size:.82rem;margin:2px 0 0 28px}
+
+/* ämnesknapparna på första sidan */
+.amnen{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px;margin-bottom:8px}
+.amnek{display:flex;align-items:center;gap:16px;background:var(--card);border-radius:24px;padding:14px 16px;box-shadow:0 5px 0 var(--line);text-decoration:none;color:inherit;transition:transform .12s,box-shadow .12s}
+.amnek:active{transform:translateY(4px);box-shadow:0 1px 0 var(--line)}
+@media(hover:hover){.amnek:hover{transform:translateY(-2px);box-shadow:0 8px 0 var(--line)}}
+.amnek .ik{flex:none;width:76px;height:76px;border-radius:22px;background:var(--c);display:grid;place-items:center;box-shadow:0 4px 0 rgba(0,0,0,.2)}
+.amnek .ik img{width:50px;height:50px}
+.amnek .txt{flex:1;min-width:0}.amnek b{display:block;font-size:1.45rem;line-height:1.1}.amnek small{display:block;color:var(--muted);font-weight:600;font-size:1rem;line-height:1.3;margin-top:3px}
+.amnek .chev{font-size:2rem;font-weight:800;color:var(--c)}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="park" aria-hidden="true"><div class="park-in">
+    <svg class="d-lampa" viewBox="0 0 70 72" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="35" cy="36" r="16" stroke="#F3F0E4" stroke-width="2.6"/><path d="M28 55h14M30 61h10" stroke="#F3F0E4" stroke-width="2.6"/><path d="M29 40q6-10 12 0" stroke="#F4D35E" stroke-width="2"/><path d="M35 10v-6M15 18l-4-4M55 18l4-4M9 36h-6M61 36h6" stroke="#F4D35E" stroke-width="2.4"/></svg>
+    <svg class="d-planet" viewBox="0 0 64 40" fill="none"><circle cx="32" cy="20" r="12" stroke="#9FD3EC" stroke-width="2.6"/><ellipse cx="32" cy="20" rx="27" ry="8" stroke="#9FD3EC" stroke-width="2.2" transform="rotate(-18 32 20)"/></svg>
+    <svg class="d-st1" viewBox="0 0 20 20"><path d="M10 2l2.4 5.2 5.6.6-4.2 3.8 1.2 5.6-5-2.9-5 2.9 1.2-5.6-4.2-3.8 5.6-.6z" fill="none" stroke="#F2A7BB" stroke-width="1.6" stroke-linejoin="round"/></svg>
+    <svg class="d-st2" viewBox="0 0 20 20"><path d="M10 2l2.4 5.2 5.6.6-4.2 3.8 1.2 5.6-5-2.9-5 2.9 1.2-5.6-4.2-3.8 5.6-.6z" fill="none" stroke="#F4D35E" stroke-width="1.8" stroke-linejoin="round"/></svg>
+    <svg class="d-abc" viewBox="0 0 60 26"><text x="1" y="21" font-family="'Baloo 2','Trebuchet MS',sans-serif" font-size="24" font-weight="700" fill="#F3F0E4" opacity=".9">a b c</text></svg>
+    <svg class="d-kritor" viewBox="0 0 86 8"><rect x="0" y="1" width="34" height="7" rx="3.5" fill="#F3F0E4"/><rect x="40" y="2" width="22" height="6" rx="3" fill="#F4D35E"/><rect x="68" y="2.5" width="16" height="5.5" rx="2.7" fill="#F2A7BB"/></svg>
+    <svg class="d-sudd" viewBox="0 0 56 15"><rect x="0" y="0" width="56" height="10" rx="3" fill="#36507A"/><rect x="0" y="9" width="56" height="6" rx="1.5" fill="#D8D2C2"/></svg>
+  </div></div>
+  <div class="hero-in">
+    <div class="title">
+      <h1><span class="k1">Plugg</span><span class="p2">parken</span><span class="betalapp" title="Sidan är under uppbyggnad">Beta</span></h1>
+      <p>Lekparken för hjärnan</p>
+    </div>
+    <div class="owlwrap">
+      <div class="bubble" id="bubble">Hej!</div>
+      <button class="owlbtn" id="owlBtn" aria-label="Öppna garderoben"><span id="owlSlot"></span><span class="owltag">👗 Klä mig</span></button>
+    </div>
+  </div>
+</header>
+
+
+
+<main class="wrap">
+  <div class="toprad">
+    <button type="button" class="sokf" data-sok aria-label="Sök övning eller spel"><span class="ic" aria-hidden="true">🔍</span><span>Sök övning eller spel …</span></button>
+    <div class="whoami"><button class="chip" id="whoChip"></button></div>
+  </div>
+  <div class="mini">
+    <div class="stars" title="Stjärnor och mynt"><span class="stw"><span class="sv"><b id="sStars">0</b><i>⭐</i></span><span class="sv"><b id="sMynt">0</b><i>🪙</i></span><small id="sTitel">stjärnor och mynt</small></span></div>
+    <button id="btnWard"><span class="ic">👗</span><span><b>Garderoben<span class="new" id="newWard" hidden>Nytt!</span></b><small id="wardInfo">Välj djur och kläder</small></span></button>
+    <a href="mittrum/" id="btnRum"><span class="ic">🏠</span><span><b>Mitt rum</b><small>Inred med mynt</small></span></a>
+    <button id="btnAlbum"><span class="ic">📒</span><span><b>Klistermärken<span class="new" id="newAlbum" hidden>Nytt!</span></b><small id="albumInfo">0 av 0</small></span></button>
+  </div>
+
+  <h2 class="grp"><span aria-hidden="true">🧭</span>Välj ämne</h2>
+  <nav class="amnen" aria-label="Ämnen">
+    <a class="amnek" style="--c:#3D5AFE" href="ny/matte/"><span class="ik"><img src="ny/bilder/matte.svg" alt="" width="64" height="64"></span><span class="txt"><b>Matte</b><small>Räkna, mäta, spela och upptäck tal</small></span><span class="chev" aria-hidden="true">›</span></a>
+    <a class="amnek" style="--c:#E5484D" href="ny/svenska/"><span class="ik"><img src="ny/bilder/svenska.svg" alt="" width="64" height="64"></span><span class="txt"><b>Svenska</b><small>Ord, stavning, läsning och sagor</small></span><span class="chev" aria-hidden="true">›</span></a>
+    <a class="amnek" style="--c:#1E9E5E" href="ny/rymd/"><span class="ik"><img src="ny/bilder/no.svg" alt="" width="64" height="64"></span><span class="txt"><b>Rymd och natur</b><small>Rymdlabbet, planeterna och djuren</small></span><span class="chev" aria-hidden="true">›</span></a>
+    <a class="amnek" style="--c:#F2780C" href="ny/so/"><span class="ik"><img src="ny/bilder/so.svg" alt="" width="64" height="64"></span><span class="txt"><b>SO</b><small>Kartor, länder och platser</small></span><span class="chev" aria-hidden="true">›</span></a>
+    <a class="amnek" style="--c:#7B61FF" href="specialare/"><span class="ik"><img src="ny/bilder/special.svg" alt="" width="64" height="64"></span><span class="txt"><b>Specialare</b><small>Filmer, lektioner och mysterier</small></span><span class="chev" aria-hidden="true">›</span></a>
+    <a class="amnek" style="--c:#0E9AA7" href="ny/fler/"><span class="ik"><img src="ny/bilder/logik.svg" alt="" width="64" height="64"></span><span class="txt"><b>Fler ämnen</b><small>Engelska, logik, kod och pengar</small></span><span class="chev" aria-hidden="true">›</span></a>
+    </nav>
+
+  <p class="foot">Dina stjärnor och rekord sparas i den här webbläsaren.<br><button class="soundbtn" id="soundBtn"></button></p>
+  <section class="om" aria-labelledby="omH"><h2 id="omH">Om Pluggparken</h2><p>Pluggparken är en gratis lekpark för hjärnan med matteövningar, spel och fler ämnen för barn i åk 1–6: multiplikationstabellerna, klockan, bråk, uppställning och division, läsning, rymden, Sverige och världen. Allt fungerar i webbläsaren, utan inloggning och utan reklam. Framstegen sparas bara på din egen enhet.</p></section>
+</main>
+
+
+<div class="modal" id="mWho" hidden><div class="sheet" role="dialog" aria-label="Vem tränar?">
+  <h2 style="text-align:center">Vem tränar idag?</h2>
+  <div class="who" id="whoGrid"></div>
+  <button class="gobtn" id="kontoIn">☁️ Logga in</button>
+  <button class="qrbtn" id="kontoNy">＋ Skapa ett nytt konto</button>
+  <button id="whoNew" hidden></button>
+  <button class="guestlink" id="scanBtn" style="margin-top:10px">📷 Jag har ett kort med QR-kod</button>
+  <div class="pinfo"><span aria-hidden="true">ℹ️</span><p>Med ett konto sparas dina poäng i molnet. Då kan du logga in på en annan dator eller iPad och fortsätta där du var. Du får ett påhittat användarnamn och lösenord. Inga riktiga namn och ingen e-post.</p></div>
+  <div class="pinfo" id="hamtaGammal" hidden><span aria-hidden="true">🚚</span><p>Har du spelat på <b>matteportalen.github.io</b>? Pluggparken har flyttat hit. <a href="https://matteportalen.github.io/" style="color:var(--accent);font-weight:800">Hämta dina framsteg därifrån</a></p></div>
+  <label class="komlabel"><input type="checkbox" class="komchk" checked> Kom ihåg mig på den här enheten<small>Bocka ur om du använder en delad dator.</small></label>
+  <button class="guestlink" id="guestBtn">Fortsätt som gäst</button>
+</div></div>
+
+<div class="modal" id="mPin" hidden><div class="sheet" role="dialog" aria-label="Kod" style="text-align:center;max-width:380px">
+  <div class="top"><h2 id="pinTitle">Skriv din kod</h2><button class="close" id="pinClose" aria-label="Stäng">✕</button></div>
+  <div id="pinOwl" style="width:90px;margin:0 auto"></div>
+  <div class="dots4" id="pinDots"><i></i><i></i><i></i><i></i></div>
+  <p class="pinmsg" id="pinMsg"></p>
+  <div class="pinpad" id="pinPad"><button>1</button><button>2</button><button>3</button><button>4</button><button>5</button><button>6</button><button>7</button><button>8</button><button>9</button><button data-k="del" aria-label="Sudda">⌫</button><button>0</button><button data-k="x" aria-hidden="true" tabindex="-1" style="visibility:hidden"></button></div>
+  <button class="linkbtn" id="pinForgot">Glömt koden?</button>
+</div></div>
+
+<div class="modal" id="mNewProf" hidden><div class="sheet" role="dialog" aria-label="Ny profil" style="max-width:420px">
+  <div class="top"><h2>Ny profil</h2><button class="close" data-close aria-label="Stäng">✕</button></div>
+  <label class="plabel" for="npName">Ditt namn i Pluggparken</label>
+  <div style="display:flex;gap:8px"><input id="npName" class="pinput" maxlength="16" autocomplete="off" placeholder="Till exempel Glada Ugglan"><button class="dice" id="npDice" aria-label="Hitta på ett namn">🎲</button></div>
+  <p class="pnote" style="text-align:left">Tips: använd gärna ett påhittat namn. Tryck på 🎲 för ett förslag.</p>
+  <p class="pinmsg" id="npMsg"></p>
+  <button class="gobtn" id="npNext">Välj en kod med 4 siffror</button>
+</div></div>
+
+<div class="modal" id="mProf" hidden><div class="sheet" role="dialog" aria-label="Min profil" style="max-width:420px">
+  <div class="top"><h2 id="profName"></h2><button class="close" data-close aria-label="Stäng">✕</button></div>
+  <div class="plist">
+    <button class="tool" id="pKonto"><span class="ic">☁️</span><span><b id="pKontoB">Skapa ett konto</b><small id="pKontoS">Dina poäng följer med. Spela på flera enheter.</small></span></button>
+    <button class="tool" id="pUt"><span class="ic">🚪</span><span><b>Logga ut</b><small>Låt någon annan spela</small></span></button>
+    <button class="tool" id="pPin"><span class="ic">🔑</span><span><b>Byt kod</b><small>Välj en ny kod med 4 siffror</small></span></button>
+    <button class="tool" id="pDel"><span class="ic">🗑️</span><span><b id="pDelB">Ta bort profilen</b><small id="pDelS">Allt för den här profilen raderas</small></span></button>
+    <button id="pSwitch" hidden></button><button id="pCard" hidden></button><button id="pMove" hidden></button><button id="pImport" hidden></button>
+  </div>
+</div></div>
+
+<div class="modal" id="mCard" hidden><div class="sheet" role="dialog" aria-label="Mitt inloggningskort" style="max-width:420px;text-align:center">
+  <div class="top noprint"><h2>Mitt inloggningskort</h2><button class="close" data-close aria-label="Stäng">✕</button></div>
+  <div class="logincard" id="loginCard">
+    <div class="lc-head"><span class="lc-owl" id="lcOwl"></span><span><b>Pluggparken</b><small>Mitt inloggningskort</small></span></div>
+    <div class="lc-qr" id="lcQr"></div>
+    <div class="lc-name" id="lcName"></div>
+    <div class="lc-konto" id="lcKonto" hidden></div>
+    <p class="lc-how" id="lcHow">Logga in på pluggparken.se: tryck på <b>Logga in</b> och skriv användarnamnet och lösenordet.</p>
+  </div>
+  <p class="pnote noprint" id="lcNote"></p>
+  <div class="noprint" style="display:flex;gap:8px;margin-top:10px"><button class="gobtn" id="lcPrint" style="margin:0">🖨️ Skriv ut</button></div>
+</div></div>
+
+<div class="modal" id="mKIn" hidden><div class="sheet" role="dialog" aria-label="Logga in med konto" style="max-width:420px">
+  <div class="top"><h2>Logga in med konto</h2><button class="close" id="kInClose" aria-label="Stäng">✕</button></div>
+  <label class="plabel" for="kInNamn">Användarnamn</label>
+  <input id="kInNamn" class="pinput" style="width:100%" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="Till exempel tokigkatt">
+  <label class="plabel" for="kInKod" style="margin-top:10px">Lösenord</label>
+  <input id="kInKod" class="pinput" style="width:100%" placeholder="Till exempel pannkaka" autocomplete="current-password" autocapitalize="none" autocorrect="off" spellcheck="false">
+  <p class="pinmsg" id="kInMsg"></p>
+  <label class="komlabel"><input type="checkbox" class="komchk" checked> Kom ihåg mig på den här enheten<small>Bocka ur om du använder en delad dator.</small></label>
+  <button class="gobtn" id="kInGo">Logga in</button>
+  <p class="pnote">Står på ditt kort. Har du inget konto? Gå tillbaka och tryck på <b>Skapa ett nytt konto</b>.</p>
+</div></div>
+
+<div class="modal" id="mKNy" hidden><div class="sheet" role="dialog" aria-label="Skapa konto" style="max-width:440px">
+  <div class="top"><h2>☁️ Skapa ett konto</h2><button class="close" data-close aria-label="Stäng">✕</button></div>
+  <p style="margin:0 0 8px">Med ett konto sparas dina framsteg också i molnet. Då kan du logga in på en annan dator eller iPad och fortsätta där du var.</p>
+  <ul class="kinfo"><li>✅ Du får ett påhittat användarnamn och ett lösenord, till exempel <b>tokigkatt</b> och <b>pannkaka</b>.</li><li>🚫 Inga riktiga namn och ingen e-post sparas.</li><li>🇸🇪 Servern ligger i Sverige.</li><li>🗑️ Du kan radera kontot när du vill.</li><li>📝 Skriv upp namnet och lösenordet, eller skriv ut ditt kort. Lösenordet går inte att få tillbaka om det försvinner.</li></ul>
+  <p class="pinmsg" id="kNyMsg"></p>
+  <button class="gobtn" id="kNyGo">Skapa mitt konto</button>
+</div></div>
+
+<div class="modal" id="mKInfo" hidden><div class="sheet" role="dialog" aria-label="Mitt konto" style="max-width:440px;text-align:center">
+  <div class="top"><h2>☁️ Mitt konto</h2><button class="close" data-close aria-label="Stäng">✕</button></div>
+  <div class="kbox"><span>Användarnamn</span><b id="kiNamn"></b><span>Lösenord</span><b id="kiKod"></b></div>
+  <p class="pnote" id="kiSenast"></p>
+  <p class="kny" id="kiNy" hidden>🎉 Ditt konto är klart! Skriv upp namnet och lösenordet, eller skriv ut kortet. Lösenordet går inte att få tillbaka om det försvinner.</p>
+  <button class="gobtn" id="kiKort">🖨️ Skriv ut mitt kort</button>
+  <button class="qrbtn" id="kiSpela" hidden>▶ Börja spela</button>
+  <button class="qrbtn" id="kiSynk">🔄 Synka nu</button>
+  <button id="kiUt" hidden></button><button id="kiDel" hidden></button>
+</div></div>
+
+<div class="modal" id="mRad" hidden><div class="sheet" role="dialog" aria-label="Radera kontot" style="max-width:420px">
+  <div class="top"><h2>🗑️ Radera kontot</h2><button class="close" data-close aria-label="Stäng">✕</button></div>
+  <p style="margin:0 0 8px">Om du raderar kontot <b id="radNamn"></b> försvinner <b>alla stjärnor, mynt, kläder och framsteg</b>, både i molnet och på den här enheten. Det går inte att ångra.</p>
+  <p class="pnote" style="text-align:left;margin:0 0 6px">Är du säker? Räkna ut uppgiften för att radera.</p>
+  <label class="plabel" for="radSvar" id="radFraga"></label>
+  <input id="radSvar" class="pinput" style="width:100%" inputmode="numeric" autocomplete="off">
+  <p class="pinmsg" id="radMsg"></p>
+  <button class="gobtn" id="radGo" style="background:#E5484D;box-shadow:0 5px 0 #A8282C">Radera allt för alltid</button>
+  <button class="guestlink" data-close>Nej, behåll mitt konto</button>
+</div></div>
+
+<div class="modal" id="mScan" hidden><div class="sheet" role="dialog" aria-label="Logga in med QR-kod" style="max-width:440px;text-align:center">
+  <div class="top"><h2>Logga in med QR-kod</h2><button class="close" id="scanClose" aria-label="Stäng">✕</button></div>
+  <p style="margin:0 0 8px">Håll upp ditt kort framför kameran.</p>
+  <div class="scanbox"><video id="scanVideo" playsinline muted></video><span class="scanframe"></span></div>
+  <canvas id="scanCanvas" hidden></canvas>
+  <p class="pinmsg" id="scanMsg"></p>
+</div></div>
+
+<div class="modal" id="mMove" hidden><div class="sheet" role="dialog" aria-label="Flytta framsteg" style="max-width:440px;text-align:center">
+  <div class="top"><h2>Flytta framsteg</h2><button class="close" data-close aria-label="Stäng">✕</button></div>
+  <p style="margin:0 0 8px">Skanna koden med kameran på den andra enheten. Då öppnas Pluggparken och dina framsteg läggs in.</p>
+  <div id="qrBox" class="qrbox"></div>
+  <p class="pnote" id="qrNote"></p>
+  <p style="margin:12px 0 4px;font-weight:800">Eller använd flyttkoden:</p>
+  <textarea id="moveCode" class="pcode" readonly></textarea>
+  <div style="display:flex;gap:8px;margin-top:8px"><button class="gobtn" id="moveCopy" style="margin:0">Kopiera koden</button><button class="gobtn" id="moveFile" style="margin:0;background:#3D5AFE;box-shadow:0 5px 0 #2A3FB8">Spara som fil</button></div>
+</div></div>
+
+<div class="modal" id="mImp" hidden><div class="sheet" role="dialog" aria-label="Hämta framsteg" style="max-width:440px">
+  <div class="top"><h2>Hämta framsteg</h2><button class="close" data-close aria-label="Stäng">✕</button></div>
+  <p style="margin:0 0 6px">Klistra in din flyttkod, eller öppna filen med dina framsteg.</p>
+  <textarea id="impCode" class="pcode" placeholder="Klistra in koden här"></textarea>
+  <label class="gobtn" style="text-align:center;background:#3D5AFE;box-shadow:0 5px 0 #2A3FB8">Öppna fil<input type="file" id="impFile" accept=".txt,.json,text/plain" hidden></label>
+  <p class="pinmsg" id="impMsg"></p>
+  <button class="gobtn" id="impGo">Lägg in framstegen</button>
+</div></div>
+
+<div class="modal" id="mWard" hidden><div class="sheet" role="dialog" aria-label="Garderoben">
+  <div class="top"><h2>Garderoben</h2><button class="close" data-close aria-label="Stäng">✕</button></div>
+  <div class="preview" id="wardPreview"></div>
+  <p style="text-align:center;margin:0;color:var(--muted);font-weight:700" id="wardStars"></p>
+  <p style="text-align:center;margin:2px 0 0;font-weight:800;min-height:1.3em" id="wardMsg"></p>
+  <div class="tabsw" id="wardTabs"></div>
+  <div class="items" id="wardItems"></div>
+  <button class="gobtn" data-close>Klar!</button>
+</div></div>
+
+<div class="modal" id="mAlbum" hidden><div class="sheet" role="dialog" aria-label="Klistermärken">
+  <div class="top"><h2>Klistermärken</h2><button class="close" data-close aria-label="Stäng">✕</button></div>
+  <p style="margin:0;color:var(--muted);font-weight:700" id="albumCount"></p>
+  <div class="stickers" id="albumGrid"></div>
+</div></div>
+
+<script src="ljud.js"></script>
+<script src="djur.js"></script>
+<script src="konto.js?v=1"></script>
+<script src="huvud.js" data-hem="../" data-nav="av" data-meny="ny" data-amne="hem" data-start="ny/"></script>
+<script>
+const $=id=>document.getElementById(id);
+const get=k=>{try{return JSON.parse(localStorage.getItem(k)||"null")}catch(e){return null}};
+const put=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+const show=(id,t)=>{const el=$(id);if(t){el.textContent=t;el.hidden=false}};
+const fmt=ms=>(ms/1000).toFixed(1).replace(".",",")+" s";
+const sum=o=>Object.values(o||{}).reduce((s,v)=>s+(typeof v==="number"?v:sum(v)),0);
+const T10=[1,2,3,4,5,6,7,8,9,10];
+const S={stars:0}; // allt som klistermärkena behöver veta
+
+/* ---------- Framsteg från alla övningar ---------- */
+function medalsFrom(h){
+  const lv=(a,b)=>{const x=h(a,b);if(!x.length)return 0;const l=x.slice(-2);if(l.length===2&&l[0][0]&&l[1][0])return(l[0][1]<3000&&l[1][1]<3000)?3:2;return 1};
+  return T10.map(T=>{if(T10.every(n=>lv(n,T)===3))return 3;if(T10.every(n=>lv(n,T)>=2))return 2;if(T10.every(n=>h(n,T).some(x=>x[0])))return 1;return 0});
+}
+const medalTxt=m=>{const n=m.filter(Boolean).length,g=m.filter(x=>x===3).length;return n?`🏅 ${n} ${n===1?"medalj":"medaljer"}${g?` · ${g} guld`:""}`:""};
+
+const mu=get("mattespel-multiplikation-v1");
+S.mMed=mu&&mu.facts?medalsFrom((a,b)=>mu.facts[Math.min(a,b)+"x"+Math.max(a,b)]||[]):T10.map(()=>0);
+S.stars+=S.mMed.reduce((a,b)=>a+b,0);show("bMulti",medalTxt(S.mMed));
+
+const dv=get("mattespel-division-v1");
+S.dMed=dv&&dv.facts?medalsFrom((q,d)=>dv.facts[d+":"+q+":0"]||[]):T10.map(()=>0);
+S.stars+=S.dMed.reduce((a,b)=>a+b,0);show("bDiv",medalTxt(S.dMed));
+S.dRest=!!dv&&[...Object.keys(dv.race||{}),...Object.keys(dv.blitz||{})].some(k=>k[0]==="r");
+
+const kl=get("mattespel-klockan-v1");S.kl=(kl&&kl.stars)||{};
+{const s=sum(S.kl);S.stars+=s;if(s)show("bKlocka",`⭐ ${s} stjärnor`)}
+const sp=get("mattespel-spel-v1");S.spel=sp||{fly:{},played:0,perfect:false};
+{const s=[...Object.values(S.spel.fly||{}),...Object.values(S.spel.mem||{}),...Object.values(S.spel.car||{}),...Object.values(S.spel.space||{}),...Object.values(S.spel.frog||{}),...Object.values(S.spel.tower||{}),...Object.values(S.spel.skatt||{}),...Object.values(S.spel.kiosk||{}),...Object.values(S.spel.bubbel||{}),...Object.values(S.spel.tug||{})].reduce((a,r)=>a+(r.stars||0),0);S.stars+=s;
+ const best=Math.max(0,...[...Object.values(S.spel.fly||{}),...Object.values(S.spel.car||{}),...Object.values(S.spel.space||{}),...Object.values(S.spel.frog||{})].map(r=>r.best||0));
+ if(s)show("bSpel",`⭐ ${s} stjärnor`);else if(best)show("bSpel",`Rekord: ${best} rätt`);}
+const ge=get("mattespel-geometri-v1");S.geo=(ge&&ge.stars)||{};
+{const s=sum(S.geo);S.stars+=s;if(s)show("bGeo",`⭐ ${s} stjärnor`)}
+const br=get("mattespel-brak-v1");S.brak=(br&&br.stars)||{};
+{const s=sum(S.brak);S.stars+=s;if(s)show("bBrak",`⭐ ${s} stjärnor`)}
+const upp=get("mattespel-uppstallning-v1");S.upp=(upp&&upp.stars)||{};
+{const s=sum(S.upp);S.stars+=s;if(s)show("bUpp",`⭐ ${s} stjärnor`)}
+const hru=get("mattespel-hundraruta-v1");S.hundra=(hru&&hru.stars)||{};
+{const s=sum(S.hundra);S.stars+=s;if(s)show("bHundra",`⭐ ${s} stjärnor`)}
+const tfo=get("mattespel-talfoljd-v1");S.foljd=(tfo&&tfo.stars)||{};
+{const s=sum(S.foljd);S.stars+=s;if(s)show("bFoljd",`⭐ ${s} stjärnor`)}
+const vag=get("mattespel-vagen-v1");S.vag=(vag&&vag.stars)||{};
+{const s=sum(S.vag);S.stars+=s;if(s)show("bVag",`⭐ ${s} stjärnor`)}
+const gom=get("mattespel-gomda-v1");S.gomda=(gom&&gom.stars)||{};
+{const s=sum(S.gomda);S.stars+=s;if(s)show("bGomda",`⭐ ${s} stjärnor`)}
+const ti=get("mattespel-tiotal-v1");S.ti=(ti&&ti.stars)||{};
+{const s=sum(S.ti);S.stars+=s;if(s)show("bTiotal",`⭐ ${s} stjärnor`)}
+const ta=get("mattespel-taluppfattning-v1");S.ta=(ta&&ta.stars)||{};S.taDiag=Object.values((ta&&ta.diag)||{});
+{const s=sum(S.ta);S.stars+=s;if(s)show("bTal",`⭐ ${s} stjärnor`)}
+const lp=get("mattespel-lillaplus-v1");
+S.lpBlitz=lp?Math.max(0,...Object.values(lp.blitz||{})):0;S.lpRace=lp?Object.values(lp.race||{}).map(r=>r.time):[];
+if(S.lpBlitz)show("bLilla",`⚡ Rekord: ${S.lpBlitz} rätt på 60 s`);else if(S.lpRace.length)show("bLilla",`🏁 Rekord: ${fmt(Math.min(...S.lpRace))}`);
+const np=get("np3-resultat");S.np=Object.values(np||{});
+/* Skattjakten (i Spelhörnan): en till tre stjärnor per nivå */
+{const sk=get("mattespel-sverigekartan-v1");S.stars+=sum((sk&&sk.stars)||{});} // Sverigekartan (Fler ämnen)
+{const og=get("mattespel-ordgomma-v1");S.stars+=sum((og&&og.stars)||{});} // Ordgömman (Fler ämnen)
+{const hf=get("mattespel-hogfrekventa-v1");S.stars+=sum((hf&&hf.stars)||{});} // Högfrekventa ord (Fler ämnen)
+S.rita=(get("mattespel-rita-v1")||{}).stars||{};S.stars+=sum(S.rita); // Draw it! (Fler ämnen)
+S.oga=get("mattespel-ordgatan-v1")||{};S.stars+=sum(S.oga.stars||{}); // Ordgåtan (Fler ämnen)
+S.peng=get("mattespel-pengar-v1")||{};S.stars+=sum(S.peng.stars||{}); // Pengar och sparande (Fler ämnen)
+S.lflyt=get("mattespel-lasflyt-v1")||{};S.stars+=sum(S.lflyt.stars||{}); // Läsflyt (Fler ämnen)
+S.tb=get("mattespel-tangentbord-v1")||{};S.stars+=sum(S.tb.stars||{}); // Tangentbordet (Fler ämnen)
+S.kod=get("mattespel-kodverkstan-v1")||{};S.stars+=sum(S.kod.stars||{}); // Kodverkstan (Fler ämnen)
+{const eu=get("mattespel-europa-v1");S.stars+=sum((eu&&eu.stars)||{});} // Europakartan (Fler ämnen)
+{const vw=get("mattespel-varlden-v1");S.stars+=sum((vw&&vw.stars)||{});} // Världskartan (Fler ämnen)
+{const af=get("mattespel-affaren-v1");S.aff=af||{};S.stars+=sum(S.aff.stars);} // Affären (i Spelhörnan)
+{const kb=get("mattespel-kulbanan-v1");S.kul=(kb&&kb.stars)||{};S.stars+=sum(S.kul);} // Kulbanan (i Spelhörnan)
+{const sr=get("mattespel-sagoriket-v1");S.stars+=sum((sr&&sr.stars)||{});} // Sagoriket (i Spelhörnan)
+{const sl=get("mattespel-sifferslottet-v1");S.stars+=sum((sl&&sl.stars)||{});} // Sifferslottet (i Spelhörnan)
+{const sk=get("mattespel-schack-v1");S.stars+=sum((sk&&sk.stars)||{});} // Schack (i Spelhörnan)
+{const tr=get("mattespel-trerirad-v1");S.stars+=sum((tr&&tr.stars)||{});} // Tre i rad (i Spelhörnan)
+const sj=get("mattespel-skattjakten-v1");S.sj=sj||{};S.stars+=Object.values(S.sj.stars||{}).reduce((a,b)=>a+(+b||0),0);
+const bbt=get("mattespel-brakbitar-v1");S.bitar=(bbt&&bbt.stars)||{};
+{const s=sum(S.bitar);S.stars+=s;if(s)show("bBitar",`⭐ ${s} stjärnor`)}
+{const du=get("mattespel-delaupp-v1");const s=sum((du&&du.stars)||{});S.stars+=s;if(s)show("bDela",`⭐ ${s} stjärnor`);} // Dela upp och dela
+{const mn=get("mattespel-matning-v1");const s=sum((mn&&mn.stars)||{});S.stars+=s;if(s)show("bMatning",`⭐ ${s} stjärnor`);} // Mätning
+{const t10=get("mattespel-tiointe-v1");S.stars+=sum((t10&&t10.stars)||{});} // 10 eller inte 10?
+{const x=get("mattespel-meningsbyggaren-v1");S.stars+=sum((x&&x.stars)||{});} // Meningsbyggaren (Fler ämnen)
+{const x=get("mattespel-ordkedjan-v1");S.stars+=sum((x&&x.stars)||{});} // Ordkedjan (Fler ämnen)
+{const x=get("mattespel-ordgissning-v1");S.stars+=sum((x&&x.stars)||{});} // Ordgissning (Fler ämnen)
+{const x=get("mattespel-dubbelteckning-v1");S.stars+=sum((x&&x.stars)||{});} // Dubbelteckning (Fler ämnen)
+{const x=get("mattespel-sagobyggaren-v1");S.stars+=sum((x&&x.stars)||{});} // Sagobyggaren (Fler ämnen)
+{const x=get("mattespel-knepigaljud-v1");S.stars+=sum((x&&x.stars)||{});} // Knepiga ljud (Fler ämnen)
+const kdv=get("mattespel-kortdivision-v1");S.kort=(kdv&&kdv.stars)||{};
+{const s=sum(S.kort);S.stars+=s;if(s)show("bKort",`⭐ ${s} stjärnor`)}
+const rj=get("mattespel-rutjakten-v1");S.rut=(rj&&rj.stars)||{};S.stars+=sum(S.rut); // Rutjakten (i Spelhörnan)
+if(S.np.length){const last=S.np.slice().sort((a,b)=>b.d-a.d)[0];show("bNp",`Senast: ${last.r} av ${last.t} rätt`)}
+$("sStars").textContent=S.stars;
+
+/* ---------- Dagar i rad (en dag räknas när något har tränats) ---------- */
+const day=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const today=day(new Date()),yest=day(new Date(Date.now()-864e5));
+const snap=["mattespel-knepigaljud-v1","mattespel-sagobyggaren-v1","mattespel-meningsbyggaren-v1","mattespel-tiointe-v1","mattespel-sifferslottet-v1","mattespel-sagoriket-v1","mattespel-lasflyt-v1","mattespel-pengar-v1","mattespel-uppstallning-v1","mattespel-hundraruta-v1","mattespel-brak-v1","mattespel-geometri-v1","mattespel-spel-v1","mattespel-multiplikation-v1","mattespel-division-v1","mattespel-klockan-v1","mattespel-tiotal-v1","mattespel-taluppfattning-v1","mattespel-lillaplus-v1","np3-resultat","mattespel-skattjakten-v1","mattespel-sverigekartan-v1","mattespel-ordgomma-v1","mattespel-hogfrekventa-v1","mattespel-europa-v1","mattespel-varlden-v1","mattespel-talfoljd-v1","mattespel-rutjakten-v1","mattespel-brakbitar-v1","mattespel-kortdivision-v1","mattespel-vagen-v1","mattespel-gomda-v1","mattespel-kulbanan-v1","mattespel-affaren-v1","mattespel-rita-v1","mattespel-ordgatan-v1","mattespel-tangentbord-v1","mattespel-delaupp-v1","mattespel-matning-v1","mattespel-kodverkstan-v1","mattespel-schack-v1","mattespel-trerirad-v1"].map(k=>localStorage.getItem(k)||"").join("|");
+let fp=0;for(let i=0;i<snap.length;i++)fp=(fp*31+snap.charCodeAt(i))|0;
+const st=get("matteportalen-dagar")||{fp:null,days:[]};
+if(st.fp!==null&&st.fp!==fp&&!st.days.includes(today))st.days.push(today);
+if(st.fp===null&&snap.replace(/\|/g,"")&&!st.days.includes(today))st.days.push(today);
+st.fp=fp;st.days=st.days.slice(-400);put("matteportalen-dagar",st);
+const daySet=new Set(st.days);
+let streak=0;{let d=new Date();if(!daySet.has(today))d=new Date(Date.now()-864e5);while(daySet.has(day(d))){streak++;d=new Date(d.getTime()-864e5)}}
+S.bestStreak=0;{let run=0,prev=null;st.days.slice().sort().forEach(x=>{const t=new Date(x+"T12:00");run=prev&&Math.round((t-prev)/864e5)===1?run+1:1;prev=t;S.bestStreak=Math.max(S.bestStreak,run)})}
+
+/* ---------- Mitt djur och mynten ---------- */
+const owlCfg=Object.assign({animal:"uggla",color:"lila",glasses:"runda",hat:"ingen",neck:"ingen",hand:"ingen",back:"ingen",seen:[]},get("matteportalen-uggla")||{});
+const saveOwl=()=>put("matteportalen-uggla",owlCfg);
+// Garderoben är en butik: saker köps för mynt (MPMynt i huvud.js). Första gången blir allt man redan låst upp med stjärnor köpt.
+const M=()=>MPMynt.get();
+{const m=M();if(m.kopt===null){m.kopt=Object.entries(WARD).flatMap(([k,v])=>v.items.filter(it=>it.need>0&&S.stars>=it.need).map(it=>k+":"+it.id));MPMynt.spara(m);}}
+const owned=(k,it)=>!it.pris||(M().kopt||[]).includes(k+":"+it.id);
+// säsongssaker (djur.js): köps bara under säsongen, syns annars bara om man redan har dem
+const SN=sasongNu(),kanKopa=it=>!it.s||(SN&&SN.id===it.s),synlig=(k,it)=>owned(k,it)||kanKopa(it);
+const sasongItems=()=>SN?Object.entries(WARD).flatMap(([k,v])=>v.items.filter(it=>it.s===SN.id).map(it=>[k,it])):[];
+const unlockedItem=it=>{const k=Object.keys(WARD).find(k=>WARD[k].items.includes(it));return owned(k,it);};
+Object.keys(WARD).forEach(k=>{if(!owned(k,itemOf(k,owlCfg[k])))owlCfg[k]=WARD[k].items[0].id});
+// titlar efter stjärnorna, som aldrig tar slut
+const TITLAR=[[0,"Nybörjare"],[10,"Stjärnspanare"],[25,"Stjärnsamlare"],[50,"Stjärnjägare"],[100,"Stjärnkapten"],[200,"Stjärnmästare"],[400,"Stjärnlegend"],[800,"Stjärnhjälte"]];
+function titel(n){let i=0;while(i+1<TITLAR.length&&n>=TITLAR[i+1][0])i++;
+  if(i===TITLAR.length-1){const extra=Math.floor((n-800)/400);return{namn:"Stjärnhjälte"+(extra?" "+(extra+1):""),nasta:800+(extra+1)*400,nastaNamn:"Stjärnhjälte "+(extra+2)};}
+  return{namn:TITLAR[i][1],nasta:TITLAR[i+1][0],nastaNamn:TITLAR[i+1][1]};}
+function visaMynt(){const m=M(),t=titel(S.stars);$("sMynt").textContent=m.m;$("sTitel").textContent=t.namn;
+  $("sTitel").parentNode.parentNode.title=`${t.namn}. ${t.nasta-S.stars} stjärnor till ${t.nastaNamn}.`;}
+
+const allItems=()=>Object.entries(WARD).flatMap(([k,v])=>v.items.map(it=>k+":"+it.id));
+function drawOwl(){$("owlSlot").innerHTML=owlSVG(owlCfg);}
+function wardBadge(){
+  const m=M().m,ej=Object.entries(WARD).flatMap(([k,v])=>v.items.filter(it=>!owned(k,it)&&kanKopa(it)).map(it=>[k,it]));
+  // Nytt! när man har råd med något man inte har sett att man har råd med
+  const nya=ej.filter(([k,it])=>it.pris<=m&&!owlCfg.seen.includes("rad:"+k+":"+it.id));
+  $("newWard").hidden=!nya.length;
+  const billig=ej.map(([,it])=>it.pris).sort((a,b)=>a-b)[0];
+  const nySasong=sasongItems().some(([k,it])=>!owned(k,it));
+  $("wardInfo").textContent=nySasong?`${SASONGER[SN.id].ikon} ${SASONGER[SN.id].namn}-saker!`:billig==null?"Allt är köpt!":billig<=m?"Något nytt att köpa!":`Nästa sak: ${billig} 🪙`;
+  visaMynt();
+}
+let wardTab="animal",kopFraga=null;
+function renderWard(){
+  $("wardPreview").innerHTML=owlSVG(owlCfg);
+  $("wardStars").textContent=`Du har ${M().m} 🪙. Mynt får du när du tränar och tar stjärnor.`;
+  const tabs=Object.entries(WARD).map(([k,v])=>[k,v.name]);
+  if(SN)tabs.unshift(["sasong",SASONGER[SN.id].ikon+" "+SASONGER[SN.id].namn]);
+  $("wardTabs").innerHTML=tabs.map(([k,n])=>`<button data-tab="${k}" aria-pressed="${k===wardTab}"${k==="sasong"?' class="sas"':""}>${n}</button>`).join("");
+  const lista=wardTab==="sasong"?sasongItems():WARD[wardTab].items.filter(it=>synlig(wardTab,it)).map(it=>[wardTab,it]);
+  $("wardItems").innerHTML=(wardTab==="sasong"?`<p class="sasinfo">Säsongssaker går bara att köpa ${sasongSlut(SN)}. Det du köper har du kvar för alltid.</p>`:"")+lista.map(([k,it])=>{
+    const open=owned(k,it),cfg=Object.assign({},owlCfg,{[k]:it.id},k==="animal"?{color:"natur"}:{}),fraga=kopFraga===k+":"+it.id;
+    return`<button class="item${owlCfg[k]===it.id?" sel":""}${open?"":" locked"}${fraga?" fraga":""}" data-slot="${k}" data-item="${it.id}">${owlSVG(cfg)}<small>${open?it.name:fraga?`Köp för ${it.pris} 🪙?`:`${it.name}<br>🪙 ${it.pris}`}</small>${it.s?`<span class="sasm" aria-hidden="true">${SASONGER[it.s].ikon}</span>`:""}</button>`;
+  }).join("");
+}
+$("wardTabs").onclick=e=>{const b=e.target.closest("[data-tab]");if(b){wardTab=b.dataset.tab;kopFraga=null;$("wardMsg").textContent="";renderWard();}};
+$("wardItems").onclick=e=>{const b=e.target.closest("[data-item]");if(!b)return;
+  const k=b.dataset.slot,it=itemOf(k,b.dataset.item);
+  const key=k+":"+it.id;
+  if(!owned(k,it)){const m=M().m;if(!kanKopa(it))return;
+    if(m<it.pris){kopFraga=null;$("wardMsg").textContent=`${it.name} kostar ${it.pris} 🪙. Du behöver ${it.pris-m} mynt till.`;b.animate([{transform:"translateX(-5px)"},{transform:"translateX(5px)"},{transform:"translateX(0)"}],{duration:250});renderWard();return;}
+    // första trycket frågar, andra köper
+    if(kopFraga!==key){kopFraga=key;$("wardMsg").textContent=`Tryck en gång till för att köpa ${it.name.toLowerCase()}.`;renderWard();return;}
+    if(!MPMynt.kop(key,it.pris))return;kopFraga=null;$("wardMsg").textContent=`Köpt! ${it.name} är din. 🎉`;window.Ljud&&Ljud.kaching&&Ljud.kaching();}
+  else{kopFraga=null;$("wardMsg").textContent="";}
+  owlCfg[k]=it.id;if(k==="animal")owlCfg.color="natur";saveOwl();renderWard();drawOwl();wardBadge();window.Ljud&&Ljud.ok();};
+function openWard(){
+  const m=M().m;owlCfg.seen=[...new Set([...(owlCfg.seen||[]),...Object.entries(WARD).flatMap(([k,v])=>v.items.filter(it=>it.pris<=m).map(it=>"rad:"+k+":"+it.id))])];
+  if(sasongItems().some(([k,it])=>!owned(k,it)))wardTab="sasong";else if(wardTab==="sasong"&&!SN)wardTab="animal";
+  kopFraga=null;$("wardMsg").textContent="";saveOwl();wardBadge();renderWard();$("mWard").hidden=false;
+  $("bubble").textContent=pickLine();
+}
+const pickLine=()=>["Vad fin jag blir!","Snyggt val!","Tack! Nu är jag redo att räkna."][Math.floor(Math.random()*3)];
+$("owlBtn").onclick=openWard;$("btnWard").onclick=openWard;
+
+/* ---------- Klistermärken ---------- */
+const anyTi=f=>Object.entries(S.ti).some(([k,v])=>f(k,v||{}));
+const STICKERS=[
+  ["forsta","⭐","Första stjärnan","Samla din första stjärna.",()=>S.stars>=1],
+  ["tio","🌟","Stjärnsamlare","Samla 10 stjärnor.",()=>S.stars>=10],
+  ["femtio","💫","Stjärnregn","Samla 50 stjärnor.",()=>S.stars>=50],
+  ["hundra","🌌","Stjärnhimmel","Samla 100 stjärnor.",()=>S.stars>=100],
+  ["tre","🔥","Tre i rad","Träna tre dagar i rad.",()=>S.bestStreak>=3],
+  ["vecka","🚀","En hel vecka","Träna sju dagar i rad.",()=>S.bestStreak>=7],
+  ["flygare","🎮","Spelglad","Spela ett spel i Spelhörnan.",()=>(S.spel.played||0)>0||["mem","car","space","frog","tower","skatt","kiosk","bubbel","tug"].some(k=>Object.keys(S.spel[k]||{}).length)||(S.spel.tugPlayed||0)>0||(S.spel.memVs||0)>0||Object.keys(S.sj.stars||{}).length>0],
+  ["ratt","🏎️","Rattkungen","Kör i mål på Racerbanan i Spelhörnan.",()=>!!S.spel.carWon],
+  ["fulltos","🏁","Fullt ös","Vinn ett lopp på Racerbanan utan ett enda fel.",()=>!!S.spel.carPerfect],
+  ["dragkamp","💪","Dragkampsmästaren","Vinn mot Roboten på Svår i Dragkampen.",()=>!!S.spel.tugHard],
+  ["garage","🚗","Garagekungen","Skaffa alla fordon i Racerbanans garage.",()=>(S.spel.carOwned||[]).length>=6],
+  ["hoppjerka","🐸","Hoppjerkan","Ta grodan över alla floder i Grodhoppet.",()=>!!S.spel.frogWon],
+  ["nackros","🪷","Näckrosmästaren","Klara Grodhoppet utan att bli blöt en enda gång.",()=>!!S.spel.frogPerfect],
+  ["bygg","🏗️","Byggmästaren","Bygg tornet ända upp till månen.",()=>!!S.spel.towerWon],
+  ["mane","🌙","Månlandaren","Nå månen i Tornbygget utan ett enda fel och utan att tappa en balk.",()=>!!S.spel.towerPerfect],
+  ["kiosk","🏪","Kassören","Klara en dag i Affären.",()=>!!S.spel.kioskWon||(S.aff.dagar||0)>0],
+  ["vaxel","🪙","Växelmästaren","Ge rätt svar direkt till alla kunder en dag i Affären.",()=>!!S.spel.kioskPerfect||Object.values(S.aff.stars||{}).some(v=>v===3)],
+  ["minne","🧠","Minnet","Spela Memory i Spelhörnan.",()=>(S.spel.memPlayed||0)>0],
+  ["minnesmastare","🃏","Minnesmästaren","Få tre stjärnor i Memory.",()=>!!S.spel.memPerfect],
+  ["groda","🐸","Plusgrodan","Kör Racet i Lilla plus & minus.",()=>S.lpRace.length>0],
+  ["blixt","⚡","Blixten","Få 20 rätt i Blixtrundan i Lilla plus & minus.",()=>S.lpBlitz>=20],
+  ["tiokompis","🔟","Tiokompis","Få stjärnor på nivå 1 i Tiotalsövergång.",()=>anyTi((k,v)=>v[1]>0)],
+  ["klattrare","🧗","Klättraren","Få tre stjärnor på nivå 3 i Tiotalsövergång.",()=>anyTi((k,v)=>v[3]===3)],
+  ["hundring","💯","Hundringen","Få stjärnor i Tiotalsövergång upp till 100.",()=>anyTi((k,v)=>k.startsWith("100")&&sum(v)>0)],
+  ["brons","🥉","Första medaljen","Få en medalj i Multiplikation.",()=>S.mMed.some(Boolean)],
+  ["guld","🥇","Guldtabellen","Få guld i en multiplikationstabell.",()=>S.mMed.includes(3)],
+  ["kung","👑","Tabellkungen","Få guld i alla multiplikationstabeller.",()=>S.mMed.every(x=>x===3)],
+  ["pizza","🍕","Dela lika","Få en medalj i Division.",()=>S.dMed.some(Boolean)],
+  ["kakor","🍪","Smulorna","Sätt ett rekord i Division med rest.",()=>S.dRest],
+  ["klocka","🕒","Klockan slår","Få stjärnor på Hel timme i Klockan.",()=>(S.kl.hel||0)>0],
+  ["runthalv","🕧","Runt halv-proffs","Få tre stjärnor på nivån ”Tjugo över till tjugo i” i Klockan.",()=>(S.kl.runthalv||0)===3],
+  ["tidtagare","⏱️","Tidtagaren","Få stjärnor på Mäta tid i Klockan.",()=>(S.kl.mata||0)>0],
+  ["klockmastare","🕰️","Klockmästaren","Få stjärnor på alla nivåer i Klockan.",()=>["hel","halv","kvart","fem","runthalv","dig","mata","mix"].every(k=>(S.kl[k]||0)>0)],
+  ["former","🔺","Formfinnaren","Få stjärnor på Former i Geometri.",()=>(S.geo.former||0)>0],
+  ["spegel","🦋","Spegelmästaren","Få tre stjärnor på Symmetri i Geometri.",()=>(S.geo.symmetri||0)===3],
+  ["rutnat","📐","Rutnätsräknaren","Få stjärnor på Omkrets och area i Geometri.",()=>(S.geo.matt||0)>0],
+  ["pizza2","🥧","Halva kakan","Få stjärnor på Halva, tredjedel … i Bråk.",()=>(S.brak.enhet||0)>0],
+  ["brakmastare","🍰","Bråkmästaren","Få tre stjärnor på Jämför bråk.",()=>(S.brak.jamfor||0)===3],
+  ["uppstallare","🧮","Uppställaren","Få stjärnor i Uppställning.",()=>sum(S.upp)>0],
+  ["vaxlingsproffs","🏦","Växlingsproffset","Få tre stjärnor på Subtraktion med växling upp till 1000.",()=>(S.upp["4-1000"]||0)===3],
+  ["hundraruta","🔢","Hundrarutan","Få stjärnor i Hundrarutan.",()=>sum(S.hundra)>0],
+  ["detektiv","🔍","Rutnätsdetektiven","Få tre stjärnor på Trasig hundraruta.",()=>(S.hundra.trasig||0)===3],
+  ["grodhopp","🐸","Grodhopparen","Få stjärnor i Talföljder.",()=>sum(S.foljd)>0],
+  ["monster","🔎","Mönsterspanaren","Få tre stjärnor på Stora tal i Talföljder.",()=>(S.foljd[4]||0)===3],
+  ["spanare","🔭","Talspanaren","Få stjärnor i Bedömningsstöd i taluppfattning.",()=>sum(S.ta)>0],
+  ["diagnos","📋","Diagnosen klar","Gör en diagnos i Bedömningsstöd i taluppfattning.",()=>S.taDiag.length>0],
+  ["allaratt","🏆","Alla rätt","Få alla rätt på en diagnos.",()=>S.taDiag.some(d=>d.ok===d.n)],
+  ["prov","📝","Provtränaren","Rätta ett delprov i Nationella prov.",()=>S.np.length>0],
+  ["fullpott","🎯","Fullpott","Få alla rätt på ett delprov i Nationella prov.",()=>S.np.some(r=>r.r===r.t&&r.t>0)],
+  ["skattjagare","🗝️","Skattjägaren","Hitta utgången i Skattjakten.",()=>Object.values(S.sj.stars||{}).some(v=>v>=1)],
+  ["kristallkula","🔮","Sällsynt fynd","Hitta en sällsynt skatt i Skattjakten: kristallkulan, guldägget eller iskulan.",()=>["orb","egg","iceorb"].some(k=>((S.sj.chamber||{})[k]||0)>0)],
+  ["brakbyggare","🧩","Bråkbyggaren","Få stjärnor i Bråkbitarna.",()=>sum(S.bitar)>0],
+  ["vagen","⚖️","Vågmästaren","Få stjärnor i Vågen.",()=>sum(S.vag)>0],
+  ["gata","🎁","Gåtlösaren","Få stjärnor i Gömda tal.",()=>sum(S.gomda)>0],
+  ["paket","🔍","Paketöppnaren","Få tre stjärnor i Gömda tal.",()=>Object.values(S.gomda).some(v=>v===3)],
+  ["butik","🛍️","Butiksägaren","Köp alla varor och tio saker till inredningen i Affären.",()=>{const o=S.aff.own||[];return o.filter(x=>!x.includes(":")).length>=6&&o.filter(x=>x.includes(":")).length>=10;}],
+  ["ordknackare","❓","Ordknäckaren","Spela en hel omgång i Ordgåtan.",()=>(S.oga.omg||0)>0],
+  ["ordgatsmastare","🧠","Ordgåtsmästaren","Få tre stjärnor på nivå 3 i Ordgåtan.",()=>((S.oga.stars||{})[3]||0)>=3],
+  ["tiofingrar","⌨️","Tiofingersmästaren","Klara alla tio lektioner i Tangentbordet.",()=>Array.from({length:10},(_,i)=>(S.tb.stars||{})["l"+(i+1)]||0).every(v=>v>0)],
+  ["alfabetsraket","🚀","Alfabetsraketen","Skriv hela alfabetet på under 15 sekunder i Tangentbordet.",()=>((S.tb.stars||{}).alfa||0)>=3],
+  ["konstnar","🎨","Konstnären","Få datorn att gissa fem av sex teckningar i Draw it!",()=>Object.values(S.rita).some(v=>v>=3)],
+  ["kulbana","🔺","Pyramidräddaren","Rensa hela Kulbanan innan kulorna når pyramiden.",()=>sum(S.kul)>0],
+  ["kortdiv","➗","Delningsmästaren","Få stjärnor i Kort division.",()=>sum(S.kort)>0],
+  ["rutjagare","🟩","Rutjägaren","Fyll fem kors i Rutjakten.",()=>Object.entries(S.rut).some(([k,v])=>!k.startsWith("t-")&&v>0)],
+  ["rutmastare","🏅","Rutmästaren","Få tre stjärnor i en variant i Rutjakten.",()=>Object.values(S.rut).some(v=>v>=3)],
+  ["skattmastare","🏴‍☠️","Skattmästaren","Hitta alla skatter på nivå 3 i Skattjakten.",()=>((S.sj.stars||{})[3]||0)>=3],
+  ["bubbelpoppare","🫧","Bubbelpopparen","Töm en hel bana i Bubbelskjutaren.",()=>Object.values(S.spel.bubbel||{}).some(r=>(r.bana||0)>=1)],
+  ["bubbelras","🌧️","Bubbelras","Få fem bubblor att ramla på ett enda skott i Bubbelskjutaren.",()=>!!S.spel.bubbelRas]
+];
+const got=STICKERS.filter(x=>x[4]()).map(x=>x[0]);
+const kst=Object.assign({seen:[]},get("matteportalen-klister")||{});
+const fresh=got.filter(id=>!kst.seen.includes(id));
+$("albumInfo").textContent=`${got.length} av ${STICKERS.length}`;
+$("newAlbum").hidden=!fresh.length;
+const stkHTML=(x,cls)=>`<div class="stk ${cls||""}"><span class="em">${x[1]}</span><b>${x[2]}</b><small>${x[3]}</small></div>`;
+function openAlbum(){
+  $("albumCount").textContent=`Du har ${got.length} av ${STICKERS.length} klistermärken.`;
+  $("albumGrid").innerHTML=STICKERS.map(x=>stkHTML(x,got.includes(x[0])?(fresh.includes(x[0])?"fresh":""):"off")).join("");
+  kst.seen=got.slice();put("matteportalen-klister",kst);$("newAlbum").hidden=true;
+  $("mAlbum").hidden=false;
+}
+$("btnAlbum").onclick=openAlbum;
+// nya klistermärken visas inte i en ruta när sidan öppnas (lärarens val); knappen Klistermärken visar "Nytt!"
+
+/* ---------- Stäng rutor ---------- */
+document.querySelectorAll(".modal").forEach(m=>m.addEventListener("click",e=>{if(m.id==="mWho"||m.id==="mPin"||m.id==="mScan")return;if(e.target===m||e.target.closest("[data-close]"))m.hidden=true;}));
+
+
+/* ---------- Ljud ---------- */
+function soundLabel(){$("soundBtn").textContent=window.Ljud&&Ljud.on?"🔊 Ljud: på":"🔇 Ljud: av";}
+$("soundBtn").onclick=()=>{if(!window.Ljud)return;Ljud.set(!Ljud.on);soundLabel();Ljud.ok();document.dispatchEvent(new Event("mp-ljud-andrat"));};
+document.addEventListener("mp-ljud",soundLabel);
+/* Djuret i sidhuvudet öppnar garderoben, och övningssidornas sidhuvud leder hit med #garderob */
+if(window.MPS)MPS.huvud.querySelector(".mph-pet").onclick=e=>{e.preventDefault();$("owlBtn").click();};
+if(location.hash==="#garderob"){history.replaceState(null,"",location.pathname);setTimeout(()=>$("owlBtn").click(),50);}
+soundLabel();
+
+/* ---------- Ugglan hälsar ---------- */
+drawOwl();wardBadge();
+const hr=new Date().getHours();
+const hi=hr<5?"Hej nattuggla!":hr<10?"God morgon!":hr<17?"Hej!":"God kväll!";
+let msg;
+if(!$("newWard").hidden)msg="Det finns nya saker i garderoben! Tryck på mig.";
+else if(S.stars>0)msg=`Du har ${S.stars} ⭐. Vad tränar vi idag?`;
+else msg="Vad vill du träna idag?";
+$("bubble").textContent=`${hi} ${msg}`;
+</script>
+<script>
+/* ============ Elevprofiler (allt sparas bara på den här enheten) ============ */
+(function(){
+const PKEYS=MPKonto.PKEYS;
+const lsGet=k=>{try{return localStorage.getItem(k)}catch(e){return null}},lsSet=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},lsDel=k=>{try{localStorage.removeItem(k)}catch(e){}};
+const jGet=k=>{try{return JSON.parse(lsGet(k)||"null")}catch(e){return null}},jSet=(k,v)=>lsSet(k,JSON.stringify(v));
+const ssGet=k=>{try{return sessionStorage.getItem(k)}catch(e){return null}},ssSet=(k,v)=>{try{sessionStorage.setItem(k,v)}catch(e){}};
+const list=()=>jGet("mp-profiles")||[],saveList=l=>jSet("mp-profiles",l);
+const owner=()=>lsGet("mp-owner"),setOwner=id=>id?lsSet("mp-owner",id):lsDel("mp-owner");
+const active=()=>ssGet("mp-active");
+// Kom ihåg mig: vem som är inloggad sparas på enheten (mp-kom) så att man slipper logga in varje gång; valet kan stängas av (mp-kom-pref), t.ex. på en delad dator
+const komPref=()=>lsGet("mp-kom-pref")!=="0";
+function setActive(id){ssSet("mp-active",id);if(id&&id!=="gast"&&komPref())lsSet("mp-kom",id);else lsDel("mp-kom");}
+function klaraAktiv(){try{sessionStorage.removeItem("mp-active")}catch(e){}lsDel("mp-kom");}
+const byId=id=>list().find(p=>p.id===id);
+const hash=s=>{let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return(h>>>0).toString(36);};
+const snapLive=()=>{const o={};PKEYS.forEach(k=>{const v=lsGet(k);if(v!=null)o[k]=v;});return o;};
+const clearLive=()=>PKEYS.forEach(lsDel);
+const loadLive=o=>{clearLive();Object.entries(o||{}).forEach(([k,v])=>lsSet(k,v));};
+const stash=()=>{const ow=owner();if(ow)jSet("mp-bundle-"+ow,snapLive());};
+function switchTo(id){
+  if(owner()!==id){stash();loadLive(jGet("mp-bundle-"+id)||{});setOwner(id);}
+  setActive(id);history.replaceState(null,"",location.pathname);location.reload();
+}
+const owlOf=id=>{const b=id===owner()?snapLive():(jGet("mp-bundle-"+id)||{});let c={};try{c=JSON.parse(b["matteportalen-uggla"]||"{}")}catch(e){}
+  return owlSVG(Object.assign({animal:"uggla",color:"lila",glasses:"runda",hat:"ingen",neck:"ingen",hand:"ingen",back:"ingen"},c));};
+const openM=id=>{document.querySelectorAll(".modal").forEach(m=>m.hidden=m.id!==id);};
+const closeAll=()=>document.querySelectorAll(".modal").forEach(m=>m.hidden=true);
+
+/* ---------- Kod med fyra siffror ---------- */
+let pinCb=null,pinVal="";
+function askPin(title,owlHTML,cb,opts={}){
+  pinCb=cb;pinVal="";$("pinTitle").textContent=title;$("pinOwl").innerHTML=owlHTML||"";$("pinMsg").textContent=opts.msg||"";$("pinMsg").className="pinmsg"+(opts.ok?" ok":"");
+  $("pinForgot").hidden=!opts.forgot;$("pinForgot").onclick=opts.forgot||null;$("pinClose").onclick=opts.cancel||closeAll;drawDots();openM("mPin");
+}
+function drawDots(){[...$("pinDots").children].forEach((d,i)=>d.classList.toggle("on",i<pinVal.length));}
+function pinKey(k){
+  if(k==="del"){pinVal=pinVal.slice(0,-1);drawDots();return;}
+  if(!/^\d$/.test(k)||pinVal.length>=4)return;pinVal+=k;drawDots();
+  if(pinVal.length===4){const v=pinVal;setTimeout(()=>{const ok=pinCb&&pinCb(v);if(ok===false){$("pinDots").classList.remove("shake");void $("pinDots").offsetWidth;$("pinDots").classList.add("shake");window.Ljud&&Ljud.bad();pinVal="";drawDots();}},120);}
+}
+$("pinPad").onclick=e=>{const b=e.target.closest("button");if(!b||b.dataset.k==="x")return;pinKey(b.dataset.k||b.textContent);};
+document.addEventListener("keydown",e=>{if($("mPin").hidden)return;if(/^\d$/.test(e.key))pinKey(e.key);else if(e.key==="Backspace")pinKey("del");});
+
+/* ---------- Välja profil ---------- */
+document.querySelectorAll(".komchk").forEach(c=>{c.checked=komPref();c.onchange=()=>{lsSet("mp-kom-pref",c.checked?"1":"0");document.querySelectorAll(".komchk").forEach(x=>x.checked=c.checked);};});
+function openWho(){
+  const ps=list();
+  $("whoGrid").innerHTML=ps.map(p=>`<button data-id="${p.id}">${owlOf(p.id)}${esc(p.name)}</button>`).join("");$("whoGrid").hidden=!ps.length;
+  $("guestBtn").hidden=false;openM("mWho");
+}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+$("whoNew").onclick=()=>openNew();
+$("whoGrid").onclick=e=>{const b=e.target.closest("button");if(!b)return;
+  const p=byId(b.dataset.id);if(p.konto){oppnaIn(p.konto.namn);return;}askPin(`Hej ${p.name}! Skriv din kod.`,owlOf(p.id),v=>{if(hash(v+p.salt)!==p.pinH){$("pinMsg").textContent="Fel kod. Försök igen.";return false;}switchTo(p.id);return true;},
+    {cancel:openWho,forgot:()=>adultReset(p)});};
+$("guestBtn").onclick=()=>{if(!list().length&&!owner()){closeAll();return;}switchTo("gast");};
+// Escape stänger rutan (som knappen ✕ eller Avbryt): koden och kameran går tillbaka till profilvalet; profilvalet går tillbaka till förra profilen eller fortsätter som gäst
+document.addEventListener("keydown",e=>{if(e.key!=="Escape")return;const m=[...document.querySelectorAll(".modal")].find(x=>!x.hidden);if(!m)return;e.preventDefault();
+  if(m.id==="mPin")$("pinClose").click();
+  else if(m.id==="mScan")$("scanClose").click();
+  else if(m.id==="mWho"){if(window.__forrigeProfil)switchTo(window.__forrigeProfil);else $("guestBtn").click();}
+  else m.hidden=true;});
+
+/* ---------- Ny profil ---------- */
+const ADJ=["Glada","Snabba","Modiga","Kloka","Busiga","Lugna","Starka","Pigga","Nyfikna","Coola"],DJUR=["Ugglan","Räven","Björnen","Haren","Lodjuret","Ekorren","Igelkotten","Delfinen","Pandan","Tigern"];
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+$("npDice").onclick=()=>{$("npName").value=`${pick(ADJ)} ${pick(DJUR)} ${1+Math.floor(Math.random()*99)}`;};
+function openNew(){$("npName").value="";$("npMsg").textContent="";openM("mNewProf");setTimeout(()=>$("npName").focus(),50);}
+$("npNext").onclick=()=>{
+  const name=$("npName").value.trim().replace(/\s+/g," ");
+  if(!name){$("npMsg").textContent="Skriv ett namn först, eller tryck på 🎲.";return;}
+  if(list().some(p=>p.name.toLowerCase()===name.toLowerCase())){$("npMsg").textContent="Det namnet finns redan. Välj ett annat.";return;}
+  choosePin(name,"");
+};
+function choosePin(name,msg){
+  askPin("Välj en kod med 4 siffror","",v1=>{askPin("Skriv samma kod en gång till","",v2=>{
+      if(v2!==v1){choosePin(name,"Koderna var olika. Börja om.");return true;}
+      createProfile(name,v1);return true;},{cancel:()=>openM("mNewProf"),msg:"Kom ihåg koden!",ok:true});return true;},{cancel:()=>openM("mNewProf"),msg});
+}
+function createProfile(name,pin){
+  const id="p"+Date.now().toString(36)+Math.floor(Math.random()*1e4).toString(36),salt=id;
+  const ps=list(),first=!ps.length&&(!owner()||owner()==="gast");
+  ps.push({id,name,salt,pinH:hash(pin+salt),created:Date.now()});saveList(ps);
+  if(first&&!owner()){setOwner(id);}          // första profilen får det som redan finns på enheten
+  else{stash();clearLive();setOwner(id);}
+  setActive(id);location.reload();
+}
+
+/* ---------- Glömt koden: en vuxen hjälper till ---------- */
+function adultReset(p){
+  const a=12+Math.floor(Math.random()*18),b=12+Math.floor(Math.random()*18);
+  const ans=prompt(`Glömt koden? Be en vuxen om hjälp.\n\nVuxen: skriv svaret på ${a} · ${b} för att välja en ny kod åt ${p.name}.`);
+  if(ans===null)return;
+  if(parseInt(ans,10)!==a*b){alert("Det var inte rätt svar.");return;}
+  askPin(`Ny kod för ${p.name}`,owlOf(p.id),v=>{const ps=list(),q=ps.find(x=>x.id===p.id);q.pinH=hash(v+q.salt);saveList(ps);switchTo(p.id);return true;},{msg:"Välj en ny kod med 4 siffror.",ok:true});
+}
+
+/* ---------- Min profil ---------- */
+const act=active()||(()=>{const k=lsGet("mp-kom");if(k&&byId(k)){ssSet("mp-active",k);return k;}return null;})(),me=act&&act!=="gast"?byId(act):null;   // minns vem som var inloggad sist
+function chip(){
+  const w=$("whoChip");
+  if(me)w.innerHTML=`<span class="mini">${owlOf(me.id)}</span>${esc(me.name)}${me.konto?" ☁️":""} ▾`;
+  else if(act==="gast")w.innerHTML=`👤 Gäst ▾`;
+  else w.innerHTML=list().length?"👥 Välj profil":"👤 Logga in";
+}
+$("whoChip").onclick=()=>{if(me){$("profName").textContent=me.name+(me.konto&&me.konto.namn!==me.name?` (${me.konto.namn})`:"");$("pPin").hidden=!!me.konto||!me.pinH;$("pDel").hidden=false;kontoRad();openM("mProf");}
+  else if(act==="gast"){$("profName").textContent="Gäst";$("pPin").hidden=$("pDel").hidden=true;kontoRad();openM("mProf");}
+  else openWho();};
+// logga ut: spara (och synka) först, sedan till "Vem tränar idag?"
+$("pUt").onclick=async()=>{stash();if(me&&me.konto)await Promise.race([MPKonto.synka(),new Promise(r=>setTimeout(r,2500))]);
+  window.__forrigeProfil=null;klaraAktiv();openWho();};
+$("pSwitch").onclick=()=>{window.__forrigeProfil=active();stash();klaraAktiv();openWho();};
+$("pPin").onclick=()=>askPin("Skriv din nuvarande kod",owlOf(me.id),v=>{if(hash(v+me.salt)!==me.pinH){$("pinMsg").textContent="Fel kod.";return false;}
+  askPin("Välj en ny kod",owlOf(me.id),n=>{const ps=list(),q=ps.find(x=>x.id===me.id);q.pinH=hash(n+q.salt);saveList(ps);closeAll();alert("Klart! Din nya kod är sparad.");return true;});return true;});
+$("pDel").onclick=()=>{if(me&&me.konto){raderaKonto();return;}askPin(`Skriv koden för att ta bort ${me.name}`,owlOf(me.id),v=>{if(hash(v+me.salt)!==me.pinH){$("pinMsg").textContent="Fel kod.";return false;}
+  if(!confirm(`Vill du verkligen ta bort ${me.name}? Alla stjärnor och klistermärken för profilen försvinner.`)){closeAll();return true;}
+  saveList(list().filter(p=>p.id!==me.id));lsDel("mp-bundle-"+me.id);if(owner()===me.id){clearLive();setOwner(null);}
+  klaraAktiv();location.reload();return true;});};
+
+/* ---------- Flyttkod (bara gamla länkar #flytta= och #kort= tas emot, knapparna är borttagna) ---------- */
+const b64u=bytes=>{let s="";bytes.forEach(b=>s+=String.fromCharCode(b));return btoa(s).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");};
+const unb64u=s=>{s=s.replace(/-/g,"+").replace(/_/g,"/");while(s.length%4)s+="=";const bin=atob(s);return Uint8Array.from(bin,c=>c.charCodeAt(0));};
+async function pack(obj){
+  const bytes=new TextEncoder().encode(JSON.stringify(obj));
+  if("CompressionStream" in window){try{const buf=await new Response(new Blob([bytes]).stream().pipeThrough(new CompressionStream("deflate-raw"))).arrayBuffer();return"Z"+b64u(new Uint8Array(buf));}catch(e){}}
+  return"J"+b64u(bytes);
+}
+async function unpack(code){
+  code=code.trim().replace(/^.*#(flytta|kort)=/,"").replace(/\s+/g,"");const kind=code[0],bytes=unb64u(code.slice(1));
+  let txt;if(kind==="Z"){const buf=await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream("deflate-raw"))).arrayBuffer();txt=new TextDecoder().decode(buf);}
+  else txt=new TextDecoder().decode(bytes);
+  const o=JSON.parse(txt);if(!o||o.v!==1||!o.n||!o.d)throw new Error("fel");return o;
+}
+function trimmed(){ // håll koden kort: bara de senaste försöken per uppgift behövs
+  const d=snapLive();Object.keys(d).forEach(k=>{try{const o=JSON.parse(d[k]);
+    if(o&&o.facts)Object.keys(o.facts).forEach(f=>{if(Array.isArray(o.facts[f]))o.facts[f]=o.facts[f].slice(-3);});
+    if(o&&Array.isArray(o.days))o.days=o.days.slice(-40);
+    d[k]=JSON.stringify(o);}catch(e){}});return d;}
+$("pMove").onclick=async()=>{
+  stash();const code=await pack({v:1,n:me.name,h:me.pinH,s:me.salt,d:trimmed()});
+  const url=location.origin+location.pathname+"#flytta="+code;
+  $("moveCode").value=code;$("qrBox").innerHTML="";$("qrNote").textContent="";openM("mMove");
+  if(url.length>2300){$("qrNote").textContent="Du har samlat så mycket att koden blev för lång för en QR-kod. Använd flyttkoden eller filen i stället.";return;}
+  const draw=()=>{try{new QRCode($("qrBox"),{text:url,width:220,height:220,correctLevel:QRCode.CorrectLevel.L});$("qrNote").textContent="Koden innehåller bara ditt namn i Pluggparken och dina framsteg. Du loggar in med samma kod som vanligt.";}catch(e){$("qrNote").textContent="QR-koden kunde inte visas. Använd flyttkoden i stället.";}};
+  if(window.QRCode)draw();else{const s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";s.onload=draw;s.onerror=()=>{$("qrNote").textContent="QR-koden kräver internet. Använd flyttkoden i stället.";};document.head.appendChild(s);}
+};
+$("moveCopy").onclick=async()=>{try{await navigator.clipboard.writeText($("moveCode").value);$("moveCopy").textContent="Kopierad! ✓";}catch(e){$("moveCode").select();document.execCommand("copy");$("moveCopy").textContent="Kopierad! ✓";}};
+$("moveFile").onclick=()=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([$("moveCode").value],{type:"text/plain"}));a.download=`pluggparken-${me.name.replace(/[^\wåäöÅÄÖ-]+/g,"_")}.txt`;document.body.appendChild(a);a.click();a.remove();};
+$("pImport").onclick=()=>{$("impCode").value="";$("impMsg").textContent="";openM("mImp");};
+$("impFile").onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{$("impCode").value=String(r.result).trim();};r.readAsText(f);};
+$("impGo").onclick=async()=>{let o;try{o=await unpack($("impCode").value);}catch(e){$("impMsg").textContent="Koden fungerade inte. Kontrollera att hela koden är med.";return;}importBundle(o);};
+/* ---------- Inloggningskort med QR-kod ---------- */
+const loadScript=src=>new Promise((ok,no)=>{if(document.querySelector(`script[src="${src}"]`))return ok();const s=document.createElement("script");s.src=src;s.onload=ok;s.onerror=no;document.head.appendChild(s);});
+const cardURL=code=>location.origin+location.pathname+"#kort="+code;
+// Kompakt version för kortet: stjärnor, medaljer, rekord, klistermärken, djur och dagar. Detaljhistoriken stannar på enheten.
+function cardData(){
+  const d=snapLive(),out={},q=v=>{try{return JSON.parse(v)}catch(e){return null}};
+  const slimFacts=(f,keep)=>{const r={};Object.keys(f||{}).forEach(k=>{if(keep&&!keep(k))return;const h=f[k];if(!Array.isArray(h)||!h.length)return;
+    r[k]=h.slice(-2).map(e=>Array.isArray(e)?[e[0]?1:0,e[1]<3000?2000:5000]:e);});return r;};
+  Object.keys(d).forEach(k=>{const o=q(d[k]);if(!o||typeof o!=="object"){out[k]=d[k];return;}
+    if(k==="mattespel-multiplikation-v1")o.facts=slimFacts(o.facts);
+    else if(k==="mattespel-division-v1")o.facts=slimFacts(o.facts,x=>/:0$/.test(x));
+    else if(o.facts)delete o.facts;
+    if(Array.isArray(o.days))o.days=o.days.slice(-40);
+    if(k==="np3-resultat"&&o&&typeof o==="object"&&!Array.isArray(o)){const ks=Object.keys(o).slice(-10),r={};ks.forEach(x=>r[x]=o[x]);out[k]=JSON.stringify(r);return;}
+    delete o.fp;out[k]=JSON.stringify(o);});
+  return out;
+}
+$("pCard").onclick=async()=>{
+  if(me&&me.konto){$("lcOwl").innerHTML=owlOf(me.id);$("lcName").textContent=me.name;$("lcQr").innerHTML="";$("lcQr").hidden=true;$("lcHow").hidden=false;
+    $("lcKonto").hidden=false;$("lcKonto").innerHTML=`<span>Användarnamn</span>${esc(me.konto.namn)}<span>Lösenord</span>${esc(me.konto.kod)}`;$("lcNote").textContent="";openM("mCard");return;}
+  $("lcQr").hidden=false;stash();const code=await pack({v:1,n:me.name,h:me.pinH,s:me.salt,d:cardData(),...(me.konto?{k:me.konto}:{})}),url=cardURL(code);
+  $("lcKonto").hidden=!me.konto;if(me.konto)$("lcKonto").innerHTML=`<span>Konto</span>${esc(me.konto.namn)} · ${esc(me.konto.kod)}`;
+  $("lcOwl").innerHTML=owlOf(me.id);$("lcName").textContent=me.name;$("lcQr").innerHTML="";$("lcNote").textContent="";openM("mCard");
+  if(url.length>2900){$("lcNote").textContent="Du har samlat så mycket att koden blev för stor för ett kort. Använd Flytta mina framsteg i stället.";return;}
+  try{await loadScript("https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js");
+    new QRCode($("lcQr"),{text:url,width:520,height:520,correctLevel:url.length>900?QRCode.CorrectLevel.L:QRCode.CorrectLevel.M});
+    $("lcNote").textContent="Kortet sparar dina framsteg som de är idag. Skriv gärna ut ett nytt kort ibland.";}
+  catch(e){$("lcNote").textContent="QR-koden kräver internet. Försök igen när du är uppkopplad.";}
+};
+$("lcPrint").onclick=()=>window.print();
+// Sammanslagning: för varje övning behålls den version som kommit längst, så att kortet aldrig tar bort framsteg.
+const mergeBundles=MPKonto.merge;
+function loginWithCard(o){
+  const ps=list();let p=ps.find(x=>x.salt===o.s);
+  if(p){const cur=p.id===owner()?snapLive():(jGet("mp-bundle-"+p.id)||{}),merged=mergeBundles(cur,o.d);
+    if(p.id===owner())loadLive(merged);else jSet("mp-bundle-"+p.id,merged);if(o.k){p.konto=o.k;saveList(ps);}}
+  else{let name=o.n;while(ps.some(x=>x.name.toLowerCase()===name.toLowerCase()))name+=" 2";
+    p={id:"p"+Date.now().toString(36),name,salt:o.s,pinH:o.h,created:Date.now(),...(o.k?{konto:o.k}:{})};ps.push(p);saveList(ps);jSet("mp-bundle-"+p.id,o.d);}
+  window.Ljud&&Ljud.magic();switchTo(p.id);
+}
+/* Kameran */
+let scanStream=null,scanRaf=0,detector=null;
+function stopScan(){cancelAnimationFrame(scanRaf);if(scanStream){scanStream.getTracks().forEach(t=>t.stop());scanStream=null;}}
+$("scanClose").onclick=()=>{stopScan();openWho();};
+$("scanBtn").onclick=async()=>{
+  openM("mScan");$("scanMsg").className="pinmsg";$("scanMsg").textContent="Startar kameran …";
+  try{scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"},audio:false});}
+  catch(e){$("scanMsg").textContent="Kameran gick inte att starta. Tillåt kameran i webbläsaren och försök igen.";return;}
+  const v=$("scanVideo");v.srcObject=scanStream;await v.play().catch(()=>{});
+  if("BarcodeDetector" in window){try{detector=new BarcodeDetector({formats:["qr_code"]});}catch(e){detector=null;}}
+  if(!detector){try{await loadScript("https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js");}catch(e){$("scanMsg").textContent="QR-läsaren kräver internet.";return;}}
+  $("scanMsg").textContent="";
+  const c=$("scanCanvas"),x=c.getContext("2d",{willReadFrequently:true});let busy=false;
+  const tick=async()=>{
+    if(!scanStream)return;
+    if(!busy&&v.readyState>=2){busy=true;let text=null;
+      try{if(detector){const r=await detector.detect(v);if(r&&r[0])text=r[0].rawValue;}
+        else{const w=Math.min(640,v.videoWidth),h=Math.round(w*v.videoHeight/v.videoWidth);c.width=w;c.height=h;x.drawImage(v,0,0,w,h);const r=window.jsQR&&jsQR(x.getImageData(0,0,w,h).data,w,h);if(r)text=r.data;}}catch(e){}
+      busy=false;
+      if(text){const m=text.match(/#(kort|flytta)=(.+)$/);
+        if(m){stopScan();try{const o=await unpack(m[2]);loginWithCard(o);}catch(e){$("scanMsg").textContent="Kortet gick inte att läsa. Försök igen.";}return;}
+        $("scanMsg").textContent="Det där är inte ett inloggningskort från Pluggparken.";}}
+    scanRaf=requestAnimationFrame(tick);};
+  tick();
+};
+
+function importBundle(o){
+  if(!confirm(`Lägga in framstegen för ${o.n} på den här enheten?`))return;
+  const ps=list();let p=ps.find(x=>x.salt===o.s);
+  if(p){if(!confirm(`${p.name} finns redan här. Vill du ersätta framstegen med de nya?`))return;p.name=o.n;p.pinH=o.h;}
+  else{let name=o.n;while(ps.some(x=>x.name.toLowerCase()===name.toLowerCase()))name+=" 2";p={id:"p"+Date.now().toString(36),name,salt:o.s,pinH:o.h,created:Date.now()};ps.push(p);}
+  saveList(ps);
+  if(owner()===p.id){loadLive(o.d);}else{jSet("mp-bundle-"+p.id,o.d);}
+  alert(`Klart! ${p.name} finns nu på den här enheten. Logga in med samma kod som förut.`);
+  history.replaceState(null,"",location.pathname);klaraAktiv();location.reload();
+}
+
+/* ---------- Konton i molnet (konto.js) ---------- */
+const sparaKonto=(id,k)=>{const ps=list(),q=ps.find(x=>x.id===id);if(!q)return;if(k)q.konto=k;else delete q.konto;saveList(ps);};
+const nar=t=>{if(!t)return"inte än";const m=Math.round((Date.now()-t)/60000);return m<1?"nyss":m<60?`för ${m} min sedan`:new Date(t).toLocaleString("sv-SE",{dateStyle:"short",timeStyle:"short"});};
+function visaKonto(k,ny){$("kiNamn").textContent=k.namn;$("kiKod").textContent=k.kod;$("kiNy").hidden=!ny;$("kiSpela").hidden=!ny;$("kiSynk").hidden=!!ny;
+  $("kiSenast").textContent=ny?"":"Senast sparat i molnet: "+nar(MPKonto.senast())+". Det sker av sig självt.";openM("mKInfo");}
+function kontoRad(){const k=me&&me.konto;$("pKontoB").textContent=k?"Mitt konto":"Skapa ett konto";$("pKontoS").textContent=k?`☁️ ${k.namn} · sparas av sig självt`:"Dina poäng följer med. Spela på flera enheter.";
+  $("pDelB").textContent=k?"Radera kontot":"Ta bort profilen";$("pDelS").textContent=k?"Kontot och poängen i molnet raderas":"Allt för den här profilen raderas";}
+// Skapa konto. Från profilmenyn: den här profilen (eller gästen) får kontot och poängen följer med.
+// Från "Vem tränar idag?": ett nytt konto; på en enhet utan profiler följer gästens poäng med.
+let skapaFran="meny";
+$("pKonto").onclick=()=>{if(me&&me.konto){visaKonto(me.konto);return;}skapaFran="meny";$("kNyMsg").textContent="";openM("mKNy");};
+$("kontoNy").onclick=()=>{skapaFran="ny";$("kNyMsg").textContent="";openM("mKNy");};
+$("kNyGo").onclick=async()=>{const b=$("kNyGo");b.disabled=true;$("kNyMsg").textContent="";stash();
+  const ow=owner(),gast=!ow||ow==="gast",ps=list();
+  let p,d;
+  if(skapaFran==="meny"&&me){p=me;d=snapLive();}
+  else{p={id:"p"+Date.now().toString(36)+Math.floor(Math.random()*1e4).toString(36),name:"",salt:"",pinH:"",created:Date.now()};p.salt=p.id;
+    d=(skapaFran==="meny"&&act==="gast")||(gast&&!ps.length)?snapLive():{};}
+  let r;try{r=await MPKonto.skapaMed(p,d);}catch(e){r={fel:"natet"};}b.disabled=false;
+  if(!r.ok){$("kNyMsg").textContent=r.fel==="natet"?"Det behövs internet för att skapa ett konto. Försök igen.":"Det gick inte att skapa kontot. Försök igen.";return;}
+  const k={namn:r.namn,kod:r.kod};window.Ljud&&Ljud.magic();
+  if(p===me){me.konto=k;sparaKonto(me.id,k);MPKonto.synka();chip();kontoRad();visaKonto(k,true);$("kiSpela").hidden=true;$("kiSynk").hidden=false;return;}
+  p.name=r.namn;p.konto=k;ps.push(p);saveList(ps);
+  if(Object.keys(d).length){lsDel("mp-bundle-gast");setOwner(p.id);}   // gästens poäng blir kontots
+  else{clearLive();setOwner(p.id);}
+  setActive(p.id);MPKonto.synka();visaKonto(k,true);};
+$("kiSpela").onclick=()=>{history.replaceState(null,"",location.pathname);location.reload();};
+$("kiKort").onclick=()=>{if(!$("kiSpela").hidden){const k={namn:$("kiNamn").textContent,kod:$("kiKod").textContent};
+    $("lcOwl").innerHTML="";$("lcName").textContent=k.namn;$("lcQr").hidden=true;$("lcKonto").hidden=false;$("lcKonto").innerHTML=`<span>Användarnamn</span>${esc(k.namn)}<span>Lösenord</span>${esc(k.kod)}`;$("lcNote").textContent="";openM("mCard");return;}
+  $("pCard").click();};
+$("kiSynk").onclick=async()=>{$("kiSenast").textContent="Sparar …";stash();const r=await MPKonto.synka({skriv:true});
+  if(r.ok){if(r.andrad){location.reload();return;}$("kiSenast").textContent="Klart! Allt är sparat i molnet.";}else $("kiSenast").textContent=r.fel==="natet"?"Ingen kontakt med servern. Försök igen senare.":"Lösenordet stämmer inte. Logga ut och logga in igen.";};
+// radera: en mattefråga (multiplikation) som försäkran om att man förstår att allt försvinner
+let radA=0,radB=0;
+function raderaKonto(){radA=3+Math.floor(Math.random()*7);radB=3+Math.floor(Math.random()*7);
+  $("radNamn").textContent=me.konto.namn;$("radFraga").textContent=`Vad är ${radA} · ${radB}?`;$("radSvar").value="";$("radMsg").textContent="";openM("mRad");setTimeout(()=>$("radSvar").focus(),50);}
+$("radSvar").addEventListener("keydown",e=>{if(e.key==="Enter")$("radGo").click();});
+$("radGo").onclick=async()=>{if(parseInt($("radSvar").value,10)!==radA*radB){$("radMsg").textContent="Det var inte rätt svar. Kontot finns kvar.";window.Ljud&&Ljud.bad();return;}
+  $("radGo").disabled=true;const r=await MPKonto.radera(me.konto.namn,me.konto.kod).catch(()=>({fel:"natet"}));
+  $("radGo").disabled=false;
+  if(!r.ok&&r.fel!=="kod"){$("radMsg").textContent=r.fel==="natet"?"Det behövs internet för att radera kontot. Försök igen.":"Kontot är spärrat en stund efter för många fel lösenord. Försök igen senare.";return;}
+  saveList(list().filter(p=>p.id!==me.id));lsDel("mp-bundle-"+me.id);if(owner()===me.id){clearLive();setOwner(null);}
+  klaraAktiv();alert("Kontot är raderat.");location.reload();};
+// logga in: kontots profil finns redan på enheten → bara lösenordet behövs; annars hämtas allt från molnet
+function oppnaIn(namn){$("kInNamn").value=namn||"";$("kInKod").value="";$("kInMsg").textContent="";openM("mKIn");setTimeout(()=>$(namn?"kInKod":"kInNamn").focus(),50);}
+$("kontoIn").onclick=()=>oppnaIn("");
+$("kInClose").onclick=openWho;
+$("kInKod").addEventListener("keydown",e=>{if(e.key==="Enter")$("kInGo").click();});
+$("kInNamn").addEventListener("keydown",e=>{if(e.key==="Enter")$("kInKod").focus();});
+$("kInGo").onclick=async()=>{const n=$("kInNamn").value.trim().toLowerCase(),k=$("kInKod").value.trim().toLowerCase();
+  if(!n||!k){$("kInMsg").textContent="Skriv både användarnamn och lösenord.";return;}
+  const lok=list().find(x=>x.konto&&x.konto.namn===n);
+  if(lok&&lok.konto.kod===k){switchTo(lok.id);return;}   // poängen hämtas från molnet när startsidan laddas
+  $("kInGo").disabled=true;$("kInMsg").textContent="";let r;try{r=await MPKonto.hamta(n,k);}catch(e){r={fel:"natet"};}$("kInGo").disabled=false;
+  if(!r.ok){$("kInMsg").textContent=r.fel==="sparrad"?"För många försök. Vänta en stund och försök igen, eller be en vuxen titta på ditt kort.":r.fel==="natet"?"Ingen kontakt med servern. Kontrollera internet.":"Användarnamnet eller lösenordet stämmer inte.";window.Ljud&&Ljud.bad();return;}
+  const o=r.data||{},d=o.d||{},ps=list();let p=ps.find(x=>x.konto&&x.konto.namn===r.namn)||(o.s&&ps.find(x=>x.salt===o.s));
+  if(p){const cur=p.id===owner()?snapLive():(jGet("mp-bundle-"+p.id)||{}),m=mergeBundles(cur,d);if(p.id===owner())loadLive(m);else jSet("mp-bundle-"+p.id,m);p.konto={namn:r.namn,kod:k};}
+  else{let name=o.n||r.namn;while(ps.some(x=>x.name.toLowerCase()===name.toLowerCase()))name+=" 2";
+    const forst=!ps.length&&(!owner()||owner()==="gast");   // på en enhet utan profiler följer gästens poäng med
+    p={id:"p"+Date.now().toString(36),name,salt:o.s||("s"+Date.now().toString(36)),pinH:o.h||"",created:Date.now(),konto:{namn:r.namn,kod:k}};ps.push(p);
+    if(forst){loadLive(mergeBundles(snapLive(),d));lsDel("mp-bundle-gast");setOwner(p.id);}else jSet("mp-bundle-"+p.id,d);}
+  saveList(ps);window.Ljud&&Ljud.magic();switchTo(p.id);};
+
+/* ---------- Start ---------- */
+chip();kontoRad();
+// synka när startsidan öppnas: hämta, slå ihop och skicka tillbaka. Ändrades något här laddas sidan om en gång.
+if(me&&me.konto){MPKonto.synka({skriv:true}).then(r=>{if(r&&r.andrad){let k=0;try{k=+(sessionStorage.getItem("mp-synkom")||0)}catch(e){}
+  if(Date.now()-k>60000){try{sessionStorage.setItem("mp-synkom",String(Date.now()))}catch(e){}location.reload();}}});}
+if(location.hash.startsWith("#kort=")){unpack(location.hash.replace("#kort=","")).then(loginWithCard).catch(()=>{alert("Inloggningskortet fungerade inte.");history.replaceState(null,"",location.pathname);});}
+else if(location.hash.startsWith("#flytta=")){unpack(location.hash).then(importBundle).catch(()=>{alert("Flyttkoden fungerade inte.");history.replaceState(null,"",location.pathname);});}
+else if(list().length&&!act)openWho();
+else if(act&&act!==owner()){switchTo(act);}  // en annan flik har bytt profil
+})();
+</script>
+
+<script>try{if(!localStorage.getItem("mp-flyttad"))document.getElementById("hamtaGammal").hidden=false;}catch(e){}</script>
+</body>
+</html>

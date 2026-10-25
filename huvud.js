@@ -63,6 +63,7 @@ html.mph-nozoom,html.mph-nozoom body{touch-action:pan-x pan-y}
 .mph.ovriga{background:linear-gradient(110deg,#17302F 0%,#1C3F3D 50%,#25605C 100%);box-shadow:0 3px 0 #7E5129}
 .mph-menu{position:absolute;top:calc(100% + 6px);left:10px;animation:mph-ner .18s ease-out;background:#fff;color:#1D2B53;border-radius:18px;padding:6px;box-shadow:0 10px 30px rgba(29,43,83,.25),0 3px 0 #C6D6F2;min-width:240px;z-index:30}
 .mph-menu a{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;font-weight:800;font-size:1.1rem}
+.mph-em{flex:none;width:30px;height:30px;border-radius:9px;background:#EAF3FF;display:grid;place-items:center;font-size:1.2rem}
 .mph-menu a:hover,.mph-menu a:focus-visible{background:#EAF3FF;outline:0}
 .mph-menu a[aria-current="true"]::after{content:"✓";margin-left:auto;color:#1E9E5E}
 .mph-menu .mph-mark{width:30px;height:30px;filter:none}
@@ -88,6 +89,13 @@ body.mph-mini #quit{display:none}
   const LOGO_NO='<svg class="mph-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" aria-hidden="true"><rect x="2" y="2" width="96" height="96" rx="24" fill="#fff"/><rect x="12" y="12" width="35" height="35" rx="9" fill="#2BB673"/><rect x="53" y="12" width="35" height="35" rx="9" fill="#3D8BFD"/><rect x="12" y="53" width="35" height="35" rx="9" fill="#7B61FF"/><rect x="53" y="53" width="35" height="35" rx="9" fill="#FF9F43"/><path d="M21 39C21 26 29 20 39 20C39 32 33 39 21 39Z" fill="#fff"/><path d="M21 39L31 29" stroke="#2BB673" stroke-width="2.5" stroke-linecap="round"/><path d="M70.5 19C70.5 19 61 30 61 35.5A9.5 9.5 0 0 0 80 35.5C80 30 70.5 19 70.5 19Z" fill="#fff"/><circle cx="29.5" cy="70.5" r="7.5" fill="#fff"/><ellipse cx="29.5" cy="70.5" rx="14" ry="4.5" fill="none" stroke="#fff" stroke-width="2.6" transform="rotate(-20 29.5 70.5)"/><circle cx="70.5" cy="70.5" r="7" fill="#fff"/><g stroke="#fff" stroke-width="3.2" stroke-linecap="round"><path d="M70.5 56v4M70.5 81v4M56 70.5h4M81 70.5h4M60.3 60.3l2.8 2.8M77.9 77.9l2.8 2.8M60.3 80.7l2.8-2.8M77.9 63.1l2.8-2.8"/></g></svg>';
   const PORTALER=[{id:'matte',namn:'Matte',sub:'Räkna, spela och utforska',kort:'Matte',ikon:'🔢',href:'',logo:LOGO},{id:'ovriga',namn:'Fler ämnen',sub:'Svenska, NO, SO, engelska och mer',kort:'Fler ämnen',ikon:'🌍',href:'ovriga/',logo:LOGO_NO}];
   const PORTAL=PORTALER.find(p=>p.id===ds.portal)||PORTALER[0];
+  // nya menyn med ämnena (utkastet i ny/): sidan anger data-meny="ny" och data-amne="<id>"
+  const em=e=>`<span class="mph-em" aria-hidden="true">${e}</span>`;
+  const NYMENY=[{id:'hem',namn:'Välj ämne',sub:'Alla ämnen',href:'ny/',logo:em('🏠')},{id:'matte',namn:'Matte',sub:'Räkna, spela och utforska',href:'ny/matte/',logo:em('🔢')},
+    {id:'svenska',namn:'Svenska',sub:'Ord, stavning, läsning och sagor',href:'ny/svenska/',logo:em('📖')},{id:'rymd',namn:'Rymd och natur',sub:'Rymdlabbet, planeter och djur',href:'ny/rymd/',logo:em('🔭')},
+    {id:'so',namn:'SO',sub:'Kartor, länder och platser',href:'ny/so/',logo:em('🗺️')},{id:'special',namn:'Specialare',sub:'Filmer och mysterier',href:'specialare/',logo:em('🎁')},
+    {id:'fler',namn:'Fler ämnen',sub:'Engelska, logik, kod och pengar',href:'ny/fler/',logo:em('🧩')}];
+  const MENY=ds.meny==='ny'?NYMENY:PORTALER,MENYNU=ds.meny==='ny'?(NYMENY.find(p=>p.id===ds.amne)||null):PORTAL;
   window.MPLogo=LOGO_PP;
   // loggan som ikon i webbläsarfliken
   if(!document.querySelector('link[rel="icon"]')){const l=document.createElement('link');l.rel='icon';l.type='image/svg+xml';l.href='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(LOGO_FAV);document.head.appendChild(l);}
@@ -155,7 +163,7 @@ body.mph-mini #quit{display:none}
   if(!document.getElementById('mph-css')){const st=document.createElement('style');st.id='mph-css';st.textContent=CSS;document.head.appendChild(st);}
   const h=document.createElement('header');h.className='mph'+(titel?' has-title':'')+(ds.liggande==='ja'?' liggande':'')+(PORTAL.id!=='matte'?' '+PORTAL.id:'');
   const pet=window.lasDjur&&window.owlSVG?owlSVG(lasDjur()):'',namn=profilnamn();
-  const hemUrl=new URL(hem+PORTAL.href,location.href),paStart=hemUrl.pathname.replace(/index\.html$/,'')===location.pathname.replace(/index\.html$/,'');
+  const hemUrl=new URL(hem+(ds.start!=null?ds.start:PORTAL.href),location.href),paStart=hemUrl.pathname.replace(/index\.html$/,'')===location.pathname.replace(/index\.html$/,'');
   h.innerHTML=`${paStart?'':'<button class="mph-bk" aria-label="Tillbaka">←</button>'}<button class="mph-x" aria-label="Avsluta">✕</button>
     <button class="mph-logo" aria-label="Pluggparken, meny" aria-haspopup="true" aria-expanded="false">${LOGO_PP}<span class="t">Plugg<b>parken</b></span><span class="mph-burger" aria-hidden="true"><i style="font-style:normal">☰</i><em>Ämnen</em></span></button>
     <span class="mph-title">${titel?`<span class="mph-sep">›</span> ${ikon?ikon+' ':''}${esc(titel)}`:''}</span>
@@ -168,7 +176,7 @@ body.mph-mini #quit{display:none}
   const rotSti=new URL(rotUrl).pathname;
   function kortNyckel(el){if(el.id&&KNAPP[el.id])return KNAPP[el.id];const h=el.getAttribute('href');if(!h||/^(https?:)?\/\//.test(h)&&!h.startsWith(location.origin))return null;
     let p=new URL(h,location.href).pathname;if(!p.startsWith(rotSti))return null;p=p.slice(rotSti.length).replace(/index\.html$/,'').replace(/\/$/,'');
-    if(p==='spel')return'spelhornan';return p.split('/').pop()||null;}
+    if(p==='spel'||p.endsWith('/spel'))return'spelhornan';return p.split('/').pop()||null;}
   function stjLappar(){document.querySelectorAll('a.card,a.gamecard,button.gamecard').forEach(el=>{if(el.querySelector('.mph-stj'))return;
     const k=kortNyckel(el);if(!k)return;const n=stjFor(k);if(n==null)return;
     const t=el.querySelector('.txt')||el.querySelector('.tx')||[...el.children].find(c=>c.querySelector&&c.querySelector('b'));if(!t)return;
@@ -202,7 +210,7 @@ body.mph-mini #quit{display:none}
   const stang=()=>{if(meny){meny.remove();meny=null;ptl.setAttribute('aria-expanded','false');}};
   ptl.onclick=e=>{e.stopPropagation();if(meny)return stang();
     meny=document.createElement('nav');meny.className='mph-menu';meny.setAttribute('aria-label','Meny');
-    meny.innerHTML=PORTALER.map(p=>`<a href="${hem}${p.href}"${p===PORTAL?' aria-current="true"':''}>${p.logo}<span>${p.namn}<small>${p.sub}</small></span></a>`).join('')
+    meny.innerHTML=MENY.map(p=>`<a href="${hem}${p.href}"${p===MENYNU?' aria-current="true"':''}>${p.logo}<span>${p.namn}<small>${p.sub}</small></span></a>`).join('')
     meny.innerHTML+=`<a href="https://fritidsparken.se" target="_blank" rel="noopener" class="mph-vann"><img class="mph-mark" src="${hem}fritidsparken-logo.jpg" alt="" width="30" height="30"><span>Fritidsparken.se<small>Våra vänner: lek och aktiviteter</small></span></a>`;
     {const sk=document.createElement('button');sk.className='mph-mt';sk.type='button';sk.innerHTML='<span>🔍</span><span>Sök övning</span>';sk.onclick=e=>{e.stopPropagation();stang();MPSokOpen();};meny.appendChild(sk);}
     if(window.MPTema){const mt=document.createElement('button');mt.className='mph-mt';mt.type='button';const ml=()=>{mt.innerHTML=MPTema.get()==='mork'?'<span>☀️</span><span>Ljust läge</span>':'<span>🌙</span><span>Mörkt läge</span>';};ml();mt.onclick=e=>{e.stopPropagation();MPTema.toggle();ml();};meny.appendChild(mt);}

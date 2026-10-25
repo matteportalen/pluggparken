@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<base href="../../">
+<script src="../tema.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Svenska – Pluggparken (utkast)</title>
+<meta name="description" content="Ord, stavning, läsning och sagor">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#1F3A35">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/apple-touch-icon.png" sizes="180x180">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EAF3FF; --ink:#1D2B53; --muted:#56668F; --card:#FFFFFF; --line:#C6D6F2;
+  --good:#1E9E5E; --good-dark:#157548; --accent:#3D5AFE; --gold:#F2B707;
+  --font:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+.hero{position:relative;overflow:hidden;color:#fff;background:radial-gradient(ellipse 40% 70% at 20% 40%,rgba(255,255,255,.05),transparent 70%),radial-gradient(ellipse 45% 50% at 72% 90%,rgba(255,255,255,.035),transparent 70%),#1F3A35;padding:14px 16px 24px}
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:10px;background:#7E5129;border-top:3px solid #5E3B1C}
+.hero-in{max-width:1040px;margin:0 auto;position:relative;z-index:1}
+.hero h1{margin:0;color:#F3F0E4;font-size:clamp(2.2rem,8vw,3rem);line-height:1;letter-spacing:-1px}
+.hero h1 span{color:#F4D35E}
+.hero p{margin:8px 0 0;color:#C9DCD5;font-weight:700;font-size:clamp(.95rem,3.4vw,1.1rem)}
+.wrap{max-width:1040px;margin:0 auto;padding:6px 16px 48px}
+a:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.cards{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:620px){.cards{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}}
+.card{display:flex;align-items:center;gap:14px;background:var(--card);border-radius:20px;padding:12px 14px 12px 12px;text-decoration:none;color:inherit;box-shadow:0 5px 0 var(--line);transition:transform .08s,box-shadow .08s}
+.card:active{transform:translateY(3px);box-shadow:0 2px 0 var(--line)}
+@media(hover:hover){.card:hover{transform:translateY(-2px);box-shadow:0 7px 0 var(--line)}}
+.tile{flex:none;width:72px;height:72px;border-radius:18px;background:var(--c);display:grid;place-items:center;font-size:2.4rem;transform:rotate(-4deg);box-shadow:inset 0 -5px 0 rgba(0,0,0,.18)}
+.card .txt{flex:1;min-width:0}
+.card b{display:block;font-size:1.3rem;line-height:1.15}
+.card small{display:block;color:var(--muted);font-size:.95rem;line-height:1.3;margin-top:2px}
+.new{display:inline-block;background:var(--gold);color:var(--ink);border-radius:999px;padding:0 8px;font-size:.75rem;font-weight:800;margin-left:6px;vertical-align:middle;transform:rotate(-3deg)}
+.chev{flex:none;color:#A9B9D8;font-size:1.6rem;font-weight:800}
+.amne{font-size:1.35rem;margin:22px 0 10px;line-height:1.2}
+.amne:first-of-type{margin-top:4px}
+@media (prefers-reduced-motion:reduce){.card{transition:none}}
+.under{font-size:1rem;margin:16px 0 8px;line-height:1.2;color:var(--muted);font-weight:800}
+.vanner{position:relative;display:flex;align-items:center;gap:18px;overflow:hidden;text-decoration:none;color:#3B2500;border-radius:26px;padding:20px 22px;background:linear-gradient(120deg,#FFD84D 0%,#FFB84D 55%,#FF9E6B 100%);box-shadow:0 6px 0 #D98A1F;transition:transform .08s,box-shadow .08s}
+.vanner:active{transform:translateY(4px);box-shadow:0 2px 0 #D98A1F}
+@media(hover:hover){.vanner:hover{transform:translateY(-2px);box-shadow:0 8px 0 #D98A1F}}
+.vanner .lek{flex:none;display:grid;grid-template-columns:repeat(2,auto);gap:2px 6px;font-size:2.3rem;line-height:1.05;filter:drop-shadow(0 3px 0 rgba(120,60,0,.25))}
+.vanner .lek span{display:block;animation:vguppa 2.8s ease-in-out infinite}
+.vanner .lek span:nth-child(2){animation-delay:.35s}.vanner .lek span:nth-child(3){animation-delay:.7s}.vanner .lek span:nth-child(4){animation-delay:1.05s}
+@keyframes vguppa{50%{transform:translateY(-5px) rotate(6deg)}}
+.vanner .vt{flex:1;min-width:0}
+.vanner .ov{display:block;font-size:.85rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;opacity:.75}
+.vanner b{display:block;font-size:clamp(1.35rem,5vw,1.9rem);line-height:1.1;margin:2px 0 4px}
+.vanner small{display:block;font-size:1rem;line-height:1.3;font-weight:600;opacity:.9}
+.vanner .kn{display:inline-block;margin-top:10px;background:#3B2500;color:#FFE9A8;border-radius:999px;padding:6px 16px;font-weight:800;font-size:1.05rem}
+@media(max-width:480px){.vanner{flex-direction:column;align-items:flex-start;gap:8px}.vanner .lek{grid-template-columns:repeat(4,auto);font-size:2rem}}
+@media (prefers-reduced-motion:reduce){.vanner,.vanner .lek span{transition:none;animation:none}}
+
+/* ämnesbandet: samma griffeltavla som resten av sajten */
+.sb{position:relative;color:#fff;background:linear-gradient(110deg,#1A302C 0%,#1F3A35 50%,#2B4F47 100%);padding:6px 16px 20px;margin:0}
+.sb::after{content:"";position:absolute;left:0;right:0;bottom:0;height:10px;background:#7E5129;border-top:3px solid #5E3B1C}
+.sb-in{position:relative;max-width:1040px;margin:0 auto;display:flex;align-items:center;gap:16px}
+.sb .ik{flex:none;width:84px;height:84px;border-radius:24px;background:var(--c,#3D5AFE);display:grid;place-items:center;box-shadow:0 5px 0 rgba(0,0,0,.28)}
+.sb .ik img{width:58px;height:58px}
+.sb h1{margin:0;font-size:clamp(2rem,6vw,2.8rem);line-height:1.05;font-weight:800;font-family:"Baloo 2","Trebuchet MS",system-ui,sans-serif}
+.sb p{margin:4px 0 0;font-size:1.08rem;opacity:.92;font-weight:600}
+.tillhub{display:inline-block;margin:12px 0 0;background:#fff;color:#1D2B53;border-radius:999px;padding:6px 16px;font-weight:800;box-shadow:0 3px 0 rgba(0,0,0,.2);text-decoration:none}
+h2.amne,h2.grp{font-family:"Baloo 2","Trebuchet MS",system-ui,sans-serif}
+
+</style>
+</head>
+<body>
+<header class="sb"><div class="sb-in"><span class="ik" style="--c:#E5484D"><img src="ny/bilder/svenska.svg" alt=""></span><div><h1>Svenska</h1><p>Ord, stavning, läsning och sagor</p></div></div></header>
+<main class="wrap" style="max-width:980px;margin:14px auto 0;padding:0 16px 40px">
+<a class="tillhub" href="ny/">← Alla ämnen</a>
+  <h2 class="amne">Ord, stavning och berättande</h2>
+  <nav class="cards" aria-label="Svenska">
+    <a class="card" href="ovriga/ordgomma/"><span class="tile" style="background:none;box-shadow:none;padding:0"><img src="ovriga/bilder/kort/ordgomma.jpg" alt="" width="72" height="72" loading="lazy" style="width:72px;height:72px;border-radius:18px;object-fit:cover;display:block;box-shadow:0 3px 0 rgba(29,43,83,.2)"></span><span class="txt"><b>Ordgömman</b><small>Hitta de gömda orden i tio teman, från djur till rymden. En ny ordgömma varje gång!</small></span><span class="chev">›</span></a>
+    <a class="card" href="ovriga/ordgatan/"><span class="tile" style="background:none;box-shadow:none;padding:0"><img src="ovriga/bilder/kort/ordgatan.jpg" alt="" width="72" height="72" loading="lazy" style="width:72px;height:72px;border-radius:18px;object-fit:cover;display:block;box-shadow:0 3px 0 rgba(29,43,83,.2)"></span><span class="txt"><b>Ordgåtan</b><small>Läs ledtråden och gissa ordet. Tio ord i varje omgång, tre nivåer.</small></span><span class="chev">›</span></a>
+    <a class="card" href="knepigaljud/"><span class="tile" style="background:none;box-shadow:none;padding:0"><img src="ovriga/bilder/kort/knepigaljud.jpg" alt="" width="72" height="72" loading="lazy" style="width:72px;height:72px;border-radius:18px;object-fit:cover;display:block;box-shadow:0 3px 0 rgba(29,43,83,.2)"></span><span class="txt"><b>Knepiga ljud</b><small>ng, tj, sj och ck: titta på bilden och välj rätt bokstäver</small></span><span class="chev">›</span></a>
+    <a class="card" href="sagobyggaren/"><span class="tile" style="background:none;box-shadow:none;padding:0"><img src="ovriga/bilder/kort/sagobyggaren.jpg" alt="" width="72" height="72" loading="lazy" style="width:72px;height:72px;border-radius:18px;object-fit:cover;display:block;box-shadow:0 3px 0 rgba(29,43,83,.2)"></span><span class="txt"><b>Sagobyggaren</b><small>Slott, drakar och troll: bygg din egen saga med idéer</small></span><span class="chev">›</span></a>
+    <a class="card" href="dubbelteckning/"><span class="tile" style="background:none;box-shadow:none;padding:0"><svg viewBox="0 0 72 72" width="72" height="72" aria-hidden="true" style="display:block;border-radius:18px;box-shadow:0 3px 0 rgba(29,43,83,.2)"><rect width="72" height="72" rx="18" fill="#7B61FF"/><g font-family="Andika, Baloo 2, sans-serif" font-weight="700" font-size="15" text-anchor="middle"><rect x="6" y="9" width="60" height="25" rx="10" fill="#fff"/><text x="36" y="27" fill="#1D2B53">ka<tspan fill="#E5484D">mm</tspan>a</text><rect x="6" y="38" width="60" height="25" rx="10" fill="#fff" opacity=".55"/><text x="36" y="56" fill="#56668F">kama</text></g></svg></span><span class="txt"><b>Dubbelteckning</b><small>Kamma eller kama? Välj rätt stavning och lär dig varför.</small></span><span class="chev">›</span></a>
+    <a class="card" href="ordgissning/"><span class="tile" style="background:none;box-shadow:none;padding:0"><svg viewBox="0 0 72 72" width="72" height="72" aria-hidden="true" style="display:block;border-radius:18px;box-shadow:0 3px 0 rgba(29,43,83,.2)"><rect width="72" height="72" rx="18" fill="#2BB673"/><g font-family="Andika, Baloo 2, sans-serif" font-weight="700" font-size="14" text-anchor="middle" fill="#fff"><rect x="7" y="9" width="26" height="26" rx="6" fill="#157548"/><text x="20" y="28">K</text><rect x="37" y="9" width="26" height="26" rx="6" fill="#F2B707"/><text x="50" y="28">A</text><rect x="7" y="38" width="26" height="26" rx="6" fill="#8895B3"/><text x="20" y="57">T</text><rect x="37" y="38" width="26" height="26" rx="6" fill="#157548"/><text x="50" y="57">T</text></g></svg></span><span class="txt"><b>Ordgissning</b><small>Gissa det hemliga ordet. Grönt, gult eller grått visar hur nära du är.</small></span><span class="chev">›</span></a>
+    <a class="card" href="ordkedjan/"><span class="tile" style="background:none;box-shadow:none;padding:0"><svg viewBox="0 0 72 72" width="72" height="72" aria-hidden="true" style="display:block;border-radius:18px;box-shadow:0 3px 0 rgba(29,43,83,.2)"><rect width="72" height="72" rx="18" fill="#3D5AFE"/><g font-family="Andika, Baloo 2, sans-serif" font-weight="700" font-size="12" text-anchor="middle"><rect x="6" y="9" width="40" height="19" rx="9.5" fill="#fff"/><text x="26" y="23" fill="#1D2B53">kat<tspan fill="#E5484D">t</tspan></text><rect x="26" y="26" width="40" height="19" rx="9.5" fill="#FFE7C2"/><text x="46" y="40" fill="#1D2B53"><tspan fill="#E5484D">t</tspan>ak</text><rect x="6" y="43" width="40" height="19" rx="9.5" fill="#fff"/><text x="26" y="57" fill="#1D2B53"><tspan fill="#E5484D">k</tspan>aka</text></g></svg></span><span class="txt"><b>Ordkedjan</b><small>Skriv ett ord som börjar där förra ordet slutar. Hur lång kedja kan du bygga?</small></span><span class="chev">›</span></a>
+    <a class="card" href="meningsbyggaren/"><span class="tile" style="background:none;box-shadow:none;padding:0"><svg viewBox="0 0 72 72" width="72" height="72" aria-hidden="true" style="display:block;border-radius:18px;box-shadow:0 3px 0 rgba(29,43,83,.2)"><rect width="72" height="72" rx="18" fill="#FF9F43"/><g font-family="Andika, Baloo 2, sans-serif" font-weight="700" font-size="11" text-anchor="middle" fill="#1D2B53"><rect x="7" y="12" width="36" height="18" rx="6" fill="#fff"/><text x="25" y="25">Katten</text><rect x="47" y="12" width="20" height="18" rx="6" fill="#fff"/><text x="57" y="25">är</text><rect x="7" y="36" width="30" height="18" rx="6" fill="#FFE7C2" stroke="#fff" stroke-width="2" stroke-dasharray="3 3"/><rect x="41" y="36" width="26" height="18" rx="6" fill="#FFE7C2" stroke="#fff" stroke-width="2" stroke-dasharray="3 3"/></g><text x="55" y="64" font-family="Andika, sans-serif" font-weight="800" font-size="20" fill="#fff">?</text></svg></span><span class="txt"><b>Meningsbyggaren</b><small>Sätt orden i rätt ordning och lägg till punkt, frågetecken och stor bokstav.</small></span><span class="chev">›</span></a>
+  </nav>
+  <h3 class="under">👩‍🏫 Läsning tillsammans med en vuxen</h3>
+  <nav class="cards" aria-label="Läsning med en vuxen">
+    <a class="card" href="ovriga/hogfrekventa/"><span class="tile" style="background:none;box-shadow:none;padding:0"><img src="ovriga/bilder/kort/hogfrekventa.jpg" alt="" width="72" height="72" loading="lazy" style="width:72px;height:72px;border-radius:18px;object-fit:cover;display:block;box-shadow:0 3px 0 rgba(29,43,83,.2)"></span><span class="txt"><b>Högfrekventa ord</b><small>De 200 vanligaste orden. Blixtläs, hitta ordet och se hur många ord du hinner läsa på en minut!</small></span><span class="chev">›</span></a>
+    <a class="card" href="ovriga/bokstaver/"><span class="tile" style="background:none;box-shadow:none;padding:0"><img src="ovriga/bilder/kort/bokstaver.jpg" alt="" width="72" height="72" loading="lazy" style="width:72px;height:72px;border-radius:18px;object-fit:cover;display:block;box-shadow:0 3px 0 rgba(29,43,83,.2)"></span><span class="txt"><b>Bokstäver</b><small>Kolla av vilka bokstäver eleven kan, titta och säg, och hitta bokstaven. Samma nivåer som Läsflyt.</small></span><span class="chev">›</span></a>
+    <a class="card" href="ovriga/lasflyt/"><span class="tile" style="background:none;box-shadow:none;padding:0"><img src="ovriga/bilder/kort/lasflyt.jpg" alt="" width="72" height="72" loading="lazy" style="width:72px;height:72px;border-radius:18px;object-fit:cover;display:block;box-shadow:0 3px 0 rgba(29,43,83,.2)"></span><span class="txt"><b>Läsflyt</b><small>Läs en kort text flera gånger tillsammans med en vuxen. Fem nivåer, bilder och en fråga till varje text.</small></span><span class="chev">›</span></a>
+  </nav>
+  
+  
+</main>
+<script src="ljud.js"></script>
+<script src="djur.js"></script>
+<script src="huvud.js" data-hem="../../" data-nav="av" data-meny="ny" data-amne="svenska" data-start="ny/" data-titel="Svenska" data-ikon="📖"></script>
+</body>
+</html>
