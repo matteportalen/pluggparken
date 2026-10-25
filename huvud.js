@@ -100,7 +100,7 @@ body.mph-mini #quit{display:none}
   // vilket ämne en sida hör till (för menyn och tillbaka-knappen)
   const REL=location.pathname.replace(/^\//,'').replace(/index\.html$/,'');
   function amneAv(){const seg=REL.split('/'),top=seg[0],sub=seg[1]||'';
-    if(REL==='')return'hem';
+    if(REL===''||top==='utkast')return'hem';
     if(['matte','svenska','so','fler'].includes(top)&&seg.length<=2)return top;
     if(top==='ovriga'){if(/^(ordgomma|ordgatan|hogfrekventa|lasflyt|bokstaver)$/.test(sub))return'svenska';if(/^(sverigekartan|europa|varlden)$/.test(sub))return'so';
       if(/^(rymdlabbet|solsystemet|vintergatan)$/.test(sub))return'rymd';return'fler';}
