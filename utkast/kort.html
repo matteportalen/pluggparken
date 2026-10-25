@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Prov: animerade ämneskort – Pluggparken</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap">
+<style>
+:root{--bg:#EAF3FF;--ink:#1D2B53;--muted:#56668F;--card:#fff;--line:#C6D6F2}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Baloo 2","Trebuchet MS",system-ui,sans-serif;padding:24px 16px 60px}
+.wrap{max-width:1100px;margin:0 auto}
+h1{font-size:1.6rem;margin:0 0 4px}
+p.lead{color:var(--muted);font-weight:600;margin:0 0 22px}
+.amnen{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:16px}
+.amnek{display:flex;align-items:center;gap:16px;background:var(--card);border-radius:24px;padding:14px 16px;box-shadow:0 5px 0 var(--line);text-decoration:none;color:inherit;transition:transform .12s,box-shadow .12s}
+.amnek:active{transform:translateY(4px);box-shadow:0 1px 0 var(--line)}
+@media(hover:hover){.amnek:hover{transform:translateY(-2px);box-shadow:0 8px 0 var(--line)}}
+.amnek .ik{flex:none;width:76px;height:76px;border-radius:22px;background:var(--c);display:grid;place-items:center;box-shadow:0 4px 0 rgba(0,0,0,.2);transition:transform .35s cubic-bezier(.34,1.56,.64,1)}
+.amnek .ik img{width:50px;height:50px}
+.amnek .txt{flex:1;min-width:0}.amnek b{display:block;font-size:1.45rem;line-height:1.1}.amnek small{display:block;color:var(--muted);font-weight:600;font-size:1rem;line-height:1.3;margin-top:3px}
+.amnek .chev{font-size:2rem;font-weight:800;color:var(--c)}
+
+/* --- Matematik: tecknet förvandlas + → × → − → ÷ --- */
+.amnek.matte .ik{background:linear-gradient(145deg,#5B78FF,#3D5AFE 55%,#2C43D6);position:relative;overflow:hidden}
+.amnek.matte .ik::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 28% 22%,rgba(255,255,255,.35),transparent 55%)}
+.amnek.matte svg{width:54px;height:54px;position:relative;overflow:visible;filter:drop-shadow(0 2px 0 rgba(0,0,0,.18))}
+.amnek.matte svg *{fill:none;stroke:#fff;stroke-width:6;stroke-linecap:round}
+.amnek.matte svg .dot{fill:#fff;stroke:none}
+.amnek.matte .rot,.amnek.matte .v,.amnek.matte .dot{transform-box:view-box}
+.amnek.matte .rot{transform-origin:24px 24px}
+.amnek.matte .v{transform-origin:24px 24px}
+.amnek.matte .dot{transform-origin:24px 24px;transform:scale(0);opacity:0}
+/* en cykel: plus (0–18) → gånger (24–42) → minus (50–66) → delat (72–92) → plus */
+@keyframes rot{0%,18%{transform:rotate(0)}26%,44%{transform:rotate(135deg)}52%,100%{transform:rotate(180deg)}}
+@keyframes vv{0%,48%{transform:scaleY(1)}56%,91%{transform:scaleY(0)}98%,100%{transform:scaleY(1)}}
+@keyframes dd{0%,66%{transform:scale(0);opacity:0}76%,86%{transform:scale(1);opacity:1}92%,100%{transform:scale(0);opacity:0}}
+@keyframes hup{0%,100%{transform:rotate(0) scale(1)}25%{transform:rotate(-6deg) scale(1.1)}60%{transform:rotate(4deg) scale(1.06)}}
+@media(hover:hover) and (prefers-reduced-motion:no-preference){
+  .amnek.matte:hover .ik{animation:hup 3.6s ease-in-out infinite}
+  .amnek.matte:hover .rot{animation:rot 3.6s ease-in-out infinite}
+  .amnek.matte:hover .v{animation:vv 3.6s ease-in-out infinite}
+  .amnek.matte:hover .dot{animation:dd 3.6s ease-in-out infinite}
+}
+/* pekskärm: en gång när kortet kommer i bild, och vid tryck */
+@media(prefers-reduced-motion:no-preference){
+  .amnek.matte.spela .ik{animation:hup 3.6s ease-in-out 1}
+  .amnek.matte.spela .rot{animation:rot 3.6s ease-in-out 1}
+  .amnek.matte.spela .v{animation:vv 3.6s ease-in-out 1}
+  .amnek.matte.spela .dot{animation:dd 3.6s ease-in-out 1}
+}
+.note{margin-top:26px;color:var(--muted);font-weight:600;max-width:640px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Prov: animerade ämneskort</h1>
+<p class="lead">Håll muspekaren över Matematik. På mobil och surfplatta går det en gång när kortet kommer i bild, och igen när du trycker på ikonen.</p>
+<div class="amnen">
+  <a class="amnek matte" style="--c:#3D5AFE" href="../matte/"><span class="ik" id="mik"><svg viewBox="0 0 48 48" aria-hidden="true">
+    <g class="rot"><path d="M8 24h32"/><path class="v" d="M24 8v32"/></g>
+    <circle class="dot" cx="24" cy="10" r="4.2"/><circle class="dot" cx="24" cy="38" r="4.2"/>
+  </svg></span><span class="txt"><b>Matematik</b><small>Räkna, mäta, spela och upptäck tal</small></span><span class="chev" aria-hidden="true">›</span></a>
+  <a class="amnek" style="--c:#E5484D" href="../svenska/"><span class="ik"><img src="../amnen/svenska.svg" alt="" width="64" height="64"></span><span class="txt"><b>Svenska</b><small>Ord, stavning, läsning och sagor</small></span><span class="chev" aria-hidden="true">›</span></a>
+  <a class="amnek" style="--c:#1E9E5E" href="../ovriga/rymdlabbet/"><span class="ik"><img src="../amnen/no.svg" alt="" width="64" height="64"></span><span class="txt"><b>Rymdlabbet</b><small>Planeterna, stjärnorna, årstiderna och svarta hål</small></span><span class="chev" aria-hidden="true">›</span></a>
+</div>
+<p class="note">Övriga kort är som de ser ut nu, bara för jämförelse.</p>
+</div>
+<script>
+(function(){
+  var k=document.querySelector(".amnek.matte");if(!k)return;
+  function spela(){if(k.classList.contains("spela"))return;k.classList.add("spela");setTimeout(function(){k.classList.remove("spela")},3700);}
+  if(window.matchMedia&&matchMedia("(hover:none)").matches){
+    if("IntersectionObserver" in window){var o=new IntersectionObserver(function(e){if(e[0].isIntersecting){setTimeout(spela,400);o.disconnect();}},{threshold:.8});o.observe(k);}
+    document.getElementById("mik").addEventListener("pointerdown",spela);
+  }
+})();
+</script>
+</body>
+</html>
