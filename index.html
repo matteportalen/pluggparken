@@ -264,6 +264,23 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 .amnek .txt{flex:1;min-width:0}.amnek b{display:block;font-size:1.45rem;line-height:1.1}.amnek small{display:block;color:var(--muted);font-weight:600;font-size:1rem;line-height:1.3;margin-top:3px}
 .amnek .chev{font-size:2rem;font-weight:800;color:var(--c)}
 .designlank{display:inline-block;margin:0 0 10px;background:var(--card);color:var(--ink);font-weight:800;border-radius:999px;padding:6px 16px;box-shadow:0 3px 0 var(--line);text-decoration:none}
+
+/* ---------- Utkast: hela sidans bredd, sök i tavlan, en ren rad för profilen och ämneskorten i flera kolumner ---------- */
+.hero{padding-top:calc(30px + env(safe-area-inset-top,0px));padding-bottom:26px}
+.hero-in,.park-in{max-width:1400px}
+.wrap{max-width:1400px;padding-top:18px}
+.herosok{display:flex;align-items:center;gap:10px;margin-top:14px;width:100%;max-width:520px;background:#fff;color:#56668F;border:0;border-radius:999px;padding:12px 20px;font:inherit;font-weight:700;font-size:1.05rem;text-align:left;box-shadow:0 4px 0 rgba(0,0,0,.28);cursor:pointer}
+.herosok:hover{box-shadow:0 6px 0 rgba(0,0,0,.28)}
+html[data-tema="mork"] .herosok{background:#1A2748;color:#A3B0D6}
+/* profilraden: logga in, stjärnor, Garderoben, Mitt rum och Klistermärken på en rad */
+.mini{grid-template-columns:repeat(2,minmax(0,1fr));margin:0 0 6px}
+@media(min-width:760px){.mini{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:1100px){.mini{grid-template-columns:repeat(5,minmax(0,1fr))}}
+.mini .whoami{margin:0;padding:0;background:none;box-shadow:none;border-radius:0;min-height:48px;justify-content:stretch}
+.mini .whoami .chip{width:100%;justify-content:center;min-height:48px;padding:6px 14px 6px 6px;border-radius:14px;box-shadow:0 3px 0 var(--line)}
+@media(max-width:759px){.mini .whoami{grid-column:1/-1}}
+/* ämneskorten i flera kolumner över hela bredden */
+.amnen{grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:16px}
 </style>
 </head>
 <body>
@@ -282,6 +299,7 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
     <div class="title">
       <h1><span class="k1">Plugg</span><span class="p2">parken</span><span class="betalapp" title="Sidan är under uppbyggnad">Beta</span></h1>
       <p>Lekparken för hjärnan</p>
+      <button class="herosok" data-sok type="button" aria-label="Sök övning eller spel"><span aria-hidden="true">🔍</span><span>Sök övning eller spel …</span></button>
     </div>
     <div class="owlwrap">
       <div class="bubble" id="bubble">Hej!</div>
@@ -293,11 +311,8 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 
 
 <main class="wrap">
-  <div class="toprad">
-    <button type="button" class="sokf" data-sok aria-label="Sök övning eller spel"><span class="ic" aria-hidden="true">🔍</span><span>Sök övning eller spel …</span></button>
-    <div class="whoami"><button class="chip" id="whoChip"></button></div>
-  </div>
   <div class="mini">
+    <div class="whoami"><button class="chip" id="whoChip"></button></div>
     <div class="stars" title="Stjärnor och mynt"><span class="stw"><span class="sv"><b id="sStars">0</b><i>⭐</i></span><span class="sv"><b id="sMynt">0</b><i>🪙</i></span><small id="sTitel">stjärnor och mynt</small></span></div>
     <button id="btnWard"><span class="ic">👗</span><span><b>Garderoben<span class="new" id="newWard" hidden>Nytt!</span></b><small id="wardInfo">Välj djur och kläder</small></span></button>
     <a href="mittrum/" id="btnRum"><span class="ic">🏠</span><span><b>Mitt rum</b><small>Inred med mynt</small></span></a>
