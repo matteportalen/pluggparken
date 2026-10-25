@@ -76,6 +76,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 
 .mening{font-family:var(--ord);font-size:clamp(1.3rem,5.4vw,1.7rem);font-weight:700;text-align:center;line-height:1.5;padding:18px 8px 14px}
 .mening .lucka{display:inline-block;min-width:3.4em;border-bottom:4px solid var(--accent);color:transparent;margin:0 4px}
+.mening .lucka.bokst{color:var(--accent);font-weight:800}
 .mening .ifylld{color:var(--good-dark);border-bottom-color:var(--good)}
 .dubb{color:#E5484D}
 .fraga{text-align:center;font-weight:800;line-height:1.4;margin:0 4px 12px;font-size:1.05rem}
@@ -202,9 +203,9 @@ function begin(lvl){
 function antal(){return G.kv.length;}
 function nasta(){if(window.speechSynthesis)speechSynthesis.cancel();if(G.i>=G.kv.length){rattarrunda();return;}
   const q=G.q=G.kv[G.i];G.gjort=false;G.steg=1;G.miss=false;G.kort=korta(q.x[1]);prickar(antal(),G.i,G.res);
-  $("mening").innerHTML=q.x[0].replace("___",'<span class="lucka">?</span>');
+  $("mening").innerHTML=q.x[0].replace("___",'<span class="lucka bokst">'+q.x[1][0]+'…</span>');
   $("fb").textContent="";$("fb").className="fb";$("regel").className="regel";$("bNasta").hidden=true;$("bLas").hidden=true;
-  $("fraga").innerHTML=(q.rep?'<span class="rep">↩ Ett ord du övade på förut</span><br>':"")+'<b>Steg 1.</b> Tänk på ordet som passar i meningen och säg det högt. Är den första vokalen <b>kort</b> eller <b>lång</b>?<small>Dra ut vokalen: går det bra (spääla) är den lång. Låter det konstigt (mammma) är den kort.</small>';
+  $("fraga").innerHTML=(q.rep?'<span class="rep">↩ Ett ord du övade på förut</span><br>':"")+'<b>Steg 1.</b> Ordet i luckan börjar på den bokstav som står där. Tänk ut ordet och säg det högt. Är den första vokalen <b>kort</b> eller <b>lång</b>?<small>Dra ut vokalen: går det bra (spääla) är den lång. Låter det konstigt (mammma) är den kort.</small>';
   $("val").className="val vok";
   $("val").innerHTML=`<button data-k="kort" type="button">Kort vokal<small>mam·ma, kopp</small></button><button data-k="lang" type="button">Lång vokal<small>ba·da, tak</small></button>`;}
 function slutaFraga(ratt1,ratt2){   // ett ord är klart: räkna, spara svåra ord
