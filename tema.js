@@ -13,7 +13,8 @@
   function satt(v){de.setAttribute('data-tema',v);
     // berätta för webbläsaren vilket läge sidan själv har, så att mobilens egen mörkläggning (t.ex. Samsung Internet och Chromes auto-dark) inte blandas med våra färger
     var m=document.querySelector('meta[name="color-scheme"]');if(!m){m=document.createElement('meta');m.name='color-scheme';(document.head||de).appendChild(m);}
-    m.content=v==='mork'?'dark':'only light';de.style.colorScheme=v==='mork'?'dark':'only light';}
+    // har eleven valt själv gäller valet; annars säger vi att sidan klarar båda lägena, så att Samsung Internet och Chrome låter sidan följa enheten i stället för att mörklägga den med egen algoritm
+    var cs=lasa()?(v==='mork'?'dark':'only light'):'light dark';m.content=cs;de.style.colorScheme=cs;}
   satt(nu());
   var st=document.createElement('style');st.id='tema-css';st.textContent=CSS;(document.head||de).appendChild(st);
   window.MPTema={
