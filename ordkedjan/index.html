@@ -183,6 +183,12 @@ function kant(w){if(SET.has(w))return w;
   return null;}
 // ord som inte finns i listan godtas om de ser ut som ord (datorn tror på eleven): minst tre bokstäver, en vokal, inga tre likadana i rad, inte för många konsonanter i rad
 function trolig(w){return w.length>=3&&/[aeiouyåäö]/.test(w)&&!/(.)\1\1/.test(w)&&!/[^aeiouyåäö]{7}/.test(w)&&!/^(.{1,3})\1{2,}$/.test(w)&&/[aeiouyåäö]/.test(w.slice(-3));}
+// stor ordlista (SALDO, Språkbanken, CC BY 4.0): ca 850 000 böjda former, hämtas i bakgrunden; sammansatta ord godtas om delarna finns
+let STOR=null;
+fetch("ord.txt").then(r=>r.ok?r.text():null).then(t=>{if(!t)return;const s=new Set();let p="";for(const rad of t.split("\n")){if(!rad)continue;p=p.slice(0,rad.charCodeAt(0)-48)+rad.slice(1);s.add(p);}STOR=s;}).catch(()=>{});
+function delOk(a){return STOR.has(a)||(a.length>3&&"saoue".includes(a.slice(-1))&&STOR.has(a.slice(0,-1)))||STOR.has(a+"e")||STOR.has(a+"a")||(a.length>3&&STOR.has(a.slice(0,-1)+"e"))||(a.length>3&&STOR.has(a.slice(0,-1)+"a"));}
+function iStor(w,djup){if(!STOR)return false;if(STOR.has(w))return true;if((djup||0)>2)return false;
+  for(let i=3;i<=w.length-3;i++){if(delOk(w.slice(0,i))&&iStor(w.slice(i),(djup||0)+1))return true;}return false;}
 function begin(lvl){G={lvl,mal:NIVX[lvl].mal,n:0,tips:0,anv:new Set(),kedja:[],res:[],slut:false};$("nivT").textContent="Nivå "+lvl;$("pet").innerHTML=owlSVG(lasDjur());
   $("kedja").innerHTML="";$("tips").innerHTML="";$("fb").textContent="";$("fb").className="fb";$("inp").value="";
   show("game");prickar(G.mal,0,[]);
@@ -207,6 +213,7 @@ function skicka(w){if(!w)return;const b=sist();
   if(w[0]!==b){fb(`Ordet ska börja på ${b.toUpperCase()}.`);skaka();window.Ljud&&Ljud.bad&&Ljud.bad();return;}
   if(w.length<2){fb("Skriv ett helt ord.");skaka();return;}
   let bas=kant(w),okant=false;
+  if(!bas&&iStor(w))bas=w;
   if(!bas){if(!trolig(w)){fb("Hmm, det där ser inte ut som ett ord. Är det rätt stavat? Prova igen, eller tryck 💡.");skaka();return;}bas=w;okant=true;}
   if(G.anv.has(bas)||G.anv.has(w)){fb("Det ordet har redan använts. Hitta ett nytt!");skaka();return;}
   G.anv.add(bas);lagg(w,"s");G.n++;G.res.push(true);prickar(G.mal,G.n,G.res);window.Ljud&&Ljud.ok&&Ljud.ok();haj();$("fb").textContent="";$("tips").innerHTML="";
