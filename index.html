@@ -186,8 +186,8 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
 .whoami{display:flex;justify-content:flex-end;margin:-10px 0 8px;position:relative;z-index:3}
 .chip{display:inline-flex;align-items:center;gap:6px;background:var(--card);border:0;border-radius:999px;padding:4px 12px 4px 4px;box-shadow:0 3px 0 var(--line);font:inherit;font-weight:800;color:var(--ink);cursor:pointer}
-.chip .mini{width:30px;height:34px;display:inline-block}
-.chip .mini svg{width:100%;height:100%}
+.chip .chipav{width:30px;height:34px;display:inline-block;flex:none}
+.chip .chipav svg{width:100%;height:100%}
 .who{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:12px;margin-top:10px}
 .who button{border:0;border-radius:18px;background:var(--bg);padding:8px 6px 10px;font:inherit;font-weight:800;color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--line)}
 .who button svg{width:80px;height:auto;display:block;margin:0 auto}
@@ -739,11 +739,12 @@ document.querySelectorAll(".modal").forEach(m=>m.addEventListener("click",e=>{if
 
 
 /* ---------- Ljud ---------- */
+try{drawOwl();wardBadge();}catch(e){console.error(e)}
 function soundLabel(){$("soundBtn").textContent=window.Ljud&&Ljud.on?"🔊 Ljud: på":"🔇 Ljud: av";}
 $("soundBtn").onclick=()=>{if(!window.Ljud)return;Ljud.set(!Ljud.on);soundLabel();Ljud.ok();document.dispatchEvent(new Event("mp-ljud-andrat"));};
 document.addEventListener("mp-ljud",soundLabel);
 /* Djuret i sidhuvudet öppnar garderoben, och övningssidornas sidhuvud leder hit med #garderob */
-if(window.MPS)MPS.huvud.querySelector(".mph-pet").onclick=e=>{e.preventDefault();$("owlBtn").click();};
+try{const pet=window.MPS&&MPS.huvud&&MPS.huvud.querySelector(".mph-pet");if(pet)pet.onclick=e=>{e.preventDefault();$("owlBtn").click();};}catch(e){}
 if(location.hash==="#garderob"){history.replaceState(null,"",location.pathname);setTimeout(()=>$("owlBtn").click(),50);}
 soundLabel();
 
@@ -859,7 +860,7 @@ function adultReset(p){
 const act=active()||(()=>{const k=lsGet("mp-kom");if(k&&byId(k)){ssSet("mp-active",k);return k;}return null;})(),me=act&&act!=="gast"?byId(act):null;   // minns vem som var inloggad sist
 function chip(){
   const w=$("whoChip");
-  if(me)w.innerHTML=`<span class="mini">${owlOf(me.id)}</span>${esc(me.name)}${me.konto?" ☁️":""} ▾`;
+  if(me)w.innerHTML=`<span class="chipav">${owlOf(me.id)}</span>${esc(me.name)}${me.konto?" ☁️":""} ▾`;
   else if(act==="gast")w.innerHTML=`👤 Gäst ▾`;
   else w.innerHTML=list().length?"👥 Välj profil":"👤 Logga in";
 }
