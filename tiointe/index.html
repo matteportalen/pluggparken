@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<script src="../tema.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>10 eller inte 10? – Pluggparken</title>
+<meta name="description" content="10 eller inte 10? En bild blinkar fram: tärningar, tioramar, fingrar eller prickar. Var det tio? Träna att se tiokompisar utan att räkna.">
+<link rel="canonical" href="https://pluggparken.se/tiointe/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Pluggparken">
+<meta property="og:locale" content="sv_SE">
+<meta property="og:title" content="10 eller inte 10? – Pluggparken">
+<meta property="og:description" content="10 eller inte 10? En bild blinkar fram: tärningar, tioramar, fingrar eller prickar. Var det tio? Träna att se tiokompisar utan att räkna.">
+<meta property="og:url" content="https://pluggparken.se/tiointe/">
+<meta property="og:image" content="https://pluggparken.se/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#1F3A35">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/apple-touch-icon.png" sizes="180x180">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EAF3FF; --ink:#1D2B53; --muted:#56668F; --card:#FFFFFF; --line:#C6D6F2;
+  --good:#1E9E5E; --good-dark:#157548; --bad:#E5484D; --accent:#3D5AFE; --gold:#F2B707;
+  --font:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:640px;margin:0 auto;padding:12px 16px 48px}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;border:0;background:none}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+[hidden]{display:none!important}
+.card{background:var(--card,#fff);border-radius:22px;box-shadow:0 4px 0 var(--line);padding:16px}
+/* startskärmen */
+.hero{display:flex;gap:16px;align-items:center;background:linear-gradient(135deg,#2BB673,#1E9E5E);color:#fff;border-radius:24px;padding:18px;box-shadow:0 5px 0 #157548;margin:6px 0 16px}
+.hero svg{flex:none;width:130px;height:auto;filter:drop-shadow(0 3px 0 rgba(0,0,0,.15))}
+.hero h1{margin:0;font-size:clamp(1.7rem,6vw,2.3rem);line-height:1.05}
+.hero p{margin:6px 0 0;font-weight:600;opacity:.95}
+.niv{display:grid;gap:10px}
+.niv button{display:flex;align-items:center;gap:14px;background:var(--card,#fff);border-radius:18px;padding:12px 14px;box-shadow:0 4px 0 var(--line);text-align:left;width:100%}
+.niv button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.niv .nr{flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-weight:800;font-size:1.4rem;color:#fff}
+.niv b{display:block;font-size:1.12rem;line-height:1.15}
+.niv small{display:block;color:var(--muted);font-weight:600;font-size:.88rem;line-height:1.25}
+.niv .st{margin-left:auto;flex:none;color:var(--gold);font-size:1.15rem;letter-spacing:1px}
+.niv .st .off{color:var(--line)}
+.info{color:var(--muted);font-size:.9rem;margin:14px 2px 0}
+/* spelet */
+.topp{display:flex;align-items:center;gap:10px;margin:4px 0 10px}
+.dots{display:flex;gap:6px;flex:1;flex-wrap:wrap}
+.dots i{width:12px;height:12px;border-radius:50%;background:var(--line)}
+.dots i.ok{background:var(--good)}.dots i.f{background:var(--bad)}.dots i.nu{background:var(--gold)}
+.niva-t{font-weight:800;color:var(--muted);font-size:.9rem}
+.scen{position:relative;background:var(--card,#fff);border-radius:24px;box-shadow:0 4px 0 var(--line);aspect-ratio:3/2;display:grid;place-items:center;overflow:hidden;transition:box-shadow .2s}
+.scen svg.bild{width:100%;height:100%;display:block}
+.scen.ratt{box-shadow:0 0 0 4px var(--good),0 4px 0 var(--line)}
+.scen.fel{box-shadow:0 0 0 4px #F7A3A6,0 4px 0 var(--line)}
+.scen .msg{position:absolute;inset:0;display:grid;place-items:center;text-align:center;font-weight:800;font-size:clamp(1.4rem,6vw,2rem);color:var(--muted);padding:12px}
+.scen .msg big{display:block;font-size:clamp(3rem,14vw,5rem);line-height:1;color:var(--accent)}
+.scen .mask{position:absolute;inset:0}
+.pet{flex:none;width:48px;height:52px;pointer-events:none;transition:transform .3s}.pet svg{width:100%;height:100%}
+.pet.hopp{animation:hopp .55s ease}
+@keyframes hopp{40%{transform:translateY(-22px)}}
+.fraga{text-align:center;font-weight:800;font-size:1.25rem;margin:14px 0 8px;min-height:1.6em}
+.svar{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.svar button{min-height:78px;border-radius:20px;font-weight:800;font-size:2rem;color:#fff;box-shadow:0 5px 0 rgba(0,0,0,.22)}
+.svar button:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(0,0,0,.22)}
+.svar button:disabled{opacity:.45;pointer-events:none}
+#bTio{background:linear-gradient(180deg,#34C77F,#1E9E5E)}
+#bInte{background:linear-gradient(180deg,#7C8DFF,#4A5BE0);font-size:1.6rem}
+.foljd{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.foljd button{min-height:62px;border-radius:16px;background:var(--card,#fff);box-shadow:0 4px 0 var(--line);font-weight:800;font-size:1.6rem}
+.foljd button.ratt{background:var(--good);color:#fff}.foljd button.fel{background:#F7A3A6}
+.forkl{text-align:center;font-weight:700;margin:12px 0 0;min-height:2.6em;font-size:1.05rem}
+.forkl.ratt{color:var(--good-dark)}.forkl.fel{color:#B4232A}
+.nasta{display:block;margin:10px auto 0;background:var(--accent);color:#fff;border-radius:16px;padding:10px 26px;font-weight:800;font-size:1.1rem;box-shadow:0 4px 0 #2A3FB8}
+/* resultat */
+.res{text-align:center}
+.res .stj{font-size:3rem;letter-spacing:6px;color:var(--gold);margin:8px 0}
+.res .stj .off{color:var(--line)}
+.knapp{display:inline-block;background:var(--good);color:#fff;border-radius:16px;padding:12px 26px;font-weight:800;font-size:1.15rem;box-shadow:0 5px 0 var(--good-dark);margin:6px}
+.knapp.vit{background:var(--card,#fff);color:var(--ink);box-shadow:0 5px 0 var(--line)}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:50}
+@media(max-width:420px){.hero svg{width:96px}.svar button{min-height:70px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<script src="../ljud.js"></script>
+<script src="../djur.js"></script>
+<script src="../huvud.js" data-titel="10 eller inte 10?" data-ikon="🔟"></script>
+<main class="wrap">
+
+<section class="screen" id="home">
+  <div class="hero">
+    <svg viewBox="0 0 120 64" aria-hidden="true"><rect x="2" y="2" width="116" height="60" rx="10" fill="#fff"/><g id="heroRam"></g></svg>
+    <div><h1>10 eller inte 10?</h1><p>En bild blinkar fram. Var det tio? Försök se det utan att räkna.</p></div>
+  </div>
+  <div class="niv" id="niv"></div>
+  <p class="info">Tärningar, tioramar, fingrar, prickar och mycket mer. Efter varje svar ser du bilden igen. Titta på hur tio ser ut, så känner du igen det nästa gång.</p>
+</section>
+
+<section class="screen" id="game" hidden>
+  <div class="topp"><div class="dots" id="dots"></div><span class="niva-t" id="nivT"></span><span class="pet" id="pet"></span></div>
+  <div class="scen" id="scen"><div class="msg" id="msg"></div></div>
+  <div class="fraga" id="fraga" aria-live="polite"></div>
+  <div class="svar" id="svar"><button id="bTio" disabled>10</button><button id="bInte" disabled>inte 10</button></div>
+  <div class="foljd" id="foljd" hidden></div>
+  <div class="forkl" id="forkl" aria-live="polite"></div>
+  <button class="nasta" id="nasta" hidden>Nästa ▶</button>
+</section>
+
+<section class="screen res" id="result" hidden>
+  <h2 id="rRub" style="margin:10px 0 0">Bra jobbat!</h2>
+  <div class="stj" id="rStj"></div>
+  <p id="rTxt" style="font-weight:700;margin:0 0 14px"></p>
+  <button class="knapp" id="rIgen">Spela igen</button>
+  <button class="knapp vit" id="rHome">Välj nivå</button>
+</section>
+
+</main>
+<canvas id="fx" hidden></canvas>
+<script>
+const $=id=>document.getElementById(id);
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const KEY="mattespel-tiointe-v1";
+const data=(()=>{try{return Object.assign({stars:{}},JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){return{stars:{}}}})();
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}};
+const reduced=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
+const ROUND=10;
+const NIV=[null,
+  {t:1000,namn:"Nivå 1: En sekund",txt:"Bilden syns i en sekund. Tio eller långt ifrån.",col:"#2BB673"},
+  {t:500,namn:"Nivå 2: En halv sekund",txt:"Snabbare, och ibland bara en ifrån: 9 eller 11.",col:"#FF9F43"},
+  {t:500,namn:"Nivå 3: Hur många fattas?",txt:"En halv sekund. Var det inte tio? Säg hur många som fattas eller är för mycket.",col:"#7B61FF"}];
+const RED="#E5484D",BLA="#3D8BFD",INK="#1D2B53";
+
+/* ---------- Bilderna (SVG 300 × 200) ----------
+   Varje bildtyp ger {svg, delar, text} för ett antal n. kan(n) säger vilka antal typen kan visa. Prickarna ligger alltid i mönster,
+   aldrig huller om buller, eftersom det är mönstret eleven ska lära sig känna igen. */
+const S=(inner)=>`<svg class="bild" viewBox="0 0 300 200" aria-hidden="true">${inner}</svg>`;
+const PIPS={1:[[1,1]],2:[[0,0],[2,2]],3:[[0,0],[1,1],[2,2]],4:[[0,0],[2,0],[0,2],[2,2]],5:[[0,0],[2,0],[1,1],[0,2],[2,2]],6:[[0,0],[2,0],[0,1],[2,1],[0,2],[2,2]]};
+function tarning(x,y,s,v,f="#fff"){const r=s*.09,st=s*.27;let g=`<rect x="${x}" y="${y}" width="${s}" height="${s}" rx="${s*.18}" fill="${f}" stroke="${INK}" stroke-width="3"/>`;
+  (PIPS[v]||[]).forEach(([c,rw])=>g+=`<circle cx="${x+s/2+(c-1)*st}" cy="${y+s/2+(rw-1)*st}" r="${r}" fill="${INK}"/>`);return g;}
+const dela2=(n,max)=>{const o=[];for(let a=Math.max(0,n-max);a<=Math.min(max,n);a++)o.push([a,n-a]);return o;};
+const TYPER={
+  tarn2:{kan:n=>n>=2&&n<=12,rita(n){const[a,b]=pick(n===10?[[4,6],[5,5],[6,4]]:dela2(n,6).filter(p=>p[0]>=1&&p[1]>=1));
+    return{svg:S(tarning(38,45,105,a)+tarning(157,45,105,b)),delar:[a,b],text:`${a} + ${b} = ${n}`};}},
+  tarn3:{kan:n=>n>=4&&n<=16,rita(n){let a,b,c;do{a=rnd(1,6);b=rnd(1,6);c=n-a-b;}while(c<1||c>6);
+    return{svg:S(tarning(14,62,80,a)+tarning(110,62,80,b)+tarning(206,62,80,c)),delar:[a,b,c],text:`${a} + ${b} + ${c} = ${n}`};}},
+  domino:{kan:n=>n>=3&&n<=12,rita(n){const[a,b]=pick(dela2(n,6).filter(p=>p[0]>=1&&p[1]>=1));
+    const half=(x,v)=>{const s=110,st=s*.27;let g="";(PIPS[v]||[]).forEach(([c,rw])=>g+=`<circle cx="${x+s/2+(c-1)*st}" cy="${100+(rw-1)*st}" r="9.5" fill="#fff"/>`);return g;};
+    return{svg:S(`<rect x="30" y="40" width="240" height="120" rx="18" fill="${INK}"/><line x1="150" y1="52" x2="150" y2="148" stroke="#fff" stroke-width="3" opacity=".6"/>`+half(35,a)+half(155,b)),delar:[a,b],text:`${a} + ${b} = ${n}`};}},
+  triangel:{kan:n=>[5,6,7,8,9,10,11,12,15].includes(n),rita(n){
+    const R={5:[3,2],6:[3,2,1],7:[4,2,1],8:[4,3,1],9:[4,3,2],10:[4,3,2,1],11:[4,3,2,2],12:[5,4,2,1],15:[5,4,3,2,1]}[n];
+    const d=34,r=12.5,col=pick(["#FF9F43","#7B61FF","#2BB673",RED]);let g="";
+    R.forEach((k,j)=>{const y=172-j*d*.88;for(let i=0;i<k;i++)g+=`<circle cx="${150+(i-(k-1)/2)*d}" cy="${y}" r="${r}" fill="${col}"/>`;});
+    return{svg:S(g),delar:R,text:`${R.join(" + ")} = ${n}`};}},
+  tioram:{kan:n=>n>=4&&n<=14,rita(n){const cell=46,x0=150-cell*2.5;const fram=(y,antal,a)=>{let g=`<rect x="${x0-4}" y="${y-4}" width="${cell*5+8}" height="${cell*2+8}" rx="8" fill="#F4F7FD" stroke="${INK}" stroke-width="3"/>`;
+        for(let i=0;i<10;i++){const cx=x0+(i%5)*cell,cy=y+Math.floor(i/5)*cell;g+=`<rect x="${cx}" y="${cy}" width="${cell}" height="${cell}" fill="none" stroke="${INK}" stroke-width="2"/>`;
+          if(i<antal)g+=`<circle cx="${cx+cell/2}" cy="${cy+cell/2}" r="${cell*.34}" fill="${i<a?RED:BLA}"/>`;}return g;};
+      if(n<=10){const a=n>=6&&Math.random()<.6?rnd(Math.max(1,n-5),Math.min(9,n-1)):n;
+        return{svg:S(fram(54,n,a)),delar:a<n?[a,n-a]:[n],text:n===10?(a<10?`${a} + ${10-a} = 10. Full tioram!`:"Full tioram = 10"):`${n} av 10 rutor`};}
+      const small=36,xs=150-small*2.5;let g=`<g transform="translate(0,-34) scale(1)">${fram(40,10,10)}</g>`;
+      g+=`<rect x="${xs-3}" y="${144-3}" width="${small*5+6}" height="${small+6}" rx="6" fill="#F4F7FD" stroke="${INK}" stroke-width="3"/>`;
+      for(let i=0;i<5;i++){g+=`<rect x="${xs+i*small}" y="144" width="${small}" height="${small}" fill="none" stroke="${INK}" stroke-width="2"/>`;if(i<n-10)g+=`<circle cx="${xs+i*small+small/2}" cy="${144+small/2}" r="${small*.34}" fill="${BLA}"/>`;}
+      return{svg:S(g),delar:[10,n-10],text:`En full tioram och ${n-10} till: 10 + ${n-10} = ${n}`};}},
+  hander:{kan:n=>n>=3&&n<=10,rita(n){const[a,b]=n===10?[5,5]:pick(dela2(n,5).filter(p=>p[0]>=1&&p[1]>=1));
+    const hand=(x,upp,spegel)=>{let g=`<g transform="translate(${x},0)${spegel?" scale(-1,1)":""}">`;
+      const fx=[-36,-16,4,24];fx.forEach((f,i)=>{const up=i<Math.min(4,upp);g+=`<rect x="${f}" y="${up?34:86}" width="17" height="${up?80:28}" rx="8.5" fill="#FFD6A8" stroke="#C9874D" stroke-width="2.5"/>`;});
+      const tum=upp===5;g+=`<rect x="-62" y="${tum?98:120}" width="${tum?44:26}" height="17" rx="8.5" fill="#FFD6A8" stroke="#C9874D" stroke-width="2.5" transform="rotate(${tum?-25:0} -40 125)"/>`;
+      g+=`<rect x="-42" y="100" width="88" height="82" rx="24" fill="#FFD6A8" stroke="#C9874D" stroke-width="2.5"/></g>`;return g;};
+    // fingrarna räknas från pekfingret; tummen är femte fingret
+    return{svg:S(hand(88,a,false)+hand(212,b,true)),delar:[a,b],text:`${a} + ${b} fingrar = ${n}`};}},
+  parlor:{kan:n=>n>=5&&n<=15,rita(n){const r=11,d=24;let g=`<line x1="14" y1="100" x2="286" y2="100" stroke="#8A6A3A" stroke-width="4"/>`;const grp=[];for(let k=n;k>0;k-=5)grp.push(Math.min(5,k));
+    let x=150-((n-1)*d+(grp.length-1)*10)/2;grp.forEach((k,gi)=>{for(let i=0;i<k;i++){g+=`<circle cx="${x}" cy="100" r="${r}" fill="${gi%2?"#F4F7FD":RED}" stroke="${INK}" stroke-width="2.5"/>`;x+=d;}x+=10;});
+    return{svg:S(g),delar:grp,text:`${grp.join(" + ")} pärlor = ${n}`};}},
+  streck:{kan:n=>n>=3&&n<=15,rita(n){const grp=[];for(let k=n;k>0;k-=5)grp.push(Math.min(5,k));let g="",x=150-(grp.length*70-20)/2;
+    grp.forEach(k=>{for(let i=0;i<Math.min(4,k);i++)g+=`<line x1="${x+i*14}" y1="62" x2="${x+i*14}" y2="138" stroke="${INK}" stroke-width="6" stroke-linecap="round"/>`;
+      if(k===5)g+=`<line x1="${x-8}" y1="128" x2="${x+50}" y2="72" stroke="${RED}" stroke-width="6" stroke-linecap="round"/>`;x+=70;});
+    return{svg:S(g),delar:grp,text:`${grp.join(" + ")} streck = ${n}`};}},
+  tiobas:{kan:n=>[6,8,9,10,11,12,13].includes(n),rita(n){const c=17,kub=(x,y)=>`<rect x="${x}" y="${y}" width="${c}" height="${c}" rx="2" fill="#F2C46B" stroke="#8A5A1A" stroke-width="2"/>`;
+    const stav=(x)=>{let g=`<rect x="${x-2}" y="${100-c*5-2}" width="${c+4}" height="${c*10+4}" rx="3" fill="#E9A93A" stroke="#8A5A1A" stroke-width="2.5"/>`;for(let i=1;i<10;i++)g+=`<line x1="${x}" y1="${100-c*5+i*c}" x2="${x+c}" y2="${100-c*5+i*c}" stroke="#8A5A1A" stroke-width="1.5"/>`;return g;};
+    if(n>=10){let g=stav(110);for(let i=0;i<n-10;i++)g+=kub(170+(i%2)*(c+6),110-c*2+Math.floor(i/2)*(c+6));return{svg:S(g),delar:n>10?[10,n-10]:[10],text:n===10?"En tiostav = 10":`En tiostav och ${n-10} ental: 10 + ${n-10} = ${n}`};}
+    const kol=n===9||n===6?3:4,rader=Math.ceil(n/kol);let g="";const x0=150-(kol*(c+6))/2,y0=100-(rader*(c+6))/2;for(let i=0;i<n;i++)g+=kub(x0+(i%kol)*(c+6),y0+Math.floor(i/kol)*(c+6));
+    return{svg:S(g),delar:[n],text:`${rader} rader med ${kol}: ${rader} · ${kol} = ${n} ental, ingen tiostav`};}}
+};
+const TYPNAMN=Object.keys(TYPER);
+
+/* ---------- Uppgifterna ----------
+   Hälften är tio. Nivå 1: inte-tio långt ifrån (minst 3 ifrån). Nivå 2 och 3: oftast 9 eller 11 (ibland 8 eller 12). */
+let senaste=[];
+function gorUppgift(lvl){
+  const tio=Math.random()<.5;let n=10;
+  if(!tio){const nara=lvl>1&&Math.random()<.8;const val=lvl===1?[4,5,6,7,13,14,15]:nara?[9,11,9,11,8,12]:[7,8,12,13];n=pick(val);}
+  let typer=TYPNAMN.filter(t=>TYPER[t].kan(n)&&!(senaste.length>=2&&senaste.slice(-2).every(s=>s===t)));
+  if(!typer.length)typer=TYPNAMN.filter(t=>TYPER[t].kan(n));
+  if(!typer.length){n=10;typer=TYPNAMN;}
+  const typ=pick(typer);senaste.push(typ);senaste=senaste.slice(-4);
+  return Object.assign({n,typ},TYPER[typ].rita(n));}
+
+/* ---------- Skärmar ---------- */
+const stjHtml=n=>[1,2,3].map(i=>i<=n?"★":'<span class="off">★</span>').join("");
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
+function hem(){
+  $("heroRam").innerHTML=(()=>{let g="";for(let i=0;i<10;i++){const x=10+(i%5)*20,y=10+Math.floor(i/5)*22;g+=`<rect x="${x}" y="${y}" width="20" height="22" fill="none" stroke="${INK}" stroke-width="1.5"/><circle cx="${x+10}" cy="${y+11}" r="7" fill="${i<7?RED:BLA}"/>`;}return g;})();
+  $("niv").innerHTML=[1,2,3].map(l=>`<button data-l="${l}"><span class="nr" style="background:${NIV[l].col}">${l}</span><span><b>${NIV[l].namn}</b><small>${NIV[l].txt}</small></span><span class="st">${stjHtml(data.stars[l]||0)}</span></button>`).join("");
+  show("home");}
+$("niv").onclick=e=>{const b=e.target.closest("[data-l]");if(b)starta(+b.dataset.l);};
+
+/* ---------- Spelet ---------- */
+let G=null,tim=[];
+const vanta=(ms)=>new Promise(r=>tim.push(setTimeout(r,ms)));
+const rensa=()=>{tim.forEach(clearTimeout);tim=[];};
+function starta(lvl){G={lvl,i:0,fel:0,res:[],u:null,laser:false};senaste=[];$("nivT").textContent="Nivå "+lvl;
+  $("pet").innerHTML=owlSVG(lasDjur());show("game");nasta();}
+function prickar(){$("dots").innerHTML=Array.from({length:ROUND},(_,j)=>`<i class="${j<G.i?(G.res[j]?"ok":"f"):j===G.i?"nu":""}"></i>`).join("");}
+function knappar(pa){$("bTio").disabled=$("bInte").disabled=!pa;}
+async function nasta(){rensa();if(G.i>=ROUND){slut();return;}
+  G.u=gorUppgift(G.lvl);G.laser=true;G.felNu=false;prickar();
+  const sc=$("scen");sc.className="scen";[...sc.querySelectorAll("svg.bild,.mask")].forEach(x=>x.remove());
+  $("svar").hidden=false;$("foljd").hidden=true;$("forkl").textContent="";$("forkl").className="forkl";$("nasta").hidden=true;knappar(false);
+  $("fraga").textContent="Titta noga!";$("msg").innerHTML="<span><big>👀</big>Redo …</span>";$("msg").hidden=false;
+  await vanta(900);
+  $("msg").hidden=true;sc.insertAdjacentHTML("afterbegin",G.u.svg);
+  await vanta(NIV[G.lvl].t);
+  // bilden försvinner: ett kort mönster av streck tar bort efterbilden
+  sc.querySelector("svg.bild").remove();
+  const m=document.createElement("div");m.className="mask";let g="";for(let i=0;i<70;i++){const x=rnd(0,300),y=rnd(0,200),a=rnd(0,180);g+=`<rect x="${x}" y="${y}" width="${rnd(10,26)}" height="5" rx="2" fill="#C6D6F2" transform="rotate(${a} ${x} ${y})"/>`;}
+  m.innerHTML=S(g);sc.appendChild(m);await vanta(120);m.remove();
+  $("msg").innerHTML="<span><big>?</big></span>";$("msg").hidden=false;$("fraga").textContent="Var det 10?";G.laser=false;knappar(true);}
+function visaIgen(){const sc=$("scen");$("msg").hidden=true;[...sc.querySelectorAll("svg.bild")].forEach(x=>x.remove());sc.insertAdjacentHTML("afterbegin",G.u.svg);}
+function svara(tio){if(G.laser||$("bTio").disabled)return;knappar(false);const n=G.u.n,ratt=(n===10)===tio;visaIgen();
+  const sc=$("scen"),f=$("forkl");
+  if(ratt){sc.classList.add("ratt");window.Ljud&&Ljud.ok&&Ljud.ok();$("pet").classList.remove("hopp");void $("pet").offsetWidth;$("pet").classList.add("hopp");}
+  else{sc.classList.add("fel");G.felNu=true;window.Ljud&&Ljud.bad&&Ljud.bad();}
+  const slutText=n===10?"Det är 10!":n<10?`Det var ${n}. ${10-n} fattas till 10.`:`Det var ${n}. ${n-10} för mycket.`;
+  // nivå 3: rätt "inte 10" → hur många fattas, eller för mycket?
+  if(ratt&&n!==10&&G.lvl===3&&Math.abs(n-10)<=5){$("svar").hidden=true;$("fraga").textContent=n<10?"Rätt! Hur många fattas till 10?":"Rätt! Hur många för mycket?";
+    f.textContent="";$("foljd").hidden=false;$("foljd").innerHTML=[1,2,3,4,5].map(k=>`<button data-k="${k}">${k}</button>`).join("");return;}
+  $("fraga").textContent=ratt?"Rätt! ✓":"Inte riktigt";f.className="forkl "+(ratt?"ratt":"fel");f.textContent=n===10?(ratt?`${G.u.text} ✓`:`Det var 10! ${G.u.text}.`):`${ratt?"":"Det var inte 10. "}${G.u.text}. ${slutText}`;
+  klar(ratt);}
+$("foljd").onclick=e=>{const b=e.target.closest("[data-k]");if(!b||$("foljd").dataset.klar)return;const n=G.u.n,diff=Math.abs(n-10),k=+b.dataset.k,ratt=k===diff;
+  $("foljd").querySelectorAll("button").forEach(x=>{x.disabled=true;if(+x.dataset.k===diff)x.classList.add("ratt");});if(!ratt){b.classList.add("fel");G.felNu=true;window.Ljud&&Ljud.bad&&Ljud.bad();}else window.Ljud&&Ljud.ok&&Ljud.ok();
+  const f=$("forkl");f.className="forkl "+(ratt?"ratt":"fel");f.textContent=`${G.u.text}. ${n<10?`${diff} fattas till 10 (${n} + ${diff} = 10)`:`${diff} för mycket (${n} − ${diff} = 10)`}.`;
+  $("fraga").textContent=ratt?"Rätt! ✓":"Inte riktigt";klar(!G.felNu);};
+function klar(ratt){if(G.felNu)G.fel++;G.res[G.i]=!G.felNu;G.i++;prickar();$("nasta").hidden=false;$("nasta").focus({preventScroll:true});
+  if(!G.felNu)tim.push(setTimeout(nasta,2600));}
+$("bTio").onclick=()=>svara(true);$("bInte").onclick=()=>svara(false);$("nasta").onclick=nasta;
+document.addEventListener("keydown",e=>{if($("game").hidden)return;
+  if(!$("bTio").disabled&&!$("svar").hidden){if(e.key==="1"||e.key==="ArrowLeft"){e.preventDefault();svara(true);}else if(e.key==="2"||e.key==="ArrowRight"){e.preventDefault();svara(false);}return;}
+  if(!$("foljd").hidden&&/^[1-5]$/.test(e.key)){const b=$("foljd").querySelector(`[data-k="${e.key}"]`);if(b&&!b.disabled)b.click();return;}
+  if(!$("nasta").hidden&&(e.key==="Enter"||e.key===" ")){e.preventDefault();nasta();}});
+function slut(){rensa();const st=G.fel===0?3:G.fel<=2?2:1,old=data.stars[G.lvl]||0;data.stars[G.lvl]=Math.max(old,st);save();
+  $("rStj").innerHTML=stjHtml(st);$("rRub").textContent=st===3?"Perfekt! 🎉":st===2?"Bra jobbat!":"Bra kämpat!";
+  $("rTxt").textContent=`${ROUND-G.fel} av ${ROUND} rätt på nivå ${G.lvl}.${st<3?" Spela igen och se om du kan få alla rätt!":""}`;
+  show("result");if(st===3){window.Ljud&&Ljud.fanfare&&Ljud.fanfare();confetti();}}
+$("rIgen").onclick=()=>starta(G.lvl);$("rHome").onclick=hem;
+
+function confetti(){if(reduced())return;const cols=["#3D8BFD","#FF9F43","#2BB673","#FFC93C","#7B61FF","#FF6B6B"];
+  const c=$("fx"),x=c.getContext("2d"),dpr=window.devicePixelRatio||1,W=innerWidth,H=innerHeight;c.width=W*dpr;c.height=H*dpr;x.setTransform(dpr,0,0,dpr,0,0);c.hidden=false;
+  const P=Array.from({length:150},()=>({x:W/2+(Math.random()-.5)*120,y:H*.3,vx:(Math.random()-.5)*16,vy:-Math.random()*15-4,r:Math.random()*7+5,c:pick(cols),a:Math.random()*6,va:(Math.random()-.5)*.4}));
+  let t=0;(function f(){x.clearRect(0,0,W,H);P.forEach(p=>{p.vy+=.45;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore();});
+    if(++t<150)requestAnimationFrame(f);else c.hidden=true;})();}
+window.__tio={TYPER,gorUppgift,starta,svara};
+hem();
+</script>
+</body>
+</html>

@@ -5,6 +5,7 @@
 "use strict";
 const ROT=new URL('.',document.currentScript.src).href;
 const IDX=[
+ ['tiointe/','10 eller inte 10?','En bild blinkar fram. Var det tio?','🔟','tio tiokompisar subitisering snabbseende tärning tioram fingrar prickar blink','Matte'],
  ['lillaplus/','Lilla plus & minus','Huvudräkning med tal upp till 10','🐔','addition subtraktion plus minus hönsgård ägg räkna','Matte'],
  ['tiotal/','Tiotalsövergång','Räkna via tiotalet med tioruta och tallinje','🚌','tiotalsövergång 10 addition subtraktion plus minus över tio tiokompisar buss tioruta hundraruta','Matte'],
  ['uppstallning/','Uppställning','Addition och subtraktion som i boken, med minnessiffra och växling','📝','uppställning minnessiffra växling skriftlig addition subtraktion plus minus låna','Matte'],
