@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<script src="../tema.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dubbelteckning – Pluggparken</title>
+<meta name="description" content="Dubbelteckning: kamma eller kama? Välj rätt stavning i meningen och lär dig när vi skriver två konsonanter, och när bara en.">
+<link rel="canonical" href="https://pluggparken.se/dubbelteckning/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Pluggparken">
+<meta property="og:locale" content="sv_SE">
+<meta property="og:title" content="Dubbelteckning – Pluggparken">
+<meta property="og:description" content="Dubbelteckning: kamma eller kama? Välj rätt stavning i meningen och lär dig när vi skriver två konsonanter, och när bara en.">
+<meta property="og:url" content="https://pluggparken.se/dubbelteckning/">
+<meta property="og:image" content="https://pluggparken.se/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#1F3A35">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/apple-touch-icon.png" sizes="180x180">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Andika:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EAF3FF; --ink:#1D2B53; --muted:#56668F; --card:#FFFFFF; --line:#C6D6F2; --soft:#F1F6FF;
+  --good:#1E9E5E; --good-dark:#157548; --bad:#E5484D; --accent:#3D5AFE; --gold:#F2B707; --hero1:#7B61FF; --hero2:#5A3FE0; --heroS:#3D2AA8;
+  --font:"Baloo 2","Trebuchet MS",system-ui,sans-serif; --ord:"Andika","Baloo 2",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:680px;margin:0 auto;padding:12px 16px 48px}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;border:0;background:none}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+[hidden]{display:none!important}
+.hero{display:flex;gap:16px;align-items:center;background:linear-gradient(135deg,var(--hero1),var(--hero2));color:#fff;border-radius:24px;padding:18px;box-shadow:0 5px 0 var(--heroS);margin:6px 0 16px}
+.hero svg{flex:none;width:130px;height:auto;filter:drop-shadow(0 3px 0 rgba(0,0,0,.15))}
+.hero h1{margin:0;font-size:clamp(1.7rem,6vw,2.3rem);line-height:1.05}
+.hero p{margin:6px 0 0;font-weight:600;opacity:.95}
+.niv{display:grid;gap:10px}
+.niv button{display:flex;align-items:center;gap:14px;background:var(--card);border-radius:18px;padding:12px 14px;box-shadow:0 4px 0 var(--line);text-align:left;width:100%}
+.niv button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.niv .nr{flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-weight:800;font-size:1.4rem;color:#fff}
+.niv b{display:block;font-size:1.12rem;line-height:1.15}
+.niv small{display:block;color:var(--muted);font-weight:600;font-size:.88rem;line-height:1.25}
+.niv .st{margin-left:auto;flex:none;color:var(--gold);font-size:1.15rem;letter-spacing:1px}
+.niv .st .off{color:var(--line)}
+.info{color:var(--muted);font-size:.9rem;margin:14px 2px 0}
+.topp{display:flex;align-items:center;gap:10px;margin:4px 0 10px}
+.dots{display:flex;gap:6px;flex:1;flex-wrap:wrap}
+.dots i{width:12px;height:12px;border-radius:50%;background:var(--line)}
+.dots i.ok{background:var(--good)}.dots i.f{background:var(--bad)}.dots i.nu{background:var(--gold)}
+.niva-t{font-weight:800;color:var(--muted);font-size:.9rem}
+.pet{flex:none;width:48px;height:52px;pointer-events:none}.pet svg{width:100%;height:100%}
+.pet.hopp{animation:hopp .55s ease}
+@keyframes hopp{40%{transform:translateY(-18px)}}
+.kort{background:var(--card);border-radius:22px;box-shadow:0 4px 0 var(--line);padding:16px}
+.fb{text-align:center;font-weight:700;margin:12px 0 0;min-height:2.6em;font-size:1.05rem}
+.fb.ratt{color:var(--good-dark)}.fb.fel{color:#B4232A}
+.knapp{display:inline-block;background:var(--good);color:#fff;border-radius:16px;padding:12px 26px;font-weight:800;font-size:1.15rem;box-shadow:0 5px 0 var(--good-dark);margin:6px}
+.knapp.vit{background:var(--card);color:var(--ink);box-shadow:0 5px 0 var(--line)}
+.knapp.bla{background:var(--accent);box-shadow:0 5px 0 #2A3FB8}
+.knapp:disabled{opacity:.4;pointer-events:none}
+.knapp:active{transform:translateY(3px)}
+.lyssna{display:inline-flex;align-items:center;gap:6px;background:var(--soft);border-radius:999px;padding:6px 14px;font-weight:700;font-size:.95rem;box-shadow:0 2px 0 var(--line)}
+.res{text-align:center}
+.res .stj{font-size:3rem;letter-spacing:6px;color:var(--gold);margin:8px 0}
+.res .stj .off{color:var(--line)}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:50}
+@media(max-width:420px){.hero svg{width:96px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.mening{font-family:var(--ord);font-size:clamp(1.3rem,5.4vw,1.7rem);font-weight:700;text-align:center;line-height:1.5;padding:18px 8px 14px}
+.mening .lucka{display:inline-block;min-width:3.4em;border-bottom:4px solid var(--accent);color:transparent;margin:0 4px}
+.mening .ifylld{color:var(--good-dark);border-bottom-color:var(--good)}
+.dubb{color:#E5484D}
+.val{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.val button{min-height:78px;border-radius:20px;background:var(--card);box-shadow:0 5px 0 var(--line);border:3px solid var(--line);font-family:var(--ord);font-size:1.5rem;font-weight:700;color:var(--ink)}
+.val button:active{transform:translateY(3px);box-shadow:0 2px 0 var(--line)}
+.val button.ratt{background:#E6F7EE;border-color:var(--good);box-shadow:0 5px 0 var(--good)}
+.val button.fel{background:#FDE7E8;border-color:#F0A3A6;box-shadow:0 5px 0 #F0A3A6}
+.val button:disabled{pointer-events:none}
+.regel{background:var(--soft);border-radius:16px;padding:10px 14px;margin-top:12px;font-weight:600;font-size:1rem;display:none}
+.regel.visas{display:block}
+.regel b{color:var(--good-dark)}
+.rad2{display:flex;gap:6px;justify-content:center;margin-top:10px;flex-wrap:wrap}
+
+</style>
+</head>
+<body>
+<script src="../ljud.js"></script>
+<script src="../djur.js"></script>
+<script src="../huvud.js" data-titel="Dubbelteckning" data-ikon="✍️"></script>
+<main class="wrap">
+
+<section class="screen" id="home">
+  <div class="hero">
+    <svg viewBox="0 0 120 64" aria-hidden="true"><rect x="2" y="2" width="116" height="60" rx="10" fill="#fff"/>
+<g font-family="Andika, Baloo 2, sans-serif" font-weight="700" font-size="17" text-anchor="middle"><rect x="8" y="9" width="48" height="26" rx="10" fill="#E6F7EE" stroke="#1E9E5E" stroke-width="2.5"/><text x="32" y="28" fill="#1D2B53">ka<tspan fill="#E5484D">mm</tspan>a</text>
+<rect x="64" y="9" width="48" height="26" rx="10" fill="#FDE7E8" stroke="#F0A3A6" stroke-width="2.5"/><text x="88" y="28" fill="#8A93AD">kama</text>
+<text x="60" y="52" font-size="13" fill="#1D2B53">Kamma eller kama?</text></g></svg>
+    <div><h1>Dubbelteckning</h1><p>Kamma eller kama? Välj rätt stavning och lär dig varför.</p></div>
+  </div>
+  <div class="niv" id="niv"></div>
+  <p class="info">Kort vokal betyder oftast två konsonanter (ma-mma). Lång vokal betyder en konsonant (ba-da). Efter varje svar visas varför.</p>
+  
+</section>
+
+<section class="screen" id="game" hidden>
+  <div class="topp"><div class="dots" id="dots"></div><span class="niva-t" id="nivT"></span><span class="pet" id="pet"></span></div>
+  <div class="kort">
+    <div class="mening" id="mening"></div>
+    <div class="val" id="val"></div>
+    <div class="regel" id="regel"></div>
+  </div>
+  <div class="fb" id="fb" aria-live="polite"></div>
+  <div class="rad2"><button class="lyssna" id="bLas" hidden>🔊 Lyssna</button><button class="knapp bla" id="bNasta" hidden>Nästa ▶</button></div>
+</section>
+
+<section class="screen res" id="result" hidden>
+  <h2 id="rRub" style="margin:10px 0 0">Bra jobbat!</h2>
+  <div class="stj" id="rStj"></div>
+  <p id="rTxt" style="font-weight:700;margin:0 0 14px"></p>
+  <button class="knapp" id="rIgen">Spela igen</button>
+  <button class="knapp vit" id="rHome">Välj nivå</button>
+</section>
+
+</main>
+<canvas id="fx" hidden></canvas>
+<script>
+const $=id=>document.getElementById(id);
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const KEY="mattespel-dubbelteckning-v1";
+const data=(()=>{try{return Object.assign({stars:{}},JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){return{stars:{}}}})();
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}};
+const reduced=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
+const NIV=[null].concat([{"namn": "Nivå 1: Kort vokal", "txt": "Efter en kort vokal skriver vi två konsonanter: mamma, kopp, katt.", "col": "#2BB673"}, {"namn": "Nivå 2: Lång vokal", "txt": "Efter en lång vokal skriver vi bara en konsonant: bada, spela, skola.", "col": "#FF9F43"}, {"namn": "Nivå 3: Knepiga par", "txt": "ck, ng/nk och ord som låter lika men betyder olika: tack och tak, fika och ficka.", "col": "#7B61FF"}]);
+const stjHtml=n=>[1,2,3].map(i=>i<=n?"★":'<span class="off">★</span>').join("");
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
+function hem(){
+  $("niv").innerHTML=[1,2,3].map(l=>`<button data-l="${l}"><span class="nr" style="background:${NIV[l].col}">${l}</span><span><b>${NIV[l].namn}</b><small>${NIV[l].txt}</small></span><span class="st">${stjHtml(data.stars[l]||0)}</span></button>`).join("");
+  if(window.speechSynthesis)speechSynthesis.cancel();show("home");}
+$("niv").onclick=e=>{const b=e.target.closest("[data-l]");if(b)begin(+b.dataset.l);};
+// uppläsning bara när man trycker (svensk röst)
+let svVoice=null;function laddaRoster(){try{svVoice=speechSynthesis.getVoices().find(v=>/^sv/i.test(v.lang))||null}catch(e){}}
+if("speechSynthesis" in window){laddaRoster();speechSynthesis.onvoiceschanged=laddaRoster;}
+function lasUpp(t){if(!("speechSynthesis" in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="sv-SE";if(svVoice)u.voice=svVoice;u.rate=.9;speechSynthesis.speak(u);}
+function prickar(n,i,res){$("dots").innerHTML=Array.from({length:n},(_,j)=>`<i class="${j<i?(res[j]?"ok":"f"):j===i?"nu":""}"></i>`).join("");}
+function haj(){const p=$("pet");if(!p)return;p.classList.remove("hopp");void p.offsetWidth;p.classList.add("hopp");}
+function resultat(st,txt){const old=data.stars[G.lvl]||0;data.stars[G.lvl]=Math.max(old,st);save();
+  $("rStj").innerHTML=stjHtml(st);$("rRub").textContent=st===3?"Perfekt! 🎉":st===2?"Bra jobbat!":"Bra kämpat!";$("rTxt").textContent=txt;
+  show("result");if(st===3){window.Ljud&&Ljud.fanfare&&Ljud.fanfare();confetti();}else window.Ljud&&Ljud.chime&&Ljud.chime();}
+$("rIgen").onclick=()=>begin(G.lvl);$("rHome").onclick=hem;
+function confetti(){if(reduced())return;const cols=["#3D8BFD","#FF9F43","#2BB673","#FFC93C","#7B61FF","#FF6B6B"];
+  const c=$("fx"),x=c.getContext("2d"),dpr=window.devicePixelRatio||1,W=innerWidth,H=innerHeight;c.width=W*dpr;c.height=H*dpr;x.setTransform(dpr,0,0,dpr,0,0);c.hidden=false;
+  const P=Array.from({length:150},()=>({x:W/2+(Math.random()-.5)*120,y:H*.3,vx:(Math.random()-.5)*16,vy:-Math.random()*15-4,r:Math.random()*7+5,c:pick(cols),a:Math.random()*6,va:(Math.random()-.5)*.4}));
+  let t=0;(function f(){x.clearRect(0,0,W,H);P.forEach(p=>{p.vy+=.45;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore();});
+    if(++t<150)requestAnimationFrame(f);else c.hidden=true;})();}
+let G=null;
+
+const RUND=8;
+const D={1:[["Jag älskar min ___.", "mamma", "mama", "Vokalen är kort, så vi skriver två konsonanter."], ["Min ___ jobbar i en affär.", "pappa", "papa", "Vokalen är kort, så vi skriver två konsonanter."], ["Jag dricker saft ur en ___.", "kopp", "kop", "Vokalen är kort, så vi skriver två konsonanter."], ["En ___ har fyra tassar och fina morrhår.", "katt", "kat", "Vokalen är kort, så vi skriver två konsonanter."], ["Jag vill inte ___ min glass.", "tappa", "tapa", "Vokalen är kort, så vi skriver två konsonanter."], ["Hunden ___ högt när någon ringer på.", "skäller", "skäler", "Vokalen är kort, så vi skriver två konsonanter."], ["Det är ___ ute, ta på dig jackan.", "kallt", "kalt", "Vokalen är kort, så vi skriver två konsonanter."], ["Hon är så ___ mot alla.", "snäll", "snäl", "Vokalen är kort, så vi skriver två konsonanter."], ["Jag har en varm ___ på huvudet.", "mössa", "mösa", "Vokalen är kort, så vi skriver två konsonanter."], ["Fåglarna ___ i trädet.", "sitter", "siter", "Vokalen är kort, så vi skriver två konsonanter."], ["Jag ___ saft i glaset.", "häller", "häler", "Vokalen är kort, så vi skriver två konsonanter."], ["Katten ___ på stolen.", "ligger", "liger", "Vokalen är kort, så vi skriver två konsonanter."], ["Jag ___ in i rummet.", "kommer", "komer", "Vokalen är kort, så vi skriver två konsonanter."], ["Bussen ___ vid hållplatsen.", "stannar", "stanar", "Vokalen är kort, så vi skriver två konsonanter."], ["Fisken ___ i vattnet.", "simmar", "simar", "Vokalen är kort, så vi skriver två konsonanter."], ["Jag ___ dig väldigt bra.", "känner", "käner", "Vokalen är kort, så vi skriver två konsonanter."], ["Vi ___ en snögubbe.", "bygger", "byger", "Vokalen är kort, så vi skriver två konsonanter."], ["Jag ___ ha en glass.", "vill", "vil", "Vokalen är kort, så vi skriver två konsonanter."], ["En ___ man satt på bänken.", "gammal", "gamal", "Vokalen är kort, så vi skriver två konsonanter."], ["Jag har ont i min ___.", "tumme", "tume", "Vokalen är kort, så vi skriver två konsonanter."], ["Jag äter ett ___.", "äpple", "äple", "Vokalen är kort, så vi skriver två konsonanter."], ["Jag ___ håret med en kam.", "kammar", "kamar", "Vokalen är kort, så vi skriver två konsonanter."], ["Det är en ___ tröja.", "tunn", "tun", "Vokalen är kort, så vi skriver två konsonanter."], ["Vi har många ___ i trädgården.", "blommor", "blomor", "Vokalen är kort, så vi skriver två konsonanter."], ["En liten ___ surrar i rummet.", "mygga", "myga", "Vokalen är kort, så vi skriver två konsonanter."], ["Jag kan inte ___ min väska.", "hitta", "hita", "Vokalen är kort, så vi skriver två konsonanter."], ["Jag äter inte ___.", "kött", "köt", "Vokalen är kort, så vi skriver två konsonanter."], ["Jag spelar ___ med mina kompisar.", "tennis", "tenis", "Vokalen är kort, så vi skriver två konsonanter."], ["Jag ska ___ mina händer.", "tvätta", "tväta", "Vokalen är kort, så vi skriver två konsonanter."], ["Hunden ___ på en pinne.", "tuggar", "tugar", "Vokalen är kort, så vi skriver två konsonanter."]],2:[["Vi går till ___ varje dag.", "skolan", "skollan", "Vokalen är lång, så vi skriver bara en konsonant."], ["Jag vill ___ fotboll.", "spela", "spella", "Vokalen är lång, så vi skriver bara en konsonant."], ["Jag ska ___ läxorna.", "göra", "görra", "Vokalen är lång, så vi skriver bara en konsonant."], ["Vi ska ___ mat till middag.", "laga", "lagga", "Vokalen är lång, så vi skriver bara en konsonant."], ["Jag ___ en bild.", "ritar", "rittar", "Vokalen är lång, så vi skriver bara en konsonant."], ["Vi ska ___ till stan.", "åka", "åkka", "Vokalen är lång, så vi skriver bara en konsonant."], ["Jag älskar att ___ böcker.", "läsa", "lässa", "Vokalen är lång, så vi skriver bara en konsonant."], ["Kan du ___ kakan i två delar?", "dela", "della", "Vokalen är lång, så vi skriver bara en konsonant."], ["Hon har ___ tänder.", "vita", "vitta", "Vokalen är lång, så vi skriver bara en konsonant."], ["Barnen leker i en ___ i skogen.", "koja", "kojja", "Vokalen är lång, så vi skriver bara en konsonant."], ["Det ___ en gång en prinsessa.", "var", "varr", "Vokalen är lång, så vi skriver bara en konsonant."], ["Vi ska ___ en bok.", "köpa", "köppa", "Vokalen är lång, så vi skriver bara en konsonant."], ["Jag kan ___ alla bokstäver.", "stava", "stavva", "Vokalen är lång, så vi skriver bara en konsonant."], ["Vi ___ godis på lördag.", "äter", "ätter", "Vokalen är lång, så vi skriver bara en konsonant."], ["Kan du ___ lite högre?", "tala", "talla", "Vokalen är lång, så vi skriver bara en konsonant."], ["Min ___ är lika gammal som jag.", "kusin", "kussin", "Vokalen är lång, så vi skriver bara en konsonant."], ["Sjung en ___ !", "låt", "lått", "Vokalen är lång, så vi skriver bara en konsonant."], ["Det ligger en ___ på marken.", "sten", "stenn", "Vokalen är lång, så vi skriver bara en konsonant."], ["Jag spelar på en ___.", "dator", "dattor", "Vokalen är lång, så vi skriver bara en konsonant."], ["Vi har en ny ___ i köket.", "spis", "spiss", "Vokalen är lång, så vi skriver bara en konsonant."]],3:[["Jag säger ___ för maten.", "tack", "tak", "tack kommer av att tacka. Ett tak sitter överst på ett hus."], ["Det finns ett hål i ___.", "tak", "tack", "Ett tak sitter överst på ett hus. Tack säger man när man är tacksam."], ["Vi ___ pannkakor.", "bakar", "backar", "Bakar är att göra kakor. Backar är att köra bakåt."], ["Bilen ___ ut ur garaget.", "backar", "bakar", "Backar är att köra bakåt. Bakar är att göra kakor."], ["Jag vill ha ett ___ bröd.", "stycke", "styke", "Efter kort y skriver vi ck: stycke."], ["Jag ___ på dörren.", "knackar", "knakar", "Efter kort a skriver vi ck: knackar."], ["Hon ___ en tröja.", "stickar", "stikar", "Efter kort i skriver vi ck: stickar."], ["Jag har en ___ till dörren.", "nyckel", "nykel", "Efter kort y skriver vi ck: nyckel."], ["Vi har en ___ på väggen.", "klocka", "kloka", "Klocka visar tiden. Kloka är de som tänker efter."], ["Jag har en hemlighet i min ___.", "ficka", "fika", "Ficka är på kläderna. Fika är att ta en kaffepaus."], ["Vi tar en ___ med kaffe och bullar.", "fika", "ficka", "Fika är en paus med något gott. Ficka är på kläderna."], ["Vi ___ upp frukt på marken.", "plockar", "plokar", "Efter kort o skriver vi ck: plockar."], ["Du får inte ___ i min jacka.", "rycka", "ryka", "Efter kort y skriver vi ck: rycka."], ["Vi ___ en sång tillsammans.", "sjunger", "sjunker", "Sjunger är med ng och handlar om sång. Sjunker är med nk och betyder att något går ner."], ["Båten ___ i havet.", "sjunker", "sjunger", "Sjunker betyder att något går ner. Sjunger är det man gör med en sång."], ["Hon ger honom en ___.", "kyss", "kys", "Efter kort y skriver vi ss: kyss."], ["En ___ full med potatis.", "säck", "säk", "Efter kort ä skriver vi ck: säck."], ["Jag ___ i en bok.", "bläddrar", "bläderar", "Efter kort ä skriver vi dd: bläddrar."]]};
+function dubb(w){return w.replace(/(.)\1/g,"<span class='dubb'>$1$1</span>");}   // gör dubbla bokstäver röda
+function begin(lvl){G={lvl,i:0,fel:0,res:[],kv:shuffle(D[lvl].slice()).slice(0,RUND).map(x=>({x,retry:false})),retries:0,gjort:false};$("nivT").textContent="Nivå "+lvl;$("pet").innerHTML=owlSVG(lasDjur());show("game");nasta();}
+function antal(){return G.kv.length;}
+function nasta(){if(window.speechSynthesis)speechSynthesis.cancel();if(G.i>=G.kv.length){slut();return;}
+  const q=G.q=G.kv[G.i];G.gjort=false;prickar(antal(),G.i,G.res);
+  const [s,r,f]=q.x;$("mening").innerHTML=s.replace("___",'<span class="lucka">'+r+'</span>');
+  $("fb").textContent="";$("fb").className="fb";$("regel").className="regel";$("bNasta").hidden=true;$("bLas").hidden=true;
+  $("val").innerHTML=shuffle([r,f]).map(w=>`<button data-w="${w}" type="button">${w}</button>`).join("");}
+$("val").onclick=e=>{const b=e.target.closest("[data-w]");if(!b||G.gjort)return;G.gjort=true;const [s,r,f,regel]=G.q.x,ratt=b.dataset.w===r;
+  $("val").querySelectorAll("button").forEach(x=>{x.disabled=true;if(x.dataset.w===r)x.classList.add("ratt");});
+  $("mening").innerHTML=s.replace("___",'<span class="lucka ifylld">'+dubb(r)+'</span>');
+  if(ratt){G.res[G.i]=!G.q.retry?true:true;window.Ljud&&Ljud.ok&&Ljud.ok();haj();$("fb").className="fb ratt";$("fb").textContent="Rätt!";}
+  else{b.classList.add("fel");window.Ljud&&Ljud.bad&&Ljud.bad();G.res[G.i]=false;if(!G.q.retry)G.fel++;$("fb").className="fb fel";$("fb").textContent=`Inte riktigt. Det heter ${r}.`;
+    // felsvar kommer tillbaka senare i rundan (högst tre gånger)
+    if(!G.q.retry&&G.retries<3){G.retries++;G.kv.push({x:G.q.x,retry:true});}}
+  const rg=$("regel");rg.innerHTML=`<b>${dubb(r)}</b> – ${regel}`;rg.className="regel visas";
+  $("bNasta").hidden=false;$("bNasta").focus({preventScroll:true});$("bLas").hidden=false;G.i++;prickar(antal(),G.i,G.res);};
+$("bNasta").onclick=nasta;
+$("bLas").onclick=()=>lasUpp(G.q.x[0].replace("___",G.q.x[1]));
+function slut(){const st=G.fel===0?3:G.fel<=2?2:1;resultat(st,`${RUND-G.fel} av ${RUND} rätt på första försöket på nivå ${G.lvl}.${st<3?" Spela igen och se om du kan få alla rätt!":""}`);}
+document.addEventListener("keydown",e=>{if($("game").hidden)return;if(e.key==="Enter"&&!$("bNasta").hidden)$("bNasta").click();});
+window.__dt={D,begin};
+
+hem();
+</script>
+</body>
+</html>
