@@ -29,7 +29,7 @@ function merge(a,b){const out=Object.assign({},a);
       o.bokst={...(x.bokst||{})};Object.entries(y.bokst||{}).forEach(([bk,v])=>{if(!o.bokst[bk]||(v.d||0)>(o.bokst[bk].d||0))o.bokst[bk]=v;});
       o.fr={...(y.fr||{}),...(x.fr||{})};out[k]=JSON.stringify(o);}catch(e){}return;}
     if(k==="matteportalen-mynt"){try{const x=JSON.parse(a[k]),y=JSON.parse(b[k]),o=(y.tj||0)>(x.tj||0)?y:x;
-      o.kopt=[...new Set([...(x.kopt||[]),...(y.kopt||[])])];out[k]=JSON.stringify(o);}catch(e){}return;}
+      o.kopt=[...new Set([...(x.kopt||[]),...(y.kopt||[])])];o.hi=Math.max(x.hi||0,x.sedd||0,y.hi||0,y.sedd||0);out[k]=JSON.stringify(o);}catch(e){}return;}
     if(progressOf(b[k])>progressOf(a[k]))out[k]=b[k];});
   return out;}
 

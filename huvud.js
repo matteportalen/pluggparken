@@ -124,9 +124,18 @@ body.mph-mini #quit{display:none}
      {m: mynt nu, tj: tjänat totalt, sedd: stjärnor som redan gett mynt, kopt: köpta saker "plats:id" (null = inte flyttat än), dag, senast} */
   const MK='matteportalen-mynt',idag=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');};
   function myntLas(){let m=get(MK);const s=MPStjarnor();
-    if(!m||typeof m.m!=='number'){m={m:5*s,tj:5*s,sedd:s,kopt:null,dag:'',senast:0};myntSpara(m);}
-    else if(s>m.sedd){const n=(s-m.sedd)*20;m.m+=n;m.tj+=n;m.sedd=s;myntSpara(m);myntVisa(n);}
-    else if(s<m.sedd){m.sedd=s;myntSpara(m);}
+    if(!m||typeof m.m!=='number'){m={m:5*s,tj:5*s,sedd:s,hi:s,kopt:null,dag:'',senast:0};myntSpara(m);}
+    else{
+      // Mynt för nya stjärnor ges bara när stjärnorna passerar det högsta antal som någonsin gett mynt (hi). Det går aldrig ned,
+      // så två flikar med olika version av koden (eller data som tillfälligt ger färre stjärnor) kan inte ge mynt om och om igen.
+      // Gamla versioner skrev bara "sedd" (och sänkte den); hi läses som det större av dem.
+      const hi=Math.max(m.hi||0,m.sedd||0);
+      if(s>hi){const n=(s-hi)*20;m.m+=n;m.tj+=n;m.hi=s;myntSpara(m);myntVisa(n);}
+      else if(m.hi!==hi){m.hi=hi;myntSpara(m);}
+    }
+    // spärr mot orimliga summor (t.ex. efter felet ovan): mest möjliga tjänat = 25 per stjärna + 200 per spelad dag + 300. Det som redan är köpt dras av.
+    try{const dg=get('matteportalen-dagar'),dagar=(dg&&dg.days&&dg.days.length)||1,tak=25*MPStjarnor()+200*dagar+300;
+      if(m.tj>tak){const spent=Math.max(0,m.tj-m.m);m.tj=tak;m.m=Math.max(0,tak-spent);myntSpara(m);}}catch(e){}
     return m;}
   function myntSpara(m){try{localStorage.setItem(MK,JSON.stringify(m));}catch(e){}}
   let myntFlyg=null;function myntVisa(n){if(!n)return;myntFlyg=n;setTimeout(()=>{const el=document.querySelector('.mph-m');if(!el)return;
