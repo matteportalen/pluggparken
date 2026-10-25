@@ -265,25 +265,22 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 .amnek .chev{font-size:2rem;font-weight:800;color:var(--c)}
 .designlank{display:inline-block;margin:0 0 10px;background:var(--card);color:var(--ink);font-weight:800;border-radius:999px;padding:6px 16px;box-shadow:0 3px 0 var(--line);text-decoration:none}
 
-/* ---------- Utkast: hela sidans bredd, sök i tavlan och ämnena som en rad på en panel ---------- */
+/* ---------- Utkast: hela sidans bredd, sök i tavlan, en ren rad för profilen och ämneskorten i flera kolumner ---------- */
+.hero{padding-top:calc(30px + env(safe-area-inset-top,0px));padding-bottom:26px}
 .hero-in,.park-in{max-width:1400px}
-.wrap{max-width:1400px}
-.hero{padding-bottom:48px}
-.herosok{display:flex;align-items:center;gap:10px;margin-top:14px;width:100%;max-width:560px;background:#fff;color:#56668F;border:0;border-radius:999px;padding:12px 20px;font:inherit;font-weight:700;font-size:1.05rem;text-align:left;box-shadow:0 4px 0 rgba(0,0,0,.28);cursor:pointer}
+.wrap{max-width:1400px;padding-top:18px}
+.herosok{display:flex;align-items:center;gap:10px;margin-top:14px;width:100%;max-width:520px;background:#fff;color:#56668F;border:0;border-radius:999px;padding:12px 20px;font:inherit;font-weight:700;font-size:1.05rem;text-align:left;box-shadow:0 4px 0 rgba(0,0,0,.28);cursor:pointer}
 .herosok:hover{box-shadow:0 6px 0 rgba(0,0,0,.28)}
 html[data-tema="mork"] .herosok{background:#1A2748;color:#A3B0D6}
-.panelwrap{max-width:1400px;margin:-30px auto 0;padding:0 16px;position:relative;z-index:3}
-.panel{background:var(--card);border-radius:30px;padding:16px;box-shadow:0 6px 0 var(--line),0 14px 34px rgba(29,43,83,.14)}
-.amnrad{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-@media(min-width:560px){.amnrad{grid-template-columns:repeat(4,minmax(0,1fr))}}
-@media(min-width:960px){.amnrad{grid-template-columns:repeat(7,minmax(0,1fr))}}
-.amnt{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;min-height:156px;padding:14px 6px;border-radius:24px;text-decoration:none;color:var(--ink);text-align:center;font-weight:800;font-size:clamp(.95rem,1.35vw,1.2rem);line-height:1.15;overflow-wrap:anywhere;
-  background:var(--card);background:color-mix(in srgb,var(--c) 15%,var(--card));box-shadow:0 4px 0 color-mix(in srgb,var(--c) 28%,var(--line));transition:transform .12s,box-shadow .12s}
-.amnt img{width:76px;height:76px;filter:drop-shadow(0 4px 0 rgba(0,0,0,.14));transition:transform .15s}
-@media(hover:hover){.amnt:hover{transform:translateY(-3px)}.amnt:hover img{transform:scale(1.08) rotate(-3deg)}}
-.amnt:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
-@media(max-width:559px){.amnrad .amnt:last-child{grid-column:1/-1;min-height:110px;flex-direction:row;gap:14px}}
-.toprad{justify-content:flex-end;margin:22px 0 14px}
+/* profilraden: logga in, stjärnor, Garderoben, Mitt rum och Klistermärken på en rad */
+.mini{grid-template-columns:repeat(2,minmax(0,1fr));margin:0 0 6px}
+@media(min-width:760px){.mini{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:1100px){.mini{grid-template-columns:repeat(5,minmax(0,1fr))}}
+.mini .whoami{margin:0;padding:0;background:none;box-shadow:none;border-radius:0;min-height:48px;justify-content:stretch}
+.mini .whoami .chip{width:100%;justify-content:center;min-height:48px;padding:6px 14px 6px 6px;border-radius:14px;box-shadow:0 3px 0 var(--line)}
+@media(max-width:759px){.mini .whoami{grid-column:1/-1}}
+/* ämneskorten i flera kolumner över hela bredden */
+.amnen{grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:16px}
 </style>
 </head>
 <body>
@@ -313,27 +310,25 @@ html[data-tema="mork"] .herosok{background:#1A2748;color:#A3B0D6}
 
 
 
-<div class="panelwrap"><section class="panel" aria-label="Välj ämne"><nav class="amnrad">
-      <a class="amnt" style="--c:#3D5AFE" href="matte/" title="Räkna, mäta, spela och upptäck tal"><img src="amnen/matte.svg" alt="" width="72" height="72"><span>Matematik</span></a>
-      <a class="amnt" style="--c:#E5484D" href="svenska/" title="Ord, stavning, läsning och sagor"><img src="amnen/svenska.svg" alt="" width="72" height="72"><span>Svenska</span></a>
-      <a class="amnt" style="--c:#1E9E5E" href="ovriga/rymdlabbet/" title="Planeterna, stjärnorna och svarta hål"><img src="amnen/no.svg" alt="" width="72" height="72"><span>Rymdlabbet</span></a>
-      <a class="amnt" style="--c:#F2780C" href="so/" title="Kartor, länder och platser"><img src="amnen/so.svg" alt="" width="72" height="72"><span>SO</span></a>
-      <a class="amnt" style="--c:#7B61FF" href="specialare/" title="Minilektioner om spännande ämnen"><img src="amnen/special.svg" alt="" width="72" height="72"><span>Specialare</span></a>
-      <a class="amnt" style="--c:#0E9AA7" href="fler/" title="Engelska, logik, kod och pengar"><img src="amnen/logik.svg" alt="" width="72" height="72"><span>Fler ämnen</span></a>
-      <a class="amnt" style="--c:#F2780C" href="https://fritidsparken.se" target="_blank" rel="noopener" title="Våra vänner: lek och aktiviteter på fritids" aria-label="Fritidsparken.se (öppnas på en ny sida)"><img src="fritidsparken-logo.jpg" alt="" width="72" height="72" style="border-radius:18px;object-fit:cover"><span>Fritidsparken ↗</span></a>
-    </nav></section></div>
-
 <main class="wrap">
-  <div class="toprad">
-    
-    <div class="whoami"><button class="chip" id="whoChip"></button></div>
-  </div>
   <div class="mini">
+    <div class="whoami"><button class="chip" id="whoChip"></button></div>
     <div class="stars" title="Stjärnor och mynt"><span class="stw"><span class="sv"><b id="sStars">0</b><i>⭐</i></span><span class="sv"><b id="sMynt">0</b><i>🪙</i></span><small id="sTitel">stjärnor och mynt</small></span></div>
     <button id="btnWard"><span class="ic">👗</span><span><b>Garderoben<span class="new" id="newWard" hidden>Nytt!</span></b><small id="wardInfo">Välj djur och kläder</small></span></button>
     <a href="mittrum/" id="btnRum"><span class="ic">🏠</span><span><b>Mitt rum</b><small>Inred med mynt</small></span></a>
     <button id="btnAlbum"><span class="ic">📒</span><span><b>Klistermärken<span class="new" id="newAlbum" hidden>Nytt!</span></b><small id="albumInfo">0 av 0</small></span></button>
   </div>
+
+  <h2 class="grp"><span aria-hidden="true">🧭</span>Välj ämne</h2>
+  <nav class="amnen" aria-label="Ämnen">
+    <a class="amnek" style="--c:#3D5AFE" href="matte/"><span class="ik"><img src="amnen/matte.svg" alt="" width="64" height="64"></span><span class="txt"><b>Matematik</b><small>Räkna, mäta, spela och upptäck tal</small></span><span class="chev" aria-hidden="true">›</span></a>
+    <a class="amnek" style="--c:#E5484D" href="svenska/"><span class="ik"><img src="amnen/svenska.svg" alt="" width="64" height="64"></span><span class="txt"><b>Svenska</b><small>Ord, stavning, läsning och sagor</small></span><span class="chev" aria-hidden="true">›</span></a>
+    <a class="amnek" style="--c:#1E9E5E" href="ovriga/rymdlabbet/"><span class="ik"><img src="amnen/no.svg" alt="" width="64" height="64"></span><span class="txt"><b>Rymdlabbet</b><small>Planeterna, stjärnorna, årstiderna och svarta hål</small></span><span class="chev" aria-hidden="true">›</span></a>
+    <a class="amnek" style="--c:#F2780C" href="so/"><span class="ik"><img src="amnen/so.svg" alt="" width="64" height="64"></span><span class="txt"><b>SO</b><small>Kartor, länder och platser</small></span><span class="chev" aria-hidden="true">›</span></a>
+    <a class="amnek" style="--c:#7B61FF" href="specialare/"><span class="ik"><img src="amnen/special.svg" alt="" width="64" height="64"></span><span class="txt"><b>Specialare</b><small>Minilektioner om spännande ämnen</small></span><span class="chev" aria-hidden="true">›</span></a>
+    <a class="amnek" style="--c:#0E9AA7" href="fler/"><span class="ik"><img src="amnen/logik.svg" alt="" width="64" height="64"></span><span class="txt"><b>Fler ämnen</b><small>Engelska, logik, kod och pengar</small></span><span class="chev" aria-hidden="true">›</span></a>
+    <a class="amnek fritid" style="--c:#F2780C" href="https://fritidsparken.se" target="_blank" rel="noopener" aria-label="Fritidsparken.se (öppnas på en ny sida)"><span class="ik"><img src="fritidsparken-logo.jpg" alt="" width="64" height="64" style="border-radius:14px;width:64px;height:64px;object-fit:cover"></span><span class="txt"><b>Fritidsparken</b><small>Våra vänner: lek och aktiviteter på fritids</small></span><span class="chev" aria-hidden="true">↗</span></a>
+    </nav>
 
   <p class="foot"><a class="designlank" href="v1/">🕰️ Gamla designen</a><br>Dina stjärnor och rekord sparas på den här enheten. Med ett gratis konto (☁️ Logga in) kan du ta med dem till andra enheter.<br><button class="soundbtn" id="soundBtn"></button></p>
   <section class="om" aria-labelledby="omH"><h2 id="omH">Om Pluggparken</h2><p>Pluggparken är en gratis lekpark för hjärnan med matteövningar, spel och fler ämnen för barn i åk 1–6: multiplikationstabellerna, klockan, bråk, uppställning och division, läsning, rymden, Sverige och världen. Allt fungerar i webbläsaren och utan reklam, och du behöver inget konto för att öva. Framstegen sparas på din egen enhet, och med ett gratis konto (ett påhittat användarnamn, ingen e-post) kan du ta med dem till andra enheter.</p></section>
