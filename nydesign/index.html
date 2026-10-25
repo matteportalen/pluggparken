@@ -20,15 +20,21 @@ a{color:inherit;text-decoration:none}button{font-family:inherit;cursor:pointer;b
 .utkast{background:#FFF1C2;border:2px dashed var(--gold);border-radius:14px;padding:8px 14px;font-weight:700;font-size:.92rem;margin:0 0 12px;color:#6B5200}
 .utkast a{text-decoration:underline;font-weight:800}
 html[data-tema="mork"] .utkast{background:#4A4119;color:#FFE9A8}
-/* hero: tavlan */
-.hero{background:radial-gradient(120% 140% at 20% 0%,#2E5A52,#1F3A35);color:#fff;border-radius:26px;padding:22px 22px 26px;position:relative;overflow:hidden;box-shadow:0 5px 0 #14262A,inset 0 0 0 5px #8A5A2B}
-.hero h1{margin:0;font-size:clamp(2rem,6vw,3rem);line-height:1.05;font-weight:800}.hero h1 b{color:#FFD44D}
-.hero p{margin:6px 0 14px;font-size:1.1rem;opacity:.92;max-width:34em}
-.sokrad{display:flex;gap:8px;flex-wrap:wrap}
-.sokrad button{background:#fff;color:#1D2B53;border-radius:999px;padding:9px 18px;font-weight:800;box-shadow:0 3px 0 rgba(0,0,0,.25)}
-.sokrad button.gul{background:#FFD44D}
+/* sidhuvudet och toppen är ett enda band: samma tavla hela vägen */
+.mph{box-shadow:none!important}
+.topband{background:linear-gradient(110deg,#1A302C 0%,#1F3A35 50%,#2B4F47 100%);color:#fff;border-bottom:6px solid #7E5129;border-radius:0 0 30px 30px;margin-top:-1px;padding:0 16px 26px;box-shadow:0 5px 0 #14262A}
+.tb-in{max-width:1040px;margin:0 auto;padding-top:4px}
+.tb-utkast{font-size:.85rem;font-weight:700;opacity:.8;margin-bottom:6px}.tb-utkast a{text-decoration:underline}
+.topband h1{margin:0;font-size:clamp(1.9rem,5.5vw,2.8rem);line-height:1.08;font-weight:800}
+.topband p{margin:4px 0 16px;font-size:1.1rem;opacity:.9}
+.sokrad{display:flex;gap:10px;flex-wrap:wrap}
+.sokrad button{background:#fff;color:#1D2B53;border-radius:999px;padding:11px 20px;font-weight:800;font-size:1rem;box-shadow:0 4px 0 rgba(0,0,0,.28)}
+.sokrad .sokstor{flex:1 1 280px;text-align:left;color:#56668F;max-width:560px}
+.sokrad .sokstor span{margin-right:6px}
+.sokrad #bSnabb{background:#FFD44D}
 /* rubriker */
 h2.sek{font-size:1.5rem;margin:26px 4px 4px}
+.wrap{padding-top:4px}
 .sub{margin:0 4px 12px;color:var(--muted);font-weight:600}
 /* fortsätt */
 .forts{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
@@ -97,16 +103,16 @@ h2.sek{font-size:1.5rem;margin:26px 4px 4px}
 <script src="../ljud.js"></script>
 <script src="../djur.js"></script>
 <script src="../huvud.js" data-titel="Ny design (utkast)" data-ikon="🧭" data-nav="av"></script>
-<main class="wrap">
-<div class="utkast">🧪 <b>Utkast:</b> så här kan en ny startsida se ut. Det är bara en testsida och inget är kopplat till resten av sajten än. <a href="../">← Till nuvarande sidan</a></div>
-
-<section id="vHem">
-  <div class="hero">
-    <h1>Plugg<b>parken</b></h1>
-    <p>Lekparken för hjärnan. Välj ett ämne, så visar vi var du kan börja.</p>
-    <div class="sokrad"><button class="gul" data-sok type="button">🔍 Sök övning</button><button id="bSnabb" type="button">🎲 Överraska mig</button></div>
+<div class="topband" id="topband">
+  <div class="tb-in">
+    <div class="tb-utkast">🧪 Utkast till ny design · <a href="../">← Nuvarande sidan</a></div>
+    <h1>Hej! Vad vill du lära dig idag?</h1>
+    <p>Välj ett ämne här under, eller sök direkt.</p>
+    <div class="sokrad"><button class="sokstor" data-sok type="button"><span>🔍</span> Sök övning eller spel …</button><button id="bSnabb" type="button">🎲 Överraska mig</button></div>
   </div>
-
+</div>
+<main class="wrap">
+<section id="vHem">
   <h2 class="sek">Fortsätt där du var</h2>
   <p class="sub">Dina senaste övningar (exempel i utkastet).</p>
   <div class="forts">
@@ -117,7 +123,7 @@ h2.sek{font-size:1.5rem;margin:26px 4px 4px}
 
   <h2 class="sek">Vad vill du lära dig?</h2>
   <p class="sub">Varje ämne har en egen sida där övningarna ligger i en ordning som passar, från början till utmaning.</p>
-  <div class="vyval"><b>Visa som:</b><button id="vyKort" class="on" type="button">▦ Stora kort</button><button id="vyLista" type="button">☰ Meny</button></div>
+  <div class="vyval"><b>Visa som:</b><button id="vyKort" type="button">▦ Stora kort</button><button id="vyLista" class="on" type="button">☰ Meny</button></div>
   <div class="amnen" id="amnen"></div>
 
   <div class="hjalp">
@@ -147,9 +153,10 @@ const AMNEN={
  verktyg:{namn:"Verktygslådan",c:"#2BB673",bild:"verktyg",tag:"Hundraruta, klocka, kulram och mer",ova:["laborera","förstå"],n:8,href:"../verktyg/",snart:1},
  special:{namn:"Specialare",c:"#7B61FF",bild:"special",tag:"Filmer och mysterier att upptäcka",ova:["rymden","historia","naturen"],n:60,href:"../specialare/",snart:1}};
 $=id=>document.getElementById(id);
+$("amnen").classList.add("lista");
 $("amnen").innerHTML=Object.entries(AMNEN).map(([id,a])=>`<a class="amne${a.snart?" snart":""}" style="--c:${a.c}" href="${a.href}"><span class="topp"><img src="bilder/${a.bild}.svg" alt=""><span class="antal">${a.n} ${a.n===1?"övning":"övningar"}</span></span><span class="txt"><h3>${a.namn}</h3><p class="tag">${a.tag}</p><div class="ova">Du övar: <b>${a.ova.join(", ")}</b></div><span class="go">${a.snart?"Öppna ›":"Öppna ämnet ›"}</span></span></a>`).join("");
 function vy(l){$("amnen").classList.toggle("lista",l);$("vyLista").classList.toggle("on",l);$("vyKort").classList.toggle("on",!l);try{localStorage.setItem("nydesign-vy",l?"lista":"kort")}catch(e){}}
-$("vyKort").onclick=()=>vy(false);$("vyLista").onclick=()=>vy(true);try{if(localStorage.getItem("nydesign-vy")==="lista")vy(true);}catch(e){}
+$("vyKort").onclick=()=>vy(false);$("vyLista").onclick=()=>vy(true);try{if(localStorage.getItem("nydesign-vy")==="kort")vy(false);}catch(e){}
 // Ämnessidor: Matte och Svenska är utarbetade i utkastet
 const typ={o:["🎯","Öva"],s:["🎮","Spela"],u:["🔭","Utforska"],v:["🧰","Verktyg"]};
 const SIDOR={
@@ -188,7 +195,7 @@ function amne(id){const a=AMNEN[id],S=SIDOR[id];const v=$("vAmne");
     const k=b.dataset.ak;v.querySelectorAll(".card").forEach(c=>{const lo=+c.dataset.lo,hi=+c.dataset.hi;c.classList.toggle("dold",k!=="alla"&&!(k==="4"?hi>=4:(lo<=+k&&hi>=+k)));});
     v.querySelectorAll(".grupp").forEach(g=>g.hidden=!g.querySelector(".card:not(.dold)"));};
   setTimeout(()=>{if(window.stjLappar)stjLappar();},0);}
-function rutt(){const h=location.hash.slice(1);const ok=SIDOR[h];$("vHem").hidden=!!ok;$("vAmne").hidden=!ok;if(ok)amne(h);window.scrollTo(0,0);}
+function rutt(){const h=location.hash.slice(1);const ok=SIDOR[h];$("topband").hidden=!!ok;$("vHem").hidden=!!ok;$("vAmne").hidden=!ok;if(ok)amne(h);window.scrollTo(0,0);}
 addEventListener("hashchange",rutt);rutt();
 $("bSnabb").onclick=()=>{const L=["multiplikation","klockan","knepigaljud","dubbelteckning","sagobyggaren","ordkedjan","vagen","gomda","brak","trerirad"];location.href="../"+L[Math.floor(Math.random()*L.length)]+"/";};
 </script>
