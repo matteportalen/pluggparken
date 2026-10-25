@@ -351,7 +351,7 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 .park .d-sudd:hover{transform:translateY(-3px) rotate(-4deg)}
 .park .d-sudd.sudda{animation:suddan .5s ease-in-out}
 @keyframes suddan{0%{transform:translateX(0)}25%{transform:translateX(-120px) rotate(-8deg)}50%{transform:translateX(160px) rotate(6deg)}75%{transform:translateX(-60px) rotate(-4deg)}100%{transform:translateX(0)}}
-.ritabtn{position:absolute;top:8px;right:10px;z-index:3;background:#F3F0E4;color:#1F3A35;border:0;border-radius:999px;padding:7px 14px;font:inherit;font-weight:800;font-size:.95rem;box-shadow:0 3px 0 rgba(0,0,0,.3);cursor:pointer}
+.ritabtn{position:absolute;top:8px;right:10px;z-index:3;width:36px;height:36px;display:grid;place-items:center;background:rgba(243,240,228,.92);color:#1F3A35;border:0;border-radius:50%;padding:0;font:inherit;font-weight:800;font-size:1.05rem;line-height:1;box-shadow:0 2px 0 rgba(0,0,0,.3);cursor:pointer}
 .ritabtn.sudda{top:50px}
 .ritabtn[aria-pressed="true"]{background:#F4D35E}
 .tavlahint{position:absolute;right:22px;bottom:22px;z-index:1;color:rgba(243,240,228,.42);font-weight:700;font-size:.9rem;pointer-events:none;transition:opacity .6s;display:none}
@@ -384,8 +384,8 @@ html[data-tema="mork"] .herosok{background:#1A2748;color:#A3B0D6}
     <svg class="d-sudd" viewBox="0 0 56 15"><rect x="0" y="0" width="56" height="10" rx="3" fill="#36507A"/><rect x="0" y="9" width="56" height="6" rx="1.5" fill="#D8D2C2"/></svg>
   </div></div>
   <canvas class="tavla" id="tavla" aria-hidden="true"></canvas>
-  <button class="ritabtn" id="ritaBtn" type="button" hidden aria-pressed="false">✏️ Rita</button>
-  <button class="ritabtn sudda" id="suddaBtn" type="button" hidden>🧽 Sudda</button>
+  <button class="ritabtn" id="ritaBtn" type="button" hidden aria-pressed="false" aria-label="Rita på tavlan">✏️</button>
+  <button class="ritabtn sudda" id="suddaBtn" type="button" hidden aria-label="Sudda tavlan">🧽</button>
   <div class="tavlahint" id="tavlaHint" aria-hidden="true">Rita på tavlan ✏️</div>
   <div class="hero-in">
     <div class="title">
@@ -1224,10 +1224,13 @@ else if(act&&act!==owner()){switchTo(act);}  // en annan flik har bytt profil
     c.classList.add("bort");setTimeout(function(){ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,c.width,c.height);ctx.setTransform(dpr,0,0,dpr,0,0);c.classList.remove("bort");},360);
   }
   if(sudd){sudd.addEventListener("click",suddaAlla);}
-  function satt(on){lage=on;c.classList.toggle("rita",on);if(rb){rb.setAttribute("aria-pressed",on?"true":"false");rb.textContent=on?"✓ Klar":"✏️ Rita";}if(sb)sb.hidden=!on;}
+  function satt(on){lage=on;c.classList.toggle("rita",on);if(rb){rb.setAttribute("aria-pressed",on?"true":"false");rb.textContent=on?"✓":"✏️";rb.setAttribute("aria-label",on?"Klar med ritandet":"Rita på tavlan");}if(sb)sb.hidden=!on;}
+  if(sb)sb.addEventListener("click",suddaAlla);
   if(grov){
-    if(rb){rb.hidden=false;rb.addEventListener("click",function(){satt(!lage);});}
-    if(sb)sb.addEventListener("click",suddaAlla);
+    if(Math.min(screen.width,screen.height,window.innerWidth)>=600){
+      /* surfplatta: man ritar direkt med fingret, ingen knapp; 🧽 behövs bara när sudden i kritrännan är gömd (under 900 px) */
+      satt(true);if(rb)rb.hidden=true;if(sb)sb.hidden=window.innerWidth>=900;
+    }else if(rb){rb.hidden=false;rb.addEventListener("click",function(){satt(!lage);});}
   }
   if(window.ResizeObserver)new ResizeObserver(storlek).observe(hero);else addEventListener("resize",storlek);
   storlek();
