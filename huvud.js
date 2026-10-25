@@ -93,7 +93,7 @@ body.mph-mini #quit{display:none}
   const em=e=>`<span class="mph-em" aria-hidden="true">${e}</span>`;
   const NYMENY=[{id:'hem',namn:'Välj ämne',sub:'Alla ämnen',href:'ny/',logo:em('🏠')},{id:'matte',namn:'Matematik',sub:'Räkna, spela och utforska',href:'ny/matte/',logo:em('🔢')},
     {id:'svenska',namn:'Svenska',sub:'Ord, stavning, läsning och sagor',href:'ny/svenska/',logo:em('📖')},{id:'rymd',namn:'Rymd och natur',sub:'Rymdlabbet och planeterna',href:'ovriga/rymdlabbet/',logo:em('🔭')},
-    {id:'so',namn:'SO',sub:'Kartor, länder och platser',href:'ny/so/',logo:em('🗺️')},{id:'special',namn:'Specialare',sub:'Minilektioner om spännande saker',href:'specialare/',logo:em('🎁')},
+    {id:'so',namn:'SO',sub:'Kartor, länder och platser',href:'ny/so/',logo:em('🗺️')},{id:'special',namn:'Specialare',sub:'Minilektioner om spännande ämnen',href:'specialare/',logo:em('🎁')},
     {id:'fler',namn:'Fler ämnen',sub:'Engelska, logik, kod och pengar',href:'ny/fler/',logo:em('🧩')}];
   const MENY=ds.meny==='ny'?NYMENY:PORTALER,MENYNU=ds.meny==='ny'?(NYMENY.find(p=>p.id===ds.amne)||null):PORTAL;
   window.MPLogo=LOGO_PP;
