@@ -173,12 +173,18 @@ const TYPER={
       for(let i=0;i<5;i++){g+=`<rect x="${xs+i*small}" y="144" width="${small}" height="${small}" fill="none" stroke="${INK}" stroke-width="2"/>`;if(i<n-10)g+=`<circle cx="${xs+i*small+small/2}" cy="${144+small/2}" r="${small*.34}" fill="${BLA}"/>`;}
       return{svg:S(g),delar:[10,n-10],text:`En full tioram och ${n-10} till: 10 + ${n-10} = ${n}`};}},
   hander:{kan:n=>n>=3&&n<=10,rita(n){const[a,b]=n===10?[5,5]:pick(dela2(n,5).filter(p=>p[0]>=1&&p[1]>=1));
+    // en hand: 4 fingrar + tumme. Uppsträckt = långt finger, inviktat = kort stubbe mot handflatan. 5 uppe = alla fem, färre = tummen invikt.
+    const SK="#FFD6A8",KT="#C9874D";
     const hand=(x,upp,spegel)=>{let g=`<g transform="translate(${x},0)${spegel?" scale(-1,1)":""}">`;
-      const fx=[-36,-16,4,24];fx.forEach((f,i)=>{const up=i<Math.min(4,upp);g+=`<rect x="${f}" y="${up?34:86}" width="17" height="${up?80:28}" rx="8.5" fill="#FFD6A8" stroke="#C9874D" stroke-width="2.5"/>`;});
-      const tum=upp===5;g+=`<rect x="-62" y="${tum?98:120}" width="${tum?44:26}" height="17" rx="8.5" fill="#FFD6A8" stroke="#C9874D" stroke-width="2.5" transform="rotate(${tum?-25:0} -40 125)"/>`;
-      g+=`<rect x="-42" y="100" width="88" height="82" rx="24" fill="#FFD6A8" stroke="#C9874D" stroke-width="2.5"/></g>`;return g;};
-    // fingrarna räknas från pekfingret; tummen är femte fingret
-    return{svg:S(hand(88,a,false)+hand(212,b,true)),delar:[a,b],text:`${a} + ${b} fingrar = ${n}`};}},
+      const langd=[96,108,100,82];const fx=[-33,-11,11,33];
+      for(let i=0;i<4;i++){const up=i<Math.min(4,upp);
+        g+=up?`<rect x="${fx[i]-10}" y="${118-langd[i]}" width="20" height="${langd[i]+10}" rx="10" fill="${SK}" stroke="${KT}" stroke-width="3"/>`
+             :`<rect x="${fx[i]-10}" y="96" width="20" height="40" rx="10" fill="${SK}" stroke="${KT}" stroke-width="3"/>`;}
+      g+=`<rect x="-44" y="112" width="88" height="76" rx="28" fill="${SK}" stroke="${KT}" stroke-width="3"/>`;
+      g+=upp===5?`<g transform="translate(-40,150) rotate(-38)"><rect x="-10" y="-72" width="20" height="82" rx="10" fill="${SK}" stroke="${KT}" stroke-width="3"/></g>`
+               :`<rect x="-56" y="136" width="32" height="34" rx="16" fill="${SK}" stroke="${KT}" stroke-width="3"/>`;
+      g+=`</g>`;return g;};
+    return{svg:S(hand(92,a,false)+hand(208,b,true)),delar:[a,b],text:`${a} + ${b} fingrar = ${n}`};}},
   parlor:{kan:n=>n>=5&&n<=15,rita(n){const r=11,d=24;let g=`<line x1="14" y1="100" x2="286" y2="100" stroke="#8A6A3A" stroke-width="4"/>`;const grp=[];for(let k=n;k>0;k-=5)grp.push(Math.min(5,k));
     let x=150-((n-1)*d+(grp.length-1)*10)/2;grp.forEach((k,gi)=>{for(let i=0;i<k;i++){g+=`<circle cx="${x}" cy="100" r="${r}" fill="${gi%2?"#F4F7FD":RED}" stroke="${INK}" stroke-width="2.5"/>`;x+=d;}x+=10;});
     return{svg:S(g),delar:grp,text:`${grp.join(" + ")} pärlor = ${n}`};}},
