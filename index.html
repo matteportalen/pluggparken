@@ -263,6 +263,76 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 .amnek .ik img{width:50px;height:50px}
 .amnek .txt{flex:1;min-width:0}.amnek b{display:block;font-size:1.45rem;line-height:1.1}.amnek small{display:block;color:var(--muted);font-weight:600;font-size:1rem;line-height:1.3;margin-top:3px}
 .amnek .chev{font-size:2rem;font-weight:800;color:var(--c)}
+/* animerade ämneskort: ikonen rör sig när man pekar (dator) eller en gång när kortet kommer i bild (pekskärm) */
+.amnek{--d:3.4s}
+.amnek .ik.a{position:relative;background:linear-gradient(145deg,color-mix(in srgb,var(--c) 78%,#fff),var(--c) 58%,color-mix(in srgb,var(--c) 82%,#000))}
+.amnek .ik.a::before{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(circle at 28% 22%,rgba(255,255,255,.35),transparent 55%);pointer-events:none}
+.amnek .ik.a svg{width:54px;height:54px;overflow:visible;position:relative;filter:drop-shadow(0 2px 0 rgba(0,0,0,.18))}
+.amnek .ik.a svg *{fill:none;stroke:#fff;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}
+.amnek .ik.a svg .s{fill:rgba(255,255,255,.22)}
+.amnek .ik.a svg .f{fill:#fff;stroke:none}
+.amnek .ik.a svg text{fill:#fff;stroke:none;font:800 11px "Baloo 2",system-ui,sans-serif;text-anchor:middle}
+.amnek.matte .ik.a svg *{stroke-width:6}
+.amnek .ik.a svg .b,.amnek .ik.a svg .tw path,.amnek .ik.a svg .spk path,.amnek .ik.a svg text{transform-box:fill-box;transform-origin:center}
+.amnek .ik.a svg .vb{transform-box:view-box;transform-origin:24px 24px}
+.amnek.matte .dot{transform:scale(0);opacity:0}
+.amnek.ry .ring{transform:rotate(-22deg)}
+.amnek .lt,.amnek .rg,.amnek .spk path{opacity:0}
+.amnek.sp .lid{transform-box:view-box;transform-origin:8px 24px}
+.amnek.fr .ik img{transform-origin:50% 100%}
+@keyframes am-hup{0%,100%{transform:rotate(0) scale(1)}25%{transform:rotate(-6deg) scale(1.1)}60%{transform:rotate(4deg) scale(1.06)}}
+@keyframes am-rot{0%,18%{transform:rotate(0)}26%,44%{transform:rotate(135deg)}52%,100%{transform:rotate(180deg)}}
+@keyframes am-vv{0%,48%{transform:scaleY(1)}56%,91%{transform:scaleY(0)}98%,100%{transform:scaleY(1)}}
+@keyframes am-dd{0%,66%{transform:scale(0);opacity:0}76%,86%{transform:scale(1);opacity:1}92%,100%{transform:scale(0);opacity:0}}
+@keyframes am-bk{0%,100%{transform:scale(1) rotate(0)}15%{transform:scale(1.07) rotate(-3deg)}32%{transform:scale(1.03) rotate(2deg)}48%{transform:scale(1) rotate(0)}}
+@keyframes am-l1{0%,4%{opacity:0;transform:translateY(0) scale(.4)}22%{opacity:1;transform:translateY(-14px) scale(1.15)}40%{opacity:1;transform:translateY(-20px) scale(1)}54%,100%{opacity:0;transform:translateY(-26px) scale(.9)}}
+@keyframes am-l2{0%,16%{opacity:0;transform:translateY(0) scale(.4)}34%{opacity:1;transform:translateY(-15px) scale(1.15)}52%{opacity:1;transform:translateY(-21px) scale(1)}66%,100%{opacity:0;transform:translateY(-27px) scale(.9)}}
+@keyframes am-l3{0%,28%{opacity:0;transform:translateY(0) scale(.4)}46%{opacity:1;transform:translateY(-14px) scale(1.15)}64%{opacity:1;transform:translateY(-20px) scale(1)}78%,100%{opacity:0;transform:translateY(-26px) scale(.9)}}
+@keyframes am-ring{0%,100%{transform:rotate(-22deg)}50%{transform:rotate(22deg)}}
+@keyframes am-orb{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+@keyframes am-tw1{0%,100%{transform:scale(1);opacity:1}30%{transform:scale(1.9) rotate(45deg);opacity:.55}}
+@keyframes am-tw2{0%,100%{transform:scale(1);opacity:1}55%{transform:scale(1.9) rotate(45deg);opacity:.55}}
+@keyframes am-tw3{0%,100%{transform:scale(1);opacity:1}80%{transform:scale(1.9) rotate(45deg);opacity:.55}}
+@keyframes am-m1{0%,100%{transform:scaleX(1)}35%{transform:scaleX(.12)}70%{transform:scaleX(1)}}
+@keyframes am-m2{0%,100%{transform:scaleX(1)}60%{transform:scaleX(.15)}90%{transform:scaleX(1)}}
+@keyframes am-pin{0%{transform:translateY(0);opacity:1}10%{transform:translateY(-8px);opacity:0}14%{transform:translateY(-22px);opacity:0}34%{transform:translateY(0);opacity:1}40%{transform:translateY(-5px)}46%,100%{transform:translateY(0);opacity:1}}
+@keyframes am-rg{0%,32%{opacity:0;transform:scale(.3)}36%{opacity:.9;transform:scale(.6)}62%,100%{opacity:0;transform:scale(2.8)}}
+@keyframes am-lid{0%,100%{transform:translateY(0) rotate(0)}12%,55%{transform:translateY(-9px) rotate(-14deg)}66%{transform:translateY(0) rotate(0)}71%{transform:translateY(-2.5px)}77%{transform:translateY(0)}}
+@keyframes am-sA{0%,8%{opacity:0;transform:translateY(8px) scale(.2)}22%{opacity:1;transform:translateY(-6px) scale(1.2)}50%{opacity:1;transform:translateY(-10px) scale(1)}62%,100%{opacity:0;transform:translateY(-14px) scale(.3)}}
+@keyframes am-sB{0%,14%{opacity:0;transform:translateY(8px) scale(.2)}28%{opacity:1;transform:translateY(-9px) scale(1.3)}56%{opacity:1;transform:translateY(-14px) scale(1)}68%,100%{opacity:0;transform:translateY(-16px) scale(.3)}}
+@keyframes am-sC{0%,10%{opacity:0;transform:translateY(8px) scale(.2)}25%{opacity:1;transform:translateY(-6px) scale(1.2)}52%{opacity:1;transform:translateY(-10px) scale(1)}64%,100%{opacity:0;transform:translateY(-14px) scale(.3)}}
+@keyframes am-pB{0%,10%{transform:translateX(0)}28%,46%{transform:translateX(10px)}62%{transform:translateX(-1.5px)}70%{transform:translateX(.8px)}78%,100%{transform:translateX(0)}}
+@keyframes am-pA{0%,10%{transform:translateX(0)}28%,46%{transform:translateX(-3px)}62%{transform:translateX(1px)}78%,100%{transform:translateX(0)}}
+@keyframes am-jn{0%,58%{opacity:0;transform:scale(0)}66%{opacity:1;transform:scale(1.5)}82%,100%{opacity:0;transform:scale(.4)}}
+@keyframes am-ball{0%,100%{transform:translateY(0) scale(1,1)}14%{transform:translateY(-14px) scale(.96,1.05)}28%{transform:translateY(0) scale(1.1,.88)}36%{transform:translateY(-6px) scale(1,1)}44%{transform:translateY(0) scale(1.04,.96)}52%{transform:translateY(0) scale(1,1)}}
+@media(prefers-reduced-motion:no-preference){
+.amnek.run{--n:infinite}.amnek.run.once{--n:1}
+.amnek.run:not(.fr) .ik{animation:am-hup var(--d) ease-in-out var(--n)}
+.amnek.run.matte .rot{animation:am-rot var(--d) ease-in-out var(--n)}
+.amnek.run.matte .v{animation:am-vv var(--d) ease-in-out var(--n)}
+.amnek.run.matte .dot{animation:am-dd var(--d) ease-in-out var(--n)}
+.amnek.run.sv .bk{animation:am-bk var(--d) ease-in-out var(--n)}
+.amnek.run.sv .l1{animation:am-l1 var(--d) ease-out var(--n)}
+.amnek.run.sv .l2{animation:am-l2 var(--d) ease-out var(--n)}
+.amnek.run.sv .l3{animation:am-l3 var(--d) ease-out var(--n)}
+.amnek.run.ry .ring{animation:am-ring var(--d) ease-in-out var(--n)}
+.amnek.run.ry .orb{animation:am-orb var(--d) ease-in-out var(--n)}
+.amnek.run.ry .tw1 path{animation:am-tw1 var(--d) ease-in-out var(--n)}
+.amnek.run.ry .tw2 path{animation:am-tw2 var(--d) ease-in-out var(--n)}
+.amnek.run.ry .tw3 path{animation:am-tw3 var(--d) ease-in-out var(--n)}
+.amnek.run.so .mer1{animation:am-m1 var(--d) ease-in-out var(--n)}
+.amnek.run.so .mer2{animation:am-m2 var(--d) ease-in-out var(--n)}
+.amnek.run.so .pin{animation:am-pin var(--d) ease-in var(--n)}
+.amnek.run.so .rg{animation:am-rg var(--d) ease-out var(--n)}
+.amnek.run.sp .lid{animation:am-lid var(--d) ease-in-out var(--n)}
+.amnek.run.sp .spA path{animation:am-sA var(--d) ease-out var(--n)}
+.amnek.run.sp .spB path{animation:am-sB var(--d) ease-out var(--n)}
+.amnek.run.sp .spC path{animation:am-sC var(--d) ease-out var(--n)}
+.amnek.run.fl .pcB{animation:am-pB var(--d) ease-in-out var(--n)}
+.amnek.run.fl .pcA{animation:am-pA var(--d) ease-in-out var(--n)}
+.amnek.run.fl .spC path{animation:am-jn var(--d) ease-out var(--n)}
+.amnek.run.fr .ik img{animation:am-ball var(--d) ease-in-out var(--n)}
+}
 .designlank{display:inline-block;margin:0 0 10px;background:var(--card);color:var(--ink);font-weight:800;border-radius:999px;padding:6px 16px;box-shadow:0 3px 0 var(--line);text-decoration:none}
 
 /* ---------- Utkast: hela sidans bredd, sök i tavlan, en ren rad för profilen och ämneskorten i flera kolumner ---------- */
@@ -321,13 +391,13 @@ html[data-tema="mork"] .herosok{background:#1A2748;color:#A3B0D6}
 
   <h2 class="grp"><span aria-hidden="true">🧭</span>Välj ämne</h2>
   <nav class="amnen" aria-label="Ämnen">
-    <a class="amnek" style="--c:#3D5AFE" href="matte/"><span class="ik"><img src="amnen/matte.svg" alt="" width="64" height="64"></span><span class="txt"><b>Matematik</b><small>Räkna, mäta, spela och upptäck tal</small></span><span class="chev" aria-hidden="true">›</span></a>
-    <a class="amnek" style="--c:#E5484D" href="svenska/"><span class="ik"><img src="amnen/svenska.svg" alt="" width="64" height="64"></span><span class="txt"><b>Svenska</b><small>Ord, stavning, läsning och sagor</small></span><span class="chev" aria-hidden="true">›</span></a>
-    <a class="amnek" style="--c:#1E9E5E" href="ovriga/rymdlabbet/"><span class="ik"><img src="amnen/no.svg" alt="" width="64" height="64"></span><span class="txt"><b>Rymdlabbet</b><small>Planeterna, stjärnorna, årstiderna och svarta hål</small></span><span class="chev" aria-hidden="true">›</span></a>
-    <a class="amnek" style="--c:#F2780C" href="so/"><span class="ik"><img src="amnen/so.svg" alt="" width="64" height="64"></span><span class="txt"><b>SO</b><small>Kartor, länder och platser</small></span><span class="chev" aria-hidden="true">›</span></a>
-    <a class="amnek" style="--c:#7B61FF" href="specialare/"><span class="ik"><img src="amnen/special.svg" alt="" width="64" height="64"></span><span class="txt"><b>Specialare</b><small>Minilektioner om spännande ämnen</small></span><span class="chev" aria-hidden="true">›</span></a>
-    <a class="amnek" style="--c:#0E9AA7" href="fler/"><span class="ik"><img src="amnen/logik.svg" alt="" width="64" height="64"></span><span class="txt"><b>Fler ämnen</b><small>Engelska, logik, kod och pengar</small></span><span class="chev" aria-hidden="true">›</span></a>
-    <a class="amnek fritid" style="--c:#F2780C" href="https://fritidsparken.se" target="_blank" rel="noopener" aria-label="Fritidsparken.se (öppnas på en ny sida)"><span class="ik"><img src="fritidsparken-logo.jpg" alt="" width="64" height="64" style="border-radius:14px;width:64px;height:64px;object-fit:cover"></span><span class="txt"><b>Fritidsparken</b><small>Våra vänner: lek och aktiviteter på fritids</small></span><span class="chev" aria-hidden="true">↗</span></a>
+    <a class="amnek matte" data-a style="--c:#3D5AFE" href="matte/"><span class="ik a"><svg viewBox="0 0 48 48" aria-hidden="true"><g class="rot vb"><path d="M8 24h32"/><path class="v vb" d="M24 8v32"/></g><circle class="dot f vb" cx="24" cy="10" r="4.2"/><circle class="dot f vb" cx="24" cy="38" r="4.2"/></svg></span><span class="txt"><b>Matematik</b><small>Räkna, mäta, spela och upptäck tal</small></span><span class="chev" aria-hidden="true">›</span></a>
+    <a class="amnek sv" data-a style="--c:#E5484D" href="svenska/"><span class="ik a"><svg viewBox="0 0 48 48" aria-hidden="true"><g class="bk b"><path class="s" d="M24 16C19 13 12 13 8 15V38C12 36 19 36 24 39Z"/><path class="s" d="M24 16C29 13 36 13 40 15V38C36 36 29 36 24 39Z"/><path d="M12 22h8M12 27h8M28 22h8M28 27h8" style="stroke-width:2;opacity:.75"/></g><text class="lt l1" x="14" y="24">Å</text><text class="lt l2" x="24" y="24">A</text><text class="lt l3" x="34" y="24">Ö</text></svg></span><span class="txt"><b>Svenska</b><small>Ord, stavning, läsning och sagor</small></span><span class="chev" aria-hidden="true">›</span></a>
+    <a class="amnek ry" data-a style="--c:#1E9E5E" href="ovriga/rymdlabbet/"><span class="ik a"><svg viewBox="0 0 48 48" aria-hidden="true"><g class="tw tw1 b" transform="translate(9 10)"><path class="f" d="M0-4 1.1-1.1 4 0 1.1 1.1 0 4-1.1 1.1-4 0-1.1-1.1z"/></g><g class="tw tw2 b" transform="translate(40 11)"><path class="f" d="M0-4 1.1-1.1 4 0 1.1 1.1 0 4-1.1 1.1-4 0-1.1-1.1z"/></g><g class="tw tw3 b" transform="translate(38 39)"><path class="f" d="M0-4 1.1-1.1 4 0 1.1 1.1 0 4-1.1 1.1-4 0-1.1-1.1z"/></g><circle class="s" cx="24" cy="24" r="9"/><ellipse class="ring vb" cx="24" cy="24" rx="19" ry="6"/><g class="orb vb"><circle class="f" cx="24" cy="3.5" r="2.8"/></g></svg></span><span class="txt"><b>Rymdlabbet</b><small>Planeterna, stjärnorna, årstiderna och svarta hål</small></span><span class="chev" aria-hidden="true">›</span></a>
+    <a class="amnek so" data-a style="--c:#F2780C" href="so/"><span class="ik a"><svg viewBox="0 0 48 48" aria-hidden="true"><circle class="s" cx="22" cy="29" r="14"/><ellipse class="mer1 b" cx="22" cy="29" rx="7" ry="14"/><ellipse class="mer2 b" cx="22" cy="29" rx="11" ry="14" style="opacity:.55"/><path d="M8 29h28" style="stroke-width:2.4"/><ellipse class="rg b" cx="30" cy="22" rx="4" ry="1.7" style="stroke-width:2"/><g class="pin b"><path class="f" d="M30 22C30 22 24 16.5 24 12.5a6 6 0 0 1 12 0C36 16.5 30 22 30 22z"/><circle cx="30" cy="12.5" r="2.3" style="fill:var(--c);stroke:none"/></g></svg></span><span class="txt"><b>SO</b><small>Kartor, länder och platser</small></span><span class="chev" aria-hidden="true">›</span></a>
+    <a class="amnek sp" data-a style="--c:#7B61FF" href="specialare/"><span class="ik a"><svg viewBox="0 0 48 48" aria-hidden="true"><g class="spk spA b" transform="translate(8 14)"><path class="f" d="M0-4 1.1-1.1 4 0 1.1 1.1 0 4-1.1 1.1-4 0-1.1-1.1z"/></g><g class="spk spB b" transform="translate(24 9)"><path class="f" d="M0-4 1.1-1.1 4 0 1.1 1.1 0 4-1.1 1.1-4 0-1.1-1.1z"/></g><g class="spk spC b" transform="translate(40 14)"><path class="f" d="M0-4 1.1-1.1 4 0 1.1 1.1 0 4-1.1 1.1-4 0-1.1-1.1z"/></g><rect class="s" x="10" y="24" width="28" height="16" rx="2.5"/><path d="M24 24v16"/><g class="lid"><rect class="s" x="8" y="17" width="32" height="7" rx="2.5"/><path d="M24 17v7"/><path d="M24 17C21 11 15 11 16 14.5S22 17 24 17zM24 17C27 11 33 11 32 14.5S26 17 24 17z"/></g></svg></span><span class="txt"><b>Specialare</b><small>Minilektioner om spännande ämnen</small></span><span class="chev" aria-hidden="true">›</span></a>
+    <a class="amnek fl" data-a style="--c:#0E9AA7" href="fler/"><span class="ik a"><svg viewBox="0 0 48 48" aria-hidden="true"><g class="pcA b"><path class="s" d="M6 15H20V20A4 4 0 0 1 20 28V33H6Z"/></g><g class="pcB b"><path class="f" d="M26 15H42V33H26V28A4 4 0 0 0 26 20Z" style="stroke:#fff;stroke-width:3.4;stroke-linejoin:round"/></g><g class="spk spC b" transform="translate(24 10)"><path class="f" d="M0-4 1.1-1.1 4 0 1.1 1.1 0 4-1.1 1.1-4 0-1.1-1.1z"/></g></svg></span><span class="txt"><b>Fler ämnen</b><small>Engelska, logik, kod och pengar</small></span><span class="chev" aria-hidden="true">›</span></a>
+    <a class="amnek fritid fr" data-a style="--c:#F2780C" href="https://fritidsparken.se" target="_blank" rel="noopener" aria-label="Fritidsparken.se (öppnas på en ny sida)"><span class="ik"><img src="fritidsparken-logo.jpg" alt="" width="64" height="64" style="border-radius:14px;width:64px;height:64px;object-fit:cover"></span><span class="txt"><b>Fritidsparken</b><small>Våra vänner: lek och aktiviteter på fritids</small></span><span class="chev" aria-hidden="true">↗</span></a>
     </nav>
 
   <p class="foot"><a class="designlank" href="v1/">🕰️ Gamla designen</a><br>Dina stjärnor och rekord sparas på den här enheten. Med ett gratis konto (☁️ Logga in) kan du ta med dem till andra enheter.<br><button class="soundbtn" id="soundBtn"></button></p>
@@ -1062,6 +1132,30 @@ else if(act&&act!==owner()){switchTo(act);}  // en annan flik har bytt profil
 })();
 </script>
 
+<script>
+/* animerade ämneskort (egen skriptblock så att fel någon annanstans inte stoppar den) */
+(function(){try{
+  var K=document.querySelectorAll(".amnek[data-a]");
+  if(!K.length||(window.matchMedia&&matchMedia("(prefers-reduced-motion:reduce)").matches))return;
+  var hov=matchMedia("(hover:hover)").matches;
+  function kor(k,en){if(k.classList.contains("run"))return;if(en)k.classList.add("once");k.classList.add("run");}
+  Array.prototype.forEach.call(K,function(k){
+    if(hov){var p=function(){k.classList.remove("once");k.classList.add("run")};k.addEventListener("mouseenter",p);k.addEventListener("focusin",p);}
+    k.addEventListener("animationiteration",function(){if(!k.matches(":hover,:focus-within"))k.classList.remove("run");});
+    k.addEventListener("animationend",function(){k.classList.remove("run","once");});
+  });
+  if(!hov){
+    var klar=[];
+    function koll(){Array.prototype.forEach.call(K,function(k,i){
+      if(klar[i])return;var r=k.getBoundingClientRect();
+      if(r.height&&r.top>=0&&r.bottom<=(window.innerHeight||document.documentElement.clientHeight)){klar[i]=1;setTimeout(function(){kor(k,true)},400+i*300);}
+    });}
+    window.addEventListener("scroll",koll,{passive:true});window.addEventListener("resize",koll);window.addEventListener("load",koll);
+    setTimeout(koll,300);setTimeout(koll,1200);
+    Array.prototype.forEach.call(K,function(k){var ik=k.querySelector(".ik");if(ik)ik.addEventListener("pointerdown",function(){kor(k,true)});});
+  }
+}catch(e){}})();
+</script>
 <script>try{if(!localStorage.getItem("mp-flyttad"))document.getElementById("hamtaGammal").hidden=false;}catch(e){}</script>
 </body>
 </html>
