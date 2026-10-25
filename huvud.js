@@ -133,8 +133,8 @@ body.mph-mini #quit{display:none}
       if(s>hi){const n=(s-hi)*20;m.m+=n;m.tj+=n;m.hi=s;myntSpara(m);myntVisa(n);}
       else if(m.hi!==hi){m.hi=hi;myntSpara(m);}
     }
-    // spärr mot orimliga summor (t.ex. efter felet ovan): mest möjliga tjänat = 25 per stjärna + 200 per spelad dag + 300. Det som redan är köpt dras av.
-    try{const dg=get('matteportalen-dagar'),dagar=(dg&&dg.days&&dg.days.length)||1,tak=25*MPStjarnor()+200*dagar+300;
+    // spärr mot orimliga summor (t.ex. efter felet ovan, som gav tusentals per minut): tak = 25 per stjärna + 3000 per spelad dag + 2000, så högt att riktigt spelande aldrig når det. Det som redan är köpt dras av.
+    try{const dg=get('matteportalen-dagar'),dagar=(dg&&dg.days&&dg.days.length)||1,tak=25*MPStjarnor()+3000*dagar+2000;
       if(m.tj>tak){const spent=Math.max(0,m.tj-m.m);m.tj=tak;m.m=Math.max(0,tak-spent);myntSpara(m);}}catch(e){}
     return m;}
   function myntSpara(m){try{localStorage.setItem(MK,JSON.stringify(m));}catch(e){}}
