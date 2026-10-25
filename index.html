@@ -249,6 +249,9 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
   .lc-name{font-size:26pt}
   .lc-how{font-size:11pt}
 }
+.komlabel{display:block;text-align:left;font-weight:700;margin:10px 4px 0;font-size:.95rem;line-height:1.3}
+.komlabel input{width:20px;height:20px;vertical-align:-4px;margin-right:6px;accent-color:var(--accent)}
+.komlabel small{display:block;color:var(--muted);font-weight:600;font-size:.82rem;margin:2px 0 0 28px}
 </style>
 </head>
 <body>
@@ -349,6 +352,7 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
   <button class="guestlink" id="scanBtn" style="margin-top:10px">📷 Jag har ett kort med QR-kod</button>
   <div class="pinfo"><span aria-hidden="true">ℹ️</span><p>Med ett konto sparas dina poäng i molnet. Då kan du logga in på en annan dator eller iPad och fortsätta där du var. Du får ett påhittat användarnamn och lösenord. Inga riktiga namn och ingen e-post.</p></div>
   <div class="pinfo" id="hamtaGammal" hidden><span aria-hidden="true">🚚</span><p>Har du spelat på <b>matteportalen.github.io</b>? Pluggparken har flyttat hit. <a href="https://matteportalen.github.io/" style="color:var(--accent);font-weight:800">Hämta dina framsteg därifrån</a></p></div>
+  <label class="komlabel"><input type="checkbox" class="komchk" checked> Kom ihåg mig på den här enheten<small>Bocka ur om du använder en delad dator.</small></label>
   <button class="guestlink" id="guestBtn">Fortsätt som gäst</button>
 </div></div>
 
@@ -401,6 +405,7 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
   <label class="plabel" for="kInKod" style="margin-top:10px">Lösenord</label>
   <input id="kInKod" class="pinput" style="width:100%" placeholder="Till exempel pannkaka" autocomplete="current-password" autocapitalize="none" autocorrect="off" spellcheck="false">
   <p class="pinmsg" id="kInMsg"></p>
+  <label class="komlabel"><input type="checkbox" class="komchk" checked> Kom ihåg mig på den här enheten<small>Bocka ur om du använder en delad dator.</small></label>
   <button class="gobtn" id="kInGo">Logga in</button>
   <p class="pnote">Står på ditt kort. Har du inget konto? Gå tillbaka och tryck på <b>Skapa ett nytt konto</b>.</p>
 </div></div>
@@ -770,6 +775,10 @@ const ssGet=k=>{try{return sessionStorage.getItem(k)}catch(e){return null}},ssSe
 const list=()=>jGet("mp-profiles")||[],saveList=l=>jSet("mp-profiles",l);
 const owner=()=>lsGet("mp-owner"),setOwner=id=>id?lsSet("mp-owner",id):lsDel("mp-owner");
 const active=()=>ssGet("mp-active");
+// Kom ihåg mig: vem som är inloggad sparas på enheten (mp-kom) så att man slipper logga in varje gång; valet kan stängas av (mp-kom-pref), t.ex. på en delad dator
+const komPref=()=>lsGet("mp-kom-pref")!=="0";
+function setActive(id){ssSet("mp-active",id);if(id&&id!=="gast"&&komPref())lsSet("mp-kom",id);else lsDel("mp-kom");}
+function klaraAktiv(){try{sessionStorage.removeItem("mp-active")}catch(e){}lsDel("mp-kom");}
 const byId=id=>list().find(p=>p.id===id);
 const hash=s=>{let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return(h>>>0).toString(36);};
 const snapLive=()=>{const o={};PKEYS.forEach(k=>{const v=lsGet(k);if(v!=null)o[k]=v;});return o;};
@@ -778,7 +787,7 @@ const loadLive=o=>{clearLive();Object.entries(o||{}).forEach(([k,v])=>lsSet(k,v)
 const stash=()=>{const ow=owner();if(ow)jSet("mp-bundle-"+ow,snapLive());};
 function switchTo(id){
   if(owner()!==id){stash();loadLive(jGet("mp-bundle-"+id)||{});setOwner(id);}
-  ssSet("mp-active",id);history.replaceState(null,"",location.pathname);location.reload();
+  setActive(id);history.replaceState(null,"",location.pathname);location.reload();
 }
 const owlOf=id=>{const b=id===owner()?snapLive():(jGet("mp-bundle-"+id)||{});let c={};try{c=JSON.parse(b["matteportalen-uggla"]||"{}")}catch(e){}
   return owlSVG(Object.assign({animal:"uggla",color:"lila",glasses:"runda",hat:"ingen",neck:"ingen",hand:"ingen",back:"ingen"},c));};
@@ -801,6 +810,7 @@ $("pinPad").onclick=e=>{const b=e.target.closest("button");if(!b||b.dataset.k===
 document.addEventListener("keydown",e=>{if($("mPin").hidden)return;if(/^\d$/.test(e.key))pinKey(e.key);else if(e.key==="Backspace")pinKey("del");});
 
 /* ---------- Välja profil ---------- */
+document.querySelectorAll(".komchk").forEach(c=>{c.checked=komPref();c.onchange=()=>{lsSet("mp-kom-pref",c.checked?"1":"0");document.querySelectorAll(".komchk").forEach(x=>x.checked=c.checked);};});
 function openWho(){
   const ps=list();
   $("whoGrid").innerHTML=ps.map(p=>`<button data-id="${p.id}">${owlOf(p.id)}${esc(p.name)}</button>`).join("");$("whoGrid").hidden=!ps.length;
@@ -841,7 +851,7 @@ function createProfile(name,pin){
   ps.push({id,name,salt,pinH:hash(pin+salt),created:Date.now()});saveList(ps);
   if(first&&!owner()){setOwner(id);}          // första profilen får det som redan finns på enheten
   else{stash();clearLive();setOwner(id);}
-  ssSet("mp-active",id);location.reload();
+  setActive(id);location.reload();
 }
 
 /* ---------- Glömt koden: en vuxen hjälper till ---------- */
@@ -854,7 +864,7 @@ function adultReset(p){
 }
 
 /* ---------- Min profil ---------- */
-const act=active(),me=act&&act!=="gast"?byId(act):null;
+const act=active()||(()=>{const k=lsGet("mp-kom");if(k&&byId(k)){ssSet("mp-active",k);return k;}return null;})(),me=act&&act!=="gast"?byId(act):null;   // minns vem som var inloggad sist
 function chip(){
   const w=$("whoChip");
   if(me)w.innerHTML=`<span class="mini">${owlOf(me.id)}</span>${esc(me.name)}${me.konto?" ☁️":""} ▾`;
@@ -866,14 +876,14 @@ $("whoChip").onclick=()=>{if(me){$("profName").textContent=me.name+(me.konto&&me
   else openWho();};
 // logga ut: spara (och synka) först, sedan till "Vem tränar idag?"
 $("pUt").onclick=async()=>{stash();if(me&&me.konto)await Promise.race([MPKonto.synka(),new Promise(r=>setTimeout(r,2500))]);
-  window.__forrigeProfil=null;try{sessionStorage.removeItem("mp-active")}catch(e){}openWho();};
-$("pSwitch").onclick=()=>{window.__forrigeProfil=active();stash();try{sessionStorage.removeItem("mp-active")}catch(e){}openWho();};
+  window.__forrigeProfil=null;klaraAktiv();openWho();};
+$("pSwitch").onclick=()=>{window.__forrigeProfil=active();stash();klaraAktiv();openWho();};
 $("pPin").onclick=()=>askPin("Skriv din nuvarande kod",owlOf(me.id),v=>{if(hash(v+me.salt)!==me.pinH){$("pinMsg").textContent="Fel kod.";return false;}
   askPin("Välj en ny kod",owlOf(me.id),n=>{const ps=list(),q=ps.find(x=>x.id===me.id);q.pinH=hash(n+q.salt);saveList(ps);closeAll();alert("Klart! Din nya kod är sparad.");return true;});return true;});
 $("pDel").onclick=()=>{if(me&&me.konto){raderaKonto();return;}askPin(`Skriv koden för att ta bort ${me.name}`,owlOf(me.id),v=>{if(hash(v+me.salt)!==me.pinH){$("pinMsg").textContent="Fel kod.";return false;}
   if(!confirm(`Vill du verkligen ta bort ${me.name}? Alla stjärnor och klistermärken för profilen försvinner.`)){closeAll();return true;}
   saveList(list().filter(p=>p.id!==me.id));lsDel("mp-bundle-"+me.id);if(owner()===me.id){clearLive();setOwner(null);}
-  try{sessionStorage.removeItem("mp-active")}catch(e){}location.reload();return true;});};
+  klaraAktiv();location.reload();return true;});};
 
 /* ---------- Flyttkod (bara gamla länkar #flytta= och #kort= tas emot, knapparna är borttagna) ---------- */
 const b64u=bytes=>{let s="";bytes.forEach(b=>s+=String.fromCharCode(b));return btoa(s).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");};
@@ -981,7 +991,7 @@ function importBundle(o){
   saveList(ps);
   if(owner()===p.id){loadLive(o.d);}else{jSet("mp-bundle-"+p.id,o.d);}
   alert(`Klart! ${p.name} finns nu på den här enheten. Logga in med samma kod som förut.`);
-  history.replaceState(null,"",location.pathname);try{sessionStorage.removeItem("mp-active")}catch(e){}location.reload();
+  history.replaceState(null,"",location.pathname);klaraAktiv();location.reload();
 }
 
 /* ---------- Konton i molnet (konto.js) ---------- */
@@ -1009,7 +1019,7 @@ $("kNyGo").onclick=async()=>{const b=$("kNyGo");b.disabled=true;$("kNyMsg").text
   p.name=r.namn;p.konto=k;ps.push(p);saveList(ps);
   if(Object.keys(d).length){lsDel("mp-bundle-gast");setOwner(p.id);}   // gästens poäng blir kontots
   else{clearLive();setOwner(p.id);}
-  ssSet("mp-active",p.id);MPKonto.synka();visaKonto(k,true);};
+  setActive(p.id);MPKonto.synka();visaKonto(k,true);};
 $("kiSpela").onclick=()=>{history.replaceState(null,"",location.pathname);location.reload();};
 $("kiKort").onclick=()=>{if(!$("kiSpela").hidden){const k={namn:$("kiNamn").textContent,kod:$("kiKod").textContent};
     $("lcOwl").innerHTML="";$("lcName").textContent=k.namn;$("lcQr").hidden=true;$("lcKonto").hidden=false;$("lcKonto").innerHTML=`<span>Användarnamn</span>${esc(k.namn)}<span>Lösenord</span>${esc(k.kod)}`;$("lcNote").textContent="";openM("mCard");return;}
@@ -1026,7 +1036,7 @@ $("radGo").onclick=async()=>{if(parseInt($("radSvar").value,10)!==radA*radB){$("
   $("radGo").disabled=false;
   if(!r.ok&&r.fel!=="kod"){$("radMsg").textContent=r.fel==="natet"?"Det behövs internet för att radera kontot. Försök igen.":"Kontot är spärrat en stund efter för många fel lösenord. Försök igen senare.";return;}
   saveList(list().filter(p=>p.id!==me.id));lsDel("mp-bundle-"+me.id);if(owner()===me.id){clearLive();setOwner(null);}
-  try{sessionStorage.removeItem("mp-active")}catch(e){}alert("Kontot är raderat.");location.reload();};
+  klaraAktiv();alert("Kontot är raderat.");location.reload();};
 // logga in: kontots profil finns redan på enheten → bara lösenordet behövs; annars hämtas allt från molnet
 function oppnaIn(namn){$("kInNamn").value=namn||"";$("kInKod").value="";$("kInMsg").textContent="";openM("mKIn");setTimeout(()=>$(namn?"kInKod":"kInNamn").focus(),50);}
 $("kontoIn").onclick=()=>oppnaIn("");
