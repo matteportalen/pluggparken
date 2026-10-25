@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<script src="../tema.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sagobyggaren – Pluggparken</title>
+<meta name="description" content="Sagobyggaren: välj hjälte, plats och vad som händer och bygg din egen saga med bilder. Välj meningar eller skriv själv. Läs upp och spara.">
+<link rel="canonical" href="https://pluggparken.se/sagobyggaren/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Pluggparken">
+<meta property="og:locale" content="sv_SE">
+<meta property="og:title" content="Sagobyggaren – Pluggparken">
+<meta property="og:description" content="Sagobyggaren: välj hjälte, plats och vad som händer och bygg din egen saga med bilder. Välj meningar eller skriv själv. Läs upp och spara.">
+<meta property="og:url" content="https://pluggparken.se/sagobyggaren/">
+<meta property="og:image" content="https://pluggparken.se/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#1F3A35">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/apple-touch-icon.png" sizes="180x180">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Andika:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EAF3FF; --ink:#1D2B53; --muted:#56668F; --card:#FFFFFF; --line:#C6D6F2; --soft:#F1F6FF;
+  --good:#1E9E5E; --good-dark:#157548; --bad:#E5484D; --accent:#3D5AFE; --gold:#F2B707; --hero1:#FF7BAC; --hero2:#E5487F; --heroS:#A82A58;
+  --font:"Baloo 2","Trebuchet MS",system-ui,sans-serif; --ord:"Andika","Baloo 2",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:680px;margin:0 auto;padding:12px 16px 48px}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;border:0;background:none}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+[hidden]{display:none!important}
+.hero{display:flex;gap:16px;align-items:center;background:linear-gradient(135deg,var(--hero1),var(--hero2));color:#fff;border-radius:24px;padding:18px;box-shadow:0 5px 0 var(--heroS);margin:6px 0 16px}
+.hero svg{flex:none;width:130px;height:auto;filter:drop-shadow(0 3px 0 rgba(0,0,0,.15))}
+.hero h1{margin:0;font-size:clamp(1.7rem,6vw,2.3rem);line-height:1.05}
+.hero p{margin:6px 0 0;font-weight:600;opacity:.95}
+.niv{display:grid;gap:10px}
+.niv button{display:flex;align-items:center;gap:14px;background:var(--card);border-radius:18px;padding:12px 14px;box-shadow:0 4px 0 var(--line);text-align:left;width:100%}
+.niv button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.niv .nr{flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-weight:800;font-size:1.4rem;color:#fff}
+.niv b{display:block;font-size:1.12rem;line-height:1.15}
+.niv small{display:block;color:var(--muted);font-weight:600;font-size:.88rem;line-height:1.25}
+.niv .st{margin-left:auto;flex:none;color:var(--gold);font-size:1.15rem;letter-spacing:1px}
+.niv .st .off{color:var(--line)}
+.info{color:var(--muted);font-size:.9rem;margin:14px 2px 0}
+.topp{display:flex;align-items:center;gap:10px;margin:4px 0 10px}
+.dots{display:flex;gap:6px;flex:1;flex-wrap:wrap}
+.dots i{width:12px;height:12px;border-radius:50%;background:var(--line)}
+.dots i.ok{background:var(--good)}.dots i.f{background:var(--bad)}.dots i.nu{background:var(--gold)}
+.niva-t{font-weight:800;color:var(--muted);font-size:.9rem}
+.pet{flex:none;width:48px;height:52px;pointer-events:none}.pet svg{width:100%;height:100%}
+.pet.hopp{animation:hopp .55s ease}
+@keyframes hopp{40%{transform:translateY(-18px)}}
+.kort{background:var(--card);border-radius:22px;box-shadow:0 4px 0 var(--line);padding:16px}
+.fb{text-align:center;font-weight:700;margin:12px 0 0;min-height:2.6em;font-size:1.05rem}
+.fb.ratt{color:var(--good-dark)}.fb.fel{color:#B4232A}
+.knapp{display:inline-block;background:var(--good);color:#fff;border-radius:16px;padding:12px 26px;font-weight:800;font-size:1.15rem;box-shadow:0 5px 0 var(--good-dark);margin:6px}
+.knapp.vit{background:var(--card);color:var(--ink);box-shadow:0 5px 0 var(--line)}
+.knapp.bla{background:var(--accent);box-shadow:0 5px 0 #2A3FB8}
+.knapp:disabled{opacity:.4;pointer-events:none}
+.knapp:active{transform:translateY(3px)}
+.lyssna{display:inline-flex;align-items:center;gap:6px;background:var(--soft);border-radius:999px;padding:6px 14px;font-weight:700;font-size:.95rem;box-shadow:0 2px 0 var(--line)}
+.res{text-align:center}
+.res .stj{font-size:3rem;letter-spacing:6px;color:var(--gold);margin:8px 0}
+.res .stj .off{color:var(--line)}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:50}
+@media(max-width:420px){.hero svg{width:96px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.steg{display:flex;gap:8px;justify-content:center;margin:2px 0 10px}
+.steg i{font-style:normal;font-weight:800;font-size:.85rem;padding:3px 12px;border-radius:999px;background:var(--line);color:var(--muted)}
+.steg i.nu{background:var(--accent);color:#fff}.steg i.klar{background:var(--good);color:#fff}
+.rubr{text-align:center;font-weight:800;font-size:1.35rem;margin:6px 0 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:10px}
+.grid button{display:grid;justify-items:center;gap:2px;background:var(--card);border-radius:18px;padding:10px 6px 8px;box-shadow:0 4px 0 var(--line);font-weight:800;color:var(--ink)}
+.grid button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.grid button img{width:72px;height:72px;object-fit:contain}
+.grid button .bgk{width:100%;height:70px;border-radius:12px;object-fit:cover;object-position:bottom;background:linear-gradient(#9AD7FF,#E4F4FF);mix-blend-mode:normal}
+.grid.pl{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+/* scenen */
+.scen{position:relative;aspect-ratio:3/2;border-radius:22px;overflow:hidden;box-shadow:0 4px 0 var(--line);background:linear-gradient(#8FD0FF,#DDF1FF 70%)}
+.scen .bgimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:bottom;mix-blend-mode:multiply}
+.scen .sp{position:absolute;bottom:13%;width:24%;aspect-ratio:1;object-fit:contain;filter:drop-shadow(0 4px 0 rgba(0,0,0,.14));animation:sPop .5s ease-out both}
+.scen .hero{left:14%}.scen .ev{left:60%}
+.scen.s1 .hero{left:38%;width:26%}
+.scen.s2 .hero{left:12%}.scen.s2 .ev{left:62%;animation-delay:.25s}
+.scen.s3 .hero{left:26%;width:30%}.scen.s3 .ev{left:58%;width:20%;animation-delay:.1s}
+.scen.s4 .hero{left:30%;width:28%}.scen.s4 .ev{left:58%;width:22%}
+.scen .dek{position:absolute;width:11%;aspect-ratio:1;object-fit:contain;animation:flyt 2.6s ease-in-out infinite}
+.scen .sky{position:absolute;top:8%;width:9%}
+@keyframes sPop{from{transform:scale(.4) translateY(14px);opacity:0}}
+@keyframes flyt{50%{transform:translateY(-8px)}}
+.sida{font-weight:800;color:var(--muted);text-align:center;margin:10px 0 6px}
+.hittills{font-family:var(--ord);font-size:1.05rem;line-height:1.55;background:var(--soft);border-radius:16px;padding:10px 14px;margin:10px 0;color:var(--ink)}
+.hittills:empty{display:none}
+.alt{display:grid;gap:8px;margin-top:10px}
+.alt button{font-family:var(--ord);font-size:1.12rem;font-weight:700;text-align:left;background:var(--card);border:3px solid var(--line);border-radius:16px;padding:12px 14px;box-shadow:0 4px 0 var(--line);color:var(--ink);line-height:1.4}
+.alt button.v{background:#E3EAFF;border-color:var(--accent);box-shadow:0 4px 0 var(--accent)}
+.alt button.skriv{background:#FFF8DC;border-color:var(--gold);box-shadow:0 4px 0 var(--gold)}
+.skrivruta{margin-top:10px}
+.skrivruta textarea{width:100%;min-height:96px;font-family:var(--ord);font-size:1.2rem;font-weight:700;border:3px solid var(--line);border-radius:16px;padding:10px 14px;background:var(--card);color:var(--ink);resize:vertical;line-height:1.45}
+.skrivruta textarea:focus{border-color:var(--accent);outline:none}
+.start{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0}
+.start button{background:#FFF8DC;border:2px solid var(--gold);border-radius:999px;padding:4px 14px;font-weight:700;font-family:var(--ord);font-size:.95rem}
+.nav{display:flex;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap}
+.nav .knapp{margin:0}
+.bok{display:grid;gap:14px}
+.bok h2{margin:2px 0 0;text-align:center;font-size:1.6rem}
+.bok .sidk{background:var(--card);border-radius:22px;box-shadow:0 4px 0 var(--line);padding:10px 10px 14px}
+.bok .sidk .scen{box-shadow:none}
+.bok .sidk p{font-family:var(--ord);font-size:1.2rem;font-weight:700;line-height:1.6;margin:10px 6px 0}
+.mina{display:grid;gap:10px}
+.mina .m{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:18px;box-shadow:0 4px 0 var(--line);padding:10px 12px;text-align:left;width:100%}
+.mina .m .scen{flex:none;width:96px;border-radius:12px;box-shadow:none}
+.mina .m b{display:block;font-size:1.05rem;line-height:1.2}.mina .m small{color:var(--muted);font-weight:600}
+.mina .m .x{margin-left:auto;font-size:1.1rem;padding:6px}
+.stjtoast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:var(--ink);color:#fff;border-radius:999px;padding:10px 22px;font-weight:800;z-index:60;box-shadow:0 8px 24px rgba(0,0,0,.3);animation:sPop .4s both}
+@media print{body *{visibility:hidden}.bok,.bok *{visibility:visible}.bok{position:absolute;left:0;top:0;width:100%}.nav{display:none}.scen .sp,.scen .dek{animation:none}}
+
+</style>
+</head>
+<body>
+<script src="../ljud.js"></script>
+<script src="../djur.js"></script>
+<script src="../huvud.js" data-titel="Sagobyggaren" data-ikon="📖"></script>
+<main class="wrap">
+
+<section class="screen" id="home">
+  <div class="hero">
+    <svg viewBox="0 0 120 64" aria-hidden="true"><rect x="2" y="2" width="116" height="60" rx="10" fill="#BFE6FF"/><path d="M2 44 Q30 30 60 42 T118 38 V62 H2Z" fill="#2BB673"/>
+<image href="bilder/rabbit_1.webp" x="14" y="16" width="38" height="38"/><image href="bilder/key_1.webp" x="70" y="30" width="26" height="26"/><text x="86" y="22" font-size="14">✨</text></svg>
+    <div><h1>Sagobyggaren</h1><p>Välj hjälte, plats och vad som händer. Sedan bygger du sagan sida för sida.</p></div>
+  </div>
+  <div class="niv" id="niv"></div>
+  <p class="info">Välj bland meningar eller skriv egna. Sagan sparas under Mina sagor och kan läsas upp av datorn eller en vuxen.</p>
+  <div class="nav" style="margin-top:6px"><button class="knapp vit" id="bMinaH" type="button">📖 Mina sagor</button></div>
+</section>
+
+<section class="screen" id="game" hidden>
+  <div id="vVal" hidden>
+    <div class="steg" id="steg"></div>
+    <div class="rubr" id="rubr"></div>
+    <div class="grid" id="gridVal"></div>
+    <div class="nav"><button class="knapp vit" id="bTillbaka" type="button">◀ Tillbaka</button></div>
+  </div>
+  <div id="vByg" hidden>
+    <div class="sida" id="sida"></div>
+    <div class="scen" id="scenByg"></div>
+    <div class="hittills" id="hittills"></div>
+    <div class="alt" id="alt"></div>
+    <div class="skrivruta" id="skriv" hidden><textarea id="txt" maxlength="220" placeholder="Skriv vad som händer …" aria-label="Skriv din mening"></textarea><div class="start" id="start"></div></div>
+    <div class="fb" id="fbS" aria-live="polite"></div>
+    <div class="nav"><button class="knapp vit" id="bBak" type="button">◀ Tillbaka</button><button class="knapp bla" id="bFram" type="button" disabled>Nästa ▶</button></div>
+  </div>
+  <div id="vBok" hidden>
+    <div class="bok" id="bok"></div>
+    <div class="nav"><button class="knapp vit" id="bLasBok" type="button">🔊 Läs upp</button><button class="knapp vit" id="bSkriv" type="button">🖨️ Skriv ut</button><button class="knapp" id="bNy" type="button">Ny saga</button><button class="knapp vit" id="bMinaB" type="button">Mina sagor</button></div>
+  </div>
+  <div id="vMina" hidden>
+    <div class="rubr">Mina sagor</div>
+    <div class="mina" id="mina"></div>
+    <div class="nav"><button class="knapp vit" id="bHemM" type="button">◀ Till början</button></div>
+  </div>
+</section>
+
+<section class="screen res" id="result" hidden>
+  <h2 id="rRub" style="margin:10px 0 0">Bra jobbat!</h2>
+  <div class="stj" id="rStj"></div>
+  <p id="rTxt" style="font-weight:700;margin:0 0 14px"></p>
+  <button class="knapp" id="rIgen">Spela igen</button>
+  <button class="knapp vit" id="rHome">Välj nivå</button>
+</section>
+
+</main>
+<canvas id="fx" hidden></canvas>
+<script>
+const $=id=>document.getElementById(id);
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const KEY="mattespel-sagobyggaren-v1";
+const data=(()=>{try{return Object.assign({stars:{}},JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){return{stars:{}}}})();
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}};
+const reduced=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
+const NIV=[null].concat([{"namn": "Nivå 1: Välj meningar", "txt": "Tre meningar att välja bland på varje sida. Bilderna byggs medan du väljer.", "col": "#2BB673"}, {"namn": "Nivå 2: Välj och skriv", "txt": "Välj meningar, men skriv själv vad hjälten gör på sida tre.", "col": "#FF9F43"}, {"namn": "Nivå 3: Skriv själv", "txt": "Skriv alla fyra sidorna själv. Du får hjälp med hur meningar kan börja.", "col": "#7B61FF"}]);
+const stjHtml=n=>[1,2,3].map(i=>i<=n?"★":'<span class="off">★</span>').join("");
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
+function hem(){
+  $("niv").innerHTML=[1,2,3].map(l=>`<button data-l="${l}"><span class="nr" style="background:${NIV[l].col}">${l}</span><span><b>${NIV[l].namn}</b><small>${NIV[l].txt}</small></span><span class="st">${stjHtml(data.stars[l]||0)}</span></button>`).join("");
+  if(window.speechSynthesis)speechSynthesis.cancel();show("home");}
+$("niv").onclick=e=>{const b=e.target.closest("[data-l]");if(b)begin(+b.dataset.l);};
+// uppläsning bara när man trycker (svensk röst)
+let svVoice=null;function laddaRoster(){try{svVoice=speechSynthesis.getVoices().find(v=>/^sv/i.test(v.lang))||null}catch(e){}}
+if("speechSynthesis" in window){laddaRoster();speechSynthesis.onvoiceschanged=laddaRoster;}
+function lasUpp(t){if(!("speechSynthesis" in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="sv-SE";if(svVoice)u.voice=svVoice;u.rate=.9;speechSynthesis.speak(u);}
+function prickar(n,i,res){$("dots").innerHTML=Array.from({length:n},(_,j)=>`<i class="${j<i?(res[j]?"ok":"f"):j===i?"nu":""}"></i>`).join("");}
+function haj(){const p=$("pet");if(!p)return;p.classList.remove("hopp");void p.offsetWidth;p.classList.add("hopp");}
+function resultat(st,txt){const old=data.stars[G.lvl]||0;data.stars[G.lvl]=Math.max(old,st);save();
+  $("rStj").innerHTML=stjHtml(st);$("rRub").textContent=st===3?"Perfekt! 🎉":st===2?"Bra jobbat!":"Bra kämpat!";$("rTxt").textContent=txt;
+  show("result");if(st===3){window.Ljud&&Ljud.fanfare&&Ljud.fanfare();confetti();}else window.Ljud&&Ljud.chime&&Ljud.chime();}
+$("rIgen").onclick=()=>begin(G.lvl);$("rHome").onclick=hem;
+function confetti(){if(reduced())return;const cols=["#3D8BFD","#FF9F43","#2BB673","#FFC93C","#7B61FF","#FF6B6B"];
+  const c=$("fx"),x=c.getContext("2d"),dpr=window.devicePixelRatio||1,W=innerWidth,H=innerHeight;c.width=W*dpr;c.height=H*dpr;x.setTransform(dpr,0,0,dpr,0,0);c.hidden=false;
+  const P=Array.from({length:150},()=>({x:W/2+(Math.random()-.5)*120,y:H*.3,vx:(Math.random()-.5)*16,vy:-Math.random()*15-4,r:Math.random()*7+5,c:pick(cols),a:Math.random()*6,va:(Math.random()-.5)*.4}));
+  let t=0;(function f(){x.clearRect(0,0,W,H);P.forEach(p=>{p.vy+=.45;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore();});
+    if(++t<150)requestAnimationFrame(f);else c.hidden=true;})();}
+let G=null;
+
+const HJ=[["pojke","player_1","en pojke","pojken"],["flicka","female_1","en flicka","flickan"],["aventyrare","adventurer_1","en äventyrare","äventyraren"],["kanin","rabbit_1","en kanin","kaninen"],
+ ["uggla","owl_1","en uggla","ugglan"],["pingvin","penguin_1","en pingvin","pingvinen"],["apa","monkey_1","en apa","apan"],["groda","frog_1","en groda","grodan"]].map(([id,img,indef,def])=>({id,img,indef,def,namn:def.charAt(0).toUpperCase()+def.slice(1)}));
+const PL=[["skog","trees","Skogen","i skogen"],["orken","desert","Öknen","i öknen"],["snoberg","snow","Snöberget","på snöberget"],["kullar","hills","Kullarna","bland kullarna"],["svamp","mushrooms","Svampskogen","i svampskogen"]].map(([id,bg,namn,prep])=>({id,bg,namn,prep}));
+const EV=[["nyckel","key_1","fynd","en gyllene nyckel","den","Nyckeln"],["edelsten","gem_1","fynd","en gnistrande ädelsten","den","Ädelstenen"],["mynt","coin_1","fynd","ett guldmynt","det","Guldmyntet"],
+ ["morot","carrot_1","fynd","en jättestor morot","den","Moroten"],["stjarna","star_1","fynd","en glittrande stjärna","den","Stjärnan"],["fisk","fish_1","fynd","en grön fisk","den","Fisken"],
+ ["spoke","ghost_1","mote","ett spöke","det","Spöket"],["slem","slime_1","mote","ett slemmigt monster","det","Monstret"],["orm","snake_1","mote","en lång orm","den","Ormen"],["ufo","ufo_1","mote","ett rymdskepp","det","Rymdskeppet"]].map(([id,img,typ,obj,pr,namn])=>({id,img,typ,obj,pr,namn}));
+const SIDOR=["Början","Något händer","Vad gör hen?","Slutet"];
+const STARTARE=[["Det var en gång","En dag","Långt borta"],["Plötsligt","Då","Men så"],["Först","Då blev","Så"],["Till slut","Sedan","Och så"]];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const C=t=>t.charAt(0).toUpperCase()+t.slice(1);
+data.sagor=data.sagor||[];data.n=data.n||{};
+const stjarnor=l=>{const n=data.n[l]||0;return n>=6?3:n>=3?2:n>=1?1:0;};
+// meningsalternativen, tre per sida
+function alternativ(sida,h,p,e){const H=C(h.def),mote=e.typ==="mote";
+  return [[`Det var en gång ${h.indef}. ${H} bodde ${p.prep}.`,`En dag var ${h.def} ute ${p.prep}.`,`Det var en fin dag ${p.prep}, och ${h.def} var glad.`],
+   mote?[`Plötsligt stod ${e.obj} framför ${h.def}!`,`Då mötte ${h.def} ${e.obj}.`,`${H} hörde ett ljud. Det var ${e.obj}!`]
+       :[`Plötsligt såg ${h.def} ${e.obj}!`,`Då hittade ${h.def} ${e.obj} på marken.`,`${H} gick och gick, och där låg ${e.obj}!`],
+   mote?[`${H} blev rädd och sprang iväg.`,`${H} vågade och sa: Hej!`,`${H} gömde sig bakom en stor sten och tittade fram.`]
+       :[`${H} blev jätteglad och dansade av glädje.`,`${H} tog ${e.pr} med sig och tittade noga.`,`${H} visste inte vad ${e.pr} var och funderade länge.`],
+   mote?[`Till slut blev de bästa vänner.`,`Sedan gick ${h.def} hem och berättade för alla.`,`Och så levde ${h.def} lyckligt i alla sina dagar.`]
+       :[`Till slut gick ${h.def} hem och visade alla sina vänner.`,`${H} gömde ${e.pr} på en hemlig plats.`,`Och så levde ${h.def} lyckligt i alla sina dagar.`]][sida];}
+function scen(p,h,e,sida,liten){const s=sida+1;
+  const dek=sida===3?`<img class="dek" style="left:12%;top:12%" src="bilder/star_1.webp" alt=""><img class="dek" style="left:78%;top:22%;animation-delay:.7s" src="bilder/heart_1.webp" alt="">`:"";
+  return `<div class="scen s${s}${liten?" liten":""}"><img class="bgimg" src="bilder/bg_${p.bg}.jpg" alt=""><img class="sp hero" src="bilder/${h.img}.webp" alt="${h.def}">${sida>=1?`<img class="sp ev" src="bilder/${e.img}.webp" alt="">`:""}${dek}</div>`;}
+const grid=$("gridVal");let steg=0;
+function begin(lvl){G={lvl,v:null,p:null,e:null,t:[],sida:0};steg=0;show("game");visa("val");}
+function visa(v){const m={val:"vVal",byg:"vByg",bok:"vBok",mina:"vMina"};["vVal","vByg","vBok","vMina"].forEach(x=>$(x).hidden=x!==m[v]);
+  if(v==="val")ritaVal();window.scrollTo(0,0);if(window.speechSynthesis)speechSynthesis.cancel();}
+function ritaVal(){$("steg").innerHTML=["Vem","Var","Vad"].map((n,i)=>`<i class="${i===steg?"nu":i<steg?"klar":""}">${i+1}. ${n}</i>`).join("");
+  $("rubr").textContent=["Vem är sagans hjälte?","Var börjar sagan?","Vad händer i sagan?"][steg];
+  grid.className="grid"+(steg===1?" pl":"");
+  grid.innerHTML=steg===0?HJ.map(h=>`<button data-i="${h.id}" type="button"><img src="bilder/${h.img}.webp" alt=""><span>${h.namn}</span></button>`).join("")
+   :steg===1?PL.map(p=>`<button data-i="${p.id}" type="button"><img class="bgk" src="bilder/bg_${p.bg}.jpg" alt=""><span>${p.namn}</span></button>`).join("")
+   :EV.map(e=>`<button data-i="${e.id}" type="button"><img src="bilder/${e.img}.webp" alt=""><span>${e.namn}</span></button>`).join("");
+  $("bTillbaka").textContent=steg===0?"◀ Välj nivå":"◀ Tillbaka";}
+grid.onclick=e=>{const b=e.target.closest("[data-i]");if(!b)return;const id=b.dataset.i;window.Ljud&&Ljud.pop&&Ljud.pop(steg*2);
+  if(steg===0)G.v=HJ.find(x=>x.id===id);else if(steg===1)G.p=PL.find(x=>x.id===id);else G.e=EV.find(x=>x.id===id);
+  if(steg<2){steg++;ritaVal();window.scrollTo(0,0);return;}
+  G.sida=0;G.t=[];visa("byg");sida();};
+$("bTillbaka").onclick=()=>{if(steg===0){hem();return;}steg--;ritaVal();};
+const fritt=()=>G.lvl===3||(G.lvl===2&&G.sida===2);
+function sida(){const i=G.sida;$("sida").textContent=`Sida ${i+1} av 4: ${SIDOR[i]}`;$("scenByg").innerHTML=scen(G.p,G.v,G.e,i);$("fbS").textContent="";
+  $("hittills").innerHTML=G.t.slice(0,i).map(esc).join(" ");
+  const fr=fritt(),alt=alternativ(i,G.v,G.p,G.e);
+  $("skriv").hidden=!fr;
+  $("alt").innerHTML=fr?"":alt.map((t,j)=>`<button data-j="${j}" type="button">${esc(t)}</button>`).join("");
+  if(fr){const txt=$("txt");txt.value=G.t[i]||"";$("start").innerHTML=STARTARE[i].map(s=>`<button type="button" data-s="${s}">${s} …</button>`).join("");setTimeout(()=>txt.focus({preventScroll:true}),50);}
+  $("bFram").disabled=fr?!ok():!G.t[i];$("bFram").textContent=i===3?"Klar! Visa sagan ▶":"Nästa ▶";$("bBak").hidden=false;}
+const ok=()=>$("txt").value.trim().split(/\s+/).filter(Boolean).length>=3;
+$("alt").onclick=e=>{const b=e.target.closest("[data-j]");if(!b)return;G.t[G.sida]=alternativ(G.sida,G.v,G.p,G.e)[+b.dataset.j];
+  [...$("alt").children].forEach(x=>x.classList.toggle("v",x===b));$("bFram").disabled=false;window.Ljud&&Ljud.pop&&Ljud.pop(2);$("hittills").innerHTML=G.t.slice(0,G.sida).map(esc).join(" ");};
+$("txt").oninput=()=>{G.t[G.sida]=$("txt").value.trim();$("bFram").disabled=!ok();$("fbS").textContent=ok()||!$("txt").value.trim()?"":"Skriv en hel mening, minst tre ord.";};
+$("start").onclick=e=>{const b=e.target.closest("[data-s]");if(!b)return;const t=$("txt");if(!t.value.trim()){t.value=b.dataset.s+" ";t.focus();t.oninput();}};
+$("bFram").onclick=()=>{if(fritt())G.t[G.sida]=$("txt").value.trim();if(!G.t[G.sida])return;
+  if(G.sida<3){G.sida++;sida();window.scrollTo(0,0);return;}
+  klarSaga();};
+$("bBak").onclick=()=>{if(G.sida>0){G.sida--;sida();return;}steg=2;visa("val");};
+function klarSaga(){const s={l:G.lvl,v:G.v.id,p:G.p.id,e:G.e.id,t:G.t.slice(0,4),d:Date.now()};data.sagor=[s,...data.sagor].slice(0,12);
+  const fore=stjarnor(G.lvl);data.n[G.lvl]=(data.n[G.lvl]||0)+1;const nu=stjarnor(G.lvl);data.stars[G.lvl]=Math.max(data.stars[G.lvl]||0,nu);save();
+  window.Ljud&&Ljud.fanfare&&Ljud.fanfare();confetti();visaBok(s);if(nu>fore)toast(`⭐ Ny stjärna på nivå ${G.lvl}!`);}
+function toast(t){const d=document.createElement("div");d.className="stjtoast";d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),3200);}
+let bokS=null;
+function visaBok(s){bokS=s;const h=HJ.find(x=>x.id===s.v)||HJ[0],p=PL.find(x=>x.id===s.p)||PL[0],e=EV.find(x=>x.id===s.e)||EV[0];
+  $("bok").innerHTML=`<h2>Sagan om ${esc(h.def)}</h2>`+s.t.map((t,i)=>`<div class="sidk">${scen(p,h,e,i)}<p>${esc(t)}</p></div>`).join("");visa("bok");}
+$("bLasBok").onclick=()=>{if(bokS){const h=HJ.find(x=>x.id===bokS.v);lasUpp(`Sagan om ${h?h.def:""}. `+bokS.t.join(" "));}};
+$("bSkriv").onclick=()=>window.print();
+$("bNy").onclick=()=>begin(G&&G.lvl||1);
+$("bMinaB").onclick=()=>minaSagor();$("bMinaH").onclick=()=>minaSagor();$("bHemM").onclick=hem;
+function minaSagor(){show("game");visa("mina");$("mina").innerHTML=data.sagor.length?data.sagor.map((s,i)=>{const h=HJ.find(x=>x.id===s.v)||HJ[0],p=PL.find(x=>x.id===s.p)||PL[0],e=EV.find(x=>x.id===s.e)||EV[0];
+  return `<div class="m"><button class="m" data-v="${i}" type="button" style="box-shadow:none;padding:0;background:none;gap:12px">${scen(p,h,e,1,true)}<span><b>Sagan om ${esc(h.def)}</b><small>${new Date(s.d).toLocaleDateString("sv-SE")} · nivå ${s.l}</small></span></button><button class="x" data-x="${i}" type="button" aria-label="Ta bort sagan">🗑️</button></div>`;}).join(""):`<p class="info">Du har inte skrivit några sagor än. Börja med en ny!</p>`;}
+$("mina").onclick=e=>{const v=e.target.closest("[data-v]"),x=e.target.closest("[data-x]");if(v){visaBok(data.sagor[+v.dataset.v]);return;}
+  if(x&&confirm("Ta bort den här sagan?")){data.sagor.splice(+x.dataset.x,1);save();minaSagor();}};
+// nivåerna: egen lista med antal sagor
+function hem(){$("niv").innerHTML=[1,2,3].map(l=>`<button data-l="${l}"><span class="nr" style="background:${NIV[l].col}">${l}</span><span><b>${NIV[l].namn}</b><small>${NIV[l].txt}</small></span><span class="st">${stjHtml(stjarnor(l))}</span></button>`).join("");
+  $("bMinaH").hidden=!data.sagor.length;["vVal","vByg","vBok","vMina"].forEach(x=>$(x).hidden=true);if(window.speechSynthesis)speechSynthesis.cancel();show("home");}
+window.__sb={HJ,PL,EV,alternativ,begin};
+
+hem();
+</script>
+</body>
+</html>
