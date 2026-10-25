@@ -84,15 +84,33 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 .grid button img{width:72px;height:72px;object-fit:contain}
 .grid button .bgk{width:100%;height:70px;border-radius:12px;object-fit:cover;object-position:bottom;background:linear-gradient(#9AD7FF,#E4F4FF);mix-blend-mode:normal}
 .grid.pl{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+.grid.tm{grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}
+.grid button.tema{padding:0;overflow:hidden;text-align:center;gap:0}
+.tema .tb{position:relative;display:block;width:100%;height:112px;background-size:cover;background-position:bottom;background-color:#9AD7FF}
+.tema .tb img{position:absolute;bottom:4px;left:50%;transform:translateX(-50%);height:92px;width:auto;object-fit:contain;filter:drop-shadow(0 3px 0 rgba(0,0,0,.2))}
+.tema b{font-size:1.15rem;margin-top:8px}.tema small{color:var(--muted);font-weight:700;font-size:.85rem;padding:2px 10px 10px;line-height:1.3}
+.grid button .bgk.ny{height:70px}
+.guide{text-align:center;color:var(--muted);font-weight:700;font-size:.95rem;margin:2px 4px 8px;line-height:1.35}
+.insp{margin-top:12px;background:#FFF8DC;border:3px solid var(--gold);border-radius:18px;padding:10px 12px;box-shadow:0 4px 0 var(--gold)}
+.insp .iq{font-weight:800;line-height:1.4}.insp .iq b{color:#8A6A00;margin-right:6px}
+.insp .ord{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 2px}
+.insp .ord button,.insp .ord span{background:#fff;border:2px solid var(--gold);border-radius:999px;padding:3px 12px;font-weight:700;font-family:var(--ord);font-size:.95rem;color:var(--ink)}
+.insp .ord span{border-style:dashed;background:transparent}
+.insp .ordt{font-size:.8rem;font-weight:800;color:#8A6A00;margin-top:8px}
+.insp .ir{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.insp .mini{background:var(--card);border:2px solid var(--gold);border-radius:999px;padding:4px 14px;font-weight:800;font-size:.9rem;color:var(--ink)}
+.insp .idea{margin-top:8px;background:#fff;border-radius:12px;padding:8px 12px;font-weight:700;border:2px dashed var(--gold);line-height:1.4}
+
 /* scenen */
 .scen{position:relative;aspect-ratio:3/2;border-radius:22px;overflow:hidden;box-shadow:0 4px 0 var(--line);background:linear-gradient(#8FD0FF,#DDF1FF 70%)}
 .scen .bgimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:bottom;mix-blend-mode:multiply}
-.scen .sp{position:absolute;bottom:13%;width:24%;aspect-ratio:1;object-fit:contain;filter:drop-shadow(0 4px 0 rgba(0,0,0,.14));animation:sPop .5s ease-out both}
-.scen .hjalte{left:14%}.scen .ev{left:60%}
-.scen.s1 .hjalte{left:38%;width:26%}
-.scen.s2 .hjalte{left:12%}.scen.s2 .ev{left:62%;animation-delay:.25s}
-.scen.s3 .hjalte{left:26%;width:30%}.scen.s3 .ev{left:58%;width:20%;animation-delay:.1s}
-.scen.s4 .hjalte{left:30%;width:28%}.scen.s4 .ev{left:58%;width:22%}
+.scen .bgimg.ny{mix-blend-mode:normal}
+.scen .sp{position:absolute;bottom:12%;height:calc(var(--h,36) * var(--k,1) * 1%);width:auto;max-width:44%;filter:drop-shadow(0 4px 0 rgba(0,0,0,.18));animation:sPop .5s ease-out both}
+.scen .hjalte{left:10%}.scen .ev{right:9%;left:auto}
+.scen.s1 .hjalte{left:34%;--k:1.1}
+.scen.s2 .hjalte{left:9%}.scen.s2 .ev{right:8%;animation-delay:.25s}
+.scen.s3 .hjalte{left:18%;--k:1.15}.scen.s3 .ev{right:12%;--k:.9;animation-delay:.1s}
+.scen.s4 .hjalte{left:24%;--k:1.1}.scen.s4 .ev{right:14%;--k:.9}
 .scen .dek{position:absolute;width:11%;aspect-ratio:1;object-fit:contain;animation:flyt 2.6s ease-in-out infinite}
 .scen .sky{position:absolute;top:8%;width:9%}
 @keyframes sPop{from{transform:scale(.4) translateY(14px);opacity:0}}
@@ -122,7 +140,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 .mina .m b{display:block;font-size:1.05rem;line-height:1.2}.mina .m small{color:var(--muted);font-weight:600}
 .mina .m .x{margin-left:auto;font-size:1.1rem;padding:6px}
 .stjtoast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:var(--ink);color:#fff;border-radius:999px;padding:10px 22px;font-weight:800;z-index:60;box-shadow:0 8px 24px rgba(0,0,0,.3);animation:sPop .4s both}
-@media print{body *{visibility:hidden}.bok,.bok *{visibility:visible}.bok{position:absolute;left:0;top:0;width:100%}.nav{display:none}.scen .sp,.scen .dek{animation:none}}
+@media print{.insp,.guide{display:none}body *{visibility:hidden}.bok,.bok *{visibility:visible}.bok{position:absolute;left:0;top:0;width:100%}.nav{display:none}.scen .sp,.scen .dek{animation:none}}
 
 </style>
 </head>
@@ -134,9 +152,8 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 
 <section class="screen" id="home">
   <div class="hero">
-    <svg viewBox="0 0 120 64" aria-hidden="true"><rect x="2" y="2" width="116" height="60" rx="10" fill="#BFE6FF"/><path d="M2 44 Q30 30 60 42 T118 38 V62 H2Z" fill="#2BB673"/>
-<image href="bilder/rabbit_1.webp" x="14" y="16" width="38" height="38"/><image href="bilder/key_1.webp" x="70" y="30" width="26" height="26"/><text x="86" y="22" font-size="14">✨</text></svg>
-    <div><h1>Sagobyggaren</h1><p>Välj hjälte, plats och vad som händer. Sedan bygger du sagan sida för sida.</p></div>
+    <svg viewBox="0 0 120 64" aria-hidden="true"><defs><clipPath id="hc"><rect x="2" y="2" width="116" height="60" rx="10"/></clipPath></defs><image href="bilder/bg_slott.jpg" x="2" y="-15" width="116" height="77" clip-path="url(#hc)" preserveAspectRatio="xMidYMid slice"/><image href="bilder/prinsessa.webp" x="12" y="17" width="26" height="33"/><image href="bilder/drake_v.webp" x="66" y="30" width="44" height="31"/></svg>
+    <div><h1>Sagobyggaren</h1><p>Välj ett sagotema, en hjälte, en plats och vad som händer. Sedan bygger du sagan sida för sida, med idéer och ord som hjälper dig.</p></div>
   </div>
   <div class="niv" id="niv"></div>
   <p class="info">Välj bland meningar eller skriv egna. Sagan sparas under Mina sagor och kan läsas upp av datorn eller en vuxen.</p>
@@ -152,10 +169,17 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
   </div>
   <div id="vByg" hidden>
     <div class="sida" id="sida"></div>
+    <div class="guide" id="guide"></div>
     <div class="scen" id="scenByg"></div>
     <div class="hittills" id="hittills"></div>
     <div class="alt" id="alt"></div>
     <div class="skrivruta" id="skriv" hidden><textarea id="txt" maxlength="220" placeholder="Skriv vad som händer …" aria-label="Skriv din mening"></textarea><div class="start" id="start"></div></div>
+    <div class="insp" id="insp">
+      <div class="iq" id="iq"></div>
+      <div id="ordw" hidden><div class="ordt">Ord du kan använda (tryck för att sätta in)</div><div class="ord" id="ord"></div></div>
+      <div class="ir"><button class="mini" id="inspN" type="button">💡 Fler frågor</button><button class="mini" id="idea" type="button">🎲 Ge mig en idé</button></div>
+      <div class="idea" id="ideaT" hidden></div>
+    </div>
     <div class="fb" id="fbS" aria-live="polite"></div>
     <div class="nav"><button class="knapp vit" id="bBak" type="button">◀ Tillbaka</button><button class="knapp bla" id="bFram" type="button" disabled>Nästa ▶</button></div>
   </div>
@@ -213,13 +237,67 @@ function confetti(){if(reduced())return;const cols=["#3D8BFD","#FF9F43","#2BB673
     if(++t<150)requestAnimationFrame(f);else c.hidden=true;})();}
 let G=null;
 
-const HJ=[["pojke","player_1","en pojke","pojken"],["flicka","female_1","en flicka","flickan"],["aventyrare","adventurer_1","en äventyrare","äventyraren"],["kanin","rabbit_1","en kanin","kaninen"],
- ["uggla","owl_1","en uggla","ugglan"],["pingvin","penguin_1","en pingvin","pingvinen"],["apa","monkey_1","en apa","apan"],["groda","frog_1","en groda","grodan"]].map(([id,img,indef,def])=>({id,img,indef,def,namn:def.charAt(0).toUpperCase()+def.slice(1)}));
-const PL=[["skog","trees","Skogen","i skogen"],["orken","desert","Öknen","i öknen"],["snoberg","snow","Snöberget","på snöberget"],["kullar","hills","Kullarna","bland kullarna"],["svamp","mushrooms","Svampskogen","i svampskogen"]].map(([id,bg,namn,prep])=>({id,bg,namn,prep}));
-const EV=[["nyckel","key_1","fynd","en gyllene nyckel","den","Nyckeln"],["edelsten","gem_1","fynd","en gnistrande ädelsten","den","Ädelstenen"],["mynt","coin_1","fynd","ett guldmynt","det","Guldmyntet"],
+const HJ=[["pojke","player_1","en pojke","pojken",42,"Är pojken blyg, busig eller modig?"],["flicka","female_1","en flicka","flickan",42,"Vad drömmer flickan om?"],["aventyrare","adventurer_1","en äventyrare","äventyraren",42,"Vart är äventyraren på väg?"],["kanin","rabbit_1","en kanin","kaninen",38,"Vad är kaninens favoritsak?"],
+ ["uggla","owl_1","en uggla","ugglan",34,"Vad vet ugglan som ingen annan vet?"],["pingvin","penguin_1","en pingvin","pingvinen",34,"Varför är pingvinen långt hemifrån?"],["apa","monkey_1","en apa","apan",30,"Vilka hyss hittar på apan på?"],["groda","frog_1","en groda","grodan",34,"Är grodan egentligen en förtrollad prins?"],
+ ["prinsessa","prinsessa","en prinsessa","prinsessan",54,"Är prinsessan en vanlig prinsessa, eller har hon ett hemligt mod?"],["riddare","riddare","en riddare","riddaren",42,"Är riddaren modig, eller lite rädd inuti?"],["drake","drake","en drake","draken",38,"Är draken snäll? Vad vill den egentligen?"],["troll","troll","ett troll","trollet",50,"Är trollet busigt, ensamt eller snällt?"]]
+ .map(([id,img,indef,def,h,q])=>({id,img,indef,def,h,q,namn:def.charAt(0).toUpperCase()+def.slice(1)}));
+const PL=[["skog","trees","Skogen","i skogen",0],["orken","desert","Öknen","i öknen",0],["snoberg","snow","Snöberget","på snöberget",0],["kullar","hills","Kullarna","bland kullarna",0],["svamp","mushrooms","Svampskogen","i svampskogen",0],
+ ["slott","slott","Slottet","vid ett stort slott",1],["slottnatt","slottnatt","Slottet i månskenet","vid ett slott en mörk natt",1],["trollskog","trollskog","Trollskogen","i trollskogen",1],["drakberg","drakberg","Drakberget","vid drakberget",1],["by","by","Byn","i en liten by",1]].map(([id,bg,namn,prep,ny])=>({id,bg,namn,prep,ny}));
+const EVB=[["nyckel","key_1","fynd","en gyllene nyckel","den","Nyckeln"],["edelsten","gem_1","fynd","en gnistrande ädelsten","den","Ädelstenen"],["mynt","coin_1","fynd","ett guldmynt","det","Guldmyntet"],
  ["morot","carrot_1","fynd","en jättestor morot","den","Moroten"],["stjarna","star_1","fynd","en glittrande stjärna","den","Stjärnan"],["fisk","fish_1","fynd","en grön fisk","den","Fisken"],
- ["spoke","ghost_1","mote","ett spöke","det","Spöket"],["slem","slime_1","mote","ett slemmigt monster","det","Monstret"],["orm","snake_1","mote","en lång orm","den","Ormen"],["ufo","ufo_1","mote","ett rymdskepp","det","Rymdskeppet"]].map(([id,img,typ,obj,pr,namn])=>({id,img,typ,obj,pr,namn}));
+ ["spoke","ghost_1","mote","ett spöke","det","Spöket"],["slem","slime_1","mote","ett slemmigt monster","det","Monstret"],["orm","snake_1","mote","en lång orm","den","Ormen"],["ufo","ufo_1","mote","ett rymdskepp","det","Rymdskeppet"],
+ ["skatt","coin_1","fynd","en glänsande guldskatt","den","Skatten"],["hjarta","heart_1","fynd","ett förtrollat hjärta","det","Hjärtat"]].map(([id,img,typ,obj,pr,namn])=>({id,img,typ,obj,pr,namn,h:32}));
+const EVN=[
+ {id:"drake",img:"drake_v",typ:"mote",obj:"en stor, röd drake",pr:"den",namn:"Draken",h:36,
+  q:["Vad bevakar draken? Varför bor den ensam?","Hur låter draken, och vad är den rädd för?"],
+  m:(H,h)=>[`Plötsligt flög en stor, röd drake över himlen!`,`Marken skakade. Det var en drake som landade!`,`${H} hörde ett mäktigt rytande. Det var en drake!`],
+  sv:(H,h)=>[`${H} tog mod till sig och sa: Snälla drake, kan vi inte vara vänner?`,`${H} gömde sig bakom en sten och tittade på draken.`,`${H} sprang allt ${h.def} orkade, men draken flög ikapp!`],
+  sl:(H,h)=>[`Draken blev ${H}s bästa vän, och tillsammans flög de över hela landet.`,`Det visade sig att draken bara var ensam och ville ha någon att leka med.`,`Draken flög iväg mot solnedgången, och allt blev fridfullt igen.`]},
+ {id:"troll",img:"troll_v",typ:"mote",obj:"ett stort, grönt troll",pr:"det",namn:"Trollet",h:50,
+  q:["Vad är trollet rädd för, och vad älskar det mest?","Varför bor trollet precis här?"],
+  m:(H,h)=>[`Plötsligt klev ett stort, grönt troll fram ur skuggorna!`,`Marken darrade. Ett troll stod mitt på stigen!`,`${H} hörde tunga steg. Det var ett troll!`],
+  sv:(H,h)=>[`${H} vågade och sa: Vem är du, och vad vill du?`,`${H} höll andan och smög förbi trollet.`,`${H} skrattade och bjöd trollet på en smörgås.`],
+  sl:(H,h)=>[`Trollet visade sig vara snällt, och de blev vänner för alltid.`,`Trollet lovade att aldrig skrämma någon mer.`,`Och trollet somnade gott under en stor gran.`]},
+ {id:"prinsessa",img:"prinsessa_v",typ:"mote",obj:"en prinsessa med en glittrande krona",pr:"hon",namn:"Prinsessan",h:54,
+  q:["Vad behöver prinsessan hjälp med?","Vilken hemlighet bär prinsessan på?"],
+  m:(H,h)=>[`Plötsligt stod en prinsessa framför ${h.def}!`,`${H} mötte en prinsessa med en glittrande krona.`,`${H} hörde någon ropa på hjälp. Det var en prinsessa!`],
+  sv:(H,h)=>[`${H} bugade djupt och frågade: Kan jag hjälpa dig?`,`${H} blev blyg, men räckte fram handen.`,`${H} lovade att hjälpa prinsessan hem till slottet.`],
+  sl:(H,h)=>[`Prinsessan tackade ${h.def}, och de firade med en stor fest.`,`Prinsessan och ${h.def} blev hemliga bästa vänner.`,`Och så levde de lyckligt i alla sina dagar.`]},
+ {id:"riddare",img:"riddare_v",typ:"mote",obj:"en modig riddare",pr:"han",namn:"Riddaren",h:42,
+  q:["Är riddaren modig, eller lite rädd inuti?","Vilket uppdrag har riddaren?"],
+  m:(H,h)=>[`Plötsligt kom en riddare galopperande!`,`${H} mötte en modig riddare med blank rustning.`,`Det klirrade i en rustning. En riddare kom fram!`],
+  sv:(H,h)=>[`${H} frågade riddaren om han kunde hjälpa till.`,`${H} gömde sig, för riddaren såg sträng ut.`,`${H} och riddaren bestämde sig för att göra något tillsammans.`],
+  sl:(H,h)=>[`Riddaren och ${h.def} red tillsammans hem i solnedgången.`,`De kom hem före mörkret och firade med en festmåltid.`,`Riddaren lovade att alltid skydda ${h.def}.`]}];
+// händelsespecifika frågor och meningar för de gamla
+const EVX={nyckel:{q:["Vilken dörr passar nyckeln till, och vad finns bakom den?"],
+  sv:(H,h)=>[`${H} provade nyckeln i ett gammalt, rostigt lås.`,`${H} bestämde sig för att leta efter dörren som nyckeln passar till.`,`${H} gömde nyckeln i fickan och smög vidare.`],
+  sl:(H,h)=>[`Dörren gick upp, och bakom den låg en hemlig skatt!`,`Nyckeln öppnade en dörr till en alldeles ny värld.`,`Och nyckeln hängde ${h.def} runt halsen för alltid.`]},
+ skatt:{q:["Vem har gömt skatten, och varför?"],sv:(H,h)=>[`${H} försökte räkna guldet, men det var för mycket att räkna!`,`${H} bestämde sig för att dela med alla.`,`${H} gömde skatten, för någon kunde vilja ta den.`],
+  sl:(H,h)=>[`Med guldet byggde ${h.def} något fint som alla kunde glädjas åt.`,`Alla i landet fick vara med på en jättefest.`,`Skatten ligger kvar, hemlig för alla utom ${h.def}.`]},
+ stjarna:{q:["Vad händer om man önskar sig något av stjärnan?"],sv:(H,h)=>[`${H} blundade och önskade sig något alldeles särskilt.`,`${H} lyfte stjärnan mot himlen och den lyste starkare.`,`${H} bestämde sig för att ge bort stjärnan som present.`]},
+ spoke:{q:["Varför är spöket här? Vad vill det?"],sv:(H,h)=>[`${H} sa: Du behöver inte vara ensam, kom och lek!`,`${H} tände en lampa, och spöket försvann i ljuset.`,`${H} skrattade, för spöket var ju bara rädd.`],
+  sl:(H,h)=>[`Spöket blev ${H}s osynliga vän.`,`Nu visste ${h.def} att inget spöke är farligt när man är modig.`,`Och spöket sa aldrig buh mer.`]},
+ edelsten:{q:["Vad kan ädelstenen göra? Är den magisk?"]},slem:{q:["Var kommer monstret ifrån, och är det snällt?"]},orm:{q:["Är ormen farlig eller bara blyg?"]},
+ ufo:{q:["Vem sitter i rymdskeppet, och vad vill de?"]},morot:{q:["Varför är moroten så enorm?"]},fisk:{q:["Kan fisken prata? Vad vill den berätta?"]},mynt:{q:["Vems mynt är det, och vad kan man köpa för det?"]},
+ hjarta:{q:["Vem har tappat det förtrollade hjärtat, och vad händer om det går sönder?"]}};
+const EV=EVB.concat(EVN);EV.forEach(e=>{const x=EVX[e.id];if(x)Object.assign(e,x);});
+const TEMAN=[
+ {id:"slott",namn:"Slott och drakar",bg:"slott",img:"prinsessa",txt:"Prinsessor, riddare, drakar och hemliga slott",hj:["prinsessa","riddare","drake","troll","pojke","flicka"],pl:["slott","slottnatt","by","drakberg","kullar"],ev:["drake","troll","prinsessa","riddare","nyckel","skatt","stjarna","spoke","edelsten","hjarta"]},
+ {id:"troll",namn:"Trollskogen",bg:"trollskog",img:"troll",txt:"Troll, spöken och märkliga varelser i den mörka skogen",hj:["troll","flicka","pojke","uggla","kanin","aventyrare"],pl:["trollskog","skog","svamp","snoberg","slottnatt"],ev:["troll","spoke","slem","orm","drake","stjarna","nyckel","edelsten","skatt"]},
+ {id:"djur",namn:"Djur och äventyr",bg:"trees",img:"rabbit_1",txt:"Djur och äventyrare som utforskar världen",hj:["kanin","uggla","pingvin","apa","groda","aventyrare"],pl:["skog","kullar","orken","snoberg","svamp","by"],ev:["morot","fisk","mynt","ufo","orm","nyckel","stjarna","edelsten","slem"]}];
 const SIDOR=["Början","Något händer","Vad gör hen?","Slutet"];
+const GUIDE=["Presentera vem sagan handlar om och var den börjar. Berätta lite om hur det ser ut.","Något oväntat händer! Här blir sagan spännande.","Hjälten måste göra något. Vad försöker hen, och blir det lätt eller svårt?","Berätta hur det slutar. I en bra saga har något förändrats i slutet."];
+const FRAGA=[
+ h=>[`Hur ser det ut där? Vad kan ${h.def} höra, se och lukta?`,`Vad önskar sig ${h.def} mest av allt?`,`Vem är ${h.def}: modig, blyg eller busig?`],
+ (h,p,e)=>[`Hur känns det för ${h.def} när det händer? Kanske bultar hjärtat …`,`Är ${e.obj} snäll, otäck eller något helt annat?`,`Vad ser, hör eller känner ${h.def} just nu?`],
+ h=>[`Vad kan ${h.def} göra? Vem eller vad kan hjälpa?`,`Vad är det värsta som kan hända? Hur löser ${h.def} det?`,`Vilket mod, trick eller vänlighet behövs?`],
+ h=>[`Hur slutar det? Har ${h.def} lärt sig något?`,`Är slutet glatt, lugnt eller lite sorgligt?`,`Kan du avsluta med en mening som sagor brukar ha?`]];
+const TEMAFRAGA={slott:["Vem bor i slottet, och vad är hemligt där?","Vad finns högst upp i det högsta tornet?"],troll:["Vilka ljud hörs i skogen när det är mörkt?","Vilka varelser gömmer sig bland träden?"],djur:["Vad är det mest spännande man kan hitta på en upptäcktsfärd?","Vilka vänner träffar man längs vägen?"]};
+const ORDG=[["en gång","långt borta","fridfull","gammal","hemlig","glittrade"],["plötsligt","oväntat","dånade","viskade","skymtade","mörk"],["modigt","försiktigt","kämpade","smög","bestämde sig","tillsammans"],["äntligen","för alltid","lyckligt","lärde sig","glad","hem"]];
+const ORDT={slott:["kungen","tornet","kronan","trollstav","riddare","slottsporten","hemlighet","fest"],troll:["mossig","dimma","mullrade","trollkonst","skugga","stig","gran","gömställe"],djur:["äventyr","utforskade","hoppade","spännande","vänner","upptäckte","nyfiken","stig"]};
+const ORDE={drake:["eldsprutande","fjäll","rytande","flög"],troll:["stor","mullrade","trollkonst","stenig"],prinsessa:["krona","bugade","festklänning"],riddare:["rustning","svärd","galopperade"],nyckel:["rostig","dörr","lås"],skatt:["guld","kista","gömställe"],spoke:["genomskinligt","tjuta","svävade"],stjarna:["önskade","glittrade","himlen"],ufo:["rymden","blinkade","landade"]};
+const IDEER=["Någon är inte den han eller hon ser ut att vara.","Ett mystiskt brev dyker upp.","Det börjar regna glitter.","Ett litet djur visar vägen.","Hjälten får en magisk förmåga i en enda dag.","Någon är rädd för något helt oväntat.","Det finns en hemlig dörr.","Tiden stannar i en minut.","Allt var ett missförstånd.","Hjälten tappar något viktigt."];
+const IDEERT={slott:["Kungen har tappat sin krona.","Slottet har en hemlig trappa.","Draken är egentligen förtrollad."],troll:["Trollet har tappat sin mössa.","Trollet gråter för att det är ensamt.","Skogen börjar viska."],djur:["En stjärna ramlar ner mitt framför dem.","Alla djur börjar prata.","Vägen försvinner."]};
 const STARTARE=[["Det var en gång","En dag","Långt borta"],["Plötsligt","Då","Men så"],["Först","Då blev","Så"],["Till slut","Sedan","Och så"]];
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const C=t=>t.charAt(0).toUpperCase()+t.slice(1);
@@ -227,6 +305,7 @@ data.sagor=data.sagor||[];data.n=data.n||{};
 const stjarnor=l=>{const n=data.n[l]||0;return n>=6?3:n>=3?2:n>=1?1:0;};
 // meningsalternativen, tre per sida
 function alternativ(sida,h,p,e){const H=C(h.def),mote=e.typ==="mote";
+  if(sida===1&&e.m)return e.m(H,h);if(sida===2&&e.sv)return e.sv(H,h);if(sida===3&&e.sl)return e.sl(H,h);
   return [[`Det var en gång ${h.indef}. ${H} bodde ${p.prep}.`,`En dag var ${h.def} ute ${p.prep}.`,`Det var en fin dag ${p.prep}, och ${h.def} var glad.`],
    mote?[`Plötsligt stod ${e.obj} framför ${h.def}!`,`Då mötte ${h.def} ${e.obj}.`,`${H} hörde ett ljud. Det var ${e.obj}!`]
        :[`Plötsligt såg ${h.def} ${e.obj}!`,`Då hittade ${h.def} ${e.obj} på marken.`,`${H} gick och gick, och där låg ${e.obj}!`],
@@ -236,25 +315,27 @@ function alternativ(sida,h,p,e){const H=C(h.def),mote=e.typ==="mote";
        :[`Till slut gick ${h.def} hem och visade alla sina vänner.`,`${H} gömde ${e.pr} på en hemlig plats.`,`Och så levde ${h.def} lyckligt i alla sina dagar.`]][sida];}
 function scen(p,h,e,sida,liten){const s=sida+1;
   const dek=sida===3?`<img class="dek" style="left:12%;top:12%" src="bilder/star_1.webp" alt=""><img class="dek" style="left:78%;top:22%;animation-delay:.7s" src="bilder/heart_1.webp" alt="">`:"";
-  return `<div class="scen s${s}${liten?" liten":""}"><img class="bgimg" src="bilder/bg_${p.bg}.jpg" alt=""><img class="sp hjalte" src="bilder/${h.img}.webp" alt="${h.def}">${sida>=1?`<img class="sp ev" src="bilder/${e.img}.webp" alt="">`:""}${dek}</div>`;}
+  return `<div class="scen s${s}${liten?" liten":""}"><img class="bgimg${p.ny?" ny":""}" src="bilder/bg_${p.bg}.jpg" alt=""><img class="sp hjalte" style="--h:${h.h||36}" src="bilder/${h.img}.webp" alt="${h.def}">${sida>=1?`<img class="sp ev" style="--h:${e.h||32}" src="bilder/${e.img}.webp" alt="">`:""}${dek}</div>`;}
 const grid=$("gridVal");let steg=0;
-function begin(lvl){G={lvl,v:null,p:null,e:null,t:[],sida:0};steg=0;show("game");visa("val");}
+function begin(lvl){G={lvl,v:null,p:null,e:null,tema:null,t:[],sida:0};steg=0;show("game");visa("val");}
 function visa(v){const m={val:"vVal",byg:"vByg",bok:"vBok",mina:"vMina"};["vVal","vByg","vBok","vMina"].forEach(x=>$(x).hidden=x!==m[v]);
   if(v==="val")ritaVal();window.scrollTo(0,0);if(window.speechSynthesis)speechSynthesis.cancel();}
-function ritaVal(){$("steg").innerHTML=["Vem","Var","Vad"].map((n,i)=>`<i class="${i===steg?"nu":i<steg?"klar":""}">${i+1}. ${n}</i>`).join("");
-  $("rubr").textContent=["Vem är sagans hjälte?","Var börjar sagan?","Vad händer i sagan?"][steg];
-  grid.className="grid"+(steg===1?" pl":"");
-  grid.innerHTML=steg===0?HJ.map(h=>`<button data-i="${h.id}" type="button"><img src="bilder/${h.img}.webp" alt=""><span>${h.namn}</span></button>`).join("")
-   :steg===1?PL.map(p=>`<button data-i="${p.id}" type="button"><img class="bgk" src="bilder/bg_${p.bg}.jpg" alt=""><span>${p.namn}</span></button>`).join("")
-   :EV.map(e=>`<button data-i="${e.id}" type="button"><img src="bilder/${e.img}.webp" alt=""><span>${e.namn}</span></button>`).join("");
+const byId=(L,ids)=>ids.map(i=>L.find(x=>x.id===i)).filter(Boolean);
+function ritaVal(){const T=G.tema;$("steg").innerHTML=["Tema","Vem","Var","Vad"].map((n,i)=>`<i class="${i===steg?"nu":i<steg?"klar":""}">${i+1}. ${n}</i>`).join("");
+  $("rubr").textContent=["Vilken sorts saga vill du skriva?","Vem är sagans hjälte?","Var börjar sagan?","Vad händer i sagan?"][steg];
+  grid.className="grid"+(steg===2?" pl":steg===0?" tm":"");
+  grid.innerHTML=steg===0?TEMAN.map(t=>`<button class="tema" data-i="${t.id}" type="button"><span class="tb" style="background-image:url(bilder/bg_${t.bg}.jpg)${t.bg==="trees"?";background-blend-mode:multiply;background-position:center 40%":""}"><img src="bilder/${t.img}.webp" alt=""></span><b>${t.namn}</b><small>${t.txt}</small></button>`).join("")
+   :steg===1?byId(HJ,T.hj).map(h=>`<button data-i="${h.id}" type="button"><img src="bilder/${h.img}.webp" alt=""><span>${h.namn}</span></button>`).join("")
+   :steg===2?byId(PL,T.pl).map(p=>`<button data-i="${p.id}" type="button"><img class="bgk${p.ny?" ny":""}" src="bilder/bg_${p.bg}.jpg" alt=""><span>${p.namn}</span></button>`).join("")
+   :byId(EV,T.ev).filter(e=>e.id!==G.v.id).map(e=>`<button data-i="${e.id}" type="button"><img src="bilder/${e.img}.webp" alt=""><span>${e.namn}</span></button>`).join("");
   $("bTillbaka").textContent=steg===0?"◀ Välj nivå":"◀ Tillbaka";}
 grid.onclick=e=>{const b=e.target.closest("[data-i]");if(!b)return;const id=b.dataset.i;window.Ljud&&Ljud.pop&&Ljud.pop(steg*2);
-  if(steg===0)G.v=HJ.find(x=>x.id===id);else if(steg===1)G.p=PL.find(x=>x.id===id);else G.e=EV.find(x=>x.id===id);
-  if(steg<2){steg++;ritaVal();window.scrollTo(0,0);return;}
+  if(steg===0)G.tema=TEMAN.find(x=>x.id===id);else if(steg===1)G.v=HJ.find(x=>x.id===id);else if(steg===2)G.p=PL.find(x=>x.id===id);else G.e=EV.find(x=>x.id===id);
+  if(steg<3){steg++;ritaVal();window.scrollTo(0,0);return;}
   G.sida=0;G.t=[];visa("byg");sida();};
 $("bTillbaka").onclick=()=>{if(steg===0){hem();return;}steg--;ritaVal();};
 const fritt=()=>G.lvl===3||(G.lvl===2&&G.sida===2);
-function sida(){const i=G.sida;$("sida").textContent=`Sida ${i+1} av 4: ${SIDOR[i]}`;$("scenByg").innerHTML=scen(G.p,G.v,G.e,i);$("fbS").textContent="";
+function sida(){const i=G.sida;$("sida").textContent=`Sida ${i+1} av 4: ${SIDOR[i]}`;$("scenByg").innerHTML=scen(G.p,G.v,G.e,i);$("fbS").textContent="";$("guide").textContent=GUIDE[i];inspo(i);
   $("hittills").innerHTML=G.t.slice(0,i).map(esc).join(" ");
   const fr=fritt(),alt=alternativ(i,G.v,G.p,G.e);
   $("skriv").hidden=!fr;
@@ -262,6 +343,17 @@ function sida(){const i=G.sida;$("sida").textContent=`Sida ${i+1} av 4: ${SIDOR[
   if(fr){const txt=$("txt");txt.value=G.t[i]||"";$("start").innerHTML=STARTARE[i].map(s=>`<button type="button" data-s="${s}">${s} …</button>`).join("");setTimeout(()=>txt.focus({preventScroll:true}),50);}
   $("bFram").disabled=fr?!ok():!G.t[i];$("bFram").textContent=i===3?"Klar! Visa sagan ▶":"Nästa ▶";$("bBak").hidden=false;}
 const ok=()=>$("txt").value.trim().split(/\s+/).filter(Boolean).length>=3;
+// inspiration: en fråga i taget, ord att sätta in när man skriver själv och en överraskning
+let inspI=0,fragor=[];
+function inspo(i){const h=G.v,p=G.p,e=G.e,T=G.tema||TEMAN[0];
+  fragor=[...(FRAGA[i](h,p,e)),...(i===0?[h.q,...(TEMAFRAGA[T.id]||[])]:i===1?(e.q||[]):[])].filter(Boolean);
+  inspI=Math.floor(Math.random()*fragor.length);visaFraga();$("ideaT").hidden=true;
+  const ord=[...ORDG[i].slice(0,4),...(ORDE[e.id]||[]).slice(0,3),...(ORDT[T.id]||[]).slice(0,4)];
+  $("ordw").hidden=!fritt();$("ord").innerHTML=ord.map(w=>`<button type="button" data-w="${w}">${w}</button>`).join("");}
+function visaFraga(){$("iq").innerHTML=`<b>💡 Tänk på:</b>${esc(fragor[inspI%fragor.length])}`;}
+$("inspN").onclick=()=>{inspI++;visaFraga();window.Ljud&&Ljud.pop&&Ljud.pop(1);};
+$("idea").onclick=()=>{const T=G.tema||TEMAN[0],L=[...IDEER,...(IDEERT[T.id]||[]),...(IDEERT[T.id]||[])];const d=$("ideaT");d.textContent="🎲 "+pick(L);d.hidden=false;window.Ljud&&Ljud.chime&&Ljud.chime();};
+$("ord").onclick=e=>{const b=e.target.closest("[data-w]");if(!b)return;const t=$("txt");t.value=(t.value&&!/\s$/.test(t.value)?t.value+" ":t.value)+b.dataset.w+" ";t.focus();t.oninput();};
 $("alt").onclick=e=>{const b=e.target.closest("[data-j]");if(!b)return;G.t[G.sida]=alternativ(G.sida,G.v,G.p,G.e)[+b.dataset.j];
   [...$("alt").children].forEach(x=>x.classList.toggle("v",x===b));$("bFram").disabled=false;window.Ljud&&Ljud.pop&&Ljud.pop(2);$("hittills").innerHTML=G.t.slice(0,G.sida).map(esc).join(" ");};
 $("txt").oninput=()=>{G.t[G.sida]=$("txt").value.trim();$("bFram").disabled=!ok();$("fbS").textContent=ok()||!$("txt").value.trim()?"":"Skriv en hel mening, minst tre ord.";};
@@ -269,7 +361,7 @@ $("start").onclick=e=>{const b=e.target.closest("[data-s]");if(!b)return;const t
 $("bFram").onclick=()=>{if(fritt())G.t[G.sida]=$("txt").value.trim();if(!G.t[G.sida])return;
   if(G.sida<3){G.sida++;sida();window.scrollTo(0,0);return;}
   klarSaga();};
-$("bBak").onclick=()=>{if(G.sida>0){G.sida--;sida();return;}steg=2;visa("val");};
+$("bBak").onclick=()=>{if(G.sida>0){G.sida--;sida();return;}steg=3;visa("val");};
 function klarSaga(){const s={l:G.lvl,v:G.v.id,p:G.p.id,e:G.e.id,t:G.t.slice(0,4),d:Date.now()};data.sagor=[s,...data.sagor].slice(0,12);
   const fore=stjarnor(G.lvl);data.n[G.lvl]=(data.n[G.lvl]||0)+1;const nu=stjarnor(G.lvl);data.stars[G.lvl]=Math.max(data.stars[G.lvl]||0,nu);save();
   window.Ljud&&Ljud.fanfare&&Ljud.fanfare();confetti();visaBok(s);if(nu>fore)toast(`⭐ Ny stjärna på nivå ${G.lvl}!`);}
@@ -288,7 +380,7 @@ $("mina").onclick=e=>{const v=e.target.closest("[data-v]"),x=e.target.closest("[
 // nivåerna: egen lista med antal sagor
 function hem(){$("niv").innerHTML=[1,2,3].map(l=>`<button data-l="${l}"><span class="nr" style="background:${NIV[l].col}">${l}</span><span><b>${NIV[l].namn}</b><small>${NIV[l].txt}</small></span><span class="st">${stjHtml(stjarnor(l))}</span></button>`).join("");
   $("bMinaH").hidden=!data.sagor.length;["vVal","vByg","vBok","vMina"].forEach(x=>$(x).hidden=true);if(window.speechSynthesis)speechSynthesis.cancel();show("home");}
-window.__sb={HJ,PL,EV,alternativ,begin};
+window.__sb={HJ,PL,EV,TEMAN,alternativ,begin};
 
 hem();
 </script>
