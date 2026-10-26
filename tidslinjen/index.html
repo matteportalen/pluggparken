@@ -598,6 +598,14 @@ const EMOJI=["⭐","🎂","🚲","🏫","⚽","🎨","🎵","🐶","🐱","🏠"
 const TEMAN={aventyr:{n:"🗺️ Äventyr",dek:[["🏔️",2,3],["🧭",89,3],["🌲",2,77],["⛺",88,77]],sl:["🚩","🏁"]},rymd:{n:"🪐 Rymd",dek:[["🪐",2,3],["🚀",89,3],["🌙",2,77],["⭐",88,77]],sl:["🌍","🛸"]},sv:{n:"🖨️ Svartvit",dek:[["✏️",2,3],["📏",89,3]],sl:["🚩","🏁"]},regnbage:{n:"🌈 Regnbåge",dek:[["🌈",2,3],["☀️",89,3],["☁️",2,77],["🦋",88,77]],sl:["🌱","🎉"]}};
 let TEMA="aventyr",NAMN="",NYTT=null,SIFF=true,LAY="stig";
 const yAt=x=>52+7*Math.sin((x-3)/94*Math.PI*1.8);
+/* händelserna ligger efter ålder (som på en riktig tidslinje), men aldrig närmare varandra än d */
+function placera(hs){const n=hs.length;if(!n)return[];const lo=12,hi=88,A=Math.max(1,M.alder),d=Math.min(15,76/n);
+  if(n===1)return[Math.max(20,Math.min(80,lo+(hi-lo)*hs[0].a/A))];
+  const xs=hs.map(h=>lo+(hi-lo)*h.a/A);
+  for(let k=0;k<4;k++){for(let i=1;i<n;i++)xs[i]=Math.max(xs[i],xs[i-1]+d);
+    if(xs[n-1]>hi){xs[n-1]=hi;for(let i=n-2;i>=0;i--)xs[i]=Math.min(xs[i],xs[i+1]-d);}
+    if(xs[0]<lo)xs[0]=lo;}
+  return xs;}
 function genAffisch(){
   const T=TEMAN[TEMA],hs=M.h.slice().sort((a,b)=>a.a-b.a),n=hs.length,fod=NU-M.alder,rak=LAY==="rak"||n>10;
   const defs=`<defs><linearGradient id="rg" gradientUnits="userSpaceOnUse" x1="3" y1="0" x2="97" y2="0"><stop offset="0" stop-color="#FF5A5F"/><stop offset=".2" stop-color="#FFA24D"/><stop offset=".4" stop-color="#F7D44C"/><stop offset=".6" stop-color="#4CC38A"/><stop offset=".8" stop-color="#4C8DFF"/><stop offset="1" stop-color="#9B5CFF"/></linearGradient></defs>`;
@@ -606,11 +614,11 @@ function genAffisch(){
   const nedre=(SIFF?`<div class="sifferrad">${sifferData().slice(0,4).map(d=>`<span>${d[0]} <b>${esc(d[1])}</b> ${esc(d[2].replace("dagar sedan jag föddes","dagar").replace("har jag sovit","sovit"))}</span>`).join("")}</div>`:"")+`<div class="ned" style="left:2cqw">Jag är ${M.alder} år · ${fod}–${NU}</div><div class="ned" style="right:2cqw">Gjord på pluggparken.se</div>`;
   const kortText=h=>`${esc(h.t)}<small>${h.a===0?"Född":"Ålder "+h.a} · ${fod+h.a}</small>`;
   if(rak){
-    const y0=48,sp=n>1?76/(n-1):0,w=n<=1?19:Math.min(19,Math.max(8,sp*3.4));
+    const y0=48,xs=placera(hs),dd=n?Math.min(15,76/n):15,w=n<=1?19:Math.min(19,Math.max(8,dd*3.4));
     const yy=(y0*.7071).toFixed(2);
     let html=`<svg class="bana" viewBox="0 0 100 70.71" preserveAspectRatio="none" aria-hidden="true">${defs}<path d="M3,${yy} L97,${yy}" fill="none" stroke-width="1.3" stroke-linecap="round"/></svg>`+dek+tit;
     html+=`<span class="st" style="left:5%;top:${y0}%">${T.sl[0]}</span><span class="st" style="left:95%;top:${y0}%">${T.sl[1]}</span>`;
-    hs.forEach((h,i)=>{const x=n===1?50:12+sp*i,k=i%4,up=k===0||k===2,lv=k<2?9:21,ny=NYTT===h.id?" ny":"";
+    hs.forEach((h,i)=>{const x=xs[i],k=i%4,up=k===0||k===2,lv=k<2?9:21,ny=NYTT===h.id?" ny":"";
       html+=`<i class="stav" style="left:${x}%;top:${up?y0-lv:y0}%;height:${lv}%"></i><span class="st pk${ny}" style="left:${x}%;top:${y0}%"></span>`;
       html+=`<div class="kt rak${up?" ovan":""}${ny}" style="left:${x}%;top:${up?y0-lv:y0+lv}%;width:${w}%"><span class="e">${esc(h.e||"⭐")}</span>${kortText(h)}</div>`;});
     if(!n)html+=`<div class="kt" style="left:50%;top:60%;width:34%">Lägg till händelser, så hamnar de på linjen.</div>`;
@@ -620,8 +628,8 @@ function genAffisch(){
   const bana=`<svg class="bana" viewBox="0 0 100 70.71" preserveAspectRatio="none" aria-hidden="true">${defs}<path d="M${pts.join(" L")}" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
   const stopp=(x,e)=>`<span class="st" style="left:${x}%;top:${yAt(x)}%">${e}</span>`;
   let html=bana+dek+tit+stopp(5,T.sl[0])+stopp(95,T.sl[1]);
-  const sp=n>1?64/(n-1):0,w=n<=1?19:Math.min(19,Math.max(10,sp*1.9));
-  hs.forEach((h,i)=>{const x=n===1?50:18+sp*i,y=yAt(x),ovan=i%2===0;
+  const xs=placera(hs),dd=n?Math.min(15,76/n):15,w=n<=1?19:Math.min(19,Math.max(10,dd*1.9));
+  hs.forEach((h,i)=>{const x=xs[i],y=yAt(x),ovan=i%2===0;
     html+=`<span class="st${NYTT===h.id?" ny":""}" style="left:${x}%;top:${y}%">${esc(h.e||"⭐")}</span>`;
     html+=`<div class="kt ${ovan?"ovan":""}${NYTT===h.id?" ny":""}" style="left:${x}%;${ovan?`top:${y-4.2}%`:`top:${y+4.6}%`};width:${w}%">${kortText(h)}</div>`;});
   if(!n)html+=`<div class="kt" style="left:50%;top:60%;width:34%">Lägg till händelser, så hamnar de här på stigen.</div>`;
