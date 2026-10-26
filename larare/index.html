@@ -200,9 +200,9 @@ const sak=k=>bank().find(x=>x.k===k)||grund().find(x=>x.k===k)||null;
 const ico=x=>x.img?`<img class="eg" src="${x.img}" alt="">`:x.svg?SVG[x.svg]:esc(x.e||"📌");
 const alleListor=()=>S.widgets.filter(x=>x.typ==="lista").forEach(x=>{const e=elOf(x.id);if(e)fyllLista(e.querySelector(".wb"),x);});
 const FARGER=["#1D2B53","#E5484D","#2F6BFF","#1E9E5E","#F2780C","#7B61FF","#FFFFFF"];
-const STL={rutat:[["Små rutor",22],["Medelstora rutor",40],["Stora rutor",64],["Mycket stora rutor",96]],linjerat:[["Smala rader",34],["Medelbreda rader",56],["Breda rader",80],["Mycket breda rader",110]]};
-const BG=["vit","rutat","linjerat","tavla"];
-const BGNAMN={vit:"Vit",rutat:"Rutat",linjerat:"Linjerat",tavla:"Griffeltavla"};
+const STL={skriv:[["Små skrivlinjer",16],["Medelstora skrivlinjer",24],["Stora skrivlinjer",34],["Mycket stora skrivlinjer",46]],rutat:[["Små rutor",22],["Medelstora rutor",40],["Stora rutor",64],["Mycket stora rutor",96]],linjerat:[["Smala rader",34],["Medelbreda rader",56],["Breda rader",80],["Mycket breda rader",110]]};
+const BG=["vit","rutat","linjerat","skriv","tavla"];
+const BGNAMN={vit:"Vit",rutat:"Rutat",linjerat:"Linjerat",skriv:"Skrivlinjer (vind, golv, källare)",tavla:"Griffeltavla"};
 const TYPFARG={lista:"#3D5AFE",lista2:"#1E9E5E",timer:"#F2780C",hjul:"#7B61FF",text:"#E0A21B",ljud:"#0E9AA7"};
 const LAPPFARG=["gul","rosa","bla","gron"];
 const tf=o=>`scale(${o.s||1})`+(o.rot?` rotate(${o.rot}deg)`:"");
@@ -254,7 +254,10 @@ function sndIkon(){$("bSnd").textContent=window.Ljud&&Ljud.on===false?"🔕":"�
 $("bSnd").onclick=()=>{if(window.Ljud&&Ljud.set){Ljud.set(!Ljud.on);sndIkon();hjalpText(Ljud.on?"Ljud på":"Ljud av");}};
 document.addEventListener("mp-ljud",sndIkon);
 $("bFull").onclick=()=>{if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen().catch(()=>{});};
-function storlek(){const l=STL[S.bg];$("bStl").style.display=l?"":"none";if(l){const i=Math.min(Math.max(S.stl[S.bg]==null?1:+S.stl[S.bg],0),3);$("board").style.setProperty("--g",l[i][1]+"px");}}
+function skrivBild(g){const H=Math.round(g*4.6),y0=Math.round(g*.8),c="#8FAAE0",d=[y0,y0+g,y0+2*g,y0+3*g];
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="${H}"><line x1="0" x2="24" y1="${d[0]}" y2="${d[0]}" stroke="${c}" stroke-width="1.5"/><line x1="0" x2="24" y1="${d[1]}" y2="${d[1]}" stroke="${c}" stroke-width="1.5" stroke-dasharray="6 6"/><line x1="0" x2="24" y1="${d[2]}" y2="${d[2]}" stroke="#5B78D6" stroke-width="2.6"/><line x1="0" x2="24" y1="${d[3]}" y2="${d[3]}" stroke="${c}" stroke-width="1.5"/></svg>`;
+  return{img:`url("data:image/svg+xml,${encodeURIComponent(svg)}")`,H};}
+function storlek(){const l=STL[S.bg];const bd=$("board");if(S.bg==="skriv"){const i=Math.min(Math.max(S.stl.skriv==null?1:+S.stl.skriv,0),3),b=skrivBild(STL.skriv[i][1]);bd.style.backgroundImage=b.img;bd.style.backgroundSize="24px "+b.H+"px";bd.style.backgroundColor="#fff";}else{bd.style.backgroundImage="";bd.style.backgroundSize="";bd.style.backgroundColor="";}$("bStl").style.display=l?"":"none";if(l&&S.bg!=="skriv"){const i=Math.min(Math.max(S.stl[S.bg]==null?1:+S.stl[S.bg],0),3);$("board").style.setProperty("--g",l[i][1]+"px");}}
 function bakgrund(bg){S.bg=bg;$("board").className=bg==="vit"?"":bg;storlek();
   if(bg==="tavla"&&S.pen.c==="#1D2B53")penFarg("#FFFFFF");else if(bg!=="tavla"&&S.pen.c==="#FFFFFF")penFarg("#1D2B53");spara();}
 function penFarg(c){S.pen.c=c;$("fargprick").style.background=c;spara();}
@@ -455,7 +458,7 @@ lasEl.addEventListener("change",()=>{const f=lasEl.files[0];lasEl.value="";if(!f
     if(!o||o.app!=="pluggparken-larare"||!Array.isArray(o.widgets)){alert("Det här är ingen fil från lärarsidan.");return;}
     if(!confirm("Ersätta tavlan med innehållet i filen? Det du har nu försvinner."))return;
     Object.keys(CLOCK).forEach(k=>delete CLOCK[k]);Object.keys(MAT).forEach(stoppaMatare);
-    S.widgets=o.widgets.slice(0,40).map(w=>renaWidget(w,true)).filter(Boolean);S.namn=renaMinne(o.namn);S.bank=renaBank(o.bank);if(o.stl&&typeof o.stl==="object")["rutat","linjerat"].forEach(k=>{const v=+o.stl[k];if(v>=0&&v<=3)S.stl[k]=v|0;});if(BG.includes(o.bg))bakgrund(o.bg);ritaAlla();spara();hjalpText("Tavlan är laddad från filen");};
+    S.widgets=o.widgets.slice(0,40).map(w=>renaWidget(w,true)).filter(Boolean);S.namn=renaMinne(o.namn);S.bank=renaBank(o.bank);if(o.stl&&typeof o.stl==="object")["rutat","linjerat","skriv"].forEach(k=>{const v=+o.stl[k];if(v>=0&&v<=3)S.stl[k]=v|0;});if(BG.includes(o.bg))bakgrund(o.bg);ritaAlla();spara();hjalpText("Tavlan är laddad från filen");};
   r.readAsText(f);});
 $("bFil").onclick=()=>{if(pop&&pop.dataset.t==="fil"){stangPop();return;}
   const p=oppnaPop($("bFil"),`<h4>Tavlan som fil</h4><button data-f="spara">💾 Spara som fil</button><label style="display:flex;gap:8px;align-items:center;font-weight:700;font-size:.85rem;color:#56668F;padding:0 4px"><input type="checkbox" id="medNamn"> Ta med namnen i lyckohjulet</label><button data-f="ladda">📂 Ladda från fil</button>`,"meny");p.dataset.t="fil";
