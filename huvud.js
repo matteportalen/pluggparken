@@ -91,7 +91,7 @@ body.mph-mini #quit{display:none}
   const PORTAL=PORTALER.find(p=>p.id===ds.portal)||PORTALER[0];
   /* ---------- Designval: nya (ämnen på första sidan) eller gamla (v1: Matte och Fler ämnen) ----------
      Valet sparas i localStorage "pluggparken-design" ("v1" = gamla). Alla länkar i menyn och tillbaka-knappen följer valet. */
-  const DESIGN=(()=>{try{return localStorage.getItem('pluggparken-design')==='v1'?'v1':'ny';}catch(e){return'ny';}})();
+  const DESIGN='ny';
   const em=e=>`<span class="mph-em" aria-hidden="true">${e}</span>`;
   const NYMENY=[{id:'hem',namn:'Välj ämne',sub:'Alla ämnen',href:'',logo:em('🏠')},{id:'matte',namn:'Matematik',sub:'Räkna, spela och utforska',href:'matte/',logo:em('🔢')},
     {id:'svenska',namn:'Svenska',sub:'Ord, stavning, läsning och sagor',href:'svenska/',logo:em('📖')},{id:'rymd',namn:'Rymdlabbet',sub:'Planeterna, stjärnorna och svarta hål',href:'ovriga/rymdlabbet/',logo:em('🔭')},
@@ -230,8 +230,7 @@ body.mph-mini #quit{display:none}
     meny=document.createElement('nav');meny.className='mph-menu';meny.setAttribute('aria-label','Meny');
     meny.innerHTML=MENY.map(p=>`<a href="${hem}${p.href}"${p===MENYNU?' aria-current="true"':''}>${p.logo}<span>${p.namn}<small>${p.sub}</small></span></a>`).join('')
     meny.innerHTML+=`<a href="https://fritidsparken.se" target="_blank" rel="noopener" class="mph-vann"><img class="mph-mark" src="${hem}fritidsparken-logo.jpg" alt="" width="30" height="30"><span>Fritidsparken.se<small>Våra vänner: lek och aktiviteter</small></span></a>`;
-    {const dv=document.createElement('button');dv.className='mph-mt';dv.type='button';dv.innerHTML=DESIGN==='ny'?'<span>🕰️</span><span>Gamla designen</span>':'<span>✨</span><span>Prova nya designen</span>';
-      dv.onclick=e=>{e.stopPropagation();try{localStorage.setItem('pluggparken-design',DESIGN==='ny'?'v1':'ny');}catch(x){}location.href=hem+(DESIGN==='ny'?'v1/':'');};meny.appendChild(dv);}
+
     {const sk=document.createElement('button');sk.className='mph-mt';sk.type='button';sk.innerHTML='<span>🔍</span><span>Sök övning</span>';sk.onclick=e=>{e.stopPropagation();stang();MPSokOpen();};meny.appendChild(sk);}
     if(window.MPTema){const mt=document.createElement('button');mt.className='mph-mt';mt.type='button';const ml=()=>{mt.innerHTML=MPTema.get()==='mork'?'<span>☀️</span><span>Ljust läge</span>':'<span>🌙</span><span>Mörkt läge</span>';};ml();mt.onclick=e=>{e.stopPropagation();MPTema.toggle();ml();};meny.appendChild(mt);}
     h.appendChild(meny);ptl.setAttribute('aria-expanded','true');meny.querySelector('a').focus({preventScroll:true});};
