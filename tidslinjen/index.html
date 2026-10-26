@@ -167,6 +167,8 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 .mtl li.tom{padding-left:0;color:var(--muted);font-weight:700}
 .mtl li.tom::before{display:none}
 @media(min-width:700px){.mtl::before{left:50%;margin-left:-2px}.mtl li{width:50%;padding:0 0 14px 0;min-height:48px}.mtl li.hoger{margin-left:50%;padding-left:34px}.mtl li.vanster{padding-right:34px;text-align:right}.mtl li.hoger .pricken{left:-21px}.mtl li.vanster .pricken{left:auto;right:-21px}.mtl li.nu{margin-left:25%;width:50%;padding-left:0;text-align:center}.mtl li.nu .pricken{position:relative;margin:0 auto 4px}.mtl li.tom{width:100%;margin:0}.mtl li.vanster .mkort{padding:8px 12px 8px 36px}.mtl li.vanster .mkort button{right:auto;left:6px}}
+.mlas{background:#FFF8E1;border:2px solid #F2D27A;border-radius:14px;padding:8px 12px;margin:0 0 12px;font-weight:700;font-size:.9rem;line-height:1.3}
+@media print{body{background:#fff}.mph,.flikar,.mchips,.mform,.stepper button,.mtl .mkort button,.pers button,.utskrift,.pet,.mlas,#fx,[data-home]{display:none!important}.wrap{max-width:none;padding:0}.kort{box-shadow:none;border:0}.pers input{border:0;padding:0}.mrad .stepper{background:none}.tavlahint{display:none}}
 .mfakta{margin:12px 2px 0;color:var(--muted);font-weight:700;font-size:.92rem;line-height:1.4}
 .pers{display:grid;grid-template-columns:1fr 100px 34px;gap:6px;margin:0 0 6px}
 .pers button{border-radius:50%;background:#fff;box-shadow:0 2px 0 var(--line);font-weight:800}
@@ -246,6 +248,7 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
   <button type="button" data-home hidden tabindex="-1" aria-hidden="true" onclick="hem()"></button>
   <div class="topp"><span class="lagt">👤 Min tidslinje</span><span style="flex:1"></span><span class="pet" id="pet4"></span></div>
   <div class="flikar"><button data-t="liv" class="v">Mitt liv</button><button data-t="slakt">Släkten</button></div>
+  <div class="mlas" role="note">🔒 Din tidslinje sparas inte. Den försvinner när du lämnar sidan. Vill du ha kvar den? Tryck på Skriv ut.</div>
   <div class="kort" id="mLiv">
     <div class="fraga">👶 Vad har hänt i ditt liv?<small>Tryck på en händelse, välj hur gammal du var och se den på tidslinjen.</small></div>
     <div class="mrad">Jag är <span class="stepper"><button id="mMinus" aria-label="Yngre">−</button><b id="mAlder">9</b><button id="mPlus" aria-label="Äldre">+</button></span> år</div>
@@ -257,6 +260,7 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
     </div>
     <ul class="mtl" id="mLinje"></ul>
     <div class="mfakta" id="mFakta"></div>
+    <div style="text-align:center"><button class="knapp vit utskrift" onclick="window.print()">🖨️ Skriv ut</button></div>
   </div>
   <div class="kort" id="mSlakt" hidden>
     <div class="fraga">👨‍👩‍👧 Hur långt tillbaka går din släkt?<small>Lägg till familjemedlemmar och året de föddes. Fråga hemma om du inte vet.</small></div>
@@ -264,6 +268,7 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
     <div id="sRader"></div>
     <div class="slaxel" id="sAxel" hidden></div>
     <div class="sltext" id="sText"></div>
+    <div style="text-align:center"><button class="knapp vit utskrift" onclick="window.print()">🖨️ Skriv ut</button></div>
   </div>
 </section>
 
@@ -364,7 +369,7 @@ const POS={riddare:"50% 20%",gustavvasa:"50% 20%",karl12:"50% 20%",linne:"50% 22
 const tk=(k,o={})=>`<div class="tk${o.sel?" sel":""}${o.lock?" lock":""}${o.fel?" fel":""}" data-id="${k.id}"><img src="bilder/${k.id}.jpg" alt="" draggable="false" style="object-position:${POS[k.id]||"center"}"><b>${k.namn}</b>${o.ar?`<i>${arTxt(k)}</i>`:""}</div>`;
 
 const stjHtml=n=>[1,2,3].map(i=>i<=n?"★":'<span class="off">★</span>').join("");
-function show(id){document.querySelectorAll(".screen").forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
+function show(id){if(id!=="min"&&typeof glomMin==="function")glomMin();document.querySelectorAll(".screen").forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
 const LAGEN=[
  {id:"ordna",ik:"⏳",namn:"Bygg tidslinjen",txt:"Sex bilder ligger blandade. Sätt dem i rätt ordning, äldst först.",col:"#F2780C"},
  {id:"langt",ik:"📏",namn:"Hur länge sedan?",txt:"Sätt en nål på en linje i rätt skala och se hur olika långa tiderna är.",col:"#3D5AFE"},
@@ -501,8 +506,10 @@ const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",
 const FORSLAG=[["🎂","Jag föddes",0],["🚶","Jag lärde mig gå",1],["🧒","Jag började på förskolan",2],["👶","Jag fick ett syskon",4],["🚲","Jag lärde mig cykla",5],["🏫","Jag började skolan",6],["🦷","Jag tappade en tand",6],["🏊","Jag lärde mig simma",7],["🐶","Jag fick ett husdjur",5],["🏠","Jag flyttade",6],["✈️","Jag reste långt",7],["⭐","Något eget …",null]];
 const SLAKT=["Jag","Mamma","Pappa","Mormor","Morfar","Farmor","Farfar","Syskon"];
 let M=null,FAL=null;
-function laddaMin(){const m=data.min||{};M={alder:Math.max(3,Math.min(99,+m.alder||9)),h:Array.isArray(m.h)?m.h:[],sl:Array.isArray(m.sl)?m.sl:[]};data.min=M;}
-const sparaMin=()=>{data.min=M;save();};
+/* Min tidslinje sparas aldrig: den finns bara i sidans minne och glöms när man lämnar läget (dataskydd, lärarens val) */
+function laddaMin(){M={alder:9,h:[],sl:[]};if("min" in data){delete data.min;save();}}
+const sparaMin=()=>{};
+function glomMin(){if(!M)return;M=null;FAL=null;["mLinje","sRader","sText","sAxel","mFakta"].forEach(i=>{$(i).innerHTML="";});$("mText").value="";$("mForm").hidden=true;}
 function startMin(){laddaMin();$("pet4").innerHTML=owlSVG(lasDjur());FAL=null;$("mForm").hidden=true;flik("liv");show("min");ritaLiv();ritaSlakt();}
 function flik(t){document.querySelectorAll(".flikar button").forEach(b=>b.classList.toggle("v",b.dataset.t===t));$("mLiv").hidden=t!=="liv";$("mSlakt").hidden=t!=="slakt";}
 document.querySelector(".flikar").onclick=e=>{const b=e.target.closest("[data-t]");if(b)flik(b.dataset.t);};
