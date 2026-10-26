@@ -259,10 +259,17 @@ cv.addEventListener("pointermove",e=>{if(!cur)return;cur.p.push(pt(e));
   const p=cur.p,n=p.length;if(n>=3){const a=p[n-3],b=p[n-2],c=p[n-1];cx.save();cx.setTransform(DPR,0,0,DPR,0,0);cx.lineCap="round";cx.lineJoin="round";cx.lineWidth=cur.w;cx.globalCompositeOperation=cur.e?"destination-out":"source-over";cx.strokeStyle=cur.e?"#000":cur.c;
     cx.beginPath();cx.moveTo((a[0]+b[0])/2,(a[1]+b[1])/2);cx.quadraticCurveTo(b[0],b[1],(b[0]+c[0])/2,(b[1]+c[1])/2);cx.stroke();cx.restore();}
   else{linje(cur);}e.preventDefault();});
-const slutStreck=()=>{cur=null;};
+const slutStreck=()=>{if(cur)sparaRitning();cur=null;};
 cv.addEventListener("pointerup",slutStreck);cv.addEventListener("pointercancel",slutStreck);
-function angra(){if(strokes.length){strokes.pop();omrita();}}
-function rensaRitning(){if(!strokes.length||confirm("Sudda hela ritningen?")){strokes=[];omrita();}}
+/* ritningen sparas i webbläsaren (bara på den här enheten); koordinaterna delas med fönsterbredden så att den hamnar rätt vid annan fönsterstorlek */
+const RKEY=KEY+"-ritning";let ritT=0;
+function sparaRitning(){clearTimeout(ritT);ritT=setTimeout(()=>{try{if(!strokes.length){localStorage.removeItem(RKEY);return;}const W=innerWidth||1;
+  const d=strokes.map(t=>({c:t.c,w:Math.round(t.w*10)/10,e:t.e?1:0,p:t.p.filter((q,i,a)=>i===0||i===a.length-1||Math.abs(q[0]-a[i-1][0])+Math.abs(q[1]-a[i-1][1])>=2).map(q=>[Math.round(q[0]/W*10000)/10000,Math.round(q[1]/W*10000)/10000])}));
+  const j=JSON.stringify(d);if(j.length>2.5e6){hjalpText("Ritningen är för stor för att sparas. Sudda något.");return;}localStorage.setItem(RKEY,j);}catch(e){}},400);}
+function laddaRitning(){try{const d=JSON.parse(localStorage.getItem(RKEY)||"null");if(!Array.isArray(d))return;const W=innerWidth||1;
+  strokes=d.slice(0,3000).filter(t=>t&&typeof t.c==="string"&&/^#[0-9A-Fa-f]{3,8}$/.test(t.c)&&Array.isArray(t.p)&&t.p.length).map(t=>({c:t.c,w:Math.max(1,Math.min(60,+t.w||6)),e:!!t.e,p:t.p.slice(0,20000).map(q=>[(+q[0]||0)*W,(+q[1]||0)*W])}));}catch(e){strokes=[];}}
+function angra(){if(strokes.length){strokes.pop();omrita();sparaRitning();}}
+function rensaRitning(){if(!strokes.length||confirm("Sudda hela ritningen?")){strokes=[];omrita();sparaRitning();}}
 addEventListener("resize",storlek);
 
 /* ---------- verktygsfält ---------- */
@@ -294,7 +301,7 @@ $("bFarg").onclick=e=>{if(pop&&pop.dataset.t==="farg"){stangPop();return;}
 $("bLagg").onclick=()=>{if(pop&&pop.dataset.t==="lagg"){stangPop();return;}
   const p=oppnaPop($("bLagg"),`<h4>Lägg till en ruta</h4><button data-n="lista">📋 Du behöver:</button><button data-n="lista2">✅ När du är klar:</button><button data-n="timer">⏱️ Timer</button><button data-n="hjul">🎡 Lyckohjul</button><button data-n="text">📝 Post-it</button><button data-n="video">▶️ Video (YouTube)</button><button data-n="skrivrad">✍️ Skrivrad (vind, golv, källare)</button><button data-n="ljud">🔊 Ljudnivå</button><button data-n="tom">➕ Egen lista</button><hr style="width:100%;border:0;border-top:1px solid #DDE5F5"><button data-n="ny" style="color:#B4232A">🆕 Ny lektion (töm tavlan)</button>`,"meny");p.dataset.t="lagg";
   p.onclick=ev=>{const b=ev.target.closest("[data-n]");if(!b)return;stangPop();const n=b.dataset.n;
-    if(n==="ny"){if(confirm("Tömma tavlan och ta bort alla rutor?")){S.widgets=[];strokes=[];omrita();ritaAlla();spara();}return;}
+    if(n==="ny"){if(confirm("Tömma tavlan och ta bort alla rutor?")){S.widgets=[];strokes=[];omrita();sparaRitning();ritaAlla();spara();}return;}
     laggTill(n);};};
 document.addEventListener("pointerdown",e=>{if(pop&&!pop.contains(e.target)&&!e.target.closest("#bar"))stangPop();});
 addEventListener("keydown",e=>{if(e.target.closest&&e.target.closest("input,textarea,[contenteditable]"))return;
@@ -515,7 +522,7 @@ $("bFil").onclick=()=>{if(pop&&pop.dataset.t==="fil"){stangPop();return;}
 
 /* ---------- start ---------- */
 bakgrund(S.bg);$("fargprick").style.background=S.pen.c;verktyg(S.pen.v==="sudd"?"sudd":"penna");
-storlek();ritaAlla();sndIkon();
+laddaRitning();storlek();ritaAlla();sndIkon();
 </script>
 </body>
 </html>
