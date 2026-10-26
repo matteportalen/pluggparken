@@ -155,20 +155,77 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 .mform{background:#FFF8E1;border:2px solid #F2D27A;border-radius:16px;padding:12px;margin:0 0 12px;display:grid;gap:8px}
 .mform input[type=text],.pers input{font:inherit;font-weight:700;border:2px solid var(--line);border-radius:12px;padding:8px 10px;width:100%;background:#fff;color:var(--ink)}
 .mform .knapp{margin:2px}
-.mtl{list-style:none;margin:6px 0 0;padding:0;position:relative}
-.mtl::before{content:"";position:absolute;left:19px;top:6px;bottom:6px;width:4px;border-radius:2px;background:var(--line)}
-.mtl li{position:relative;padding:0 0 12px 52px;min-height:44px}
-.mtl .pricken{position:absolute;left:0;top:0;width:42px;height:42px;border-radius:50%;background:#fff;border:3px solid var(--accent);display:grid;place-items:center;font-size:1.3rem}
-.mtl li.nu .pricken{border-color:var(--good);background:#E6F7EE}
-.mtl .mkort{background:var(--soft);border-radius:14px;padding:8px 36px 8px 12px;position:relative}
-.mtl .mkort small{display:block;color:var(--muted);font-weight:800;font-size:.78rem}
-.mtl .mkort b{display:block;line-height:1.2}
-.mtl .mkort button{position:absolute;right:6px;top:6px;width:26px;height:26px;border-radius:50%;background:#fff;font-weight:800;font-size:.85rem;box-shadow:0 2px 0 var(--line)}
-.mtl li.tom{padding-left:0;color:var(--muted);font-weight:700}
-.mtl li.tom::before{display:none}
-@media(min-width:700px){.mtl::before{left:50%;margin-left:-2px}.mtl li{width:50%;padding:0 0 14px 0;min-height:48px}.mtl li.hoger{margin-left:50%;padding-left:34px}.mtl li.vanster{padding-right:34px;text-align:right}.mtl li.hoger .pricken{left:-21px}.mtl li.vanster .pricken{left:auto;right:-21px}.mtl li.nu{margin-left:25%;width:50%;padding-left:0;text-align:center}.mtl li.nu .pricken{position:relative;margin:0 auto 4px}.mtl li.tom{width:100%;margin:0}.mtl li.vanster .mkort{padding:8px 12px 8px 36px}.mtl li.vanster .mkort button{right:auto;left:6px}}
 .mlas{background:#FFF8E1;border:2px solid #F2D27A;border-radius:14px;padding:8px 12px;margin:0 0 12px;font-weight:700;font-size:.9rem;line-height:1.3}
-@media print{body{background:#fff}.mph,.flikar,.mchips,.mform,.stepper button,.mtl .mkort button,.pers button,.utskrift,.pet,.mlas,#fx,[data-home]{display:none!important}.wrap{max-width:none;padding:0}.kort{box-shadow:none;border:0}.pers input{border:0;padding:0}.mrad .stepper{background:none}.tavlahint{display:none}}
+/* affisch */
+.affischrad{display:grid;gap:8px;margin:4px 0 10px}
+.affischrad input{font:inherit;font-weight:700;border:2px solid var(--line);border-radius:12px;padding:8px 12px;width:100%;background:#fff;color:var(--ink)}
+.tema{display:flex;gap:6px;flex-wrap:wrap}
+.tema button{flex:1;min-width:96px;background:#fff;border:2px solid var(--line);border-radius:12px;padding:7px 8px;font-weight:800;font-size:.92rem;box-shadow:0 3px 0 var(--line)}
+.tema button.v{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 3px 0 #2A3FB8}
+.emojirad{display:flex;flex-wrap:wrap;gap:3px}
+.emojirad button{width:36px;height:36px;border-radius:10px;background:#fff;border:2px solid transparent;font-size:1.25rem;line-height:1}
+.emojirad button.v{border-color:var(--accent);background:#E3EAFF}
+.affisch{container-type:inline-size;position:relative;aspect-ratio:1.414/1;border-radius:16px;overflow:hidden;box-shadow:0 4px 0 var(--line);margin:0 0 12px;-webkit-print-color-adjust:exact;print-color-adjust:exact;font-weight:700}
+.affisch .bana{position:absolute;inset:0;width:100%;height:100%}
+.affisch .tit{position:absolute;left:0;right:0;top:3.2cqw;text-align:center;font-size:clamp(18px,4.6cqw,52px);font-weight:800;line-height:1}
+.affisch .dek{position:absolute;font-size:clamp(18px,5cqw,56px);line-height:1;pointer-events:none}
+.affisch .ned{position:absolute;bottom:1.6cqw;font-size:clamp(9px,1.25cqw,14px);opacity:.8}
+.affisch .st{position:absolute;transform:translate(-50%,-50%);width:6cqw;height:6cqw;border-radius:50%;display:grid;place-items:center;font-size:clamp(14px,3.4cqw,38px);line-height:1}
+.affisch .kt{position:absolute;text-align:center;font-size:clamp(11px,1.5cqw,17px);line-height:1.15;padding:.7cqw .8cqw;border-radius:1.2cqw;transform:translateX(-50%)}
+.affisch .kt small{display:block;font-size:.82em;opacity:.8;font-weight:700}
+.affisch .kt.ovan{transform:translate(-50%,-100%)}
+.affisch .ny{animation:pop .6s cubic-bezier(.34,1.56,.64,1)}
+@keyframes pop{0%{transform:translate(-50%,-50%) scale(0)}100%{transform:translate(-50%,-50%) scale(1)}}
+.affisch .kt.ny{animation:popk .6s cubic-bezier(.34,1.56,.64,1)}
+@keyframes popk{0%{opacity:0;margin-top:2cqw}100%{opacity:1;margin-top:0}}
+.t-aventyr{background:radial-gradient(circle at 18% 16%,#FFF3D6,#F0DAA5 62%,#E2C27F);color:#4A2E12;border:.8cqw double #8A5A2B}
+.t-aventyr .bana path{stroke:#8A5A2B;stroke-dasharray:2.4 1.6}
+.t-aventyr .st{background:#FFF9E8;border:.5cqw solid #8A5A2B}
+.t-aventyr .kt{background:#FFF9E8;border:.25cqw solid #B98A4E}
+.t-rymd{background:radial-gradient(circle at 20% 25%,rgba(120,100,255,.35),transparent 45%),radial-gradient(circle at 80% 75%,rgba(0,200,255,.22),transparent 45%),radial-gradient(1px 1px at 12% 22%,#fff,transparent),radial-gradient(1.5px 1.5px at 33% 80%,#fff,transparent),radial-gradient(1px 1px at 52% 12%,#fff,transparent),radial-gradient(1.5px 1.5px at 70% 40%,#fff,transparent),radial-gradient(1px 1px at 88% 18%,#fff,transparent),radial-gradient(1px 1px at 92% 88%,#fff,transparent),radial-gradient(1px 1px at 6% 62%,#fff,transparent),#0E1236;color:#fff;border:.8cqw solid #3A3F8F}
+.t-rymd .bana path{stroke:#7FE7FF;stroke-dasharray:1.2 2}
+.t-rymd .st{background:#1B2260;border:.5cqw solid #7FE7FF}
+.t-rymd .kt{background:rgba(255,255,255,.12);border:.2cqw solid rgba(255,255,255,.45)}
+.t-regnbage{background:linear-gradient(#CDEBFF,#FFF6D6 68%,#CFF2C9);color:#1D2B53;border:.8cqw solid #fff}
+.t-regnbage .bana path{stroke:url(#rg)}
+.t-regnbage .st{background:#fff;border:.5cqw solid #FFB347}
+.t-regnbage .kt{background:rgba(255,255,255,.9);border:.25cqw solid #fff}
+.affisch::before,.affisch::after{content:"";position:absolute;border-radius:50%;pointer-events:none}
+.t-aventyr::before{left:-12%;width:60%;bottom:-24cqw;height:34cqw;background:#C9A15F;opacity:.75}
+.t-aventyr::after{right:-14%;width:66%;bottom:-27cqw;height:36cqw;background:#B98A4E;opacity:.8}
+.t-rymd::before{left:-10%;width:48%;bottom:-24cqw;height:34cqw;background:radial-gradient(circle at 50% 12%,#7C6CFF,#3C2E9E 55%,#1A1550);box-shadow:0 0 5cqw rgba(124,108,255,.55)}
+.t-rymd::after{right:6%;width:7cqw;height:7cqw;bottom:9cqw;background:radial-gradient(circle at 35% 30%,#fff,#FFD27A 60%,#C98B2B);box-shadow:0 0 2cqw rgba(255,210,122,.6)}
+.t-regnbage::before{left:-14%;width:64%;bottom:-24cqw;height:34cqw;background:#9ED98A}
+.t-regnbage::after{right:-16%;width:70%;bottom:-27cqw;height:36cqw;background:#7CC97A}
+.affisch .ned{z-index:2}
+.t-aventyr .ned{color:#4A2E12;opacity:.9}.t-regnbage .ned{color:#17502A;opacity:1}
+.t-sv{background:#fff;color:#000;border:.7cqw solid #000}
+.t-sv::before,.t-sv::after{display:none}
+.t-sv .bana path{stroke:#000;stroke-dasharray:2 1.6}
+.t-sv .st{background:#fff;border:.45cqw solid #000}
+.t-sv .kt{background:#fff;border:.3cqw solid #000}
+.t-sv .tit{font-weight:800}
+.t-sv .ned{color:#000;opacity:1}
+.mlista{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 6px}
+.mlista .tom{color:var(--muted);font-weight:700}
+.mlista span{background:var(--soft);border-radius:12px;padding:5px 6px 5px 10px;font-weight:700;font-size:.88rem;display:inline-flex;gap:6px;align-items:center}
+.mlista button{width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 2px 0 var(--line);font-weight:800;font-size:.75rem}
+.siffror{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:12px 0}
+.siffror div{background:var(--soft);border-radius:14px;padding:8px 10px;text-align:center;font-weight:700;font-size:.85rem;line-height:1.25}
+.siffror b{display:block;font-size:1.25rem;color:var(--accent)}
+@page{size:A4 landscape;margin:8mm}
+@media print{
+  .mph,.topp,.flikar,.mlas,[data-home],#fx,.tavlahint,.utskrift{display:none!important}
+  body{background:#fff}
+  main.wrap{max-width:none;padding:0}
+  section.screen:not(#min){display:none!important}
+  .kort{box-shadow:none;border:0;padding:0}
+  body[data-pr="liv"] #mSlakt,body[data-pr="liv"] #mLiv>*:not(.affisch){display:none!important}
+  body[data-pr="liv"] .affisch{margin:0;border-radius:0;box-shadow:none}
+  body[data-pr="slakt"] #mLiv{display:none!important}
+  body[data-pr="slakt"] .mchips,body[data-pr="slakt"] .pers button{display:none!important}
+  .pers input{border:0;padding:0;background:none;color:#000}
+}
 .mfakta{margin:12px 2px 0;color:var(--muted);font-weight:700;font-size:.92rem;line-height:1.4}
 .pers{display:grid;grid-template-columns:1fr 100px 34px;gap:6px;margin:0 0 6px}
 .pers button{border-radius:50%;background:#fff;box-shadow:0 2px 0 var(--line);font-weight:800}
@@ -255,12 +312,18 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
     <div class="mchips" id="mChips"></div>
     <div class="mform" id="mForm" hidden>
       <input type="text" id="mText" maxlength="40" placeholder="Vad hände?" aria-label="Vad hände?">
+      <div class="emojirad" id="mEmoji" role="group" aria-label="Välj en bild"></div>
       <div class="mrad" style="margin:0">Då var jag <span class="stepper"><button id="aMinus" aria-label="Yngre">−</button><b id="aVal">6</b><button id="aPlus" aria-label="Äldre">+</button></span> år</div>
       <div><button class="knapp" id="mLagg">Lägg till ✓</button><button class="knapp vit" id="mAvbryt">Avbryt</button></div>
     </div>
-    <ul class="mtl" id="mLinje"></ul>
-    <div class="mfakta" id="mFakta"></div>
-    <div style="text-align:center"><button class="knapp vit utskrift" onclick="window.print()">🖨️ Skriv ut</button></div>
+    <div class="affischrad">
+      <input type="text" id="mNamn" maxlength="20" placeholder="Ditt förnamn (skrivs bara på affischen)" aria-label="Ditt förnamn">
+      <div class="tema" id="mTema" role="group" aria-label="Välj tema"></div>
+    </div>
+    <div class="affisch t-aventyr" id="affisch" aria-label="Din tidslinje som affisch"></div>
+    <div class="mlista" id="mLinje"></div>
+    <div class="siffror" id="mFakta"></div>
+    <div style="text-align:center"><button class="knapp vit utskrift" onclick="skrivUt('liv')">🖨️ Skriv ut som affisch</button></div>
   </div>
   <div class="kort" id="mSlakt" hidden>
     <div class="fraga">👨‍👩‍👧 Hur långt tillbaka går din släkt?<small>Lägg till familjemedlemmar och året de föddes. Fråga hemma om du inte vet.</small></div>
@@ -268,7 +331,7 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
     <div id="sRader"></div>
     <div class="slaxel" id="sAxel" hidden></div>
     <div class="sltext" id="sText"></div>
-    <div style="text-align:center"><button class="knapp vit utskrift" onclick="window.print()">🖨️ Skriv ut</button></div>
+    <div style="text-align:center"><button class="knapp vit utskrift" onclick="skrivUt('slakt')">🖨️ Skriv ut</button></div>
   </div>
 </section>
 
@@ -509,32 +572,63 @@ let M=null,FAL=null;
 /* Min tidslinje sparas aldrig: den finns bara i sidans minne och glöms när man lämnar läget (dataskydd, lärarens val) */
 function laddaMin(){M={alder:9,h:[],sl:[]};if("min" in data){delete data.min;save();}}
 const sparaMin=()=>{};
-function glomMin(){if(!M)return;M=null;FAL=null;["mLinje","sRader","sText","sAxel","mFakta"].forEach(i=>{$(i).innerHTML="";});$("mText").value="";$("mForm").hidden=true;}
+function glomMin(){if(!M)return;M=null;FAL=null;NAMN="";TEMA="aventyr";NYTT=null;["mLinje","sRader","sText","sAxel","mFakta","affisch"].forEach(i=>{$(i).innerHTML="";});$("mText").value="";$("mNamn").value="";$("mForm").hidden=true;}
 function startMin(){laddaMin();$("pet4").innerHTML=owlSVG(lasDjur());FAL=null;$("mForm").hidden=true;flik("liv");show("min");ritaLiv();ritaSlakt();}
 function flik(t){document.querySelectorAll(".flikar button").forEach(b=>b.classList.toggle("v",b.dataset.t===t));$("mLiv").hidden=t!=="liv";$("mSlakt").hidden=t!=="slakt";}
 document.querySelector(".flikar").onclick=e=>{const b=e.target.closest("[data-t]");if(b)flik(b.dataset.t);};
 /* mitt liv */
+const EMOJI=["⭐","🎂","🚲","🏫","⚽","🎨","🎵","🐶","🐱","🏠","✈️","🚗","🚂","🏊","⛷️","🍦","🎁","📚","🦷","👶","🧒","👫","🌈","🎮","🏆","🍕","🌳","🏖️","🎪","🐴","🔭","🧩","🎒","🥇","🪁","🛴","🎻","🎤","🍎","❤️"];
+const TEMAN={aventyr:{n:"🗺️ Äventyr",dek:[["🏔️",2,3],["🧭",89,3],["🌲",2,77],["⛺",88,77]],sl:["🚩","🏁"]},rymd:{n:"🪐 Rymd",dek:[["🪐",2,3],["🚀",89,3],["🌙",2,77],["⭐",88,77]],sl:["🌍","🛸"]},sv:{n:"🖨️ Svartvit",dek:[["✏️",2,3],["📏",89,3]],sl:["🚩","🏁"]},regnbage:{n:"🌈 Regnbåge",dek:[["🌈",2,3],["☀️",89,3],["☁️",2,77],["🦋",88,77]],sl:["🌱","🎉"]}};
+let TEMA="aventyr",NAMN="",NYTT=null;
+const yAt=x=>52+7*Math.sin((x-3)/94*Math.PI*1.8);
+function genAffisch(){
+  const T=TEMAN[TEMA],hs=M.h.slice().sort((a,b)=>a.a-b.a),n=hs.length,fod=NU-M.alder;
+  const pts=[];for(let x=3;x<=97;x+=1)pts.push((x).toFixed(1)+","+(yAt(x)*.7071).toFixed(2));
+  const bana=`<svg class="bana" viewBox="0 0 100 70.71" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="rg" x1="0" x2="1"><stop offset="0" stop-color="#FF5A5F"/><stop offset=".2" stop-color="#FFA24D"/><stop offset=".4" stop-color="#F7D44C"/><stop offset=".6" stop-color="#4CC38A"/><stop offset=".8" stop-color="#4C8DFF"/><stop offset="1" stop-color="#9B5CFF"/></linearGradient></defs><path d="M${pts.join(" L")}" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  const dek=T.dek.map(d=>`<span class="dek" style="left:${d[1]}%;top:${d[2]}%">${d[0]}</span>`).join("");
+  const stopp=(x,e,tx,cls)=>`<span class="st" style="left:${x}%;top:${yAt(x)}%">${e}</span>`;
+  let html=bana+dek+`<div class="tit">${esc(titel())}</div>`+stopp(5,T.sl[0])+stopp(95,T.sl[1]);
+  const sp=n>1?64/(n-1):0,w=n<=1?19:Math.min(19,Math.max(10,sp*1.9));
+  hs.forEach((h,i)=>{const x=n===1?50:18+sp*i,y=yAt(x),ovan=i%2===0;
+    html+=`<span class="st${NYTT===h.id?" ny":""}" style="left:${x}%;top:${y}%">${esc(h.e||"⭐")}</span>`;
+    html+=`<div class="kt ${ovan?"ovan":""}${NYTT===h.id?" ny":""}" style="left:${x}%;${ovan?`top:${y-4.2}%`:`top:${y+4.6}%`};width:${w}%">${esc(h.t)}<small>${h.a===0?"Född":"Ålder "+h.a} · ${fod+h.a}</small></div>`;});
+  if(!n)html+=`<div class="kt" style="left:50%;top:60%;width:34%">Lägg till händelser, så hamnar de här på stigen.</div>`;
+  html+=`<div class="ned" style="left:2cqw">Jag är ${M.alder} år · ${fod}–${NU}</div><div class="ned" style="right:2cqw">Gjord på pluggparken.se</div>`;
+  return html;}
+const titel=()=>{const n=NAMN.trim();if(!n)return"Min tidslinje";return(/[sxzSXZ]$/.test(n)?n:n+"s")+" tidslinje";};
+function ritaAffisch(){$("affisch").className="affisch t-"+TEMA;$("affisch").innerHTML=genAffisch();
+  $("mTema").innerHTML=Object.entries(TEMAN).map(([k,v])=>`<button data-tema="${k}" class="${k===TEMA?"v":""}">${v.n}</button>`).join("");}
+function siffror(){const a=M.alder,dagar=Math.round(a*365.25),veckor=Math.round(a*52.18),slag=Math.round(a*40);
+  const kort=KORT.filter(k=>k.ar>=1800&&k.ar<=NU-a).sort((x,y)=>x.ar-y.ar).pop();
+  const rut=(b,t)=>`<div><b>${b}</b>${t}</div>`;
+  return rut("📅 "+fmt(dagar),"dagar sedan du föddes")+rut("🗓️ "+fmt(veckor),"veckor")+rut("❤️ ca "+fmt(slag)+" milj.","hjärtslag")+rut("😴 ca "+(Math.round(a/3*10)/10).toString().replace(".",",")+" år","har du sovit")+rut("🌍 ca "+(Math.round(a*0.94*10)/10).toString().replace(".",",")+" mdr km","har jorden åkt med dig runt solen")+(kort?rut("🕰️ "+kort.namn,`fanns redan när du föddes (${kort.ar})`):"");}
 function ritaLiv(){
   $("mAlder").textContent=M.alder;
   $("mChips").innerHTML=FORSLAG.map((f,i)=>`<button data-f="${i}"><span>${f[0]}</span>${f[1]}</button>`).join("");
+  $("mEmoji").innerHTML=EMOJI.map(e=>`<button type="button" data-e="${e}" class="${FAL&&FAL.e===e?"v":""}">${e}</button>`).join("");
   const fod=NU-M.alder,hs=M.h.slice().sort((a,b)=>a.a-b.a);
-  $("mLinje").innerHTML=(hs.length?hs.map((h,i)=>`<li class="${i%2?"vanster":"hoger"}"><span class="pricken">${esc(h.e||"⭐")}</span><div class="mkort"><small>Ålder ${h.a} · år ${fod+h.a}</small><b>${esc(h.t)}</b><button data-del="${h.id}" aria-label="Ta bort ${esc(h.t)}">✕</button></div></li>`).join(""):`<li class="tom">Tryck på en händelse här ovanför, så hamnar den på tidslinjen.</li>`)
-    +(hs.length?`<li class="nu"><span class="pricken">📍</span><div class="mkort"><small>Nu · år ${NU}</small><b>Jag är ${M.alder} år</b></div></li>`:"");
-  const dagar=M.alder*365+Math.floor(M.alder/4);
-  $("mFakta").textContent=`Du har levt i ungefär ${fmt(dagar)} dagar. På en tidslinje över 12 000 år är hela ditt liv ${M.alder/12000*100<.1?"mindre än 0,1":Math.round(M.alder/120*10)/10} % av linjen, mindre än en prick.`;
+  $("mLinje").innerHTML=hs.length?hs.map(h=>`<span>${esc(h.e||"⭐")} ${esc(h.t)} <small>(${h.a} år)</small><button data-del="${h.id}" aria-label="Ta bort ${esc(h.t)}">✕</button></span>`).join(""):`<span class="tom">Inga händelser än. Tryck på en av knapparna ovanför.</span>`;
+  $("mFakta").innerHTML=siffror();
+  ritaAffisch();NYTT=null;
 }
-$("mMinus").onclick=()=>{M.alder=Math.max(3,M.alder-1);sparaMin();ritaLiv();ritaSlakt();};
-$("mPlus").onclick=()=>{M.alder=Math.min(99,M.alder+1);sparaMin();ritaLiv();ritaSlakt();};
+$("mMinus").onclick=()=>{M.alder=Math.max(3,M.alder-1);M.h=M.h.map(h=>({...h,a:Math.min(h.a,M.alder)}));ritaLiv();ritaSlakt();};
+$("mPlus").onclick=()=>{M.alder=Math.min(99,M.alder+1);ritaLiv();ritaSlakt();};
 $("mChips").onclick=e=>{const b=e.target.closest("[data-f]");if(!b)return;const f=FORSLAG[+b.dataset.f];
-  FAL={e:f[0],a:Math.min(M.alder,f[2]==null?M.alder:f[2])};$("mText").value=f[2]==null?"":f[1];$("aVal").textContent=FAL.a;$("mForm").hidden=false;
+  FAL={e:f[0],a:Math.min(M.alder,f[2]==null?M.alder:f[2])};$("mText").value=f[2]==null?"":f[1];$("aVal").textContent=FAL.a;$("mForm").hidden=false;ritaLiv();
   $("mText").focus({preventScroll:false});$("mForm").scrollIntoView({block:"nearest",behavior:reduced()?"auto":"smooth"});};
+$("mEmoji").onclick=e=>{const b=e.target.closest("[data-e]");if(!b||!FAL)return;FAL.e=b.dataset.e;$("mEmoji").querySelectorAll("button").forEach(x=>x.classList.toggle("v",x.dataset.e===FAL.e));};
 $("aMinus").onclick=()=>{if(FAL){FAL.a=Math.max(0,FAL.a-1);$("aVal").textContent=FAL.a;}};
 $("aPlus").onclick=()=>{if(FAL){FAL.a=Math.min(M.alder,FAL.a+1);$("aVal").textContent=FAL.a;}};
 $("mAvbryt").onclick=()=>{FAL=null;$("mForm").hidden=true;};
 $("mLagg").onclick=()=>{const t=$("mText").value.trim();if(!FAL||!t){$("mText").focus();return;}
-  M.h.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,5),t,a:FAL.a,e:FAL.e});sparaMin();FAL=null;$("mForm").hidden=true;window.Ljud&&Ljud.pop&&Ljud.pop(3);ritaLiv();};
+  if(M.h.length>=10){alert("Det får plats 10 händelser på affischen. Ta bort någon först om du vill lägga till en ny.");return;}
+  const id=Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+  M.h.push({id,t,a:FAL.a,e:FAL.e});NYTT=id;FAL=null;$("mForm").hidden=true;window.Ljud&&Ljud.pop&&Ljud.pop(3);ritaLiv();};
 $("mText").addEventListener("keydown",e=>{if(e.key==="Enter")$("mLagg").click();});
-$("mLinje").onclick=e=>{const b=e.target.closest("[data-del]");if(!b)return;M.h=M.h.filter(h=>h.id!==b.dataset.del);sparaMin();ritaLiv();};
+$("mLinje").onclick=e=>{const b=e.target.closest("[data-del]");if(!b)return;M.h=M.h.filter(h=>h.id!==b.dataset.del);ritaLiv();};
+$("mNamn").addEventListener("input",()=>{NAMN=$("mNamn").value;ritaAffisch();});
+$("mTema").onclick=e=>{const b=e.target.closest("[data-tema]");if(!b)return;TEMA=b.dataset.tema;ritaAffisch();};
+function skrivUt(vad){document.body.dataset.pr=vad;const k=()=>{delete document.body.dataset.pr;removeEventListener("afterprint",k);};addEventListener("afterprint",k);setTimeout(()=>window.print(),50);}
 /* släkten */
 function ritaSlakt(){
   $("sChips").innerHTML=SLAKT.map(n=>`<button data-n="${n}">+ ${n}</button>`).join("");
