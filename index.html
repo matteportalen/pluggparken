@@ -137,6 +137,15 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 .more:active{transform:translateY(3px);box-shadow:0 0 0 2px var(--line,#BFE0CB) inset,0 1px 0 var(--line,#BFE0CB)}
 .more .mi{font-size:2rem;line-height:1}
 .more b{display:block;color:var(--ok-ink,#157548);font-size:1.1rem}
+.tavlalank{display:flex;align-items:center;gap:12px;max-width:520px;margin:18px auto 0;padding:9px 16px;border-radius:999px;background:var(--card);border:2px dashed #E9A3A6;color:var(--ink);text-decoration:none;box-shadow:0 3px 0 var(--line);transition:transform .12s,box-shadow .12s}
+.tavlalank .tl-ik{font-size:1.5rem;line-height:1}
+.tavlalank .tl-txt{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.15}
+.tavlalank b{font-size:1.05rem}
+.tavlalank small{color:var(--muted);font-weight:600;font-size:.82rem}
+.tavlalank .tl-for{font-size:.82rem;font-weight:800;color:#C23A40;white-space:nowrap}
+.tavlalank:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
+@media(hover:hover){.tavlalank:hover{border-style:solid;border-color:#E5484D}}
+@media(max-width:420px){.tavlalank .tl-for{display:none}}
 .foot{margin-top:26px;color:var(--muted);font-size:.85rem;text-align:center}
 .tools{display:flex;gap:10px;margin:0 0 18px}
 .tool{flex:1;display:flex;align-items:center;gap:10px;background:var(--card);border:0;border-radius:18px;padding:10px 12px;box-shadow:0 4px 0 var(--line);font:inherit;color:inherit;text-align:left;cursor:pointer;min-width:0}
@@ -422,7 +431,9 @@ html[data-tema="mork"] .herosok{background:#1A2748;color:#A3B0D6}
     <a class="amnek fritid fr" data-a style="--c:#F2780C" href="https://fritidsparken.se" target="_blank" rel="noopener" aria-label="Fritidsparken.se (öppnas på en ny sida)"><span class="ik"><img src="fritidsparken-logo.jpg" alt="" width="64" height="64" style="border-radius:14px;width:64px;height:64px;object-fit:cover"></span><span class="txt"><b>Fritidsparken</b><small>Våra vänner: lek och aktiviteter på fritids</small></span><span class="chev" aria-hidden="true">↗</span></a>
     </nav>
 
-  <p class="foot"><a class="designlank" href="larare/">🍎 Klasstavlan: interaktiv whiteboard för klassrummet</a><br>Dina stjärnor och rekord sparas på den här enheten. Med ett gratis konto (☁️ Logga in) kan du ta med dem till andra enheter.<br><button class="soundbtn" id="soundBtn"></button></p>
+  <a class="tavlalank" href="larare/"><span class="tl-ik" aria-hidden="true">🍎</span><span class="tl-txt"><b>Klasstavlan</b><small>Interaktiv whiteboard för klassrummet</small></span><span class="tl-for">För lärare ›</span></a>
+
+  <p class="foot">Dina stjärnor och rekord sparas på den här enheten. Med ett gratis konto (☁️ Logga in) kan du ta med dem till andra enheter.<br><button class="soundbtn" id="soundBtn"></button></p>
   <section class="om" aria-labelledby="omH"><h2 id="omH">Om Pluggparken</h2><p>Pluggparken är en gratis lekpark för hjärnan med matteövningar, spel och fler ämnen för barn i åk 1–6: multiplikationstabellerna, klockan, bråk, uppställning och division, läsning, rymden, Sverige och världen. Allt fungerar i webbläsaren och utan reklam, och du behöver inget konto för att öva. Framstegen sparas på din egen enhet, och med ett gratis konto (ett påhittat användarnamn, ingen e-post) kan du ta med dem till andra enheter.</p></section>
 </main>
 
