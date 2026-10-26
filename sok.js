@@ -67,6 +67,7 @@ const IDX=[
  ['ovriga/rita/','Draw it!','Rita ordet på engelska så gissar datorn','🎨','engelska rita gissa quick draw glosor','Engelska'],
  ['ovriga/rymdlabbet/','Rymdlabbet','Solsystemet, dag och natt, månens faser och mer','🔭','rymden planeter måne stjärnor svarta hål årstider förmörkelse universum galax jättar','NO'],
  ['ovriga/solsystemet/','Solsystemet i 3D','Res bland planeterna och ut i universum','🪐','planeter solen jorden månen vintergatan resa stockholm','NO'],
+ ['tidslinjen/','Tidslinjen','Sätt bilder i rätt tid, känn hur länge sedan det var och lös ledtrådar','⏳','historia tid tidslinje stenåldern vikingatiden medeltiden vasa årtal förr ledtrådar detektiv','SO'],
  ['ovriga/sverigekartan/','Sverigekartan','Landskap, städer och älvar','🗺️','landskap städer älvar djur blommor vapen karta sverige','SO'],
  ['ovriga/europa/','Europakartan','Europas länder, huvudstäder och flaggor','🌍','länder huvudstäder flaggor karta europa','SO'],
  ['ovriga/varlden/','Världskartan','Världsdelar, världshav och var djuren bor','🌐','världsdelar hav djur karta världen mercator storlek','SO'],

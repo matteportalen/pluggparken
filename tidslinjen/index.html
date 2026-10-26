@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<script src="../tema.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tidslinjen – Pluggparken</title>
+<meta name="description" content="Tidslinjen: sätt bilder från stenåldern till i dag i rätt ordning, känn hur långt sedan det var och lös ledtrådar som berättar vilken tid en bild hör till.">
+<link rel="canonical" href="https://pluggparken.se/tidslinjen/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Pluggparken">
+<meta property="og:locale" content="sv_SE">
+<meta property="og:title" content="Tidslinjen – Pluggparken">
+<meta property="og:description" content="Tidslinjen: sätt bilder från stenåldern till i dag i rätt ordning, känn hur långt sedan det var och lös ledtrådar som berättar vilken tid en bild hör till.">
+<meta property="og:url" content="https://pluggparken.se/tidslinjen/">
+<meta property="og:image" content="https://pluggparken.se/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#1F3A35">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/apple-touch-icon.png" sizes="180x180">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EAF3FF; --ink:#1D2B53; --muted:#56668F; --card:#FFFFFF; --line:#C6D6F2; --soft:#F1F6FF;
+  --good:#1E9E5E; --good-dark:#157548; --bad:#E5484D; --accent:#3D5AFE; --gold:#F2B707; --hero1:#FF9F43; --hero2:#F2780C; --heroS:#B85A06;
+  --font:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:760px;margin:0 auto;padding:12px 16px 48px}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;border:0;background:none}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+[hidden]{display:none!important}
+.hero{display:flex;gap:16px;align-items:center;background:linear-gradient(135deg,var(--hero1),var(--hero2));color:#fff;border-radius:24px;padding:18px;box-shadow:0 5px 0 var(--heroS);margin:6px 0 16px}
+.hero svg{flex:none;width:150px;height:auto;filter:drop-shadow(0 3px 0 rgba(0,0,0,.15))}
+.hero h1{margin:0;font-size:clamp(1.7rem,6vw,2.3rem);line-height:1.05}
+.hero p{margin:6px 0 0;font-weight:600;opacity:.95}
+.lagen{display:grid;gap:10px}
+.lagen button{display:flex;align-items:center;gap:14px;background:var(--card);border-radius:18px;padding:12px 14px;box-shadow:0 4px 0 var(--line);text-align:left;width:100%}
+.lagen button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.lagen .nr{flex:none;width:50px;height:50px;border-radius:15px;display:grid;place-items:center;font-size:1.7rem;color:#fff}
+.lagen b{display:block;font-size:1.15rem;line-height:1.15}
+.lagen small{display:block;color:var(--muted);font-weight:600;font-size:.9rem;line-height:1.25}
+.lagen .st{margin-left:auto;flex:none;color:var(--gold);font-size:1.15rem;letter-spacing:1px}
+.lagen .st .off{color:var(--line)}
+.info{color:var(--muted);font-size:.9rem;margin:14px 2px 0}
+.kallor{margin-top:16px;font-size:.85rem;color:var(--muted)}
+.kallor summary{cursor:pointer;font-weight:700}
+.kallor ul{margin:8px 0 0;padding-left:18px;line-height:1.5}
+.kallor a{color:var(--accent)}
+.topp{display:flex;align-items:center;gap:10px;margin:4px 0 10px}
+.dots{display:flex;gap:6px;flex:1;flex-wrap:wrap}
+.dots i{width:12px;height:12px;border-radius:50%;background:var(--line)}
+.dots i.ok{background:var(--good)}.dots i.f{background:var(--bad)}.dots i.nu{background:var(--gold)}
+.lagt{font-weight:800;color:var(--muted);font-size:.9rem}
+.pet{flex:none;width:48px;height:52px;pointer-events:none}.pet svg{width:100%;height:100%}
+.pet.hopp{animation:hopp .55s ease}
+@keyframes hopp{40%{transform:translateY(-18px)}}
+.kort{background:var(--card);border-radius:22px;box-shadow:0 4px 0 var(--line);padding:16px}
+.fraga{text-align:center;font-weight:800;color:var(--muted);margin:0 0 10px;font-size:1rem}
+.fb{text-align:center;font-weight:700;margin:12px 0 0;min-height:2.6em;font-size:1.02rem}
+.fb.ratt{color:var(--good-dark)}.fb.fel{color:#B4232A}
+.knapp{display:inline-block;background:var(--good);color:#fff;border-radius:16px;padding:12px 26px;font-weight:800;font-size:1.15rem;box-shadow:0 5px 0 var(--good-dark);margin:6px}
+.knapp.vit{background:var(--card);color:var(--ink);box-shadow:0 5px 0 var(--line)}
+.knapp.bla{background:var(--accent);box-shadow:0 5px 0 #2A3FB8}
+.knapp:disabled{opacity:.4;pointer-events:none}
+.knapp:active{transform:translateY(3px)}
+.rad{display:flex;gap:6px;justify-content:center;margin-top:10px;flex-wrap:wrap}
+.res{text-align:center}
+.res .stj{font-size:3rem;letter-spacing:6px;color:var(--gold);margin:8px 0}
+.res .stj .off{color:var(--line)}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:50}
+@media(max-width:420px){.hero svg{width:100px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* bildkort */
+.tk{position:relative;width:100px;background:#fff;border:2px solid var(--line);border-radius:14px;box-shadow:0 3px 0 var(--line);overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;text-align:center;flex:none}
+.tk img{display:block;width:100%;height:74px;object-fit:cover;background:#E7ECF6;pointer-events:none}
+.tk b{display:block;font-size:.78rem;line-height:1.1;padding:4px 3px 5px;pointer-events:none}
+.tk i{display:block;font-style:normal;font-size:.72rem;font-weight:700;color:#fff;background:var(--good);padding:2px 3px;pointer-events:none}
+.tk.sel{border-color:var(--accent);box-shadow:0 3px 0 var(--accent),0 0 0 3px rgba(61,90,254,.25);transform:translateY(-3px)}
+.tk.lock{cursor:default;border-color:var(--good);box-shadow:0 3px 0 var(--good)}
+.tk.fel{border-color:#F0A3A6;box-shadow:0 3px 0 #F0A3A6;animation:skak .5s}
+.tk.dold{opacity:.25}
+.tk.spok{box-shadow:0 10px 20px rgba(29,43,83,.3);cursor:grabbing}
+@keyframes skak{20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}
+.pilrad{display:flex;justify-content:space-between;font-weight:800;color:var(--muted);font-size:.85rem;margin:0 2px 6px}
+.slots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;justify-items:center;margin-bottom:12px}
+.slot{width:100%;max-width:112px;min-height:104px;border:3px dashed var(--line);border-radius:16px;display:grid;place-items:center;background:var(--soft);padding:0}
+.slot .nr{font-weight:800;font-size:1.6rem;color:var(--line)}
+.slot:has(.tk){border-style:solid;border-color:transparent;background:none;align-content:start}
+.tray{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;min-height:120px;padding:10px;border-radius:16px;background:var(--soft)}
+@media(max-width:639px){.slot .tk{width:100%}.tk img{height:62px}.tk b{font-size:.74rem}.tray .tk{width:calc((100% - 16px)/3)}.tray{min-height:100px;padding:8px}}
+@media(min-width:640px){.slots{grid-template-columns:repeat(6,1fr);gap:6px}.slot{width:100%;max-width:112px}.tk{width:100%}.tray .tk{width:100px}}
+
+/* hur länge sedan */
+.vy{display:flex;gap:14px;align-items:center;margin-bottom:12px}
+.vy .tk{width:120px;cursor:default;touch-action:auto}
+.vy .tk img{height:88px}
+.vy p{margin:0;font-weight:700;color:var(--muted);font-size:1rem}
+.axel{position:relative;height:74px;margin:56px 8px 8px;touch-action:none;cursor:pointer}
+.axel .linje{position:absolute;left:0;right:0;top:34px;height:10px;border-radius:6px;overflow:hidden;display:flex;box-shadow:inset 0 0 0 2px rgba(29,43,83,.15)}
+.axel .linje span{height:100%}
+.axel .tick{position:absolute;top:44px;transform:translateX(-50%);font-size:.7rem;font-weight:800;color:var(--muted);white-space:nowrap;text-align:center;line-height:1.05;padding-top:4px}
+.axel .tick::before{content:"";position:absolute;left:50%;top:-2px;width:2px;height:8px;background:var(--muted);transform:translateX(-50%)}
+.axel .tick:first-of-type{transform:none;text-align:left}
+.pinne{position:absolute;top:0;transform:translateX(-50%);width:30px;text-align:center;pointer-events:none;transition:left .05s}
+.pinne::before{content:"";display:block;width:26px;height:26px;margin:0 auto;background:var(--accent);border-radius:50% 50% 50% 0;transform:rotate(-45deg);box-shadow:0 3px 0 rgba(0,0,0,.25)}
+.pinne::after{content:"";position:absolute;left:50%;top:26px;width:2px;height:14px;background:var(--accent);transform:translateX(-50%)}
+.pinne.sann::before{background:var(--good)}.pinne.sann::after{background:var(--good)}
+.pinne.sann em{top:-50px;background:#E6F7EE;color:var(--good-dark)}
+.pinne em{position:absolute;top:-24px;left:50%;transform:translateX(-50%);font-style:normal;font-size:.72rem;font-weight:800;white-space:nowrap;background:#fff;border-radius:8px;padding:1px 6px;box-shadow:0 2px 0 var(--line)}
+.axtips{text-align:center;color:var(--muted);font-weight:600;font-size:.88rem;margin-top:2px}
+
+/* detektiven */
+.detek{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap;justify-content:center}
+.detek .stor{width:min(100%,300px);border:2px solid var(--line);border-radius:16px;overflow:hidden;background:#E7ECF6;box-shadow:0 3px 0 var(--line)}
+.detek .stor img{display:block;width:100%;height:210px;object-fit:cover}
+.detek .stor b{display:block;text-align:center;padding:6px;font-size:1.05rem}
+.led{flex:1;min-width:230px;display:grid;gap:8px}
+.led div,.led button{border-radius:14px;padding:10px 12px;font-weight:700;font-size:.98rem;line-height:1.3;text-align:left}
+.led div{background:#FFF8E1;border:2px solid #F2D27A}
+.led button{background:var(--soft);border:2px dashed var(--line);color:var(--muted)}
+.led small{display:block;font-weight:800;color:#8A6A00;font-size:.75rem;margin-bottom:2px}
+.band{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;justify-content:center}
+.band button{background:#fff;border:2px solid var(--line);border-radius:12px;padding:6px 10px;box-shadow:0 3px 0 var(--line);font-weight:800;font-size:.9rem;line-height:1.1}
+.band button small{display:block;font-weight:600;color:var(--muted);font-size:.68rem}
+.band button:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
+.band button.ratt{background:#E6F7EE;border-color:var(--good);box-shadow:0 3px 0 var(--good)}
+.band button.fel{background:#FDE7E8;border-color:#F0A3A6;box-shadow:0 3px 0 #F0A3A6}
+.band button:disabled{pointer-events:none}
+.poang{font-weight:800;color:var(--muted);font-size:.9rem;text-align:center;margin-top:6px}
+</style>
+</head>
+<body>
+<script src="../ljud.js"></script>
+<script src="../djur.js"></script>
+<script src="../huvud.js" data-titel="Tidslinjen" data-ikon="⏳"></script>
+<main class="wrap">
+
+<section class="screen" id="home">
+  <div class="hero">
+    <svg viewBox="0 0 160 70" aria-hidden="true"><rect x="2" y="2" width="156" height="66" rx="12" fill="#fff"/>
+      <path d="M12 44H148" stroke="#C6D6F2" stroke-width="5" stroke-linecap="round"/>
+      <g stroke="#F2780C" stroke-width="3" stroke-linecap="round"><path d="M22 36v16M54 38v12M92 38v12M124 36v16M146 40v8"/></g>
+      <rect x="10" y="9" width="26" height="19" rx="4" fill="#D9C7A3" stroke="#8A6A3A" stroke-width="2"/><rect x="46" y="9" width="26" height="19" rx="4" fill="#9FB8E8" stroke="#3D5AFE" stroke-width="2"/><rect x="82" y="9" width="26" height="19" rx="4" fill="#B6DFC3" stroke="#1E9E5E" stroke-width="2"/><rect x="118" y="9" width="26" height="19" rx="4" fill="#F4D35E" stroke="#B88A00" stroke-width="2"/>
+      <g font-family="Baloo 2, sans-serif" font-weight="800" font-size="8" fill="#56668F" text-anchor="middle"><text x="22" y="64">sten</text><text x="64" y="64">mitt</text><text x="106" y="64">nära</text><text x="144" y="64">nu</text></g>
+    </svg>
+    <div><h1>Tidslinjen</h1><p>Hur länge sedan var det? Sätt bilder i rätt tid och lista ut vad ledtrådarna berättar.</p></div>
+  </div>
+  <div class="lagen" id="lagen"></div>
+  <p class="info">Bilderna går från stenåldern till i dag. Det handlar inte om att kunna årtal, utan om att tänka efter: vad syns i bilden, och vad fanns då?</p>
+  <details class="kallor"><summary>Bilder och källor</summary><ul id="kallor"></ul></details>
+</section>
+
+<section class="screen" id="ordna" hidden>
+  <button type="button" data-home hidden tabindex="-1" aria-hidden="true" onclick="hem()"></button>
+  <div class="topp"><span class="lagt">⏳ Bygg tidslinjen</span><span style="flex:1"></span><span class="pet" id="pet1"></span></div>
+  <div class="kort">
+    <div class="fraga" id="oFraga">Sätt bilderna i rätt ordning. Äldst först, nyast sist.</div>
+    <div class="pilrad"><span>◀ Äldst</span><span>Nyast ▶</span></div>
+    <div class="slots" id="oSlots"></div>
+    <div class="tray" id="oTray" aria-label="Bilder att placera"></div>
+  </div>
+  <div class="rad"><button class="knapp" id="oKolla" disabled>Kolla ✓</button><button class="knapp bla" id="oNasta" hidden>Fortsätt ▶</button></div>
+  <div class="fb" id="oFb" aria-live="polite"></div>
+</section>
+
+<section class="screen" id="langt" hidden>
+  <button type="button" data-home hidden tabindex="-1" aria-hidden="true" onclick="hem()"></button>
+  <div class="topp"><div class="dots" id="lDots"></div><span class="lagt">📏 Hur länge sedan?</span><span class="pet" id="pet2"></span></div>
+  <div class="kort">
+    <div class="vy"><div class="tk" id="lKort"></div><p id="lFraga"></p></div>
+    <div class="axel" id="lAxel" aria-label="Tidslinje från 12 000 år sedan till i dag"></div>
+    <div class="axtips" id="lTips">Tryck eller dra på linjen och sätt nålen där du tror att bilden hör hemma. Siffrorna är hur många år sedan.</div>
+  </div>
+  <div class="rad"><button class="knapp" id="lKlar" disabled>Klar ✓</button><button class="knapp bla" id="lNasta" hidden>Nästa ▶</button></div>
+  <div class="fb" id="lFb" aria-live="polite"></div>
+</section>
+
+<section class="screen" id="detektiv" hidden>
+  <button type="button" data-home hidden tabindex="-1" aria-hidden="true" onclick="hem()"></button>
+  <div class="topp"><div class="dots" id="dDots"></div><span class="lagt">🕵️ Ledtrådsdetektiven</span><span class="pet" id="pet3"></span></div>
+  <div class="kort">
+    <div class="fraga" id="dFraga">Vilken tid hör bilden till? Läs ledtrådarna och välj.</div>
+    <div class="detek"><div class="stor" id="dStor"></div><div class="led" id="dLed"></div></div>
+    <div class="band" id="dBand"></div>
+    <div class="poang" id="dPoang"></div>
+  </div>
+  <div class="rad"><button class="knapp bla" id="dNasta" hidden>Nästa ▶</button></div>
+  <div class="fb" id="dFb" aria-live="polite"></div>
+</section>
+
+<section class="screen res" id="result" hidden>
+  <h2 id="rRub" style="margin:10px 0 0">Bra jobbat!</h2>
+  <div class="stj" id="rStj"></div>
+  <p id="rTxt" style="font-weight:700;margin:0 0 14px"></p>
+  <button class="knapp" id="rIgen">Spela igen</button>
+  <button class="knapp vit" id="rHome">Välj läge</button>
+</section>
+
+</main>
+<canvas id="fx" hidden></canvas>
+<script>
+const $=id=>document.getElementById(id);
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const KEY="mattespel-tidslinjen-v1";
+const data=(()=>{try{return Object.assign({stars:{}},JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){return{stars:{}}}})();
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}};
+const reduced=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
+const NU=new Date().getFullYear();
+const fmt=n=>Math.round(n).toLocaleString("sv-SE").replace(/ /g," ");
+
+/* tider (Sverige): från år, till år */
+const ERA=[
+ {id:"sten",namn:"Stenåldern",fran:-12000,till:-1800,c:"#C9B48A"},
+ {id:"brons",namn:"Bronsåldern",fran:-1800,till:-500,c:"#D08B4A"},
+ {id:"jarn",namn:"Järnåldern",fran:-500,till:800,c:"#8C8F99"},
+ {id:"vik",namn:"Vikingatiden",fran:800,till:1050,c:"#4C86C6"},
+ {id:"med",namn:"Medeltiden",fran:1050,till:1520,c:"#7A5CAE"},
+ {id:"vasa",namn:"Vasatiden",fran:1520,till:1611,c:"#C25A5A"},
+ {id:"storm",namn:"Stormaktstiden",fran:1611,till:1718,c:"#2F8F7A"},
+ {id:"s1700",namn:"1700-talet",fran:1718,till:1800,c:"#E0A93B"},
+ {id:"s1800",namn:"1800-talet",fran:1800,till:1900,c:"#6A7B8C"},
+ {id:"s1900",namn:"1900-talet",fran:1900,till:2000,c:"#3D5AFE"},
+ {id:"nu",namn:"Nutid",fran:2000,till:NU,c:"#1E9E5E"}
+];
+const ERA_BY=Object.fromEntries(ERA.map(e=>[e.id,e]));
+const eraTxt=e=>{const f=y=>y<0?(-y)+" f.Kr.":String(y);return e.id==="nu"?"från år 2000":e.id==="sten"?"till ca "+f(e.till):f(e.fran)+"–"+f(e.till);};
+
+/* bilder, år och ledtrådar (från svår till lätt) */
+const KORT=[
+ {id:"stenaldern",namn:"Yxa och kniv av sten",ar:-5000,era:"sten",l:["Sakerna är gjorda av sten som man har slagit till och slipat.","Människorna levde som jägare och fiskare. De hade inga metaller.","Det här är de äldsta sakerna i Sverige, flera tusen år innan någon kunde gjuta brons."],f:"Stenåldern är den längsta tiden i Sverige: nästan 10 000 år."},
+ {id:"hallristning",namn:"Hällristning",ar:-1000,era:"brons",l:["Bilderna är ristade i berget med hårda verktyg.","Det är skepp, människor och djur. Man tror att de har med tro och resor att göra.","Det finns tusentals hällristningar i Sverige, mest från bronsåldern. Tanum i Bohuslän är kända."],f:"Hällristningarna i Tanum är ungefär 3 000 år gamla."},
+ {id:"bronssvard",namn:"Svärd av brons",ar:-1200,era:"brons",l:["Svärden är gjorda av brons, en blandning av koppar och tenn.","Brons var det nya och dyra materialet. De som hade svärd var ofta mäktiga.","Tiden är uppkallad efter just det här materialet."],f:"Bronsåldern fick sitt namn efter brons. Järnet kom först efteråt."},
+ {id:"gamlauppsala",namn:"Kungshögarna i Gamla Uppsala",ar:550,era:"jarn",l:["Högarna är gravar, byggda av jord och sten över mäktiga människor.","På den här tiden skrev man med runor och använde redskap av järn.","Det är långt efter bronsåldern men före vikingarna."],f:"Högarna i Gamla Uppsala är ungefär 1 500 år gamla."},
+ {id:"gokstad",namn:"Vikingaskeppet från Gokstad",ar:900,era:"vik",l:["Skeppet är byggt av trä, med åror och plats för ett segel.","Med skepp som det här seglade man till England, Ryssland och Island.","Det hittades i en gravhög i Norge. Det var vikingarnas skepp."],f:"Gokstadsskeppet byggdes omkring år 900."},
+ {id:"runsten",namn:"Runsten",ar:1020,era:"vik",l:["Texten är skriven med runor, de bokstäver man använde innan vårt alfabet.","Man reste stenar till minne av någon som hade dött.","De flesta runstenar är från vikingatiden och början av medeltiden."],f:"Runstenarna är för det mesta från ungefär år 1000."},
+ {id:"visby",namn:"Ringmuren i Visby",ar:1288,era:"med",l:["Muren är byggd av sten och har torn. Den skulle skydda staden mot fiender.","Visby på Gotland var rikt av handel över Östersjön.","Muren byggdes på 1200-talet, när Sverige var ett kungarike men inte ett stormakt."],f:"Ringmuren runt Visby är från slutet av 1200-talet."},
+ {id:"riddare",namn:"Riddare i rustning",ar:1500,era:"med",l:["Riddaren är en soldat i rustning, ofta till häst och i tjänst hos en kung eller furste.","Rustningen är av plåt och skyddar mot svärd och spjut.","Riddare hörde till medeltiden. Bilden är ett gammalt träsnitt."],f:"Riddare och borgar hör till medeltiden."},
+ {id:"gustavvasa",namn:"Gustav Vasa",ar:1540,era:"vasa",l:["Han blev kung av Sverige år 1523 och styrde i nästan 40 år.","Under honom blev Sverige ett mer samlat rike, och han tog kyrkans rikedomar.","Hans släkt gav namn åt hela tiden: Vasatiden."],f:"Gustav Vasa blev kung 1523."},
+ {id:"vasa",namn:"Regalskeppet Vasa",ar:1628,era:"storm",l:["Skeppet var ett krigsskepp med många kanoner, byggt på kung Gustav II Adolfs order.","Sverige var då en stormakt och förde krig utomlands.","Skeppet sjönk på sin första färd i Stockholm år 1628."],f:"Vasa sjönk 1628 och lyftes upp igen 1961."},
+ {id:"karl12",namn:"Karl XII",ar:1706,era:"storm",l:["Han blev kung som 15-åring och ledde landet i krig i över 20 år.","Han dog i Norge år 1718. Efter honom slutade Sveriges tid som stormakt.","Porträttet är målat för hand med oljefärg."],f:"Karl XII dog år 1718."},
+ {id:"linne",namn:"Carl von Linné",ar:1753,era:"s1700",l:["Han ordnade växter och djur i grupper och gav dem namn på latin.","Han var professor i Uppsala och reste runt i Sverige och samlade växter.","Han levde på 1700-talet. Hans sätt att ordna naturen används än i dag."],f:"Linné gav ut sitt stora verk om växter år 1753."},
+ {id:"anglok",namn:"Ånglok",ar:1860,era:"s1800",l:["Loket drivs av ånga som man får genom att elda med ved eller kol.","De första järnvägarna i Sverige byggdes på 1850-talet.","Det är före bilar och flygplan men efter segelskeppen."],f:"Sveriges första järnväg för allmän trafik öppnade år 1856."},
+ {id:"vaveri",namn:"Vävfabrik",ar:1880,era:"s1800",l:["Arbetarna står vid stora maskiner som drivs av ånga eller vatten.","Förr vävde man tyg hemma för hand. Nu görs det i fabriker.","Tiden när fabrikerna växte kallas industrialiseringen. Den hände mest på 1800-talet."],f:"Industrialiseringen gjorde att många flyttade från landet till städerna."},
+ {id:"radio",namn:"Radio",ar:1935,era:"s1900",l:["Man lyssnar på program som sänds genom luften, men utan bild.","Apparaterna har rör och ratt. Det finns inga skärmar.","Radio kom till Sverige på 1920-talet och blev vanlig på 1930-talet."],f:"Sveriges Radio startade år 1925."},
+ {id:"eniac",namn:"ENIAC, en tidig dator",ar:1946,era:"s1900",l:["Datorn är så stor att den fyller ett helt rum.","Den räknar med glasrör. Chip fanns inte än.","Den byggdes i USA strax efter andra världskriget."],f:"ENIAC var en av de första stora datorerna. Den fyllde ett helt rum."},
+ {id:"tv",namn:"Tv-apparat",ar:1957,era:"s1900",l:["Apparaten visar rörliga bilder, men bara i svartvitt.","Den har ratt för att välja kanal, men det fanns inte många kanaler.","Tv började sändas i Sverige år 1956."],f:"Tv-sändningarna i Sverige började år 1956."},
+ {id:"manen",namn:"Månlandningen",ar:1969,era:"s1900",l:["En människa står på en annan himlakropp.","Bilden är tagen för mer än 50 år sedan med en vanlig kamera.","Rymdskeppet hette Apollo 11 och landade på månen år 1969."],f:"Apollo 11 landade på månen den 20 juli 1969."},
+ {id:"nokia",namn:"Mobiltelefon",ar:1994,era:"s1900",l:["Telefonen har knappar och en liten skärm. Det finns ingen pekskärm.","Man kan ringa och skicka korta meddelanden, men inte surfa på nätet.","Mobiltelefoner blev vanliga i Sverige på 1990-talet."],f:"Mobiltelefoner blev vanliga på 1990-talet."},
+ {id:"smartphone",namn:"Smartphone",ar:2015,era:"nu",l:["Skärmen är en pekskärm som man trycker och drar på.","Telefonen visar kartor och vet var man är med hjälp av satelliter (GPS).","Det är från vår tid. Du har säkert använt en själv."],f:"Smartphones kom på 2000-talet och finns nu i varje ficka."}
+];
+const KORT_BY=Object.fromEntries(KORT.map(k=>[k.id,k]));
+const KRED={"stenaldern": {"k": "Västgöten · CC BY-SA 3.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Scandinavian_Stone_Age_axe_and_knife,_original.jpg"}, "hallristning": {"k": "Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Tanumshede_2005_rock_carvings_7.jpg"}, "bronssvard": {"k": "Oscar Montellius · CC0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Early_Bronze_Age_Swords_from_Scandinavia.jpg"}, "gamlauppsala": {"k": "Henri Osti · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Uppsala_Mounds,_Gamla_Uppsala,_Uppland,_Sweden.jpg"}, "visby": {"k": "Arild Vågen · CC BY-SA 4.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Visby_ringmur_August_2020_02.jpg"}, "riddare": {"k": "Bálint Hadnagy · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Image_of_a_knight_in_armour,_1511.jpg"}, "gustavvasa": {"k": "anonymous · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Gustav_Vasa_(1496-1560)_-_Nationalmuseum_-_39500.tif"}, "karl12": {"k": "David von Krafft · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Karl_XII_1706.jpg"}, "linne": {"k": "Alexander Roslin · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Carl_von_Linn%C3%A9.jpg"}, "vaveri": {"k": "Wilhelm Peters · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Fra_Hjula_Veveri.jpeg"}, "anglok": {"k": "Goffert · No restrictions · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Wood_burning_locomotive_on_Nikolaev_Railway.jpg"}, "radio": {"k": "Joe Mabel · CC BY-SA 3.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Flint_Radio_Co_1930s_radios.jpg"}, "tv": {"k": "John Atherton · CC BY-SA 2.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Television_set_from_the_early_1950s_crop.jpg"}, "manen": {"k": "Neil A. Armstrong · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Aldrin_Apollo_11.jpg"}, "nokia": {"k": "Mustaraamattu · CC BY-SA 3.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Nokia_2110i_NHE-4NX.jpg"}, "eniac": {"k": "Unidentified U.S. Army photographer · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Classic_shot_of_the_ENIAC_(full_resolution).jpg"}, "runsten": {"k": "Erik Brate · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Runestone_U_308_at_Ekeby.jpg"}, "gokstad": {"k": "Bild: Colgill · CC BY-SA 4.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Gokstad_Ship_June_2012.jpg"}, "vasa": {"k": "Bild: Jules Verne Times Two · CC BY-SA 4.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Stern_of_the_Vasa_ship,_Vasa_Museum,_Stockholm,_Sweden_julesvernex2.jpg"}, "smartphone": {"k": "Bild: Vyacheslav Argenberg · CC BY 4.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Olkhon_Island,_GPS_navigation,_Smartphone,_Lake_Baikal,_Russia.jpg"}};
+const arTxt=k=>k.ar<0?"ca "+(-k.ar)+" f.Kr.":k.ar<1800?"ca år "+k.ar:"år "+k.ar;
+const ago=k=>NU-k.ar;
+const POS={riddare:"50% 20%",gustavvasa:"50% 20%",karl12:"50% 20%",linne:"50% 22%",bronssvard:"50% 50%"};
+const tk=(k,o={})=>`<div class="tk${o.sel?" sel":""}${o.lock?" lock":""}${o.fel?" fel":""}" data-id="${k.id}"><img src="bilder/${k.id}.jpg" alt="" draggable="false" style="object-position:${POS[k.id]||"center"}"><b>${k.namn}</b>${o.ar?`<i>${arTxt(k)}</i>`:""}</div>`;
+
+const stjHtml=n=>[1,2,3].map(i=>i<=n?"★":'<span class="off">★</span>').join("");
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
+const LAGEN=[
+ {id:"ordna",ik:"⏳",namn:"Bygg tidslinjen",txt:"Sex bilder ligger blandade. Sätt dem i rätt ordning, äldst först.",col:"#F2780C"},
+ {id:"langt",ik:"📏",namn:"Hur länge sedan?",txt:"Sätt en nål på en linje i rätt skala och se hur olika långa tiderna är.",col:"#3D5AFE"},
+ {id:"detektiv",ik:"🕵️",namn:"Ledtrådsdetektiven",txt:"Vilken tid hör bilden till? Använd ledtrådarna och lista ut det.",col:"#7B61FF"}
+];
+function hem(){
+  $("lagen").innerHTML=LAGEN.map(l=>`<button data-l="${l.id}"><span class="nr" style="background:${l.col}">${l.ik}</span><span><b>${l.namn}</b><small>${l.txt}</small></span><span class="st">${stjHtml(data.stars[l.id]||0)}</span></button>`).join("");
+  show("home");}
+$("lagen").onclick=e=>{const b=e.target.closest("[data-l]");if(!b)return;({ordna:startOrdna,langt:startLangt,detektiv:startDetektiv})[b.dataset.l]();};
+$("kallor").innerHTML=KORT.map(k=>{const c=KRED[k.id]||{k:"",s:"#"};return`<li>${k.namn}: <a href="${c.s}" target="_blank" rel="noopener">${c.k||"Wikimedia Commons"}</a></li>`}).join("");
+function haj(n){const p=$(n);if(!p)return;p.classList.remove("hopp");void p.offsetWidth;p.classList.add("hopp");}
+function prickar(id,n,i,res){$(id).innerHTML=Array.from({length:n},(_,j)=>`<i class="${j<i?(res[j]?"ok":"f"):j===i?"nu":""}"></i>`).join("");}
+let LAST=null;
+function resultat(lage,st,txt){LAST=lage;const old=data.stars[lage]||0;data.stars[lage]=Math.max(old,st);save();
+  $("rStj").innerHTML=stjHtml(st);$("rRub").textContent=st===3?"Perfekt! 🎉":st===2?"Bra jobbat!":"Bra kämpat!";$("rTxt").textContent=txt;
+  show("result");if(st===3){window.Ljud&&Ljud.fanfare&&Ljud.fanfare();confetti();}else window.Ljud&&Ljud.chime&&Ljud.chime();}
+$("rIgen").onclick=()=>({ordna:startOrdna,langt:startLangt,detektiv:startDetektiv})[LAST]();
+$("rHome").onclick=hem;
+function confetti(){if(reduced())return;const cols=["#3D8BFD","#FF9F43","#2BB673","#FFC93C","#7B61FF","#FF6B6B"];
+  const c=$("fx"),x=c.getContext("2d"),dpr=window.devicePixelRatio||1,W=innerWidth,H=innerHeight;c.width=W*dpr;c.height=H*dpr;x.setTransform(dpr,0,0,dpr,0,0);c.hidden=false;
+  const P=Array.from({length:150},()=>({x:W/2+(Math.random()-.5)*120,y:H*.3,vx:(Math.random()-.5)*16,vy:-Math.random()*15-4,r:Math.random()*7+5,c:pick(cols),a:Math.random()*6,va:(Math.random()-.5)*.4}));
+  let t=0;(function f(){x.clearRect(0,0,W,H);P.forEach(p=>{p.vy+=.45;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore();});
+    if(++t<150)requestAnimationFrame(f);else c.hidden=true;})();}
+
+/* ---------- 1. Bygg tidslinjen ---------- */
+let O=null;
+function startOrdna(){
+  const per={};KORT.forEach(k=>(per[k.era]=per[k.era]||[]).push(k));
+  const val=shuffle(Object.keys(per)).slice(0,6).map(e=>pick(per[e]));
+  const fasit=val.slice().sort((a,b)=>a.ar-b.ar).map(k=>k.id);
+  let tray;do tray=shuffle(val.map(k=>k.id));while(tray.join()===fasit.join());
+  O={fasit,slots:Array(6).fill(null),tray,sel:null,fors:0,last:Array(6).fill(false),felNu:new Set(),klar:false};
+  $("pet1").innerHTML=owlSVG(lasDjur());$("oFb").textContent="";$("oFb").className="fb";$("oNasta").hidden=true;$("oKolla").hidden=false;
+  show("ordna");ritaOrdna();}
+function ritaOrdna(){
+  $("oSlots").innerHTML=O.slots.map((id,i)=>`<div class="slot" data-i="${i}">${id?tk(KORT_BY[id],{lock:O.last[i],fel:O.felNu.has(i),ar:O.klar}):`<span class="nr">${i+1}</span>`}</div>`).join("");
+  $("oTray").innerHTML=O.tray.map(id=>tk(KORT_BY[id],{sel:O.sel===id})).join("");
+  $("oKolla").disabled=O.klar||O.slots.some(x=>!x);}
+function lagg(id,i){if(O.last[i])return;const fran=O.slots.indexOf(id),old=O.slots[i];
+  if(fran>=0)O.slots[fran]=null;O.tray=O.tray.filter(x=>x!==id);
+  if(old&&old!==id){if(fran>=0)O.slots[fran]=old;else O.tray.push(old);}
+  O.slots[i]=id;O.sel=null;window.Ljud&&Ljud.pop&&Ljud.pop(2);ritaOrdna();}
+function tillbaka(id){const si=O.slots.indexOf(id);if(si>=0){if(O.last[si])return;O.slots[si]=null;O.tray.push(id);}O.sel=null;ritaOrdna();}
+let DR=null;
+$("ordna").addEventListener("pointerdown",e=>{const c=e.target.closest(".tk");if(!c||!O||O.klar||c.classList.contains("lock"))return;
+  DR={id:c.dataset.id,x:e.clientX,y:e.clientY,drag:false,el:c,pid:e.pointerId};});
+addEventListener("pointermove",e=>{if(!DR||e.pointerId!==DR.pid)return;
+  if(!DR.drag){if(Math.hypot(e.clientX-DR.x,e.clientY-DR.y)<8)return;DR.drag=true;
+    const r=DR.el.getBoundingClientRect();DR.g=DR.el.cloneNode(true);DR.g.className="tk spok";DR.g.style.cssText=`position:fixed;left:0;top:0;width:${r.width}px;pointer-events:none;z-index:60;`;
+    document.body.appendChild(DR.g);DR.dx=e.clientX-r.left;DR.dy=e.clientY-r.top;DR.el.classList.add("dold");}
+  DR.g.style.transform=`translate(${e.clientX-DR.dx}px,${e.clientY-DR.dy}px) rotate(3deg) scale(1.05)`;e.preventDefault();},{passive:false});
+function slutDrag(e,avbryt){if(!DR||e.pointerId!==DR.pid)return;const d=DR;DR=null;
+  if(d.drag){d.g.remove();if(avbryt){ritaOrdna();return;}
+    const t=document.elementFromPoint(e.clientX,e.clientY),slot=t&&t.closest("#oSlots .slot"),tray=t&&t.closest("#oTray");
+    if(slot)lagg(d.id,+slot.dataset.i);else if(tray)tillbaka(d.id);else ritaOrdna();return;}
+  if(avbryt)return;
+  if(O.slots.includes(d.id)){tillbaka(d.id);return;}
+  O.sel=O.sel===d.id?null:d.id;ritaOrdna();}
+addEventListener("pointerup",e=>slutDrag(e,false));addEventListener("pointercancel",e=>slutDrag(e,true));
+$("oSlots").addEventListener("click",e=>{const s=e.target.closest(".slot");if(!s||e.target.closest(".tk")||!O||!O.sel)return;lagg(O.sel,+s.dataset.i);});
+$("oKolla").onclick=()=>{if(O.klar)return;O.fors++;const fel=[];
+  O.slots.forEach((id,i)=>{if(id===O.fasit[i])O.last[i]=true;else fel.push(i);});
+  const fb=$("oFb");
+  if(!fel.length){O.klar=true;O.felNu=new Set();ritaOrdna();window.Ljud&&Ljud.ok&&Ljud.ok();haj("pet1");
+    const a=KORT_BY[O.fasit[0]],b=KORT_BY[O.fasit[5]];
+    fb.className="fb ratt";fb.textContent=`Rätt! Från det äldsta till det nyaste kortet är det ca ${fmt(ago(a)-ago(b))} år.`;
+    $("oKolla").hidden=true;$("oNasta").hidden=false;return;}
+  window.Ljud&&Ljud.bad&&Ljud.bad();O.felNu=new Set(fel);ritaOrdna();
+  const k=KORT_BY[O.slots[fel[0]]];
+  fb.className="fb fel";fb.textContent=`${6-fel.length} av 6 ligger rätt. Fundera på ${k.namn}: ${k.l[1]}`;
+  setTimeout(()=>{if(O.klar)return;fel.forEach(i=>{O.tray.push(O.slots[i]);O.slots[i]=null;});O.felNu=new Set();ritaOrdna();},1100);};
+$("oNasta").onclick=()=>{const st=O.fors===1?3:O.fors===2?2:1;resultat("ordna",st,O.fors===1?"Alla sex på rätt plats på första försöket!":`Du klarade det på ${O.fors} försök. Spela igen och se om du kan få det på första!`);};
+
+/* ---------- 2. Hur länge sedan? ---------- */
+const AXELAR=12000,TOL=700;
+let L=null;
+function startLangt(){
+  const set=shuffle(KORT.filter(k=>k.ar<=1760)).slice(0,6);
+  L={set,i:0,res:[],err:[],pos:null,gjort:false};$("pet2").innerHTML=owlSVG(lasDjur());
+  {const ax=$("lAxel");
+    const band=ERA.map(e=>{const f=Math.max(e.fran,NU-AXELAR),w=(e.till-f)/AXELAR*100;return w>0?`<span style="width:${w}%;background:${e.c}"></span>`:"";}).join("");
+    const tick=[[0,"12 000"],[7000,"5 000"],[10000,"2 000"],[12000,"Nu"]].map(([v,t])=>`<span class="tick" style="left:${v/AXELAR*100}%">${t}</span>`).join("");
+    ax.innerHTML=`<div class="linje">${band}</div>${tick}<div class="pinne" id="lPin" hidden></div><div class="pinne sann" id="lSann" hidden></div>`;}
+  show("langt");nastaL();}
+function nastaL(){const k=L.set[L.i];L.pos=null;L.gjort=false;
+  prickar("lDots",6,L.i,L.res);$("lKort").innerHTML=tk(k);$("lFraga").textContent="Hur länge sedan var det här? Sätt nålen på linjen. Längst till höger är nu.";
+  $("lPin").hidden=true;$("lSann").hidden=true;$("lFb").textContent="";$("lFb").className="fb";$("lKlar").disabled=true;$("lKlar").hidden=false;$("lNasta").hidden=true;$("lTips").hidden=false;}
+function axPos(e){const r=$("lAxel").getBoundingClientRect();return Math.max(0,Math.min(1,(e.clientX-r.left)/r.width));}
+let AD=false;
+function sattPin(f){L.pos=f;const p=$("lPin");p.hidden=false;p.style.left=(f*100)+"%";p.innerHTML=`<em>${fmt(Math.round((1-f)*AXELAR/50)*50)} år sedan</em>`;$("lKlar").disabled=false;}
+$("lAxel").addEventListener("pointerdown",e=>{if(!L||L.gjort)return;AD=true;try{$("lAxel").setPointerCapture(e.pointerId)}catch(_){}sattPin(axPos(e));e.preventDefault();});
+$("lAxel").addEventListener("pointermove",e=>{if(AD&&!L.gjort)sattPin(axPos(e));});
+$("lAxel").addEventListener("pointerup",()=>{AD=false;});$("lAxel").addEventListener("pointercancel",()=>{AD=false;});
+$("lKlar").onclick=()=>{if(L.gjort||L.pos==null)return;L.gjort=true;const k=L.set[L.i];
+  const sann=ago(k),gissat=(1-L.pos)*AXELAR,fel=Math.abs(gissat-sann),ok=fel<=TOL;L.res[L.i]=ok;L.err.push(fel);
+  const s=$("lSann");s.hidden=false;s.style.left=((1-sann/AXELAR)*100)+"%";s.innerHTML=`<em>${arTxt(k)}</em>`;
+  $("lKort").innerHTML=tk(k,{ar:true});$("lTips").hidden=true;
+  const fb=$("lFb");fb.className="fb "+(ok?"ratt":"fel");
+  if(ok){window.Ljud&&Ljud.ok&&Ljud.ok();haj("pet2");fb.textContent=`Nära! ${k.namn} är från ${arTxt(k)}, ungefär ${fmt(sann)} år sedan. ${k.f}`;}
+  else{window.Ljud&&Ljud.bad&&Ljud.bad();fb.textContent=`${k.namn} är från ${arTxt(k)}, ungefär ${fmt(sann)} år sedan. Det var ${gissat>sann?"senare":"tidigare"} än du trodde. ${k.f}`;}
+  prickar("lDots",6,L.i+1,L.res);$("lKlar").hidden=true;$("lNasta").hidden=false;$("lNasta").focus({preventScroll:true});};
+$("lNasta").onclick=()=>{L.i++;if(L.i>=6){slutL();return;}nastaL();};
+function slutL(){const ok=L.res.filter(Boolean).length,st=ok>=5?3:ok>=3?2:1,snitt=L.err.reduce((a,b)=>a+b,0)/L.err.length;
+  const stenAndel=Math.round((ERA_BY.sten.till-(NU-AXELAR))/AXELAR*100),vik=Math.round((NU-ERA_BY.vik.fran)/AXELAR*100);
+  resultat("langt",st,`${ok} av 6 nära rätt plats. Du var i snitt ${fmt(Math.round(snitt/10)*10)} år från rätt. Tänk: stenåldern tar ${stenAndel} % av linjen, och allt från vikingarna till i dag bara ${vik} %!`);}
+
+/* ---------- 3. Ledtrådsdetektiven ---------- */
+let D=null;
+function startDetektiv(){
+  D={set:shuffle(KORT.slice()).slice(0,6),i:0,poang:[],res:[]};$("pet3").innerHTML=owlSVG(lasDjur());show("detektiv");nastaD();}
+function nastaD(){const k=D.set[D.i];D.vis=1;D.fel=0;D.gjort=false;D.fel_e=new Set();
+  prickar("dDots",6,D.i,D.res);$("dFb").textContent="";$("dFb").className="fb";$("dNasta").hidden=true;ritaD();}
+function ritaD(){const k=D.set[D.i];
+  $("dStor").innerHTML=`<img src="bilder/${k.id}.jpg" alt="" style="object-position:${POS[k.id]||"center"}"><b>${D.gjort?k.namn:"Vad är det här?"}</b>`;
+  $("dLed").innerHTML=k.l.map((t,j)=>j<D.vis?`<div><small>Ledtråd ${j+1}</small>${t}</div>`:j===D.vis?`<button data-led="${j}">🔎 Visa ledtråd ${j+1} (−1 poäng)</button>`:"").join("");
+  $("dBand").innerHTML=ERA.map(e=>`<button data-e="${e.id}" class="${D.gjort&&e.id===k.era?"ratt":D.fel_e.has(e.id)?"fel":""}"${D.gjort||D.fel_e.has(e.id)?" disabled":""}>${e.namn}<small>${eraTxt(e)}</small></button>`).join("");
+  $("dPoang").textContent=D.gjort?"":`Poäng nu: ${Math.max(1,3-(D.vis-1)-D.fel)}`;}
+$("dLed").onclick=e=>{const b=e.target.closest("[data-led]");if(!b||D.gjort)return;D.vis=Math.min(3,D.vis+1);ritaD();};
+$("dBand").onclick=e=>{const b=e.target.closest("[data-e]");if(!b||D.gjort)return;const k=D.set[D.i],val=b.dataset.e,fb=$("dFb");
+  if(val===k.era){const p=Math.max(1,3-(D.vis-1)-D.fel);D.poang[D.i]=p;D.res[D.i]=p>=2;D.gjort=true;window.Ljud&&Ljud.ok&&Ljud.ok();haj("pet3");
+    fb.className="fb ratt";fb.textContent=`Rätt! ${k.namn} är från ${arTxt(k)+(k.ar<0?"":".")} ${k.f} (+${p} poäng)`;ritaD();prickar("dDots",6,D.i+1,D.res);$("dNasta").hidden=false;$("dNasta").focus({preventScroll:true});return;}
+  D.fel++;D.fel_e.add(val);window.Ljud&&Ljud.bad&&Ljud.bad();
+  const ei=ERA.findIndex(e=>e.id===k.era),vi=ERA.findIndex(e=>e.id===val),nara=Math.abs(ei-vi)===1;
+  if(D.fel>=2){D.poang[D.i]=0;D.res[D.i]=false;D.gjort=true;fb.className="fb fel";fb.textContent=`Det var ${ERA_BY[k.era].namn}. ${k.namn} är från ${arTxt(k)+(k.ar<0?"":".")} ${k.f}`;ritaD();prickar("dDots",6,D.i+1,D.res);$("dNasta").hidden=false;return;}
+  fb.className="fb fel";fb.textContent=`${nara?"Nästan! ":""}Det var ${ei>vi?"senare":"tidigare"} än så.${D.vis<3?" Du kan visa en ledtråd till.":""}`;ritaD();};
+$("dNasta").onclick=()=>{D.i++;if(D.i>=6){slutD();return;}nastaD();};
+function slutD(){const tot=D.poang.reduce((a,b)=>a+(b||0),0),st=tot>=14?3:tot>=9?2:1;
+  resultat("detektiv",st,`Du fick ${tot} poäng av 18. Ju färre ledtrådar och försök du behöver, desto fler poäng.`);}
+window.__tl={lagg,ritaOrdna,KORT,ERA,startOrdna,startLangt,startDetektiv,get O(){return O},get L(){return L},get D(){return D}};
+hem();
+</script>
+</body>
+</html>
