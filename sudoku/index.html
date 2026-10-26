@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<script src="../tema.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sudoku – Pluggparken</title>
+<meta name="description" content="Sudoku för barn: fyll rutnätet så att varje siffra eller djur finns en gång i varje rad, kolumn och ruta. Från små 4 × 4 med djur till 9 × 9, med tips och anteckningar.">
+<link rel="canonical" href="https://pluggparken.se/sudoku/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Pluggparken">
+<meta property="og:locale" content="sv_SE">
+<meta property="og:title" content="Sudoku – Pluggparken">
+<meta property="og:description" content="Sudoku för barn: fyll rutnätet så att varje siffra eller djur finns en gång i varje rad, kolumn och ruta. Från små 4 × 4 med djur till 9 × 9.">
+<meta property="og:url" content="https://pluggparken.se/sudoku/">
+<meta property="og:image" content="https://pluggparken.se/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#2F3A8F">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/apple-touch-icon.png" sizes="180x180">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EEF0FF;--ink:#23296B;--muted:#6468A0;--card:#FFFFFF;--line:#D3D7F5;--acc:#4B57E0;--gold:#F2B707;--bad:#E5484D;--font:"Baloo 2","Trebuchet MS",system-ui,sans-serif;--bs:420px}
+*{box-sizing:border-box}
+html,body{overflow-x:clip;margin:0;min-height:100%}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:620px;margin:0 auto;padding:12px 16px 48px}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;border:0;background:none}
+button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+[hidden]{display:none !important}
+.hero{border-radius:24px;padding:20px 20px 18px;background:linear-gradient(135deg,#5B6BFF,#2F3A8F);color:#fff;box-shadow:0 6px 0 #1C2468;position:relative;overflow:hidden;margin:6px 0 18px}
+.hero h1{margin:0;font-size:2.4rem;line-height:1.05;text-shadow:0 2px 0 rgba(0,0,0,.18)}
+.hero p{margin:4px 0 0;font-weight:600;max-width:19em}
+.hero svg{position:absolute;right:12px;top:50%;transform:translateY(-50%);width:100px;height:100px}
+h2{font-size:1.25rem;margin:18px 0 8px}
+.row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt{background:var(--card);border-radius:18px;padding:12px 8px;text-align:center;box-shadow:0 4px 0 var(--line);border:2px solid transparent;font-weight:800;transition:transform .1s}
+.opt:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.opt.on{border-color:var(--acc);box-shadow:0 4px 0 #A7AEF5}
+.opt small{display:block;color:var(--muted);font-weight:600;line-height:1.2;font-size:.82rem}
+.opt .st{display:block;font-size:.95rem;letter-spacing:1px;margin-top:2px}
+.opt .st i{opacity:.25;font-style:normal}
+.go{display:block;width:100%;margin-top:18px;background:linear-gradient(180deg,#4DDB93,#1E9E5E);color:#fff;border-radius:20px;padding:14px;font-size:1.3rem;font-weight:800;box-shadow:0 5px 0 #157548}
+.go:active{transform:translateY(4px);box-shadow:0 1px 0 #157548}
+.how{margin-top:16px;background:var(--card);border-radius:18px;padding:12px 16px;box-shadow:0 4px 0 var(--line);font-weight:600;color:var(--muted);font-size:.95rem}
+.how b{color:var(--ink)}
+/* spelplan */
+.gtop{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:2px auto 10px;max-width:var(--bs);font-weight:800}
+.gtop .tag{background:var(--card);border-radius:999px;padding:4px 14px;box-shadow:0 3px 0 var(--line);font-size:.95rem}
+.board{position:relative;margin:0 auto;width:var(--bs);height:var(--bs);display:grid;background:var(--ink);border:3px solid var(--ink);border-radius:14px;overflow:hidden;box-shadow:0 7px 0 #14194A,0 16px 30px rgba(20,25,74,.22);touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.cell{background:#fff;position:relative;display:grid;place-items:center;font-weight:800;color:var(--ink);padding:0;border-radius:0;margin:0 1px 1px 0;transition:background .12s}
+.cell.r{margin-right:3px}.cell.b{margin-bottom:3px}
+.cell.last-c{margin-right:0}.cell.last-r{margin-bottom:0}
+.cell .v{font-size:calc(var(--bs)/var(--n)*.58);line-height:1}
+.cell.giv{background:#F4F5FF}.cell.giv .v{color:#14194A}
+.cell:not(.giv) .v{color:#3A47D8}
+.cell.hl{background:#E6E8FF}
+.cell.same{background:#CBD0FF}
+.cell.sel{background:#FFE9A3;outline:3px solid var(--gold);outline-offset:-3px;z-index:2}
+.cell.err{background:#FFD6DA}.cell.err .v{color:var(--bad)}
+.cell.tip{animation:tp 1s infinite}
+@keyframes tp{50%{background:#FFF1B8}}
+.cell.pulse{animation:pl .5s ease-out}
+@keyframes pl{40%{transform:scale(1.14);z-index:3}}
+.cell .nt{position:absolute;inset:1px;display:grid;font-size:calc(var(--bs)/var(--n)*.27);line-height:1;color:#6468A0;font-weight:700;place-items:center}
+.cell.win{background:#FFF0B3}
+.pad{display:grid;gap:6px;justify-content:center;margin:16px auto 0;max-width:var(--bs)}
+.pad button{background:var(--card);border-radius:14px;min-width:0;height:54px;box-shadow:0 4px 0 var(--line);font-weight:800;font-size:1.5rem;padding:0}
+.pad button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.pad button.full{opacity:.35}
+.acts{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.pill{background:var(--card);border-radius:999px;padding:7px 15px;font-weight:800;box-shadow:0 3px 0 var(--line);font-size:.95rem}
+.pill:active{transform:translateY(2px)}
+.pill.on{background:#FFE9A3;box-shadow:0 3px 0 #E0BC4A}
+.msg{margin:12px auto 0;max-width:var(--bs);min-height:3em;text-align:center;font-weight:700;color:var(--muted);font-size:1rem}
+.msg b{color:var(--ink)}
+.res{text-align:center;padding:30px 8px}
+.res .big{font-size:4.5rem;line-height:1}.res h2{font-size:2rem;margin:8px 0}.res .st{font-size:2.2rem;letter-spacing:4px}
+.res p{color:var(--muted)}
+@media(prefers-reduced-motion:reduce){.cell.tip,.cell.pulse{animation:none}}
+</style>
+</head>
+<body>
+<script src="../ljud.js"></script>
+<script src="../djur.js"></script>
+<script src="../huvud.js" data-titel="Sudoku" data-ikon="🔢" data-portal="ovriga"></script>
+<div class="wrap">
+<section id="home" class="screen">
+  <div class="hero"><h1>Sudoku</h1><p>Varje siffra eller djur ska finnas en gång i varje rad, kolumn och ruta.</p>
+    <svg viewBox="0 0 60 60" aria-hidden="true"><rect x="5" y="5" width="50" height="50" rx="6" fill="none" stroke="#fff" stroke-width="3"/><path d="M22 5v50M38 5v50M5 22h50M5 38h50" stroke="#fff" stroke-width="2" opacity=".7"/><path d="M22 5v50M38 5v50" stroke="#fff" stroke-width="3.2"/><text x="13.5" y="18" font-size="13" font-weight="800" fill="#FFE07A" text-anchor="middle" font-family="sans-serif">3</text><text x="30" y="35" font-size="13" font-weight="800" fill="#fff" text-anchor="middle" font-family="sans-serif">7</text><text x="46.5" y="52" font-size="13" font-weight="800" fill="#FFE07A" text-anchor="middle" font-family="sans-serif">1</text></svg></div>
+  <h2>Hur stort?</h2>
+  <div class="row" id="oSize"></div>
+  <h2>Hur klurigt?</h2>
+  <div class="row" id="oLvl"></div>
+  <h2>Siffror eller djur?</h2>
+  <div class="row2" id="oSym"></div>
+  <button class="go" id="goBtn">Spela!</button>
+  <div class="how"><b>Så här gör du:</b> Tryck på en ruta och sedan på en siffra (eller ett djur) under rutnätet. Varje <b>rad</b>, varje <b>kolumn</b> och varje <b>ruta med tjock ram</b> ska ha alla olika. Du kan alltid lista ut svaret utan att gissa. 💡 Tips hjälper dig på vägen.</div>
+</section>
+<section id="game" class="screen" hidden>
+  <button data-home hidden onclick="MPSud.hem()"></button>
+  <div class="gtop"><span class="tag" id="tagA"></span><span class="tag" id="tagB"></span></div>
+  <div class="board" id="board"></div>
+  <div class="pad" id="pad"></div>
+  <div class="acts" id="acts"></div>
+  <div class="msg" id="msg"></div>
+</section>
+<section id="result" class="screen" hidden>
+  <div class="res"><div class="big" id="rEmoji"></div><h2 id="rTitle"></h2><div class="st" id="rStars"></div><p id="rText"></p>
+    <div class="acts"><button class="go" style="width:auto;padding:12px 26px;margin-top:6px" id="rAgain">Nytt sudoku</button><button class="pill" id="rHome">Till menyn</button></div></div>
+</section>
+</div>
+<script>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id),L=()=>window.Ljud||{};
+const KEY='mattespel-sudoku-v1';
+let D;try{D=JSON.parse(localStorage.getItem(KEY))||{};}catch(e){D={};}
+D.stars=D.stars||{};D.cfg=D.cfg||{n:4,lvl:1,sym:'djur'};
+function save(){try{localStorage.setItem(KEY,JSON.stringify(D));}catch(e){}}
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
+const DJUR=['🐶','🐱','🐰','🦊','🐼','🐸','🐵','🦁','🐧'];
+const BOX={4:[2,2],6:[2,3],9:[3,3]};   // [rader, kolumner] per ruta
+const GIV={4:[10,7,5],6:[20,16,12],9:[40,33,27]};
+const LV=['','Lätt','Mellan','Svår'];
+
+/* ---------- lösare och skapare ---------- */
+function geo(n){const [br,bc]=BOX[n],units=[];
+  for(let r=0;r<n;r++)units.push(Array.from({length:n},(_,c)=>r*n+c));
+  for(let c=0;c<n;c++)units.push(Array.from({length:n},(_,r)=>r*n+c));
+  for(let R=0;R<n/br;R++)for(let C=0;C<n/bc;C++){const u=[];for(let r=0;r<br;r++)for(let c=0;c<bc;c++)u.push((R*br+r)*n+C*bc+c);units.push(u);}
+  const peers=Array.from({length:n*n},()=>new Set());
+  units.forEach(u=>u.forEach(a=>u.forEach(b=>{if(a!==b)peers[a].add(b);})));
+  return {n,units,peers:peers.map(s=>[...s])};
+}
+const GEO={};const geoOf=n=>GEO[n]||(GEO[n]=geo(n));
+const bits=x=>{let c=0;while(x){x&=x-1;c++;}return c;};
+// räknar lösningar (max lim) med minsta-kandidat-först
+function countSol(g,grid,lim){
+  const n=g.n,full=(1<<n)-1;const a=grid.slice();let cnt=0;
+  function cand(i){let m=full;for(const p of g.peers[i])if(a[p])m&=~(1<<(a[p]-1));return m;}
+  function rec(){
+    let bi=-1,bm=0,bc=99;
+    for(let i=0;i<a.length;i++)if(!a[i]){const m=cand(i),c=bits(m);if(c===0)return;if(c<bc){bc=c;bi=i;bm=m;if(c===1)break;}}
+    if(bi<0){cnt++;return;}
+    for(let d=1;d<=n;d++)if(bm&(1<<(d-1))){a[bi]=d;rec();if(cnt>=lim){a[bi]=0;return;}}
+    a[bi]=0;
+  }
+  rec();return cnt;
+}
+function fillFull(g){
+  const n=g.n,a=Array(n*n).fill(0),full=(1<<n)-1;
+  function cand(i){let m=full;for(const p of g.peers[i])if(a[p])m&=~(1<<(a[p]-1));return m;}
+  function rec(){
+    let bi=-1,bm=0,bc=99;
+    for(let i=0;i<a.length;i++)if(!a[i]){const m=cand(i),c=bits(m);if(c===0)return false;if(c<bc){bc=c;bi=i;bm=m;}}
+    if(bi<0)return true;
+    const ds=[];for(let d=1;d<=n;d++)if(bm&(1<<(d-1)))ds.push(d);
+    for(let i=ds.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[ds[i],ds[j]]=[ds[j],ds[i]];}
+    for(const d of ds){a[bi]=d;if(rec())return true;}
+    a[bi]=0;return false;
+  }
+  rec();return a;
+}
+// går det att lösa med bara "den enda möjliga" och "enda platsen för siffran"?
+function singlesOnly(g,grid){
+  const n=g.n,full=(1<<n)-1,a=grid.slice();
+  for(;;){
+    let prog=false;
+    const cm=a.map((v,i)=>{if(v)return 0;let m=full;for(const p of g.peers[i])if(a[p])m&=~(1<<(a[p]-1));return m;});
+    for(let i=0;i<a.length;i++)if(!a[i]&&bits(cm[i])===1){a[i]=Math.log2(cm[i])+1;prog=true;break;}
+    if(!prog)for(const u of g.units){for(let d=1;d<=n&&!prog;d++){let w=-1,k=0,has=false;for(const i of u){if(a[i]===d){has=true;break;}if(!a[i]&&(cm[i]&(1<<(d-1)))){w=i;k++;}}if(!has&&k===1){a[w]=d;prog=true;}}if(prog)break;}
+    if(!prog)break;
+  }
+  return a.every(v=>v);
+}
+function makePuzzle(n,lvl){
+  const g=geoOf(n),target=GIV[n][lvl-1];let best=null;
+  for(let attempt=0;attempt<6;attempt++){
+    const sol=fillFull(g),p=sol.slice(),order=[...p.keys()];
+    for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];}
+    let givens=n*n;
+    for(const i of order){if(givens<=target)break;const keep=p[i];p[i]=0;
+      if(countSol(g,p,2)===1&&(lvl===3||singlesOnly(g,p)))givens--;else p[i]=keep;}
+    if(!best||givens<best.g){best={p:p.slice(),sol,g:givens};}
+    if(givens<=target)break;
+  }
+  return best;
+}
+
+/* ---------- val ---------- */
+let sel=D.cfg;
+function home(){
+  const st=k=>{const v=D.stars[k]||0;return '⭐'.repeat(v)+'<i>'+'☆'.repeat(3-v)+'</i>';};
+  $('oSize').innerHTML=[4,6,9].map(n=>`<button class="opt ${sel.n===n?'on':''}" data-n="${n}">${n} × ${n}<small>${n===4?'Små, nybörjare':n===6?'Lagom':'Det riktiga'}</small></button>`).join('');
+  $('oLvl').innerHTML=[1,2,3].map(l=>`<button class="opt ${sel.lvl===l?'on':''}" data-l="${l}">${['😀','🤔','🧠'][l-1]} ${LV[l]}<small>${['Många ledtrådar','Några ledtrådar','Få ledtrådar'][l-1]}</small><span class="st">${st(sel.n+'-'+l)}</span></button>`).join('');
+  $('oSym').innerHTML=`<button class="opt ${sel.sym==='djur'?'on':''}" data-s="djur">🐶🐱🐰<small>Djur</small></button><button class="opt ${sel.sym==='siffror'?'on':''}" data-s="siffror">1 2 3<small>Siffror</small></button>`;
+}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('.opt');if(!b)return;
+  if(b.dataset.n){sel.n=+b.dataset.n;home();}
+  else if(b.dataset.l){sel.lvl=+b.dataset.l;home();}
+  else if(b.dataset.s){sel.sym=b.dataset.s;home();}
+});
+$('goBtn').onclick=()=>{D.cfg=sel;save();start();};
+
+/* ---------- spel ---------- */
+let G=null;
+const sym=d=>G.sym==='djur'?DJUR[d-1]:String(d);
+function start(){
+  const n=sel.n;const pz=makePuzzle(n,sel.lvl);
+  G={n,lvl:sel.lvl,sym:sel.sym,giv:pz.p.map(v=>!!v),v:pz.p.slice(),sol:pz.sol,notes:Array(n*n).fill(0),sel:-1,note:false,hist:[],errs:0,hints:0,tip:-1,over:false,wrong:new Set()};
+  show('game');build();
+}
+function build(){
+  const n=G.n,g=geoOf(n),[br,bc]=BOX[n];
+  const bs=Math.max(240,Math.min(innerWidth-32,innerHeight-360,460));
+  document.documentElement.style.setProperty('--bs',bs+'px');
+  const B=$('board');B.style.setProperty('--n',n);B.style.gridTemplateColumns=`repeat(${n},1fr)`;B.style.gridTemplateRows=`repeat(${n},1fr)`;
+  B.innerHTML=Array.from({length:n*n},(_,i)=>{const r=Math.floor(i/n),c=i%n;
+    const cl=['cell',(c+1)%bc===0&&c<n-1?'r':'',(r+1)%br===0&&r<n-1?'b':'',c===n-1?'last-c':'',r===n-1?'last-r':''].join(' ');
+    return `<button class="${cl}" data-i="${i}" aria-label="Ruta rad ${r+1}, kolumn ${c+1}"></button>`;}).join('');
+  $('tagA').textContent=n+' × '+n+' · '+LV[G.lvl];
+  $('pad').style.gridTemplateColumns=`repeat(${n+1},minmax(0,${n<=6?64:56}px))`;
+  $('pad').innerHTML=Array.from({length:n},(_,k)=>`<button data-d="${k+1}" aria-label="${G.sym==='djur'?'Djur '+(k+1):'Siffra '+(k+1)}">${sym(k+1)}</button>`).join('')+'<button data-d="0" aria-label="Sudda" style="font-size:1.2rem">⌫</button>';
+  $('acts').innerHTML='<button class="pill" id="aUndo">↶ Ångra</button><button class="pill" id="aNote">✏️ Anteckna</button><button class="pill" id="aHint">💡 Tips</button><button class="pill" id="aNew">🔄 Nytt</button>';
+  $('aUndo').onclick=undo;$('aNote').onclick=()=>{G.note=!G.note;paint();};$('aHint').onclick=hint;$('aNew').onclick=start;
+  paint();
+  say('Tryck på en tom ruta. Sedan väljer du '+(G.sym==='djur'?'ett djur':'en siffra')+' nedanför.');
+}
+function say(t){$('msg').innerHTML=t;}
+function paint(){
+  const n=G.n,g=geoOf(n),s=G.sel;
+  const cells=$('board').children;
+  const sv=s>=0?G.v[s]:0;
+  for(let i=0;i<cells.length;i++){
+    const c=cells[i],v=G.v[i];
+    c.classList.toggle('giv',G.giv[i]);
+    c.classList.toggle('sel',i===s);
+    c.classList.toggle('hl',s>=0&&i!==s&&g.peers[s].includes(i));
+    c.classList.toggle('same',s>=0&&i!==s&&sv&&v===sv);
+    c.classList.toggle('err',!!v&&!G.giv[i]&&v!==G.sol[i]);
+    c.classList.toggle('tip',i===G.tip);
+    if(v)c.innerHTML=`<span class="v">${sym(v)}</span>`;
+    else if(G.notes[i]){let h='';const k=Math.ceil(Math.sqrt(n));for(let d=1;d<=n;d++)h+=`<span>${G.notes[i]&(1<<(d-1))?sym(d):''}</span>`;c.innerHTML=`<span class="nt" style="grid-template-columns:repeat(${k},1fr);grid-template-rows:repeat(${Math.ceil(n/k)},1fr)">${h}</span>`;}
+    else c.innerHTML='';
+  }
+  $('aNote').classList.toggle('on',G.note);
+  const cnt=Array(n+1).fill(0);G.v.forEach((v,i)=>{if(v&&v===G.sol[i])cnt[v]++;});
+  document.querySelectorAll('#pad [data-d]').forEach(b=>{const d=+b.dataset.d;b.classList.toggle('full',d>0&&cnt[d]>=n);});
+  $('tagB').textContent=G.hints?'💡 '+G.hints:'';$('tagB').hidden=!G.hints;
+}
+$('board').addEventListener('click',e=>{const c=e.target.closest('.cell');if(!c||!G||G.over)return;
+  G.sel=G.sel===+c.dataset.i?-1:+c.dataset.i;G.tip=-1;paint();});
+function snap(){G.hist.push({v:G.v.slice(),notes:G.notes.slice()});if(G.hist.length>200)G.hist.shift();}
+function undo(){if(!G||G.over||!G.hist.length)return;const h=G.hist.pop();G.v=h.v;G.notes=h.notes;paint();}
+function setDigit(d){
+  if(!G||G.over)return;const i=G.sel;
+  if(i<0){say('Tryck först på en tom ruta.');return;}
+  if(G.giv[i]){say('Den rutan är en ledtråd. Prova en tom ruta.');return;}
+  const g=geoOf(G.n);
+  if(d===0){snap();G.v[i]=0;G.notes[i]=0;paint();return;}
+  if(G.note){if(G.v[i])return;snap();G.notes[i]^=(1<<(d-1));paint();return;}
+  snap();G.v[i]=d;G.notes[i]=0;G.tip=-1;
+  g.peers[i].forEach(p=>{G.notes[p]&=~(1<<(d-1));});
+  if(L().pop)L().pop();
+  const ok=d===G.sol[i];
+  if(!ok){
+    const clash=g.peers[i].some(p=>G.v[p]===d);
+    if(!G.wrong.has(i+':'+d)){G.wrong.add(i+':'+d);G.errs++;}
+    say(clash?'Den finns redan i samma <b>rad, kolumn eller ruta</b>. Titta efter vilken som är röd.':'Det passar inte här. Titta på vad som saknas i <b>raden</b>, <b>kolumnen</b> och <b>rutan</b>.');
+  }else say(G.v.every((v,k)=>v===G.sol[k])?'':'Bra!');
+  paint();
+  const c=$('board').children[i];c.classList.remove('pulse');void c.offsetWidth;c.classList.add('pulse');
+  if(G.v.every((v,k)=>v===G.sol[k]))win();
+}
+$('pad').addEventListener('click',e=>{const b=e.target.closest('[data-d]');if(b)setDigit(+b.dataset.d);});
+addEventListener('keydown',e=>{
+  if(!G||$('game').hidden)return;
+  if(e.key>='1'&&e.key<='9'&&+e.key<=G.n){setDigit(+e.key);e.preventDefault();}
+  else if(e.key==='Backspace'||e.key==='Delete'||e.key==='0'){setDigit(0);e.preventDefault();}
+  else if(e.key.startsWith('Arrow')){const n=G.n;let i=G.sel<0?0:G.sel,r=Math.floor(i/n),c=i%n;
+    if(e.key==='ArrowUp')r=(r+n-1)%n;if(e.key==='ArrowDown')r=(r+1)%n;if(e.key==='ArrowLeft')c=(c+n-1)%n;if(e.key==='ArrowRight')c=(c+1)%n;
+    G.sel=r*n+c;G.tip=-1;paint();e.preventDefault();}
+  else if(e.key==='z'&&(e.ctrlKey||e.metaKey)){undo();e.preventDefault();}
+});
+/* tips i två steg: först pekas en ruta ut, sedan fylls den */
+function hint(){
+  if(!G||G.over)return;
+  const n=G.n,g=geoOf(n),full=(1<<n)-1;
+  const bad=G.v.findIndex((v,i)=>v&&!G.giv[i]&&v!==G.sol[i]);
+  if(bad>=0){G.sel=bad;G.tip=bad;paint();say('Titta på den röda rutan. Den siffran passar inte. Ta bort den med ⌫.');return;}
+  if(G.tip>=0&&!G.v[G.tip]){snap();G.v[G.tip]=G.sol[G.tip];G.notes[G.tip]=0;G.sel=G.tip;G.tip=-1;G.hints++;
+    say('Där kom svaret. Försök hitta nästa själv!');paint();if(G.v.every((v,k)=>v===G.sol[k]))win();return;}
+  const a=G.v;let pick=-1,why='';
+  const cm=a.map((v,i)=>{if(v)return 0;let m=full;for(const p of g.peers[i])if(a[p])m&=~(1<<(a[p]-1));return m;});
+  for(let i=0;i<a.length;i++)if(!a[i]&&bits(cm[i])===1){pick=i;why='Här finns det bara <b>en</b> möjlig '+(G.sym==='djur'?'djur':'siffra')+'. Vilka finns redan i raden, kolumnen och rutan?';break;}
+  if(pick<0)outer:for(const u of g.units){for(let d=1;d<=n;d++){let w=-1,k=0,has=false;for(const i of u){if(a[i]===d){has=true;break;}if(!a[i]&&(cm[i]&(1<<(d-1)))){w=i;k++;}}if(!has&&k===1){pick=w;why='Titta på '+sym(d)+': i den här raden, kolumnen eller rutan finns det bara <b>en</b> plats där den kan stå.';break outer;}}}
+  if(pick<0){const e=a.findIndex(v=>!v);pick=e;why='Den här rutan är en bra start.';}
+  if(pick<0)return;
+  G.sel=pick;G.tip=pick;G.hints++;paint();say('💡 '+why+'<br>Tryck på Tips igen för att få svaret.');
+}
+function win(){
+  G.over=true;G.sel=-1;paint();
+  document.querySelectorAll('.cell').forEach(c=>c.classList.add('win'));
+  const stars=G.hints===0&&G.errs===0?3:G.hints===0&&G.errs<=3?2:1;
+  const k=G.n+'-'+G.lvl;if(stars>(D.stars[k]||0)){D.stars[k]=stars;save();}
+  if(L().fanfare)L().fanfare();
+  setTimeout(()=>{
+    $('rEmoji').textContent='🏆';$('rTitle').textContent='Klart!';
+    $('rStars').textContent='⭐'.repeat(stars);
+    $('rText').textContent=stars===3?'Utan fel och utan tips. Fantastiskt!':stars===2?'Utan tips. Snyggt jobbat!':'Du klarade det. Nästa gång kanske du klarar det utan tips!';
+    $('rAgain').onclick=start;show('result');
+  },1300);
+}
+function hem(){G=null;home();show('home');}
+$('rHome').onclick=hem;
+home();
+window.MPSud={hem,get G(){return G;},makePuzzle,countSol,singlesOnly,geoOf,start,setDigit,hint};
+})();
+</script>
+</body>
+</html>

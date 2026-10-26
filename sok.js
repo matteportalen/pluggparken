@@ -75,6 +75,8 @@ const IDX=[
  ['ovriga/pengar/','Pengar och sparande','Spargris, sparkonto eller fond? Tidsmaskinen','💰','sparande aktier fonder bitcoin ränta ekonomi privatekonomi','Privatekonomi'],
  ['schack/','Schack','Lär dig pjäserna, hitta matt och spela mot datorn','♟️','pjäser matt matt i ett drag matt i två drag mattmönster parti slutspel äventyr ö kung dam torn springare löpare bonde klocka två spelare','Logik och strategi'],
  ['trerirad/','Tre i rad','Få tre i rad före datorn eller en kompis','⭕','kryss och ring luffarschack fyra i rad två spelare','Logik och strategi'],
+ ['sudoku/','Sudoku','Fyll rutnätet så att varje siffra eller djur finns en gång i varje rad, kolumn och ruta','🔢','sudoku siffror djur rutnät logik pussel 4x4 6x6 9x9','Logik och strategi'],
+ ['trafikstockning/','Trafikstockning','Skjut bilarna ur vägen och släpp ut den röda bilen: 40 pussel','🚗','rush hour bilar parkering skjutpussel logik trafik väg','Logik och strategi'],
  ['ovriga/tangentbord/','Tangentbordet','Lär dig skriva med rätt fingrar','⌨️','skriva tangenter tiofingersystemet alfabetet','Digitalt'],
  ['ovriga/kodverkstan/','Kodverkstan','Bygg program med block och styr ditt djur','🧩','kodning kod programmera programmering scratch block algoritm spel klon kloner kostym exempel remixa film bilder egen bild','Digitalt'],
  ['specialare/','Specialare','Minilektioner om coola saker','🎁','lektioner filmer fakta mysterium ledtrådar','Utforska']

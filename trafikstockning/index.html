@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<script src="../tema.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Trafikstockning – Pluggparken</title>
+<meta name="description" content="Trafikstockning: skjut bilarna ur vägen och släpp ut den röda bilen. 40 pussel från lätta till riktigt klurigt, med tips och stjärnor för så få drag som möjligt.">
+<link rel="canonical" href="https://pluggparken.se/trafikstockning/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Pluggparken">
+<meta property="og:locale" content="sv_SE">
+<meta property="og:title" content="Trafikstockning – Pluggparken">
+<meta property="og:description" content="Skjut bilarna ur vägen och släpp ut den röda bilen. 40 pussel från lätta till riktigt klurigt.">
+<meta property="og:url" content="https://pluggparken.se/trafikstockning/">
+<meta property="og:image" content="https://pluggparken.se/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#F77F00">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/apple-touch-icon.png" sizes="180x180">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F6F1E4;--ink:#2B2D42;--muted:#6E6A5E;--card:#FFFFFF;--line:#E6DCC3;--acc:#F77F00;--gold:#F2B707;--font:"Baloo 2","Trebuchet MS",system-ui,sans-serif;--bs:420px;--cell:70px}
+*{box-sizing:border-box}
+html,body{overflow-x:clip;margin:0;min-height:100%}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:620px;margin:0 auto;padding:12px 16px 48px}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;border:0;background:none}
+button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+[hidden]{display:none !important}
+.hero{border-radius:24px;padding:20px 20px 18px;background:linear-gradient(135deg,#FFB703,#F77F00);color:#fff;box-shadow:0 6px 0 #B35A00;position:relative;overflow:hidden;margin:6px 0 18px}
+.hero h1{margin:0;font-size:2.3rem;line-height:1.05;text-shadow:0 2px 0 rgba(0,0,0,.18)}
+.hero p{margin:4px 0 0;font-weight:600;max-width:17em}
+.hero svg{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:130px;height:90px}
+h2{font-size:1.25rem;margin:18px 0 8px}
+.set{background:var(--card);border-radius:20px;padding:12px 14px 14px;margin-bottom:12px;box-shadow:0 4px 0 var(--line)}
+.set h3{margin:0 0 8px;font-size:1.1rem;display:flex;align-items:center;gap:8px}
+.set h3 .stars{margin-left:auto;font-size:1rem;letter-spacing:1px}
+.set h3 .stars i{opacity:.25;font-style:normal}
+.set h3 small{color:var(--muted);font-weight:600;font-size:.82rem}
+.lv{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.lv button{border-radius:14px;background:#FFF4DD;border:2px solid #F3D9A0;height:56px;font-weight:800;font-size:1.15rem;position:relative;box-shadow:0 3px 0 #E8C77A}
+.lv button:active{transform:translateY(2px);box-shadow:0 1px 0 #E8C77A}
+.lv button .bt{position:absolute;bottom:2px;left:0;right:0;font-size:.6rem;letter-spacing:0;line-height:1}
+.lv button.done{background:#E3F6E9;border-color:#9BDDB1;box-shadow:0 3px 0 #7CC495}
+.lv button.lock{opacity:.4;box-shadow:none}
+.how{margin-top:12px;background:var(--card);border-radius:18px;padding:12px 16px;box-shadow:0 4px 0 var(--line);font-weight:600;color:var(--muted);font-size:.95rem}
+.how b{color:var(--ink)}
+.gtop{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:2px auto 12px;max-width:calc(var(--bs) + 30px);font-weight:800}
+.tag{background:var(--card);border-radius:999px;padding:4px 14px;box-shadow:0 3px 0 var(--line);font-size:.95rem}
+.stage{position:relative;margin:0 auto;width:calc(var(--bs) + 30px);padding-right:30px}
+.board{position:relative;width:var(--bs);height:var(--bs);background:#8E8A7C;border:7px solid #4E4B42;border-radius:16px;box-shadow:0 7px 0 #34322B,0 16px 30px rgba(52,50,43,.25);touch-action:none;user-select:none;-webkit-user-select:none;box-sizing:content-box;margin:0 auto 0 0}
+.board::before{content:"";position:absolute;inset:0;border-radius:9px;background-image:linear-gradient(rgba(255,255,255,.16) 2px,transparent 2px),linear-gradient(90deg,rgba(255,255,255,.16) 2px,transparent 2px);background-size:var(--cell) var(--cell)}
+.gate{position:absolute;right:-9px;width:16px;background:#8E8A7C;z-index:3}
+.flag{position:absolute;right:-6px;font-size:1.6rem;transform:translateX(100%);z-index:2;animation:fl 1.2s infinite}
+@keyframes fl{50%{transform:translateX(100%) translateX(5px)}}
+.car{position:absolute;z-index:1;touch-action:none;cursor:grab;filter:drop-shadow(0 3px 2px rgba(0,0,0,.35));transition:transform .18s ease-out}
+.car.drag{transition:none;cursor:grabbing;z-index:4;filter:drop-shadow(0 6px 5px rgba(0,0,0,.4))}
+.car svg{position:absolute;left:50%;top:50%;display:block;pointer-events:none}
+.car.v svg{transform:translate(-50%,-50%) rotate(90deg)}
+.car.h svg{transform:translate(-50%,-50%)}
+.car.sel{filter:drop-shadow(0 0 0 #fff) drop-shadow(0 0 6px var(--gold)) drop-shadow(0 3px 2px rgba(0,0,0,.35))}
+.car.tip{animation:tp .9s infinite}
+@keyframes tp{50%{filter:drop-shadow(0 0 10px #FFD60A) drop-shadow(0 0 4px #fff)}}
+.car.out{transition:transform .8s ease-in}
+.car.red{z-index:2}
+.arrow{position:absolute;z-index:5;font-size:1.7rem;color:#fff;text-shadow:0 2px 4px rgba(0,0,0,.6);pointer-events:none;animation:ar .8s infinite}
+@keyframes ar{50%{opacity:.4}}
+.pad2{display:flex;gap:8px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+.pill{background:var(--card);border-radius:999px;padding:7px 15px;font-weight:800;box-shadow:0 3px 0 var(--line);font-size:.95rem}
+.pill:active{transform:translateY(2px)}
+.msg{margin:12px auto 0;max-width:var(--bs);min-height:3em;text-align:center;font-weight:700;color:var(--muted);font-size:1rem}
+.msg b{color:var(--ink)}
+.go{display:block;width:100%;margin-top:18px;background:linear-gradient(180deg,#4DDB93,#1E9E5E);color:#fff;border-radius:20px;padding:14px;font-size:1.3rem;font-weight:800;box-shadow:0 5px 0 #157548}
+.go:active{transform:translateY(4px);box-shadow:0 1px 0 #157548}
+.res{text-align:center;padding:30px 8px}
+.res .big{font-size:4.5rem;line-height:1}.res h2{font-size:2rem;margin:8px 0}.res .st{font-size:2.2rem;letter-spacing:4px}
+.res p{color:var(--muted)}
+.res .acts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+@media(prefers-reduced-motion:reduce){.car,.car.out{transition:none}.flag,.car.tip,.arrow{animation:none}}
+</style>
+</head>
+<body>
+<script src="../ljud.js"></script>
+<script src="../djur.js"></script>
+<script src="../huvud.js" data-titel="Trafikstockning" data-ikon="🚗" data-portal="ovriga"></script>
+<div class="wrap">
+<section id="home" class="screen">
+  <div class="hero"><h1>Trafikstockning</h1><p>Skjut bilarna ur vägen och släpp ut den röda bilen!</p>
+    <svg viewBox="0 0 130 90" aria-hidden="true"><rect x="4" y="14" width="122" height="62" rx="10" fill="rgba(0,0,0,.2)"/><rect x="12" y="22" width="38" height="46" rx="9" fill="#2E86FF"/><rect x="18" y="30" width="26" height="9" rx="3" fill="#CFE9FF"/><rect x="58" y="46" width="62" height="22" rx="9" fill="#E5253A"/><rect x="62" y="50" width="8" height="14" rx="3" fill="#CFE9FF" opacity=".85"/><rect x="74" y="49" width="18" height="16" rx="5" fill="rgba(0,0,0,.2)"/><rect x="98" y="50" width="14" height="14" rx="4" fill="#CFE9FF"/><rect x="116" y="50" width="4" height="4" rx="2" fill="#FFE98A"/><rect x="116" y="60" width="4" height="4" rx="2" fill="#FFE98A"/><rect x="58" y="22" width="22" height="20" rx="7" fill="#FFB703"/><rect x="84" y="22" width="36" height="20" rx="7" fill="#2FBF71"/></svg></div>
+  <div id="sets"></div>
+  <div class="how"><b>Så här gör du:</b> Dra en bil <b>framåt eller bakåt</b> längs sin väg. Bilarna kan inte svänga och inte köra över varandra. Släpp ut den <b>röda bilen</b> åt höger! Du får stjärnor för så <b>få drag</b> som möjligt (ett drag är en bil som flyttas, hur långt du vill). Fastnar du hjälper 💡 Tips.</div>
+</section>
+<section id="game" class="screen" hidden>
+  <button data-home hidden onclick="MPTraf.hem()"></button>
+  <div class="gtop"><span class="tag" id="tagA"></span><span class="tag" id="tagB"></span></div>
+  <div class="stage"><div class="board" id="board"></div></div>
+  <div class="pad2" id="acts"></div>
+  <div class="msg" id="msg"></div>
+</section>
+<section id="result" class="screen" hidden>
+  <div class="res"><div class="big">🏁</div><h2 id="rTitle"></h2><div class="st" id="rStars"></div><p id="rText"></p>
+    <div class="acts"><button class="go" style="width:auto;padding:12px 26px;margin-top:6px" id="rNext">Nästa bana ▶</button><button class="pill" id="rAgain">Försök med färre drag</button><button class="pill" id="rHome">Till menyn</button></div></div>
+</section>
+</div>
+<script>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id),L=()=>window.Ljud||{};
+const KEY='mattespel-trafikstockning-v1';
+let D;try{D=JSON.parse(localStorage.getItem(KEY))||{};}catch(e){D={};}
+D.betyg=D.betyg||{};D.stars=D.stars||{};
+function save(){try{localStorage.setItem(KEY,JSON.stringify(D));}catch(e){}}
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
+/*PUSSEL*/
+/* 40 pussel (36 tecken = brädet rad för rad, x = röda bilen, . = tomt) och minsta antal drag; framräknade med en bred sökning */
+const PZ=[
+[".DAJJ..DA.BB.xx..I.FF..IEE..HH.CCGG.",3],
+[".BB...HH..D.GAxxDCGA...C..FF.....EEE",3],
+[".JJJEEDA.FFGDA.xxGC...I.C...IBHH...B",4],
+["CCJJ.BHH.AAB.xxDIBEEFDI...F......GG.",4],
+["GG.BBC.KKEECIxx.F.IAAAF.HHDDJ.LL..J.",5],
+["...FG..EEFG.xx.FCD.I..CDHI....H.AABB",5],
+[".CBBB..CEEFFGxx..KG.JJ.KGDDIAA...IHH",6],
+["J....HJ.AAAHxx.G..BDDG..B.FCEI..FCEI",6],
+["..C.JJ..CIADxx.IADH.E..GH.E.FGBB..FG",7],
+["..G.KK..GDBCxx.DBCIHE.FFIHE.J...AAJ.",7],
+["HE.CIIHE.C.F.Exx.F...GGA.DDD.A....BB",8],
+["ECCDDDEI...BEIxx.BFFFGGAJ....AJ..HHH",9],
+["G..DDDG.IKCCxxIK.LE.FHHLEBF.JJEB.AAA",10],
+["..CCGEFF..GExx..GH.A.JJH.A.I...BBIDD",10],
+[".DDD.EKBB.IEKxxGI.HHCG...JCGFF.JAAA.",11],
+["..IIHHJJ..EB.xx.EBF....BFGGDDDFCCAAA",11],
+[".GGGBB....AC..xxACI.FJ.CI.FJDD.HHHEE",12],
+["..I.....IGGA.xxFBAEJ.FB.EJHHBKEDDCCK",12],
+[".JJBCC..HBEExxHB.AG.HFFAG....D...IID",13],
+["LIII..L.EBB.xxE..G.JEFFGDJKKHCD.AAHC",13],
+["JJ...C.....CIGxxHCIGABH.EFABH.EFABDD",14],
+["..CGG...CJ.FxxCJBFI.HHBAIEEE.A.DDD..",15],
+["...AAA.HH.JCxxKIJCFFKI..D.B.EED.BGG.",15],
+["....IIFG..DAFGxxDA.CCCDAJJB.HH..BEE.",16],
+["J.GG.AJ.CKIAxxCKIA..CBBBH.EEE.HFFDDD",16],
+["..CGGGKKC..FxxCJ.FIHHJB.IEEEBAIDD..A",17],
+[".FFFCJ.IIHCJxxDHCBK.DAABKLG....LGEE.",17],
+["K..CCIK.FJJIxxFA.EGG.A.E.HDDBB.H....",18],
+[".FFFCJ.IIHCJxxDH.BKLDAABKLG..B..GEEE",18],
+[".ELLHH.EK.JJxxKB...DDBACFII.ACFGG.A.",19],
+[".CCCE..FFFEAxx.DEAI.GDHHI.GBBBKK..JJ",20],
+["EGGDDBE.KKFBExxAFBCCHA....HAII..JJJ.",21],
+["IIGE.H..GE.HxxDAJ.CBDAJ.CBFFJ.......",22],
+["JJKKK.DDDCGGxx.CBIHH..BIE.FAALE.F..L",23],
+["FGG.EEFCCC.HxxA..H..A.BBIIIDJ....DJ.",24],
+["IIIGKBH..GKBHxxGKAE.JJ.AE.CDDD..CFFF",25],
+["HHHD.K...DAKJxxDA.J...ACBIFGGCBIFEEE",27],
+["II.A...HHA.BxxFA.B..F.GGJ.F..EJDDCCE",28],
+["..IGGG..I.BA.xxFBAEJ.FBKEJHH.KEDD.CC",29],
+[".FCEEE.FC..JxxCA.JHBBAGDH...GDKKIIID",32]];
+const SETS=[['Nybörjare','🚲','Få bilar, korta lösningar'],['Lätt','🚗','Lite fler bilar'],['Mellan','🚚','Här måste du tänka i flera steg'],['Expert','🏎️','Riktigt klurigt']];
+const COL=['#2E86FF','#2FBF71','#FFB703','#9B5DE5','#F15BB5','#00B4D8','#FF7A59','#8AC926','#6C757D','#C77DFF','#06A77D','#E76F51'];
+/* ---------- lösare ---------- */
+function parse(s){
+  const cars=[],seen={};
+  for(let i=0;i<36;i++){const ch=s[i];if(ch==='.'||seen[ch]!==undefined)continue;
+    const idx=[];for(let k=0;k<36;k++)if(s[k]===ch)idx.push(k);
+    const h=idx.length>1&&idx[1]-idx[0]===1;
+    const car={ch,len:idx.length,h,r:Math.floor(idx[0]/6),c:idx[0]%6};
+    seen[ch]=cars.length;cars.push(car);}
+  cars.sort((a,b)=>a.ch==='x'?-1:b.ch==='x'?1:a.ch<b.ch?-1:1);
+  return cars;
+}
+function bfs(cars,pos){      // pos[i] = läge längs bilens led; returnerar lista av drag {car,to}
+  const n=cars.length,fx=cars.map(x=>x.h?x.r:x.c),ls=cars.map(x=>x.len),hs=cars.map(x=>x.h);
+  const key=a=>a.join(',');const seen=new Map();seen.set(key(pos),null);let fr=[pos];
+  while(fr.length){const nx=[];
+    for(const s of fr){
+      if(s[0]===4){const out=[];let k=key(s);while(seen.get(k)){const m=seen.get(k);out.push({car:m.car,to:m.to});k=m.from;}return out.reverse();}
+      const occ=Array(36).fill(-1);
+      for(let i=0;i<n;i++)for(let k=0;k<ls[i];k++){const r=hs[i]?fx[i]:s[i]+k,c=hs[i]?s[i]+k:fx[i];occ[r*6+c]=i;}
+      for(let i=0;i<n;i++)for(const dir of[-1,1])for(let st=1;st<6;st++){
+        const p=s[i]+dir*st;if(p<0||p+ls[i]>6)break;
+        const e=dir>0?p+ls[i]-1:p,r=hs[i]?fx[i]:e,c=hs[i]?e:fx[i];if(occ[r*6+c]!==-1)break;
+        const t=s.slice();t[i]=p;const k=key(t);if(!seen.has(k)){seen.set(k,{from:key(s),car:i,to:p});nx.push(t);}
+      }
+    }
+    fr=nx;
+  }
+  return null;
+}
+/* ---------- menyn ---------- */
+function open(k){const b=D.betyg;return k===0||b[k]||b[k-1]||b[k-2];}
+function setStars(si){let all=true,mn=3;for(let k=si*10;k<si*10+10;k++){const b=D.betyg[k]||0;if(!b)all=false;mn=Math.min(mn,b||0);}return all?mn:0;}
+function recompute(){SETS.forEach((_,si)=>{D.stars['s'+(si+1)]=setStars(si);});save();}
+function home(){
+  recompute();
+  $('sets').innerHTML=SETS.map((s,si)=>{
+    const st=D.stars['s'+(si+1)]||0,have=PZ.length>si*10;
+    if(!have)return '';
+    let n=0;for(let k=si*10;k<si*10+10;k++)if(D.betyg[k])n++;
+    return `<div class="set"><h3><span>${s[1]}</span>${s[0]} <small>${n} av 10 klara</small><span class="stars">${'⭐'.repeat(st)}<i>${'☆'.repeat(3-st)}</i></span></h3>
+    <div class="lv">${Array.from({length:10},(_,j)=>{const k=si*10+j;if(k>=PZ.length)return '';const b=D.betyg[k]||0,o=open(k);
+      return `<button data-k="${k}" class="${b?'done':''} ${o?'':'lock'}" ${o?'':'aria-disabled="true"'} aria-label="Bana ${k+1}${b?', klar':''}">${o?j+1:'🔒'}${b?`<span class="bt">${'★'.repeat(b)}</span>`:''}</button>`;}).join('')}</div></div>`;}).join('');
+}
+$('sets').addEventListener('click',e=>{const b=e.target.closest('[data-k]');if(!b)return;const k=+b.dataset.k;if(!open(k)){say0('Klara en bana före först.');return;}start(k);});
+function say0(t){const m=document.querySelector('.how');m.innerHTML='<b>'+t+'</b>';setTimeout(home,0);}
+/* ---------- spel ---------- */
+let G=null;
+function cellSize(){return Math.floor(Math.max(240,Math.min(innerWidth-62,innerHeight-380,440))/6);}
+function start(k){
+  const p=PZ[k];const cars=parse(p[0]);
+  G={k,cars,pos:cars.map(c=>c.h?c.c:c.r),start:null,best:p[1],moves:0,hist:[],hints:0,sel:-1,tip:null,over:false,last:-1};
+  G.start=G.pos.slice();
+  show('game');build();
+}
+function build(){
+  const cs=cellSize(),bs=cs*6;document.documentElement.style.setProperty('--bs',bs+'px');document.documentElement.style.setProperty('--cell',cs+'px');G.cs=cs;
+  const B=$('board');B.innerHTML='';
+  const gate=document.createElement('div');gate.className='gate';gate.style.top=(2*cs)+'px';gate.style.height=cs+'px';B.appendChild(gate);
+  const fl=document.createElement('div');fl.className='flag';fl.style.top=(2*cs+cs/2-14)+'px';fl.textContent='🏁';B.appendChild(fl);
+  G.els=G.cars.map((car,i)=>{
+    const e=document.createElement('div');e.className='car '+(car.h?'h':'v')+(i===0?' red':'');e.dataset.i=i;
+    const w=car.h?cs*car.len:cs,h=car.h?cs:cs*car.len;e.style.width=w+'px';e.style.height=h+'px';
+    const color=i===0?'#E5253A':COL[(car.ch.charCodeAt(0)-65)%COL.length];
+    const L2=car.len*100;   // svg i vågrätt läge, pekar åt höger
+    const sw=car.h?w:h,sh=cs;
+    e.innerHTML=`<svg width="${sw}" height="${sh}" viewBox="0 0 ${L2} 100" style="--c:${color}" aria-hidden="true">
+      <rect x="6" y="9" width="${L2-12}" height="82" rx="16" fill="${color}"/>
+      <rect x="6" y="9" width="${L2-12}" height="82" rx="16" fill="none" stroke="rgba(0,0,0,.28)" stroke-width="3"/>
+      <rect x="20" y="22" width="16" height="56" rx="6" fill="#CFE9FF" opacity=".85"/>
+      <rect x="40" y="19" width="${L2-112}" height="62" rx="10" fill="rgba(0,0,0,.22)"/>
+      <rect x="${L2-66}" y="21" width="30" height="58" rx="8" fill="#CFE9FF"/>
+      <rect x="${L2-17}" y="17" width="9" height="15" rx="4" fill="#FFE98A"/><rect x="${L2-17}" y="68" width="9" height="15" rx="4" fill="#FFE98A"/>
+      <rect x="8" y="17" width="7" height="15" rx="3" fill="#8B0F1D"/><rect x="8" y="68" width="7" height="15" rx="3" fill="#8B0F1D"/>
+      ${i===0?`<path d="M${L2/2-6} 38l14 12-14 12" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" opacity=".9" transform="translate(-14 0)"/>`:''}
+    </svg>`;
+    B.appendChild(e);return e;});
+  G.els.forEach((_,i)=>place(i));
+  $('tagA').textContent='Bana '+(G.k+1)+' · '+SETS[Math.floor(G.k/10)][0];
+  paintTop();
+  $('acts').innerHTML='<button class="pill" id="aUndo">↶ Ångra</button><button class="pill" id="aHint">💡 Tips</button><button class="pill" id="aRe">🔄 Börja om</button>';
+  $('aUndo').onclick=undo;$('aHint').onclick=hint;$('aRe').onclick=()=>{if(!G||G.over)return;restart();};
+  say('Dra bilarna ur vägen. Släpp ut den <b>röda bilen</b> åt höger!');
+}
+function paintTop(){$('tagB').textContent='Drag: '+G.moves+' · bäst '+G.best;}
+function say(t){$('msg').innerHTML=t;}
+function place(i,px){const e=G.els&&G.els[i]||null;if(!e)return;const car=G.cars[i],cs=G.cs;
+  const p=px!==undefined?px:G.pos[i]*cs;
+  const x=car.h?p:car.c*cs,y=car.h?car.r*cs:p;e.style.left='0px';e.style.top='0px';e.style.transform=`translate(${x}px,${y}px)`;}
+function occ(skip){const o=Array(36).fill(-1);G.cars.forEach((c,i)=>{if(i===skip)return;for(let k=0;k<c.len;k++){const r=c.h?c.r:G.pos[i]+k,cc=c.h?G.pos[i]+k:c.c;o[r*6+cc]=i;}});return o;}
+function range(i){const c=G.cars[i],o=occ(i);let lo=G.pos[i],hi=G.pos[i];
+  const at=p=>{const r=c.h?c.r:p,cc=c.h?p:c.c;return o[r*6+cc];};
+  while(lo>0&&at(lo-1)===-1)lo--;
+  while(hi+c.len<6&&at(hi+c.len)===-1)hi++;
+  return [lo,hi];}
+/* dra */
+let dr=null;
+$('board').addEventListener('pointerdown',e=>{const el=e.target.closest('.car');if(!el||!G||G.over)return;
+  const i=+el.dataset.i,car=G.cars[i],[lo,hi]=range(i);
+  dr={i,el,lo,hi,start:G.pos[i],x0:car.h?e.clientX:e.clientY,moved:false,pid:e.pointerId,cur:G.pos[i]};
+  try{el.setPointerCapture(e.pointerId);}catch(_){}
+  el.classList.add('drag');select(i);clearTip();e.preventDefault();});
+$('board').addEventListener('pointermove',e=>{if(!dr||e.pointerId!==dr.pid)return;const car=G.cars[dr.i];
+  const d=((car.h?e.clientX:e.clientY)-dr.x0)/G.cs;if(Math.abs(d)>.08)dr.moved=true;
+  let p=dr.start+d;p=Math.max(dr.lo,Math.min(dr.hi,p));dr.cur=p;place(dr.i,p*G.cs);});
+function endDrag(e){if(!dr||(e&&e.pointerId!==dr.pid))return;const {i,el}=dr;el.classList.remove('drag');
+  const np=Math.round(dr.cur);const was=G.pos[i];
+  if(np!==was){commit(i,np);}else place(i);
+  dr=null;}
+$('board').addEventListener('pointerup',endDrag);$('board').addEventListener('pointercancel',endDrag);
+function commit(i,np,noHist){
+  if(!noHist)G.hist.push({pos:G.pos.slice(),moves:G.moves,last:G.last});
+  G.pos[i]=np;G.moves++;G.last=i;place(i);paintTop();
+  if(L().clonk)L().clonk();else if(L().pop)L().pop();
+  say(G.moves>G.best+6?'Det går att klara med färre drag. Prova 💡 Tips eller 🔄 Börja om.':'');
+  if(i===0&&np===4)finish();
+}
+function select(i){G.sel=i;G.els.forEach((e,k)=>e.classList.toggle('sel',k===i));}
+function clearTip(){G.tip=null;G.els.forEach(e=>e.classList.remove('tip'));document.querySelectorAll('.arrow').forEach(a=>a.remove());}
+addEventListener('keydown',e=>{if(!G||$('game').hidden||G.over||G.sel<0)return;const i=G.sel,car=G.cars[i];
+  const map=car.h?{ArrowLeft:-1,ArrowRight:1}:{ArrowUp:-1,ArrowDown:1};
+  if(map[e.key]===undefined){if(e.key==='z'&&(e.ctrlKey||e.metaKey)){undo();e.preventDefault();}return;}
+  const [lo,hi]=range(i),np=G.pos[i]+map[e.key];e.preventDefault();
+  if(np<lo||np>hi)return;
+  if(G.last===i&&G.hist.length){G.pos[i]=np;place(i);if(i===0&&np===4)finish();}   // flera steg i rad med samma bil räknas som ett drag
+  else commit(i,np);
+});
+function undo(){if(!G||G.over||!G.hist.length)return;const h=G.hist.pop();G.pos=h.pos;G.moves=h.moves;G.last=h.last;G.els.forEach((_,i)=>place(i));paintTop();clearTip();}
+function restart(){G.pos=G.start.slice();G.moves=0;G.hist=[];G.last=-1;clearTip();G.els.forEach((_,i)=>place(i));paintTop();say('Börja om. Du klarar det!');}
+function hint(){
+  if(!G||G.over)return;clearTip();
+  const sol=bfs(G.cars,G.pos);if(!sol||!sol.length)return;
+  const m=sol[0],car=G.cars[m.car];G.hints++;G.tip=m;
+  G.els[m.car].classList.add('tip');select(m.car);
+  const a=document.createElement('div');a.className='arrow';
+  const cs=G.cs,dir=m.to>G.pos[m.car]?1:-1;
+  const ex=car.h?(dir>0?(G.pos[m.car]+car.len)*cs:(G.pos[m.car]-1)*cs):car.c*cs,ey=car.h?car.r*cs:(dir>0?(G.pos[m.car]+car.len)*cs:(G.pos[m.car]-1)*cs);
+  a.style.left=(ex+cs/2-14)+'px';a.style.top=(ey+cs/2-18)+'px';a.textContent=car.h?(dir>0?'➡️':'⬅️'):(dir>0?'⬇️':'⬆️');$('board').appendChild(a);
+  say('💡 Flytta den lysande bilen '+(car.h?(dir>0?'åt höger':'åt vänster'):(dir>0?'nedåt':'uppåt'))+'. Det går att klara på <b>'+sol.length+'</b> drag härifrån.');
+}
+function finish(){
+  G.over=true;clearTip();select(-1);
+  const el=G.els[0];el.classList.add('out');el.style.transform=`translate(${6*G.cs+60}px,${2*G.cs}px)`;
+  if(L().fanfare)L().fanfare();
+  const extra=Math.max(2,Math.round(G.best*.35));
+  let stars=G.moves<=G.best?3:G.moves<=G.best+extra?2:1;if(G.hints>0&&stars>2)stars=2;
+  const k=G.k;if(stars>(D.betyg[k]||0)){D.betyg[k]=stars;}else if(!D.betyg[k])D.betyg[k]=stars;
+  recompute();
+  setTimeout(()=>{
+    $('rTitle').textContent=stars===3?'Perfekt!':'Ute!';
+    $('rStars').textContent='⭐'.repeat(stars);
+    $('rText').textContent=(stars===3?'Du klarade den på så få drag som det går: ':'Du klarade den på ')+G.moves+' drag'+(stars===3?'.':'. Det finns en lösning med '+G.best+'.');
+    const nx=G.k+1<PZ.length;$('rNext').hidden=!nx;
+    $('rNext').onclick=()=>start(G.k+1);$('rAgain').onclick=()=>start(G.k);
+    show('result');
+  },1100);
+}
+function hem(){G=null;home();show('home');}
+$('rHome').onclick=hem;
+addEventListener('resize',()=>{if(G&&!G.over&&!$('game').hidden){const keep=G;build();}});
+home();
+window.MPTraf={hem,get G(){return G;},start,bfs,parse,PZ,commit,range};
+})();
+</script>
+</body>
+</html>
