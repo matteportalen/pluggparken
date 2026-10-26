@@ -63,9 +63,14 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 .pet.hopp{animation:hopp .55s ease}
 @keyframes hopp{40%{transform:translateY(-18px)}}
 .kort{background:var(--card);border-radius:22px;box-shadow:0 4px 0 var(--line);padding:16px}
-.fraga{text-align:center;font-weight:800;color:var(--muted);margin:0 0 10px;font-size:1rem}
-.fb{text-align:center;font-weight:700;margin:12px 0 0;min-height:2.6em;font-size:1.02rem}
-.fb.ratt{color:var(--good-dark)}.fb.fel{color:#B4232A}
+.fraga{text-align:center;font-weight:800;color:var(--ink);margin:0 0 14px;font-size:1.2rem;line-height:1.2;text-wrap:balance}
+.fraga small{display:block;font-weight:700;color:var(--muted);font-size:.92rem;margin-top:3px}
+.fb{text-align:center;font-weight:700;margin:14px auto 0;max-width:640px;border-radius:18px;padding:12px 18px 14px;font-size:1.05rem;line-height:1.35}
+.fb:empty{display:none}
+.fb strong{display:block;font-size:1.45rem;line-height:1.1;margin-bottom:3px}
+.fb.ratt{background:var(--ok-bg,#E6F7EE);border:3px solid var(--good);color:var(--ok-ink,var(--good-dark));box-shadow:0 4px 0 var(--good)}
+.fb.fel{background:var(--err-bg,#FDE7E8);border:3px solid #F0A3A6;color:var(--err-ink,#8F1D22);box-shadow:0 4px 0 #F0A3A6}
+@media(min-width:800px){.fraga{font-size:1.55rem;margin-bottom:18px}.fraga small{font-size:1.02rem}.fb{font-size:1.18rem;padding:14px 22px 16px}.fb strong{font-size:1.8rem}.vy p{font-size:1.35rem!important;color:var(--ink)!important}}
 .knapp{display:inline-block;background:var(--good);color:#fff;border-radius:16px;padding:12px 26px;font-weight:800;font-size:1.15rem;box-shadow:0 5px 0 var(--good-dark);margin:6px}
 .knapp.vit{background:var(--card);color:var(--ink);box-shadow:0 5px 0 var(--line)}
 .knapp.bla{background:var(--accent);box-shadow:0 5px 0 #2A3FB8}
@@ -103,7 +108,7 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 .vy{display:flex;gap:14px;align-items:center;margin-bottom:12px}
 .vy .tk{width:120px;cursor:default;touch-action:auto}
 .vy .tk img{height:88px}
-.vy p{margin:0;font-weight:700;color:var(--muted);font-size:1rem}
+.vy p{margin:0;font-weight:800;color:var(--ink);font-size:1.15rem;line-height:1.2}
 .axel{position:relative;height:74px;margin:56px 8px 8px;touch-action:none;cursor:pointer}
 .axel .linje{position:absolute;left:0;right:0;top:34px;height:10px;border-radius:6px;overflow:hidden;display:flex;box-shadow:inset 0 0 0 2px rgba(29,43,83,.15)}
 .axel .linje span{height:100%}
@@ -163,13 +168,13 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
   <button type="button" data-home hidden tabindex="-1" aria-hidden="true" onclick="hem()"></button>
   <div class="topp"><span class="lagt">⏳ Bygg tidslinjen</span><span style="flex:1"></span><span class="pet" id="pet1"></span></div>
   <div class="kort">
-    <div class="fraga" id="oFraga">Sätt bilderna i rätt ordning. Äldst först, nyast sist.</div>
+    <div class="fraga" id="oFraga">⏳ Sätt bilderna i rätt ordning<small>Äldst först, nyast sist. Dra bilderna, eller tryck på en bild och sedan på en ruta.</small></div>
     <div class="pilrad"><span>◀ Äldst</span><span>Nyast ▶</span></div>
     <div class="slots" id="oSlots"></div>
     <div class="tray" id="oTray" aria-label="Bilder att placera"></div>
   </div>
-  <div class="rad"><button class="knapp" id="oKolla" disabled>Kolla ✓</button><button class="knapp bla" id="oNasta" hidden>Fortsätt ▶</button></div>
   <div class="fb" id="oFb" aria-live="polite"></div>
+  <div class="rad"><button class="knapp" id="oKolla" disabled>Kolla ✓</button><button class="knapp bla" id="oNasta" hidden>Fortsätt ▶</button></div>
 </section>
 
 <section class="screen" id="langt" hidden>
@@ -180,21 +185,21 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
     <div class="axel" id="lAxel" aria-label="Tidslinje från 12 000 år sedan till i dag"></div>
     <div class="axtips" id="lTips">Tryck eller dra på linjen och sätt nålen där du tror att bilden hör hemma. Siffrorna är hur många år sedan.</div>
   </div>
-  <div class="rad"><button class="knapp" id="lKlar" disabled>Klar ✓</button><button class="knapp bla" id="lNasta" hidden>Nästa ▶</button></div>
   <div class="fb" id="lFb" aria-live="polite"></div>
+  <div class="rad"><button class="knapp" id="lKlar" disabled>Klar ✓</button><button class="knapp bla" id="lNasta" hidden>Nästa ▶</button></div>
 </section>
 
 <section class="screen" id="detektiv" hidden>
   <button type="button" data-home hidden tabindex="-1" aria-hidden="true" onclick="hem()"></button>
   <div class="topp"><div class="dots" id="dDots"></div><span class="lagt">🕵️ Ledtrådsdetektiven</span><span class="pet" id="pet3"></span></div>
   <div class="kort">
-    <div class="fraga" id="dFraga">Vilken tid hör bilden till? Läs ledtrådarna och välj.</div>
+    <div class="fraga" id="dFraga">🕵️ Vilken tid hör bilden till?<small>Läs ledtrådarna, tänk efter och välj tiden nedanför.</small></div>
     <div class="detek"><div class="stor" id="dStor"></div><div class="led" id="dLed"></div></div>
     <div class="band" id="dBand"></div>
     <div class="poang" id="dPoang"></div>
   </div>
-  <div class="rad"><button class="knapp bla" id="dNasta" hidden>Nästa ▶</button></div>
   <div class="fb" id="dFb" aria-live="polite"></div>
+  <div class="rad"><button class="knapp bla" id="dNasta" hidden>Nästa ▶</button></div>
 </section>
 
 <section class="screen res" id="result" hidden>
@@ -277,6 +282,7 @@ function hem(){
   show("home");}
 $("lagen").onclick=e=>{const b=e.target.closest("[data-l]");if(!b)return;({ordna:startOrdna,langt:startLangt,detektiv:startDetektiv})[b.dataset.l]();};
 $("kallor").innerHTML=KORT.map(k=>{const c=KRED[k.id]||{k:"",s:"#"};return`<li>${k.namn}: <a href="${c.s}" target="_blank" rel="noopener">${c.k||"Wikimedia Commons"}</a></li>`}).join("");
+function sag(el,typ,rub,txt){el.className="fb "+typ;el.innerHTML=`<strong>${rub}</strong><span>${txt}</span>`;try{el.scrollIntoView({block:"nearest",behavior:reduced()?"auto":"smooth"})}catch(e){}}
 function haj(n){const p=$(n);if(!p)return;p.classList.remove("hopp");void p.offsetWidth;p.classList.add("hopp");}
 function prickar(id,n,i,res){$(id).innerHTML=Array.from({length:n},(_,j)=>`<i class="${j<i?(res[j]?"ok":"f"):j===i?"nu":""}"></i>`).join("");}
 let LAST=null;
@@ -332,11 +338,11 @@ $("oKolla").onclick=()=>{if(O.klar)return;O.fors++;const fel=[];
   const fb=$("oFb");
   if(!fel.length){O.klar=true;O.felNu=new Set();ritaOrdna();window.Ljud&&Ljud.ok&&Ljud.ok();haj("pet1");
     const a=KORT_BY[O.fasit[0]],b=KORT_BY[O.fasit[5]];
-    fb.className="fb ratt";fb.textContent=`Rätt! Från det äldsta till det nyaste kortet är det ca ${fmt(ago(a)-ago(b))} år.`;
+    sag(fb,"ratt","Rätt! 🎉",`Från det äldsta till det nyaste kortet är det ca ${fmt(ago(a)-ago(b))} år.`);
     $("oKolla").hidden=true;$("oNasta").hidden=false;return;}
   window.Ljud&&Ljud.bad&&Ljud.bad();O.felNu=new Set(fel);ritaOrdna();
   const k=KORT_BY[O.slots[fel[0]]];
-  fb.className="fb fel";fb.textContent=`${6-fel.length} av 6 ligger rätt. Fundera på ${k.namn}: ${k.l[1]}`;
+  sag(fb,"fel",`${6-fel.length} av 6 ligger rätt`,`Fundera på ${k.namn}: ${k.l[1]}`);
   setTimeout(()=>{if(O.klar)return;fel.forEach(i=>{O.tray.push(O.slots[i]);O.slots[i]=null;});O.felNu=new Set();ritaOrdna();},1100);};
 $("oNasta").onclick=()=>{const st=O.fors===1?3:O.fors===2?2:1;resultat("ordna",st,O.fors===1?"Alla sex på rätt plats på första försöket!":`Du klarade det på ${O.fors} försök. Spela igen och se om du kan få det på första!`);};
 
@@ -352,7 +358,7 @@ function startLangt(){
     ax.innerHTML=`<div class="linje">${band}</div>${tick}<div class="pinne" id="lPin" hidden></div><div class="pinne sann" id="lSann" hidden></div>`;}
   show("langt");nastaL();}
 function nastaL(){const k=L.set[L.i];L.pos=null;L.gjort=false;
-  prickar("lDots",6,L.i,L.res);$("lKort").innerHTML=tk(k);$("lFraga").textContent="Hur länge sedan var det här? Sätt nålen på linjen. Längst till höger är nu.";
+  prickar("lDots",6,L.i,L.res);$("lKort").innerHTML=tk(k);$("lFraga").innerHTML="📏 Hur länge sedan var det här?<small style=\"display:block;font-weight:700;color:var(--muted);font-size:.9em;margin-top:3px\">Sätt nålen på linjen. Längst till höger är nu.</small>";
   $("lPin").hidden=true;$("lSann").hidden=true;$("lFb").textContent="";$("lFb").className="fb";$("lKlar").disabled=true;$("lKlar").hidden=false;$("lNasta").hidden=true;$("lTips").hidden=false;}
 function axPos(e){const r=$("lAxel").getBoundingClientRect();return Math.max(0,Math.min(1,(e.clientX-r.left)/r.width));}
 let AD=false;
@@ -364,9 +370,9 @@ $("lKlar").onclick=()=>{if(L.gjort||L.pos==null)return;L.gjort=true;const k=L.se
   const sann=ago(k),gissat=(1-L.pos)*AXELAR,fel=Math.abs(gissat-sann),ok=fel<=TOL;L.res[L.i]=ok;L.err.push(fel);
   const s=$("lSann");s.hidden=false;s.style.left=((1-sann/AXELAR)*100)+"%";s.innerHTML=`<em>${arTxt(k)}</em>`;
   $("lKort").innerHTML=tk(k,{ar:true});$("lTips").hidden=true;
-  const fb=$("lFb");fb.className="fb "+(ok?"ratt":"fel");
-  if(ok){window.Ljud&&Ljud.ok&&Ljud.ok();haj("pet2");fb.textContent=`Nära! ${k.namn} är från ${arTxt(k)}, ungefär ${fmt(sann)} år sedan. ${k.f}`;}
-  else{window.Ljud&&Ljud.bad&&Ljud.bad();fb.textContent=`${k.namn} är från ${arTxt(k)}, ungefär ${fmt(sann)} år sedan. Det var ${gissat>sann?"senare":"tidigare"} än du trodde. ${k.f}`;}
+  const fb=$("lFb");
+  if(ok){window.Ljud&&Ljud.ok&&Ljud.ok();haj("pet2");sag(fb,"ratt","Nära! 🎉",`${k.namn} är från ${arTxt(k)}, ungefär ${fmt(sann)} år sedan. ${k.f}`);}
+  else{window.Ljud&&Ljud.bad&&Ljud.bad();sag(fb,"fel",`Det var ${gissat>sann?"senare":"tidigare"} än du trodde`,`${k.namn} är från ${arTxt(k)}, ungefär ${fmt(sann)} år sedan. ${k.f}`);}
   prickar("lDots",6,L.i+1,L.res);$("lKlar").hidden=true;$("lNasta").hidden=false;$("lNasta").focus({preventScroll:true});};
 $("lNasta").onclick=()=>{L.i++;if(L.i>=6){slutL();return;}nastaL();};
 function slutL(){const ok=L.res.filter(Boolean).length,st=ok>=5?3:ok>=3?2:1,snitt=L.err.reduce((a,b)=>a+b,0)/L.err.length;
@@ -387,11 +393,11 @@ function ritaD(){const k=D.set[D.i];
 $("dLed").onclick=e=>{const b=e.target.closest("[data-led]");if(!b||D.gjort)return;D.vis=Math.min(3,D.vis+1);ritaD();};
 $("dBand").onclick=e=>{const b=e.target.closest("[data-e]");if(!b||D.gjort)return;const k=D.set[D.i],val=b.dataset.e,fb=$("dFb");
   if(val===k.era){const p=Math.max(1,3-(D.vis-1)-D.fel);D.poang[D.i]=p;D.res[D.i]=p>=2;D.gjort=true;window.Ljud&&Ljud.ok&&Ljud.ok();haj("pet3");
-    fb.className="fb ratt";fb.textContent=`Rätt! ${k.namn} är från ${arTxt(k)+(k.ar<0?"":".")} ${k.f} (+${p} poäng)`;ritaD();prickar("dDots",6,D.i+1,D.res);$("dNasta").hidden=false;$("dNasta").focus({preventScroll:true});return;}
+    sag(fb,"ratt",`Rätt! 🎉 +${p} ${p===1?"poäng":"poäng"}`,`${k.namn} är från ${arTxt(k)+(k.ar<0?"":".")} ${k.f}`);ritaD();prickar("dDots",6,D.i+1,D.res);$("dNasta").hidden=false;$("dNasta").focus({preventScroll:true});return;}
   D.fel++;D.fel_e.add(val);window.Ljud&&Ljud.bad&&Ljud.bad();
   const ei=ERA.findIndex(e=>e.id===k.era),vi=ERA.findIndex(e=>e.id===val),nara=Math.abs(ei-vi)===1;
-  if(D.fel>=2){D.poang[D.i]=0;D.res[D.i]=false;D.gjort=true;fb.className="fb fel";fb.textContent=`Det var ${ERA_BY[k.era].namn}. ${k.namn} är från ${arTxt(k)+(k.ar<0?"":".")} ${k.f}`;ritaD();prickar("dDots",6,D.i+1,D.res);$("dNasta").hidden=false;return;}
-  fb.className="fb fel";fb.textContent=`${nara?"Nästan! ":""}Det var ${ei>vi?"senare":"tidigare"} än så.${D.vis<3?" Du kan visa en ledtråd till.":""}`;ritaD();};
+  if(D.fel>=2){D.poang[D.i]=0;D.res[D.i]=false;D.gjort=true;sag(fb,"fel",`Det var ${ERA_BY[k.era].namn}`,`${k.namn} är från ${arTxt(k)+(k.ar<0?"":".")} ${k.f}`);ritaD();prickar("dDots",6,D.i+1,D.res);$("dNasta").hidden=false;return;}
+  sag(fb,"fel",`${nara?"Nästan! ":""}Det var ${ei>vi?"senare":"tidigare"} än så`,`Prova igen.${D.vis<3?" Du kan också visa en ledtråd till.":""}`);ritaD();};
 $("dNasta").onclick=()=>{D.i++;if(D.i>=6){slutD();return;}nastaD();};
 function slutD(){const tot=D.poang.reduce((a,b)=>a+(b||0),0),st=tot>=14?3:tot>=9?2:1;
   resultat("detektiv",st,`Du fick ${tot} poäng av 18. Ju färre ledtrådar och försök du behöver, desto fler poäng.`);}
