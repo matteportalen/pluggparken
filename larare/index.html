@@ -135,6 +135,9 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 .w.lapp .wh button{width:26px;height:26px;background:rgba(0,0,0,.1);color:#4A3F00;opacity:.25;font-size:.9rem}
 .w.lapp:hover .wh button,.w.lapp:focus-within .wh button{opacity:1}
 .w.lapp .wb{padding:8px 12px 18px}
+.w.dold .wb{display:none}
+.w.dold .wh{border-radius:12px}
+.w.dold{min-width:0}
 .w.video{width:480px;max-width:none;min-width:300px}
 .w.video .wb{padding:8px}
 .vram{aspect-ratio:16/9;background:#111;border-radius:10px;overflow:hidden;display:grid;place-items:center;color:#cfd6ea;font-weight:700;text-align:center}
@@ -329,10 +332,10 @@ function ritaAlla(){const kvar={};document.querySelectorAll('.w[data-video="1"]'
 function elOf(id){return document.querySelector(`.w[data-id="${id}"]`);}
 function fram(id){const e=elOf(id);if(e)e.style.zIndex=++z;}
 function farg(w){return w.typ==="lista"?TYPFARG[w.d.farg||"lista"]:TYPFARG[w.typ]||"#3D5AFE";}
-function bygg(w){const e=document.createElement("div");e.className="w"+(w.typ==="text"?" lapp c-"+(w.d.c||"gul"):w.typ==="skrivrad"?" skrivrad":w.typ==="video"?" video":"");e.dataset.id=w.id;if(w.typ==="video")e.dataset.video="1";
+function bygg(w){const e=document.createElement("div");e.className="w"+(w.typ==="text"?" lapp c-"+(w.d.c||"gul"):w.typ==="skrivrad"?" skrivrad":w.typ==="video"?" video":"")+(w.min?" dold":"");e.dataset.id=w.id;if(w.typ==="video")e.dataset.video="1";
   e.style.cssText=`left:${w.x}px;top:${w.y}px;transform:${tf(w)};z-index:${++z};--c:${farg(w)}`;
   const titel=w.typ==="lista"?`<input value="${esc(w.d.titel)}" placeholder="Rubrik" aria-label="Rubrik">`:`<b>${{timer:"⏱️ Timer",hjul:"🎡 Lyckohjul",text:"",ljud:"🔊 Ljudnivå",skrivrad:"✍️ Skrivrad",video:"▶️ Video"}[w.typ]}</b>`;
-  e.innerHTML=`<div class="wh">${titel}${w.typ==="text"?`<button data-a="farg" title="Byt färg" aria-label="Byt färg">🎨</button>`:""}<button data-a="minus" title="Mindre" aria-label="Mindre">−</button><button data-a="plus" title="Större" aria-label="Större">+</button><button data-a="x" title="Ta bort" aria-label="Ta bort rutan">✕</button></div><div class="wb"></div>`;
+  e.innerHTML=`<div class="wh">${titel}${w.typ==="text"?`<button data-a="farg" title="Byt färg" aria-label="Byt färg">🎨</button>`:""}${w.typ==="text"||w.typ==="skrivrad"?"":`<button data-a="dolj" title="${w.min?"Visa innehållet igen":"Dölj innehållet (det finns kvar)"}" aria-label="${w.min?"Visa innehållet":"Dölj innehållet"}">${w.min?"👁️":"🙈"}</button>`}<button data-a="minus" title="Mindre" aria-label="Mindre">−</button><button data-a="plus" title="Större" aria-label="Större">+</button><button data-a="x" title="Ta bort" aria-label="Ta bort rutan">✕</button></div><div class="wb"></div>`;
   fyll(e,w);return e;}
 function fyllSkrivrad(b){const r=skrivBild(34);b.style.height=r.H+"px";b.style.backgroundImage=r.img;b.style.backgroundSize="24px "+r.H+"px";}
 /* video: inbäddad YouTube-spelare (youtube-nocookie), länk eller spellista, favoriter i S.fav */
@@ -364,6 +367,7 @@ let dra=null;
 $("widgets").addEventListener("pointerdown",e=>{const w=e.target.closest(".w");if(!w)return;fram(w.dataset.id);
   const a=e.target.closest("[data-a]");if(a){const o=S.widgets.find(x=>x.id===w.dataset.id);
     if(a.dataset.a==="x"){if(o.typ==="timer")delete CLOCK[o.id];if(o.typ==="ljud")stoppaMatare(o.id);S.widgets=S.widgets.filter(x=>x!==o);w.remove();}
+    else if(a.dataset.a==="dolj"){o.min=!o.min;w.classList.toggle("dold",o.min);a.textContent=o.min?"👁️":"🙈";a.title=o.min?"Visa innehållet igen":"Dölj innehållet (det finns kvar)";a.setAttribute("aria-label",o.min?"Visa innehållet":"Dölj innehållet");}
     else if(a.dataset.a==="farg"){const i=(LAPPFARG.indexOf(o.d.c||"gul")+1)%4;w.classList.remove("c-"+(o.d.c||"gul"));o.d.c=LAPPFARG[i];w.classList.add("c-"+o.d.c);}
     else{o.s=Math.max(.6,Math.min(2.6,(o.s||1)*(a.dataset.a==="plus"?1.2:1/1.2)));w.style.transform=tf(o);}
     spara();return;}
@@ -493,7 +497,7 @@ function stoppaMatare(id){const m=MAT[id];if(!m)return;cancelAnimationFrame(m.ra
 const TYPER=["lista","timer","hjul","text","ljud","skrivrad","video"];
 const JPG=/^data:image\/jpeg;base64,[A-Za-z0-9+\/=]*$/;
 const tal=(v,a,b,d)=>{v=+v;return Number.isFinite(v)?Math.max(a,Math.min(b,v)):d;};
-function renaWidget(o,medNamn){if(!o||!TYPER.includes(o.typ))return null;const d=o.d||{},n={id:uid(),typ:o.typ,x:tal(o.x,-60,3000,100),y:tal(o.y,0,3000,100),s:tal(o.s,.6,2.6,1),d:{}};
+function renaWidget(o,medNamn){if(!o||!TYPER.includes(o.typ))return null;const d=o.d||{},n={id:uid(),typ:o.typ,min:!!o.min,x:tal(o.x,-60,3000,100),y:tal(o.y,0,3000,100),s:tal(o.s,.6,2.6,1),d:{}};
   if(o.typ==="lista"){n.d={titel:String(d.titel||"").slice(0,40),farg:d.farg==="lista2"?"lista2":"lista",items:(Array.isArray(d.items)?d.items:[]).slice(0,30).map(i=>({k:String((i&&i.k)||"bok").slice(0,40),t:i&&i.t?String(i.t).slice(0,30):undefined,sid:String((i&&i.sid)||"").slice(0,30),img:i&&typeof i.img==="string"&&JPG.test(i.img)&&i.img.length<120000?i.img:"",e:i&&i.e?String(i.e).slice(0,8):"",bok:!!(i&&i.bok)}))};}
   else if(o.typ==="timer")n.d={tot:tal(d.tot,60,7200,300)};
   else if(o.typ==="hjul")n.d={namn:medNamn&&Array.isArray(d.namn)?d.namn.slice(0,60).map(x=>String(x).slice(0,30)):[],tabort:!!d.tabort,rot:0,n:tal(d.n,2,60,25)};
