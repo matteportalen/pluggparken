@@ -195,14 +195,15 @@ const $=id=>document.getElementById(id);
 const KEY="pluggparken-larare-v1";   // sparas bara i den här webbläsaren, aldrig i molnet (innehåller bl.a. elevnamn till lyckohjulet)
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,5);
 const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const SAKER=[["penna","✏️","Penna"],["sudd","SVG:sudd","Sudd"],["fargpennor","🖍️","Färgpennor"],["mattebok","📘","Mattebok",1],["lasbok","📖","Läsebok",1],["skrivbok","📓","Skrivbok",1],["linjal","📏","Linjal"],["sax","✂️","Sax"],["lim","SVG:lim","Limstift"],["dator","💻","Dator"],["platta","📱","Surfplatta"],["horlurar","🎧","Hörlurar"],["minir","🧮","Räknehjälp"],["anteckn","📝","Anteckningsbok"],["flaska","🥤","Vattenflaska"],["frukt","🍎","Frukt"],["mellanmal","🥪","Mellanmål"],["gympa","👟","Gympakläder"],["ytter","🧥","Ytterkläder"],["bok","📚","Annan bok",1]];
+const SAKER=[["penna","✏️","Penna"],["sudd","SVG:sudd","Sudd"],["fargpennor","🖍️","Färgpennor"],["mattebok","📘","Mattebok",1],["lasbok","📖","Läsebok",1],["skrivbok","📓","Skrivbok",1],["linjal","📏","Linjal"],["sax","✂️","Sax"],["lim","SVG:lim","Limstift"],["dator","💻","Dator"],["platta","📱","Surfplatta"],["horlurar","🎧","Hörlurar"],["minir","🧮","Räknehjälp"],["anteckn","📝","Anteckningsbok"],["frukt","🍎","Frukt"],["gympa","👟","Gympakläder"],["bok","📚","Annan bok",1]];
 const SVG={sudd:'<svg viewBox="0 0 64 40" aria-hidden="true"><rect x="4" y="8" width="56" height="26" rx="6" fill="#F4A6C0" stroke="#C0527A" stroke-width="3"/><rect x="4" y="8" width="26" height="26" rx="6" fill="#fff" stroke="#C0527A" stroke-width="3"/></svg>',lim:'<svg viewBox="0 0 40 64" aria-hidden="true" style="width:40px;height:56px"><rect x="8" y="24" width="24" height="34" rx="5" fill="#4C8DFF" stroke="#2A3FB8" stroke-width="3"/><rect x="12" y="6" width="16" height="20" rx="3" fill="#fff" stroke="#2A3FB8" stroke-width="3"/></svg>'};
 const ikon=k=>{const s=SAKER.find(x=>x[0]===k);if(!s)return"📌";return s[1].startsWith("SVG:")?SVG[s[1].slice(4)]:s[1];};
 const EMO=["📘","📗","📕","📙","📖","📚","📓","📝","✏️","🖍️","🖊️","📏","📐","✂️","🧮","💻","📱","🎧","🎒","🍎","🍌","🥪","🥤","🧥","👟","🧤","🎨","🎵","⚽","🔬","🌍","🧩","📎","🗂️","📁","🧪","🔭","🎲","🎻","⭐"];
 /* min lista: grundförslagen (SAKER) kan redigeras; listan ligger i S.bank (null = grundlistan) */
 const grund=()=>SAKER.map(([k,e,n,bok])=>({k,e:e.startsWith("SVG:")?"":e,svg:e.startsWith("SVG:")?e.slice(4):"",n,bok:!!bok,img:""}));
 const bank=()=>Array.isArray(S&&S.bank)?S.bank:grund();
-const sak=k=>bank().find(x=>x.k===k)||grund().find(x=>x.k===k)||null;
+const GAMLA=[["flaska","🥤","Vattenflaska"],["mellanmal","🥪","Mellanmål"],["ytter","🧥","Ytterkläder"]].map(([k,e,n])=>({k,e,n,svg:"",bok:false,img:""}));  /* inte längre förslag, men finns kvar på tavlor där de redan ligger */
+const sak=k=>bank().find(x=>x.k===k)||grund().find(x=>x.k===k)||GAMLA.find(x=>x.k===k)||null;
 const ico=x=>x.img?`<img class="eg" src="${x.img}" alt="">`:x.svg?SVG[x.svg]:esc(x.e||"📌");
 const alleListor=()=>S.widgets.filter(x=>x.typ==="lista").forEach(x=>{const e=elOf(x.id);if(e)fyllLista(e.querySelector(".wb"),x);});
 const FARGER=["#1D2B53","#E5484D","#2F6BFF","#1E9E5E","#F2780C","#7B61FF","#FFFFFF"];
