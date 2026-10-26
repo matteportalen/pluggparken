@@ -69,7 +69,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 .wb{padding:12px;user-select:text;-webkit-user-select:text}
 /* lista */
 .saker{display:flex;flex-wrap:wrap;gap:10px;min-height:56px}
-.it{position:relative;width:104px;text-align:center;background:#F6F9FF;border:2px solid var(--line);border-radius:16px;padding:8px 4px 6px}
+.it{position:relative;width:112px;text-align:center;background:#F6F9FF;border:2px solid var(--line);border-radius:16px;padding:8px 4px 6px}
 .it .ik{font-size:3rem;line-height:1.1;height:3.4rem;display:grid;place-items:center}
 .it .ik svg{width:64px;height:44px}
 .it .n{display:block;font-weight:800;font-size:.95rem;line-height:1.1;margin-top:2px}
@@ -77,6 +77,17 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 .it .x{position:absolute;right:3px;top:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 0 var(--line);font-size:.7rem;font-weight:800;opacity:0}
 .it:hover .x,.it:focus-within .x{opacity:1}
 .tomrad{color:var(--muted);font-weight:700;align-self:center}
+.it .ik img.eg{width:78px;height:62px;object-fit:cover;border-radius:10px;display:block}
+.it .bi{position:absolute;left:3px;top:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 0 var(--line);font-size:.8rem;opacity:0}
+.it:hover .bi,.it:focus-within .bi{opacity:1}
+.it textarea.en{width:94%;margin-top:2px;font:inherit;font-weight:800;font-size:.95rem;line-height:1.1;text-align:center;border:2px solid #B9C9EE;border-radius:10px;padding:3px;background:#fff;color:var(--ink);resize:none;overflow:hidden}
+@media(hover:none){.it .x,.it .bi{opacity:.85}}
+.egenform{flex:1 1 100%;display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;background:#F1F6FF;border:2px dashed var(--line);border-radius:14px;padding:10px}
+.egenform input[type=text]{grid-column:1/-1;font:inherit;font-weight:700;border:2px solid var(--line);border-radius:10px;padding:6px 10px;color:var(--ink);background:#fff}
+.egenform label{font-weight:800;font-size:.95rem;display:flex;gap:6px;align-items:center;cursor:pointer}
+.egenform .bildv{background:#fff;border:2px solid var(--line);border-radius:10px;padding:4px 10px}
+.egenform .bildv img{width:34px;height:28px;object-fit:cover;border-radius:6px}
+.egenform .ok{grid-column:1/-1;background:var(--good);color:#fff;border-radius:12px;padding:8px;font-weight:800;font-size:1.05rem}
 .palett{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;padding-top:10px;border-top:2px dashed var(--line)}
 .palett button{width:60px;height:56px;border-radius:12px;background:#F1F6FF;border:2px solid var(--line);font-size:1.7rem;line-height:1;display:grid;place-items:center}
 .palett button.on{border-color:var(--good);background:#E6F7EE}
@@ -166,7 +177,7 @@ const $=id=>document.getElementById(id);
 const KEY="pluggparken-larare-v1";   // sparas bara i den här webbläsaren, aldrig i molnet (innehåller bl.a. elevnamn till lyckohjulet)
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,5);
 const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const SAKER=[["penna","✏️","Penna"],["sudd","SVG:sudd","Sudd"],["fargpennor","🖍️","Färgpennor"],["mattebok","📘","Mattebok",1],["lasbok","📖","Läsebok",1],["skrivbok","📓","Skrivbok",1],["linjal","📏","Linjal"],["sax","✂️","Sax"],["lim","SVG:lim","Limstift"],["dator","💻","Dator"],["platta","📱","Surfplatta"],["horlurar","🎧","Hörlurar"],["minir","🧮","Räknehjälp"],["anteckn","📝","Anteckningsbok"],["flaska","🥤","Vattenflaska"],["bok","📚","Annan bok",1]];
+const SAKER=[["penna","✏️","Penna"],["sudd","SVG:sudd","Sudd"],["fargpennor","🖍️","Färgpennor"],["mattebok","📘","Mattebok",1],["lasbok","📖","Läsebok",1],["skrivbok","📓","Skrivbok",1],["linjal","📏","Linjal"],["sax","✂️","Sax"],["lim","SVG:lim","Limstift"],["dator","💻","Dator"],["platta","📱","Surfplatta"],["horlurar","🎧","Hörlurar"],["minir","🧮","Räknehjälp"],["anteckn","📝","Anteckningsbok"],["flaska","🥤","Vattenflaska"],["frukt","🍎","Frukt"],["mellanmal","🥪","Mellanmål"],["gympa","👟","Gympakläder"],["ytter","🧥","Ytterkläder"],["bok","📚","Annan bok",1]];
 const SVG={sudd:'<svg viewBox="0 0 64 40" aria-hidden="true"><rect x="4" y="8" width="56" height="26" rx="6" fill="#F4A6C0" stroke="#C0527A" stroke-width="3"/><rect x="4" y="8" width="26" height="26" rx="6" fill="#fff" stroke="#C0527A" stroke-width="3"/></svg>',lim:'<svg viewBox="0 0 40 64" aria-hidden="true" style="width:40px;height:56px"><rect x="8" y="24" width="24" height="34" rx="5" fill="#4C8DFF" stroke="#2A3FB8" stroke-width="3"/><rect x="12" y="6" width="16" height="20" rx="3" fill="#fff" stroke="#2A3FB8" stroke-width="3"/></svg>'};
 const ikon=k=>{const s=SAKER.find(x=>x[0]===k);if(!s)return"📌";return s[1].startsWith("SVG:")?SVG[s[1].slice(4)]:s[1];};
 const FARGER=["#1D2B53","#E5484D","#2F6BFF","#1E9E5E","#F2780C","#7B61FF","#FFFFFF"];
@@ -284,18 +295,33 @@ $("widgets").addEventListener("input",e=>{const w=e.target.closest(".w");if(!w)r
   if(o.typ==="lista"&&e.target.matches(".wh input")){o.d.titel=e.target.value;spara();}});
 
 /* lista: Du behöver / När du är klar */
+const EGEN={};   // bild som väljs i formuläret för en egen sak (sparas först när saken läggs till)
 function fyllLista(b,w){const d=w.d;
-  const items=d.items.map((it,i)=>{const s=SAKER.find(x=>x[0]===it.k);const namn=it.t||(s?s[2]:it.k),bok=s&&s[3];
-    return`<div class="it" data-i="${i}"><button class="x" data-del="${i}" aria-label="Ta bort ${esc(namn)}">✕</button><div class="ik">${it.t?"📌":ikon(it.k)}</div><span class="n">${esc(namn)}</span>${bok?`<input data-sid="${i}" value="${esc(it.sid||"")}" placeholder="sidor" aria-label="Sidor i ${esc(namn)}">`:""}</div>`;}).join("");
-  const pal=d.pal?`<div class="palett">${SAKER.map(s=>`<button data-add="${s[0]}" class="${d.items.some(i=>i.k===s[0])?"on":""}" title="${s[2]}" aria-label="${s[2]}">${s[1].startsWith("SVG:")?SVG[s[1].slice(4)]:s[1]}</button>`).join("")}<button class="eget" data-eget="1">+ Egen text</button></div>`:"";
+  const items=d.items.map((it,i)=>{const s=SAKER.find(x=>x[0]===it.k);const std=s?s[2]:it.k,namn=it.t||std,bok=s?!!s[3]:!!it.bok;
+    const ik=it.img?`<img class="eg" src="${it.img}" alt="">`:(s?ikon(it.k):(it.bok?"📚":"📌"));
+    return`<div class="it" data-i="${i}"><button class="x" data-del="${i}" aria-label="Ta bort ${esc(namn)}">✕</button><button class="bi" data-bi="${i}" title="Välj egen bild" aria-label="Välj egen bild till ${esc(namn)}">🖼️</button><div class="ik">${ik}</div>${bok?`<textarea class="en" rows="2" data-ent="${i}" placeholder="Vilken bok?" aria-label="Vilken bok">${esc(namn)}</textarea>`:`<span class="n">${esc(namn)}</span>`}${bok?`<input data-sid="${i}" value="${esc(it.sid||"")}" placeholder="sidor" aria-label="Sidor">`:""}</div>`;}).join("");
+  const ef=d.egen?`<div class="egenform"><input type="text" data-enamn maxlength="30" placeholder="Vad behövs? (till exempel Svenska arbetsbok)" aria-label="Namn"><label class="bildv"><input type="file" accept="image/*" data-efil hidden>${EGEN[w.id]?`<img src="${EGEN[w.id]}" alt="">`:"🖼️"} ${EGEN[w.id]?"Byt bild":"Välj bild"}</label><label><input type="checkbox" data-esid> Skriv sidor</label><button class="ok" data-eok>Lägg till</button></div>`:"";
+  const pal=d.pal?`<div class="palett">${SAKER.map(s=>`<button data-add="${s[0]}" class="${d.items.some(i=>i.k===s[0])?"on":""}" title="${s[2]}" aria-label="${s[2]}">${s[1].startsWith("SVG:")?SVG[s[1].slice(4)]:s[1]}</button>`).join("")}<button class="eget" data-eget="1">${d.egen?"− Egen sak":"+ Egen sak"}</button>${ef}</div>`:"";
   b.innerHTML=`<div class="saker">${items||'<span class="tomrad">Tryck på ➕ Välj saker nedanför.</span>'}</div>${pal}<button class="lagg" data-pal="1">${d.pal?"✓ Klar med att välja":"➕ Välj saker"}</button>`;}
+/* läser en bild från datorn eller kameran, krymper den och ger den som en liten jpg (sparas bara i webbläsaren) */
+function laddaBild(fil,cb){if(!fil)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const m=220,sc=Math.min(1,m/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.max(1,Math.round(im.width*sc));c.height=Math.max(1,Math.round(im.height*sc));c.getContext("2d").drawImage(im,0,0,c.width,c.height);cb(c.toDataURL("image/jpeg",.82));};im.src=r.result;};r.readAsDataURL(fil);}
+let BILDMAL=null;
+const filEl=document.createElement("input");filEl.type="file";filEl.accept="image/*";filEl.hidden=true;document.body.appendChild(filEl);
+filEl.addEventListener("change",()=>{const f=filEl.files[0];filEl.value="";if(!f||!BILDMAL)return;const m=BILDMAL;BILDMAL=null;laddaBild(f,url=>{const o=S.widgets.find(x=>x.id===m.id);if(!o||!o.d.items[m.i])return;o.d.items[m.i].img=url;const e=elOf(o.id);if(e)fyllLista(e.querySelector(".wb"),o);spara();});});
 $("widgets").addEventListener("click",e=>{const w=e.target.closest(".w");if(!w)return;const o=S.widgets.find(x=>x.id===w.dataset.id);if(!o||o.typ!=="lista")return;const b=w.querySelector(".wb");
-  const del=e.target.closest("[data-del]"),add=e.target.closest("[data-add]"),pal=e.target.closest("[data-pal]"),eget=e.target.closest("[data-eget]");
+  const del=e.target.closest("[data-del]"),add=e.target.closest("[data-add]"),pal=e.target.closest("[data-pal]"),eget=e.target.closest("[data-eget]"),bi=e.target.closest("[data-bi]"),eok=e.target.closest("[data-eok]");
   if(del){o.d.items.splice(+del.dataset.del,1);fyllLista(b,o);spara();}
+  else if(bi){BILDMAL={id:o.id,i:+bi.dataset.bi};filEl.click();}
   else if(add){const k=add.dataset.add,i=o.d.items.findIndex(x=>x.k===k);if(i>=0)o.d.items.splice(i,1);else o.d.items.push({k,sid:""});fyllLista(b,o);spara();}
-  else if(eget){const t=prompt("Vad behövs? (till exempel Gympakläder)");if(t&&t.trim()){o.d.items.push({k:"egen"+uid(),t:t.trim().slice(0,24)});fyllLista(b,o);spara();}}
+  else if(eget){o.d.egen=!o.d.egen;fyllLista(b,o);}
+  else if(eok){const n=b.querySelector("[data-enamn]").value.trim();if(!n){b.querySelector("[data-enamn]").focus();return;}
+    o.d.items.push({k:"egen"+uid(),t:n.slice(0,30),img:EGEN[o.id]||"",bok:b.querySelector("[data-esid]").checked,sid:""});delete EGEN[o.id];o.d.egen=false;fyllLista(b,o);spara();}
   else if(pal){o.d.pal=!o.d.pal;fyllLista(b,o);spara();}});
-$("widgets").addEventListener("input",e=>{const s=e.target.closest("[data-sid]");if(!s)return;const w=e.target.closest(".w"),o=S.widgets.find(x=>x.id===w.dataset.id);if(o&&o.d.items[+s.dataset.sid]){o.d.items[+s.dataset.sid].sid=s.value;spara();}});
+$("widgets").addEventListener("change",e=>{const f=e.target.closest("[data-efil]");if(!f)return;const w=e.target.closest(".w"),o=S.widgets.find(x=>x.id===w.dataset.id);const nm=w.querySelector("[data-enamn]").value,sid=w.querySelector("[data-esid]").checked;
+  laddaBild(f.files[0],url=>{EGEN[o.id]=url;fyllLista(w.querySelector(".wb"),o);const b=w.querySelector(".wb");b.querySelector("[data-enamn]").value=nm;b.querySelector("[data-esid]").checked=sid;});});
+$("widgets").addEventListener("input",e=>{const s=e.target.closest("[data-sid]"),n=e.target.closest("[data-ent]");if(!s&&!n)return;const w=e.target.closest(".w"),o=S.widgets.find(x=>x.id===w.dataset.id);if(!o)return;
+  if(s&&o.d.items[+s.dataset.sid]){o.d.items[+s.dataset.sid].sid=s.value;spara();}
+  if(n&&o.d.items[+n.dataset.ent]){o.d.items[+n.dataset.ent].t=n.value;spara();}});
 
 /* timer */
 const fm=s=>{s=Math.max(0,Math.ceil(s));return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");};
