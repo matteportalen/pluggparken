@@ -168,6 +168,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
   <button id="bLagg" title="Lägg till en ruta" aria-label="Lägg till en ruta">➕</button>
   <button id="bBg" title="Byt bakgrund" aria-label="Byt bakgrund">🖼️</button>
   <button id="bFull" title="Helskärm (F)" aria-label="Helskärm">⛶</button>
+  <button id="bFil" title="Spara eller ladda tavlan som fil" aria-label="Spara eller ladda tavlan som fil">💾</button>
   <button id="bSnd" title="Ljud av eller på (timer och lyckohjul)" aria-label="Ljud av eller på">🔔</button>
 </div>
 <div id="hjalp" role="status">Tryck på ➕ för att lägga till rutor. Dra i en rutas rubrik för att flytta den. Rita fritt med ✏️.<button id="hjalpX">Ok</button></div>
@@ -396,6 +397,32 @@ $("widgets").addEventListener("click",async e=>{const w=e.target.closest(".w");i
   }catch(err){b.querySelector(".lbl").textContent="Ingen tillgång till mikrofonen. Tillåt den i webbläsaren och försök igen.";}});
 $("widgets").addEventListener("input",e=>{const r=e.target.closest("[data-gr]");if(!r)return;const w=e.target.closest(".w"),o=S.widgets.find(x=>x.id===w.dataset.id);if(!o)return;o.d.gr=+r.value;w.querySelector(".gr").style.left=o.d.gr+"%";spara();});
 function stoppaMatare(id){const m=MAT[id];if(!m)return;cancelAnimationFrame(m.raf);m.st.getTracks().forEach(t=>t.stop());try{m.ac.close()}catch(e){}delete MAT[id];}
+
+
+/* spara och ladda som fil (säkerhetskopia, eller för att flytta till en annan dator) */
+const TYPER=["lista","timer","hjul","text","ljud"];
+const JPG=/^data:image\/jpeg;base64,[A-Za-z0-9+\/=]*$/;
+const tal=(v,a,b,d)=>{v=+v;return Number.isFinite(v)?Math.max(a,Math.min(b,v)):d;};
+function renaWidget(o,medNamn){if(!o||!TYPER.includes(o.typ))return null;const d=o.d||{},n={id:uid(),typ:o.typ,x:tal(o.x,-60,3000,100),y:tal(o.y,0,3000,100),s:tal(o.s,.6,2.6,1),d:{}};
+  if(o.typ==="lista"){n.d={titel:String(d.titel||"").slice(0,40),farg:d.farg==="lista2"?"lista2":"lista",items:(Array.isArray(d.items)?d.items:[]).slice(0,30).map(i=>({k:String((i&&i.k)||"bok").slice(0,40),t:i&&i.t?String(i.t).slice(0,30):undefined,sid:String((i&&i.sid)||"").slice(0,30),img:i&&typeof i.img==="string"&&JPG.test(i.img)&&i.img.length<120000?i.img:"",bok:!!(i&&i.bok)}))};}
+  else if(o.typ==="timer")n.d={tot:tal(d.tot,60,7200,300)};
+  else if(o.typ==="hjul")n.d={namn:medNamn&&Array.isArray(d.namn)?d.namn.slice(0,60).map(x=>String(x).slice(0,30)):[],tabort:!!d.tabort,rot:0,n:tal(d.n,2,60,25)};
+  else if(o.typ==="text"){n.rot=tal(o.rot,-6,6,0);n.d={text:String(d.text||"").slice(0,600),c:LAPPFARG.includes(d.c)?d.c:"gul"};}
+  else n.d={gr:tal(d.gr,30,95,70)};
+  return n;}
+function sparaFil(medNamn){const ut={app:"pluggparken-larare",v:1,bg:S.bg,pen:S.pen,widgets:S.widgets.map(w=>{const c=JSON.parse(JSON.stringify(w));if(c.typ==="hjul"&&!medNamn)c.d.namn=[];return c;})};
+  const blob=new Blob([JSON.stringify(ut)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="lararsidan-"+new Date().toISOString().slice(0,10)+".json";document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);hjalpText("Sparat som fil i Hämtade filer");}
+const lasEl=document.createElement("input");lasEl.type="file";lasEl.accept=".json,application/json";lasEl.hidden=true;document.body.appendChild(lasEl);
+lasEl.addEventListener("change",()=>{const f=lasEl.files[0];lasEl.value="";if(!f)return;if(f.size>6e6){alert("Filen är för stor.");return;}
+  const r=new FileReader();r.onload=()=>{let o;try{o=JSON.parse(r.result);}catch(e){alert("Det här är ingen fil från lärarsidan.");return;}
+    if(!o||o.app!=="pluggparken-larare"||!Array.isArray(o.widgets)){alert("Det här är ingen fil från lärarsidan.");return;}
+    if(!confirm("Ersätta tavlan med innehållet i filen? Det du har nu försvinner."))return;
+    Object.keys(CLOCK).forEach(k=>delete CLOCK[k]);Object.keys(MAT).forEach(stoppaMatare);
+    S.widgets=o.widgets.slice(0,40).map(w=>renaWidget(w,true)).filter(Boolean);if(BG.includes(o.bg))bakgrund(o.bg);ritaAlla();spara();hjalpText("Tavlan är laddad från filen");};
+  r.readAsText(f);});
+$("bFil").onclick=()=>{if(pop&&pop.dataset.t==="fil"){stangPop();return;}
+  const p=oppnaPop($("bFil"),`<h4>Tavlan som fil</h4><button data-f="spara">💾 Spara som fil</button><label style="display:flex;gap:8px;align-items:center;font-weight:700;font-size:.85rem;color:#56668F;padding:0 4px"><input type="checkbox" id="medNamn"> Ta med namnen i lyckohjulet</label><button data-f="ladda">📂 Ladda från fil</button>`,"meny");p.dataset.t="fil";
+  p.onclick=ev=>{const b=ev.target.closest("[data-f]");if(!b)return;const med=p.querySelector("#medNamn").checked;stangPop();if(b.dataset.f==="spara")sparaFil(med);else lasEl.click();};};
 
 /* ---------- start ---------- */
 bakgrund(S.bg);$("fargprick").style.background=S.pen.c;verktyg(S.pen.v==="sudd"?"sudd":"penna");
