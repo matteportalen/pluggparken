@@ -123,7 +123,7 @@ h2{font-size:1.25rem;margin:18px 0 8px}
 const $=id=>document.getElementById(id),L=()=>window.Ljud||{};
 const KEY='mattespel-sudoku-v1';
 let D;try{D=JSON.parse(localStorage.getItem(KEY))||{};}catch(e){D={};}
-D.stars=D.stars||{};D.cfg=D.cfg||{n:4,lvl:1,sym:'djur'};
+D.stars=D.stars||{};D.cfg=D.cfg||{n:4,lvl:1,sym:'siffror'};if(!D.cfg.v2){D.cfg.sym='siffror';D.cfg.v2=1;}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(D));}catch(e){}}
 function show(id){document.querySelectorAll('.screen').forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
 const DJUR=['🐶','🐱','🐰','🦊','🐼','🐸','🐵','🦁','🐧'];
@@ -201,7 +201,7 @@ function home(){
   const st=k=>{const v=D.stars[k]||0;return '⭐'.repeat(v)+'<i>'+'☆'.repeat(3-v)+'</i>';};
   $('oSize').innerHTML=[4,6,9].map(n=>`<button class="opt ${sel.n===n?'on':''}" data-n="${n}">${n} × ${n}<small>${n===4?'Små, nybörjare':n===6?'Lagom':'Det riktiga'}</small></button>`).join('');
   $('oLvl').innerHTML=[1,2,3].map(l=>`<button class="opt ${sel.lvl===l?'on':''}" data-l="${l}">${['😀','🤔','🧠'][l-1]} ${LV[l]}<small>${['Många ledtrådar','Några ledtrådar','Få ledtrådar'][l-1]}</small><span class="st">${st(sel.n+'-'+l)}</span></button>`).join('');
-  $('oSym').innerHTML=`<button class="opt ${sel.sym==='djur'?'on':''}" data-s="djur">🐶🐱🐰<small>Djur</small></button><button class="opt ${sel.sym==='siffror'?'on':''}" data-s="siffror">1 2 3<small>Siffror</small></button>`;
+  $('oSym').innerHTML=`<button class="opt ${sel.sym==='siffror'?'on':''}" data-s="siffror">1 2 3<small>Siffror</small></button><button class="opt ${sel.sym==='djur'?'on':''}" data-s="djur">🐶🐱🐰<small>Djur (tillval)</small></button>`;
 }
 document.addEventListener('click',e=>{
   const b=e.target.closest('.opt');if(!b)return;
