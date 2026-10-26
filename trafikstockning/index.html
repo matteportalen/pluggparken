@@ -193,7 +193,7 @@ function bfs(cars,pos){      // pos[i] = läge längs bilens led; returnerar lis
   return null;
 }
 /* ---------- menyn ---------- */
-function open(k){const b=D.betyg;return k===0||b[k]||b[k-1]||b[k-2];}
+function open(k){const b=D.betyg;return k%10===0||b[k]||b[k-1]||b[k-2];}   // bana 1 i varje paket är alltid öppen
 function setStars(si){let all=true,mn=3;for(let k=si*10;k<si*10+10;k++){const b=D.betyg[k]||0;if(!b)all=false;mn=Math.min(mn,b||0);}return all?mn:0;}
 function recompute(){SETS.forEach((_,si)=>{D.stars['s'+(si+1)]=setStars(si);});save();}
 function home(){
