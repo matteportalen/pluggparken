@@ -206,6 +206,15 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 .t-sv .kt{background:#fff;border:.3cqw solid #000}
 .t-sv .tit{font-weight:800}
 .t-sv .ned{color:#000;opacity:1}
+.kryss{display:flex;gap:8px;align-items:center;font-weight:700;font-size:.9rem;color:var(--muted)}
+.kryss input{width:20px;height:20px}
+.affisch .sifferrad{position:absolute;left:3cqw;right:3cqw;bottom:4.2cqw;display:flex;justify-content:center;gap:1.2cqw;flex-wrap:wrap;z-index:2}
+.affisch .sifferrad span{font-size:clamp(10px,1.45cqw,16px);line-height:1.1;padding:.5cqw 1cqw;border-radius:99px;white-space:nowrap}
+.affisch .sifferrad b{font-weight:800}
+.t-aventyr .sifferrad span{background:#FFF9E8;border:.2cqw solid #B98A4E}
+.t-rymd .sifferrad span{background:rgba(255,255,255,.14);border:.15cqw solid rgba(255,255,255,.5)}
+.t-regnbage .sifferrad span{background:rgba(255,255,255,.92)}
+.t-sv .sifferrad span{background:#fff;border:.25cqw solid #000}
 .mlista{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 6px}
 .mlista .tom{color:var(--muted);font-weight:700}
 .mlista span{background:var(--soft);border-radius:12px;padding:5px 6px 5px 10px;font-weight:700;font-size:.88rem;display:inline-flex;gap:6px;align-items:center}
@@ -319,6 +328,7 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
     <div class="affischrad">
       <input type="text" id="mNamn" maxlength="20" placeholder="Ditt förnamn (skrivs bara på affischen)" aria-label="Ditt förnamn">
       <div class="tema" id="mTema" role="group" aria-label="Välj tema"></div>
+      <label class="kryss"><input type="checkbox" id="mSiff" checked> Visa mina år i siffror längst ner på affischen</label>
     </div>
     <div class="affisch t-aventyr" id="affisch" aria-label="Din tidslinje som affisch"></div>
     <div class="mlista" id="mLinje"></div>
@@ -572,14 +582,14 @@ let M=null,FAL=null;
 /* Min tidslinje sparas aldrig: den finns bara i sidans minne och glöms när man lämnar läget (dataskydd, lärarens val) */
 function laddaMin(){M={alder:9,h:[],sl:[]};if("min" in data){delete data.min;save();}}
 const sparaMin=()=>{};
-function glomMin(){if(!M)return;M=null;FAL=null;NAMN="";TEMA="aventyr";NYTT=null;["mLinje","sRader","sText","sAxel","mFakta","affisch"].forEach(i=>{$(i).innerHTML="";});$("mText").value="";$("mNamn").value="";$("mForm").hidden=true;}
+function glomMin(){if(!M)return;M=null;FAL=null;NAMN="";TEMA="aventyr";NYTT=null;SIFF=true;$("mSiff").checked=true;["mLinje","sRader","sText","sAxel","mFakta","affisch"].forEach(i=>{$(i).innerHTML="";});$("mText").value="";$("mNamn").value="";$("mForm").hidden=true;}
 function startMin(){laddaMin();$("pet4").innerHTML=owlSVG(lasDjur());FAL=null;$("mForm").hidden=true;flik("liv");show("min");ritaLiv();ritaSlakt();}
 function flik(t){document.querySelectorAll(".flikar button").forEach(b=>b.classList.toggle("v",b.dataset.t===t));$("mLiv").hidden=t!=="liv";$("mSlakt").hidden=t!=="slakt";}
 document.querySelector(".flikar").onclick=e=>{const b=e.target.closest("[data-t]");if(b)flik(b.dataset.t);};
 /* mitt liv */
 const EMOJI=["⭐","🎂","🚲","🏫","⚽","🎨","🎵","🐶","🐱","🏠","✈️","🚗","🚂","🏊","⛷️","🍦","🎁","📚","🦷","👶","🧒","👫","🌈","🎮","🏆","🍕","🌳","🏖️","🎪","🐴","🔭","🧩","🎒","🥇","🪁","🛴","🎻","🎤","🍎","❤️"];
 const TEMAN={aventyr:{n:"🗺️ Äventyr",dek:[["🏔️",2,3],["🧭",89,3],["🌲",2,77],["⛺",88,77]],sl:["🚩","🏁"]},rymd:{n:"🪐 Rymd",dek:[["🪐",2,3],["🚀",89,3],["🌙",2,77],["⭐",88,77]],sl:["🌍","🛸"]},sv:{n:"🖨️ Svartvit",dek:[["✏️",2,3],["📏",89,3]],sl:["🚩","🏁"]},regnbage:{n:"🌈 Regnbåge",dek:[["🌈",2,3],["☀️",89,3],["☁️",2,77],["🦋",88,77]],sl:["🌱","🎉"]}};
-let TEMA="aventyr",NAMN="",NYTT=null;
+let TEMA="aventyr",NAMN="",NYTT=null,SIFF=true;
 const yAt=x=>52+7*Math.sin((x-3)/94*Math.PI*1.8);
 function genAffisch(){
   const T=TEMAN[TEMA],hs=M.h.slice().sort((a,b)=>a.a-b.a),n=hs.length,fod=NU-M.alder;
@@ -593,15 +603,16 @@ function genAffisch(){
     html+=`<span class="st${NYTT===h.id?" ny":""}" style="left:${x}%;top:${y}%">${esc(h.e||"⭐")}</span>`;
     html+=`<div class="kt ${ovan?"ovan":""}${NYTT===h.id?" ny":""}" style="left:${x}%;${ovan?`top:${y-4.2}%`:`top:${y+4.6}%`};width:${w}%">${esc(h.t)}<small>${h.a===0?"Född":"Ålder "+h.a} · ${fod+h.a}</small></div>`;});
   if(!n)html+=`<div class="kt" style="left:50%;top:60%;width:34%">Lägg till händelser, så hamnar de här på stigen.</div>`;
+  if(SIFF)html+=`<div class="sifferrad">${sifferData().slice(0,4).map(d=>`<span>${d[0]} <b>${esc(d[1])}</b> ${esc(d[2].replace("dagar sedan jag föddes","dagar").replace("har jag sovit","sovit"))}</span>`).join("")}</div>`;
   html+=`<div class="ned" style="left:2cqw">Jag är ${M.alder} år · ${fod}–${NU}</div><div class="ned" style="right:2cqw">Gjord på pluggparken.se</div>`;
   return html;}
 const titel=()=>{const n=NAMN.trim();if(!n)return"Min tidslinje";return(/[sxzSXZ]$/.test(n)?n:n+"s")+" tidslinje";};
 function ritaAffisch(){$("affisch").className="affisch t-"+TEMA;$("affisch").innerHTML=genAffisch();
   $("mTema").innerHTML=Object.entries(TEMAN).map(([k,v])=>`<button data-tema="${k}" class="${k===TEMA?"v":""}">${v.n}</button>`).join("");}
-function siffror(){const a=M.alder,dagar=Math.round(a*365.25),veckor=Math.round(a*52.18),slag=Math.round(a*40);
+function sifferData(){const a=M.alder,dagar=Math.round(a*365.25),veckor=Math.round(a*52.18),slag=Math.round(a*40),kom=n=>(Math.round(n*10)/10).toString().replace(".",",");
   const kort=KORT.filter(k=>k.ar>=1800&&k.ar<=NU-a).sort((x,y)=>x.ar-y.ar).pop();
-  const rut=(b,t)=>`<div><b>${b}</b>${t}</div>`;
-  return rut("📅 "+fmt(dagar),"dagar sedan du föddes")+rut("🗓️ "+fmt(veckor),"veckor")+rut("❤️ ca "+fmt(slag)+" milj.","hjärtslag")+rut("😴 ca "+(Math.round(a/3*10)/10).toString().replace(".",",")+" år","har du sovit")+rut("🌍 ca "+(Math.round(a*0.94*10)/10).toString().replace(".",",")+" mdr km","har jorden åkt med dig runt solen")+(kort?rut("🕰️ "+kort.namn,`fanns redan när du föddes (${kort.ar})`):"");}
+  return[["📅",fmt(dagar),"dagar sedan jag föddes"],["🗓️",fmt(veckor),"veckor"],["❤️","ca "+fmt(slag)+" milj.","hjärtslag"],["😴","ca "+kom(a/3)+" år","har jag sovit"],["🌍","ca "+kom(a*.94)+" mdr km","har jorden åkt med mig runt solen"]].concat(kort?[["🕰️",kort.namn,`fanns redan när jag föddes (${kort.ar})`]]:[]);}
+function siffror(){return sifferData().map(d=>`<div><b>${d[0]} ${esc(d[1])}</b>${esc(d[2])}</div>`).join("");}
 function ritaLiv(){
   $("mAlder").textContent=M.alder;
   $("mChips").innerHTML=FORSLAG.map((f,i)=>`<button data-f="${i}"><span>${f[0]}</span>${f[1]}</button>`).join("");
@@ -626,6 +637,7 @@ $("mLagg").onclick=()=>{const t=$("mText").value.trim();if(!FAL||!t){$("mText").
   M.h.push({id,t,a:FAL.a,e:FAL.e});NYTT=id;FAL=null;$("mForm").hidden=true;window.Ljud&&Ljud.pop&&Ljud.pop(3);ritaLiv();};
 $("mText").addEventListener("keydown",e=>{if(e.key==="Enter")$("mLagg").click();});
 $("mLinje").onclick=e=>{const b=e.target.closest("[data-del]");if(!b)return;M.h=M.h.filter(h=>h.id!==b.dataset.del);ritaLiv();};
+$("mSiff").addEventListener("change",()=>{SIFF=$("mSiff").checked;ritaAffisch();});
 $("mNamn").addEventListener("input",()=>{NAMN=$("mNamn").value;ritaAffisch();});
 $("mTema").onclick=e=>{const b=e.target.closest("[data-tema]");if(!b)return;TEMA=b.dataset.tema;ritaAffisch();};
 function skrivUt(vad){document.body.dataset.pr=vad;const k=()=>{delete document.body.dataset.pr;removeEventListener("afterprint",k);};addEventListener("afterprint",k);setTimeout(()=>window.print(),50);}
