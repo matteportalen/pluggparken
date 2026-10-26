@@ -135,6 +135,12 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 .w.lapp .wh button{width:26px;height:26px;background:rgba(0,0,0,.1);color:#4A3F00;opacity:.25;font-size:.9rem}
 .w.lapp:hover .wh button,.w.lapp:focus-within .wh button{opacity:1}
 .w.lapp .wb{padding:8px 12px 18px}
+.w.skrivrad{background:transparent;box-shadow:none;border:0;border-radius:0;width:900px;max-width:none;min-width:0;pointer-events:none}
+.w.skrivrad .wh{pointer-events:auto;width:fit-content;min-width:230px;box-shadow:0 4px 12px rgba(20,30,70,.25)}
+.w.skrivrad .wh{background:#E8EEFB;color:#3B4F86;padding:2px 6px;min-height:28px;border-radius:10px}
+.w.skrivrad .wh b{flex:1;font-size:.9rem}
+.w.skrivrad .wh button{width:26px;height:26px;background:rgba(0,0,0,.08);color:#3B4F86;font-size:.9rem}
+.w.skrivrad .wb{padding:0;user-select:none;-webkit-user-select:none;pointer-events:none}
 .an{min-height:170px;outline:none;font-weight:700;font-size:1.55rem;line-height:1.25;white-space:pre-wrap;user-select:text;color:#33290A}
 .an:empty::before{content:"Skriv här …";color:rgba(51,41,10,.4)}
 /* ljudnivå */
@@ -200,10 +206,10 @@ const sak=k=>bank().find(x=>x.k===k)||grund().find(x=>x.k===k)||null;
 const ico=x=>x.img?`<img class="eg" src="${x.img}" alt="">`:x.svg?SVG[x.svg]:esc(x.e||"📌");
 const alleListor=()=>S.widgets.filter(x=>x.typ==="lista").forEach(x=>{const e=elOf(x.id);if(e)fyllLista(e.querySelector(".wb"),x);});
 const FARGER=["#1D2B53","#E5484D","#2F6BFF","#1E9E5E","#F2780C","#7B61FF","#FFFFFF"];
-const STL={skriv:[["Små skrivlinjer",16],["Medelstora skrivlinjer",24],["Stora skrivlinjer",34],["Mycket stora skrivlinjer",46]],rutat:[["Små rutor",22],["Medelstora rutor",40],["Stora rutor",64],["Mycket stora rutor",96]],linjerat:[["Smala rader",34],["Medelbreda rader",56],["Breda rader",80],["Mycket breda rader",110]]};
-const BG=["vit","rutat","linjerat","skriv","tavla"];
-const BGNAMN={vit:"Vit",rutat:"Rutat",linjerat:"Linjerat",skriv:"Skrivlinjer (vind, golv, källare)",tavla:"Griffeltavla"};
-const TYPFARG={lista:"#3D5AFE",lista2:"#1E9E5E",timer:"#F2780C",hjul:"#7B61FF",text:"#E0A21B",ljud:"#0E9AA7"};
+const STL={rutat:[["Små rutor",22],["Medelstora rutor",40],["Stora rutor",64],["Mycket stora rutor",96]],linjerat:[["Smala rader",34],["Medelbreda rader",56],["Breda rader",80],["Mycket breda rader",110]]};
+const BG=["vit","rutat","linjerat","tavla"];
+const BGNAMN={vit:"Vit",rutat:"Rutat",linjerat:"Linjerat",tavla:"Griffeltavla"};
+const TYPFARG={lista:"#3D5AFE",lista2:"#1E9E5E",timer:"#F2780C",hjul:"#7B61FF",text:"#E0A21B",ljud:"#0E9AA7",skrivrad:"#5B78D6"};
 const LAPPFARG=["gul","rosa","bla","gron"];
 const tf=o=>`scale(${o.s||1})`+(o.rot?` rotate(${o.rot}deg)`:"");
 
@@ -257,11 +263,11 @@ $("bFull").onclick=()=>{if(document.fullscreenElement)document.exitFullscreen();
 function skrivBild(g){const H=Math.round(g*4.6),y0=Math.round(g*.8),c="#8FAAE0",d=[y0,y0+g,y0+2*g,y0+3*g];
   const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="${H}"><line x1="0" x2="24" y1="${d[0]}" y2="${d[0]}" stroke="${c}" stroke-width="1.5"/><line x1="0" x2="24" y1="${d[1]}" y2="${d[1]}" stroke="${c}" stroke-width="1.5" stroke-dasharray="6 6"/><line x1="0" x2="24" y1="${d[2]}" y2="${d[2]}" stroke="#5B78D6" stroke-width="2.6"/><line x1="0" x2="24" y1="${d[3]}" y2="${d[3]}" stroke="${c}" stroke-width="1.5"/></svg>`;
   return{img:`url("data:image/svg+xml,${encodeURIComponent(svg)}")`,H};}
-function storlek(){const l=STL[S.bg];const bd=$("board");if(S.bg==="skriv"){const i=Math.min(Math.max(S.stl.skriv==null?1:+S.stl.skriv,0),3),b=skrivBild(STL.skriv[i][1]);bd.style.backgroundImage=b.img;bd.style.backgroundSize="24px "+b.H+"px";bd.style.backgroundColor="#fff";}else{bd.style.backgroundImage="";bd.style.backgroundSize="";bd.style.backgroundColor="";}$("bStl").style.display=l?"":"none";if(l&&S.bg!=="skriv"){const i=Math.min(Math.max(S.stl[S.bg]==null?1:+S.stl[S.bg],0),3);$("board").style.setProperty("--g",l[i][1]+"px");}}
-function bakgrund(bg){S.bg=bg;$("board").className=bg==="vit"?"":bg;storlek();
+function rutStorlek(){const l=STL[S.bg];$("bStl").style.display=l?"":"none";if(l){const i=Math.min(Math.max(S.stl[S.bg]==null?1:+S.stl[S.bg],0),3);$("board").style.setProperty("--g",l[i][1]+"px");}}
+function bakgrund(bg){S.bg=bg;$("board").className=bg==="vit"?"":bg;rutStorlek();
   if(bg==="tavla"&&S.pen.c==="#1D2B53")penFarg("#FFFFFF");else if(bg!=="tavla"&&S.pen.c==="#FFFFFF")penFarg("#1D2B53");spara();}
 function penFarg(c){S.pen.c=c;$("fargprick").style.background=c;spara();}
-$("bStl").onclick=()=>{const l=STL[S.bg];if(!l)return;const i=((S.stl[S.bg]==null?1:+S.stl[S.bg])+1)%4;S.stl[S.bg]=i;storlek();spara();hjalpText(l[i][0]);};
+$("bStl").onclick=()=>{const l=STL[S.bg];if(!l)return;const i=((S.stl[S.bg]==null?1:+S.stl[S.bg])+1)%4;S.stl[S.bg]=i;rutStorlek();spara();hjalpText(l[i][0]);};
 $("bBg").onclick=()=>{bakgrund(BG[(BG.indexOf(S.bg)+1)%BG.length]);hjalpText("Bakgrund: "+BGNAMN[S.bg]);};
 let pop=null;
 function stangPop(){if(pop){pop.remove();pop=null;}}
@@ -272,7 +278,7 @@ $("bFarg").onclick=e=>{if(pop&&pop.dataset.t==="farg"){stangPop();return;}
   p.onclick=ev=>{const c=ev.target.closest("[data-c]"),w=ev.target.closest("[data-w]");if(c){penFarg(c.dataset.c);verktyg("penna");}if(w){S.pen.w=+w.dataset.w;spara();verktyg("penna");}
     p.querySelectorAll("[data-c]").forEach(b=>b.classList.toggle("v",b.dataset.c===S.pen.c));p.querySelectorAll("[data-w]").forEach(b=>b.classList.toggle("v",+b.dataset.w===S.pen.w));};};
 $("bLagg").onclick=()=>{if(pop&&pop.dataset.t==="lagg"){stangPop();return;}
-  const p=oppnaPop($("bLagg"),`<h4>Lägg till en ruta</h4><button data-n="lista">📋 Du behöver:</button><button data-n="lista2">✅ När du är klar:</button><button data-n="timer">⏱️ Timer</button><button data-n="hjul">🎡 Lyckohjul</button><button data-n="text">📝 Post-it</button><button data-n="ljud">🔊 Ljudnivå</button><button data-n="tom">➕ Egen lista</button><hr style="width:100%;border:0;border-top:1px solid #DDE5F5"><button data-n="ny" style="color:#B4232A">🆕 Ny lektion (töm tavlan)</button>`,"meny");p.dataset.t="lagg";
+  const p=oppnaPop($("bLagg"),`<h4>Lägg till en ruta</h4><button data-n="lista">📋 Du behöver:</button><button data-n="lista2">✅ När du är klar:</button><button data-n="timer">⏱️ Timer</button><button data-n="hjul">🎡 Lyckohjul</button><button data-n="text">📝 Post-it</button><button data-n="skrivrad">✍️ Skrivrad (vind, golv, källare)</button><button data-n="ljud">🔊 Ljudnivå</button><button data-n="tom">➕ Egen lista</button><hr style="width:100%;border:0;border-top:1px solid #DDE5F5"><button data-n="ny" style="color:#B4232A">🆕 Ny lektion (töm tavlan)</button>`,"meny");p.dataset.t="lagg";
   p.onclick=ev=>{const b=ev.target.closest("[data-n]");if(!b)return;stangPop();const n=b.dataset.n;
     if(n==="ny"){if(confirm("Tömma tavlan och ta bort alla rutor?")){S.widgets=[];strokes=[];omrita();ritaAlla();spara();}return;}
     laggTill(n);};};
@@ -291,6 +297,7 @@ function laggTill(n){const c=S.widgets.length*28%140;let w;
   else if(n==="tom")w={typ:"lista",x:140+c,y:130+c,s:1,d:{titel:"",farg:"lista",items:[]}};
   else if(n==="timer")w={typ:"timer",x:Math.max(40,innerWidth-420)+c,y:90+c,s:1,d:{tot:300}};
   else if(n==="hjul")w={typ:"hjul",x:Math.max(40,innerWidth-480)+c,y:120+c,s:1,d:{namn:[],tabort:false,rot:0}};
+  else if(n==="skrivrad")w={typ:"skrivrad",x:60+c,y:200+c,s:1,d:{}};
   else if(n==="ljud")w={typ:"ljud",x:Math.max(40,innerWidth-420)+c,y:420+c,s:1,d:{gr:70}};
   else w={typ:"text",x:200+c,y:160+c,s:1,rot:Math.round((Math.random()*6-3)*10)/10,d:{text:"",c:LAPPFARG[S.widgets.filter(x=>x.typ==="text").length%4]}};
   w.id=uid();S.widgets.push(w);ritaAlla();fram(w.id);spara();}
@@ -299,12 +306,13 @@ function ritaAlla(){$("widgets").innerHTML="";S.widgets.forEach(w=>$("widgets").
 function elOf(id){return document.querySelector(`.w[data-id="${id}"]`);}
 function fram(id){const e=elOf(id);if(e)e.style.zIndex=++z;}
 function farg(w){return w.typ==="lista"?TYPFARG[w.d.farg||"lista"]:TYPFARG[w.typ]||"#3D5AFE";}
-function bygg(w){const e=document.createElement("div");e.className="w"+(w.typ==="text"?" lapp c-"+(w.d.c||"gul"):"");e.dataset.id=w.id;
+function bygg(w){const e=document.createElement("div");e.className="w"+(w.typ==="text"?" lapp c-"+(w.d.c||"gul"):w.typ==="skrivrad"?" skrivrad":"");e.dataset.id=w.id;
   e.style.cssText=`left:${w.x}px;top:${w.y}px;transform:${tf(w)};z-index:${++z};--c:${farg(w)}`;
-  const titel=w.typ==="lista"?`<input value="${esc(w.d.titel)}" placeholder="Rubrik" aria-label="Rubrik">`:`<b>${{timer:"⏱️ Timer",hjul:"🎡 Lyckohjul",text:"",ljud:"🔊 Ljudnivå"}[w.typ]}</b>`;
+  const titel=w.typ==="lista"?`<input value="${esc(w.d.titel)}" placeholder="Rubrik" aria-label="Rubrik">`:`<b>${{timer:"⏱️ Timer",hjul:"🎡 Lyckohjul",text:"",ljud:"🔊 Ljudnivå",skrivrad:"✍️ Skrivrad"}[w.typ]}</b>`;
   e.innerHTML=`<div class="wh">${titel}${w.typ==="text"?`<button data-a="farg" title="Byt färg" aria-label="Byt färg">🎨</button>`:""}<button data-a="minus" title="Mindre" aria-label="Mindre">−</button><button data-a="plus" title="Större" aria-label="Större">+</button><button data-a="x" title="Ta bort" aria-label="Ta bort rutan">✕</button></div><div class="wb"></div>`;
   fyll(e,w);return e;}
-function fyll(e,w){const b=e.querySelector(".wb");({lista:fyllLista,timer:fyllTimer,hjul:fyllHjul,text:fyllText,ljud:fyllLjud})[w.typ](b,w);}
+function fyllSkrivrad(b){const r=skrivBild(34);b.style.height=r.H+"px";b.style.backgroundImage=r.img;b.style.backgroundSize="24px "+r.H+"px";}
+function fyll(e,w){const b=e.querySelector(".wb");({lista:fyllLista,timer:fyllTimer,hjul:fyllHjul,text:fyllText,ljud:fyllLjud,skrivrad:fyllSkrivrad})[w.typ](b,w);}
 
 /* dra, ändra storlek, ta bort */
 let dra=null;
@@ -437,7 +445,7 @@ function stoppaMatare(id){const m=MAT[id];if(!m)return;cancelAnimationFrame(m.ra
 
 
 /* spara och ladda som fil (säkerhetskopia, eller för att flytta till en annan dator) */
-const TYPER=["lista","timer","hjul","text","ljud"];
+const TYPER=["lista","timer","hjul","text","ljud","skrivrad"];
 const JPG=/^data:image\/jpeg;base64,[A-Za-z0-9+\/=]*$/;
 const tal=(v,a,b,d)=>{v=+v;return Number.isFinite(v)?Math.max(a,Math.min(b,v)):d;};
 function renaWidget(o,medNamn){if(!o||!TYPER.includes(o.typ))return null;const d=o.d||{},n={id:uid(),typ:o.typ,x:tal(o.x,-60,3000,100),y:tal(o.y,0,3000,100),s:tal(o.s,.6,2.6,1),d:{}};
@@ -458,7 +466,7 @@ lasEl.addEventListener("change",()=>{const f=lasEl.files[0];lasEl.value="";if(!f
     if(!o||o.app!=="pluggparken-larare"||!Array.isArray(o.widgets)){alert("Det här är ingen fil från lärarsidan.");return;}
     if(!confirm("Ersätta tavlan med innehållet i filen? Det du har nu försvinner."))return;
     Object.keys(CLOCK).forEach(k=>delete CLOCK[k]);Object.keys(MAT).forEach(stoppaMatare);
-    S.widgets=o.widgets.slice(0,40).map(w=>renaWidget(w,true)).filter(Boolean);S.namn=renaMinne(o.namn);S.bank=renaBank(o.bank);if(o.stl&&typeof o.stl==="object")["rutat","linjerat","skriv"].forEach(k=>{const v=+o.stl[k];if(v>=0&&v<=3)S.stl[k]=v|0;});if(BG.includes(o.bg))bakgrund(o.bg);ritaAlla();spara();hjalpText("Tavlan är laddad från filen");};
+    S.widgets=o.widgets.slice(0,40).map(w=>renaWidget(w,true)).filter(Boolean);S.namn=renaMinne(o.namn);S.bank=renaBank(o.bank);if(o.stl&&typeof o.stl==="object")["rutat","linjerat"].forEach(k=>{const v=+o.stl[k];if(v>=0&&v<=3)S.stl[k]=v|0;});if(BG.includes(o.bg))bakgrund(o.bg);ritaAlla();spara();hjalpText("Tavlan är laddad från filen");};
   r.readAsText(f);});
 $("bFil").onclick=()=>{if(pop&&pop.dataset.t==="fil"){stangPop();return;}
   const p=oppnaPop($("bFil"),`<h4>Tavlan som fil</h4><button data-f="spara">💾 Spara som fil</button><label style="display:flex;gap:8px;align-items:center;font-weight:700;font-size:.85rem;color:#56668F;padding:0 4px"><input type="checkbox" id="medNamn"> Ta med namnen i lyckohjulet</label><button data-f="ladda">📂 Ladda från fil</button>`,"meny");p.dataset.t="fil";
