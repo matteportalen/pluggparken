@@ -194,14 +194,17 @@ const LAPPFARG=["gul","rosa","bla","gron"];
 const tf=o=>`scale(${o.s||1})`+(o.rot?` rotate(${o.rot}deg)`:"");
 
 /* ---------- tillstånd ---------- */
-function mall(){return{bg:"vit",pen:{c:"#1D2B53",w:6,v:"penna"},widgets:[
-  {id:uid(),typ:"lista",x:90,y:70,s:1,d:{titel:"Du behöver:",farg:"lista",items:[{k:"penna"},{k:"sudd"},{k:"mattebok",sid:""}]}},
-  {id:uid(),typ:"lista",x:90,y:330,s:1,d:{titel:"När du är klar:",farg:"lista2",items:[{k:"lasbok",sid:""}]}},
+function mall(){return{bg:"vit",namn:{},pen:{c:"#1D2B53",w:6,v:"penna"},widgets:[
+  {id:uid(),typ:"lista",x:90,y:70,s:1,d:{titel:"Du behöver:",farg:"lista",items:[{k:"penna"},{k:"sudd"},{k:"mattebok",sid:""}].map(i=>Object.assign(i,minnet(i.k)))}},
+  {id:uid(),typ:"lista",x:90,y:330,s:1,d:{titel:"När du är klar:",farg:"lista2",items:[{k:"lasbok",sid:""}].map(i=>Object.assign(i,minnet(i.k)))}},
   {id:uid(),typ:"timer",x:520,y:70,s:1,d:{tot:300}}]};}
 let S;try{S=JSON.parse(localStorage.getItem(KEY));}catch(e){}
 if(!S||!Array.isArray(S.widgets)){S=mall();}
-S.pen=S.pen||{c:"#1D2B53",w:6,v:"penna"};if(!BG.includes(S.bg))S.bg="vit";
-let sparaT=0;function spara(){clearTimeout(sparaT);sparaT=setTimeout(()=>{try{localStorage.setItem(KEY,JSON.stringify({bg:S.bg,pen:S.pen,widgets:S.widgets}))}catch(e){}},250);}
+S.pen=S.pen||{c:"#1D2B53",w:6,v:"penna"};if(!S.namn||typeof S.namn!=="object")S.namn={};if(!BG.includes(S.bg))S.bg="vit";
+let sparaT=0;function spara(){clearTimeout(sparaT);sparaT=setTimeout(()=>{try{localStorage.setItem(KEY,JSON.stringify({bg:S.bg,pen:S.pen,namn:S.namn,widgets:S.widgets}))}catch(e){}},250);}
+/* minne: ett namn eller en bild man ändrat på en sak (t.ex. Läsebok → Tyst läsning) följer med den saken nästa gång */
+function kom(k,f){if(!k||String(k).startsWith("egen"))return;const m=S.namn[k]=Object.assign(S.namn[k]||{},f);if(!m.t&&!m.img&&!m.e)delete S.namn[k];spara();}
+function minnet(k){const m=(S&&S.namn||{})[k];if(!m)return{};const r={};if(m.t)r.t=m.t;if(m.img)r.img=m.img;if(m.e)r.e=m.e;return r;}
 let z=60;
 
 /* ---------- ritning ---------- */
@@ -313,7 +316,7 @@ function fyllLista(b,w){const d=w.d;
 function laddaBild(fil,cb){if(!fil)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const m=220,sc=Math.min(1,m/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.max(1,Math.round(im.width*sc));c.height=Math.max(1,Math.round(im.height*sc));c.getContext("2d").drawImage(im,0,0,c.width,c.height);cb(c.toDataURL("image/jpeg",.82));};im.src=r.result;};r.readAsDataURL(fil);}
 let BILDMAL=null;
 const filEl=document.createElement("input");filEl.type="file";filEl.accept="image/*";filEl.hidden=true;document.body.appendChild(filEl);
-filEl.addEventListener("change",()=>{const f=filEl.files[0];filEl.value="";if(!f||!BILDMAL)return;const m=BILDMAL;BILDMAL=null;laddaBild(f,url=>{const o=S.widgets.find(x=>x.id===m.id);if(!o||!o.d.items[m.i])return;o.d.items[m.i].img=url;const e=elOf(o.id);if(e)fyllLista(e.querySelector(".wb"),o);spara();});});
+filEl.addEventListener("change",()=>{const f=filEl.files[0];filEl.value="";if(!f||!BILDMAL)return;const m=BILDMAL;BILDMAL=null;laddaBild(f,url=>{const o=S.widgets.find(x=>x.id===m.id);if(!o||!o.d.items[m.i])return;o.d.items[m.i].img=url;o.d.items[m.i].e="";kom(o.d.items[m.i].k,{img:url,e:""});const e=elOf(o.id);if(e)fyllLista(e.querySelector(".wb"),o);spara();});});
 $("widgets").addEventListener("click",e=>{const w=e.target.closest(".w");if(!w)return;const o=S.widgets.find(x=>x.id===w.dataset.id);if(!o||o.typ!=="lista")return;const b=w.querySelector(".wb");
   const del=e.target.closest("[data-del]"),add=e.target.closest("[data-add]"),pal=e.target.closest("[data-pal]"),eget=e.target.closest("[data-eget]"),bi=e.target.closest("[data-bi]"),eok=e.target.closest("[data-eok]");
   if(del){o.d.items.splice(+del.dataset.del,1);fyllLista(b,o);spara();}
@@ -321,9 +324,9 @@ $("widgets").addEventListener("click",e=>{const w=e.target.closest(".w");if(!w)r
   else if(bi){const i=+bi.dataset.bi;const p=oppnaPop(bi,`<h4>Bild till ${esc(o.d.items[i].t||(SAKER.find(x=>x[0]===o.d.items[i].k)||[0,0,"saken"])[2])}</h4><button data-p="fil">📷 Välj en egen bild …</button><h4>Eller en emoji</h4><div class="eg">${EMO.map(e=>`<button data-pe="${e}">${e}</button>`).join("")}</div><button data-p="std">↩ Tillbaka till standardbilden</button>`,"meny");p.dataset.t="bild";
     p.onclick=ev=>{const f=ev.target.closest("[data-p]"),em=ev.target.closest("[data-pe]"),it=o.d.items[i];if(!it)return;
       if(f&&f.dataset.p==="fil"){stangPop();BILDMAL={id:o.id,i};filEl.click();return;}
-      if(f&&f.dataset.p==="std"){it.img="";it.e="";}else if(em){it.e=em.dataset.pe;it.img="";}else return;
+      if(f&&f.dataset.p==="std"){it.img="";it.e="";kom(it.k,{img:"",e:""});}else if(em){it.e=em.dataset.pe;it.img="";kom(it.k,{e:it.e,img:""});}else return;
       stangPop();fyllLista(b,o);spara();};}
-  else if(add){const k=add.dataset.add,i=o.d.items.findIndex(x=>x.k===k);if(i>=0)o.d.items.splice(i,1);else o.d.items.push({k,sid:""});fyllLista(b,o);spara();}
+  else if(add){const k=add.dataset.add,i=o.d.items.findIndex(x=>x.k===k);if(i>=0)o.d.items.splice(i,1);else o.d.items.push(Object.assign({k,sid:""},minnet(k)));fyllLista(b,o);spara();}
   else if(eget){o.d.egen=!o.d.egen;fyllLista(b,o);}
   else if(eok){const n=b.querySelector("[data-enamn]").value.trim();if(!n){b.querySelector("[data-enamn]").focus();return;}
     o.d.items.push({k:"egen"+uid(),t:n.slice(0,30),img:EGEN[o.id]||"",e:EGEN[o.id]?"":(EGENEMO[o.id]||""),bok:b.querySelector("[data-esid]").checked,sid:""});delete EGEN[o.id];delete EGENEMO[o.id];o.d.egen=false;fyllLista(b,o);spara();}
@@ -332,7 +335,7 @@ $("widgets").addEventListener("change",e=>{const f=e.target.closest("[data-efil]
   laddaBild(f.files[0],url=>{EGEN[o.id]=url;delete EGENEMO[o.id];fyllLista(w.querySelector(".wb"),o);const b=w.querySelector(".wb");b.querySelector("[data-enamn]").value=nm;b.querySelector("[data-esid]").checked=sid;});});
 $("widgets").addEventListener("input",e=>{const s=e.target.closest("[data-sid]"),n=e.target.closest("[data-ent]");if(!s&&!n)return;const w=e.target.closest(".w"),o=S.widgets.find(x=>x.id===w.dataset.id);if(!o)return;
   if(s&&o.d.items[+s.dataset.sid]){o.d.items[+s.dataset.sid].sid=s.value;spara();}
-  if(n&&o.d.items[+n.dataset.ent]){o.d.items[+n.dataset.ent].t=n.value;spara();}});
+  if(n&&o.d.items[+n.dataset.ent]){const it=o.d.items[+n.dataset.ent];it.t=n.value;kom(it.k,{t:n.value.trim()});spara();}});
 
 /* timer */
 const fm=s=>{s=Math.max(0,Math.ceil(s));return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");};
@@ -420,7 +423,8 @@ function renaWidget(o,medNamn){if(!o||!TYPER.includes(o.typ))return null;const d
   else if(o.typ==="text"){n.rot=tal(o.rot,-6,6,0);n.d={text:String(d.text||"").slice(0,600),c:LAPPFARG.includes(d.c)?d.c:"gul"};}
   else n.d={gr:tal(d.gr,30,95,70)};
   return n;}
-function sparaFil(medNamn){const ut={app:"pluggparken-larare",v:1,bg:S.bg,pen:S.pen,widgets:S.widgets.map(w=>{const c=JSON.parse(JSON.stringify(w));if(c.typ==="hjul"&&!medNamn)c.d.namn=[];return c;})};
+function renaMinne(m){const r={};if(!m||typeof m!=="object")return r;SAKER.forEach(([k])=>{const v=m[k];if(!v||typeof v!=="object")return;const x={};if(v.t)x.t=String(v.t).slice(0,30);if(typeof v.img==="string"&&JPG.test(v.img)&&v.img.length<120000)x.img=v.img;if(v.e)x.e=String(v.e).slice(0,8);if(x.t||x.img||x.e)r[k]=x;});return r;}
+function sparaFil(medNamn){const ut={app:"pluggparken-larare",v:1,bg:S.bg,pen:S.pen,namn:S.namn,widgets:S.widgets.map(w=>{const c=JSON.parse(JSON.stringify(w));if(c.typ==="hjul"&&!medNamn)c.d.namn=[];return c;})};
   const blob=new Blob([JSON.stringify(ut)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="lararsidan-"+new Date().toISOString().slice(0,10)+".json";document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);hjalpText("Sparat som fil i Hämtade filer");}
 const lasEl=document.createElement("input");lasEl.type="file";lasEl.accept=".json,application/json";lasEl.hidden=true;document.body.appendChild(lasEl);
 lasEl.addEventListener("change",()=>{const f=lasEl.files[0];lasEl.value="";if(!f)return;if(f.size>6e6){alert("Filen är för stor.");return;}
@@ -428,7 +432,7 @@ lasEl.addEventListener("change",()=>{const f=lasEl.files[0];lasEl.value="";if(!f
     if(!o||o.app!=="pluggparken-larare"||!Array.isArray(o.widgets)){alert("Det här är ingen fil från lärarsidan.");return;}
     if(!confirm("Ersätta tavlan med innehållet i filen? Det du har nu försvinner."))return;
     Object.keys(CLOCK).forEach(k=>delete CLOCK[k]);Object.keys(MAT).forEach(stoppaMatare);
-    S.widgets=o.widgets.slice(0,40).map(w=>renaWidget(w,true)).filter(Boolean);if(BG.includes(o.bg))bakgrund(o.bg);ritaAlla();spara();hjalpText("Tavlan är laddad från filen");};
+    S.widgets=o.widgets.slice(0,40).map(w=>renaWidget(w,true)).filter(Boolean);S.namn=renaMinne(o.namn);if(BG.includes(o.bg))bakgrund(o.bg);ritaAlla();spara();hjalpText("Tavlan är laddad från filen");};
   r.readAsText(f);});
 $("bFil").onclick=()=>{if(pop&&pop.dataset.t==="fil"){stangPop();return;}
   const p=oppnaPop($("bFil"),`<h4>Tavlan som fil</h4><button data-f="spara">💾 Spara som fil</button><label style="display:flex;gap:8px;align-items:center;font-weight:700;font-size:.85rem;color:#56668F;padding:0 4px"><input type="checkbox" id="medNamn"> Ta med namnen i lyckohjulet</label><button data-f="ladda">📂 Ladda från fil</button>`,"meny");p.dataset.t="fil";
