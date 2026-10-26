@@ -141,6 +141,46 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 .band button.fel{background:#FDE7E8;border-color:#F0A3A6;box-shadow:0 3px 0 #F0A3A6}
 .band button:disabled{pointer-events:none}
 .poang{font-weight:800;color:var(--muted);font-size:.9rem;text-align:center;margin-top:6px}
+/* min tidslinje */
+.flikar{display:flex;gap:8px;margin:0 0 12px}
+.flikar button{flex:1;background:var(--card);border-radius:14px;padding:9px 8px;font-weight:800;box-shadow:0 3px 0 var(--line);text-align:center;font-size:1rem}
+.flikar button.v{background:var(--accent);color:#fff;box-shadow:0 3px 0 #2A3FB8}
+.stepper{display:inline-flex;align-items:center;gap:8px;background:var(--soft);border-radius:999px;padding:3px 6px}
+.stepper button{width:34px;height:34px;border-radius:50%;background:#fff;box-shadow:0 2px 0 var(--line);font-weight:800;font-size:1.2rem;line-height:1}
+.stepper b{min-width:2ch;text-align:center;font-size:1.25rem}
+.mrad{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-weight:800;margin-bottom:10px}
+.mchips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 12px}
+.mchips button{background:#fff;border:2px solid var(--line);border-radius:12px;padding:6px 10px;font-weight:800;font-size:.9rem;box-shadow:0 3px 0 var(--line);display:inline-flex;gap:5px;align-items:center}
+.mchips button:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
+.mform{background:#FFF8E1;border:2px solid #F2D27A;border-radius:16px;padding:12px;margin:0 0 12px;display:grid;gap:8px}
+.mform input[type=text],.pers input{font:inherit;font-weight:700;border:2px solid var(--line);border-radius:12px;padding:8px 10px;width:100%;background:#fff;color:var(--ink)}
+.mform .knapp{margin:2px}
+.mtl{list-style:none;margin:6px 0 0;padding:0;position:relative}
+.mtl::before{content:"";position:absolute;left:19px;top:6px;bottom:6px;width:4px;border-radius:2px;background:var(--line)}
+.mtl li{position:relative;padding:0 0 12px 52px;min-height:44px}
+.mtl .pricken{position:absolute;left:0;top:0;width:42px;height:42px;border-radius:50%;background:#fff;border:3px solid var(--accent);display:grid;place-items:center;font-size:1.3rem}
+.mtl li.nu .pricken{border-color:var(--good);background:#E6F7EE}
+.mtl .mkort{background:var(--soft);border-radius:14px;padding:8px 36px 8px 12px;position:relative}
+.mtl .mkort small{display:block;color:var(--muted);font-weight:800;font-size:.78rem}
+.mtl .mkort b{display:block;line-height:1.2}
+.mtl .mkort button{position:absolute;right:6px;top:6px;width:26px;height:26px;border-radius:50%;background:#fff;font-weight:800;font-size:.85rem;box-shadow:0 2px 0 var(--line)}
+.mtl li.tom{padding-left:0;color:var(--muted);font-weight:700}
+.mtl li.tom::before{display:none}
+@media(min-width:700px){.mtl::before{left:50%;margin-left:-2px}.mtl li{width:50%;padding:0 0 14px 0;min-height:48px}.mtl li.hoger{margin-left:50%;padding-left:34px}.mtl li.vanster{padding-right:34px;text-align:right}.mtl li.hoger .pricken{left:-21px}.mtl li.vanster .pricken{left:auto;right:-21px}.mtl li.nu{margin-left:25%;width:50%;padding-left:0;text-align:center}.mtl li.nu .pricken{position:relative;margin:0 auto 4px}.mtl li.tom{width:100%;margin:0}.mtl li.vanster .mkort{padding:8px 12px 8px 36px}.mtl li.vanster .mkort button{right:auto;left:6px}}
+.mfakta{margin:12px 2px 0;color:var(--muted);font-weight:700;font-size:.92rem;line-height:1.4}
+.pers{display:grid;grid-template-columns:1fr 100px 34px;gap:6px;margin:0 0 6px}
+.pers button{border-radius:50%;background:#fff;box-shadow:0 2px 0 var(--line);font-weight:800}
+.slaxel{position:relative;height:118px;margin:18px 14px 6px}
+.slaxel .l{position:absolute;left:0;right:0;top:44px;height:8px;border-radius:5px;background:var(--line)}
+.slaxel .t{position:absolute;top:56px;transform:translateX(-50%);font-size:.72rem;font-weight:800;color:var(--muted)}
+.slaxel .p{position:absolute;transform:translateX(-50%);text-align:center;font-weight:800;font-size:.8rem;line-height:1.05;white-space:normal;width:120px}
+.slaxel .p i{display:block;width:14px;height:14px;border-radius:50%;background:var(--accent);margin:0 auto;border:3px solid #fff;box-shadow:0 2px 0 rgba(0,0,0,.25)}
+.slaxel .p.over{top:0}.slaxel .p.over i{margin-top:6px}
+.slaxel .p.under{top:76px}
+.slaxel .p.over::after{content:"";display:block;width:2px;height:16px;background:var(--accent);margin:0 auto}
+.sltext{margin:6px 2px 0;font-weight:700;font-size:.95rem;line-height:1.45;color:var(--ink)}
+.sltext p{margin:0 0 8px}
+
 </style>
 </head>
 <body>
@@ -202,6 +242,31 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
   <div class="rad"><button class="knapp bla" id="dNasta" hidden>Nästa ▶</button></div>
 </section>
 
+<section class="screen" id="min" hidden>
+  <button type="button" data-home hidden tabindex="-1" aria-hidden="true" onclick="hem()"></button>
+  <div class="topp"><span class="lagt">👤 Min tidslinje</span><span style="flex:1"></span><span class="pet" id="pet4"></span></div>
+  <div class="flikar"><button data-t="liv" class="v">Mitt liv</button><button data-t="slakt">Släkten</button></div>
+  <div class="kort" id="mLiv">
+    <div class="fraga">👶 Vad har hänt i ditt liv?<small>Tryck på en händelse, välj hur gammal du var och se den på tidslinjen.</small></div>
+    <div class="mrad">Jag är <span class="stepper"><button id="mMinus" aria-label="Yngre">−</button><b id="mAlder">9</b><button id="mPlus" aria-label="Äldre">+</button></span> år</div>
+    <div class="mchips" id="mChips"></div>
+    <div class="mform" id="mForm" hidden>
+      <input type="text" id="mText" maxlength="40" placeholder="Vad hände?" aria-label="Vad hände?">
+      <div class="mrad" style="margin:0">Då var jag <span class="stepper"><button id="aMinus" aria-label="Yngre">−</button><b id="aVal">6</b><button id="aPlus" aria-label="Äldre">+</button></span> år</div>
+      <div><button class="knapp" id="mLagg">Lägg till ✓</button><button class="knapp vit" id="mAvbryt">Avbryt</button></div>
+    </div>
+    <ul class="mtl" id="mLinje"></ul>
+    <div class="mfakta" id="mFakta"></div>
+  </div>
+  <div class="kort" id="mSlakt" hidden>
+    <div class="fraga">👨‍👩‍👧 Hur långt tillbaka går din släkt?<small>Lägg till familjemedlemmar och året de föddes. Fråga hemma om du inte vet.</small></div>
+    <div class="mchips" id="sChips"></div>
+    <div id="sRader"></div>
+    <div class="slaxel" id="sAxel" hidden></div>
+    <div class="sltext" id="sText"></div>
+  </div>
+</section>
+
 <section class="screen res" id="result" hidden>
   <h2 id="rRub" style="margin:10px 0 0">Bra jobbat!</h2>
   <div class="stj" id="rStj"></div>
@@ -261,13 +326,41 @@ const KORT=[
  {id:"tv",namn:"Tv-apparat",ar:1957,era:"s1900",l:["Apparaten visar rörliga bilder, men bara i svartvitt.","Den har ratt för att välja kanal, men det fanns inte många kanaler.","Tv började sändas i Sverige år 1956."],f:"Tv-sändningarna i Sverige började år 1956."},
  {id:"manen",namn:"Månlandningen",ar:1969,era:"s1900",l:["En människa står på en annan himlakropp.","Bilden är tagen för mer än 50 år sedan med en vanlig kamera.","Rymdskeppet hette Apollo 11 och landade på månen år 1969."],f:"Apollo 11 landade på månen den 20 juli 1969."},
  {id:"nokia",namn:"Mobiltelefon",ar:1994,era:"s1900",l:["Telefonen har knappar och en liten skärm. Det finns ingen pekskärm.","Man kan ringa och skicka korta meddelanden, men inte surfa på nätet.","Mobiltelefoner blev vanliga i Sverige på 1990-talet."],f:"Mobiltelefoner blev vanliga på 1990-talet."},
- {id:"smartphone",namn:"Smartphone",ar:2015,era:"nu",l:["Skärmen är en pekskärm som man trycker och drar på.","Telefonen visar kartor och vet var man är med hjälp av satelliter (GPS).","Det är från vår tid. Du har säkert använt en själv."],f:"Smartphones kom på 2000-talet och finns nu i varje ficka."}
+ {id:"smartphone",namn:"Smartphone",ar:2015,era:"nu",l:["Skärmen är en pekskärm som man trycker och drar på.","Telefonen visar kartor och vet var man är med hjälp av satelliter (GPS).","Det är från vår tid. Du har säkert använt en själv."],f:"Smartphones kom på 2000-talet och finns nu i varje ficka."},
+ {id:"namforsen",namn:"Hällristningar vid Nämforsen",ar:-3500,era:"sten",l:["Bilderna är ristade i berget vid en stor å, där man fiskade.","Det är älgar, människor och båtar. De som ristade levde på jakt och fiske och hade inga metaller.","Nämforsen i Ångermanland har några av Nordens äldsta hällristningar, flera tusen år innan bronsåldern."],f:"Hällristningarna vid Nämforsen är över 4 000 år gamla."},
+ {id:"flintdolk",namn:"Dolk av flinta",ar:-2000,era:"sten",l:["Dolken är gjord av flinta, en hård sten som man har slagit till i en lång, vacker form.","Den är gjord för att likna dolkar av metall, som man just hade börjat se i andra länder.","Flinta är sten. Dolken är från slutet av stenåldern."],f:"Flintdolkar från slutet av stenåldern är ungefär 4 000 år gamla."},
+ {id:"kivik",namn:"Kungagraven vid Kivik",ar:-1400,era:"brons",l:["Graven är en jättestor rund hög av stenar. Inuti finns en gravkammare.","I kammaren finns ristade bilder av bland annat skepp, människor och kärl.","Den ligger i Skåne och är från bronsåldern, för ungefär 3 400 år sedan."],f:"Kiviksgraven i Skåne är från bronsåldern."},
+ {id:"lur",namn:"Lurar av brons",ar:-1000,era:"brons",l:["Det är blåsinstrument av metall, böjda som stora horn.","De hittades i mossar i Danmark och södra Sverige. Man tror att man blåste i dem vid ceremonier.","De är gjorda av brons, så de är från bronsåldern."],f:"Lurar gjordes av brons för ungefär 3 000 år sedan."},
+ {id:"eketorp",namn:"Borgen Eketorp",ar:400,era:"jarn",l:["Borgen är en rund stenmur som skyddade människor och djur.","Den ligger på Öland. Man bodde innanför muren, i små hus.","Den byggdes på järnåldern, för ungefär 1 600 år sedan. Det du ser på bilden är en återuppbyggd del."],f:"Eketorp på Öland byggdes omkring år 400. En del är nu återuppbyggd."},
+ {id:"valsgarde",namn:"Hjälmar och vapen från Vendeltiden",ar:650,era:"jarn",l:["Hjälmarna är av järn och brons och har fina mönster. De låg i gravar.","De hittades i gravar vid Valsgärde och Ultuna i Uppland.","De är från Vendeltiden, strax före vikingatiden."],f:"Vendeltiden är tiden strax före vikingatiden."},
+ {id:"hunninge",namn:"Bildsten från Gotland",ar:700,era:"jarn",l:["Bilderna är ristade i en stor rest sten och var en gång målade.","Det finns flera hundra på Gotland. De visar skepp med segel och krigare.","Bildstenar reste man på Gotland före och under vikingatiden."],f:"Bildstenarna på Gotland är från tiden före och under vikingatiden."},
+ {id:"ales",namn:"Ales stenar",ar:600,era:"jarn",l:["Många stora stenar står i en ring formad som ett skepp, högt över havet.","Platsen ligger i Skåne, vid Kåseberga. Ingen vet säkert varför man byggde den.","Man tror att den byggdes för ungefär 1 400 år sedan."],f:"Ales stenar är ett skepp av stenar, ungefär 1 400 år gammalt."},
+ {id:"gjermundbu",namn:"Vikingahjälm från Gjermundbu",ar:950,era:"vik",l:["Hjälmen är av järn och skyddar huvudet och ansiktet. Den hittades i en grav i Norge.","Hjälmen har inga horn. Hornhjälmar har man bara sett på teater och i filmer.","Det är en hjälm från vikingatiden."],f:"Vikingar hade inga horn på hjälmen."},
+ {id:"spillings",namn:"Silverskatt från Gotland",ar:870,era:"vik",l:["Det är silver i form av armringar, mynt och smycken.","Skatten gömdes i jorden på Gotland. Mynten kommer från länder långt bort, till exempel Arabien.","Man betalade med silver som vägdes. Det var vikingatiden."],f:"Spillingsskatten på Gotland hittades 1999 och är en av de största vikingatida silverskatterna."},
+ {id:"ulfberht",namn:"Svärd med namnet Ulfberht",ar:1000,era:"vik",l:["Svärdet är av stål, med namnet ULFBERHT instämplat i bladet.","Svärd av den här sorten var ovanligt bra och dyra. De bars av mäktiga krigare.","De gjordes under vikingatiden."],f:"Ulfberht-svärden var vikingatidens mest eftertraktade svärd."},
+ {id:"sanktgoran",namn:"Sankt Göran och draken",ar:1489,era:"med",l:["Figuren visar en riddare på häst som slåss mot en drake. Den är gjord av trä och står i en kyrka.","Den står i Storkyrkan i Gamla stan i Stockholm. Riddaren är Sankt Göran.","Den gjordes 1489. Då slutade medeltiden snart."],f:"Sankt Göran och draken står i Storkyrkan och gjordes 1489."},
+ {id:"uppsaladomkyrka",namn:"Uppsala domkyrka",ar:1300,era:"med",l:["Kyrkan är byggd av tegel och är Nordens största. Insidan är hög och full av pelare.","Man började bygga den på 1270-talet, och det tog över 150 år.","Här kröntes många av Sveriges kungar och drottningar. Den hör till medeltiden."],f:"Uppsala domkyrka är Nordens största kyrka."},
+ {id:"gripsholm",namn:"Gripsholms slott",ar:1537,era:"vasa",l:["Slottet är byggt av tegel med runda torn, vid Mälaren.","Det byggdes som en stark borg för en kung som ville ha ett säkert fäste.","Gustav Vasa lät bygga det år 1537."],f:"Gripsholm började byggas 1537 av Gustav Vasa."},
+ {id:"bibeln",namn:"Gustav Vasas bibel",ar:1541,era:"vasa",l:["Det är en bok, trycks med tryckpress och är den första bibeln på svenska.","Den kom när landet bytte från katolsk till protestantisk kyrka. Folk fick läsa Bibeln på svenska.","Den kom ut 1541 under Gustav Vasa."],f:"Gustav Vasas bibel är den första fullständiga bibeln på svenska."},
+ {id:"erik14",namn:"Erik XIV",ar:1560,era:"vasa",l:["Han var kung efter sin pappa och gifte sig med Karin Månsdotter, som inte var adlig.","Han var äldste son till Gustav Vasa.","Han blev kung 1560."],f:"Erik XIV blev kung 1560 efter sin pappa Gustav Vasa."},
+ {id:"gustavadolf",namn:"Gustav II Adolf",ar:1632,era:"storm",l:["Han var kung och ledde Sveriges armé i det trettioåriga kriget.","Han lät bygga Vasaskeppet.","Han dog i slaget vid Lützen år 1632."],f:"Gustav II Adolf dog i slaget vid Lützen 1632."},
+ {id:"kristina",namn:"Drottning Kristina",ar:1653,era:"storm",l:["Hon blev drottning som sexåring och ville ha ett Sverige med böcker och vetenskap.","Hon var dotter till Gustav II Adolf.","Hon avgick som drottning år 1654, mitt i stormaktstiden."],f:"Kristina var drottning 1632–1654."},
+ {id:"celsius",namn:"Anders Celsius",ar:1742,era:"s1700",l:["Han var astronom och professor i Uppsala.","Han hittade på en skala för att mäta temperatur, med fryspunkt och kokpunkt för vatten.","Gradskalan som vi använder i väderrapporten är uppkallad efter honom, från 1742."],f:"Celsius skala hade först 0 som kokpunkt och 100 som fryspunkt. Den vändes efter hans död."},
+ {id:"gustav3",namn:"Gustav III",ar:1777,era:"s1700",l:["Han var kung och älskade teater, musik och konst.","Han startade Operan och Svenska Akademien. Han dog efter ett attentat på en maskeradbal.","Han levde på 1700-talet och dog 1792."],f:"Gustav III grundade Operan 1773 och Svenska Akademien 1786."},
+ {id:"bellman",namn:"Carl Michael Bellman",ar:1779,era:"s1700",l:["Han skrev visor och spelade luta.","Han skrev om vardagsliv i Stockholm, krogar och människor. Visorna är kända än i dag.","Han levde på 1700-talet, på Gustav III:s tid."],f:"Bellman skrev Fredmans epistlar på 1700-talet."},
+ {id:"gotakanal",namn:"Göta kanal",ar:1832,era:"s1800",l:["Det är en kanal med slussar där båtar kan åka genom landet.","Man grävde den för hand med spade, mest soldater.","Göta kanal öppnades 1832."],f:"Göta kanal invigdes 1832 och grävdes för hand."},
+ {id:"nobel",namn:"Alfred Nobel",ar:1867,era:"s1800",l:["Han var uppfinnare och kemist och hittade på dynamit.","Han ville att pengarna efter honom skulle bli ett pris.","Nobelpriset delas ut sedan 1901. Dynamiten fick han patent på 1867."],f:"Alfred Nobel fick patent på dynamit 1867."},
+ {id:"volvo",namn:"Volvo PV444",ar:1947,era:"s1900",l:["Bilen är rund och har inga säkerhetsbälten eller airbags.","Det var en av de första bilarna Volvo gjorde i stor mängd efter kriget.","Den började säljas 1947, mitt i 1900-talet."],f:"Volvo PV444 började säljas 1947."},
+ {id:"appleii",namn:"Apple II, en tidig persondator",ar:1977,era:"s1900",l:["Datorn är ett tangentbord i en låda som kopplas till en tv.","Den såldes till vanliga människor, inte bara forskare.","Den kom 1977, långt före internet blev vanligt."],f:"Apple II började säljas 1977."},
+ {id:"walkman",namn:"Walkman",ar:1979,era:"s1900",l:["Man bar den på sig och lyssnade i hörlurar.","Den spelar kassettband, inte filer.","Den kom 1979 och gjorde att man kunde ha musiken med sig."],f:"Sonys första Walkman kom 1979."},
+ {id:"ipad",namn:"Surfplatta (iPad)",ar:2010,era:"nu",l:["Det är en stor platt skärm utan tangentbord som man pekar och drar på.","Man kan surfa, spela spel och titta på filmer på den.","Den första kom 2010 och är från vår tid."],f:"Den första iPad kom 2010."},
+ {id:"elbil",namn:"Laddplatser för elbilar",ar:2020,era:"nu",l:["Det är parkeringsplatser där bilar står och laddar sig, inte tankar.","Bilarna går på el från batterier, inte på bensin eller diesel.","Det blir allt vanligare på 2020-talet."],f:"Elbilar blir allt vanligare på 2020-talet."}
 ];
 const KORT_BY=Object.fromEntries(KORT.map(k=>[k.id,k]));
-const KRED={"stenaldern": {"k": "Västgöten · CC BY-SA 3.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Scandinavian_Stone_Age_axe_and_knife,_original.jpg"}, "hallristning": {"k": "Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Tanumshede_2005_rock_carvings_7.jpg"}, "bronssvard": {"k": "Oscar Montellius · CC0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Early_Bronze_Age_Swords_from_Scandinavia.jpg"}, "gamlauppsala": {"k": "Henri Osti · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Uppsala_Mounds,_Gamla_Uppsala,_Uppland,_Sweden.jpg"}, "visby": {"k": "Arild Vågen · CC BY-SA 4.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Visby_ringmur_August_2020_02.jpg"}, "riddare": {"k": "Bálint Hadnagy · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Image_of_a_knight_in_armour,_1511.jpg"}, "gustavvasa": {"k": "anonymous · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Gustav_Vasa_(1496-1560)_-_Nationalmuseum_-_39500.tif"}, "karl12": {"k": "David von Krafft · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Karl_XII_1706.jpg"}, "linne": {"k": "Alexander Roslin · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Carl_von_Linn%C3%A9.jpg"}, "vaveri": {"k": "Wilhelm Peters · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Fra_Hjula_Veveri.jpeg"}, "anglok": {"k": "Goffert · No restrictions · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Wood_burning_locomotive_on_Nikolaev_Railway.jpg"}, "radio": {"k": "Joe Mabel · CC BY-SA 3.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Flint_Radio_Co_1930s_radios.jpg"}, "tv": {"k": "John Atherton · CC BY-SA 2.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Television_set_from_the_early_1950s_crop.jpg"}, "manen": {"k": "Neil A. Armstrong · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Aldrin_Apollo_11.jpg"}, "nokia": {"k": "Mustaraamattu · CC BY-SA 3.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Nokia_2110i_NHE-4NX.jpg"}, "eniac": {"k": "Unidentified U.S. Army photographer · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Classic_shot_of_the_ENIAC_(full_resolution).jpg"}, "runsten": {"k": "Erik Brate · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Runestone_U_308_at_Ekeby.jpg"}, "gokstad": {"k": "Bild: Colgill · CC BY-SA 4.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Gokstad_Ship_June_2012.jpg"}, "vasa": {"k": "Bild: Jules Verne Times Two · CC BY-SA 4.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Stern_of_the_Vasa_ship,_Vasa_Museum,_Stockholm,_Sweden_julesvernex2.jpg"}, "smartphone": {"k": "Bild: Vyacheslav Argenberg · CC BY 4.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Olkhon_Island,_GPS_navigation,_Smartphone,_Lake_Baikal,_Russia.jpg"}};
+const KRED={"stenaldern": {"k": "Västgöten · CC BY-SA 3.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Scandinavian_Stone_Age_axe_and_knife,_original.jpg"}, "hallristning": {"k": "Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Tanumshede_2005_rock_carvings_7.jpg"}, "bronssvard": {"k": "Oscar Montellius · CC0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Early_Bronze_Age_Swords_from_Scandinavia.jpg"}, "gamlauppsala": {"k": "Henri Osti · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Uppsala_Mounds,_Gamla_Uppsala,_Uppland,_Sweden.jpg"}, "visby": {"k": "Arild Vågen · CC BY-SA 4.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Visby_ringmur_August_2020_02.jpg"}, "riddare": {"k": "Bálint Hadnagy · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Image_of_a_knight_in_armour,_1511.jpg"}, "gustavvasa": {"k": "anonymous · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Gustav_Vasa_(1496-1560)_-_Nationalmuseum_-_39500.tif"}, "karl12": {"k": "David von Krafft · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Karl_XII_1706.jpg"}, "linne": {"k": "Alexander Roslin · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Carl_von_Linn%C3%A9.jpg"}, "vaveri": {"k": "Wilhelm Peters · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Fra_Hjula_Veveri.jpeg"}, "anglok": {"k": "Goffert · No restrictions · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Wood_burning_locomotive_on_Nikolaev_Railway.jpg"}, "radio": {"k": "Joe Mabel · CC BY-SA 3.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Flint_Radio_Co_1930s_radios.jpg"}, "tv": {"k": "John Atherton · CC BY-SA 2.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Television_set_from_the_early_1950s_crop.jpg"}, "manen": {"k": "Neil A. Armstrong · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Aldrin_Apollo_11.jpg"}, "nokia": {"k": "Mustaraamattu · CC BY-SA 3.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Nokia_2110i_NHE-4NX.jpg"}, "eniac": {"k": "Unidentified U.S. Army photographer · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Classic_shot_of_the_ENIAC_(full_resolution).jpg"}, "runsten": {"k": "Erik Brate · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Runestone_U_308_at_Ekeby.jpg"}, "gokstad": {"k": "Bild: Colgill · CC BY-SA 4.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Gokstad_Ship_June_2012.jpg"}, "vasa": {"k": "Bild: Jules Verne Times Two · CC BY-SA 4.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Stern_of_the_Vasa_ship,_Vasa_Museum,_Stockholm,_Sweden_julesvernex2.jpg"}, "smartphone": {"k": "Bild: Vyacheslav Argenberg · CC BY 4.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Olkhon_Island,_GPS_navigation,_Smartphone,_Lake_Baikal,_Russia.jpg"}, "namforsen": {"k": "Hans Lindqvist · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:N%C3%A4mforsen-Petroglyphs.jpg"}, "flintdolk": {"k": "Historiska museet · CC BY 2.5 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Stor_dolk_av_flinta_Senneolitikum,_Hunna_Kitteg%C3%A5rd_2299_f.Kr._-_1700_f.Kr.jpg"}, "kivik": {"k": "Johan Jönsson (Julle) · CC BY-SA 4.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Kiviksgraven_01.jpg"}, "lur": {"k": "User:Vmenkov · CC BY-SA 3.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Nationalmuseet_-_lur_-_1020004.jpg"}, "eketorp": {"k": "Gerbaltic Productions (AlbBoris) · CC BY-SA 4.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:EketorpBorg2021.jpg"}, "valsgarde": {"k": "Christer Åhlin/Statens historiska museum · CC BY 4.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Valsg%C3%A4rde_7_and_Ultuna_helmets_19115.jpg"}, "hunninge": {"k": "Swedish National Heritage Board from Sweden · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Picture_Stone_from_Hunninge,_Klinte,_Gotland_(29630060325).jpg"}, "ales": {"k": "Rickard Törnblad · CC BY-SA 4.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Ale%27s_Stones,_K%C3%A5seberga,_Scania,_Sweden_-_July_2015.jpg"}, "gjermundbu": {"k": "Skadinaujo · CC BY 3.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Gjermundbu_helmet.JPG"}, "spillings": {"k": "W.carter · CC BY-SA 4.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Spillings_Silver_Hoard_1.jpg"}, "ulfberht": {"k": "Wolfgang Sauber · CC BY-SA 4.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Schwert_2_Ulfberht.jpg"}, "sanktgoran": {"k": "Richard Mortel from Riyadh, Saudi Arabia · CC BY 2.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:St._George_and_the_Dragon,_1489,_Storkyrkan,_Stockholm_(1)_(36099731522).jpg"}, "uppsaladomkyrka": {"k": "Arild Vågen · CC BY-SA 3.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Uppsala_domkyrka_April_2013.jpg"}, "gripsholm": {"k": "Pudelek · CC BY-SA 4.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Gripsholm_castle_(by_Pudelek).JPG"}, "erik14": {"k": "Unknown authorUnknown author · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Erik_XIV,_1533-1577,_kung_av_Sverige_-_Nationalmuseum_-_16141.tif"}, "bibeln": {"k": "Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Gustav_Vasas_bibel_1541_-_title_page.jpg"}, "kristina": {"k": "Sébastien Bourdon · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Queen_Christina_(S%C3%A9bastien_Bourdon)_-_Nationalmuseum_-_18075FXD.jpg"}, "gustavadolf": {"k": "AnonymousUnknown author · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Portrait_of_Gustav_II_Adolf_(1594%E2%80%931632),_King_of_Sweden_(by_Michiel_Jansz._van_Mierevelt).jpg"}, "celsius": {"k": "Olof Arenius · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Anders-Celsius-Head.jpg"}, "gustav3": {"k": "Alexander Roslin · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Alexander_Roslin_-_Gustav_III.jpg"}, "bellman": {"k": "Per Krafft the Elder · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Carl_Michael_Bellman,_portrayed_by_Per_Krafft_1779.jpg"}, "gotakanal": {"k": "Cornell University Library · No restrictions · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Borenshult_Lock_on_the_G%C3%B6ta_Canal,_Sweden_(3611185059).jpg"}, "nobel": {"k": "Gösta Florman (1831–1900) / The Royal Library · Public domain · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:AlfredNobel_adjusted.jpg"}, "volvo": {"k": "JasonVogel · CC BY-SA 3.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Volvo_PV444_1950.JPG"}, "appleii": {"k": "The wub · CC BY-SA 4.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Apple_II,_1977,_Computer_History_Museum.jpg"}, "walkman": {"k": "Binarysequence · CC BY-SA 4.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Original_Sony_Walkman_TPS-L2.JPG"}, "ipad": {"k": "彭家杰 · CC BY-SA 4.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Apple_iPad.jpg"}, "elbil": {"k": "Philip Halling · CC BY-SA 2.0 · Wikimedia Commons", "s": "https://commons.wikimedia.org/wiki/File:Electric_car_charging_points_-_geograph.org.uk_-_7322507.jpg"}};
 const arTxt=k=>k.ar<0?"ca "+(-k.ar)+" f.Kr.":k.ar<1800?"ca år "+k.ar:"år "+k.ar;
 const ago=k=>NU-k.ar;
-const POS={riddare:"50% 20%",gustavvasa:"50% 20%",karl12:"50% 20%",linne:"50% 22%",bronssvard:"50% 50%"};
+const POS={riddare:"50% 20%",gustavvasa:"50% 20%",karl12:"50% 20%",linne:"50% 22%",bronssvard:"50% 50%",erik14:"50% 20%",gustavadolf:"50% 20%",kristina:"50% 20%",celsius:"50% 20%",gustav3:"50% 20%",bellman:"50% 20%",nobel:"50% 20%",flintdolk:"50% 40%",gjermundbu:"50% 35%",bibeln:"50% 25%",walkman:"50% 30%",hunninge:"50% 30%"};
 const tk=(k,o={})=>`<div class="tk${o.sel?" sel":""}${o.lock?" lock":""}${o.fel?" fel":""}" data-id="${k.id}"><img src="bilder/${k.id}.jpg" alt="" draggable="false" style="object-position:${POS[k.id]||"center"}"><b>${k.namn}</b>${o.ar?`<i>${arTxt(k)}</i>`:""}</div>`;
 
 const stjHtml=n=>[1,2,3].map(i=>i<=n?"★":'<span class="off">★</span>').join("");
@@ -275,12 +368,13 @@ function show(id){document.querySelectorAll(".screen").forEach(s=>s.hidden=s.id!
 const LAGEN=[
  {id:"ordna",ik:"⏳",namn:"Bygg tidslinjen",txt:"Sex bilder ligger blandade. Sätt dem i rätt ordning, äldst först.",col:"#F2780C"},
  {id:"langt",ik:"📏",namn:"Hur länge sedan?",txt:"Sätt en nål på en linje i rätt skala och se hur olika långa tiderna är.",col:"#3D5AFE"},
- {id:"detektiv",ik:"🕵️",namn:"Ledtrådsdetektiven",txt:"Vilken tid hör bilden till? Använd ledtrådarna och lista ut det.",col:"#7B61FF"}
+ {id:"detektiv",ik:"🕵️",namn:"Ledtrådsdetektiven",txt:"Vilken tid hör bilden till? Använd ledtrådarna och lista ut det.",col:"#7B61FF"},
+ {id:"min",ik:"👤",namn:"Min tidslinje",txt:"Lägg in händelser från ditt eget liv, och se hur långt tillbaka din släkt går.",col:"#1E9E5E",fri:true}
 ];
 function hem(){
-  $("lagen").innerHTML=LAGEN.map(l=>`<button data-l="${l.id}"><span class="nr" style="background:${l.col}">${l.ik}</span><span><b>${l.namn}</b><small>${l.txt}</small></span><span class="st">${stjHtml(data.stars[l.id]||0)}</span></button>`).join("");
+  $("lagen").innerHTML=LAGEN.map(l=>`<button data-l="${l.id}"><span class="nr" style="background:${l.col}">${l.ik}</span><span><b>${l.namn}</b><small>${l.txt}</small></span><span class="st">${l.fri?"":stjHtml(data.stars[l.id]||0)}</span></button>`).join("");
   show("home");}
-$("lagen").onclick=e=>{const b=e.target.closest("[data-l]");if(!b)return;({ordna:startOrdna,langt:startLangt,detektiv:startDetektiv})[b.dataset.l]();};
+$("lagen").onclick=e=>{const b=e.target.closest("[data-l]");if(!b)return;({ordna:startOrdna,langt:startLangt,detektiv:startDetektiv,min:startMin})[b.dataset.l]();};
 $("kallor").innerHTML=KORT.map(k=>{const c=KRED[k.id]||{k:"",s:"#"};return`<li>${k.namn}: <a href="${c.s}" target="_blank" rel="noopener">${c.k||"Wikimedia Commons"}</a></li>`}).join("");
 function sag(el,typ,rub,txt){el.className="fb "+typ;el.innerHTML=`<strong>${rub}</strong><span>${txt}</span>`;try{el.scrollIntoView({block:"nearest",behavior:reduced()?"auto":"smooth"})}catch(e){}}
 function haj(n){const p=$(n);if(!p)return;p.classList.remove("hopp");void p.offsetWidth;p.classList.add("hopp");}
@@ -401,6 +495,66 @@ $("dBand").onclick=e=>{const b=e.target.closest("[data-e]");if(!b||D.gjort)retur
 $("dNasta").onclick=()=>{D.i++;if(D.i>=6){slutD();return;}nastaD();};
 function slutD(){const tot=D.poang.reduce((a,b)=>a+(b||0),0),st=tot>=14?3:tot>=9?2:1;
   resultat("detektiv",st,`Du fick ${tot} poäng av 18. Ju färre ledtrådar och försök du behöver, desto fler poäng.`);}
+
+/* ---------- 4. Min tidslinje ---------- */
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const FORSLAG=[["🎂","Jag föddes",0],["🚶","Jag lärde mig gå",1],["🧒","Jag började på förskolan",2],["👶","Jag fick ett syskon",4],["🚲","Jag lärde mig cykla",5],["🏫","Jag började skolan",6],["🦷","Jag tappade en tand",6],["🏊","Jag lärde mig simma",7],["🐶","Jag fick ett husdjur",5],["🏠","Jag flyttade",6],["✈️","Jag reste långt",7],["⭐","Något eget …",null]];
+const SLAKT=["Jag","Mamma","Pappa","Mormor","Morfar","Farmor","Farfar","Syskon"];
+let M=null,FAL=null;
+function laddaMin(){const m=data.min||{};M={alder:Math.max(3,Math.min(99,+m.alder||9)),h:Array.isArray(m.h)?m.h:[],sl:Array.isArray(m.sl)?m.sl:[]};data.min=M;}
+const sparaMin=()=>{data.min=M;save();};
+function startMin(){laddaMin();$("pet4").innerHTML=owlSVG(lasDjur());FAL=null;$("mForm").hidden=true;flik("liv");show("min");ritaLiv();ritaSlakt();}
+function flik(t){document.querySelectorAll(".flikar button").forEach(b=>b.classList.toggle("v",b.dataset.t===t));$("mLiv").hidden=t!=="liv";$("mSlakt").hidden=t!=="slakt";}
+document.querySelector(".flikar").onclick=e=>{const b=e.target.closest("[data-t]");if(b)flik(b.dataset.t);};
+/* mitt liv */
+function ritaLiv(){
+  $("mAlder").textContent=M.alder;
+  $("mChips").innerHTML=FORSLAG.map((f,i)=>`<button data-f="${i}"><span>${f[0]}</span>${f[1]}</button>`).join("");
+  const fod=NU-M.alder,hs=M.h.slice().sort((a,b)=>a.a-b.a);
+  $("mLinje").innerHTML=(hs.length?hs.map((h,i)=>`<li class="${i%2?"vanster":"hoger"}"><span class="pricken">${esc(h.e||"⭐")}</span><div class="mkort"><small>Ålder ${h.a} · år ${fod+h.a}</small><b>${esc(h.t)}</b><button data-del="${h.id}" aria-label="Ta bort ${esc(h.t)}">✕</button></div></li>`).join(""):`<li class="tom">Tryck på en händelse här ovanför, så hamnar den på tidslinjen.</li>`)
+    +(hs.length?`<li class="nu"><span class="pricken">📍</span><div class="mkort"><small>Nu · år ${NU}</small><b>Jag är ${M.alder} år</b></div></li>`:"");
+  const dagar=M.alder*365+Math.floor(M.alder/4);
+  $("mFakta").textContent=`Du har levt i ungefär ${fmt(dagar)} dagar. På en tidslinje över 12 000 år är hela ditt liv ${M.alder/12000*100<.1?"mindre än 0,1":Math.round(M.alder/120*10)/10} % av linjen, mindre än en prick.`;
+}
+$("mMinus").onclick=()=>{M.alder=Math.max(3,M.alder-1);sparaMin();ritaLiv();ritaSlakt();};
+$("mPlus").onclick=()=>{M.alder=Math.min(99,M.alder+1);sparaMin();ritaLiv();ritaSlakt();};
+$("mChips").onclick=e=>{const b=e.target.closest("[data-f]");if(!b)return;const f=FORSLAG[+b.dataset.f];
+  FAL={e:f[0],a:Math.min(M.alder,f[2]==null?M.alder:f[2])};$("mText").value=f[2]==null?"":f[1];$("aVal").textContent=FAL.a;$("mForm").hidden=false;
+  $("mText").focus({preventScroll:false});$("mForm").scrollIntoView({block:"nearest",behavior:reduced()?"auto":"smooth"});};
+$("aMinus").onclick=()=>{if(FAL){FAL.a=Math.max(0,FAL.a-1);$("aVal").textContent=FAL.a;}};
+$("aPlus").onclick=()=>{if(FAL){FAL.a=Math.min(M.alder,FAL.a+1);$("aVal").textContent=FAL.a;}};
+$("mAvbryt").onclick=()=>{FAL=null;$("mForm").hidden=true;};
+$("mLagg").onclick=()=>{const t=$("mText").value.trim();if(!FAL||!t){$("mText").focus();return;}
+  M.h.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,5),t,a:FAL.a,e:FAL.e});sparaMin();FAL=null;$("mForm").hidden=true;window.Ljud&&Ljud.pop&&Ljud.pop(3);ritaLiv();};
+$("mText").addEventListener("keydown",e=>{if(e.key==="Enter")$("mLagg").click();});
+$("mLinje").onclick=e=>{const b=e.target.closest("[data-del]");if(!b)return;M.h=M.h.filter(h=>h.id!==b.dataset.del);sparaMin();ritaLiv();};
+/* släkten */
+function ritaSlakt(){
+  $("sChips").innerHTML=SLAKT.map(n=>`<button data-n="${n}">+ ${n}</button>`).join("");
+  $("sRader").innerHTML=M.sl.map(p=>`<div class="pers" data-id="${p.id}"><input class="pn" type="text" maxlength="20" value="${esc(p.n)}" aria-label="Namn"><input class="pa" type="number" inputmode="numeric" min="1900" max="${NU}" placeholder="Född år" value="${p.ar||""}" aria-label="Födelseår"><button data-rm="${p.id}" aria-label="Ta bort ${esc(p.n)}">✕</button></div>`).join("");
+  ritaSlaktAxel();}
+$("sChips").onclick=e=>{const b=e.target.closest("[data-n]");if(!b)return;const n=b.dataset.n;
+  M.sl.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,5),n,ar:n==="Jag"?NU-M.alder:""});sparaMin();ritaSlakt();
+  const r=$("sRader").querySelectorAll(".pers");const l=r[r.length-1];if(l&&!l.querySelector(".pa").value)l.querySelector(".pa").focus();};
+$("sRader").addEventListener("input",e=>{const r=e.target.closest(".pers");if(!r)return;const p=M.sl.find(x=>x.id===r.dataset.id);if(!p)return;
+  p.n=r.querySelector(".pn").value;const v=parseInt(r.querySelector(".pa").value,10);p.ar=Number.isFinite(v)?v:"";sparaMin();ritaSlaktAxel();});
+$("sRader").onclick=e=>{const b=e.target.closest("[data-rm]");if(!b)return;M.sl=M.sl.filter(p=>p.id!==b.dataset.rm);sparaMin();ritaSlakt();};
+function ritaSlaktAxel(){
+  const ok=M.sl.filter(p=>p.ar>=1800&&p.ar<=NU&&String(p.n).trim()).sort((a,b)=>a.ar-b.ar);
+  const ax=$("sAxel"),tx=$("sText");
+  if(!ok.length){ax.hidden=true;tx.innerHTML=M.sl.length?"<p>Skriv in vilket år var och en föddes (till exempel 1968), så hamnar de på tidslinjen.</p>":"<p>Tryck på en person ovanför och skriv in året hen föddes.</p>";return;}
+  const min=Math.min(ok[0].ar,NU-30)-8,span=NU-min,steg=span>110?20:span>45?10:5;
+  let tick="";for(let y=Math.ceil(min/steg)*steg;y<=NU;y+=steg)tick+=`<span class="t" style="left:${(y-min)/span*100}%">${y}</span>`;
+  const grp=[];ok.forEach(p=>{const g=grp[grp.length-1];if(g&&(p.ar-g.ar[g.ar.length-1])/span*100<9){g.ar.push(p.ar);g.n.push(p.n);}else grp.push({ar:[p.ar],n:[p.n]});});
+  const pins=grp.map((g,i)=>{const x=Math.max(8,Math.min(92,(g.ar.reduce((a,b)=>a+b,0)/g.ar.length-min)/span*100)),nm=g.n.map(esc).join(" · ");
+    return`<div class="p ${i%2?"under":"over"}" style="left:${x}%">${i%2?"":nm+"<br>"}<i></i>${i%2?nm:""}</div>`;}).join("")+`<div class="p under" style="left:96%"><i style="background:var(--good)"></i>Nu</div>`;
+  ax.hidden=false;ax.innerHTML=`<div class="l"></div>${tick}${pins}`;
+  const kort=KORT.filter(k=>k.ar>=1800).sort((a,b)=>a.ar-b.ar);
+  tx.innerHTML=ok.map(p=>{const f=kort.filter(k=>k.ar<=p.ar).pop();
+    return`<p><b>${esc(p.n)}</b> föddes ${p.ar}, för ${NU-p.ar} år sedan.${f&&p.ar-f.ar<=60?` Strax före kom ${f.namn} (${f.ar}), ${p.ar-f.ar===0?"samma år":p.ar-f.ar+" år tidigare"}.`:""}</p>`;}).join("")
+   +(ok.length>1?`<p>Mellan den äldsta och den yngsta är det ${ok[ok.length-1].ar-ok[0].ar} år.</p>`:"");
+}
+
 window.__tl={lagg,ritaOrdna,KORT,ERA,startOrdna,startLangt,startDetektiv,get O(){return O},get L(){return L},get D(){return D}};
 hem();
 </script>
