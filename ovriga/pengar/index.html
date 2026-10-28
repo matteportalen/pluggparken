@@ -139,6 +139,12 @@ button.pl:hover,.pl[role=button]:hover{background:var(--card2);border-color:rgba
 .graf canvas{display:block;width:100%;height:230px;touch-action:pan-y}
 .spel{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0 12px}
 .spel .knapp{min-width:120px}
+.gcols{display:block}
+@media(max-width:999px){#game .spel{position:sticky;bottom:8px;z-index:20;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:8px 10px;box-shadow:var(--shadow2)}}
+@media(min-width:1000px){body.gamebred .wrap{max-width:1360px}
+  .gcols{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:22px;align-items:start}
+  .gl{position:sticky;top:10px;max-height:calc(100vh - 20px);overflow:auto;padding-right:2px}
+  .gr .sub:first-child{margin-top:0}}
 .bar{height:8px;background:var(--g3);border-radius:999px;overflow:hidden;flex:1;min-width:120px}
 .bar i{display:block;height:100%;background:linear-gradient(90deg,#B8923A,#E8C468);width:0}
 .sub{font-family:var(--serif);font-weight:700;color:var(--ink);margin:18px 0 6px;font-size:1.1rem}
@@ -286,6 +292,7 @@ button.pl:hover,.pl[role=button]:hover{background:var(--card2);border-color:rgba
 <!-- ================= Tidsmaskinen: resan ================= -->
 <section id="game" hidden>
   <button class="back" id="quit">← Avsluta</button>
+  <div class="gcols"><div class="gl">
   <div class="card port">
     <div><div class="datum" id="gDatum"></div><div class="lbl">Min portfölj</div><div class="varde" id="gVarde"></div><div class="forandr" id="gFor"></div><div class="mman" id="gMan" hidden></div></div>
     <div class="p-r"><canvas id="gDonut" width="208" height="208" aria-label="Hur pengarna är fördelade"></canvas><div class="leg" id="gLeg"></div></div>
@@ -294,13 +301,14 @@ button.pl:hover,.pl[role=button]:hover{background:var(--card2);border-color:rgba
     <div class="chips" id="gJmf"><span class="info" style="margin:0 4px 0 0;align-self:center">Jämför med:</span><button data-j="spar" aria-pressed="false">🏦 Bara sparkonto</button><button data-j="sv" aria-pressed="false">🇸🇪 Bara indexfond</button></div>
     <div class="graf"><canvas id="gGraf" aria-label="Hur mycket dina pengar är värda"></canvas></div><div class="tlegend" id="gTleg" hidden><span><i style="background:var(--kop)"></i>Köp</span><span><i style="background:var(--salj)"></i>Sälj</span></div>
   </div>
-  <div id="gNotis" class="notiser" aria-live="polite"></div>
-  <div id="gNytt" aria-live="polite"></div>
   <div class="spel">
     <button class="knapp bla" id="gPlay">▶ Spela</button>
     <button class="knapp vit" id="gFart">⏩ Snabbare</button>
     <div class="bar" aria-hidden="true"><i id="gBar"></i></div>
   </div>
+  <div id="gNotis" class="notiser" aria-live="polite"></div>
+  <div id="gNytt" aria-live="polite"></div>
+  </div><div class="gr">
   <div class="sub">Det här äger du <small>(tryck för att köpa, sälja eller läsa om bolaget)</small></div>
   <div class="lista" id="gAger"></div>
   <div class="sub">Köp något nytt<span class="nyabadge" id="gNyaB" hidden></span></div>
@@ -309,6 +317,7 @@ button.pl:hover,.pl[role=button]:hover{background:var(--card2);border-color:rgba
   <div class="logg" id="gLogg"></div>
   <div class="sub" id="gNyhRub" hidden>📰 Nyheter på vägen</div>
   <div class="nyh" id="gNyh"></div>
+  </div></div>
 </section>
 
 <!-- ================= Tidsmaskinen: resultat ================= -->
@@ -579,7 +588,7 @@ function minis(){if(minisKlar)return;minisKlar=true;
 /* ---------- Skärmar ---------- */
 const SKARMAR=["home","spar","mal","tval","game","result","fragor","klar"];
 let skarm="home";
-function show(id){SKARMAR.forEach(s=>$(s).hidden=s!==id);skarm=id;window.MPS&&MPS.visa(id);window.scrollTo(0,0);
+function show(id){document.body.classList.toggle("gamebred",id==="game");SKARMAR.forEach(s=>$(s).hidden=s!==id);skarm=id;window.MPS&&MPS.visa(id);window.scrollTo(0,0);
   if(id!=="game"){paus();const fk=document.querySelector(".fakta");if(fk)fk.remove();}if(id==="home")hem();}
 document.addEventListener("click",e=>{if(e.target.closest("[data-home]"))show("home");});
 function hem(){minis();$("stMal").textContent=stjTxt(data.stars.mal)+(data.stars.mal?"":" Frågor ger stjärnor");$("stSpar").textContent=stjTxt(data.stars.spar)+(data.stars.spar?"":" Frågor ger stjärnor");$("stTid").textContent=stjTxt(data.stars.tid)+(data.stars.tid?"":" Frågor ger stjärnor");}
