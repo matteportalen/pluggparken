@@ -5,13 +5,13 @@
 <script src="../tema.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Sudoku – Pluggparken</title>
-<meta name="description" content="Sudoku för barn: fyll rutnätet så att varje siffra eller djur finns en gång i varje rad, kolumn och ruta. Från små 4 × 4 med djur till 9 × 9, med tips och anteckningar.">
+<meta name="description" content="Sudoku för barn: fyll rutnätet så att varje siffra finns en gång i varje rad, kolumn och ruta. Från små 4 × 4 till 9 × 9, med tips och anteckningar.">
 <link rel="canonical" href="https://pluggparken.se/sudoku/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Pluggparken">
 <meta property="og:locale" content="sv_SE">
 <meta property="og:title" content="Sudoku – Pluggparken">
-<meta property="og:description" content="Sudoku för barn: fyll rutnätet så att varje siffra eller djur finns en gång i varje rad, kolumn och ruta. Från små 4 × 4 med djur till 9 × 9.">
+<meta property="og:description" content="Sudoku för barn: fyll rutnätet så att varje siffra finns en gång i varje rad, kolumn och ruta. Från små 4 × 4 till 9 × 9.">
 <meta property="og:url" content="https://pluggparken.se/sudoku/">
 <meta property="og:image" content="https://pluggparken.se/og.jpg">
 <meta property="og:image:width" content="1200">
@@ -98,16 +98,14 @@ h2{font-size:1.25rem;margin:18px 0 8px}
 <script src="../huvud.js" data-titel="Sudoku" data-ikon="🔢" data-portal="ovriga"></script>
 <div class="wrap">
 <section id="home" class="screen">
-  <div class="hero"><h1>Sudoku</h1><p>Varje siffra eller djur ska finnas en gång i varje rad, kolumn och ruta.</p>
+  <div class="hero"><h1>Sudoku</h1><p>Varje siffra ska finnas en gång i varje rad, kolumn och ruta.</p>
     <svg viewBox="0 0 60 60" aria-hidden="true"><rect x="5" y="5" width="50" height="50" rx="6" fill="none" stroke="#fff" stroke-width="3"/><path d="M22 5v50M38 5v50M5 22h50M5 38h50" stroke="#fff" stroke-width="2" opacity=".7"/><path d="M22 5v50M38 5v50" stroke="#fff" stroke-width="3.2"/><text x="13.5" y="18" font-size="13" font-weight="800" fill="#FFE07A" text-anchor="middle" font-family="sans-serif">3</text><text x="30" y="35" font-size="13" font-weight="800" fill="#fff" text-anchor="middle" font-family="sans-serif">7</text><text x="46.5" y="52" font-size="13" font-weight="800" fill="#FFE07A" text-anchor="middle" font-family="sans-serif">1</text></svg></div>
   <h2>Hur stort?</h2>
   <div class="row" id="oSize"></div>
   <h2>Hur klurigt?</h2>
   <div class="row" id="oLvl"></div>
-  <h2>Siffror eller djur?</h2>
-  <div class="row2" id="oSym"></div>
   <button class="go" id="goBtn">Spela!</button>
-  <div class="how"><b>Så här gör du:</b> Tryck på en ruta och sedan på en siffra (eller ett djur) under rutnätet. Varje <b>rad</b>, varje <b>kolumn</b> och varje <b>ruta med tjock ram</b> ska ha alla olika. Du kan alltid lista ut svaret utan att gissa. 💡 Tips hjälper dig på vägen.</div>
+  <div class="how"><b>Så här gör du:</b> Tryck på en ruta och sedan på en siffra under rutnätet. Varje <b>rad</b>, varje <b>kolumn</b> och varje <b>ruta med tjock ram</b> ska ha alla olika. Du kan alltid lista ut svaret utan att gissa. 💡 Tips hjälper dig på vägen.</div>
 </section>
 <section id="game" class="screen" hidden>
   <button data-home hidden onclick="MPSud.hem()"></button>
@@ -209,7 +207,7 @@ function home(){
   const st=k=>{const v=D.stars[k]||0;return '⭐'.repeat(v)+'<i>'+'☆'.repeat(3-v)+'</i>';};
   $('oSize').innerHTML=[4,6,9].map(n=>`<button class="opt ${sel.n===n?'on':''}" data-n="${n}">${n} × ${n}<small>${n===4?'Små, nybörjare':n===6?'Lagom':'Det riktiga'}</small></button>`).join('');
   $('oLvl').innerHTML=[1,2,3].map(l=>`<button class="opt ${sel.lvl===l?'on':''}" data-l="${l}">${['😀','🤔','🧠'][l-1]} ${LV[l]}<small>${['Många ledtrådar','Några ledtrådar','Få ledtrådar'][l-1]}</small><span class="st">${st(sel.n+'-'+l)}</span></button>`).join('');
-  $('oSym').innerHTML=`<button class="opt ${sel.sym==='siffror'?'on':''}" data-s="siffror">1 2 3<small>Siffror</small></button><button class="opt ${sel.sym==='djur'?'on':''}" data-s="djur">🐶🐱🐰<small>Djur (tillval)</small></button>`;
+  sel.sym='siffror';
 }
 document.addEventListener('click',e=>{
   const b=e.target.closest('.opt');if(!b)return;
@@ -221,7 +219,7 @@ $('goBtn').onclick=()=>{D.cfg=sel;save();start();};
 
 /* ---------- spel ---------- */
 let G=null;
-const sym=d=>G.sym==='djur'?DJUR[d-1]:String(d);
+const sym=d=>String(d);
 function start(){
   const n=sel.n;const pz=makePuzzle(n,sel.lvl);
   G={n,lvl:sel.lvl,sym:sel.sym,giv:pz.p.map(v=>!!v),v:pz.p.slice(),sol:pz.sol,notes:Array(n*n).fill(0),sel:-1,note:false,hist:[],errs:0,hints:0,tip:-1,over:false,wrong:new Set()};
@@ -237,11 +235,11 @@ function build(){
     return `<button class="${cl}" data-i="${i}" aria-label="Ruta rad ${r+1}, kolumn ${c+1}"></button>`;}).join('');
   $('tagA').textContent=n+' × '+n+' · '+LV[G.lvl];
   $('pad').style.gridTemplateColumns=`repeat(${n+1},minmax(0,${n<=6?64:56}px))`;
-  $('pad').innerHTML=Array.from({length:n},(_,k)=>`<button data-d="${k+1}" aria-label="${G.sym==='djur'?'Djur '+(k+1):'Siffra '+(k+1)}">${sym(k+1)}</button>`).join('')+'<button data-d="0" aria-label="Sudda" style="font-size:1.2rem">⌫</button>';
+  $('pad').innerHTML=Array.from({length:n},(_,k)=>`<button data-d="${k+1}" aria-label="Siffra ${k+1}">${sym(k+1)}</button>`).join('')+'<button data-d="0" aria-label="Sudda" style="font-size:1.2rem">⌫</button>';
   $('acts').innerHTML='<button class="pill" id="aUndo">↶ Ångra</button><button class="pill" id="aNote">✏️ Anteckna</button><button class="pill" id="aHint">💡 Tips</button><button class="pill" id="aNew">🔄 Nytt</button>';
   $('aUndo').onclick=undo;$('aNote').onclick=()=>{G.note=!G.note;paint();};$('aHint').onclick=hint;$('aNew').onclick=start;
   paint();
-  say('Tryck på en tom ruta. Sedan väljer du '+(G.sym==='djur'?'ett djur':'en siffra')+' nedanför.');
+  say('Tryck på en tom ruta. Sedan väljer du en siffra nedanför.');
 }
 function say(t){$('msg').innerHTML=t;}
 function paint(){
@@ -309,7 +307,7 @@ function hint(){
     say('Där kom svaret. Försök hitta nästa själv!');paint();if(G.v.every((v,k)=>v===G.sol[k]))win();return;}
   const a=G.v;let pick=-1,why='';
   const cm=a.map((v,i)=>{if(v)return 0;let m=full;for(const p of g.peers[i])if(a[p])m&=~(1<<(a[p]-1));return m;});
-  for(let i=0;i<a.length;i++)if(!a[i]&&bits(cm[i])===1){pick=i;why='Här finns det bara <b>en</b> möjlig '+(G.sym==='djur'?'djur':'siffra')+'. Vilka finns redan i raden, kolumnen och rutan?';break;}
+  for(let i=0;i<a.length;i++)if(!a[i]&&bits(cm[i])===1){pick=i;why='Här finns det bara <b>en</b> möjlig siffra. Vilka finns redan i raden, kolumnen och rutan?';break;}
   if(pick<0)outer:for(const u of g.units){for(let d=1;d<=n;d++){let w=-1,k=0,has=false;for(const i of u){if(a[i]===d){has=true;break;}if(!a[i]&&(cm[i]&(1<<(d-1)))){w=i;k++;}}if(!has&&k===1){pick=w;why='Titta på '+sym(d)+': i den här raden, kolumnen eller rutan finns det bara <b>en</b> plats där den kan stå.';break outer;}}}
   if(pick<0){const e=a.findIndex(v=>!v);pick=e;why='Den här rutan är en bra start.';}
   if(pick<0)return;
