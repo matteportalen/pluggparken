@@ -364,45 +364,49 @@ var insMode='both', swapInt=false, presetCv=null;
 function presetInt(){
   if(presetCv)return presetCv;
   var c=document.createElement('canvas');c.width=c.height=600;var g=c.getContext('2d');
-  function bygg(hj){
-  var bg=g.createRadialGradient(300,300,20,300,300,440);bg.addColorStop(0,'#1B0509');bg.addColorStop(.45,'#5A1220');bg.addColorStop(1,'#8E2238');g.fillStyle=bg;g.fillRect(0,0,600,600);
-  // Trianglarna 0 och 2 (övre) respektive 1 och 3 (nedre) möts längs bildens vågräta axel när loppan viks.
-  // Hjärnan och tungan delas därför längs axeln: en halva i vardera triangeln, som varandras spegelbilder, med mittfåran på axeln.
   function klipp(q,tris){q.beginPath();tris.forEach(function(i){INT[i][2].forEach(function(pt,j){var x=(pt[0]+100)*3,y=(100-pt[1])*3;if(j)q.lineTo(x,y);else q.moveTo(x,y)});q.closePath()});q.clip()}
-  function tunga(q){var tg=q.createRadialGradient(480,330,10,480,320,190);tg.addColorStop(0,'#F08AA0');tg.addColorStop(1,'#C24A68');
-    q.fillStyle=tg;q.beginPath();q.ellipse(480,300,200,150,0,0,7);q.fill();q.fillStyle='rgba(255,255,255,.2)';q.beginPath();q.ellipse(500,360,40,14,0,0,7);q.fill();
-    q.strokeStyle='rgba(120,30,55,.6)';q.lineWidth=7;q.lineCap='round';q.beginPath();q.moveTo(430,300);q.lineTo(600,300);q.stroke()}
-  g.save();klipp(g,[1]);tunga(g);g.restore();
-  g.save();klipp(g,[3]);g.translate(600,0);g.scale(-1,1);tunga(g);g.restore();
-  if(hj){
-    var halva=function(q){q.save();q.translate(470,300);q.rotate(-Math.PI/2);var hh=330,ww=hh*hj.naturalWidth/hj.naturalHeight;
-      q.beginPath();q.rect(0,-hh/2,ww/2,hh);q.clip();q.shadowColor='rgba(0,0,0,.5)';q.shadowBlur=14;q.drawImage(hj,-ww/2,-hh/2,ww,hh);q.restore()};
-    g.save();klipp(g,[0]);halva(g);g.restore();
-    g.save();klipp(g,[2]);g.translate(600,0);g.scale(-1,1);halva(g);g.restore();
-  }
-  // tandrader: övre och undre tänder ligger mot varandra vid ytterändan (som i munnens mungipor) och är glest isär i mitten, där hålet är mörkt
-  var D0=64,RMAX=215;
-  [-1,1].forEach(function(sx){[true,false].forEach(function(up){
-    var Sx=300,Sy=300+(up?-D0:D0),Ex=300+sx*RMAX,Ey=300;
-    var len=Math.hypot(Ex-Sx,Ey-Sy),e1x=(Ex-Sx)/len,e1y=(Ey-Sy)/len;
-    var e2x=-e1y,e2y=e1x; if((e2y>0)!==up){e2x=-e2x;e2y=-e2y}   // e2 pekar mot axeln (tandspetsarna)
-    function P(r,v){return [Sx+e1x*r+e2x*v,Sy+e1y*r+e2y*v]}
-    function W(r){return 36-0.1*r}
-    // sammanhängande tandkött
-    var g0=W(0)*1.4,g1=W(len)*1.4,pa=P(0,3),pb=P(len,3),pc=P(len,-g1),pd=P(0,-g0);
-    g.save();g.fillStyle='#E0607C';g.beginPath();g.moveTo(pa[0],pa[1]);g.lineTo(pb[0],pb[1]);g.lineTo(pc[0],pc[1]);g.lineTo(pd[0],pd[1]);g.closePath();g.fill();
-    g.strokeStyle='rgba(255,190,205,.55)';g.lineWidth=5;g.lineCap='round';g.beginPath();g.moveTo(pa[0],pa[1]);g.lineTo(pb[0],pb[1]);g.stroke();g.restore();
-    var r=14;
-    while(r<len){
-      var w=W(r),dist=Math.max(0,D0*(1-r/RMAX)),h=Math.min(w*1.25,dist+w*.3);
-      g.save();var o=P(r,0);g.transform(e1x,e1y,e2x,e2y,o[0],o[1]);
-      g.shadowColor='rgba(0,0,0,.45)';g.shadowBlur=8;
-      var tg2=g.createLinearGradient(0,0,0,h);tg2.addColorStop(0,'#E8DFCB');tg2.addColorStop(.5,'#FFFFFF');tg2.addColorStop(1,'#F2EAD8');
-      g.fillStyle=tg2;g.beginPath();g.moveTo(-w/2,-2);g.lineTo(w/2,-2);g.lineTo(w/2-w*.1,h*.78);g.quadraticCurveTo(0,h*1.12,-w/2+w*.1,h*.78);g.closePath();g.fill();
-      g.restore();
-      r+=w*1.02;
+  /* Efter ritning på referensen: i varje triangel ligger tänderna stora längs den långa kanten (vågräta axeln), munhålan är stor och mörk,
+     hjärnan (övre trianglarna) och tungan (nedre) sitter vid hörnet längst ut. Trianglarna 0 och 2 respektive 1 och 3 möts längs de yttre kanterna (x = ±100),
+     så hjärnan och tungan delas där som spegelvända halvor. */
+  function bygg(hj){
+    // munhålan: nästan svart i mitten, brungrå ut mot kanterna
+    var bg=g.createRadialGradient(300,300,10,300,300,430);bg.addColorStop(0,'#050102');bg.addColorStop(.35,'#2B1215');bg.addColorStop(1,'#7C5655');g.fillStyle=bg;g.fillRect(0,0,600,600);
+    // tungan: stor, lila-rosa, nedre trianglarna
+    function tunga(q){var tg=q.createRadialGradient(560,470,10,540,470,260);tg.addColorStop(0,'#C98AA6');tg.addColorStop(.6,'#9A5578');tg.addColorStop(1,'#6A3250');
+      q.fillStyle=tg;q.beginPath();q.ellipse(585,470,270,190,0,0,7);q.fill();
+      q.strokeStyle='rgba(60,15,35,.55)';q.lineWidth=8;q.lineCap='round';q.beginPath();q.moveTo(600,330);q.lineTo(600,600);q.stroke();
+      q.fillStyle='rgba(255,255,255,.14)';q.beginPath();q.ellipse(500,450,50,16,-.3,0,7);q.fill()}
+    g.save();klipp(g,[1]);tunga(g);g.restore();
+    g.save();klipp(g,[3]);g.translate(600,0);g.scale(-1,1);tunga(g);g.restore();
+    // hjärnan: liten, i hörnet längst ut (övre trianglarna), mittfåran längs kanten x = ±100
+    if(hj){
+      var halva=function(q){q.save();q.translate(600,105);q.rotate(0);var hh=260,ww=hh*hj.naturalWidth/hj.naturalHeight;
+        q.beginPath();q.rect(-ww/2,-hh/2,ww/2,hh);q.clip();q.shadowColor='rgba(0,0,0,.5)';q.shadowBlur=14;q.drawImage(hj,-ww/2,-hh/2,ww,hh);q.restore()};
+      g.save();klipp(g,[0]);halva(g);g.restore();
+      g.save();klipp(g,[2]);g.translate(600,0);g.scale(-1,1);halva(g);g.restore();
     }
-  })});
+    // tandrader längs axeln: stora vid ytterändan, mindre och mot varandra i mitten (där de möts)
+    var D0=58,RMAX=292;
+    [-1,1].forEach(function(sx){[true,false].forEach(function(up){
+      var Sx=300,Sy=300,Ex=300+sx*RMAX,Ey=300+(up?-D0:D0);
+      var len=Math.hypot(Ex-Sx,Ey-Sy),e1x=(Ex-Sx)/len,e1y=(Ey-Sy)/len;
+      var e2x=-e1y,e2y=e1x; if((e2y>0)!==up){e2x=-e2x;e2y=-e2y}
+      function P(r,v){return [Sx+e1x*r+e2x*v,Sy+e1y*r+e2y*v]}
+      function W(r){return 22+0.16*r}
+      var g0=W(0)*1.5,g1=W(len)*1.5,pa=P(0,3),pb=P(len,3),pc=P(len,-g1),pd=P(0,-g0);
+      g.save();g.fillStyle='#D9607A';g.beginPath();g.moveTo(pa[0],pa[1]);g.lineTo(pb[0],pb[1]);g.lineTo(pc[0],pc[1]);g.lineTo(pd[0],pd[1]);g.closePath();g.fill();
+      g.strokeStyle='rgba(255,190,205,.5)';g.lineWidth=5;g.lineCap='round';g.beginPath();g.moveTo(pa[0],pa[1]);g.lineTo(pb[0],pb[1]);g.stroke();g.restore();
+      var r=10;
+      while(r<len){
+        var w=W(r),dist=D0*(r/RMAX),h=Math.min(w*1.35,dist+w*.35);
+        g.save();var o=P(r,0);g.transform(e1x,e1y,e2x,e2y,o[0],o[1]);
+        g.shadowColor='rgba(0,0,0,.45)';g.shadowBlur=9;
+        var tg2=g.createLinearGradient(0,0,0,h);tg2.addColorStop(0,'#E6DCC6');tg2.addColorStop(.5,'#FFFFFF');tg2.addColorStop(1,'#EFE6D2');
+        g.fillStyle=tg2;g.beginPath();g.moveTo(-w/2,-2);g.lineTo(w/2,-2);g.lineTo(w/2-w*.1,h*.78);g.quadraticCurveTo(0,h*1.12,-w/2+w*.1,h*.78);g.closePath();g.fill();
+        g.restore();
+        r+=w*1.02;
+      }
+    })});
   }
   bygg(null);presetCv=c;
   var hj=new Image();hj.onload=function(){bygg(hj);update()};hj.src='hjarna.png';
