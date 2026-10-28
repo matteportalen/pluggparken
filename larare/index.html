@@ -390,9 +390,10 @@ function ritaAlla(){const kvar={};document.querySelectorAll('.w[data-video="1"]'
 function elOf(id){return document.querySelector(`.w[data-id="${id}"]`);}
 function fram(id){const e=elOf(id);if(e)e.style.zIndex=++z;}
 function farg(w){return w.typ==="lista"?TYPFARG[w.d.farg||"lista"]:TYPFARG[w.typ]||"#3D5AFE";}
+const titelHtml=t=>t?esc(t):'<i style="opacity:.6;font-weight:600">Egen lista</i>';
 function bygg(w){const e=document.createElement("div");e.className="w"+(w.typ==="text"?" lapp c-"+(w.d.c||"gul"):w.typ==="skrivrad"?" skrivrad":w.typ==="video"?" video":w.typ==="textruta"?" textruta":"")+(w.min?" dold":"")+(w.lock?" last":"");e.dataset.id=w.id;if(w.typ==="video")e.dataset.video="1";
   e.style.cssText=`left:${w.x}px;top:${w.y}px;transform:${tf(w)};z-index:${++z};--c:${farg(w)}`;
-  const titel=w.typ==="lista"?`<input value="${esc(w.d.titel)}" placeholder="Rubrik" aria-label="Rubrik">`:`<b>${{timer:"⏱️ Timer",hjul:"🎡 Lyckohjul",text:"",ljud:"🔊 Ljudnivå",skrivrad:"✍️ Skrivrad",video:"▶️ Video",textruta:"✍️ Text"}[w.typ]}</b>`;
+  const titel=w.typ==="lista"?`<b class="tit" title="Dubbelklicka för att byta rubrik">${titelHtml(w.d.titel)}</b>`:`<b>${{timer:"⏱️ Timer",hjul:"🎡 Lyckohjul",text:"",ljud:"🔊 Ljudnivå",skrivrad:"✍️ Skrivrad",video:"▶️ Video",textruta:"✍️ Text"}[w.typ]}</b>`;
   e.innerHTML=`<div class="wh">${titel}${w.typ==="text"?`<button data-a="farg" title="Byt färg" aria-label="Byt färg">🎨</button>`:""}${w.typ==="textruta"?`<button data-a="tfarg" title="Textfärg" aria-label="Textfärg">🎨</button><button data-a="fet" title="Fetstil av eller på" aria-label="Fetstil" style="font-family:serif">B</button>`:""}${w.typ==="text"||w.typ==="skrivrad"||w.typ==="textruta"?"":`<button data-a="dolj" title="${w.min?"Visa innehållet igen":"Dölj innehållet (det finns kvar)"}" aria-label="${w.min?"Visa innehållet":"Dölj innehållet"}">${w.min?"👁️":"🙈"}</button>`}<button data-a="las" title="${w.lock?"Lås upp (så att rutan går att flytta)":"Lås rutan på plats"}" aria-label="${w.lock?"Lås upp rutan":"Lås rutan"}">${w.lock?"🔒":"🔓"}</button><button data-a="minus" title="Mindre" aria-label="Mindre">−</button><button data-a="plus" title="Större" aria-label="Större">+</button><button data-a="x" title="Ta bort" aria-label="Ta bort rutan">✕</button></div><div class="wb"></div>`;
   fyll(e,w);return e;}
 function fyllSkrivrad(b){const r=skrivBild(34);b.style.height=r.H+"px";b.style.backgroundImage=r.img;b.style.backgroundSize="24px "+r.H+"px";}
@@ -449,6 +450,12 @@ addEventListener("pointermove",e=>{if(!dra||e.pointerId!==dra.pid)return;
   guider(gv,gh);dra.o.x=Math.round(nx);dra.o.y=Math.round(ny);dra.w.style.left=dra.o.x+"px";dra.w.style.top=dra.o.y+"px";});
 const slutDra=e=>{if(dra&&e.pointerId===dra.pid){dra=null;guider([],[]);spara();}};
 addEventListener("pointerup",slutDra);addEventListener("pointercancel",slutDra);
+/* rubriken på en lista är vanlig text (så att hela rubrikraden går att dra i); dubbelklick gör den redigerbar */
+$("widgets").addEventListener("dblclick",e=>{const h=e.target.closest(".wh");if(!h||e.target.closest("button,input"))return;const t=h.querySelector(".tit");if(!t)return;
+  const w=h.closest(".w"),o=S.widgets.find(x=>x.id===w.dataset.id);if(!o)return;
+  const i=document.createElement("input");i.value=o.d.titel||"";i.placeholder="Rubrik";i.setAttribute("aria-label","Rubrik");i.maxLength=40;t.replaceWith(i);i.focus();i.select();
+  const klar=()=>{o.d.titel=i.value.slice(0,40);spara();const b=document.createElement("b");b.className="tit";b.title="Dubbelklicka för att byta rubrik";b.innerHTML=titelHtml(o.d.titel);i.replaceWith(b);};
+  i.addEventListener("blur",klar,{once:true});i.addEventListener("keydown",ev=>{if(ev.key==="Enter")i.blur();});});
 $("widgets").addEventListener("input",e=>{const w=e.target.closest(".w");if(!w)return;const o=S.widgets.find(x=>x.id===w.dataset.id);if(!o)return;
   if(o.typ==="lista"&&e.target.matches(".wh input")){o.d.titel=e.target.value;spara();}});
 
