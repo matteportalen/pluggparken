@@ -293,14 +293,51 @@ function drawMouth(c,n){
   c.strokeStyle=shade(mouth.color,.4); c.lineWidth=Math.max(2,n/120); c.beginPath(); c.moveTo(-w/2,0); c.lineTo(w/2,0); c.stroke();
   c.restore();
 }
-function composeUt(P,guides){
-  var saved=layers.ext;
-  if(mouth.on){
-    var n=Math.round(200*(P/400)), bc=document.createElement('canvas'); bc.width=bc.height=n;
-    var bg=bc.getContext('2d'); renderInto(bg,n,saved); drawMouth(bg,n);
-    layers.ext={img:bc,x:0,y:0,zoom:1,rot:0,flip:false};
+/* Bilden får aldrig lämna vita kanter: där fotot inte räcker till fylls rutan med en mjukt suddad, utsträckt kopia av fotot.
+   Samma förflyttning, zoom och rotation som renderInto (som är orörd), men bakgrunden ritas först. */
+function mjuk(img){   // liten, mjuk version (nedskalad i två steg) som cachas på bilden
+  if(img._mjuk)return img._mjuk;
+  var a=document.createElement('canvas');a.width=a.height=96;var g=a.getContext('2d');g.imageSmoothingQuality='high';
+  var s=Math.max(96/iw(img),96/ih(img));g.drawImage(img,(96-iw(img)*s)/2,(96-ih(img)*s)/2,iw(img)*s,ih(img)*s);
+  var b=document.createElement('canvas');b.width=b.height=24;var h=b.getContext('2d');h.imageSmoothingQuality='high';h.drawImage(a,0,0,24,24);
+  return img._mjuk=b;
+}
+/* Utvidgning: fotots kanter dras utåt och mjukas upp, så att fortsättningen ser ut som fotot (hår, bakgrund, kropp) i stället för en vit kant. */
+function padOf(img){
+  if(img._pad)return img._pad;
+  var W=iw(img),H=ih(img),m=Math.max(W,H),P=Math.round(m*.55),ps=Math.min(1,2400/(W+2*P));
+  var pw=Math.max(8,Math.round((W+2*P)*ps)),ph=Math.max(8,Math.round((H+2*P)*ps)),pp=Math.round(P*ps),w2=Math.round(W*ps),h2=Math.round(H*ps);
+  var E=document.createElement('canvas');E.width=pw;E.height=ph;var g=E.getContext('2d');g.imageSmoothingQuality='high';
+  var sw=Math.max(2,Math.round(W*.01)),sh=Math.max(2,Math.round(H*.01));   // smala kantremsor som dras ut
+  g.drawImage(img,0,0,sw,H,0,pp,pp,h2);g.drawImage(img,W-sw,0,sw,H,pp+w2,pp,pw-pp-w2,h2);
+  g.drawImage(img,0,0,W,sh,pp,0,w2,pp);g.drawImage(img,0,H-sh,W,sh,pp,pp+h2,w2,ph-pp-h2);
+  g.drawImage(img,0,0,sw,sh,0,0,pp,pp);g.drawImage(img,W-sw,0,sw,sh,pp+w2,0,pw-pp-w2,pp);
+  g.drawImage(img,0,H-sh,sw,sh,0,pp+h2,pp,ph-pp-h2);g.drawImage(img,W-sw,H-sh,sw,sh,pp+w2,pp+h2,pw-pp-w2,ph-pp-h2);
+  var t1=document.createElement('canvas');t1.width=Math.max(4,pw>>4);t1.height=Math.max(4,ph>>4);var a1=t1.getContext('2d');a1.imageSmoothingQuality='high';a1.drawImage(E,0,0,t1.width,t1.height);
+  var t2=document.createElement('canvas');t2.width=Math.max(4,pw>>2);t2.height=Math.max(4,ph>>2);var a2=t2.getContext('2d');a2.imageSmoothingQuality='high';a2.drawImage(t1,0,0,t2.width,t2.height);
+  var Sm=document.createElement('canvas');Sm.width=pw;Sm.height=ph;var s2=Sm.getContext('2d');s2.imageSmoothingQuality='high';s2.drawImage(t2,0,0,pw,ph);
+  s2.drawImage(img,0,0,W,H,pp,pp,w2,h2);   // själva fotot ovanpå den mjuka utvidgningen
+  return img._pad={c:Sm,ps:ps,P:P};
+}
+function renderExt(c,n,L){
+  c.save();c.setTransform(1,0,0,1,0,0);c.fillStyle='#fff';c.fillRect(0,0,n,n);
+  if(L.img){
+    c.imageSmoothingEnabled=true;c.imageSmoothingQuality='high';c.drawImage(mjuk(L.img),0,0,n,n);   // reserv längst bak
+    var base=n/Math.min(iw(L.img),ih(L.img))*L.zoom,pd=padOf(L.img);
+    c.translate(n/2+L.x*n,n/2+L.y*n);c.rotate(L.rot*Math.PI/180);c.scale(L.flip?-base:base,base);
+    c.drawImage(pd.c,-iw(L.img)/2-pd.P,-ih(L.img)/2-pd.P,pd.c.width/pd.ps,pd.c.height/pd.ps);
+    c.drawImage(L.img,-iw(L.img)/2,-ih(L.img)/2);   // fotot i full skärpa ovanpå
   }
-  try{return compose(P,guides)}finally{layers.ext=saved}
+  c.restore();
+}
+function bake(L,n){var bc=document.createElement('canvas');bc.width=bc.height=n;renderExt(bc.getContext('2d'),n,L);return {img:bc,x:0,y:0,zoom:1,rot:0,flip:false}}
+function composeUt(P,guides){
+  var n=Math.round(200*(P/400)),se=layers.ext,si=layers.int;
+  var be=bake(se,n);
+  if(mouth.on)drawMouth(be.img.getContext('2d'),n);
+  layers.ext=be;
+  if(si.img)layers.int=bake(si,n);
+  try{return compose(P,guides)}finally{layers.ext=se;layers.int=si}
 }
 
 function overlay(c,n,type){
@@ -315,7 +352,7 @@ function overlay(c,n,type){
 }
 function drawEditor(){
   var L=layers[cur], n=ed.width, c=ed.getContext('2d');
-  renderInto(c,n,L);
+  renderExt(c,n,L);
   if(!L.img){c.fillStyle='#8a9692'; c.font='700 '+(n/22)+'px sans-serif'; c.textAlign='center'; c.fillText('Ingen bild. Arket lämnas tomt här.',n/2,n/2);}
   if(cur==='ext'&&mouth.on)drawMouth(c,n);
   overlay(c,n,cur);
