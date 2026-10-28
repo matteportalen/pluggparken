@@ -380,11 +380,17 @@ function presetInt(){
     // gör e2 vinkelrät mot e1 och pekande mot axeln
     var px=-e1y,py=e1x; if(py*ny<0){px=-px;py=-py}
     e2x=px;e2y=py;
+    // ett sammanhängande, mjukt tandkött i stället för en ruta per tand
+    (function(){var r0=0,r1=400,g0=9*1.4,g1=(9+.17*r1)*1.4;
+      function P(r,v){return [300+e1x*r+e2x*v,300+e1y*r+e2y*v]}
+      var a=P(r0,3),b=P(r1,3),c2=P(r1,-g1),d=P(r0,-g0);
+      g.save();g.fillStyle='#E0607C';g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.lineTo(c2[0],c2[1]);g.lineTo(d[0],d[1]);g.closePath();g.fill();
+      g.strokeStyle='rgba(255,190,205,.55)';g.lineWidth=5;g.lineCap='round';g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.stroke();
+      g.restore()})();
     var r=36;
     while(r<360){
       var w=9+0.17*r,h=w*1.25,gum=w*1.4;
       g.save();g.transform(e1x,e1y,e2x,e2y,300+e1x*r,300+e1y*r);
-      g.fillStyle='#E0607C';g.fillRect(-w*.56,-gum,w*1.12,gum+2);
       g.shadowColor='rgba(0,0,0,.45)';g.shadowBlur=8;
       var tg2=g.createLinearGradient(0,0,0,h);tg2.addColorStop(0,'#E8DFCB');tg2.addColorStop(.5,'#FFFFFF');tg2.addColorStop(1,'#F2EAD8');
       g.fillStyle=tg2;g.beginPath();g.moveTo(-w/2,-2);g.lineTo(w/2,-2);g.lineTo(w/2-w*.1,h*.78);g.quadraticCurveTo(0,h*1.12,-w/2+w*.1,h*.78);g.closePath();g.fill();
