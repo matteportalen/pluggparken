@@ -258,7 +258,11 @@ let S;try{S=JSON.parse(localStorage.getItem(KEY));}catch(e){}
 if(!S||!Array.isArray(S.widgets)){S=mall();}
 if(S.v!==2){const k=1920/Math.max(600,innerWidth);S.widgets.forEach(w=>{w.x=Math.round((+w.x||0)*k);w.y=Math.round((+w.y||0)*k)});S.v=2;}   // äldre tavlor sparade i skärmpixlar: räknas om till tavlans mått (1920 breda)
 S.pen=S.pen||{c:"#1D2B53",w:6,v:"penna"};if(!S.namn||typeof S.namn!=="object")S.namn={};if(!Array.isArray(S.bank))S.bank=null;S.fav=renaFav(S.fav);if(!BG.includes(S.bg))S.bg="vit";if(!S.stl||typeof S.stl!=="object")S.stl={rutat:1,linjerat:1};
-let sparaT=0;function spara(){clearTimeout(sparaT);sparaT=setTimeout(()=>{try{localStorage.setItem(KEY,JSON.stringify({v:2,bg:S.bg,pen:S.pen,namn:S.namn,bank:S.bank||null,stl:S.stl,fav:S.fav||[],widgets:S.widgets}))}catch(e){}},250);}
+let sparaT=0;
+function sparaNu(){clearTimeout(sparaT);try{localStorage.setItem(KEY,JSON.stringify({v:2,bg:S.bg,pen:S.pen,namn:S.namn,bank:S.bank||null,stl:S.stl,fav:S.fav||[],widgets:S.widgets}))}catch(e){}}
+function spara(){clearTimeout(sparaT);sparaT=setTimeout(sparaNu,250);}
+/* sparar direkt när man lämnar sidan eller byter flik, så att det man nyss skrev (t.ex. på en post-it) alltid finns kvar */
+addEventListener("pagehide",sparaNu);document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden")sparaNu();});
 /* minne: ett namn eller en bild man ändrat på en sak (t.ex. Läsebok → Tyst läsning) följer med den saken nästa gång */
 function kom(k,f){if(!k||String(k).startsWith("egen"))return;const m=S.namn[k]=Object.assign(S.namn[k]||{},f);if(!m.t&&!m.img&&!m.e)delete S.namn[k];spara();}
 function minnet(k){const m=(S&&S.namn||{})[k];if(!m)return{};const r={};if(m.t)r.t=m.t;if(m.img)r.img=m.img;if(m.e)r.e=m.e;return r;}
@@ -326,7 +330,7 @@ $("bLagg").onclick=()=>{if(pop&&pop.dataset.t==="lagg"){stangPop();return;}
   const p=oppnaPop($("bLagg"),`<h4>Mallar</h4><button data-n="mall:start">🧩 Lektionsstart</button><button data-n="mall:arbete">🧩 Arbetspass</button><button data-n="mall:samling">🧩 Samling</button><h4>Lägg till en ruta</h4><button data-n="textruta">✍️ Textruta (skriv med tangentbordet)</button><button data-n="lista">📋 Du behöver:</button><button data-n="lista2">✅ När du är klar:</button><button data-n="timer">⏱️ Timer</button><button data-n="hjul">🎡 Lyckohjul</button><button data-n="text">📝 Post-it</button><button data-n="video">▶️ Video (YouTube)</button><button data-n="skrivrad">✍️ Skrivrad (vind, golv, källare)</button><button data-n="ljud">🔊 Ljudnivå</button><button data-n="tom">➕ Egen lista</button><hr style="width:100%;border:0;border-top:1px solid #DDE5F5"><button data-n="ny" style="color:#B4232A">🆕 Ny lektion (töm tavlan)</button>`,"meny");p.dataset.t="lagg";
   p.onclick=ev=>{const b=ev.target.closest("[data-n]");if(!b)return;stangPop();const n=b.dataset.n;
     if(n.startsWith("mall:")){anvandMall(n.slice(5));return;}
-    if(n==="ny"){if(confirm("Tömma tavlan och ta bort alla rutor?")){S.widgets=[];strokes=[];omrita();sparaRitning();ritaAlla();spara();}return;}
+    if(n==="ny"){if(confirm("Tömma tavlan och ta bort alla rutor? (Låsta rutor 🔒 och post-it-lappar med text ligger kvar tills du stänger dem själv.)")){S.widgets.filter(o=>!behall(o)).forEach(o=>{if(o.typ==="timer")delete CLOCK[o.id];if(o.typ==="ljud")stoppaMatare(o.id);});S.widgets=S.widgets.filter(behall);strokes=[];omrita();sparaRitning();ritaAlla();spara();}return;}
     laggTill(n);};};
 document.addEventListener("pointerdown",e=>{if(pop&&!pop.contains(e.target)&&!e.target.closest("#bar"))stangPop();});
 addEventListener("keydown",e=>{if(e.target.closest&&e.target.closest("input,textarea,[contenteditable]"))return;
@@ -337,7 +341,9 @@ $("hjalpX").onclick=()=>{$("hjalp").hidden=true;try{localStorage.setItem(KEY+"-h
 try{if(localStorage.getItem(KEY+"-hjalp"))$("hjalp").hidden=true;}catch(e){}
 
 /* ---------- tavlans mått: allt placeras i en yta som är 1920 enheter bred (projektor) och skalas efter fönstret ---------- */
-const SW=1920,GAP=16,X0=96,Y0=20;let K=1,SH=1080;
+const SW=1920,GAP=16,X0=96,Y0=20;
+/* rutor som ligger kvar vid Ny lektion och mallar: låsta rutor och post-it-lappar med text (de stängs bara av läraren själv) */
+const behall=o=>!!o.lock||(o.typ==="text"&&!!String((o.d&&o.d.text)||"").trim());let K=1,SH=1080;
 function scenen(){K=innerWidth/SW;SH=Math.round(innerHeight/K);const w=$("widgets");w.style.width=SW+"px";w.style.height=SH+"px";w.style.transform="scale("+K+")";}
 function mat(id){const e=elOf(id),o=S.widgets.find(x=>x.id===id);if(!e||!o)return{w:240,h:100};const s=o.s||1;return{w:e.offsetWidth*s,h:e.offsetHeight*s};}
 function rektar(utan){return S.widgets.filter(o=>o.id!==utan).map(o=>{const m=mat(o.id);return{id:o.id,x:o.x,y:o.y,w:m.w,h:m.h,lock:!!o.lock};});}
@@ -360,9 +366,9 @@ const MALLAR={
   arbete:["Arbetspass","Du behöver, timer på 20 minuter och ljudnivå",()=>[{typ:"lista",s:1,d:{titel:"Du behöver:",farg:"lista",items:[{k:"penna"},{k:"sudd"}].map(i=>Object.assign(i,minnet(i.k)))}},{typ:"timer",s:1,d:{tot:1200}},{typ:"ljud",s:1,d:{gr:70}}]],
   samling:["Samling","Timer, lyckohjul och en post-it",()=>[{typ:"timer",s:1,d:{tot:300}},{typ:"hjul",s:1,d:{namn:[],tabort:false,rot:0}},{typ:"text",s:1,rot:-1.5,d:{text:"",c:"gul"}}]]
 };
-function anvandMall(n){const m=MALLAR[n];if(!m)return;if(S.widgets.length&&!confirm("Mallen ersätter rutorna som ligger på tavlan. Fortsätta?"))return;
-  Object.keys(CLOCK).forEach(k=>delete CLOCK[k]);Object.keys(MAT).forEach(stoppaMatare);
-  S.widgets=m[2]().map(w=>Object.assign({id:uid(),x:0,y:0},w));ritaAlla();ordna(false);hjalpText("Mall: "+m[0]);}
+function anvandMall(n){const m=MALLAR[n];if(!m)return;if(S.widgets.some(o=>!behall(o))&&!confirm("Mallen ersätter rutorna som ligger på tavlan. Låsta rutor 🔒 och post-it-lappar med text ligger kvar. Fortsätta?"))return;
+  S.widgets.filter(o=>!behall(o)).forEach(o=>{delete CLOCK[o.id];if(o.typ==="ljud")stoppaMatare(o.id);});
+  S.widgets=S.widgets.filter(behall).concat(m[2]().map(w=>Object.assign({id:uid(),x:0,y:0},w)));ritaAlla();ordna(false);hjalpText("Mall: "+m[0]);}
 /* ---------- rutor ---------- */
 function laggTill(n){const c=S.widgets.length*28%140;let w;
   if(n==="lista")w={typ:"lista",x:120+c,y:100+c,s:1,d:{titel:"Du behöver:",farg:"lista",items:[]}};
