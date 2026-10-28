@@ -365,31 +365,35 @@ function presetInt(){
   if(presetCv)return presetCv;
   var c=document.createElement('canvas');c.width=c.height=600;var g=c.getContext('2d');
   var bg=g.createRadialGradient(300,300,20,300,300,440);bg.addColorStop(0,'#1B0509');bg.addColorStop(.45,'#5A1220');bg.addColorStop(1,'#8E2238');g.fillStyle=bg;g.fillRect(0,0,600,600);
-  // tungan nederst i mitten
-  var tg=g.createRadialGradient(300,455,10,300,470,170);tg.addColorStop(0,'#F08AA0');tg.addColorStop(1,'#C24A68');
-  g.fillStyle=tg;g.beginPath();g.ellipse(300,485,150,120,0,0,7);g.fill();
-  g.strokeStyle='rgba(110,25,50,.55)';g.lineWidth=7;g.lineCap='round';g.beginPath();g.moveTo(300,380);g.lineTo(300,520);g.stroke();
-  g.fillStyle='rgba(255,255,255,.2)';g.beginPath();g.ellipse(255,430,36,16,-.3,0,7);g.fill();g.beginPath();g.ellipse(345,440,28,12,.3,0,7);g.fill();
-  // tandrader längs mittsömmen: övre tänder pekar ner, undre tänder pekar upp
-  function rad(up){
-    var seam=up?292:308,dir=up?-1:1; // dir: åt vilket håll tandköttet ligger
-    g.fillStyle='#E0607C';g.fillRect(0,up?seam-96:seam+14,600,82);
-    g.fillStyle='rgba(0,0,0,.18)';g.fillRect(0,up?seam-96:seam+96-4,600,4);
-    for(var x=-14;x<620;x+=60){
-      var w=56,h=86;g.save();g.shadowColor='rgba(0,0,0,.5)';g.shadowBlur=12;g.shadowOffsetY=up?5:-5;
-      var y0=up?seam-96:seam+96,y1=up?seam:seam; // tandkött -> spets
-      var tg2=g.createLinearGradient(0,y0,0,seam);tg2.addColorStop(0,'#E8DFCB');tg2.addColorStop(.5,'#FFFFFF');tg2.addColorStop(1,'#F2EAD8');
-      g.fillStyle=tg2;g.beginPath();
-      if(up){g.moveTo(x,y0+8);g.lineTo(x+w,y0+8);g.lineTo(x+w-6,seam-12);g.quadraticCurveTo(x+w/2,seam+10,x+6,seam-12);}
-      else{g.moveTo(x,y0-8);g.lineTo(x+w,y0-8);g.lineTo(x+w-6,seam+12);g.quadraticCurveTo(x+w/2,seam-10,x+6,seam+12);}
-      g.closePath();g.fill();g.restore();
-      g.strokeStyle='rgba(120,90,70,.35)';g.lineWidth=2;g.beginPath();g.moveTo(x+w,up?y0+8:y0-8);g.lineTo(x+w-6,up?seam-12:seam+12);g.stroke();
+  // tungan nederst, vid nedre kanten
+  var tg=g.createRadialGradient(300,560,10,300,570,190);tg.addColorStop(0,'#F08AA0');tg.addColorStop(1,'#C24A68');
+  g.fillStyle=tg;g.beginPath();g.ellipse(300,585,170,125,0,0,7);g.fill();
+  g.strokeStyle='rgba(110,25,50,.55)';g.lineWidth=7;g.lineCap='round';g.beginPath();g.moveTo(300,470);g.lineTo(300,600);g.stroke();
+  g.fillStyle='rgba(255,255,255,.2)';g.beginPath();g.ellipse(250,520,36,15,-.3,0,7);g.fill();g.beginPath();g.ellipse(352,528,28,12,.3,0,7);g.fill();
+  // tandrader: två rader från varje sida som möts i mitten (brytpunkten), övre tänder pekar ner, undre upp
+  var PHI=17*Math.PI/180;
+  [-1,1].forEach(function(sx){[true,false].forEach(function(up){
+    var dx=sx*Math.cos(PHI),dy=(up?-1:1)*Math.sin(PHI),nx=-dy*sx*(up?-1:1)*0,ny=up?1:-1;
+    // e1 = riktning ut längs raden, e2 = mot tandspetsarna (vinkelrätt, mot mittlinjen)
+    var e2x=-dy*sx*0,e2y=ny; var len=Math.hypot(dx,dy);var e1x=dx/len,e1y=dy/len;
+    // gör e2 vinkelrät mot e1 och pekande mot axeln
+    var px=-e1y,py=e1x; if(py*ny<0){px=-px;py=-py}
+    e2x=px;e2y=py;
+    var r=36;
+    while(r<360){
+      var w=9+0.17*r,h=w*1.25,gum=w*1.4;
+      g.save();g.transform(e1x,e1y,e2x,e2y,300+e1x*r,300+e1y*r);
+      g.fillStyle='#E0607C';g.fillRect(-w*.56,-gum,w*1.12,gum+2);
+      g.shadowColor='rgba(0,0,0,.45)';g.shadowBlur=8;
+      var tg2=g.createLinearGradient(0,0,0,h);tg2.addColorStop(0,'#E8DFCB');tg2.addColorStop(.5,'#FFFFFF');tg2.addColorStop(1,'#F2EAD8');
+      g.fillStyle=tg2;g.beginPath();g.moveTo(-w/2,-2);g.lineTo(w/2,-2);g.lineTo(w/2-w*.1,h*.78);g.quadraticCurveTo(0,h*1.12,-w/2+w*.1,h*.78);g.closePath();g.fill();
+      g.restore();
+      r+=w*1.02;
     }
-  }
-  rad(true);rad(false);
+  })});
   presetCv=c;
   // hjärnan (uppifrån, två halvor) överst i mitten
-  var hj=new Image();hj.onload=function(){var q=c.getContext('2d');q.save();q.shadowColor='rgba(0,0,0,.55)';q.shadowBlur=22;q.shadowOffsetY=8;var hh=250,ww=hh*hj.naturalWidth/hj.naturalHeight;q.drawImage(hj,300-ww/2,20,ww,hh);q.restore();update()};hj.src='hjarna.png';
+  var hj=new Image();hj.onload=function(){var q=c.getContext('2d');q.save();q.shadowColor='rgba(0,0,0,.55)';q.shadowBlur=22;q.shadowOffsetY=8;var hh=215,ww=hh*hj.naturalWidth/hj.naturalHeight;q.drawImage(hj,300-ww/2,2,ww,hh);q.restore();update()};hj.src='hjarna.png';
   // en riktig bild (insida.jpg, kvadratisk) ersätter ritningen när den finns i mappen
   var im=new Image();im.onload=function(){var q=c.getContext('2d'),m=Math.min(im.naturalWidth,im.naturalHeight);q.clearRect(0,0,600,600);q.drawImage(im,(im.naturalWidth-m)/2,(im.naturalHeight-m)/2,m,m,0,0,600,600);update()};im.src='insida.jpg';
   return c;
