@@ -136,7 +136,7 @@ details.fb img{width:100%;max-width:420px;border:2px solid var(--line);border-ra
   </div>
   <div class="stage"><canvas id="ed" width="640" height="640" aria-label="Förhandsvisning av bilden"></canvas></div>
   <p class="hint" id="edhint"></p>
-  <div id="swapBox" hidden style="text-align:center;margin:6px 0 10px"><label for="insMode" style="font-weight:800">Insidan visar: </label><select id="insMode"><option value="pre">Färdig bild: hjärna, tänder och tunga</option><option value="own">Min egen mun</option><option value="both">Min mun i ena öppningen, färdig bild i den andra</option></select><label class="chk" for="swapInt" id="swapLbl" style="display:none;margin-top:6px"><input type="checkbox" id="swapInt">Byt plats mellan de två öppningarna</label></div>
+  <div id="swapBox" hidden style="text-align:center;margin:6px 0 10px"><label for="insMode" style="font-weight:800">Insidan visar: </label><select id="insMode"><option value="both">Min mun + färdig bild (hjärna, tänder, tunga)</option><option value="own">Bara min egen mun (som förut)</option><option value="pre">Bara den färdiga bilden</option></select><label class="chk" for="swapInt" id="swapLbl" style="margin-top:6px"><input type="checkbox" id="swapInt">Byt plats mellan de två öppningarna</label></div>
   <label class="ctl" for="zoom">Zooma <input type="range" id="zoom" min="0.4" max="8" step="0.01" value="1"><output id="zoomv">1,0×</output></label>
   <label class="ctl" for="hsize" id="hsizeBox" hidden>Huvud <input type="range" id="hsize" min="0.12" max="0.5" step="0.005" value="0.32"><output id="hsizev"></output></label>
   <label class="ctl" for="fish" id="fishBox" hidden>Fisheye <input type="range" id="fish" min="0" max="1" step="0.05" value="0.4"><output id="fishv"></output></label>
@@ -360,16 +360,17 @@ function bake(L,n){var bc=document.createElement('canvas');bc.width=bc.height=n;
 /* ===== Insidans färdiga bild: tänder längs mittsömmen, hjärna överst i mitten, tunga nederst i mitten (som på loppor man ser på film) =====
    Läge (insMode): 'pre' = bara den färdiga bilden (alla åtta trianglar), 'own' = bara din egen mun (som förut),
    'both' = din mun i ena öppningen (INT 4–7) och den färdiga bilden i den andra (INT 0–3); "Byt plats" växlar. */
-var insMode='pre', swapInt=false, presetCv=null;
+var insMode='both', swapInt=false, presetCv=null;
 function presetInt(){
   if(presetCv)return presetCv;
   var c=document.createElement('canvas');c.width=c.height=600;var g=c.getContext('2d');
   var bg=g.createRadialGradient(300,300,20,300,300,440);bg.addColorStop(0,'#1B0509');bg.addColorStop(.45,'#5A1220');bg.addColorStop(1,'#8E2238');g.fillStyle=bg;g.fillRect(0,0,600,600);
-  // tungan nederst, vid nedre kanten
-  var tg=g.createRadialGradient(300,560,10,300,570,190);tg.addColorStop(0,'#F08AA0');tg.addColorStop(1,'#C24A68');
-  g.fillStyle=tg;g.beginPath();g.ellipse(300,585,170,125,0,0,7);g.fill();
-  g.strokeStyle='rgba(110,25,50,.55)';g.lineWidth=7;g.lineCap='round';g.beginPath();g.moveTo(300,470);g.lineTo(300,600);g.stroke();
-  g.fillStyle='rgba(255,255,255,.2)';g.beginPath();g.ellipse(250,520,36,15,-.3,0,7);g.fill();g.beginPath();g.ellipse(352,528,28,12,.3,0,7);g.fill();
+  // tungan: skuren, en halva i vardera nedre hörnet
+  [150,450].forEach(function(cx){
+    var tg=g.createRadialGradient(cx,545,10,cx,560,150);tg.addColorStop(0,'#F08AA0');tg.addColorStop(1,'#C24A68');
+    g.fillStyle=tg;g.beginPath();g.ellipse(cx,585,150,105,0,0,7);g.fill();
+    g.fillStyle='rgba(255,255,255,.2)';g.beginPath();g.ellipse(cx-30,525,34,13,-.3,0,7);g.fill();
+  });
   // tandrader: två rader från varje sida som möts i mitten (brytpunkten), övre tänder pekar ner, undre upp
   var PHI=17*Math.PI/180;
   [-1,1].forEach(function(sx){[true,false].forEach(function(up){
@@ -393,7 +394,7 @@ function presetInt(){
   })});
   presetCv=c;
   // hjärnan (uppifrån, två halvor) överst i mitten
-  var hj=new Image();hj.onload=function(){var q=c.getContext('2d');q.save();q.shadowColor='rgba(0,0,0,.55)';q.shadowBlur=22;q.shadowOffsetY=8;var hh=215,ww=hh*hj.naturalWidth/hj.naturalHeight;q.drawImage(hj,300-ww/2,2,ww,hh);q.restore();update()};hj.src='hjarna.png';
+  var hj=new Image();hj.onload=function(){var q=c.getContext('2d');q.save();q.shadowColor='rgba(0,0,0,.55)';q.shadowBlur=22;q.shadowOffsetY=8;var hh=290,ww=hh*hj.naturalWidth/hj.naturalHeight;[150,450].forEach(function(cx){q.drawImage(hj,cx-ww/2,-20,ww,hh)});q.restore();update()};hj.src='hjarna.png';
   // en riktig bild (insida.jpg, kvadratisk) ersätter ritningen när den finns i mappen
   var im=new Image();im.onload=function(){var q=c.getContext('2d'),m=Math.min(im.naturalWidth,im.naturalHeight);q.clearRect(0,0,600,600);q.drawImage(im,(im.naturalWidth-m)/2,(im.naturalHeight-m)/2,m,m,0,0,600,600);update()};im.src='insida.jpg';
   return c;
