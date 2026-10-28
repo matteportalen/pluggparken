@@ -277,7 +277,7 @@ button.pl:hover,.pl[role=button]:hover{background:var(--card2);border-color:rgba
   <p class="lead" style="margin-bottom:8px">Du har <b>10 000 kr</b>. Vad vill du köpa? Tryck på + för att lägga 1 000 kr. Det du inte använder hamnar på sparkontot och får ränta. Tryck på en rad för att se kursen.</p>
   <div class="lista" id="valLista"></div>
   <div class="kvar"><b id="kvarTxt"></b><button class="knapp" id="startTid">▶ Starta tidsmaskinen</button></div>
-  <p class="info">Fler saker går att köpa senare, till exempel Spotify och bitcoin. Du kan köpa och sälja när du vill under resan.</p>
+  <p class="info">Fler saker går att köpa senare, till exempel Spotify, bitcoin och Ethereum. Du kan köpa och sälja när du vill under resan.</p>
   </div>
   <div id="tMan" hidden>
     <p class="lead" style="margin-bottom:6px">Hur mycket sätter du in varje månad?</p>
@@ -368,7 +368,7 @@ button.pl:hover,.pl[role=button]:hover{background:var(--card2);border-color:rgba
 </div>
 <script src="../../ljud.js"></script>
 <script src="../../djur.js"></script>
-<script src="kurser.js?v=2"></script>
+<script src="kurser.js?v=3"></script>
 <script src="../../huvud.js" data-hem="../../" data-titel="Pengar och sparande" data-ikon="💰" data-portal="ovriga"></script>
 <script>
 /* Pengar och sparande: Spargrisen eller banken? (åk 3–5) och Tidsmaskinen (åk 6–9).
@@ -432,11 +432,12 @@ const INFO={
   toyota:["🚙","Aktie","Bilar, bland annat hybridbilar."],
   novo:["💉","Aktie","Mediciner mot diabetes, t.ex. insulin."],
   roblox:["🧱","Aktie","Spelplattform där vem som helst kan bygga egna spel."],
-  bitcoin:["₿","Krypto","Digitala pengar utan bank. Ingen äger företag när man köper bitcoin, och priset svänger väldigt mycket."]};
+  bitcoin:["₿","Krypto","Digitala pengar utan bank. Ingen äger företag när man köper bitcoin, och priset svänger väldigt mycket."],
+  eth:["⟠","Krypto","Digitala pengar och små datorprogram i ett nätverk utan bank. Priset svänger väldigt mycket, som för bitcoin."]};
 const GRUPPER=[["Fonder",["sverige","usa","varlden"]],
   ["Svenska bolag",["volvo","hm","ericsson","investor","astra","atlas","seb","swedbank","sandvik","essity","telia","abb","hexagon","boliden","skf","electrolux","assa","autoliv","thule","embracer","paradox","spotify"]],
   ["Bolag i andra länder",["apple","microsoft","amazon","alphabet","nvidia","netflix","disney","coca","mcd","nike","sony","nintendo","toyota","tesla","novo","roblox"]],
-  ["Krypto",["bitcoin"]]];
+  ["Krypto",["bitcoin","eth"]]];
 const ORDN=GRUPPER.flatMap(g=>g[1]);
 // från början visas bara de mest kända, resten fälls ut med "Visa fler bolag"
 const KORT=["sverige","usa","varlden","hm","volvo","spotify","apple","nintendo","netflix","mcd","roblox","bitcoin"];
@@ -491,6 +492,7 @@ const OM={
   toyota:{g:"1937",l:"Japan, Toyota",s:"Bilar",t:"Toyota säljer flest bilar i världen. De var först med att sälja många hybridbilar.",f:[["1997","Prius, den första hybridbilen i stor skala, kom."]],h:[["2011-03","En stor jordbävning i Japan stoppade bilfabrikerna en tid."]]},
   novo:{g:"1923",l:"Danmark, Bagsværd",s:"Mediciner",t:"Novo Nordisk gör insulin till människor med diabetes och mediciner som Ozempic och Wegovy.",f:[["1923","Ett av bolagen som blev Novo Nordisk började göra insulin."],["1989","Novo och Nordisk slogs ihop."]],h:[["2021-06","Medicinen Wegovy, som hjälper mot fetma, godkändes i USA och aktien steg mycket."]]},
   roblox:{g:"2004",l:"USA, Kalifornien",s:"Spelplattform",t:"På Roblox bygger spelarna själva spelen. Bolaget tjänar pengar när spelare köper Robux.",f:[["2006","Roblox öppnade för spelare."]],h:[["2021-03","Roblox började säljas på börsen i New York."]]},
+  eth:{g:"2015",l:"Ingen (ett nätverk av datorer)",s:"Digitala pengar och program",t:"Ethereum startade 2015 och har flera skapare, bland dem Vitalik Buterin. Förutom att skicka pengar kan man köra små datorprogram, kallade smarta kontrakt, i nätverket. Valutan heter ether (ETH).",f:[["2015","Ethereum startade."]],h:[["2022-09","Nätverket bytte sätt att säkra sig (kallat The Merge), vilket minskade strömförbrukningen kraftigt."],["2022-11","Kryptobörsen FTX gick i konkurs och priset föll kraftigt."]]},
   bitcoin:{g:"2009",l:"Ingen (ett nätverk av datorer)",s:"Digitala pengar",t:"Bitcoin skapades av en okänd person eller grupp som kallar sig Satoshi Nakamoto. Det kan bara finnas 21 miljoner bitcoin.",f:[["2009","De första bitcoin skapades."],["2010","Någon betalade 10 000 bitcoin för två pizzor."]],h:[["2016-07","Halvering: nya bitcoin börjar skapas hälften så fort."],["2020-05","Halvering igen."],["2021-11","Priset nådde ett rekord som stod sig i över två år."],["2022-11","Kryptobörsen FTX gick i konkurs och priset föll kraftigt."]]}};
 const PAL=["#6C8CFF","#35D69A","#E8C468","#FF8FA3","#5CC8FF","#B48CFF","#FFB36B","#7BE0C9","#FF6B6B","#A0E86B","#F06CCB","#8DE0FF"];
 const COL=a=>a==="spar"?"#8FA0C2":PAL[ORDN.indexOf(a)%PAL.length];
@@ -756,7 +758,7 @@ function bRita(){const{a,i,per}=bl,[em,typ,txt]=INFO[a],v=A[a].v,f0=fran(a);
       return`<div class="pl"><span class="em">${INFO[x][0]}</span><span class="tx"><b>${A[x].n}</b><small class="${vx>=G.kost[x]?"up":"down"}">${kr(vx)} (${pr(vx/G.kost[x]-1,0)})</small></span><span class="stepper" style="gap:6px"><button data-ann="${x}" data-b="1000" style="width:auto;padding:0 10px;font-size:.9rem">Sälj 1 000</button><button data-ann="${x}" data-b="alla" style="width:auto;padding:0 10px;font-size:.9rem">Allt</button></span></div>`;}).join("")}</div>`;}
   if(bl.bara)h+=`<div class="info">Kursen visas fram till januari 2007. Resten får du se när tidsmaskinen startar!</div>`;
   const om=OM[a];if(om){const hh=(om.h||[]).filter(x=>mi(x[0])<=i);
-    h+=`<div class="om"><h3>${a==="spar"?"Om sparkontot":a==="sverige"||a==="usa"||a==="varlden"?"Om fonden":a==="bitcoin"?"Om bitcoin":"Om bolaget"}</h3><div class="fakt">${om.g?`<span>Grundat</span><b>${om.g}</b>`:""}${om.l?`<span>Land</span><b>${om.l}</b>`:""}<span>${om.l?"Gör":"Vad"}</span><b>${om.s}</b></div><p>${om.t}</p>${(om.f||[]).length||hh.length?`<ul>${(om.f||[]).map(x=>`<li><b>${x[0]}</b><span>${x[1]}</span></li>`).join("")}${hh.map(x=>`<li class="nu"><b>${x[0].slice(0,4)}</b><span>${x[1]}</span></li>`).join("")}</ul>`:""}${hh.length?`<p class="info">De gula prickarna i grafen visar när det hände.</p>`:""}</div>`;}
+    h+=`<div class="om"><h3>${a==="spar"?"Om sparkontot":a==="sverige"||a==="usa"||a==="varlden"?"Om fonden":a==="bitcoin"?"Om bitcoin":a==="eth"?"Om Ethereum":"Om bolaget"}</h3><div class="fakt">${om.g?`<span>Grundat</span><b>${om.g}</b>`:""}${om.l?`<span>Land</span><b>${om.l}</b>`:""}<span>${om.l?"Gör":"Vad"}</span><b>${om.s}</b></div><p>${om.t}</p>${(om.f||[]).length||hh.length?`<ul>${(om.f||[]).map(x=>`<li><b>${x[0]}</b><span>${x[1]}</span></li>`).join("")}${hh.map(x=>`<li class="nu"><b>${x[0].slice(0,4)}</b><span>${x[1]}</span></li>`).join("")}</ul>`:""}${hh.length?`<p class="info">De gula prickarna i grafen visar när det hände.</p>`:""}</div>`;}
   $("bInne").innerHTML=h;
   const cv=$("bGraf"),o={v:a==="spar"?v.map(x=>x*100/v[s]):v,a:s,b:i,hover:bl.hover,fmt:a==="spar"?x=>x.toFixed(1).replace(".",",")+" kr":null,ev:(OM[a]&&OM[a].h)||[],glob:true,affar:bl.bara?[]:(G.logg||[]).filter(l=>l.a===a&&(l.t==="kop"||l.t==="salj"))};rita(cv,o);
   pekbar(cv,hh=>{o.hover=hh;rita(cv,o);});
@@ -828,6 +830,7 @@ const EV={
   "2017-07":()=>ny("essity","Essity, som gör blöjor och toapapper, delas av från SCA och blir ett eget bolag på börsen."),
   "2021-04":()=>ny("roblox","Roblox, där barn bygger och spelar varandras spel, börjar säljas på börsen i New York."),
   "2016-11":()=>ny("embracer","Ett svenskt datorspelsföretag börjar säljas på börsen."),
+  "2017-11":()=>ny("eth","Ethereum är ett nätverk där man kan skicka digitala pengar och dessutom köra små datorprogram. Som bitcoin kan priset gå upp och ner mycket på kort tid."),
   "2018-04":()=>ny("spotify","Spotify från Stockholm börjar säljas på börsen i New York."),
   "2020-03":()=>kris("k20","Corona!",`En ny sjukdom sprids i hela världen. Skolor och butiker stänger. Indexfond Sverige har rasat <b>${pr(sv("2020-01","2020-03"),0)}</b> på två månader.`),
   "2021-03":()=>efter("k20",1,"Ett år efter coronaraset"),
