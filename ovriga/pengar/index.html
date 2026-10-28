@@ -503,7 +503,7 @@ const FAKTA=[
   {m:"2009-06",ik:"⏳",r:"Tålamod",t:"Efter ett ras tar det tid innan det vänder. Den som sparar länge hinner oftast vara med när det vänder."},
   {m:"2011-03",ik:"💸",r:"Utdelning",t:"Många företag delar ut en del av vinsten till dem som äger aktier. Det heter utdelning, och den är redan inräknad i våra kurser. Fondernas avgifter ligger också redan i kursen. Skatt räknar vi inte med."},
   {m:"2013-05",ik:"🏷️",r:"Avgifter",t:"Fonder tar en avgift varje år, och den dras redan i kursen. Våra indexfonder tar ungefär 0,1–0,5 %. Dyrare fonder kan ta 1,5 % eller mer, och över många år blir den skillnaden mycket pengar. Skatt är inte inräknad här."},
-  {m:"2014-08",ik:"🧾",r:"Skatt",t:"Skatt är inte inräknad i övningen. Många sparar i ett ISK (investeringssparkonto, finns sedan 2012). På ett ISK betalar man ingen skatt på vinsten, utan en liten skatt varje år på hela värdet, de senaste åren ofta mellan 0,4 och 1,1 %. Den heter schablonskatt och betalas även ett år när det har gått dåligt."},
+  {m:"2014-08",ik:"🧾",r:"Skatt",t:"Skatt är inte inräknad i övningen. Många sparar i ett ISK (investeringssparkonto, finns sedan 2012). På ett ISK betalar man ingen skatt på vinsten, utan en liten skatt varje år på hela värdet, de senaste åren ofta mellan 0,4 och 1,1 %. Den heter schablonskatt och betalas även ett år när det har gått dåligt.",dyn:()=>`</p><p><b>Räkneexempel:</b> du har just nu ${kr(varde())}. Med 1 % schablonskatt blir det ungefär <b>${kr(varde()*.01)}</b> i skatt det året, oavsett om värdet gick upp eller ner. Gick värdet upp 1 000 kr och du istället hade betalat 30 % skatt på vinsten (som på ett vanligt depåkonto) hade skatten blivit 300 kr, men gick det ner hade du inte betalat något vinstskatt alls.`},
   {m:"2015-03",ik:"📉",r:"Inflation",t:"När priserna stiger räcker samma pengar till mindre. Inflationen äter upp pengar som bara ligger stilla."},
   {m:"2017-05",ik:"🎢",r:"Risk och belöning",t:"Det som kan ge mycket pengar kan också förlora mycket. En enda aktie svänger mer än en fond."},
   {m:"2019-04",ik:"🛡️",r:"Insättningsgarantin",t:"Pengar på ett bankkonto är skyddade av staten upp till 1 050 000 kr per person och bank. Aktier och fonder har inte det skyddet."},
@@ -694,8 +694,8 @@ function steg(){if(G.i>=N-1){slut();return;}
   avgTick();G.hist[G.i]=varde();gRita();
   const fk=FAKTA.find(f=>f.m===M[G.i]);if(fk&&!G.fakta.includes(fk)){G.fakta.push(fk);visaFakta(fk);}
   handelse();}
-function visaFakta(f){const o=document.querySelector(".fakta");if(o)o.remove();const d=document.createElement("div");d.className="fakta";d.setAttribute("role","status");
-  d.innerHTML=`<span class="ik">${f.ik}</span><span><b>💡 ${f.r}</b><p>${f.t}</p></span><button aria-label="Stäng">✕</button>`;document.body.appendChild(d);d.querySelector("button").onclick=()=>d.remove();setTimeout(()=>{if(d.isConnected)d.remove();},12000);}
+function visaFakta(f){const tx=f.t+(f.dyn?f.dyn():"");const o=document.querySelector(".fakta");if(o)o.remove();const d=document.createElement("div");d.className="fakta";d.setAttribute("role","status");
+  d.innerHTML=`<span class="ik">${f.ik}</span><span><b>💡 ${f.r}</b><p>${tx}</p></span><button aria-label="Stäng">✕</button>`;document.body.appendChild(d);d.querySelector("button").onclick=()=>d.remove();setTimeout(()=>{if(d.isConnected)d.remove();},f.dyn?24000:12000);}
 function spela(){if(G.tid||skarm!=="game"||G.krav)return;if(!G.krav)$("gNytt").innerHTML="";$("gPlay").textContent="⏸ Pausa";G.tid=setInterval(steg,G.fart>1?70:260);}
 function paus(){clearInterval(G.tid);G.tid=null;$("gPlay").textContent=G.krav?"Välj först vad du gör":G.i>=N-1?"✓ Klart":"▶ Spela";}
 $("gPlay").onclick=()=>{if(G.i>=N-1){slut();return;}G.tid?paus():spela();};
@@ -842,7 +842,8 @@ function handelse(){const f=EV[M[G.i]];if(f&&!G.sedd[M[G.i]]){G.sedd[M[G.i]]=1;f
 
 /* ---------- Resultatet ---------- */
 function bara(a){return START*A[a].v[N-1]/A[a].v[fran(a)];}
-const avgTxt=()=>avgSum()>=1?` Dina fonder kostade ungefär ${kr(avgSum())} i avgift under resan (ungefärligt belopp, och avgiften är redan inräknad i kurserna). Skatt är inte inräknad (på ett ISK betalar man en årlig schablonskatt på värdet i stället för skatt på vinsten).`:" Skatt är inte inräknad i övningen (på ett ISK betalar man en årlig schablonskatt på värdet i stället för skatt på vinsten).";
+const iskTxt=()=>{let t=0;for(let y=2007;y<=2026;y++){const i=M.findIndex(m=>m.startsWith(y+"-01"));if(i>=0&&G.hist[i]!=null)t+=G.hist[i]*.01;}return ` Hade allt legat på ett ISK hade schablonskatten under resan blivit ungefär ${kr(t)} (räknat med 1 % av värdet varje år, så den verkliga skatten hade ofta varit lägre, och ISK fanns inte 2007).`;};
+const avgTxt=()=>avgSum()>=1?` Dina fonder kostade ungefär ${kr(avgSum())} i avgift under resan (ungefärligt belopp, och avgiften är redan inräknad i kurserna). Skatt är inte inräknad (på ett ISK betalar man en årlig schablonskatt på värdet i stället för skatt på vinsten).${iskTxt()}`:" Skatt är inte inräknad i övningen (på ett ISK betalar man en årlig schablonskatt på värdet i stället för skatt på vinsten)."+iskTxt();
 function slut(){paus();if(skarm!=="game")return;const v=varde(),f=v/START-1;
   if(G.krav)return;$("gNytt").innerHTML="";
   $("rVarde").textContent=kr(v);$("rFor").textContent=pr(f)+" på knappt 20 år";$("rFor").className="forandr "+(f>=0?"up":"down");
