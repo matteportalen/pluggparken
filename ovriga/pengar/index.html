@@ -99,6 +99,12 @@ select{font:inherit;background:var(--card2);color:var(--ink);border:1px solid va
 .nytt{margin:12px 0 0;background:var(--card);border:1px solid var(--line);border-left:5px solid var(--acc2);border-radius:18px;padding:12px 14px;animation:nyIn .35s ease-out}
 .nytt.krav{border-left-color:var(--down);box-shadow:0 0 0 1px var(--down),0 8px 24px rgba(214,59,59,.14)}
 .nytt .nh{display:flex;gap:10px;align-items:flex-start}.nytt .ik{font-size:1.8rem;line-height:1}.nytt small{display:block;color:var(--muted);font-weight:700;font-size:.78rem}.nytt h3{font-size:1.15rem;line-height:1.2}
+.notiser{display:flex;flex-direction:column;gap:6px;margin:10px 0 0}.notiser:empty{display:none}
+.notis{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--acc2);border-radius:14px;padding:8px 12px;font-size:.92rem;font-weight:700;animation:nyIn .35s ease-out;box-shadow:var(--shadow2)}
+.notis .ik{font-size:1.3rem;line-height:1}.notis small{display:block;color:var(--muted);font-weight:700;font-size:.72rem}.notis .pil{margin-left:auto;color:var(--muted);font-weight:800}
+.notis.rod{border-left-color:var(--down)}.notis.ut{opacity:0;transform:translateY(-4px);transition:.4s}
+.nyabadge{display:inline-block;margin-left:8px;background:var(--acc2);color:#fff;border-radius:999px;padding:1px 9px;font-size:.75rem;font-weight:800;vertical-align:middle}
+.pausnot{margin:0 0 8px;font-size:.82rem;color:var(--muted);font-weight:700}.btxt{margin:0 0 8px;padding:8px 10px;border-radius:12px;background:var(--card2);font-size:.9rem}
 .nytt .x{margin-left:auto;width:34px;height:34px;border-radius:50%;background:var(--card2);flex:none;font-weight:800}
 .nytt p{margin:6px 0}.nytt .val{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.nytt .val .knapp{flex:1 1 200px;min-height:42px;padding:8px 14px;font-size:.95rem}
 @keyframes nyIn{from{transform:translateY(-8px);opacity:0}}
@@ -288,6 +294,7 @@ button.pl:hover,.pl[role=button]:hover{background:var(--card2);border-color:rgba
     <div class="chips" id="gJmf"><span class="info" style="margin:0 4px 0 0;align-self:center">Jämför med:</span><button data-j="spar" aria-pressed="false">🏦 Bara sparkonto</button><button data-j="sv" aria-pressed="false">🇸🇪 Bara indexfond</button></div>
     <div class="graf"><canvas id="gGraf" aria-label="Hur mycket dina pengar är värda"></canvas></div><div class="tlegend" id="gTleg" hidden><span><i style="background:var(--kop)"></i>Köp</span><span><i style="background:var(--salj)"></i>Sälj</span></div>
   </div>
+  <div id="gNotis" class="notiser" aria-live="polite"></div>
   <div id="gNytt" aria-live="polite"></div>
   <div class="spel">
     <button class="knapp bla" id="gPlay">▶ Spela</button>
@@ -296,7 +303,7 @@ button.pl:hover,.pl[role=button]:hover{background:var(--card2);border-color:rgba
   </div>
   <div class="sub">Det här äger du <small>(tryck för att köpa, sälja eller läsa om bolaget)</small></div>
   <div class="lista" id="gAger"></div>
-  <div class="sub">Köp något nytt</div>
+  <div class="sub">Köp något nytt<span class="nyabadge" id="gNyaB" hidden></span></div>
   <div class="lista" id="gKop"></div>
   <div class="sub">Dina affärer</div>
   <div class="logg" id="gLogg"></div>
@@ -475,7 +482,7 @@ const OM={
   toyota:{g:"1937",l:"Japan, Toyota",s:"Bilar",t:"Toyota säljer flest bilar i världen. De var först med att sälja många hybridbilar.",f:[["1997","Prius, den första hybridbilen i stor skala, kom."]],h:[["2011-03","En stor jordbävning i Japan stoppade bilfabrikerna en tid."]]},
   novo:{g:"1923",l:"Danmark, Bagsværd",s:"Mediciner",t:"Novo Nordisk gör insulin till människor med diabetes och mediciner som Ozempic och Wegovy.",f:[["1923","Ett av bolagen som blev Novo Nordisk började göra insulin."],["1989","Novo och Nordisk slogs ihop."]],h:[["2021-06","Medicinen Wegovy, som hjälper mot fetma, godkändes i USA och aktien steg mycket."]]},
   roblox:{g:"2004",l:"USA, Kalifornien",s:"Spelplattform",t:"På Roblox bygger spelarna själva spelen. Bolaget tjänar pengar när spelare köper Robux.",f:[["2006","Roblox öppnade för spelare."]],h:[["2021-03","Roblox började säljas på börsen i New York."]]},
-  bitcoin:{g:"2009",l:"Ingen (ett nätverk av datorer)",s:"Digitala pengar",t:"Bitcoin skapades av en okänd person eller grupp som kallar sig Satoshi Nakamoto. Det kan bara finnas 21 miljoner bitcoin.",f:[["2009","De första bitcoin skapades."],["2010","Någon betalade 10 000 bitcoin för två pizzor."]],h:[["2016-07","Halvering: nya bitcoin börjar skapas hälften så fort."],["2020-05","Halvering igen."],["2021-11","Priset nådde ett rekord som stod sig i över två år."],["2022-11","Kryptobörsen FTX gick i konkurs och priset rasade."]]}};
+  bitcoin:{g:"2009",l:"Ingen (ett nätverk av datorer)",s:"Digitala pengar",t:"Bitcoin skapades av en okänd person eller grupp som kallar sig Satoshi Nakamoto. Det kan bara finnas 21 miljoner bitcoin.",f:[["2009","De första bitcoin skapades."],["2010","Någon betalade 10 000 bitcoin för två pizzor."]],h:[["2016-07","Halvering: nya bitcoin börjar skapas hälften så fort."],["2020-05","Halvering igen."],["2021-11","Priset nådde ett rekord som stod sig i över två år."],["2022-11","Kryptobörsen FTX gick i konkurs och priset föll kraftigt."]]}};
 const PAL=["#6C8CFF","#35D69A","#E8C468","#FF8FA3","#5CC8FF","#B48CFF","#FFB36B","#7BE0C9","#FF6B6B","#A0E86B","#F06CCB","#8DE0FF"];
 const COL=a=>a==="spar"?"#8FA0C2":PAL[ORDN.indexOf(a)%PAL.length];
 const GLOB=[["2008-10","Finanskrisen"],["2020-03","Corona"],["2022-06","Inflationen"]];
@@ -658,7 +665,7 @@ $("valLista").onclick=e=>{const p=e.target.closest("[data-p]"),m=e.target.closes
   if(m){const a=m.dataset.m;if(valKr[a]){valKr[a]-=1000;if(!valKr[a])delete valKr[a];}valRita();return;}
   const r=e.target.closest("[data-a]");if(r&&finns(r.dataset.a,0))blad(r.dataset.a,0,true);};
 $("gaTid").onclick=()=>{valKr={};valRita();show("tval");};
-function startResa(){G.nyh=[];G.krav=false;$("gNytt").innerHTML="";
+function startResa(){G.nyh=[];G.nya=[];G.krav=false;$("gNytt").innerHTML="";$("gNotis").innerHTML="";nyaB();
   $("gJmf").querySelectorAll("[data-j]").forEach(b=>b.setAttribute("aria-pressed","false"));
   $("gMan").hidden=G.satt!=="man";
   $("gFart").textContent="⏩ Snabbare";show("game");gRita();setTimeout(spela,500);}
@@ -714,18 +721,18 @@ document.addEventListener("click",e=>{const r=e.target.closest("#gAger [data-a],
 
 /* ---------- Bladet med en aktie eller fond: kurs, perioder, köp och sälj ---------- */
 let bl=null;
-function blad(a,i,bara){document.querySelectorAll(".blad").forEach(x=>x.remove());bl={a,i,bara,per:a==="spar"?"max":"1",hover:null};
+function blad(a,i,bara){document.querySelectorAll(".blad").forEach(x=>x.remove());const pausad=skarm==="game"&&!bara&&!!G.tid;if(skarm==="game"&&G.tid)paus();bl={a,i,bara,per:a==="spar"?"max":"1",hover:null,bt:G.bt||"",pausad:skarm==="game"&&!bara};G.bt="";if(G.nya){G.nya=G.nya.filter(x=>x!==a);nyaB();}
   const d=document.createElement("div");d.className="blad";d.innerHTML=`<div role="dialog" aria-label="${A[a].n}"><button class="stang" aria-label="Stäng">✕</button><div id="bInne"></div></div>`;
   document.body.appendChild(d);d.onclick=e=>{if(e.target===d||e.target.closest(".stang"))stangBlad();};
   bRita();}
 function stangBlad(){const d=document.querySelector(".blad");if(d)d.remove();bl=null;if(skarm==="game")gRita();}
 function bRita(){const{a,i,per}=bl,[em,typ,txt]=INFO[a],v=A[a].v,f0=fran(a);
   const ant={"1":12,"3":36,"5":60,max:9999}[per],s=Math.max(f0,i-ant),ff=i>s?v[i]/v[s]-1:0;
-  let h=`<h2>${em} ${A[a].n}</h2><div class="info" style="margin:0 0 6px">${typ} · ${txt}</div>`;
+  let h=(bl.bt?`<div class="btxt">${bl.bt}</div>`:"")+`<h2>${em} ${A[a].n}</h2><div class="info" style="margin:0 0 6px">${typ} · ${txt}</div>`;
   if(a==="spar")h+=`<div class="kurs">${K.ranta[i].toFixed(2).replace(".",",")} %</div><div class="info">ränta per år i ${datum(i)}. Grafen visar hur 100 kr på kontot har växt.</div>`+(G.satt==="man"&&!bl.bara&&skarm==="game"?(G.till==="spar"?`<p class="info" style="color:var(--gold)">📅 Hit går dina ${kr(G.man)} varje månad.</p>`:`<div class="handel"><button class="knapp vit" data-till="spar">📅 Spara på sparkontot varje månad i stället</button></div>`):"");
   else h+=`<div class="kurs">${kurs(v[i])} kr</div><div class="forandr ${ff>=0?"up":"down"}">${pr(ff)} <span style="color:var(--muted);font-weight:700">${per==="max"?"sedan "+M[s].slice(0,4):s===f0&&i-s<ant?"sedan "+datum(s):"senaste "+(per==="1"?"året":per+" åren")}</span></div>`;
   h+=`<div class="perioder">${[["1","1 år"],["3","3 år"],["5","5 år"],["max","Max"]].map(([k,n])=>`<button data-per="${k}" aria-pressed="${k===per}">${n}</button>`).join("")}</div>
-    <div class="graf"><canvas id="bGraf"></canvas></div>${!bl.bara&&(G.logg||[]).some(l=>l.a===a&&(l.t==="kop"||l.t==="salj"))?`<div class="tlegend"><span><i style="background:var(--kop)"></i>Köp</span><span><i style="background:var(--salj)"></i>Sälj</span><span>Dra över en prick för att se affären</span></div>`:""}`;
+    <div class="graf"><canvas id="bGraf"></canvas></div>${bl.pausad?`<p class="pausnot">⏸ Tiden står still medan du tittar. Tryck ▶ Spela när du vill köra vidare.</p>`:""}${!bl.bara&&(G.logg||[]).some(l=>l.a===a&&(l.t==="kop"||l.t==="salj"))?`<div class="tlegend"><span><i style="background:var(--kop)"></i>Köp</span><span><i style="background:var(--salj)"></i>Sälj</span><span>Dra över en prick för att se affären</span></div>`:""}`;
   if(a!=="spar"){let ho=-Infinity,la=Infinity;for(let j=s;j<=i;j++){ho=Math.max(ho,v[j]);la=Math.min(la,v[j]);}
     h+=`<div class="nyckel"><span>Högsta</span><b>${kurs(ho)} kr</b><span>Lägsta</span><b>${kurs(la)} kr</b><span>Från toppen</span><b class="${v[i]>=ho?"up":"down"}">${pr(v[i]/ho-1)}</b><span>Månad</span><b style="text-transform:capitalize">${datum(i)}</b></div>`;}
   if(!bl.bara&&a!=="spar"){const ag=(G.u[a]||0)*v[i],c=G.cash;
@@ -785,7 +792,16 @@ function efter(id,ar,rub){const val=G.val[id];if(!val||val==="ingen")return;cons
   else if(val==="vanta")t=`<p>Du väntade lugnt. Börsen har gått upp <b>${pr(A.sverige.v[G.i]/A.sverige.v[s.i]-1,0)}</b> sedan raset.</p><p>Dina pengar är nu värda <b>${kr(nu)}</b>. Att vänta är ofta det svåraste och det bästa när man sparar länge.</p>${G.satt==="man"&&s.till!=="spar"?`<p>📅 Medan det var billigt köpte dina ${kr(G.man)} varje månad fler andelar än vanligt. Nu är de andelarna värda mycket mer.</p>`:""}`;
   else t=`<p>Du köpte mer när det var billigt. Indexfond Sverige har gått upp <b>${pr(A.sverige.v[G.i]/A.sverige.v[s.i]-1,0)}</b> sedan du köpte.</p><p>Att köpa när andra är rädda kan löna sig, men ingen vet i förväg hur långt ner det går.</p>`;
   ruta("🔎",rub,t,[["Fortsätt",null]]);}
-function ny(a,txt){ruta(INFO[a][0],`Nytt: ${A[a].n}!`,`<p>${txt}</p><p>Kurs: <b>${kurs(A[a].v[G.i])} kr</b>. På sparkontot har du ${kr(G.cash)}.${G.cash<1000&&Object.keys(G.u).length?" Vill du köpa kan du sälja något du äger.":""}</p>`,[[`Titta på ${A[a].n}`,()=>{paus();blad(a,G.i,false);},"bla"],["Stäng",null,"vit"]]);}
+// nya bolag och mindre nyheter: en diskret notis, tiden fortsätter. Tryck på notisen för att pausa och titta på bladet.
+function nyaB(){const b=$("gNyaB");if(!b)return;const n=(G.nya||[]).length;b.hidden=!n;b.textContent=n+" nya";}
+function notis(a,ik,rub,txt,rod){(G.nyh=G.nyh||[]).push({i:G.i,ik,rub});(G.nya=G.nya||[]);if(!rod&&!G.nya.includes(a))G.nya.push(a);nyaB();
+  const box=$("gNotis");while(box.children.length>=3)box.firstChild.remove();
+  const b=document.createElement("button");b.className="notis"+(rod?" rod":"");b.type="button";
+  b.innerHTML=`<span class="ik">${ik}</span><span><small>${stor(datum(G.i))}</small>${rub}</span><span class="pil">Titta ›</span>`;
+  const bort=()=>{b.classList.add("ut");setTimeout(()=>b.remove(),400);};
+  b.onclick=()=>{b.remove();paus();G.bt=txt;blad(a,G.i,false);};
+  box.appendChild(b);setTimeout(()=>{if(b.isConnected)bort();},10000);}
+function ny(a,txt){notis(a,INFO[a][0],`🆕 ${A[a].n} finns nu att köpa`,`<p style="margin:0">${txt}</p><p style="margin:6px 0 0">Kurs: <b>${kurs(A[a].v[G.i])} kr</b>. På sparkontot har du ${kr(G.cash)}.${G.cash<1000&&Object.keys(G.u).length?" Vill du köpa kan du sälja något du äger.":""}</p>`);}
 const EV={
   "2008-03":()=>ny("varlden","En indexfond som köper en liten bit av tusentals företag i hela världen. Så sprider man pengarna väldigt mycket."),
   "2008-10":()=>kris("k08","Finanskrisen!",`Banker i USA har lånat ut pengar till folk som inte kunde betala tillbaka, och nu är hela världen orolig. Indexfond Sverige är värd <b>${pr(sv("2007-10","2008-10"),0)}</b> mindre än för ett år sedan.`),
@@ -801,11 +817,11 @@ const EV={
   "2020-03":()=>kris("k20","Corona!",`En ny sjukdom sprids i hela världen. Skolor och butiker stänger. Indexfond Sverige har rasat <b>${pr(sv("2020-01","2020-03"),0)}</b> på två månader.`),
   "2021-03":()=>efter("k20",1,"Ett år efter coronaraset"),
   "2021-11":()=>{const u=A.bitcoin.v[G.i]/A.bitcoin.v[G.i-12]-1;skugga("btc");
-    ruta("🚀","Alla pratar om bitcoin!",`<p>Bitcoin har gått upp <b>${pr(u,0)}</b> på ett år. Kompisar och vuxna säger att man måste köpa nu.</p><p>Vill du köpa?</p>`,[["Köp bitcoin för 1 000 kr",()=>{G.val.btc="kop";G.logg.push({i:G.i,t:"val",txt:"Alla pratade om bitcoin. Du köpte."});kop("bitcoin",1000);},"bla"],["Nej, jag väntar",()=>{G.val.btc="nej";G.logg.push({i:G.i,t:"val",txt:"Alla pratade om bitcoin. Du väntade."});}]]);},
+    ruta("🚀","Bitcoin har stigit mycket",`<p>Bitcoin har gått upp <b>${pr(u,0)}</b> på ett år och många pratar om den.</p><p>Bitcoin har gått genom flera stora uppgångar och fall förut. Vissa tror att den fortsätter uppåt på lång sikt, andra tycker att den redan är dyr. Ingen vet säkert.</p><p>Vill du köpa?</p>`,[["Köp bitcoin för 1 000 kr",()=>{G.val.btc="kop";G.logg.push({i:G.i,t:"val",txt:"Bitcoin hade stigit mycket. Du köpte."});kop("bitcoin",1000);},"bla"],["Nej, jag väntar",()=>{G.val.btc="nej";G.logg.push({i:G.i,t:"val",txt:"Bitcoin hade stigit mycket. Du väntade."});}]]);},
   "2022-11":()=>{const d=A.bitcoin.v[G.i]/A.bitcoin.v[mi("2021-11")]-1;
-    ruta("📉","Bitcoin har rasat",`<p>Bitcoin är värd <b>${pr(d,0)}</b> jämfört med för ett år sedan, när alla pratade om den.</p><p>${G.val.btc==="kop"?"Du köpte när alla var glada. Det är vanligt att priset redan har stigit mycket när alla pratar om något.":"Du köpte inte när alla pratade om den. Det som har gått upp mycket kan också gå ner mycket."}</p>`,[["Fortsätt",null]]);},
+    ruta("📉","Bitcoin har fallit",`<p>Bitcoin är värd <b>${pr(d,0)}</b> jämfört med för ett år sedan.</p><p>${G.val.btc==="kop"?"Du köpte nära toppen och det syns nu i ditt värde.":"Du köpte inte, så det här påverkar inte dina pengar."}</p><p>Bitcoin har fallit med över 70 % flera gånger tidigare, till exempel 2014–2015 och 2018. Efter varje tidigare fall har priset så småningom nått nya rekord, men det har tagit flera år, och ingen vet om det upprepas. Den som äger bitcoin måste klara att priset kan halveras och att vänta länge.</p>`,[["Fortsätt",null]]);},
   "2022-10":()=>{const g=20*K.kpi[G.i]/K.kpi[0];ruta("🛒","Allt blir dyrare",`<p>Priserna i affären har stigit snabbt det senaste året (inflation). En glass som kostade 20 kr i januari 2007 kostar nu ungefär <b>${g.toFixed(0)} kr</b>.</p><p>Pengar som bara ligger stilla räcker till mindre och mindre. Räntan på sparkontot är bara ${K.ranta[G.i].toFixed(1).replace(".",",")} %.</p>`,[["Fortsätt",null]]);},
-  "2023-06":()=>{if(G.u.embracer){const d=A.embracer.v[G.i]/A.embracer.v[mi("2021-06")]-1;ruta("🎮","Embracer har rasat",`<p>Datorspelsföretaget du äger har tappat <b>${pr(d,0)}</b> på två år. Företaget hade lånat mycket pengar för att köpa andra spelföretag.</p><p>Så kan det gå med en enda aktie. I en indexfond hade det bara varit en liten del av pengarna.</p>`,[["Fortsätt",null]]);}},
+  "2023-06":()=>{if(G.u.embracer){const d=A.embracer.v[G.i]/A.embracer.v[mi("2021-06")]-1;notis("embracer","🎮",`Embracer, som du äger, har tappat ${pr(d,0)} på två år`,`<p style="margin:0">Datorspelsföretaget du äger har tappat <b>${pr(d,0)}</b> på två år. Företaget hade lånat mycket pengar för att köpa andra spelföretag.</p><p style="margin:6px 0 0">Så kan det gå med en enda aktie. I en indexfond hade det bara varit en liten del av pengarna.</p>`,true);}},
 };
 function handelse(){const f=EV[M[G.i]];if(f&&!G.sedd[M[G.i]]){G.sedd[M[G.i]]=1;f();}if(G.i>=N-1){paus();setTimeout(slut,600);}}
 
@@ -830,7 +846,7 @@ function slut(){paus();if(skarm!=="game")return;const v=varde(),f=v/START-1;
   $("rArInfo").textContent=`Sämst var att börja ${arS[0][0]} (${kr(arS[0][1])}) och bäst ${arS[arS.length-1][0]} (${kr(arS[arS.length-1][1])}). ${alla?"Alla startår gav mer pengar efter tio år, men hur mycket berodde på när man började.":"Några startår gav mindre pengar efter tio år."} Ju längre man sparar, desto mindre betyder det vilket år man började. Ingen kan veta i förväg om det är ett bra år att börja.`;
   const fr07=ORDN.filter(a=>fran(a)===0).map(a=>[a,bara(a)]).sort((x,y)=>y[1]-x[1]);
   const b=fr07[0],s=fr07[fr07.length-1];
-  $("rBast").innerHTML=`<p style="margin:0 0 6px">${INFO[b[0]][0]} <b>${A[b[0]].n}</b>: 10 000 kr blev <b class="up">${kr(b[1])}</b>.</p><p style="margin:0 0 6px">${INFO[s[0]][0]} <b>${A[s[0]].n}</b>: 10 000 kr blev <b class="${s[1]>=START?"up":"down"}">${kr(s[1])}</b>.</p><p class="info" style="margin:0 0 6px">Ingen kunde veta 2007 vilket bolag som skulle gå bäst eller sämst. Med en indexfond äger man lite av alla, både vinnarna och förlorarna.</p><p class="info" style="margin:0">Bitcoin räknas inte här eftersom den inte fanns att köpa 2007. 1 000 kr i bitcoin i oktober 2014 hade blivit ${kr(1000*A.bitcoin.v[N-1]/A.bitcoin.v[mi("2014-10")])}, men på vägen rasade den flera gånger med mer än hälften.</p>`;
+  $("rBast").innerHTML=`<p style="margin:0 0 6px">${INFO[b[0]][0]} <b>${A[b[0]].n}</b>: 10 000 kr blev <b class="up">${kr(b[1])}</b>.</p><p style="margin:0 0 6px">${INFO[s[0]][0]} <b>${A[s[0]].n}</b>: 10 000 kr blev <b class="${s[1]>=START?"up":"down"}">${kr(s[1])}</b>.</p><p class="info" style="margin:0 0 6px">Ingen kunde veta 2007 vilket bolag som skulle gå bäst eller sämst. Med en indexfond äger man lite av alla, både vinnarna och förlorarna.</p><p class="info" style="margin:0">Bitcoin räknas inte här eftersom den inte fanns att köpa 2007. 1 000 kr i bitcoin i oktober 2014 hade blivit ${kr(1000*A.bitcoin.v[N-1]/A.bitcoin.v[mi("2014-10")])}, men på vägen föll den flera gånger med mer än hälften, och steg sedan till nya rekord.</p>`;
   const rad=[];const lg=G.logg||[];
   const forst=lg.filter(l=>l.i===0&&l.t==="kop"),st=lg.find(l=>l.t==="start");if(st)rad.push({i:0,k:"k",t:`Du började spara ${kr(st.x)} varje månad i ${A[st.a].n}.`});else if(forst.length)rad.push({i:0,k:"k",t:"Du köpte "+forst.map(l=>A[l.a].n+" för "+kr(l.x)).join(", ")+"."});else rad.push({i:0,k:"",t:"Du lät alla pengar ligga på sparkontot."});
   lg.filter(l=>l.i>0).forEach(l=>{if(l.t==="val")rad.push({i:l.i,k:"e",t:l.txt});else if(l.t==="till")rad.push({i:l.i,k:"e",t:`Från nu sparade du ${kr(l.x)} varje månad i ${A[l.a].n}.`});else rad.push({i:l.i,k:l.t==="kop"?"k":"s",t:(l.t==="kop"?"Du köpte ":"Du sålde ")+A[l.a].n+" för "+kr(l.x)+"."});});
@@ -878,10 +894,10 @@ const FR={
   ()=>({q:"Varför är en indexfond oftast mindre riskabel än en enda aktie?",a:["Pengarna sprids på många företag","Den har alltid hög ränta","Den kan inte gå ner"],r:0,f:"Om ett företag går dåligt, som Embracer, är det bara en liten del av fonden. Fonden kan också gå ner, men den rasar sällan lika mycket som en enda aktie."}),
   ()=>({q:"Vad är en aktie?",a:["En liten del av ett företag","Ett lån till banken","En sorts sparkonto"],r:0,f:"Den som äger en aktie äger en liten del av företaget och får dela på vinsten (utdelning) när det går bra."}),
   ()=>({q:"Två fonder går precis lika bra, men den ena tar 1,5 % i avgift varje år och den andra 0,2 %. Vad händer efter 20 år?",a:["Den med låg avgift har gett mycket mer","Det spelar ingen roll","Den dyra har gett mer"],r:0,f:"Avgiften dras varje år, och den tar också bort det pengarna hade kunnat växa. Efter 20 år blir skillnaden flera tusen kronor på 10 000."}),
-  ()=>({q:"Bitcoin gick upp väldigt mycket. Betyder det att den kommer att göra det igen?",a:["Nej, ingen vet hur det går i framtiden","Ja, det som gått bra fortsätter alltid","Ja, om alla pratar om den"],r:0,f:"Historien säger inget säkert om framtiden. Bitcoin rasade med mer än hälften flera gånger på vägen upp."}),
+  ()=>({q:"Bitcoin gick upp väldigt mycket. Betyder det att den kommer att göra det igen?",a:["Nej, ingen vet hur det går i framtiden","Ja, det som gått bra fortsätter alltid","Ja, om alla pratar om den"],r:0,f:"Historien säger inget säkert om framtiden, varken åt det ena eller andra hållet. Bitcoin har både fallit med mer än hälften flera gånger och därefter nått nya rekord, men ingen vet om det upprepas."}),
   ()=>({q:"Vad menas med ränta på ränta?",a:["Man får ränta även på räntan man fått tidigare","Banken tar ränta två gånger","Räntan är alltid dubbelt så hög"],r:0,f:"Räntan läggs till pengarna, och nästa år får man ränta på allt. Så växer pengarna snabbare och snabbare. Samma sak gäller fonder som växer."}),
   ()=>({q:"Priserna stiger med 3 % på ett år och sparkontot ger 1 % ränta. Vad händer med pengarna på kontot?",a:["De räcker till lite mindre än förut","De räcker till mer än förut","Ingenting händer"],r:0,f:"Pengarna blir 1 % fler, men sakerna blir 3 % dyrare. Man kan alltså köpa lite mindre än innan."}),
-  ()=>({q:"Alla pratar om en aktie som har gått upp jättemycket. Vad är klokt att tänka på?",a:["Den kan redan vara dyr, och den kan gå ner","Köp så mycket som möjligt direkt","Den kan inte gå ner nu"],r:0,f:"När alla pratar om något har priset ofta redan stigit mycket. Som bitcoin 2021: ett år senare var den värd mindre än hälften."})]};
+  ()=>({q:"En aktie har gått upp jättemycket. Vad är klokt att tänka på?",a:["Ingen vet säkert om den fortsätter upp eller vänder ner","Köp så mycket som möjligt direkt","Den kan inte gå ner nu"],r:0,f:"Det som har gått upp mycket kan fortsätta upp eller vända ner, och det som har gått ner mycket kan gå upp igen. Ingen vet i förväg, och därför sprider man sina pengar."})]};
 let F=null;
 function blanda(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 function startFragor(del){const lista=del==="spar"?[FR.spar[0],...blanda(FR.spar.slice(1)).slice(0,3)]:del==="tid"&&G.satt==="man"?[...FR.man,...blanda(FR.tid.filter(f=>!/ränta på ränta/i.test(f().q))).slice(0,2)]:blanda(FR[del]).slice(0,del==="mal"?3:4);
