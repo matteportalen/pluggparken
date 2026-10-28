@@ -310,7 +310,7 @@ function sparaRitning(){clearTimeout(ritT);ritT=setTimeout(()=>{try{if(!strokes.
 function laddaRitning(){try{const d=JSON.parse(localStorage.getItem(RKEY)||"null");if(!Array.isArray(d))return;const W=innerWidth||1;
   strokes=d.slice(0,3000).filter(t=>t&&typeof t.c==="string"&&/^#[0-9A-Fa-f]{3,8}$/.test(t.c)&&Array.isArray(t.p)&&t.p.length).map(t=>({c:t.c,w:Math.max(1,Math.min(60,+t.w||6)),e:!!t.e,p:t.p.slice(0,20000).map(q=>[(+q[0]||0)*W,(+q[1]||0)*W])}));}catch(e){strokes=[];}}
 function angra(){if(strokes.length){strokes.pop();omrita();sparaRitning();}}
-function rensaRitning(){if(!strokes.length||confirm("Sudda hela ritningen?")){strokes=[];omrita();sparaRitning();}}
+function rensaRitning(){if(!strokes.length)return;const rits=JSON.stringify(strokes),snap=JSON.stringify(S.widgets);strokes=[];omrita();sparaRitning();angraRuta("Ritningen är struken",snap,rits);}
 addEventListener("resize",storlek);
 
 /* ---------- verktygsfält ---------- */
