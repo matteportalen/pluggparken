@@ -208,14 +208,63 @@ select.sel{font:inherit;font-size:1.2rem;min-width:2.8em;height:2.1em;border:2px
 .arrowbox{display:inline-grid;place-items:center;width:2em;height:2em;border:1.5px solid #555;font-size:1.1rem}
 .mc.multi .opt.sel{border-radius:10px}
 @media (max-width:760px){.pg{grid-template-columns:1fr}.pg img{position:static}}
-/* gamla prov på bred skärm: provsidan får mycket mer plats och svarsrutan ligger fast bredvid medan man rullar */
+/* ---------- Navigering, framsteg, zoom, resultat ---------- */
+.provnav{position:sticky;top:var(--mphh,0px);z-index:4;background:rgba(251,252,247,.97);border:2px solid var(--ink);border-radius:14px;padding:8px 12px;margin:0 0 16px;display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:2px solid var(--ink);background:#fff;border-radius:10px;padding:4px 12px;font-weight:700;cursor:pointer}
+.chip.on{background:var(--ink);color:#fff}
+.chip.klar{border-color:var(--ok);color:var(--ok)}
+.chip.klar::after{content:" ✓"}
+.chip.klar.on{background:var(--ok);color:#fff}
+.pinfo{display:flex;align-items:center;gap:10px;font-weight:700;flex:1 1 220px;min-width:200px}
+.bar{flex:1;height:10px;border-radius:6px;background:#e4e9f1;overflow:hidden;min-width:70px}
+.bar i{display:block;height:100%;width:0;background:var(--ok);transition:width .25s}
+.zoom{display:flex;align-items:center;gap:6px;font-weight:700}
+.zoom button{width:34px;height:34px;border:2px solid var(--ink);border-radius:10px;background:#fff;font-weight:800;font-size:1.1rem;cursor:pointer}
+.dir{display:flex;gap:6px;align-items:center;font-weight:700;cursor:pointer}
+.q.qok .qn::after{content:" ✓";color:var(--ok)}
+.q.qbad .qn::after{content:" ✗";color:#c0392b}
+.pg{scroll-margin-top:calc(var(--mphh,0px) + 84px)}
+.q{scroll-margin-top:calc(var(--mphh,0px) + 90px)}
+.pg img{cursor:zoom-in}
+.ansbox .nxt{margin-top:8px;width:100%}
+.sum{background:#fff;border:2px solid var(--ink);border-radius:16px;padding:14px 18px;margin:0 0 20px}
+.sum h2{margin:0 0 8px;font-size:1.5rem}
+.sum .bar.big{height:16px;margin-bottom:10px}
+.sum p{margin:.4rem 0}
+.badge.prog{color:#7a5b00;background:#fff3c4}
+.dpdesc dt{font-weight:700;margin-top:10px}.dpdesc dd{margin:2px 0 0;color:var(--muted)}
+.toast{position:fixed;left:50%;top:70px;transform:translateX(-50%);z-index:30;background:var(--ink);color:#fff;border-radius:12px;padding:10px 18px;font-weight:700;box-shadow:0 6px 18px rgba(0,0,0,.3)}
+#ljus{position:fixed;inset:0;z-index:50;background:rgba(10,15,30,.92);overflow:auto;padding:20px;text-align:center}
+#ljus[hidden]{display:none}
+#ljus img{width:min(1500px,100%);max-width:none;background:#fff;box-shadow:0 6px 30px rgba(0,0,0,.5);cursor:zoom-out}
+#ljus .ljx{position:fixed;right:16px;top:12px;width:44px;height:44px;border-radius:50%;border:0;background:#fff;font-size:1.3rem;font-weight:800;cursor:pointer;z-index:2}
+/* stor skärm: gamla prov med bred provsida och fast svarsruta, övningsläget med bredare blad */
 @media (min-width:1000px){
-  body.exam .cover,body.exam .wrap{max-width:1560px}
+  body.exam .cover,body.exam .wrap{max-width:max(1560px,calc(var(--bw,1000px) + 560px))}
   body.exam .actions .in{max-width:1440px}
-  body.exam .pg{grid-template-columns:minmax(0,1000px) minmax(340px,440px);justify-content:center;gap:32px}
-  body.exam .pg img{position:static;max-width:1000px;width:100%}
-  body.exam .ansbox{position:sticky;top:12px;max-height:calc(100vh - 120px);overflow:auto}
+  body.exam .pg{grid-template-columns:minmax(0,var(--bw,1000px)) minmax(340px,440px);justify-content:center;gap:32px}
+  body.exam .pg img{position:static;max-width:var(--bw,1000px);width:100%}
+  body.exam .ansbox{position:sticky;top:calc(var(--mphh,0px) + 84px);max-height:calc(100vh - 220px);overflow:auto}
   body.exam .lead{max-width:none}
+  body.ova .cover,body.ova .wrap{max-width:1240px}
+  body.ova .sheet{max-width:1100px;font-size:1.08rem}
+  body.ova .actions .in{max-width:1100px}
+}
+/* mindre skärm: svarsrutan fäst nedtill medan man rullar förbi provsidan (tryck på rubriken fäller ihop den) */
+@media (max-width:999px){
+  .zoom{display:none}
+  body.exam .pg{display:block}
+  body.exam .ansbox{position:sticky;bottom:calc(var(--act,64px) + 8px);max-height:44vh;overflow:auto;z-index:3;box-shadow:0 -6px 22px rgba(0,0,0,.2)}
+  body.exam .ansbox h3{cursor:pointer}
+  body.exam .ansbox h3::after{content:" ▾"}
+  body.exam .ansbox.min .qs,body.exam .ansbox.min .nxt{display:none}
+  body.exam .ansbox.min h3::after{content:" ▴"}
+  .provnav{gap:4px 10px;padding:6px 8px;font-size:.9rem}
+  .chips{flex-wrap:nowrap;overflow-x:auto;max-width:100%;flex:1 1 100%}
+  .chip{padding:2px 10px}
+  .pinfo{flex:1 1 150px;min-width:0}
+  body.exam .ansbox{max-height:38vh}
 }
 
 /* ---------- Knappraden ---------- */
@@ -792,18 +841,58 @@ const STORE="np3-resultat";
 function loadRes(){try{return JSON.parse(localStorage.getItem(STORE)||"{}")}catch(e){return{}}}
 function saveRes(key,right,total){try{const r=loadRes();r[key]={r:right,t:total,d:Date.now()};localStorage.setItem(STORE,JSON.stringify(r))}catch(e){}}
 function resBadge(key){const r=loadRes()[key];if(!r)return"";const all=r.r===r.t;return `<span class="badge${all?" full":""}" title="Senaste resultat">${all?"✓ ":""}${r.r}/${r.t}</span>`}
+
+/* ---------- svar som sparas, framsteg, rätta direkt, zoom, resultat ---------- */
+const SKEY="np3-svar",ZKEY="np3-zoom",DKEY="np3-direkt";
+const svarLoad=()=>{try{return JSON.parse(localStorage.getItem(SKEY)||"{}")}catch(e){return{}}};
+const svarPut=o=>{try{localStorage.setItem(SKEY,JSON.stringify(o))}catch(e){}};
+function svarCollect(){const o={};cur.qs.forEach((q,qi)=>q.fields.forEach((fd,fi)=>{const el=app.querySelector(`[data-q="${qi}"][data-f="${fi}"]`);if(!el)return;let v;
+  if(el.classList.contains("colpad"))v={c:[...el.querySelectorAll(".cin")].map(i=>i.value),m:[...el.querySelectorAll(".mkin")].map(i=>i.value),s:[...el.querySelectorAll(".dgb")].map((b,i)=>b.classList.contains("struck")?i:-1).filter(i=>i>=0)};
+  else if(el.classList.contains("mc"))v=[...el.querySelectorAll(".opt")].map((b,i)=>b.classList.contains("sel")?i:-1).filter(i=>i>=0);
+  else v=el.value;
+  if(v===""||(Array.isArray(v)&&!v.length)||(v&&v.c&&!v.c.some(x=>x)&&!v.m.some(x=>x)&&!v.s.length))return;o[qi+":"+fi]=v}));return o}
+function svarRestore(a){let n=0;Object.entries(a).forEach(([k,v])=>{const[qi,fi]=k.split(":");const el=app.querySelector(`[data-q="${qi}"][data-f="${fi}"]`);if(!el)return;
+  if(el.classList.contains("colpad")){const c=el.querySelectorAll(".cin"),m=el.querySelectorAll(".mkin"),d=el.querySelectorAll(".dgb");(v.c||[]).forEach((x,i)=>{if(c[i])c[i].value=x});(v.m||[]).forEach((x,i)=>{if(m[i])m[i].value=x});(v.s||[]).forEach(i=>{if(d[i])d[i].classList.add("struck")})}
+  else if(el.classList.contains("mc")){const os=el.querySelectorAll(".opt");(v||[]).forEach(i=>{if(os[i])os[i].classList.add("sel")})}
+  else el.value=v;n++});return n}
+function svarSave(){if(!cur||!cur.exam)return;const a=svarCollect(),all=svarLoad();if(Object.keys(a).length)all[cur.key]={a,t:Date.now()};else delete all[cur.key];svarPut(all)}
+const has=v=>v!==null&&v!==undefined&&v!==""&&!(Array.isArray(v)&&!v.length);
+const filled=v=>has(v)&&v!=="x";
+const qCounted=q=>q.fields.some(fd=>fd.k!=="self");
+const qAnswered=qi=>cur.qs[qi].fields.some((fd,fi)=>fd.k!=="self"&&has(readVal(qi,fi)));
+function qComplete(qi){const nf=cur.qs[qi].fields.map((fd,fi)=>fd.k==="self"?-1:fi).filter(i=>i>=0);return nf.length>0&&nf.every(fi=>filled(readVal(qi,fi)))}
+function uppdProg(){if(!cur)return;let tot=0,done=0;const per={};
+  cur.qs.forEach((q,qi)=>{if(!qCounted(q))return;tot++;if(qAnswered(qi))done++;if(q._pg!=null){const p=per[q._pg]=per[q._pg]||{t:0,d:0};p.t++;if(qComplete(qi))p.d++}});
+  const pr=$("#prog"),pb=$("#progbar");if(pr)pr.textContent=`${done} av ${tot} besvarade`;if(pb)pb.style.width=(tot?100*done/tot:0)+"%";
+  document.querySelectorAll(".chip[data-go]").forEach(c=>{const p=per[c.dataset.go];c.classList.toggle("klar",!!p&&p.t>0&&p.d===p.t)})}
+function liveGrade(qi){const q=cur.qs[qi];if(!qComplete(qi))return;const r=gradeQ(q,q.fields.map((_,fi)=>readVal(qi,fi)));let allOk=true;
+  r.forEach((ok,fi)=>{if(q.fields[fi].k==="self")return;const el=app.querySelector(`[data-q="${qi}"][data-f="${fi}"]`);if(!el)return;el.classList.remove("ok","bad");el.classList.add(ok?"ok":"bad");if(!ok)allOk=false});
+  const qe=$("#q"+qi);qe.classList.remove("qok","qbad");qe.classList.add(allOk?"qok":"qbad")}
+function navHTML(pages){return `<div class="provnav" id="provnav">${pages?`<div class="chips" aria-label="Sidor">${pages.map(([pg])=>`<button type="button" class="chip" data-go="${pg}">Sida ${pg}</button>`).join("")}</div>`:""}<div class="pinfo"><span id="prog">0 av 0 besvarade</span><span class="bar"><i id="progbar"></i></span></div>${pages?`<div class="zoom" aria-label="Storlek på provsidan"><button type="button" data-z="-" aria-label="Mindre provsida">−</button><span id="zv">100%</span><button type="button" data-z="+" aria-label="Större provsida">+</button></div>`:""}<label class="dir"><input type="checkbox" id="direkt"> Rätta direkt</label></div>`}
+function bw(v){if(v!=null){try{localStorage.setItem(ZKEY,String(v))}catch(e){}}const n=Math.max(600,Math.min(1400,+(v!=null?v:localStorage.getItem(ZKEY))||1000));document.body.style.setProperty("--bw",n+"px");const z=$("#zv");if(z)z.textContent=Math.round(n/10)+"%";return n}
+function setAct(){document.documentElement.style.setProperty("--act",(acts.hidden?0:acts.offsetHeight)+"px");const h=document.querySelector(".mph");const st=h?getComputedStyle(h).position:"";document.documentElement.style.setProperty("--mphh",(st==="sticky"||st==="fixed")&&getComputedStyle(h).display!=="none"?h.offsetHeight+"px":"0px")}
+function initNav(){const d=$("#direkt");if(d){d.checked=localStorage.getItem(DKEY)!=="0";d.onchange=()=>{try{localStorage.setItem(DKEY,d.checked?"1":"0")}catch(e){}}}bw();setAct();uppdProg()}
+function toast(t){const e=document.createElement("div");e.className="toast";e.textContent=t;document.body.appendChild(e);setTimeout(()=>e.remove(),5000)}
+function visaSum(bad,right,total){const old=$("#sum");if(old)old.remove();const pct=Math.round(100*right/total);
+  let h=`<section class="sum" id="sum"><h2>${right} av ${total} rätt</h2><div class="bar big"><i style="width:${pct}%"></i></div>`;
+  h+=bad.length?`<p>Det här kan du titta på igen:</p><div class="chips">${bad.map(([qi,q])=>`<button type="button" class="chip" data-q2="${qi}">${cur.exam?"Fråga":"Uppgift"} ${q._num}${q._pg!=null?` (sida ${q._pg})`:""}</button>`).join("")}</div>`:`<p>Alla rätt! 🎉</p>`;
+  h+=`</section>`;const first=app.querySelector(".pg,.sheet");if(first){first.insertAdjacentHTML("beforebegin",h);$("#sum").scrollIntoView({block:"start",behavior:"smooth"})}}
 function home(tab){
   cur=null;acts.hidden=true;res.textContent="";
   setCover("Träna inför provet","Nya uppgifter varje gång, i samma stil som det riktiga provet.");
   document.title="Träna nationella prov – Matematik åk 3";
   const tabs=`<nav class="tabs" aria-label="Välj"><a href="#/ova" ${tab==="ova"?'aria-current="page"':""}>Öva på nya uppgifter</a><a href="#/prov" ${tab==="prov"?'aria-current="page"':""}>Gamla prov</a></nav>`;
   if(tab==="prov"){
-    app.innerHTML=`${tabs}<p class="lead">Här finns riktiga nationella prov från tidigare år. Tryck på en bokstav. Du ser provsidorna och skriver dina svar bredvid, så rättas de direkt. Du kan också ladda ner provet och göra det på papper.</p>
+    const sv=svarLoad(),nSv=k=>sv[k]&&sv[k].a?Object.keys(sv[k].a).length:0,pgb=k=>nSv(k)?`<span class="badge prog" title="Du har påbörjat provet">pågår</span>`:"";
+    const sist=HAS_EXAMS()?Object.entries(sv).filter(([k,v])=>EXAMS[k]&&nSv(k)).sort((a,b)=>b[1].t-a[1].t)[0]:null;
+    const forts=sist?(([k])=>{const[y,l]=k.split("-");return `<div class="dplist" style="margin:0 0 16px"><a class="dp" href="#/prov/${k}"><span class="dot">▶</span><span><b>Fortsätt: Delprov ${l}, ${y-1}/${y}</b><small>${nSv(k)} svar sparade på den här enheten</small></span></a></div>`})(sist):"";
+    app.innerHTML=`${tabs}${forts}<p class="lead">Här finns riktiga nationella prov från tidigare år. Tryck på en bokstav. Du ser provsidorna och skriver dina svar bredvid, så rättas de direkt. Du kan också ladda ner provet och göra det på papper.</p>
     <table class="oldtab"><thead><tr><th></th>${"BCDEFG".split("").map(l=>`<th>${l}</th>`).join("")}</tr></thead><tbody>
-    ${oldList().map(([lbl,y,ps])=>`<tr><th>${lbl}</th>${"BCDEFG".split("").map(l=>`<td>${ps.includes(l)?`<a class="pdf" href="#/prov/${y}-${l}" aria-label="Delprov ${l}, läsår ${lbl}">${l}</a>${resBadge(y+"-"+l)}`:`<span class="none">–</span>`}</td>`).join("")}</tr>`).join("")}
+    ${oldList().map(([lbl,y,ps])=>`<tr><th>${lbl}</th>${"BCDEFG".split("").map(l=>`<td>${ps.includes(l)?`<a class="pdf" href="#/prov/${y}-${l}" aria-label="Delprov ${l}, läsår ${lbl}">${l}</a>${resBadge(y+"-"+l)}${pgb(y+"-"+l)}`:`<span class="none">–</span>`}</td>`).join("")}</tr>`).join("")}
     </tbody></table>
     ${HAS_EXAMS()?"":`<p class="msgbox">De gamla proven kunde inte laddas. Kontrollera att filen <b>gamla.js</b> ligger i mappen np3 på GitHub.</p>`}
-    <p class="note">Siffrorna under bokstäverna visar senaste resultatet på den här enheten.</p>
+    <p class="note">Siffrorna under bokstäverna visar senaste resultatet på den här enheten. <b>pågår</b> betyder att du har sparade svar och kan fortsätta där du var.</p>
+    <h3>Vad ingår i delproven?</h3><dl class="dpdesc">${"BCDEFG".split("").map(k=>`<dt>Delprov ${k} · ${DELPROV[k].name}</dt><dd>${DELPROV[k].desc}</dd>`).join("")}</dl>
     <p class="note">Delprov A är muntligt och görs tillsammans med läraren, därför finns det inte här. Proven kommer från Skolverket (PRIM-gruppen). Facit är inte Skolverkets officiella bedömning, utan gjort för att eleverna ska kunna öva själva.</p>`;
     return;
   }
@@ -855,10 +944,10 @@ function practice(key){
   setCover(key==="X"?"Blandat":`Delprov ${key}`,D.name===("Blandat")?"Lite från varje delprov":D.name);
   document.title=`${key==="X"?"Blandat":"Delprov "+key} – Träna nationella prov`;
   const qs=D.gens().map(build);cur={key,qs,facit:false};
-  let html=`<a class="back" href="#/ova">← Alla delprov</a><article class="sheet">${D.instr?`<p class="instr">${D.instr}</p>`:""}<ol class="qs">`;
-  qs.forEach((q,qi)=>{html+=qHTML(q,qi,qi+1,null)});
+  document.body.classList.add("ova");let html=`<a class="back" href="#/ova">← Alla delprov</a>${navHTML(null)}<article class="sheet">${D.instr?`<p class="instr">${D.instr}</p>`:""}<ol class="qs">`;
+  qs.forEach((q,qi)=>{q._num=qi+1;html+=qHTML(q,qi,qi+1,null)});
   html+=`</ol><div class="sheetfoot"><span>Övning Np3 Ma ${key==="X"?"Blandat":"Delprov "+key}</span><span>mattespel.github.io</span></div></article>`;
-  app.innerHTML=html;acts.hidden=false;res.textContent="";$("#bFacit").textContent="Visa facit";
+  app.innerHTML=html;acts.hidden=false;res.textContent="";$("#bFacit").textContent="Visa facit";initNav();
   $("#bNew").textContent="Nya uppgifter";$("#bPrint").textContent="Skriv ut";
 }
 
@@ -874,13 +963,15 @@ function upgradeCalc(q,key){
 function examView(key){
   const pages=EXAMS[key];const[y,l]=key.split("-");const lbl=`${y-1}/${y}`;
   setCover(`Delprov ${l}`,`Riktigt prov från läsår ${lbl}`);document.title=`Delprov ${l} ${lbl} – Gamla nationella prov`;
-  const qs=[];let html=`<a class="back" href="#/prov">← Alla gamla prov</a><p class="lead">Titta på provsidan och skriv dina svar i rutan bredvid. Räkna på papper när det behövs. <a href="prov/${key}.pdf" target="_blank" rel="noopener">Ladda ner provet som PDF</a></p>`;
-  pages.forEach(([pg,list])=>{
-    html+=`<section class="pg"><img src="sidor/${key}-${pg}.jpg" alt="Provsida ${pg}" loading="lazy" width="900" height="1273" onerror="this.outerHTML='<div class=&quot;imgmiss&quot;>Bilden för sida ${pg} hittades inte (sidor/${key}-${pg}.jpg).<br><a href=&quot;prov/${key}.pdf&quot; target=&quot;_blank&quot;>Öppna provet som PDF</a> i stället.</div>'"><div class="ansbox"><h3>Svar, sida ${pg}</h3><ol class="qs">`;
-    list.forEach(([num,gen])=>{const q=upgradeCalc(build(gen),key);const qi=qs.length;qs.push(q);html+=qHTML(q,qi,num,key)});
-    html+=`</ol></div></section>`;
+  const qs=[];let html=`<a class="back" href="#/prov">← Alla gamla prov</a><p class="lead">Titta på provsidan och skriv dina svar i rutan bredvid. Räkna på papper när det behövs. <a href="prov/${key}.pdf" target="_blank" rel="noopener">Ladda ner provet som PDF</a></p>${navHTML(pages)}`;
+  pages.forEach(([pg,list],pi)=>{
+    html+=`<section class="pg" id="pg-${pg}" data-pg="${pg}"><img src="sidor/${key}-${pg}.jpg" alt="Provsida ${pg}" loading="lazy" width="900" height="1273" onerror="this.outerHTML='<div class=&quot;imgmiss&quot;>Bilden för sida ${pg} hittades inte (sidor/${key}-${pg}.jpg).<br><a href=&quot;prov/${key}.pdf&quot; target=&quot;_blank&quot;>Öppna provet som PDF</a> i stället.</div>'"><div class="ansbox"><h3>Svar, sida ${pg}</h3><ol class="qs">`;
+    list.forEach(([num,gen])=>{const q=upgradeCalc(build(gen),key);q._num=num;q._pg=pg;const qi=qs.length;qs.push(q);html+=qHTML(q,qi,num,key)});
+    html+=`</ol><button type="button" class="btn nxt" data-nxt="${pg}">${pi<pages.length-1?"Nästa sida ›":"Till Rätta ↓"}</button></div></section>`;
   });
   document.body.classList.add("exam");cur={key,qs,facit:false,exam:true};app.innerHTML=html;acts.hidden=false;res.textContent="";$("#bFacit").textContent="Visa facit";
+  {const sv=svarLoad()[key];if(sv&&sv.a){const n=svarRestore(sv.a);if(n)toast("Dina sparade svar är tillbaka ("+n+")")}}
+  initNav();
   $("#bNew").textContent="Börja om";$("#bPrint").textContent="Ladda ner PDF";
 }
 function readCol(cp){
@@ -895,7 +986,7 @@ function readVal(qi,fi){
   const el=app.querySelector(`input[data-q="${qi}"][data-f="${fi}"]`);return el?el.value:"";
 }
 function grade(){
-  if(!cur)return;let right=0,total=0;
+  if(!cur)return;let right=0,total=0;const bad=[];
   cur.qs.forEach((q,qi)=>{
     const vals=q.fields.map((_,fi)=>readVal(qi,fi)),r=gradeQ(q,vals);
     let allOk=true;const hasSelf=q.fields.some(fd=>fd.k==="self");
@@ -903,11 +994,12 @@ function grade(){
     const pw=app.querySelector(`#q${qi} .padwrap[data-g="1"]`);
     if(pw){const ok=calcOk(q,readCalc(pw));pw.classList.remove("ok","bad");pw.classList.add(ok?"ok":"bad");total++;if(ok)right++;else allOk=false}
     app.querySelector(`#q${qi} .facit`).hidden=allOk&&!hasSelf&&!cur.facit;
+    if(r.some((_,fi)=>q.fields[fi].k!=="self")||pw){const qe=$("#q"+qi);qe.classList.remove("qok","qbad");qe.classList.add(allOk?"qok":"qbad");if(!allOk)bad.push([qi,q])}
   });
   if(total===0){res.textContent="Här finns inget som rättas automatiskt. Jämför med facit.";return}
   if(window.Ljud)right===total?Ljud.fanfare():Ljud.bad();res.textContent=right===total?`Alla ${total} rätt! Bra jobbat.`:`Du har ${right} av ${total} rätt. Titta på de röda och försök igen.`;
   saveRes(cur.exam?cur.key:"ova-"+cur.key,right,total);
-  if(right<total){const bad=app.querySelector(".bad");if(bad){const r=bad.getBoundingClientRect();if(r.top<60||r.bottom>innerHeight-130)bad.scrollIntoView({block:"center",behavior:"smooth"})}}
+  visaSum(bad,right,total);
 }
 app.addEventListener("click",e=>{
   const dgb=e.target.closest(".dgb");if(dgb){dgb.classList.toggle("struck");if(dgb.classList.contains("struck")){const td=dgb.closest("td"),idx=[...td.parentElement.children].indexOf(td);const mk=td.closest("table").querySelector(".mkrow").children[idx].querySelector("input");if(mk&&!mk.value)mk.focus()}return}
@@ -985,13 +1077,34 @@ app.addEventListener("keydown",e=>{
   const all=[...app.querySelectorAll("input.ans")],i=all.indexOf(e.target);if(all[i+1])all[i+1].focus();else grade();
 });
 $("#bCheck").onclick=grade;
+let tt=0;const tick=()=>{if(!cur)return;clearTimeout(tt);tt=setTimeout(()=>{uppdProg();svarSave()},250)};
+const liveFor=t=>{const d=$("#direkt");if(!cur||!d||!d.checked)return;const qe=t.closest&&t.closest(".q");if(qe)liveGrade(+qe.id.slice(1))};
+const nollaQ=t=>{const qe=t.closest&&t.closest(".q");if(qe)qe.classList.remove("qok","qbad")};
+["input","change","click"].forEach(ev=>app.addEventListener(ev,e=>{if(e.target.closest&&e.target.closest("#provnav"))return;nollaQ(e.target);tick()}));
+app.addEventListener("change",e=>{if(e.target.matches&&e.target.matches("input.ans,select.sel"))setTimeout(()=>liveFor(e.target),0)});
+app.addEventListener("click",e=>{const o=e.target.closest(".opt");if(o)setTimeout(()=>liveFor(o),0)});
+app.addEventListener("input",e=>{if(e.target.classList&&e.target.classList.contains("cin"))setTimeout(()=>liveFor(e.target),0)});
+addEventListener("pagehide",()=>{clearTimeout(tt);svarSave()});
+const ljus=document.createElement("div");ljus.id="ljus";ljus.hidden=true;ljus.innerHTML='<button type="button" class="ljx" aria-label="Stäng">✕</button><img alt="Provsida">';document.body.appendChild(ljus);
+ljus.addEventListener("click",()=>{ljus.hidden=true});
+addEventListener("keydown",e=>{if(e.key==="Escape")ljus.hidden=true});
+app.addEventListener("click",e=>{
+  const im=e.target.closest(".pg img");if(im){ljus.querySelector("img").src=im.src;ljus.hidden=false;ljus.scrollTop=0;return}
+  const go=e.target.closest("[data-go]");if(go){const el=document.getElementById("pg-"+go.dataset.go);if(el)el.scrollIntoView({behavior:"smooth",block:"start"});return}
+  const nx=e.target.closest("[data-nxt]");if(nx){const pgs=[...app.querySelectorAll(".pg")],i=pgs.findIndex(x=>x.dataset.pg===nx.dataset.nxt);if(pgs[i+1])pgs[i+1].scrollIntoView({behavior:"smooth",block:"start"});else window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"});return}
+  const z=e.target.closest("[data-z]");if(z){bw(bw()+(z.dataset.z==="+"?100:-100));return}
+  const q2=e.target.closest("[data-q2]");if(q2){const el=document.getElementById("q"+q2.dataset.q2);if(el)el.scrollIntoView({behavior:"smooth",block:"center"});return}
+  const h3=e.target.closest(".ansbox h3");if(h3&&innerWidth<1000)h3.closest(".ansbox").classList.toggle("min");
+});
+let rafT=0;addEventListener("scroll",()=>{if(!cur||!cur.exam||rafT)return;rafT=requestAnimationFrame(()=>{rafT=0;const pgs=[...app.querySelectorAll(".pg")];let on=null;pgs.forEach(p=>{if(p.getBoundingClientRect().top<=160)on=p.dataset.pg});document.querySelectorAll(".chip[data-go]").forEach(c=>c.classList.toggle("on",c.dataset.go===on))})},{passive:true});
+addEventListener("resize",setAct);
 function hasAnswers(){return [...app.querySelectorAll("input.ans,input.cin,input.mkin")].some(i=>i.value.trim())||!!app.querySelector(".opt.sel,.dgb.struck")||[...app.querySelectorAll("select.sel")].some(s=>s.value!=="")}
-$("#bNew").onclick=()=>{if(hasAnswers()&&!confirm(cur.exam?"Vill du börja om? Dina svar försvinner.":"Vill du få nya uppgifter? Dina svar försvinner."))return;cur.exam?examView(cur.key):practice(cur.key);window.scrollTo({top:0})};
+$("#bNew").onclick=()=>{if(hasAnswers()&&!confirm(cur.exam?"Vill du börja om? Dina svar försvinner.":"Vill du få nya uppgifter? Dina svar försvinner."))return;if(cur.exam){const a=svarLoad();delete a[cur.key];svarPut(a)}cur.exam?examView(cur.key):practice(cur.key);window.scrollTo({top:0})};
 $("#bFacit").onclick=()=>{cur.facit=!cur.facit;app.querySelectorAll(".facit").forEach(x=>x.hidden=!cur.facit);$("#bFacit").textContent=cur.facit?"Dölj facit":"Visa facit"};
 $("#bPrint").onclick=()=>cur&&cur.exam?window.open(`prov/${cur.key}.pdf`,"_blank"):window.print();
 
 function route(){
-  const [a,b]=location.hash.replace(/^#\/?/,"").split("/");document.body.classList.remove("exam");
+  const [a,b]=location.hash.replace(/^#\/?/,"").split("/");document.body.classList.remove("exam","ova");
   if(a==="ova"&&DELPROV[b])practice(b);else if(a==="prov"&&HAS_EXAMS()&&EXAMS[b])examView(b);else home(a==="prov"?"prov":"ova");
   window.scrollTo(0,0);
 }
