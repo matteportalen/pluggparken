@@ -501,8 +501,9 @@ const FAKTA=[
   {m:"2007-09",ik:"🌱",r:"Ränta på ränta",t:"Räntan läggs till pengarna, och nästa år får du ränta på allt. Så växer pengarna snabbare och snabbare."},
   {m:"2008-05",ik:"🧺",r:"Lägg inte alla ägg i samma korg",t:"Köper du många olika saker påverkas du mindre när ett företag går dåligt. Det kallas att sprida riskerna."},
   {m:"2009-06",ik:"⏳",r:"Tålamod",t:"Efter ett ras tar det tid innan det vänder. Den som sparar länge hinner oftast vara med när det vänder."},
-  {m:"2011-03",ik:"💸",r:"Utdelning",t:"Många företag delar ut en del av vinsten till dem som äger aktier. Det heter utdelning, och den är redan inräknad i våra kurser."},
-  {m:"2013-05",ik:"🏷️",r:"Avgifter",t:"Fonder tar en avgift varje år. 1 % låter lite, men över många år blir det mycket pengar."},
+  {m:"2011-03",ik:"💸",r:"Utdelning",t:"Många företag delar ut en del av vinsten till dem som äger aktier. Det heter utdelning, och den är redan inräknad i våra kurser. Fondernas avgifter ligger också redan i kursen. Skatt räknar vi inte med."},
+  {m:"2013-05",ik:"🏷️",r:"Avgifter",t:"Fonder tar en avgift varje år, och den dras redan i kursen. Våra indexfonder tar ungefär 0,1–0,5 %. Dyrare fonder kan ta 1,5 % eller mer, och över många år blir den skillnaden mycket pengar. Skatt är inte inräknad här."},
+  {m:"2014-08",ik:"🧾",r:"Skatt",t:"Skatt är inte inräknad i övningen. Många sparar i ett ISK (investeringssparkonto, finns sedan 2012). På ett ISK betalar man ingen skatt på vinsten, utan en liten skatt varje år på hela värdet, de senaste åren ofta mellan 0,4 och 1,1 %. Den heter schablonskatt och betalas även ett år när det har gått dåligt."},
   {m:"2015-03",ik:"📉",r:"Inflation",t:"När priserna stiger räcker samma pengar till mindre. Inflationen äter upp pengar som bara ligger stilla."},
   {m:"2017-05",ik:"🎢",r:"Risk och belöning",t:"Det som kan ge mycket pengar kan också förlora mycket. En enda aktie svänger mer än en fond."},
   {m:"2019-04",ik:"🛡️",r:"Insättningsgarantin",t:"Pengar på ett bankkonto är skyddade av staten upp till 1 050 000 kr per person och bank. Aktier och fonder har inte det skyddet."},
@@ -674,7 +675,7 @@ $("valLista").onclick=e=>{const p=e.target.closest("[data-p]"),m=e.target.closes
   if(m){const a=m.dataset.m;if(valKr[a]){valKr[a]-=1000;if(!valKr[a])delete valKr[a];}valRita();return;}
   const r=e.target.closest("[data-a]");if(r&&finns(r.dataset.a,0))blad(r.dataset.a,0,true);};
 $("gaTid").onclick=()=>{valKr={};valRita();show("tval");};
-function startResa(){G.nyh=[];G.nya=[];G.krav=false;$("gNytt").innerHTML="";$("gNotis").innerHTML="";nyaB();
+function startResa(){G.nyh=[];G.nya=[];G.avgA={};G.krav=false;$("gNytt").innerHTML="";$("gNotis").innerHTML="";nyaB();
   $("gJmf").querySelectorAll("[data-j]").forEach(b=>b.setAttribute("aria-pressed","false"));
   $("gMan").hidden=G.satt!=="man";
   $("gFart").textContent="⏩ Snabbare";show("game");gRita();setTimeout(spela,500);}
@@ -690,7 +691,7 @@ function steg(){if(G.i>=N-1){slut();return;}
   G.cash*=1+K.ranta[G.i]/1200;G.skugg.forEach(s=>{s.cash*=1+K.ranta[G.i]/1200;});
   G.i++;
   if(G.satt==="man"){satIn(G,G.till,G.man);G.skugg.forEach(s=>satIn(s,s.till,G.man));G.ins[G.i]=G.ins[G.i-1]+G.man;}else G.ins[G.i]=START;
-  G.hist[G.i]=varde();gRita();
+  avgTick();G.hist[G.i]=varde();gRita();
   const fk=FAKTA.find(f=>f.m===M[G.i]);if(fk&&!G.fakta.includes(fk)){G.fakta.push(fk);visaFakta(fk);}
   handelse();}
 function visaFakta(f){const o=document.querySelector(".fakta");if(o)o.remove();const d=document.createElement("div");d.className="fakta";d.setAttribute("role","status");
@@ -737,7 +738,7 @@ function blad(a,i,bara){document.querySelectorAll(".blad").forEach(x=>x.remove()
 function stangBlad(){const d=document.querySelector(".blad");if(d)d.remove();bl=null;if(skarm==="game")gRita();}
 function bRita(){const{a,i,per}=bl,[em,typ,txt]=INFO[a],v=A[a].v,f0=fran(a);
   const ant={"1":12,"3":36,"5":60,max:9999}[per],s=Math.max(f0,i-ant),ff=i>s?v[i]/v[s]-1:0;
-  let h=(bl.bt?`<div class="btxt">${bl.bt}</div>`:"")+`<h2>${em} ${A[a].n}</h2><div class="info" style="margin:0 0 6px">${typ} · ${txt}</div>`;
+  let h=(bl.bt?`<div class="btxt">${bl.bt}</div>`:"")+`<h2>${em} ${A[a].n}</h2><div class="info" style="margin:0 0 6px">${typ} · ${txt}</div>`+(AVG[a]?`<div class="info" style="margin:0 0 6px">💸 Avgift: ca ${prc(AVG[a])} % per år. Den är redan inräknad i kursen.${skarm==="game"&&!bl.bara&&(G.avgA||{})[a]>=1?` Hittills har du betalat ungefär <b>${kr(G.avgA[a])}</b> i avgift.`:""}</div>`:"");
   if(a==="spar")h+=`<div class="kurs">${K.ranta[i].toFixed(2).replace(".",",")} %</div><div class="info">ränta per år i ${datum(i)}. Grafen visar hur 100 kr på kontot har växt.</div>`+(G.satt==="man"&&!bl.bara&&skarm==="game"?(G.till==="spar"?`<p class="info" style="color:var(--gold)">📅 Hit går dina ${kr(G.man)} varje månad.</p>`:`<div class="handel"><button class="knapp vit" data-till="spar">📅 Spara på sparkontot varje månad i stället</button></div>`):"");
   else h+=`<div class="kurs">${kurs(v[i])} kr</div><div class="forandr ${ff>=0?"up":"down"}">${pr(ff)} <span style="color:var(--muted);font-weight:700">${per==="max"?"sedan "+M[s].slice(0,4):s===f0&&i-s<ant?"sedan "+datum(s):"senaste "+(per==="1"?"året":per+" åren")}</span></div>`;
   h+=`<div class="perioder">${[["1","1 år"],["3","3 år"],["5","5 år"],["max","Max"]].map(([k,n])=>`<button data-per="${k}" aria-pressed="${k===per}">${n}</button>`).join("")}</div>
@@ -786,6 +787,11 @@ function ruta(ik,rub,txt,knappar){paus();document.querySelector(".fakta")?.remov
   const x=box.querySelector("[data-x]");if(x)x.onclick=stang;
   requestAnimationFrame(()=>{const r=box.getBoundingClientRect();if(r.top<70||r.bottom>innerHeight)box.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth",block:"center"});});}
 function spelTxt(){const b=$("gPlay");if(!b)return;b.disabled=!!G.krav;if(G.krav)b.textContent="Välj först vad du gör";else if(!G.tid)b.textContent=G.i>=N-1?"✓ Klart":"▶ Spela";}
+// fondavgifter (procent per år, ungefär): ligger redan i kursen. Beloppet är en uppskattning: värdet i fonden × avgiften, månad för månad.
+const AVG={sverige:.5,varlden:.32,usa:.09};
+function avgTick(){G.avgA=G.avgA||{};for(const a in AVG)if(G.u[a]>1e-9)G.avgA[a]=(G.avgA[a]||0)+G.u[a]*A[a].v[G.i]*AVG[a]/1200;}
+const avgSum=()=>Object.values(G.avgA||{}).reduce((x,y)=>x+y,0);
+const prc=x=>String(x).replace(".",",");
 const sv=(a,b)=>A.sverige.v[mi(b)]/A.sverige.v[mi(a)]-1;
 // skuggportfölj: hur det hade gått om man inte gjort något
 const skugga=id=>{G.skugg.push({id,i:G.i,u:{...G.u},cash:G.cash,till:G.till});};
@@ -836,6 +842,7 @@ function handelse(){const f=EV[M[G.i]];if(f&&!G.sedd[M[G.i]]){G.sedd[M[G.i]]=1;f
 
 /* ---------- Resultatet ---------- */
 function bara(a){return START*A[a].v[N-1]/A[a].v[fran(a)];}
+const avgTxt=()=>avgSum()>=1?` Dina fonder kostade ungefär ${kr(avgSum())} i avgift under resan (ungefärligt belopp, och avgiften är redan inräknad i kurserna). Skatt är inte inräknad (på ett ISK betalar man en årlig schablonskatt på värdet i stället för skatt på vinsten).`:" Skatt är inte inräknad i övningen (på ett ISK betalar man en årlig schablonskatt på värdet i stället för skatt på vinsten).";
 function slut(){paus();if(skarm!=="game")return;const v=varde(),f=v/START-1;
   if(G.krav)return;$("gNytt").innerHTML="";
   $("rVarde").textContent=kr(v);$("rFor").textContent=pr(f)+" på knappt 20 år";$("rFor").className="forandr "+(f>=0?"up":"down");
@@ -846,7 +853,7 @@ function slut(){paus();if(skarm!=="game")return;const v=varde(),f=v/START-1;
     ["Bara indexfond USA",bara("usa"),"#1E9E5E"],["Spargrisen (vad 10 000 kr räcker till i dag)",START*K.kpi[0]/K.kpi[N-1],"#FF7EB6"]];
   const top=Math.max(...rader.map(r=>r[1]));
   $("rJmf").innerHTML=rader.map(([n,x,c,du])=>`<div class="jr${du?" du":""}"><span>${n}</span><span class="st" style="width:${Math.max(18,x/top*100)}%;background:${c}">${kr(x)}</span></div>`).join("");
-  $("rJmfInfo").textContent=`Indexfonderna har redan låg avgift (0,1–0,5 % per år). Med 1,5 % i avgift varje år hade samma fond gett ${kr(bara("sverige")-avg)} mindre. Spargrisen har kvar 10 000 kr, men priserna har stigit, så pengarna räcker bara till lika mycket som ${kr(START*K.kpi[0]/K.kpi[N-1])} gjorde 2007.`;
+  $("rJmfInfo").textContent=`Indexfonderna har redan låg avgift (0,1–0,5 % per år). Med 1,5 % i avgift varje år hade samma fond gett ${kr(bara("sverige")-avg)} mindre. Spargrisen har kvar 10 000 kr, men priserna har stigit, så pengarna räcker bara till lika mycket som ${kr(START*K.kpi[0]/K.kpi[N-1])} gjorde 2007.${avgTxt()}`;
   }
   // startåren 2005–2016, tio år var
   const AS=K.arSverige,ar=[];for(let y=AS.fran;y+10<=AS.fran+AS.v.length-1;y++)ar.push([y,START*AS.v[y+10-AS.fran]/AS.v[y-AS.fran]]);
@@ -877,7 +884,7 @@ function slutMan(v){const ins=G.ins[N-1],x=G.man,f=v/ins-1,sist=a=>{const s=manS
   $("rJmf").innerHTML=rader.map(([n,y,c,du])=>`<div class="jr${du?" du":""}"><span>${n}</span><span class="st" style="width:${Math.max(18,y/top*100)}%;background:${c}">${kr(y)}</span></div>`).join("");
   // hur många fler andelar 300 kr köpte när börsen låg som lägst 2008–2009
   let lag=Infinity;for(let i=mi("2008-06");i<=mi("2009-12");i++)lag=Math.min(lag,A.sverige.v[i]);const ggr=A.sverige.v[0]/lag;
-  $("rJmfInfo").textContent=`När börsen låg som lägst under finanskrisen köpte ${kr(x)} i Indexfond Sverige ungefär ${ggr.toFixed(1).replace(".",",")} gånger så många andelar som i januari 2007. Den som fortsatte spara köpte billigt. Att sätta in allt på en gång i januari 2007 hade gett ${klump>sist("sverige")?"mer":"mindre"}, men då hade man behövt ha alla pengar redan från början, och man köpte allt precis före kraschen. Spargrisen har bara det du satte in, och priserna har stigit under tiden.`;}
+  $("rJmfInfo").textContent=`När börsen låg som lägst under finanskrisen köpte ${kr(x)} i Indexfond Sverige ungefär ${ggr.toFixed(1).replace(".",",")} gånger så många andelar som i januari 2007. Den som fortsatte spara köpte billigt. Att sätta in allt på en gång i januari 2007 hade gett ${klump>sist("sverige")?"mer":"mindre"}, men då hade man behövt ha alla pengar redan från början, och man köpte allt precis före kraschen. Spargrisen har bara det du satte in, och priserna har stigit under tiden.${avgTxt()}`;}
 $("rHome").onclick=()=>show("home");
 $("rFragor").onclick=()=>startFragor("tid");
 
