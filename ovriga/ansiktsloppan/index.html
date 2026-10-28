@@ -365,15 +365,14 @@ function presetInt(){
   if(presetCv)return presetCv;
   var c=document.createElement('canvas');c.width=c.height=600;var g=c.getContext('2d');
   var bg=g.createRadialGradient(300,300,20,300,300,440);bg.addColorStop(0,'#1B0509');bg.addColorStop(.45,'#5A1220');bg.addColorStop(1,'#8E2238');g.fillStyle=bg;g.fillRect(0,0,600,600);
-  // tungan: bara i de två nedre trianglarna (INT 1 och 3), skuren
+  // Trianglarna 0 och 2 (övre) respektive 1 och 3 (nedre) möts längs bildens vågräta axel när loppan viks.
+  // Hjärnan och tungan delas därför längs axeln: en halva i vardera triangeln, som varandras spegelbilder, med mittfåran på axeln.
   function klipp(q,tris){q.beginPath();tris.forEach(function(i){INT[i][2].forEach(function(pt,j){var x=(pt[0]+100)*3,y=(100-pt[1])*3;if(j)q.lineTo(x,y);else q.moveTo(x,y)});q.closePath()});q.clip()}
-  g.save();klipp(g,[1,3]);
-  [120,480].forEach(function(cx){
-    var tg=g.createRadialGradient(cx,400,10,cx,430,190);tg.addColorStop(0,'#F08AA0');tg.addColorStop(1,'#C24A68');
-    g.fillStyle=tg;g.beginPath();g.ellipse(cx,440,175,150,0,0,7);g.fill();
-    g.fillStyle='rgba(255,255,255,.2)';g.beginPath();g.ellipse(cx,385,40,14,-.3,0,7);g.fill();
-  });
-  g.restore();
+  function tunga(q){var tg=q.createRadialGradient(545,330,10,545,320,150);tg.addColorStop(0,'#F08AA0');tg.addColorStop(1,'#C24A68');
+    q.fillStyle=tg;q.beginPath();q.ellipse(545,300,150,125,0,0,7);q.fill();q.fillStyle='rgba(255,255,255,.2)';q.beginPath();q.ellipse(545,350,38,13,0,0,7);q.fill();
+    q.strokeStyle='rgba(120,30,55,.6)';q.lineWidth=7;q.lineCap='round';q.beginPath();q.moveTo(430,300);q.lineTo(600,300);q.stroke()}
+  g.save();klipp(g,[1]);tunga(g);g.restore();
+  g.save();klipp(g,[3]);g.translate(600,0);g.scale(-1,1);tunga(g);g.restore();
   // tandrader: två rader från varje sida som möts i mitten (brytpunkten), övre tänder pekar ner, undre upp
   var PHI=17*Math.PI/180;
   [-1,1].forEach(function(sx){[true,false].forEach(function(up){
@@ -384,14 +383,14 @@ function presetInt(){
     var px=-e1y,py=e1x; if(py*ny<0){px=-px;py=-py}
     e2x=px;e2y=py;
     // ett sammanhängande, mjukt tandkött i stället för en ruta per tand
-    (function(){var r0=0,r1=400,g0=9*1.4,g1=(9+.17*r1)*1.4;
+    (function(){var r0=0,r1=215,g0=9*1.4,g1=(9+.17*r1)*1.4;
       function P(r,v){return [300+e1x*r+e2x*v,300+e1y*r+e2y*v]}
       var a=P(r0,3),b=P(r1,3),c2=P(r1,-g1),d=P(r0,-g0);
       g.save();g.fillStyle='#E0607C';g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.lineTo(c2[0],c2[1]);g.lineTo(d[0],d[1]);g.closePath();g.fill();
       g.strokeStyle='rgba(255,190,205,.55)';g.lineWidth=5;g.lineCap='round';g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.stroke();
       g.restore()})();
     var r=36;
-    while(r<360){
+    while(r<205){
       var w=9+0.17*r,h=w*1.25,gum=w*1.4;
       g.save();g.transform(e1x,e1y,e2x,e2y,300+e1x*r,300+e1y*r);
       g.shadowColor='rgba(0,0,0,.45)';g.shadowBlur=8;
@@ -403,7 +402,11 @@ function presetInt(){
   })});
   presetCv=c;
   // hjärnan (uppifrån, två halvor) överst i mitten
-  var hj=new Image();hj.onload=function(){var q=c.getContext('2d');q.save();q.shadowColor='rgba(0,0,0,.55)';q.shadowBlur=22;q.shadowOffsetY=8;var hh=225,ww=hh*hj.naturalWidth/hj.naturalHeight;q.save();klipp(q,[0,2]);[120,480].forEach(function(cx){q.drawImage(hj,cx-ww/2,-18,ww,hh)});q.restore();q.restore();update()};hj.src='hjarna.png';
+  var hj=new Image();hj.onload=function(){var q=c.getContext('2d');
+    function halva(){q.save();q.translate(545,300);q.rotate(-Math.PI/2);var hh=215,ww=hh*hj.naturalWidth/hj.naturalHeight;
+      q.beginPath();q.rect(0,-hh/2,ww/2,hh);q.clip();q.shadowColor='rgba(0,0,0,.5)';q.shadowBlur=14;q.drawImage(hj,-ww/2,-hh/2,ww,hh);q.restore()}
+    q.save();klipp(q,[0]);halva();q.restore();
+    q.save();klipp(q,[2]);q.translate(600,0);q.scale(-1,1);halva();q.restore();update()};hj.src='hjarna.png';
   // en riktig bild (insida.jpg, kvadratisk) ersätter ritningen när den finns i mappen
   var im=new Image();im.onload=function(){var q=c.getContext('2d'),m=Math.min(im.naturalWidth,im.naturalHeight);q.clearRect(0,0,600,600);q.drawImage(im,(im.naturalWidth-m)/2,(im.naturalHeight-m)/2,m,m,0,0,600,600);update()};im.src='insida.jpg';
   return c;
