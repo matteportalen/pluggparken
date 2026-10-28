@@ -165,7 +165,14 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 .w.textruta:hover,.w.textruta:focus-within{border-color:rgba(61,90,254,.55);background:rgba(255,255,255,.4)}
 .w.textruta .wh{background:rgba(31,58,53,.9);border-radius:10px 10px 0 0;padding:2px 6px;min-height:28px;opacity:0;transition:opacity .15s}
 .w.textruta:hover .wh,.w.textruta:focus-within .wh,.w.textruta.last .wh{opacity:1}
-.w.textruta .wb{padding:6px 12px 10px}
+.w.textruta .wb{padding:6px 12px 10px 34px}
+.w.textruta .grep{position:absolute;left:0;top:0;bottom:0;width:30px;cursor:grab;display:grid;place-items:center;color:#5A6AA8;font-size:1.3rem;font-weight:800;opacity:0;transition:opacity .15s;touch-action:none;user-select:none;-webkit-user-select:none}
+.w.textruta .grep:active{cursor:grabbing}
+.w.textruta .bredd{position:absolute;right:-9px;top:0;bottom:0;width:18px;cursor:ew-resize;touch-action:none}
+.w.textruta .bredd::after{content:"";position:absolute;right:7px;top:25%;bottom:25%;width:4px;border-radius:2px;background:rgba(61,90,254,.65);opacity:0;transition:opacity .15s}
+.w.textruta:hover .grep,.w.textruta:focus-within .grep,.w.textruta:hover .bredd::after,.w.textruta:focus-within .bredd::after{opacity:1}
+.w.textruta.last .grep,.w.textruta.last .bredd{display:none}
+@media(hover:none){.w.textruta .grep,.w.textruta .bredd::after{opacity:.9}}
 .tt{min-height:70px;outline:none;font-weight:700;font-size:44px;line-height:1.25;white-space:pre-wrap;word-break:break-word;user-select:text;-webkit-user-select:text;color:#1D2B53}
 .tt:empty::before{content:"Skriv här …";opacity:.35}
 @media(hover:none){.w.textruta .wh{opacity:.9}}
@@ -379,7 +386,7 @@ function laggTill(n){const c=S.widgets.length*28%140;let w;
   else if(n==="timer")w={typ:"timer",x:Math.max(40,innerWidth-420)+c,y:90+c,s:1,d:{tot:300}};
   else if(n==="hjul")w={typ:"hjul",x:Math.max(40,innerWidth-480)+c,y:120+c,s:1,d:{namn:[],tabort:false,rot:0}};
   else if(n==="video")w={typ:"video",x:Math.max(40,innerWidth-560)+c,y:60+c,s:1,d:{id:"",list:""}};
-  else if(n==="textruta")w={typ:"textruta",x:0,y:0,s:1,d:{text:"",c:TXTF[0],fet:true}};
+  else if(n==="textruta")w={typ:"textruta",x:0,y:0,s:1,d:{text:"",c:TXTF[0],fet:true,w:560}};
   else if(n==="skrivrad")w={typ:"skrivrad",x:60+c,y:200+c,s:1,d:{}};
   else if(n==="ljud")w={typ:"ljud",x:Math.max(40,innerWidth-420)+c,y:420+c,s:1,d:{gr:70}};
   else w={typ:"text",x:200+c,y:160+c,s:1,rot:Math.round((Math.random()*6-3)*10)/10,d:{text:"",c:LAPPFARG[S.widgets.filter(x=>x.typ==="text").length%4]}};
@@ -392,7 +399,7 @@ function fram(id){const e=elOf(id);if(e)e.style.zIndex=++z;}
 function farg(w){return w.typ==="lista"?TYPFARG[w.d.farg||"lista"]:TYPFARG[w.typ]||"#3D5AFE";}
 const titelHtml=t=>t?esc(t):'<i style="opacity:.6;font-weight:600">Egen lista</i>';
 function bygg(w){const e=document.createElement("div");e.className="w"+(w.typ==="text"?" lapp c-"+(w.d.c||"gul"):w.typ==="skrivrad"?" skrivrad":w.typ==="video"?" video":w.typ==="textruta"?" textruta":"")+(w.min?" dold":"")+(w.lock?" last":"");e.dataset.id=w.id;if(w.typ==="video")e.dataset.video="1";
-  e.style.cssText=`left:${w.x}px;top:${w.y}px;transform:${tf(w)};z-index:${++z};--c:${farg(w)}`;
+  e.style.cssText=`left:${w.x}px;top:${w.y}px;transform:${tf(w)};z-index:${++z};--c:${farg(w)}${w.typ==="textruta"&&w.d.w?`;width:${w.d.w}px`:""}`;
   const titel=w.typ==="lista"?`<b class="tit" title="Dubbelklicka för att byta rubrik">${titelHtml(w.d.titel)}</b>`:`<b>${{timer:"⏱️ Timer",hjul:"🎡 Lyckohjul",text:"",ljud:"🔊 Ljudnivå",skrivrad:"✍️ Skrivrad",video:"▶️ Video",textruta:"✍️ Text"}[w.typ]}</b>`;
   e.innerHTML=`<div class="wh">${titel}${w.typ==="text"?`<button data-a="farg" title="Byt färg" aria-label="Byt färg">🎨</button>`:""}${w.typ==="textruta"?`<button data-a="tfarg" title="Textfärg" aria-label="Textfärg">🎨</button><button data-a="fet" title="Fetstil av eller på" aria-label="Fetstil" style="font-family:serif">B</button>`:""}${w.typ==="text"||w.typ==="skrivrad"||w.typ==="textruta"?"":`<button data-a="dolj" title="${w.min?"Visa innehållet igen":"Dölj innehållet (det finns kvar)"}" aria-label="${w.min?"Visa innehållet":"Dölj innehållet"}">${w.min?"👁️":"🙈"}</button>`}<button data-a="las" title="${w.lock?"Lås upp (så att rutan går att flytta)":"Lås rutan på plats"}" aria-label="${w.lock?"Lås upp rutan":"Lås rutan"}">${w.lock?"🔒":"🔓"}</button><button data-a="minus" title="Mindre" aria-label="Mindre">−</button><button data-a="plus" title="Större" aria-label="Större">+</button><button data-a="x" title="Ta bort" aria-label="Ta bort rutan">✕</button></div><div class="wb"></div>`;
   fyll(e,w);return e;}
@@ -422,8 +429,9 @@ $("widgets").addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.matches
 function fyll(e,w){const b=e.querySelector(".wb");({lista:fyllLista,timer:fyllTimer,hjul:fyllHjul,text:fyllText,ljud:fyllLjud,skrivrad:fyllSkrivrad,video:fyllVideo,textruta:fyllTextruta})[w.typ](b,w);}
 
 /* dra, ändra storlek, ta bort */
-let dra=null;
+let dra=null,rs=null;
 $("widgets").addEventListener("pointerdown",e=>{const w=e.target.closest(".w");if(!w)return;fram(w.dataset.id);
+  const br=e.target.closest(".bredd");if(br){const o=S.widgets.find(x=>x.id===w.dataset.id);if(o&&!o.lock){rs={o,w,x0:e.clientX,w0:w.offsetWidth,pid:e.pointerId};try{br.setPointerCapture(e.pointerId)}catch(_){}e.preventDefault();}return;}
   const a=e.target.closest("[data-a]");if(a){const o=S.widgets.find(x=>x.id===w.dataset.id);
     if(a.dataset.a==="x"){if(o.typ==="timer")delete CLOCK[o.id];if(o.typ==="ljud")stoppaMatare(o.id);S.widgets=S.widgets.filter(x=>x!==o);w.remove();}
     else if(a.dataset.a==="dolj"){o.min=!o.min;w.classList.toggle("dold",o.min);a.textContent=o.min?"👁️":"🙈";a.title=o.min?"Visa innehållet igen":"Dölj innehållet (det finns kvar)";a.setAttribute("aria-label",o.min?"Visa innehållet":"Dölj innehållet");}
@@ -433,7 +441,7 @@ $("widgets").addEventListener("pointerdown",e=>{const w=e.target.closest(".w");i
     else if(a.dataset.a==="farg"){const i=(LAPPFARG.indexOf(o.d.c||"gul")+1)%4;w.classList.remove("c-"+(o.d.c||"gul"));o.d.c=LAPPFARG[i];w.classList.add("c-"+o.d.c);}
     else{o.s=Math.max(.6,Math.min(2.6,(o.s||1)*(a.dataset.a==="plus"?1.2:1/1.2)));w.style.transform=tf(o);}
     spara();return;}
-  const h=e.target.closest(".wh");if(!h||e.target.closest("input"))return;const o=S.widgets.find(x=>x.id===w.dataset.id);if(!o||o.lock)return;
+  const h=e.target.closest(".wh,.grep");if(!h||e.target.closest("input"))return;const o=S.widgets.find(x=>x.id===w.dataset.id);if(!o||o.lock)return;
   const m=mat(o.id);dra={o,w,dx:e.clientX/K-o.x,dy:e.clientY/K-o.y,pid:e.pointerId,rw:m.w,rh:m.h,ob:rektar(o.id)};try{h.setPointerCapture(e.pointerId)}catch(_){}e.preventDefault();});
 function guider(v,h){document.querySelectorAll("#widgets .gl").forEach(x=>x.remove());
   v.forEach(x=>{const d=document.createElement("div");d.className="gl v";d.style.left=x+"px";$("widgets").appendChild(d);});h.forEach(y=>{const d=document.createElement("div");d.className="gl h";d.style.top=y+"px";$("widgets").appendChild(d);});}
@@ -448,6 +456,8 @@ addEventListener("pointermove",e=>{if(!dra||e.pointerId!==dra.pid)return;
       [r.y,r.y+r.h/2,r.y+r.h].forEach(v=>my.push({v,lin:v}));my.push({v:r.y+r.h+GAP,lin:r.y+r.h,k:0},{v:r.y-GAP,lin:r.y,k:2});});
     const sx=snappa(nx,dra.rw,mx,T),sy=snappa(ny,dra.rh,my,T);if(sx){nx+=sx.d;gv.push(sx.lin);}if(sy){ny+=sy.d;gh.push(sy.lin);}}
   guider(gv,gh);dra.o.x=Math.round(nx);dra.o.y=Math.round(ny);dra.w.style.left=dra.o.x+"px";dra.w.style.top=dra.o.y+"px";});
+addEventListener("pointermove",e=>{if(!rs||e.pointerId!==rs.pid)return;const nb=Math.max(160,Math.min(1700,rs.w0+(e.clientX-rs.x0)/K/(rs.o.s||1)));rs.w.style.width=nb+"px";rs.o.d.w=Math.round(nb);});
+const slutRs=e=>{if(rs&&e.pointerId===rs.pid){rs=null;spara();}};addEventListener("pointerup",slutRs);addEventListener("pointercancel",slutRs);
 const slutDra=e=>{if(dra&&e.pointerId===dra.pid){dra=null;guider([],[]);spara();}};
 addEventListener("pointerup",slutDra);addEventListener("pointercancel",slutDra);
 /* rubriken på en lista är vanlig text (så att hela rubrikraden går att dra i); dubbelklick gör den redigerbar */
@@ -550,7 +560,8 @@ function fyllText(b,w){b.innerHTML=`<div class="an" contenteditable="true" spell
   a.addEventListener("input",()=>{w.d.text=a.innerText;spara();});}
 
 const TXTF=["#1D2B53","#E5484D","#2F6BFF","#1E9E5E","#F2780C","#FFFFFF"];
-function fyllTextruta(b,w){b.innerHTML=`<div class="tt" contenteditable="true" spellcheck="false" aria-label="Textruta"></div>`;const a=b.querySelector(".tt");a.textContent=w.d.text||"";a.style.color=w.d.c||TXTF[0];a.style.fontWeight=w.d.fet===false?"500":"700";
+function fyllTextruta(b,w){const e=b.closest(".w");if(e&&!e.querySelector(".grep")){e.insertAdjacentHTML("beforeend",'<div class="grep" title="Dra för att flytta" aria-label="Flytta rutan">⠿</div><div class="bredd" title="Dra i kanten för att ändra radlängden" aria-label="Ändra bredd"></div>');}
+  b.innerHTML=`<div class="tt" contenteditable="true" spellcheck="false" aria-label="Textruta"></div>`;const a=b.querySelector(".tt");a.textContent=w.d.text||"";a.style.color=w.d.c||TXTF[0];a.style.fontWeight=w.d.fet===false?"500":"700";
   a.addEventListener("input",()=>{w.d.text=a.innerText.replace(/\n$/,"");spara();});
   a.addEventListener("paste",e=>{e.preventDefault();const t=(e.clipboardData||window.clipboardData).getData("text/plain");document.execCommand("insertText",false,t);});}
 /* ljudnivå: mäter hur högt det är i klassrummet med mikrofonen. Ljudet spelas aldrig in och skickas ingenstans, bara nivån räknas ut här. */
@@ -587,7 +598,7 @@ function renaWidget(o,medNamn){if(!o||!TYPER.includes(o.typ))return null;const d
   else if(o.typ==="hjul")n.d={namn:medNamn&&Array.isArray(d.namn)?d.namn.slice(0,60).map(x=>String(x).slice(0,30)):[],tabort:!!d.tabort,rot:0,n:tal(d.n,2,60,25)};
   else if(o.typ==="text"){n.rot=tal(o.rot,-6,6,0);n.d={text:String(d.text||"").slice(0,600),c:LAPPFARG.includes(d.c)?d.c:"gul"};}
   else if(o.typ==="video"){const ok=/^[\w-]{11}$/,okl=/^[\w-]{10,60}$/;n.d={id:ok.test(d.id||"")?d.id:"",list:okl.test(d.list||"")?d.list:""};}
-  else if(o.typ==="textruta")n.d={text:String(d.text||"").slice(0,4000),c:TXTF.includes(d.c)?d.c:TXTF[0],fet:d.fet!==false};
+  else if(o.typ==="textruta")n.d={text:String(d.text||"").slice(0,4000),c:TXTF.includes(d.c)?d.c:TXTF[0],fet:d.fet!==false,w:tal(d.w,160,1700,560)};
   else if(o.typ==="skrivrad")n.d={};
   else n.d={gr:tal(d.gr,30,95,70)};
   return n;}
