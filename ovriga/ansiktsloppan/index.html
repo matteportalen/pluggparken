@@ -138,7 +138,8 @@ details.fb img{width:100%;max-width:420px;border:2px solid var(--line);border-ra
   <p class="hint" id="edhint"></p>
   <label class="ctl" for="zoom">Zooma <input type="range" id="zoom" min="0.4" max="8" step="0.01" value="1"><output id="zoomv">1,0×</output></label>
   <label class="ctl" for="hsize" id="hsizeBox" hidden>Huvud <input type="range" id="hsize" min="0.12" max="0.5" step="0.005" value="0.32"><output id="hsizev"></output></label>
-  <p class="hint" id="hsizeHint" hidden>Åt höger blir ansiktet större och fyller loppan. Åt vänster ryms hela huvudet.</p>
+  <label class="ctl" for="fish" id="fishBox" hidden>Fisheye <input type="range" id="fish" min="0" max="1" step="0.05" value="0.4"><output id="fishv"></output></label>
+  <p class="hint" id="hsizeHint" hidden>Åt höger blir ansiktet större och fyller loppan. Åt vänster ryms hela huvudet. Fisheye trycker ihop det yttre så att mer ryms utan att ögon och mun blir små.</p>
   <div class="acts">
     <button class="pill" id="eFit" type="button">🎯 Peka ut ögon och mun</button>
     <label class="pill" for="file">🖼️ Annan bild</label>
@@ -322,6 +323,21 @@ function padOf(img){
   s2.drawImage(img,0,0,W,H,pp,pp,w2,h2);   // själva fotot ovanpå den mjuka utvidgningen
   return img._pad={c:Sm,ps:ps,P:P};
 }
+/* Fisheye: runt munnen (rutans mitt) trycks det yttre ihop, mitten behåller sin storlek. Görs på bilden före vikningen, så EXT/INT och vikgeometrin är orörda. */
+var fish=0.4;
+function fisheye(c,n){
+  if(fish<=0)return;
+  var src=c.getImageData(0,0,n,n),S=src.data,out=c.createImageData(n,n),D=out.data,R=n/2,k=fish*0.9,m=n-1;
+  for(var y=0;y<n;y++)for(var x=0;x<n;x++){
+    var dx=(x+.5-R)/R,dy=(y+.5-R)/R,r2=dx*dx+dy*dy,f=1+k*r2;
+    var sx=R+dx*f*R-.5,sy=R+dy*f*R-.5;
+    if(sx<0)sx=0;else if(sx>m)sx=m;if(sy<0)sy=0;else if(sy>m)sy=m;
+    var x0=sx|0,y0=sy|0,x1=x0<m?x0+1:x0,y1=y0<m?y0+1:y0,fx=sx-x0,fy=sy-y0,i=(y*n+x)*4;
+    var a=(y0*n+x0)*4,b=(y0*n+x1)*4,d=(y1*n+x0)*4,e=(y1*n+x1)*4;
+    for(var q=0;q<4;q++)D[i+q]=(S[a+q]*(1-fx)+S[b+q]*fx)*(1-fy)+(S[d+q]*(1-fx)+S[e+q]*fx)*fy;
+  }
+  c.putImageData(out,0,0);
+}
 function renderExt(c,n,L){
   c.save();c.setTransform(1,0,0,1,0,0);c.fillStyle='#fff';c.fillRect(0,0,n,n);
   if(L.img){
@@ -332,6 +348,7 @@ function renderExt(c,n,L){
     c.drawImage(L.img,-iw(L.img)/2,-ih(L.img)/2);   // fotot i full skärpa ovanpå
   }
   c.restore();
+  if(L.kind==='ext'&&L.pts)fisheye(c,n);
 }
 function bake(L,n){var bc=document.createElement('canvas');bc.width=bc.height=n;renderExt(bc.getContext('2d'),n,L);return {img:bc,x:0,y:0,zoom:1,rot:0,flip:false}}
 function composeUt(P,guides){
@@ -373,7 +390,7 @@ function syncCtl(){
   $('edhint').textContent=cur==='ext'
     ? 'Dra bilden för att flytta den. Nyp eller använd reglaget för att zooma. Munnen ska ligga där linjerna korsar varandra.'
     : 'Valfritt. Det här syns när loppan öppnas: ta ett nära foto av bara en stor öppen mun (inga ögon, de sitter på utsidan). Mungiporna ska ligga på den vågräta linjen och munnens mitt där linjerna korsar varandra.';
-  var hs=cur==='ext'&&!!layers.ext.pts;$('hsizeBox').hidden=!hs;$('hsizeHint').hidden=!hs;
+  var hs=cur==='ext'&&!!layers.ext.pts;$('hsizeBox').hidden=!hs;$('fishBox').hidden=!hs;$('fishv').textContent=fish>0?Math.round(fish*100)+' %':'Av';$('hsizeHint').hidden=!hs;
   if(hs){$('hsize').value=layers.ext.abst;$('hsizev').textContent=layers.ext.abst<.2?'Hela':layers.ext.abst>.38?'Nära':'';}
   $('eFit').textContent=cur==='ext'?'🎯 Peka ut ögon och mun':'🎯 Peka ut munnen';
   $('mouthbox').hidden=cur!=='ext';
@@ -398,6 +415,7 @@ $('hsize').oninput=function(){
   var L=layers.ext;if(!L.pts)return;var F=refit(L,+this.value,L.flip);if(!F)return;
   layers.ext=F;syncCtl();update();
 };
+$('fish').oninput=function(){fish=+this.value;$('fishv').textContent=fish>0?Math.round(fish*100)+' %':'Av';update()};
 $('guides').onchange=update;
 $('clear').onclick=function(){var L=layers[cur];if(L.img){L.img=null;L.sample=false}else{layers[cur]=mk(cur)}syncCtl();update()};
 
