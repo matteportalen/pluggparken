@@ -96,21 +96,23 @@ body.mph-mini #quit{display:none}
   const NYMENY=[{id:'hem',namn:'Välj ämne',sub:'Alla ämnen',href:'',logo:em('🏠')},{id:'matte',namn:'Matematik',sub:'Räkna, spela och utforska',href:'matte/',logo:em('🔢')},
     {id:'svenska',namn:'Svenska',sub:'Ord, stavning, läsning och sagor',href:'svenska/',logo:em('📖')},{id:'rymd',namn:'Rymdlabbet',sub:'Planeterna, stjärnorna och svarta hål',href:'ovriga/rymdlabbet/',logo:em('🔭')},
     {id:'so',namn:'SO',sub:'Kartor, länder och platser',href:'so/',logo:em('🗺️')},{id:'special',namn:'Specialare',sub:'Minilektioner om spännande ämnen',href:'specialare/',logo:em('🎁')},
-    {id:'fler',namn:'Fler ämnen',sub:'Engelska, logik, kod och pengar',href:'fler/',logo:em('🧩')}];
+    {id:'fler',namn:'Fler ämnen',sub:'Engelska, logik, kod och pengar',href:'fler/',logo:em('🧩')},
+    {id:'extra',namn:'Extra',sub:'Saker att göra själv',href:'extra/',logo:em('✨')}];
   // vilket ämne en sida hör till (för menyn och tillbaka-knappen)
   const REL=location.pathname.replace(/^\//,'').replace(/index\.html$/,'');
   function amneAv(){const seg=REL.split('/'),top=seg[0],sub=seg[1]||'';
     if(REL==='')return'hem';
-    if(['matte','svenska','so','fler'].includes(top)&&seg.length<=2)return top;
+    if(['matte','svenska','so','fler','extra'].includes(top)&&seg.length<=2)return top;
+    if(top==='extra')return'extra';
     if(top==='ovriga'){if(/^(ordgomma|ordgatan|hogfrekventa|lasflyt|bokstaver)$/.test(sub))return'svenska';if(/^(sverigekartan|europa|varlden)$/.test(sub))return'so';
-      if(/^(rymdlabbet|solsystemet|vintergatan)$/.test(sub))return'rymd';return'fler';}
+      if(/^(rymdlabbet|solsystemet|vintergatan)$/.test(sub))return'rymd';if(sub==='ansiktsloppan')return'extra';return'fler';}
     if(/^(meningsbyggaren|ordkedjan|ordgissning|dubbelteckning|knepigaljud|sagobyggaren)$/.test(top))return'svenska';
     if(top==='tidslinjen')return'so';
     if(/^(schack|trerirad|sudoku|trafikstockning)$/.test(top))return'fler';
     if(top==='specialare')return'special';
     if(/^(mittrum|flytta)$/.test(top))return'hem';
     return'matte';}
-  const AMNE=amneAv(),EGENSIDA=REL===''||['matte','svenska','so','fler'].includes(REL.replace(/\/$/,''));   // sidan är ämnets egen sida
+  const AMNE=amneAv(),EGENSIDA=REL===''||['matte','svenska','so','fler','extra'].includes(REL.replace(/\/$/,''));   // sidan är ämnets egen sida
   const MENY=DESIGN==='ny'?NYMENY:PORTALER,MENYNU=DESIGN==='ny'?(NYMENY.find(p=>p.id===AMNE)||null):PORTAL;
   window.MPLogo=LOGO_PP;
   // loggan som ikon i webbläsarfliken
