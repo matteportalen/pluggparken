@@ -378,13 +378,6 @@ function presetInt(){
       q.fillStyle='rgba(255,255,255,.14)';q.beginPath();q.ellipse(500,450,50,16,-.3,0,7);q.fill()}
     g.save();klipp(g,[1]);tunga(g);g.restore();
     g.save();klipp(g,[3]);g.translate(600,0);g.scale(-1,1);tunga(g);g.restore();
-    // hjärnan: liten, i hörnet längst ut (övre trianglarna), mittfåran längs kanten x = ±100
-    if(hj){
-      var halva=function(q){q.save();q.translate(600,105);q.rotate(0);var hh=260,ww=hh*hj.naturalWidth/hj.naturalHeight;
-        q.beginPath();q.rect(-ww/2,-hh/2,ww/2,hh);q.clip();q.shadowColor='rgba(0,0,0,.5)';q.shadowBlur=14;q.drawImage(hj,-ww/2,-hh/2,ww,hh);q.restore()};
-      g.save();klipp(g,[0]);halva(g);g.restore();
-      g.save();klipp(g,[2]);g.translate(600,0);g.scale(-1,1);halva(g);g.restore();
-    }
     // tandrader längs axeln: stora vid ytterändan, mindre och mot varandra i mitten (där de möts)
     var D0=58,RMAX=292;
     [-1,1].forEach(function(sx){[true,false].forEach(function(up){
@@ -407,6 +400,13 @@ function presetInt(){
         r+=w*1.02;
       }
     })});
+    // hjärnan ritas sist så att den ligger ovanpå tandköttet (övre trianglarna), mittfåran längs kanten x = ±100
+    if(hj){
+      var halva=function(q){q.save();q.translate(600,105);q.rotate(0);var hh=260,ww=hh*hj.naturalWidth/hj.naturalHeight;
+        q.beginPath();q.rect(-ww/2,-hh/2,ww/2,hh);q.clip();q.shadowColor='rgba(0,0,0,.5)';q.shadowBlur=14;q.drawImage(hj,-ww/2,-hh/2,ww,hh);q.restore()};
+      g.save();klipp(g,[0]);halva(g);g.restore();
+      g.save();klipp(g,[2]);g.translate(600,0);g.scale(-1,1);halva(g);g.restore();
+    }
   }
   bygg(null);presetCv=c;
   var hj=new Image();hj.onload=function(){bygg(hj);update()};hj.src='hjarna.png';
