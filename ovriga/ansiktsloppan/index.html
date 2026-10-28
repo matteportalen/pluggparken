@@ -137,8 +137,8 @@ details.fb img{width:100%;max-width:420px;border:2px solid var(--line);border-ra
   <div class="stage"><canvas id="ed" width="640" height="640" aria-label="Förhandsvisning av bilden"></canvas></div>
   <p class="hint" id="edhint"></p>
   <label class="ctl" for="zoom">Zooma <input type="range" id="zoom" min="0.4" max="8" step="0.01" value="1"><output id="zoomv">1,0×</output></label>
-  <label class="ctl" for="hsize" id="hsizeBox" hidden>Huvud <input type="range" id="hsize" min="0.10" max="0.32" step="0.005" value="0.17"><output id="hsizev"></output></label>
-  <p class="hint" id="hsizeHint" hidden>Dra åt vänster så ryms hela huvudet i loppan. Åt höger blir ansiktet större.</p>
+  <label class="ctl" for="hsize" id="hsizeBox" hidden>Huvud <input type="range" id="hsize" min="0.12" max="0.5" step="0.005" value="0.32"><output id="hsizev"></output></label>
+  <p class="hint" id="hsizeHint" hidden>Åt höger blir ansiktet större och fyller loppan. Åt vänster ryms hela huvudet.</p>
   <div class="acts">
     <button class="pill" id="eFit" type="button">🎯 Peka ut ögon och mun</button>
     <label class="pill" for="file">🖼️ Annan bild</label>
@@ -242,8 +242,8 @@ function compose(P,guides){
 /* ================= Slut på den ofarliga geometrin ================= */
 
 var ed=$('ed'), sheet=$('sheet');
-var ABST=0.17;   // standard för avståndet från ögonens mitt till munnen, som andel av rutans storlek: 0,17 ger plats för hela huvudet i loppan (ändra här)
-var ABST_MIN=0.10, ABST_MAX=0.32;   // gränser för reglaget Huvudets storlek
+var ABST=0.32;   // standard för avståndet från ögonens mitt till munnen, som andel av rutans storlek: 0,32 fyller loppans ruta med ett stort ansikte (som på riktiga loppor); lägre värden ger plats för hela huvudet (ändra här)
+var ABST_MIN=0.12, ABST_MAX=0.5;   // gränser för reglaget Huvudets storlek
 
 function sample(kind){
   var c=document.createElement('canvas'); c.width=c.height=600; var g=c.getContext('2d');
@@ -374,7 +374,7 @@ function syncCtl(){
     ? 'Dra bilden för att flytta den. Nyp eller använd reglaget för att zooma. Munnen ska ligga där linjerna korsar varandra.'
     : 'Valfritt. Det här syns när loppan öppnas: ta ett nära foto av bara en stor öppen mun (inga ögon, de sitter på utsidan). Mungiporna ska ligga på den vågräta linjen och munnens mitt där linjerna korsar varandra.';
   var hs=cur==='ext'&&!!layers.ext.pts;$('hsizeBox').hidden=!hs;$('hsizeHint').hidden=!hs;
-  if(hs){$('hsize').value=layers.ext.abst;$('hsizev').textContent=layers.ext.abst<.14?'Hela':layers.ext.abst>.24?'Nära':'';}
+  if(hs){$('hsize').value=layers.ext.abst;$('hsizev').textContent=layers.ext.abst<.2?'Hela':layers.ext.abst>.38?'Nära':'';}
   $('eFit').textContent=cur==='ext'?'🎯 Peka ut ögon och mun':'🎯 Peka ut munnen';
   $('mouthbox').hidden=cur!=='ext';
   ['ext','int'].forEach(function(k){$('tab-'+k).setAttribute('aria-selected',String(k===cur))});
