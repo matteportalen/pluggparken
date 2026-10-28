@@ -121,9 +121,9 @@ details.fb img{width:100%;max-width:420px;border:2px solid var(--line);border-ra
 
 <section id="kamera" class="screen" hidden>
   <button data-home hidden type="button" onclick="MPLopp.hem()"></button>
-  <div class="say">Ställ dig så att ansiktet fyller ovalen<small>Ögonen på linjen. Munnen i mitten av korset.</small></div>
+  <div class="say" id="camSay"></div>
   <div class="stage"><video id="vid" autoplay playsinline muted></video>
-    <svg class="guide" viewBox="0 0 100 100" aria-hidden="true"><ellipse cx="50" cy="43.5" rx="29" ry="37" fill="none" stroke="#fff" stroke-width="1.2" stroke-dasharray="3 2" opacity=".95"/><line x1="24" y1="38" x2="76" y2="38" stroke="#FFE07A" stroke-width="1" stroke-dasharray="2 2"/><line x1="44" y1="65" x2="56" y2="65" stroke="#FFE07A" stroke-width="1"/><line x1="50" y1="60" x2="50" y2="70" stroke="#FFE07A" stroke-width="1"/><circle cx="37" cy="38" r="2" fill="none" stroke="#fff" stroke-width=".8"/><circle cx="63" cy="38" r="2" fill="none" stroke="#fff" stroke-width=".8"/></svg></div>
+    <svg class="guide" viewBox="0 0 100 100" aria-hidden="true"><g id="gExt"><ellipse cx="50" cy="43.5" rx="29" ry="37" fill="none" stroke="#fff" stroke-width="1.2" stroke-dasharray="3 2" opacity=".95"/><line x1="24" y1="38" x2="76" y2="38" stroke="#FFE07A" stroke-width="1" stroke-dasharray="2 2"/><line x1="44" y1="65" x2="56" y2="65" stroke="#FFE07A" stroke-width="1"/><line x1="50" y1="60" x2="50" y2="70" stroke="#FFE07A" stroke-width="1"/><circle cx="37" cy="38" r="2" fill="none" stroke="#fff" stroke-width=".8"/><circle cx="63" cy="38" r="2" fill="none" stroke="#fff" stroke-width=".8"/></g><g id="gInt" hidden><ellipse cx="50" cy="50" rx="38" ry="27" fill="none" stroke="#fff" stroke-width="1.2" stroke-dasharray="3 2"/><line x1="10" y1="50" x2="90" y2="50" stroke="#FFE07A" stroke-width="1" stroke-dasharray="2 2"/><line x1="50" y1="40" x2="50" y2="60" stroke="#FFE07A" stroke-width="1"/><circle cx="12" cy="50" r="2" fill="none" stroke="#fff" stroke-width=".8"/><circle cx="88" cy="50" r="2" fill="none" stroke="#fff" stroke-width=".8"/></g></svg></div>
   <div class="acts"><button class="go" id="camShot" type="button" style="margin-top:0;width:auto;padding:12px 28px">📸 Ta bilden</button><button class="pill" id="camFlip" type="button">🔄 Byt kamera</button><button class="pill" id="camCancel" type="button">Avbryt</button></div>
   <p class="msg" id="camMsg" role="status"></p>
 </section>
@@ -246,25 +246,29 @@ function sample(kind){
   var c=document.createElement('canvas'); c.width=c.height=600; var g=c.getContext('2d');
   var gr=g.createLinearGradient(0,0,0,600); gr.addColorStop(0,'#E9B99C'); gr.addColorStop(1,'#DDA487');
   g.fillStyle=gr; g.fillRect(0,0,600,600);
+  if(kind==='int'){   // insidan är bara en stor öppen mun (ögonen sitter på utsidan)
+    g.fillStyle='#C03355'; g.beginPath(); g.ellipse(300,300,285,215,0,0,7); g.fill();
+    g.save(); g.beginPath(); g.ellipse(300,300,232,162,0,0,7); g.clip();
+    g.fillStyle='#4A0F1B'; g.fillRect(0,0,600,600);
+    g.fillStyle='#F7F3EA'; g.fillRect(60,120,480,58);
+    g.fillStyle='#E0708A'; g.beginPath(); g.ellipse(300,420,170,105,0,0,7); g.fill();
+    g.fillStyle='rgba(255,255,255,.18)'; g.beginPath(); g.ellipse(300,396,70,18,0,0,7); g.fill();
+    g.restore();
+    g.strokeStyle='#8B1E2E'; g.lineWidth=14; g.beginPath(); g.ellipse(300,300,285,215,0,0,7); g.stroke();
+    return c;
+  }
   g.fillStyle='#3B2A26'; g.fillRect(0,0,600,70);
-  function eye(x,y,open){
-    g.fillStyle='#fff'; g.beginPath(); g.ellipse(x,y,58,open?40:30,0,0,7); g.fill();
-    g.fillStyle='#4C7A5B'; g.beginPath(); g.arc(x,y,open?26:22,0,7); g.fill();
+  function eye(x,y){
+    g.fillStyle='#fff'; g.beginPath(); g.ellipse(x,y,58,30,0,0,7); g.fill();
+    g.fillStyle='#4C7A5B'; g.beginPath(); g.arc(x,y,22,0,7); g.fill();
     g.fillStyle='#111'; g.beginPath(); g.arc(x,y,11,0,7); g.fill();
-    g.strokeStyle='#3B2A26'; g.lineWidth=10; g.lineCap='round'; g.beginPath(); g.moveTo(x-62,y-(open?66:52)); g.quadraticCurveTo(x,y-(open?92:70),x+62,y-(open?66:52)); g.stroke();
+    g.strokeStyle='#3B2A26'; g.lineWidth=10; g.lineCap='round'; g.beginPath(); g.moveTo(x-62,y-52); g.quadraticCurveTo(x,y-70,x+62,y-52); g.stroke();
   }
-  eye(185,125,kind==='int'); eye(415,125,kind==='int');
+  eye(185,125); eye(415,125);
   g.fillStyle='rgba(120,60,50,.5)'; g.beginPath(); g.ellipse(275,225,13,9,0,0,7); g.ellipse(325,225,13,9,0,0,7); g.fill();
-  if(kind==='int'){
-    g.fillStyle='#4A0F1B'; g.beginPath(); g.ellipse(300,320,230,190,0,0,7); g.fill();
-    g.fillStyle='#F7F3EA'; g.fillRect(140,190,320,52);
-    g.fillStyle='#E0708A'; g.beginPath(); g.ellipse(300,440,150,90,0,0,7); g.fill();
-    g.strokeStyle='#C03355'; g.lineWidth=26; g.beginPath(); g.ellipse(300,320,230,190,0,0,7); g.stroke();
-  } else {
-    g.fillStyle='#C03355'; g.beginPath(); g.ellipse(300,300,92,44,0,0,7); g.fill();
-    g.strokeStyle='#6E1427'; g.lineWidth=6; g.beginPath(); g.moveTo(212,300); g.lineTo(388,300); g.stroke();
-    g.fillStyle='rgba(255,255,255,.35)'; g.beginPath(); g.ellipse(300,282,40,9,0,0,7); g.fill();
-  }
+  g.fillStyle='#C03355'; g.beginPath(); g.ellipse(300,300,92,44,0,0,7); g.fill();
+  g.strokeStyle='#6E1427'; g.lineWidth=6; g.beginPath(); g.moveTo(212,300); g.lineTo(388,300); g.stroke();
+  g.fillStyle='rgba(255,255,255,.35)'; g.beginPath(); g.ellipse(300,282,40,9,0,0,7); g.fill();
   return c;
 }
 function mk(kind){return {img:sample(kind),sample:true,x:0,y:0,zoom:1,rot:0,flip:false,kind:kind}}
@@ -328,8 +332,8 @@ function syncCtl(){
   $('clear').textContent=L.img?'Ta bort bild':'Visa exempel';
   $('edhint').textContent=cur==='ext'
     ? 'Dra bilden för att flytta den. Nyp eller använd reglaget för att zooma. Munnen ska ligga där linjerna korsar varandra.'
-    : 'Valfritt. Bilden syns när loppan öppnas. Använd en bild på en öppen mun och lägg munnens mitt där linjerna korsar varandra.';
-  $('eFit').hidden=cur!=='ext';
+    : 'Valfritt. Det här syns när loppan öppnas: ta ett nära foto av bara en stor öppen mun (inga ögon, de sitter på utsidan). Mungiporna ska ligga på den vågräta linjen och munnens mitt där linjerna korsar varandra.';
+  $('eFit').textContent=cur==='ext'?'🎯 Peka ut ögon och mun':'🎯 Peka ut munnen';
   $('mouthbox').hidden=cur!=='ext';
   ['ext','int'].forEach(function(k){$('tab-'+k).setAttribute('aria-selected',String(k===cur))});
 }
@@ -354,8 +358,8 @@ function toCanvas(im){
 }
 var target='ext';
 function taEmot(img){   // img är en canvas; ansiktet pekas ut när det gäller utsidan
-  if(target==='ext'){startPunkt(img)}
-  else{layers.int={img:img,sample:false,x:0,y:0,zoom:1,rot:0,flip:false,kind:'int'};cur='int';openEditor()}
+  if(target==='ext'){startPunkt(img,'ext')}
+  else{startPunkt(img,'int')}
 }
 $('file').onchange=function(){
   var f=this.files&&this.files[0];if(!f)return;this.value='';
@@ -370,9 +374,11 @@ function openEditor(){show('edit');syncCtl();update()}
 $('hDemo').onclick=function(){layers={ext:mk('ext'),int:mk('int')};cur='ext';openEditor()};
 
 /* ---------- tre klick: ögon och mun ---------- */
-var pk={img:null,pts:[],s:1,ox:0,oy:0};
+var pk={img:null,pts:[],s:1,ox:0,oy:0,mode:'ext'};
 var PKTEXT=[['Tryck på ditt vänstra öga','Mitt i ögat. Det är det som sitter till vänster i bilden.'],['Tryck på det högra ögat','Mitt i ögat.'],['Tryck på munnen','Mitt i, där läpparna möts.']];
-function startPunkt(img){pk.img=img;pk.pts=[];show('punkt');drawPk()}
+var PKINT=[['Tryck på ena mungipan','Ena hörnet av den öppna munnen.'],['Tryck på den andra mungipan','Det andra hörnet. Ögonen behövs inte här.']];
+function startPunkt(img,mode){pk.img=img;pk.pts=[];pk.mode=mode||'ext';show('punkt');drawPk()}
+function pkMax(){return pk.mode==='int'?2:3}
 function drawPk(){
   var c=$('pk'),g=c.getContext('2d'),N=c.width,img=pk.img;
   g.fillStyle='#fff';g.fillRect(0,0,N,N);
@@ -383,20 +389,20 @@ function drawPk(){
     g.beginPath();g.arc(x,y,N/36,0,7);g.fillStyle='#E5484D';g.fill();g.lineWidth=N/180;g.strokeStyle='#fff';g.stroke();
     g.fillStyle='#fff';g.font='800 '+(N/28)+'px sans-serif';g.textAlign='center';g.textBaseline='middle';g.fillText(String(i+1),x,y+1);
   });
-  var d=pk.pts.length,t=PKTEXT[Math.min(d,2)];
-  $('pkSay').innerHTML=d<3?(d+1)+'. '+t[0]+'<small>'+t[1]+'</small>':'Bra!';
+  var d=pk.pts.length,T=pk.mode==='int'?PKINT:PKTEXT,t=T[Math.min(d,T.length-1)];
+  $('pkSay').innerHTML=d<pkMax()?(d+1)+'. '+t[0]+'<small>'+t[1]+'</small>':'Bra!';
   $('pkUndo').disabled=!d;
 }
 $('pk').addEventListener('pointerdown',function(e){
-  if(!pk.img||pk.pts.length>=3)return;
+  if(!pk.img||pk.pts.length>=pkMax())return;
   var r=this.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*this.width,y=(e.clientY-r.top)/r.height*this.height;
   var ix=(x-pk.ox)/pk.s,iy=(y-pk.oy)/pk.s;
   if(ix<0||iy<0||ix>iw(pk.img)||iy>ih(pk.img))return;
   pk.pts.push([ix,iy]);drawPk();e.preventDefault();
-  if(pk.pts.length===3)setTimeout(klarPunkt,250);
+  if(pk.pts.length===pkMax())setTimeout(klarPunkt,250);
 });
 $('pkUndo').onclick=function(){pk.pts.pop();drawPk()};
-$('pkSkip').onclick=function(){applyFit(pk.img,null)};
+$('pkSkip').onclick=function(){applyFit(pk.img,null,pk.mode)};
 // räknar ut flytt, zoom och rotation så att ögonlinjen blir vågrät och munnen hamnar i mitten
 function fitLayer(img,pts){
   var L=pts[0],R=pts[1],M=pts[2];
@@ -409,16 +415,27 @@ function fitLayer(img,pts){
   var x=-(Math.cos(a)*dx-Math.sin(a)*dy),y=-(Math.sin(a)*dx+Math.cos(a)*dy);
   return {img:img,sample:false,x:x,y:y,zoom:zoom,rot:rot,flip:false,kind:'ext'};
 }
+// insidan: ena och andra mungipan; munnens mitt hamnar i rutans mitt och mungiporna ligger på den vågräta linjen
+var MUNBREDD=.8;   // munnens bredd som andel av rutans storlek (ändra här)
+function fitMouth(img,pts){
+  var A=pts[0],B=pts[1],dist=Math.hypot(B[0]-A[0],B[1]-A[1]);
+  if(dist<4)return null;
+  var theta=Math.atan2(B[1]-A[1],B[0]-A[0]),rot=-theta*180/Math.PI,W=iw(img),H=ih(img),mn=Math.min(W,H);
+  var zoom=Math.min(8,Math.max(.4,MUNBREDD*mn/dist)),base=zoom/mn,a=rot*Math.PI/180;
+  var Mx=(A[0]+B[0])/2,My=(A[1]+B[1])/2,dx=(Mx-W/2)*base,dy=(My-H/2)*base;
+  return {img:img,sample:false,x:-(Math.cos(a)*dx-Math.sin(a)*dy),y:-(Math.sin(a)*dx+Math.cos(a)*dy),zoom:zoom,rot:rot,flip:false,kind:'int'};
+}
 function klarPunkt(){
-  var L=fitLayer(pk.img,pk.pts);
-  if(!L){pk.pts=[];drawPk();$('pkSay').innerHTML='Punkterna låg för nära varandra<small>Försök igen. Tryck på vänster öga, höger öga och munnen.</small>';return}
-  applyFit(pk.img,L);
+  var L=pk.mode==='int'?fitMouth(pk.img,pk.pts):fitLayer(pk.img,pk.pts);
+  if(!L){pk.pts=[];drawPk();$('pkSay').innerHTML='Punkterna låg för nära varandra<small>Försök igen.</small>';return}
+  applyFit(pk.img,L,pk.mode);
 }
-function applyFit(img,L){
-  layers.ext=L||{img:img,sample:false,x:0,y:0,zoom:1,rot:0,flip:false,kind:'ext'};
-  cur='ext';openEditor();
+function applyFit(img,L,mode){
+  mode=mode||'ext';
+  layers[mode]=L||{img:img,sample:false,x:0,y:0,zoom:1,rot:0,flip:false,kind:mode};
+  cur=mode;openEditor();
 }
-$('eFit').onclick=function(){var L=layers.ext;if(!L.img||L.sample){$('edhint').textContent='Välj en egen bild först.';return}target='ext';startPunkt(L.img)};
+$('eFit').onclick=function(){var L=layers[cur];if(!L.img||L.sample){$('edhint').textContent='Välj en egen bild först.';return}target=cur;startPunkt(L.img,cur)};
 
 /* ---------- dra och nyp ---------- */
 var pts=new Map(),lastDist=0;
@@ -441,6 +458,8 @@ function stoppaKamera(){if(stream){stream.getTracks().forEach(function(t){t.stop
 function kameraMsg(t){$('camMsg').textContent=t}
 function oppnaKamera(){
   target=target||'ext';show('kamera');kameraMsg('');
+  var inne=target==='int';$('gExt').hidden=inne;$('gInt').hidden=!inne;
+  $('camSay').innerHTML=inne?'Öppna munnen stort och ta bara munnen<small>Mungiporna på linjen. Inga ögon i bilden.</small>':'Ställ dig så att ansiktet fyller ovalen<small>Ögonen på linjen. Munnen i mitten av korset.</small>';
   if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){kameraMsg('Den här webbläsaren kan inte använda kameran. Välj en bild i stället.');return}
   stoppaKamera();
   navigator.mediaDevices.getUserMedia({video:{facingMode:facing,width:{ideal:1280},height:{ideal:1280}},audio:false}).then(function(s){
