@@ -83,6 +83,10 @@ h2{font-size:1.25rem;margin:18px 0 8px}
 .res .big{font-size:4.5rem;line-height:1}.res h2{font-size:2rem;margin:8px 0}.res .st{font-size:2.2rem;letter-spacing:4px}
 .res p{color:var(--muted)}
 .res .acts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+/* dator: brädet stort till vänster, knappar och hjälp till höger */
+@media(min-width:900px){body.breds .wrap{max-width:1040px}
+  body.breds .gcols{display:grid;grid-template-columns:auto minmax(260px,340px);gap:40px;justify-content:center;align-items:center;min-height:calc(100vh - 150px)}
+  body.breds .gr .msg{max-width:340px}}
 @media(prefers-reduced-motion:reduce){.car,.car.out{transition:none}.flag,.car.tip,.arrow{animation:none}}
 </style>
 </head>
@@ -99,10 +103,13 @@ h2{font-size:1.25rem;margin:18px 0 8px}
 </section>
 <section id="game" class="screen" hidden>
   <button data-home hidden onclick="MPTraf.hem()"></button>
+  <div class="gcols"><div class="gl">
   <div class="gtop"><span class="tag" id="tagA"></span><span class="tag" id="tagB"></span></div>
   <div class="stage"><div class="board" id="board"></div></div>
+  </div><div class="gr">
   <div class="pad2" id="acts"></div>
   <div class="msg" id="msg"></div>
+  </div></div>
 </section>
 <section id="result" class="screen" hidden>
   <div class="res"><div class="big">🏁</div><h2 id="rTitle"></h2><div class="st" id="rStars"></div><p id="rText"></p>
@@ -117,7 +124,7 @@ const KEY='mattespel-trafikstockning-v1';
 let D;try{D=JSON.parse(localStorage.getItem(KEY))||{};}catch(e){D={};}
 D.betyg=D.betyg||{};D.stars=D.stars||{};
 function save(){try{localStorage.setItem(KEY,JSON.stringify(D));}catch(e){}}
-function show(id){document.querySelectorAll('.screen').forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
+function show(id){if(id!=='game')document.body.classList.remove('breds');document.querySelectorAll('.screen').forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
 /*PUSSEL*/
 /* 40 pussel (36 tecken = brädet rad för rad, x = röda bilen, . = tomt) och minsta antal drag; framräknade med en bred sökning */
 const PZ=[
@@ -210,7 +217,7 @@ $('sets').addEventListener('click',e=>{const b=e.target.closest('[data-k]');if(!
 function say0(t){const m=document.querySelector('.how');m.innerHTML='<b>'+t+'</b>';setTimeout(home,0);}
 /* ---------- spel ---------- */
 let G=null;
-function cellSize(){return Math.floor(Math.max(240,Math.min(innerWidth-62,innerHeight-380,440))/6);}
+function cellSize(){const bred=innerWidth>=900;document.body.classList.toggle('breds',bred);return Math.floor((bred?Math.max(300,Math.min(innerHeight-170,640)):Math.max(240,Math.min(innerWidth-62,innerHeight-380,440)))/6);}
 function start(k){
   const p=PZ[k];const cars=parse(p[0]);
   G={k,cars,pos:cars.map(c=>c.h?c.c:c.r),start:null,best:p[1],moves:0,hist:[],hints:0,sel:-1,tip:null,over:false,last:-1};

@@ -76,6 +76,10 @@ h2{font-size:1.25rem;margin:18px 0 8px}
 .res{text-align:center;padding:30px 8px}
 .res .big{font-size:4.5rem;line-height:1}.res h2{font-size:2rem;margin:8px 0}.res .st{font-size:2.2rem;letter-spacing:4px}
 .res p{color:var(--muted)}
+/* dator: brädet stort till vänster, knappar och hjälp till höger */
+@media(min-width:900px){body.breds .wrap{max-width:1040px}
+  body.breds .gcols{display:grid;grid-template-columns:auto minmax(260px,340px);gap:40px;justify-content:center;align-items:center;min-height:calc(100vh - 150px)}
+  body.breds .gr .msg{max-width:340px}}
 @media(prefers-reduced-motion:reduce){.cell .m{animation:none;stroke-dashoffset:0}.cell.win,.cell.hintc::after{animation:none}}
 </style>
 </head>
@@ -95,10 +99,13 @@ h2{font-size:1.25rem;margin:18px 0 8px}
   <button class="go" id="goBtn">Spela!</button>
 </section>
 <section id="game" class="screen" hidden>
+  <div class="gcols"><div class="gl">
   <div class="gtop"><div class="chip" id="cA"></div><span class="vs">mot</span><div class="chip" id="cB"></div></div>
   <div class="board" id="board"></div>
+  </div><div class="gr">
   <div class="msg" id="msg"></div>
   <div class="acts" id="acts"></div>
+  </div></div>
 </section>
 <section id="result" class="screen" hidden>
   <div class="res"><div class="big" id="rEmoji"></div><h2 id="rTitle"></h2><div class="st" id="rStars"></div><p id="rText"></p>
@@ -113,7 +120,7 @@ const KEY='mattespel-trerirad-v1';
 let D;try{D=JSON.parse(localStorage.getItem(KEY))||{};}catch(e){D={};}
 D.stars=D.stars||{};D.cfg=D.cfg||{size:3,lvl:2};
 function save(){try{localStorage.setItem(KEY,JSON.stringify(D));}catch(e){}}
-function show(id){document.querySelectorAll('.screen').forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
+function show(id){if(id!=='game')document.body.classList.remove('breds');document.querySelectorAll('.screen').forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
 const LV=['','Lätt','Mellan','Svår'];
 const XS='<svg viewBox="0 0 100 100"><path class="m x" pathLength="1" d="M20 20L80 80"/><path class="m x b" pathLength="1" d="M80 20L20 80"/></svg>';
 const OS='<svg viewBox="0 0 100 100"><circle class="m o" pathLength="1" cx="50" cy="50" r="31"/></svg>';
@@ -179,7 +186,7 @@ function start(first){
   // vid nytt parti mot datorn turas man om att börja
   if(prev&&!first)G.human=prev.human===1?2:1;
   show('game');
-  const bs=Math.max(236,Math.min(innerWidth-60,innerHeight-330,440));document.documentElement.style.setProperty('--bs',bs+'px');
+  const bred=innerWidth>=900;document.body.classList.toggle('breds',bred);const bs=bred?Math.max(320,Math.min(innerHeight-170,620)):Math.max(236,Math.min(innerWidth-60,innerHeight-330,440));document.documentElement.style.setProperty('--bs',bs+'px');
   const B=$('board');B.style.gridTemplateColumns=`repeat(${N},1fr)`;B.style.gridTemplateRows=`repeat(${N},1fr)`;
   B.innerHTML=G.b.map((_,i)=>`<button class="cell" data-i="${i}" aria-label="Ruta ${i+1}"></button>`).join('');
   const nm=G.two?['Spelare 1','Spelare 2']:G.human===1?['Du','Datorn']:['Datorn','Du'];
