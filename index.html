@@ -138,7 +138,16 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 .more .mi{font-size:2rem;line-height:1}
 .more b{display:block;color:var(--ok-ink,#157548);font-size:1.1rem}
 .tavlalank{display:flex;align-items:center;gap:12px;max-width:520px;margin:18px auto 0;padding:9px 16px;border-radius:999px;background:var(--card);border:2px dashed #E9A3A6;color:var(--ink);text-decoration:none;box-shadow:0 3px 0 var(--line);transition:transform .12s,box-shadow .12s}
-.tavlalank .tl-ik{font-size:1.5rem;line-height:1}
+.tavlalank .tl-ik{flex:none;position:relative;width:62px;height:62px;border-radius:18px;display:grid;place-items:center;background:linear-gradient(145deg,#FF8A8E,#E5484D 58%,#C23A40);box-shadow:0 3px 0 rgba(0,0,0,.2);margin:-2px 0}
+.tavlalank .tl-ik::before{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(circle at 28% 22%,rgba(255,255,255,.35),transparent 55%);pointer-events:none}
+.tavlalank .tl-ik svg{width:48px;height:48px;overflow:visible;position:relative;filter:drop-shadow(0 2px 0 rgba(0,0,0,.18))}
+.tavlalank .tl-ik svg *{fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.tavlalank .tl-ik svg .s{fill:rgba(255,255,255,.22)}.tavlalank .tl-ik svg .f{fill:#fff;stroke:none}
+.tavlalank .tl-ik svg .sq{stroke-dasharray:60;stroke-dashoffset:0}
+.tavlalank .tl-ik svg .pn{transform-box:fill-box;transform-origin:50% 100%}
+@keyframes tl-rita{0%{stroke-dashoffset:60}100%{stroke-dashoffset:0}}
+@keyframes tl-pen{0%,100%{transform:translate(0,0)}30%{transform:translate(-9px,-3px) rotate(-6deg)}60%{transform:translate(-4px,1px) rotate(3deg)}}
+@media(hover:hover) and (prefers-reduced-motion:no-preference){.tavlalank:hover .tl-ik .sq{animation:tl-rita 1.3s ease-out}.tavlalank:hover .tl-ik .pn{animation:tl-pen 1.3s ease-in-out}}
 .tavlalank .tl-txt{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.15}
 .tavlalank b{font-size:1.05rem}
 .tavlalank small{color:var(--muted);font-weight:600;font-size:.82rem}
@@ -431,7 +440,7 @@ html[data-tema="mork"] .herosok{background:#1A2748;color:#A3B0D6}
     <a class="amnek fritid fr" data-a style="--c:#F2780C" href="https://fritidsparken.se" target="_blank" rel="noopener" aria-label="Fritidsparken.se (öppnas på en ny sida)"><span class="ik"><img src="fritidsparken-logo.jpg" alt="" width="64" height="64" style="border-radius:14px;width:64px;height:64px;object-fit:cover"></span><span class="txt"><b>Fritidsparken</b><small>Våra vänner: lek och aktiviteter på fritids</small></span><span class="chev" aria-hidden="true">↗</span></a>
     </nav>
 
-  <a class="tavlalank" href="larare/"><span class="tl-ik" aria-hidden="true">🍎</span><span class="tl-txt"><b>Klasstavlan</b><small>Interaktiv whiteboard för klassrummet</small></span><span class="tl-for">För lärare ›</span></a>
+  <a class="tavlalank" href="larare/"><span class="tl-ik" aria-hidden="true"><svg viewBox="0 0 48 48"><rect class="s" x="5" y="7" width="38" height="25" rx="3.5"/><path class="sq" d="M11 22c3-7 5-7 7-1s4 6 6-1 4-6 7 0"/><path d="M13 14h10"/><path d="M12 38h20"/><g class="pn"><path d="M31 37l10-10"/><path class="f" d="M40 25.6l2.4 2.4-1.7 1.7-2.4-2.4z"/></g></svg></span><span class="tl-txt"><b>Klasstavlan</b><small>Interaktiv whiteboard för klassrummet</small></span><span class="tl-for">För lärare ›</span></a>
 
   <p class="foot">Dina stjärnor och rekord sparas på den här enheten. Med ett gratis konto (☁️ Logga in) kan du ta med dem till andra enheter.<br><button class="soundbtn" id="soundBtn"></button></p>
   <section class="om" aria-labelledby="omH"><h2 id="omH">Om Pluggparken</h2><p>Pluggparken är en gratis lekpark för hjärnan med matteövningar, spel och fler ämnen för barn i åk 1–6: multiplikationstabellerna, klockan, bråk, uppställning och division, läsning, rymden, Sverige och världen. Allt fungerar i webbläsaren och utan reklam, och du behöver inget konto för att öva. Framstegen sparas på din egen enhet, och med ett gratis konto (ett påhittat användarnamn, ingen e-post) kan du ta med dem till andra enheter.</p></section>
