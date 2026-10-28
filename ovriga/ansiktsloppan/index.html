@@ -385,7 +385,7 @@ function presetInt(){
   }
   rad(true);rad(false);
   presetBase=document.createElement('canvas');presetBase.width=presetBase.height=600;presetBase.getContext('2d').drawImage(c,0,0);
-  var hj=new Image();hj.onload=function(){var q=c.getContext('2d');q.save();q.shadowColor='rgba(0,0,0,.55)';q.shadowBlur=26;q.shadowOffsetY=10;q.drawImage(hj,95,85,410,410);q.restore();update()};hj.src='hjarna.svg';
+  var hj=new Image();hj.onload=function(){var q=c.getContext('2d');q.save();q.shadowColor='rgba(0,0,0,.55)';q.shadowBlur=26;q.shadowOffsetY=10;var hh=400,ww=hh*hj.naturalWidth/hj.naturalHeight;q.drawImage(hj,300-ww/2,300-hh/2,ww,hh);q.restore();update()};hj.src='hjarna.png';
   presetCv=c;
   // en riktig bild (insida.jpg, kvadratisk) ersätter ritningen när den finns i mappen
   var im=new Image();im.onload=function(){var q=c.getContext('2d'),m=Math.min(im.naturalWidth,im.naturalHeight);q.clearRect(0,0,600,600);q.drawImage(im,(im.naturalWidth-m)/2,(im.naturalHeight-m)/2,m,m,0,0,600,600);update()};im.src='insida.jpg';
