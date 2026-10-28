@@ -158,6 +158,9 @@ input.ans:focus{outline:none;background:#fff8dc;border-bottom-color:var(--pencil
 .padform input,.padform select{font:inherit;font-size:1.05rem;border:2px solid var(--ink);border-radius:8px;padding:3px 6px;background:#fff}
 .padrow{margin:.4rem 0 .6rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .padrow select{font:inherit;font-size:1.05rem;border:2px solid var(--ink);border-radius:8px;padding:3px 8px;background:#fff}
+.restl{font-weight:700;margin:0 4px 0 8px}
+@media (max-width:620px){.calcpad{flex-wrap:wrap}}
+input.cRest{width:3.2em}
 .calcpad{display:flex;align-items:center;gap:.3em;font-size:1.3rem;margin:.4rem 0;flex-wrap:nowrap}
 .calcpad input{font:inherit;font-size:1.3rem;text-align:center;border:2px solid var(--ink);border-radius:8px;padding:2px 2px;background:#fff;width:3.2em;min-width:0}
 .calcpad .cR{color:var(--blue-d)}
@@ -1100,14 +1103,14 @@ app.addEventListener("input",e=>{
     t.value=t.value.replace(/[^0-9]/g,"");const cp=t.closest(".colpad");if(cp){cp.classList.remove("ok","bad");cp.querySelectorAll(".cin").forEach(c=>c.classList.remove("dok","dbad"))}
     if(t.classList.contains("cin")&&t.value){const row=[...t.closest("tr").querySelectorAll(".cin")],i=row.indexOf(t);if(i>0)row[i-1].focus()}
   }
-  if(t.classList.contains("cA")||t.classList.contains("cB")||t.classList.contains("cR"))t.value=t.value.replace(/[^0-9]/g,"");
+  if(t.classList.contains("cA")||t.classList.contains("cB")||t.classList.contains("cR")||t.classList.contains("cRest"))t.value=t.value.replace(/[^0-9]/g,"");
   const pw=t.closest(".padwrap");if(pw)pw.classList.remove("ok","bad");
 });
 function calcRow(op,pre){
   const v=i=>pre&&pre[i]!=null?` value="${pre[i]}"`:"";
   const inp=(c,ph,lab,i)=>`<input class="${c}" inputmode="numeric" maxlength="4" autocomplete="off" aria-label="${lab}" placeholder="${ph}"${v(i)}>`;
   const res=`<input class="cR" inputmode="numeric" maxlength="5" autocomplete="off" aria-label="Svar">`;
-  if(op==="÷")return `<div class="calcpad"><span class="fracin">${inp("cA","täljare","Täljare",0)}${inp("cB","nämnare","Nämnare",1)}</span><span>=</span>${res}</div>`;
+  if(op==="÷")return `<div class="calcpad"><span class="fracin">${inp("cA","täljare","Täljare",0)}${inp("cB","nämnare","Nämnare",1)}</span><span>=</span>${res}<span class="restl">och rest</span><input class="cRest" inputmode="numeric" maxlength="3" autocomplete="off" aria-label="Rest (lämna tomt om det går jämnt ut)" placeholder="0"></div>`;
   const ph=op==="×"?"faktor":"term",sym=op==="×"?"·":op==="+"?"+":"−";
   let h=`<div class="calcpad">${inp("cA",ph,ph[0].toUpperCase()+ph.slice(1),0)}<span>${sym}</span>${inp("cB",ph,ph[0].toUpperCase()+ph.slice(1),1)}<span>=</span>${res}</div>`;
   if(op==="+"||op==="-")h+=`<div><button type="button" class="sm padgo">Ställ upp</button> <span class="padmsg"></span></div>`;
@@ -1131,7 +1134,7 @@ function readCalc(w){
   if(col){const z=readCol(col);if(!/^\d+$/.test(z))return null;return{op:col.dataset.pop,x:+col.dataset.pa,y:+col.dataset.pb,z:+z}}
   const g=c=>{const el=body.querySelector(c);const n=el?parseInt(el.value,10):NaN;return n};
   const x=g(".cA"),y=g(".cB"),z=g(".cR");if([x,y,z].some(isNaN))return null;
-  return{op,x,y,z};
+  const rr=g(".cRest");return{op,x,y,z,r:isNaN(rr)?0:rr};
 }
 function numsOf(q){
   const t=(q.html+" "+(q.facit||"")).replace(/<[^>]*>/g," ").replace(/@@\d+@@/g," ");
@@ -1140,8 +1143,8 @@ function numsOf(q){
 // Rätt beräkning: räkningen stämmer, svaret finns med, och de andra talen kommer från uppgiften.
 // Då godkänns t.ex. både 25 − 12 = 13 och 12 + 13 = 25, och 18 + 39 lika väl som 39 + 18.
 function calcOk(q,c){
-  if(!c)return false;const{op,x,y,z}=c;
-  const t=op==="+"?x+y===z:op==="-"?x-y===z:op==="×"?x*y===z:(y!==0&&x===y*z);
+  if(!c)return false;const{op,x,y,z}=c,rest=c.r||0;
+  const t=op==="+"?x+y===z:op==="-"?x-y===z:op==="×"?x*y===z:(y!==0&&rest>=0&&rest<y&&x===y*z+rest);
   if(!t)return false;
   const fd=q.fields.find(f=>f.k==="num");if(!fd)return false;
   const A=fd.a,Ns=numsOf(q),arr=[x,y,z];
