@@ -439,7 +439,7 @@ function taEmot(img){   // img är en canvas; ansiktet pekas ut när det gäller
 $('file').onchange=function(){
   var f=this.files&&this.files[0];if(!f)return;this.value='';
   var url=URL.createObjectURL(f),im=new Image();
-  im.onload=function(){var c=toCanvas(im);URL.revokeObjectURL(url);taEmot(c)};
+  im.onload=function(){var c=toCanvas(im);URL.revokeObjectURL(url);pk.cam=false;taEmot(c)};
   im.onerror=function(){URL.revokeObjectURL(url);alert('Bilden kunde inte läsas. Prova en JPG eller PNG.')};
   im.src=url;
 };
@@ -466,7 +466,7 @@ function drawPk(){
   });
   var d=pk.pts.length,T=pk.mode==='int'?PKINT:PKTEXT,t=T[Math.min(d,T.length-1)];
   $('pkSay').innerHTML=d<pkMax()?(d+1)+'. '+t[0]+'<small>'+t[1]+'</small>':'Bra!';
-  $('pkUndo').disabled=!d;
+  var omFoto=!d&&pk.cam;$('pkUndo').disabled=!d&&!omFoto;$('pkUndo').textContent=omFoto?'📷 Ta om bilden':'↶ Ångra';
 }
 $('pk').addEventListener('pointerdown',function(e){
   if(!pk.img||pk.pts.length>=pkMax())return;
@@ -476,7 +476,9 @@ $('pk').addEventListener('pointerdown',function(e){
   pk.pts.push([ix,iy]);drawPk();e.preventDefault();
   if(pk.pts.length===pkMax())setTimeout(klarPunkt,250);
 });
-$('pkUndo').onclick=function(){pk.pts.pop();drawPk()};
+$('pkUndo').onclick=function(){
+  if(!pk.pts.length&&pk.cam){target=pk.mode;facing=facing||'user';fran='home';oppnaKamera();return}   // inga punkter än: ångra = ta om fotot
+  pk.pts.pop();drawPk()};
 $('pkSkip').onclick=function(){applyFit(pk.img,null,pk.mode)};
 // räknar ut flytt, zoom och rotation så att ögonlinjen blir vågrät och munnen hamnar i mitten
 function fitLayer(img,pts,abst){
@@ -554,7 +556,7 @@ $('camShot').onclick=function(){
   var v=$('vid');if(!stream||!v.videoWidth){kameraMsg('Kameran är inte klar än. Vänta en sekund.');return}
   var s=Math.min(v.videoWidth,v.videoHeight),c=document.createElement('canvas');c.width=c.height=Math.min(s,1600);
   c.getContext('2d').drawImage(v,(v.videoWidth-s)/2,(v.videoHeight-s)/2,s,s,0,0,c.width,c.height);   // fotot sparas i rätt riktning (inte spegelvänt)
-  stoppaKamera();taEmot(c);
+  stoppaKamera();pk.cam=true;taEmot(c);
 };
 document.addEventListener('visibilitychange',function(){if(document.hidden)stoppaKamera()});
 addEventListener('pagehide',stoppaKamera);
