@@ -208,6 +208,15 @@ select.sel{font:inherit;font-size:1.2rem;min-width:2.8em;height:2.1em;border:2px
 .arrowbox{display:inline-grid;place-items:center;width:2em;height:2em;border:1.5px solid #555;font-size:1.1rem}
 .mc.multi .opt.sel{border-radius:10px}
 @media (max-width:760px){.pg{grid-template-columns:1fr}.pg img{position:static}}
+/* gamla prov på bred skärm: provsidan får mycket mer plats och svarsrutan ligger fast bredvid medan man rullar */
+@media (min-width:1000px){
+  body.exam .cover,body.exam .wrap{max-width:1560px}
+  body.exam .actions .in{max-width:1440px}
+  body.exam .pg{grid-template-columns:minmax(0,1000px) minmax(340px,440px);justify-content:center;gap:32px}
+  body.exam .pg img{position:static;max-width:1000px;width:100%}
+  body.exam .ansbox{position:sticky;top:12px;max-height:calc(100vh - 120px);overflow:auto}
+  body.exam .lead{max-width:none}
+}
 
 /* ---------- Knappraden ---------- */
 .actions{position:fixed;left:0;right:0;bottom:0;background:rgba(251,252,247,.96);border-top:2px solid var(--ink);padding:10px 12px calc(10px + env(safe-area-inset-bottom));z-index:5}
@@ -871,7 +880,7 @@ function examView(key){
     list.forEach(([num,gen])=>{const q=upgradeCalc(build(gen),key);const qi=qs.length;qs.push(q);html+=qHTML(q,qi,num,key)});
     html+=`</ol></div></section>`;
   });
-  cur={key,qs,facit:false,exam:true};app.innerHTML=html;acts.hidden=false;res.textContent="";$("#bFacit").textContent="Visa facit";
+  document.body.classList.add("exam");cur={key,qs,facit:false,exam:true};app.innerHTML=html;acts.hidden=false;res.textContent="";$("#bFacit").textContent="Visa facit";
   $("#bNew").textContent="Börja om";$("#bPrint").textContent="Ladda ner PDF";
 }
 function readCol(cp){
@@ -982,7 +991,7 @@ $("#bFacit").onclick=()=>{cur.facit=!cur.facit;app.querySelectorAll(".facit").fo
 $("#bPrint").onclick=()=>cur&&cur.exam?window.open(`prov/${cur.key}.pdf`,"_blank"):window.print();
 
 function route(){
-  const [a,b]=location.hash.replace(/^#\/?/,"").split("/");
+  const [a,b]=location.hash.replace(/^#\/?/,"").split("/");document.body.classList.remove("exam");
   if(a==="ova"&&DELPROV[b])practice(b);else if(a==="prov"&&HAS_EXAMS()&&EXAMS[b])examView(b);else home(a==="prov"?"prov":"ova");
   window.scrollTo(0,0);
 }
