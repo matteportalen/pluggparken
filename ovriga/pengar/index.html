@@ -505,7 +505,7 @@ const FAKTA=[
   {m:"2009-06",ik:"⏳",r:"Tålamod",t:"Efter ett ras tar det tid innan det vänder. Den som sparar länge hinner oftast vara med när det vänder."},
   {m:"2011-03",ik:"💸",r:"Utdelning",t:"Många företag delar ut en del av vinsten till dem som äger aktier. Det heter utdelning, och den är redan inräknad i våra kurser."},
   {m:"2013-05",ik:"🏷️",r:"Avgifter",t:"Fonder tar en avgift varje år. Våra tar ca 0,1–0,5 % och den ligger redan i kursen. Dyra fonder kan ta 1,5 % eller mer."},
-  {m:"2014-08",ik:"🧾",r:"Skatt",t:"Skatt ingår inte här. På ett ISK betalar man en liten skatt varje år på hela värdet, ofta ca 1 %, även när det går dåligt.",dyn:()=>` Du har nu ${kr(varde())}, så ca ${kr(varde()*.01)} per år.`},
+  {m:"2014-08",ik:"🧾",r:"Skatt",t:"Skatt ingår inte här. På ett ISK betalar man en liten skatt på hela värdet, men sedan 2025 inte på de första 150 000 kr (300 000 kr från 2026). Små sparare betalar därför oftast ingenting."},
   {m:"2015-03",ik:"📉",r:"Inflation",t:"När priserna stiger räcker samma pengar till mindre. Inflationen äter upp pengar som bara ligger stilla."},
   {m:"2017-05",ik:"🎢",r:"Risk och belöning",t:"Det som kan ge mycket pengar kan också förlora mycket. En enda aktie svänger mer än en fond."},
   {m:"2019-04",ik:"🛡️",r:"Insättningsgarantin",t:"Pengar på ett bankkonto är skyddade av staten upp till 1 050 000 kr per person och bank. Aktier och fonder har inte det skyddet."},
@@ -845,7 +845,7 @@ function handelse(){const f=EV[M[G.i]];if(f&&!G.sedd[M[G.i]]){G.sedd[M[G.i]]=1;f
 
 /* ---------- Resultatet ---------- */
 function bara(a){return START*A[a].v[N-1]/A[a].v[fran(a)];}
-const iskTxt=()=>{let t=0;for(let y=2007;y<=2026;y++){const i=M.findIndex(m=>m.startsWith(y+"-01"));if(i>=0&&G.hist[i]!=null)t+=G.hist[i]*.01;}return ` Skatt ingår inte. Med ISK hade schablonskatten blivit ca ${kr(t)} (1 % per år, ungefärligt).`;};
+const iskTxt=()=>" Skatt ingår inte.";
 const avgTxt=()=>(avgSum()>=1?` Fondavgifter under resan: ca ${kr(avgSum())} (ingår redan i kursen).`:"")+iskTxt();
 function slut(){paus();if(skarm!=="game")return;const v=varde(),f=v/START-1;
   if(G.krav)return;$("gNytt").innerHTML="";
