@@ -72,6 +72,11 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 .w.ordnar{transition:left .45s ease,top .45s ease}
 .w.last{box-shadow:0 8px 24px rgba(20,30,70,.28),0 0 0 3px rgba(255,255,255,.65)}
 .w.last .wh{cursor:default}
+.hjorn{position:absolute;right:-8px;bottom:-8px;width:30px;height:30px;cursor:nwse-resize;touch-action:none;pointer-events:auto;z-index:3}
+.hjorn::after{content:"";position:absolute;right:9px;bottom:9px;width:14px;height:14px;border-right:4px solid var(--c,#3D5AFE);border-bottom:4px solid var(--c,#3D5AFE);border-radius:0 0 6px 0;opacity:0;transition:opacity .15s}
+.w:hover .hjorn::after,.hjorn:active::after{opacity:.85}
+.w.last .hjorn{display:none}
+@media(hover:none){.hjorn::after{opacity:.6}}
 .gl{position:absolute;background:#F2780C;pointer-events:none;z-index:9999;opacity:.9;border-radius:2px}
 .gl.v{width:3px;top:0;bottom:0;margin-left:-1px}
 .gl.h{height:3px;left:0;right:0;margin-top:-1px}
@@ -401,8 +406,8 @@ const titelHtml=t=>t?esc(t):'<i style="opacity:.6;font-weight:600">Egen lista</i
 function bygg(w){const e=document.createElement("div");e.className="w"+(w.typ==="text"?" lapp c-"+(w.d.c||"gul"):w.typ==="skrivrad"?" skrivrad":w.typ==="video"?" video":w.typ==="textruta"?" textruta":"")+(w.min?" dold":"")+(w.lock?" last":"");e.dataset.id=w.id;if(w.typ==="video")e.dataset.video="1";
   e.style.cssText=`left:${w.x}px;top:${w.y}px;transform:${tf(w)};z-index:${++z};--c:${farg(w)}${w.typ==="textruta"&&w.d.w?`;width:${w.d.w}px`:""}`;
   const titel=w.typ==="lista"?`<b class="tit" title="Dubbelklicka för att byta rubrik">${titelHtml(w.d.titel)}</b>`:`<b>${{timer:"⏱️ Timer",hjul:"🎡 Lyckohjul",text:"",ljud:"🔊 Ljudnivå",skrivrad:"✍️ Skrivrad",video:"▶️ Video",textruta:"✍️ Text"}[w.typ]}</b>`;
-  e.innerHTML=`<div class="wh">${titel}${w.typ==="text"?`<button data-a="farg" title="Byt färg" aria-label="Byt färg">🎨</button>`:""}${w.typ==="textruta"?`<button data-a="tfarg" title="Textfärg" aria-label="Textfärg">🎨</button><button data-a="fet" title="Fetstil av eller på" aria-label="Fetstil" style="font-family:serif">B</button>`:""}${w.typ==="text"||w.typ==="skrivrad"||w.typ==="textruta"?"":`<button data-a="dolj" title="${w.min?"Visa innehållet igen":"Dölj innehållet (det finns kvar)"}" aria-label="${w.min?"Visa innehållet":"Dölj innehållet"}">${w.min?"👁️":"🙈"}</button>`}<button data-a="las" title="${w.lock?"Lås upp (så att rutan går att flytta)":"Lås rutan på plats"}" aria-label="${w.lock?"Lås upp rutan":"Lås rutan"}">${w.lock?"🔒":"🔓"}</button><button data-a="minus" title="Mindre" aria-label="Mindre">−</button><button data-a="plus" title="Större" aria-label="Större">+</button><button data-a="x" title="Ta bort" aria-label="Ta bort rutan">✕</button></div><div class="wb"></div>`;
-  fyll(e,w);return e;}
+  e.innerHTML=`<div class="wh">${titel}${w.typ==="text"?`<button data-a="farg" title="Byt färg" aria-label="Byt färg">🎨</button>`:""}${w.typ==="textruta"?`<button data-a="tfarg" title="Textfärg" aria-label="Textfärg">🎨</button><button data-a="fet" title="Fetstil av eller på" aria-label="Fetstil" style="font-family:serif">B</button>`:""}${w.typ==="text"||w.typ==="skrivrad"||w.typ==="textruta"?"":`<button data-a="dolj" title="${w.min?"Visa innehållet igen":"Dölj innehållet (det finns kvar)"}" aria-label="${w.min?"Visa innehållet":"Dölj innehållet"}">${w.min?"👁️":"🙈"}</button>`}<button data-a="las" title="${w.lock?"Lås upp (så att rutan går att flytta)":"Lås rutan på plats"}" aria-label="${w.lock?"Lås upp rutan":"Lås rutan"}">${w.lock?"🔒":"🔓"}</button><button data-a="x" title="Ta bort" aria-label="Ta bort rutan">✕</button></div><div class="wb"></div>`;
+  fyll(e,w);e.insertAdjacentHTML("beforeend",'<div class="hjorn" title="Dra i hörnet för att ändra storlek" aria-label="Ändra storlek"></div>');return e;}
 function fyllSkrivrad(b){const r=skrivBild(34);b.style.height=r.H+"px";b.style.backgroundImage=r.img;b.style.backgroundSize="24px "+r.H+"px";}
 /* video: inbäddad YouTube-spelare (youtube-nocookie), länk eller spellista, favoriter i S.fav */
 function ytLank(t){t=String(t||"").trim();let id="",list="";const m=t.match(/(?:youtu\.be\/|[?&]v=|\/shorts\/|\/embed\/|\/live\/)([\w-]{11})/),l=t.match(/[?&]list=([\w-]{10,60})/);
@@ -429,8 +434,9 @@ $("widgets").addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.matches
 function fyll(e,w){const b=e.querySelector(".wb");({lista:fyllLista,timer:fyllTimer,hjul:fyllHjul,text:fyllText,ljud:fyllLjud,skrivrad:fyllSkrivrad,video:fyllVideo,textruta:fyllTextruta})[w.typ](b,w);}
 
 /* dra, ändra storlek, ta bort */
-let dra=null,rs=null;
+let dra=null,rs=null,sc=null;
 $("widgets").addEventListener("pointerdown",e=>{const w=e.target.closest(".w");if(!w)return;fram(w.dataset.id);
+  const hj=e.target.closest(".hjorn");if(hj){const o=S.widgets.find(x=>x.id===w.dataset.id);if(o&&!o.lock){sc={o,w,pid:e.pointerId,bw:w.offsetWidth,bh:w.offsetHeight};try{hj.setPointerCapture(e.pointerId)}catch(_){}e.preventDefault();}return;}
   const br=e.target.closest(".bredd");if(br){const o=S.widgets.find(x=>x.id===w.dataset.id);if(o&&!o.lock){rs={o,w,x0:e.clientX,w0:w.offsetWidth,pid:e.pointerId};try{br.setPointerCapture(e.pointerId)}catch(_){}e.preventDefault();}return;}
   const a=e.target.closest("[data-a]");if(a){const o=S.widgets.find(x=>x.id===w.dataset.id);
     if(a.dataset.a==="x"){if(o.typ==="timer")delete CLOCK[o.id];if(o.typ==="ljud")stoppaMatare(o.id);S.widgets=S.widgets.filter(x=>x!==o);w.remove();}
@@ -457,6 +463,9 @@ addEventListener("pointermove",e=>{if(!dra||e.pointerId!==dra.pid)return;
     const sx=snappa(nx,dra.rw,mx,T),sy=snappa(ny,dra.rh,my,T);if(sx){nx+=sx.d;gv.push(sx.lin);}if(sy){ny+=sy.d;gh.push(sy.lin);}}
   guider(gv,gh);dra.o.x=Math.round(nx);dra.o.y=Math.round(ny);dra.w.style.left=dra.o.x+"px";dra.w.style.top=dra.o.y+"px";});
 addEventListener("pointermove",e=>{if(!rs||e.pointerId!==rs.pid)return;const nb=Math.max(160,Math.min(1700,rs.w0+(e.clientX-rs.x0)/K/(rs.o.s||1)));rs.w.style.width=nb+"px";rs.o.d.w=Math.round(nb);});
+addEventListener("pointermove",e=>{if(!sc||e.pointerId!==sc.pid)return;const px=e.clientX/K-sc.o.x,py=e.clientY/K-sc.o.y;
+  const ny=Math.max(.5,Math.min(3,(px*sc.bw+py*sc.bh)/(sc.bw*sc.bw+sc.bh*sc.bh)));sc.o.s=Math.round(ny*100)/100;sc.w.style.transform=tf(sc.o);});
+const slutSc=e=>{if(sc&&e.pointerId===sc.pid){sc=null;spara();}};addEventListener("pointerup",slutSc);addEventListener("pointercancel",slutSc);
 const slutRs=e=>{if(rs&&e.pointerId===rs.pid){rs=null;spara();}};addEventListener("pointerup",slutRs);addEventListener("pointercancel",slutRs);
 const slutDra=e=>{if(dra&&e.pointerId===dra.pid){dra=null;guider([],[]);spara();}};
 addEventListener("pointerup",slutDra);addEventListener("pointercancel",slutDra);
@@ -592,7 +601,7 @@ function stoppaMatare(id){const m=MAT[id];if(!m)return;cancelAnimationFrame(m.ra
 const TYPER=["lista","timer","hjul","text","ljud","skrivrad","video","textruta"];
 const JPG=/^data:image\/jpeg;base64,[A-Za-z0-9+\/=]*$/;
 const tal=(v,a,b,d)=>{v=+v;return Number.isFinite(v)?Math.max(a,Math.min(b,v)):d;};
-function renaWidget(o,medNamn){if(!o||!TYPER.includes(o.typ))return null;const d=o.d||{},n={id:uid(),typ:o.typ,min:!!o.min,lock:!!o.lock,x:tal(o.x,-300,2300,100),y:tal(o.y,0,2400,100),s:tal(o.s,.6,2.6,1),d:{}};
+function renaWidget(o,medNamn){if(!o||!TYPER.includes(o.typ))return null;const d=o.d||{},n={id:uid(),typ:o.typ,min:!!o.min,lock:!!o.lock,x:tal(o.x,-300,2300,100),y:tal(o.y,0,2400,100),s:tal(o.s,.5,3,1),d:{}};
   if(o.typ==="lista"){n.d={titel:String(d.titel||"").slice(0,40),farg:d.farg==="lista2"?"lista2":"lista",items:(Array.isArray(d.items)?d.items:[]).slice(0,30).map(i=>({k:String((i&&i.k)||"bok").slice(0,40),t:i&&i.t?String(i.t).slice(0,30):undefined,sid:String((i&&i.sid)||"").slice(0,30),img:i&&typeof i.img==="string"&&JPG.test(i.img)&&i.img.length<120000?i.img:"",e:i&&i.e?String(i.e).slice(0,8):"",bok:!!(i&&i.bok)}))};}
   else if(o.typ==="timer")n.d={tot:tal(d.tot,60,7200,300)};
   else if(o.typ==="hjul")n.d={namn:medNamn&&Array.isArray(d.namn)?d.namn.slice(0,60).map(x=>String(x).slice(0,30)):[],tabort:!!d.tabort,rot:0,n:tal(d.n,2,60,25)};
