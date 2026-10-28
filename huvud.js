@@ -29,16 +29,16 @@
 .mph-logo{position:relative;display:flex;align-items:center;gap:7px;font-weight:800;font-size:1.2rem!important;line-height:1;letter-spacing:-.3px;white-space:nowrap;min-height:44px;padding:3px 6px 3px 3px!important;border-radius:999px;background:rgba(255,255,255,.12)!important;flex:none;transition:background .2s}
 .mph-logo b{color:#F4D35E}
 .mph-burger em{display:none;font-style:normal;font-size:.9rem;font-weight:800;letter-spacing:0}
-@media (min-width:700px){.mph-burger{padding:0 11px 0 9px}.mph-burger em{display:inline}}
+@media (min-width:700px){.mph .mph-burger{padding:0 11px 0 9px}.mph-burger em{display:inline}}
 .mph-logo .mph-mark{transition:transform .25s,filter .25s}
-.mph-burger{min-width:28px;height:28px;border-radius:999px;gap:5px;grid-auto-flow:column;background:#FFC93C;color:#1D2B53;display:grid;place-items:center;font-size:1rem;line-height:1;box-shadow:0 2px 0 rgba(29,43,83,.25)}
-.mph-logo::before{content:"";position:absolute;inset:-3px;border-radius:inherit;padding:3px;background:conic-gradient(from var(--mph-a,0deg),transparent 0 55%,rgba(255,201,60,.0) 58%,#FFC93C 74%,#fff 82%,rgba(255,255,255,0) 90%,transparent);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .25s;pointer-events:none}
+.mph .mph-burger{min-width:28px;height:28px;border-radius:999px;gap:5px;grid-auto-flow:column;background:#FFC93C;color:#1D2B53;display:grid;place-items:center;font-size:1rem;line-height:1;box-shadow:0 2px 0 rgba(29,43,83,.25)}
+.mph-burger::before{content:"";position:absolute;inset:-3px;border-radius:inherit;padding:3px;background:conic-gradient(from var(--mph-a,0deg),transparent 0 55%,rgba(255,201,60,.0) 58%,#FFC93C 74%,#fff 82%,rgba(255,255,255,0) 90%,transparent);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .25s;pointer-events:none}
 @property --mph-a{syntax:"<angle>";inherits:false;initial-value:0deg}
 @keyframes mph-varv{to{--mph-a:360deg}}
-.mph-logo:hover,.mph-logo:focus-visible,.mph-logo[aria-expanded="true"]{background:rgba(255,255,255,.24)!important;outline:0}
-.mph-logo:hover::before,.mph-logo:focus-visible::before,.mph-logo[aria-expanded="true"]::before,.mph-logo:active::before{opacity:1;animation:mph-varv 1.6s linear infinite}
-.mph-logo:hover .mph-mark,.mph-logo:focus-visible .mph-mark{transform:rotate(-6deg) scale(1.08);filter:drop-shadow(0 0 6px rgba(255,255,255,.9)) drop-shadow(0 2px 0 rgba(29,43,83,.25))}
-@media (prefers-reduced-motion:reduce){.mph-logo::before{animation:none!important}.mph-logo .mph-mark{transition:none}}
+.mph-home{display:flex;align-items:center;gap:7px;color:inherit;text-decoration:none;border-radius:999px;padding-right:4px}.mph-home:hover,.mph-home:focus-visible{outline:0;background:rgba(255,255,255,.14)}.mph .mph-burger{position:relative}.mph-burger:hover,.mph-burger:focus-visible,.mph-burger[aria-expanded="true"]{outline:0;filter:brightness(1.06)}
+.mph-burger:hover::before,.mph-burger:focus-visible::before,.mph-burger[aria-expanded="true"]::before,.mph-burger:active::before{opacity:1;animation:mph-varv 1.6s linear infinite}
+.mph-home:hover .mph-mark,.mph-home:focus-visible .mph-mark{transform:rotate(-6deg) scale(1.08);filter:drop-shadow(0 0 6px rgba(255,255,255,.9)) drop-shadow(0 2px 0 rgba(29,43,83,.25))}
+@media (prefers-reduced-motion:reduce){.mph-burger::before{animation:none!important}.mph-logo .mph-mark{transition:none}}
 .mph-mark{width:34px;height:34px;display:block;flex:none;filter:drop-shadow(0 2px 0 rgba(29,43,83,.25))}
 .mph-bk{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.95)!important;color:#1D2B53!important;font-weight:800;font-size:1.35rem!important;line-height:1;flex:none;box-shadow:0 3px 0 rgba(29,43,83,.25);display:grid;place-items:center}
 .mph-bk:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(29,43,83,.25)}
@@ -75,7 +75,7 @@ html.mph-nozoom,html.mph-nozoom body{touch-action:pan-x pan-y}
 .mph.mini .mph-x{display:grid;place-items:center}
 .mph.dold{display:none}
 body.mph-mini #quit{display:none}
-@media (max-width:520px){.mph-logo span.t{display:none}.mph-name{max-width:5em}.mph.has-title .mph-name{display:none}}
+@media (max-width:520px){.mph-home span.t{display:none}.mph-name{max-width:5em}.mph.has-title .mph-name{display:none}}
 @media (max-width:360px){.mph-name{display:none}}
 @media (orientation:landscape) and (max-height:500px){.mph.liggande{display:none}}
 @media print{.mph{display:none}}`;
@@ -110,7 +110,7 @@ body.mph-mini #quit{display:none}
     if(top==='specialare')return'special';
     if(/^(mittrum|flytta)$/.test(top))return'hem';
     return'matte';}
-  const AMNE=amneAv(),EGENSIDA=['matte','svenska','so','fler','hem'].includes(AMNE)&&REL.split('/').filter(Boolean).length<=1;   // sidan är ämnets egen sida
+  const AMNE=amneAv(),EGENSIDA=REL===''||['matte','svenska','so','fler'].includes(REL.replace(/\/$/,''));   // sidan är ämnets egen sida
   const MENY=DESIGN==='ny'?NYMENY:PORTALER,MENYNU=DESIGN==='ny'?(NYMENY.find(p=>p.id===AMNE)||null):PORTAL;
   window.MPLogo=LOGO_PP;
   // loggan som ikon i webbläsarfliken
@@ -181,7 +181,7 @@ body.mph-mini #quit{display:none}
   const pet=window.lasDjur&&window.owlSVG?owlSVG(lasDjur()):'',namn=profilnamn();
   const hemUrl=new URL(hem+(ds.start!=null?ds.start:DESIGN==='ny'?(EGENSIDA?'':NYMENY.find(p=>p.id===AMNE).href):PORTAL.href),location.href),paStart=hemUrl.pathname.replace(/index\.html$/,'')===location.pathname.replace(/index\.html$/,'');
   h.innerHTML=`${paStart?'':'<button class="mph-bk" aria-label="Tillbaka">←</button>'}<button class="mph-x" aria-label="Avsluta">✕</button>
-    <button class="mph-logo" aria-label="Pluggparken, meny" aria-haspopup="true" aria-expanded="false">${LOGO_PP}<span class="t">Plugg<b>parken</b></span><span class="mph-burger" aria-hidden="true"><i style="font-style:normal">☰</i><em>Ämnen</em></span></button>
+    <span class="mph-logo"><a class="mph-home" href="${hem||'./'}" aria-label="Pluggparken, till startsidan">${LOGO_PP}<span class="t">Plugg<b>parken</b></span></a><button class="mph-burger" type="button" aria-label="Ämnen, öppna menyn" aria-haspopup="true" aria-expanded="false"><i style="font-style:normal">☰</i><em>Ämnen</em></button></span>
     <span class="mph-title">${titel?`<span class="mph-sep">›</span> ${ikon?ikon+' ':''}${esc(titel)}`:''}</span>
     <span class="mph-right"><a class="mph-pet" href="${hem}#garderob" aria-label="Ditt djur och dina stjärnor">${pet}${namn?`<span class="mph-name">${esc(namn)}</span>`:''}<span>⭐&nbsp;<span class="mph-n">${MPStjarnor()}</span></span><span class="mph-mynt">🪙&nbsp;<span class="mph-m">${myntLas().m}</span></span></a><button class="mph-sok" aria-label="Sök övning" title="Sök (tryck /)">🔍</button><button class="mph-snd" aria-label="Ljud av eller på"></button><button class="mph-tema" aria-label="Byt mellan ljust och mörkt läge"></button></span>`;
   document.body.prepend(h);
@@ -217,14 +217,16 @@ body.mph-mini #quit{display:none}
   h.querySelector('.mph-x').onclick=()=>history.back();
   // tillbaka: inne i sidan ett steg bakåt (sidans egna knappar trycks via historiken), annars dit man kom ifrån
   const bk=h.querySelector('.mph-bk');
-  if(bk)bk.onclick=()=>{
-    if(navOn&&cur.i>0){history.back();return;}
+  // lämna sidan: till föregående sida om man kom från en annan sida här, annars till ämnets/startsidan
+  function lamna(){
     let fran=null;try{fran=document.referrer?new URL(document.referrer):null;}catch(e){}
     // ämnessidans ←: upp till första sidan (bakåt i historiken bara om man kom därifrån, annars byt ut sidan så att ← inte hoppar fram och tillbaka)
     if(DESIGN==='ny'&&EGENSIDA){if(fran&&fran.origin===location.origin&&fran.pathname===hemUrl.pathname)history.back();else location.replace(hemUrl.href);return;}
-    if(fran&&fran.origin===location.origin&&fran.pathname!==location.pathname)history.back();else location.replace(hemUrl.href);};
+    if(fran&&fran.origin===location.origin&&fran.pathname!==location.pathname)history.back();else location.replace(hemUrl.href);}
+  window.__mpsLamna=lamna;
+  if(bk)bk.onclick=()=>{if(navOn&&cur.i>0){history.back();return;}lamna();};
   // menyn bakom loggan
-  const ptl=h.querySelector('.mph-logo');let meny=null;
+  const ptl=h.querySelector('.mph-burger');let meny=null;
   const stang=()=>{if(meny){meny.remove();meny=null;ptl.setAttribute('aria-expanded','false');}};
   ptl.onclick=e=>{e.stopPropagation();if(meny)return stang();
     meny=document.createElement('nav');meny.className='mph-menu';meny.setAttribute('aria-label','Meny');
@@ -290,9 +292,10 @@ body.mph-mini #quit{display:none}
     if(ign){ign--;if(fix)history.replaceState(fix,'');fix=null;return;}
     if(s.i>cur.i){ign++;fix=cur;history.go(cur.i-s.i);return;} // framåt går inte: stanna kvar
     // bakåt: tryck på skärmens egen tillbaka-knapp tills vi är på rätt nivå
-    popping=true;
-    for(let k=0;k<4&&cur.d>s.d;k++){const was=cur.mp;if(!tryckTillbaka()||cur.mp===was)break;}
-    popping=false;
+    popping=true;let bytt=false;
+    for(let k=0;k<4&&cur.d>s.d;k++){const was=cur.mp;if(!tryckTillbaka()||cur.mp===was)break;bytt=true;}
+    popping=false;const kvar=!bytt&&cur.d>s.d;
     st.length=s.i+1;st[s.i]=cur.d;cur={mp:cur.mp,d:cur.d,i:s.i};history.replaceState(cur,'');
+    if(kvar)lamna();   // skärmen har ingen egen tillbaka-knapp: lämna sidan med det här trycket i stället för att ingenting händer
   });
 })();
