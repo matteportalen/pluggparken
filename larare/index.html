@@ -330,13 +330,15 @@ $("bLagg").onclick=()=>{if(pop&&pop.dataset.t==="lagg"){stangPop();return;}
   const p=oppnaPop($("bLagg"),`<h4>Mallar</h4><button data-n="mall:start">🧩 Lektionsstart</button><button data-n="mall:arbete">🧩 Arbetspass</button><button data-n="mall:samling">🧩 Samling</button><h4>Lägg till en ruta</h4><button data-n="textruta">✍️ Textruta (skriv med tangentbordet)</button><button data-n="lista">📋 Du behöver:</button><button data-n="lista2">✅ När du är klar:</button><button data-n="timer">⏱️ Timer</button><button data-n="hjul">🎡 Lyckohjul</button><button data-n="text">📝 Post-it</button><button data-n="video">▶️ Video (YouTube)</button><button data-n="skrivrad">✍️ Skrivrad (vind, golv, källare)</button><button data-n="ljud">🔊 Ljudnivå</button><button data-n="tom">➕ Egen lista</button><hr style="width:100%;border:0;border-top:1px solid #DDE5F5"><button data-n="ny" style="color:#B4232A">🆕 Ny lektion (töm tavlan)</button>`,"meny");p.dataset.t="lagg";
   p.onclick=ev=>{const b=ev.target.closest("[data-n]");if(!b)return;stangPop();const n=b.dataset.n;
     if(n.startsWith("mall:")){anvandMall(n.slice(5));return;}
-    if(n==="ny"){if(confirm("Tömma tavlan och ta bort alla rutor? (Låsta rutor 🔒 och post-it-lappar med text ligger kvar tills du stänger dem själv.)")){S.widgets.filter(o=>!behall(o)).forEach(o=>{if(o.typ==="timer")delete CLOCK[o.id];if(o.typ==="ljud")stoppaMatare(o.id);});S.widgets=S.widgets.filter(behall);strokes=[];omrita();sparaRitning();ritaAlla();spara();}return;}
+    if(n==="ny"){{const snap=JSON.stringify(S.widgets),rits=JSON.stringify(strokes);S.widgets.filter(o=>!behall(o)).forEach(o=>{if(o.typ==="timer")delete CLOCK[o.id];if(o.typ==="ljud")stoppaMatare(o.id);});S.widgets=S.widgets.filter(behall);strokes=[];omrita();sparaRitning();ritaAlla();spara();angraRuta("Ny lektion (låsta rutor och post-it med text ligger kvar)",snap,rits);}return;}
     laggTill(n);};};
 document.addEventListener("pointerdown",e=>{if(pop&&!pop.contains(e.target)&&!e.target.closest("#bar"))stangPop();});
 addEventListener("keydown",e=>{if(e.target.closest&&e.target.closest("input,textarea,[contenteditable]"))return;
   if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="z"){angra();e.preventDefault();}
   else if(e.key==="p"||e.key==="P")verktyg("penna");else if(e.key==="e"||e.key==="E")verktyg("sudd");else if(e.key==="f"||e.key==="F")$("bFull").click();else if(e.key==="Escape")stangPop();});
 function hjalpText(t){const h=$("hjalp");h.hidden=false;h.innerHTML=esc(t);clearTimeout(hjalpText.t);hjalpText.t=setTimeout(()=>{h.hidden=true;},2200);}
+function angraRuta(txt,snap,rits){const h=$("hjalp");h.hidden=false;h.innerHTML=esc(txt)+'<button id="angB">↩ Ångra</button>';clearTimeout(hjalpText.t);hjalpText.t=setTimeout(()=>{h.hidden=true;},9000);
+  $("angB").onclick=()=>{S.widgets=JSON.parse(snap);if(rits){strokes=JSON.parse(rits);omrita();sparaRitning();}ritaAlla();spara();h.hidden=true;};}
 $("hjalpX").onclick=()=>{$("hjalp").hidden=true;try{localStorage.setItem(KEY+"-hjalp","1")}catch(e){}};
 try{if(localStorage.getItem(KEY+"-hjalp"))$("hjalp").hidden=true;}catch(e){}
 
@@ -366,9 +368,9 @@ const MALLAR={
   arbete:["Arbetspass","Du behöver, timer på 20 minuter och ljudnivå",()=>[{typ:"lista",s:1,d:{titel:"Du behöver:",farg:"lista",items:[{k:"penna"},{k:"sudd"}].map(i=>Object.assign(i,minnet(i.k)))}},{typ:"timer",s:1,d:{tot:1200}},{typ:"ljud",s:1,d:{gr:70}}]],
   samling:["Samling","Timer, lyckohjul och en post-it",()=>[{typ:"timer",s:1,d:{tot:300}},{typ:"hjul",s:1,d:{namn:[],tabort:false,rot:0}},{typ:"text",s:1,rot:-1.5,d:{text:"",c:"gul"}}]]
 };
-function anvandMall(n){const m=MALLAR[n];if(!m)return;if(S.widgets.some(o=>!behall(o))&&!confirm("Mallen ersätter rutorna som ligger på tavlan. Låsta rutor 🔒 och post-it-lappar med text ligger kvar. Fortsätta?"))return;
+function anvandMall(n){const m=MALLAR[n];if(!m)return;const snap=JSON.stringify(S.widgets);
   S.widgets.filter(o=>!behall(o)).forEach(o=>{delete CLOCK[o.id];if(o.typ==="ljud")stoppaMatare(o.id);});
-  S.widgets=S.widgets.filter(behall).concat(m[2]().map(w=>Object.assign({id:uid(),x:0,y:0},w)));ritaAlla();ordna(false);hjalpText("Mall: "+m[0]);}
+  S.widgets=S.widgets.filter(behall).concat(m[2]().map(w=>Object.assign({id:uid(),x:0,y:0},w)));ritaAlla();ordna(false);angraRuta("Mall: "+m[0]+" (låsta rutor och post-it med text ligger kvar)",snap);}
 /* ---------- rutor ---------- */
 function laggTill(n){const c=S.widgets.length*28%140;let w;
   if(n==="lista")w={typ:"lista",x:120+c,y:100+c,s:1,d:{titel:"Du behöver:",farg:"lista",items:[]}};
