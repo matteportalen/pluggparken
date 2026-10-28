@@ -239,6 +239,28 @@ select.sel{font:inherit;font-size:1.2rem;min-width:2.8em;height:2.1em;border:2px
 #ljus[hidden]{display:none}
 #ljus img{width:min(1500px,100%);max-width:none;background:#fff;box-shadow:0 6px 30px rgba(0,0,0,.5);cursor:zoom-out}
 #ljus .ljx{position:fixed;right:16px;top:12px;width:44px;height:44px;border-radius:50%;border:0;background:#fff;font-size:1.3rem;font-weight:800;cursor:pointer;z-index:2}
+/* rita på provsidan och kladdblock */
+.pgimg{position:relative;min-width:0}
+.pgimg img{position:static;display:block;width:100%;height:auto}
+canvas.rit{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;touch-action:pan-y pinch-zoom}
+body.rita canvas.rit{pointer-events:auto;cursor:crosshair}
+.chip[aria-pressed="true"]{background:var(--ink);color:#fff}
+.ritmer{display:flex;align-items:center;gap:4px}
+.ritmer[hidden]{display:none}
+.rv{display:inline-flex;align-items:center;gap:4px}
+.rv button{min-width:34px;height:34px;border:2px solid var(--ink);border-radius:10px;background:#fff;font-weight:800;cursor:pointer;padding:0 6px}
+.rv button.rvc{width:34px;padding:0;background:var(--c);border-color:#fff;box-shadow:0 0 0 2px var(--ink)}
+.rv button.on{background:#fff3c4;box-shadow:0 0 0 3px var(--pencil,#e6a800)}
+.rv button.rvc.on{background:var(--c);box-shadow:0 0 0 3px var(--pencil,#e6a800),0 0 0 5px var(--ink)}
+#kladd{position:fixed;right:16px;bottom:calc(var(--act,64px) + 12px);width:min(540px,92vw);height:min(420px,46vh);z-index:20;background:#fff;border:2px solid var(--ink);border-radius:16px;box-shadow:0 10px 34px rgba(0,0,0,.35);display:flex;flex-direction:column;overflow:hidden}
+#kladd[hidden]{display:none}
+#kladd.stor{width:min(1000px,94vw);height:min(720px,78vh)}
+#kladd .kh{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:var(--blue-l,#dcecf8);border-bottom:2px solid var(--ink);padding:6px 10px}
+#kladd .kh{cursor:grab}#kladd .kh b{flex:1 1 auto;font-size:1.05rem}
+#kladd .kh>button{width:34px;height:34px;border:2px solid var(--ink);border-radius:10px;background:#fff;font-weight:800;cursor:pointer}
+#kladd .kc{position:relative;flex:1;min-height:0;background-color:#fff;background-image:linear-gradient(#dfe8f6 1px,transparent 1px),linear-gradient(90deg,#dfe8f6 1px,transparent 1px);background-size:28px 28px}
+#kladd canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair}
+@media (max-width:999px){#kladd{right:8px;left:8px;width:auto;height:42vh}#kladd.stor{height:70vh}}
 /* stor skärm: gamla prov med bred provsida och fast svarsruta, övningsläget med bredare blad */
 @media (min-width:1000px){
   body.exam .cover,body.exam .wrap{max-width:max(1560px,calc(var(--bw,1000px) + 560px))}
@@ -265,6 +287,9 @@ select.sel{font:inherit;font-size:1.2rem;min-width:2.8em;height:2.1em;border:2px
   .chip{padding:2px 10px}
   .pinfo{flex:1 1 150px;min-width:0}
   body.exam .ansbox{max-height:38vh}
+  .ritmer{flex:1 1 100%}
+  .rv button{min-width:30px;height:30px}
+  .rv button.rvc{width:30px}
 }
 
 /* ---------- Knappraden ---------- */
@@ -868,15 +893,68 @@ function uppdProg(){if(!cur)return;let tot=0,done=0;const per={};
 function liveGrade(qi){const q=cur.qs[qi];if(!qComplete(qi))return;const r=gradeQ(q,q.fields.map((_,fi)=>readVal(qi,fi)));let allOk=true;
   r.forEach((ok,fi)=>{if(q.fields[fi].k==="self")return;const el=app.querySelector(`[data-q="${qi}"][data-f="${fi}"]`);if(!el)return;el.classList.remove("ok","bad");el.classList.add(ok?"ok":"bad");if(!ok)allOk=false});
   const qe=$("#q"+qi);qe.classList.remove("qok","qbad");qe.classList.add(allOk?"qok":"qbad")}
-function navHTML(pages){return `<div class="provnav" id="provnav">${pages?`<div class="chips" aria-label="Sidor">${pages.map(([pg])=>`<button type="button" class="chip" data-go="${pg}">Sida ${pg}</button>`).join("")}</div>`:""}<div class="pinfo"><span id="prog">0 av 0 besvarade</span><span class="bar"><i id="progbar"></i></span></div>${pages?`<div class="zoom" aria-label="Storlek på provsidan"><button type="button" data-z="-" aria-label="Mindre provsida">−</button><span id="zv">100%</span><button type="button" data-z="+" aria-label="Större provsida">+</button></div>`:""}<label class="dir"><input type="checkbox" id="direkt"> Rätta direkt</label></div>`}
+function navHTML(pages){return `<div class="provnav" id="provnav">${pages?`<div class="chips" aria-label="Sidor">${pages.map(([pg])=>`<button type="button" class="chip" data-go="${pg}">Sida ${pg}</button>`).join("")}</div>`:""}<div class="pinfo"><span id="prog">0 av 0 besvarade</span><span class="bar"><i id="progbar"></i></span></div>${pages?`<div class="zoom" aria-label="Storlek på provsidan"><button type="button" data-z="-" aria-label="Mindre provsida">−</button><span id="zv">100%</span><button type="button" data-z="+" aria-label="Större provsida">+</button></div>`:""}${pages?`<button type="button" class="chip" id="bRita" aria-pressed="false" title="Rita och skriv på provsidan">✏️ Rita</button><span class="ritmer" hidden>${rvHTML()}</span>`:""}<button type="button" class="chip" id="bKladd" aria-pressed="false" title="Ett tomt block att räkna och rita på">📝 Kladdblock</button><label class="dir"><input type="checkbox" id="direkt"> Rätta direkt</label></div>`}
 function bw(v){if(v!=null){try{localStorage.setItem(ZKEY,String(v))}catch(e){}}const n=Math.max(600,Math.min(1400,+(v!=null?v:localStorage.getItem(ZKEY))||1000));document.body.style.setProperty("--bw",n+"px");const z=$("#zv");if(z)z.textContent=Math.round(n/10)+"%";return n}
 function setAct(){document.documentElement.style.setProperty("--act",(acts.hidden?0:acts.offsetHeight)+"px");const h=document.querySelector(".mph");const st=h?getComputedStyle(h).position:"";document.documentElement.style.setProperty("--mphh",(st==="sticky"||st==="fixed")&&getComputedStyle(h).display!=="none"?h.offsetHeight+"px":"0px")}
-function initNav(){const d=$("#direkt");if(d){d.checked=localStorage.getItem(DKEY)!=="0";d.onchange=()=>{try{localStorage.setItem(DKEY,d.checked?"1":"0")}catch(e){}}}bw();setAct();uppdProg()}
+function initNav(){const d=$("#direkt");if(d){d.checked=localStorage.getItem(DKEY)!=="0";d.onchange=()=>{try{localStorage.setItem(DKEY,d.checked?"1":"0")}catch(e){}}}bw();setAct();uppdProg();ritInit()}
 function toast(t){const e=document.createElement("div");e.className="toast";e.textContent=t;document.body.appendChild(e);setTimeout(()=>e.remove(),5000)}
 function visaSum(bad,right,total){const old=$("#sum");if(old)old.remove();const pct=Math.round(100*right/total);
   let h=`<section class="sum" id="sum"><h2>${right} av ${total} rätt</h2><div class="bar big"><i style="width:${pct}%"></i></div>`;
   h+=bad.length?`<p>Det här kan du titta på igen:</p><div class="chips">${bad.map(([qi,q])=>`<button type="button" class="chip" data-q2="${qi}">${cur.exam?"Fråga":"Uppgift"} ${q._num}${q._pg!=null?` (sida ${q._pg})`:""}</button>`).join("")}</div>`:`<p>Alla rätt! 🎉</p>`;
   h+=`</section>`;const first=app.querySelector(".pg,.sheet");if(first){first.insertAdjacentHTML("beforebegin",h);$("#sum").scrollIntoView({block:"start",behavior:"smooth"})}}
+
+/* ---------- rita på provsidan och kladdblock (ritningen sparas per prov, ingen handskriftsläsning) ---------- */
+const RT={on:false,c:"#1D2B53",w:1,e:false,pen:false},RW=[2.2,4,8],RKEY="np3-rit";
+const rvHTML=()=>`<span class="rv">${["#1D2B53","#1E6BFF","#E5484D"].map(c=>`<button type="button" class="rvc" data-rv="c:${c}" style="--c:${c}" aria-label="Färg"></button>`).join("")}<button type="button" data-rv="w" title="Tjocklek" aria-label="Tjocklek"></button><button type="button" data-rv="e" title="Sudd" aria-label="Sudd">🧽</button><button type="button" data-rv="undo" title="Ångra" aria-label="Ångra">↶</button><button type="button" data-rv="clear" title="Sudda sidan" aria-label="Sudda">🗑️</button></span>`;
+function rvUppd(){document.querySelectorAll("[data-rv]").forEach(b=>{const k=b.dataset.rv;if(k.startsWith("c:"))b.classList.toggle("on",!RT.e&&RT.c===k.slice(2));else if(k==="e")b.classList.toggle("on",RT.e);else if(k==="w")b.textContent=["•","●","⬤"][RT.w]})}
+const ritLoad=()=>{try{return JSON.parse(localStorage.getItem(RKEY)||"{}")}catch(e){return{}}};
+let ritT=0;function ritSpara(){if(!cur||!cur.exam)return;clearTimeout(ritT);ritT=setTimeout(()=>{const all=ritLoad(),r=cur.rit||{};const tom=Object.values(r).every(a=>!a||!a.length);if(tom)delete all[cur.key];else all[cur.key]={t:Date.now(),r};try{localStorage.setItem(RKEY,JSON.stringify(all))}catch(e){}},400)}
+function ritKoppla(cv,get,alltid,bas){const cx=cv.getContext("2d");let st=null,last=null;
+  const rect=()=>cv.getBoundingClientRect();
+  function size(){const r=rect(),d=Math.min(2,devicePixelRatio||1);cv.width=Math.max(1,Math.round(r.width*d));cv.height=Math.max(1,Math.round(r.height*d));redraw()}
+  function line(s,a,b){const W=cv.width,H=cv.height;cx.save();cx.lineCap="round";cx.lineJoin="round";cx.globalCompositeOperation=s.e?"destination-out":"source-over";cx.strokeStyle=s.c;cx.fillStyle=s.c;cx.lineWidth=s.w*W;
+    if(!b){cx.beginPath();cx.arc(a[0]*W,a[1]*H,s.w*W/2,0,7);cx.fill()}else{cx.beginPath();cx.moveTo(a[0]*W,a[1]*H);cx.lineTo(b[0]*W,b[1]*H);cx.stroke()}cx.restore()}
+  function draw(s){if(s.p.length===1)line(s,s.p[0]);else for(let i=1;i<s.p.length;i++)line(s,s.p[i-1],s.p[i])}
+  function redraw(){cx.clearRect(0,0,cv.width,cv.height);get().forEach(draw)}
+  cv.addEventListener("pointerdown",e=>{if(!alltid&&!RT.on)return;if(e.button>0)return;if(e.pointerType==="touch"&&RT.pen)return;
+    if(e.pointerType==="pen"&&!RT.pen){RT.pen=true;rittMode()}
+    const r=rect();st={c:RT.c,e:RT.e,w:(RT.e?RW[RT.w]*4:RW[RT.w])*(bas||1000)/(bas||1000)*(bas?1/bas*1.3:1/1000),p:[]};
+    const pt=[(e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height];st.p.push(pt);last=pt;line(st,pt);try{cv.setPointerCapture(e.pointerId)}catch(_){}e.preventDefault()});
+  cv.addEventListener("pointermove",e=>{if(!st)return;const r=rect(),pt=[(e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height];
+    if(Math.hypot((pt[0]-last[0])*r.width,(pt[1]-last[1])*r.height)<1.5)return;st.p.push(pt);line(st,last,pt);last=pt;e.preventDefault()});
+  const slut=()=>{if(!st)return;st.p=st.p.map(a=>[+a[0].toFixed(4),+a[1].toFixed(4)]);st.w=+st.w.toFixed(5);get().push(st);const pg=cv.dataset.pg||"k";(cur.ritStack=cur.ritStack||[]).push(pg);st=null;ritSpara()};
+  cv.addEventListener("pointerup",slut);cv.addEventListener("pointercancel",slut);
+  const k={size,redraw};cv._k=k;return k}
+function rittMode(){document.body.classList.toggle("rita",RT.on);document.querySelectorAll("canvas.rit").forEach(c=>{c.style.touchAction=RT.on&&!RT.pen?"none":"pan-y pinch-zoom"})}
+function ritInit(){if(!cur||!cur.exam)return;const sv=ritLoad()[cur.key];cur.rit=sv&&sv.r?sv.r:{};cur.ritStack=[];
+  const ro=window.ResizeObserver?new ResizeObserver(es=>es.forEach(en=>{const cv=en.target.querySelector("canvas.rit");if(cv&&cv._k)cv._k.size()})):null;
+  app.querySelectorAll("canvas.rit").forEach(cv=>{const pg=cv.dataset.pg;ritKoppla(cv,()=>cur.rit[pg]||(cur.rit[pg]=[]),false,0);cv._k.size();if(ro)ro.observe(cv.parentElement)});
+  RT.on=false;rittMode();rvUppd()}
+function aktuellSida(){const pgs=[...app.querySelectorAll(".pg")];let on=pgs[0];pgs.forEach(p=>{if(p.getBoundingClientRect().top<=innerHeight*.4)on=p});return on?on.dataset.pg:null}
+function ritToast(t,fn){const e=document.createElement("div");e.className="toast";e.innerHTML=esc2(t)+' <button type="button" class="btn" style="margin-left:8px;padding:2px 10px">↩ Ångra</button>';e.querySelector("button").onclick=()=>{fn();e.remove()};document.body.appendChild(e);setTimeout(()=>e.remove(),8000)}
+const esc2=t=>String(t).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+function ritBy(inK,what){if(!cur)return;cur.rit=cur.rit||{};
+  if(what==="undo"){const stack=cur.ritStack||[];for(let i=stack.length-1;i>=0;i--){const pg=stack[i];if(inK&&pg!=="k")continue;if(!inK&&pg==="k")continue;stack.splice(i,1);const a=cur.rit[pg];if(a&&a.length){a.pop();const cv=pg==="k"?$("#kladd canvas"):app.querySelector(`canvas.rit[data-pg="${pg}"]`);if(cv&&cv._k)cv._k.redraw();ritSpara();return}}
+    {const pg=inK?"k":aktuellSida(),a=pg&&cur.rit[pg];if(a&&a.length){a.pop();const cv=pg==="k"?$("#kladd canvas"):app.querySelector(`canvas.rit[data-pg="${pg}"]`);if(cv&&cv._k)cv._k.redraw();ritSpara()}}}
+  else if(what==="clear"){const pg=inK?"k":aktuellSida();if(!pg)return;const a=cur.rit[pg];if(!a||!a.length)return;const snap=a.slice();cur.rit[pg]=[];const cv=inK?$("#kladd canvas"):app.querySelector(`canvas.rit[data-pg="${pg}"]`);if(cv&&cv._k)cv._k.redraw();ritSpara();
+    ritToast(inK?"Kladdblocket är struket":"Sidan "+pg+" är struken",()=>{cur.rit[pg]=snap;if(cv&&cv._k)cv._k.redraw();ritSpara()})}}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-rv]");if(!b||!cur)return;const k=b.dataset.rv,inK=!!b.closest("#kladd");
+  if(k.startsWith("c:")){RT.c=k.slice(2);RT.e=false}else if(k==="e")RT.e=!RT.e;else if(k==="w")RT.w=(RT.w+1)%3;else{ritBy(inK,k)}rvUppd()});
+document.addEventListener("click",e=>{
+  const r=e.target.closest("#bRita");if(r){RT.on=!RT.on;r.setAttribute("aria-pressed",RT.on);document.querySelector(".ritmer").hidden=!RT.on;rittMode();rvUppd();return}
+  const kb=e.target.closest("#bKladd");if(kb){kladdToggle();return}
+});
+let kl=null;
+function kladdBygg(){kl=document.createElement("div");kl.id="kladd";kl.hidden=true;kl.setAttribute("role","dialog");kl.setAttribute("aria-label","Kladdblock");
+  kl.innerHTML=`<div class="kh"><b>📝 Kladdblock</b>${rvHTML()}<button type="button" data-k="stor" title="Större eller mindre" aria-label="Större eller mindre">⤢</button><button type="button" data-k="x" title="Stäng" aria-label="Stäng">✕</button></div><div class="kc"><canvas></canvas></div>`;
+  document.body.appendChild(kl);const cv=kl.querySelector("canvas");ritKoppla(cv,()=>{cur.rit=cur.rit||{};return cur.rit.k||(cur.rit.k=[])},true,520);
+  if(window.ResizeObserver)new ResizeObserver(()=>{if(!kl.hidden&&cv._k)cv._k.size()}).observe(kl.querySelector(".kc"));
+  /* kladdblocket går att flytta genom att dra i rubrikraden */
+  let dg=null;kl.querySelector(".kh").addEventListener("pointerdown",e=>{if(e.target.closest("button")||innerWidth<1000)return;const r=kl.getBoundingClientRect();dg={dx:e.clientX-r.left,dy:e.clientY-r.top,id:e.pointerId};try{e.currentTarget.setPointerCapture(e.pointerId)}catch(_){}e.preventDefault()});
+  kl.querySelector(".kh").addEventListener("pointermove",e=>{if(!dg||e.pointerId!==dg.id)return;kl.style.left=Math.max(0,Math.min(innerWidth-120,e.clientX-dg.dx))+"px";kl.style.top=Math.max(0,Math.min(innerHeight-60,e.clientY-dg.dy))+"px";kl.style.right="auto";kl.style.bottom="auto"});
+  kl.querySelector(".kh").addEventListener("pointerup",()=>{dg=null});
+  kl.addEventListener("click",e=>{const b=e.target.closest("[data-k]");if(!b)return;if(b.dataset.k==="x")kladdToggle(false);else{kl.classList.toggle("stor");setTimeout(()=>cv._k.size(),50)}})}
+function kladdToggle(vis){if(!cur)return;if(!kl)kladdBygg();const v=vis===undefined?kl.hidden:vis;kl.hidden=!v;const b=$("#bKladd");if(b)b.setAttribute("aria-pressed",v);if(v){cur.rit=cur.rit||{};setTimeout(()=>{const cv=kl.querySelector("canvas");cv._k.size()},30);rvUppd()}}
 function home(tab){
   cur=null;acts.hidden=true;res.textContent="";
   setCover("Träna inför provet","Nya uppgifter varje gång, i samma stil som det riktiga provet.");
@@ -965,7 +1043,7 @@ function examView(key){
   setCover(`Delprov ${l}`,`Riktigt prov från läsår ${lbl}`);document.title=`Delprov ${l} ${lbl} – Gamla nationella prov`;
   const qs=[];let html=`<a class="back" href="#/prov">← Alla gamla prov</a><p class="lead">Titta på provsidan och skriv dina svar i rutan bredvid. Räkna på papper när det behövs. <a href="prov/${key}.pdf" target="_blank" rel="noopener">Ladda ner provet som PDF</a></p>${navHTML(pages)}`;
   pages.forEach(([pg,list],pi)=>{
-    html+=`<section class="pg" id="pg-${pg}" data-pg="${pg}"><img src="sidor/${key}-${pg}.jpg" alt="Provsida ${pg}" loading="lazy" width="900" height="1273" onerror="this.outerHTML='<div class=&quot;imgmiss&quot;>Bilden för sida ${pg} hittades inte (sidor/${key}-${pg}.jpg).<br><a href=&quot;prov/${key}.pdf&quot; target=&quot;_blank&quot;>Öppna provet som PDF</a> i stället.</div>'"><div class="ansbox"><h3>Svar, sida ${pg}</h3><ol class="qs">`;
+    html+=`<section class="pg" id="pg-${pg}" data-pg="${pg}"><div class="pgimg"><img src="sidor/${key}-${pg}.jpg" alt="Provsida ${pg}" loading="lazy" width="900" height="1273" onerror="this.outerHTML='<div class=&quot;imgmiss&quot;>Bilden för sida ${pg} hittades inte (sidor/${key}-${pg}.jpg).<br><a href=&quot;prov/${key}.pdf&quot; target=&quot;_blank&quot;>Öppna provet som PDF</a> i stället.</div>'"><canvas class="rit" data-pg="${pg}"></canvas></div><div class="ansbox"><h3>Svar, sida ${pg}</h3><ol class="qs">`;
     list.forEach(([num,gen])=>{const q=upgradeCalc(build(gen),key);q._num=num;q._pg=pg;const qi=qs.length;qs.push(q);html+=qHTML(q,qi,num,key)});
     html+=`</ol><button type="button" class="btn nxt" data-nxt="${pg}">${pi<pages.length-1?"Nästa sida ›":"Till Rätta ↓"}</button></div></section>`;
   });
@@ -1099,12 +1177,12 @@ app.addEventListener("click",e=>{
 let rafT=0;addEventListener("scroll",()=>{if(!cur||!cur.exam||rafT)return;rafT=requestAnimationFrame(()=>{rafT=0;const pgs=[...app.querySelectorAll(".pg")];let on=null;pgs.forEach(p=>{if(p.getBoundingClientRect().top<=160)on=p.dataset.pg});document.querySelectorAll(".chip[data-go]").forEach(c=>c.classList.toggle("on",c.dataset.go===on))})},{passive:true});
 addEventListener("resize",setAct);
 function hasAnswers(){return [...app.querySelectorAll("input.ans,input.cin,input.mkin")].some(i=>i.value.trim())||!!app.querySelector(".opt.sel,.dgb.struck")||[...app.querySelectorAll("select.sel")].some(s=>s.value!=="")}
-$("#bNew").onclick=()=>{if(hasAnswers()&&!confirm(cur.exam?"Vill du börja om? Dina svar försvinner.":"Vill du få nya uppgifter? Dina svar försvinner."))return;if(cur.exam){const a=svarLoad();delete a[cur.key];svarPut(a)}cur.exam?examView(cur.key):practice(cur.key);window.scrollTo({top:0})};
+$("#bNew").onclick=()=>{if(hasAnswers()&&!confirm(cur.exam?"Vill du börja om? Dina svar försvinner.":"Vill du få nya uppgifter? Dina svar försvinner."))return;if(cur.exam){const a=svarLoad();delete a[cur.key];svarPut(a);const r=ritLoad();delete r[cur.key];try{localStorage.setItem(RKEY,JSON.stringify(r))}catch(e){}}cur.exam?examView(cur.key):practice(cur.key);window.scrollTo({top:0})};
 $("#bFacit").onclick=()=>{cur.facit=!cur.facit;app.querySelectorAll(".facit").forEach(x=>x.hidden=!cur.facit);$("#bFacit").textContent=cur.facit?"Dölj facit":"Visa facit"};
 $("#bPrint").onclick=()=>cur&&cur.exam?window.open(`prov/${cur.key}.pdf`,"_blank"):window.print();
 
 function route(){
-  const [a,b]=location.hash.replace(/^#\/?/,"").split("/");document.body.classList.remove("exam","ova");
+  const [a,b]=location.hash.replace(/^#\/?/,"").split("/");document.body.classList.remove("exam","ova","rita");if(kl&&!kl.hidden)kladdToggle(false);
   if(a==="ova"&&DELPROV[b])practice(b);else if(a==="prov"&&HAS_EXAMS()&&EXAMS[b])examView(b);else home(a==="prov"?"prov":"ova");
   window.scrollTo(0,0);
 }
