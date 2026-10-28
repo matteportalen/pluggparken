@@ -123,7 +123,7 @@ details.fb img{width:100%;max-width:420px;border:2px solid var(--line);border-ra
   <button data-home hidden type="button" onclick="MPLopp.hem()"></button>
   <div class="say" id="camSay"></div>
   <div class="stage"><video id="vid" autoplay playsinline muted></video>
-    <svg class="guide" viewBox="0 0 100 100" aria-hidden="true"><g id="gExt"><ellipse cx="50" cy="43.5" rx="29" ry="37" fill="none" stroke="#fff" stroke-width="1.2" stroke-dasharray="3 2" opacity=".95"/><line x1="24" y1="38" x2="76" y2="38" stroke="#FFE07A" stroke-width="1" stroke-dasharray="2 2"/><line x1="44" y1="65" x2="56" y2="65" stroke="#FFE07A" stroke-width="1"/><line x1="50" y1="60" x2="50" y2="70" stroke="#FFE07A" stroke-width="1"/><circle cx="37" cy="38" r="2" fill="none" stroke="#fff" stroke-width=".8"/><circle cx="63" cy="38" r="2" fill="none" stroke="#fff" stroke-width=".8"/></g><g id="gInt" hidden><ellipse cx="50" cy="50" rx="38" ry="27" fill="none" stroke="#fff" stroke-width="1.2" stroke-dasharray="3 2"/><line x1="10" y1="50" x2="90" y2="50" stroke="#FFE07A" stroke-width="1" stroke-dasharray="2 2"/><line x1="50" y1="40" x2="50" y2="60" stroke="#FFE07A" stroke-width="1"/><circle cx="12" cy="50" r="2" fill="none" stroke="#fff" stroke-width=".8"/><circle cx="88" cy="50" r="2" fill="none" stroke="#fff" stroke-width=".8"/></g></svg></div>
+    <svg class="guide" viewBox="0 0 100 100" aria-hidden="true"><g id="gExt"><ellipse cx="50" cy="43.5" rx="29" ry="37" fill="none" stroke="#fff" stroke-width="1.2" stroke-dasharray="3 2" opacity=".95"/><line x1="24" y1="38" x2="76" y2="38" stroke="#FFE07A" stroke-width="1" stroke-dasharray="2 2"/><line x1="44" y1="65" x2="56" y2="65" stroke="#FFE07A" stroke-width="1"/><line x1="50" y1="60" x2="50" y2="70" stroke="#FFE07A" stroke-width="1"/><circle cx="37" cy="38" r="2" fill="none" stroke="#fff" stroke-width=".8"/><circle cx="63" cy="38" r="2" fill="none" stroke="#fff" stroke-width=".8"/></g><g id="gInt" style="display:none"><ellipse cx="50" cy="50" rx="38" ry="27" fill="none" stroke="#fff" stroke-width="1.2" stroke-dasharray="3 2"/><line x1="10" y1="50" x2="90" y2="50" stroke="#FFE07A" stroke-width="1" stroke-dasharray="2 2"/><line x1="50" y1="40" x2="50" y2="60" stroke="#FFE07A" stroke-width="1"/><circle cx="12" cy="50" r="2" fill="none" stroke="#fff" stroke-width=".8"/><circle cx="88" cy="50" r="2" fill="none" stroke="#fff" stroke-width=".8"/></g></svg></div>
   <div class="acts"><button class="go" id="camShot" type="button" style="margin-top:0;width:auto;padding:12px 28px">📸 Ta bilden</button><button class="pill" id="camFlip" type="button">🔄 Byt kamera</button><button class="pill" id="camCancel" type="button">Avbryt</button></div>
   <p class="msg" id="camMsg" role="status"></p>
 </section>
@@ -137,6 +137,8 @@ details.fb img{width:100%;max-width:420px;border:2px solid var(--line);border-ra
   <div class="stage"><canvas id="ed" width="640" height="640" aria-label="Förhandsvisning av bilden"></canvas></div>
   <p class="hint" id="edhint"></p>
   <label class="ctl" for="zoom">Zooma <input type="range" id="zoom" min="0.4" max="8" step="0.01" value="1"><output id="zoomv">1,0×</output></label>
+  <label class="ctl" for="hsize" id="hsizeBox" hidden>Huvud <input type="range" id="hsize" min="0.10" max="0.32" step="0.005" value="0.17"><output id="hsizev"></output></label>
+  <p class="hint" id="hsizeHint" hidden>Dra åt vänster så ryms hela huvudet i loppan. Åt höger blir ansiktet större.</p>
   <div class="acts">
     <button class="pill" id="eFit" type="button">🎯 Peka ut ögon och mun</button>
     <label class="pill" for="file">🖼️ Annan bild</label>
@@ -240,7 +242,8 @@ function compose(P,guides){
 /* ================= Slut på den ofarliga geometrin ================= */
 
 var ed=$('ed'), sheet=$('sheet');
-var ABST=0.27;   // avståndet från ögonens mitt till munnen, som andel av rutans storlek (ändra här)
+var ABST=0.17;   // standard för avståndet från ögonens mitt till munnen, som andel av rutans storlek: 0,17 ger plats för hela huvudet i loppan (ändra här)
+var ABST_MIN=0.10, ABST_MAX=0.32;   // gränser för reglaget Huvudets storlek
 
 function sample(kind){
   var c=document.createElement('canvas'); c.width=c.height=600; var g=c.getContext('2d');
@@ -370,6 +373,8 @@ function syncCtl(){
   $('edhint').textContent=cur==='ext'
     ? 'Dra bilden för att flytta den. Nyp eller använd reglaget för att zooma. Munnen ska ligga där linjerna korsar varandra.'
     : 'Valfritt. Det här syns när loppan öppnas: ta ett nära foto av bara en stor öppen mun (inga ögon, de sitter på utsidan). Mungiporna ska ligga på den vågräta linjen och munnens mitt där linjerna korsar varandra.';
+  var hs=cur==='ext'&&!!layers.ext.pts;$('hsizeBox').hidden=!hs;$('hsizeHint').hidden=!hs;
+  if(hs){$('hsize').value=layers.ext.abst;$('hsizev').textContent=layers.ext.abst<.14?'Hela':layers.ext.abst>.24?'Nära':'';}
   $('eFit').textContent=cur==='ext'?'🎯 Peka ut ögon och mun':'🎯 Peka ut munnen';
   $('mouthbox').hidden=cur!=='ext';
   ['ext','int'].forEach(function(k){$('tab-'+k).setAttribute('aria-selected',String(k===cur))});
@@ -377,7 +382,22 @@ function syncCtl(){
 $('tab-ext').onclick=function(){cur='ext';syncCtl();update()};
 $('tab-int').onclick=function(){cur='int';syncCtl();update()};
 $('zoom').oninput=function(){layers[cur].zoom=+this.value;syncCtl();update()};
-$('flip').onchange=function(){layers[cur].flip=this.checked;update()};
+// passar om utifrån de tre punkterna; vid spegelvändning speglas punkterna så att munnen stannar i mitten och ögonen vågräta
+function refit(L,abst,flip){
+  var W=iw(L.img),pp=L.pts,use=flip?[[W-pp[1][0],pp[1][1]],[W-pp[0][0],pp[0][1]],[W-pp[2][0],pp[2][1]]]:pp;
+  var F=fitLayer(L.img,use,abst);if(!F)return null;F.pts=pp;F.flip=!!flip;F.abst=abst;return F;
+}
+$('flip').onchange=function(){
+  var L=layers[cur];
+  if(cur==='ext'&&L.pts){var F=refit(L,L.abst,this.checked);if(F)layers.ext=F;else L.flip=this.checked}
+  else L.flip=this.checked;
+  syncCtl();update();
+};
+// huvudets storlek: räknar om passningen från de tre punkterna (munnen stannar i mitten, ögonen vågräta)
+$('hsize').oninput=function(){
+  var L=layers.ext;if(!L.pts)return;var F=refit(L,+this.value,L.flip);if(!F)return;
+  layers.ext=F;syncCtl();update();
+};
 $('guides').onchange=update;
 $('clear').onclick=function(){var L=layers[cur];if(L.img){L.img=null;L.sample=false}else{layers[cur]=mk(cur)}syncCtl();update()};
 
@@ -441,16 +461,17 @@ $('pk').addEventListener('pointerdown',function(e){
 $('pkUndo').onclick=function(){pk.pts.pop();drawPk()};
 $('pkSkip').onclick=function(){applyFit(pk.img,null,pk.mode)};
 // räknar ut flytt, zoom och rotation så att ögonlinjen blir vågrät och munnen hamnar i mitten
-function fitLayer(img,pts){
+function fitLayer(img,pts,abst){
+  abst=abst||ABST;
   var L=pts[0],R=pts[1],M=pts[2];
   var ex=(L[0]+R[0])/2,ey=(L[1]+R[1])/2,dist=Math.hypot(M[0]-ex,M[1]-ey),eye=Math.hypot(R[0]-L[0],R[1]-L[1]);
   if(eye<4||dist<4)return null;
   var theta=Math.atan2(R[1]-L[1],R[0]-L[0]),rot=-theta*180/Math.PI;
   var W=iw(img),H=ih(img),mn=Math.min(W,H);
-  var zoom=Math.min(8,Math.max(.4,ABST*mn/dist)),base=zoom*1/mn;   // base i enheter av rutans storlek per bildpunkt
+  var zoom=Math.min(8,Math.max(.4,abst*mn/dist)),base=zoom*1/mn;   // base i enheter av rutans storlek per bildpunkt
   var a=rot*Math.PI/180,dx=(M[0]-W/2)*base,dy=(M[1]-H/2)*base;
   var x=-(Math.cos(a)*dx-Math.sin(a)*dy),y=-(Math.sin(a)*dx+Math.cos(a)*dy);
-  return {img:img,sample:false,x:x,y:y,zoom:zoom,rot:rot,flip:false,kind:'ext'};
+  return {img:img,sample:false,x:x,y:y,zoom:zoom,rot:rot,flip:false,kind:'ext',pts:pts,abst:abst};
 }
 // insidan: ena och andra mungipan; munnens mitt hamnar i rutans mitt och mungiporna ligger på den vågräta linjen
 var MUNBREDD=.8;   // munnens bredd som andel av rutans storlek (ändra här)
@@ -495,7 +516,7 @@ function stoppaKamera(){if(stream){stream.getTracks().forEach(function(t){t.stop
 function kameraMsg(t){$('camMsg').textContent=t}
 function oppnaKamera(){
   target=target||'ext';show('kamera');kameraMsg('');
-  var inne=target==='int';$('gExt').hidden=inne;$('gInt').hidden=!inne;
+  var inne=target==='int';$('gExt').style.display=inne?'none':'';$('gInt').style.display=inne?'':'none';   // SVG-element har inget hidden-attribut som egenskap
   $('camSay').innerHTML=inne?'Öppna munnen stort och ta bara munnen<small>Mungiporna på linjen. Inga ögon i bilden.</small>':'Ställ dig så att ansiktet fyller ovalen<small>Ögonen på linjen. Munnen i mitten av korset.</small>';
   if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){kameraMsg('Den här webbläsaren kan inte använda kameran. Välj en bild i stället.');return}
   stoppaKamera();
