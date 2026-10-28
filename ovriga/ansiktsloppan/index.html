@@ -387,7 +387,7 @@ function presetInt(){
       function P(r,v){return [Sx+e1x*r+e2x*v,Sy+e1y*r+e2y*v]}
       function W(r){return 22+0.16*r}
       var g0=W(0)*1.5,g1=W(len)*1.5,pa=P(0,3),pb=P(len,3),pc=P(len,-g1),pd=P(0,-g0);
-      g.save();g.fillStyle='#D9607A';g.beginPath();g.moveTo(pa[0],pa[1]);g.lineTo(pb[0],pb[1]);g.lineTo(pc[0],pc[1]);g.lineTo(pd[0],pd[1]);g.closePath();g.fill();
+      g.save();var gm=P(len*.6,3),gf=P(len*.6,-g1*1.05),gg=g.createLinearGradient(gm[0],gm[1],gf[0],gf[1]);gg.addColorStop(0,'#D9607A');gg.addColorStop(.55,'#D9607A');gg.addColorStop(1,'rgba(217,96,122,0)');g.fillStyle=gg;g.beginPath();g.moveTo(pa[0],pa[1]);g.lineTo(pb[0],pb[1]);g.lineTo(pc[0],pc[1]);g.lineTo(pd[0],pd[1]);g.closePath();g.fill();
       g.strokeStyle='rgba(255,190,205,.5)';g.lineWidth=5;g.lineCap='round';g.beginPath();g.moveTo(pa[0],pa[1]);g.lineTo(pb[0],pb[1]);g.stroke();g.restore();
       var r=10;
       while(r<len){
