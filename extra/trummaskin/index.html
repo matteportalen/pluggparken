@@ -150,6 +150,15 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
 .mgrid button.p{background:var(--k);box-shadow:0 0 10px color-mix(in srgb,var(--k) 70%,transparent)}
 .mgrid button.nu{outline:2px solid rgba(255,255,255,.55);outline-offset:-1px}
 @media(max-width:700px){.mgrid{grid-template-columns:24px repeat(16,28px);gap:3px;overflow-x:auto;padding-bottom:6px;-webkit-overflow-scrolling:touch}.mgrid button{height:26px}.mgrid .mn{font-size:.55rem;position:sticky;left:0;background:#202226}}
+.tl{display:grid;grid-template-columns:64px minmax(0,1fr);gap:8px 10px;align-items:center}
+.tl .tn{font-size:.62rem;font-weight:800;letter-spacing:.12em;color:var(--dim)}
+.tl .tn.lk{color:var(--sk);font-size:.8rem;letter-spacing:.06em;text-shadow:0 0 8px var(--sk)}
+.lloop{display:grid;grid-template-columns:repeat(16,1fr);gap:6px}
+.lloop button{position:relative;height:22px;border-radius:6px;background:#2a2c33;box-shadow:inset 0 2px 4px rgba(0,0,0,.6),0 0 0 2px #111}
+.lloop button.p{background:var(--sk);box-shadow:0 0 10px color-mix(in srgb,var(--sk) 60%,transparent),0 0 0 2px #111}
+.lloop.tom{opacity:.45}
+.lloop button.nu{outline:2px solid #fff;outline-offset:1px}
+@media(max-width:700px){.tl{grid-template-columns:44px minmax(0,1fr)}.lloop{grid-template-columns:repeat(8,1fr)}.lloop button{height:26px}}
 .loopmaskin{margin-top:22px}
 .loopmaskin::after{background:linear-gradient(90deg,#4cc3ff 0 25%,#7fe08a 25% 50%,#c58bff 50% 75%,#ff7bd0 75%)}
 .loopmaskin .logga b i{color:#4cc3ff}
@@ -269,7 +278,7 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
     <div class="grupp"><select class="sel" id="selMall" aria-label="Färdig rytm"></select><span class="l">Färdig rytm</span></div>
   </div>
   <div class="vyrad"><div class="kit vy" role="tablist" aria-label="Vy"><button type="button" id="vyT" role="tab" class="on" aria-selected="true">▦ TRUMMASKIN</button><button type="button" id="vyL" role="tab" aria-selected="false">♫ LÅT</button></div><div class="monsterg"><span class="l">MÖNSTER</span><div class="monster" id="monster"></div><button type="button" class="lilla" id="bKop" title="Kopiera det här mönstret till ett annat">⧉ KOPIERA</button></div></div>
-  <div class="lat" id="lat" hidden><div class="lcells" id="lcells"></div><div class="latrad"><button class="lilla on" id="bSlinga" type="button" aria-pressed="true">🔁 SLINGA</button><button class="lilla" id="bTomLat" type="button">TÖM LÅT</button><span class="latinfo" id="latInfo"></span></div><div class="krok" style="margin-top:0">Välj ett mönster (A–D) uppe till höger och tryck på en ruta för att lägga det i låten. Tryck på samma ruta igen för att ta bort det. Byt till ▦ TRUMMASKIN för att ändra mönstren, och tillbaka hit för att spela låten. START spelar låten.</div></div>
+  <div class="lat" id="lat" hidden><div class="tl" id="tl"><span class="tn">MÖNSTER</span><div class="lcells" id="lcells"></div></div><div class="latrad"><button class="lilla on" id="bSlinga" type="button" aria-pressed="true">🔁 SLINGA</button><button class="lilla" id="bTomLat" type="button">TÖM LÅT</button><span class="latinfo" id="latInfo"></span></div><div class="krok" style="margin-top:0">Välj ett mönster (A–D) uppe till höger och tryck på en ruta för att lägga det i låten. Tryck på samma ruta igen för att ta bort det. Byt till ▦ TRUMMASKIN för att ändra mönstren, och tillbaka hit för att spela låten. START spelar låten. Raderna L1–L4 bestämmer i vilka takter dina inspelade loopar hörs: tryck på rutorna. En rad utan markerade rutor spelar hela låten.</div></div>
   <div class="spar" id="spar">
     <div class="ledrad"><div class="fyll"></div><div class="leds" id="leds"></div></div>
   </div>
@@ -388,7 +397,7 @@ const MALLAR=[
  ["Skaka (latin)",100,8,["x..x..x...x.x...","","","xxxxxxxxxxxxxxxx","","..x..x..x..x..x.","x.x.x..x.x.x..x.",""]],
  ["Disco",118,0,["x...x...x...x...","","....x.......x...","","x.x.x.x.x.x.x.x.","","...x.x...x.x....","..............x."]]
 ];
-function tomt(){return{bpm:90,swing:0,master:80,kit:0,namn:"Tomt",t:SPAR.map((s,i)=>({s:".".repeat(16),v:0,vol:i<2?100:75,mute:false})),pat:[0,1,2,3].map(()=>SPAR.map(()=>".".repeat(16))),cur:0,song:Array(16).fill(-1),loop:true,songOn:false,key:0,scale:0,mel:[".".repeat(16),".".repeat(16)],mpat:[0,1,2,3].map(()=>[".".repeat(16),".".repeat(16)]),mv:[0,0],mvol:[85,70],mmute:[false,false]}}
+function tomt(){return{bpm:90,swing:0,master:80,kit:0,namn:"Tomt",t:SPAR.map((s,i)=>({s:".".repeat(16),v:0,vol:i<2?100:75,mute:false})),pat:[0,1,2,3].map(()=>SPAR.map(()=>".".repeat(16))),cur:0,song:Array(16).fill(-1),loop:true,songOn:false,lsong:[0,1,2,3].map(()=>".".repeat(16)),key:0,scale:0,mel:[".".repeat(16),".".repeat(16)],mpat:[0,1,2,3].map(()=>[".".repeat(16),".".repeat(16)]),mv:[0,0],mvol:[85,70],mmute:[false,false]}}
 let S=tomt(),spelar=false,steg=0,nasta=0,tid=0,timer=0,kö=[];
 function mall(i){const m=MALLAR[i],old=S;S=tomt();behall(old);S.bpm=m[1];S.swing=m[2];S.namn=m[0];m[3].forEach((p,k)=>{S.t[k].s=(p||"").padEnd(16,".").slice(0,16)});if(S.kit)kitSatt(S.kit)}
 function kitSatt(k){S.kit=k;S.t.forEach((t,i)=>{const sy=SPAR[i].syn.length;t.v=k&&SAMP?sy:0});$("#kitA").classList.toggle("on",!k);$("#kitB").classList.toggle("on",!!k)}
@@ -401,16 +410,17 @@ function avkod(k){try{const pp=k.split("~"),p=pp[0].split("_"),h=p[0].split(".")
   for(let i=0;i<8;i++){const q=p[i+1].split(".");if(!/^[0-9a-f]{4}$/i.test(q[0]))return null;o.t[i]={s:BIN(q[0]),v:Math.max(0,Math.min(40,+q[1]||0)),vol:Math.max(0,Math.min(100,+q[2]||0)),mute:q[3]==="1"}}avlat(o,pp);return o}catch(e){return null}}
 const MONAM=["A","B","C","D"],MONK=["var(--r)","var(--o)","var(--y)","#4cc3ff"];
 const harMel=()=>S.mel.some(s=>/[0-7]/.test(s))||S.mpat.some((d,p)=>p!==S.cur&&d.some(s=>/[0-7]/.test(s)));
-const harLat=()=>S.song.some(x=>x>=0)||S.pat.some((d,p)=>p!==S.cur&&d.some(s=>s.includes("x")))||harMel();
+const harLat=()=>S.song.some(x=>x>=0)||S.pat.some((d,p)=>p!==S.cur&&d.some(s=>s.includes("x")))||harMel()||S.lsong.some(r=>r.includes("x"));
 function kod(){const b=kodBas();if(!harLat())return b;
   const pats=[0,1,2,3].map(p=>p===S.cur?"":(S.pat[p].every(s=>!s.includes("x"))?"-":S.pat[p].map(HEX).join("."))),sg=S.song.map(x=>x<0?".":MONAM[x]).join("").replace(/\.+$/,"");
-  return b+"~"+S.cur+"~"+pats.join(",")+"~"+sg+"~"+(S.loop?1:0)+(S.songOn?1:0)+"~"+[S.key,S.scale,S.mv[0],S.mv[1],S.mvol[0],S.mvol[1],(S.mmute[0]?1:0)+""+(S.mmute[1]?1:0)].join(".")+"~"+[0,1,2,3].map(p=>{const d=melData(p);return /[0-7]/.test(d.join(""))?d.join(":"):"-"}).join(",")}
+  return b+"~"+S.cur+"~"+pats.join(",")+"~"+sg+"~"+(S.loop?1:0)+(S.songOn?1:0)+"~"+[S.key,S.scale,S.mv[0],S.mv[1],S.mvol[0],S.mvol[1],(S.mmute[0]?1:0)+""+(S.mmute[1]?1:0)].join(".")+"~"+[0,1,2,3].map(p=>{const d=melData(p);return /[0-7]/.test(d.join(""))?d.join(":"):"-"}).join(",")+"~"+S.lsong.map(HEX).join(".")}
 function avlat(o,pp){if(pp.length<5)return;const cur=+pp[1];if(cur>=0&&cur<4)o.cur=cur;const pl=pp[2].split(",");
   for(let p=0;p<4;p++){if(p===o.cur)continue;const q=pl[p];if(!q||q==="-")continue;const h=q.split(".");if(h.length===8&&h.every(x=>/^[0-9a-f]{4}$/i.test(x)))o.pat[p]=h.map(BIN)}
   const sg=pp[3]||"";for(let i=0;i<16;i++){const x=MONAM.indexOf(sg[i]);o.song[i]=x>=0?x:-1}
   o.loop=(pp[4]||"1")[0]!=="0";o.songOn=(pp[4]||"")[1]==="1";if(o.song.some(x=>x>=0))o.namn="Egen låt";
   if(pp.length>=7){const q=pp[5].split("."),cl=(v,a,b)=>Math.max(a,Math.min(b,Math.round(+v)||0));o.key=cl(q[0],0,11);o.scale=cl(q[1],0,2);o.mv=[cl(q[2],0,1),cl(q[3],0,3)];o.mvol=[cl(q[4],0,100),cl(q[5],0,100)];o.mmute=[(q[6]||"")[0]==="1",(q[6]||"")[1]==="1"];
-    const ml=pp[6].split(",");for(let p=0;p<4;p++){const a=(ml[p]||"-").split(":");if(a.length===2&&a.every(x=>/^[.0-7]{16}$/.test(x))){if(p===o.cur)o.mel=a;else o.mpat[p]=a}}}}
+    const ml=pp[6].split(",");for(let p=0;p<4;p++){const a=(ml[p]||"-").split(":");if(a.length===2&&a.every(x=>/^[.0-7]{16}$/.test(x))){if(p===o.cur)o.mel=a;else o.mpat[p]=a}}}
+  if(pp.length>=8){const q=pp[7].split(".");for(let i=0;i<4;i++)if(/^[0-9a-f]{4}$/i.test(q[i]||""))o.lsong[i]=BIN(q[i])}}
 const NYCKEL="pluggparken-trummaskin";
 function minnenLasa(){try{return JSON.parse(localStorage.getItem(NYCKEL)||"[]")}catch(e){return[]}}
 function minnenSkriv(a){try{localStorage.setItem(NYCKEL,JSON.stringify(a))}catch(e){}}
@@ -458,8 +468,8 @@ function stegTid(k){const sek=60/S.bpm/4,sw=(S.swing/100)*sek*.66;return sek+(k%
 let barPd,barMd,barIx=-1;
 function tick(){if(!ctx)return;while(nasta<ctx.currentTime+.12){const k=steg%16;
     if(k===0){lastBar=nasta;const len=songLen();
-      if(S.songOn&&len>0){const bi=Math.floor(steg/16);if(!S.loop&&bi>=len){clearInterval(timer);setTimeout(stopp,Math.max(0,(nasta-ctx.currentTime)*1000));return}barIx=bi%len;const p=S.song[barIx];barPd=p>=0?monsterData(p):null;barMd=p>=0?melData(p):null}
-      else{barIx=-1;barPd=undefined;barMd=undefined}}
+      if(S.songOn&&len>0){const bi=Math.floor(steg/16);if(!S.loop&&bi>=len){clearInterval(timer);setTimeout(stopp,Math.max(0,(nasta-ctx.currentTime)*1000));return}barIx=bi%len;lpBarGate(barIx,nasta);const p=S.song[barIx];barPd=p>=0?monsterData(p):null;barMd=p>=0?melData(p):null}
+      else{barIx=-1;barPd=undefined;barMd=undefined;lpBarGate(-1,nasta)}}
     hist.push([nasta,k]);if(hist.length>40)hist.shift();
     const pd=barPd===undefined?S.t.map(t=>t.s):barPd;
     if(pd)S.t.forEach((t,i)=>{if(pd[i][k]==="x")spela(i,nasta)});const md=barMd===undefined?S.mel:barMd;if(md)melTick(k,nasta,md);kö.push([nasta,k,barIx]);steg++;nasta+=stegTid(k)}}
@@ -473,15 +483,18 @@ function slag(i){startaLjud();if(!ctx)return;if(!(recLive&&suddLage))spela(i,ctx
 const songLen=()=>{let n=0;S.song.forEach((x,i)=>{if(x>=0)n=i+1});return n};
 const monsterData=p=>p===S.cur?S.t.map(t=>t.s):S.pat[p];
 const melData=p=>p===S.cur?S.mel:S.mpat[p];
-function behall(o){if(!o||!o.pat)return;S.pat=o.pat;S.cur=o.cur;S.song=o.song;S.loop=o.loop;S.songOn=o.songOn;S.key=o.key;S.scale=o.scale;S.mel=o.mel;S.mpat=o.mpat;S.mv=o.mv;S.mvol=o.mvol;S.mmute=o.mmute}
+function behall(o){if(!o||!o.pat)return;S.pat=o.pat;S.cur=o.cur;S.song=o.song;S.loop=o.loop;S.songOn=o.songOn;S.lsong=o.lsong;S.key=o.key;S.scale=o.scale;S.mel=o.mel;S.mpat=o.mpat;S.mv=o.mv;S.mvol=o.mvol;S.mmute=o.mmute}
 function monsterVal(n){if(n===S.cur)return;S.pat[S.cur]=S.t.map(t=>t.s);S.mpat[S.cur]=S.mel.slice();S.cur=n;S.t.forEach((t,i)=>t.s=S.pat[n][i]);S.mel=S.mpat[n].slice();visa()}
 let kopLage=false;
 function latBygg(){const m=$("#monster");MONAM.forEach((n,p)=>{const b=document.createElement("button");b.type="button";b.dataset.p=p;b.style.setProperty("--k",MONK[p]);b.setAttribute("aria-label","Mönster "+n);b.innerHTML="<b>"+n+"</b><svg viewBox='0 0 32 21' class='mini' aria-hidden='true'></svg>";m.appendChild(b)});
-  const c=$("#lcells");for(let i=0;i<16;i++){const b=document.createElement("button");b.type="button";b.dataset.i=i;b.dataset.n=i+1;b.setAttribute("aria-label","Takt "+(i+1));c.appendChild(b)}}
+  const c=$("#lcells");for(let i=0;i<16;i++){const b=document.createElement("button");b.type="button";b.dataset.i=i;b.dataset.n=i+1;b.setAttribute("aria-label","Takt "+(i+1));c.appendChild(b)}
+  const tl=$("#tl");LC.forEach((col,l)=>{const lab=document.createElement("span");lab.className="tn lk";lab.style.setProperty("--sk",col);lab.textContent="L"+(l+1);const row=document.createElement("div");row.className="lloop";row.dataset.l=l;row.style.setProperty("--sk",col);
+    for(let i=0;i<16;i++){const b=document.createElement("button");b.type="button";b.dataset.i=i;b.setAttribute("aria-label","Loop "+(l+1)+", takt "+(i+1));row.appendChild(b)}tl.appendChild(lab);tl.appendChild(row)})}
 function latRita(){const m=$("#monster");if(!m||!m.children.length)return;
   $("#spar").hidden=!!S.songOn;$("#lat").hidden=!S.songOn;
   [["#vyT",!S.songOn],["#vyL",!!S.songOn]].forEach(([q,on])=>{$(q).classList.toggle("on",on);$(q).setAttribute("aria-selected",on)});
   [...m.children].forEach((b,p)=>{b.classList.toggle("on",p===S.cur);const d=monsterData(p);let h="";d.forEach((s,i)=>{for(let k=0;k<16;k++)if(s[k]==="x")h+='<rect x="'+k*2+'" y="'+i*2+'" width="1.6" height="1.6"/>'});melData(p).forEach((s,i)=>{for(let k=0;k<16;k++)if(s[k]!==".")h+='<rect x="'+k*2+'" y="'+(17+i*2)+'" width="1.6" height="1.6"/>'});b.querySelector("svg").setAttribute("viewBox","0 0 32 21");b.querySelector("svg").innerHTML=h});
+  document.querySelectorAll("#tl .lloop").forEach(r=>{const l=+r.dataset.l,row=S.lsong[l];r.classList.toggle("tom",!LP[l].layers.length);r.querySelectorAll("button").forEach((b,i)=>b.classList.toggle("p",row[i]==="x"))});
   const len=songLen();[...$("#lcells").children].forEach((c,i)=>{const p=S.song[i];c.textContent=p>=0?MONAM[p]:"";c.classList.toggle("p",p>=0);if(p>=0)c.style.setProperty("--k",MONK[p]);else c.style.removeProperty("--k");c.classList.toggle("bort",len>0&&i>=len)});
   $("#latInfo").textContent=len?len+" takter · "+Math.round(len*barDur())+" s":"Tom låt: spelar mönster "+MONAM[S.cur];
   $("#bSlinga").setAttribute("aria-pressed",S.loop);$("#bSlinga").classList.toggle("on",S.loop)}
@@ -494,7 +507,7 @@ function melRita(){const h=$("#melod");if(!h||!h.firstChild)return;h.hidden=!!S.
   h.querySelectorAll(".mgrid").forEach(g=>{const m=+g.dataset.mi,st=S.mel[m];g.querySelectorAll("span.mn").forEach(sp=>{sp.textContent=TONER[(S.key+sc[+sp.dataset.r])%12]});g.querySelectorAll("button").forEach(b=>b.classList.toggle("p",st[+b.dataset.k]===b.dataset.r))});
   h.querySelectorAll(".mel").forEach(el=>{const m=+el.dataset.mi;el.querySelector(".mlcd span").textContent=MROSTER[m][S.mv[m]%MROSTER[m].length][0];el.querySelector("[data-mm]").classList.toggle("on",S.mmute[m]);const f=S.mvol[m]/100,kn2=el.querySelector("[data-mvol]");kn2.style.setProperty("--p",(f*270)+"deg");kn2.querySelector(".kap").style.transform="rotate("+(-135+f*270)+"deg)"})}
 function melMark(k){document.querySelectorAll("#melod .mgrid button.nu").forEach(b=>b.classList.remove("nu"));if(k>=0)document.querySelectorAll('#melod .mgrid button[data-k="'+k+'"]').forEach(b=>b.classList.add("nu"))}
-function latMark(ix){const c=$("#lcells");if(!c)return;[...c.children].forEach((e,i)=>e.classList.toggle("nu",i===ix))}
+function latMark(ix){const c=$("#lcells");if(!c)return;[...c.children].forEach((e,i)=>e.classList.toggle("nu",i===ix));document.querySelectorAll("#tl .lloop").forEach(r=>[...r.children].forEach((e,i)=>e.classList.toggle("nu",i===ix)))}
 function laddaS(s){S=s;steg=0;visa();krok("")}
 /* ---------- bygg sidan ---------- */
 function init(){
@@ -552,7 +565,9 @@ function lpBygger(l){const len=lenOf(l);if(!len){l.mix=l.raw=l.pk=null;return}
   const ab=ctx.createBuffer(1,len,ctx.sampleRate),d=ab.getChannelData(0);
   for(let i=0;i<len;i++)d[i]=m?raw[i]*m[i]:raw[i];
   l.mix=ab}
-function lpSpela(l,vid,off){if(!ctx||!l.mix)return;l.srcs.forEach(s=>{try{s.stop(vid)}catch(e){}});const s=ctx.createBufferSource();s.buffer=l.mix;s.loop=true;s.connect(lpGain(l));s.start(vid,off);l.srcs=[s]}
+function lpGate(l){if(!l.gate){l.gate=ctx.createGain();l.gate.connect(lpGain(l))}return l.gate}
+function lpBarGate(ix,t){LP.forEach(l=>{if(!l.gate)return;const row=S.lsong[l.i],v=(ix>=0&&row.includes("x"))?(row[ix]==="x"?1:0):1;if(l.gv!==v){l.gate.gain.cancelScheduledValues(t);l.gate.gain.setTargetAtTime(v,t,.006);l.gv=v}})}
+function lpSpela(l,vid,off){if(!ctx||!l.mix)return;l.srcs.forEach(s=>{try{s.stop(vid)}catch(e){}});const s=ctx.createBufferSource();s.buffer=l.mix;s.loop=true;s.connect(lpGate(l));s.start(vid,off);l.srcs=[s]}
 function lpNy(l){lpBygger(l);if(spelar&&l.mix){const nu=ctx.currentTime+.03,off=(((nu-l.t0)%l.dur)+l.dur)%l.dur;lpSpela(l,nu,off)}}
 function klarRec(l){const r=l.rec;l.rec=null;if(!ctx)return;const sr=ctx.sampleRate,ab=ctx.createBuffer(1,r.len,sr),d=ab.getChannelData(0);d.set(r.buf);
   const fi=Math.round(sr*.004);for(let i=0;i<fi;i++){d[i]*=i/fi;d[r.len-1-i]*=i/fi}   // mjuka kanter så att det inte knäpper
@@ -690,9 +705,10 @@ $("#monster").addEventListener("click",e=>{const b=e.target.closest("button");if
   if(kopLage){kopLage=false;$("#bKop").classList.remove("on");if(p!==S.cur){S.pat[p]=S.t.map(t=>t.s);S.mpat[p]=S.mel.slice();toast("Kopierade "+MONAM[S.cur]+" till "+MONAM[p])}visa();return}
   monsterVal(p)});
 $("#bKop").onclick=()=>{kopLage=!kopLage;$("#bKop").classList.toggle("on",kopLage);if(kopLage)toast("Tryck på mönstret du vill kopiera till")};
+$("#tl").addEventListener("click",e=>{const b=e.target.closest(".lloop button");if(!b)return;const l=+b.closest(".lloop").dataset.l,i=+b.dataset.i,a=S.lsong[l].split("");a[i]=a[i]==="x"?".":"x";S.lsong[l]=a.join("");visa()});
 $("#lcells").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const i=+b.dataset.i;S.song[i]=S.song[i]===S.cur?-1:S.cur;visa()});
 $("#bSlinga").onclick=()=>{S.loop=!S.loop;visa()};
-$("#bTomLat").onclick=()=>{S.song=Array(16).fill(-1);visa()};
+$("#bTomLat").onclick=()=>{S.song=Array(16).fill(-1);S.lsong=[0,1,2,3].map(()=>".".repeat(16));visa()};
 $("#vyT").onclick=()=>{S.songOn=false;visa()};$("#vyL").onclick=()=>{S.songOn=true;visa()};
 $("#melod").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
   if(b.dataset.k!=null){const m=+b.closest(".mgrid").dataset.mi,k=+b.dataset.k,r=b.dataset.r,a=S.mel[m].split(""),nu=a[k]===r?".":r;a[k]=nu;S.mel[m]=a.join("");if(nu!=="."){startaLjud();nota(m,+r,ctx.currentTime+.01,.3)}visa();return}
