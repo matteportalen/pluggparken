@@ -133,6 +133,27 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
 .recb.loop::after{background:#35c25a;box-shadow:0 0 12px rgba(53,194,90,.7)}
 .recb.ovr::after{background:#ff7a2e;box-shadow:0 0 14px rgba(255,122,46,.8)}
 @keyframes bl{to{opacity:.35}}
+.len{flex-wrap:nowrap}
+.len button{width:26px}
+.lc{flex-wrap:wrap}
+.lv{width:100%;height:68px;display:block;border-radius:8px;touch-action:none;cursor:crosshair;box-shadow:inset 0 2px 6px #000,0 0 0 2px #17181c}
+.lm[data-lmode=move] .lv{cursor:ew-resize}
+.ledit{display:none;flex-direction:column;gap:6px}
+.lm.har .ledit{display:flex}
+.lrow{display:flex;flex-wrap:wrap;align-items:center;gap:5px}
+.lrow button{padding:5px 8px;border-radius:7px;font-weight:800;font-size:.72rem;background:linear-gradient(180deg,#555862,#3a3c43);box-shadow:0 2px 0 rgba(0,0,0,.55);color:var(--ink)}
+.lrow button.on{background:linear-gradient(180deg,#ffc94d,#f2a707);color:#241a00}
+.lrow button:disabled{opacity:.4;cursor:default}
+.lrow button:active:not(:disabled){transform:translateY(2px);box-shadow:none}
+.lrow.zon span{font-size:.7rem;color:var(--dim);font-weight:800;letter-spacing:.06em}
+.lsh{font-size:.72rem;color:#ffc94d;font-weight:800;margin-left:auto}
+.lm.rec{box-shadow:0 0 0 2px #ff3b36,0 0 22px rgba(255,59,54,.55),inset 0 2px 8px rgba(0,0,0,.5)}
+.lm.vantar{box-shadow:0 0 0 2px #f2b707,0 0 16px rgba(242,183,7,.4),inset 0 2px 8px rgba(0,0,0,.5)}
+.lstat{display:none;margin:0 0 12px;padding:10px 14px;border-radius:10px;background:#0c0a06;color:var(--lcd);font-weight:800;letter-spacing:.1em;text-align:center;font-size:1.05rem;box-shadow:inset 0 2px 4px #000}
+.lstat.rec{display:block;color:#ff6b66;text-shadow:0 0 10px rgba(255,59,54,.7);animation:bl .6s infinite alternate}
+.lstat.vantar{display:block;color:#ffc94d}
+.loopmaskin.recakt{box-shadow:0 0 0 3px #ff3b36,0 0 40px rgba(255,59,54,.35)}
+
 .len{display:flex;border-radius:8px;overflow:hidden;box-shadow:0 0 0 2px #111}
 .len button{width:30px;height:30px;font-weight:800;font-size:.82rem;background:#3a3c43;color:var(--dim)}
 .len button.on{background:linear-gradient(180deg,#ffc94d,#f2a707);color:#241a00}
@@ -222,8 +243,9 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
 </div>
 <div class="maskin loopmaskin" id="loopmaskin">
   <div class="topp" style="margin-bottom:12px"><div class="logga"><b>LOOPSTATION <i>LS-4</i></b><small>PLUGGPARKEN · 4 SPÅR · MIKROFON</small></div><div style="flex:1"></div><button type="button" class="micb" id="bMic" aria-pressed="false">🎤 MIKROFON</button><span class="meter" aria-hidden="true"><i id="meterI"></i></span><div class="grupp" style="flex-direction:row;gap:8px"><div class="knob liten" id="kJust" role="slider" tabindex="0" aria-label="Justera inspelningens timing"><div class="kap"></div></div><span class="l" id="justT">Timing 0 ms</span></div></div>
+  <div class="lstat" id="lstatus" aria-live="polite"></div>
   <div class="lgrid" id="lgrid"></div>
-  <div class="krok" style="margin-top:14px">Använd hörlurar, annars hör mikrofonen trummorna. Tryck på den runda knappen för att spela in, och tryck igen för att lägga på mer ljud. Ljudet sparas inte.</div>
+  <div class="krok" style="margin-top:14px">Använd hörlurar, annars hör mikrofonen trummorna. Tryck på den runda knappen för att spela in, och tryck igen för att lägga på mer ljud. Dra över vågen för att markera en bit, och välj sedan Radera eller Spela bara. Med Flytta drar du hela vågen så den hamnar på rätt slag. ¼ och ½ ger riktigt korta loopar. Ljudet sparas inte.</div>
 </div>
 <details class="info">
   <summary>Om ljuden, källor och licens</summary>
@@ -382,7 +404,8 @@ function init(){
 
 /* ---------- loopstation: spela in eget ljud och loopa det i valt antal takter ---------- */
 const LC=["#4cc3ff","#7fe08a","#c58bff","#ff7bd0"];
-const LP=[0,1,2,3].map(i=>({i,st:"tom",n:2,layers:[],srcs:[],vol:80,mute:false,t0:0,dur:0,rec:null,gain:null}));
+const NLEN=[[.25,"¼"],[.5,"½"],[1,"1"],[2,"2"],[4,"4"],[8,"8"]];
+const LP=[0,1,2,3].map(i=>({i,st:"tom",n:2,layers:[],srcs:[],vol:80,mute:false,t0:0,dur:0,rec:null,gain:null,mix:null,raw:null,pk:null,cuts:[],zone:null,shift:0,sel:null,mode:"mark",undo:[],drag:null}));
 let mic=null,micSrc=null,proc=null,anMic=null,lastBar=0,LJUST=0;
 const barDur=()=>16*60/S.bpm/4;
 const harLoopar=()=>LP.some(l=>l.layers.length||l.rec);
@@ -402,11 +425,31 @@ function mikBlock(e){const inp=e.inputBuffer.getChannelData(0),n=inp.length,sr=c
   LP.forEach(l=>{const r=l.rec;if(!r)return;let from=0;
     if(!r.go){const skip=Math.round((r.t-cap)*sr);if(skip>=n)return;r.go=true;from=Math.max(0,skip)}
     const take=Math.min(n-from,r.len-r.w);r.buf.set(inp.subarray(from,from+take),r.w);r.w+=take;if(r.w>=r.len)klarRec(l)})}
-function startLager(l,ab,vid,off){const s=ctx.createBufferSource();s.buffer=ab;s.loop=true;s.connect(lpGain(l));s.start(vid,off);l.srcs.push(s);return s}
+const lenOf=l=>l.layers.length?l.layers[0].length:0;
+const stepsOf=l=>Math.max(1,Math.round(16*l.n));
+/* ljudet i en loop = alla lager ihop, förskjutet, med raderade delar och spelzon som tystnad (rådata ändras aldrig) */
+function lpBygger(l){const len=lenOf(l);if(!len){l.mix=l.raw=l.pk=null;return}
+  const sum=new Float32Array(len);l.layers.forEach(ab=>{const x=ab.getChannelData(0);for(let i=0;i<len;i++)sum[i]+=x[i]});
+  const sh=((l.shift%len)+len)%len,raw=new Float32Array(len);raw.set(sum.subarray(len-sh),0);raw.set(sum.subarray(0,len-sh),sh);l.raw=raw;
+  const cols=400,pk=new Float32Array(cols*2);
+  for(let c=0;c<cols;c++){const a=Math.floor(c*len/cols),b=Math.max(a+1,Math.floor((c+1)*len/cols)),st=Math.max(1,Math.floor((b-a)/40));let mn=0,mx=0;for(let i=a;i<b;i+=st){const v=raw[i];if(v<mn)mn=v;if(v>mx)mx=v}pk[c*2]=mn;pk[c*2+1]=mx}
+  l.pk=pk;
+  let m=null;
+  if(l.zone||l.cuts.length){m=new Float32Array(len).fill(1);
+    if(l.zone){m.fill(0,0,Math.round(l.zone[0]*len));m.fill(0,Math.round(l.zone[1]*len),len)}
+    l.cuts.forEach(c=>m.fill(0,Math.round(c[0]*len),Math.round(c[1]*len)));
+    const h=Math.round(ctx.sampleRate*.004),w=2*h+1,o=new Float32Array(len);let sm=0;for(let k=-h;k<=h;k++)sm+=m[(k+len)%len];
+    for(let i=0;i<len;i++){o[i]=sm/w;sm+=m[(i+h+1)%len]-m[(i-h+len)%len]}
+    m=o}
+  const ab=ctx.createBuffer(1,len,ctx.sampleRate),d=ab.getChannelData(0);
+  for(let i=0;i<len;i++)d[i]=m?raw[i]*m[i]:raw[i];
+  l.mix=ab}
+function lpSpela(l,vid,off){if(!ctx||!l.mix)return;l.srcs.forEach(s=>{try{s.stop(vid)}catch(e){}});const s=ctx.createBufferSource();s.buffer=l.mix;s.loop=true;s.connect(lpGain(l));s.start(vid,off);l.srcs=[s]}
+function lpNy(l){lpBygger(l);if(spelar&&l.mix){const nu=ctx.currentTime+.03,off=(((nu-l.t0)%l.dur)+l.dur)%l.dur;lpSpela(l,nu,off)}}
 function klarRec(l){const r=l.rec;l.rec=null;if(!ctx)return;const sr=ctx.sampleRate,ab=ctx.createBuffer(1,r.len,sr),d=ab.getChannelData(0);d.set(r.buf);
   const fi=Math.round(sr*.004);for(let i=0;i<fi;i++){d[i]*=i/fi;d[r.len-1-i]*=i/fi}   // mjuka kanter så att det inte knäpper
-  if(!r.over){l.t0=r.t;l.dur=r.len/sr}
-  l.layers.push(ab);const nu=ctx.currentTime+.02,off=(((nu-l.t0)%l.dur)+l.dur)%l.dur;startLager(l,ab,nu,off);l.st="loop";lpVisa()}
+  if(!r.over){l.t0=r.t;l.dur=r.len/sr;l.cuts=[];l.zone=null;l.shift=0;l.undo=[];l.sel=null}
+  l.layers.push(ab);l.st="loop";lpNy(l);lpVisa()}
 function nastaBar(){let b=lastBar||ctx.currentTime;const bd=barDur();while(b<ctx.currentTime+.08)b+=bd;return b}
 async function lpKlick(i){const l=LP[i];
   if(l.rec){l.rec=null;l.st=l.layers.length?"loop":"tom";lpVisa();return}
@@ -414,36 +457,105 @@ async function lpKlick(i){const l=LP[i];
   const sr=ctx.sampleRate;let t,over=false,len;
   if(l.layers.length){over=true;len=Math.round(l.dur*sr);const bd=l.dur,now=ctx.currentTime+.08;t=l.t0+Math.ceil((now-l.t0)/bd)*bd}
   else{len=Math.round(l.n*barDur()*sr);
-    if(!spelar){start(true);t=nasta0+barDur()}else t=nastaBar()}
+    if(!spelar){start(true);t=nasta0+barDur()}
+    else if(l.n<1){const u=l.n*barDur(),b0=lastBar||ctx.currentTime;t=b0+Math.ceil((ctx.currentTime+.08-b0)/u)*u}
+    else t=nastaBar()}
   l.rec={t,len,buf:new Float32Array(len),w:0,go:false,over};l.st="vantar";lpVisa()}
 function lpStoppa(){LP.forEach(l=>{l.srcs.forEach(s=>{try{s.stop()}catch(e){}});l.srcs=[];if(l.rec){l.rec=null;l.st=l.layers.length?"loop":"tom"}});lpVisa()}
-function lpStarta(t0){LP.forEach(l=>{if(!l.layers.length)return;l.t0=t0;l.layers.forEach(ab=>startLager(l,ab,t0,0))})}
-function lpAngra(i){const l=LP[i];if(!l.layers.length)return;l.layers.pop();const s=l.srcs.pop();if(s)try{s.stop()}catch(e){};if(!l.layers.length){l.st="tom"}lpVisa()}
-function lpRadera(i){const l=LP[i];l.rec=null;l.srcs.forEach(s=>{try{s.stop()}catch(e){}});l.srcs=[];l.layers=[];l.st="tom";lpVisa()}
+function lpStarta(t0){LP.forEach(l=>{if(!l.layers.length)return;l.t0=t0;if(!l.mix)lpBygger(l);lpSpela(l,t0,0)})}
+function lpSnap(l){l.undo.push(JSON.stringify({c:l.cuts,z:l.zone,s:l.shift}));if(l.undo.length>30)l.undo.shift()}
+function lpRed(l,fn){lpSnap(l);fn();l.sel=null;lpNy(l);lpVisa()}
+function lpAngra(i){const l=LP[i];
+  if(l.undo.length){const s=JSON.parse(l.undo.pop());l.cuts=s.c;l.zone=s.z;l.shift=s.s;l.sel=null;lpNy(l);lpVisa();return}
+  if(!l.layers.length)return;l.layers.pop();if(!l.layers.length){lpRadera(i);return}lpNy(l);lpVisa()}
+function lpRadera(i){const l=LP[i];l.rec=null;l.srcs.forEach(s=>{try{s.stop()}catch(e){}});l.srcs=[];l.layers=[];l.mix=l.raw=l.pk=null;l.cuts=[];l.zone=null;l.shift=0;l.sel=null;l.undo=[];l.st="tom";lpVisa()}
 const LTXT={tom:"TOM",vantar:"VÄNTAR",rec:"SPELAR IN",loop:"LOOP",ovr:"LÄGGER PÅ"};
+const ZON=[["0-1","Hela"],["0-0.5","½·1"],["0.5-1","½·2"],["0-0.25","¼·1"],["0.25-0.5","¼·2"],["0.5-0.75","¼·3"],["0.75-1","¼·4"]];
 function lpVisa(){LP.forEach(l=>{const m=document.querySelector(`.lm[data-i="${l.i}"]`);if(!m)return;
     let st=l.st;if(l.rec&&l.rec.go)st=l.rec.over?"ovr":"rec";else if(l.rec)st="vantar";
     m.querySelector(".ls").textContent=(st==="loop"&&!spelar)?"STOPP":LTXT[st];
     const b=m.querySelector(".recb");b.className="recb "+(st==="vantar"?"vantar":st==="rec"?"rec":st==="ovr"?"ovr":st==="loop"?"loop":"");
     b.setAttribute("aria-label",st==="tom"?"Spela in":st==="loop"?"Lägg på mer ljud":"Avbryt");
+    m.classList.toggle("rec",st==="rec"||st==="ovr");m.classList.toggle("vantar",st==="vantar");m.classList.toggle("har",l.layers.length>0);m.dataset.lmode=l.mode;
     m.querySelectorAll(".len button").forEach(x=>{x.classList.toggle("on",+x.dataset.n===l.n);x.disabled=l.layers.length>0||!!l.rec});
     m.querySelector("[data-lm]").classList.toggle("on",l.mute);
+    m.querySelectorAll("[data-mode]").forEach(x=>x.classList.toggle("on",x.dataset.mode===l.mode));
+    m.querySelectorAll("[data-act=cut],[data-act=only],[data-act=clr]").forEach(x=>x.disabled=!l.sel);
+    const z=l.zone||[0,1];m.querySelectorAll("[data-z]").forEach(x=>{const q=x.dataset.z.split("-").map(Number);x.classList.toggle("on",Math.abs(q[0]-z[0])<1e-6&&Math.abs(q[1]-z[1])<1e-6)});
+    const lenS=lenOf(l),ms=ctx&&lenS?Math.round(l.shift/ctx.sampleRate*1000):0;m.querySelector(".lsh").textContent=ms?("↔ "+(ms>0?"+":"")+ms+" ms"):"";
     const f=l.vol/100,kn2=m.querySelector("[data-lvol]");kn2.style.setProperty("--p",(f*270)+"deg");kn2.querySelector(".kap").style.transform="rotate("+(-135+f*270)+"deg)"});
   const las=harLoopar();["#bMin","#bPlus","#kTempo"].forEach(q=>$(q)&&$(q).closest(".grupp")&&$(q).closest(".grupp").classList.toggle("las",las))}
-function lpRita(){if(!ctx)return;LP.forEach(l=>{const m=document.querySelector(`.lm[data-i="${l.i}"]`);if(!m)return;let p=0;
-    if(l.rec&&l.rec.go)p=l.rec.w/l.rec.len;else if(l.layers.length&&spelar){const nu=ctx.currentTime;p=((((nu-l.t0)%l.dur)+l.dur)%l.dur)/l.dur}
-    m.querySelector(".lp i").style.width=(p*100)+"%";
-    const st=l.rec&&l.rec.go?(l.rec.over?"ovr":"rec"):l.rec?"vantar":l.st;const t=m.querySelector(".ls"),want=(st==="loop"&&!spelar)?"STOPP":LTXT[st];if(t.textContent!==want)lpVisa()});
+/* ---- vågformen ---- */
+function hatch(c,x,w,H,dpr){if(w<=0)return;c.save();c.beginPath();c.rect(x,0,w,H);c.clip();c.fillStyle="rgba(6,5,3,.78)";c.fillRect(x,0,w,H);c.strokeStyle="rgba(255,255,255,.12)";c.lineWidth=dpr;c.beginPath();for(let k=-H;k<w+H;k+=9*dpr){c.moveTo(x+k,H);c.lineTo(x+k+H,0)}c.stroke();c.restore()}
+function vagRita(c,pk,W,H,dx,col,alpha,sc){const cols=pk.length/2,mid=H/2,amp=H*.44;c.globalAlpha=alpha;c.fillStyle=col;
+  for(let x=0;x<W;x++){const xx=(((x-dx)%W)+W)%W,ci=Math.min(cols-1,Math.floor(xx/W*cols)),mn=pk[ci*2],mx=pk[ci*2+1];const y1=mid-mx*amp*sc,y2=mid-mn*amp*sc;c.fillRect(x,y1,1,Math.max(1,y2-y1))}c.globalAlpha=1}
+function lpTeckna(l,m){const cv=m.querySelector("canvas"),dpr=Math.min(2,window.devicePixelRatio||1),W=Math.round(cv.clientWidth*dpr),H=Math.round(cv.clientHeight*dpr);if(!W||!H)return;
+  if(cv.width!==W||cv.height!==H){cv.width=W;cv.height=H}
+  const c=cv.getContext("2d"),col=LC[l.i],now=ctx?ctx.currentTime:0,r=l.rec,steps=stepsOf(l);
+  c.clearRect(0,0,W,H);c.fillStyle="#0c0a06";c.fillRect(0,0,W,H);
+  const wait=r&&!r.go,go=r&&r.go;
+  for(let k=0;k<=steps;k++){if(steps>32&&k%4)continue;const x=Math.min(W-1,Math.round(k/steps*W)),bar=k%16===0,beat=k%4===0;c.fillStyle=bar?"rgba(255,255,255,.3)":beat?"rgba(255,255,255,.13)":"rgba(255,255,255,.05)";c.fillRect(x,0,bar?2:1,H)}
+  c.fillStyle="rgba(255,255,255,.1)";c.fillRect(0,H/2,W,1);
+  let sc=1;
+  if(l.pk){let mx=.05;for(let i=1;i<l.pk.length;i+=2){const a=Math.max(l.pk[i],-l.pk[i-1]);if(a>mx)mx=a}sc=Math.min(8,1/mx)}
+  const dx=(l.drag&&l.drag.t==="move")?l.drag.dx*W:0;
+  if(l.pk)vagRita(c,l.pk,W,H,dx,col,go?.35:.95,sc);
+  if(go){const len=r.len,cols=400,pl=new Float32Array(cols*2);let mx=.05;
+    for(let q=0;q<cols;q++){const a=Math.floor(q*len/cols);if(a>=r.w)break;const b=Math.min(r.w,Math.floor((q+1)*len/cols)),st=Math.max(1,Math.floor((b-a)/40));let mn=0,mxx=0;for(let i=a;i<b;i+=st){const v=r.buf[i];if(v<mn)mn=v;if(v>mxx)mxx=v}pl[q*2]=mn;pl[q*2+1]=mxx;const aa=Math.max(mxx,-mn);if(aa>mx)mx=aa}
+    c.save();c.beginPath();c.rect(0,0,Math.round(r.w/len*W),H);c.clip();vagRita(c,pl,W,H,0,r.over?"#ff9a4a":"#ff5a54",1,Math.min(8,1/mx));c.restore()}
+  if(l.layers.length&&!r){
+    if(l.zone){hatch(c,0,Math.round(l.zone[0]*W),H,dpr);hatch(c,Math.round(l.zone[1]*W),W-Math.round(l.zone[1]*W),H,dpr)}
+    l.cuts.forEach(q=>hatch(c,Math.round(q[0]*W),Math.round((q[1]-q[0])*W),H,dpr));
+    if(l.sel){const x1=Math.round(l.sel[0]*W),x2=Math.round(l.sel[1]*W);c.fillStyle="rgba(255,255,255,.17)";c.fillRect(x1,0,x2-x1,H);c.fillStyle="#fff";c.fillRect(x1,0,3*dpr,H);c.fillRect(x2-3*dpr,0,3*dpr,H);
+      c.fillRect(x1,H/2-9*dpr,7*dpr,18*dpr);c.fillRect(x2-7*dpr,H/2-9*dpr,7*dpr,18*dpr)}}
+  if(wait){const rem=r.t-now,beats=Math.ceil(rem/(60/S.bpm));c.fillStyle="rgba(242,183,7,.16)";c.fillRect(0,0,W,H);c.fillStyle="#ffc94d";c.textAlign="center";c.textBaseline="middle";
+    if(beats<=8&&beats>0){c.font="800 "+Math.round(H*.8)+"px system-ui,sans-serif";c.fillText(String(beats),W/2,H/2+H*.04)}else{c.font="800 "+Math.round(H*.26)+"px system-ui,sans-serif";c.fillText("Väntar på nästa varv",W/2,H/2)}}
+  else if(go){const pul=.55+.45*Math.sin(now*9);c.strokeStyle="rgba(255,59,54,"+pul+")";c.lineWidth=4*dpr;c.strokeRect(2*dpr,2*dpr,W-4*dpr,H-4*dpr);
+    const x=Math.round(r.w/r.len*W);c.fillStyle="#ff3b36";c.fillRect(x,0,2*dpr,H);
+    c.font="800 "+Math.round(H*.24)+"px system-ui,sans-serif";c.textAlign="left";c.textBaseline="top";c.fillStyle="rgba(255,90,84,"+(.6+.4*pul)+")";c.fillText("● REC",8*dpr,6*dpr)}
+  else if(!l.layers.length){c.fillStyle="rgba(255,255,255,.28)";c.textAlign="center";c.textBaseline="middle";c.font="700 "+Math.round(H*.2)+"px system-ui,sans-serif";c.fillText("Tryck på ● för att spela in",W/2,H/2)}
+  else if(spelar&&l.dur){const p=((((now-l.t0)%l.dur)+l.dur)%l.dur)/l.dur,x=Math.round(p*W);c.fillStyle="#fff";c.shadowColor="#fff";c.shadowBlur=8;c.fillRect(x,0,2*dpr,H);c.shadowBlur=0}}
+function lpRita(){
+  LP.forEach(l=>{const m=document.querySelector(`.lm[data-i="${l.i}"]`);if(!m)return;
+    const st=l.rec&&l.rec.go?(l.rec.over?"ovr":"rec"):l.rec?"vantar":l.st;const t=m.querySelector(".ls"),want=(st==="loop"&&!spelar)?"STOPP":LTXT[st];if(t.textContent!==want)lpVisa();
+    lpTeckna(l,m)});
+  const ban=$("#lstatus");let txt="",kl="";
+  if(ctx){const l=LP.find(x=>x.rec);
+    if(l){const r=l.rec;if(r.go){txt="● SPELAR IN · L"+(l.i+1)+" · "+Math.max(0,((r.len-r.w)/ctx.sampleRate)).toFixed(1)+" s kvar";kl="rec"}
+      else{const rem=r.t-ctx.currentTime,b=Math.ceil(rem/(60/S.bpm));txt=b<=8&&b>0?"GÖR DIG REDO · L"+(l.i+1)+" · spelar in om "+b:"L"+(l.i+1)+" spelar in vid nästa varv";kl="vantar"}}}
+  if(ban.textContent!==txt){ban.textContent=txt}
+  ban.className="lstat"+(kl?" "+kl:"");$("#loopmaskin").classList.toggle("recakt",kl==="rec");
   requestAnimationFrame(lpRita)}
+function lpPtr(l,e){if(!l.layers.length||l.rec)return;const cv=e.currentTarget,rc=()=>cv.getBoundingClientRect(),fx=ev=>Math.max(0,Math.min(1,(ev.clientX-rc().left)/rc().width)),st=stepsOf(l),sn=f=>Math.round(f*st)/st,x0=fx(e);
+  cv.setPointerCapture(e.pointerId);
+  if(l.mode==="move"){l.drag={t:"move",dx:0};
+    cv.onpointermove=ev=>{const d=fx(ev)-x0;l.drag.dx=ev.shiftKey?d:sn(d)};
+    cv.onpointerup=cv.onpointercancel=()=>{const len=lenOf(l),sh=Math.round(l.drag.dx*len);cv.onpointermove=cv.onpointerup=cv.onpointercancel=null;l.drag=null;if(sh)lpRed(l,()=>{l.shift+=sh})};return}
+  let a=sn(x0),b=a;
+  if(l.sel){const px=rc().width,d0=Math.abs(x0-l.sel[0])*px,d1=Math.abs(x0-l.sel[1])*px;if(Math.min(d0,d1)<16){const e0=d0<d1;a=e0?l.sel[1]:l.sel[0];b=sn(x0)}}
+  l.drag={t:"mark"};
+  const set=()=>{const lo=Math.min(a,b),hi=Math.max(a,b);l.sel=hi-lo>1e-9?[lo,hi]:null};set();
+  cv.onpointermove=ev=>{b=sn(fx(ev));set()};
+  cv.onpointerup=cv.onpointercancel=()=>{cv.onpointermove=cv.onpointerup=cv.onpointercancel=null;l.drag=null;lpVisa()}}
 function lpBygg(){const g=$("#lgrid");LP.forEach(l=>{const m=document.createElement("div");m.className="lm";m.dataset.i=l.i;m.style.setProperty("--sk",LC[l.i]);
-    m.innerHTML=`<div class="lt"><span class="led"></span><b>L${l.i+1}</b><span class="ls">TOM</span></div><div class="lc"><button type="button" class="recb" data-rec aria-label="Spela in"></button><div class="len" role="group" aria-label="Antal takter">${[1,2,4,8].map(n=>`<button type="button" data-n="${n}" aria-label="${n} takter">${n}</button>`).join("")}</div></div><div class="lp"><i></i></div><div class="lr"><div class="knob liten" data-lvol role="slider" tabindex="0" aria-label="Volym loop ${l.i+1}"><div class="kap"></div></div><button type="button" class="sm" data-lm aria-label="Tysta loop ${l.i+1}">M</button><button type="button" class="sm" data-lu aria-label="Ångra senaste lagret" title="Ångra senaste lagret">↶</button><button type="button" class="sm" data-lx aria-label="Radera loopen" title="Radera loopen">✕</button></div>`;
-    g.appendChild(m);knob(m.querySelector("[data-lvol]"),{min:0,max:100,reset:80,val:()=>l.vol,set:v=>{l.vol=v;if(l.gain)lpGain(l)}})});
+    m.innerHTML=`<div class="lt"><span class="led"></span><b>L${l.i+1}</b><span class="ls">TOM</span></div><div class="lc"><button type="button" class="recb" data-rec aria-label="Spela in"></button><div class="len" role="group" aria-label="Längd i takter">${NLEN.map(q=>`<button type="button" data-n="${q[0]}" aria-label="${q[1]} takt">${q[1]}</button>`).join("")}</div></div><canvas class="lv" role="img" aria-label="Ljudvåg"></canvas><div class="ledit"><div class="lrow"><button type="button" data-mode="mark" class="on">Markera</button><button type="button" data-mode="move">Flytta</button><button type="button" data-sh="-1" aria-label="Flytta ett steg bakåt" title="Flytta ett steg bakåt (Shift = 10 ms)">◀</button><button type="button" data-sh="1" aria-label="Flytta ett steg framåt" title="Flytta ett steg framåt (Shift = 10 ms)">▶</button><span class="lsh"></span></div><div class="lrow"><button type="button" data-act="cut" disabled>Radera</button><button type="button" data-act="only" disabled>Spela bara</button><button type="button" data-act="clr" disabled>Avmarkera</button></div><div class="lrow zon"><span>Spela:</span>${ZON.map(q=>`<button type="button" data-z="${q[0]}">${q[1]}</button>`).join("")}<button type="button" data-act="reset" title="Ta bort alla ändringar">↺</button></div></div><div class="lr"><div class="knob liten" data-lvol role="slider" tabindex="0" aria-label="Volym loop ${l.i+1}"><div class="kap"></div></div><button type="button" class="sm" data-lm aria-label="Tysta loop ${l.i+1}">M</button><button type="button" class="sm" data-lu aria-label="Ångra senaste ändringen" title="Ångra senaste ändringen">↶</button><button type="button" class="sm" data-lx aria-label="Radera loopen" title="Radera loopen">✕</button></div>`;
+    g.appendChild(m);m.querySelector("canvas").addEventListener("pointerdown",e=>lpPtr(l,e));
+    knob(m.querySelector("[data-lvol]"),{min:0,max:100,reset:80,val:()=>l.vol,set:v=>{l.vol=v;if(l.gain)lpGain(l)}})});
   g.addEventListener("click",e=>{const m=e.target.closest(".lm");if(!m)return;const i=+m.dataset.i,l=LP[i];
     if(e.target.closest("[data-rec]")){lpKlick(i);return}
     const nb=e.target.closest(".len button");if(nb&&!nb.disabled){l.n=+nb.dataset.n;lpVisa();return}
     if(e.target.closest("[data-lm]")){l.mute=!l.mute;if(l.gain)lpGain(l);lpVisa();return}
     if(e.target.closest("[data-lu]")){lpAngra(i);return}
-    if(e.target.closest("[data-lx]")){lpRadera(i);return}});
+    if(e.target.closest("[data-lx]")){lpRadera(i);return}
+    const mb=e.target.closest("[data-mode]");if(mb){l.mode=mb.dataset.mode;lpVisa();return}
+    if(!l.layers.length||l.rec)return;
+    const sb=e.target.closest("[data-sh]");if(sb){const dir=+sb.dataset.sh,stp=e.shiftKey?Math.round(ctx.sampleRate*.01):Math.round(lenOf(l)/stepsOf(l));lpRed(l,()=>{l.shift+=dir*stp});return}
+    const zb=e.target.closest("[data-z]");if(zb){const q=zb.dataset.z.split("-").map(Number);lpRed(l,()=>{l.zone=(q[0]===0&&q[1]===1)?null:[q[0],q[1]]});return}
+    const ab=e.target.closest("[data-act]");if(!ab||ab.disabled)return;const act=ab.dataset.act;
+    if(act==="cut"&&l.sel){const sel=l.sel;lpRed(l,()=>{l.cuts.push(sel)})}
+    else if(act==="only"&&l.sel){const sel=l.sel;lpRed(l,()=>{l.zone=sel})}
+    else if(act==="clr"){l.sel=null;lpVisa()}
+    else if(act==="reset"){lpRed(l,()=>{l.cuts=[];l.zone=null;l.shift=0})}});
   $("#bMic").onclick=()=>{mic?micStopp():micStart()};
   knob($("#kJust"),{min:-100,max:100,reset:0,val:()=>LJUST,set:v=>{LJUST=v;$("#justT").textContent="Timing "+(v>0?"+":"")+v+" ms"}});
   lpVisa();requestAnimationFrame(lpRita)}
