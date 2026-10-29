@@ -678,6 +678,24 @@ $('dl').onclick=function(){
   },30);
 };
 
+
+/* ---------- testark: öppna sidan med ?test, skriv ut, vik och fota, så syns exakt var varje ruta och triangel hamnar ---------- */
+function testBild(kind){var c=document.createElement('canvas');c.width=c.height=600;var g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,600,600);g.textAlign='center';g.textBaseline='middle';
+  if(kind==='ext'){[[0,0,'1','ÖVRE VÄNSTER'],[300,0,'2','ÖVRE HÖGER'],[0,300,'3','NEDRE VÄNSTER'],[300,300,'4','NEDRE HÖGER']].forEach(function(q,i){
+      g.fillStyle=['#e4e4e4','#c4c4c4','#a4a4a4','#848484'][i];g.fillRect(q[0],q[1],300,300);g.fillStyle='#000';g.font='bold 150px sans-serif';g.fillText(q[2],q[0]+150,q[1]+135);
+      g.font='bold 30px sans-serif';g.fillText(q[3],q[0]+150,q[1]+240);g.font='bold 64px sans-serif';g.fillText('↑',q[0]+52,q[1]+52)});
+    g.strokeStyle='#000';g.lineWidth=6;g.strokeRect(3,3,594,594);g.beginPath();g.moveTo(300,0);g.lineTo(300,600);g.moveTo(0,300);g.lineTo(600,300);g.stroke();
+    g.beginPath();g.arc(300,300,30,0,7);g.fillStyle='#000';g.fill();g.fillStyle='#fff';g.font='bold 20px sans-serif';g.fillText('MUN',300,301);}
+  else{INT.forEach(function(t,i){var P=t[2].map(function(p){return[(p[0]+100)*3,(100-p[1])*3]});g.fillStyle=i%2?'#ececec':'#c9c9c9';g.beginPath();P.forEach(function(p,j){j?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])});g.closePath();g.fill();g.strokeStyle='#000';g.lineWidth=4;g.stroke();
+      var cx=(P[0][0]+P[1][0]+P[2][0])/3,cy=(P[0][1]+P[1][1]+P[2][1])/3;g.fillStyle='#000';g.font='bold 72px sans-serif';g.fillText('ABCDEFGH'[i],cx,cy);
+      var dx=300-cx,dy=300-cy,l=Math.hypot(dx,dy);g.save();g.translate(cx+dx/l*58,cy+dy/l*58);g.rotate(Math.atan2(dy,dx));g.beginPath();g.moveTo(18,0);g.lineTo(-11,-12);g.lineTo(-11,12);g.closePath();g.fill();g.restore()});
+    g.beginPath();g.arc(300,300,14,0,7);g.fillStyle='#000';g.fill();}
+  return c}
+if(/[?&]test\b/.test(location.search)){
+  layers={ext:{img:testBild('ext'),sample:false,x:0,y:0,zoom:1,rot:0,flip:false,kind:'ext'},int:{img:testBild('int'),sample:false,x:0,y:0,zoom:1,rot:0,flip:false,kind:'int'}};
+  insMode='own';if($('insMode'))$('insMode').value='own';if(typeof mouth!=='undefined')mouth.on=false;fish=0;cur='ext';setTimeout(openEditor,0);
+}
+
 syncCtl();update();
 window.MPLopp={hem:hem,get layers(){return layers},get mouth(){return mouth},fitLayer:fitLayer,gorSida:gorSida,composeUt:composeUt,compose:compose,startPunkt:startPunkt,get pk(){return pk},toCanvas:toCanvas,sample:sample,renderInto:renderInto,EXT:EXT,INT:INT,ed:ed};
 })();
