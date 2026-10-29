@@ -108,6 +108,30 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
 .steg button:nth-child(n+5):nth-child(-n+8){--k:var(--o)}
 .steg button:nth-child(n+9):nth-child(-n+12){--k:var(--y)}
 .steg button:nth-child(n+13){--k:var(--c)}
+[hidden]{display:none!important}
+.vyrad{display:flex;align-items:center;justify-content:space-between;gap:12px 20px;flex-wrap:wrap;margin:6px 0 14px}
+.kit.vy button{padding:10px 18px;font-size:.84rem;letter-spacing:.1em}
+.monsterg{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.monsterg>.l{font-size:.7rem;font-weight:800;letter-spacing:.14em;color:var(--dim)}
+.monster{display:flex;gap:7px}
+.monster button{position:relative;width:52px;padding:5px 4px 4px;border-radius:9px;background:linear-gradient(180deg,#4b4e58,#383a42);box-shadow:0 3px 0 #111214,0 0 0 2px #16171a;color:var(--ink);display:flex;flex-direction:column;align-items:center;gap:3px}
+.monster button b{font-size:.92rem;line-height:1}
+.monster button .mini{width:100%;height:auto;aspect-ratio:2/1;background:#0c0a06;border-radius:3px;display:block}
+.monster button .mini rect{fill:var(--k)}
+.monster button.on{background:linear-gradient(180deg,var(--k),color-mix(in srgb,var(--k) 65%,#000));color:#fff;box-shadow:0 3px 0 #111214,0 0 0 2px #16171a,0 0 16px color-mix(in srgb,var(--k) 70%,transparent)}
+.monster button.on .mini rect{fill:#fff}
+.lilla.on{background:linear-gradient(180deg,#ffc94d,#f2a707);color:#241a00}
+.lat{display:flex;flex-direction:column;gap:14px;padding:18px 16px;border-radius:12px;background:#17181c;box-shadow:inset 0 2px 8px rgba(0,0,0,.55);margin-bottom:6px}
+.lcells{display:grid;grid-template-columns:repeat(16,1fr);gap:6px}
+.lcells button{position:relative;aspect-ratio:1/1.15;border-radius:8px;background:#2a2c33;box-shadow:inset 0 2px 5px rgba(0,0,0,.65),0 0 0 2px #111;font-weight:800;color:#fff;font-size:1.05rem}
+.lcells button::before{content:attr(data-n);position:absolute;left:4px;top:2px;font-size:.55rem;color:#7d8088;font-weight:700}
+.lcells button.p{background:linear-gradient(180deg,var(--k),color-mix(in srgb,var(--k) 62%,#000));box-shadow:0 3px 0 #111214,0 0 0 2px #16171a,0 0 12px color-mix(in srgb,var(--k) 55%,transparent)}
+.lcells button.p::before{color:rgba(255,255,255,.65)}
+.lcells button.bort{opacity:.35}
+.lcells button.nu{outline:3px solid #fff;outline-offset:2px}
+.latrad{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.latinfo{margin-left:auto;font-size:.8rem;font-weight:800;letter-spacing:.08em;color:var(--lcd)}
+@media(max-width:700px){.lcells{grid-template-columns:repeat(8,1fr)}.monster button{width:46px}}
 .loopmaskin{margin-top:22px}
 .loopmaskin::after{background:linear-gradient(90deg,#4cc3ff 0 25%,#7fe08a 25% 50%,#c58bff 50% 75%,#ff7bd0 75%)}
 .loopmaskin .logga b i{color:#4cc3ff}
@@ -226,6 +250,8 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
     <div class="grupp"><div class="kit" role="group" aria-label="Ljudsamling"><button type="button" id="kitA" class="on">SYNT</button><button type="button" id="kitB">GAMLA</button></div><span class="l">Ljud</span></div>
     <div class="grupp"><select class="sel" id="selMall" aria-label="Färdig rytm"></select><span class="l">Färdig rytm</span></div>
   </div>
+  <div class="vyrad"><div class="kit vy" role="tablist" aria-label="Vy"><button type="button" id="vyT" role="tab" class="on" aria-selected="true">▦ TRUMMASKIN</button><button type="button" id="vyL" role="tab" aria-selected="false">♫ LÅT</button></div><div class="monsterg"><span class="l">MÖNSTER</span><div class="monster" id="monster"></div><button type="button" class="lilla" id="bKop" title="Kopiera det här mönstret till ett annat">⧉ KOPIERA</button></div></div>
+  <div class="lat" id="lat" hidden><div class="lcells" id="lcells"></div><div class="latrad"><button class="lilla on" id="bSlinga" type="button" aria-pressed="true">🔁 SLINGA</button><button class="lilla" id="bTomLat" type="button">TÖM LÅT</button><span class="latinfo" id="latInfo"></span></div><div class="krok" style="margin-top:0">Välj ett mönster (A–D) uppe till höger och tryck på en ruta för att lägga det i låten. Tryck på samma ruta igen för att ta bort det. Byt till ▦ TRUMMASKIN för att ändra mönstren, och tillbaka hit för att spela låten. START spelar låten.</div></div>
   <div class="spar" id="spar">
     <div class="ledrad"><div class="fyll"></div><div class="leds" id="leds"></div></div>
   </div>
@@ -323,17 +349,26 @@ const MALLAR=[
  ["Skaka (latin)",100,8,["x..x..x...x.x...","","","xxxxxxxxxxxxxxxx","","..x..x..x..x..x.","x.x.x..x.x.x..x.",""]],
  ["Disco",118,0,["x...x...x...x...","","....x.......x...","","x.x.x.x.x.x.x.x.","","...x.x...x.x....","..............x."]]
 ];
-function tomt(){return{bpm:90,swing:0,master:80,kit:0,namn:"Tomt",t:SPAR.map((s,i)=>({s:".".repeat(16),v:0,vol:i<2?100:75,mute:false}))}}
+function tomt(){return{bpm:90,swing:0,master:80,kit:0,namn:"Tomt",t:SPAR.map((s,i)=>({s:".".repeat(16),v:0,vol:i<2?100:75,mute:false})),pat:[0,1,2,3].map(()=>SPAR.map(()=>".".repeat(16))),cur:0,song:Array(16).fill(-1),loop:true,songOn:false}}
 let S=tomt(),spelar=false,steg=0,nasta=0,tid=0,timer=0,kö=[];
-function mall(i){const m=MALLAR[i];S=tomt();S.bpm=m[1];S.swing=m[2];S.namn=m[0];m[3].forEach((p,k)=>{S.t[k].s=(p||"").padEnd(16,".").slice(0,16)});if(S.kit)kitSatt(S.kit)}
+function mall(i){const m=MALLAR[i],old=S;S=tomt();behall(old);S.bpm=m[1];S.swing=m[2];S.namn=m[0];m[3].forEach((p,k)=>{S.t[k].s=(p||"").padEnd(16,".").slice(0,16)});if(S.kit)kitSatt(S.kit)}
 function kitSatt(k){S.kit=k;S.t.forEach((t,i)=>{const sy=SPAR[i].syn.length;t.v=k&&SAMP?sy:0});$("#kitA").classList.toggle("on",!k);$("#kitB").classList.toggle("on",!!k)}
 /* ---------- delning och sparande ---------- */
 const HEX=s=>("0000"+parseInt(s.replace(/x/g,"1").replace(/\./g,"0"),2).toString(16)).slice(-4);
 const BIN=h=>parseInt(h,16).toString(2).padStart(16,"0").replace(/1/g,"x").replace(/0/g,".");
-function kod(){return [S.bpm,S.swing,S.master,S.kit].join(".")+"_"+S.t.map(t=>[HEX(t.s),t.v,t.vol,t.mute?1:0].join(".")).join("_")}
-function avkod(k){try{const p=k.split("_"),h=p[0].split(".").map(Number);if(p.length!==9||h.some(isNaN))return null;
+function kodBas(){return [S.bpm,S.swing,S.master,S.kit].join(".")+"_"+S.t.map(t=>[HEX(t.s),t.v,t.vol,t.mute?1:0].join(".")).join("_")}
+function avkod(k){try{const pp=k.split("~"),p=pp[0].split("_"),h=p[0].split(".").map(Number);if(p.length!==9||h.some(isNaN))return null;
   const o=tomt();o.bpm=Math.max(50,Math.min(200,h[0]));o.swing=Math.max(0,Math.min(60,h[1]));o.master=Math.max(0,Math.min(100,h[2]));o.kit=h[3]?1:0;o.namn="Egen rytm";
-  for(let i=0;i<8;i++){const q=p[i+1].split(".");if(!/^[0-9a-f]{4}$/i.test(q[0]))return null;o.t[i]={s:BIN(q[0]),v:Math.max(0,Math.min(40,+q[1]||0)),vol:Math.max(0,Math.min(100,+q[2]||0)),mute:q[3]==="1"}}return o}catch(e){return null}}
+  for(let i=0;i<8;i++){const q=p[i+1].split(".");if(!/^[0-9a-f]{4}$/i.test(q[0]))return null;o.t[i]={s:BIN(q[0]),v:Math.max(0,Math.min(40,+q[1]||0)),vol:Math.max(0,Math.min(100,+q[2]||0)),mute:q[3]==="1"}}avlat(o,pp);return o}catch(e){return null}}
+const MONAM=["A","B","C","D"],MONK=["var(--r)","var(--o)","var(--y)","#4cc3ff"];
+const harLat=()=>S.song.some(x=>x>=0)||S.pat.some((d,p)=>p!==S.cur&&d.some(s=>s.includes("x")));
+function kod(){const b=kodBas();if(!harLat())return b;
+  const pats=[0,1,2,3].map(p=>p===S.cur?"":(S.pat[p].every(s=>!s.includes("x"))?"-":S.pat[p].map(HEX).join("."))),sg=S.song.map(x=>x<0?".":MONAM[x]).join("").replace(/\.+$/,"");
+  return b+"~"+S.cur+"~"+pats.join(",")+"~"+sg+"~"+(S.loop?1:0)+(S.songOn?1:0)}
+function avlat(o,pp){if(pp.length<5)return;const cur=+pp[1];if(cur>=0&&cur<4)o.cur=cur;const pl=pp[2].split(",");
+  for(let p=0;p<4;p++){if(p===o.cur)continue;const q=pl[p];if(!q||q==="-")continue;const h=q.split(".");if(h.length===8&&h.every(x=>/^[0-9a-f]{4}$/i.test(x)))o.pat[p]=h.map(BIN)}
+  const sg=pp[3]||"";for(let i=0;i<16;i++){const x=MONAM.indexOf(sg[i]);o.song[i]=x>=0?x:-1}
+  o.loop=(pp[4]||"1")[0]!=="0";o.songOn=(pp[4]||"")[1]==="1";if(o.song.some(x=>x>=0))o.namn="Egen låt"}
 const NYCKEL="pluggparken-trummaskin";
 function minnenLasa(){try{return JSON.parse(localStorage.getItem(NYCKEL)||"[]")}catch(e){return[]}}
 function minnenSkriv(a){try{localStorage.setItem(NYCKEL,JSON.stringify(a))}catch(e){}}
@@ -371,22 +406,43 @@ function visa(){document.querySelectorAll(".rad").forEach(r=>{const i=+r.dataset
     const kn=r.querySelector("[data-vol]");kn.dispatchEvent(new Event("uppd"));});
   document.querySelectorAll("[data-vol]").forEach((k,i)=>{const f=S.t[i].vol/100;k.style.setProperty("--p",(f*270)+"deg");k.querySelector(".kap").style.transform="rotate("+(-135+f*270)+"deg)"});
   sev($("#sevBpm"),S.bpm);$("#namnLcd").textContent=S.namn;$("#kitA").classList.toggle("on",!S.kit);$("#kitB").classList.toggle("on",!!S.kit);
-  $("#selMall").value=MALLAR.findIndex(m=>m[0]===S.namn);kn.tempo&&kn.tempo();kn.swing&&kn.swing();kn.master&&kn.master()}
+  $("#selMall").value=MALLAR.findIndex(m=>m[0]===S.namn);kn.tempo&&kn.tempo();kn.swing&&kn.swing();kn.master&&kn.master();latRita()}
 const kn={};
 function krok(t){$("#krok").innerHTML=t}
 function toast(t){const e=document.createElement("div");e.className="toast";e.textContent=t;document.body.appendChild(e);setTimeout(()=>e.remove(),2200)}
 function minnenRita(){const a=minnenLasa(),h=$("#minnen");h.innerHTML="";a.forEach((m,i)=>{const b=document.createElement("button");b.type="button";b.className="lilla";b.textContent=m.n;b.title="Tryck för att ladda. Dubbeltryck tar bort.";b.dataset.i=i;h.appendChild(b)})}
 /* ---------- spelare ---------- */
 function stegTid(k){const sek=60/S.bpm/4,sw=(S.swing/100)*sek*.66;return sek+(k%2===0?sw:-sw)}
-function tick(){if(!ctx)return;while(nasta<ctx.currentTime+.12){const k=steg%16;if(k===0)lastBar=nasta;hist.push([nasta,k]);if(hist.length>40)hist.shift();
-    S.t.forEach((t,i)=>{if(t.s[k]==="x")spela(i,nasta)});kö.push([nasta,k]);steg++;nasta+=stegTid(k)}}
+let barPd,barIx=-1;
+function tick(){if(!ctx)return;while(nasta<ctx.currentTime+.12){const k=steg%16;
+    if(k===0){lastBar=nasta;const len=songLen();
+      if(S.songOn&&len>0){const bi=Math.floor(steg/16);if(!S.loop&&bi>=len){clearInterval(timer);setTimeout(stopp,Math.max(0,(nasta-ctx.currentTime)*1000));return}barIx=bi%len;const p=S.song[barIx];barPd=p>=0?monsterData(p):null}
+      else{barIx=-1;barPd=undefined}}
+    hist.push([nasta,k]);if(hist.length>40)hist.shift();
+    const pd=barPd===undefined?S.t.map(t=>t.s):barPd;
+    if(pd)S.t.forEach((t,i)=>{if(pd[i][k]==="x")spela(i,nasta)});kö.push([nasta,k,barIx]);steg++;nasta+=stegTid(k)}}
 function ritaLed(){if(!spelar){return}const nu=ctx.currentTime;let akt=null;while(kö.length&&kö[0][0]<=nu){akt=kö.shift()}
-  if(akt){const k=akt[1];document.querySelectorAll("#leds i").forEach((e,j)=>e.classList.toggle("nu",j===k));document.querySelectorAll(".steg button.nu").forEach(b=>b.classList.remove("nu"));document.querySelectorAll(".rad").forEach(r=>{r.querySelectorAll(".steg button")[k].classList.add("nu")})}
+  if(akt){const k=akt[1];latMark(akt[2]);document.querySelectorAll("#leds i").forEach((e,j)=>e.classList.toggle("nu",j===k));document.querySelectorAll(".steg button.nu").forEach(b=>b.classList.remove("nu"));document.querySelectorAll(".rad").forEach(r=>{r.querySelectorAll(".steg button")[k].classList.add("nu")})}
   requestAnimationFrame(ritaLed)}
 let nasta0=0;
 function start(rakna){startaLjud();if(!ctx||spelar)return;spelar=true;steg=0;nasta=ctx.currentTime+.06;nasta0=nasta;kö=[];lpStarta(nasta);if(rakna){const bt=60/S.bpm;for(let q=0;q<4;q++)klick(nasta+q*bt,q===0)}tick();timer=setInterval(tick,25);requestAnimationFrame(ritaLed);$("#bStart").classList.add("p")}
-function stopp(){if(!spelar){return}spelar=false;lpStoppa();if(recLive){recLive=false;$("#bRec").classList.remove("p");$("#bRec").setAttribute("aria-pressed","false")}hist=[];clearInterval(timer);kö=[];document.querySelectorAll("#leds i").forEach(e=>e.classList.remove("nu"));document.querySelectorAll(".steg button.nu").forEach(b=>b.classList.remove("nu"));$("#bStart").classList.remove("p")}
+function stopp(){if(!spelar){return}spelar=false;lpStoppa();if(recLive){recLive=false;$("#bRec").classList.remove("p");$("#bRec").setAttribute("aria-pressed","false")}hist=[];clearInterval(timer);kö=[];latMark(-1);document.querySelectorAll("#leds i").forEach(e=>e.classList.remove("nu"));document.querySelectorAll(".steg button.nu").forEach(b=>b.classList.remove("nu"));$("#bStart").classList.remove("p")}
 function slag(i){startaLjud();if(!ctx)return;if(!(recLive&&suddLage))spela(i,ctx.currentTime+.005,1);if(recLive)lagg(i);const p=document.querySelector(`.pad[data-i="${i}"]`);if(p){p.classList.add("slag");setTimeout(()=>p.classList.remove("slag"),110)}}
+const songLen=()=>{let n=0;S.song.forEach((x,i)=>{if(x>=0)n=i+1});return n};
+const monsterData=p=>p===S.cur?S.t.map(t=>t.s):S.pat[p];
+function behall(o){if(!o||!o.pat)return;S.pat=o.pat;S.cur=o.cur;S.song=o.song;S.loop=o.loop;S.songOn=o.songOn}
+function monsterVal(n){if(n===S.cur)return;S.pat[S.cur]=S.t.map(t=>t.s);S.cur=n;S.t.forEach((t,i)=>t.s=S.pat[n][i]);visa()}
+let kopLage=false;
+function latBygg(){const m=$("#monster");MONAM.forEach((n,p)=>{const b=document.createElement("button");b.type="button";b.dataset.p=p;b.style.setProperty("--k",MONK[p]);b.setAttribute("aria-label","Mönster "+n);b.innerHTML="<b>"+n+"</b><svg viewBox='0 0 32 16' class='mini' aria-hidden='true'></svg>";m.appendChild(b)});
+  const c=$("#lcells");for(let i=0;i<16;i++){const b=document.createElement("button");b.type="button";b.dataset.i=i;b.dataset.n=i+1;b.setAttribute("aria-label","Takt "+(i+1));c.appendChild(b)}}
+function latRita(){const m=$("#monster");if(!m||!m.children.length)return;
+  $("#spar").hidden=!!S.songOn;$("#lat").hidden=!S.songOn;
+  [["#vyT",!S.songOn],["#vyL",!!S.songOn]].forEach(([q,on])=>{$(q).classList.toggle("on",on);$(q).setAttribute("aria-selected",on)});
+  [...m.children].forEach((b,p)=>{b.classList.toggle("on",p===S.cur);const d=monsterData(p);let h="";d.forEach((s,i)=>{for(let k=0;k<16;k++)if(s[k]==="x")h+='<rect x="'+k*2+'" y="'+i*2+'" width="1.6" height="1.6"/>'});b.querySelector("svg").innerHTML=h});
+  const len=songLen();[...$("#lcells").children].forEach((c,i)=>{const p=S.song[i];c.textContent=p>=0?MONAM[p]:"";c.classList.toggle("p",p>=0);if(p>=0)c.style.setProperty("--k",MONK[p]);else c.style.removeProperty("--k");c.classList.toggle("bort",len>0&&i>=len)});
+  $("#latInfo").textContent=len?len+" takter · "+Math.round(len*barDur())+" s":"Tom låt: spelar mönster "+MONAM[S.cur];
+  $("#bSlinga").setAttribute("aria-pressed",S.loop);$("#bSlinga").classList.toggle("on",S.loop)}
+function latMark(ix){const c=$("#lcells");if(!c)return;[...c.children].forEach((e,i)=>e.classList.toggle("nu",i===ix))}
 function laddaS(s){S=s;steg=0;visa();krok("")}
 /* ---------- bygg sidan ---------- */
 function init(){
@@ -399,7 +455,7 @@ function init(){
   kn.tempo=knob($("#kTempo"),{min:50,max:200,reset:90,val:()=>S.bpm,set:v=>{if(las())return;S.bpm=v;sev($("#sevBpm"),v)}});
   kn.swing=knob($("#kSwing"),{min:0,max:60,reset:0,val:()=>S.swing,set:v=>{S.swing=v}});
   kn.master=knob($("#kMaster"),{min:0,max:100,reset:80,val:()=>S.master,set:v=>{S.master=v;setMaster()}});
-  visa();minnenRita();lpBygg();
+  latBygg();visa();minnenRita();lpBygg();
 }
 
 /* ---------- loopstation: spela in eget ljud och loopa det i valt antal takter ---------- */
@@ -578,15 +634,23 @@ document.addEventListener("click",e=>{
   const mn=e.target.closest("#minnen button");if(mn){const a=minnenLasa(),m=a[+mn.dataset.i];if(m){const s=avkod(m.k);if(s){s.namn=m.n;laddaS(s);toast("Laddade "+m.n)}}return}
 });
 document.addEventListener("dblclick",e=>{const mn=e.target.closest("#minnen button");if(mn){const a=minnenLasa();a.splice(+mn.dataset.i,1);minnenSkriv(a);minnenRita();toast("Borttagen")}});
+$("#monster").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const p=+b.dataset.p;
+  if(kopLage){kopLage=false;$("#bKop").classList.remove("on");if(p!==S.cur){S.pat[p]=S.t.map(t=>t.s);toast("Kopierade "+MONAM[S.cur]+" till "+MONAM[p])}visa();return}
+  monsterVal(p)});
+$("#bKop").onclick=()=>{kopLage=!kopLage;$("#bKop").classList.toggle("on",kopLage);if(kopLage)toast("Tryck på mönstret du vill kopiera till")};
+$("#lcells").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const i=+b.dataset.i;S.song[i]=S.song[i]===S.cur?-1:S.cur;visa()});
+$("#bSlinga").onclick=()=>{S.loop=!S.loop;visa()};
+$("#bTomLat").onclick=()=>{S.song=Array(16).fill(-1);visa()};
+$("#vyT").onclick=()=>{S.songOn=false;visa()};$("#vyL").onclick=()=>{S.songOn=true;visa()};
 $("#bStart").onclick=()=>{spelar?stopp():start()};
 $("#bStopp").onclick=stopp;
 $("#bMin").onclick=()=>{if(las())return;S.bpm=Math.max(50,S.bpm-2);visa()};$("#bPlus").onclick=()=>{if(las())return;S.bpm=Math.min(200,S.bpm+2);visa()};
 $("#kitA").onclick=()=>{startaLjud();kitSatt(0);visa()};$("#kitB").onclick=()=>{startaLjud();if(!SAMP)krok("Laddar de gamla ljuden …");kitSatt(1);visa();if(!SAMP)setTimeout(()=>{kitSatt(1);visa();krok("Gamla inspelningar från Library of Congress. Tryck ◀ ▶ vid ett spår för att byta klipp.")},900)};
 $("#selMall").onchange=e=>{const i=+e.target.value;const k=S.kit,bp=S.bpm,lk=harLoopar();mall(i);if(lk)S.bpm=bp;if(k)kitSatt(1);visa()};
-$("#bSlump").onclick=()=>{const k=S.kit,bp0=S.bpm;S=tomt();S.kit=k;S.bpm=bp0;S.namn="Slumpad rytm";S.bpm=harLoopar()?S.bpm:80+Math.round(Math.random()*60);S.swing=Math.random()<.4?Math.round(Math.random()*25):0;
+$("#bSlump").onclick=()=>{const k=S.kit,bp0=S.bpm,old=S;S=tomt();behall(old);S.kit=k;S.bpm=bp0;S.namn="Slumpad rytm";S.bpm=harLoopar()?S.bpm:80+Math.round(Math.random()*60);S.swing=Math.random()<.4?Math.round(Math.random()*25):0;
   const dens=[.3,.2,.12,.55,.12,.1,.2,.06];S.t.forEach((t,i)=>{let a="";for(let k=0;k<16;k++){let p=dens[i];if(i===0&&k%4===0)p=.7;if(i===1&&k%8===4)p=.9;a+=Math.random()<p?"x":"."}t.s=a;if(k){const n=roster(i).length;t.v=Math.min(n-1,SPAR[i].syn.length+Math.floor(Math.random()*(n-SPAR[i].syn.length)))}});visa()};
 $("#bRensa").onclick=()=>{S.t.forEach(t=>t.s=".".repeat(16));S.namn="Tomt";visa()};
-$("#bDela").onclick=()=>{const u=location.origin+location.pathname+"#m="+encodeURIComponent(kod());history.replaceState(null,"",u);if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(u).then(()=>toast("Länken är kopierad"),()=>toast("Kopiera adressen i fältet"));else toast("Kopiera adressen i fältet")};
+$("#bDela").onclick=()=>{const u=location.origin+location.pathname+"#m="+encodeURIComponent(kod());history.replaceState(null,"",u);if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(u).then(()=>toast(harLat()?"Länken är kopierad med hela låten. Inspelade loopar följer inte med":"Länken är kopierad"),()=>toast("Kopiera adressen i fältet"));else toast("Kopiera adressen i fältet")};
 $("#bSpara").onclick=()=>{const a=minnenLasa();const n=prompt("Vad ska rytmen heta?",S.namn&&S.namn!=="Tomt"?S.namn:"Min rytm");if(!n)return;a.push({n:n.slice(0,18),k:kod()});minnenSkriv(a.slice(-8));S.namn=n.slice(0,18);minnenRita();visa();toast("Sparad på den här enheten")};
 const TK={a:0,s:1,d:2,f:3,g:4,h:5,j:6,k:7};
 document.addEventListener("pointerdown",e=>{const pd=e.target.closest(".pad");if(pd){slag(+pd.dataset.i)}});
