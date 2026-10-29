@@ -425,10 +425,18 @@ function comboInt(n,L){
   set.forEach(function(i){INT[i][2].forEach(function(p,j){var x=(p[0]+100)*ks,y=(100-p[1])*ks;if(j)g.lineTo(x,y);else g.moveTo(x,y)});g.closePath()});
   g.clip();g.drawImage(egen(),0,0);g.restore();return c;
 }
+/* Rättning efter lärarens vikta testark (okt 2026): på den riktiga loppan blev varje flik på utsidan spegelvänd längs den diagonal
+   som inte går genom mitten (pilarna pekade åt sidan och MUN hamnade i flikens yttre hörn). Därför speglas varje kvadrant av ansiktet
+   längs samma diagonal innan arket ritas; speglingen tar ut sig själv när man viker. EXT/compose är orörda. */
+function speglaKvadranter(src,n){var c=document.createElement('canvas');c.width=c.height=n;var g=c.getContext('2d'),h=n/2;
+  [[0,0,0,-1,-1,0,h,h],[h,0,0,1,1,0,h,-h],[0,h,0,1,1,0,-h,h],[h,h,0,-1,-1,0,3*h,3*h]].forEach(function(q){
+    g.save();g.beginPath();g.rect(q[0],q[1],h,h);g.clip();g.setTransform(q[2],q[4],q[3],q[5],q[6],q[7]);g.drawImage(src,0,0);g.restore()});
+  return c}
 function composeUt(P,guides){
   var n=Math.round(200*(P/400)),se=layers.ext,si=layers.int;
   var be=bake(se,n);
   if(mouth.on)drawMouth(be.img.getContext('2d'),n);
+  be.img=speglaKvadranter(be.img,n);
   layers.ext=be;
   layers.int={img:comboInt(n,si.img?bake(si,n):null),x:0,y:0,zoom:1,rot:0,flip:false};
   try{return compose(P,guides)}finally{layers.ext=se;layers.int=si}
