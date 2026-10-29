@@ -53,6 +53,12 @@ h1.sr{position:absolute;left:-9999px}
 .stor:active,.stor.p{transform:translateY(4px);box-shadow:0 1px 0 rgba(0,0,0,.55),0 0 0 2px rgba(0,0,0,.4),inset 0 2px 0 rgba(255,255,255,.25)}
 .stor.start{background:linear-gradient(180deg,#f0615d,#c6343a)}
 .stor.start.p{background:linear-gradient(180deg,#ff8a86,#e5484d);box-shadow:0 1px 0 rgba(0,0,0,.55),0 0 24px rgba(229,72,77,.8),inset 0 2px 0 rgba(255,255,255,.25)}
+.stor.rec{background:linear-gradient(180deg,#5b5e68,#3a3c43);min-width:96px}
+.stor.rec::before{content:"";display:inline-block;width:12px;height:12px;border-radius:50%;background:#e5484d;margin-right:8px;vertical-align:-1px;box-shadow:0 0 0 2px rgba(0,0,0,.35)}
+.stor.rec.p{background:linear-gradient(180deg,#ff8a86,#e5484d);box-shadow:0 1px 0 rgba(0,0,0,.55),0 0 26px rgba(229,72,77,.85),inset 0 2px 0 rgba(255,255,255,.25);animation:recbl 1s infinite}
+.stor.rec.p::before{background:#fff}
+@keyframes recbl{50%{filter:brightness(.8)}}
+.pm button[aria-pressed="true"]{background:linear-gradient(180deg,#ffc94d,#f2a707);color:#241a00}
 .stor.stopp{background:linear-gradient(180deg,#5b5e68,#3a3c43)}
 .lilla{min-width:56px;height:40px;border-radius:10px;font-weight:800;font-size:.86rem;letter-spacing:.06em;background:linear-gradient(180deg,#555862,#3a3c43);color:#ECE6D6;box-shadow:0 4px 0 rgba(0,0,0,.55),0 0 0 2px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.2);padding:0 12px}
 .lilla:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.55),0 0 0 2px rgba(0,0,0,.35)}
@@ -96,6 +102,7 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
 .steg button.p{background:linear-gradient(180deg,var(--k),color-mix(in srgb,var(--k) 70%,#000));box-shadow:0 4px 0 #111214,0 0 0 2px #16171a,0 0 16px color-mix(in srgb,var(--k) 75%,transparent),inset 0 1px 0 rgba(255,255,255,.5)}
 .steg button.p::before{background:#fff;opacity:.85}
 .steg button:active{transform:translateY(3px);box-shadow:0 1px 0 #111214,0 0 0 2px #16171a}
+.steg button.ny{outline:3px solid #fff;outline-offset:2px}
 .steg button.nu{outline:2px solid #ffffff55;outline-offset:1px}
 .steg button:nth-child(-n+4){--k:var(--r)}
 .steg button:nth-child(n+5):nth-child(-n+8){--k:var(--o)}
@@ -189,9 +196,12 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
   <div class="rad1">
     <button class="stor start" id="bStart" type="button">▶ START</button>
     <button class="stor stopp" id="bStopp" type="button">■ STOPP</button>
+    <button class="stor rec" id="bRec" type="button" aria-pressed="false" title="Spela in med padsen (tangent R)">● REC</button>
     <div class="grupp"><div class="pm"><button type="button" id="bMin" aria-label="Långsammare">−</button><button type="button" id="bPlus" aria-label="Snabbare">+</button></div><span class="l">Tempo</span></div>
     <div class="grupp"><div class="knob" id="kTempo" role="slider" tabindex="0" aria-label="Tempo"><div class="kap"></div></div><label>Tempo</label></div>
     <div class="grupp"><div class="knob" id="kSwing" role="slider" tabindex="0" aria-label="Swing"><div class="kap"></div></div><label>Swing</label></div>
+    <div class="grupp"><div class="pm"><button type="button" id="bSudd" aria-pressed="false" title="Sudda med padsen (håll Skift)">⌫</button></div><span class="l">Sudda</span></div>
+    <div class="grupp"><div class="knob" id="kPadtid" role="slider" tabindex="0" aria-label="Pad-timing"><div class="kap"></div></div><label id="padT">Pad-tid 0 ms</label></div>
     <div class="grupp"><div class="kit" role="group" aria-label="Ljudsamling"><button type="button" id="kitA" class="on">SYNT</button><button type="button" id="kitB">GAMLA</button></div><span class="l">Ljud</span></div>
     <div class="grupp"><select class="sel" id="selMall" aria-label="Färdig rytm"></select><span class="l">Färdig rytm</span></div>
   </div>
@@ -208,7 +218,7 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
     </div>
     <div class="knapprad" id="minnen" aria-label="Sparade rytmer"></div>
   </div>
-  <div class="krok" id="krok">Tryck på rutorna för att bygga en rytm, eller välj en färdig rytm. Mellanslag startar och stoppar.</div>
+  <div class="krok" id="krok">Tryck på rutorna för att bygga en rytm, eller välj en färdig rytm. Mellanslag startar och stoppar. R spelar in med padsen.</div>
 </div>
 <div class="maskin loopmaskin" id="loopmaskin">
   <div class="topp" style="margin-bottom:12px"><div class="logga"><b>LOOPSTATION <i>LS-4</i></b><small>PLUGGPARKEN · 4 SPÅR · MIKROFON</small></div><div style="flex:1"></div><button type="button" class="micb" id="bMic" aria-pressed="false">🎤 MIKROFON</button><span class="meter" aria-hidden="true"><i id="meterI"></i></span><div class="grupp" style="flex-direction:row;gap:8px"><div class="knob liten" id="kJust" role="slider" tabindex="0" aria-label="Justera inspelningens timing"><div class="kap"></div></div><span class="l" id="justT">Timing 0 ms</span></div></div>
@@ -346,15 +356,15 @@ function toast(t){const e=document.createElement("div");e.className="toast";e.te
 function minnenRita(){const a=minnenLasa(),h=$("#minnen");h.innerHTML="";a.forEach((m,i)=>{const b=document.createElement("button");b.type="button";b.className="lilla";b.textContent=m.n;b.title="Tryck för att ladda. Dubbeltryck tar bort.";b.dataset.i=i;h.appendChild(b)})}
 /* ---------- spelare ---------- */
 function stegTid(k){const sek=60/S.bpm/4,sw=(S.swing/100)*sek*.66;return sek+(k%2===0?sw:-sw)}
-function tick(){if(!ctx)return;while(nasta<ctx.currentTime+.12){const k=steg%16;if(k===0)lastBar=nasta;
+function tick(){if(!ctx)return;while(nasta<ctx.currentTime+.12){const k=steg%16;if(k===0)lastBar=nasta;hist.push([nasta,k]);if(hist.length>40)hist.shift();
     S.t.forEach((t,i)=>{if(t.s[k]==="x")spela(i,nasta)});kö.push([nasta,k]);steg++;nasta+=stegTid(k)}}
 function ritaLed(){if(!spelar){return}const nu=ctx.currentTime;let akt=null;while(kö.length&&kö[0][0]<=nu){akt=kö.shift()}
   if(akt){const k=akt[1];document.querySelectorAll("#leds i").forEach((e,j)=>e.classList.toggle("nu",j===k));document.querySelectorAll(".steg button.nu").forEach(b=>b.classList.remove("nu"));document.querySelectorAll(".rad").forEach(r=>{r.querySelectorAll(".steg button")[k].classList.add("nu")})}
   requestAnimationFrame(ritaLed)}
 let nasta0=0;
 function start(rakna){startaLjud();if(!ctx||spelar)return;spelar=true;steg=0;nasta=ctx.currentTime+.06;nasta0=nasta;kö=[];lpStarta(nasta);if(rakna){const bt=60/S.bpm;for(let q=0;q<4;q++)klick(nasta+q*bt,q===0)}tick();timer=setInterval(tick,25);requestAnimationFrame(ritaLed);$("#bStart").classList.add("p")}
-function stopp(){if(!spelar){return}spelar=false;lpStoppa();clearInterval(timer);kö=[];document.querySelectorAll("#leds i").forEach(e=>e.classList.remove("nu"));document.querySelectorAll(".steg button.nu").forEach(b=>b.classList.remove("nu"));$("#bStart").classList.remove("p")}
-function slag(i){startaLjud();if(!ctx)return;spela(i,ctx.currentTime+.005,1);const p=document.querySelector(`.pad[data-i="${i}"]`);if(p){p.classList.add("slag");setTimeout(()=>p.classList.remove("slag"),110)}}
+function stopp(){if(!spelar){return}spelar=false;lpStoppa();if(recLive){recLive=false;$("#bRec").classList.remove("p");$("#bRec").setAttribute("aria-pressed","false")}hist=[];clearInterval(timer);kö=[];document.querySelectorAll("#leds i").forEach(e=>e.classList.remove("nu"));document.querySelectorAll(".steg button.nu").forEach(b=>b.classList.remove("nu"));$("#bStart").classList.remove("p")}
+function slag(i){startaLjud();if(!ctx)return;if(!(recLive&&suddLage))spela(i,ctx.currentTime+.005,1);if(recLive)lagg(i);const p=document.querySelector(`.pad[data-i="${i}"]`);if(p){p.classList.add("slag");setTimeout(()=>p.classList.remove("slag"),110)}}
 function laddaS(s){S=s;steg=0;visa();krok("")}
 /* ---------- bygg sidan ---------- */
 function init(){
@@ -437,13 +447,22 @@ function lpBygg(){const g=$("#lgrid");LP.forEach(l=>{const m=document.createElem
   $("#bMic").onclick=()=>{mic?micStopp():micStart()};
   knob($("#kJust"),{min:-100,max:100,reset:0,val:()=>LJUST,set:v=>{LJUST=v;$("#justT").textContent="Timing "+(v>0?"+":"")+v+" ms"}});
   lpVisa();requestAnimationFrame(lpRita)}
+
+/* ---------- spela in med padsen ---------- */
+let recLive=false,suddLage=false,PADOFF=0,hist=[],recFran=0;
+function sattRec(v){recLive=v;$("#bRec").classList.toggle("p",v);$("#bRec").setAttribute("aria-pressed",v);
+  if(v){if(!spelar){start(true);recFran=nasta0+barDur()}else recFran=0;krok("Spelar in: slå på padsen (A S D F G H J K) så hamnar slagen på närmaste steg. Tryck R igen för att sluta.")}
+  else krok("Inspelningen är klar. Du kan rätta rutorna för hand.")}
+function lagg(i){if(!ctx||!spelar||!hist.length)return;const nu=ctx.currentTime-PADOFF/1000;if(recFran&&nu<recFran-.03)return;
+  let b=hist[0];for(const h of hist)if(Math.abs(h[0]-nu)<Math.abs(b[0]-nu))b=h;const k=b[1],t=S.t[i],a=t.s.split("");
+  a[k]=suddLage?".":"x";t.s=a.join("");S.namn="Egen rytm";visa();
+  const rad=document.querySelector(`.rad[data-i="${i}"] .steg button:nth-child(${k+1})`);if(rad){rad.classList.add("ny");setTimeout(()=>rad.classList.remove("ny"),220)}}
 /* ---------- händelser ---------- */
 document.addEventListener("click",e=>{
   const st=e.target.closest(".steg button");if(st){const r=st.closest(".rad"),i=+r.dataset.i,k=+st.dataset.k,t=S.t[i];const a=t.s.split("");a[k]=a[k]==="x"?".":"x";t.s=a.join("");S.namn="Egen rytm";visa();startaLjud();if(a[k]==="x"&&!spelar&&ctx)spela(i,ctx.currentTime+.005,1);return}
   const bb=e.target.closest(".vlcd button");if(bb){const r=bb.closest(".rad"),i=+r.dataset.i,t=S.t[i],n=roster(i).length;t.v=(t.v+ +bb.dataset.b+n)%n;visa();startaLjud();if(ctx&&!spelar)spela(i,ctx.currentTime+.005,1);
     const rr=roster(i)[t.v];if(rr&&rr.s!=null){const m=SAMPMETA[rr.s];krok(`<b>${m.n}</b> · ur <i>${m.t}</i> · ${m.c}`)}else krok("Ljudet skapas i webbläsaren.");return}
   const mu=e.target.closest("[data-m]");if(mu){const i=+mu.closest(".rad").dataset.i;S.t[i].mute=!S.t[i].mute;visa();return}
-  const pd=e.target.closest(".pad");if(pd){slag(+pd.dataset.i);return}
   const mn=e.target.closest("#minnen button");if(mn){const a=minnenLasa(),m=a[+mn.dataset.i];if(m){const s=avkod(m.k);if(s){s.namn=m.n;laddaS(s);toast("Laddade "+m.n)}}return}
 });
 document.addEventListener("dblclick",e=>{const mn=e.target.closest("#minnen button");if(mn){const a=minnenLasa();a.splice(+mn.dataset.i,1);minnenSkriv(a);minnenRita();toast("Borttagen")}});
@@ -458,9 +477,14 @@ $("#bRensa").onclick=()=>{S.t.forEach(t=>t.s=".".repeat(16));S.namn="Tomt";visa(
 $("#bDela").onclick=()=>{const u=location.origin+location.pathname+"#m="+encodeURIComponent(kod());history.replaceState(null,"",u);if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(u).then(()=>toast("Länken är kopierad"),()=>toast("Kopiera adressen i fältet"));else toast("Kopiera adressen i fältet")};
 $("#bSpara").onclick=()=>{const a=minnenLasa();const n=prompt("Vad ska rytmen heta?",S.namn&&S.namn!=="Tomt"?S.namn:"Min rytm");if(!n)return;a.push({n:n.slice(0,18),k:kod()});minnenSkriv(a.slice(-8));S.namn=n.slice(0,18);minnenRita();visa();toast("Sparad på den här enheten")};
 const TK={a:0,s:1,d:2,f:3,g:4,h:5,j:6,k:7};
+document.addEventListener("pointerdown",e=>{const pd=e.target.closest(".pad");if(pd){slag(+pd.dataset.i)}});
+$("#bRec").onclick=()=>sattRec(!recLive);
+$("#bSudd").onclick=()=>{suddLage=!suddLage;$("#bSudd").setAttribute("aria-pressed",suddLage)};
+knob($("#kPadtid"),{min:-100,max:100,reset:0,val:()=>PADOFF,set:v=>{PADOFF=v;$("#padT").textContent="Pad-tid "+(v>0?"+":"")+v+" ms"}});
 document.addEventListener("keydown",e=>{if(e.target.closest&&e.target.closest("input,select,textarea"))return;if(e.metaKey||e.ctrlKey||e.altKey)return;
   if(e.key===" "&&!e.target.closest("button")){e.preventDefault();spelar?stopp():start();return}
-  const i=TK[e.key.toLowerCase()];if(i!=null&&!e.repeat){slag(i)}});
+  if((e.key==="r"||e.key==="R")&&!e.repeat){sattRec(!recLive);return}
+  const i=TK[e.key.toLowerCase()];if(i!=null&&!e.repeat){const sl=suddLage;if(e.shiftKey&&recLive)suddLage=true;slag(i);suddLage=sl}});
 document.addEventListener("visibilitychange",()=>{if(document.hidden)stopp()});
 init();
 window.MPTrummaskin={LP:LP,lpKlick:lpKlick,lpRadera:lpRadera,lpAngra:lpAngra,micStart:micStart,fakeMic:null,slag:slag,get ctx(){return ctx},get master(){return master},get S(){return S},roster:roster,kitSatt:kitSatt,visa:visa};
