@@ -381,7 +381,7 @@ function presetInt(){
     // tandrader längs axeln: stora vid ytterändan, mindre och mot varandra i mitten (där de möts)
     var D0=58,RMAX=292;
     [-1,1].forEach(function(sx){[true,false].forEach(function(up){
-      var Sx=300,Sy=300,Ex=300+sx*RMAX,Ey=300+(up?-D0:D0);
+      var Sx=300,Sy=300+(up?-D0:D0),Ex=300+sx*RMAX,Ey=300;   // isär i mitten (mörkt hål), mot varandra ute vid mungiporna
       var len=Math.hypot(Ex-Sx,Ey-Sy),e1x=(Ex-Sx)/len,e1y=(Ey-Sy)/len;
       var e2x=-e1y,e2y=e1x; if((e2y>0)!==up){e2x=-e2x;e2y=-e2y}
       function P(r,v){return [Sx+e1x*r+e2x*v,Sy+e1y*r+e2y*v]}
@@ -391,7 +391,7 @@ function presetInt(){
       g.strokeStyle='rgba(255,190,205,.5)';g.lineWidth=5;g.lineCap='round';g.beginPath();g.moveTo(pa[0],pa[1]);g.lineTo(pb[0],pb[1]);g.stroke();g.restore();
       var r=10;
       while(r<len){
-        var w=W(r),dist=D0*(r/RMAX),h=Math.min(w*1.35,dist+w*.35);
+        var w=W(r),dist=D0*Math.max(0,1-r/len),h=Math.min(w*1.35,dist+w*.35);
         g.save();var o=P(r,0);g.transform(e1x,e1y,e2x,e2y,o[0],o[1]);
         g.shadowColor='rgba(0,0,0,.45)';g.shadowBlur=9;
         var tg2=g.createLinearGradient(0,0,0,h);tg2.addColorStop(0,'#E6DCC6');tg2.addColorStop(.5,'#FFFFFF');tg2.addColorStop(1,'#EFE6D2');
