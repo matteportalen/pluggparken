@@ -198,7 +198,7 @@ const HELV_B_W = [761, 761, 761, 761, 761, 761, 761, 761, 761, 761, 761, 761, 76
         'Skriv ut alla tre blad i ' + opts.paper + ', stående, i 100 % ("verklig storlek", inte "anpassa till sida"). Kontrollmät: linjalen nedan ska vara 100 mm och bildkvadraten ' + s + ' × ' + s + ' mm.',
         'Klipp ut kvadraten precis på bildens kant - bilden går ända ut. Klippmärkena i hörnen visar var.',
         'Tejpa fast bladen i hörnet med målartejp: blad 1 i ' + where + ', blad 2 på vänster vägg, blad 3 på höger vägg. Hörnet markerat HÖRN ska gå exakt in i hörnpunkten; kanterna ska mötas utan glapp och utan överlapp.',
-        'Stå ' + fmtM(opts.eyeM) + ' m från båda väggarna (på diagonalen mot hörnet), ' + eye + '. Titta med ETT öga, eller filma med mobilen, rakt in i hörnet.',
+        'Stå ' + fmtM(opts.eyeM) + ' m från båda väggarna (på diagonalen mot hörnet), ' + eye + '. Titta rakt in i hörnet, helst med ETT öga (håll för det andra) eller filma med mobilen. Det funkar även med båda ögonen, men då ser man lättare att bilden är platt.',
         'Motivet ska nu se ut att sticka ut ur hörnet. Flytta dig åt sidan och illusionen "vrider sig" och släpper till slut.',
       ];
       let y = yb + 6.5;
