@@ -101,6 +101,42 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
 .steg button:nth-child(n+5):nth-child(-n+8){--k:var(--o)}
 .steg button:nth-child(n+9):nth-child(-n+12){--k:var(--y)}
 .steg button:nth-child(n+13){--k:var(--c)}
+.loopmaskin{margin-top:22px}
+.loopmaskin::after{background:linear-gradient(90deg,#4cc3ff 0 25%,#7fe08a 25% 50%,#c58bff 50% 75%,#ff7bd0 75%)}
+.loopmaskin .logga b i{color:#4cc3ff}
+.lhead{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:12px}
+.lhead b{font-size:.95rem;letter-spacing:.2em;font-weight:800}
+.lhead small{color:var(--dim);font-size:.78rem;flex:1;min-width:200px}
+.micb{padding:7px 12px;border-radius:9px;font-weight:800;font-size:.78rem;letter-spacing:.08em;background:linear-gradient(180deg,#555862,#3a3c43);box-shadow:0 3px 0 rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.2)}
+.micb.on{background:linear-gradient(180deg,#7fe08a,#35b24a);color:#062a10}
+.meter{width:90px;height:8px;border-radius:5px;background:#17181c;overflow:hidden;box-shadow:inset 0 1px 3px #000}
+.meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,#4cc38a 0 60%,#f2b707 60% 85%,#e5484d 85%)}
+.lgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.lm{min-width:0;background:#202226;border-radius:12px;padding:10px 12px 12px;box-shadow:0 0 0 2px #17181c,inset 0 2px 8px rgba(0,0,0,.5);display:flex;flex-direction:column;gap:10px}
+.lt{display:flex;align-items:center;gap:8px}
+.lt .led{width:10px;height:10px;border-radius:50%;background:var(--sk);box-shadow:0 0 8px var(--sk)}
+.lt b{font-size:.86rem;letter-spacing:.1em}
+.lt .ls{margin-left:auto;background:#0c0a06;color:var(--lcd);font-size:.66rem;font-weight:800;letter-spacing:.1em;padding:4px 8px;border-radius:6px;box-shadow:inset 0 2px 4px #000;text-shadow:0 0 6px rgba(255,176,0,.5);min-width:8ch;text-align:center}
+.lc{display:flex;align-items:center;gap:12px}
+.recb{position:relative;width:60px;height:60px;border-radius:50%;flex:none;background:radial-gradient(circle at 35% 30%,#7a7d88,#3a3c43 70%);box-shadow:0 5px 0 rgba(0,0,0,.6),0 0 0 3px #17181c,inset 0 1px 0 rgba(255,255,255,.3);transition:transform .05s}
+.recb::after{content:"";position:absolute;inset:16px;border-radius:50%;background:#8a2a2e;box-shadow:inset 0 2px 3px rgba(255,255,255,.2)}
+.recb:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.6),0 0 0 3px #17181c}
+.recb.vantar::after{background:#f2b707;animation:bl .5s infinite alternate}
+.recb.rec::after{background:#ff3b36;box-shadow:0 0 16px 4px rgba(255,59,54,.85)}
+.recb.loop::after{background:#35c25a;box-shadow:0 0 12px rgba(53,194,90,.7)}
+.recb.ovr::after{background:#ff7a2e;box-shadow:0 0 14px rgba(255,122,46,.8)}
+@keyframes bl{to{opacity:.35}}
+.len{display:flex;border-radius:8px;overflow:hidden;box-shadow:0 0 0 2px #111}
+.len button{width:30px;height:30px;font-weight:800;font-size:.82rem;background:#3a3c43;color:var(--dim)}
+.len button.on{background:linear-gradient(180deg,#ffc94d,#f2a707);color:#241a00}
+.len button:disabled{opacity:.45;cursor:default}
+.lp{height:7px;border-radius:4px;background:#17181c;overflow:hidden;box-shadow:inset 0 1px 3px #000}
+.lp i{display:block;height:100%;width:0;background:var(--sk)}
+.lr{display:flex;align-items:center;gap:8px}
+.lr .sm{width:32px;height:30px;border-radius:8px;font-weight:800;font-size:.86rem;background:linear-gradient(180deg,#555862,#3a3c43);box-shadow:0 3px 0 rgba(0,0,0,.55);color:var(--ink)}
+.lr .sm.on{background:linear-gradient(180deg,#ff8a86,#e5484d)}
+.lr .sm:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.55)}
+.las{opacity:.45;pointer-events:none}
 /* pads */
 .pads{margin-top:22px;display:grid;grid-template-columns:repeat(8,1fr);gap:12px}
 .pad{position:relative;aspect-ratio:1/.8;border-radius:12px;background:radial-gradient(circle at 50% 35%,#4c4f59,#2f3138 70%);box-shadow:0 6px 0 #111214,0 0 0 3px #17181c,inset 0 2px 0 rgba(255,255,255,.18);font-weight:800;color:var(--dim);transition:transform .05s,box-shadow .05s,background .05s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
@@ -117,12 +153,14 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
 .info a{color:#ffc94d}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#0c0a06;color:var(--lcd);font-weight:800;padding:10px 18px;border-radius:12px;box-shadow:0 0 0 2px #3b3d44,0 10px 24px rgba(0,0,0,.5);z-index:40}
 @media(max-width:980px){
+  .lgrid{grid-template-columns:repeat(2,1fr)}
   .ledrad,.rad{grid-template-columns:1fr;gap:6px}
   .ledrad .fyll{display:none}
   .ctrl{grid-template-columns:12px 56px minmax(0,1fr) auto}
   .pads{grid-template-columns:repeat(4,1fr)}
 }
 @media(max-width:700px){
+  .lgrid{grid-template-columns:1fr}
   .wrap{padding:10px 8px 50px}.maskin{padding:16px 12px 20px}
   .steg,.leds{grid-template-columns:repeat(8,1fr)}
   .leds i{height:6px}
@@ -172,6 +210,11 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
   </div>
   <div class="krok" id="krok">Tryck på rutorna för att bygga en rytm, eller välj en färdig rytm. Mellanslag startar och stoppar.</div>
 </div>
+<div class="maskin loopmaskin" id="loopmaskin">
+  <div class="topp" style="margin-bottom:12px"><div class="logga"><b>LOOPSTATION <i>LS-4</i></b><small>PLUGGPARKEN · 4 SPÅR · MIKROFON</small></div><div style="flex:1"></div><button type="button" class="micb" id="bMic" aria-pressed="false">🎤 MIKROFON</button><span class="meter" aria-hidden="true"><i id="meterI"></i></span><div class="grupp" style="flex-direction:row;gap:8px"><div class="knob liten" id="kJust" role="slider" tabindex="0" aria-label="Justera inspelningens timing"><div class="kap"></div></div><span class="l" id="justT">Timing 0 ms</span></div></div>
+  <div class="lgrid" id="lgrid"></div>
+  <div class="krok" style="margin-top:14px">Använd hörlurar, annars hör mikrofonen trummorna. Tryck på den runda knappen för att spela in, och tryck igen för att lägga på mer ljud. Ljudet sparas inte.</div>
+</div>
 <details class="info">
   <summary>Om ljuden, källor och licens</summary>
   <p>Ljuden som heter <b>SYNT</b> skapas direkt i din webbläsare. Ljuden med <b>♪</b> framför namnet (knappen <b>GAMLA</b>) är korta klipp ur riktigt gamla inspelningar (ungefär 1900–1950), ur <a href="https://citizen-dj.labs.loc.gov/" target="_blank" rel="noopener">Citizen DJ</a> från Library of Congress i USA. Klippen är utvalda automatiskt för att låta som slag, så några kan låta överraskande. Tryck på ◀ ▶ vid ett spår för att byta ljud.</p>
@@ -182,6 +225,7 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
     <li>MusicBox Project: fria att använda och återanvända (American Folklife Center).</li>
     <li>Tony Schwartz Collection: fria att använda och återanvända.</li>
   </ul>
+  <p><b>Loopstationen:</b> tillåt mikrofonen, tryck ● på ett spår och spela eller sjung in. Ljudet loopar sedan i takt med trummorna i så många takter du valt. Inspelningarna sparas inte och skickas ingenstans, de finns bara kvar tills du stänger fliken. Använd hörlurar så att mikrofonen inte hör trummorna.</p>
   <p>Kreditrad: Citizen DJ Project, Library of Congress. Biblioteket påminner om att de är historiska inspelningar som speglar sin tid, och ber oss behandla materialet med respekt. Vilket klipp som ligger bakom ett ljud visas under maskinen när du byter ljud.</p>
 </details>
 </main>
@@ -302,13 +346,14 @@ function toast(t){const e=document.createElement("div");e.className="toast";e.te
 function minnenRita(){const a=minnenLasa(),h=$("#minnen");h.innerHTML="";a.forEach((m,i)=>{const b=document.createElement("button");b.type="button";b.className="lilla";b.textContent=m.n;b.title="Tryck för att ladda. Dubbeltryck tar bort.";b.dataset.i=i;h.appendChild(b)})}
 /* ---------- spelare ---------- */
 function stegTid(k){const sek=60/S.bpm/4,sw=(S.swing/100)*sek*.66;return sek+(k%2===0?sw:-sw)}
-function tick(){if(!ctx)return;while(nasta<ctx.currentTime+.12){const k=steg%16;
+function tick(){if(!ctx)return;while(nasta<ctx.currentTime+.12){const k=steg%16;if(k===0)lastBar=nasta;
     S.t.forEach((t,i)=>{if(t.s[k]==="x")spela(i,nasta)});kö.push([nasta,k]);steg++;nasta+=stegTid(k)}}
 function ritaLed(){if(!spelar){return}const nu=ctx.currentTime;let akt=null;while(kö.length&&kö[0][0]<=nu){akt=kö.shift()}
   if(akt){const k=akt[1];document.querySelectorAll("#leds i").forEach((e,j)=>e.classList.toggle("nu",j===k));document.querySelectorAll(".steg button.nu").forEach(b=>b.classList.remove("nu"));document.querySelectorAll(".rad").forEach(r=>{r.querySelectorAll(".steg button")[k].classList.add("nu")})}
   requestAnimationFrame(ritaLed)}
-function start(){startaLjud();if(!ctx||spelar)return;spelar=true;steg=0;nasta=ctx.currentTime+.06;kö=[];tick();timer=setInterval(tick,25);requestAnimationFrame(ritaLed);$("#bStart").classList.add("p")}
-function stopp(){if(!spelar){return}spelar=false;clearInterval(timer);kö=[];document.querySelectorAll("#leds i").forEach(e=>e.classList.remove("nu"));document.querySelectorAll(".steg button.nu").forEach(b=>b.classList.remove("nu"));$("#bStart").classList.remove("p")}
+let nasta0=0;
+function start(rakna){startaLjud();if(!ctx||spelar)return;spelar=true;steg=0;nasta=ctx.currentTime+.06;nasta0=nasta;kö=[];lpStarta(nasta);if(rakna){const bt=60/S.bpm;for(let q=0;q<4;q++)klick(nasta+q*bt,q===0)}tick();timer=setInterval(tick,25);requestAnimationFrame(ritaLed);$("#bStart").classList.add("p")}
+function stopp(){if(!spelar){return}spelar=false;lpStoppa();clearInterval(timer);kö=[];document.querySelectorAll("#leds i").forEach(e=>e.classList.remove("nu"));document.querySelectorAll(".steg button.nu").forEach(b=>b.classList.remove("nu"));$("#bStart").classList.remove("p")}
 function slag(i){startaLjud();if(!ctx)return;spela(i,ctx.currentTime+.005,1);const p=document.querySelector(`.pad[data-i="${i}"]`);if(p){p.classList.add("slag");setTimeout(()=>p.classList.remove("slag"),110)}}
 function laddaS(s){S=s;steg=0;visa();krok("")}
 /* ---------- bygg sidan ---------- */
@@ -319,11 +364,79 @@ function init(){
   const fran=location.hash.match(/#m=([^&]+)/);const d=fran&&avkod(decodeURIComponent(fran[1]));
   if(d)S=d;else mall(1);
   byggSpar();
-  kn.tempo=knob($("#kTempo"),{min:50,max:200,reset:90,val:()=>S.bpm,set:v=>{S.bpm=v;sev($("#sevBpm"),v)}});
+  kn.tempo=knob($("#kTempo"),{min:50,max:200,reset:90,val:()=>S.bpm,set:v=>{if(las())return;S.bpm=v;sev($("#sevBpm"),v)}});
   kn.swing=knob($("#kSwing"),{min:0,max:60,reset:0,val:()=>S.swing,set:v=>{S.swing=v}});
   kn.master=knob($("#kMaster"),{min:0,max:100,reset:80,val:()=>S.master,set:v=>{S.master=v;setMaster()}});
-  visa();minnenRita();
+  visa();minnenRita();lpBygg();
 }
+
+/* ---------- loopstation: spela in eget ljud och loopa det i valt antal takter ---------- */
+const LC=["#4cc3ff","#7fe08a","#c58bff","#ff7bd0"];
+const LP=[0,1,2,3].map(i=>({i,st:"tom",n:2,layers:[],srcs:[],vol:80,mute:false,t0:0,dur:0,rec:null,gain:null}));
+let mic=null,micSrc=null,proc=null,anMic=null,lastBar=0,LJUST=0;
+const barDur=()=>16*60/S.bpm/4;
+const harLoopar=()=>LP.some(l=>l.layers.length||l.rec);
+function las(){if(harLoopar()){toast("Tempot är låst medan det finns loopar. Radera dem först.");return true}return false}
+function klick(t,hog){if(!ctx)return;const g=ctx.createGain();g.connect(master);osc(t,"square",hog?1800:1200,0,.045,.35,g)}
+function lpGain(l){if(!l.gain){l.gain=ctx.createGain();l.gain.connect(master)}l.gain.gain.value=l.mute?0:Math.pow(l.vol/100,1.5)*1.3;return l.gain}
+async function micStart(){if(mic)return true;startaLjud();if(!ctx)return false;
+  try{const fake=window.MPTrummaskin&&window.MPTrummaskin.fakeMic;mic=fake||await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}})}
+  catch(e){toast("Mikrofonen får inte användas. Tillåt den i webbläsaren.");return false}
+  micSrc=ctx.createMediaStreamSource(mic);anMic=ctx.createAnalyser();anMic.fftSize=1024;micSrc.connect(anMic);
+  proc=ctx.createScriptProcessor(1024,1,1);const dov=ctx.createGain();dov.gain.value=0;micSrc.connect(proc);proc.connect(dov);dov.connect(ctx.destination);proc.onaudioprocess=mikBlock;
+  $("#bMic").classList.add("on");$("#bMic").setAttribute("aria-pressed","true");micMat();return true}
+function micStopp(){if(!mic)return;try{mic.getTracks().forEach(t=>t.stop())}catch(e){}try{proc.disconnect();micSrc.disconnect()}catch(e){}mic=null;proc=null;micSrc=null;$("#bMic").classList.remove("on");$("#bMic").setAttribute("aria-pressed","false");$("#meterI").style.width="0"}
+const mbuf=new Float32Array(1024);
+function micMat(){if(!mic)return;anMic.getFloatTimeDomainData(mbuf);let m=0;for(let i=0;i<mbuf.length;i++){const a=Math.abs(mbuf[i]);if(a>m)m=a}$("#meterI").style.width=Math.min(100,m*140)+"%";requestAnimationFrame(micMat)}
+function mikBlock(e){const inp=e.inputBuffer.getChannelData(0),n=inp.length,sr=ctx.sampleRate,buf=n/sr,cap=(e.playbackTime||ctx.currentTime)-2*buf-.02-LJUST/1000;
+  LP.forEach(l=>{const r=l.rec;if(!r)return;let from=0;
+    if(!r.go){const skip=Math.round((r.t-cap)*sr);if(skip>=n)return;r.go=true;from=Math.max(0,skip)}
+    const take=Math.min(n-from,r.len-r.w);r.buf.set(inp.subarray(from,from+take),r.w);r.w+=take;if(r.w>=r.len)klarRec(l)})}
+function startLager(l,ab,vid,off){const s=ctx.createBufferSource();s.buffer=ab;s.loop=true;s.connect(lpGain(l));s.start(vid,off);l.srcs.push(s);return s}
+function klarRec(l){const r=l.rec;l.rec=null;if(!ctx)return;const sr=ctx.sampleRate,ab=ctx.createBuffer(1,r.len,sr),d=ab.getChannelData(0);d.set(r.buf);
+  const fi=Math.round(sr*.004);for(let i=0;i<fi;i++){d[i]*=i/fi;d[r.len-1-i]*=i/fi}   // mjuka kanter så att det inte knäpper
+  if(!r.over){l.t0=r.t;l.dur=r.len/sr}
+  l.layers.push(ab);const nu=ctx.currentTime+.02,off=(((nu-l.t0)%l.dur)+l.dur)%l.dur;startLager(l,ab,nu,off);l.st="loop";lpVisa()}
+function nastaBar(){let b=lastBar||ctx.currentTime;const bd=barDur();while(b<ctx.currentTime+.08)b+=bd;return b}
+async function lpKlick(i){const l=LP[i];
+  if(l.rec){l.rec=null;l.st=l.layers.length?"loop":"tom";lpVisa();return}
+  if(!(await micStart()))return;
+  const sr=ctx.sampleRate;let t,over=false,len;
+  if(l.layers.length){over=true;len=Math.round(l.dur*sr);const bd=l.dur,now=ctx.currentTime+.08;t=l.t0+Math.ceil((now-l.t0)/bd)*bd}
+  else{len=Math.round(l.n*barDur()*sr);
+    if(!spelar){start(true);t=nasta0+barDur()}else t=nastaBar()}
+  l.rec={t,len,buf:new Float32Array(len),w:0,go:false,over};l.st="vantar";lpVisa()}
+function lpStoppa(){LP.forEach(l=>{l.srcs.forEach(s=>{try{s.stop()}catch(e){}});l.srcs=[];if(l.rec){l.rec=null;l.st=l.layers.length?"loop":"tom"}});lpVisa()}
+function lpStarta(t0){LP.forEach(l=>{if(!l.layers.length)return;l.t0=t0;l.layers.forEach(ab=>startLager(l,ab,t0,0))})}
+function lpAngra(i){const l=LP[i];if(!l.layers.length)return;l.layers.pop();const s=l.srcs.pop();if(s)try{s.stop()}catch(e){};if(!l.layers.length){l.st="tom"}lpVisa()}
+function lpRadera(i){const l=LP[i];l.rec=null;l.srcs.forEach(s=>{try{s.stop()}catch(e){}});l.srcs=[];l.layers=[];l.st="tom";lpVisa()}
+const LTXT={tom:"TOM",vantar:"VÄNTAR",rec:"SPELAR IN",loop:"LOOP",ovr:"LÄGGER PÅ"};
+function lpVisa(){LP.forEach(l=>{const m=document.querySelector(`.lm[data-i="${l.i}"]`);if(!m)return;
+    let st=l.st;if(l.rec&&l.rec.go)st=l.rec.over?"ovr":"rec";else if(l.rec)st="vantar";
+    m.querySelector(".ls").textContent=(st==="loop"&&!spelar)?"STOPP":LTXT[st];
+    const b=m.querySelector(".recb");b.className="recb "+(st==="vantar"?"vantar":st==="rec"?"rec":st==="ovr"?"ovr":st==="loop"?"loop":"");
+    b.setAttribute("aria-label",st==="tom"?"Spela in":st==="loop"?"Lägg på mer ljud":"Avbryt");
+    m.querySelectorAll(".len button").forEach(x=>{x.classList.toggle("on",+x.dataset.n===l.n);x.disabled=l.layers.length>0||!!l.rec});
+    m.querySelector("[data-lm]").classList.toggle("on",l.mute);
+    const f=l.vol/100,kn2=m.querySelector("[data-lvol]");kn2.style.setProperty("--p",(f*270)+"deg");kn2.querySelector(".kap").style.transform="rotate("+(-135+f*270)+"deg)"});
+  const las=harLoopar();["#bMin","#bPlus","#kTempo"].forEach(q=>$(q)&&$(q).closest(".grupp")&&$(q).closest(".grupp").classList.toggle("las",las))}
+function lpRita(){if(!ctx)return;LP.forEach(l=>{const m=document.querySelector(`.lm[data-i="${l.i}"]`);if(!m)return;let p=0;
+    if(l.rec&&l.rec.go)p=l.rec.w/l.rec.len;else if(l.layers.length&&spelar){const nu=ctx.currentTime;p=((((nu-l.t0)%l.dur)+l.dur)%l.dur)/l.dur}
+    m.querySelector(".lp i").style.width=(p*100)+"%";
+    const st=l.rec&&l.rec.go?(l.rec.over?"ovr":"rec"):l.rec?"vantar":l.st;const t=m.querySelector(".ls"),want=(st==="loop"&&!spelar)?"STOPP":LTXT[st];if(t.textContent!==want)lpVisa()});
+  requestAnimationFrame(lpRita)}
+function lpBygg(){const g=$("#lgrid");LP.forEach(l=>{const m=document.createElement("div");m.className="lm";m.dataset.i=l.i;m.style.setProperty("--sk",LC[l.i]);
+    m.innerHTML=`<div class="lt"><span class="led"></span><b>L${l.i+1}</b><span class="ls">TOM</span></div><div class="lc"><button type="button" class="recb" data-rec aria-label="Spela in"></button><div class="len" role="group" aria-label="Antal takter">${[1,2,4,8].map(n=>`<button type="button" data-n="${n}" aria-label="${n} takter">${n}</button>`).join("")}</div></div><div class="lp"><i></i></div><div class="lr"><div class="knob liten" data-lvol role="slider" tabindex="0" aria-label="Volym loop ${l.i+1}"><div class="kap"></div></div><button type="button" class="sm" data-lm aria-label="Tysta loop ${l.i+1}">M</button><button type="button" class="sm" data-lu aria-label="Ångra senaste lagret" title="Ångra senaste lagret">↶</button><button type="button" class="sm" data-lx aria-label="Radera loopen" title="Radera loopen">✕</button></div>`;
+    g.appendChild(m);knob(m.querySelector("[data-lvol]"),{min:0,max:100,reset:80,val:()=>l.vol,set:v=>{l.vol=v;if(l.gain)lpGain(l)}})});
+  g.addEventListener("click",e=>{const m=e.target.closest(".lm");if(!m)return;const i=+m.dataset.i,l=LP[i];
+    if(e.target.closest("[data-rec]")){lpKlick(i);return}
+    const nb=e.target.closest(".len button");if(nb&&!nb.disabled){l.n=+nb.dataset.n;lpVisa();return}
+    if(e.target.closest("[data-lm]")){l.mute=!l.mute;if(l.gain)lpGain(l);lpVisa();return}
+    if(e.target.closest("[data-lu]")){lpAngra(i);return}
+    if(e.target.closest("[data-lx]")){lpRadera(i);return}});
+  $("#bMic").onclick=()=>{mic?micStopp():micStart()};
+  knob($("#kJust"),{min:-100,max:100,reset:0,val:()=>LJUST,set:v=>{LJUST=v;$("#justT").textContent="Timing "+(v>0?"+":"")+v+" ms"}});
+  lpVisa();requestAnimationFrame(lpRita)}
 /* ---------- händelser ---------- */
 document.addEventListener("click",e=>{
   const st=e.target.closest(".steg button");if(st){const r=st.closest(".rad"),i=+r.dataset.i,k=+st.dataset.k,t=S.t[i];const a=t.s.split("");a[k]=a[k]==="x"?".":"x";t.s=a.join("");S.namn="Egen rytm";visa();startaLjud();if(a[k]==="x"&&!spelar&&ctx)spela(i,ctx.currentTime+.005,1);return}
@@ -336,10 +449,10 @@ document.addEventListener("click",e=>{
 document.addEventListener("dblclick",e=>{const mn=e.target.closest("#minnen button");if(mn){const a=minnenLasa();a.splice(+mn.dataset.i,1);minnenSkriv(a);minnenRita();toast("Borttagen")}});
 $("#bStart").onclick=()=>{spelar?stopp():start()};
 $("#bStopp").onclick=stopp;
-$("#bMin").onclick=()=>{S.bpm=Math.max(50,S.bpm-2);visa()};$("#bPlus").onclick=()=>{S.bpm=Math.min(200,S.bpm+2);visa()};
+$("#bMin").onclick=()=>{if(las())return;S.bpm=Math.max(50,S.bpm-2);visa()};$("#bPlus").onclick=()=>{if(las())return;S.bpm=Math.min(200,S.bpm+2);visa()};
 $("#kitA").onclick=()=>{startaLjud();kitSatt(0);visa()};$("#kitB").onclick=()=>{startaLjud();if(!SAMP)krok("Laddar de gamla ljuden …");kitSatt(1);visa();if(!SAMP)setTimeout(()=>{kitSatt(1);visa();krok("Gamla inspelningar från Library of Congress. Tryck ◀ ▶ vid ett spår för att byta klipp.")},900)};
-$("#selMall").onchange=e=>{const i=+e.target.value;const k=S.kit;mall(i);if(k)kitSatt(1);visa()};
-$("#bSlump").onclick=()=>{const k=S.kit;S=tomt();S.kit=k;S.namn="Slumpad rytm";S.bpm=80+Math.round(Math.random()*60);S.swing=Math.random()<.4?Math.round(Math.random()*25):0;
+$("#selMall").onchange=e=>{const i=+e.target.value;const k=S.kit,bp=S.bpm,lk=harLoopar();mall(i);if(lk)S.bpm=bp;if(k)kitSatt(1);visa()};
+$("#bSlump").onclick=()=>{const k=S.kit,bp0=S.bpm;S=tomt();S.kit=k;S.bpm=bp0;S.namn="Slumpad rytm";S.bpm=harLoopar()?S.bpm:80+Math.round(Math.random()*60);S.swing=Math.random()<.4?Math.round(Math.random()*25):0;
   const dens=[.3,.2,.12,.55,.12,.1,.2,.06];S.t.forEach((t,i)=>{let a="";for(let k=0;k<16;k++){let p=dens[i];if(i===0&&k%4===0)p=.7;if(i===1&&k%8===4)p=.9;a+=Math.random()<p?"x":"."}t.s=a;if(k){const n=roster(i).length;t.v=Math.min(n-1,SPAR[i].syn.length+Math.floor(Math.random()*(n-SPAR[i].syn.length)))}});visa()};
 $("#bRensa").onclick=()=>{S.t.forEach(t=>t.s=".".repeat(16));S.namn="Tomt";visa()};
 $("#bDela").onclick=()=>{const u=location.origin+location.pathname+"#m="+encodeURIComponent(kod());history.replaceState(null,"",u);if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(u).then(()=>toast("Länken är kopierad"),()=>toast("Kopiera adressen i fältet"));else toast("Kopiera adressen i fältet")};
@@ -350,7 +463,7 @@ document.addEventListener("keydown",e=>{if(e.target.closest&&e.target.closest("i
   const i=TK[e.key.toLowerCase()];if(i!=null&&!e.repeat){slag(i)}});
 document.addEventListener("visibilitychange",()=>{if(document.hidden)stopp()});
 init();
-window.MPTrummaskin={slag:slag,get ctx(){return ctx},get master(){return master},get S(){return S},roster:roster,kitSatt:kitSatt,visa:visa};
+window.MPTrummaskin={LP:LP,lpKlick:lpKlick,lpRadera:lpRadera,lpAngra:lpAngra,micStart:micStart,fakeMic:null,slag:slag,get ctx(){return ctx},get master(){return master},get S(){return S},roster:roster,kitSatt:kitSatt,visa:visa};
 })();
 </script>
 </body>
