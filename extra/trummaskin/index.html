@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>Trummaskin – Pluggparken</title>
+<meta name="description" content="Trummaskin med 16 steg, åtta spår och riktiga gamla inspelningar från Library of Congress som ljud. Bygg en rytm, ändra tempo och dela den med en länk.">
+<link rel="canonical" href="https://pluggparken.se/extra/trummaskin/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Pluggparken">
+<meta property="og:locale" content="sv_SE">
+<meta property="og:title" content="Trummaskin – Pluggparken">
+<meta property="og:description" content="Bygg din egen rytm i en trummaskin med 16 steg och gamla inspelningar som ljud.">
+<meta property="og:url" content="https://pluggparken.se/extra/trummaskin/">
+<meta property="og:image" content="https://pluggparken.se/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#1b1c20">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/apple-touch-icon.png" sizes="180x180">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--font:"Baloo 2","Trebuchet MS",system-ui,sans-serif;--r:#E5484D;--o:#F2780C;--y:#F2B707;--c:#F3EBD6;--ink:#ECE6D6;--dim:#8D8F98;--panel:#2A2C31;--panel2:#202226;--lcd:#FFB000}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;overflow-x:clip}
+body{font-family:var(--font);color:var(--ink);background:radial-gradient(ellipse at 50% -10%,#3a3d46 0,#17181c 60%) fixed,#17181c;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-action:manipulation}
+button:focus-visible,.knob:focus-visible,select:focus-visible{outline:3px solid #7fb4ff;outline-offset:2px}
+.wrap{max-width:1240px;margin:0 auto;padding:18px 14px 60px}
+h1.sr{position:absolute;left:-9999px}
+/* maskinen */
+.maskin{position:relative;border-radius:26px;padding:22px 22px 26px;background:linear-gradient(180deg,#34363c 0,#2a2c31 18%,#26282d 100%);box-shadow:0 30px 60px rgba(0,0,0,.55),0 0 0 3px #111215,inset 0 2px 0 rgba(255,255,255,.12),inset 0 -3px 0 rgba(0,0,0,.4)}
+.maskin::before{content:"";position:absolute;inset:0;border-radius:26px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.018) 0 1px,transparent 1px 3px);pointer-events:none}
+.maskin::after{content:"";position:absolute;left:22px;right:22px;top:0;height:6px;border-radius:0 0 6px 6px;background:linear-gradient(90deg,var(--r) 0 25%,var(--o) 25% 50%,var(--y) 50% 75%,var(--c) 75%)}
+.topp{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin:6px 0 18px}
+.logga{display:flex;flex-direction:column;line-height:1;margin-right:6px}
+.logga b{font-size:1.7rem;font-weight:800;letter-spacing:.06em;color:var(--ink)}
+.logga b i{font-style:normal;color:var(--o)}
+.logga small{font-size:.72rem;letter-spacing:.32em;color:var(--dim);margin-top:5px;font-weight:700}
+.lcd{background:#0c0a06;border-radius:10px;padding:8px 14px;box-shadow:inset 0 3px 8px #000,0 0 0 2px #3b3d44,0 1px 0 rgba(255,255,255,.1);display:flex;align-items:center;gap:12px;min-height:62px}
+.lcd .sv{height:44px;width:auto;display:block}
+.lcd .etikett{font-size:.66rem;letter-spacing:.2em;color:#a37a1a;font-weight:800;writing-mode:horizontal-tb}
+.lcd .namn{font-size:1.05rem;color:var(--lcd);font-weight:800;letter-spacing:.08em;text-shadow:0 0 8px rgba(255,176,0,.55);min-width:11ch;text-transform:uppercase}
+.rad1{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+.grupp{display:flex;flex-direction:column;align-items:center;gap:5px}
+.grupp>label,.grupp>span.l{font-size:.64rem;letter-spacing:.18em;color:var(--dim);font-weight:800;text-transform:uppercase}
+.stor{min-width:104px;height:56px;border-radius:12px;font-weight:800;font-size:1.08rem;letter-spacing:.1em;color:#fff;box-shadow:0 5px 0 rgba(0,0,0,.55),0 0 0 2px rgba(0,0,0,.4),inset 0 2px 0 rgba(255,255,255,.25);transition:transform .06s,box-shadow .06s}
+.stor:active,.stor.p{transform:translateY(4px);box-shadow:0 1px 0 rgba(0,0,0,.55),0 0 0 2px rgba(0,0,0,.4),inset 0 2px 0 rgba(255,255,255,.25)}
+.stor.start{background:linear-gradient(180deg,#f0615d,#c6343a)}
+.stor.start.p{background:linear-gradient(180deg,#ff8a86,#e5484d);box-shadow:0 1px 0 rgba(0,0,0,.55),0 0 24px rgba(229,72,77,.8),inset 0 2px 0 rgba(255,255,255,.25)}
+.stor.stopp{background:linear-gradient(180deg,#5b5e68,#3a3c43)}
+.lilla{min-width:56px;height:40px;border-radius:10px;font-weight:800;font-size:.86rem;letter-spacing:.06em;background:linear-gradient(180deg,#555862,#3a3c43);color:#ECE6D6;box-shadow:0 4px 0 rgba(0,0,0,.55),0 0 0 2px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.2);padding:0 12px}
+.lilla:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.55),0 0 0 2px rgba(0,0,0,.35)}
+.lilla.on{background:linear-gradient(180deg,#ffc94d,#f2a707);color:#241a00}
+.pm{display:flex;gap:4px}
+.pm button{width:34px;height:34px;border-radius:9px;font-weight:800;background:linear-gradient(180deg,#555862,#3a3c43);box-shadow:0 3px 0 rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.2)}
+.pm button:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.55)}
+select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;border:0;border-radius:8px;padding:8px 10px;box-shadow:inset 0 3px 6px #000,0 0 0 2px #3b3d44;max-width:200px;letter-spacing:.04em}
+.kit{display:flex;border-radius:10px;overflow:hidden;box-shadow:0 0 0 2px #111}
+.kit button{padding:9px 12px;font-size:.78rem;font-weight:800;letter-spacing:.08em;background:#3a3c43;color:var(--dim)}
+.kit button.on{background:linear-gradient(180deg,#ffc94d,#f2a707);color:#241a00}
+/* rattar */
+.knob{position:relative;width:48px;height:48px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#7a7d88,#3a3c43 70%);box-shadow:0 5px 8px rgba(0,0,0,.55),0 0 0 3px #17181c,inset 0 1px 0 rgba(255,255,255,.3);cursor:ns-resize;touch-action:none;flex:none}
+.knob::before{content:"";position:absolute;inset:-7px;border-radius:50%;background:conic-gradient(from -135deg,var(--o) 0 var(--p,0deg),#17181c var(--p,0deg) 270deg,transparent 270deg);-webkit-mask:radial-gradient(circle,transparent 0 27px,#000 28px 31px,transparent 32px);mask:radial-gradient(circle,transparent 0 27px,#000 28px 31px,transparent 32px);opacity:.95}
+.knob .kap{position:absolute;inset:6px;border-radius:50%;background:repeating-conic-gradient(from 0deg,#4a4d57 0 6deg,#42444d 6deg 12deg);box-shadow:inset 0 2px 3px rgba(255,255,255,.18),inset 0 -3px 4px rgba(0,0,0,.4)}
+.knob .kap::after{content:"";position:absolute;left:50%;top:3px;width:4px;height:13px;margin-left:-2px;border-radius:2px;background:#ffe9b0;box-shadow:0 0 6px rgba(255,200,80,.8)}
+.knob.liten{width:38px;height:38px}
+.knob.liten::before{inset:-6px;-webkit-mask:radial-gradient(circle,transparent 0 21px,#000 22px 25px,transparent 26px);mask:radial-gradient(circle,transparent 0 21px,#000 22px 25px,transparent 26px)}
+.knob.liten .kap{inset:5px}.knob.liten .kap::after{top:2px;height:10px}
+/* spår */
+.spar{margin-top:14px;display:flex;flex-direction:column;gap:10px}
+.ledrad,.rad{display:grid;grid-template-columns:300px 1fr;gap:12px;align-items:center}
+.leds{display:grid;grid-template-columns:repeat(16,1fr);gap:6px;padding:0 4px}
+.leds i{display:block;height:7px;border-radius:4px;background:#3a2020;box-shadow:inset 0 1px 2px #000;transition:background .04s,box-shadow .04s}
+.leds i.nu{background:#ff4a44;box-shadow:0 0 10px 2px rgba(255,74,68,.85)}
+.leds i:nth-child(4n+1){background-color:#4a2a1c}
+.leds i.nu:nth-child(n){background:#ff4a44}
+.ctrl{display:grid;grid-template-columns:12px 64px minmax(0,1fr) auto;gap:8px;align-items:center;background:linear-gradient(180deg,#2f3136,#25272b);border-radius:12px;padding:7px 10px;box-shadow:0 0 0 2px #17181c,inset 0 1px 0 rgba(255,255,255,.1)}
+.ctrl .pr{width:10px;height:10px;border-radius:50%;background:var(--sk);box-shadow:0 0 8px var(--sk)}
+.ctrl .tn{display:flex;align-items:center;gap:6px;min-width:0}
+.ctrl .tn b{font-size:.78rem;letter-spacing:.06em;font-weight:800;text-transform:uppercase;white-space:nowrap}
+.vlcd{display:flex;align-items:center;gap:3px;background:#0c0a06;border-radius:7px;padding:3px 4px;box-shadow:inset 0 2px 5px #000;min-width:0}
+.vlcd button{width:20px;height:24px;color:var(--lcd);font-weight:800;line-height:1;border-radius:5px;font-size:1rem}
+.vlcd button:active{background:#2a2108}
+.vlcd span{flex:1;text-align:center;color:var(--lcd);font-size:.72rem;font-weight:800;letter-spacing:.05em;text-shadow:0 0 6px rgba(255,176,0,.5);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:7ch;text-transform:uppercase}
+.mute{width:32px;height:30px;border-radius:8px;font-weight:800;font-size:.78rem;background:linear-gradient(180deg,#555862,#3a3c43);box-shadow:0 3px 0 rgba(0,0,0,.55);color:var(--ink)}
+.mute.on{background:linear-gradient(180deg,#ff8a86,#e5484d);box-shadow:0 3px 0 rgba(0,0,0,.55),0 0 12px rgba(229,72,77,.7)}
+.steg{display:grid;grid-template-columns:repeat(16,1fr);gap:6px;padding:0 4px}
+.steg button{position:relative;aspect-ratio:1/1.12;border-radius:6px;background:linear-gradient(180deg,#4b4e58,#383a42);box-shadow:0 4px 0 #111214,0 0 0 2px #16171a,inset 0 1px 0 rgba(255,255,255,.2);transition:transform .05s,box-shadow .05s}
+.steg button::before{content:"";position:absolute;left:18%;right:18%;top:7px;height:4px;border-radius:2px;background:var(--k);opacity:.9}
+.steg button.p{background:linear-gradient(180deg,var(--k),color-mix(in srgb,var(--k) 70%,#000));box-shadow:0 4px 0 #111214,0 0 0 2px #16171a,0 0 16px color-mix(in srgb,var(--k) 75%,transparent),inset 0 1px 0 rgba(255,255,255,.5)}
+.steg button.p::before{background:#fff;opacity:.85}
+.steg button:active{transform:translateY(3px);box-shadow:0 1px 0 #111214,0 0 0 2px #16171a}
+.steg button.nu{outline:2px solid #ffffff55;outline-offset:1px}
+.steg button:nth-child(-n+4){--k:var(--r)}
+.steg button:nth-child(n+5):nth-child(-n+8){--k:var(--o)}
+.steg button:nth-child(n+9):nth-child(-n+12){--k:var(--y)}
+.steg button:nth-child(n+13){--k:var(--c)}
+/* pads */
+.pads{margin-top:22px;display:grid;grid-template-columns:repeat(8,1fr);gap:12px}
+.pad{position:relative;aspect-ratio:1/.8;border-radius:12px;background:radial-gradient(circle at 50% 35%,#4c4f59,#2f3138 70%);box-shadow:0 6px 0 #111214,0 0 0 3px #17181c,inset 0 2px 0 rgba(255,255,255,.18);font-weight:800;color:var(--dim);transition:transform .05s,box-shadow .05s,background .05s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.pad small{font-size:.62rem;letter-spacing:.14em;text-transform:uppercase}
+.pad kbd{font:inherit;font-size:1rem;color:var(--ink)}
+.pad.slag,.pad:active{transform:translateY(5px);box-shadow:0 1px 0 #111214,0 0 0 3px #17181c;background:radial-gradient(circle at 50% 35%,var(--sk),#2f3138 95%);color:#fff}
+.under{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:18px;align-items:center}
+.under .knapprad{display:flex;gap:10px;flex-wrap:wrap}
+.krok{margin-top:18px;font-size:.84rem;color:var(--dim);min-height:1.3em}
+.krok b{color:#cdb77a}
+.info{margin-top:22px;background:#1f2024;border-radius:16px;padding:6px 18px 16px;box-shadow:0 0 0 2px #2a2c31;color:#c3c0b6;font-size:.92rem;line-height:1.5}
+.info summary{cursor:pointer;font-weight:800;padding:12px 0;color:var(--ink);letter-spacing:.04em}
+.info ul{margin:.3rem 0 .6rem 1.1rem;padding:0}
+.info a{color:#ffc94d}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#0c0a06;color:var(--lcd);font-weight:800;padding:10px 18px;border-radius:12px;box-shadow:0 0 0 2px #3b3d44,0 10px 24px rgba(0,0,0,.5);z-index:40}
+@media(max-width:980px){
+  .ledrad,.rad{grid-template-columns:1fr;gap:6px}
+  .ledrad .fyll{display:none}
+  .ctrl{grid-template-columns:12px 64px minmax(0,1fr) auto}
+  .pads{grid-template-columns:repeat(4,1fr)}
+}
+@media(max-width:700px){
+  .wrap{padding:10px 8px 50px}.maskin{padding:16px 12px 20px}
+  .steg,.leds{grid-template-columns:repeat(8,1fr)}
+  .leds i{height:6px}
+  .leds.b2{display:grid}
+  .stor{min-width:88px;height:52px}
+  .logga b{font-size:1.35rem}
+  .steg button{aspect-ratio:1/1}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<script src="../../ljud.js"></script>
+<script src="../../djur.js"></script>
+<script src="../../huvud.js" data-titel="Trummaskin" data-ikon="🥁" data-hem="../../" data-portal="ovriga" data-nav="av"></script>
+<main class="wrap">
+<h1 class="sr">Trummaskin</h1>
+<div class="maskin" id="maskin">
+  <div class="topp">
+    <div class="logga"><b>TRUMMASKIN <i>TM-16</i></b><small>PLUGGPARKEN · 16 STEG · 8 SPÅR</small></div>
+    <div class="lcd" id="lcdBpm" aria-live="off"><span class="etikett">TEMPO</span><svg class="sv" id="sevBpm" viewBox="0 0 144 64" aria-label="Tempo"></svg><span class="etikett">BPM</span></div>
+    <div class="lcd"><span class="etikett">RYTM</span><span class="namn" id="namnLcd">Tomt</span></div>
+    <div style="flex:1"></div>
+    <div class="grupp"><div class="knob" id="kMaster" role="slider" tabindex="0" aria-label="Huvudvolym"><div class="kap"></div></div><label>Volym</label></div>
+  </div>
+  <div class="rad1">
+    <button class="stor start" id="bStart" type="button">▶ START</button>
+    <button class="stor stopp" id="bStopp" type="button">■ STOPP</button>
+    <div class="grupp"><div class="pm"><button type="button" id="bMin" aria-label="Långsammare">−</button><button type="button" id="bPlus" aria-label="Snabbare">+</button></div><span class="l">Tempo</span></div>
+    <div class="grupp"><div class="knob" id="kTempo" role="slider" tabindex="0" aria-label="Tempo"><div class="kap"></div></div><label>Tempo</label></div>
+    <div class="grupp"><div class="knob" id="kSwing" role="slider" tabindex="0" aria-label="Swing"><div class="kap"></div></div><label>Swing</label></div>
+    <div class="grupp"><div class="kit" role="group" aria-label="Ljudsamling"><button type="button" id="kitA" class="on">SYNT</button><button type="button" id="kitB">GAMLA</button></div><span class="l">Ljud</span></div>
+    <div class="grupp"><select class="sel" id="selMall" aria-label="Färdig rytm"></select><span class="l">Färdig rytm</span></div>
+  </div>
+  <div class="spar" id="spar">
+    <div class="ledrad"><div class="fyll"></div><div class="leds" id="leds"></div></div>
+  </div>
+  <div class="pads" id="pads" aria-label="Spela själv"></div>
+  <div class="under">
+    <div class="knapprad">
+      <button class="lilla" id="bSlump" type="button">🎲 SLUMPA</button>
+      <button class="lilla" id="bRensa" type="button">TÖM</button>
+      <button class="lilla" id="bDela" type="button">🔗 DELA</button>
+      <button class="lilla" id="bSpara" type="button">💾 SPARA</button>
+    </div>
+    <div class="knapprad" id="minnen" aria-label="Sparade rytmer"></div>
+  </div>
+  <div class="krok" id="krok">Tryck på rutorna för att bygga en rytm, eller välj en färdig rytm. Mellanslag startar och stoppar.</div>
+</div>
+<details class="info">
+  <summary>Om ljuden, källor och licens</summary>
+  <p>Ljuden som heter <b>SYNT</b> skapas direkt i din webbläsare. Ljuden som heter <b>GAMLA</b> är korta klipp ur riktigt gamla inspelningar (ungefär 1900–1950), ur <a href="https://citizen-dj.labs.loc.gov/" target="_blank" rel="noopener">Citizen DJ</a> från Library of Congress i USA. Klippen är utvalda automatiskt för att låta som slag, så några kan låta överraskande. Tryck på ◀ ▶ vid ett spår för att byta ljud.</p>
+  <p>Biblioteket har markerat inspelningarna som fria att använda och remixa, även i andra sammanhang. Källor:</p>
+  <ul>
+    <li>The National Jukebox (folkmusik, jazz, blues, populärmusik): allmän egendom.</li>
+    <li>Inventing Entertainment (Edison-inspelningar): allmän egendom.</li>
+    <li>MusicBox Project: fria att använda och återanvända (American Folklife Center).</li>
+    <li>Tony Schwartz Collection: fria att använda och återanvända.</li>
+  </ul>
+  <p>Kreditrad: Citizen DJ Project, Library of Congress. Biblioteket påminner om att de är historiska inspelningar som speglar sin tid, och ber oss behandla materialet med respekt. Vilket klipp som ligger bakom ett ljud visas under maskinen när du byter ljud.</p>
+</details>
+</main>
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s);
+const SK=["#E5484D","#F2780C","#F2B707","#F3EBD6","#4cc3ff","#7fe08a","#c58bff","#ff7bd0"];
+/* ---------- ljudmotor ---------- */
+let ctx=null,master=null,comp=null,brus=null,SAMP=null,SAMPMETA=[];
+function startaLjud(){if(ctx){if(ctx.state==="suspended")ctx.resume();return}
+  const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;ctx=new AC();
+  master=ctx.createGain();comp=ctx.createDynamicsCompressor();comp.threshold.value=-14;comp.ratio.value=5;comp.attack.value=.003;comp.release.value=.2;
+  master.connect(comp);comp.connect(ctx.destination);setMaster();
+  const n=ctx.sampleRate*1.2;brus=ctx.createBuffer(1,n,ctx.sampleRate);const d=brus.getChannelData(0);for(let i=0;i<n;i++)d[i]=Math.random()*2-1;
+  hamtaSampel()}
+function hamtaSampel(){if(SAMP||!ctx||hamtaSampel.p)return;hamtaSampel.p=1;
+  Promise.all([fetch("samples.json").then(r=>r.json()),fetch("samples.wav").then(r=>r.arrayBuffer())]).then(([m,b])=>ctx.decodeAudioData(b).then(buf=>{
+    SAMPMETA=m;SAMP=m.map(s=>{const sr=buf.sampleRate,a=Math.round(s.a*sr),l=Math.round(s.l*sr),o=ctx.createBuffer(1,l,sr);o.getChannelData(0).set(buf.getChannelData(0).subarray(a,a+l));return o});
+    byggSpar()})).catch(()=>{hamtaSampel.p=0})}
+function setMaster(){if(master)master.gain.value=Math.pow(S.master/100,1.6)*1.1}
+function ns(t,dur,fr,q,type,g,dest){const s=ctx.createBufferSource();s.buffer=brus;s.loop=true;const f=ctx.createBiquadFilter();f.type=type;f.frequency.value=fr;f.Q.value=q;const e=ctx.createGain();e.gain.setValueAtTime(g,t);e.gain.exponentialRampToValueAtTime(.0008,t+dur);s.connect(f);f.connect(e);e.connect(dest);s.start(t,Math.random()*.5);s.stop(t+dur+.05)}
+function osc(t,type,f0,f1,dur,g,dest,lp){const o=ctx.createOscillator();o.type=type;o.frequency.setValueAtTime(f0,t);if(f1)o.frequency.exponentialRampToValueAtTime(f1,t+dur*.6);const e=ctx.createGain();e.gain.setValueAtTime(g,t);e.gain.exponentialRampToValueAtTime(.0008,t+dur);o.connect(e);e.connect(dest);o.start(t);o.stop(t+dur+.05)}
+const SYN={
+  b808:(t,d)=>{osc(t,"sine",160,42,.62,1,d);osc(t,"sine",62,40,.5,.5,d)},
+  bpunch:(t,d)=>{osc(t,"sine",210,52,.28,1,d);ns(t,.018,3000,.7,"highpass",.5,d)},
+  blong:(t,d)=>{osc(t,"sine",120,36,1,1,d)},
+  snare:(t,d)=>{ns(t,.2,1900,.8,"bandpass",.8,d);ns(t,.12,6000,.5,"highpass",.3,d);osc(t,"triangle",210,150,.11,.6,d)},
+  rim:(t,d)=>{osc(t,"square",820,780,.035,.35,d);ns(t,.03,3500,1,"bandpass",.5,d)},
+  clap:(t,d)=>{[0,.011,.022].forEach(x=>ns(t+x,.03,1500,1.2,"bandpass",1.7,d));ns(t+.03,.2,1250,.9,"bandpass",1.2,d)},
+  hatc:(t,d)=>{ns(t,.05,8200,.7,"highpass",.45,d)},
+  hato:(t,d)=>{ns(t,.34,8000,.7,"highpass",.4,d)},
+  shaker:(t,d)=>{ns(t,.1,5200,1.5,"bandpass",.5,d)},
+  tom:(t,d)=>{osc(t,"sine",190,90,.36,.9,d)},
+  conga:(t,d)=>{osc(t,"sine",340,250,.18,.8,d);ns(t,.012,2500,1,"bandpass",.3,d)},
+  cow:(t,d)=>{[540,800].forEach(f=>osc(t,"square",f,0,.28,.3,d))},
+  zap:(t,d)=>{osc(t,"sawtooth",1800,90,.22,.35,d)},
+  blip:(t,d)=>{osc(t,"square",880,0,.07,.25,d);osc(t+.07,"square",1320,0,.1,.22,d)}
+};
+/* spåren: namn, färg, synt-röster, vilken grupp av gamla klipp som hör till */
+const SPAR=[
+ {id:"bas",n:"Bas",syn:[["808 BAS","b808"],["PUNCH","bpunch"],["LÅNG BAS","blong"]],grp:["bas"]},
+ {id:"snart",n:"Snärt",syn:[["SNÄRT","snare"],["RIM","rim"]],grp:["snart"]},
+ {id:"klapp",n:"Klapp",syn:[["KLAPP","clap"],["RIM","rim"]],grp:["snart","stab"]},
+ {id:"hatc",n:"Hatt",syn:[["HATT","hatc"],["SKAKA","shaker"]],grp:["tick"]},
+ {id:"hato",n:"Öppen",syn:[["HATT ÖPPEN","hato"]],grp:["tick","ljud"]},
+ {id:"tom",n:"Tom",syn:[["TOM","tom"],["CONGA","conga"]],grp:["perc","bas"]},
+ {id:"perc",n:"Slag",syn:[["KOKLOCKA","cow"],["CONGA","conga"],["SKAKA","shaker"]],grp:["perc"]},
+ {id:"fx",n:"Effekt",syn:[["LASER","zap"],["BLIPP","blip"]],grp:["stab","ljud"]}
+];
+function roster(i){const sp=SPAR[i],r=sp.syn.map(([n,f])=>({n,f,s:null}));if(SAMP)SAMPMETA.forEach((m,k)=>{if(sp.grp.includes(m.k))r.push({n:"GAMLA "+(m.n.match(/\d+$/)||[""])[0],f:null,s:k})});return r}
+function spela(i,t,vel){if(!ctx)return;const tr=S.t[i];if(tr.mute&&!vel)return;const v=roster(i),r=v[tr.v%v.length]||v[0];
+  const g=ctx.createGain();g.gain.value=(tr.vol/100)*(vel||1);g.connect(master);
+  if(r.s!=null&&SAMP){const b=ctx.createBufferSource();b.buffer=SAMP[r.s];b.connect(g);b.start(t)}else{SYN[r.f](t,g)}}
+/* ---------- tillstånd ---------- */
+const MALLAR=[
+ ["Tomt",90,0,[]],
+ ["Boom bap",88,16,["x.......x.x.....","....x.......x...","","x.x.x.x.x.x.x.x.","..............x.","","",""]],
+ ["Fyra i takt",124,0,["x...x...x...x...","","....x.......x...","xxxxxxxxxxxxxxxx","..x...x...x...x.","","",""]],
+ ["Funk",104,12,["x..x..x...x...x.","....x..x.x..x...","","x.x.x.x.x.x.x.x.","","","..x.....x..x...",""]],
+ ["Trap",140,0,["x.....x...x.....","........x.......","........x.......","x.xxx.xxx.x.xxxx","......x.......x.","","",""]],
+ ["En droppe (reggae)",76,10,["........x.......","........x.......","","x.x.x.x.x.x.x.x.","","","x...x...x...x...",""]],
+ ["Skaka (latin)",100,8,["x..x..x...x.x...","","","xxxxxxxxxxxxxxxx","","..x..x..x..x..x.","x.x.x..x.x.x..x.",""]],
+ ["Disco",118,0,["x...x...x...x...","","....x.......x...","","x.x.x.x.x.x.x.x.","","...x.x...x.x....","..............x."]]
+];
+function tomt(){return{bpm:90,swing:0,master:80,kit:0,namn:"Tomt",t:SPAR.map((s,i)=>({s:".".repeat(16),v:0,vol:i<2?100:75,mute:false}))}}
+let S=tomt(),spelar=false,steg=0,nasta=0,tid=0,timer=0,kö=[];
+function mall(i){const m=MALLAR[i];S=tomt();S.bpm=m[1];S.swing=m[2];S.namn=m[0];m[3].forEach((p,k)=>{S.t[k].s=(p||"").padEnd(16,".").slice(0,16)});if(S.kit)kitSatt(S.kit)}
+function kitSatt(k){S.kit=k;S.t.forEach((t,i)=>{const sy=SPAR[i].syn.length;t.v=k&&SAMP?sy:0});$("#kitA").classList.toggle("on",!k);$("#kitB").classList.toggle("on",!!k)}
+/* ---------- delning och sparande ---------- */
+const HEX=s=>("0000"+parseInt(s.replace(/x/g,"1").replace(/\./g,"0"),2).toString(16)).slice(-4);
+const BIN=h=>parseInt(h,16).toString(2).padStart(16,"0").replace(/1/g,"x").replace(/0/g,".");
+function kod(){return [S.bpm,S.swing,S.master,S.kit].join(".")+"_"+S.t.map(t=>[HEX(t.s),t.v,t.vol,t.mute?1:0].join(".")).join("_")}
+function avkod(k){try{const p=k.split("_"),h=p[0].split(".").map(Number);if(p.length!==9||h.some(isNaN))return null;
+  const o=tomt();o.bpm=Math.max(50,Math.min(200,h[0]));o.swing=Math.max(0,Math.min(60,h[1]));o.master=Math.max(0,Math.min(100,h[2]));o.kit=h[3]?1:0;o.namn="Egen rytm";
+  for(let i=0;i<8;i++){const q=p[i+1].split(".");if(!/^[0-9a-f]{4}$/i.test(q[0]))return null;o.t[i]={s:BIN(q[0]),v:Math.max(0,Math.min(40,+q[1]||0)),vol:Math.max(0,Math.min(100,+q[2]||0)),mute:q[3]==="1"}}return o}catch(e){return null}}
+const NYCKEL="pluggparken-trummaskin";
+function minnenLasa(){try{return JSON.parse(localStorage.getItem(NYCKEL)||"[]")}catch(e){return[]}}
+function minnenSkriv(a){try{localStorage.setItem(NYCKEL,JSON.stringify(a))}catch(e){}}
+/* ---------- sjusegment ---------- */
+const SEG={0:"abcdef",1:"bc",2:"abdeg",3:"abcdg",4:"bcfg",5:"acdfg",6:"acdefg",7:"abc",8:"abcdefg",9:"abcdfg"};
+function sev(el,tal){const t=String(Math.round(tal)).padStart(3," ");const P={a:[8,4,24,4],b:[34,8,4,24],c:[34,36,4,24],d:[8,60,24,4],e:[4,36,4,24],f:[4,8,4,24],g:[8,32,24,4]};
+  let h="";t.split("").forEach((ch,i)=>{const x=i*48;Object.keys(P).forEach(k=>{const on=ch!==" "&&SEG[ch].includes(k),p=P[k];const horiz=p[2]>p[3];h+=`<rect x="${x+p[0]}" y="${p[1]}" width="${p[2]}" height="${p[3]}" rx="2" fill="${on?"#FFB000":"#2a2108"}" ${on?'filter="url(#g)"':""}/>`})});
+  el.innerHTML='<defs><filter id="g"><feGaussianBlur stdDeviation="1.2"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>'+h}
+/* ---------- rattar ---------- */
+function knob(el,opt){let v=opt.val();const upd=()=>{v=opt.val();const f=(v-opt.min)/(opt.max-opt.min);el.style.setProperty("--p",(f*270)+"deg");el.querySelector(".kap").style.transform="rotate("+(-135+f*270)+"deg)";el.setAttribute("aria-valuenow",Math.round(v));el.setAttribute("aria-valuemin",opt.min);el.setAttribute("aria-valuemax",opt.max)};
+  const sat=nv=>{nv=Math.max(opt.min,Math.min(opt.max,Math.round(nv)));if(nv!==opt.val()){opt.set(nv)}upd()};
+  let y0=0,v0=0,dr=false;
+  el.addEventListener("pointerdown",e=>{dr=true;y0=e.clientY;v0=opt.val();el.setPointerCapture(e.pointerId);e.preventDefault()});
+  el.addEventListener("pointermove",e=>{if(!dr)return;sat(v0+(y0-e.clientY)*(opt.max-opt.min)/150)});
+  const slut=()=>{dr=false};el.addEventListener("pointerup",slut);el.addEventListener("pointercancel",slut);
+  el.addEventListener("wheel",e=>{e.preventDefault();sat(opt.val()+(e.deltaY<0?1:-1)*Math.max(1,(opt.max-opt.min)/40))},{passive:false});
+  el.addEventListener("keydown",e=>{const d=e.key==="ArrowUp"||e.key==="ArrowRight"?1:e.key==="ArrowDown"||e.key==="ArrowLeft"?-1:0;if(d){e.preventDefault();sat(opt.val()+d*Math.max(1,(opt.max-opt.min)/40))}});
+  el.addEventListener("dblclick",()=>{if(opt.reset!=null){sat(opt.reset)}});
+  upd();return upd}
+/* ---------- gränssnitt ---------- */
+let uppd={};
+function byggSpar(){const sp=$("#spar");sp.querySelectorAll(".rad").forEach(r=>r.remove());
+  const L=$("#leds");if(!L.children.length)for(let i=0;i<16;i++)L.appendChild(document.createElement("i"));
+  SPAR.forEach((s,i)=>{const r=document.createElement("div");r.className="rad";r.dataset.i=i;
+    r.innerHTML=`<div class="ctrl" style="--sk:${SK[i]}"><span class="pr"></span><div class="tn"><b>${s.n}</b></div><div class="vlcd"><button type="button" data-b="-1" aria-label="Föregående ljud">◀</button><span></span><button type="button" data-b="1" aria-label="Nästa ljud">▶</button></div><div style="display:flex;align-items:center;gap:8px"><div class="knob liten" data-vol role="slider" tabindex="0" aria-label="Volym ${s.n}"><div class="kap"></div></div><button type="button" class="mute" data-m aria-label="Tysta ${s.n}">M</button></div></div><div class="steg"></div>`;
+    const st=r.querySelector(".steg");for(let k=0;k<16;k++){const b=document.createElement("button");b.type="button";b.dataset.k=k;b.setAttribute("aria-label",s.n+" steg "+(k+1));b.setAttribute("aria-pressed","false");st.appendChild(b)}
+    sp.appendChild(r);
+    knob(r.querySelector("[data-vol]"),{min:0,max:100,reset:75,val:()=>S.t[i].vol,set:v=>{S.t[i].vol=v}});
+  });
+  visa()}
+function visa(){document.querySelectorAll(".rad").forEach(r=>{const i=+r.dataset.i,t=S.t[i];
+    r.querySelectorAll(".steg button").forEach((b,k)=>{const p=t.s[k]==="x";b.classList.toggle("p",p);b.setAttribute("aria-pressed",p)});
+    const v=roster(i);r.querySelector(".vlcd span").textContent=(v[t.v%v.length]||v[0]).n;
+    r.querySelector("[data-m]").classList.toggle("on",t.mute);
+    const kn=r.querySelector("[data-vol]");kn.dispatchEvent(new Event("uppd"));});
+  document.querySelectorAll("[data-vol]").forEach((k,i)=>{const f=S.t[i].vol/100;k.style.setProperty("--p",(f*270)+"deg");k.querySelector(".kap").style.transform="rotate("+(-135+f*270)+"deg)"});
+  sev($("#sevBpm"),S.bpm);$("#namnLcd").textContent=S.namn;$("#kitA").classList.toggle("on",!S.kit);$("#kitB").classList.toggle("on",!!S.kit);
+  $("#selMall").value=MALLAR.findIndex(m=>m[0]===S.namn);kn.tempo&&kn.tempo();kn.swing&&kn.swing();kn.master&&kn.master()}
+const kn={};
+function krok(t){$("#krok").innerHTML=t}
+function toast(t){const e=document.createElement("div");e.className="toast";e.textContent=t;document.body.appendChild(e);setTimeout(()=>e.remove(),2200)}
+function minnenRita(){const a=minnenLasa(),h=$("#minnen");h.innerHTML="";a.forEach((m,i)=>{const b=document.createElement("button");b.type="button";b.className="lilla";b.textContent=m.n;b.title="Tryck för att ladda. Dubbeltryck tar bort.";b.dataset.i=i;h.appendChild(b)})}
+/* ---------- spelare ---------- */
+function stegTid(k){const sek=60/S.bpm/4,sw=(S.swing/100)*sek*.66;return sek+(k%2===0?sw:-sw)}
+function tick(){if(!ctx)return;while(nasta<ctx.currentTime+.12){const k=steg%16;
+    S.t.forEach((t,i)=>{if(t.s[k]==="x")spela(i,nasta)});kö.push([nasta,k]);steg++;nasta+=stegTid(k)}}
+function ritaLed(){if(!spelar){return}const nu=ctx.currentTime;let akt=null;while(kö.length&&kö[0][0]<=nu){akt=kö.shift()}
+  if(akt){const k=akt[1];document.querySelectorAll("#leds i").forEach((e,j)=>e.classList.toggle("nu",j===k));document.querySelectorAll(".steg button.nu").forEach(b=>b.classList.remove("nu"));document.querySelectorAll(".rad").forEach(r=>{r.querySelectorAll(".steg button")[k].classList.add("nu")})}
+  requestAnimationFrame(ritaLed)}
+function start(){startaLjud();if(!ctx||spelar)return;spelar=true;steg=0;nasta=ctx.currentTime+.06;kö=[];tick();timer=setInterval(tick,25);requestAnimationFrame(ritaLed);$("#bStart").classList.add("p")}
+function stopp(){if(!spelar){return}spelar=false;clearInterval(timer);kö=[];document.querySelectorAll("#leds i").forEach(e=>e.classList.remove("nu"));document.querySelectorAll(".steg button.nu").forEach(b=>b.classList.remove("nu"));$("#bStart").classList.remove("p")}
+function slag(i){startaLjud();if(!ctx)return;spela(i,ctx.currentTime+.005,1);const p=document.querySelector(`.pad[data-i="${i}"]`);if(p){p.classList.add("slag");setTimeout(()=>p.classList.remove("slag"),110)}}
+function laddaS(s){S=s;steg=0;visa();krok("")}
+/* ---------- bygg sidan ---------- */
+function init(){
+  const P=$("#pads");const TANG=["a","s","d","f","g","h","j","k"];
+  SPAR.forEach((s,i)=>{const b=document.createElement("button");b.type="button";b.className="pad";b.dataset.i=i;b.style.setProperty("--sk",SK[i]);b.innerHTML=`<small>${s.n}</small><kbd>${TANG[i].toUpperCase()}</kbd>`;P.appendChild(b)});
+  const sel=$("#selMall");MALLAR.forEach((m,i)=>{const o=document.createElement("option");o.value=i;o.textContent=m[0];sel.appendChild(o)});
+  const fran=location.hash.match(/#m=([^&]+)/);const d=fran&&avkod(decodeURIComponent(fran[1]));
+  if(d)S=d;else mall(1);
+  byggSpar();
+  kn.tempo=knob($("#kTempo"),{min:50,max:200,reset:90,val:()=>S.bpm,set:v=>{S.bpm=v;sev($("#sevBpm"),v)}});
+  kn.swing=knob($("#kSwing"),{min:0,max:60,reset:0,val:()=>S.swing,set:v=>{S.swing=v}});
+  kn.master=knob($("#kMaster"),{min:0,max:100,reset:80,val:()=>S.master,set:v=>{S.master=v;setMaster()}});
+  visa();minnenRita();
+}
+/* ---------- händelser ---------- */
+document.addEventListener("click",e=>{
+  const st=e.target.closest(".steg button");if(st){const r=st.closest(".rad"),i=+r.dataset.i,k=+st.dataset.k,t=S.t[i];const a=t.s.split("");a[k]=a[k]==="x"?".":"x";t.s=a.join("");S.namn="Egen rytm";visa();startaLjud();if(a[k]==="x"&&!spelar&&ctx)spela(i,ctx.currentTime+.005,1);return}
+  const bb=e.target.closest(".vlcd button");if(bb){const r=bb.closest(".rad"),i=+r.dataset.i,t=S.t[i],n=roster(i).length;t.v=(t.v+ +bb.dataset.b+n)%n;visa();startaLjud();if(ctx&&!spelar)spela(i,ctx.currentTime+.005,1);
+    const rr=roster(i)[t.v];if(rr&&rr.s!=null){const m=SAMPMETA[rr.s];krok(`<b>${m.n}</b> · ur <i>${m.t}</i> · ${m.c}`)}else krok("Ljudet skapas i webbläsaren.");return}
+  const mu=e.target.closest("[data-m]");if(mu){const i=+mu.closest(".rad").dataset.i;S.t[i].mute=!S.t[i].mute;visa();return}
+  const pd=e.target.closest(".pad");if(pd){slag(+pd.dataset.i);return}
+  const mn=e.target.closest("#minnen button");if(mn){const a=minnenLasa(),m=a[+mn.dataset.i];if(m){const s=avkod(m.k);if(s){s.namn=m.n;laddaS(s);toast("Laddade "+m.n)}}return}
+});
+document.addEventListener("dblclick",e=>{const mn=e.target.closest("#minnen button");if(mn){const a=minnenLasa();a.splice(+mn.dataset.i,1);minnenSkriv(a);minnenRita();toast("Borttagen")}});
+$("#bStart").onclick=()=>{spelar?stopp():start()};
+$("#bStopp").onclick=stopp;
+$("#bMin").onclick=()=>{S.bpm=Math.max(50,S.bpm-2);visa()};$("#bPlus").onclick=()=>{S.bpm=Math.min(200,S.bpm+2);visa()};
+$("#kitA").onclick=()=>{startaLjud();kitSatt(0);visa()};$("#kitB").onclick=()=>{startaLjud();if(!SAMP)krok("Laddar de gamla ljuden …");kitSatt(1);visa();if(!SAMP)setTimeout(()=>{kitSatt(1);visa();krok("Gamla inspelningar från Library of Congress. Tryck ◀ ▶ vid ett spår för att byta klipp.")},900)};
+$("#selMall").onchange=e=>{const i=+e.target.value;const k=S.kit;mall(i);if(k)kitSatt(1);visa()};
+$("#bSlump").onclick=()=>{const k=S.kit;S=tomt();S.kit=k;S.namn="Slumpad rytm";S.bpm=80+Math.round(Math.random()*60);S.swing=Math.random()<.4?Math.round(Math.random()*25):0;
+  const dens=[.3,.2,.12,.55,.12,.1,.2,.06];S.t.forEach((t,i)=>{let a="";for(let k=0;k<16;k++){let p=dens[i];if(i===0&&k%4===0)p=.7;if(i===1&&k%8===4)p=.9;a+=Math.random()<p?"x":"."}t.s=a;if(k){const n=roster(i).length;t.v=Math.min(n-1,SPAR[i].syn.length+Math.floor(Math.random()*(n-SPAR[i].syn.length)))}});visa()};
+$("#bRensa").onclick=()=>{S.t.forEach(t=>t.s=".".repeat(16));S.namn="Tomt";visa()};
+$("#bDela").onclick=()=>{const u=location.origin+location.pathname+"#m="+encodeURIComponent(kod());history.replaceState(null,"",u);if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(u).then(()=>toast("Länken är kopierad"),()=>toast("Kopiera adressen i fältet"));else toast("Kopiera adressen i fältet")};
+$("#bSpara").onclick=()=>{const a=minnenLasa();const n=prompt("Vad ska rytmen heta?",S.namn&&S.namn!=="Tomt"?S.namn:"Min rytm");if(!n)return;a.push({n:n.slice(0,18),k:kod()});minnenSkriv(a.slice(-8));S.namn=n.slice(0,18);minnenRita();visa();toast("Sparad på den här enheten")};
+const TK={a:0,s:1,d:2,f:3,g:4,h:5,j:6,k:7};
+document.addEventListener("keydown",e=>{if(e.target.closest&&e.target.closest("input,select,textarea"))return;if(e.metaKey||e.ctrlKey||e.altKey)return;
+  if(e.key===" "&&!e.target.closest("button")){e.preventDefault();spelar?stopp():start();return}
+  const i=TK[e.key.toLowerCase()];if(i!=null&&!e.repeat){slag(i)}});
+document.addEventListener("visibilitychange",()=>{if(document.hidden)stopp()});
+init();
+window.MPTrummaskin={slag:slag,get ctx(){return ctx},get master(){return master},get S(){return S},roster:roster,kitSatt:kitSatt,visa:visa};
+})();
+</script>
+</body>
+</html>
