@@ -160,6 +160,7 @@ const HELV_B_W = [761, 761, 761, 761, 761, 761, 761, 761, 761, 761, 761, 761, 76
       }
       doc.text('BLAD ' + i + ' av 3 - ' + ed.name, x0, 13, { size: 18, bold: true, color: [0, 0, 0] });
       doc.text(opts.title + ' · hörnillusion', x0 + s, 13, { size: 8, align: 'right', color: [0, 0, 0] });
+      doc.text('pluggparken.se', PW - 10, PH - 7, { size: 7, align: 'right', color: [0.5, 0.5, 0.5] });
       // kantetiketter
       const lc = [0.1, 0.1, 0.5];
       doc.fill(...lc);
