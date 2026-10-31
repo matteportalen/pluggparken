@@ -63,6 +63,7 @@ h1.sr{position:absolute;left:-9999px}
 .lilla{min-width:56px;height:40px;border-radius:10px;font-weight:800;font-size:.86rem;letter-spacing:.06em;background:linear-gradient(180deg,#555862,#3a3c43);color:#ECE6D6;box-shadow:0 4px 0 rgba(0,0,0,.55),0 0 0 2px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.2);padding:0 12px}
 .lilla:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.55),0 0 0 2px rgba(0,0,0,.35)}
 .lilla.on{background:linear-gradient(180deg,#ffc94d,#f2a707);color:#241a00}
+#bSmpM.on{background:linear-gradient(180deg,#ff8a86,#e5484d);color:#fff}
 .pm{display:flex;gap:4px}
 .pm button{width:34px;height:34px;border-radius:9px;font-weight:800;background:linear-gradient(180deg,#555862,#3a3c43);box-shadow:0 3px 0 rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.2)}
 .pm button:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.55)}
@@ -507,12 +508,12 @@ function padBygg(){const h=$("#padpan");
   <div class="padctl"><span class="fx"><div class="knob liten" id="kPpit" role="slider" tabindex="0" aria-label="Tonhöjd på klippen"><div class="kap"></div></div><small id="ppitT">TONHÖJD 0</small></span><span class="fx"><button type="button" id="bPrev" aria-pressed="false">⇄ BAKLÄNGES</button></span><span class="fx"><div class="knob liten" id="kPvol" role="slider" tabindex="0" aria-label="Volym sample-pads"><div class="kap"></div></div><small>VOLYM</small></span><span class="fx"><button type="button" id="bPstj" aria-pressed="false" title="Tryck på ett klipp för att lägga det bland dina favoriter (⭐ MINA)">⭐ MARKERA</button></span><small id="pkalla" style="color:var(--dim);flex:1;min-width:160px">Tryck på en pad. Kom ihåg: REC (R) spelar in dem i takten.</small></div>
   <div class="egnarad" id="egnarad" hidden><button type="button" class="lilla" id="bEgRec">🎤 SPELA IN</button><button type="button" class="lilla" id="bEgFil">📂 LADDA FIL</button>${[1,2,3,4].map(i=>`<button type="button" class="lilla" data-eg="${i-1}">L${i} → PAD</button>`).join("")}<button type="button" class="lilla" id="bEgTom">TÖM</button><input type="file" id="egFil" accept="audio/*" hidden><small style="color:var(--dim);flex:1;min-width:200px">Tryck på en tom pad för att välja plats. Dina egna ljud sparas inte: spara låten som mp3 när du är klar.</small></div>
   <div class="spgrid" id="spgrid">${Array.from({length:16},(_,i)=>`<button type="button" class="sp" data-sp="${i}"><kbd>${SPK[i].toUpperCase()}</kbd><span></span></button>`).join("")}</div>
-  <div class="smpl"><span>SAMPLE-SPÅR</span><button type="button" class="lilla" id="bSmpTom">TÖM SPÅR</button><small style="color:var(--dim)">Tryck på en pad och sedan på en ruta för att lägga klippet där, eller spela in med REC.</small></div>
+  <div class="smpl"><span>SAMPLE-SPÅR</span><button type="button" class="lilla" id="bSmpM" aria-pressed="false" title="Tysta sample-spåret i takten (padsen du spelar själv hörs ändå)">🔇 TYSTA SPÅRET</button><button type="button" class="lilla" id="bSmpTom">TÖM SPÅR</button><small style="color:var(--dim)">Tryck på en pad och sedan på en ruta för att lägga klippet där, eller spela in med REC.</small></div>
   <div class="smprad" id="smprad">${Array.from({length:16},(_,i)=>`<button type="button" data-sk="${i}" aria-label="Sample-spår steg ${i+1}"></button>`).join("")}</div>`;
   knob($("#kPpit"),{min:-12,max:12,reset:0,val:()=>padPit,set:v=>{padPit=v;$("#ppitT").textContent="TONHÖJD "+(v>0?"+":"")+v}});
   knob($("#kPvol"),{min:0,max:100,reset:80,val:()=>S.pvol,set:v=>{S.pvol=v}});
   $("#egFil").addEventListener("change",e=>{egnaFil(e.target.files[0]);e.target.value=""})}
-function padRita(){const h=$("#padpan");if(!h||!h.firstChild)return;h.hidden=!!S.songOn;
+function padRita(){const h=$("#padpan");if(!h||!h.firstChild)return;{const mb=$("#bSmpM");if(mb){mb.classList.toggle("on",!!S.smpMute);mb.setAttribute("aria-pressed",!!S.smpMute);mb.textContent=S.smpMute?"🔇 SPÅRET TYST":"🔊 SPÅRET PÅ"}}h.hidden=!!S.songOn;
   h.querySelectorAll("#pbank button").forEach(b=>b.classList.toggle("on",+b.dataset.pb===padBank));$("#egnarad").hidden=padBank!==8;
   const col=PBANK[padBank][2];h.style.setProperty("--sk",col);
   h.querySelectorAll(".sp").forEach((b,pi)=>{const id=padId(pi),c=id==null?null:padKlipp(id);b.querySelector("span").textContent=c?c.n:(PADS?"":"…");b.classList.toggle("tom",!c);b.classList.toggle("vald",id!=null&&id===padVald);b.style.setProperty("--sk",id==null?col:PBANK[id>>4][2]);
@@ -557,7 +558,7 @@ const MALLAR=[
  ["Hård techno",150,0,["x...x...x...x...","","....x.......x...","x.x.x.x.x.x.x.x.","..x...x...x...x.","","xxxxxxxxxxxxxxxx",""],[4,2,0,2,0,0,4,0]]
 ];
 function autoNy(){const l=()=>Array(16).fill(null);return{pump:l(),echo:[l(),l(),l(),l()],filt:[l(),l(),l(),l()]}}
-function tomt(){return{bpm:90,swing:0,master:80,kit:0,namn:"Tomt",t:SPAR.map((s,i)=>({s:".".repeat(16),v:0,vol:i<2?100:75,mute:false})),pat:[0,1,2,3].map(()=>SPAR.map(()=>".".repeat(16))),cur:0,song:Array(16).fill(-1),loop:true,songOn:false,pvol:80,smp:Array(16).fill(null),spat:[0,1,2,3].map(()=>Array(16).fill(null)),lsong:[0,1,2,3].map(()=>".".repeat(16)),key:0,scale:0,mel:[".".repeat(16),".".repeat(16)],mpat:[0,1,2,3].map(()=>[".".repeat(16),".".repeat(16)]),mv:[0,0],mvol:[85,70],mmute:[false,false],pump:0,auto:autoNy(),chord:[false,false]}}
+function tomt(){return{bpm:90,swing:0,master:80,kit:0,namn:"Tomt",t:SPAR.map((s,i)=>({s:".".repeat(16),v:0,vol:i<2?100:75,mute:false})),pat:[0,1,2,3].map(()=>SPAR.map(()=>".".repeat(16))),cur:0,song:Array(16).fill(-1),loop:true,songOn:false,pvol:80,smp:Array(16).fill(null),spat:[0,1,2,3].map(()=>Array(16).fill(null)),lsong:[0,1,2,3].map(()=>".".repeat(16)),key:0,scale:0,mel:[".".repeat(16),".".repeat(16)],mpat:[0,1,2,3].map(()=>[".".repeat(16),".".repeat(16)]),mv:[0,0],mvol:[85,70],mmute:[false,false],pump:0,auto:autoNy(),chord:[false,false],smpMute:false}}
 let S=tomt(),spelar=false,steg=0,nasta=0,tid=0,timer=0,kö=[];
 function mall(i){const m=MALLAR[i],old=S;S=tomt();behall(old);S.bpm=m[1];S.swing=m[2];S.namn=m[0];m[3].forEach((p,k)=>{S.t[k].s=(p||"").padEnd(16,".").slice(0,16)});if(m[4])m[4].forEach((v,k)=>{S.t[k].v=v});if(S.kit)kitSatt(S.kit)}
 function kitSatt(k){S.kit=k;S.t.forEach((t,i)=>{const sy=SPAR[i].syn.length;t.v=k&&SAMP?sy:0})}   // bara kvar för gamla länkar
@@ -636,7 +637,7 @@ function tick(){if(!ctx)return;while(nasta<ctx.currentTime+.12){const k=steg%16;
       else{barIx=-1;barPd=undefined;barMd=undefined;barSd=undefined;lpBarGate(-1,nasta)}}
     hist.push([nasta,k]);if(hist.length>40)hist.shift();autoApply(k);const bs=bldStep(k);
     const pd=bs?null:(barPd===undefined?S.t.map(t=>t.s):barPd);
-    if(pd){S.t.forEach((t,i)=>{if(pd[i][k]==="x")spela(i,nasta)});if(pd[0][k]==="x"&&!S.t[0].mute)pumpDuck(nasta)}else if(!bs&&S.pump>0&&S.t[0].s[k]==="x"&&!S.t[0].mute)pumpDuck(nasta);const md=bs?null:(barMd===undefined?S.mel:barMd);if(md)melTick(k,nasta,md);const sdd=bs?null:(barSd===undefined?S.smp:barSd);if(sdd&&sdd[k])padSpela(sdd[k].i,nasta,sdd[k].p,sdd[k].r);kö.push([nasta,k,barIx]);steg++;nasta+=stegTid(k)}}
+    if(pd){S.t.forEach((t,i)=>{if(pd[i][k]==="x")spela(i,nasta)});if(pd[0][k]==="x"&&!S.t[0].mute)pumpDuck(nasta)}else if(!bs&&S.pump>0&&S.t[0].s[k]==="x"&&!S.t[0].mute)pumpDuck(nasta);const md=bs?null:(barMd===undefined?S.mel:barMd);if(md)melTick(k,nasta,md);const sdd=bs?null:(barSd===undefined?S.smp:barSd);if(sdd&&sdd[k]&&!S.smpMute)padSpela(sdd[k].i,nasta,sdd[k].p,sdd[k].r);kö.push([nasta,k,barIx]);steg++;nasta+=stegTid(k)}}
 function ritaLed(){if(!spelar){return}const nu=ctx.currentTime;let akt=null;while(kö.length&&kö[0][0]<=nu){akt=kö.shift()}
   if(akt){const k=akt[1];latMark(akt[2]);melMark(k);smpMark(k);document.querySelectorAll("#leds i").forEach((e,j)=>e.classList.toggle("nu",j===k));document.querySelectorAll(".steg button.nu").forEach(b=>b.classList.remove("nu"));document.querySelectorAll(".rad").forEach(r=>{r.querySelectorAll(".steg button")[k].classList.add("nu")})}
   requestAnimationFrame(ritaLed)}
@@ -648,7 +649,7 @@ const songLen=()=>{let n=0;S.song.forEach((x,i)=>{if(x>=0)n=i+1});return n};
 const monsterData=p=>p===S.cur?S.t.map(t=>t.s):S.pat[p];
 const melData=p=>p===S.cur?S.mel:S.mpat[p];
 const smpData=p=>p===S.cur?S.smp:S.spat[p];
-function behall(o){if(!o||!o.pat)return;S.pat=o.pat;S.cur=o.cur;S.song=o.song;S.loop=o.loop;S.songOn=o.songOn;S.pvol=o.pvol;S.smp=o.smp;S.spat=o.spat;S.lsong=o.lsong;S.key=o.key;S.scale=o.scale;S.mel=o.mel;S.mpat=o.mpat;S.mv=o.mv;S.mvol=o.mvol;S.mmute=o.mmute;S.pump=o.pump||0;S.auto=o.auto||autoNy();S.chord=o.chord||[false,false]}
+function behall(o){if(!o||!o.pat)return;S.pat=o.pat;S.cur=o.cur;S.song=o.song;S.loop=o.loop;S.songOn=o.songOn;S.pvol=o.pvol;S.smp=o.smp;S.spat=o.spat;S.lsong=o.lsong;S.key=o.key;S.scale=o.scale;S.mel=o.mel;S.mpat=o.mpat;S.mv=o.mv;S.mvol=o.mvol;S.mmute=o.mmute;S.pump=o.pump||0;S.auto=o.auto||autoNy();S.chord=o.chord||[false,false];S.smpMute=!!o.smpMute}
 function monsterVal(n){if(n===S.cur)return;S.pat[S.cur]=S.t.map(t=>t.s);S.mpat[S.cur]=S.mel.slice();S.spat[S.cur]=S.smp.slice();S.cur=n;S.t.forEach((t,i)=>t.s=S.pat[n][i]);S.mel=S.mpat[n].slice();S.smp=S.spat[n].slice();visa()}
 let kopLage=false;
 function latBygg(){const m=$("#monster");MONAM.forEach((n,p)=>{const b=document.createElement("button");b.type="button";b.dataset.p=p;b.style.setProperty("--k",MONK[p]);b.setAttribute("aria-label","Mönster "+n);b.innerHTML="<b>"+n+"</b><svg viewBox='0 0 32 21' class='mini' aria-hidden='true'></svg>";m.appendChild(b)});
@@ -1033,7 +1034,7 @@ function renderaLat(){startaLjud();if(!ctx)return null;
   ctx=off;master=off.createGain();comp=off.createDynamicsCompressor();comp.threshold.value=-14;comp.ratio.value=5;comp.attack.value=.003;comp.release.value=.2;master.connect(comp);comp.connect(off.destination);pg=off.createGain();pg.connect(master);master.gain.value=Math.pow(S.master/100,1.6)*1.1;
   const pump0=S.pump,stepT=[];
   try{let t=.05;const bar0=t,starts=[];
-    bars.forEach(p=>{starts.push(t);const pd=p>=0?monsterData(p):null,md=p>=0?melData(p):null;for(let k=0;k<16;k++){stepT.push([t,k]);if(S.auto.pump[k]!==null)S.pump=S.auto.pump[k];if(pd){S.t.forEach((tr,i)=>{if(pd[i][k]==="x")spela(i,t)});if(pd[0][k]==="x"&&!S.t[0].mute)pumpDuck(t)}if(md)melTick(k,t,md);const sdd=p>=0?smpData(p):null;if(sdd&&sdd[k])padSpela(sdd[k].i,t,sdd[k].p,sdd[k].r);t+=stegTid(k)}});
+    bars.forEach(p=>{starts.push(t);const pd=p>=0?monsterData(p):null,md=p>=0?melData(p):null;for(let k=0;k<16;k++){stepT.push([t,k]);if(S.auto.pump[k]!==null)S.pump=S.auto.pump[k];if(pd){S.t.forEach((tr,i)=>{if(pd[i][k]==="x")spela(i,t)});if(pd[0][k]==="x"&&!S.t[0].mute)pumpDuck(t)}if(md)melTick(k,t,md);const sdd=p>=0?smpData(p):null;if(sdd&&sdd[k]&&!S.smpMute)padSpela(sdd[k].i,t,sdd[k].p,sdd[k].r);t+=stegTid(k)}});
     LP.forEach(l=>{if(!l.mix)return;const g=off.createGain(),lg=off.createGain();lg.gain.value=l.mute?0:Math.pow(l.vol/100,1.5)*1.3;lg.connect(master);const fx=fxBygg(l,off,lg);g.connect(fx.inn);
       {const le=S.auto.echo[l.i],lf=S.auto.filt[l.i];stepT.forEach(([tt,kk])=>{if(le[kk]!==null)fx.ds.gain.setValueAtTime(le[kk]/100*.9,tt)});
        const vs=lf.filter(x=>x!==null),lo=vs.some(v=>v<-3),hi=vs.some(v=>v>3);if(vs.length&&lo!==hi){fx.f.type=lo?"lowpass":"highpass";fx.f.Q.value=1.2;stepT.forEach(([tt,kk])=>{const v=lf[kk];if(v!==null)fx.f.frequency.setValueAtTime(lo?(v<-3?22050*Math.pow(180/22050,-v/100):22000):(v>3?20*Math.pow(7000/20,v/100):20),tt)})}}
@@ -1061,7 +1062,7 @@ const b64=u8=>{let t="";for(let i=0;i<u8.length;i+=32768)t+=String.fromCharCode.
 const unb64=t=>{const q=atob(t),u=new Uint8Array(q.length);for(let i=0;i<q.length;i++)u[i]=q.charCodeAt(i);return u};
 function bufTill(buf){const d=buf.getChannelData(0),n=d.length,v=new Int16Array(n);for(let i=0;i<n;i++)v[i]=Math.max(-32768,Math.min(32767,Math.round(d[i]*32767)));return{sr:buf.sampleRate,d:b64(new Uint8Array(v.buffer))}}
 function bufFran(o){if(!o||typeof o.d!=="string"||!(o.sr>=8000&&o.sr<=96000))throw 0;const u=unb64(o.d),n=u.length>>1;if(n<1||n>o.sr*130)throw 0;const v=new Int16Array(u.buffer,0,n),b=ctx.createBuffer(1,n,o.sr),f=b.getChannelData(0);for(let i=0;i<n;i++)f[i]=v[i]/32767;return b}
-function projSpara(){try{const o={pp:"musiklabbet",v:1,kod:kod(),namn:S.namn,pump:S.pump,auto:S.auto,chord:S.chord,smp:S.smp,spat:S.spat,
+function projSpara(){try{const o={pp:"musiklabbet",v:1,kod:kod(),namn:S.namn,pump:S.pump,auto:S.auto,chord:S.chord,smpMute:S.smpMute,smp:S.smp,spat:S.spat,
     loops:LP.map(l=>l.layers.length?{n:l.n,vol:l.vol,mute:l.mute,fx:l.fx,sl:l.sl,slp:l.slp,o:l.o,cuts:l.cuts,zone:l.zone,shift:l.shift,layers:l.layers.map(bufTill)}:null),
     egna:EGNA.map(e=>e?{n:e.n,b:bufTill(e.buf)}:null)};
   const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(o)],{type:"application/json"}));a.download="pluggparken-projekt.json";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),20000);
@@ -1075,7 +1076,7 @@ async function projLadda(f){startaLjud();if(!ctx||!f)return;if(f.size>150e6){toa
     stopp();LP.forEach((l,i)=>lpRadera(i));EGNA.fill(null);
     ny.namn=String(o.namn||"Projekt").slice(0,30);ny.pump=Math.max(0,Math.min(100,+o.pump||0));
     if(o.auto&&slopar(o.auto.pump,16)&&slopar(o.auto.echo,4)&&slopar(o.auto.filt,4)&&o.auto.echo.every(a=>slopar(a,16))&&o.auto.filt.every(a=>slopar(a,16)))ny.auto=o.auto;
-    if(slopar(o.chord,2))ny.chord=[!!o.chord[0],!!o.chord[1]];
+    if(slopar(o.chord,2))ny.chord=[!!o.chord[0],!!o.chord[1]];ny.smpMute=!!o.smpMute;
     if(gSmp(o.smp))ny.smp=o.smp;if(slopar(o.spat,4)&&o.spat.every(gSmp))ny.spat=o.spat;
     const egna=(o.egna||[]).slice(0,16).map(e=>e&&e.b?{n:String(e.n||"EGET").slice(0,12),c:"Ditt eget ljud (sparas inte)",buf:bufFran(e.b)}:null);
     const lps=(o.loops||[]).slice(0,4).map(q=>q&&Array.isArray(q.layers)&&q.layers.length&&q.layers.length<=12?Object.assign({},q,{bufs:q.layers.map(bufFran)}):null);
@@ -1093,6 +1094,7 @@ $("#padpan").addEventListener("click",e=>{const b=e.target.closest("button");if(
   if(b.id==="bEgFil"){$("#egFil").click();return}
   if(b.id==="bEgTom"){EGNA.fill(null);if(egnaId(padVald))padVald=-1;padRita();return}
   if(b.dataset.eg!=null){startaLjud();egnaFranLoop(+b.dataset.eg);return}
+  if(b.id==="bSmpM"){S.smpMute=!S.smpMute;padRita();return}
   if(b.id==="bSmpTom"){S.smp=Array(16).fill(null);visa();return}
   if(b.dataset.sk!=null){const k=+b.dataset.sk,x=S.smp[k];if(padVald>=0&&!(x&&x.i===padVald&&x.p===padPit&&!!x.r===padRevV))S.smp[k]={i:padVald,p:padPit,r:padRevV?1:0};else S.smp[k]=null;S.namn="Egen rytm";visa();return}});
 document.addEventListener("pointerdown",e=>{const b=e.target.closest(".sp");if(b)padSlag(+b.dataset.sp)});
