@@ -457,6 +457,7 @@ const SYN={
   tomhi:(t,d)=>{osc(t,"sine",260,160,.4,1,d);ns(t,.012,1800,.8,"lowpass",.4,d)},
   tomel:(t,d)=>{osc(t,"sine",380,60,.45,1,d)},
   bongo:(t,d)=>{osc(t,"sine",430,330,.14,.9,d);ns(t,.008,3000,1,"bandpass",.35,d)},
+  claves2:(t,d)=>{osc(t,"sine",3300,0,.05,.55,d);osc(t,"sine",4400,0,.035,.3,d)},
   claves:(t,d)=>{osc(t,"sine",2500,0,.07,.6,d);osc(t,"sine",3300,0,.045,.3,d)},
   tamb:(t,d)=>{ns(t,.05,7000,1.2,"bandpass",.55,d);ns(t+.02,.05,7000,1.2,"bandpass",.45,d);ns(t,.16,9500,.8,"highpass",.25,d);osc(t,"square",6300,0,.09,.05,d);osc(t,"square",7100,0,.09,.05,d)},
   tria:(t,d)=>{osc(t,"sine",4300,0,1.4,.32,d);osc(t,"sine",7100,0,1,.16,d);osc(t,"sine",10800,0,.6,.08,d)},
@@ -472,7 +473,7 @@ function shaper(d,k){const w=ctx.createWaveShaper(),c=new Float32Array(1024);for
 function lowp(d,fr,f1,t1){const f=ctx.createBiquadFilter();f.type="lowpass";f.frequency.value=fr;f.Q.value=.7;f.connect(d);return f}
 function metal(t,dur,g,d){const hp=ctx.createBiquadFilter();hp.type="highpass";hp.frequency.value=7000;hp.Q.value=.8;hp.connect(d);[205.3,304.4,369.6,522.7,540,800].forEach(f=>osc(t,"square",f*2,0,dur,g*.55,hp))}
 function sweep(t,dur,f0,f1,q,g,d){const s=ctx.createBufferSource();s.buffer=brus;s.loop=true;const f=ctx.createBiquadFilter();f.type="bandpass";f.Q.value=q*2;f.frequency.setValueAtTime(f0,t);f.frequency.exponentialRampToValueAtTime(f1,t+dur);const e=ctx.createGain();e.gain.setValueAtTime(.0008,t);e.gain.exponentialRampToValueAtTime(g,t+dur*.4);e.gain.exponentialRampToValueAtTime(.0008,t+dur);s.connect(f);f.connect(e);e.connect(d);s.start(t,Math.random()*.5);s.stop(t+dur+.05)}
-const TRIM={kdry:1.24,k808d:.55,klofi:1,kakust:1.08,sdry:1.06,slofi:.6,srim:.85,ssnap:2.2,sbig:.7,cbig:1.1,cdry:1.5,clofi:1.3,h808:2.5,hsoft:1.05,htight:1.2,o808:2.8,olong:.85,oshort:1.3,crash:.5,tomlo:.7,tommid:.78,tomhi:.85,tomel:.8,bongo:1.5,claves:1.4,tamb:2,tria:.7,wblock:1.2,agogo:.8,stab:.6,zap2:1.4,klick2:2};
+const TRIM={claves2:1.5,kdry:1.24,k808d:.55,klofi:1,kakust:1.08,sdry:1.06,slofi:.6,srim:.85,ssnap:2.2,sbig:.7,cbig:1.1,cdry:1.5,clofi:1.3,h808:2.5,hsoft:1.05,htight:1.2,o808:2.8,olong:.85,oshort:1.3,crash:.5,tomlo:.7,tommid:.78,tomhi:.85,tomel:.8,bongo:1.5,claves:1.4,tamb:2,tria:.7,wblock:1.2,agogo:.8,stab:.6,zap2:1.4,klick2:2};
 /* spåren: namn, färg, synt-röster, vilken grupp av gamla klipp som hör till */
 const SPAR=[
  {id:"bas",n:"Bas",syn:[["808 BAS","b808"],["PUNCH","bpunch"],["LÅNG BAS","blong"],["TEKNO KICK","k909"],["HÅRD KICK","khard"],["TORR KICK","kdry"],["DJUP 808","k808d"],["LO-FI KICK","klofi"],["AKUSTISK","kakust"]],grp:["bas"]},
@@ -481,7 +482,7 @@ const SPAR=[
  {id:"hatc",n:"Hatt",syn:[["HATT","hatc"],["SKAKA","shaker"],["ELEK HATT","ehat"],["808 HATT","h808"],["MJUK HATT","hsoft"],["TIGHT HATT","htight"]],grp:["tick"]},
  {id:"hato",n:"Öppen",syn:[["HATT ÖPPEN","hato"],["808 ÖPPEN","o808"],["LÅNG ÖPPEN","olong"],["KORT ÖPPEN","oshort"],["CRASH","crash"]],grp:["tick","ljud"]},
  {id:"tom",n:"Tom",syn:[["TOM","tom"],["CONGA","conga"],["LÅG TOM","tomlo"],["MELLAN TOM","tommid"],["HÖG TOM","tomhi"],["ELEK TOM","tomel"],["BONGO","bongo"]],grp:["perc","bas"]},
- {id:"perc",n:"Slag",syn:[["KOKLOCKA","cow"],["CONGA","conga"],["SKAKA","shaker"],["ELEK PERC","eperc"],["RIDE","ride"],["CLAVES","claves"],["TAMBURIN","tamb"],["TRIANGEL","tria"],["WOODBLOCK","wblock"],["AGOGO","agogo"]],grp:["perc"]},
+ {id:"perc",n:"Slag",syn:[["CLAVES","claves"],["CONGA","conga"],["SKAKA","shaker"],["ELEK PERC","eperc"],["RIDE","ride"],["HÖG CLAVES","claves2"],["TAMBURIN","tamb"],["TRIANGEL","tria"],["WOODBLOCK","wblock"],["AGOGO","agogo"]],grp:["perc"]},
  {id:"fx",n:"Effekt",syn:[["LASER","zap"],["BLIPP","blip"],["RISER","riser"],["IMPACT","impact"],["SVEP UPP","svup"],["SVEP NER","svne"],["STAB","stab"],["ZAP 2","zap2"],["KLICK","klick2"]],grp:["stab","ljud"]}
 ];
 function roster(i){const sp=SPAR[i],r=sp.syn.map(([n,f])=>({n,f,s:null}));if(SAMP)SAMPMETA.forEach((m,k)=>{if(sp.grp.includes(m.k))r.push({n:"♪ "+m.n.toUpperCase(),f:null,s:k})});return r}
@@ -645,7 +646,7 @@ const MALLAR=[
  ["Fyra i takt",124,0,["x...x...x...x...","","....x.......x...","xxxxxxxxxxxxxxxx","..x...x...x...x.","","",""]],
  ["Funk",104,12,["x..x..x...x...x.","....x..x.x..x...","","x.x.x.x.x.x.x.x.","","","..x.....x..x...",""]],
  ["Trap",140,0,["x.....x...x.....","........x.......","........x.......","x.xxx.xxx.x.xxxx","......x.......x.","","",""]],
- ["En droppe (reggae)",76,10,["........x.......","........x.......","","x.x.x.x.x.x.x.x.","","","x...x...x...x...",""]],
+ ["En droppe (reggae)",74,22,["........x.......","........x.......","","x.x.x.x.x.x.x.x.","..............x.","","..x.....x..x....","..x...x...x...x."],[6,1,0,4,3,0,1,6]],
  ["Skaka (latin)",100,8,["x..x..x...x.x...","","","xxxxxxxxxxxxxxxx","","..x..x..x..x..x.","x.x.x..x.x.x..x.",""]],
  ["Disco",118,0,["x...x...x...x...","","....x.......x...","","x.x.x.x.x.x.x.x.","","...x.x...x.x....","..............x."]],
  ["Techno",130,0,["x...x...x...x...","","....x.......x...","xxxxxxxxxxxxxxxx","..x...x...x...x.","","x..x..x...x..x..",""],[3,2,0,2,0,0,3,0]],
