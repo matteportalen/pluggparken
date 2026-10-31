@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="sv"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Utforska människokroppen i 3D: skelett, muskler, organ, blodkärl och nerver med svenska namn."><link rel="canonical" href="https://pluggparken.se/anatomi/"><meta name="color-scheme" content="light">
+<meta name="description" content="Utforska människokroppen i 3D: skelett, muskler, organ, blodkärl och nerver med svenska namn."><link rel="canonical" href="https://pluggparken.se/anatomi/"><meta name="color-scheme" content="dark"><meta name="theme-color" content="#040a12">
 <title>Människokroppen i 3D – Pluggparken</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -8,7 +8,7 @@
 *{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden;background:#fff;font-family:Inter,system-ui,sans-serif;color:var(--ink)}
 #c{position:fixed;inset:0;width:100%;height:100%;touch-action:none;background:radial-gradient(ellipse at 50% 40%,#fff 0,#f4f7fb 100%)}
 .top{position:fixed;left:16px;top:14px;z-index:5}.top a{color:var(--mut);text-decoration:none;font-size:.85rem}.top h1{margin:2px 0 0;font-size:1.15rem;font-weight:700;letter-spacing:-.01em}
-.lag{position:fixed;left:16px;top:70px;z-index:5;display:flex;flex-direction:column;gap:6px}
+.lag{position:fixed;left:16px;top:98px;z-index:5;display:flex;flex-direction:column;gap:6px}
 .lag button{display:flex;align-items:center;gap:9px;border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 12px;font:inherit;font-size:.86rem;font-weight:500;color:var(--ink);cursor:pointer;box-shadow:0 1px 2px rgba(15,23,42,.05);min-width:150px;text-align:left}
 .lag button i{width:12px;height:12px;border-radius:50%;background:var(--c);flex:none}.lag button[aria-pressed=false]{opacity:.45}.lag button[aria-pressed=false] i{background:#fff;border:2px solid var(--c)}
 .lag small{display:block;color:var(--mut);font-size:.72rem;font-weight:400}
@@ -23,7 +23,31 @@
 .reg button:hover,.zm button:hover{border-color:var(--acc);color:var(--acc)}
 .zm{position:fixed;right:16px;bottom:44px;z-index:5;display:flex;flex-direction:column;gap:6px}.zm button{width:42px;height:42px;padding:0;font-size:1.25rem;border-radius:12px}
 .hint{bottom:92px}
-@media(max-width:640px){.reg{bottom:38px;left:12px;right:12px;transform:none;max-width:none}.zm{bottom:150px;right:12px}.lag{bottom:88px;top:auto;bottom:70px;flex-direction:row;flex-wrap:wrap;right:12px}.lag button{min-width:0;padding:6px 10px;font-size:.78rem}.lag small{display:none}.hint{display:none}}
+@media(max-width:640px){.reg{bottom:58px;left:12px;right:12px;transform:none;max-width:none}.zm{bottom:170px;right:12px}.lag{top:auto;bottom:112px;flex-direction:row;flex-wrap:wrap;right:12px}.lag button{min-width:0;padding:6px 10px;font-size:.78rem}.lag small{display:none}.hint{display:none}}
+
+/* mörk, medicinsk-futuristisk stil */
+:root{--ink:#e6f1ff;--mut:#8aa3bd;--line:rgba(110,200,255,.22);--acc:#22d3ee}
+html,body{background:#040a12}
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background:linear-gradient(rgba(34,211,238,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(34,211,238,.045) 1px,transparent 1px);background-size:44px 44px;-webkit-mask-image:radial-gradient(ellipse at 50% 45%,#000 0,transparent 72%);mask-image:radial-gradient(ellipse at 50% 45%,#000 0,transparent 72%)}
+#c{background:radial-gradient(ellipse at 50% 40%,#10324d 0,#08162a 46%,#030710 100%)}
+.top a{color:var(--mut);letter-spacing:.04em;transition:color .2s}.top a:hover{color:var(--acc)}
+.top h1{font-size:1.05rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--ink)}
+.top h1::before{content:"ANATOMI · 3D";display:block;font-size:.62rem;letter-spacing:.28em;color:var(--acc);margin-bottom:3px;font-weight:600}
+.top h1::after{content:"";display:block;width:46px;height:2px;margin-top:7px;background:linear-gradient(90deg,var(--acc),transparent);border-radius:2px}
+.lag button,.reg button,.zm button,.kort{background:rgba(9,24,40,.58);-webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3);border:1px solid var(--line);color:var(--ink);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 4px 18px rgba(0,0,0,.35)}
+.lag button{border-radius:12px;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;font-weight:600;transition:all .2s}
+.lag button i{box-shadow:0 0 10px var(--c),0 0 3px var(--c)}
+.lag button[aria-pressed=true]{border-color:var(--c);box-shadow:0 0 0 1px var(--c),0 0 22px -4px var(--c),inset 0 0 18px -8px var(--c)}
+.lag button[aria-pressed=false]{opacity:.62}.lag button[aria-pressed=false] i{background:transparent;border:2px solid var(--c);box-shadow:none}
+.lag button:hover{opacity:1;border-color:var(--c)}
+.reg button,.zm button{border-radius:99px;font-size:.74rem;letter-spacing:.09em;text-transform:uppercase;font-weight:600;color:#bfe9f7;transition:all .2s}
+.reg button:hover,.zm button:hover,.reg button:focus-visible{color:#04202b;background:var(--acc);border-color:var(--acc);box-shadow:0 0 22px rgba(34,211,238,.55)}
+.zm button{font-size:1.3rem;letter-spacing:0;color:var(--acc)}
+.kort{border-radius:16px;border-left:3px solid var(--acc)}
+.kort .sys{color:var(--acc);letter-spacing:.16em}.kort h2{color:#fff}.kort p{color:#a9bdd2}.kort button{color:var(--mut)}
+.hint{background:rgba(9,24,40,.5);border-color:var(--line);color:var(--mut);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.kal,.kal a{color:#5d7590}
+#lad{background:#040a12;color:var(--acc);letter-spacing:.2em;text-transform:uppercase;font-size:.75rem}
 </style></head><body>
 <canvas id="c"></canvas>
 <div class="top"><a href="../ovriga/">← Fler ämnen</a><h1>Människokroppen</h1></div>
@@ -49,9 +73,10 @@ const SYS=[
 const cv=document.getElementById("c"),R=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});
 R.setPixelRatio(Math.min(devicePixelRatio,2));R.outputColorSpace=THREE.SRGBColorSpace;
 const S=new THREE.Scene(),cam=new THREE.PerspectiveCamera(32,1,.01,50);
-S.add(new THREE.HemisphereLight(0xffffff,0xb8c4d6,1.1));
+S.add(new THREE.HemisphereLight(0xe4f2ff,0x1a3350,1.0));
 const d1=new THREE.DirectionalLight(0xffffff,1.6);d1.position.set(1.5,2,3);S.add(d1);
-const d2=new THREE.DirectionalLight(0xdbe6f5,.7);d2.position.set(-2,1,-2);S.add(d2);
+const d2=new THREE.DirectionalLight(0x4fd6ff,1.5);d2.position.set(-2.5,1.8,-2.5);S.add(d2);const d3=new THREE.DirectionalLight(0x6aa8ff,.6);d3.position.set(2.5,.6,-2);S.add(d3);
+for(const [r0,r1,o] of [[.5,.515,.55],[.78,.785,.22]]){const rg=new THREE.Mesh(new THREE.RingGeometry(r0,r1,128),new THREE.MeshBasicMaterial({color:0x22d3ee,transparent:true,opacity:o,side:THREE.DoubleSide,depthWrite:false}));rg.rotation.x=-Math.PI/2;rg.position.y=.003;S.add(rg);}
 const ctl=new OrbitControls(cam,cv);ctl.enableDamping=true;ctl.dampingFactor=.08;ctl.minDistance=.25;ctl.maxDistance=6;ctl.zoomToCursor=true;
 const grp={},mats={};let all=[];
 const gl=new GLTFLoader(),dr=new DRACOLoader();dr.setDecoderPath("https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/libs/draco/gltf/");gl.setDRACOLoader(dr);
@@ -96,7 +121,7 @@ const ray=new THREE.Raycaster(),mv=new THREE.Vector2();let sel=null,hov=null;
 function kolla(e){const r=cv.getBoundingClientRect();mv.set((e.clientX-r.left)/r.width*2-1,-((e.clientY-r.top)/r.height)*2+1);ray.setFromCamera(mv,cam);
  const vis=all.filter(o=>grp[o.userData.s].visible&&!(o.userData.s==='hud'&&hudGlas));const h=ray.intersectObjects(vis,false);return h.length?h[0].object:null;}
 function sätt(o,k){if(!o)return;o.material=o===sel?hl(o):mats[o.userData.c];}
-const hm={};function hl(o){const c=new THREE.Color(o.userData.c).lerp(new THREE.Color("#2563eb"),.65).getHex();hm[c]=hm[c]||new THREE.MeshStandardMaterial({color:c,roughness:.4,emissive:0x1d4ed8,emissiveIntensity:.25});return hm[c];}
+const hm={};function hl(o){const c=new THREE.Color(o.userData.c).lerp(new THREE.Color("#22d3ee"),.6).getHex();hm[c]=hm[c]||new THREE.MeshStandardMaterial({color:c,roughness:.4,emissive:0x0e7490,emissiveIntensity:.45});return hm[c];}
 let dn=null;cv.addEventListener("pointerdown",e=>{dn=[e.clientX,e.clientY];});
 cv.addEventListener("pointerup",e=>{if(!dn||Math.hypot(e.clientX-dn[0],e.clientY-dn[1])>5)return;const o=kolla(e);if(sel){const p=sel;sel=null;sätt(p);}
  if(o){sel=o;sätt(o);visa(o);}else document.getElementById("kort").hidden=true;});
