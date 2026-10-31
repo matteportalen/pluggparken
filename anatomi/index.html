@@ -18,13 +18,19 @@
 .hint{position:fixed;left:50%;bottom:44px;transform:translateX(-50%);z-index:5;font-size:.8rem;color:var(--mut);background:rgba(255,255,255,.85);padding:6px 12px;border-radius:99px;border:1px solid var(--line);white-space:nowrap}
 .kal{position:fixed;left:0;right:0;bottom:10px;text-align:center;z-index:5;font-size:.68rem;color:#94a3b8;padding:0 12px}.kal a{color:#94a3b8}
 #lad{position:fixed;inset:0;z-index:9;display:grid;place-items:center;background:#fff;font-size:.9rem;color:var(--mut);transition:opacity .5s}
-@media(max-width:640px){.lag{top:auto;bottom:70px;flex-direction:row;flex-wrap:wrap;right:12px}.lag button{min-width:0;padding:6px 10px;font-size:.78rem}.lag small{display:none}.hint{display:none}}
+.reg{position:fixed;left:50%;bottom:44px;transform:translateX(-50%);z-index:5;display:flex;gap:6px;max-width:calc(100vw - 24px);overflow-x:auto;padding:2px;scrollbar-width:none}.reg::-webkit-scrollbar{display:none}
+.reg button,.zm button{border:1px solid var(--line);background:#fff;border-radius:99px;padding:8px 14px;font:inherit;font-size:.84rem;font-weight:600;color:var(--ink);cursor:pointer;box-shadow:0 1px 2px rgba(15,23,42,.06);white-space:nowrap}
+.reg button:hover,.zm button:hover{border-color:var(--acc);color:var(--acc)}
+.zm{position:fixed;right:16px;bottom:44px;z-index:5;display:flex;flex-direction:column;gap:6px}.zm button{width:42px;height:42px;padding:0;font-size:1.25rem;border-radius:12px}
+.hint{bottom:92px}
+@media(max-width:640px){.reg{bottom:38px;left:12px;right:12px;transform:none;max-width:none}.zm{bottom:150px;right:12px}.lag{bottom:88px;top:auto;bottom:70px;flex-direction:row;flex-wrap:wrap;right:12px}.lag button{min-width:0;padding:6px 10px;font-size:.78rem}.lag small{display:none}.hint{display:none}}
 </style></head><body>
 <canvas id="c"></canvas>
 <div class="top"><a href="../ovriga/">← Fler ämnen</a><h1>Människokroppen</h1></div>
 <div class="lag" id="lag"></div>
+<div class="reg" id="reg"></div><div class="zm"><button id="zin" aria-label="Zooma in">+</button><button id="zut" aria-label="Zooma ut">−</button></div>
 <div class="kort" id="kort" hidden></div>
-<div class="hint">Dra för att vrida · scrolla för att zooma · tryck på en del</div>
+<div class="hint">Dra för att vrida · scrolla för att zooma · dubbeltryck på en del för att gå nära</div>
 <div class="kal">Modeller: Z-Anatomy (CC BY-SA 4.0) · BodyParts3D, Database Center for Life Science (CC BY-SA 2.1 Japan) · bearbetade och förenklade</div>
 <div id="lad">Laddar kroppen …</div>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
@@ -45,7 +51,7 @@ const S=new THREE.Scene(),cam=new THREE.PerspectiveCamera(32,1,.01,50);
 S.add(new THREE.HemisphereLight(0xffffff,0xb8c4d6,1.1));
 const d1=new THREE.DirectionalLight(0xffffff,1.6);d1.position.set(1.5,2,3);S.add(d1);
 const d2=new THREE.DirectionalLight(0xdbe6f5,.7);d2.position.set(-2,1,-2);S.add(d2);
-const ctl=new OrbitControls(cam,cv);ctl.enableDamping=true;ctl.dampingFactor=.08;ctl.minDistance=.25;ctl.maxDistance=6;
+const ctl=new OrbitControls(cam,cv);ctl.enableDamping=true;ctl.dampingFactor=.08;ctl.minDistance=.25;ctl.maxDistance=6;ctl.zoomToCursor=true;
 const grp={},mats={};let all=[];
 const gl=new GLTFLoader(),dr=new DRACOLoader();dr.setDecoderPath("https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/libs/draco/gltf/");gl.setDRACOLoader(dr);
 let GR={};
@@ -77,7 +83,7 @@ async function las(){let k=0;
  eget();
  const b=new THREE.Box3().setFromObject(S);const mid=b.getCenter(new THREE.Vector3()),sz=b.getSize(new THREE.Vector3());
  const h=Math.max(sz.y,sz.x,sz.z);const dist=h/2/Math.tan(cam.fov*Math.PI/360)*1.25;
- ctl.target.copy(mid);cam.position.set(mid.x,mid.y,mid.z+dist);ctl.update();ctl.maxDistance=dist*2.5;
+ ctl.target.copy(mid);cam.position.set(mid.x,mid.y,mid.z+dist);ctl.update();ctl.maxDistance=dist*2.5;HEL={t:mid.clone(),d:dist};
  const l=document.getElementById("lad");l.style.opacity=0;setTimeout(()=>l.remove(),600);}
 const lag=document.getElementById("lag");
 SYS.forEach(sd=>{const b=document.createElement("button");b.style.setProperty("--c",sd.c);b.setAttribute("aria-pressed",sd.pa);b.innerHTML=`<i></i><span>${sd.namn}</span>`;
@@ -95,7 +101,20 @@ cv.addEventListener("pointerup",e=>{if(!dn||Math.hypot(e.clientX-dn[0],e.clientY
 cv.addEventListener("pointermove",e=>{if(e.buttons)return;const o=kolla(e);cv.style.cursor=o?"pointer":"grab";});
 function visa(o){const k=document.getElementById("kort"),sd=SYS.find(x=>x.id===o.userData.s),m=GR[o.userData.id];
  k.hidden=false;k.innerHTML=`<button aria-label="Stäng" onclick="this.parentNode.hidden=true">✕</button><div class="sys">${sd.namn}</div><h2>${m.sv}</h2><p>${m.t}</p>`;}
-function loop(){requestAnimationFrame(loop);ctl.update();R.render(S,cam);}
+
+let HEL=null,fly=null;
+function flyTo(t,d){const dir=cam.position.clone().sub(ctl.target).normalize();fly={t0:performance.now(),a:ctl.target.clone(),b:t.clone(),da:cam.position.distanceTo(ctl.target),db:d,dir};}
+function flyStep(){if(!fly)return;const k=Math.min(1,(performance.now()-fly.t0)/750),e=k<.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2;
+ ctl.target.lerpVectors(fly.a,fly.b,e);const d=fly.da*Math.pow(fly.db/fly.da,e);cam.position.copy(ctl.target).addScaledVector(fly.dir,d);if(k>=1)fly=null;}
+const REG=[["Hela kroppen",null],["Huvud",[0,1.6,.02,1.0]],["Bröst",[0,1.32,0,1.05]],["Mage",[0,1.08,0,.95]],["Armar",[0,1.2,0,2.1]],["Ben",[0,.5,0,1.9]]];
+const rg=document.getElementById("reg");
+REG.forEach(([n,p])=>{const b=document.createElement("button");b.textContent=n;b.onclick=()=>{if(!p){if(HEL)flyTo(HEL.t,HEL.d);}else flyTo(new THREE.Vector3(p[0],p[1],p[2]),p[3]);};rg.appendChild(b);});
+function zoomBy(f){const d=cam.position.distanceTo(ctl.target);flyTo(ctl.target.clone(),Math.min(ctl.maxDistance,Math.max(ctl.minDistance,d*f)));}
+document.getElementById("zin").onclick=()=>zoomBy(.6);document.getElementById("zut").onclick=()=>zoomBy(1/.6);
+cv.addEventListener("dblclick",e=>{const o=kolla(e);if(!o)return;const b=new THREE.Box3().setFromObject(o),c=b.getCenter(new THREE.Vector3()),sz=b.getSize(new THREE.Vector3());
+ const m=Math.max(sz.x,sz.y,sz.z);flyTo(c,Math.min(ctl.maxDistance,Math.max(ctl.minDistance,m*2.2)));});
+ctl.addEventListener("start",()=>{fly=null;});
+function loop(){requestAnimationFrame(loop);flyStep();ctl.update();R.render(S,cam);}
 las().then(loop);
 window.__a={S,cam,ctl,grp,all};
 </script></body></html>
