@@ -668,7 +668,7 @@ if(!data.stam)data.stam={};
 const HJ=[2,4,7];const hjarton=id=>{const g=(data.stam[id]||{}).g||0;return HJ.filter(x=>g>=x).length;};
 function stamLook(s){const pet=lasDjur(),l=Object.assign({color:"natur",hand:"ingen",back:"ingen"},s.look);if(l.animal===pet.animal)l.animal=l.animal==="katt"?"kanin":"katt";return l;}
 const ANON=["Hej!","God dag!","Hallå där!","Trevlig affär!","Hej hej!"];
-const FLAV={vaxel:["Jag har bara en stor sedel!","Kan jag få tillbaka?"],racker:["Hoppas pengarna räcker!","Ojoj, räcker det?"],vaxla:["Alla mina mynt är så tunga!","Jag behöver växla!"],rakna:["Jag har samlat i en burk!","Hur mycket har jag?"],billig:["Jag vill ha det billigaste!","Jag letar efter ett fynd!"],budget:["Jag har en liten budget!","Jag har exakt så mycket!"],summa:["Nu ska jag köpa lite!","Det här vill jag ha!"],styck:["Jag tar flera stycken!","Det här är gott!"]};
+const FLAV={vaxel:["Jag har bara en stor sedel!","Hur mycket får jag tillbaka?"],racker:["Hoppas pengarna räcker!","Ojoj, räcker det?"],vaxla:["Alla mina mynt är så tunga!","Jag behöver växla!"],rakna:["Jag har samlat i en burk!","Hur mycket har jag?"],billig:["Jag vill ha det billigaste!","Jag letar efter ett fynd!"],budget:["Jag har en liten budget!","Jag har exakt så mycket!"],summa:["Nu ska jag köpa lite!","Det här vill jag ha!"],styck:["Jag tar flera stycken!","Det här är gott!"]};
 const BFL={frukt:["Jag vill ha något färskt!","Frukt är bäst!"],bageri:["Det doftar så gott här!","Jag älskar nybakat!"],glass:["Det är varmt, jag vill ha glass!","Något gott och kallt, tack!"]};
 const BADA=["🤔 Hmm?","🤨 Är det rätt?","🙃 Kolla igen!"],TACKA=["😊 Tack!","👍 Tack så mycket!","😄 Bra jobbat!"];
 function pbHtml(){const p=G&&G.prat;if(!p)return "";const e=(Date.now()-p.at)/1000;if(e>3.4)return "";return `<span class="pb" style="animation-delay:-${e.toFixed(2)}s,${(3.1-e).toFixed(2)}s">${p.t}</span>`;}
@@ -689,7 +689,7 @@ function sayFor(t){
   if(t.typ==="summa")return `Hej! Jag vill köpa ${t.items.length===2?"de här två":"de här"}. Vad blir det?`;
   if(t.typ==="styck")return t.offer?`Jag tar ${ANTAL(t.qty,t.unit)}. Det är 2 för ${G.offer.p} kr! Vad blir det?`:`Jag vill ha ${ANTAL(t.qty,t.unit)}. De kostar ${G.prices[t.unit]} kr styck. Vad blir det?`;
   if(t.typ==="vaxla")return `Hej! Kan du växla min ${ENSAM[t.note]}${t.only?` till bara ${FLERA[t.only]}`:""}?`;
-  if(t.typ==="vaxel")return t.payList?`Det blir ${t.tot} kr. Här är mina pengar. Kan jag få tillbaka?`:`Det blir ${t.tot} kr. Här är ${t.pay} kr. Kan jag få tillbaka?`;
+  if(t.typ==="vaxel")return t.payList?`Det blir ${t.tot} kr. Här är mina pengar. Hur mycket får jag tillbaka?`:`Det blir ${t.tot} kr. Här är ${t.pay} kr. Hur mycket får jag tillbaka?`;
   if(t.typ==="racker")return `Jag har ${t.har} kr. Räcker det till ${t.items.length===1?"den här":"de här"}?`;
   if(t.typ==="billig")return `Vilken av de här är ${t.dyr?"dyrast":"billigast"}? Den vill jag ha!`;
   if(t.typ==="rakna")return `Här är mina pengar. Hur mycket är det?`;
