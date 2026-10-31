@@ -137,6 +137,11 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
 .latinfo{margin-left:auto;font-size:.8rem;font-weight:800;letter-spacing:.08em;color:var(--lcd)}
 @media(max-width:700px){.lcells{grid-template-columns:repeat(8,1fr)}.monster button{width:46px}}
 .melod{margin-top:16px;padding:14px 14px 10px;border-radius:12px;background:#17181c;box-shadow:inset 0 2px 8px rgba(0,0,0,.5)}
+.vikbtn{margin-left:auto;width:34px;height:30px;border-radius:8px;font-weight:800;font-size:1rem;line-height:1;background:linear-gradient(180deg,#555862,#3a3c43);box-shadow:0 3px 0 rgba(0,0,0,.55);color:var(--ink)}
+.vikbtn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.55)}
+.mixrad .vikbtn{margin-left:8px}.spartit{display:flex;align-items:center;gap:12px;margin:0 0 8px}.spartit b{letter-spacing:.2em;font-size:.95rem}
+#mixrad.vik .fx,#melod.vik .mel,#melod.vik .melhead .grupp,#melod.vik .melhead small,#padwrap.vik .pads,#padwrap.vik .padpan,#padwrap.vik .padlab span,#spar.vik .rad,#loopmaskin.vik .lstat,#loopmaskin.vik .lgrid,#loopmaskin.vik>.krok,#loopmaskin.vik .micb,#loopmaskin.vik #selMic{display:none}
+#loopmaskin.vik .topp{margin-bottom:0!important}#padwrap.vik .padlab,#melod.vik .melhead{margin-bottom:0}
 .melhead{display:flex;align-items:center;gap:12px 24px;flex-wrap:wrap;margin-bottom:6px}
 .melhead>b{letter-spacing:.2em;font-size:.95rem}
 .melhead small{color:var(--dim);font-size:.78rem;flex:1;min-width:150px}
@@ -750,6 +755,21 @@ function melMark(k){document.querySelectorAll("#melod .mgrid button.nu").forEach
 function latMark(ix){const c=$("#lcells");if(!c)return;[...c.children].forEach((e,i)=>e.classList.toggle("nu",i===ix));document.querySelectorAll("#tl .lloop").forEach(r=>[...r.children].forEach((e,i)=>e.classList.toggle("nu",i===ix)))}
 function laddaS(s){S=s;steg=0;visa();krok("")}
 /* ---------- bygg sidan ---------- */
+function vikInit(){let st={};try{st=JSON.parse(localStorage.getItem("pluggparken-trummaskin-vik")||"{}")||{}}catch(e){st={}}
+  const sp=$("#spar");if(sp&&!sp.querySelector(".spartit")){const h=document.createElement("div");h.className="spartit";h.innerHTML="<b>TRUMMOR</b>";sp.prepend(h)}
+  const mk=(id,namn,plats)=>{const c=$(id);if(!c||c.querySelector(".vikbtn"))return;const b=document.createElement("button");b.type="button";b.className="vikbtn";b.dataset.vik=id;
+    const sat=v=>{b.textContent=v?"▸":"▾";b.title=(v?"Visa ":"Minimera ")+namn;b.setAttribute("aria-label",b.title);b.setAttribute("aria-expanded",!v)};c.classList.toggle("vik",!!st[id]);sat(!!st[id]);
+    b.onclick=()=>{if(c.dataset.upptagen)return;const v=!c.classList.contains("vik");sat(v);st[id]=v;try{localStorage.setItem("pluggparken-trummaskin-vik",JSON.stringify(st))}catch(e){}
+      const h0=c.getBoundingClientRect().height;c.classList.toggle("vik",v);const h1=c.getBoundingClientRect().height;
+      if(matchMedia("(prefers-reduced-motion:reduce)").matches||Math.abs(h0-h1)<2||!c.animate)return;
+      if(v)c.classList.remove("vik");c.dataset.upptagen="1";c.style.overflow="hidden";
+      const a=c.animate([{height:h0+"px"},{height:h1+"px"}],{duration:420,easing:"cubic-bezier(.3,.9,.25,1)"});
+      a.onfinish=a.oncancel=()=>{c.style.overflow="";delete c.dataset.upptagen;if(v)c.classList.add("vik")}};plats(c,b)};
+  mk("#mixrad","mixern",(c,b)=>c.querySelector(".l").after(b));
+  mk("#spar","trummorna",(c,b)=>c.querySelector(".spartit").appendChild(b));
+  mk("#melod","melodin",(c,b)=>c.querySelector(".melhead").appendChild(b));
+  mk("#padwrap","padsen",(c,b)=>c.querySelector(".padlab").appendChild(b));
+  mk("#loopmaskin","loopstationen",(c,b)=>c.querySelector(".topp .logga").after(b))}
 function init(){
   const P=$("#pads");const TANG=["a","s","d","f","g","h","j","k"];
   SPAR.forEach((s,i)=>{const b=document.createElement("button");b.type="button";b.className="pad";b.dataset.i=i;b.style.setProperty("--sk",SK[i]);b.innerHTML=`<small>${s.n}</small><kbd>${TANG[i].toUpperCase()}</kbd>`;P.appendChild(b)});
@@ -763,7 +783,7 @@ function init(){
   [["#kMdr","dr",0,100],["#kMme","me",0,100],["#kMlo","lo",0,100],["#kMeb","eb",-100,100],["#kMeh","eh",-100,100]].forEach(([id,k,mn,mx])=>mixUpd.push(knob($(id),{min:mn,max:mx,reset:k==="eb"||k==="eh"?0:80,val:()=>S.mix[k],set:v=>{S.mix[k]=v;mixSatt()}})));
   mixUpd.push(knob($("#kMpd"),{min:0,max:100,reset:80,val:()=>S.pvol,set:v=>{S.pvol=v}}));
   kn.master=knob($("#kMaster"),{min:0,max:100,reset:80,val:()=>S.master,set:v=>{S.master=v;setMaster()}});
-  latBygg();melBygg();padBygg();visa();minnenRita();lpBygg();lastSnap=snapS();histKnappar();
+  latBygg();melBygg();padBygg();visa();minnenRita();lpBygg();lastSnap=snapS();histKnappar();vikInit();
 }
 
 /* ---------- loopstation: spela in eget ljud och loopa det i valt antal takter ---------- */
