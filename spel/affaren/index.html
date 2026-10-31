@@ -714,7 +714,7 @@ function render(enter){const t=G.t;let onc="";
   renderPanel();}
 function scanBind(){document.querySelectorAll("#onc .ware.skan").forEach(w=>{w.onpointerdown=e=>{if(G.done||w.classList.contains("gone"))return;e.preventDefault();const j=+w.dataset.j,sx=e.clientX,sy=e.clientY;let moved=false;try{w.setPointerCapture(e.pointerId);}catch(x){}w.style.position="relative";w.style.zIndex=50;
   w.onpointermove=ev=>{const dx=ev.clientX-sx,dy=ev.clientY-sy;if(Math.abs(dx)+Math.abs(dy)>8)moved=true;w.style.transform=`translate(${dx}px,${dy}px) scale(1.12)`;};
-  w.onpointerup=ev=>{w.onpointermove=w.onpointerup=null;const rg=$("regBtn").getBoundingClientRect(),over=ev.clientX>=rg.left-16&&ev.clientX<=rg.right+16&&ev.clientY>=rg.top-16&&ev.clientY<=rg.bottom+16;if(over||!moved)scanned(j);else{w.style.transform="";w.style.zIndex="";}};};});}
+  w.onpointerup=ev=>{w.onpointermove=w.onpointerup=null;const rg=document.querySelector("#gameShop .reg").getBoundingClientRect(),over=ev.clientX>=rg.left-16&&ev.clientX<=rg.right+16&&ev.clientY>=rg.top-16&&ev.clientY<=rg.bottom+16;if(over||!moved)scanned(j);else{w.style.transform="";w.style.zIndex="";}};};});}
 function scanned(j){if(!G||G.done||G.scan.has(j))return;G.scan.add(j);window.Ljud&&Ljud.clonk&&Ljud.clonk();render(false);
   if(G.scan.size>=G.t.items.length){fb("Alla varor är skannade! Vad blir det tillsammans?",false);renderPanel();}}
 function renderPanel(){const t=G.t,p=$("panel");
