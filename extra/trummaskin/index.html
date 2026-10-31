@@ -323,6 +323,7 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
     <div class="lcd" id="lcdBpm" aria-live="off"><span class="etikett">TEMPO</span><svg class="sv" id="sevBpm" viewBox="0 0 144 64" aria-label="Tempo"></svg><span class="etikett">BPM</span></div>
     <div class="lcd"><span class="etikett">RYTM</span><span class="namn" id="namnLcd">Tomt</span></div>
     <div style="flex:1"></div>
+    <div class="grupp" id="gFull" hidden><button class="lilla" id="bFull" type="button" aria-pressed="false" title="Visa hela sidan i helskärm (Esc avslutar)">⛶ HELSKÄRM</button><span class="l">Visa</span></div>
     <div class="grupp"><div class="projg"><button class="lilla" id="bProjS" type="button" title="Spara hela projektet som en fil: rytmer, låt, melodier, loopar, egna ljud och rattrörelser">📁 SPARA</button><button class="lilla" id="bProjL" type="button" title="Öppna ett sparat projekt">📂 ÖPPNA</button><input type="file" id="projFil" accept=".json,application/json" hidden><button class="lilla" id="bLive" type="button" aria-pressed="false" title="Spela in allt du hör, live, och spara som mp3 när du trycker igen">⏺ SPELA IN LIVE</button><button class="lilla" id="bExp" type="button" title="Spara låten som en mp3-fil på din dator">⬇ MP3</button></div><span class="l">Projekt och export</span></div>
     <div class="grupp"><div class="knob" id="kMaster" role="slider" tabindex="0" aria-label="Huvudvolym"><div class="kap"></div></div><label>Volym</label></div>
   </div>
@@ -1211,6 +1212,11 @@ async function exportMp3(){if(exporterar)return;exporterar=true;const kn3=$("#bE
   catch(e){toast("Det gick inte att skapa filen")}
   exporterar=false;kn3.textContent=txt;kn3.disabled=false}
 $("#bExp").onclick=exportMp3;
+{const el=document.documentElement,kan=document.fullscreenEnabled||document.webkitFullscreenEnabled;
+  const full=()=>document.fullscreenElement||document.webkitFullscreenElement;
+  if(kan){$("#gFull").hidden=false;const b=$("#bFull"),vis=()=>{const f=!!full();b.textContent=f?"✕ AVSLUTA HELSKÄRM":"⛶ HELSKÄRM";b.setAttribute("aria-pressed",f);b.classList.toggle("on",f)};
+    b.onclick=()=>{if(full()){(document.exitFullscreen||document.webkitExitFullscreen).call(document)}else{const r=el.requestFullscreen||el.webkitRequestFullscreen;try{const p=r.call(el);p&&p.catch&&p.catch(()=>toast("Webbläsaren tillät inte helskärm här"))}catch(e){toast("Webbläsaren tillät inte helskärm här")}}};
+    document.addEventListener("fullscreenchange",vis);document.addEventListener("webkitfullscreenchange",vis);vis()}}
 let liveR=null;
 function liveStopp(avbryt){if(!liveR)return;const L=liveR;liveR=null;clearInterval(L.timer);try{L.dest.disconnect()}catch(e){}try{mg&&mg.disconnect(L.dest)}catch(e){}L.avbryt=!!avbryt;try{L.mr.state!=="inactive"&&L.mr.stop()}catch(e){}
   const b=$("#bLive");b.classList.remove("on");b.setAttribute("aria-pressed","false");if(avbryt)b.textContent="⏺ SPELA IN LIVE"}
