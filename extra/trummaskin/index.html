@@ -168,6 +168,10 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
 .fxs b{min-width:2.2ch;text-align:center;font-size:.8rem;color:var(--lcd)}
 .fxs button{width:22px;padding:4px 0!important}
 .lrow button[aria-pressed=true]{background:linear-gradient(180deg,#ffc94d,#f2a707);color:#241a00}
+.lrow .slc{display:grid;grid-template-columns:repeat(8,1fr);gap:3px;flex:1;min-width:150px}
+.lrow .slc button{height:20px;padding:0;border-radius:4px;background:#2a2c33;box-shadow:inset 0 1px 3px rgba(0,0,0,.6)}
+.lrow .slc button.p{background:var(--sk);box-shadow:0 0 8px color-mix(in srgb,var(--sk) 55%,transparent)}
+.lrow.lsl{border-top:1px solid #34363c;padding-top:6px}
 .loopmaskin{margin-top:22px}
 .loopmaskin::after{background:linear-gradient(90deg,#4cc3ff 0 25%,#7fe08a 25% 50%,#c58bff 50% 75%,#ff7bd0 75%)}
 .loopmaskin .logga b i{color:#4cc3ff}
@@ -538,7 +542,7 @@ function init(){
 /* ---------- loopstation: spela in eget ljud och loopa det i valt antal takter ---------- */
 const LC=["#4cc3ff","#7fe08a","#c58bff","#ff7bd0"];
 const NLEN=[[.25,"¼"],[.5,"½"],[1,"1"],[2,"2"],[4,"4"],[8,"8"]];
-const LP=[0,1,2,3].map(i=>({i,st:"tom",n:2,layers:[],srcs:[],vol:80,mute:false,t0:0,dur:0,rec:null,gain:null,fx:{pitch:0,rev:false,echo:0,et:0,hall:0,filt:0},fxu:[],mix:null,raw:null,pk:null,cuts:[],zone:null,shift:0,sel:null,mode:"mark",undo:[],drag:null}));
+const LP=[0,1,2,3].map(i=>({i,st:"tom",n:2,layers:[],srcs:[],vol:80,mute:false,t0:0,dur:0,rec:null,gain:null,fx:FXNY(),sl:"xxxxxxxx",slp:0,o:0,fxu:[],mix:null,raw:null,pk:null,cuts:[],zone:null,shift:0,sel:null,mode:"mark",undo:[],drag:null}));
 let mic=null,micSrc=null,proc=null,anMic=null,lastBar=0,LJUST=0;
 const barDur=()=>16*60/S.bpm/4;
 const harLoopar=()=>LP.some(l=>l.layers.length||l.rec);
@@ -563,27 +567,52 @@ const stepsOf=l=>Math.max(1,Math.round(16*l.n));
 /* ljudet i en loop = alla lager ihop, förskjutet, med raderade delar och spelzon som tystnad (rådata ändras aldrig) */
 function lpBygger(l){const len=lenOf(l);if(!len){l.mix=l.raw=l.pk=null;return}
   const sum=new Float32Array(len);l.layers.forEach(ab=>{const x=ab.getChannelData(0);for(let i=0;i<len;i++)sum[i]+=x[i]});
-  let base=sum;if(l.fx.pitch)base=pitchShift(base,l.fx.pitch);if(l.fx.rev){base=base===sum?sum.slice():base;base.reverse()}
+  let base=sum;if(l.fx.pitch)base=pitchShift(base,l.fx.pitch);if(l.fx.form)base=formantShift(base,Math.pow(2,l.fx.form/16));if(l.fx.rev){base=base===sum?sum.slice():base;base.reverse()}
   const sh=((l.shift%len)+len)%len,raw=new Float32Array(len);raw.set(base.subarray(len-sh),0);raw.set(base.subarray(0,len-sh),sh);l.raw=raw;
   const cols=400,pk=new Float32Array(cols*2);
   for(let c=0;c<cols;c++){const a=Math.floor(c*len/cols),b=Math.max(a+1,Math.floor((c+1)*len/cols)),st=Math.max(1,Math.floor((b-a)/40));let mn=0,mx=0;for(let i=a;i<b;i+=st){const v=raw[i];if(v<mn)mn=v;if(v>mx)mx=v}pk[c*2]=mn;pk[c*2+1]=mx}
   l.pk=pk;
   let m=null;
-  if(l.zone||l.cuts.length){m=new Float32Array(len).fill(1);
+  const slOn=l.sl.includes(".");
+  if(l.zone||l.cuts.length||slOn){m=new Float32Array(len).fill(1);
     if(l.zone){m.fill(0,0,Math.round(l.zone[0]*len));m.fill(0,Math.round(l.zone[1]*len),len)}
     l.cuts.forEach(c=>m.fill(0,Math.round(c[0]*len),Math.round(c[1]*len)));
+    if(slOn){const sd=60/S.bpm/2,sr0=ctx.sampleRate;for(let i=0;i<len;i++){if(l.sl[Math.floor((i/sr0+(l.o||0))/sd)%8]===".")m[i]=0}}
     const h=Math.round(ctx.sampleRate*.004),w=2*h+1,o=new Float32Array(len);let sm=0;for(let k=-h;k<=h;k++)sm+=m[(k+len)%len];
     for(let i=0;i<len;i++){o[i]=sm/w;sm+=m[(i+h+1)%len]-m[(i-h+len)%len]}
     m=o}
   const ab=ctx.createBuffer(1,len,ctx.sampleRate),d=ab.getChannelData(0);
   for(let i=0;i<len;i++)d[i]=m?raw[i]*m[i]:raw[i];
   l.mix=ab}
-/* ---- effekter per loop: tonhöjd och baklänges bakas in i loopen, echo, hall och filter är levande ---- */
+/* ---- effekter per loop: tonhöjd, röst och baklänges bakas in i loopen, echo, hall, flanger och filter är levande ---- */
+function FXNY(){return{pitch:0,form:0,rev:false,echo:0,et:0,hall:0,flang:0,filt:0}}
+const FFTT={};
+function fftIn(re,im,inv){const n=re.length;let T=FFTT[n];if(!T){T=FFTT[n]={c:new Float64Array(n/2),s:new Float64Array(n/2)};for(let i=0;i<n/2;i++){T.c[i]=Math.cos(2*Math.PI*i/n);T.s[i]=Math.sin(2*Math.PI*i/n)}}
+  for(let i=1,j=0;i<n;i++){let b=n>>1;for(;j&b;b>>=1)j^=b;j^=b;if(i<j){let t=re[i];re[i]=re[j];re[j]=t;t=im[i];im[i]=im[j];im[j]=t}}
+  for(let len=2;len<=n;len<<=1){const half=len>>1,step=n/len;for(let i=0;i<n;i+=len){for(let k=0;k<half;k++){const wr=T.c[k*step],wi=(inv?-1:1)*T.s[k*step],a=i+k,b=a+half,xr=re[b]*wr-im[b]*wi,xi=re[b]*wi+im[b]*wr;re[b]=re[a]-xr;im[b]=im[a]-xi;re[a]+=xr;im[a]+=xi}}}
+  if(inv)for(let i=0;i<n;i++){re[i]/=n;im[i]/=n}}
+/* röstkaraktär: spektrala kuvertet flyttas, tonhöjden (fina strukturen) lämnas ifred */
+function formantShift(x,ratio){const N=2048,H=512,h=N/2,Lq=34,n=x.length,y=new Float32Array(n),win=new Float32Array(N);for(let i=0;i<N;i++)win[i]=.5-.5*Math.cos(2*Math.PI*i/N);
+  const re=new Float64Array(N),im=new Float64Array(N),mag=new Float64Array(h+1),ph=new Float64Array(h+1),cr=new Float64Array(N),ci=new Float64Array(N),env=new Float64Array(h+1),nr=new Float64Array(N),ni=new Float64Array(N);
+  for(let p=0;p<n;p+=H){
+    for(let j=0;j<N;j++){re[j]=x[(p+j)%n]*win[j];im[j]=0}
+    fftIn(re,im,false);
+    for(let k=0;k<=h;k++){mag[k]=Math.hypot(re[k],im[k]);ph[k]=Math.atan2(im[k],re[k])}
+    for(let k=0;k<N;k++){cr[k]=Math.log(mag[k<=h?k:N-k]+1e-6);ci[k]=0}
+    fftIn(cr,ci,true);for(let q=Lq+1;q<N-Lq;q++)cr[q]=0;for(let q=0;q<N;q++)ci[q]=0;fftIn(cr,ci,false);
+    for(let k=0;k<=h;k++)env[k]=Math.exp(cr[k]);
+    for(let k=0;k<=h;k++){const sp=k/ratio,k0=Math.floor(sp),f=sp-k0,e0=env[Math.min(h,k0)],e1=env[Math.min(h,k0+1)],m=(mag[k]/(env[k]+1e-9))*(e0+(e1-e0)*f);nr[k]=m*Math.cos(ph[k]);ni[k]=m*Math.sin(ph[k])}
+    ni[0]=0;ni[h]=0;for(let k=1;k<h;k++){nr[N-k]=nr[k];ni[N-k]=-ni[k]}
+    fftIn(nr,ni,true);
+    for(let j=0;j<N;j++)y[(p+j)%n]+=nr[j]*win[j]}
+  for(let i=0;i<n;i++)y[i]/=1.5;return y}
+const SLP=["xxxxxxxx","x.x.x.x.","xx.xx.x.","x..x..x.","xxx.xxx.","x.xxx.xx"];
 const ETID=[1,.75,.5],ETXT=["¼","3/16","⅛"];
 function irSkapa(c){const n=Math.round(c.sampleRate*2.2),b=c.createBuffer(2,n,c.sampleRate);for(let ch=0;ch<2;ch++){const d=b.getChannelData(ch);for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/n,2.6)}return b}
-function fxBygg(l,c,dest){const inn=c.createGain(),f=c.createBiquadFilter(),dry=c.createGain(),ds=c.createGain(),dl=c.createDelay(2),fb=c.createGain(),rs=c.createGain(),cv=c.createConvolver();cv.buffer=irSkapa(c);
+function fxBygg(l,c,dest){const inn=c.createGain(),f=c.createBiquadFilter(),dry=c.createGain(),ds=c.createGain(),dl=c.createDelay(2),fb=c.createGain(),rs=c.createGain(),cv=c.createConvolver(),fls=c.createGain(),fd=c.createDelay(.05),flb=c.createGain(),lfo=c.createOscillator(),lg=c.createGain();cv.buffer=irSkapa(c);
   inn.connect(f);f.connect(dry);dry.connect(dest);f.connect(ds);ds.connect(dl);dl.connect(dest);dl.connect(fb);fb.connect(dl);f.connect(rs);rs.connect(cv);cv.connect(dest);fb.gain.value=.42;
-  const set=()=>{const x=l.fx;ds.gain.value=x.echo/100*.9;dl.delayTime.value=60/S.bpm*ETID[x.et];rs.gain.value=x.hall/100*.9;const v=x.filt;
+  fd.delayTime.value=.004;lfo.frequency.value=.28;lg.gain.value=.003;lfo.connect(lg);lg.connect(fd.delayTime);lfo.start();f.connect(fls);fls.connect(fd);fd.connect(dest);fd.connect(flb);flb.connect(fd);flb.gain.value=.55;
+  const set=()=>{const x=l.fx;ds.gain.value=x.echo/100*.9;dl.delayTime.value=60/S.bpm*ETID[x.et];rs.gain.value=x.hall/100*.9;fls.gain.value=x.flang/100*.9;const v=x.filt;
     if(Math.abs(v)<4){f.type="lowpass";f.frequency.value=22000;f.Q.value=.0001}else if(v<0){f.type="lowpass";f.frequency.value=22050*Math.pow(180/22050,-v/100);f.Q.value=1.2}else{f.type="highpass";f.frequency.value=20*Math.pow(7000/20,v/100);f.Q.value=1.2}};
   set();return{inn,set}}
 function pitchShift(x,st){const n=x.length,r=Math.pow(2,st/12),G=2048,H=G/4,y=new Float32Array(n),w=new Float32Array(G);for(let i=0;i<G;i++)w[i]=.5-.5*Math.cos(2*Math.PI*i/G);
@@ -593,7 +622,8 @@ let fxT=0;function lpNyDeb(l){clearTimeout(fxT);fxT=setTimeout(()=>lpNy(l),160)}
 function lpGate(l){if(!l.gate){l.gate=ctx.createGain();l.fxn=fxBygg(l,ctx,lpGain(l));l.gate.connect(l.fxn.inn)}return l.gate}
 function lpBarGate(ix,t){LP.forEach(l=>{if(!l.gate)return;const row=S.lsong[l.i],v=(ix>=0&&row.includes("x"))?(row[ix]==="x"?1:0):1;if(l.gv!==v){l.gate.gain.cancelScheduledValues(t);l.gate.gain.setTargetAtTime(v,t,.006);l.gv=v}})}
 function lpSpela(l,vid,off){if(!ctx||!l.mix)return;l.srcs.forEach(s=>{try{s.stop(vid)}catch(e){}});const s=ctx.createBufferSource();s.buffer=l.mix;s.loop=true;s.connect(lpGate(l));s.start(vid,off);l.srcs=[s]}
-function lpNy(l){lpBygger(l);if(spelar&&l.mix){const nu=ctx.currentTime+.03,off=(((nu-l.t0)%l.dur)+l.dur)%l.dur;lpSpela(l,nu,off)}}
+const lpOff=(l,t)=>(((t-l.t0)%l.dur)+l.dur)%l.dur;
+function lpNy(l){lpBygger(l);if(spelar&&l.mix){const nu=ctx.currentTime+.03;lpSpela(l,nu,lpOff(l,nu))}}
 function klarRec(l){const r=l.rec;l.rec=null;if(!ctx)return;const sr=ctx.sampleRate,ab=ctx.createBuffer(1,r.len,sr),d=ab.getChannelData(0);d.set(r.buf);
   const fi=Math.round(sr*.004);for(let i=0;i<fi;i++){d[i]*=i/fi;d[r.len-1-i]*=i/fi}   // mjuka kanter så att det inte knäpper
   if(!r.over){l.t0=r.t;l.dur=r.len/sr;l.cuts=[];l.zone=null;l.shift=0;l.undo=[];l.sel=null}
@@ -611,13 +641,25 @@ async function lpKlick(i){const l=LP[i];
   if(rakna)for(let q=0;q<4;q++)klick(t-(4-q)*bt,q===0);   // alltid fyra räkningar före inspelningen
   l.rec={t,len,buf:new Float32Array(len),w:0,go:false,over};l.st="vantar";lpVisa()}
 function lpStoppa(){LP.forEach(l=>{l.srcs.forEach(s=>{try{s.stop()}catch(e){}});l.srcs=[];if(l.rec){l.rec=null;l.st=l.layers.length?"loop":"tom"}});lpVisa()}
-function lpStarta(t0){LP.forEach(l=>{if(!l.layers.length)return;l.t0=t0;if(!l.mix)lpBygger(l);lpSpela(l,t0,0)})}
-function lpSnap(l){l.undo.push(JSON.stringify({c:l.cuts,z:l.zone,s:l.shift}));if(l.undo.length>30)l.undo.shift()}
+function lpStarta(t0){LP.forEach(l=>{if(!l.layers.length)return;l.t0=t0+(l.o||0);if(!l.mix)lpBygger(l);lpSpela(l,t0,lpOff(l,t0))})}
+function lpSnap(l){l.undo.push({k:"e",c:JSON.parse(JSON.stringify(l.cuts)),z:l.zone?l.zone.slice():null,s:l.shift});if(l.undo.length>30)l.undo.shift()}
+function lpBeskar(l){const sel=l.sel;if(!sel||!ctx||!l.layers.length)return;const len=lenOf(l),sr=ctx.sampleRate,i0=Math.round(sel[0]*len),i1=Math.round(sel[1]*len),nl=i1-i0;if(nl<sr*.03){toast("Markera en längre bit");return}
+  const stepsNew=(nl/len)*stepsOf(l),a=sel[0],b=sel[1];
+  l.undo.push({k:"c",layers:l.layers,t0:l.t0,dur:l.dur,n:l.n,o:l.o||0,rev:l.fx.rev,c:JSON.parse(JSON.stringify(l.cuts)),z:l.zone?l.zone.slice():null,s:l.shift});if(l.undo.length>30)l.undo.shift();
+  const sh=((l.shift%len)+len)%len,fade=Math.round(sr*.004),rev=l.fx.rev;
+  const nyl=l.layers.map(ab=>{const x=ab.getChannelData(0),y=new Float32Array(len);for(let i=0;i<len;i++)y[(i+sh)%len]=x[rev?len-1-i:i];
+    const o=ctx.createBuffer(1,nl,sr),d=o.getChannelData(0);d.set(y.subarray(i0,i1));for(let i=0;i<fade;i++){d[i]*=i/fade;d[nl-1-i]*=i/fade}return o});
+  const mapC=q=>[(Math.max(q[0],a)-a)/(b-a),(Math.min(q[1],b)-a)/(b-a)];
+  l.cuts=l.cuts.filter(q=>q[1]>a&&q[0]<b).map(mapC);
+  if(l.zone){if(l.zone[1]>a&&l.zone[0]<b){const z=mapC(l.zone);l.zone=(z[0]<1e-6&&z[1]>1-1e-6)?null:z}else{l.zone=null;l.cuts.push([0,1])}}
+  l.layers=nyl;l.t0+=a*l.dur;l.o=(l.o||0)+a*l.dur;l.dur=nl/sr;l.n=l.n*(nl/len);l.shift=0;l.fx.rev=false;l.sel=null;
+  lpNy(l);lpVisa();
+  const sn=Math.round(stepsNew),ok=Math.abs(stepsNew-sn)<.02&&sn>0&&(sn<=16?16%sn===0:sn%16===0);if(!ok)toast("Den här biten går i otakt mot trummorna")}
 function lpRed(l,fn){lpSnap(l);fn();l.sel=null;lpNy(l);lpVisa()}
 function lpAngra(i){const l=LP[i];
-  if(l.undo.length){const s=JSON.parse(l.undo.pop());l.cuts=s.c;l.zone=s.z;l.shift=s.s;l.sel=null;lpNy(l);lpVisa();return}
+  if(l.undo.length){const s=l.undo.pop();if(s.k==="c"){l.layers=s.layers;l.t0=s.t0;l.dur=s.dur;l.n=s.n;l.o=s.o;l.fx.rev=s.rev}l.cuts=s.c;l.zone=s.z;l.shift=s.s;l.sel=null;lpNy(l);lpVisa();return}
   if(!l.layers.length)return;l.layers.pop();if(!l.layers.length){lpRadera(i);return}lpNy(l);lpVisa()}
-function lpRadera(i){const l=LP[i];l.rec=null;l.srcs.forEach(s=>{try{s.stop()}catch(e){}});l.srcs=[];l.layers=[];l.mix=l.raw=l.pk=null;l.cuts=[];l.zone=null;l.shift=0;l.sel=null;l.undo=[];l.fx={pitch:0,rev:false,echo:0,et:0,hall:0,filt:0};if(l.fxn)l.fxn.set();l.st="tom";lpVisa()}
+function lpRadera(i){const l=LP[i];l.rec=null;l.srcs.forEach(s=>{try{s.stop()}catch(e){}});l.srcs=[];l.layers=[];l.mix=l.raw=l.pk=null;l.cuts=[];l.zone=null;l.shift=0;l.sel=null;l.undo=[];l.fx=FXNY();l.sl="xxxxxxxx";l.slp=0;l.o=0;if(l.fxn)l.fxn.set();l.st="tom";lpVisa()}
 const LTXT={tom:"TOM",vantar:"VÄNTAR",rec:"SPELAR IN",loop:"LOOP",ovr:"LÄGGER PÅ"};
 const ZON=[["0-1","Hela"],["0-0.5","½·1"],["0.5-1","½·2"],["0-0.25","¼·1"],["0.25-0.5","¼·2"],["0.5-0.75","¼·3"],["0.75-1","¼·4"]];
 function lpVisa(){LP.forEach(l=>{const m=document.querySelector(`.lm[data-i="${l.i}"]`);if(!m)return;
@@ -629,11 +671,11 @@ function lpVisa(){LP.forEach(l=>{const m=document.querySelector(`.lm[data-i="${l
     m.querySelectorAll(".len button").forEach(x=>{x.classList.toggle("on",+x.dataset.n===l.n);x.disabled=l.layers.length>0||!!l.rec});
     m.querySelector("[data-lm]").classList.toggle("on",l.mute);
     m.querySelectorAll("[data-mode]").forEach(x=>x.classList.toggle("on",x.dataset.mode===l.mode));
-    m.querySelectorAll("[data-act=cut],[data-act=only],[data-act=clr]").forEach(x=>x.disabled=!l.sel);
+    m.querySelectorAll("[data-act=cut],[data-act=only],[data-act=crop],[data-act=clr]").forEach(x=>x.disabled=!l.sel);
     const z=l.zone||[0,1];m.querySelectorAll("[data-z]").forEach(x=>{const q=x.dataset.z.split("-").map(Number);x.classList.toggle("on",Math.abs(q[0]-z[0])<1e-6&&Math.abs(q[1]-z[1])<1e-6)});
     const lenS=lenOf(l),ms=ctx&&lenS?Math.round(l.shift/ctx.sampleRate*1000):0;m.querySelector(".lsh").textContent=ms?("↔ "+(ms>0?"+":"")+ms+" ms"):"";
     const f=l.vol/100,kn2=m.querySelector("[data-lvol]");kn2.style.setProperty("--p",(f*270)+"deg");kn2.querySelector(".kap").style.transform="rotate("+(-135+f*270)+"deg)";
-    l.fxu.forEach(u=>u());m.querySelector("[data-fxpv]").textContent=(l.fx.pitch>0?"+":"")+l.fx.pitch;m.querySelector("[data-fxrev]").setAttribute("aria-pressed",l.fx.rev);m.querySelector("[data-fxet]").textContent=ETXT[l.fx.et]});
+    l.fxu.forEach(u=>u());m.querySelector("[data-fxpv]").textContent=(l.fx.pitch>0?"+":"")+l.fx.pitch;m.querySelector("[data-fxfv]").textContent=(l.fx.form>0?"+":"")+l.fx.form;m.querySelectorAll("[data-sl]").forEach(b=>b.classList.toggle("p",l.sl[+b.dataset.sl]==="x"));m.querySelector("[data-fxrev]").setAttribute("aria-pressed",l.fx.rev);m.querySelector("[data-fxet]").textContent=ETXT[l.fx.et]});
   const las=harLoopar();["#bMin","#bPlus","#kTempo"].forEach(q=>$(q)&&$(q).closest(".grupp")&&$(q).closest(".grupp").classList.toggle("las",las))}
 /* ---- vågformen ---- */
 function hatch(c,x,w,H,dpr){if(w<=0)return;c.save();c.beginPath();c.rect(x,0,w,H);c.clip();c.fillStyle="rgba(6,5,3,.78)";c.fillRect(x,0,w,H);c.strokeStyle="rgba(255,255,255,.12)";c.lineWidth=dpr;c.beginPath();for(let k=-H;k<w+H;k+=9*dpr){c.moveTo(x+k,H);c.lineTo(x+k+H,0)}c.stroke();c.restore()}
@@ -656,6 +698,7 @@ function lpTeckna(l,m){const cv=m.querySelector("canvas"),dpr=Math.min(2,window.
   if(l.layers.length&&!r){
     if(l.zone){hatch(c,0,Math.round(l.zone[0]*W),H,dpr);hatch(c,Math.round(l.zone[1]*W),W-Math.round(l.zone[1]*W),H,dpr)}
     l.cuts.forEach(q=>hatch(c,Math.round(q[0]*W),Math.round((q[1]-q[0])*W),H,dpr));
+    if(l.sl.includes(".")&&l.dur){const sd=60/S.bpm/2,o=l.o||0;for(let t=0;t<l.dur-1e-6;){const si=Math.floor((t+o)/sd+1e-9),t2=Math.min(l.dur,(si+1)*sd-o);if(l.sl[si%8]===".")hatch(c,Math.round(t/l.dur*W),Math.max(1,Math.round((t2-t)/l.dur*W)),H,dpr);t=Math.max(t2,t+1e-4)}}
     if(l.sel){const x1=Math.round(l.sel[0]*W),x2=Math.round(l.sel[1]*W);c.fillStyle="rgba(255,255,255,.17)";c.fillRect(x1,0,x2-x1,H);c.fillStyle="#fff";c.fillRect(x1,0,3*dpr,H);c.fillRect(x2-3*dpr,0,3*dpr,H);
       c.fillRect(x1,H/2-9*dpr,7*dpr,18*dpr);c.fillRect(x2-7*dpr,H/2-9*dpr,7*dpr,18*dpr)}}
   if(wait){const rem=r.t-now,beats=Math.ceil(rem/(60/S.bpm));c.fillStyle="rgba(242,183,7,.16)";c.fillRect(0,0,W,H);c.fillStyle="#ffc94d";c.textAlign="center";c.textBaseline="middle";
@@ -688,7 +731,7 @@ function lpPtr(l,e){if(!l.layers.length||l.rec)return;const cv=e.currentTarget,r
   cv.onpointermove=ev=>{b=sn(fx(ev));set()};
   cv.onpointerup=cv.onpointercancel=()=>{cv.onpointermove=cv.onpointerup=cv.onpointercancel=null;l.drag=null;lpVisa()}}
 function lpBygg(){const g=$("#lgrid");LP.forEach(l=>{const m=document.createElement("div");m.className="lm";m.dataset.i=l.i;m.style.setProperty("--sk",LC[l.i]);
-    m.innerHTML=`<div class="lt"><span class="led"></span><b>L${l.i+1}</b><span class="ls">TOM</span></div><div class="lc"><button type="button" class="recb" data-rec aria-label="Spela in"></button><div class="len" role="group" aria-label="Längd i takter">${NLEN.map(q=>`<button type="button" data-n="${q[0]}" aria-label="${q[1]} takt">${q[1]}</button>`).join("")}</div></div><canvas class="lv" role="img" aria-label="Ljudvåg"></canvas><div class="ledit"><div class="lrow"><button type="button" data-mode="mark" class="on">Markera</button><button type="button" data-mode="move">Flytta</button><button type="button" data-sh="-1" aria-label="Flytta ett steg bakåt" title="Flytta ett steg bakåt (Shift = 10 ms)">◀</button><button type="button" data-sh="1" aria-label="Flytta ett steg framåt" title="Flytta ett steg framåt (Shift = 10 ms)">▶</button><span class="lsh"></span></div><div class="lrow lfx"><span class="fx"><span class="fxs"><button type="button" data-fxp="-1" aria-label="Lägre tonhöjd">−</button><b data-fxpv>0</b><button type="button" data-fxp="1" aria-label="Högre tonhöjd">+</button></span><small>TONHÖJD</small></span><span class="fx"><button type="button" data-fxrev aria-pressed="false">⇄ BAKLÄNGES</button></span><span class="fx"><div class="knob liten" data-fxk="echo" role="slider" tabindex="0" aria-label="Echo"><div class="kap"></div></div><small>ECHO</small></span><span class="fx"><button type="button" data-fxet title="Echots längd">¼</button></span><span class="fx"><div class="knob liten" data-fxk="hall" role="slider" tabindex="0" aria-label="Hall"><div class="kap"></div></div><small>HALL</small></span><span class="fx"><div class="knob liten" data-fxk="filt" role="slider" tabindex="0" aria-label="Filter"><div class="kap"></div></div><small>FILTER</small></span></div><div class="lrow"><button type="button" data-act="cut" disabled>Radera</button><button type="button" data-act="only" disabled>Spela bara</button><button type="button" data-act="clr" disabled>Avmarkera</button></div><div class="lrow zon"><span>Spela:</span>${ZON.map(q=>`<button type="button" data-z="${q[0]}">${q[1]}</button>`).join("")}<button type="button" data-act="reset" title="Ta bort alla ändringar">↺</button></div></div><div class="lr"><div class="knob liten" data-lvol role="slider" tabindex="0" aria-label="Volym loop ${l.i+1}"><div class="kap"></div></div><button type="button" class="sm" data-lm aria-label="Tysta loop ${l.i+1}">M</button><button type="button" class="sm" data-lu aria-label="Ångra senaste ändringen" title="Ångra senaste ändringen">↶</button><button type="button" class="sm" data-lx aria-label="Radera loopen" title="Radera loopen">✕</button></div>`;
+    m.innerHTML=`<div class="lt"><span class="led"></span><b>L${l.i+1}</b><span class="ls">TOM</span></div><div class="lc"><button type="button" class="recb" data-rec aria-label="Spela in"></button><div class="len" role="group" aria-label="Längd i takter">${NLEN.map(q=>`<button type="button" data-n="${q[0]}" aria-label="${q[1]} takt">${q[1]}</button>`).join("")}</div></div><canvas class="lv" role="img" aria-label="Ljudvåg"></canvas><div class="ledit"><div class="lrow"><button type="button" data-mode="mark" class="on">Markera</button><button type="button" data-mode="move">Flytta</button><button type="button" data-sh="-1" aria-label="Flytta ett steg bakåt" title="Flytta ett steg bakåt (Shift = 10 ms)">◀</button><button type="button" data-sh="1" aria-label="Flytta ett steg framåt" title="Flytta ett steg framåt (Shift = 10 ms)">▶</button><span class="lsh"></span></div><div class="lrow lfx"><span class="fx"><span class="fxs"><button type="button" data-fxp="-1" aria-label="Lägre tonhöjd">−</button><b data-fxpv>0</b><button type="button" data-fxp="1" aria-label="Högre tonhöjd">+</button></span><small>TONHÖJD</small></span><span class="fx"><span class="fxs"><button type="button" data-fxf="-1" aria-label="Mörkare röst">−</button><b data-fxfv>0</b><button type="button" data-fxf="1" aria-label="Ljusare röst">+</button></span><small>RÖST</small></span><span class="fx"><button type="button" data-fxrev aria-pressed="false">⇄ BAKLÄNGES</button></span><span class="fx"><div class="knob liten" data-fxk="echo" role="slider" tabindex="0" aria-label="Echo"><div class="kap"></div></div><small>ECHO</small></span><span class="fx"><button type="button" data-fxet title="Echots längd">¼</button></span><span class="fx"><div class="knob liten" data-fxk="hall" role="slider" tabindex="0" aria-label="Hall"><div class="kap"></div></div><small>HALL</small></span><span class="fx"><div class="knob liten" data-fxk="flang" role="slider" tabindex="0" aria-label="Flanger"><div class="kap"></div></div><small>FLANGER</small></span><span class="fx"><div class="knob liten" data-fxk="filt" role="slider" tabindex="0" aria-label="Filter"><div class="kap"></div></div><small>FILTER</small></span></div><div class="lrow lsl"><span class="fx"><small>SLICER</small></span><div class="slc" role="group" aria-label="Slicer">${Array.from({length:8},(_,i)=>`<button type="button" data-sl="${i}" aria-label="Del ${i+1}"></button>`).join("")}</div><button type="button" data-slp title="Byt slicer-mönster">↻</button></div><div class="lrow"><button type="button" data-act="cut" disabled>Radera</button><button type="button" data-act="only" disabled>Spela bara</button><button type="button" data-act="crop" disabled title="Loopen blir bara det markerade">Beskär</button><button type="button" data-act="clr" disabled>Avmarkera</button></div><div class="lrow zon"><span>Spela:</span>${ZON.map(q=>`<button type="button" data-z="${q[0]}">${q[1]}</button>`).join("")}<button type="button" data-act="reset" title="Ta bort alla ändringar">↺</button></div></div><div class="lr"><div class="knob liten" data-lvol role="slider" tabindex="0" aria-label="Volym loop ${l.i+1}"><div class="kap"></div></div><button type="button" class="sm" data-lm aria-label="Tysta loop ${l.i+1}">M</button><button type="button" class="sm" data-lu aria-label="Ångra senaste ändringen" title="Ångra senaste ändringen">↶</button><button type="button" class="sm" data-lx aria-label="Radera loopen" title="Radera loopen">✕</button></div>`;
     m.querySelectorAll("[data-fxk]").forEach(el=>{const key=el.dataset.fxk;l.fxu.push(knob(el,{min:key==="filt"?-100:0,max:100,reset:0,val:()=>l.fx[key],set:v=>{l.fx[key]=v;if(l.fxn)l.fxn.set()}}))});
     g.appendChild(m);m.querySelector("canvas").addEventListener("pointerdown",e=>lpPtr(l,e));
     knob(m.querySelector("[data-lvol]"),{min:0,max:100,reset:80,val:()=>l.vol,set:v=>{l.vol=v;if(l.gain)lpGain(l)}})});
@@ -700,6 +743,9 @@ function lpBygg(){const g=$("#lgrid");LP.forEach(l=>{const m=document.createElem
     if(e.target.closest("[data-lx]")){lpRadera(i);return}
     const mb=e.target.closest("[data-mode]");if(mb){l.mode=mb.dataset.mode;lpVisa();return}
     const fp=e.target.closest("[data-fxp]");if(fp){l.fx.pitch=Math.max(-12,Math.min(12,l.fx.pitch+ +fp.dataset.fxp));lpVisa();lpNyDeb(l);return}
+    const ff=e.target.closest("[data-fxf]");if(ff){l.fx.form=Math.max(-12,Math.min(12,l.fx.form+ +ff.dataset.fxf));lpVisa();lpNyDeb(l);return}
+    const sb2=e.target.closest("[data-sl]");if(sb2){const a=l.sl.split(""),i=+sb2.dataset.sl;a[i]=a[i]==="x"?".":"x";l.sl=a.join("");lpVisa();lpNyDeb(l);return}
+    if(e.target.closest("[data-slp]")){l.slp=(l.slp+1)%SLP.length;l.sl=SLP[l.slp];lpVisa();lpNyDeb(l);return}
     if(e.target.closest("[data-fxrev]")){l.fx.rev=!l.fx.rev;lpVisa();lpNyDeb(l);return}
     if(e.target.closest("[data-fxet]")){l.fx.et=(l.fx.et+1)%3;if(l.fxn)l.fxn.set();lpVisa();return}
     if(!l.layers.length||l.rec)return;
@@ -708,6 +754,7 @@ function lpBygg(){const g=$("#lgrid");LP.forEach(l=>{const m=document.createElem
     const ab=e.target.closest("[data-act]");if(!ab||ab.disabled)return;const act=ab.dataset.act;
     if(act==="cut"&&l.sel){const sel=l.sel;lpRed(l,()=>{l.cuts.push(sel)})}
     else if(act==="only"&&l.sel){const sel=l.sel;lpRed(l,()=>{l.zone=sel})}
+    else if(act==="crop"&&l.sel){lpBeskar(l)}
     else if(act==="clr"){l.sel=null;lpVisa()}
     else if(act==="reset"){lpRed(l,()=>{l.cuts=[];l.zone=null;l.shift=0})}});
   $("#bMic").onclick=()=>{mic?micStopp():micStart()};
@@ -758,7 +805,7 @@ function renderaLat(){startaLjud();if(!ctx)return null;
     bars.forEach(p=>{starts.push(t);const pd=p>=0?monsterData(p):null,md=p>=0?melData(p):null;for(let k=0;k<16;k++){if(pd)S.t.forEach((tr,i)=>{if(pd[i][k]==="x")spela(i,t)});if(md)melTick(k,t,md);t+=stegTid(k)}});
     LP.forEach(l=>{if(!l.mix)return;const g=off.createGain(),lg=off.createGain();lg.gain.value=l.mute?0:Math.pow(l.vol/100,1.5)*1.3;lg.connect(master);const fx=fxBygg(l,off,lg);g.connect(fx.inn);
       const row=S.lsong[l.i];if(len>0&&row.includes("x")){g.gain.value=0;starts.forEach((bs,bi)=>g.gain.setTargetAtTime(row[bi]==="x"?1:0,bs,.006))}
-      const s=off.createBufferSource();s.buffer=l.mix;s.loop=true;s.connect(g);s.start(bar0,0)})
+      const s=off.createBufferSource();s.buffer=l.mix;s.loop=true;s.connect(g);s.start(bar0,(((-(l.o||0))%l.dur)+l.dur)%l.dur)})
   }finally{ctx=oc;master=om;comp=ocp}
   return off.startRendering()}
 async function lameLadda(){if(window.lamejs)return true;try{await new Promise((res,rej)=>{const sc=document.createElement("script");sc.src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js";sc.onload=res;sc.onerror=rej;document.head.appendChild(sc)})}catch(e){return false}return !!window.lamejs}
