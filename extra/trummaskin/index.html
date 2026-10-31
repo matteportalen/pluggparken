@@ -159,6 +159,15 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
 .lloop.tom{opacity:.45}
 .lloop button.nu{outline:2px solid #fff;outline-offset:1px}
 @media(max-width:700px){.tl{grid-template-columns:44px minmax(0,1fr)}.lloop{grid-template-columns:repeat(8,1fr)}.lloop button{height:26px}}
+.stor.mute{background:linear-gradient(180deg,#5b5e68,#3a3c43);min-width:120px;font-size:.95rem}
+.stor.mute.p{background:linear-gradient(180deg,#ff8a86,#e5484d);box-shadow:0 1px 0 rgba(0,0,0,.55),0 0 26px rgba(229,72,77,.85),inset 0 2px 0 rgba(255,255,255,.25)}
+.lfx{align-items:flex-end;gap:8px 12px;padding-top:4px;border-top:1px solid #34363c}
+.fx{display:flex;flex-direction:column;align-items:center;gap:3px}
+.fx small{font-size:.55rem;letter-spacing:.1em;color:var(--dim);font-weight:800}
+.fxs{display:flex;align-items:center;gap:3px}
+.fxs b{min-width:2.2ch;text-align:center;font-size:.8rem;color:var(--lcd)}
+.fxs button{width:22px;padding:4px 0!important}
+.lrow button[aria-pressed=true]{background:linear-gradient(180deg,#ffc94d,#f2a707);color:#241a00}
 .loopmaskin{margin-top:22px}
 .loopmaskin::after{background:linear-gradient(90deg,#4cc3ff 0 25%,#7fe08a 25% 50%,#c58bff 50% 75%,#ff7bd0 75%)}
 .loopmaskin .logga b i{color:#4cc3ff}
@@ -269,6 +278,7 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
     <button class="stor start" id="bStart" type="button">▶ START</button>
     <button class="stor stopp" id="bStopp" type="button">■ STOPP</button>
     <button class="stor rec" id="bRec" type="button" aria-pressed="false" title="Spela in med padsen (tangent R)">● REC</button>
+    <button class="stor mute" id="bMuteAll" type="button" aria-pressed="false" title="Tysta allt (tangent M)">🔇 MUTE ALL</button>
     <div class="grupp"><div class="pm"><button type="button" id="bMin" aria-label="Långsammare">−</button><button type="button" id="bPlus" aria-label="Snabbare">+</button></div><span class="l">Tempo</span></div>
     <div class="grupp"><div class="knob" id="kTempo" role="slider" tabindex="0" aria-label="Tempo"><div class="kap"></div></div><label>Tempo</label></div>
     <div class="grupp"><div class="knob" id="kSwing" role="slider" tabindex="0" aria-label="Swing"><div class="kap"></div></div><label>Swing</label></div>
@@ -290,6 +300,7 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
       <button class="lilla" id="bRensa" type="button">TÖM</button>
       <button class="lilla" id="bDela" type="button">🔗 DELA</button>
       <button class="lilla" id="bSpara" type="button">💾 SPARA</button>
+      <button class="lilla" id="bExp" type="button" title="Spara låten som en mp3-fil på din dator">⬇ MP3</button>
     </div>
     <div class="knapprad" id="minnen" aria-label="Sparade rytmer"></div>
   </div>
@@ -321,17 +332,18 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
 const $=s=>document.querySelector(s);
 const SK=["#E5484D","#F2780C","#F2B707","#F3EBD6","#4cc3ff","#7fe08a","#c58bff","#ff7bd0"];
 /* ---------- ljudmotor ---------- */
-let ctx=null,master=null,comp=null,brus=null,SAMP=null,SAMPMETA=[];
+let ctx=null,master=null,comp=null,mg=null,muteAll=false,brus=null,SAMP=null,SAMPMETA=[];
 function startaLjud(){if(ctx){if(ctx.state==="suspended")ctx.resume();return}
   const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;ctx=new AC();
   master=ctx.createGain();comp=ctx.createDynamicsCompressor();comp.threshold.value=-14;comp.ratio.value=5;comp.attack.value=.003;comp.release.value=.2;
-  master.connect(comp);comp.connect(ctx.destination);setMaster();
+  master.connect(comp);mg=ctx.createGain();comp.connect(mg);mg.connect(ctx.destination);setMaster();setMute();
   const n=ctx.sampleRate*1.2;brus=ctx.createBuffer(1,n,ctx.sampleRate);const d=brus.getChannelData(0);for(let i=0;i<n;i++)d[i]=Math.random()*2-1;
   hamtaSampel()}
 function hamtaSampel(){if(SAMP||!ctx||hamtaSampel.p)return;hamtaSampel.p=1;
   Promise.all([fetch("samples.json").then(r=>r.json()),fetch("samples.wav").then(r=>r.arrayBuffer())]).then(([m,b])=>ctx.decodeAudioData(b).then(buf=>{
     SAMPMETA=m;SAMP=m.map(s=>{const sr=buf.sampleRate,a=Math.round(s.a*sr),l=Math.round(s.l*sr),o=ctx.createBuffer(1,l,sr);o.getChannelData(0).set(buf.getChannelData(0).subarray(a,a+l));return o});
     byggSpar()})).catch(()=>{hamtaSampel.p=0})}
+function setMute(){if(mg)mg.gain.setTargetAtTime(muteAll?0:.85,ctx.currentTime,.012)}
 function setMaster(){if(master)master.gain.value=Math.pow(S.master/100,1.6)*1.1}
 function ns(t,dur,fr,q,type,g,dest){const s=ctx.createBufferSource();s.buffer=brus;s.loop=true;const f=ctx.createBiquadFilter();f.type=type;f.frequency.value=fr;f.Q.value=q;const e=ctx.createGain();e.gain.setValueAtTime(g,t);e.gain.exponentialRampToValueAtTime(.0008,t+dur);s.connect(f);f.connect(e);e.connect(dest);s.start(t,Math.random()*.5);s.stop(t+dur+.05)}
 function osc(t,type,f0,f1,dur,g,dest,lp){const o=ctx.createOscillator();o.type=type;o.frequency.setValueAtTime(f0,t);if(f1)o.frequency.exponentialRampToValueAtTime(f1,t+dur*.6);const e=ctx.createGain();e.gain.setValueAtTime(g,t);e.gain.exponentialRampToValueAtTime(.0008,t+dur);o.connect(e);e.connect(dest);o.start(t);o.stop(t+dur+.05)}
@@ -526,7 +538,7 @@ function init(){
 /* ---------- loopstation: spela in eget ljud och loopa det i valt antal takter ---------- */
 const LC=["#4cc3ff","#7fe08a","#c58bff","#ff7bd0"];
 const NLEN=[[.25,"¼"],[.5,"½"],[1,"1"],[2,"2"],[4,"4"],[8,"8"]];
-const LP=[0,1,2,3].map(i=>({i,st:"tom",n:2,layers:[],srcs:[],vol:80,mute:false,t0:0,dur:0,rec:null,gain:null,mix:null,raw:null,pk:null,cuts:[],zone:null,shift:0,sel:null,mode:"mark",undo:[],drag:null}));
+const LP=[0,1,2,3].map(i=>({i,st:"tom",n:2,layers:[],srcs:[],vol:80,mute:false,t0:0,dur:0,rec:null,gain:null,fx:{pitch:0,rev:false,echo:0,et:0,hall:0,filt:0},fxu:[],mix:null,raw:null,pk:null,cuts:[],zone:null,shift:0,sel:null,mode:"mark",undo:[],drag:null}));
 let mic=null,micSrc=null,proc=null,anMic=null,lastBar=0,LJUST=0;
 const barDur=()=>16*60/S.bpm/4;
 const harLoopar=()=>LP.some(l=>l.layers.length||l.rec);
@@ -551,7 +563,8 @@ const stepsOf=l=>Math.max(1,Math.round(16*l.n));
 /* ljudet i en loop = alla lager ihop, förskjutet, med raderade delar och spelzon som tystnad (rådata ändras aldrig) */
 function lpBygger(l){const len=lenOf(l);if(!len){l.mix=l.raw=l.pk=null;return}
   const sum=new Float32Array(len);l.layers.forEach(ab=>{const x=ab.getChannelData(0);for(let i=0;i<len;i++)sum[i]+=x[i]});
-  const sh=((l.shift%len)+len)%len,raw=new Float32Array(len);raw.set(sum.subarray(len-sh),0);raw.set(sum.subarray(0,len-sh),sh);l.raw=raw;
+  let base=sum;if(l.fx.pitch)base=pitchShift(base,l.fx.pitch);if(l.fx.rev){base=base===sum?sum.slice():base;base.reverse()}
+  const sh=((l.shift%len)+len)%len,raw=new Float32Array(len);raw.set(base.subarray(len-sh),0);raw.set(base.subarray(0,len-sh),sh);l.raw=raw;
   const cols=400,pk=new Float32Array(cols*2);
   for(let c=0;c<cols;c++){const a=Math.floor(c*len/cols),b=Math.max(a+1,Math.floor((c+1)*len/cols)),st=Math.max(1,Math.floor((b-a)/40));let mn=0,mx=0;for(let i=a;i<b;i+=st){const v=raw[i];if(v<mn)mn=v;if(v>mx)mx=v}pk[c*2]=mn;pk[c*2+1]=mx}
   l.pk=pk;
@@ -565,7 +578,19 @@ function lpBygger(l){const len=lenOf(l);if(!len){l.mix=l.raw=l.pk=null;return}
   const ab=ctx.createBuffer(1,len,ctx.sampleRate),d=ab.getChannelData(0);
   for(let i=0;i<len;i++)d[i]=m?raw[i]*m[i]:raw[i];
   l.mix=ab}
-function lpGate(l){if(!l.gate){l.gate=ctx.createGain();l.gate.connect(lpGain(l))}return l.gate}
+/* ---- effekter per loop: tonhöjd och baklänges bakas in i loopen, echo, hall och filter är levande ---- */
+const ETID=[1,.75,.5],ETXT=["¼","3/16","⅛"];
+function irSkapa(c){const n=Math.round(c.sampleRate*2.2),b=c.createBuffer(2,n,c.sampleRate);for(let ch=0;ch<2;ch++){const d=b.getChannelData(ch);for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/n,2.6)}return b}
+function fxBygg(l,c,dest){const inn=c.createGain(),f=c.createBiquadFilter(),dry=c.createGain(),ds=c.createGain(),dl=c.createDelay(2),fb=c.createGain(),rs=c.createGain(),cv=c.createConvolver();cv.buffer=irSkapa(c);
+  inn.connect(f);f.connect(dry);dry.connect(dest);f.connect(ds);ds.connect(dl);dl.connect(dest);dl.connect(fb);fb.connect(dl);f.connect(rs);rs.connect(cv);cv.connect(dest);fb.gain.value=.42;
+  const set=()=>{const x=l.fx;ds.gain.value=x.echo/100*.9;dl.delayTime.value=60/S.bpm*ETID[x.et];rs.gain.value=x.hall/100*.9;const v=x.filt;
+    if(Math.abs(v)<4){f.type="lowpass";f.frequency.value=22000;f.Q.value=.0001}else if(v<0){f.type="lowpass";f.frequency.value=22050*Math.pow(180/22050,-v/100);f.Q.value=1.2}else{f.type="highpass";f.frequency.value=20*Math.pow(7000/20,v/100);f.Q.value=1.2}};
+  set();return{inn,set}}
+function pitchShift(x,st){const n=x.length,r=Math.pow(2,st/12),G=2048,H=G/4,y=new Float32Array(n),w=new Float32Array(G);for(let i=0;i<G;i++)w[i]=.5-.5*Math.cos(2*Math.PI*i/G);
+  for(let p=0;p<n;p+=H){for(let j=0;j<G;j++){const o=(p+j)%n,sp=p+G/2+(j-G/2)*r,i0=Math.floor(sp),f=sp-i0,a=x[((i0%n)+n)%n],b=x[(((i0+1)%n)+n)%n];y[o]+=w[j]*(a+(b-a)*f)}}
+  for(let i=0;i<n;i++)y[i]*=.5;return y}
+let fxT=0;function lpNyDeb(l){clearTimeout(fxT);fxT=setTimeout(()=>lpNy(l),160)}
+function lpGate(l){if(!l.gate){l.gate=ctx.createGain();l.fxn=fxBygg(l,ctx,lpGain(l));l.gate.connect(l.fxn.inn)}return l.gate}
 function lpBarGate(ix,t){LP.forEach(l=>{if(!l.gate)return;const row=S.lsong[l.i],v=(ix>=0&&row.includes("x"))?(row[ix]==="x"?1:0):1;if(l.gv!==v){l.gate.gain.cancelScheduledValues(t);l.gate.gain.setTargetAtTime(v,t,.006);l.gv=v}})}
 function lpSpela(l,vid,off){if(!ctx||!l.mix)return;l.srcs.forEach(s=>{try{s.stop(vid)}catch(e){}});const s=ctx.createBufferSource();s.buffer=l.mix;s.loop=true;s.connect(lpGate(l));s.start(vid,off);l.srcs=[s]}
 function lpNy(l){lpBygger(l);if(spelar&&l.mix){const nu=ctx.currentTime+.03,off=(((nu-l.t0)%l.dur)+l.dur)%l.dur;lpSpela(l,nu,off)}}
@@ -578,11 +603,12 @@ async function lpKlick(i){const l=LP[i];
   if(l.rec){l.rec=null;l.st=l.layers.length?"loop":"tom";lpVisa();return}
   if(!(await micStart()))return;
   const sr=ctx.sampleRate;let t,over=false,len;
-  if(l.layers.length){over=true;len=Math.round(l.dur*sr);const bd=l.dur,now=ctx.currentTime+.08;t=l.t0+Math.ceil((now-l.t0)/bd)*bd}
+  const bt=60/S.bpm,need=4*bt+.1;let rakna=false;
+  if(l.layers.length){over=true;len=Math.round(l.dur*sr);const bd=l.dur;t=l.t0+Math.ceil((ctx.currentTime+need-l.t0)/bd)*bd;rakna=true}
   else{len=Math.round(l.n*barDur()*sr);
     if(!spelar){start(true);t=nasta0+barDur()}
-    else if(l.n<1){const u=l.n*barDur(),b0=lastBar||ctx.currentTime;t=b0+Math.ceil((ctx.currentTime+.08-b0)/u)*u}
-    else t=nastaBar()}
+    else{const u=l.n<1?l.n*barDur():barDur(),b0=lastBar||ctx.currentTime;t=b0+Math.ceil((ctx.currentTime+need-b0)/u)*u;rakna=true}}
+  if(rakna)for(let q=0;q<4;q++)klick(t-(4-q)*bt,q===0);   // alltid fyra räkningar före inspelningen
   l.rec={t,len,buf:new Float32Array(len),w:0,go:false,over};l.st="vantar";lpVisa()}
 function lpStoppa(){LP.forEach(l=>{l.srcs.forEach(s=>{try{s.stop()}catch(e){}});l.srcs=[];if(l.rec){l.rec=null;l.st=l.layers.length?"loop":"tom"}});lpVisa()}
 function lpStarta(t0){LP.forEach(l=>{if(!l.layers.length)return;l.t0=t0;if(!l.mix)lpBygger(l);lpSpela(l,t0,0)})}
@@ -591,7 +617,7 @@ function lpRed(l,fn){lpSnap(l);fn();l.sel=null;lpNy(l);lpVisa()}
 function lpAngra(i){const l=LP[i];
   if(l.undo.length){const s=JSON.parse(l.undo.pop());l.cuts=s.c;l.zone=s.z;l.shift=s.s;l.sel=null;lpNy(l);lpVisa();return}
   if(!l.layers.length)return;l.layers.pop();if(!l.layers.length){lpRadera(i);return}lpNy(l);lpVisa()}
-function lpRadera(i){const l=LP[i];l.rec=null;l.srcs.forEach(s=>{try{s.stop()}catch(e){}});l.srcs=[];l.layers=[];l.mix=l.raw=l.pk=null;l.cuts=[];l.zone=null;l.shift=0;l.sel=null;l.undo=[];l.st="tom";lpVisa()}
+function lpRadera(i){const l=LP[i];l.rec=null;l.srcs.forEach(s=>{try{s.stop()}catch(e){}});l.srcs=[];l.layers=[];l.mix=l.raw=l.pk=null;l.cuts=[];l.zone=null;l.shift=0;l.sel=null;l.undo=[];l.fx={pitch:0,rev:false,echo:0,et:0,hall:0,filt:0};if(l.fxn)l.fxn.set();l.st="tom";lpVisa()}
 const LTXT={tom:"TOM",vantar:"VÄNTAR",rec:"SPELAR IN",loop:"LOOP",ovr:"LÄGGER PÅ"};
 const ZON=[["0-1","Hela"],["0-0.5","½·1"],["0.5-1","½·2"],["0-0.25","¼·1"],["0.25-0.5","¼·2"],["0.5-0.75","¼·3"],["0.75-1","¼·4"]];
 function lpVisa(){LP.forEach(l=>{const m=document.querySelector(`.lm[data-i="${l.i}"]`);if(!m)return;
@@ -606,7 +632,8 @@ function lpVisa(){LP.forEach(l=>{const m=document.querySelector(`.lm[data-i="${l
     m.querySelectorAll("[data-act=cut],[data-act=only],[data-act=clr]").forEach(x=>x.disabled=!l.sel);
     const z=l.zone||[0,1];m.querySelectorAll("[data-z]").forEach(x=>{const q=x.dataset.z.split("-").map(Number);x.classList.toggle("on",Math.abs(q[0]-z[0])<1e-6&&Math.abs(q[1]-z[1])<1e-6)});
     const lenS=lenOf(l),ms=ctx&&lenS?Math.round(l.shift/ctx.sampleRate*1000):0;m.querySelector(".lsh").textContent=ms?("↔ "+(ms>0?"+":"")+ms+" ms"):"";
-    const f=l.vol/100,kn2=m.querySelector("[data-lvol]");kn2.style.setProperty("--p",(f*270)+"deg");kn2.querySelector(".kap").style.transform="rotate("+(-135+f*270)+"deg)"});
+    const f=l.vol/100,kn2=m.querySelector("[data-lvol]");kn2.style.setProperty("--p",(f*270)+"deg");kn2.querySelector(".kap").style.transform="rotate("+(-135+f*270)+"deg)";
+    l.fxu.forEach(u=>u());m.querySelector("[data-fxpv]").textContent=(l.fx.pitch>0?"+":"")+l.fx.pitch;m.querySelector("[data-fxrev]").setAttribute("aria-pressed",l.fx.rev);m.querySelector("[data-fxet]").textContent=ETXT[l.fx.et]});
   const las=harLoopar();["#bMin","#bPlus","#kTempo"].forEach(q=>$(q)&&$(q).closest(".grupp")&&$(q).closest(".grupp").classList.toggle("las",las))}
 /* ---- vågformen ---- */
 function hatch(c,x,w,H,dpr){if(w<=0)return;c.save();c.beginPath();c.rect(x,0,w,H);c.clip();c.fillStyle="rgba(6,5,3,.78)";c.fillRect(x,0,w,H);c.strokeStyle="rgba(255,255,255,.12)";c.lineWidth=dpr;c.beginPath();for(let k=-H;k<w+H;k+=9*dpr){c.moveTo(x+k,H);c.lineTo(x+k+H,0)}c.stroke();c.restore()}
@@ -632,7 +659,7 @@ function lpTeckna(l,m){const cv=m.querySelector("canvas"),dpr=Math.min(2,window.
     if(l.sel){const x1=Math.round(l.sel[0]*W),x2=Math.round(l.sel[1]*W);c.fillStyle="rgba(255,255,255,.17)";c.fillRect(x1,0,x2-x1,H);c.fillStyle="#fff";c.fillRect(x1,0,3*dpr,H);c.fillRect(x2-3*dpr,0,3*dpr,H);
       c.fillRect(x1,H/2-9*dpr,7*dpr,18*dpr);c.fillRect(x2-7*dpr,H/2-9*dpr,7*dpr,18*dpr)}}
   if(wait){const rem=r.t-now,beats=Math.ceil(rem/(60/S.bpm));c.fillStyle="rgba(242,183,7,.16)";c.fillRect(0,0,W,H);c.fillStyle="#ffc94d";c.textAlign="center";c.textBaseline="middle";
-    if(beats<=8&&beats>0){c.font="800 "+Math.round(H*.8)+"px system-ui,sans-serif";c.fillText(String(beats),W/2,H/2+H*.04)}else{c.font="800 "+Math.round(H*.26)+"px system-ui,sans-serif";c.fillText("Väntar på nästa varv",W/2,H/2)}}
+    if(beats<=4&&beats>0){c.font="800 "+Math.round(H*.8)+"px system-ui,sans-serif";c.fillText(String(beats),W/2,H/2+H*.04)}else{c.font="800 "+Math.round(H*.26)+"px system-ui,sans-serif";c.fillText("Gör dig redo",W/2,H/2)}}
   else if(go){const pul=.55+.45*Math.sin(now*9);c.strokeStyle="rgba(255,59,54,"+pul+")";c.lineWidth=4*dpr;c.strokeRect(2*dpr,2*dpr,W-4*dpr,H-4*dpr);
     const x=Math.round(r.w/r.len*W);c.fillStyle="#ff3b36";c.fillRect(x,0,2*dpr,H);
     c.font="800 "+Math.round(H*.24)+"px system-ui,sans-serif";c.textAlign="left";c.textBaseline="top";c.fillStyle="rgba(255,90,84,"+(.6+.4*pul)+")";c.fillText("● REC",8*dpr,6*dpr)}
@@ -645,7 +672,7 @@ function lpRita(){
   const ban=$("#lstatus");let txt="",kl="";
   if(ctx){const l=LP.find(x=>x.rec);
     if(l){const r=l.rec;if(r.go){txt="● SPELAR IN · L"+(l.i+1)+" · "+Math.max(0,((r.len-r.w)/ctx.sampleRate)).toFixed(1)+" s kvar";kl="rec"}
-      else{const rem=r.t-ctx.currentTime,b=Math.ceil(rem/(60/S.bpm));txt=b<=8&&b>0?"GÖR DIG REDO · L"+(l.i+1)+" · spelar in om "+b:"L"+(l.i+1)+" spelar in vid nästa varv";kl="vantar"}}}
+      else{const rem=r.t-ctx.currentTime,b=Math.ceil(rem/(60/S.bpm));txt=b<=4&&b>0?"SPELAR IN OM "+b+" · L"+(l.i+1):"GÖR DIG REDO · L"+(l.i+1);kl="vantar"}}}
   if(ban.textContent!==txt){ban.textContent=txt}
   ban.className="lstat"+(kl?" "+kl:"");$("#loopmaskin").classList.toggle("recakt",kl==="rec");
   requestAnimationFrame(lpRita)}
@@ -661,7 +688,8 @@ function lpPtr(l,e){if(!l.layers.length||l.rec)return;const cv=e.currentTarget,r
   cv.onpointermove=ev=>{b=sn(fx(ev));set()};
   cv.onpointerup=cv.onpointercancel=()=>{cv.onpointermove=cv.onpointerup=cv.onpointercancel=null;l.drag=null;lpVisa()}}
 function lpBygg(){const g=$("#lgrid");LP.forEach(l=>{const m=document.createElement("div");m.className="lm";m.dataset.i=l.i;m.style.setProperty("--sk",LC[l.i]);
-    m.innerHTML=`<div class="lt"><span class="led"></span><b>L${l.i+1}</b><span class="ls">TOM</span></div><div class="lc"><button type="button" class="recb" data-rec aria-label="Spela in"></button><div class="len" role="group" aria-label="Längd i takter">${NLEN.map(q=>`<button type="button" data-n="${q[0]}" aria-label="${q[1]} takt">${q[1]}</button>`).join("")}</div></div><canvas class="lv" role="img" aria-label="Ljudvåg"></canvas><div class="ledit"><div class="lrow"><button type="button" data-mode="mark" class="on">Markera</button><button type="button" data-mode="move">Flytta</button><button type="button" data-sh="-1" aria-label="Flytta ett steg bakåt" title="Flytta ett steg bakåt (Shift = 10 ms)">◀</button><button type="button" data-sh="1" aria-label="Flytta ett steg framåt" title="Flytta ett steg framåt (Shift = 10 ms)">▶</button><span class="lsh"></span></div><div class="lrow"><button type="button" data-act="cut" disabled>Radera</button><button type="button" data-act="only" disabled>Spela bara</button><button type="button" data-act="clr" disabled>Avmarkera</button></div><div class="lrow zon"><span>Spela:</span>${ZON.map(q=>`<button type="button" data-z="${q[0]}">${q[1]}</button>`).join("")}<button type="button" data-act="reset" title="Ta bort alla ändringar">↺</button></div></div><div class="lr"><div class="knob liten" data-lvol role="slider" tabindex="0" aria-label="Volym loop ${l.i+1}"><div class="kap"></div></div><button type="button" class="sm" data-lm aria-label="Tysta loop ${l.i+1}">M</button><button type="button" class="sm" data-lu aria-label="Ångra senaste ändringen" title="Ångra senaste ändringen">↶</button><button type="button" class="sm" data-lx aria-label="Radera loopen" title="Radera loopen">✕</button></div>`;
+    m.innerHTML=`<div class="lt"><span class="led"></span><b>L${l.i+1}</b><span class="ls">TOM</span></div><div class="lc"><button type="button" class="recb" data-rec aria-label="Spela in"></button><div class="len" role="group" aria-label="Längd i takter">${NLEN.map(q=>`<button type="button" data-n="${q[0]}" aria-label="${q[1]} takt">${q[1]}</button>`).join("")}</div></div><canvas class="lv" role="img" aria-label="Ljudvåg"></canvas><div class="ledit"><div class="lrow"><button type="button" data-mode="mark" class="on">Markera</button><button type="button" data-mode="move">Flytta</button><button type="button" data-sh="-1" aria-label="Flytta ett steg bakåt" title="Flytta ett steg bakåt (Shift = 10 ms)">◀</button><button type="button" data-sh="1" aria-label="Flytta ett steg framåt" title="Flytta ett steg framåt (Shift = 10 ms)">▶</button><span class="lsh"></span></div><div class="lrow lfx"><span class="fx"><span class="fxs"><button type="button" data-fxp="-1" aria-label="Lägre tonhöjd">−</button><b data-fxpv>0</b><button type="button" data-fxp="1" aria-label="Högre tonhöjd">+</button></span><small>TONHÖJD</small></span><span class="fx"><button type="button" data-fxrev aria-pressed="false">⇄ BAKLÄNGES</button></span><span class="fx"><div class="knob liten" data-fxk="echo" role="slider" tabindex="0" aria-label="Echo"><div class="kap"></div></div><small>ECHO</small></span><span class="fx"><button type="button" data-fxet title="Echots längd">¼</button></span><span class="fx"><div class="knob liten" data-fxk="hall" role="slider" tabindex="0" aria-label="Hall"><div class="kap"></div></div><small>HALL</small></span><span class="fx"><div class="knob liten" data-fxk="filt" role="slider" tabindex="0" aria-label="Filter"><div class="kap"></div></div><small>FILTER</small></span></div><div class="lrow"><button type="button" data-act="cut" disabled>Radera</button><button type="button" data-act="only" disabled>Spela bara</button><button type="button" data-act="clr" disabled>Avmarkera</button></div><div class="lrow zon"><span>Spela:</span>${ZON.map(q=>`<button type="button" data-z="${q[0]}">${q[1]}</button>`).join("")}<button type="button" data-act="reset" title="Ta bort alla ändringar">↺</button></div></div><div class="lr"><div class="knob liten" data-lvol role="slider" tabindex="0" aria-label="Volym loop ${l.i+1}"><div class="kap"></div></div><button type="button" class="sm" data-lm aria-label="Tysta loop ${l.i+1}">M</button><button type="button" class="sm" data-lu aria-label="Ångra senaste ändringen" title="Ångra senaste ändringen">↶</button><button type="button" class="sm" data-lx aria-label="Radera loopen" title="Radera loopen">✕</button></div>`;
+    m.querySelectorAll("[data-fxk]").forEach(el=>{const key=el.dataset.fxk;l.fxu.push(knob(el,{min:key==="filt"?-100:0,max:100,reset:0,val:()=>l.fx[key],set:v=>{l.fx[key]=v;if(l.fxn)l.fxn.set()}}))});
     g.appendChild(m);m.querySelector("canvas").addEventListener("pointerdown",e=>lpPtr(l,e));
     knob(m.querySelector("[data-lvol]"),{min:0,max:100,reset:80,val:()=>l.vol,set:v=>{l.vol=v;if(l.gain)lpGain(l)}})});
   g.addEventListener("click",e=>{const m=e.target.closest(".lm");if(!m)return;const i=+m.dataset.i,l=LP[i];
@@ -671,6 +699,9 @@ function lpBygg(){const g=$("#lgrid");LP.forEach(l=>{const m=document.createElem
     if(e.target.closest("[data-lu]")){lpAngra(i);return}
     if(e.target.closest("[data-lx]")){lpRadera(i);return}
     const mb=e.target.closest("[data-mode]");if(mb){l.mode=mb.dataset.mode;lpVisa();return}
+    const fp=e.target.closest("[data-fxp]");if(fp){l.fx.pitch=Math.max(-12,Math.min(12,l.fx.pitch+ +fp.dataset.fxp));lpVisa();lpNyDeb(l);return}
+    if(e.target.closest("[data-fxrev]")){l.fx.rev=!l.fx.rev;lpVisa();lpNyDeb(l);return}
+    if(e.target.closest("[data-fxet]")){l.fx.et=(l.fx.et+1)%3;if(l.fxn)l.fxn.set();lpVisa();return}
     if(!l.layers.length||l.rec)return;
     const sb=e.target.closest("[data-sh]");if(sb){const dir=+sb.dataset.sh,stp=e.shiftKey?Math.round(ctx.sampleRate*.01):Math.round(lenOf(l)/stepsOf(l));lpRed(l,()=>{l.shift+=dir*stp});return}
     const zb=e.target.closest("[data-z]");if(zb){const q=zb.dataset.z.split("-").map(Number);lpRed(l,()=>{l.zone=(q[0]===0&&q[1]===1)?null:[q[0],q[1]]});return}
@@ -716,6 +747,36 @@ $("#melod").addEventListener("click",e=>{const b=e.target.closest("button");if(!
   if(b.dataset.mb){const m=+b.closest(".mel").dataset.mi,n=MROSTER[m].length;S.mv[m]=(S.mv[m]+ +b.dataset.mb+n)%n;startaLjud();nota(m,m?2:0,ctx.currentTime+.01,.4);visa();return}
   if(b.dataset.mm!=null){const m=+b.closest(".mel").dataset.mi;S.mmute[m]=!S.mmute[m];visa()}});
 $("#melod").addEventListener("change",e=>{if(e.target.id==="selTon"){S.key=+e.target.value;startaLjud();nota(1,2,ctx.currentTime+.01,.3);visa()}});
+function mutaAlla(v){muteAll=v;$("#bMuteAll").classList.toggle("p",v);$("#bMuteAll").setAttribute("aria-pressed",v);setMute()}
+$("#bMuteAll").onclick=()=>mutaAlla(!muteAll);
+let exporterar=false;
+function renderaLat(){startaLjud();if(!ctx)return null;
+  const len=songLen(),bars=len>0?S.song.slice(0,len):[S.cur,S.cur,S.cur,S.cur];let dur=.05;bars.forEach(()=>{for(let k=0;k<16;k++)dur+=stegTid(k)});dur+=2.6;
+  const sr=44100,off=new OfflineAudioContext(2,Math.ceil(dur*sr),sr),oc=ctx,om=master,ocp=comp;
+  ctx=off;master=off.createGain();comp=off.createDynamicsCompressor();comp.threshold.value=-14;comp.ratio.value=5;comp.attack.value=.003;comp.release.value=.2;master.connect(comp);comp.connect(off.destination);master.gain.value=Math.pow(S.master/100,1.6)*1.1;
+  try{let t=.05;const bar0=t,starts=[];
+    bars.forEach(p=>{starts.push(t);const pd=p>=0?monsterData(p):null,md=p>=0?melData(p):null;for(let k=0;k<16;k++){if(pd)S.t.forEach((tr,i)=>{if(pd[i][k]==="x")spela(i,t)});if(md)melTick(k,t,md);t+=stegTid(k)}});
+    LP.forEach(l=>{if(!l.mix)return;const g=off.createGain(),lg=off.createGain();lg.gain.value=l.mute?0:Math.pow(l.vol/100,1.5)*1.3;lg.connect(master);const fx=fxBygg(l,off,lg);g.connect(fx.inn);
+      const row=S.lsong[l.i];if(len>0&&row.includes("x")){g.gain.value=0;starts.forEach((bs,bi)=>g.gain.setTargetAtTime(row[bi]==="x"?1:0,bs,.006))}
+      const s=off.createBufferSource();s.buffer=l.mix;s.loop=true;s.connect(g);s.start(bar0,0)})
+  }finally{ctx=oc;master=om;comp=ocp}
+  return off.startRendering()}
+async function lameLadda(){if(window.lamejs)return true;try{await new Promise((res,rej)=>{const sc=document.createElement("script");sc.src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js";sc.onload=res;sc.onerror=rej;document.head.appendChild(sc)})}catch(e){return false}return !!window.lamejs}
+async function mp3Av(buf){let pk=0;const L=buf.getChannelData(0),R=buf.getChannelData(1),n=L.length;for(let i=0;i<n;i++){const a=Math.max(Math.abs(L[i]),Math.abs(R[i]));if(a>pk)pk=a}const g=pk>.98?.98/pk:1;
+  const enc=new lamejs.Mp3Encoder(2,buf.sampleRate,128),out=[],bl=1152,li=new Int16Array(bl),ri=new Int16Array(bl);
+  for(let i=0,c=0;i<n;i+=bl,c++){const m=Math.min(bl,n-i);for(let j=0;j<m;j++){li[j]=Math.max(-32768,Math.min(32767,L[i+j]*g*32767));ri[j]=Math.max(-32768,Math.min(32767,R[i+j]*g*32767))}
+    const d=enc.encodeBuffer(m<bl?li.subarray(0,m):li,m<bl?ri.subarray(0,m):ri);if(d.length)out.push(new Uint8Array(d));if(c%200===0)await new Promise(r=>setTimeout(r))}
+  const e=enc.flush();if(e.length)out.push(new Uint8Array(e));return new Blob(out,{type:"audio/mpeg"})}
+function wavAv(buf){const n=buf.length,d=new DataView(new ArrayBuffer(44+n*4)),w=(o,s)=>{for(let i=0;i<s.length;i++)d.setUint8(o+i,s.charCodeAt(i))};w(0,"RIFF");d.setUint32(4,36+n*4,true);w(8,"WAVEfmt ");d.setUint32(16,16,true);d.setUint16(20,1,true);d.setUint16(22,2,true);d.setUint32(24,buf.sampleRate,true);d.setUint32(28,buf.sampleRate*4,true);d.setUint16(32,4,true);d.setUint16(34,16,true);w(36,"data");d.setUint32(40,n*4,true);
+  const L=buf.getChannelData(0),R=buf.getChannelData(1);for(let i=0;i<n;i++){d.setInt16(44+i*4,Math.max(-1,Math.min(1,L[i]))*32767,true);d.setInt16(46+i*4,Math.max(-1,Math.min(1,R[i]))*32767,true)}return new Blob([d],{type:"audio/wav"})}
+async function exportMp3(){if(exporterar)return;exporterar=true;const kn3=$("#bExp"),txt=kn3.textContent;kn3.textContent="⏳ SKAPAR …";kn3.disabled=true;
+  try{stopp();const buf=await renderaLat();if(!buf)throw 0;let blob,ext="mp3";
+    if(await lameLadda())blob=await mp3Av(buf);else{blob=wavAv(buf);ext="wav";toast("Kunde inte hämta mp3-kodaren, du får en wav-fil i stället")}
+    const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="pluggparken-"+(songLen()>0?"lat":"rytm")+"."+ext;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),20000);
+    toast("Klart! Filen ligger i dina nedladdningar")}
+  catch(e){toast("Det gick inte att skapa filen")}
+  exporterar=false;kn3.textContent=txt;kn3.disabled=false}
+$("#bExp").onclick=exportMp3;
 $("#bStart").onclick=()=>{spelar?stopp():start()};
 $("#bStopp").onclick=stopp;
 $("#bMin").onclick=()=>{if(las())return;S.bpm=Math.max(50,S.bpm-2);visa()};$("#bPlus").onclick=()=>{if(las())return;S.bpm=Math.min(200,S.bpm+2);visa()};
@@ -737,10 +798,11 @@ knob($("#kPadtid"),{min:-100,max:100,reset:0,val:()=>PADOFF,set:v=>{PADOFF=v;$("
 document.addEventListener("keydown",e=>{if(e.target.closest&&e.target.closest("input,select,textarea"))return;if(e.metaKey||e.ctrlKey||e.altKey)return;
   if(e.key===" "&&!e.target.closest("button")){e.preventDefault();spelar?stopp():start();return}
   if((e.key==="r"||e.key==="R")&&!e.repeat){sattRec(!recLive);return}
+  if((e.key==="m"||e.key==="M")&&!e.repeat){mutaAlla(!muteAll);return}
   const i=TK[e.key.toLowerCase()];if(i!=null&&!e.repeat){const sl=suddLage;if(e.shiftKey&&recLive)suddLage=true;slag(i);suddLage=sl}});
 document.addEventListener("visibilitychange",()=>{if(document.hidden)stopp()});
 init();
-window.MPTrummaskin={LP:LP,lpKlick:lpKlick,lpRadera:lpRadera,lpAngra:lpAngra,micStart:micStart,fakeMic:null,slag:slag,get ctx(){return ctx},get master(){return master},get S(){return S},roster:roster,kitSatt:kitSatt,visa:visa};
+window.MPTrummaskin={renderaLat:()=>renderaLat(),mp3Av:b=>mp3Av(b),lameLadda:()=>lameLadda(),LP:LP,lpKlick:lpKlick,lpRadera:lpRadera,lpAngra:lpAngra,micStart:micStart,fakeMic:null,slag:slag,get ctx(){return ctx},get master(){return master},get S(){return S},roster:roster,kitSatt:kitSatt,visa:visa};
 })();
 </script>
 </body>
