@@ -65,6 +65,7 @@
     /* Kiosken: kassaapparat */
     kaching(){if(!isOn())return;const c=ac();if(!c)return;noiseBurst(c,0,.08,3000,1,.12);tone(1760,.06,.35,'triangle',.12);tone(2637,.1,.45,'sine',.09);},
     /* Tornbygget: klossen landar */
+    pip(){if(!isOn())return;const c=ac();if(!c)return;tone(2350,0,.11,'square',.07);tone(2350,.001,.11,'sine',.1);},
     clonk(){if(!isOn())return;const c=ac();if(!c)return;tone(180,0,.22,'triangle',.22,110);tone(360,0,.08,'square',.05,200);noiseBurst(c,0,.12,900,1,.12);},
     /* Kloss som ramlar ner */
     fall(){if(!isOn())return;tone(700,0,.5,'sine',.08,120);},
