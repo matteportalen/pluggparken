@@ -40,7 +40,8 @@ import {OrbitControls} from "three/addons/controls/OrbitControls.js";
 import {GLTFLoader} from "three/addons/loaders/GLTFLoader.js";
 import {DRACOLoader} from "three/addons/loaders/DRACOLoader.js";
 const SYS=[
- {id:"skelett",namn:"Skelettet",c:"#d9cfb8",pa:true},
+ {id:"hud",namn:"Huden",c:"#e9b99a",pa:true},
+ {id:"skelett",namn:"Skelettet",c:"#d9cfb8",pa:false},
  {id:"muskler",namn:"Musklerna",c:"#c4575d",pa:false},
  {id:"organ",namn:"Organen",c:"#e49a8f",pa:false},
  {id:"karl",namn:"Blodkärlen",c:"#d94a4a",pa:false},
@@ -54,10 +55,11 @@ const d2=new THREE.DirectionalLight(0xdbe6f5,.7);d2.position.set(-2,1,-2);S.add(
 const ctl=new OrbitControls(cam,cv);ctl.enableDamping=true;ctl.dampingFactor=.08;ctl.minDistance=.25;ctl.maxDistance=6;ctl.zoomToCursor=true;
 const grp={},mats={};let all=[];
 const gl=new GLTFLoader(),dr=new DRACOLoader();dr.setDecoderPath("https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/libs/draco/gltf/");gl.setDRACOLoader(dr);
-let GR={};
+let GR={},hudM=null,hudGlas=false;
+function hudUpd(){const a=['skelett','muskler','organ','karl','nerver'].some(k=>grp[k]&&grp[k].visible);hudGlas=a&&!!(grp.hud&&grp.hud.visible);if(!hudM)return;hudM.opacity=hudGlas?.14:1;hudM.depthWrite=!hudGlas;}
 function bygg(s,g){const sd=SYS.find(x=>x.id===s),G=grp[s]||new THREE.Group();G.name=s;
  g.scene.traverse(o=>{if(!o.isMesh)return;const id=o.name.replace(/[._]\d+$/,"");const m=GR[id];if(!m)return;const c=m.c;
-  mats[c]=mats[c]||new THREE.MeshStandardMaterial({color:c,roughness:.55,metalness:0});
+  mats[c]=mats[c]||(s==='hud'?(hudM=new THREE.MeshStandardMaterial({color:c,roughness:.7,metalness:0,side:THREE.DoubleSide,transparent:true})):new THREE.MeshStandardMaterial({color:c,roughness:.55,metalness:0}));
   o.material=mats[c];o.userData.s=s;o.userData.c=c;o.userData.id=id;o.geometry.computeVertexNormals();all.push(o);});
  G.add(g.scene);if(!grp[s]){grp[s]=G;S.add(G);G.visible=sd.pa;}}
 function eget(){
@@ -80,19 +82,19 @@ async function las(){let k=0;
  GR=Object.fromEntries((await (await fetch("modell/grupper.json")).json()).map(x=>[x.id,x]));
  const FIL=SYS.map(sd=>[sd.id,sd.id]).concat([['organ','organ2']]);
  for(const [sid,f] of FIL) await new Promise(res=>gl.load(`modell/${f}.glb`,g=>{bygg(sid,g);res();},null,()=>res()));
- eget();
+ eget();hudUpd();
  const b=new THREE.Box3().setFromObject(S);const mid=b.getCenter(new THREE.Vector3()),sz=b.getSize(new THREE.Vector3());
  const h=Math.max(sz.y,sz.x,sz.z);const dist=h/2/Math.tan(cam.fov*Math.PI/360)*1.25;
  ctl.target.copy(mid);cam.position.set(mid.x,mid.y,mid.z+dist);ctl.update();ctl.maxDistance=dist*2.5;HEL={t:mid.clone(),d:dist};
  const l=document.getElementById("lad");l.style.opacity=0;setTimeout(()=>l.remove(),600);}
 const lag=document.getElementById("lag");
 SYS.forEach(sd=>{const b=document.createElement("button");b.style.setProperty("--c",sd.c);b.setAttribute("aria-pressed",sd.pa);b.innerHTML=`<i></i><span>${sd.namn}</span>`;
- b.onclick=()=>{const p=b.getAttribute("aria-pressed")!=="true";b.setAttribute("aria-pressed",p);if(grp[sd.id])grp[sd.id].visible=p;};lag.appendChild(b);});
+ b.onclick=()=>{const p=b.getAttribute("aria-pressed")!=="true";b.setAttribute("aria-pressed",p);if(grp[sd.id])grp[sd.id].visible=p;hudUpd();};lag.appendChild(b);});
 function size(){const w=innerWidth,h=innerHeight;R.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();}
 addEventListener("resize",size);size();
 const ray=new THREE.Raycaster(),mv=new THREE.Vector2();let sel=null,hov=null;
 function kolla(e){const r=cv.getBoundingClientRect();mv.set((e.clientX-r.left)/r.width*2-1,-((e.clientY-r.top)/r.height)*2+1);ray.setFromCamera(mv,cam);
- const vis=all.filter(o=>grp[o.userData.s].visible);const h=ray.intersectObjects(vis,false);return h.length?h[0].object:null;}
+ const vis=all.filter(o=>grp[o.userData.s].visible&&!(o.userData.s==='hud'&&hudGlas));const h=ray.intersectObjects(vis,false);return h.length?h[0].object:null;}
 function sätt(o,k){if(!o)return;o.material=o===sel?hl(o):mats[o.userData.c];}
 const hm={};function hl(o){const c=new THREE.Color(o.userData.c).lerp(new THREE.Color("#2563eb"),.65).getHex();hm[c]=hm[c]||new THREE.MeshStandardMaterial({color:c,roughness:.4,emissive:0x1d4ed8,emissiveIntensity:.25});return hm[c];}
 let dn=null;cv.addEventListener("pointerdown",e=>{dn=[e.clientX,e.clientY];});
