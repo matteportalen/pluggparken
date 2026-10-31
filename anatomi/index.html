@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="sv"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Utforska människokroppen i 3D: skelett, muskler, organ, blodkärl och nerver med svenska namn."><link rel="canonical" href="https://pluggparken.se/anatomi/"><meta name="color-scheme" content="light">
+<title>Människokroppen i 3D – Pluggparken</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#16202e;--mut:#64748b;--line:#e2e8f0;--acc:#2563eb}
+*{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden;background:#fff;font-family:Inter,system-ui,sans-serif;color:var(--ink)}
+#c{position:fixed;inset:0;width:100%;height:100%;touch-action:none;background:radial-gradient(ellipse at 50% 40%,#fff 0,#f4f7fb 100%)}
+.top{position:fixed;left:16px;top:14px;z-index:5}.top a{color:var(--mut);text-decoration:none;font-size:.85rem}.top h1{margin:2px 0 0;font-size:1.15rem;font-weight:700;letter-spacing:-.01em}
+.lag{position:fixed;left:16px;top:70px;z-index:5;display:flex;flex-direction:column;gap:6px}
+.lag button{display:flex;align-items:center;gap:9px;border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 12px;font:inherit;font-size:.86rem;font-weight:500;color:var(--ink);cursor:pointer;box-shadow:0 1px 2px rgba(15,23,42,.05);min-width:150px;text-align:left}
+.lag button i{width:12px;height:12px;border-radius:50%;background:var(--c);flex:none}.lag button[aria-pressed=false]{opacity:.45}.lag button[aria-pressed=false] i{background:#fff;border:2px solid var(--c)}
+.lag small{display:block;color:var(--mut);font-size:.72rem;font-weight:400}
+.kort{position:fixed;right:16px;top:14px;z-index:5;width:min(300px,calc(100vw - 32px));background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:0 8px 24px rgba(15,23,42,.08)}
+.kort h2{margin:0 0 2px;font-size:1.05rem;font-weight:700}.kort p{margin:6px 0 0;color:var(--mut);font-size:.85rem;line-height:1.4}.kort .sys{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--acc);font-weight:600}
+.kort button{float:right;border:0;background:none;font-size:1.1rem;color:var(--mut);cursor:pointer}
+.hint{position:fixed;left:50%;bottom:44px;transform:translateX(-50%);z-index:5;font-size:.8rem;color:var(--mut);background:rgba(255,255,255,.85);padding:6px 12px;border-radius:99px;border:1px solid var(--line);white-space:nowrap}
+.kal{position:fixed;left:0;right:0;bottom:10px;text-align:center;z-index:5;font-size:.68rem;color:#94a3b8;padding:0 12px}.kal a{color:#94a3b8}
+#lad{position:fixed;inset:0;z-index:9;display:grid;place-items:center;background:#fff;font-size:.9rem;color:var(--mut);transition:opacity .5s}
+@media(max-width:640px){.lag{top:auto;bottom:70px;flex-direction:row;flex-wrap:wrap;right:12px}.lag button{min-width:0;padding:6px 10px;font-size:.78rem}.lag small{display:none}.hint{display:none}}
+</style></head><body>
+<canvas id="c"></canvas>
+<div class="top"><a href="../ovriga/">← Fler ämnen</a><h1>Människokroppen</h1></div>
+<div class="lag" id="lag"></div>
+<div class="kort" id="kort" hidden></div>
+<div class="hint">Dra för att vrida · scrolla för att zooma · tryck på en del</div>
+<div class="kal">Modeller: Z-Anatomy (CC BY-SA 4.0) · BodyParts3D, Database Center for Life Science (CC BY-SA 2.1 Japan) · bearbetade och förenklade</div>
+<div id="lad">Laddar kroppen …</div>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from "three";
+import {OrbitControls} from "three/addons/controls/OrbitControls.js";
+import {GLTFLoader} from "three/addons/loaders/GLTFLoader.js";
+import {DRACOLoader} from "three/addons/loaders/DRACOLoader.js";
+const SYS=[
+ {id:"skelett",namn:"Skelettet",c:"#d9cfb8",pa:true},
+ {id:"muskler",namn:"Musklerna",c:"#c4575d",pa:false},
+ {id:"organ",namn:"Organen",c:"#e49a8f",pa:false},
+ {id:"karl",namn:"Blodkärlen",c:"#d94a4a",pa:false},
+ {id:"nerver",namn:"Nerverna",c:"#e0b43c",pa:false}];
+const cv=document.getElementById("c"),R=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});
+R.setPixelRatio(Math.min(devicePixelRatio,2));R.outputColorSpace=THREE.SRGBColorSpace;
+const S=new THREE.Scene(),cam=new THREE.PerspectiveCamera(32,1,.01,50);
+S.add(new THREE.HemisphereLight(0xffffff,0xb8c4d6,1.1));
+const d1=new THREE.DirectionalLight(0xffffff,1.6);d1.position.set(1.5,2,3);S.add(d1);
+const d2=new THREE.DirectionalLight(0xdbe6f5,.7);d2.position.set(-2,1,-2);S.add(d2);
+const ctl=new OrbitControls(cam,cv);ctl.enableDamping=true;ctl.dampingFactor=.08;ctl.minDistance=.25;ctl.maxDistance=6;
+const grp={},mats={};let all=[];
+const gl=new GLTFLoader(),dr=new DRACOLoader();dr.setDecoderPath("https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/libs/draco/gltf/");gl.setDRACOLoader(dr);
+let GR={};
+function bygg(s,g){const sd=SYS.find(x=>x.id===s),G=grp[s]||new THREE.Group();G.name=s;
+ g.scene.traverse(o=>{if(!o.isMesh)return;const id=o.name.replace(/[._]\d+$/,"");const m=GR[id];if(!m)return;const c=m.c;
+  mats[c]=mats[c]||new THREE.MeshStandardMaterial({color:c,roughness:.55,metalness:0});
+  o.material=mats[c];o.userData.s=s;o.userData.c=c;o.userData.id=id;o.geometry.computeVertexNormals();all.push(o);});
+ G.add(g.scene);if(!grp[s]){grp[s]=G;S.add(G);G.visible=sd.pa;}}
+function eget(){
+ GR.njurar={id:"njurar",s:"organ",sv:"Njurarna",c:"#a24a42",t:"Njurarna sitter längst bak i buken, ett par centimeter under revbenen. De renar blodet och gör urin. Urinen rinner genom två smala rör, urinledarna, ner till urinblåsan."};
+ GR.urinledare={id:"urinledare",s:"organ",sv:"Urinledarna",c:"#e3c25a",t:"Två smala rör som leder urinen från njurarna ner till urinblåsan. Modellen är förenklad."};
+ const G=grp.organ;
+ const put=(geo,id)=>{const c=GR[id].c;mats[c]=mats[c]||new THREE.MeshStandardMaterial({color:c,roughness:.55,metalness:0});const m=new THREE.Mesh(geo,mats[c]);m.userData={s:"organ",c,id};return m;};
+ for(const sg of [-1,1]){
+  const geo=new THREE.SphereGeometry(1,40,28),p=geo.attributes.position,med=-sg;
+  for(let i=0;i<p.count;i++){let u=p.getX(i),v=p.getY(i),w=p.getZ(i);
+   const d=.5*Math.exp(-(v*v*6+w*w*6));if(u*med>0)u-=med*d*u*med*1.15;
+   p.setXYZ(i,u*.027,v*.056,w*.019);}
+  geo.computeVertexNormals();
+  const k=put(geo,"njurar");k.position.set(sg*.08,sg<0?1.125:1.145,-.05);k.rotation.z=-sg*.2;G.add(k);all.push(k);
+  const cur=new THREE.CatmullRomCurve3([[sg*.055,1.1,-.045],[sg*.05,1.02,-.04],[sg*.04,.93,-.012],[sg*.022,.87,.012]].map(a=>new THREE.Vector3(...a)));
+  const t=put(new THREE.TubeGeometry(cur,30,.0032,8),"urinledare");G.add(t);all.push(t);}
+}
+let min=new THREE.Vector3(1e9,1e9,1e9),max=new THREE.Vector3(-1e9,-1e9,-1e9);
+async function las(){let k=0;
+ GR=Object.fromEntries((await (await fetch("modell/grupper.json")).json()).map(x=>[x.id,x]));
+ const FIL=SYS.map(sd=>[sd.id,sd.id]).concat([['organ','organ2']]);
+ for(const [sid,f] of FIL) await new Promise(res=>gl.load(`modell/${f}.glb`,g=>{bygg(sid,g);res();},null,()=>res()));
+ eget();
+ const b=new THREE.Box3().setFromObject(S);const mid=b.getCenter(new THREE.Vector3()),sz=b.getSize(new THREE.Vector3());
+ const h=Math.max(sz.y,sz.x,sz.z);const dist=h/2/Math.tan(cam.fov*Math.PI/360)*1.25;
+ ctl.target.copy(mid);cam.position.set(mid.x,mid.y,mid.z+dist);ctl.update();ctl.maxDistance=dist*2.5;
+ const l=document.getElementById("lad");l.style.opacity=0;setTimeout(()=>l.remove(),600);}
+const lag=document.getElementById("lag");
+SYS.forEach(sd=>{const b=document.createElement("button");b.style.setProperty("--c",sd.c);b.setAttribute("aria-pressed",sd.pa);b.innerHTML=`<i></i><span>${sd.namn}</span>`;
+ b.onclick=()=>{const p=b.getAttribute("aria-pressed")!=="true";b.setAttribute("aria-pressed",p);if(grp[sd.id])grp[sd.id].visible=p;};lag.appendChild(b);});
+function size(){const w=innerWidth,h=innerHeight;R.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();}
+addEventListener("resize",size);size();
+const ray=new THREE.Raycaster(),mv=new THREE.Vector2();let sel=null,hov=null;
+function kolla(e){const r=cv.getBoundingClientRect();mv.set((e.clientX-r.left)/r.width*2-1,-((e.clientY-r.top)/r.height)*2+1);ray.setFromCamera(mv,cam);
+ const vis=all.filter(o=>grp[o.userData.s].visible);const h=ray.intersectObjects(vis,false);return h.length?h[0].object:null;}
+function sätt(o,k){if(!o)return;o.material=o===sel?hl(o):mats[o.userData.c];}
+const hm={};function hl(o){const c=new THREE.Color(o.userData.c).lerp(new THREE.Color("#2563eb"),.65).getHex();hm[c]=hm[c]||new THREE.MeshStandardMaterial({color:c,roughness:.4,emissive:0x1d4ed8,emissiveIntensity:.25});return hm[c];}
+let dn=null;cv.addEventListener("pointerdown",e=>{dn=[e.clientX,e.clientY];});
+cv.addEventListener("pointerup",e=>{if(!dn||Math.hypot(e.clientX-dn[0],e.clientY-dn[1])>5)return;const o=kolla(e);if(sel){const p=sel;sel=null;sätt(p);}
+ if(o){sel=o;sätt(o);visa(o);}else document.getElementById("kort").hidden=true;});
+cv.addEventListener("pointermove",e=>{if(e.buttons)return;const o=kolla(e);cv.style.cursor=o?"pointer":"grab";});
+function visa(o){const k=document.getElementById("kort"),sd=SYS.find(x=>x.id===o.userData.s),m=GR[o.userData.id];
+ k.hidden=false;k.innerHTML=`<button aria-label="Stäng" onclick="this.parentNode.hidden=true">✕</button><div class="sys">${sd.namn}</div><h2>${m.sv}</h2><p>${m.t}</p>`;}
+function loop(){requestAnimationFrame(loop);ctl.update();R.render(S,cam);}
+las().then(loop);
+window.__a={S,cam,ctl,grp,all};
+</script></body></html>

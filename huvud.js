@@ -106,6 +106,7 @@ body.mph-mini #quit{display:none}
     if(top==='extra')return'extra';
     if(top==='ovriga'){if(/^(ordgomma|ordgatan|hogfrekventa|lasflyt|bokstaver)$/.test(sub))return'svenska';if(/^(sverigekartan|europa|varlden)$/.test(sub))return'so';
       if(/^(rymdlabbet|solsystemet|vintergatan)$/.test(sub))return'rymd';if(sub==='ansiktsloppan')return'extra';return'fler';}
+    if(top==='anatomi')return'fler';
     if(/^(meningsbyggaren|ordkedjan|ordgissning|dubbelteckning|knepigaljud|sagobyggaren)$/.test(top))return'svenska';
     if(top==='tidslinjen')return'so';
     if(/^(schack|trerirad|sudoku|trafikstockning)$/.test(top))return'fler';

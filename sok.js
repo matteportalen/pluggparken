@@ -67,6 +67,7 @@ const IDX=[
  ['ovriga/lasflyt/','Läsflyt','Läs en kort text flera gånger med en vuxen','📖','läsa text flyt upprepad läsning','Svenska'],
  ['ovriga/rita/','Draw it!','Rita ordet på engelska så gissar datorn','🎨','engelska rita gissa quick draw glosor','Engelska'],
  ['ovriga/rymdlabbet/','Rymdlabbet','Solsystemet, dag och natt, månens faser och mer','🔭','rymden planeter måne stjärnor svarta hål årstider förmörkelse universum galax jättar','NO'],
+ ['anatomi/','Människokroppen i 3D','Skelett, muskler, organ, blodkärl och nerver','🫀','kroppen anatomi skelett muskler hjärta lungor tarmar hjärnan nerver blodkärl ben organ njurar ögon','NO'],
  ['ovriga/solsystemet/','Solsystemet i 3D','Res bland planeterna och ut i universum','🪐','planeter solen jorden månen vintergatan resa stockholm','NO'],
  ['larare/','Klasstavlan','Interaktiv whiteboard för klassrummet: Du behöver, timer, lyckohjul, post-it, ljudnivå och video','🍎','klasstavlan lärare lärarsida tavla whiteboard projektor timer lyckohjul post-it ljudnivå instruktioner lektion klassrum','Lärare'],
  ['tidslinjen/','Tidslinjen','Sätt bilder i rätt tid, känn hur länge sedan det var och lös ledtrådar','⏳','historia tid tidslinje stenåldern vikingatiden medeltiden vasa årtal förr ledtrådar detektiv släkt släktträd mitt liv generation','SO'],
