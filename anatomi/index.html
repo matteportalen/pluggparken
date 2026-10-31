@@ -56,8 +56,9 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;bac
 #linD{fill:#22d3ee;filter:drop-shadow(0 0 6px #22d3ee)}
 #linR{fill:none;stroke:#22d3ee;stroke-width:1.4;transform-box:fill-box;transform-origin:center;animation:linPuls 1.8s ease-out infinite}
 @keyframes linPuls{0%{transform:scale(.4);opacity:.95}100%{transform:scale(2.1);opacity:0}}
-.kort{transform-origin:0 40px}.kort.in{animation:kIn .5s .6s cubic-bezier(.2,.8,.2,1) both}
+.kort{transform-origin:0 40px}.kort.L{transform-origin:100% 40px}.kort.in{animation:kIn .5s .6s cubic-bezier(.2,.8,.2,1) both}
 @keyframes kIn{from{opacity:0;transform:scale(.85) translateX(-8px)}to{opacity:1;transform:none}}
+.kort.L.in{animation-name:kInL}@keyframes kInL{from{opacity:0;transform:scale(.85) translateX(8px)}to{opacity:1;transform:none}}
 @media(min-width:761px){.kort{top:110px;right:28px;width:300px}}
 @media(max-width:760px){.kort{top:84px;left:12px;right:12px;width:auto}}
 @media(prefers-reduced-motion:reduce){#linP.on{animation-duration:.01s}.kort.in{animation:none}#linR{animation:none}}
@@ -140,7 +141,7 @@ function sätt(o,k){if(!o||o.userData.s==='hud')return;o.material=o===sel?hl(o):
 const hm={};function hl(o){const c=new THREE.Color(o.userData.c).lerp(new THREE.Color("#22d3ee"),.6).getHex();hm[c]=hm[c]||new THREE.MeshStandardMaterial({color:c,roughness:.4,emissive:0x0e7490,emissiveIntensity:.45});return hm[c];}
 let dn=null;cv.addEventListener("pointerdown",e=>{dn=[e.clientX,e.clientY];});
 cv.addEventListener("pointerup",e=>{if(!dn||Math.hypot(e.clientX-dn[0],e.clientY-dn[1])>5)return;const o=kolla(e);if(sel){const p=sel;sel=null;sätt(p);}
- if(o){sel=o;sätt(o);AN=LH?LH.clone():null;SO=o;visa(o);}else{document.getElementById("kort").hidden=true;AN=null;}});
+ if(o){sel=o;sätt(o);AN=LH?LH.clone():null;SO=o;visa(o);placeCard();}else{document.getElementById("kort").hidden=true;AN=null;}});
 cv.addEventListener("pointermove",e=>{if(e.buttons)return;const o=kolla(e);cv.style.cursor=o?"pointer":"grab";});
 function visa(o){const k=document.getElementById("kort"),sd=SYS.find(x=>x.id===o.userData.s),m=GR[o.userData.id];
  k.hidden=false;k.classList.remove('in');void k.offsetWidth;k.classList.add('in');const lp=document.getElementById('linP');lp.classList.remove('on');void lp.getBoundingClientRect();lp.classList.add('on');k.innerHTML=`<button aria-label="Stäng" onclick="this.parentNode.hidden=true">✕</button><div class="sys">${sd.namn}</div><h2>${m.sv}</h2><p>${m.t}</p>`;}
@@ -159,12 +160,23 @@ cv.addEventListener("dblclick",e=>{const o=kolla(e);if(!o)return;const b=new THR
 ctl.addEventListener("start",()=>{fly=null;});
 
 const lin=document.getElementById("lin"),linP=document.getElementById("linP"),linR=document.getElementById("linR"),linD=document.getElementById("linD"),kortEl=document.getElementById("kort"),_v=new THREE.Vector3();
+
+let kSide="R";
+function placeCard(){const k=document.getElementById("kort"),W=innerWidth,H=innerHeight;
+ if(W<=760||!AN){k.style.left=k.style.right=k.style.top="";k.classList.remove("L");kSide="R";return;}
+ _v.copy(AN).project(cam);const ax=(_v.x+1)/2*W,ay=(1-_v.y)/2*H,h=k.offsetHeight||150;
+ const left=ax<W*.5-70;kSide=left?"L":"R";k.classList.toggle("L",left);
+ if(left){k.style.right="auto";k.style.left="28px";k.style.top=Math.round(Math.min(H-h-130,Math.max(400,ay-50)))+"px";}
+ else{k.style.left="auto";k.style.right="28px";k.style.top=Math.round(Math.min(H-h-130,Math.max(110,ay-50)))+"px";}}
 function linUpd(){const ok=AN&&SO&&!kortEl.hidden&&grp[SO.userData.s].visible&&!(SO.userData.s==='hud'&&hudGlas);
  if(!ok){lin.style.opacity=0;return;}
  _v.copy(AN).project(cam);if(_v.z>1||Math.abs(_v.x)>1.1||Math.abs(_v.y)>1.1){lin.style.opacity=0;return;}
  const W=innerWidth,H=innerHeight,ax=(_v.x+1)/2*W,ay=(1-_v.y)/2*H,r=kortEl.getBoundingClientRect(),wide=W>760;
- const ex=wide?r.left:r.left+r.width/2,ey=wide?r.top+Math.min(r.height/2,60):r.bottom;
- const mx=wide?ex-34:ex,my=wide?ey:ey+28;
+ const L=wide&&kSide==='L',over=wide&&ax>r.left-6&&ax<r.right+6&&(ay<r.top-24||ay>r.bottom+24);
+ let ex,ey,mx,my;
+ if(over){ex=Math.min(r.right-18,Math.max(r.left+18,ax));ey=ay<r.top?r.top:r.bottom;mx=ex;my=ey+(ay<r.top?-28:28);}
+ else if(wide){const inside=ax>r.left&&ax<r.right;ex=L?r.right:r.left;ey=r.top+Math.min(r.height/2,60);mx=inside?ex:(L?ex+34:ex-34);my=ey;}
+ else{ex=r.left+r.width/2;ey=r.bottom;mx=ex;my=ey+28;}
  linP.setAttribute("d",`M${ax},${ay} L${mx},${my} L${ex},${ey}`);
  linR.setAttribute("cx",ax);linR.setAttribute("cy",ay);linD.setAttribute("cx",ax);linD.setAttribute("cy",ay);lin.style.opacity=1;}
 function loop(){requestAnimationFrame(loop);flyStep();ctl.update();linUpd();R.render(S,cam);}
