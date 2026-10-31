@@ -477,7 +477,7 @@ function melTick(k,t,md){for(let m=0;m<2;m++){const c=md[m][k];if(c==="."||S.mmu
 const PBANK=[["ord","RÖSTER","#7fe08a"],["prat","PRATLJUD","#ff7bd0"],["rymd","RYMD","#4cc3ff"],["small","SMÄLL","#ff9a4a"],["swish","SWISH","#c58bff"],["g1","GAMLA 1","#e8c468"],["g2","GAMLA 2","#e8c468"],["g3","GAMLA 3","#e8c468"],["egna","🎤 EGNA","#ff5a54"],["fav","⭐ MINA","#ffd24d"],["dub","DUB","#5fd35f"],["reggae","REGGAE","#f2c744"],["skrik","SKRIK","#ff8a5c"]];
 const PORD=[0,1,2,3,4,10,11,12,5,6,7,8,9];
 const padNy=id=>id<128||id>=160;
-const SPK=["1","2","3","4","q","w","e","t","z","x","c","v","7","8","9","0"];
+const SPK=["1","2","3","4","5","6","7","8","q","w","e","t","y","u","i","o"];
 let PADS=null,padBank=0,padLaddar=false,padVald=-1,padStj=false,padPit=0,padRevV=false,PFAV=[];
 try{PFAV=JSON.parse(localStorage.getItem("pluggparken-trummaskin-fav")||"[]").filter(x=>Number.isInteger(x)&&padNy(x)&&x>=0&&x<208).slice(0,16)}catch(e){}
 async function padLadda(){if(PADS||padLaddar||!ctx)return;padLaddar=true;
