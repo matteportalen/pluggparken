@@ -310,6 +310,7 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
     <button class="stor start" id="bStart" type="button">▶ START</button>
     <button class="stor stopp" id="bStopp" type="button">■ STOPP</button>
     <button class="stor rec" id="bRec" type="button" aria-pressed="false" title="Spela in med padsen (tangent R)">● REC</button>
+    <button class="lilla" id="bAutoTom" type="button" title="Ta bort inspelade rattrörelser (ECHO, FILTER, PUMP)" hidden>🎛 TÖM RATTAR</button>
     <button class="stor mute" id="bMuteAll" type="button" aria-pressed="false" title="Tysta allt (tangent M)">🔇 MUTE ALL</button>
     <div class="grupp"><div class="pm"><button type="button" id="bMin" aria-label="Långsammare">−</button><button type="button" id="bPlus" aria-label="Snabbare">+</button></div><span class="l">Tempo</span></div>
     <div class="grupp"><div class="knob" id="kTempo" role="slider" tabindex="0" aria-label="Tempo"><div class="kap"></div></div><label>Tempo</label></div>
@@ -438,6 +439,12 @@ const MV={
  pad:(f,t,d,g)=>{const e=eg(g,t,.12,.32,t+d+.25),b=lpf(f*3,1,e,t);oc("sawtooth",f,t,t+d+.25,b,-10);oc("sawtooth",f,t,t+d+.25,b,10);oc("triangle",f/2,t,t+d+.25,b)}
 };
 const mFreq=(m,r)=>440*Math.pow(2,((m===0?36:60)+S.key+SCALER[S.scale][1][r]-69)/12);
+const autoTouch={};
+function autoRec(key,li,v){if(!recLive||!spelar)return;const k=stegNu();if(k<0)return;autoTouch[key+li]=performance.now();const a=S.auto;(li<0?a[key]:a[key][li])[k]=v}
+function autoApply(k){const a=S.auto,nu=performance.now(),fri=key=>!(nu-(autoTouch[key]||0)<500);
+  if(a.pump[k]!==null&&fri("pump-1")){S.pump=a.pump[k];kn.pump&&kn.pump()}
+  LP.forEach(l=>{["echo","filt"].forEach(key=>{const v=a[key][l.i][k];if(v!==null&&v!==undefined&&fri(key+l.i)){l.fx[key]=v;if(l.fxn)l.fxn.set();l.fxu&&l.fxu.forEach(u=>u())}})})}
+function autoHar(){const a=S.auto;return a.pump.some(x=>x!==null)||a.echo.some(l=>l.some(x=>x!==null))||a.filt.some(l=>l.some(x=>x!==null))}
 function pumpDuck(t){if(!pg||!(S.pump>0))return;const a=S.pump/100*.85,q=pg.gain;q.cancelScheduledValues(t);q.setValueAtTime(1-a,t);q.linearRampToValueAtTime(1,t+.24)}
 function nota(m,r,t,dur){if(!ctx||!master)return;const v=MROSTER[m][S.mv[m]%MROSTER[m].length][1],g=ctx.createGain();g.gain.value=Math.pow(S.mvol[m]/100,1.4)*.9;g.connect(pg||master);MV[v](mFreq(m,r),t,Math.max(.06,dur),g)}
 function melTick(k,t,md){for(let m=0;m<2;m++){const c=md[m][k];if(c==="."||S.mmute[m])continue;const v=MROSTER[m][S.mv[m]%MROSTER[m].length][1],sl=stegTid(k);let n=1;
@@ -519,7 +526,8 @@ const MALLAR=[
  ["Drum and bass",174,0,["x.........x.....","....x.......x...","","x.x.x.x.x.x.x.x.","","","..x.....x......",""],[3,2,0,2,0,0,3,0]],
  ["Hård techno",150,0,["x...x...x...x...","","....x.......x...","x.x.x.x.x.x.x.x.","..x...x...x...x.","","xxxxxxxxxxxxxxxx",""],[4,2,0,2,0,0,4,0]]
 ];
-function tomt(){return{bpm:90,swing:0,master:80,kit:0,namn:"Tomt",t:SPAR.map((s,i)=>({s:".".repeat(16),v:0,vol:i<2?100:75,mute:false})),pat:[0,1,2,3].map(()=>SPAR.map(()=>".".repeat(16))),cur:0,song:Array(16).fill(-1),loop:true,songOn:false,pvol:80,smp:Array(16).fill(null),spat:[0,1,2,3].map(()=>Array(16).fill(null)),lsong:[0,1,2,3].map(()=>".".repeat(16)),key:0,scale:0,mel:[".".repeat(16),".".repeat(16)],mpat:[0,1,2,3].map(()=>[".".repeat(16),".".repeat(16)]),mv:[0,0],mvol:[85,70],mmute:[false,false],pump:0}}
+function autoNy(){const l=()=>Array(16).fill(null);return{pump:l(),echo:[l(),l(),l(),l()],filt:[l(),l(),l(),l()]}}
+function tomt(){return{bpm:90,swing:0,master:80,kit:0,namn:"Tomt",t:SPAR.map((s,i)=>({s:".".repeat(16),v:0,vol:i<2?100:75,mute:false})),pat:[0,1,2,3].map(()=>SPAR.map(()=>".".repeat(16))),cur:0,song:Array(16).fill(-1),loop:true,songOn:false,pvol:80,smp:Array(16).fill(null),spat:[0,1,2,3].map(()=>Array(16).fill(null)),lsong:[0,1,2,3].map(()=>".".repeat(16)),key:0,scale:0,mel:[".".repeat(16),".".repeat(16)],mpat:[0,1,2,3].map(()=>[".".repeat(16),".".repeat(16)]),mv:[0,0],mvol:[85,70],mmute:[false,false],pump:0,auto:autoNy()}}
 let S=tomt(),spelar=false,steg=0,nasta=0,tid=0,timer=0,kö=[];
 function mall(i){const m=MALLAR[i],old=S;S=tomt();behall(old);S.bpm=m[1];S.swing=m[2];S.namn=m[0];m[3].forEach((p,k)=>{S.t[k].s=(p||"").padEnd(16,".").slice(0,16)});if(m[4])m[4].forEach((v,k)=>{S.t[k].v=v});if(S.kit)kitSatt(S.kit)}
 function kitSatt(k){S.kit=k;S.t.forEach((t,i)=>{const sy=SPAR[i].syn.length;t.v=k&&SAMP?sy:0})}   // bara kvar för gamla länkar
@@ -595,7 +603,7 @@ function tick(){if(!ctx)return;while(nasta<ctx.currentTime+.12){const k=steg%16;
     if(k===0){lastBar=nasta;const len=songLen();
       if(S.songOn&&len>0){const bi=Math.floor(steg/16);if(!S.loop&&bi>=len){clearInterval(timer);setTimeout(stopp,Math.max(0,(nasta-ctx.currentTime)*1000));return}barIx=bi%len;lpBarGate(barIx,nasta);const p=S.song[barIx];barPd=p>=0?monsterData(p):null;barMd=p>=0?melData(p):null;barSd=p>=0?smpData(p):null}
       else{barIx=-1;barPd=undefined;barMd=undefined;barSd=undefined;lpBarGate(-1,nasta)}}
-    hist.push([nasta,k]);if(hist.length>40)hist.shift();
+    hist.push([nasta,k]);if(hist.length>40)hist.shift();autoApply(k);
     const pd=barPd===undefined?S.t.map(t=>t.s):barPd;
     if(pd){S.t.forEach((t,i)=>{if(pd[i][k]==="x")spela(i,nasta)});if(pd[0][k]==="x"&&!S.t[0].mute)pumpDuck(nasta)}else if(S.pump>0&&S.t[0].s[k]==="x"&&!S.t[0].mute)pumpDuck(nasta);const md=barMd===undefined?S.mel:barMd;if(md)melTick(k,nasta,md);const sdd=barSd===undefined?S.smp:barSd;if(sdd&&sdd[k])padSpela(sdd[k].i,nasta,sdd[k].p,sdd[k].r);kö.push([nasta,k,barIx]);steg++;nasta+=stegTid(k)}}
 function ritaLed(){if(!spelar){return}const nu=ctx.currentTime;let akt=null;while(kö.length&&kö[0][0]<=nu){akt=kö.shift()}
@@ -609,7 +617,7 @@ const songLen=()=>{let n=0;S.song.forEach((x,i)=>{if(x>=0)n=i+1});return n};
 const monsterData=p=>p===S.cur?S.t.map(t=>t.s):S.pat[p];
 const melData=p=>p===S.cur?S.mel:S.mpat[p];
 const smpData=p=>p===S.cur?S.smp:S.spat[p];
-function behall(o){if(!o||!o.pat)return;S.pat=o.pat;S.cur=o.cur;S.song=o.song;S.loop=o.loop;S.songOn=o.songOn;S.pvol=o.pvol;S.smp=o.smp;S.spat=o.spat;S.lsong=o.lsong;S.key=o.key;S.scale=o.scale;S.mel=o.mel;S.mpat=o.mpat;S.mv=o.mv;S.mvol=o.mvol;S.mmute=o.mmute;S.pump=o.pump||0}
+function behall(o){if(!o||!o.pat)return;S.pat=o.pat;S.cur=o.cur;S.song=o.song;S.loop=o.loop;S.songOn=o.songOn;S.pvol=o.pvol;S.smp=o.smp;S.spat=o.spat;S.lsong=o.lsong;S.key=o.key;S.scale=o.scale;S.mel=o.mel;S.mpat=o.mpat;S.mv=o.mv;S.mvol=o.mvol;S.mmute=o.mmute;S.pump=o.pump||0;S.auto=o.auto||autoNy()}
 function monsterVal(n){if(n===S.cur)return;S.pat[S.cur]=S.t.map(t=>t.s);S.mpat[S.cur]=S.mel.slice();S.spat[S.cur]=S.smp.slice();S.cur=n;S.t.forEach((t,i)=>t.s=S.pat[n][i]);S.mel=S.mpat[n].slice();S.smp=S.spat[n].slice();visa()}
 let kopLage=false;
 function latBygg(){const m=$("#monster");MONAM.forEach((n,p)=>{const b=document.createElement("button");b.type="button";b.dataset.p=p;b.style.setProperty("--k",MONK[p]);b.setAttribute("aria-label","Mönster "+n);b.innerHTML="<b>"+n+"</b><svg viewBox='0 0 32 21' class='mini' aria-hidden='true'></svg>";m.appendChild(b)});
@@ -645,7 +653,7 @@ function init(){
   byggSpar();
   kn.tempo=knob($("#kTempo"),{min:50,max:200,reset:90,val:()=>S.bpm,set:v=>{if(las())return;S.bpm=v;sev($("#sevBpm"),v)}});
   kn.swing=knob($("#kSwing"),{min:0,max:60,reset:0,val:()=>S.swing,set:v=>{S.swing=v}});
-  kn.pump=knob($("#kPump"),{min:0,max:100,reset:0,val:()=>S.pump||0,set:v=>{S.pump=v}});
+  kn.pump=knob($("#kPump"),{min:0,max:100,reset:0,val:()=>S.pump||0,set:v=>{S.pump=v;autoRec("pump",-1,v)}});
   kn.master=knob($("#kMaster"),{min:0,max:100,reset:80,val:()=>S.master,set:v=>{S.master=v;setMaster()}});
   latBygg();melBygg();padBygg();visa();minnenRita();lpBygg();
 }
@@ -760,7 +768,7 @@ function fxBygg(l,c,dest){const inn=c.createGain(),f=c.createBiquadFilter(),dry=
   fd.delayTime.value=.004;lfo.frequency.value=.28;lg.gain.value=.003;lfo.connect(lg);lg.connect(fd.delayTime);lfo.start();f.connect(fls);fls.connect(fd);fd.connect(dest);fd.connect(flb);flb.connect(fd);flb.gain.value=.55;
   const set=()=>{const x=l.fx;ds.gain.value=x.echo/100*.9;dl.delayTime.value=60/S.bpm*ETID[x.et];rs.gain.value=x.hall/100*.9;fls.gain.value=x.flang/100*.9;const v=x.filt;
     if(Math.abs(v)<4){f.type="lowpass";f.frequency.value=22000;f.Q.value=.0001}else if(v<0){f.type="lowpass";f.frequency.value=22050*Math.pow(180/22050,-v/100);f.Q.value=1.2}else{f.type="highpass";f.frequency.value=20*Math.pow(7000/20,v/100);f.Q.value=1.2}};
-  set();return{inn,set}}
+  set();return{inn,set,ds,f}}
 function pitchShift(x,st){const n=x.length,r=Math.pow(2,st/12),G=2048,H=G/4,y=new Float32Array(n),w=new Float32Array(G);for(let i=0;i<G;i++)w[i]=.5-.5*Math.cos(2*Math.PI*i/G);
   for(let p=0;p<n;p+=H){for(let j=0;j<G;j++){const o=(p+j)%n,sp=p+G/2+(j-G/2)*r,i0=Math.floor(sp),f=sp-i0,a=x[((i0%n)+n)%n],b=x[(((i0+1)%n)+n)%n];y[o]+=w[j]*(a+(b-a)*f)}}
   for(let i=0;i<n;i++)y[i]*=.5;return y}
@@ -878,7 +886,7 @@ function lpPtr(l,e){if(!l.layers.length||l.rec)return;const cv=e.currentTarget,r
   cv.onpointerup=cv.onpointercancel=()=>{cv.onpointermove=cv.onpointerup=cv.onpointercancel=null;l.drag=null;lpVisa()}}
 function lpBygg(){const g=$("#lgrid");LP.forEach(l=>{const m=document.createElement("div");m.className="lm";m.dataset.i=l.i;m.style.setProperty("--sk",LC[l.i]);
     m.innerHTML=`<div class="lt"><span class="led"></span><b>L${l.i+1}</b><span class="ls">TOM</span></div><div class="lc"><button type="button" class="recb" data-rec aria-label="Spela in"></button><div class="len" role="group" aria-label="Längd i takter">${NLEN.map(q=>`<button type="button" data-n="${q[0]}" aria-label="${q[1]} takt">${q[1]}</button>`).join("")}</div></div><canvas class="lv" role="img" aria-label="Ljudvåg"></canvas><div class="ledit"><div class="lrow"><button type="button" data-mode="mark" class="on">Markera</button><button type="button" data-mode="move">Flytta</button><button type="button" data-sh="-1" aria-label="Flytta ett steg bakåt" title="Flytta ett steg bakåt (Shift = 10 ms)">◀</button><button type="button" data-sh="1" aria-label="Flytta ett steg framåt" title="Flytta ett steg framåt (Shift = 10 ms)">▶</button><span class="lsh"></span></div><div class="lrow lfx"><span class="fx"><span class="fxs"><button type="button" data-fxp="-1" aria-label="Lägre tonhöjd">−</button><b data-fxpv>0</b><button type="button" data-fxp="1" aria-label="Högre tonhöjd">+</button></span><small>TONHÖJD</small></span><span class="fx"><button type="button" data-fxr title="Byt röst: robot, harmoni (flera röster), oktav, kör, megafon">🎭 INGEN</button><small>RÖST</small></span><span class="fx"><button type="button" data-fxrev aria-pressed="false">⇄ BAKLÄNGES</button></span><span class="fx"><div class="knob liten" data-fxk="echo" role="slider" tabindex="0" aria-label="Echo"><div class="kap"></div></div><small>ECHO</small></span><span class="fx"><button type="button" data-fxet title="Echots längd">¼</button></span><span class="fx"><div class="knob liten" data-fxk="hall" role="slider" tabindex="0" aria-label="Hall"><div class="kap"></div></div><small>HALL</small></span><span class="fx"><div class="knob liten" data-fxk="flang" role="slider" tabindex="0" aria-label="Flanger"><div class="kap"></div></div><small>FLANGER</small></span><span class="fx"><div class="knob liten" data-fxk="filt" role="slider" tabindex="0" aria-label="Filter"><div class="kap"></div></div><small>FILTER</small></span></div><div class="lrow lsl"><span class="fx"><small>SLICER</small></span><span class="slb"><button type="button" data-slf="1" title="Fyll: alla delar på">FYLL</button><button type="button" data-slf="0" title="Töm: alla delar av, lägg sedan till de du vill ha">TÖM</button><button type="button" data-slp title="Byt slicer-mönster">↻</button></span><div class="slc" role="group" aria-label="Slicer">${Array.from({length:16},(_,i)=>`<button type="button" data-sl="${i}" aria-label="Del ${i+1}"></button>`).join("")}</div></div><div class="lrow"><button type="button" data-act="cut" disabled>Radera</button><button type="button" data-act="only" disabled>Spela bara</button><button type="button" data-act="crop" disabled title="Loopen blir bara det markerade">Beskär</button><button type="button" data-act="clr" disabled>Avmarkera</button></div><div class="lrow zon"><span>Spela:</span>${ZON.map(q=>`<button type="button" data-z="${q[0]}">${q[1]}</button>`).join("")}<button type="button" data-act="reset" title="Ta bort alla ändringar">↺</button></div></div><div class="lr"><div class="knob liten" data-lvol role="slider" tabindex="0" aria-label="Volym loop ${l.i+1}"><div class="kap"></div></div><button type="button" class="sm" data-lm aria-label="Tysta loop ${l.i+1}">M</button><button type="button" class="sm" data-lu aria-label="Ångra senaste ändringen" title="Ångra senaste ändringen">↶</button><button type="button" class="sm" data-lx aria-label="Radera loopen" title="Radera loopen">✕</button></div>`;
-    m.querySelectorAll("[data-fxk]").forEach(el=>{const key=el.dataset.fxk;l.fxu.push(knob(el,{min:key==="filt"?-100:0,max:100,reset:0,val:()=>l.fx[key],set:v=>{l.fx[key]=v;if(l.fxn)l.fxn.set()}}))});
+    m.querySelectorAll("[data-fxk]").forEach(el=>{const key=el.dataset.fxk;l.fxu.push(knob(el,{min:key==="filt"?-100:0,max:100,reset:0,val:()=>l.fx[key],set:v=>{l.fx[key]=v;if(l.fxn)l.fxn.set();if(key==="echo"||key==="filt")autoRec(key,l.i,v)}}))});
     g.appendChild(m);m.querySelector("canvas").addEventListener("pointerdown",e=>lpPtr(l,e));
     knob(m.querySelector("[data-lvol]"),{min:0,max:100,reset:80,val:()=>l.vol,set:v=>{l.vol=v;if(l.gain)lpGain(l)}})});
   g.addEventListener("click",e=>{const m=e.target.closest(".lm");if(!m)return;const i=+m.dataset.i,l=LP[i];
@@ -917,8 +925,8 @@ function lpBygg(){const g=$("#lgrid");LP.forEach(l=>{const m=document.createElem
 /* ---------- spela in med padsen ---------- */
 let recLive=false,suddLage=false,PADOFF=0,hist=[],recFran=0;
 function sattRec(v){recLive=v;$("#bRec").classList.toggle("p",v);$("#bRec").setAttribute("aria-pressed",v);
-  if(v){if(!spelar){start(true);recFran=nasta0+barDur()}else recFran=0;krok("Spelar in: slå på padsen (A S D F G H J K) så hamnar slagen på närmaste steg. Tryck R igen för att sluta.")}
-  else krok("Inspelningen är klar. Du kan rätta rutorna för hand.")}
+  if(v){if(!spelar){start(true);recFran=nasta0+barDur()}else recFran=0;krok("Spelar in: slå på padsen (A S D F G H J K) så hamnar slagen på närmaste steg. Vrid även på ECHO, FILTER (loopen) och PUMP, så spelas det in. Tryck R igen för att sluta.")}
+  else{krok("Inspelningen är klar. Du kan rätta rutorna för hand.");$("#bAutoTom").hidden=!autoHar()}}
 function lagg(i){if(!ctx||!spelar||!hist.length)return;const nu=ctx.currentTime-PADOFF/1000;if(recFran&&nu<recFran-.03)return;
   let b=hist[0];for(const h of hist)if(Math.abs(h[0]-nu)<Math.abs(b[0]-nu))b=h;const k=b[1],t=S.t[i],a=t.s.split("");
   a[k]=suddLage?".":"x";t.s=a.join("");S.namn="Egen rytm";visa();
@@ -954,12 +962,15 @@ function renderaLat(){startaLjud();if(!ctx)return null;
   const len=songLen(),bars=len>0?S.song.slice(0,len):[S.cur,S.cur,S.cur,S.cur];let dur=.05;bars.forEach(()=>{for(let k=0;k<16;k++)dur+=stegTid(k)});dur+=2.6;
   const sr=44100,off=new OfflineAudioContext(2,Math.ceil(dur*sr),sr),oc=ctx,om=master,ocp=comp,opg=pg;
   ctx=off;master=off.createGain();comp=off.createDynamicsCompressor();comp.threshold.value=-14;comp.ratio.value=5;comp.attack.value=.003;comp.release.value=.2;master.connect(comp);comp.connect(off.destination);pg=off.createGain();pg.connect(master);master.gain.value=Math.pow(S.master/100,1.6)*1.1;
+  const pump0=S.pump,stepT=[];
   try{let t=.05;const bar0=t,starts=[];
-    bars.forEach(p=>{starts.push(t);const pd=p>=0?monsterData(p):null,md=p>=0?melData(p):null;for(let k=0;k<16;k++){if(pd){S.t.forEach((tr,i)=>{if(pd[i][k]==="x")spela(i,t)});if(pd[0][k]==="x"&&!S.t[0].mute)pumpDuck(t)}if(md)melTick(k,t,md);const sdd=p>=0?smpData(p):null;if(sdd&&sdd[k])padSpela(sdd[k].i,t,sdd[k].p,sdd[k].r);t+=stegTid(k)}});
+    bars.forEach(p=>{starts.push(t);const pd=p>=0?monsterData(p):null,md=p>=0?melData(p):null;for(let k=0;k<16;k++){stepT.push([t,k]);if(S.auto.pump[k]!==null)S.pump=S.auto.pump[k];if(pd){S.t.forEach((tr,i)=>{if(pd[i][k]==="x")spela(i,t)});if(pd[0][k]==="x"&&!S.t[0].mute)pumpDuck(t)}if(md)melTick(k,t,md);const sdd=p>=0?smpData(p):null;if(sdd&&sdd[k])padSpela(sdd[k].i,t,sdd[k].p,sdd[k].r);t+=stegTid(k)}});
     LP.forEach(l=>{if(!l.mix)return;const g=off.createGain(),lg=off.createGain();lg.gain.value=l.mute?0:Math.pow(l.vol/100,1.5)*1.3;lg.connect(master);const fx=fxBygg(l,off,lg);g.connect(fx.inn);
+      {const le=S.auto.echo[l.i],lf=S.auto.filt[l.i];stepT.forEach(([tt,kk])=>{if(le[kk]!==null)fx.ds.gain.setValueAtTime(le[kk]/100*.9,tt)});
+       const vs=lf.filter(x=>x!==null),lo=vs.some(v=>v<-3),hi=vs.some(v=>v>3);if(vs.length&&lo!==hi){fx.f.type=lo?"lowpass":"highpass";fx.f.Q.value=1.2;stepT.forEach(([tt,kk])=>{const v=lf[kk];if(v!==null)fx.f.frequency.setValueAtTime(lo?(v<-3?22050*Math.pow(180/22050,-v/100):22000):(v>3?20*Math.pow(7000/20,v/100):20),tt)})}}
       const row=S.lsong[l.i];if(len>0&&row.includes("x")){g.gain.value=0;starts.forEach((bs,bi)=>g.gain.setTargetAtTime(row[bi]==="x"?1:0,bs,.006))}
       const s=off.createBufferSource();s.buffer=l.mix;s.loop=true;s.connect(g);s.start(bar0,(((-(l.o||0))%l.dur)+l.dur)%l.dur)})
-  }finally{ctx=oc;master=om;comp=ocp;pg=opg}
+  }finally{ctx=oc;master=om;comp=ocp;pg=opg;S.pump=pump0}
   return off.startRendering()}
 async function lameLadda(){if(window.lamejs)return true;try{await new Promise((res,rej)=>{const sc=document.createElement("script");sc.src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js";sc.onload=res;sc.onerror=rej;document.head.appendChild(sc)})}catch(e){return false}return !!window.lamejs}
 async function mp3Av(buf){let pk=0;const L=buf.getChannelData(0),R=buf.getChannelData(1),n=L.length;for(let i=0;i<n;i++){const a=Math.max(Math.abs(L[i]),Math.abs(R[i]));if(a>pk)pk=a}const g=pk>.98?.98/pk:1;
@@ -1002,6 +1013,7 @@ function slumpMel(){const b=[],l=[];for(let k=0;k<16;k++)b.push(k%4===0?(Math.ra
 {const so=$("#bSlump").onclick;$("#bSlump").onclick=()=>{so();slumpMel();visa()}}
 const TK={a:0,s:1,d:2,f:3,g:4,h:5,j:6,k:7};
 document.addEventListener("pointerdown",e=>{const pd=e.target.closest(".pad");if(pd){slag(+pd.dataset.i)}});
+$("#bAutoTom").onclick=()=>{S.auto=autoNy();$("#bAutoTom").hidden=true;toast("Rattrörelserna är borttagna")};
 $("#bRec").onclick=()=>sattRec(!recLive);
 $("#bSudd").onclick=()=>{suddLage=!suddLage;$("#bSudd").setAttribute("aria-pressed",suddLage)};
 knob($("#kPadtid"),{min:-100,max:100,reset:0,val:()=>PADOFF,set:v=>{PADOFF=v;$("#padT").textContent="Pad-tid "+(v>0?"+":"")+v+" ms"}});
