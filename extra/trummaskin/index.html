@@ -151,6 +151,7 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
 .mgrid button[data-g="1"],.mgrid button[data-g="3"]{background:#383a42}
 .mgrid button[data-g="0"]{--k:var(--r)}.mgrid button[data-g="1"]{--k:var(--o)}.mgrid button[data-g="2"]{--k:var(--y)}.mgrid button[data-g="3"]{--k:var(--c)}
 .mgrid button.p{background:var(--k);box-shadow:0 0 10px color-mix(in srgb,var(--k) 70%,transparent)}
+.mgrid button.p.h{border-radius:0 4px 4px 0;margin-left:-3px;opacity:.78}.mgrid button.p.hn{border-radius:4px 0 0 4px}.mgrid .mn.rt{color:#cfd2da}
 .mgrid button.nu{outline:2px solid rgba(255,255,255,.55);outline-offset:-1px}
 @media(max-width:700px){.mgrid{grid-template-columns:24px repeat(16,28px);gap:3px;overflow-x:auto;padding-bottom:6px;-webkit-overflow-scrolling:touch}.mgrid button{height:26px}.mgrid .mn{font-size:.55rem;position:sticky;left:0;background:#202226}}
 .tl{display:grid;grid-template-columns:64px minmax(0,1fr);gap:8px 10px;align-items:center}
@@ -447,7 +448,9 @@ const MV={
  ssaw:(f,t,d,g)=>{const b=lpf(f*5,1.2,eg(g,t,.015,.4,t+d+.08),t);[-24,-12,0,12,24].forEach(c=>oc("sawtooth",f,t,t+d+.08,b,c))},
  pad:(f,t,d,g)=>{const e=eg(g,t,.12,.32,t+d+.25),b=lpf(f*3,1,e,t);oc("sawtooth",f,t,t+d+.25,b,-10);oc("sawtooth",f,t,t+d+.25,b,10);oc("triangle",f/2,t,t+d+.25,b)}
 };
-const mFreq=(m,r)=>{const sc=SCALER[S.scale][1],sm=r<8?sc[r]:sc[r-5]+12;return 440*Math.pow(2,((m===0?36:60)+S.key+sm-69)/12)};
+const semi=r=>SCALER[S.scale][1][r%5]+12*Math.floor(r/5);
+const nv=c=>parseInt(c,16);
+const mFreq=(m,r)=>{const sm=semi(r);return 440*Math.pow(2,((m===0?36:60)+S.key+sm-69)/12)};
 const autoTouch={};
 function autoRec(key,li,v){if(!recLive||!spelar)return;const k=stegNu();if(k<0)return;autoTouch[key+li]=performance.now();const a=S.auto;(li<0?a[key]:a[key][li])[k]=v}
 function autoApply(k){const a=S.auto,nu=performance.now(),fri=key=>!(nu-(autoTouch[key]||0)<500);
@@ -470,9 +473,11 @@ function bldStep(k){if(!bld)return false;const rel=steg-bld.s;
 function bldAvbryt(){bld=null;bldArm=0;if(bf&&ctx){bf.frequency.cancelScheduledValues(0);bf.frequency.setValueAtTime(10,ctx.currentTime)}bldUI(false)}
 function pumpDuck(t){if(!pg||!(S.pump>0))return;const a=S.pump/100*.85,q=pg.gain;q.cancelScheduledValues(t);q.setValueAtTime(1-a,t);q.linearRampToValueAtTime(1,t+.24)}
 function nota(m,r,t,dur,gm){if(!ctx||!master)return;const v=MROSTER[m][S.mv[m]%MROSTER[m].length][1],g=ctx.createGain();g.gain.value=Math.pow(S.mvol[m]/100,1.4)*.9*(gm||1);g.connect(pg||master);MV[v](mFreq(m,r),t,Math.max(.06,dur),g)}
-function melTick(k,t,md){for(let m=0;m<2;m++){const c=md[m][k];if(c==="."||S.mmute[m])continue;const v=MROSTER[m][S.mv[m]%MROSTER[m].length][1],sl=stegTid(k);let n=1;
-    if(HALL[v]){while(n<4&&md[m][(k+n)%16]==="."&&n<16)n++}
-    if(S.chord&&S.chord[m])[0,2,4].forEach(dd=>nota(m,+c+dd,t,n*sl*(HALL[v]?.94:.9),.7));else nota(m,+c,t,n*sl*(HALL[v]?.94:.9))}}
+function melTick(k,t,md){for(let m=0;m<2;m++){const c=md[m][k];if(c==="."||c==="_"||S.mmute[m])continue;const v=MROSTER[m][S.mv[m]%MROSTER[m].length][1],sl=stegTid(k);let n=1;
+    while(k+n<16&&md[m][k+n]==="_")n++;
+    if(n===1&&HALL[v]){while(n<4&&md[m][(k+n)%16]==="."&&n<16)n++}
+    const dur=n*sl*(HALL[v]?.94:.9),r=nv(c);
+    if(S.chord&&S.chord[m])[0,2,4].forEach(dd=>nota(m,r+dd,t,dur,.7));else nota(m,r,t,dur)}}
 /* ---------- sample-pads: effekter, röster och gamla klipp, och ett sample-spår i takten ---------- */
 const PBANK=[["ord","RÖSTER","#7fe08a"],["prat","PRATLJUD","#ff7bd0"],["rymd","RYMD","#4cc3ff"],["small","SMÄLL","#ff9a4a"],["swish","SWISH","#c58bff"],["g1","GAMLA 1","#e8c468"],["g2","GAMLA 2","#e8c468"],["g3","GAMLA 3","#e8c468"],["egna","🎤 EGNA","#ff5a54"],["fav","⭐ MINA","#ffd24d"],["dub","DUB","#5fd35f"],["reggae","REGGAE","#f2c744"],["skrik","SKRIK","#ff8a5c"]];
 const PORD=[0,1,2,3,4,10,11,12,5,6,7,8,9];
@@ -562,19 +567,19 @@ function avkod(k){try{const pp=k.split("~"),p=pp[0].split("_"),h=p[0].split(".")
   const o=tomt();o.bpm=Math.max(50,Math.min(200,h[0]));o.swing=Math.max(0,Math.min(60,h[1]));o.master=Math.max(0,Math.min(100,h[2]));o.kit=h[3]?1:0;o.namn="Egen rytm";
   for(let i=0;i<8;i++){const q=p[i+1].split(".");if(!/^[0-9a-f]{4}$/i.test(q[0]))return null;o.t[i]={s:BIN(q[0]),v:Math.max(0,Math.min(40,+q[1]||0)),vol:Math.max(0,Math.min(100,+q[2]||0)),mute:q[3]==="1"}}avlat(o,pp);return o}catch(e){return null}}
 const MONAM=["A","B","C","D"],MONK=["var(--r)","var(--o)","var(--y)","#4cc3ff"];
-const harMel=()=>S.mel.some(s=>/[0-7]/.test(s))||S.mpat.some((d,p)=>p!==S.cur&&d.some(s=>/[0-7]/.test(s)));
+const harMel=()=>S.mel.some(s=>/[0-9a-b]/.test(s))||S.mpat.some((d,p)=>p!==S.cur&&d.some(s=>/[0-9a-b]/.test(s)));
 const egnaId=i=>i>=128&&i<160,harEgna=()=>S.smp.some(x=>x&&egnaId(x.i))||S.spat.some(d=>d.some(x=>x&&egnaId(x.i)));
 const harSmp=()=>S.smp.some(x=>x)||S.spat.some((d,p)=>p!==S.cur&&d.some(x=>x));
 const harLat=()=>harSmp()||S.song.some(x=>x>=0)||S.pat.some((d,p)=>p!==S.cur&&d.some(s=>s.includes("x")))||harMel()||S.lsong.some(r=>r.includes("x"));
 function kod(){const b=kodBas();if(!harLat())return b;
   const pats=[0,1,2,3].map(p=>p===S.cur?"":(S.pat[p].every(s=>!s.includes("x"))?"-":S.pat[p].map(HEX).join("."))),sg=S.song.map(x=>x<0?".":MONAM[x]).join("").replace(/\.+$/,"");
-  return b+"~"+S.cur+"~"+pats.join(",")+"~"+sg+"~"+(S.loop?1:0)+(S.songOn?1:0)+"~"+[S.key,S.scale,S.mv[0],S.mv[1],S.mvol[0],S.mvol[1],(S.mmute[0]?1:0)+""+(S.mmute[1]?1:0)].join(".")+"~"+[0,1,2,3].map(p=>{const d=melData(p);return /[0-7]/.test(d.join(""))?d.join(":"):"-"}).join(",")+"~"+S.lsong.map(HEX).join(".")+"~"+S.pvol+"~"+[0,1,2,3].map(p=>smpData(p).map(x=>x&&padNy(x.i)?x.i+"."+x.p+"."+(x.r?1:0):"").join(",")).join("|")}
+  return b+"~"+S.cur+"~"+pats.join(",")+"~"+sg+"~"+(S.loop?1:0)+(S.songOn?1:0)+"~"+[S.key,S.scale,S.mv[0],S.mv[1],S.mvol[0],S.mvol[1],(S.mmute[0]?1:0)+""+(S.mmute[1]?1:0)].join(".")+"~"+[0,1,2,3].map(p=>{const d=melData(p);return /[0-9a-b]/.test(d.join(""))?d.join(":"):"-"}).join(",")+"~"+S.lsong.map(HEX).join(".")+"~"+S.pvol+"~"+[0,1,2,3].map(p=>smpData(p).map(x=>x&&padNy(x.i)?x.i+"."+x.p+"."+(x.r?1:0):"").join(",")).join("|")}
 function avlat(o,pp){if(pp.length<5)return;const cur=+pp[1];if(cur>=0&&cur<4)o.cur=cur;const pl=pp[2].split(",");
   for(let p=0;p<4;p++){if(p===o.cur)continue;const q=pl[p];if(!q||q==="-")continue;const h=q.split(".");if(h.length===8&&h.every(x=>/^[0-9a-f]{4}$/i.test(x)))o.pat[p]=h.map(BIN)}
   const sg=pp[3]||"";for(let i=0;i<16;i++){const x=MONAM.indexOf(sg[i]);o.song[i]=x>=0?x:-1}
   o.loop=(pp[4]||"1")[0]!=="0";o.songOn=(pp[4]||"")[1]==="1";if(o.song.some(x=>x>=0))o.namn="Egen låt";
   if(pp.length>=7){const q=pp[5].split("."),cl=(v,a,b)=>Math.max(a,Math.min(b,Math.round(+v)||0));o.key=cl(q[0],0,11);o.scale=cl(q[1],0,2);o.mv=[cl(q[2],0,1),cl(q[3],0,3)];o.mvol=[cl(q[4],0,100),cl(q[5],0,100)];o.mmute=[(q[6]||"")[0]==="1",(q[6]||"")[1]==="1"];
-    const ml=pp[6].split(",");for(let p=0;p<4;p++){const a=(ml[p]||"-").split(":");if(a.length===2&&a.every(x=>/^[.0-7]{16}$/.test(x))){if(p===o.cur)o.mel=a;else o.mpat[p]=a}}}
+    const ml=pp[6].split(",");for(let p=0;p<4;p++){const a=(ml[p]||"-").split(":");if(a.length===2&&a.every(x=>/^[.0-9a-b_]{16}$/.test(x))){if(p===o.cur)o.mel=a;else o.mpat[p]=a}}}
   if(pp.length>=8){const q=pp[7].split(".");for(let i=0;i<4;i++)if(/^[0-9a-f]{4}$/i.test(q[i]||""))o.lsong[i]=BIN(q[i])}
   if(pp.length>=10){o.pvol=Math.max(0,Math.min(100,Math.round(+pp[8])||80));pp[9].split("|").forEach((t,p)=>{if(p>3)return;const a=t.split(","),arr=Array(16).fill(null);for(let k=0;k<16;k++){const q=(a[k]||"").split(".");if(q.length===3&&q.every(v=>v!==""&&!isNaN(+v)))arr[k]={i:Math.max(0,Math.min(207,Math.round(+q[0]))),p:Math.max(-12,Math.min(12,Math.round(+q[1]))),r:+q[2]?1:0}}if(p===o.cur)o.smp=arr;else o.spat[p]=arr})}}
 const NYCKEL="pluggparken-trummaskin";
@@ -657,12 +662,12 @@ function latRita(){const m=$("#monster");if(!m||!m.children.length)return;
   $("#latInfo").textContent=len?len+" takter · "+Math.round(len*barDur())+" s":"Tom låt: spelar mönster "+MONAM[S.cur];
   $("#bSlinga").setAttribute("aria-pressed",S.loop);$("#bSlinga").classList.toggle("on",S.loop)}
 function melBygg(){const h=$("#melod");
-  h.innerHTML=`<div class="melhead"><b>MELODI</b><div class="grupp"><select class="sel" id="selTon" aria-label="Tonart">${TONER.map((n,i)=>`<option value="${i}">${n}</option>`).join("")}</select><span class="l">Tonart</span></div><div class="grupp"><div class="kit" id="kitSkala" role="group" aria-label="Skala">${SCALER.map((q,i)=>`<button type="button" data-s="${i}">${q[0]}</button>`).join("")}</div><span class="l">Skala</span></div><small>Alla toner passar ihop. Tryck på rutorna för att lägga toner.</small></div>`+[0,1].map(m=>`<div class="mel" data-mi="${m}" style="--sk:${m?"#c58bff":"#4cc3ff"}"><div class="mctrl"><span class="mnam">${m?"LEAD":"BAS"}</span><div class="mlcd"><button type="button" data-mb="-1" aria-label="Föregående instrument">◀</button><span></span><button type="button" data-mb="1" aria-label="Nästa instrument">▶</button></div><div class="knob liten" data-mvol role="slider" tabindex="0" aria-label="Volym ${m?"lead":"bas"}"><div class="kap"></div></div><button type="button" class="sm" data-mm aria-label="Tysta ${m?"lead":"bas"}">M</button><button type="button" class="sm" data-ack aria-pressed="false" title="Ackord: varje ton spelas som tre toner ihop">ACKORD</button></div><div class="mgrid" data-mi="${m}">${[7,6,5,4,3,2,1,0].map(r=>`<span class="mn" data-r="${r}"></span>`+Array.from({length:16},(_,k)=>`<button type="button" data-r="${r}" data-k="${k}" data-g="${k>>2}" aria-label="Ton ${r+1}, steg ${k+1}"></button>`).join("")).join("")}</div></div>`).join("");
+  h.innerHTML=`<div class="melhead"><b>MELODI</b><div class="grupp"><select class="sel" id="selTon" aria-label="Tonart">${TONER.map((n,i)=>`<option value="${i}">${n}</option>`).join("")}</select><span class="l">Tonart</span></div><div class="grupp"><div class="kit" id="kitSkala" role="group" aria-label="Skala">${SCALER.map((q,i)=>`<button type="button" data-s="${i}">${q[0]}</button>`).join("")}</div><span class="l">Skala</span></div><small>Alla toner passar ihop. Tryck på rutorna för att lägga toner.</small></div>`+[0,1].map(m=>`<div class="mel" data-mi="${m}" style="--sk:${m?"#c58bff":"#4cc3ff"}"><div class="mctrl"><span class="mnam">${m?"LEAD":"BAS"}</span><div class="mlcd"><button type="button" data-mb="-1" aria-label="Föregående instrument">◀</button><span></span><button type="button" data-mb="1" aria-label="Nästa instrument">▶</button></div><div class="knob liten" data-mvol role="slider" tabindex="0" aria-label="Volym ${m?"lead":"bas"}"><div class="kap"></div></div><button type="button" class="sm" data-mm aria-label="Tysta ${m?"lead":"bas"}">M</button><button type="button" class="sm" data-ack aria-pressed="false" title="Ackord: varje ton spelas som tre toner ihop">ACKORD</button></div><div class="mgrid" data-mi="${m}">${[11,10,9,8,7,6,5,4,3,2,1,0].map(r=>`<span class="mn${r%5===0?" rt":""}" data-r="${r}"></span>`+Array.from({length:16},(_,k)=>`<button type="button" data-r="${r}" data-k="${k}" data-g="${k>>2}" aria-label="Ton ${r+1}, steg ${k+1}"></button>`).join("")).join("")}</div></div>`).join("");
   h.querySelectorAll(".mel").forEach(el=>{const m=+el.dataset.mi;knob(el.querySelector("[data-mvol]"),{min:0,max:100,reset:m?70:85,val:()=>S.mvol[m],set:v=>{S.mvol[m]=v}})})}
 function melRita(){const h=$("#melod");if(!h||!h.firstChild)return;h.hidden=!!S.songOn;
   $("#selTon").value=S.key;h.querySelectorAll("#kitSkala button").forEach(b=>b.classList.toggle("on",+b.dataset.s===S.scale));
   const sc=SCALER[S.scale][1];
-  h.querySelectorAll(".mgrid").forEach(g=>{const m=+g.dataset.mi,st=S.mel[m];g.querySelectorAll("span.mn").forEach(sp=>{sp.textContent=TONER[(S.key+sc[+sp.dataset.r])%12]});g.querySelectorAll("button").forEach(b=>b.classList.toggle("p",st[+b.dataset.k]===b.dataset.r))});
+  h.querySelectorAll(".mgrid").forEach(g=>{const m=+g.dataset.mi,st=S.mel[m];g.querySelectorAll("span.mn").forEach(sp=>{sp.textContent=TONER[(S.key+semi(+sp.dataset.r))%12]});let cr=-1;const rows=[];for(let k=0;k<16;k++){const ch=st[k];if(ch==="."){cr=-1}else if(ch!=="_"){cr=nv(ch)}rows.push(cr)}g.querySelectorAll("button").forEach(b=>{const k=+b.dataset.k,r=+b.dataset.r,ch=st[k],on=ch!=="."&&rows[k]===r;b.classList.toggle("p",on);b.classList.toggle("h",on&&ch==="_");b.classList.toggle("hn",on&&ch!=="_"&&st[k+1]==="_")})});
   h.querySelectorAll(".mel").forEach(el=>{const m=+el.dataset.mi;el.querySelector(".mlcd span").textContent=MROSTER[m][S.mv[m]%MROSTER[m].length][0];el.querySelector("[data-mm]").classList.toggle("on",S.mmute[m]);el.querySelector("[data-ack]").classList.toggle("on",!!S.chord[m]);const f=S.mvol[m]/100,kn2=el.querySelector("[data-mvol]");kn2.style.setProperty("--p",(f*270)+"deg");kn2.querySelector(".kap").style.transform="rotate("+(-135+f*270)+"deg)"})}
 function melMark(k){document.querySelectorAll("#melod .mgrid button.nu").forEach(b=>b.classList.remove("nu"));if(k>=0)document.querySelectorAll('#melod .mgrid button[data-k="'+k+'"]').forEach(b=>b.classList.add("nu"))}
 function latMark(ix){const c=$("#lcells");if(!c)return;[...c.children].forEach((e,i)=>e.classList.toggle("nu",i===ix));document.querySelectorAll("#tl .lloop").forEach(r=>[...r.children].forEach((e,i)=>e.classList.toggle("nu",i===ix)))}
@@ -979,8 +984,25 @@ $("#lcells").addEventListener("click",e=>{const b=e.target.closest("button");if(
 $("#bSlinga").onclick=()=>{S.loop=!S.loop;visa()};
 $("#bTomLat").onclick=()=>{S.song=Array(16).fill(-1);S.lsong=[0,1,2,3].map(()=>".".repeat(16));visa()};
 $("#vyT").onclick=()=>{S.songOn=false;visa()};$("#vyL").onclick=()=>{S.songOn=true;visa()};
+(function(){let dr=null;
+  const cell=e=>{const el=document.elementFromPoint(e.clientX,e.clientY),b=el&&el.closest&&el.closest(".mgrid button[data-k]");return b};
+  const lang=(a,k)=>{let n=1;while(k+n<16&&a[k+n]==="_")n++;return n};
+  const sattLang=(m,k,r,n)=>{const a=S.mel[m].split("");let o=lang(a,k);for(let q=1;q<o;q++)a[k+q]=".";a[k]=r.toString(16);for(let q=1;q<n&&k+q<16;q++)a[k+q]="_";S.mel[m]=a.join("")};
+  const start=(e,b)=>{const m=+b.closest(".mgrid").dataset.mi,k=+b.dataset.k,r=+b.dataset.r,a=S.mel[m].split(""),ch=a[k];
+    let rows=-1;for(let q=0;q<=k;q++){if(a[q]==="."){rows=-1}else if(a[q]!=="_"){rows=nv(a[q])}}
+    const had=ch!=="."&&ch!=="_"&&nv(ch)===r;dr={m,k,r,had,moved:false,touch:e.pointerType==="touch",id:e.pointerId,n0:had?lang(a,k):1,hold:ch==="_"&&rows===r};
+    if(!dr.touch){startaLjud();if(!had){/* ny ton (eller kortare om man tryckte mitt i en lång ton) */if(ch==="_"&&rows>=0){}sattLang(m,k,r,1);nota(m,r,ctx.currentTime+.01,.3);visa()}}}
+  document.addEventListener("pointerdown",e=>{if(e.button>0)return;const b=e.target.closest&&e.target.closest("#melod .mgrid button[data-k]");if(!b)return;start(e,b)});
+  document.addEventListener("pointermove",e=>{if(!dr||dr.touch||e.pointerId!==dr.id&&e.pointerType!=="mouse")return;const b=cell(e);if(!b||+b.dataset.r!==dr.r||b.closest(".mgrid").dataset.mi!=dr.m)return;const j=+b.dataset.k;if(j<dr.k)return;const n=j-dr.k+1;
+    if(n!==lang(S.mel[dr.m].split(""),dr.k)){dr.moved=true;sattLang(dr.m,dr.k,dr.r,n);visa()}});
+  const slut=e=>{if(!dr)return;const d=dr;dr=null;if(e.type==="pointercancel")return;
+    if(d.touch){startaLjud();const a=S.mel[d.m].split("");
+      if(d.had){const n=lang(a,d.k),nxt=[2,3,4,6,8].find(x=>x>n);if(nxt&&d.k+nxt<=16)sattLang(d.m,d.k,d.r,nxt);else{for(let q=0;q<n;q++)a[d.k+q]=".";S.mel[d.m]=a.join("")}}
+      else{sattLang(d.m,d.k,d.r,1);nota(d.m,d.r,ctx.currentTime+.01,.3)}visa();return}
+    if(d.had&&!d.moved){const a=S.mel[d.m].split(""),n=lang(a,d.k);for(let q=0;q<n;q++)a[d.k+q]=".";S.mel[d.m]=a.join("");visa()}};
+  document.addEventListener("pointerup",slut);document.addEventListener("pointercancel",slut)})();
 $("#melod").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
-  if(b.dataset.k!=null){const m=+b.closest(".mgrid").dataset.mi,k=+b.dataset.k,r=b.dataset.r,a=S.mel[m].split(""),nu=a[k]===r?".":r;a[k]=nu;S.mel[m]=a.join("");if(nu!=="."){startaLjud();nota(m,+r,ctx.currentTime+.01,.3)}visa();return}
+  if(b.dataset.k!=null)return;
   if(b.dataset.s!=null){S.scale=+b.dataset.s;startaLjud();nota(1,2,ctx.currentTime+.01,.3);visa();return}
   if(b.dataset.mb){const m=+b.closest(".mel").dataset.mi,n=MROSTER[m].length;S.mv[m]=(S.mv[m]+ +b.dataset.mb+n)%n;startaLjud();nota(m,m?2:0,ctx.currentTime+.01,.4);visa();return}
   if(b.dataset.ack!=null){const m=+b.closest(".mel").dataset.mi;S.chord[m]=!S.chord[m];startaLjud();nota(m,m?2:0,ctx.currentTime+.01,.5,.55);if(S.chord[m]){nota(m,m?4:2,ctx.currentTime+.01,.5,.55);nota(m,m?6:4,ctx.currentTime+.01,.5,.55)}visa();return}
