@@ -368,7 +368,7 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
   </ul>
   <p><b>Loopstationen:</b> tillåt mikrofonen, tryck ● på ett spår och spela eller sjung in. Ljudet loopar sedan i takt med trummorna i så många takter du valt. Inspelningarna sparas inte och skickas ingenstans, de finns bara kvar tills du stänger fliken. Använd hörlurar så att mikrofonen inte hör trummorna.</p>
   <p>Kreditrad: Citizen DJ Project, Library of Congress. Biblioteket påminner om att de är historiska inspelningar som speglar sin tid, och ber oss behandla materialet med respekt. Vilket klipp som ligger bakom ett ljud visas under maskinen när du byter ljud.</p>
-<p><b>Sample-pads:</b> effekterna, rösterna och pratljuden är fria (CC0): <i>Digital SFX Set, Sci-Fi Sounds, RPG Sound Effects</i> och <i>Voiceover Pack</i> av <a href="https://kenney.nl" target="_blank" rel="noopener">Kenney</a>, <i>Dialog vocal samples</i> och <i>Swishes Sound Pack</i> från <a href="https://opengameart.org" target="_blank" rel="noopener">OpenGameArt</a>. Rösterna är engelska ord och påhittat pratljud. Klippen är beskurna och omsamplade. GAMLA 1–3 är samma gamla inspelningar ur Library of Congress som ovan.</p>
+<p><b>Sample-pads:</b> effekterna och pratljuden är fria (CC0): <i>Digital SFX Set</i>, <i>Sci-Fi Sounds</i> och <i>RPG Sound Effects</i> av <a href="https://kenney.nl" target="_blank" rel="noopener">Kenney</a>, <i>Dialog vocal samples</i> och <i>Swishes Sound Pack</i> från <a href="https://opengameart.org" target="_blank" rel="noopener">OpenGameArt</a>. Pratljuden är påhittade. Klippen i VOKAL, DUB, REGGAE och SKRIK är fria (CC0) och kommer från <a href="https://freesound.org" target="_blank" rel="noopener">Freesound</a>: varje klipp är kontrollerat mot sin licenssida och upphovspersonerna står i filen LICENS-pad.txt. Klippen är beskurna och omsamplade. GAMLA 1–3 är samma gamla inspelningar ur Library of Congress som ovan.</p>
 </details>
 </main>
 <script>
@@ -480,19 +480,19 @@ function melTick(k,t,md){for(let m=0;m<2;m++){if(S.mmute[m])continue;const v=MRO
     const dur=n*sl*(HALL[v]?.94:.9),r=nv(c);
     if(S.chord&&S.chord[m])[0,2,4].forEach(dd=>nota(m,r+dd,t,dur,.7));else nota(m,r,t,dur)}}}
 /* ---------- sample-pads: effekter, röster och gamla klipp, och ett sample-spår i takten ---------- */
-const PBANK=[["ord","RÖSTER","#7fe08a"],["prat","PRATLJUD","#ff7bd0"],["rymd","RYMD","#4cc3ff"],["small","SMÄLL","#ff9a4a"],["swish","SWISH","#c58bff"],["g1","GAMLA 1","#e8c468"],["g2","GAMLA 2","#e8c468"],["g3","GAMLA 3","#e8c468"],["egna","🎤 EGNA","#ff5a54"],["fav","⭐ MINA","#ffd24d"],["dub","DUB","#5fd35f"],["reggae","REGGAE","#f2c744"],["skrik","SKRIK","#ff8a5c"]];
+const PBANK=[["ord","VOKAL","#7fe08a"],["prat","PRATLJUD","#ff7bd0"],["rymd","RYMD","#4cc3ff"],["small","SMÄLL","#ff9a4a"],["swish","SWISH","#c58bff"],["g1","GAMLA 1","#e8c468"],["g2","GAMLA 2","#e8c468"],["g3","GAMLA 3","#e8c468"],["egna","🎤 EGNA","#ff5a54"],["fav","⭐ MINA","#ffd24d"],["dub","DUB","#5fd35f"],["reggae","REGGAE","#f2c744"],["skrik","SKRIK","#ff8a5c"]];
 const PORD=[0,1,2,3,4,10,11,12,5,6,7,8,9];
 const padNy=id=>id<128||id>=160;
 const SPK=["1","2","3","4","5","6","7","8","q","w","e","t","y","u","i","o"];
 let PADS=null,padBank=0,padLaddar=false,padVald=-1,padStj=false,padPit=0,padRevV=false,PFAV=[];
 try{PFAV=JSON.parse(localStorage.getItem("pluggparken-trummaskin-fav")||"[]").filter(x=>Number.isInteger(x)&&padNy(x)&&x>=0&&x<208).slice(0,16)}catch(e){}
 async function padLadda(){if(PADS||padLaddar||!ctx)return;padLaddar=true;
-  try{const [m,b]=await Promise.all([fetch("pad.json").then(r=>r.json()),fetch("pad.wav").then(r=>r.arrayBuffer())]);const buf=await ctx.decodeAudioData(b),sr=buf.sampleRate,P={};
+  try{const [m,b]=await Promise.all([fetch("pad.json?v=2").then(r=>r.json()),fetch("pad.wav?v=2").then(r=>r.arrayBuffer())]);const buf=await ctx.decodeAudioData(b),sr=buf.sampleRate,P={};
     m.forEach(x=>{const a=Math.round(x.a*sr),l=Math.round(x.l*sr),o=ctx.createBuffer(1,l,sr);o.getChannelData(0).set(buf.getChannelData(0).subarray(a,a+l));(P[x.b]=P[x.b]||[]).push({n:x.n,buf:o,c:x.c})});PADS=P;padGamla();padRita();pad2Behov()}
   catch(e){padLaddar=false}}
 let pad2L=0;
 function pad2Behov(force){if(pad2L||!PADS||!ctx)return;if(!force&&!(padBank>=10||S.smp.some(x=>x&&x.i>=160)||S.spat.some(d=>d.some(x=>x&&x.i>=160))))return;pad2L=1;
-  Promise.all([fetch("pad2.json").then(r=>r.json()),fetch("pad2.wav").then(r=>r.arrayBuffer())]).then(([m,b])=>ctx.decodeAudioData(b).then(buf=>{const sr=buf.sampleRate;m.forEach(x=>{const a=Math.round(x.a*sr),l=Math.round(x.l*sr),o=ctx.createBuffer(1,l,sr);o.getChannelData(0).set(buf.getChannelData(0).subarray(a,a+l));(PADS[x.b]=PADS[x.b]||[]).push({n:x.n,buf:o,c:x.c})});padRita()})).catch(()=>{pad2L=0})}
+  Promise.all([fetch("pad2.json?v=2").then(r=>r.json()),fetch("pad2.wav?v=2").then(r=>r.arrayBuffer())]).then(([m,b])=>ctx.decodeAudioData(b).then(buf=>{const sr=buf.sampleRate;m.forEach(x=>{const a=Math.round(x.a*sr),l=Math.round(x.l*sr),o=ctx.createBuffer(1,l,sr);o.getChannelData(0).set(buf.getChannelData(0).subarray(a,a+l));(PADS[x.b]=PADS[x.b]||[]).push({n:x.n,buf:o,c:x.c})});padRita()})).catch(()=>{pad2L=0})}
 function padGamla(){if(!PADS||!SAMP)return;const by=k=>SAMPMETA.map((m,i)=>[m,i]).filter(q=>q[0].k===k).map(q=>q[1]),mk=ids=>ids.slice(0,16).map(i=>({n:SAMPMETA[i].n.toUpperCase(),buf:SAMP[i],c:"Library of Congress, Citizen DJ: "+SAMPMETA[i].c}));
   PADS.g1=mk(by("perc").concat(by("ljud")));PADS.g2=mk(by("stab").concat(by("snart")));PADS.g3=mk(by("bas").concat(by("tick")))}
 const EGNA=Array(16).fill(null);
