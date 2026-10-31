@@ -48,11 +48,25 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;bac
 .hint{background:rgba(9,24,40,.5);border-color:var(--line);color:var(--mut);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 .kal,.kal a{color:#5d7590}
 #lad{background:#040a12;color:var(--acc);letter-spacing:.2em;text-transform:uppercase;font-size:.75rem}
+
+#lin{position:fixed;inset:0;width:100%;height:100%;z-index:4;pointer-events:none;overflow:visible;transition:opacity .25s}
+#linP{fill:none;stroke:#22d3ee;stroke-width:1.6;stroke-linejoin:round;filter:drop-shadow(0 0 5px rgba(34,211,238,.9));stroke-dasharray:1;stroke-dashoffset:1}
+#linP.on{animation:linDraw .75s .15s cubic-bezier(.3,.7,.2,1) forwards}
+@keyframes linDraw{to{stroke-dashoffset:0}}
+#linD{fill:#22d3ee;filter:drop-shadow(0 0 6px #22d3ee)}
+#linR{fill:none;stroke:#22d3ee;stroke-width:1.4;transform-box:fill-box;transform-origin:center;animation:linPuls 1.8s ease-out infinite}
+@keyframes linPuls{0%{transform:scale(.4);opacity:.95}100%{transform:scale(2.1);opacity:0}}
+.kort{transform-origin:0 40px}.kort.in{animation:kIn .5s .6s cubic-bezier(.2,.8,.2,1) both}
+@keyframes kIn{from{opacity:0;transform:scale(.85) translateX(-8px)}to{opacity:1;transform:none}}
+@media(min-width:761px){.kort{top:110px;right:28px;width:300px}}
+@media(max-width:760px){.kort{top:84px;left:12px;right:12px;width:auto}}
+@media(prefers-reduced-motion:reduce){#linP.on{animation-duration:.01s}.kort.in{animation:none}#linR{animation:none}}
 </style></head><body>
 <canvas id="c"></canvas>
 <div class="top"><a href="../ovriga/">← Fler ämnen</a><h1>Människokroppen</h1></div>
 <div class="lag" id="lag"></div>
 <div class="reg" id="reg"></div><div class="zm"><button id="zin" aria-label="Zooma in">+</button><button id="zut" aria-label="Zooma ut">−</button></div>
+<svg id="lin" aria-hidden="true"><path id="linP" pathLength="1"/><circle id="linR" r="9"/><circle id="linD" r="3.6"/></svg>
 <div class="kort" id="kort" hidden></div>
 <div class="hint">Dra för att vrida · scrolla för att zooma · dubbeltryck på en del för att gå nära</div>
 <div class="kal">Modeller: Z-Anatomy (CC BY-SA 4.0) · BodyParts3D, Database Center for Life Science (CC BY-SA 2.1 Japan) · bearbetade och förenklade</div>
@@ -117,17 +131,17 @@ SYS.forEach(sd=>{const b=document.createElement("button");b.style.setProperty("-
  b.onclick=()=>{const p=b.getAttribute("aria-pressed")!=="true";b.setAttribute("aria-pressed",p);if(grp[sd.id])grp[sd.id].visible=p;hudUpd();};lag.appendChild(b);});
 function size(){const w=innerWidth,h=innerHeight;R.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();}
 addEventListener("resize",size);size();
-const ray=new THREE.Raycaster(),mv=new THREE.Vector2();let sel=null,hov=null;
+const ray=new THREE.Raycaster(),mv=new THREE.Vector2();let sel=null,hov=null,LH=null,AN=null,SO=null;
 function kolla(e){const r=cv.getBoundingClientRect();mv.set((e.clientX-r.left)/r.width*2-1,-((e.clientY-r.top)/r.height)*2+1);ray.setFromCamera(mv,cam);
- const vis=all.filter(o=>grp[o.userData.s].visible&&!(o.userData.s==='hud'&&hudGlas));const h=ray.intersectObjects(vis,false);return h.length?h[0].object:null;}
-function sätt(o,k){if(!o)return;o.material=o===sel?hl(o):mats[o.userData.c];}
+ const vis=all.filter(o=>grp[o.userData.s].visible&&!(o.userData.s==='hud'&&hudGlas));const h=ray.intersectObjects(vis,false);LH=h.length?h[0].point.clone():null;return h.length?h[0].object:null;}
+function sätt(o,k){if(!o||o.userData.s==='hud')return;o.material=o===sel?hl(o):mats[o.userData.c];}
 const hm={};function hl(o){const c=new THREE.Color(o.userData.c).lerp(new THREE.Color("#22d3ee"),.6).getHex();hm[c]=hm[c]||new THREE.MeshStandardMaterial({color:c,roughness:.4,emissive:0x0e7490,emissiveIntensity:.45});return hm[c];}
 let dn=null;cv.addEventListener("pointerdown",e=>{dn=[e.clientX,e.clientY];});
 cv.addEventListener("pointerup",e=>{if(!dn||Math.hypot(e.clientX-dn[0],e.clientY-dn[1])>5)return;const o=kolla(e);if(sel){const p=sel;sel=null;sätt(p);}
- if(o){sel=o;sätt(o);visa(o);}else document.getElementById("kort").hidden=true;});
+ if(o){sel=o;sätt(o);AN=LH?LH.clone():null;SO=o;visa(o);}else{document.getElementById("kort").hidden=true;AN=null;}});
 cv.addEventListener("pointermove",e=>{if(e.buttons)return;const o=kolla(e);cv.style.cursor=o?"pointer":"grab";});
 function visa(o){const k=document.getElementById("kort"),sd=SYS.find(x=>x.id===o.userData.s),m=GR[o.userData.id];
- k.hidden=false;k.innerHTML=`<button aria-label="Stäng" onclick="this.parentNode.hidden=true">✕</button><div class="sys">${sd.namn}</div><h2>${m.sv}</h2><p>${m.t}</p>`;}
+ k.hidden=false;k.classList.remove('in');void k.offsetWidth;k.classList.add('in');const lp=document.getElementById('linP');lp.classList.remove('on');void lp.getBoundingClientRect();lp.classList.add('on');k.innerHTML=`<button aria-label="Stäng" onclick="this.parentNode.hidden=true">✕</button><div class="sys">${sd.namn}</div><h2>${m.sv}</h2><p>${m.t}</p>`;}
 
 let HEL=null,fly=null;
 function flyTo(t,d){const dir=cam.position.clone().sub(ctl.target).normalize();fly={t0:performance.now(),a:ctl.target.clone(),b:t.clone(),da:cam.position.distanceTo(ctl.target),db:d,dir};}
@@ -141,7 +155,17 @@ document.getElementById("zin").onclick=()=>zoomBy(.6);document.getElementById("z
 cv.addEventListener("dblclick",e=>{const o=kolla(e);if(!o)return;const b=new THREE.Box3().setFromObject(o),c=b.getCenter(new THREE.Vector3()),sz=b.getSize(new THREE.Vector3());
  const m=Math.max(sz.x,sz.y,sz.z);flyTo(c,Math.min(ctl.maxDistance,Math.max(ctl.minDistance,m*2.2)));});
 ctl.addEventListener("start",()=>{fly=null;});
-function loop(){requestAnimationFrame(loop);flyStep();ctl.update();R.render(S,cam);}
+
+const lin=document.getElementById("lin"),linP=document.getElementById("linP"),linR=document.getElementById("linR"),linD=document.getElementById("linD"),kortEl=document.getElementById("kort"),_v=new THREE.Vector3();
+function linUpd(){const ok=AN&&SO&&!kortEl.hidden&&grp[SO.userData.s].visible&&!(SO.userData.s==='hud'&&hudGlas);
+ if(!ok){lin.style.opacity=0;return;}
+ _v.copy(AN).project(cam);if(_v.z>1||Math.abs(_v.x)>1.1||Math.abs(_v.y)>1.1){lin.style.opacity=0;return;}
+ const W=innerWidth,H=innerHeight,ax=(_v.x+1)/2*W,ay=(1-_v.y)/2*H,r=kortEl.getBoundingClientRect(),wide=W>760;
+ const ex=wide?r.left:r.left+r.width/2,ey=wide?r.top+Math.min(r.height/2,60):r.bottom;
+ const mx=wide?ex-34:ex,my=wide?ey:ey+28;
+ linP.setAttribute("d",`M${ax},${ay} L${mx},${my} L${ex},${ey}`);
+ linR.setAttribute("cx",ax);linR.setAttribute("cy",ay);linD.setAttribute("cx",ax);linD.setAttribute("cy",ay);lin.style.opacity=1;}
+function loop(){requestAnimationFrame(loop);flyStep();ctl.update();linUpd();R.render(S,cam);}
 las().then(loop);
 window.__a={S,cam,ctl,grp,all};
 </script></body></html>
