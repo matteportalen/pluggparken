@@ -143,6 +143,7 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
 .mnam{font-weight:800;letter-spacing:.14em;color:var(--sk);min-width:44px;text-shadow:0 0 8px var(--sk)}
 .mctrl .sm{width:32px;height:30px;border-radius:8px;font-weight:800;font-size:.86rem;background:linear-gradient(180deg,#555862,#3a3c43);box-shadow:0 3px 0 rgba(0,0,0,.55);color:var(--ink)}
 .mctrl .sm.on{background:linear-gradient(180deg,#ff8a86,#e5484d)}
+.mctrl .sm[data-lang].on{background:linear-gradient(180deg,#ffd24d,#d99a06);color:#241a00}
 .mctrl .sm[data-ack]{width:auto;padding:0 8px;font-size:.62rem;letter-spacing:.04em}.mctrl .sm[data-ack].on{background:linear-gradient(180deg,#7fe08a,#2f9e4f);color:#0b1a0e}
 #bBuild.p{box-shadow:0 0 0 2px #ffd24d,0 0 14px #ffd24d88}
 .mgrid{display:grid;grid-template-columns:30px repeat(16,minmax(0,1fr));gap:3px}
@@ -663,7 +664,7 @@ function latRita(){const m=$("#monster");if(!m||!m.children.length)return;
   $("#latInfo").textContent=len?len+" takter · "+Math.round(len*barDur())+" s":"Tom låt: spelar mönster "+MONAM[S.cur];
   $("#bSlinga").setAttribute("aria-pressed",S.loop);$("#bSlinga").classList.toggle("on",S.loop)}
 function melBygg(){const h=$("#melod");
-  h.innerHTML=`<div class="melhead"><b>MELODI</b><div class="grupp"><select class="sel" id="selTon" aria-label="Tonart">${TONER.map((n,i)=>`<option value="${i}">${n}</option>`).join("")}</select><span class="l">Tonart</span></div><div class="grupp"><div class="kit" id="kitSkala" role="group" aria-label="Skala">${SCALER.map((q,i)=>`<button type="button" data-s="${i}">${q[0]}</button>`).join("")}</div><span class="l">Skala</span></div><small>Alla toner passar ihop. Tryck på rutorna för att lägga toner.</small></div>`+[0,1].map(m=>`<div class="mel" data-mi="${m}" style="--sk:${m?"#c58bff":"#4cc3ff"}"><div class="mctrl"><span class="mnam">${m?"LEAD":"BAS"}</span><div class="mlcd"><button type="button" data-mb="-1" aria-label="Föregående instrument">◀</button><span></span><button type="button" data-mb="1" aria-label="Nästa instrument">▶</button></div><div class="knob liten" data-mvol role="slider" tabindex="0" aria-label="Volym ${m?"lead":"bas"}"><div class="kap"></div></div><button type="button" class="sm" data-mm aria-label="Tysta ${m?"lead":"bas"}">M</button><button type="button" class="sm" data-ack aria-pressed="false" title="Ackord: varje ton spelas som tre toner ihop">ACKORD</button></div><div class="mgrid" data-mi="${m}">${[11,10,9,8,7,6,5,4,3,2,1,0].map(r=>`<span class="mn${r%5===0?" rt":""}" data-r="${r}"></span>`+Array.from({length:16},(_,k)=>`<button type="button" data-r="${r}" data-k="${k}" data-g="${k>>2}" aria-label="Ton ${r+1}, steg ${k+1}"></button>`).join("")).join("")}</div></div>`).join("");
+  h.innerHTML=`<div class="melhead"><b>MELODI</b><div class="grupp"><select class="sel" id="selTon" aria-label="Tonart">${TONER.map((n,i)=>`<option value="${i}">${n}</option>`).join("")}</select><span class="l">Tonart</span></div><div class="grupp"><div class="kit" id="kitSkala" role="group" aria-label="Skala">${SCALER.map((q,i)=>`<button type="button" data-s="${i}">${q[0]}</button>`).join("")}</div><span class="l">Skala</span></div><small>Alla toner passar ihop. Tryck på en ruta för att lägga en ton, tryck på en ton för att ta bort den. Dra åt höger för att göra den längre, eller använd ↔ på pekskärm. Två toner i samma kolumn blir ett ackord.</small></div>`+[0,1].map(m=>`<div class="mel" data-mi="${m}" style="--sk:${m?"#c58bff":"#4cc3ff"}"><div class="mctrl"><span class="mnam">${m?"LEAD":"BAS"}</span><div class="mlcd"><button type="button" data-mb="-1" aria-label="Föregående instrument">◀</button><span></span><button type="button" data-mb="1" aria-label="Nästa instrument">▶</button></div><div class="knob liten" data-mvol role="slider" tabindex="0" aria-label="Volym ${m?"lead":"bas"}"><div class="kap"></div></div><button type="button" class="sm" data-mm aria-label="Tysta ${m?"lead":"bas"}">M</button><button type="button" class="sm" data-lang aria-pressed="false" title="Längd: tryck på en ruta till höger om en ton i samma rad för att göra tonen längre">↔</button><button type="button" class="sm" data-ack aria-pressed="false" title="Ackord: varje ton spelas som tre toner ihop">ACKORD</button></div><div class="mgrid" data-mi="${m}">${[11,10,9,8,7,6,5,4,3,2,1,0].map(r=>`<span class="mn${r%5===0?" rt":""}" data-r="${r}"></span>`+Array.from({length:16},(_,k)=>`<button type="button" data-r="${r}" data-k="${k}" data-g="${k>>2}" aria-label="Ton ${r+1}, steg ${k+1}"></button>`).join("")).join("")}</div></div>`).join("");
   h.querySelectorAll(".mel").forEach(el=>{const m=+el.dataset.mi;knob(el.querySelector("[data-mvol]"),{min:0,max:100,reset:m?70:85,val:()=>S.mvol[m],set:v=>{S.mvol[m]=v}})})}
 function melRita(){const h=$("#melod");if(!h||!h.firstChild)return;h.hidden=!!S.songOn;
   $("#selTon").value=S.key;h.querySelectorAll("#kitSkala button").forEach(b=>b.classList.toggle("on",+b.dataset.s===S.scale));
@@ -985,6 +986,7 @@ $("#lcells").addEventListener("click",e=>{const b=e.target.closest("button");if(
 $("#bSlinga").onclick=()=>{S.loop=!S.loop;visa()};
 $("#bTomLat").onclick=()=>{S.song=Array(16).fill(-1);S.lsong=[0,1,2,3].map(()=>".".repeat(16));visa()};
 $("#vyT").onclick=()=>{S.songOn=false;visa()};$("#vyL").onclick=()=>{S.songOn=true;visa()};
+const langLage=[false,false];
 (function(){let dr=null;
   const get=m=>{let a=S.mel[m];if(a.length<32)a+=".".repeat(32-a.length);return a.split("")};
   const put=(m,a)=>{S.mel[m]=a.slice(16).every(c=>c===".")?a.slice(0,16).join(""):a.join("")};
@@ -995,16 +997,22 @@ $("#vyT").onclick=()=>{S.songOn=false;visa()};$("#vyL").onclick=()=>{S.songOn=tr
   const start=(e,b)=>{const m=+b.closest(".mgrid").dataset.mi,k=+b.dataset.k,r=+b.dataset.r,a=get(m);
     let L=-1;for(let q=0;q<2;q++)if(rowAt(a,q,k)===r){L=q;break}
     let had=false;
-    if(L>=0){had=a[16*L+k]!=="_"}
+    let k0=k;
+    if(L>=0){had=true;while(k0>0&&a[16*L+k0]==="_")k0--}
     else{L=a[k]==="."?0:(a[16+k]==="."?1:1)}
-    dr={m,k,r,L,had,moved:false,touch:e.pointerType==="touch",id:e.pointerId};
+    dr={m,k:k0,r,L,had,moved:false,touch:e.pointerType==="touch",id:e.pointerId,lang:langLage[m],kk:k};
+    if(dr.lang)return;
     if(!dr.touch){startaLjud();if(!had){sattLang(m,L,k,r,1);nota(m,r,ctx.currentTime+.01,.3);visa()}}};
   document.addEventListener("pointerdown",e=>{if(e.button>0)return;const b=e.target.closest&&e.target.closest("#melod .mgrid button[data-k]");if(!b)return;start(e,b)});
   document.addEventListener("pointermove",e=>{if(!dr||dr.touch||e.pointerId!==dr.id&&e.pointerType!=="mouse")return;const b=cell(e);if(!b||+b.dataset.r!==dr.r||+b.closest(".mgrid").dataset.mi!==dr.m)return;const j=+b.dataset.k;if(j<dr.k)return;const n=j-dr.k+1;
     if(n!==lang(get(dr.m),dr.L,dr.k)){dr.moved=true;sattLang(dr.m,dr.L,dr.k,dr.r,n);visa()}});
   const slut=e=>{if(!dr)return;const d=dr;dr=null;if(e.type==="pointercancel")return;const a=get(d.m);
+    if(d.lang){startaLjud();let best=-1,bl=0;for(let q=0;q<2;q++){let st=-1;for(let z=0;z<=d.kk;z++){const c=a[16*q+z];if(c!=="."&&c!=="_"&&nv(c)===d.r)st=z}
+        if(st>=0&&st>=best){best=st;bl=q}}
+      if(best<0){toast("Tryck på samma rad, till höger om en ton, för att göra den längre");return}
+      sattLang(d.m,bl,best,d.r,d.kk-best+1);visa();return}
     if(d.touch){startaLjud();
-      if(d.had){const n=lang(a,d.L,d.k),nxt=[2,3,4,6,8].find(x=>x>n);if(nxt&&d.k+nxt<=16)sattLang(d.m,d.L,d.k,d.r,nxt);else{for(let q=0;q<n;q++)a[16*d.L+d.k+q]=".";put(d.m,a)}}
+      if(d.had){const n=lang(a,d.L,d.k);for(let q=0;q<n;q++)a[16*d.L+d.k+q]=".";put(d.m,a)}
       else{sattLang(d.m,d.L,d.k,d.r,1);nota(d.m,d.r,ctx.currentTime+.01,.3)}visa();return}
     if(d.had&&!d.moved){const n=lang(a,d.L,d.k);for(let q=0;q<n;q++)a[16*d.L+d.k+q]=".";put(d.m,a);visa()}};
   document.addEventListener("pointerup",slut);document.addEventListener("pointercancel",slut)})();
@@ -1012,6 +1020,7 @@ $("#melod").addEventListener("click",e=>{const b=e.target.closest("button");if(!
   if(b.dataset.k!=null)return;
   if(b.dataset.s!=null){S.scale=+b.dataset.s;startaLjud();nota(1,2,ctx.currentTime+.01,.3);visa();return}
   if(b.dataset.mb){const m=+b.closest(".mel").dataset.mi,n=MROSTER[m].length;S.mv[m]=(S.mv[m]+ +b.dataset.mb+n)%n;startaLjud();nota(m,m?2:0,ctx.currentTime+.01,.4);visa();return}
+  if(b.dataset.lang!=null){const m=+b.closest(".mel").dataset.mi;langLage[m]=!langLage[m];b.classList.toggle("on",langLage[m]);b.setAttribute("aria-pressed",langLage[m]);toast(langLage[m]?"Längd: tryck på en ruta till höger om en ton i samma rad":"Längd av");return}
   if(b.dataset.ack!=null){const m=+b.closest(".mel").dataset.mi;S.chord[m]=!S.chord[m];startaLjud();nota(m,m?2:0,ctx.currentTime+.01,.5,.55);if(S.chord[m]){nota(m,m?4:2,ctx.currentTime+.01,.5,.55);nota(m,m?6:4,ctx.currentTime+.01,.5,.55)}visa();return}
   if(b.dataset.mm!=null){const m=+b.closest(".mel").dataset.mi;S.mmute[m]=!S.mmute[m];visa()}});
 $("#melod").addEventListener("change",e=>{if(e.target.id==="selTon"){S.key=+e.target.value;startaLjud();nota(1,2,ctx.currentTime+.01,.3);visa()}});
