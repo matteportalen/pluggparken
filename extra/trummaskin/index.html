@@ -589,7 +589,7 @@ const stepsOf=l=>Math.max(1,Math.round(16*l.n));
 /* ljudet i en loop = alla lager ihop, förskjutet, med raderade delar och spelzon som tystnad (rådata ändras aldrig) */
 function lpBygger(l){const len=lenOf(l);if(!len){l.mix=l.raw=l.pk=null;return}
   const sum=new Float32Array(len);l.layers.forEach(ab=>{const x=ab.getChannelData(0);for(let i=0;i<len;i++)sum[i]+=x[i]});
-  let base=sum;if(l.fx.pitch)base=pitchShift(base,l.fx.pitch);if(l.fx.form)base=formantShift(base,Math.pow(2,l.fx.form/16));if(l.fx.rev){base=base===sum?sum.slice():base;base.reverse()}
+  let base=sum;if(l.fx.pitch)base=pitchShift(base,l.fx.pitch);if(l.fx.form)base=formantShift(base,Math.pow(2,l.fx.form/10));if(l.fx.rev){base=base===sum?sum.slice():base;base.reverse()}
   const sh=((l.shift%len)+len)%len,raw=new Float32Array(len);raw.set(base.subarray(len-sh),0);raw.set(base.subarray(0,len-sh),sh);l.raw=raw;
   const cols=400,pk=new Float32Array(cols*2);
   for(let c=0;c<cols;c++){const a=Math.floor(c*len/cols),b=Math.max(a+1,Math.floor((c+1)*len/cols)),st=Math.max(1,Math.floor((b-a)/40));let mn=0,mx=0;for(let i=a;i<b;i+=st){const v=raw[i];if(v<mn)mn=v;if(v>mx)mx=v}pk[c*2]=mn;pk[c*2+1]=mx}
