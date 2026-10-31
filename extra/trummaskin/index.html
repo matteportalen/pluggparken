@@ -63,6 +63,7 @@ h1.sr{position:absolute;left:-9999px}
 .lilla{min-width:56px;height:40px;border-radius:10px;font-weight:800;font-size:.86rem;letter-spacing:.06em;background:linear-gradient(180deg,#555862,#3a3c43);color:#ECE6D6;box-shadow:0 4px 0 rgba(0,0,0,.55),0 0 0 2px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.2);padding:0 12px}
 .lilla:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.55),0 0 0 2px rgba(0,0,0,.35)}
 .lilla.on{background:linear-gradient(180deg,#ffc94d,#f2a707);color:#241a00}
+#bLive.on{background:linear-gradient(180deg,#ff8a86,#e5484d);color:#fff;animation:livep 1.2s infinite}@keyframes livep{50%{box-shadow:0 0 0 3px rgba(255,90,84,.45)}}
 #bSmpM.on{background:linear-gradient(180deg,#ff8a86,#e5484d);color:#fff}
 .pm{display:flex;gap:4px}
 .pm button{width:34px;height:34px;border-radius:9px;font-weight:800;background:linear-gradient(180deg,#555862,#3a3c43);box-shadow:0 3px 0 rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.2)}
@@ -315,7 +316,7 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
     <div class="lcd" id="lcdBpm" aria-live="off"><span class="etikett">TEMPO</span><svg class="sv" id="sevBpm" viewBox="0 0 144 64" aria-label="Tempo"></svg><span class="etikett">BPM</span></div>
     <div class="lcd"><span class="etikett">RYTM</span><span class="namn" id="namnLcd">Tomt</span></div>
     <div style="flex:1"></div>
-    <div class="grupp"><div class="projg"><button class="lilla" id="bProjS" type="button" title="Spara hela projektet som en fil: rytmer, låt, melodier, loopar, egna ljud och rattrörelser">📁 SPARA</button><button class="lilla" id="bProjL" type="button" title="Öppna ett sparat projekt">📂 ÖPPNA</button><input type="file" id="projFil" accept=".json,application/json" hidden><button class="lilla" id="bExp" type="button" title="Spara låten som en mp3-fil på din dator">⬇ MP3</button></div><span class="l">Projekt och export</span></div>
+    <div class="grupp"><div class="projg"><button class="lilla" id="bProjS" type="button" title="Spara hela projektet som en fil: rytmer, låt, melodier, loopar, egna ljud och rattrörelser">📁 SPARA</button><button class="lilla" id="bProjL" type="button" title="Öppna ett sparat projekt">📂 ÖPPNA</button><input type="file" id="projFil" accept=".json,application/json" hidden><button class="lilla" id="bLive" type="button" aria-pressed="false" title="Spela in allt du hör, live, och spara som mp3 när du trycker igen">⏺ SPELA IN LIVE</button><button class="lilla" id="bExp" type="button" title="Spara låten som en mp3-fil på din dator">⬇ MP3</button></div><span class="l">Projekt och export</span></div>
     <div class="grupp"><div class="knob" id="kMaster" role="slider" tabindex="0" aria-label="Huvudvolym"><div class="kap"></div></div><label>Volym</label></div>
   </div>
   <div class="rad1">
@@ -798,7 +799,7 @@ async function micStart(){if(mic)return true;startaLjud();if(!ctx)return false;
   micLista();
   $("#bMic").classList.add("on");$("#bMic").setAttribute("aria-pressed","true");micMat();return true}
 /* byter man mikrofon eller hörlurar kan webbläsaren tappa ljudutgången (tyst eller telefonljud): bygg om hela ljudmotorn */
-async function ljudOm(){const spelade=spelar,micVar=!!mic;stopp();micStopp();const gammal=ctx;ctx=null;master=comp=mg=null;
+async function ljudOm(){liveStopp(true);const spelade=spelar,micVar=!!mic;stopp();micStopp();const gammal=ctx;ctx=null;master=comp=mg=null;
   LP.forEach(l=>{l.gain=l.gate=l.fxn=null;l.srcs=[];l.gv=undefined});
   try{gammal&&await Promise.race([gammal.close(),new Promise(r=>setTimeout(r,800))])}catch(e){}
   startaLjud();if(micVar)await micStart();if(spelade)start();lpVisa();toast("Ljudet är återställt")}
@@ -1148,6 +1149,27 @@ async function exportMp3(){if(exporterar)return;exporterar=true;const kn3=$("#bE
   catch(e){toast("Det gick inte att skapa filen")}
   exporterar=false;kn3.textContent=txt;kn3.disabled=false}
 $("#bExp").onclick=exportMp3;
+let liveR=null;
+function liveStopp(avbryt){if(!liveR)return;const L=liveR;liveR=null;clearInterval(L.timer);try{L.dest.disconnect()}catch(e){}try{mg&&mg.disconnect(L.dest)}catch(e){}L.avbryt=!!avbryt;try{L.mr.state!=="inactive"&&L.mr.stop()}catch(e){}
+  const b=$("#bLive");b.classList.remove("on");b.setAttribute("aria-pressed","false");if(avbryt)b.textContent="⏺ SPELA IN LIVE"}
+async function liveToggle(){const b=$("#bLive");
+  if(liveR){liveStopp(false);b.textContent="⏳ SKAPAR MP3 …";b.disabled=true;return}
+  if(!window.MediaRecorder){toast("Din webbläsare kan inte spela in ljud härifrån");return}
+  startaLjud();if(!ctx||!mg)return;
+  const dest=ctx.createMediaStreamDestination();mg.connect(dest);
+  const mime=["audio/webm;codecs=opus","audio/webm","audio/mp4"].find(m=>MediaRecorder.isTypeSupported(m));
+  let mr;try{mr=new MediaRecorder(dest.stream,mime?{mimeType:mime,audioBitsPerSecond:192000}:undefined)}catch(e){toast("Det gick inte att starta inspelningen");try{mg.disconnect(dest)}catch(e2){}return}
+  const chunks=[];mr.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
+  mr.onstop=async()=>{if(L.avbryt)return;let ok=false;
+    try{const blob=new Blob(chunks,{type:mr.mimeType||"audio/webm"});if(blob.size<1000)throw 0;
+      const ab=await blob.arrayBuffer(),dec=await ctx.decodeAudioData(ab),st=ctx.createBuffer(2,dec.length,dec.sampleRate);st.getChannelData(0).set(dec.getChannelData(0));st.getChannelData(1).set(dec.getChannelData(dec.numberOfChannels>1?1:0));
+      let out,ext="mp3";if(await lameLadda())out=await mp3Av(st);else{out=wavAv(st);ext="wav"}
+      const a=document.createElement("a");a.href=URL.createObjectURL(out);a.download="pluggparken-liveset."+ext;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),20000);ok=true;toast("Klart! Ditt liveset ligger i dina nedladdningar")}
+    catch(e){toast("Det gick inte att skapa filen")}
+    b.disabled=false;b.textContent="⏺ SPELA IN LIVE"};
+  const t0=performance.now(),L={mr,dest,timer:setInterval(()=>{const q=Math.floor((performance.now()-t0)/1000);b.textContent="⏹ STOPPA · "+Math.floor(q/60)+":"+String(q%60).padStart(2,"0");if(q>=1800)liveToggle()},500)};
+  liveR=L;mr.start(1000);b.classList.add("on");b.setAttribute("aria-pressed","true");b.textContent="⏹ STOPPA · 0:00"}
+$("#bLive").onclick=liveToggle;
 const b64=u8=>{let t="";for(let i=0;i<u8.length;i+=32768)t+=String.fromCharCode.apply(null,u8.subarray(i,i+32768));return btoa(t)};
 const unb64=t=>{const q=atob(t),u=new Uint8Array(q.length);for(let i=0;i<q.length;i++)u[i]=q.charCodeAt(i);return u};
 function bufTill(buf){const d=buf.getChannelData(0),n=d.length,v=new Int16Array(n);for(let i=0;i<n;i++)v[i]=Math.max(-32768,Math.min(32767,Math.round(d[i]*32767)));return{sr:buf.sampleRate,d:b64(new Uint8Array(v.buffer))}}
