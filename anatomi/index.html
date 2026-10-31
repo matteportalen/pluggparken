@@ -161,13 +161,14 @@ ctl.addEventListener("start",()=>{fly=null;});
 
 const lin=document.getElementById("lin"),linP=document.getElementById("linP"),linR=document.getElementById("linR"),linD=document.getElementById("linD"),kortEl=document.getElementById("kort"),_v=new THREE.Vector3();
 
-let kSide="R";
+let kSide="R";const _w=new THREE.Vector3();
 function placeCard(){const k=document.getElementById("kort"),W=innerWidth,H=innerHeight;
  if(W<=760||!AN){k.style.left=k.style.right=k.style.top="";k.classList.remove("L");kSide="R";return;}
  _v.copy(AN).project(cam);const ax=(_v.x+1)/2*W,ay=(1-_v.y)/2*H,h=k.offsetHeight||150;
+ let bx0=1e9,bx1=-1e9;for(const x of [-.36,.36])for(const y of [0,1.78])for(const z of [-.15,.15]){_w.set(x,y,z).project(cam);const px=(_w.x+1)/2*W;bx0=Math.min(bx0,px);bx1=Math.max(bx1,px);}
  const left=ax<W*.5-70;kSide=left?"L":"R";k.classList.toggle("L",left);
- if(left){k.style.right="auto";k.style.left=Math.round(Math.max(28,Math.min(ax-150-300,W*.5-H*.24-300)))+"px";k.style.top=Math.round(Math.min(H-h-130,Math.max(400,ay-50)))+"px";}
- else{k.style.right="auto";k.style.left=Math.round(Math.min(W-328,Math.max(ax+150,W*.5+H*.24)))+"px";k.style.top=Math.round(Math.min(H-h-130,Math.max(110,ay-50)))+"px";}}
+ if(left){k.style.right="auto";k.style.left=Math.round(Math.max(28,Math.min(ax-60,bx0-40)-300))+"px";k.style.top=Math.round(Math.min(H-h-130,Math.max(400,ay-50)))+"px";}
+ else{k.style.right="auto";k.style.left=Math.round(Math.min(W-328,Math.max(ax+60,bx1+40)))+"px";k.style.top=Math.round(Math.min(H-h-130,Math.max(110,ay-50)))+"px";}}
 function linUpd(){const ok=AN&&SO&&!kortEl.hidden&&grp[SO.userData.s].visible&&!(SO.userData.s==='hud'&&hudGlas);
  if(!ok){lin.style.opacity=0;return;}
  _v.copy(AN).project(cam);if(_v.z>1||Math.abs(_v.x)>1.1||Math.abs(_v.y)>1.1){lin.style.opacity=0;return;}
