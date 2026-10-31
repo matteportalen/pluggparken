@@ -431,22 +431,62 @@ const SYN={
   eperc:(t,d)=>{osc(t,"sine",1300,420,.07,.55,d);ns(t,.01,4000,1,"bandpass",.25,d)},
   ride:(t,d)=>{ns(t,.4,6500,.9,"highpass",.3,d);osc(t,"square",5400,5400,.18,.05,d)},
   riser:(t,d)=>{osc(t,"sawtooth",120,2600,1.3,.22,d);ns(t,1.3,5000,.6,"highpass",.25,d)},
-  impact:(t,d)=>{osc(t,"sine",95,28,1,1,d);ns(t,.7,700,.7,"lowpass",.7,d)}
+  impact:(t,d)=>{osc(t,"sine",95,28,1,1,d);ns(t,.7,700,.7,"lowpass",.7,d)},
+  /* ---- fler trumljud (okt 2026) ---- */
+  kdry:(t,d)=>{osc(t,"sine",135,52,.22,1,d);ns(t,.008,3500,.7,"highpass",.5,d)},
+  k808d:(t,d)=>{const w=shaper(d,2.2);osc(t,"sine",125,36,1.15,1,w);osc(t,"sine",62,36,.9,.35,w)},
+  klofi:(t,d)=>{const f=lowp(d,950);osc(t,"sine",96,50,.3,1,f);osc(t,"triangle",190,100,.1,.3,f)},
+  kakust:(t,d)=>{osc(t,"sine",92,55,.32,.95,d);ns(t,.14,220,.8,"lowpass",.55,d);ns(t,.012,2600,1,"bandpass",.6,d)},
+  sdry:(t,d)=>{ns(t,.11,2400,.9,"bandpass",.9,d);ns(t,.07,6500,.6,"highpass",.3,d);osc(t,"triangle",190,140,.08,.7,d)},
+  slofi:(t,d)=>{const f=lowp(d,4200);ns(t,.2,3200,.7,"lowpass",.7,f);osc(t,"sine",170,130,.14,.8,f)},
+  srim:(t,d)=>{osc(t,"square",1700,0,.012,.45,d);osc(t,"sine",450,400,.06,.85,d);ns(t,.02,3000,1,"bandpass",.6,d)},
+  ssnap:(t,d)=>{ns(t,.035,2200,5,"bandpass",1.1,d);ns(t,.02,3500,3,"bandpass",.7,d);osc(t,"sine",1800,1200,.03,.3,d)},
+  sbig:(t,d)=>{ns(t,.45,1800,.7,"bandpass",.7,d);ns(t,.3,6000,.5,"highpass",.35,d);osc(t,"triangle",200,150,.15,.7,d)},
+  cbig:(t,d)=>{[0,.012,.025,.04].forEach(x=>ns(t+x,.035,1300,1.2,"bandpass",1.3,d));ns(t+.05,.38,1100,.9,"bandpass",.9,d)},
+  cdry:(t,d)=>{[0,.009,.018].forEach(x=>ns(t+x,.025,1600,1.4,"bandpass",1.5,d));ns(t+.025,.1,1400,1,"bandpass",1,d)},
+  clofi:(t,d)=>{const f=lowp(d,3000);[0,.011,.022].forEach(x=>ns(t+x,.03,1000,1.2,"bandpass",1.4,f));ns(t+.03,.22,900,.9,"bandpass",1,f)},
+  h808:(t,d)=>metal(t,.07,.14,d),
+  hsoft:(t,d)=>{const f=lowp(d,8000);ns(t,.07,5500,.7,"bandpass",.5,f)},
+  htight:(t,d)=>{ns(t,.025,9000,.8,"highpass",.55,d)},
+  o808:(t,d)=>metal(t,.36,.14,d),
+  olong:(t,d)=>{ns(t,.6,7500,.7,"highpass",.38,d)},
+  oshort:(t,d)=>{ns(t,.16,8500,.8,"highpass",.45,d)},
+  crash:(t,d)=>{ns(t,1.3,5500,.6,"highpass",.5,d);metal(t,1.1,.07,d)},
+  tomlo:(t,d)=>{osc(t,"sine",120,70,.6,1,d);ns(t,.015,900,.8,"lowpass",.4,d)},
+  tommid:(t,d)=>{osc(t,"sine",180,105,.5,1,d);ns(t,.015,1200,.8,"lowpass",.4,d)},
+  tomhi:(t,d)=>{osc(t,"sine",260,160,.4,1,d);ns(t,.012,1800,.8,"lowpass",.4,d)},
+  tomel:(t,d)=>{osc(t,"sine",380,60,.45,1,d)},
+  bongo:(t,d)=>{osc(t,"sine",430,330,.14,.9,d);ns(t,.008,3000,1,"bandpass",.35,d)},
+  claves:(t,d)=>{osc(t,"sine",2500,0,.07,.6,d);osc(t,"sine",3300,0,.045,.3,d)},
+  tamb:(t,d)=>{ns(t,.05,7000,1.2,"bandpass",.55,d);ns(t+.02,.05,7000,1.2,"bandpass",.45,d);ns(t,.16,9500,.8,"highpass",.25,d);osc(t,"square",6300,0,.09,.05,d);osc(t,"square",7100,0,.09,.05,d)},
+  tria:(t,d)=>{osc(t,"sine",4300,0,1.4,.32,d);osc(t,"sine",7100,0,1,.16,d);osc(t,"sine",10800,0,.6,.08,d)},
+  wblock:(t,d)=>{osc(t,"sine",880,780,.07,.9,d);ns(t,.02,1800,1,"bandpass",.4,d)},
+  agogo:(t,d)=>{osc(t,"sine",760,0,.38,.5,d);osc(t,"sine",1170,0,.26,.3,d);ns(t,.01,3000,1,"bandpass",.3,d)},
+  svup:(t,d)=>sweep(t,.55,300,6000,.8,1.8,d),
+  svne:(t,d)=>sweep(t,.55,6000,300,.8,1.8,d),
+  stab:(t,d)=>{const f=lowp(d,2600,600,.32);[220,261.6,329.6].forEach(q=>{osc(t,"sawtooth",q,0,.3,.28,f);osc(t,"sawtooth",q*1.007,0,.3,.28,f)})},
+  zap2:(t,d)=>{osc(t,"sawtooth",3000,200,.15,.4,d)},
+  klick2:(t,d)=>{osc(t,"square",1500,0,.012,.4,d);ns(t,.01,4000,1,"highpass",.4,d)}
 };
+function shaper(d,k){const w=ctx.createWaveShaper(),c=new Float32Array(1024);for(let i=0;i<1024;i++){const x=i/512-1;c[i]=Math.tanh(x*k)/Math.tanh(k)}w.curve=c;const g=ctx.createGain();g.gain.value=1;g.connect(w);w.connect(d);return g}
+function lowp(d,fr,f1,t1){const f=ctx.createBiquadFilter();f.type="lowpass";f.frequency.value=fr;f.Q.value=.7;f.connect(d);return f}
+function metal(t,dur,g,d){const hp=ctx.createBiquadFilter();hp.type="highpass";hp.frequency.value=7000;hp.Q.value=.8;hp.connect(d);[205.3,304.4,369.6,522.7,540,800].forEach(f=>osc(t,"square",f*2,0,dur,g*.55,hp))}
+function sweep(t,dur,f0,f1,q,g,d){const s=ctx.createBufferSource();s.buffer=brus;s.loop=true;const f=ctx.createBiquadFilter();f.type="bandpass";f.Q.value=q*2;f.frequency.setValueAtTime(f0,t);f.frequency.exponentialRampToValueAtTime(f1,t+dur);const e=ctx.createGain();e.gain.setValueAtTime(.0008,t);e.gain.exponentialRampToValueAtTime(g,t+dur*.4);e.gain.exponentialRampToValueAtTime(.0008,t+dur);s.connect(f);f.connect(e);e.connect(d);s.start(t,Math.random()*.5);s.stop(t+dur+.05)}
+const TRIM={kdry:1.24,k808d:.55,klofi:1,kakust:1.08,sdry:1.06,slofi:.6,srim:.85,ssnap:2.2,sbig:.7,cbig:1.1,cdry:1.5,clofi:1.3,h808:2.5,hsoft:1.05,htight:1.2,o808:2.8,olong:.85,oshort:1.3,crash:.5,tomlo:.7,tommid:.78,tomhi:.85,tomel:.8,bongo:1.5,claves:1.4,tamb:2,tria:.7,wblock:1.2,agogo:.8,stab:.6,zap2:1.4,klick2:2};
 /* spåren: namn, färg, synt-röster, vilken grupp av gamla klipp som hör till */
 const SPAR=[
- {id:"bas",n:"Bas",syn:[["808 BAS","b808"],["PUNCH","bpunch"],["LÅNG BAS","blong"],["TEKNO KICK","k909"],["HÅRD KICK","khard"]],grp:["bas"]},
- {id:"snart",n:"Snärt",syn:[["SNÄRT","snare"],["RIM","rim"],["ELEK SNÄRT","sn909"]],grp:["snart"]},
- {id:"klapp",n:"Klapp",syn:[["KLAPP","clap"],["RIM","rim"]],grp:["snart","stab"]},
- {id:"hatc",n:"Hatt",syn:[["HATT","hatc"],["SKAKA","shaker"],["ELEK HATT","ehat"]],grp:["tick"]},
- {id:"hato",n:"Öppen",syn:[["HATT ÖPPEN","hato"]],grp:["tick","ljud"]},
- {id:"tom",n:"Tom",syn:[["TOM","tom"],["CONGA","conga"]],grp:["perc","bas"]},
- {id:"perc",n:"Slag",syn:[["KOKLOCKA","cow"],["CONGA","conga"],["SKAKA","shaker"],["ELEK PERC","eperc"],["RIDE","ride"]],grp:["perc"]},
- {id:"fx",n:"Effekt",syn:[["LASER","zap"],["BLIPP","blip"],["RISER","riser"],["IMPACT","impact"]],grp:["stab","ljud"]}
+ {id:"bas",n:"Bas",syn:[["808 BAS","b808"],["PUNCH","bpunch"],["LÅNG BAS","blong"],["TEKNO KICK","k909"],["HÅRD KICK","khard"],["TORR KICK","kdry"],["DJUP 808","k808d"],["LO-FI KICK","klofi"],["AKUSTISK","kakust"]],grp:["bas"]},
+ {id:"snart",n:"Snärt",syn:[["SNÄRT","snare"],["RIM","rim"],["ELEK SNÄRT","sn909"],["TORR SNÄRT","sdry"],["LO-FI SNÄRT","slofi"],["RIMSHOT","srim"],["SNAP","ssnap"],["STOR SNÄRT","sbig"]],grp:["snart"]},
+ {id:"klapp",n:"Klapp",syn:[["KLAPP","clap"],["RIM","rim"],["STOR KLAPP","cbig"],["TORR KLAPP","cdry"],["LO-FI KLAPP","clofi"]],grp:["snart","stab"]},
+ {id:"hatc",n:"Hatt",syn:[["HATT","hatc"],["SKAKA","shaker"],["ELEK HATT","ehat"],["808 HATT","h808"],["MJUK HATT","hsoft"],["TIGHT HATT","htight"]],grp:["tick"]},
+ {id:"hato",n:"Öppen",syn:[["HATT ÖPPEN","hato"],["808 ÖPPEN","o808"],["LÅNG ÖPPEN","olong"],["KORT ÖPPEN","oshort"],["CRASH","crash"]],grp:["tick","ljud"]},
+ {id:"tom",n:"Tom",syn:[["TOM","tom"],["CONGA","conga"],["LÅG TOM","tomlo"],["MELLAN TOM","tommid"],["HÖG TOM","tomhi"],["ELEK TOM","tomel"],["BONGO","bongo"]],grp:["perc","bas"]},
+ {id:"perc",n:"Slag",syn:[["KOKLOCKA","cow"],["CONGA","conga"],["SKAKA","shaker"],["ELEK PERC","eperc"],["RIDE","ride"],["CLAVES","claves"],["TAMBURIN","tamb"],["TRIANGEL","tria"],["WOODBLOCK","wblock"],["AGOGO","agogo"]],grp:["perc"]},
+ {id:"fx",n:"Effekt",syn:[["LASER","zap"],["BLIPP","blip"],["RISER","riser"],["IMPACT","impact"],["SVEP UPP","svup"],["SVEP NER","svne"],["STAB","stab"],["ZAP 2","zap2"],["KLICK","klick2"]],grp:["stab","ljud"]}
 ];
 function roster(i){const sp=SPAR[i],r=sp.syn.map(([n,f])=>({n,f,s:null}));if(SAMP)SAMPMETA.forEach((m,k)=>{if(sp.grp.includes(m.k))r.push({n:"♪ "+m.n.toUpperCase(),f:null,s:k})});return r}
 function spela(i,t,vel){if(!ctx)return;const tr=S.t[i];if(tr.mute&&!vel)return;const v=roster(i),r=v[tr.v%v.length]||v[0];
-  const g=ctx.createGain();g.gain.value=(tr.vol/100)*(vel||1);g.connect(drumBus||master);
+  const g=ctx.createGain();g.gain.value=(tr.vol/100)*(vel||1)*(TRIM[r.f]||1);g.connect(drumBus||master);
   if(r.s!=null&&SAMP){const b=ctx.createBufferSource();b.buffer=SAMP[r.s];b.connect(g);b.start(t)}else{SYN[r.f](t,g)}}
 /* ---------- melodispår: bas och lead i låsta skalor ---------- */
 const MROSTER=[[["RUND BAS","sub"],["GNÄLLBAS","saw"],["ACID","acid"],["ELBAS","elbas"]],[["LEAD","lead"],["KEYS","keys"],["KLOCKA","bell"],["PAD","pad"],["SUPERSAW","ssaw"],["MELODICA","melodica"],["STRÄNGAR","gitarr"],["KALIMBA","kalimba"],["UKULELE","ukulele"]]];
@@ -1263,7 +1303,7 @@ document.addEventListener("keydown",e=>{if(e.target.closest&&e.target.closest("i
   const i=TK[e.key.toLowerCase()];if(i!=null&&!e.repeat){const sl=suddLage;if(e.shiftKey&&recLive)suddLage=true;slag(i);suddLage=sl}});
 document.addEventListener("visibilitychange",()=>{if(document.hidden)stopp()});
 init();
-window.MPTrummaskin={kod:()=>kod(),avkod:k=>avkod(k),ljudOm:()=>ljudOm(),renderaLat:()=>renderaLat(),mp3Av:b=>mp3Av(b),lameLadda:()=>lameLadda(),LP:LP,lpKlick:lpKlick,lpRadera:lpRadera,lpAngra:lpAngra,micStart:micStart,fakeMic:null,slag:slag,get ctx(){return ctx},get master(){return master},get S(){return S},roster:roster,kitSatt:kitSatt,visa:visa};
+window.MPTrummaskin={voice:(k,len)=>{startaLjud();const sr=44100,off=new OfflineAudioContext(1,Math.ceil(sr*(len||1.6)),sr),oc=ctx;ctx=off;try{const g=off.createGain();g.connect(off.destination);SYN[k](.01,g);return off.startRendering()}finally{ctx=oc}},SPAR:SPAR,kod:()=>kod(),avkod:k=>avkod(k),ljudOm:()=>ljudOm(),renderaLat:()=>renderaLat(),mp3Av:b=>mp3Av(b),lameLadda:()=>lameLadda(),LP:LP,lpKlick:lpKlick,lpRadera:lpRadera,lpAngra:lpAngra,micStart:micStart,fakeMic:null,slag:slag,get ctx(){return ctx},get master(){return master},get S(){return S},roster:roster,kitSatt:kitSatt,visa:visa};
 })();
 </script>
 </body>
