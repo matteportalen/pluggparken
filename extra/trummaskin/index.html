@@ -311,7 +311,7 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
   <div class="krok" id="krok">Tryck på rutorna för att bygga en rytm, eller välj en färdig rytm. Mellanslag startar och stoppar. R spelar in med padsen.</div>
 </div>
 <div class="maskin loopmaskin" id="loopmaskin">
-  <div class="topp" style="margin-bottom:12px"><div class="logga"><b>LOOPSTATION <i>LS-4</i></b><small>PLUGGPARKEN · 4 SPÅR · MIKROFON</small></div><div style="flex:1"></div><button type="button" class="micb" id="bMic" aria-pressed="false">🎤 MIKROFON</button><select class="sel" id="selMic" hidden aria-label="Välj mikrofon"></select><button type="button" class="micb on" id="bFix" aria-pressed="true" title="Slår på mikrofonens automatiska volym och brusfilter. Bra för röst. Stäng av för instrument.">✨ FÖRBÄTTRA RÖST</button><span class="meter" aria-hidden="true"><i id="meterI"></i></span><div class="grupp" style="flex-direction:row;gap:8px"><div class="knob liten" id="kJust" role="slider" tabindex="0" aria-label="Justera inspelningens timing"><div class="kap"></div></div><span class="l" id="justT">Timing 0 ms</span></div></div>
+  <div class="topp" style="margin-bottom:12px"><div class="logga"><b>LOOPSTATION <i>LS-4</i></b><small>PLUGGPARKEN · 4 SPÅR · MIKROFON</small></div><div style="flex:1"></div><button type="button" class="micb" id="bMic" aria-pressed="false">🎤 MIKROFON</button><select class="sel" id="selMic" hidden aria-label="Välj mikrofon"></select><button type="button" class="micb" id="bLjudOm" title="Tryck om ljudet har blivit tyst eller låter dåligt efter att du bytt mikrofon eller hörlurar">🔄 ÅTERSTÄLL LJUD</button><button type="button" class="micb on" id="bFix" aria-pressed="true" title="Slår på mikrofonens automatiska volym och brusfilter. Bra för röst. Stäng av för instrument.">✨ FÖRBÄTTRA RÖST</button><span class="meter" aria-hidden="true"><i id="meterI"></i></span><div class="grupp" style="flex-direction:row;gap:8px"><div class="knob liten" id="kJust" role="slider" tabindex="0" aria-label="Justera inspelningens timing"><div class="kap"></div></div><span class="l" id="justT">Timing 0 ms</span></div></div>
   <div class="lstat" id="lstatus" aria-live="polite"></div>
   <div class="lgrid" id="lgrid"></div>
   <div class="krok" style="margin-top:14px">Använd hörlurar, annars hör mikrofonen trummorna. Tryck på den runda knappen för att spela in, och tryck igen för att lägga på mer ljud. Dra över vågen för att markera en bit, och välj sedan Radera eller Spela bara. Med Flytta drar du hela vågen så den hamnar på rätt slag. ¼ och ½ ger riktigt korta loopar. Ljudet sparas inte.</div>
@@ -571,6 +571,11 @@ async function micStart(){if(mic)return true;startaLjud();if(!ctx)return false;
   if(!ok){proc=ctx.createScriptProcessor(1024,1,1);const dov=ctx.createGain();dov.gain.value=0;micSrc.connect(proc);proc.connect(dov);dov.connect(ctx.destination);proc.onaudioprocess=mikBlock}
   micLista();
   $("#bMic").classList.add("on");$("#bMic").setAttribute("aria-pressed","true");micMat();return true}
+/* byter man mikrofon eller hörlurar kan webbläsaren tappa ljudutgången (tyst eller telefonljud): bygg om hela ljudmotorn */
+async function ljudOm(){const spelade=spelar,micVar=!!mic;stopp();micStopp();const gammal=ctx;ctx=null;master=comp=mg=null;
+  LP.forEach(l=>{l.gain=l.gate=l.fxn=null;l.srcs=[];l.gv=undefined});
+  try{gammal&&await Promise.race([gammal.close(),new Promise(r=>setTimeout(r,800))])}catch(e){}
+  startaLjud();if(micVar)await micStart();if(spelade)start();lpVisa();toast("Ljudet är återställt")}
 function micStopp(){if(!mic)return;try{mic.getTracks().forEach(t=>t.stop())}catch(e){}try{proc&&proc.disconnect();micSrc.disconnect();mikNod&&mikNod.disconnect()}catch(e){}mikNod=null;mic=null;proc=null;micSrc=null;$("#bMic").classList.remove("on");$("#bMic").setAttribute("aria-pressed","false");$("#meterI").style.width="0"}
 const mbuf=new Float32Array(1024);
 function micMat(){if(!mic)return;anMic.getFloatTimeDomainData(mbuf);let m=0;for(let i=0;i<mbuf.length;i++){const a=Math.abs(mbuf[i]);if(a>m)m=a}$("#meterI").style.width=Math.min(100,m*140)+"%";requestAnimationFrame(micMat)}
@@ -776,7 +781,8 @@ function lpBygg(){const g=$("#lgrid");LP.forEach(l=>{const m=document.createElem
     else if(act==="reset"){lpRed(l,()=>{l.cuts=[];l.zone=null;l.shift=0})}});
   $("#bMic").onclick=()=>{mic?micStopp():micStart()};
   $("#bFix").classList.toggle("on",micSet.fix);$("#bFix").setAttribute("aria-pressed",micSet.fix);
-  const nyMik=async()=>{if(mic){micStopp();await micStart()}};
+  const nyMik=async()=>{if(mic)await ljudOm()};
+  $("#bLjudOm").onclick=()=>{startaLjud();ljudOm()};
   $("#bFix").onclick=()=>{micSet.fix=!micSet.fix;micSpara();$("#bFix").classList.toggle("on",micSet.fix);$("#bFix").setAttribute("aria-pressed",micSet.fix);toast(micSet.fix?"Förbättra röst på: automatisk volym och brusfilter":"Förbättra röst av: ren mikrofon");nyMik()};
   $("#selMic").onchange=e=>{micSet.dev=e.target.value;micSpara();nyMik()};
   if(navigator.mediaDevices&&navigator.mediaDevices.addEventListener)navigator.mediaDevices.addEventListener("devicechange",micLista);
@@ -871,7 +877,7 @@ document.addEventListener("keydown",e=>{if(e.target.closest&&e.target.closest("i
   const i=TK[e.key.toLowerCase()];if(i!=null&&!e.repeat){const sl=suddLage;if(e.shiftKey&&recLive)suddLage=true;slag(i);suddLage=sl}});
 document.addEventListener("visibilitychange",()=>{if(document.hidden)stopp()});
 init();
-window.MPTrummaskin={renderaLat:()=>renderaLat(),mp3Av:b=>mp3Av(b),lameLadda:()=>lameLadda(),LP:LP,lpKlick:lpKlick,lpRadera:lpRadera,lpAngra:lpAngra,micStart:micStart,fakeMic:null,slag:slag,get ctx(){return ctx},get master(){return master},get S(){return S},roster:roster,kitSatt:kitSatt,visa:visa};
+window.MPTrummaskin={ljudOm:()=>ljudOm(),renderaLat:()=>renderaLat(),mp3Av:b=>mp3Av(b),lameLadda:()=>lameLadda(),LP:LP,lpKlick:lpKlick,lpRadera:lpRadera,lpAngra:lpAngra,micStart:micStart,fakeMic:null,slag:slag,get ctx(){return ctx},get master(){return master},get S(){return S},roster:roster,kitSatt:kitSatt,visa:visa};
 })();
 </script>
 </body>
