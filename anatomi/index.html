@@ -62,11 +62,33 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;bac
 @media(min-width:761px){.kort{top:110px;right:28px;width:300px}}
 @media(max-width:760px){.kort{top:84px;left:12px;right:12px;width:auto}}
 @media(prefers-reduced-motion:reduce){#linP.on{animation-duration:.01s}.kort.in{animation:none}#linR{animation:none}}
+
+.reg .rgo{background:linear-gradient(135deg,#0e7490,#22d3ee);color:#021a22;border-color:#22d3ee;box-shadow:0 0 20px rgba(34,211,238,.4)}
+.reg .rgo:hover{filter:brightness(1.15);color:#021a22}
+.resa{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:6;width:min(660px,calc(100vw - 24px));background:rgba(7,20,34,.72);-webkit-backdrop-filter:blur(16px) saturate(1.3);backdrop-filter:blur(16px) saturate(1.3);border:1px solid var(--line);border-top:2px solid var(--acc);border-radius:16px;padding:14px 16px 12px;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+.resa.in{animation:rIn .45s cubic-bezier(.2,.8,.2,1)}@keyframes rIn{from{opacity:.4;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%)}}
+.rtop{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}.rn{font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);font-weight:700}.rtop b{font-size:1.1rem;color:#fff}.rtid{margin-left:auto;font-size:.72rem;color:#7fd6e8;letter-spacing:.04em}
+.resa p{margin:6px 0 10px;color:#b4c6d9;font-size:.88rem;line-height:1.45;min-height:3.9em}
+#rS{width:100%;accent-color:#22d3ee;margin:0 0 6px;height:18px}
+.rbar{display:flex;gap:4px}.rbar button{flex:1;position:relative;overflow:hidden;border:1px solid var(--line);background:rgba(9,24,40,.6);border-radius:8px;padding:6px 2px 5px;color:#8aa3bd;font:inherit;font-size:.6rem;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;min-width:0}
+.rbar button i{position:absolute;left:0;bottom:0;height:3px;width:calc(var(--p,0)*100%);background:var(--acc);box-shadow:0 0 8px var(--acc)}
+.rbar button span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rbar button.on{color:#fff;border-color:var(--acc);box-shadow:0 0 14px -4px var(--acc)}
+.rctl{display:flex;gap:6px;margin-top:9px;align-items:center}.rctl button{border:1px solid var(--line);background:rgba(9,24,40,.7);color:#d3ecf6;border-radius:10px;padding:7px 12px;font:inherit;font-size:.82rem;cursor:pointer;min-width:42px}.rctl button:hover{border-color:var(--acc);color:#fff}
+.rctl .rxb{margin-left:auto;letter-spacing:.06em;text-transform:uppercase;font-size:.7rem;font-weight:600}
+body.resa .reg,body.resa .hint,body.resa .zm,body.resa .lag,body.resa #kort,body.resa #lin{display:none!important}
+@media(max-width:760px){.rctl button{padding:7px 9px;min-width:36px}.rctl .rxb{font-size:.62rem;padding:7px 8px}.resa{bottom:10px;padding:12px 12px 10px}.resa p{font-size:.82rem;min-height:0}.rbar button{font-size:0}.rbar button span{display:none}.rbar button{height:22px}}
 </style></head><body>
 <canvas id="c"></canvas>
 <div class="top"><a href="../ovriga/">← Fler ämnen</a><h1>Människokroppen</h1></div>
 <div class="lag" id="lag"></div>
 <div class="reg" id="reg"></div><div class="zm"><button id="zin" aria-label="Zooma in">+</button><button id="zut" aria-label="Zooma ut">−</button></div>
+<div class="resa" id="resa" hidden>
+ <div class="rtop"><span class="rn" id="rN"></span><b id="rT"></b><span class="rtid" id="rTid"></span></div>
+ <p id="rP"></p>
+ <input type="range" id="rS" min="0" max="6500" value="0" aria-label="Var i resan">
+ <div class="rbar" id="rBar"></div>
+ <div class="rctl"><button id="rPrev" aria-label="Föregående steg">⏮</button><button id="rPlay" aria-label="Spela eller pausa">⏸</button><button id="rNext" aria-label="Nästa steg">⏭</button><button id="rSpd" aria-label="Fart">1×</button><button id="rSnd" aria-label="Röst">🔊</button><button id="rX" class="rxb">✕ Avsluta</button></div>
+</div>
 <svg id="lin" aria-hidden="true"><path id="linP" pathLength="1"/><circle id="linR" r="9"/><circle id="linD" r="3.6"/></svg>
 <div class="kort" id="kort" hidden></div>
 <div class="hint">Dra för att vrida · scrolla för att zooma · dubbeltryck på en del för att gå nära</div>
@@ -78,6 +100,7 @@ import * as THREE from "three";
 import {OrbitControls} from "three/addons/controls/OrbitControls.js";
 import {GLTFLoader} from "three/addons/loaders/GLTFLoader.js";
 import {DRACOLoader} from "three/addons/loaders/DRACOLoader.js";
+import {initResa} from "./resa.js?v=1";
 const SYS=[
  {id:"hud",namn:"Huden",c:"#e9b99a",pa:false},
  {id:"skelett",namn:"Skelettet",c:"#d9cfb8",pa:true},
@@ -180,7 +203,10 @@ function linUpd(){const ok=AN&&SO&&!kortEl.hidden&&grp[SO.userData.s].visible&&!
  else{ex=r.left+r.width/2;ey=r.bottom;mx=ex;my=ey+28;}
  linP.setAttribute("d",`M${ax},${ay} L${mx},${my} L${ex},${ey}`);
  linR.setAttribute("cx",ax);linR.setAttribute("cy",ay);linD.setAttribute("cx",ax);linD.setAttribute("cy",ay);lin.style.opacity=1;}
-function loop(){requestAnimationFrame(loop);flyStep();ctl.update();linUpd();R.render(S,cam);}
+let _t0=performance.now();
+function loop(){requestAnimationFrame(loop);const _n=performance.now(),_dt=(_n-_t0)/1000;_t0=_n;flyStep();RESA.frame(_dt);ctl.update();linUpd();R.render(S,cam);}
+const RESA=initResa({THREE,S,cam,ctl,grp,all,hudUpd,flyHome:()=>{if(HEL)flyTo(HEL.t,HEL.d);}});
+const rgo=document.createElement('button');rgo.className='rgo';rgo.textContent='🍽 Matens resa';rgo.onclick=()=>RESA.start();document.getElementById('reg').appendChild(rgo);
 las().then(loop);
 window.__a={S,cam,ctl,grp,all};
 </script></body></html>
