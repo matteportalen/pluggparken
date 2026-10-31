@@ -109,6 +109,7 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
 .steg button:nth-child(n+9):nth-child(-n+12){--k:var(--y)}
 .steg button:nth-child(n+13){--k:var(--c)}
 [hidden]{display:none!important}
+.rytmrad{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 12px}.rytmrad>.l{font-size:.7rem;font-weight:800;letter-spacing:.14em;color:var(--dim)}.projg{display:flex;gap:8px}
 .vyrad{display:flex;align-items:center;justify-content:space-between;gap:12px 20px;flex-wrap:wrap;margin:6px 0 14px}
 .kit.vy button{padding:10px 18px;font-size:.84rem;letter-spacing:.1em}
 .monsterg{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
@@ -306,6 +307,7 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
     <div class="lcd" id="lcdBpm" aria-live="off"><span class="etikett">TEMPO</span><svg class="sv" id="sevBpm" viewBox="0 0 144 64" aria-label="Tempo"></svg><span class="etikett">BPM</span></div>
     <div class="lcd"><span class="etikett">RYTM</span><span class="namn" id="namnLcd">Tomt</span></div>
     <div style="flex:1"></div>
+    <div class="grupp"><div class="projg"><button class="lilla" id="bProjS" type="button" title="Spara hela projektet som en fil: rytmer, låt, melodier, loopar, egna ljud och rattrörelser">📁 SPARA</button><button class="lilla" id="bProjL" type="button" title="Öppna ett sparat projekt">📂 ÖPPNA</button><input type="file" id="projFil" accept=".json,application/json" hidden></div><span class="l">Projekt</span></div>
     <div class="grupp"><div class="knob" id="kMaster" role="slider" tabindex="0" aria-label="Huvudvolym"><div class="kap"></div></div><label>Volym</label></div>
   </div>
   <div class="rad1">
@@ -321,9 +323,9 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
     <div class="grupp"><div class="knob" id="kPump" role="slider" tabindex="0" aria-label="Pump (sidechain)"><div class="kap"></div></div><label>Pump</label></div>
     <div class="grupp"><div class="pm"><button type="button" id="bSudd" aria-pressed="false" title="Sudda med padsen (håll Skift)">⌫</button></div><span class="l">Sudda</span></div>
     <div class="grupp"><div class="knob" id="kPadtid" role="slider" tabindex="0" aria-label="Pad-timing"><div class="kap"></div></div><label id="padT">Pad-tid 0 ms</label></div>
-    <div class="grupp"><select class="sel" id="selMall" aria-label="Färdig rytm"></select><span class="l">Färdig rytm</span></div>
   </div>
   <div class="vyrad"><div class="kit vy" role="tablist" aria-label="Vy"><button type="button" id="vyT" role="tab" class="on" aria-selected="true">▦ TRUMMASKIN</button><button type="button" id="vyL" role="tab" aria-selected="false">♫ LÅT</button></div><div class="monsterg"><span class="l">MÖNSTER</span><div class="monster" id="monster"></div><button type="button" class="lilla" id="bKop" title="Kopiera det här mönstret till ett annat">⧉ KOPIERA</button></div></div>
+  <div class="rytmrad" id="rytmrad"><span class="l">RYTM</span><select class="sel" id="selMall" aria-label="Färdig rytm"></select><button class="lilla" id="bSlump" type="button" title="Slumpa en ny rytm och melodi">🎲 SLUMPA</button><button class="lilla" id="bRensa" type="button" title="Töm det här mönstret: stegen, melodin och sample-spåret">🧹 TÖM MÖNSTRET</button></div>
   <div class="lat" id="lat" hidden><div class="tl" id="tl"><span class="tn">MÖNSTER</span><div class="lcells" id="lcells"></div></div><div class="latrad"><button class="lilla on" id="bSlinga" type="button" aria-pressed="true">🔁 SLINGA</button><button class="lilla" id="bTomLat" type="button">TÖM LÅT</button><span class="latinfo" id="latInfo"></span></div><div class="krok" style="margin-top:0">Välj ett mönster (A–D) uppe till höger och tryck på en ruta för att lägga det i låten. Tryck på samma ruta igen för att ta bort det. Byt till ▦ TRUMMASKIN för att ändra mönstren, och tillbaka hit för att spela låten. START spelar låten. Raderna L1–L4 bestämmer i vilka takter dina inspelade loopar hörs: tryck på rutorna. En rad utan markerade rutor spelar hela låten.</div></div>
   <div class="spar" id="spar">
     <div class="ledrad"><div class="fyll"></div><div class="leds" id="leds"></div></div>
@@ -333,11 +335,9 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
   <div class="pads" id="pads" aria-label="Spela själv"></div>
   <div class="under">
     <div class="knapprad">
-      <button class="lilla" id="bSlump" type="button">🎲 SLUMPA</button>
-      <button class="lilla" id="bRensa" type="button">TÖM</button>
       <button class="lilla" id="bDela" type="button">🔗 DELA</button>
-      <button class="lilla" id="bSpara" type="button">💾 SPARA</button>
-      <button class="lilla" id="bProjS" type="button" title="Spara hela projektet som en fil: rytmer, låt, melodier, loopar, egna ljud och rattrörelser">📁 SPARA PROJEKT</button><button class="lilla" id="bProjL" type="button" title="Öppna ett sparat projekt">📂 ÖPPNA PROJEKT</button><input type="file" id="projFil" accept=".json,application/json" hidden>
+      <button class="lilla" id="bSpara" type="button" title="Spara den här rytmen i listan nedanför (finns kvar i webbläsaren)">💾 SPARA RYTM</button>
+      
       <button class="lilla" id="bExp" type="button" title="Spara låten som en mp3-fil på din dator">⬇ MP3</button>
     </div>
     <div class="knapprad" id="minnen" aria-label="Sparade rytmer"></div>
@@ -644,7 +644,7 @@ function latBygg(){const m=$("#monster");MONAM.forEach((n,p)=>{const b=document.
   const tl=$("#tl");LC.forEach((col,l)=>{const lab=document.createElement("span");lab.className="tn lk";lab.style.setProperty("--sk",col);lab.textContent="L"+(l+1);const row=document.createElement("div");row.className="lloop";row.dataset.l=l;row.style.setProperty("--sk",col);
     for(let i=0;i<16;i++){const b=document.createElement("button");b.type="button";b.dataset.i=i;b.setAttribute("aria-label","Loop "+(l+1)+", takt "+(i+1));row.appendChild(b)}tl.appendChild(lab);tl.appendChild(row)})}
 function latRita(){const m=$("#monster");if(!m||!m.children.length)return;
-  $("#spar").hidden=!!S.songOn;$("#lat").hidden=!S.songOn;
+  $("#spar").hidden=!!S.songOn;$("#rytmrad").hidden=!!S.songOn;$("#lat").hidden=!S.songOn;
   [["#vyT",!S.songOn],["#vyL",!!S.songOn]].forEach(([q,on])=>{$(q).classList.toggle("on",on);$(q).setAttribute("aria-selected",on)});
   [...m.children].forEach((b,p)=>{b.classList.toggle("on",p===S.cur);const d=monsterData(p);let h="";d.forEach((s,i)=>{for(let k=0;k<16;k++)if(s[k]==="x")h+='<rect x="'+k*2+'" y="'+i*2+'" width="1.6" height="1.6"/>'});melData(p).forEach((s,i)=>{for(let k=0;k<16;k++)if(s[k]!==".")h+='<rect x="'+k*2+'" y="'+(17+i*2)+'" width="1.6" height="1.6"/>'});b.querySelector("svg").setAttribute("viewBox","0 0 32 21");b.querySelector("svg").innerHTML=h});
   document.querySelectorAll("#tl .lloop").forEach(r=>{const l=+r.dataset.l,row=S.lsong[l];r.classList.toggle("tom",!LP[l].layers.length);r.querySelectorAll("button").forEach((b,i)=>b.classList.toggle("p",row[i]==="x"))});
