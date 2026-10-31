@@ -166,8 +166,8 @@ function placeCard(){const k=document.getElementById("kort"),W=innerWidth,H=inne
  if(W<=760||!AN){k.style.left=k.style.right=k.style.top="";k.classList.remove("L");kSide="R";return;}
  _v.copy(AN).project(cam);const ax=(_v.x+1)/2*W,ay=(1-_v.y)/2*H,h=k.offsetHeight||150;
  const left=ax<W*.5-70;kSide=left?"L":"R";k.classList.toggle("L",left);
- if(left){k.style.right="auto";k.style.left="28px";k.style.top=Math.round(Math.min(H-h-130,Math.max(400,ay-50)))+"px";}
- else{k.style.left="auto";k.style.right="28px";k.style.top=Math.round(Math.min(H-h-130,Math.max(110,ay-50)))+"px";}}
+ if(left){k.style.right="auto";k.style.left=Math.round(Math.max(28,Math.min(ax-70-300,W*.5-300)))+"px";k.style.top=Math.round(Math.min(H-h-130,Math.max(400,ay-50)))+"px";}
+ else{k.style.right="auto";k.style.left=Math.round(Math.min(W-328,Math.max(ax+70,W*.5+40)))+"px";k.style.top=Math.round(Math.min(H-h-130,Math.max(110,ay-50)))+"px";}}
 function linUpd(){const ok=AN&&SO&&!kortEl.hidden&&grp[SO.userData.s].visible&&!(SO.userData.s==='hud'&&hudGlas);
  if(!ok){lin.style.opacity=0;return;}
  _v.copy(AN).project(cam);if(_v.z>1||Math.abs(_v.x)>1.1||Math.abs(_v.y)>1.1){lin.style.opacity=0;return;}
