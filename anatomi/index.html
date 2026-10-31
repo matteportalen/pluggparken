@@ -81,7 +81,7 @@ import {DRACOLoader} from "three/addons/loaders/DRACOLoader.js";
 const SYS=[
  {id:"hud",namn:"Huden",c:"#e9b99a",pa:false},
  {id:"skelett",namn:"Skelettet",c:"#d9cfb8",pa:true},
- {id:"muskler",namn:"Musklerna",c:"#c4575d",pa:true},
+ {id:"muskler",namn:"Musklerna",c:"#c4575d",pa:false},
  {id:"organ",namn:"Organen",c:"#e49a8f",pa:true},
  {id:"karl",namn:"Pulsådror",c:"#d94a4a",pa:true},
  {id:"ven",namn:"Vener",c:"#3f6fd1",pa:true},
@@ -97,7 +97,7 @@ const ctl=new OrbitControls(cam,cv);ctl.enableDamping=true;ctl.dampingFactor=.08
 const grp={},mats={};let all=[];
 const gl=new GLTFLoader(),dr=new DRACOLoader();dr.setDecoderPath("https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/libs/draco/gltf/");gl.setDRACOLoader(dr);
 let GR={},hudM=null,hudGlas=false,musGlas=false;const musM=new Set();
-function hudUpd(){const inn=['skelett','organ','karl','ven','nerver'].some(k=>grp[k]&&grp[k].visible);musGlas=inn&&!!(grp.muskler&&grp.muskler.visible);musM.forEach(m=>{m.opacity=musGlas?.22:1;m.depthWrite=!musGlas;});const a=['skelett','muskler','organ','karl','ven','nerver'].some(k=>grp[k]&&grp[k].visible);hudGlas=a&&!!(grp.hud&&grp.hud.visible);if(!hudM)return;hudM.opacity=hudGlas?.14:1;hudM.depthWrite=!hudGlas;}
+function hudUpd(){const inn=['skelett','organ','karl','ven','nerver'].some(k=>grp[k]&&grp[k].visible);musGlas=false;const a=['skelett','muskler','organ','karl','ven','nerver'].some(k=>grp[k]&&grp[k].visible);hudGlas=a&&!!(grp.hud&&grp.hud.visible);if(!hudM)return;hudM.opacity=hudGlas?.14:1;hudM.depthWrite=!hudGlas;}
 function bygg(s,g){const sd=SYS.find(x=>x.id===s),G=grp[s]||new THREE.Group();G.name=s;
  g.scene.traverse(o=>{if(!o.isMesh)return;const id=o.name.replace(/[._]\d+$/,"");const m=GR[id];if(!m)return;const c=m.c;
   mats[c]=mats[c]||(s==='hud'?(hudM=new THREE.MeshStandardMaterial({color:c,roughness:.7,metalness:0,side:THREE.DoubleSide,transparent:true})):new THREE.MeshStandardMaterial({color:c,roughness:.55,metalness:0}));
