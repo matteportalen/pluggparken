@@ -1,16 +1,16 @@
 /* Matens resa: en lysande matklump åker genom matspjälkningen. Tid, text och röst per steg.
    Röstfiler: ../ljud/matensresa/s<n>-1.mp3 (s0 inledning, s1–s7 stegen, s8 avslutning). Saknas en fil visas bara texten.
    Manus: manus/matensresa-manus.txt. Höj VER när en röstfil byts ut. */
-const VER="1";
+const VER="2";
 const FARTER=[1,1.25,1.5,2];
 const STG=[
- {id:"munn",namn:"Munnen",tid:"ca 10–30 sekunder",dur:7,hl:["tunga"],c:0xe0b070,t:"Maten tuggas sönder av tänderna, och saliven gör den mjuk och börjar bryta ner den. Tungan för maten bakåt när du sväljer."},
- {id:"matstrupe",namn:"Matstrupen",tid:"5–10 sekunder",dur:6,hl:["matstrupe"],c:0xd9a35f,t:"Ett rör ungefär 25 centimeter långt. Musklerna i väggen kramar ihop sig i en våg och pressar maten ner mot magen, även om du står på huvudet."},
- {id:"magsack",namn:"Magsäcken",tid:"2–4 timmar",dur:11,hl:["magsack"],c:0xe8c24a,t:"Maten blandas med magsaft och blir en tjock gröt. Magsaften är så sur att den dödar många bakterier. Magsäcken knådar maten som en degmaskin."},
- {id:"tolvfinger",namn:"Tolvfingertarmen",tid:"några minuter",dur:9,hl:["tolvfinger","gallblasa","bukspott","lever"],c:0xf0d45a,t:"Här kommer galla från gallblåsan (levern gör gallan) och saft från bukspottkörteln. Gallan hjälper till att bryta ner fett, och saften bryter ner resten av maten."},
- {id:"tunntarm",namn:"Tunntarmen",tid:"3–5 timmar",dur:17,hl:["tunntarm","portader"],c:0xf6e27a,t:"Här tas näringen upp. Tarmens vägg är full av små fingrar som suger upp näringen, och den går över i blodet. Blodet bär näringen först till levern genom portådern, sedan vidare ut i hela kroppen. Tunntarmen är flera meter lång."},
- {id:"tjocktarm",namn:"Tjocktarmen",tid:"10–50 timmar",dur:14,hl:["tjocktarm","blindtarm"],c:0xa8803f,t:"Det som blir kvar är mest vatten och sådant som kroppen inte kan ta upp. Tjocktarmen suger upp vattnet så att resten blir fast. Här bor också miljarder nyttiga bakterier som hjälper till."},
- {id:"slut",namn:"Ändtarmen",tid:"oftast 1–3 dygn för hela resan",dur:5,hl:["tjocktarm"],c:0x8a6a30,t:"Sist samlas resten i ändtarmen. När du går på toaletten lämnar det kroppen. Hela resan tar oftast mellan ett och tre dygn."}];
+ {id:"munn",namn:"Munnen",tid:"ca 10–30 sekunder",dur:12,hl:["tunga"],c:0xe0b070,t:"Maten tuggas sönder av tänderna, och saliven gör den mjuk och börjar bryta ner den. Tungan för maten bakåt när du sväljer."},
+ {id:"matstrupe",namn:"Matstrupen",tid:"5–10 sekunder",dur:13.5,hl:["matstrupe"],c:0xd9a35f,t:"Ett rör ungefär 25 centimeter långt. Musklerna i väggen kramar ihop sig i en våg och pressar maten ner mot magen, även om du står på huvudet."},
+ {id:"magsack",namn:"Magsäcken",tid:"2–4 timmar",dur:12.5,hl:["magsack"],c:0xe8c24a,t:"Maten blandas med magsaft och blir en tjock gröt. Magsaften är så sur att den dödar många bakterier. Magsäcken knådar maten som en degmaskin."},
+ {id:"tolvfinger",namn:"Tolvfingertarmen",tid:"några minuter",dur:14,hl:["tolvfinger","gallblasa","bukspott","lever"],c:0xf0d45a,t:"Här kommer galla från gallblåsan (levern gör gallan) och saft från bukspottkörteln. Gallan hjälper till att bryta ner fett, och saften bryter ner resten av maten."},
+ {id:"tunntarm",namn:"Tunntarmen",tid:"3–5 timmar",dur:18,hl:["tunntarm","portader"],c:0xf6e27a,t:"Här tas näringen upp. Tarmens vägg är full av små fingrar som suger upp näringen, och den går över i blodet. Blodet bär näringen först till levern genom portådern, sedan vidare ut i hela kroppen. Tunntarmen är flera meter lång."},
+ {id:"tjocktarm",namn:"Tjocktarmen",tid:"10–50 timmar",dur:11.8,hl:["tjocktarm","blindtarm"],c:0xa8803f,t:"Det som blir kvar är mest vatten och sådant som kroppen inte kan ta upp. Tjocktarmen suger upp vattnet så att resten blir fast. Här bor också miljarder nyttiga bakterier som hjälper till."},
+ {id:"slut",namn:"Ändtarmen",tid:"oftast 1–3 dygn för hela resan",dur:8.5,hl:["tjocktarm"],c:0x8a6a30,t:"Sist samlas resten i ändtarmen. När du går på toaletten lämnar det kroppen. Hela resan tar oftast mellan ett och tre dygn."}];
 const INTRO="Följ med på maten resa genom kroppen. Det börjar i munnen och slutar flera dygn senare. Tiderna i rutan är ungefärliga, och här går allt mycket snabbare än i verkligheten.";
 const FIN="Nu har du följt maten hela vägen. Du kan se resan igen, eller dra i reglaget för att titta närmare på ett steg.";
 const SPAR=new Set(["tunga","matstrupe","magsack","tolvfinger","gallblasa","bukspott","lever","tunntarm","tjocktarm","blindtarm"]);
