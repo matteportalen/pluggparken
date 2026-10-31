@@ -826,8 +826,8 @@ const ETID=[1,.75,.5],ETXT=["¼","3/16","⅛"];
 function irSkapa(c){const n=Math.round(c.sampleRate*2.2),b=c.createBuffer(2,n,c.sampleRate);for(let ch=0;ch<2;ch++){const d=b.getChannelData(ch);for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/n,2.6)}return b}
 function fxBygg(l,c,dest){const inn=c.createGain(),f=c.createBiquadFilter(),dry=c.createGain(),ds=c.createGain(),dl=c.createDelay(2),fb=c.createGain(),rs=c.createGain(),cv=c.createConvolver(),fls=c.createGain(),fd=c.createDelay(.05),flb=c.createGain(),lfo=c.createOscillator(),lg=c.createGain();cv.buffer=irSkapa(c);
   inn.connect(f);f.connect(dry);dry.connect(dest);f.connect(ds);ds.connect(dl);dl.connect(dest);dl.connect(fb);fb.connect(dl);f.connect(rs);rs.connect(cv);cv.connect(dest);fb.gain.value=.42;
-  fd.delayTime.value=.004;lfo.frequency.value=.28;lg.gain.value=.003;lfo.connect(lg);lg.connect(fd.delayTime);lfo.start();f.connect(fls);fls.connect(fd);fd.connect(dest);fd.connect(flb);flb.connect(fd);flb.gain.value=.55;
-  const set=()=>{const x=l.fx;ds.gain.value=x.echo/100*.9;dl.delayTime.value=60/S.bpm*ETID[x.et];rs.gain.value=x.hall/100*.9;fls.gain.value=x.flang/100*.9;const v=x.filt;
+  fd.delayTime.value=.0045;lfo.frequency.value=.4;lg.gain.value=.0038;lfo.connect(lg);lg.connect(fd.delayTime);lfo.start();f.connect(fls);fls.connect(fd);fd.connect(dest);fd.connect(flb);flb.connect(fd);flb.gain.value=.72;
+  const set=()=>{const x=l.fx;ds.gain.value=x.echo/100*.9;dl.delayTime.value=60/S.bpm*ETID[x.et];rs.gain.value=x.hall/100*.9;fls.gain.value=x.flang/100*1.05;const v=x.filt;
     if(Math.abs(v)<4){f.type="lowpass";f.frequency.value=22000;f.Q.value=.0001}else if(v<0){f.type="lowpass";f.frequency.value=22050*Math.pow(180/22050,-v/100);f.Q.value=1.2}else{f.type="highpass";f.frequency.value=20*Math.pow(7000/20,v/100);f.Q.value=1.2}};
   set();return{inn,set,ds,f}}
 function pitchShift(x,st){const n=x.length,r=Math.pow(2,st/12),G=2048,H=G/4,y=new Float32Array(n),w=new Float32Array(G);for(let i=0;i<G;i++)w[i]=.5-.5*Math.cos(2*Math.PI*i/G);
