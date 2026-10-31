@@ -217,6 +217,19 @@ h2{font-size:1.6rem;margin:18px 0 8px;font-weight:800}
 #fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:8}
 @media(min-width:700px){.shop{--h:400px;--w:44px}.onc .ware{--w:58px}.tag{font-size:.76rem}.keeper,.cust{width:130px}}
 @media (prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important}}
+.pb{position:absolute;left:2%;bottom:calc(100% - 4px);width:max-content;max-width:min(190px,58vw);background:#fff;color:#1D2B53;border-radius:14px;padding:5px 10px;font-weight:800;font-size:.8rem;line-height:1.2;box-shadow:0 3px 0 rgba(0,0,0,.18);z-index:7;pointer-events:none;animation:pbIn .25s cubic-bezier(.3,1.4,.5,1) both,pbOut .4s ease 3.1s forwards}
+.pb::after{content:"";position:absolute;left:22px;bottom:-7px;border:7px solid transparent;border-top-color:#fff;border-bottom:0}
+@keyframes pbIn{from{opacity:0;transform:translateY(6px) scale(.9)}to{opacity:1;transform:none}}@keyframes pbOut{to{opacity:0}}
+.nm{position:absolute;left:50%;transform:translateX(-50%);bottom:-5px;background:rgba(29,43,83,.92);color:#fff;border-radius:10px;padding:0 8px;font-weight:800;font-size:.64rem;white-space:nowrap;z-index:5}
+.book{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-top:12px}
+.bk{background:var(--card,#fff);border-radius:18px;padding:10px;box-shadow:0 4px 0 var(--line);text-align:center}
+.bk .pic{width:78px;margin:0 auto}.bk .pic svg{width:100%;height:auto;display:block}.bk.ny .pic{filter:brightness(0) opacity(.25)}
+.bk b{display:block;font-size:1.1rem}.bk small{display:block;color:var(--muted);font-weight:700;margin-top:2px}.bk .fav{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:6px;font-weight:700;font-size:.85rem}
+.bk .hj{font-size:1.2rem;letter-spacing:2px;margin-top:4px}.bk .hj .off{opacity:.25}
+.rap{list-style:none;margin:10px 0 0;padding:0;text-align:left;display:grid;gap:6px}.rap li{background:var(--card,#fff);border-radius:14px;padding:8px 12px;box-shadow:0 3px 0 var(--line);font-weight:700;font-size:.95rem}
+.rap li.ok{background:var(--ok-bg,#E3F7EC)}.rap li.nyvan{background:#FFF1C9}
+.kvl{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px 0}.kvl span{background:#fff;border-radius:10px;padding:6px 10px;font-weight:800;box-shadow:0 3px 0 var(--line);border-top:3px dashed #C8874A;font-size:.9rem}
+.kvl span small{display:block;color:var(--muted);font-weight:700;font-size:.68rem}
 </style>
 </head>
 <body>
@@ -229,6 +242,7 @@ h2{font-size:1.6rem;margin:18px 0 8px;font-weight:800}
   <div class="levels" id="levels"></div>
   <button class="go" id="play">Öppna affären ▶</button>
   <button class="mine" id="lagerBtn"><span><b>🚚 Fyll på hyllorna</b><small id="lagerInfo">Beställ varor som håller på att ta slut</small></span></button>
+  <button class="mine" id="bookBtn"><span><b>📒 Stamkunder</b><small id="bookInfo">Träffa dem som handlar hos dig</small></span></button>
   <button class="mine" id="mineBtn"><span><b>🏪 Min affär</b><small>Köp nya varor och saker till affären</small></span><span class="k" id="mineK"></span></button>
 </div>
 </section>
@@ -251,6 +265,23 @@ h2{font-size:1.6rem;margin:18px 0 8px;font-weight:800}
   <div class="lrows" id="lrows"></div>
 </div>
 </section>
+<section id="book" class="screen" hidden>
+<div class="wrap">
+  <button class="back" id="bookBack">← Affären</button>
+  <h1>Stamkunder</h1>
+  <p class="lead">Några kunder kommer tillbaka. Räkna rätt direkt så blir de nöjda och till slut dina vänner.</p>
+  <div class="book" id="bookList"></div>
+</div>
+</section>
+<section id="cash" class="screen" hidden>
+<div class="wrap res">
+  <h2>Kassan ska räknas!</h2>
+  <p class="lead">Här är dagens kvitton. Hur mycket sålde affären för?</p>
+  <div class="kvl" id="cashList"></div>
+  <div class="panel" id="cashPanel"></div>
+  <button class="alt" id="cashSkip">Hoppa över</button>
+</div>
+</section>
 <section id="game" class="screen" hidden>
   <div class="hud"><button class="hb" id="quit" aria-label="Stäng affären">✕</button><span class="t" id="hudT"></span><span class="kassa" id="hudK"></span></div>
   <div id="gwrap">
@@ -264,6 +295,7 @@ h2{font-size:1.6rem;margin:18px 0 8px;font-weight:800}
   <div id="rStars"></div>
   <div class="big" id="rKassa"></div>
   <p id="rSub"></p>
+  <ul class="rap" id="rRap"></ul>
   <button class="go" id="rAgain">Ny dag ▶</button>
   <button class="alt" id="rLager">🚚 Fyll på hyllorna</button>
   <button class="alt" id="rMine">🏪 Min affär</button>
@@ -412,7 +444,7 @@ function shopHtml(o){o=o||{};const pr=o.prices||{},sor=(o.utbud||sortiment()).sl
     <div class="counter"></div>${disk}
     <button class="reg" id="regBtn" style="--rc:${KASSA[E.kassa]}" data-k="${E.kassa}" aria-label="Kassaapparat"><div class="scr" id="regScr">${o.reg||""}</div><div class="box"></div><div class="lada"><i></i><i></i><i></i><i></i></div></button>
     <div class="keeper">${owlSVG(Object.assign({},pet,{neck:"forklade"}))}</div>
-    ${o.cust?`<div class="cust${o.away?" away":""}" id="cust">${owlSVG(o.cust)}</div>`:""}
+    ${o.cust?`<div class="cust${o.away?" away":""}" id="cust">${o.pb||""}${owlSVG(o.cust)}${o.nm?`<span class="nm">${o.nm}</span>`:""}</div>`:""}
     ${E.golv!=="ingen"?`<button class="ongolv int${E.golv==="lampa"&&F.lampa?" on":""}" data-int="${E.golv}" aria-label="${E.golv}">${deco(E.golv,{lampa:44,hangare:42,vaxt:46,pall:44,hogtalare:38}[E.golv],{on:F.lampa})}</button>`:""}
     <div class="onc" id="onc">${o.onc||""}</div></div>
     ${o.say?`<div class="bubble" id="bubble">${o.say}<button class="spk" id="spk" aria-label="Läs upp">🔊</button></div>`:""}`;}
@@ -424,6 +456,7 @@ function openHome(){G=null;
   $("homeShop").innerHTML=shopHtml();
   $("levels").innerHTML=Object.entries(NIVA).map(([n,v])=>`<button class="lvl" data-n="${n}" aria-pressed="${data.niva==n}"><b>${n}. ${v.name}</b><small>${v.desc}</small>${starHtml(data.stars[n]||0)}</button>`).join("");
   $("mineK").textContent=`💰 ${data.kassa} kr`;initLager();const lagt=sortiment().filter(i=>lag(i)<=1).length;
+  {const tr=STAM.filter(x=>(data.stam[x.id]||{}).b).length,vn=STAM.filter(x=>hjarton(x.id)>0).length;$("bookInfo").textContent=tr?`${tr} av ${STAM.length} träffade · ${vn} ${vn===1?"vän":"vänner"}`:"Träffa dem som handlar hos dig";}
   $("lagerInfo").textContent=lagt?`${lagt} ${lagt===1?"vara håller":"varor håller"} på att ta slut`:"Hyllorna är fulla";show("home");}
 $("lagerBtn").onclick=()=>openLager();
 $("levels").onclick=e=>{const b=e.target.closest("[data-n]");if(!b)return;data.niva=+b.dataset.n;save();$("levels").querySelectorAll("[data-n]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.n==data.niva));};
@@ -490,17 +523,21 @@ function startDay(){if(data.radio&&eqRadio())radioCtx();const N=NIVA[data.niva],
   if(offer&&!utbud.includes(offer.i)){const c=utbud.filter(i=>lag(i)>=4);offer=c.length?{i:c[0],p:prices[c[0]]*2-rnd(2,Math.max(3,Math.floor(prices[c[0]]/2)))}:null;}
   // kunderna: alltid två som ska ha växel, sedan sex olika
   const typer=shuffle(["vaxel","vaxel",...shuffle(["summa","summa","rakna","budget","vaxla","racker","billig",...(data.niva===4?["styck","styck"]:[])]).slice(0,6)]);
-  G={N,niva:data.niva,prices,offer,typer,utbud,k:0,miss:0,kassa:0,slut:[]};
+  // tre stamkunder per dag, helst sådana vars favoritvara finns på hyllan
+  const harFav=x=>{const f=VAROR.indexOf(x.fav);return utbud.includes(f)&&lag(f)>0;},stamDag=[...shuffle(STAM.filter(harFav)).slice(0,2),...shuffle(STAM.filter(x=>!harFav(x))).slice(0,1)].filter(Boolean),platser=shuffle([...Array(KUNDER).keys()]).slice(0,stamDag.length),slots=Array(KUNDER).fill(null);stamDag.forEach((x,j)=>slots[platser[j]]=x);
+  G={N,niva:data.niva,prices,offer,typer,utbud,k:0,miss:0,kassa:0,slut:[],slots,met:{},sales:[],sold:{},mal:Math.round(78*MULT[data.niva]),prat:null,pers:null};
   show("game");nextCust();}
 function custCfg(){const pet=lasDjur(),an=pick(WARD.animal.items.map(x=>x.id).filter(a=>a!==pet.animal));
   return{animal:an,color:"natur",glasses:pick(["inga","inga","runda","sol"]),hat:pick(["ingen","ingen","keps","mossa","party"]),neck:pick(["ingen","rosett","halsduk"])};}
-function hud(){$("hudT").textContent=`Dag ${data.dagar+1} · Kund ${Math.min(G.k+1,KUNDER)} av ${KUNDER}`;$("hudK").textContent=`💰 ${G.kassa} kr`;}
+function hud(){$("hudT").textContent=`Dag ${data.dagar+1} · Kund ${Math.min(G.k+1,KUNDER)} av ${KUNDER}`;$("hudK").textContent=`💰 ${G.kassa} / ${G.mal} kr`;}
 function nextCust(){if(G.k>=KUNDER)return endDay();
-  const typ=G.typer[G.k];FB={m:"",h:false};G.bad=false;G.t=makeTask(typ);G.t.cust=custCfg();G.tries=0;G.inp="";G.tray=[];G.sel=new Set();G.done=false;G.helped=false;
-  hud();render(true);
+  const typ=G.typer[G.k];FB={m:"",h:false};G.bad=false;const sl=G.slots[G.k],fi=sl?VAROR.indexOf(sl.fav):-1;G.must=sl&&fi>=0&&iLager().includes(fi)&&Math.random()<.8?fi:null;G.prat=null;
+  G.t=makeTask(typ);G.t.cust=sl?stamLook(sl):custCfg();G.pers={s:sl,nm:sl?sl.n:null,fi:G.t.items&&G.must!=null&&G.t.items.includes(G.must)?G.must:-1};G.tries=0;G.inp="";G.tray=[];G.sel=new Set();G.done=false;G.helped=false;
+  hud();render(true);const kk=G.k;
+  setTimeout(()=>{if(!G||G.k!==kk||G.done||G.prat)return;const s0=G.pers.s,t0=G.t;pratt(s0?(G.pers.fi>=0?s0.favT:Math.random()<.35&&FLAV[t0.typ]?pick(FLAV[t0.typ]):pick(s0.hej)):pick(FLAV[t0.typ]&&Math.random()<.6?FLAV[t0.typ]:ANON));},650);
   if(G.t.typ==="slut"){G.done=true;G.slut.push(G.t.want);fb(`Kunden gick utan att handla. Fyll på ${NAMN(G.t.want)} efter dagen!`,true);window.Ljud&&Ljud.bad&&Ljud.bad();renderPanel();}}
 // ett slumpat köp: 1–3 varor vars summa ryms under gränsen
-function basket(n,limit){const sor=iLager();n=Math.min(n,sor.length);for(let k=0;k<200;k++){const it=shuffle(sor.slice()).slice(0,n),tot=it.reduce((s,i)=>s+G.prices[i],0);if(tot<=limit)return{it,tot};}
+function basket(n,limit){const sor=iLager();n=Math.min(n,sor.length);for(let k=0;k<200;k++){const it=shuffle(sor.slice()).slice(0,n);if(G.must!=null&&sor.includes(G.must)&&!it.includes(G.must))it[0]=G.must;const tot=it.reduce((s,i)=>s+G.prices[i],0);if(tot<=limit)return{it,tot};}
   const i=sor.reduce((a,b)=>G.prices[a]<G.prices[b]?a:b);return{it:[i],tot:G.prices[i]};}
 // kunden betalar med en sedel eller ett mynt som är större än summan
 // kunden betalar med flera mynt och sedlar som blir lite mer än priset (23 kr: en tjugolapp och en femkrona)
@@ -542,6 +579,25 @@ function makeTask(typ){const N=G.N,max=N.max,inne=iLager(),hylla=G.utbud||sortim
     if(pairs===1&&new Set(ps).size===5)return{typ:"budget",items:it,sum,ans:[a,b].sort(),earn:sum};}
   return makeTask("summa");}
 const NAMN=i=>VAROR[i];
+/* Stamkunder: fasta kunder med namn, favoritvara och egna repliker. De kommer tillbaka, blir nöjda och till slut vänner (data.stam). */
+const STAM=[
+ {id:"majken",n:"Majken",look:{animal:"katt",glasses:"runda",hat:"ingen",neck:"rosett"},fav:"jordgubbe",hej:["Hej! Det är jag, Majken!","Jag handlar alltid här!","Hej hej! Vad gott allt ser ut!"],favT:"Jordgubbar! Min favorit!",tack:["Tack! Du är bäst!","Härligt! Vi ses snart!"],oj:["Det går bra! Tack ändå!"],fel:["Hmm, räkna igen?"]},
+ {id:"ove",n:"Ove",look:{animal:"hund",glasses:"inga",hat:"keps",neck:"ingen"},fav:"korv med bröd",hej:["Tjena! Ove här.","Dags för lunch!","Hej, kompis!"],favT:"Korv med bröd! Mums!",tack:["Tack, kompis!","Perfekt, tack!"],oj:["Räkna lite noga nästa gång, kompis!"],fel:["Nä, det var väl fel?"]},
+ {id:"elsa",n:"Elsa",look:{animal:"kanin",glasses:"stjarn",hat:"ingen",neck:"halsduk"},fav:"morot",hej:["Hej! Hoppas du har morötter!","Elsa är här!","Hopp hopp, hej!"],favT:"Morötter! Hoppsan, vad bra!",tack:["Tack! Hopp-hopp!","Vad duktig du är!"],oj:["Det är lugnt. Tack ändå!"],fel:["Hoppsan, räkna om!"]},
+ {id:"kalle",n:"Kalle",look:{animal:"rav",glasses:"sol",hat:"mossa",neck:"ingen"},fav:"pizza",hej:["Hej! Kalle Räv, hungrig som en räv!","Hej hej!","Inget är så gott som mat!"],favT:"Pizza! Det är min grej!",tack:["Smart! Tack!","Ha en fin dag!"],oj:["Hmm, litet krångligt. Tack ändå!"],fel:["Ser du inte lurig ut?"]},
+ {id:"sixten",n:"Sixten",look:{animal:"bjorn",glasses:"inga",hat:"ingen",neck:"medalj"},fav:"honung",hej:["Mmm. Sixten. Har ni honung?","Hej, jag brummar förbi.","Brum brum, hej!"],favT:"Honung! Brum brum!",tack:["Brumm, tack!","Mycket bra!"],oj:["Brummel. Det blev lite fel."],fel:["Brummel? Nej, nej."]},
+ {id:"lisbet",n:"Lisbet",look:{animal:"pingvin",glasses:"inga",hat:"party",neck:"ingen"},fav:"isglass",hej:["Hej! Det är så varmt idag!","Lisbet! Jag vill ha något kallt!","Hej hej, jag har bråttom!"],favT:"Glass! Äntligen!",tack:["Tack så mycket!","Åh, vad snabbt!"],oj:["Oj, det var visst knepigt."],fel:["Brr, räkna en gång till."]},
+ {id:"nisse",n:"Nisse",look:{animal:"groda",glasses:"dyk",hat:"ingen",neck:"ingen"},fav:"vindruvor",hej:["Kvack! Hej!","Nisse hoppade förbi!","Hej hej, kvack!"],favT:"Vindruvor! Kvack kvack!",tack:["Kvack! Tack!","Hoppla, vad bra!"],oj:["Kvack, det blev lite kluddigt."],fel:["Kvack? Nej."]},
+ {id:"doris",n:"Doris",look:{animal:"panda",glasses:"runda",hat:"krona",neck:"medalj"},fav:"tårta",hej:["God dag! Doris hälsar.","Idag firar jag något!","Hej på dig!"],favT:"Tårta! Det är fest!",tack:["Tack, älskling!","Bravo, bra räknat!"],oj:["Ingen fara. Tack ändå!"],fel:["Nej nej, kolla igen."]}];
+if(!data.stam)data.stam={};
+const HJ=[2,4,7];const hjarton=id=>{const g=(data.stam[id]||{}).g||0;return HJ.filter(x=>g>=x).length;};
+function stamLook(s){const pet=lasDjur(),l=Object.assign({color:"natur",hand:"ingen",back:"ingen"},s.look);if(l.animal===pet.animal)l.animal=l.animal==="katt"?"kanin":"katt";return l;}
+const ANON=["Hej!","God dag!","Hallå där!","Trevlig affär!","Hej hej!"];
+const FLAV={vaxel:["Jag har bara en stor sedel!","Kan jag få tillbaka?"],racker:["Hoppas pengarna räcker!","Ojoj, räcker det?"],vaxla:["Alla mina mynt är så tunga!","Jag behöver växla!"],rakna:["Jag har samlat i en burk!","Hur mycket har jag?"],billig:["Jag vill ha det billigaste!","Jag letar efter ett fynd!"],budget:["Jag har en liten budget!","Jag har exakt så mycket!"],summa:["Nu ska jag köpa lite!","Det här vill jag ha!"],styck:["Jag tar flera stycken!","Det här är gott!"]};
+const BADA=["🤔 Hmm?","🤨 Är det rätt?","🙃 Kolla igen!"],TACKA=["😊 Tack!","👍 Tack så mycket!","😄 Bra jobbat!"];
+function pbHtml(){const p=G&&G.prat;if(!p)return "";const e=(Date.now()-p.at)/1000;if(e>3.4)return "";return `<span class="pb" style="animation-delay:-${e.toFixed(2)}s,${(3.1-e).toFixed(2)}s">${p.t}</span>`;}
+function pratt(t){if(!G)return;G.prat={t,at:Date.now()};const c=$("cust");if(!c)return;c.querySelectorAll(".pb").forEach(x=>x.remove());c.insertAdjacentHTML("afterbegin",pbHtml());}
+function bad(){window.Ljud&&Ljud.bad&&Ljud.bad();if(G&&G.t&&G.t.typ!=="slut"){const s=G.pers&&G.pers.s;pratt(s?"🤔 "+pick(s.fel):pick(BADA));}}
 // flera av samma vara ("3 bananer"); n = 1 ger ental
 const PLUR=["äpplen","bananer","apelsiner","päron","citroner","morötter","ägg","ostar","jordgubbar","körsbär","klasar vindruvor","vattenmeloner","croissanter","limpor","muffins","cupcakes","munkar","kakor","tårtor","våfflor",
   "isglassar","glasspokaler","glassbägare","chokladkakor","chokladbitar","klubbor","läskburkar","läskflaskor","mjölkpaket","burkar honung","korv med bröd","smörgåsar","pizzor","pannkakor"];
@@ -566,7 +622,7 @@ function render(enter){const t=G.t;let onc="";
   else if(t.typ==="slut")onc=`<span class="ware out">${spr(t.want)}<span class="tag slut">Slut</span></span>`;
   else if(t.typ==="rakna")onc=t.money.map(v=>moneyHtml(v,true)).join("");
   else onc=t.items.map((i,j)=>`<span class="ware pick${G.sel.has(j)?" sel":""}" data-j="${j}">${spr(i)}<span class="tag">${G.prices[i]} kr</span></span>`).join("");
-  $("gameShop").innerHTML=shopHtml({prices:G.prices,offer:G.offer,utbud:G.utbud,cust:t.cust,away:enter,say:sayFor(t),onc,reg:t.typ==="vaxel"?`${t.tot} kr`:""});
+  $("gameShop").innerHTML=shopHtml({prices:G.prices,offer:G.offer,utbud:G.utbud,cust:t.cust,nm:G.pers&&G.pers.nm,pb:pbHtml(),away:enter,say:sayFor(t),onc,reg:t.typ==="vaxel"?`${t.tot} kr`:""});
   if(enter&&!reduced())requestAnimationFrame(()=>requestAnimationFrame(()=>{const c=$("cust");if(c)c.classList.remove("away");}));else{const c=$("cust");if(c)c.classList.remove("away");}
   $("spk").onclick=()=>speak(sayFor(t).replace(/kr\b/g,"kronor"));
   document.querySelectorAll("#onc .pick").forEach(x=>x.onclick=()=>pickWare(+x.dataset.j));
@@ -618,58 +674,94 @@ function why(t){
   return "";}
 function checkNum(){const t=G.t,v=+G.inp;
   if(v===t.ans){serve(`Rätt! ${why(t)}`);return;}
-  G.tries++;if(G.tries===1)G.miss++;window.Ljud&&Ljud.bad&&Ljud.bad();
+  G.tries++;if(G.tries===1)G.miss++;bad();
   if(G.tries>=2){G.inp=String(t.ans);serve(`Det blir ${why(t)}.`,true);return;}
   G.bad=true;
   fb(t.typ==="rakna"?"Inte riktigt. Börja med de största pengarna och räkna vidare.":t.typ==="styck"?(t.offer?"Inte riktigt. Hur många par blir det?":"Inte riktigt. Det är samma pris flera gånger."):"Inte riktigt. Räkna ihop prislapparna en gång till.",true);renderPanel();}
 function checkChange(){const t=G.t,sum=G.tray.reduce((a,b)=>a+b,0);if(!G.tray.length){fb("Tryck på pengarna i kassalådan först.",true);return;}
   if(t.typ==="vaxla"){const fel=t.only&&G.tray.some(v=>v!==t.only);
     if(sum===t.note&&!fel){serve(`Rätt! ${G.tray.length>6&&t.only?`${G.tray.length} · ${t.only}`:G.tray.join(" + ")} = ${t.note} kr.`);return;}
-    G.tries++;if(G.tries===1)G.miss++;window.Ljud&&Ljud.bad&&Ljud.bad();
+    G.tries++;if(G.tries===1)G.miss++;bad();
     if(G.tries>=2){serve(t.only?`${t.note} kr är ${t.note/t.only} ${FLERA[t.only]}: ${t.note/t.only} · ${t.only} = ${t.note}.`:`Pengarna ska bli ${t.note} kr tillsammans, till exempel ${exempel(t.note)}.`,true);return;}
     fb(fel?`Kunden vill bara ha ${FLERA[t.only]}. Hur många ${FLERA[t.only]} blir ${t.note} kr?`:sum<t.note?`Det är ${sum} kr. Det ska bli ${t.note} kr.`:`Det är ${sum} kr, det är för mycket. Det ska bli ${t.note} kr.`,true);renderPanel();return;}
   if(sum===t.ans){serve(`Rätt! ${t.pay} − ${t.tot} = ${t.ans} kr tillbaka.`);return;}
-  G.tries++;if(G.tries===1)G.miss++;window.Ljud&&Ljud.bad&&Ljud.bad();
+  G.tries++;if(G.tries===1)G.miss++;bad();
   if(G.tries>=2){G.helped=true;serve(`Tillbaka ska det vara ${t.ans} kr: räkna uppåt från ${t.tot} till ${t.pay}.`,true);return;}
   fb(sum<t.ans?"Det är för lite. Räkna uppåt från priset till det kunden betalade.":"Det är för mycket. Räkna uppåt från priset till det kunden betalade.",true);renderPanel();}
 // ett exempel på växel med de största valörerna under beloppet
 function exempel(n){const out=[];let r=n;for(const v of G.N.val.filter(v=>v<n).reverse())while(r>=v){out.push(v);r-=v;}return out.join(" + ");}
 function answerRacker(ja){const t=G.t;if(!G||G.done)return;const sum=`${t.items.map(i=>G.prices[i]).join(" + ")} = ${t.tot} kr`;
   if(ja===t.ans){serve(`Rätt! ${t.items.length>1?sum:`Den kostar ${t.tot} kr`}, och ${t.har} kr ${t.ans?"räcker":"räcker inte"}.`);return;}
-  G.tries++;if(G.tries===1)G.miss++;window.Ljud&&Ljud.bad&&Ljud.bad();
+  G.tries++;if(G.tries===1)G.miss++;bad();
   if(G.tries>=2){serve(`${sum}. ${t.har} kr ${t.ans?"räcker":"räcker inte"}.`,true);return;}
   fb(t.items.length>1?"Inte riktigt. Räkna ihop prislapparna först och jämför med pengarna.":"Inte riktigt. Jämför priset med pengarna.",true);}
 function pickWare(j){if(!G||G.done)return;const t=G.t;
   if(t.typ==="billig"){G.sel=new Set([j]);render(false);
     if(j===t.ans){serve(`Rätt! ${G.prices[t.items[j]]} kr är ${t.dyr?"dyrast":"billigast"}.`);return;}
-    G.tries++;if(G.tries===1)G.miss++;window.Ljud&&Ljud.bad&&Ljud.bad();
+    G.tries++;if(G.tries===1)G.miss++;bad();
     if(G.tries>=2){G.sel=new Set([t.ans]);serve(`Den ${t.dyr?"dyraste":"billigaste"} kostar ${G.prices[t.items[t.ans]]} kr.`,true);return;}
     fb(`${G.prices[t.items[j]]} kr. Finns det någon som är ${t.dyr?"dyrare":"billigare"}?`,true);setTimeout(()=>{if(G&&!G.done){G.sel=new Set();render(false);}},900);return;}
   if(G.sel.has(j))G.sel.delete(j);else{if(G.sel.size>=2)return;G.sel.add(j);}
   render(false);if(G.sel.size<2)return;
   const [a,b]=[...G.sel].sort(),pa=G.prices[t.items[a]],pb=G.prices[t.items[b]];
   if(pa+pb===t.sum){serve(`Rätt! ${pa} + ${pb} = ${t.sum} kr`);return;}
-  G.tries++;if(G.tries===1)G.miss++;window.Ljud&&Ljud.bad&&Ljud.bad();
+  G.tries++;if(G.tries===1)G.miss++;bad();
   if(G.tries>=2){G.sel=new Set(t.ans);serve(`De två är ${t.ans.map(j=>G.prices[t.items[j]]).join(" + ")} = ${t.sum} kr.`,true);return;}
   fb(`${pa} + ${pb} = ${pa+pb} kr. Det ska bli ${t.sum} kr.`,true);setTimeout(()=>{if(G&&!G.done){G.sel=new Set();render(false);}},900);}
 function serve(msg,shown){const t=G.t;G.done=true;
+  {const pe=G.pers&&G.pers.s,direkt=G.tries===0&&!shown;
+   if(pe){const h=G.met[pe.id];G.met[pe.id]=(h===undefined?true:h)&&direkt;}
+   pratt(pe?(shown?"🙂 "+pick(pe.oj):direkt?"😊 "+pick(pe.tack):"🙂 Tack ändå!"):(shown?"🙂 Tack ändå!":pick(TACKA)));
+   if(t.earn>0&&["summa","styck","vaxel","kvitto","vag","rea"].includes(t.typ))G.sales.push({n:(G.pers&&G.pers.nm)||"Kund",v:t.earn});}
   const lon=LON(G.tries===0,G.niva);G.kassa+=lon;
   // varorna går från hyllan
-  const salt=t.typ==="budget"?t.ans.map(j=>t.items[j]):t.typ==="billig"?[t.items[t.ans]]:t.typ==="racker"&&!t.ans?[]:t.items||[];salt.forEach(i=>{data.lager[i]=Math.max(0,lag(i)-1);});save();
+  const salt=t.typ==="budget"?t.ans.map(j=>t.items[j]):t.typ==="billig"?[t.items[t.ans]]:t.typ==="racker"&&!t.ans?[]:t.items||[];salt.forEach(i=>{data.lager[i]=Math.max(0,lag(i)-1);G.sold[i]=(G.sold[i]||0)+1;});save();
   fb(msg+` Affären tjänar ${lon} kr.`,shown);kvitto(t);
   if(!shown){window.Ljud&&Ljud.kaching&&Ljud.kaching();}
   hud();renderPanel();
   if(t.typ==="vaxel"&&G.helped){const lb=document.querySelector("#panel #lineBox");if(lb)lb.innerHTML=countUp(t.tot,t.pay);}
   const c=$("cust");if(c&&!reduced()){c.animate([{transform:"translateY(0)"},{transform:"translateY(-16px)"},{transform:"translateY(0)"}],{duration:450});}}
-function endDay(){const st=G.miss===0?3:G.miss<=2?2:1,old=data.stars[G.niva]||0;data.stars[G.niva]=Math.max(old,st);
-  const bonus=G.miss===0?Math.round(20*MULT[G.niva]):0;G.kassa+=bonus;
-  data.kassa+=G.kassa;data.dagar=(data.dagar||0)+1;save();
+function endDay(){const st=G.miss===0?3:G.miss<=2?2:1,old=data.stars[G.niva]||0;data.stars[G.niva]=Math.max(old,st);G.st=st;
+  const rap=[],k0=G.kassa;
+  G.bonus=G.miss===0?Math.round(20*MULT[G.niva]):0;G.kassa+=G.bonus;
+  if(k0>=G.mal){const mb=Math.round(10*MULT[G.niva]);G.kassa+=mb;rap.push(`<li class="ok">🎯 Dagens mål (${G.mal} kr) nåddes! +${mb} kr</li>`);}else rap.push(`<li>🎯 Dagens mål var ${G.mal} kr. Du fick ${k0} kr, nästan!</li>`);
+  Object.keys(G.met).forEach(id=>{const s0=STAM.find(x=>x.id===id),d=data.stam[id]||(data.stam[id]={b:0,g:0}),h0=hjarton(id);d.b++;if(G.met[id])d.g++;const h1=hjarton(id);
+    if(G.met[id]&&h1>h0){const dr=h1===1?0:h1===2?15:30;G.kassa+=dr;rap.push(`<li class="nyvan">❤️ ${s0.n} har blivit ${h1===1?"en vän":h1===2?"en riktig stamkund":"din bästa vän"}!${dr?` ${s0.n} ger ${dr} kr i dricks.`:""}</li>`);}
+    else rap.push(`<li>${G.met[id]?"😊":"🙂"} ${s0.n} handlade idag${G.met[id]?" och blev nöjd":""}.</li>`);});
+  const top=Object.entries(G.sold).sort((a,b)=>b[1]-a[1])[0];if(top&&top[1]>=2)rap.push(`<li>🏆 Mest sålt idag: ${PLUR[+top[0]]} (${top[1]} st)</li>`);
+  G.rap=rap;
+  if(G.sales.length>=3)openCash();else slutDag();}
+function slutDag(){const st=G.st,bonus=G.bonus;data.kassa+=G.kassa;data.dagar=(data.dagar||0)+1;save();
   $("rTitle").textContent=G.miss===0?"Alla kunder fick rätt direkt! 🎉":"Affären har stängt för idag";
   $("rStars").innerHTML=starHtml(st);$("rKassa").textContent=`+${G.kassa} kr`;
   const next=UPS.filter(u=>!has(u.id)).sort((a,b)=>a.pris-b.pris)[0];
   const lagt=sortiment().filter(i=>lag(i)<=1).length;
   $("rSub").innerHTML=`${KUNDER-G.miss} av ${KUNDER} kunder fick rätt direkt.${bonus?` ${bonus} kr i bonus för en dag utan fel!`:""}${G.slut.length?` ${G.slut.length} ${G.slut.length===1?"kund":"kunder"} gick för att varan var slut.`:""}<br>I kassan totalt: <b>${data.kassa} kr</b>.`+(lagt?`<br>🚚 ${lagt} ${lagt===1?"vara håller":"varor håller"} på att ta slut.`:"")+(next?(data.kassa>=next.pris?` Du har råd med <b>${next.name}</b>!`:` ${next.pris-data.kassa} kr kvar till ${next.name}.`):"");
+  $("rRap").innerHTML=G.rap.join("");
   show("result");if(st===3&&window.Ljud&&Ljud.fanfare){Ljud.fanfare();confetti();}}
+/* Kassan räknas: efter stängning ska dagens kvitton läggas ihop (frivilligt, ger lite extra i kassan men påverkar inte stjärnorna) */
+let C=null;
+function openCash(){C={sum:G.sales.reduce((a,b)=>a+b.v,0),inp:"",tries:0,done:false,fb:""};
+  $("cashList").innerHTML=G.sales.map(x=>`<span><small>${x.n}</small>${x.v} kr</span>`).join("");cashPanel();show("cash");}
+function cashPanel(){const p=$("cashPanel");
+  if(C.done){p.innerHTML=`<div class="fb">${C.fb}</div><button class="go" id="cashNext">Fortsätt ➜</button>`;$("cashNext").onclick=slutDag;return;}
+  p.innerHTML=`<p class="ask">Sålt för: <span class="ans" id="cashAns">${C.inp||" "}</span> kr</p><div class="fb${C.hint?" hint":""}" id="cashFb">${C.fb}</div>
+    <div class="pad">${[1,2,3,4,5,6,7,8,9].map(n=>`<button data-k="${n}">${n}</button>`).join("")}<button data-k="del" aria-label="Sudda">⌫</button><button data-k="0">0</button><button data-k="ok" class="okbtn">OK</button></div>`;
+  p.querySelectorAll(".pad [data-k]").forEach(b=>b.onclick=()=>cashKey(b.dataset.k));}
+function cashKey(k){if(!C||C.done)return;
+  if(k==="del"){C.inp=C.inp.slice(0,-1);cashPanel();return;}
+  if(k==="ok"){if(C.inp==="")return;const v=+C.inp;
+    if(v===C.sum){C.done=true;C.hint=false;G.kassa+=10;C.fb=`Rätt! ${G.sales.map(x=>x.v).join(" + ")} = ${C.sum} kr. Kassan stämmer! +10 kr`;window.Ljud&&Ljud.kaching&&Ljud.kaching();cashPanel();return;}
+    C.tries++;bad();
+    if(C.tries>=2){C.done=true;C.hint=false;C.fb=`Det blev ${C.sum} kr: ${G.sales.map(x=>x.v).join(" + ")}.`;cashPanel();return;}
+    C.hint=true;C.fb="Inte riktigt. Lägg ihop kvittona två och två, och sedan summorna.";C.inp="";cashPanel();return;}
+  if(C.inp.length<4){C.inp+=k;C.fb="";C.hint=false;cashPanel();}}
+$("cashSkip").onclick=()=>slutDag();
+/* Stamkundsboken */
+function openBook(){const d0=id=>data.stam[id]||{b:0,g:0};
+  $("bookList").innerHTML=STAM.map(s0=>{const d=d0(s0.id),ny=!d.b,fi=VAROR.indexOf(s0.fav),h=hjarton(s0.id);
+    return `<div class="bk${ny?" ny":""}"><div class="pic">${owlSVG(stamLook(s0))}</div><b>${ny?"???":s0.n}</b>${ny?"<small>Har inte besökt än</small>":`<small>${d.b} ${d.b===1?"besök":"besök"}</small><div class="fav">${spr(fi,34)} ${s0.fav}</div>`}<div class="hj">${[0,1,2].map(i=>i<h?"❤️":'<span class="off">❤️</span>').join("")}</div></div>`;}).join("");show("book");}
+$("bookBtn").onclick=()=>openBook();$("bookBack").onclick=()=>openHome();
 $("rAgain").onclick=()=>startDay();$("rMine").onclick=()=>openMine();$("rLager").onclick=()=>openLager();$("rHome").onclick=()=>openHome();
 $("quit").onclick=()=>{G=null;openHome();};
 
