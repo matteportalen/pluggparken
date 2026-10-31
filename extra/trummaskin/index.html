@@ -377,11 +377,11 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
 const $=s=>document.querySelector(s);
 const SK=["#E5484D","#F2780C","#F2B707","#F3EBD6","#4cc3ff","#7fe08a","#c58bff","#ff7bd0"];
 /* ---------- ljudmotor ---------- */
-let ctx=null,master=null,comp=null,pg=null,bf=null,mg=null,muteAll=false,brus=null,SAMP=null,SAMPMETA=[];
+let padIn=null,padFxn=null,ctx=null,master=null,comp=null,pg=null,bf=null,mg=null,muteAll=false,brus=null,SAMP=null,SAMPMETA=[];
 function startaLjud(){if(ctx){if(ctx.state==="suspended")ctx.resume();return}
   const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;ctx=new AC();
   master=ctx.createGain();comp=ctx.createDynamicsCompressor();comp.threshold.value=-14;comp.ratio.value=5;comp.attack.value=.003;comp.release.value=.2;
-  bf=ctx.createBiquadFilter();bf.type="highpass";bf.frequency.value=10;bf.Q.value=.7;master.connect(bf);bf.connect(comp);pg=ctx.createGain();pg.connect(master);mg=ctx.createGain();comp.connect(mg);mg.connect(ctx.destination);setMaster();setMute();
+  padFxn=fxBygg(PFX,ctx,master);padIn=padFxn.inn;bf=ctx.createBiquadFilter();bf.type="highpass";bf.frequency.value=10;bf.Q.value=.7;master.connect(bf);bf.connect(comp);pg=ctx.createGain();pg.connect(master);mg=ctx.createGain();comp.connect(mg);mg.connect(ctx.destination);setMaster();setMute();
   const n=ctx.sampleRate*1.2;brus=ctx.createBuffer(1,n,ctx.sampleRate);const d=brus.getChannelData(0);for(let i=0;i<n;i++)d[i]=Math.random()*2-1;
   hamtaSampel();padLadda()}
 function hamtaSampel(){if(SAMP||!ctx||hamtaSampel.p)return;hamtaSampel.p=1;
@@ -525,20 +525,22 @@ function pad2Behov(force){if(pad2L||!PADS||!ctx)return;if(!force&&!(padBank>=10|
 function padGamla(){if(!PADS||!SAMP)return;const by=k=>SAMPMETA.map((m,i)=>[m,i]).filter(q=>q[0].k===k).map(q=>q[1]),mk=ids=>ids.slice(0,16).map(i=>({n:SAMPMETA[i].n.toUpperCase(),buf:SAMP[i],c:"Library of Congress, Citizen DJ: "+SAMPMETA[i].c}));
   PADS.g1=mk(by("perc").concat(by("ljud")));PADS.g2=mk(by("stab").concat(by("snart")));PADS.g3=mk(by("bas").concat(by("tick")))}
 const EGNA=Array(16).fill(null);
+const PFX={fx:Object.assign(FXNY(),{et:1})};
 const padKlipp=id=>{const b=PBANK[id>>4];if(!b)return null;if(b[0]==="egna")return EGNA[id&15];return PADS&&PADS[b[0]]&&PADS[b[0]][id&15]};
 const padRevM=new Map();
 function padBuf(c,rev){if(!rev)return c.buf;let r=padRevM.get(c);if(!r){const n=c.buf.length;r=ctx.createBuffer(1,n,c.buf.sampleRate);const a=c.buf.getChannelData(0),d=r.getChannelData(0);for(let i=0;i<n;i++)d[i]=a[n-1-i];padRevM.set(c,r)}return r}
-function padSpela(id,t,p,rev){const c=padKlipp(id);if(!c||!ctx||!master)return;const s=ctx.createBufferSource(),g=ctx.createGain();s.buffer=padBuf(c,rev);s.playbackRate.value=Math.pow(2,(p||0)/12);g.gain.value=Math.pow(S.pvol/100,1.4)*1.1;s.connect(g);g.connect(master);s.start(t)}
+function padSpela(id,t,p,rev){const c=padKlipp(id);if(!c||!ctx||!master)return;const s=ctx.createBufferSource(),g=ctx.createGain();s.buffer=padBuf(c,rev);s.playbackRate.value=Math.pow(2,(p||0)/12);g.gain.value=Math.pow(S.pvol/100,1.4)*1.1;s.connect(g);g.connect(padIn||master);s.start(t)}
 const padId=pi=>padBank===9?PFAV[pi]:padBank*16+pi;
 function padBygg(){const h=$("#padpan");
   h.innerHTML=`<div class="padhead"><b>SAMPLE-PADS</b><div class="pbank" id="pbank" role="group" aria-label="Samplingsbank">${PORD.map(i=>`<button type="button" data-pb="${i}">${PBANK[i][1]}</button>`).join("")}</div></div>
-  <div class="padctl"><span class="fx"><div class="knob liten" id="kPpit" role="slider" tabindex="0" aria-label="Tonhöjd på klippen"><div class="kap"></div></div><small id="ppitT">TONHÖJD 0</small></span><span class="fx"><button type="button" id="bPrev" aria-pressed="false">⇄ BAKLÄNGES</button></span><span class="fx"><div class="knob liten" id="kPvol" role="slider" tabindex="0" aria-label="Volym sample-pads"><div class="kap"></div></div><small>VOLYM</small></span><span class="fx"><button type="button" id="bPstj" aria-pressed="false" title="Tryck på ett klipp för att lägga det bland dina favoriter (⭐ MINA)">⭐ MARKERA</button></span><small id="pkalla" style="color:var(--dim);flex:1;min-width:160px">Tryck på en pad. Kom ihåg: REC (R) spelar in dem i takten.</small></div>
+  <div class="padctl"><span class="fx"><div class="knob liten" id="kPpit" role="slider" tabindex="0" aria-label="Tonhöjd på klippen"><div class="kap"></div></div><small id="ppitT">TONHÖJD 0</small></span><span class="fx"><button type="button" id="bPrev" aria-pressed="false">⇄ BAKLÄNGES</button></span><span class="fx"><div class="knob liten" id="kPvol" role="slider" tabindex="0" aria-label="Volym sample-pads"><div class="kap"></div></div><small>VOLYM</small></span><span class="fx"><div class="knob liten" id="kPe" role="slider" tabindex="0" aria-label="Echo på sample-pads"><div class="kap"></div></div><small>ECHO</small></span><span class="fx"><div class="knob liten" id="kPh" role="slider" tabindex="0" aria-label="Hall på sample-pads"><div class="kap"></div></div><small>HALL</small></span><span class="fx"><div class="knob liten" id="kPf" role="slider" tabindex="0" aria-label="Flanger på sample-pads"><div class="kap"></div></div><small>FLANGER</small></span><span class="fx"><div class="knob liten" id="kPfi" role="slider" tabindex="0" aria-label="Filter på sample-pads"><div class="kap"></div></div><small>FILTER</small></span><span class="fx"><button type="button" id="bPstj" aria-pressed="false" title="Tryck på ett klipp för att lägga det bland dina favoriter (⭐ MINA)">⭐ MARKERA</button></span><small id="pkalla" style="color:var(--dim);flex:1;min-width:160px">Tryck på en pad. Kom ihåg: REC (R) spelar in dem i takten.</small></div>
   <div class="egnarad" id="egnarad" hidden><button type="button" class="lilla" id="bEgRec">🎤 SPELA IN</button><button type="button" class="lilla" id="bEgFil">📂 LADDA FIL</button>${[1,2,3,4].map(i=>`<button type="button" class="lilla" data-eg="${i-1}">L${i} → PAD</button>`).join("")}<button type="button" class="lilla" id="bEgTom">TÖM</button><input type="file" id="egFil" accept="audio/*" hidden><small style="color:var(--dim);flex:1;min-width:200px">Tryck på en tom pad för att välja plats. Dina egna ljud sparas inte: spara låten som mp3 när du är klar.</small></div>
   <div class="spgrid" id="spgrid">${Array.from({length:16},(_,i)=>`<button type="button" class="sp" data-sp="${i}"><kbd>${SPK[i].toUpperCase()}</kbd><span></span></button>`).join("")}</div>
   <div class="smpl"><span>SAMPLE-SPÅR</span><button type="button" class="lilla" id="bSmpM" aria-pressed="false" title="Tysta sample-spåret i takten (padsen du spelar själv hörs ändå)">🔇 TYSTA SPÅRET</button><button type="button" class="lilla" id="bSmpTom">TÖM SPÅR</button><small style="color:var(--dim)">Tryck på en pad och sedan på en ruta för att lägga klippet där, eller spela in med REC.</small></div>
   <div class="smprad" id="smprad">${Array.from({length:16},(_,i)=>`<button type="button" data-sk="${i}" aria-label="Sample-spår steg ${i+1}"></button>`).join("")}</div>`;
   knob($("#kPpit"),{min:-12,max:12,reset:0,val:()=>padPit,set:v=>{padPit=v;$("#ppitT").textContent="TONHÖJD "+(v>0?"+":"")+v}});
   knob($("#kPvol"),{min:0,max:100,reset:80,val:()=>S.pvol,set:v=>{S.pvol=v}});
+  [["#kPe","echo",0],["#kPh","hall",0],["#kPf","flang",0],["#kPfi","filt",-100]].forEach(([id,k,mn])=>knob($(id),{min:mn,max:100,reset:0,val:()=>PFX.fx[k],set:v=>{PFX.fx[k]=v;padFxn&&padFxn.set()}}));
   $("#egFil").addEventListener("change",e=>{egnaFil(e.target.files[0]);e.target.value=""})}
 function padRita(){const h=$("#padpan");if(!h||!h.firstChild)return;{const mb=$("#bSmpM");if(mb){mb.classList.toggle("on",!!S.smpMute);mb.setAttribute("aria-pressed",!!S.smpMute);mb.textContent=S.smpMute?"🔇 SPÅRET TYST":"🔊 SPÅRET PÅ"}}h.hidden=!!S.songOn;
   h.querySelectorAll("#pbank button").forEach(b=>b.classList.toggle("on",+b.dataset.pb===padBank));$("#egnarad").hidden=padBank!==8;
@@ -1057,8 +1059,8 @@ $("#bMuteAll").onclick=()=>mutaAlla(!muteAll);
 let exporterar=false;
 function renderaLat(){startaLjud();if(!ctx)return null;
   const len=songLen(),bars=len>0?S.song.slice(0,len):[S.cur,S.cur,S.cur,S.cur];let dur=.05;bars.forEach(()=>{for(let k=0;k<16;k++)dur+=stegTid(k)});dur+=2.6;
-  const sr=44100,off=new OfflineAudioContext(2,Math.ceil(dur*sr),sr),oc=ctx,om=master,ocp=comp,opg=pg;
-  ctx=off;master=off.createGain();comp=off.createDynamicsCompressor();comp.threshold.value=-14;comp.ratio.value=5;comp.attack.value=.003;comp.release.value=.2;master.connect(comp);comp.connect(off.destination);pg=off.createGain();pg.connect(master);master.gain.value=Math.pow(S.master/100,1.6)*1.1;
+  const sr=44100,off=new OfflineAudioContext(2,Math.ceil(dur*sr),sr),oc=ctx,om=master,ocp=comp,opg=pg,opi=padIn,opf=padFxn;
+  ctx=off;master=off.createGain();comp=off.createDynamicsCompressor();comp.threshold.value=-14;comp.ratio.value=5;comp.attack.value=.003;comp.release.value=.2;master.connect(comp);comp.connect(off.destination);pg=off.createGain();pg.connect(master);padFxn=fxBygg(PFX,off,master);padIn=padFxn.inn;master.gain.value=Math.pow(S.master/100,1.6)*1.1;
   const pump0=S.pump,stepT=[];
   try{let t=.05;const bar0=t,starts=[];
     bars.forEach(p=>{starts.push(t);const pd=p>=0?monsterData(p):null,md=p>=0?melData(p):null;for(let k=0;k<16;k++){stepT.push([t,k]);if(S.auto.pump[k]!==null)S.pump=S.auto.pump[k];if(pd){S.t.forEach((tr,i)=>{if(pd[i][k]==="x")spela(i,t)});if(pd[0][k]==="x"&&!S.t[0].mute)pumpDuck(t)}if(md)melTick(k,t,md);const sdd=p>=0?smpData(p):null;if(sdd&&sdd[k]&&!S.smpMute)padSpela(sdd[k].i,t,sdd[k].p,sdd[k].r);t+=stegTid(k)}});
@@ -1067,7 +1069,7 @@ function renderaLat(){startaLjud();if(!ctx)return null;
        const vs=lf.filter(x=>x!==null),lo=vs.some(v=>v<-3),hi=vs.some(v=>v>3);if(vs.length&&lo!==hi){fx.f.type=lo?"lowpass":"highpass";fx.f.Q.value=1.2;stepT.forEach(([tt,kk])=>{const v=lf[kk];if(v!==null)fx.f.frequency.setValueAtTime(lo?(v<-3?22050*Math.pow(180/22050,-v/100):22000):(v>3?20*Math.pow(7000/20,v/100):20),tt)})}}
       const row=S.lsong[l.i];if(len>0&&row.includes("x")){g.gain.value=0;starts.forEach((bs,bi)=>g.gain.setTargetAtTime(row[bi]==="x"?1:0,bs,.006))}
       const s=off.createBufferSource();s.buffer=l.mix;s.loop=true;s.connect(g);s.start(bar0,(((-(l.o||0))%l.dur)+l.dur)%l.dur)})
-  }finally{ctx=oc;master=om;comp=ocp;pg=opg;S.pump=pump0}
+  }finally{ctx=oc;master=om;comp=ocp;pg=opg;padIn=opi;padFxn=opf;S.pump=pump0}
   return off.startRendering()}
 async function lameLadda(){if(window.lamejs)return true;try{await new Promise((res,rej)=>{const sc=document.createElement("script");sc.src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js";sc.onload=res;sc.onerror=rej;document.head.appendChild(sc)})}catch(e){return false}return !!window.lamejs}
 async function mp3Av(buf){let pk=0;const L=buf.getChannelData(0),R=buf.getChannelData(1),n=L.length;for(let i=0;i<n;i++){const a=Math.max(Math.abs(L[i]),Math.abs(R[i]));if(a>pk)pk=a}const g=pk>.98?.98/pk:1;
@@ -1089,7 +1091,7 @@ const b64=u8=>{let t="";for(let i=0;i<u8.length;i+=32768)t+=String.fromCharCode.
 const unb64=t=>{const q=atob(t),u=new Uint8Array(q.length);for(let i=0;i<q.length;i++)u[i]=q.charCodeAt(i);return u};
 function bufTill(buf){const d=buf.getChannelData(0),n=d.length,v=new Int16Array(n);for(let i=0;i<n;i++)v[i]=Math.max(-32768,Math.min(32767,Math.round(d[i]*32767)));return{sr:buf.sampleRate,d:b64(new Uint8Array(v.buffer))}}
 function bufFran(o){if(!o||typeof o.d!=="string"||!(o.sr>=8000&&o.sr<=96000))throw 0;const u=unb64(o.d),n=u.length>>1;if(n<1||n>o.sr*130)throw 0;const v=new Int16Array(u.buffer,0,n),b=ctx.createBuffer(1,n,o.sr),f=b.getChannelData(0);for(let i=0;i<n;i++)f[i]=v[i]/32767;return b}
-function projSpara(){try{const o={pp:"musiklabbet",v:1,kod:kod(),namn:S.namn,pump:S.pump,auto:S.auto,chord:S.chord,smpMute:S.smpMute,smp:S.smp,spat:S.spat,
+function projSpara(){try{const o={pp:"musiklabbet",v:1,kod:kod(),namn:S.namn,pump:S.pump,auto:S.auto,chord:S.chord,smpMute:S.smpMute,pfx:PFX.fx,smp:S.smp,spat:S.spat,
     loops:LP.map(l=>l.layers.length?{n:l.n,vol:l.vol,mute:l.mute,fx:l.fx,sl:l.sl,slp:l.slp,o:l.o,cuts:l.cuts,zone:l.zone,shift:l.shift,layers:l.layers.map(bufTill)}:null),
     egna:EGNA.map(e=>e?{n:e.n,b:bufTill(e.buf)}:null)};
   const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(o)],{type:"application/json"}));a.download="pluggparken-projekt.json";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),20000);
@@ -1103,7 +1105,7 @@ async function projLadda(f){startaLjud();if(!ctx||!f)return;if(f.size>150e6){toa
     stopp();LP.forEach((l,i)=>lpRadera(i));EGNA.fill(null);
     ny.namn=String(o.namn||"Projekt").slice(0,30);ny.pump=Math.max(0,Math.min(100,+o.pump||0));
     if(o.auto&&slopar(o.auto.pump,16)&&slopar(o.auto.echo,4)&&slopar(o.auto.filt,4)&&o.auto.echo.every(a=>slopar(a,16))&&o.auto.filt.every(a=>slopar(a,16)))ny.auto=o.auto;
-    if(slopar(o.chord,2))ny.chord=[!!o.chord[0],!!o.chord[1]];ny.smpMute=!!o.smpMute;
+    if(slopar(o.chord,2))ny.chord=[!!o.chord[0],!!o.chord[1]];ny.smpMute=!!o.smpMute;if(o.pfx&&typeof o.pfx==="object"){for(const k of["echo","hall","flang","filt"]){const v=+o.pfx[k];if(isFinite(v))PFX.fx[k]=Math.max(k==="filt"?-100:0,Math.min(100,v))}if(padFxn)padFxn.set()}
     if(gSmp(o.smp))ny.smp=o.smp;if(slopar(o.spat,4)&&o.spat.every(gSmp))ny.spat=o.spat;
     const egna=(o.egna||[]).slice(0,16).map(e=>e&&e.b?{n:String(e.n||"EGET").slice(0,12),c:"Ditt eget ljud (sparas inte)",buf:bufFran(e.b)}:null);
     const lps=(o.loops||[]).slice(0,4).map(q=>q&&Array.isArray(q.layers)&&q.layers.length&&q.layers.length<=12?Object.assign({},q,{bufs:q.layers.map(bufFran)}):null);
