@@ -311,7 +311,7 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
   <div class="krok" id="krok">Tryck på rutorna för att bygga en rytm, eller välj en färdig rytm. Mellanslag startar och stoppar. R spelar in med padsen.</div>
 </div>
 <div class="maskin loopmaskin" id="loopmaskin">
-  <div class="topp" style="margin-bottom:12px"><div class="logga"><b>LOOPSTATION <i>LS-4</i></b><small>PLUGGPARKEN · 4 SPÅR · MIKROFON</small></div><div style="flex:1"></div><button type="button" class="micb" id="bMic" aria-pressed="false">🎤 MIKROFON</button><span class="meter" aria-hidden="true"><i id="meterI"></i></span><div class="grupp" style="flex-direction:row;gap:8px"><div class="knob liten" id="kJust" role="slider" tabindex="0" aria-label="Justera inspelningens timing"><div class="kap"></div></div><span class="l" id="justT">Timing 0 ms</span></div></div>
+  <div class="topp" style="margin-bottom:12px"><div class="logga"><b>LOOPSTATION <i>LS-4</i></b><small>PLUGGPARKEN · 4 SPÅR · MIKROFON</small></div><div style="flex:1"></div><button type="button" class="micb" id="bMic" aria-pressed="false">🎤 MIKROFON</button><select class="sel" id="selMic" hidden aria-label="Välj mikrofon"></select><button type="button" class="micb on" id="bFix" aria-pressed="true" title="Slår på mikrofonens automatiska volym, brusfilter och ekokansling. Bra för röst. Stäng av för instrument.">✨ FÖRBÄTTRA RÖST</button><span class="meter" aria-hidden="true"><i id="meterI"></i></span><div class="grupp" style="flex-direction:row;gap:8px"><div class="knob liten" id="kJust" role="slider" tabindex="0" aria-label="Justera inspelningens timing"><div class="kap"></div></div><span class="l" id="justT">Timing 0 ms</span></div></div>
   <div class="lstat" id="lstatus" aria-live="polite"></div>
   <div class="lgrid" id="lgrid"></div>
   <div class="krok" style="margin-top:14px">Använd hörlurar, annars hör mikrofonen trummorna. Tryck på den runda knappen för att spela in, och tryck igen för att lägga på mer ljud. Dra över vågen för att markera en bit, och välj sedan Radera eller Spela bara. Med Flytta drar du hela vågen så den hamnar på rätt slag. ¼ och ½ ger riktigt korta loopar. Ljudet sparas inte.</div>
@@ -549,16 +549,33 @@ const harLoopar=()=>LP.some(l=>l.layers.length||l.rec);
 function las(){if(harLoopar()){toast("Tempot är låst medan det finns loopar. Radera dem först.");return true}return false}
 function klick(t,hog){if(!ctx)return;const g=ctx.createGain();g.connect(master);osc(t,"square",hog?1800:1200,0,.045,.35,g)}
 function lpGain(l){if(!l.gain){l.gain=ctx.createGain();l.gain.connect(master)}l.gain.gain.value=l.mute?0:Math.pow(l.vol/100,1.5)*1.3;return l.gain}
+const MIKNYCKEL="pluggparken-trummaskin-mic";
+let micSet={fix:true,dev:""},mikNod=null;try{Object.assign(micSet,JSON.parse(localStorage.getItem(MIKNYCKEL)||"{}"))}catch(e){}
+const micSpara=()=>{try{localStorage.setItem(MIKNYCKEL,JSON.stringify(micSet))}catch(e){}};
+/* inspelningen sker på ljudtråden (AudioWorklet) så att huvudtråden inte kan tappa bitar och knaka */
+const WSRC='class P extends AudioWorkletProcessor{constructor(){super();this.b=new Float32Array(1024);this.n=0;this.t=0}process(i){const c=i[0]&&i[0][0];if(!c)return true;for(let k=0;k<c.length;k++){if(this.n===0)this.t=currentTime+k/sampleRate;this.b[this.n++]=c[k];if(this.n===1024){this.port.postMessage({t:this.t,d:this.b});this.b=new Float32Array(1024);this.n=0}}return true}}registerProcessor("mikrec",P)';
+async function micLista(){const s=$("#selMic");if(!s||!navigator.mediaDevices||!navigator.mediaDevices.enumerateDevices)return;
+  try{const d=(await navigator.mediaDevices.enumerateDevices()).filter(x=>x.kind==="audioinput"&&x.deviceId);if(d.length<2||!d.some(x=>x.label))return;
+    s.innerHTML='<option value="">Standardmikrofon</option>'+d.map(x=>'<option value="'+x.deviceId.replace(/"/g,"")+'">'+(x.label||"Mikrofon").replace(/[<>&"]/g,"")+"</option>").join("");s.value=micSet.dev;s.hidden=false}catch(e){}}
 async function micStart(){if(mic)return true;startaLjud();if(!ctx)return false;
-  try{const fake=window.MPTrummaskin&&window.MPTrummaskin.fakeMic;mic=fake||await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}})}
+  try{const fake=window.MPTrummaskin&&window.MPTrummaskin.fakeMic;
+    if(fake)mic=fake;else{const fx=micSet.fix,base={echoCancellation:fx,noiseSuppression:fx,autoGainControl:fx,channelCount:1};
+      try{mic=await navigator.mediaDevices.getUserMedia({audio:micSet.dev?Object.assign({deviceId:{exact:micSet.dev}},base):base})}
+      catch(e){if(micSet.dev&&e&&(e.name==="OverconstrainedError"||e.name==="NotFoundError")){micSet.dev="";micSpara();mic=await navigator.mediaDevices.getUserMedia({audio:base})}else throw e}}}
   catch(e){toast("Mikrofonen får inte användas. Tillåt den i webbläsaren.");return false}
   micSrc=ctx.createMediaStreamSource(mic);anMic=ctx.createAnalyser();anMic.fftSize=1024;micSrc.connect(anMic);
-  proc=ctx.createScriptProcessor(1024,1,1);const dov=ctx.createGain();dov.gain.value=0;micSrc.connect(proc);proc.connect(dov);dov.connect(ctx.destination);proc.onaudioprocess=mikBlock;
+  let ok=false;
+  if(ctx.audioWorklet&&window.AudioWorkletNode){try{if(!ctx.mikmod){await ctx.audioWorklet.addModule(URL.createObjectURL(new Blob([WSRC],{type:"text/javascript"})));ctx.mikmod=1}
+    mikNod=new AudioWorkletNode(ctx,"mikrec",{numberOfInputs:1,numberOfOutputs:1,channelCount:1,channelCountMode:"explicit"});mikNod.port.onmessage=e=>mikData(e.data.d,e.data.t-.043-LJUST/1000);
+    const dov=ctx.createGain();dov.gain.value=0;micSrc.connect(mikNod);mikNod.connect(dov);dov.connect(ctx.destination);ok=true}catch(e){mikNod=null}}
+  if(!ok){proc=ctx.createScriptProcessor(1024,1,1);const dov=ctx.createGain();dov.gain.value=0;micSrc.connect(proc);proc.connect(dov);dov.connect(ctx.destination);proc.onaudioprocess=mikBlock}
+  micLista();
   $("#bMic").classList.add("on");$("#bMic").setAttribute("aria-pressed","true");micMat();return true}
-function micStopp(){if(!mic)return;try{mic.getTracks().forEach(t=>t.stop())}catch(e){}try{proc.disconnect();micSrc.disconnect()}catch(e){}mic=null;proc=null;micSrc=null;$("#bMic").classList.remove("on");$("#bMic").setAttribute("aria-pressed","false");$("#meterI").style.width="0"}
+function micStopp(){if(!mic)return;try{mic.getTracks().forEach(t=>t.stop())}catch(e){}try{proc&&proc.disconnect();micSrc.disconnect();mikNod&&mikNod.disconnect()}catch(e){}mikNod=null;mic=null;proc=null;micSrc=null;$("#bMic").classList.remove("on");$("#bMic").setAttribute("aria-pressed","false");$("#meterI").style.width="0"}
 const mbuf=new Float32Array(1024);
 function micMat(){if(!mic)return;anMic.getFloatTimeDomainData(mbuf);let m=0;for(let i=0;i<mbuf.length;i++){const a=Math.abs(mbuf[i]);if(a>m)m=a}$("#meterI").style.width=Math.min(100,m*140)+"%";requestAnimationFrame(micMat)}
-function mikBlock(e){const inp=e.inputBuffer.getChannelData(0),n=inp.length,sr=ctx.sampleRate,buf=n/sr,cap=(e.playbackTime||ctx.currentTime)-2*buf-.02-LJUST/1000;
+function mikBlock(e){const inp=e.inputBuffer.getChannelData(0);mikData(inp,(e.playbackTime||ctx.currentTime)-2*(inp.length/ctx.sampleRate)-.02-LJUST/1000)}
+function mikData(inp,cap){const n=inp.length,sr=ctx.sampleRate;
   LP.forEach(l=>{const r=l.rec;if(!r)return;let from=0;
     if(!r.go){const skip=Math.round((r.t-cap)*sr);if(skip>=n)return;r.go=true;from=Math.max(0,skip)}
     const take=Math.min(n-from,r.len-r.w);r.buf.set(inp.subarray(from,from+take),r.w);r.w+=take;if(r.w>=r.len)klarRec(l)})}
@@ -758,6 +775,11 @@ function lpBygg(){const g=$("#lgrid");LP.forEach(l=>{const m=document.createElem
     else if(act==="clr"){l.sel=null;lpVisa()}
     else if(act==="reset"){lpRed(l,()=>{l.cuts=[];l.zone=null;l.shift=0})}});
   $("#bMic").onclick=()=>{mic?micStopp():micStart()};
+  $("#bFix").classList.toggle("on",micSet.fix);$("#bFix").setAttribute("aria-pressed",micSet.fix);
+  const nyMik=async()=>{if(mic){micStopp();await micStart()}};
+  $("#bFix").onclick=()=>{micSet.fix=!micSet.fix;micSpara();$("#bFix").classList.toggle("on",micSet.fix);$("#bFix").setAttribute("aria-pressed",micSet.fix);toast(micSet.fix?"Förbättra röst på: automatisk volym och brusfilter":"Förbättra röst av: ren mikrofon");nyMik()};
+  $("#selMic").onchange=e=>{micSet.dev=e.target.value;micSpara();nyMik()};
+  if(navigator.mediaDevices&&navigator.mediaDevices.addEventListener)navigator.mediaDevices.addEventListener("devicechange",micLista);
   knob($("#kJust"),{min:-100,max:100,reset:0,val:()=>LJUST,set:v=>{LJUST=v;$("#justT").textContent="Timing "+(v>0?"+":"")+v+" ms"}});
   lpVisa();requestAnimationFrame(lpRita)}
 
