@@ -586,7 +586,7 @@ function startDay(){if(data.radio&&eqRadio())radioCtx();const N=NIVA[data.niva],
   const inne=shuffle(sor.filter(i=>lag(i)>0)),tomma=shuffle(sor.filter(i=>lag(i)===0)),utbud=[...inne.slice(0,HYLLA-Math.min(2,tomma.length)),...tomma].slice(0,HYLLA);
   if(offer&&!utbud.includes(offer.i)){const c=utbud.filter(i=>lag(i)>=4);offer=c.length?{i:c[0],p:prices[c[0]]*2-rnd(2,Math.max(3,Math.floor(prices[c[0]]/2)))}:null;}
   // kunderna: alltid två som ska ha växel, sedan sex olika
-  const typer=shuffle(["vaxel","vaxel",...shuffle(["summa","summa","rakna","budget","vaxla","racker","billig","kvitto","vag","marginal",...(data.niva>=2?["rea"]:[]),...(data.niva===4?["styck","styck"]:[])]).slice(0,6)]);
+  const typer=shuffle(["vaxel","vaxel","summa","summa",...shuffle(["rakna","budget","vaxla","racker","billig","kvitto","vag","marginal",...(data.niva>=2?["rea"]:[]),...(data.niva===4?["styck","styck"]:[])]).slice(0,4)]);
   // tre stamkunder per dag, helst sådana vars favoritvara finns på hyllan
   const harFav=x=>{const f=VAROR.indexOf(x.fav);return utbud.includes(f)&&lag(f)>0;},stamDag=[...shuffle(STAM.filter(harFav)).slice(0,2),...shuffle(STAM.filter(x=>!harFav(x))).slice(0,1)].filter(Boolean),platser=shuffle([...Array(KUNDER).keys()]).slice(0,stamDag.length),slots=Array(KUNDER).fill(null);stamDag.forEach((x,j)=>slots[platser[j]]=x);
   G={N,egna,niva:data.niva,prices,offer,typer,utbud,rush:!!data.rush,kqs:[custCfg(),custCfg()],k:0,miss:0,kassa:0,slut:[],slots,met:{},sales:[],sold:{},mal:Math.round(78*MULT[data.niva]),prat:null,pers:null};
@@ -596,7 +596,7 @@ function custCfg(){const pet=lasDjur(),an=pick(WARD.animal.items.map(x=>x.id).fi
 function hud(){$("hudT").textContent=`Dag ${data.dagar+1} · Kund ${Math.min(G.k+1,KUNDER)} av ${KUNDER}`;$("hudK").textContent=`💰 ${G.kassa} / ${G.mal} kr`;}
 function nextCust(){if(G.k>=KUNDER)return endDay();
   const typ=G.typer[G.k];FB={m:"",h:false};G.bad=false;const sl=G.slots[G.k],fi=sl?VAROR.indexOf(sl.fav):-1;G.must=sl&&fi>=0&&iLager().includes(fi)&&Math.random()<.8?fi:null;G.prat=null;
-  G.t=makeTask(typ);G.scan=new Set();if(G.t.typ==="summa"&&G.t.items&&G.t.items.length>=2&&Math.random()<.4)G.t.skan=true;G.t.cust=sl?stamLook(sl):custCfg();G.pers={s:sl,nm:sl?sl.n:null,fi:G.t.items&&G.must!=null&&G.t.items.includes(G.must)?G.must:-1};G.tries=0;G.inp="";G.tray=[];G.sel=new Set();G.done=false;G.helped=false;
+  G.t=makeTask(typ);G.scan=new Set();if(G.t.typ==="summa"&&G.t.items&&G.t.items.length>=2&&Math.random()<.75)G.t.skan=true;G.t.cust=sl?stamLook(sl):custCfg();G.pers={s:sl,nm:sl?sl.n:null,fi:G.t.items&&G.must!=null&&G.t.items.includes(G.must)?G.must:-1};G.tries=0;G.inp="";G.tray=[];G.sel=new Set();G.done=false;G.helped=false;
   hud();G.kvStep=0;render(true);startPat();const kk=G.k;
   setTimeout(()=>{if(!G||G.k!==kk||G.done||G.prat)return;const s0=G.pers.s,t0=G.t;pratt(s0?(G.pers.fi>=0?s0.favT:Math.random()<.35&&FLAV[t0.typ]?pick(FLAV[t0.typ]):pick(s0.hej)):pick(BFL[butik()]&&Math.random()<.4?BFL[butik()]:FLAV[t0.typ]&&Math.random()<.6?FLAV[t0.typ]:ANON));},650);
   if(G.t.typ==="slut"){G.done=true;G.slut.push(G.t.want);fb(`Kunden gick utan att handla. Fyll på ${NAMN(G.t.want)} efter dagen!`,true);window.Ljud&&Ljud.bad&&Ljud.bad();renderPanel();}}
