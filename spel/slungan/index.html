@@ -235,7 +235,7 @@ const HINTS={
  king:"Kungen tål tre träffar! Slå ner lådorna han står på.",
  mur:"Muren är i vägen! Dra slungan <b>snett uppåt</b> för en hög båge. Antal steg bestämmer var du landar.",
  typer:"Nu finns <b>två sorters djur</b> med olika stegmått. Välj det som passar: stegen ska bli ett helt antal!",
- lab_x:"Skyltarna visar nu en multiplikation. <b>4 · 6</b> betyder 4 gånger 6.",
+ lab_x:"Skylten visar bara <b>avståndet</b>. Vilket djur passar? Avståndet ska vara ett helt antal steg: <b>steg · stegmått = avstånd</b>.",
  lab_s:"Skyltarna visar en addition. Räkna ut avståndet först, tänk sedan på stegen.",
  lab_d:"Skyltarna visar en subtraktion, till exempel <b>60 − 12</b>. Räkna ut avståndet.",
  bunker:"Slemmet gömmer sig i en <b>stenbunker</b>: taket går inte att knäcka. Sikta på <b>💥-skylten</b> i stället: TNT-lådorna sprängs och tar bort bunkern!",
@@ -293,7 +293,7 @@ function pathPts(speed,th,maxT){const P=[];let x=AX,y=AY,vx=speed*Math.cos(th),v
 let G=null,raf=0,last=0;
 function mulberry(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
 function labelFor(D,mode,rnd){
-  if(mode==="x"){const ps=[];for(let a=2;a<=12;a++)if(D%a===0&&D/a>=2&&D/a<=12&&a<=D/a)ps.push([a,D/a]);if(!ps.length)return D+" m";const p=ps[Math.floor(rnd()*ps.length)];return(rnd()<.5?p[0]+" · "+p[1]:p[1]+" · "+p[0])+" m";}
+  if(mode==="x")return D+" m"; // produkten: skylten ger aldrig faktorerna (de skulle avslöja antalet steg)
   if(mode==="s"){const bs=[];for(let b=3;b<=D-3;b++)if(b%5===0||b%3===0||b===10)bs.push(b);const b=bs[Math.floor(rnd()*bs.length)]||5;return(D-b)+" + "+b+" m";}
   if(mode==="q"){const bs=[2,3,4,5].filter(b=>D*b<=240);const b=bs[Math.floor(rnd()*bs.length)];return(D*b)+" ÷ "+b+" m";}
   if(mode==="e"){const ps=[];for(let a=2;a<=9;a++)for(let b=2;b<=9;b++)for(const c of[2,3,4,5,6,8,10]){if(a*b+c===D)ps.push(a+" · "+b+" + "+c);if(a*b-c===D)ps.push(a+" · "+b+" − "+c);}if(!ps.length)return D+" m";return ps[Math.floor(rnd()*ps.length)]+" m";}
