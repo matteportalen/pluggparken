@@ -261,11 +261,6 @@ function rita(){if(!ST)return;const g=cx,k=ST.k,G0=geom();
   /* mätstreck */
   if(k.mat){g.fillStyle="#cfe0ff";g.strokeStyle="#cfe0ff";g.font='700 13px "Baloo 2",system-ui,sans-serif';g.lineWidth=2;
     for(let d=1;d<=5;d++){const yy=G0.y0-yAvV(k,d/5)*G0.bh,x0=G0.cx+k.w(.5)*G0.bw/2;g.beginPath();g.moveTo(x0-(d%5?14:22),yy);g.lineTo(x0,yy);g.stroke();g.fillText(d+" dl",x0+6,yy+4);}}
-  /* strecket */
-  const yt=G0.y0-G0.bh;const xl=G0.cx-k.w(ST.yt)*G0.bw/2,xr=G0.cx+k.w(ST.yt)*G0.bw/2;
-  g.save();g.strokeStyle="#ffd54a";g.lineWidth=3;g.setLineDash([9,6]);g.beginPath();g.moveTo(xl-26,yt);g.lineTo(xr+26,yt);g.stroke();g.setLineDash([]);
-  g.fillStyle="#ffd54a";g.beginPath();g.moveTo(xl-26,yt);g.lineTo(xl-40,yt-8);g.lineTo(xl-40,yt+8);g.fill();
-  g.font='800 15px "Baloo 2",system-ui,sans-serif';g.textAlign="right";g.fillText("kanten",xl-46,yt+5);g.restore();
   /* strålen */
   if(ST.fas==="halls"){const top=G0.y0-G0.bh-26;g.fillStyle=ST.vat[1];const ys=G0.y0-lvl*G0.bh;g.fillRect(G0.cx-3,top,6,Math.max(0,ys-top));
     g.fillStyle="rgba(255,255,255,.18)";g.fillRect(G0.cx-1,top,2,Math.max(0,ys-top));
@@ -291,7 +286,7 @@ function hem(){ljudStopp();ST=null;$("hStj").innerHTML=stjHtml(data.stars.r||0);
 function heroRita(){const c=$("heroC"),g=c.getContext("2d");g.clearRect(0,0,220,260);const k=KARL[0];
   const bw=110,bh=170,cxx=110,y0=232;const pts=[];for(let i=0;i<=40;i++){const y=i/40;pts.push([cxx-k.w(y)*bw/2,y0-y*bh]);}for(let i=40;i>=0;i--){const y=i/40;pts.push([cxx+k.w(y)*bw/2,y0-y*bh]);}
   g.save();sti(g,pts);g.clip();g.fillStyle="#4aa8ff";g.fillRect(0,y0-bh*.9,220,bh);g.restore();sti(g,pts);g.strokeStyle="rgba(200,225,255,.9)";g.lineWidth=5;g.stroke();
-  g.strokeStyle="#ffd54a";g.lineWidth=4;g.setLineDash([10,7]);g.beginPath();g.moveTo(20,y0-bh);g.lineTo(200,y0-bh);g.stroke();}
+}
 function confetti(){if(reduced())return;const c=$("fx"),x=c.getContext("2d");c.hidden=false;c.width=innerWidth;c.height=innerHeight;const cols=["#3D8BFD","#FF9F43","#2BB673","#FFC93C","#7B61FF","#FF6B6B"];
   const P=Array.from({length:90},()=>({x:Math.random()*c.width,y:-20-Math.random()*200,vx:(Math.random()-.5)*4,vy:2+Math.random()*3,r:6+Math.random()*7,a:Math.random()*6,va:(Math.random()-.5)*.3,c:pick(cols)}));
   let t=0;(function f(){x.clearRect(0,0,c.width,c.height);P.forEach(p=>{p.vy+=.12;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore();});
