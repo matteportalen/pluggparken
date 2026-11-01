@@ -2,8 +2,8 @@
    Röstfiler: ../ljud/matensresa/s<n>-1.mp3 (s0 inledning, s1–s7 stegen, s8 avslutning). Saknas en fil visas bara texten.
    Manus: manus/matensresa-manus.txt. Höj VER när en röstfil byts ut. */
 import {syreStory} from "./syre.js?v=1";
-import {nervStory} from "./nerv.js?v=5";
-const VER="4";
+import {nervStory} from "./nerv.js?v=6";
+const VER="5";
 const FARTER=[1,1.25,1.5,2];
 const MAT_STG=[
  {id:"munn",namn:"Munnen",tid:"ca 10–30 sekunder",dur:12,hl:["tunga"],c:0xe0b070,t:"Maten tuggas sönder av tänderna, och saliven gör den mjuk och börjar bryta ner den. Tungan för maten bakåt när du sväljer."},
