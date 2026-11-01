@@ -23,7 +23,7 @@ const P6=[[-.05,1.64,.06],[-.03,1.62,-.04],[0,1.605,-.075],[.03,1.59,-.085],[0,1
 const P7=[[0,1.675,.02],[0,1.64,.0],[0,1.61,-.012],[0,1.58,-.022],[0,1.558,-.03],[0,1.537,-.028],[0,1.499,-.023],[0,1.475,-.027],[0,1.453,-.032],...P1.slice().reverse().slice(0,P1.length),...P0.slice().reverse().slice(1)].map(p=>p.slice());
 const FINGER=P0[0],CORD=[0,1.455,-.032];
 const MUS=new Set(["biceps","triceps","underarm","delta"]);
-const GRP=new Set(["skelett","organ","nerver","muskler"]);
+const GRP=new Set(["skelett","organ","nerver","muskler","hud"]);
 const ELEC=[0xffe45a,0xffffff,0xfff2a0];
 export function nervStory(H){
  const {THREE,all,grp}=H;
@@ -47,18 +47,19 @@ export function nervStory(H){
   o.grpR.add(pts,pot,mk,ml,ms,lc,ll,ls);
   const lines=H.VAG().kurvor.map((cv,i)=>{const n=Math.max(30,Math.round(cv.getLength()/.003)),a=new Float32Array(n*3);for(let k=0;k<n;k++){const p=cv.getPointAt(k/(n-1));a[k*3]=p.x;a[k*3+1]=p.y;a[k*3+2]=p.z;}
    const gg=new THREE.BufferGeometry();gg.setAttribute("position",new THREE.BufferAttribute(a,3));
-   const l=new THREE.Points(gg,new THREE.PointsMaterial({size:.0065,map:H.tex,color:STG[i].c,transparent:true,opacity:0,blending:THREE.AdditiveBlending,depthWrite:false,sizeAttenuation:true}));l.frustumCulled=false;l.renderOrder=8;o.grpR.add(l);return l;});
+   const l=new THREE.Points(gg,new THREE.PointsMaterial({size:.008,map:H.tex,color:STG[i].c,transparent:true,opacity:0,blending:THREE.AdditiveBlending,depthWrite:false,sizeAttenuation:true}));l.frustumCulled=false;l.renderOrder=8;o.grpR.add(l);return l;});
   o.nv={lines,NF,pos,cl,sd,g,pts,rings,ri:0,tt:0,pot,mk,ml,ms,lc,ll,ls,ev:{},last:-1,beat:0};}
  function flash(o,p,colr,sc){const f=o.nv,r=f.rings[f.ri++%3];r.t=0;r.sc=sc||1;r.sp.material.color.setHex(colr);r.sp.position.set(...p);}
  function burst(n,p,colr,w){for(let k=0;k<n;k++){const a=new V(...p),b=new V(p[0]+rnd(w),p[1]+rnd(w),p[2]+rnd(w));H.nyPartikel("a",a,b,.55+Math.random()*.4,colr);}}
  const lerpO=(m,t,dt,k)=>{m.opacity+=(t-m.opacity)*Math.min(1,dt*(k||4));};
  return {namn:"Hjärnan och nerverna",rost:"nervresan",STG,INTRO,FIN,SPAR:new Set(),orbit:.2,
-  dd:[.3,.3,.15,.3,.32,.34,.3,.55],
+  introD:1.35,
+  dd:[1.3,1.15,.55,.85,.6,.34,.3,.95],
   ladda:async()=>({kurvor:[P0,P1,P2,P3,P4,P5,P6,P7].map(a=>new THREE.CatmullRomCurve3(a.map(p=>new V(...p)),false,"centripetal"))}),
   setup(){for(const k of Object.keys(grp))grp[k].visible=GRP.has(k);
    for(const o of all){const s=o.userData.s;if(!GRP.has(s))continue;const m=o.material.clone();m.transparent=true;m.opacity=s==="skelett"?.04:0;
-    if(m.emissive){m.emissive.set(s==="nerver"?0xffd84a:s==="muskler"?0xff7a2e:0xff8ad8);}m.emissiveIntensity=0;o.material=m;o.visible=s==="skelett";}},
-  kern:(i,u)=>.0075*(1+.15*Math.sin(performance.now()/160)),
+    if(m.emissive){m.emissive.set(s==="nerver"?0xffd84a:s==="muskler"?0xff7a2e:s==="hud"?0x6ab8ff:0xff8ad8);}m.emissiveIntensity=0;o.material=m;o.visible=s==="skelett";}},
+  kern:(i,u)=>.0075*([1.9,1.9,1.2,1.7,1.2,1,1,1.9][i])*(1+.15*Math.sin(performance.now()/160)),
   farg:(i,u)=>(i===0?mix(0xff5a1a,0xffe45a,u*1.5):i===2?mix(0xffe45a,0xffa040,Math.max(0,(u-.55)*2.2)):mix(STG[i].c,STG[i].c,0)).getHex(),
   sprut(dt,i,bol,u){const R=H.R();if(!R)return;const o=R.ob;if(!o.nv)bygg(o);const f=o.nv,cur=H.VAG().kurvor[i];f.tt+=dt;
    if(f.last!==i){f.last=i;f.ev={};}
@@ -96,6 +97,7 @@ export function nervStory(H){
     let tgt=0,em=0;
     if(s==="skelett")tgt=id==="skalle"&&brain?.09:.04;
     else if(s==="organ"){if(id==="hjarna"){tgt=brain?.5:.35;em=act.includes("hjarna")?(.12+.28*fk)*(i===5?1.5:1):.05;}}
+    else if(s==="hud"){tgt=(i===5||i===6)?.03:.13;em=.35;}
     else if(s==="nerver"){tgt=.62;if(act.includes(id)){tgt=.95;em=puls*1.3;}else em=.08;}
     else if(s==="muskler"){if(MUS.has(id)){tgt=.08;if(act.includes(id)){tgt=.5;em=i===3?.6+.6*fk:.4;}}}
     mat.opacity+=(tgt-mat.opacity)*Math.min(1,dt*5);if(mat.emissive)mat.emissiveIntensity+=(em-mat.emissiveIntensity)*Math.min(1,dt*7);

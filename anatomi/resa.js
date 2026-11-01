@@ -2,7 +2,7 @@
    Röstfiler: ../ljud/matensresa/s<n>-1.mp3 (s0 inledning, s1–s7 stegen, s8 avslutning). Saknas en fil visas bara texten.
    Manus: manus/matensresa-manus.txt. Höj VER när en röstfil byts ut. */
 import {syreStory} from "./syre.js?v=1";
-import {nervStory} from "./nerv.js?v=6";
+import {nervStory} from "./nerv.js?v=9";
 const VER="5";
 const FARTER=[1,1.25,1.5,2];
 const MAT_STG=[
@@ -72,7 +72,7 @@ export function initResa(C){
   $("kort").hidden=true;
   ST.setup();
   paneler();$("rSnd").textContent=R.sound?"🔊":"🔇";ctl.minDistance=.1;
-  const p0=VAG.kurvor[0].getPointAt(0);ctl.target.copy(p0);cam.position.set(p0.x+.06,p0.y+.04,p0.z+.3);
+  const p0=VAG.kurvor[0].getPointAt(0);ctl.target.copy(p0);cam.position.set(p0.x+.06,p0.y+.04,p0.z+(ST.introD||.3));
   C.setLines&&C.setLines(false);
   intro();});}
 
