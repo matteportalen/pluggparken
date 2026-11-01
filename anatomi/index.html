@@ -77,9 +77,22 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;bac
 .rctl .rxb{margin-left:auto;letter-spacing:.06em;text-transform:uppercase;font-size:.7rem;font-weight:600}
 body.resa .reg,body.resa .hint,body.resa .zm,body.resa .lag,body.resa #kort,body.resa #lin{display:none!important}
 @media(max-width:760px){.rctl button{padding:7px 9px;min-width:36px}.rctl .rxb{font-size:.62rem;padding:7px 8px}.resa{bottom:10px;padding:12px 12px 10px}.resa p{font-size:.82rem;min-height:0}.rbar button{font-size:0}.rbar button span{display:none}.rbar button{height:22px}}
+
+/* meny som kan fällas ihop på mobil */
+#menyb{display:none}
+@media(max-width:760px){
+#menyb{display:flex;position:fixed;right:12px;bottom:12px;z-index:7;align-items:center;gap:8px;padding:9px 16px;border-radius:99px;border:1px solid var(--line);background:rgba(8,20,36,.72);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:var(--ink);font:inherit;font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer}
+#menyb:active{transform:scale(.97)}
+.lag,.reg,.kal,.zm{transition:opacity .28s ease,transform .32s cubic-bezier(.4,0,.2,1),bottom .32s cubic-bezier(.4,0,.2,1)}
+body.mini .lag,body.mini .reg{opacity:0;pointer-events:none;transform:translateY(34px) scale(.96)}
+body.mini .kal{opacity:0;pointer-events:none}
+body.mini .zm{bottom:70px}
+}
+@media(prefers-reduced-motion:reduce){.lag,.reg,.kal,.zm{transition:none}}
 </style></head><body>
 <canvas id="c"></canvas>
 <div class="top"><a href="../fler/">← Fler ämnen</a><h1>Människokroppen</h1></div>
+<button id="menyb" aria-expanded="true" aria-controls="lag">▾ Dölj meny</button>
 <div class="lag" id="lag"></div>
 <div class="reg" id="reg"></div><div class="zm"><button id="zin" aria-label="Zooma in">+</button><button id="zut" aria-label="Zooma ut">−</button></div>
 <div class="resa" id="resa" hidden>
@@ -209,4 +222,10 @@ const RESA=initResa({THREE,S,cam,ctl,grp,all,hudUpd,flyHome:()=>{if(HEL)flyTo(HE
 const rgo=document.createElement('button');rgo.className='rgo';rgo.textContent='🍽 Matens resa';rgo.onclick=()=>RESA.start();document.getElementById('reg').appendChild(rgo);
 las().then(loop);
 window.__a={S,cam,ctl,grp,all};
-</script></body></html>
+</script><script>
+(function(){const b=document.getElementById("menyb");if(!b)return;
+function set(m){document.body.classList.toggle("mini",m);b.textContent=m?"▴ Meny":"▾ Dölj meny";b.setAttribute("aria-expanded",m?"false":"true");try{localStorage.setItem("pluggparken-anatomi-mini",m?"1":"0")}catch(e){}}
+let m0=false;try{m0=localStorage.getItem("pluggparken-anatomi-mini")==="1"}catch(e){}
+set(m0);b.onclick=()=>set(!document.body.classList.contains("mini"));})();
+</script>
+</body></html>
