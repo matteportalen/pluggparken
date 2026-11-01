@@ -159,6 +159,10 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 @media (max-width:640px){#bar{flex-wrap:wrap;row-gap:2px}#cards{order:10;flex:1 1 100%;padding-bottom:4px}.hb{width:38px;height:38px}#pot{min-width:0}#bar .hb:nth-of-type(2){margin-left:auto}}
 #startb{white-space:nowrap}
 .cd.hint{animation:nx 1s ease-in-out infinite;box-shadow:0 0 0 4px #FFE066,0 4px 0 rgba(0,0,0,.22)}
+.demo{display:flex;justify-content:center;gap:6px;margin:8px 0}
+.dm{background:var(--lc-F2F6FF,#F2F6FF);border-radius:16px;padding:6px 8px 4px;text-align:center;box-shadow:0 3px 0 var(--line);min-width:64px}
+.dm i{display:block;font-style:normal;font-weight:800;border-radius:9px;padding:0 8px;margin-top:2px;background:#3D5AFE;color:#fff}
+.dm i.m{background:#7B61FF}.dm i.w{background:#7A5230}.dm i.s{background:#E5A500}
 @media (prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important}}
 </style>
 </head>
@@ -179,6 +183,7 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 <div class="wrap plan">
   <button class="alt" id="planBack" style="margin:0 0 6px;width:auto;padding:6px 16px;display:inline-block">← Till kartan</button>
   <h2 id="planT"></h2><p class="sub" id="planS"></p>
+  <div class="panel" id="planNew" hidden></div>
   <div class="panel"><h3>👀 Fiender i den här banan</h3><div class="enl" id="planE"></div></div>
   <div class="panel"><h3 id="planAH">🐾 Dina djur</h3><div class="anl" id="planA"></div><p class="note" id="planN" style="margin:8px 0 0"></p></div>
   <button class="go" id="planGo">Spela ▶</button>
@@ -194,7 +199,8 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
   <div class="coach" id="coach" hidden role="dialog"><i class="arr" aria-hidden="true"></i><b id="coachT"></b><p id="coachP"></p><button id="coachOk">Okej!</button></div>
   <div class="ov" id="pause" hidden><div><b class="t">Paus</b><button class="go" id="resume">Fortsätt ▶</button><button class="alt" id="restart">Börja om banan</button><button class="alt" id="toMap">Till kartan</button></div></div>
   <div class="ov" id="lose" hidden><div><b class="t" id="loseT">Slemmet tog huset!</b><p id="loseP"></p><button class="go" id="again">Försök igen</button><button class="alt" id="loseMap">Till kartan</button></div></div>
-  <div class="ov" id="qz" hidden><div><b class="t">⭐ Kraftfråga</b><p>Svara rätt så får alla djur dubbel skada en stund!</p><div class="q" id="qq"></div><div class="ch" id="qc"></div><button class="alt" id="qx">Hoppa över</button></div></div>
+  <div class="ov" id="intro" hidden><div><b class="t" id="inT"></b><div id="inD"></div><p id="inP" style="color:var(--ink);text-align:left;font-size:1.05rem"></p><button class="go" id="inGo">Förstått! ▶</button></div></div>
+  <div class="ov" id="qz" hidden><div><b class="t" id="qzT">⭐ Kraftfråga</b><p id="qzP">Svara rätt så får alla djur dubbel skada en stund!</p><div class="q" id="qq"></div><div class="ch" id="qc"></div><button class="alt" id="qx">Hoppa över</button></div></div>
 </section>
 <section id="result" class="screen" hidden>
 <div class="wrap res">
@@ -232,17 +238,17 @@ const ANI={
  katt:{n:"Bollkatten",cfg:{...base,animal:"katt",hat:"keps"},cost:25,cd:4.5,hp:40,dmg:3,unl:1,
   t:"Kastar en boll varje omgång. Siffran på djuret är skadan.",ex:"12 ÷ 3 = 4 omgångar"},
  bjorn:{n:"Stenbjörnen",cfg:{...base,animal:"bjorn",hat:"hjalm"},cost:15,cd:12,hp:200,wall:1,unl:2,tag:"mur",
-  t:"Står i vägen och tål mycket. Köper tid åt de andra.",ex:"200 ÷ 8 = 25 sekunder"},
+  how:"En <b>mur</b> som tål 200 skada. Fienden stannar och äter på den medan dina skyttar skjuter: <b>200 ÷ 8 = 25 sekunder</b> om fienden äter 8 per sekund.",demo:["bjorn"],t:"Står i vägen och tål mycket. Köper tid åt de andra.",ex:"200 ÷ 8 = 25 sekunder"},
  groda:{n:"Spruttgrodan",cfg:{...base,animal:"groda",glasses:"dyk"},cost:20,cd:4.5,hp:40,dmg:2,unl:3,
-  t:"Billig skytt med liten skada. Bra i många körfält.",ex:"2 · 3 = 6 skada av tre grodor"},
+  how:"Billig skytt med <b>2 skada</b> per skott. Tre grodor i en rad gör <b>3 · 2 = 6</b> skada. Bra när du har lite sol.",demo:["groda"],t:"Billig skytt med liten skada. Bra i många körfält.",ex:"2 · 3 = 6 skada av tre grodor"},
  pingvin:{n:"Frostpingvinen",cfg:{...base,animal:"pingvin",hat:"mossa",neck:"halsduk"},cost:35,cd:6,hp:40,dmg:2,slow:1,unl:4,
-  t:"Fryser fienden så att den går halva farten. Då hinner de andra skjuta dubbelt så många gånger.",ex:"Halv fart: 2 × så många omgångar"},
+  how:"Fryser fienden så att den går <b>halva farten</b>. Då hinner skyttarna skjuta <b>dubbelt så många gånger</b> innan fienden kommer fram.",demo:["pingvin"],t:"Fryser fienden så att den går halva farten. Då hinner de andra skjuta dubbelt så många gånger.",ex:"Halv fart: 2 × så många omgångar"},
  drake:{n:"Eldraken",cfg:{...base,animal:"drake",hat:"krona",back:"vingar"},cost:50,cd:9,hp:50,dmg:8,unl:5,
-  t:"Dyr men stark. Eldbollen gör mycket skada.",ex:"24 ÷ 8 = 3 omgångar"},
+  how:"Dyr men stark: <b>8 skada</b> per skott. En fiende med 24 i hälsa: <b>24 ÷ 8 = 3</b> skott.",demo:["drake"],t:"Dyr men stark. Eldbollen gör mycket skada.",ex:"24 ÷ 8 = 3 omgångar"},
  robot:{n:"Dubbel-roboten",cfg:{...base,animal:"robot",hat:"horlurar"},cost:30,cd:8,hp:40,mult:2,unl:7,tag:"×2",
-  t:"Dubblar skadan hos djuren i rutorna bredvid (till vänster och höger).",ex:"3 × 2 = 6 skada"},
+  how:"Ställ den <b>precis bredvid</b> en skytt (till vänster eller höger). Skytten gör då <b>dubbelt</b> så mycket skada: <b>3 · 2 = 6</b>. Två robotar bredvid samma skytt: 3 · 2 · 2 = 12!",demo:["katt","robot"],t:"Dubblar skadan hos djuren i rutorna bredvid (till vänster och höger).",ex:"3 × 2 = 6 skada"},
  uggla:{n:"Plus-ugglan",cfg:{...base,animal:"uggla",hat:"troll"},cost:35,cd:8,hp:40,add:3,unl:9,tag:"+3",
-  t:"Lägger till +3 skada hos alla skyttar i körfältet. Först × sedan +.",ex:"(3 × 2) + 3 = 9 skada"}
+  how:"Gör <b>alla skyttar i hela raden</b> starkare: <b>+3</b> skada var. Räkna <b>först gånger, sedan plus</b>: robot och katt ger 3 · 2 = 6, och ugglan lägger på 3: <b>(3 · 2) + 3 = 9</b>.",demo:["katt","robot","uggla"],t:"Lägger till +3 skada hos alla skyttar i körfältet. Först × sedan +.",ex:"(3 × 2) + 3 = 9 skada"}
 };
 const ANL=Object.keys(ANI);
 const ET={
@@ -264,6 +270,7 @@ const WORLDS=[
 const BOSSN=["Snigelkungen","Slemkungen","Frostkungen"];
 /* ---------- Banor ---------- */
 const LNAME=["Första fröet","Mössen kommer","Slemmen rullar","Hela gården","Masken kryper","Snigelkungen","Skogsbrynet","Hoppande grodor","Dubbel kraft","Eldslemmen","Ugglans hjälp","Slemkungen","Första snön","Delaren","Is och eld","Stora vågor","Vinterstorm","Frostkungen"];
+function exprFor(hp,rnd){const L=[];for(let a=2;a<=9;a++)for(let b=2;b<=9;b++)for(let c=1;c<=12;c++){if(a*b+c===hp)L.push(a+" · "+b+" + "+c);if(a*b-c===hp&&c<a*b)L.push(a+" · "+b+" − "+c);}for(let a=2;a<=9;a++)for(let c=2;c<=6;c++)if((a+c)*c===hp)L.push("("+a+" + "+c+") · "+c);return L.length?L[Math.floor(rnd()*L.length)]:null;}
 function genLevel(n){
  const w=Math.floor((n-1)/6),i=(n-1)%6,rnd=mulberry(n*7919+3);
  const lanes=w>0?5:[3,3,4,5,5,5][i];
@@ -275,7 +282,7 @@ function genLevel(n){
  const count=Math.round(6+i*3.2+w*7),T=76+i*13+w*26,first=22+w*3;
  const fac={mus:.6,mask:1.5,lava:1.3,groda:.9,delare:1.6};
  const sp=[];
- const add=(t,row,type,hp)=>{hp*=[1.5,1.5,1.15][w];hp=Math.max(3,Math.round(hp));if(type==="delare")hp=Math.max(6,Math.round(hp/6)*6);else if(w===0)hp=Math.max(3,Math.round(hp/3)*3);sp.push({t:+t.toFixed(2),row,type,hp});};
+ const add=(t,row,type,hp)=>{hp*=[1.5,1.5,1.15][w];hp=Math.max(3,Math.round(hp));if(type==="delare")hp=Math.max(6,Math.round(hp/6)*6);else if(w===0)hp=Math.max(3,Math.round(hp/3)*3);const o={t:+t.toFixed(2),row,type,hp};if(w>=1&&type!=="kung"&&rnd()<[0,.35,.6][w]){const x=exprFor(hp,rnd);if(x)o.expr=x;}sp.push(o);};
  const boss=i===5;
  for(let k=0;k<count;k++){const type=types[Math.floor(rnd()*types.length)];const t=first+(T-first)*Math.pow(k/Math.max(1,count-1),.9)+(rnd()-.5)*3;add(Math.max(first,t),Math.floor(rnd()*lanes),type,HP[Math.floor(rnd()*HP.length)]*(fac[type]||1));}
  const waves=[.55,.92].map(f=>first+(T-first)*f);
@@ -311,7 +318,7 @@ function place(s,id,r,c){if(canPlace(s,id,r,c)!=="ok")return false;const d=ANI[i
  const a={uid:s.uid++,id,row:r,col:c,hp:d.hp,hpMax:d.hp,t:.6+s.rnd()*.7,pt:d.pt?d.pt*.55:0,hit:0,fire:0,born:s.t};s.grid[r][c]=a;s.animals.push(a);s.placed++;s.ev.push({k:"place",r,c,id});return true;}
 function removeAnimal(s,r,c,refund){const a=s.grid[r][c];if(!a)return;s.grid[r][c]=null;s.animals.splice(s.animals.indexOf(a),1);if(refund){s.sun+=Math.floor(ANI[a.id].cost/2);s.ev.push({k:"shovel",r,c});}else s.ev.push({k:"adie",r,c,id:a.id});}
 function collectSun(s,u){const i=s.suns.indexOf(u);if(i<0||u.st==="fly")return;u.st="fly";u.ft=0;s.sun+=u.v;s.collected++;s.ev.push({k:"sun",v:u.v,x:u.x,y:u.y});}
-function spawnEnemy(s,sp,x,row){const T=ET[sp.type];const e={uid:s.uid++,type:sp.type,row:row==null?sp.row:row,x:x==null?SPAWNX:x,hp:sp.hp,hpMax:sp.hp,slow:0,flash:0,ph:s.rnd()*6,eat:false,sum:6,child:!!sp.child};s.enemies.push(e);s.ev.push({k:"spawn",e});return e;}
+function spawnEnemy(s,sp,x,row){const T=ET[sp.type];const e={uid:s.uid++,type:sp.type,row:row==null?sp.row:row,x:x==null?SPAWNX:x,hp:sp.hp,hpMax:sp.hp,expr:sp.expr||null,slow:0,flash:0,ph:s.rnd()*6,eat:false,sum:6,child:!!sp.child};s.enemies.push(e);s.ev.push({k:"spawn",e});return e;}
 function dmgEnemy(s,e,d,kind){if(e.hp<=0)return;e.hp-=d;e.flash=.12;s.ev.push({k:"dmg",e,d,kind});if(e.hp<=0)killEnemy(s,e,false);}
 function killEnemy(s,e,barrow){const i=s.enemies.indexOf(e);if(i<0)return;s.enemies.splice(i,1);s.killed++;e.hp=0;s.ev.push({k:"kill",e,barrow});
  if(ET[e.type].split&&!barrow&&e.hpMax>=6){const h=Math.round(e.hpMax/2);spawnEnemy(s,{type:"snigel",hp:h,child:true},e.x+.18,e.row);spawnEnemy(s,{type:"snigel",hp:h,child:true},e.x-.1,e.row);s.total+=2;s.ev.push({k:"split",e});}}
@@ -385,6 +392,7 @@ function openPlan(n){const lv=n?LEVELS[n-1]:{endless:true,n:100,w:0,lanes:5,sun0
  $("planS").textContent=n?(lv.boss?`👑 Bossbana: ${BOSSN[lv.w]}`:`${lv.lanes} körfält · ${lv.total} fiender`):"Fienderna blir fler och starkare för varje våg.";
  const grp={};(lv.spawns||[]).forEach(s=>{const g=grp[s.type]=grp[s.type]||{n:0,min:1e9,max:0};g.n++;g.min=Math.min(g.min,s.hp);g.max=Math.max(g.max,s.hp);});
  $("planE").innerHTML=(n?Object.keys(grp):lv.types.slice(0,4)).map(t=>`<span class="en">${enIc(t,38)}<span>${ET[t].n}<br><small>${n?(grp[t].min===grp[t].max?grp[t].min:grp[t].min+"–"+grp[t].max)+" i hälsa · "+grp[t].n+" st":"Fler typer kommer"}</small></span></span>`).join("");
+ {const nw=n?ANL.filter(id=>ANI[id].unl===n&&n>1):[];const el=$("planNew");el.hidden=!nw.length;el.innerHTML=nw.map(id=>'<h3>🆕 Nytt djur: '+ANI[id].n+'</h3>'+demoHtml(ANI[id].demo||[id])+'<p style="margin:0">'+(ANI[id].how||ANI[id].t)+'</p>').join("");}
  renderPlanA();show("plan");}
 function renderPlanA(){const P=PLAN;$("planAH").textContent=P.unlocked.length>P.slots?`🐾 Välj ${P.slots} djur`:"🐾 Dina djur";
  $("planA").innerHTML=P.unlocked.map(id=>{const d=ANI[id],isNew=P.n&&d.unl===P.n&&P.n>1;return `<button class="an${P.sel.includes(id)?" on":""}" data-id="${id}"><img src="${portrait(id)}" width="40" height="46" alt=""><span><b>${d.n}</b><small>${d.dmg?"Skada "+d.dmg:d.prod?"Sol "+d.prod:d.mult?"× "+d.mult:d.add?"+ "+d.add:"Mur "+d.hp}</small><small>${d.cost} sol</small></span>${isNew?'<span class="new">Nytt!</span>':""}</button>`;}).join("");
@@ -409,6 +417,7 @@ async function startGame(lv,load){stopGame();show("game");loadAnimalImgs(load);
  $("snd").textContent=window.Ljud&&Ljud.on?"🔊":"🔇";layout();hudUpdate(true);
  if(!lv.endless){const flags=lv.waves.map(t=>((t-lv.first)/(lv.T-lv.first)));$("wbar").querySelectorAll(".fl").forEach(x=>x.remove());flags.forEach((f,i)=>{const e=document.createElement("span");e.className="fl";e.textContent="🚩";e.style.left=(8+f*84)+"%";$("wbar").appendChild(e);});}
  if(lv.n===1){G.spawns[0].row=1;UI.tut=null;setTimeout(()=>{if(G&&G.lv===lv&&UI.tut==null)tutGo(0);},350);}else if(HINT[lv.n]&&!data.sett["h"+lv.n]){const k=lv.n;setTimeout(()=>{if(G&&G.lv===lv&&!G.running){say(HINT[k],8000);data.sett["h"+k]=1;save();}},400);}
+ {const nw=ANL.filter(id=>ANI[id].unl===lv.n&&lv.n>1&&!data.sett["an_"+id]);if(nw.length&&!lv.endless)setTimeout(()=>{if(G&&G.lv===lv)showIntro(nw);},350);}
  last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop);}
 const HINT={2:"Nya fiender: <b>möss</b> är snabba men har lite hälsa. Stenbjörnen står i vägen och köper tid.",7:"Nytt djur: <b>Dubbel-roboten ×2</b> dubblar skadan hos grannarna. Då blir 3 till 6!",9:"Nytt djur: <b>Plus-ugglan +3</b> lägger till skada i hela körfältet. <b>Först × sedan +</b>.",13:"Nu finns <b>Delarmasken ÷2</b>: den delas i två halvor när den faller. 24 blir 12 och 12.",12:"Bossbana! Slemkungen tål mycket och kallar på hjälp.",6:"Bossbana! Snigelkungen är stor och kallar på hjälp.",18:"Sista bossen! Frostkungen kommer. Lycka till!"};
 function loadAnimalImgs(load){load.forEach(id=>{const im=new Image();im.src=portrait(id);ANI[id].img=im;});}
@@ -454,7 +463,7 @@ function handleEvents(){const s=G;for(const ev of s.ev){const T=L.T;
  else if(ev.k==="adie"){poof(ev.c+.5,ev.r+.6,8,"#8A7355");snd("bad");}
  else if(ev.k==="shovel"){snd("clonk");}
  else if(ev.k==="barrow"){UI.shake=Math.max(UI.shake,8);snd("whoosh");say("Skottkärran räddar körfältet! Men bara en gång per körfält.",4000);}
- else if(ev.k==="spawn"){const e=ev.e;$("startb").hidden=true;}
+ else if(ev.k==="spawn"){const e=ev.e;$("startb").hidden=true;if(e.expr&&!data.sett.expr&&s.running){data.sett.expr=1;save();say("Den här fienden har ett <b>uttryck</b> som hälsa: <b>"+e.expr+"</b>. Räkna ut vad det blir. <b>Först gånger, sedan plus eller minus.</b>",9000);}}
  else if(ev.k==="lose"){UI.shake=14;}
 }
 s.ev.length=0;}
@@ -494,11 +503,24 @@ function qGen(w,rnd){const r=a=>a+Math.floor(rnd()*(8-a+1));let a,b,txt,ans;cons
  else{if(k===0){a=2+Math.floor(rnd()*5);b=2+Math.floor(rnd()*5);const c=2+Math.floor(rnd()*5);txt=`${a} + ${b} · ${c}`;ans=a+b*c;}else if(k===1){a=6+Math.floor(rnd()*6);b=6+Math.floor(rnd()*6);txt=`${a} · ${b}`;ans=a*b;}else{b=4+Math.floor(rnd()*6);ans=6+Math.floor(rnd()*7);a=b*ans;txt=`${a} ÷ ${b}`;}}
  const ch=new Set([ans]);let g=0;while(ch.size<3&&g++<40){const d=[1,2,-1,-2,10,-10,3][Math.floor(rnd()*7)];const v=ans+d;if(v>0)ch.add(v);}
  return{txt:txt+" = ?",ans,ch:[...ch].sort(()=>rnd()-.5)};}
-function openQuiz(q){if(!G||G.over)return;UI.paused=true;UI.quizStar=q;const Q=qGen(G.lv.w||0,Math.random);UI.Q=Q;$("qq").textContent=Q.txt;$("qc").innerHTML=Q.ch.map(v=>`<button data-v="${v}">${v}</button>`).join("");$("qz").hidden=false;UI.qT=performance.now();}
+function openQuiz(q,need){if(!G||G.over)return;UI.paused=true;UI.quizStar=q||null;const Q=need||qGen(G.lv.w||0,Math.random);UI.Q=Q;$("qzT").textContent=need?"🧮 Planeringsfråga":"⭐ Kraftfråga";$("qzP").textContent=need?need.intro:"Svara rätt så får alla djur dubbel skada en stund!";$("qq").textContent=Q.txt;$("qc").innerHTML=Q.ch.map(v=>`<button data-v="${v}">${v}</button>`).join("");$("qz").hidden=false;UI.qT=performance.now();}
 $("qc").onclick=e=>{const b=e.target.closest("[data-v]");if(!b||!UI.Q||UI.Q.done||performance.now()-UI.qT<600)return;UI.Q.done=true;const ok=+b.dataset.v===UI.Q.ans;b.classList.add(ok?"ok":"bad");
  if(!ok){$("qc").querySelectorAll("button").forEach(x=>{if(+x.dataset.v===UI.Q.ans)x.classList.add("ok");});snd("bad");}else snd("fanfare");
- setTimeout(()=>{$("qz").hidden=true;UI.paused=false;const i=G&&G.stars.indexOf(UI.quizStar);if(G&&i>=0)G.stars.splice(i,1);if(ok&&G){G.buff=14;say("Dubbel skada i 14 sekunder!",3000);starBurst(4,2,10);}last=performance.now();},ok?650:1300);};
+ setTimeout(()=>{$("qz").hidden=true;UI.paused=false;const i=G&&G.stars.indexOf(UI.quizStar);if(G&&i>=0)G.stars.splice(i,1);if(G&&UI.Q&&UI.Q.need){if(ok){G.sun+=25;say("Rätt! <b>+25 sol</b> i bonus. "+UI.Q.expl,6500);starBurst(4,2,8);}else say("Nästan! "+UI.Q.expl,8000);}else if(ok&&G){G.buff=14;say("Dubbel skada i 14 sekunder!",3000);starBurst(4,2,10);}last=performance.now();},ok?650:(UI.Q&&UI.Q.need?2200:1300));};
 $("qx").onclick=()=>{if(performance.now()-UI.qT<600)return;$("qz").hidden=true;UI.paused=false;const i=G.stars.indexOf(UI.quizStar);if(i>=0)G.stars.splice(i,1);last=performance.now();};
+function needQ(tw){const lv=G.lv,sh=G.load.filter(id=>ANI[id].dmg),pick=sh.includes("katt")?"katt":sh.includes("groda")?"groda":sh[0];if(!pick)return null;
+ const grp=G.spawns.filter(x=>x.t>=tw-.1&&x.t<=tw+5);if(!grp.length)return null;const m=grp.reduce((a,b)=>b.hp>a.hp?b:a),d=ANI[pick].dmg,ans=Math.ceil(m.hp/d),rest=m.hp%d;
+ const ch=new Set([ans]);for(const x of[1,-1,2,-2,3]){if(ans+x>0&&ch.size<3)ch.add(ans+x);}
+ const expl=rest?m.hp+" ÷ "+d+" = "+Math.floor(m.hp/d)+" rest "+rest+". Resten kräver ett skott till: "+ans+" skott.":m.hp+" ÷ "+d+" = "+ans+" skott.";
+ return{need:1,intro:"Nästa våg kommer snart! Starkaste fienden har "+(m.expr?"hälsan "+m.expr+" (räkna ut den först)":m.hp+" i hälsa")+". "+ANI[pick].n+" gör "+d+" skada per skott.",txt:"Hur många skott behövs?",ans,ch:[...ch].sort((a,b)=>a-b),expl};}
+function needTick(){if(!G||G.over||UI.paused||G.hold||G.lv.endless||G.lv.n<2||!G.running)return;const w=G.lv.waves;if(!w)return;G.asked=G.asked||{};
+ for(let i=0;i<w.length;i++){const tw=w[i];if(!G.asked[i]&&G.clock>=tw-7&&G.clock<tw+1){G.asked[i]=1;const q=needQ(tw);if(q)openQuiz(null,q);return;}}}
+function demoHtml(ids){return '<div class="demo">'+ids.map(id=>{const d=ANI[id],tg=d.dmg?'<i>⚡'+d.dmg+'</i>':d.mult?'<i class="m">×'+d.mult+'</i>':d.add?'<i class="m">+'+d.add+'</i>':d.wall?'<i class="w">'+d.hp+'</i>':'<i class="s">+'+(d.prod||0)+'</i>';return '<div class="dm"><img src="'+portrait(id)+'" width="52" height="60" alt="">'+tg+'</div>';}).join("")+'</div>';}
+let introQ=[];
+function showIntro(ids){introQ=ids.slice();nextIntro();}
+function nextIntro(){const id=introQ.shift();if(!id){$("intro").hidden=true;UI.paused=false;last=performance.now();return;}const d=ANI[id];UI.paused=true;
+ $("inT").textContent="🆕 Nytt djur: "+d.n;$("inD").innerHTML=demoHtml(d.demo||[id]);$("inP").innerHTML=d.how||d.t;$("intro").hidden=false;data.sett["an_"+id]=1;save();}
+$("inGo").onclick=nextIntro;
 /* ---------- Avslut ---------- */
 function setPause(v){if(!G||G.over)return;UI.paused=v;$("pause").hidden=!v;}
 $("pauseBtn").onclick=()=>setPause(true);$("resume").onclick=()=>{setPause(false);last=performance.now();};
@@ -532,7 +554,7 @@ $("bkA").onclick=()=>{bkTab="a";$("bkA").setAttribute("aria-pressed","true");$("
 $("bkE").onclick=()=>{bkTab="e";$("bkE").setAttribute("aria-pressed","true");$("bkA").setAttribute("aria-pressed","false");renderBook();};
 /* ---------- Loop och ritning ---------- */
 function loop(now){raf=requestAnimationFrame(loop);if(!G)return;const dt=Math.min(.05,(now-last)/1000);last=now;frame(dt);}
-function frame(dt){if(!G)return;tutTick();if(!UI.paused&&G.running&&!G.over){let r=dt*UI.ff;while(r>0){const d=Math.min(r,.033);step(G,d);r-=d;}}
+function frame(dt){if(!G)return;tutTick();needTick();if(!UI.paused&&G.running&&!G.over){let r=dt*UI.ff;while(r>0){const d=Math.min(r,.033);step(G,d);r-=d;}}
  if(!UI.paused)uiStep(dt);handleEvents();hudUpdate();draw();
  if(G.over&&!G.fin){G.fin=true;const win=G.over==="win";if(win&&!reduced())UI.slow=.5;setTimeout(()=>{if(G&&G.fin===true){G.fin=2;finish(win);}},win?1500:900);}}
 function uiStep(dt){for(const p of UI.parts){p.t+=dt;if(p.k!=="ring"){p.x+=(p.vx||0)*dt;p.y+=(p.vy||0)*dt;if(p.k==="star"){p.vy+=7*dt;p.r+=p.vr*dt;}else p.vy=(p.vy||0)+.8*dt;}}UI.parts=UI.parts.filter(p=>p.t<p.l);
@@ -641,7 +663,7 @@ function drawEnemy(e){const T=L.T,t=ET[e.type],fr=SPR[t.spr],cell=T*1.05*t.sz,cx
  ctx.save();ctx.translate(cx,by-hop);if(e.eat)ctx.rotate(Math.sin(e.ph*18)*.05);const sq=1+wob*.03;ctx.scale(1/sq,sq);if(e.flash>0)ctx.globalAlpha=.7;
  spr(fr[Math.floor(e.ph*(e.eat?6:3.4))%2],-cell/2,-cell*.98,cell,cell,false);ctx.restore();
  if(t.king){const kx=cx,ky=by-cell*.95-hop;ctx.fillStyle="#FFCB2E";ctx.strokeStyle="#7A4E00";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(kx-cell*.2,ky+cell*.1);ctx.lineTo(kx-cell*.22,ky-cell*.1);ctx.lineTo(kx-cell*.1,ky);ctx.lineTo(kx,ky-cell*.14);ctx.lineTo(kx+cell*.1,ky);ctx.lineTo(kx+cell*.22,ky-cell*.1);ctx.lineTo(kx+cell*.2,ky+cell*.1);ctx.closePath();ctx.fill();ctx.stroke();}
- const fr2=e.hp/e.hpMax;plate(cx,by-cell*(t.king?1.18:.98)-hop-T*.04,String(Math.ceil(e.hp)),e.flash>0?"#FFFFFF":fr2>.6?"#D6F5DC":fr2>.3?"#FFF0B8":"#FFD0CB","#2A1B10",Math.max(12,T*.25));
+ const fr2=e.hp/e.hpMax;plate(cx,by-cell*(t.king?1.18:.98)-hop-T*.04,(e.expr&&e.hp===e.hpMax)?e.expr:String(Math.ceil(e.hp)),e.flash>0?"#FFFFFF":fr2>.6?"#D6F5DC":fr2>.3?"#FFF0B8":"#FFD0CB","#2A1B10",Math.max(12,T*.25));
  if(e.slow>0){ctx.fillStyle="rgba(120,200,255,.9)";ctx.font=`${T*.22}px sans-serif`;ctx.textAlign="center";ctx.fillText("❄",cx+cell*.3,by-cell*.6);}}
 function drawSun(u){const T=L.T;let [x,y]=sunPx(u);let sc=1,al=1;if(u.st==="fly"){const f=u.ft/.5,tx=$("pot").getBoundingClientRect(),ca=cv.getBoundingClientRect(),px=tx.left+tx.width*.2-ca.left,py=tx.top+tx.height*.5-ca.top;x+=(px-x)*f*f;y+=(py-y)*f*f;sc=1-f*.5;al=1-f*.3;}
  else if(u.st==="rest"&&u.life<2.5){al=.5+.5*Math.sin(u.life*10);}
