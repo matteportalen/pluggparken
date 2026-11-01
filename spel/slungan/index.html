@@ -181,7 +181,11 @@ const WORLDS=[
  {id:"oknen",name:"Öknen",icon:"🏜️",rule:"Flera djur: vilket passar? Faktorer",wg:"linear-gradient(90deg,#E8A24A,#C9772B)",king:"Blockkungen",slime:"block",ground:"sand",
   sky:["#FFC77A","#FFF1CF"],h1:"#F2CB98",h2:"#E4AC70",sun:true,cacti:true},
  {id:"isberget",name:"Isberget",icon:"❄️",rule:"Avstånd som uttryck: 30 + 12",wg:"linear-gradient(90deg,#5E8FE0,#3A63B8)",king:"Slemkejsaren",slime:"mix",ground:"snow",
-  sky:["#9DB9EA","#EEF5FF"],h1:"#D4E3F7",h2:"#B3CBEB",snow:true}
+  sky:["#9DB9EA","#EEF5FF"],h1:"#D4E3F7",h2:"#B3CBEB",snow:true},
+ {id:"vulkan",name:"Vulkanön",icon:"🌋",rule:"Division: 72 ÷ 2",wg:"linear-gradient(90deg,#D9552B,#8E2A1B)",king:"Lavakungen",slime:"fire",ground:"sand",tint:"rgba(70,20,10,.55)",
+  sky:["#5A2430","#F2A06B"],h1:"#7A3A33",h2:"#55261F",embers:true},
+ {id:"manen",name:"Månen",icon:"🌙",rule:"Flera led: 3 · 8 + 4",wg:"linear-gradient(90deg,#4A4F9C,#262A5E)",king:"Månkejsaren",slime:"mix",ground:"snow",tint:"rgba(40,40,100,.38)",
+  sky:["#0B0F2E","#3A3F85"],h1:"#3B3F7A",h2:"#2A2D5E",stars:true}
 ];
 /* k: antal djur per steg-längd (meter per steg). t: mål {d: avstånd i meter, s: byggnad, king}. x: murar {x, h, m}. help: 2 linjal+produkt, 1 produkt, 0 bara steg.
    lab: skyltens uttryck (p tal, x produkt, s summa, d differens). par: antal skott som ger tre stjärnor. */
@@ -204,13 +208,27 @@ const LV=[
  {w:2,name:"Pyramiden",k:{6:3,8:3},t:[{d:48,s:"borg"},{d:36,s:"tab"},{d:24,s:"c3"}],x:[{x:14,h:5}],lab:"x",help:0,par:3},
  {w:2,name:"Faktorjakten",k:{5:3,9:3,4:2},t:[{d:45,s:"borg"},{d:20,s:"c3"},{d:36,s:"c3"}],lab:"x",help:0,par:4},
  {w:2,name:"Blockkungen",k:{6:2,7:2,8:2},t:[{d:42,s:"fort",king:1},{d:48}],x:[{x:18,h:6}],lab:"x",help:0,par:4,boss:1},
- {w:3,name:"Plus på kartan",k:{10:3,5:3},t:[{d:30,s:"borg"},{d:45,s:"c3"}],lab:"s",help:0,par:3,hint:"lab_s"},
- {w:3,name:"Isborgen",k:{4:3,6:3,8:2},t:[{d:32,s:"borg",m:"ice"},{d:42,s:"tab"},{d:18,s:"c3"}],lab:"s",help:0,par:4},
- {w:3,name:"Minus på kartan",k:{12:3,9:3,6:2},t:[{d:36,s:"borg"},{d:48,s:"tab"},{d:27,s:"c3"}],x:[{x:16,h:5,m:"ice"}],lab:"d",help:0,par:4,hint:"lab_d"},
- {w:3,name:"Frostvind",k:{5:3,8:3,12:2},t:[{d:40,s:"borg"},{d:24,s:"c4"},{d:48,s:"tab"}],x:[{x:12,h:5,m:"stone"}],lab:"d",help:0,par:4},
+ {w:3,name:"Plus på kartan",k:{10:3,5:3},t:[{d:30,s:"borg",tnt:1},{d:45,s:"c3"}],lab:"s",help:0,par:3,hint:"lab_s"},
+ {w:3,name:"Isborgen",k:{4:3,6:3,8:2},t:[{d:32,s:"borg",m:"ice",tnt:1},{d:42,s:"tab"},{d:18,s:"c3"}],lab:"s",help:0,par:4},
+ {w:3,name:"Minus på kartan",k:{12:3,9:3,6:2},t:[{d:36,s:"borg"},{d:48,s:"tab"},{d:27,s:"c3"}],x:[{x:16,h:5,m:"ice"}],o:[{t:"boulder",x:31.5,r:.9}],lab:"d",help:0,par:4,hint:"lab_d"},
+ {w:3,name:"Frostvind",k:{5:3,8:3,12:2},t:[{d:40,s:"borg"},{d:24,s:"c4",tnt:1},{d:48,s:"tab"}],x:[{x:12,h:5,m:"stone"}],o:[{t:"tnt",x:44.5,n:2}],lab:"d",help:0,par:4},
  {w:3,name:"Tre mål",k:{6:3,9:3,10:3},t:[{d:30,s:"borg"},{d:36,s:"c3"},{d:45,s:"tab"}],lab:"s",help:0,par:4},
- {w:3,name:"Slemkejsaren",k:{6:6,8:6,9:5},t:[{d:48,s:"fort",king:1},{d:36,s:"fort",king:1}],x:[{x:14,h:6,m:"stone"}],lab:"d",help:0,par:6,boss:1}
+ {w:3,name:"Slemkejsaren",k:{6:6,8:6,9:5},t:[{d:48,s:"fort",king:1,tnt:1},{d:36,s:"fort",king:1}],x:[{x:14,h:6,m:"stone"}],lab:"d",help:0,par:6,boss:1}
 ];
+LV.push(
+ {w:4,name:"Lavastigen",k:{6:5},t:[{d:24,s:"c3"},{d:39,s:"bunker",bx:36}],lab:"q",help:0,par:2,hint:"bunker"},
+ {w:4,name:"Eldfloden",k:{8:4,12:3},t:[{d:36,s:"borg",tnt:1},{d:51,s:"bunker",bx:48}],lab:"q",help:0,par:3,hint:"lab_q"},
+ {w:4,name:"Kratern",k:{4:4,9:4},t:[{d:27,s:"c3"},{d:39,s:"bunker",bx:36},{d:20,s:"c2",tnt:1}],lab:"q",help:0,par:4},
+ {w:4,name:"Basaltmuren",k:{6:4,7:3},t:[{d:42,s:"borg"},{d:24,s:"bunker",bx:21},{d:35,s:"c3",tnt:1}],x:[{x:14,h:6,m:"stone"}],lab:"q",help:0,par:4},
+ {w:4,name:"Askregn",k:{3:3,8:3,12:2},t:[{d:33,s:"borg",tnt:1},{d:51,s:"bunker",bx:48},{d:30,s:"bunker",bx:27}],lab:"q",help:0,par:5},
+ {w:4,name:"Lavakungen",k:{6:5,8:4,9:4},t:[{d:45,s:"fort",king:1,tnt:1},{d:33,s:"bunker",bx:30}],x:[{x:16,h:6,m:"stone"}],lab:"q",help:0,par:5,boss:1},
+ {w:5,name:"Månlandning",k:{4:4,6:3},t:[{d:28,s:"c3"},{d:23,s:"bunker",bx:20}],lab:"e",help:0,par:3,hint:"lab_e"},
+ {w:5,name:"Kratrar",k:{5:4,7:3},t:[{d:35,s:"borg",tnt:1},{d:24,s:"bunker",bx:21},{d:40,s:"tab"}],lab:"e",help:0,par:4},
+ {w:5,name:"Stjärnfall",k:{3:3,8:3,10:2},t:[{d:30,s:"c4",tnt:1},{d:27,s:"bunker",bx:24},{d:48,s:"tab"}],x:[{x:12,h:5}],lab:"e",help:0,par:4},
+ {w:5,name:"Månmuren",k:{6:4,9:3},t:[{d:36,s:"c3"},{d:45,s:"bunker",bx:42},{d:18,s:"tab"}],x:[{x:20,h:6,m:"stone"}],lab:"e",help:0,par:4},
+ {w:5,name:"Rymdstationen",k:{4:3,7:3,12:2},t:[{d:48,s:"borg",tnt:1},{d:31,s:"bunker",bx:28},{d:36,s:"tab"},{d:44,s:"c2"}],x:[{x:14,h:5,m:"ice"}],lab:"e",help:0,par:5},
+ {w:5,name:"Månkejsaren",k:{6:6,8:5,9:5},t:[{d:48,s:"fort",king:1,tnt:1},{d:39,s:"bunker",bx:36},{d:27,s:"c3"}],lab:"e",help:0,par:6,boss:1}
+);
 LV.forEach((l,i)=>l.n=i+1);
 const HINTS={
  intro:"Dra slungan bakåt. Siffran är antal <b>steg</b>. Ett steg är <b>3 m</b>, och slemmet står <b>12 m</b> bort.",
@@ -219,7 +237,10 @@ const HINTS={
  typer:"Nu finns <b>två sorters djur</b> med olika stegmått. Välj det som passar: stegen ska bli ett helt antal!",
  lab_x:"Skyltarna visar nu en multiplikation. <b>4 · 6</b> betyder 4 gånger 6.",
  lab_s:"Skyltarna visar en addition. Räkna ut avståndet först, tänk sedan på stegen.",
- lab_d:"Skyltarna visar en subtraktion, till exempel <b>60 − 12</b>. Räkna ut avståndet."
+ lab_d:"Skyltarna visar en subtraktion, till exempel <b>60 − 12</b>. Räkna ut avståndet.",
+ bunker:"Slemmet gömmer sig i en <b>stenbunker</b>: taket går inte att knäcka. Sikta på <b>💥-skylten</b> i stället: TNT-lådorna sprängs och tar bort bunkern!",
+ lab_q:"Skyltarna visar en division, till exempel <b>72 ÷ 2</b>. Räkna ut avståndet först, och sedan hur många steg det blir.",
+ lab_e:"Skyltarna har flera led, till exempel <b>3 · 8 + 4</b>. Multiplikation först, sedan plus eller minus."
 };
 const KCOL={2:"#FF6B6B",3:"#FFB02E",4:"#2EB8E6",5:"#52C77A",6:"#A77BFF",7:"#FF7FB0",8:"#1FB5A8",9:"#E9B824",10:"#EF476F",12:"#2F7FD0"};
 const kcol=k=>KCOL[k]||"#888";
@@ -235,7 +256,7 @@ function syncStars(){WORLDS.forEach((W,i)=>data.stars[W.id]=worldStars(i));}
 const nextLvl=()=>{const f=LV.find(l=>bet(l.n)===0);return f?f.n:0;};
 const spr=(x,y,sz)=>`<span class="sp" style="width:${sz}px;height:${sz}px;background-size:${12*sz}px ${7*sz}px;background-position:-${x/128*sz}px -${y/128*sz}px"></span>`;
 function openHome(){stopGame();syncStars();save();const nx=nextLvl();
-  $("worlds").innerHTML=WORLDS.map((W,wi)=>{const first=wLevels(wi)[0],open=oppen(first.n),sil=[[256,640],[0,768],[768,768],[256,640]][wi];
+  $("worlds").innerHTML=WORLDS.map((W,wi)=>{const first=wLevels(wi)[0],open=oppen(first.n),sil=[[256,640],[0,768],[768,768],[256,640],[0,768],[768,768]][wi];
     return `<div class="world${open?"":" locked"}" style="--wg:${W.wg}"><div class="wh"><span class="ic">${W.icon}</span><span><b>${W.name}</b><small>${W.rule}</small></span>${starHtml(worldStars(wi))}</div>
     <div class="lvs">${wLevels(wi).map(l=>`<button class="lvb${l.boss?" boss":""}${l.n===nx?" next":""}" data-l="${l.n}"${oppen(l.n)?"":" disabled"}><b>${oppen(l.n)?(l.boss?"👑":l.n):"🔒"}</b><small>${l.name}</small>${starHtml(bet(l.n))}</button>`).join("")}</div>
     ${open?"":`<div class="lock"><span class="sil sp" style="background-size:${12*64}px ${7*64}px;background-position:-${sil[0]/2}px -${sil[1]/2}px"></span><span>🔒 ${W.king} väntar här.<br>Klara 👑 i ${WORLDS[wi-1].name} för att öppna.</span></div>`}</div>`;}).join("");
@@ -256,7 +277,7 @@ function loadPet(){try{const svg=owlSVG(lasDjur(),"",true);pet=new Image();pet.s
 function petSrc(){return pet?pet.src:"";}
 
 const PM=40,DTS=1000/120,GPS=10.5,GSUB=GPS*PM/(120*120),BR=0.45*PM,H0=2.2,AX=0,AY=-H0*PM;
-const MAT={wood:{d:.0011,hp:48,fr:.55,re:.05},stone:{d:.0028,hp:120,fr:.7,re:.03},ice:{d:.0008,hp:30,fr:.05,re:.1}};
+const MAT={tnt:{d:.0012,hp:6,fr:.6,re:.05},wood:{d:.0011,hp:48,fr:.55,re:.05},stone:{d:.0028,hp:120,fr:.7,re:.03},ice:{d:.0008,hp:30,fr:.05,re:.1}};
 const mps=v=>v*120/PM; // px per delta-steg till m/s
 
 /* Flygbana: samma integration som Matter (v += g; x += v) i delsteg. Ger landningens x (px) när cirkelns mitt når marken. */
@@ -274,6 +295,8 @@ function mulberry(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1
 function labelFor(D,mode,rnd){
   if(mode==="x"){const ps=[];for(let a=2;a<=12;a++)if(D%a===0&&D/a>=2&&D/a<=12&&a<=D/a)ps.push([a,D/a]);if(!ps.length)return D+" m";const p=ps[Math.floor(rnd()*ps.length)];return(rnd()<.5?p[0]+" · "+p[1]:p[1]+" · "+p[0])+" m";}
   if(mode==="s"){const bs=[];for(let b=3;b<=D-3;b++)if(b%5===0||b%3===0||b===10)bs.push(b);const b=bs[Math.floor(rnd()*bs.length)]||5;return(D-b)+" + "+b+" m";}
+  if(mode==="q"){const bs=[2,3,4,5].filter(b=>D*b<=240);const b=bs[Math.floor(rnd()*bs.length)];return(D*b)+" ÷ "+b+" m";}
+  if(mode==="e"){const ps=[];for(let a=2;a<=9;a++)for(let b=2;b<=9;b++)for(const c of[2,3,4,5,6,8,10]){if(a*b+c===D)ps.push(a+" · "+b+" + "+c);if(a*b-c===D)ps.push(a+" · "+b+" − "+c);}if(!ps.length)return D+" m";return ps[Math.floor(rnd()*ps.length)]+" m";}
   if(mode==="d"){const b=[6,8,9,12,14,15,16,18][Math.floor(rnd()*8)];return(D+b)+" − "+b+" m";}
   return D+" m";}
 function build(lv){
@@ -288,24 +311,31 @@ function build(lv){
   const slime=(xm,ym,r,kind,king)=>{const b=M.Bodies.circle(xm*PM,-ym*PM,r*PM,{density:king?.0016:.0009,friction:.8,restitution:0,inertia:Infinity,sleepThreshold:40});
     Object.assign(b,{kind:"slime",ti:g.curT,sk:kind,r,king:!!king,hp:king?3:1,ph:rnd()*4,hurt:0,cool:0,dead:false,ox:xm});g.slimes.push(b);return add(b);};
   const kindFor=i=>W.slime==="mix"?["normal","fire","block"][i%3]:W.slime;
+  const tntSigns=[];
   lv.t.forEach((t,i)=>{g.curT=i;const D=t.d,mat=t.m||"wood",k=kindFor(i),king=!!t.king,r=king?.95:.5;
-    if(t.s==="c2"||t.s==="c3"||t.s==="c4"){const n=+t.s[1];for(let j=0;j<n;j++)blk(D,.5+j,1,1,mat);slime(D,n+r,r,k,king);}
+    if(t.s==="c2"||t.s==="c3"||t.s==="c4"){const n=+t.s[1];for(let j=0;j<n;j++)blk(D,.5+j,1,1,t.tnt&&j===0?"tnt":mat);slime(D,n+r,r,k,king);}
     else if(t.s==="tab"){blk(D-1.3,1,.7,2,mat);blk(D+1.3,1,.7,2,mat);blk(D,2.25,3.7,.5,mat);slime(D,2.5+r,r,k,king);}
-    else if(t.s==="borg"){[-1,0,1].forEach(j=>blk(D+j,.5,1,1,mat));blk(D,1.25,4.2,.5,"wood");
+    else if(t.s==="borg"){[-1,0,1].forEach(j=>blk(D+j,.5,1,1,t.tnt&&j===0?"tnt":mat));blk(D,1.25,4.2,.5,"wood");
       blk(D-.5,2,1,1,mat);blk(D+.5,2,1,1,mat);blk(D,2.75,2.6,.5,"wood");
       slime(D,3+r,r,k,king);slime(D-1.6,1.5+r,r,k,false);slime(D+1.6,1.5+r,r,k,false);}
-    else if(t.s==="fort"){[-1,0,1].forEach(j=>blk(D+j,.5,1,1,mat));[-.5,.5].forEach(j=>blk(D+j,1.5,1,1,mat));slime(D,2+r,r,k,king);}
+    else if(t.s==="bunker"){blk(D-1.3,1,.7,2,"stone");blk(D+1.3,1,.7,2,"stone");blk(D,2.25,3.7,.5,"stone");
+      if(t.bx){blk(D+2.3,.5,1,1,mat);blk(D+2.3,1.5,1,1,mat);}slime(D,r+.02,r,k,king);
+      for(let j=0;j<(t.bn||2);j++)blk(t.bx,.5+j,1,1,"tnt");tntSigns.push({d:t.bx,text:labelFor(t.bx,lv.lab||"p",rnd),tnt:1});}
+    else if(t.s==="fort"){[-1,0,1].forEach(j=>blk(D+j,.5,1,1,t.tnt&&j===0?"tnt":mat));[-.5,.5].forEach(j=>blk(D+j,1.5,1,1,mat));slime(D,2+r,r,k,king);}
     else slime(D,r+.02,r,k,king);
     // fyllnad bakom målet så att banan inte är tom (ligger bakom, så den skyddar inte)
-    if(lv.n>2&&t.s!=="borg"){const fm=lv.w===3&&i%2?"ice":(lv.w>=1&&i%2?"stone":"wood"),hi=1+(i+lv.n)%3;
+    if(lv.n>2&&t.s!=="borg"&&t.s!=="bunker"){const fm=lv.w===3&&i%2?"ice":(lv.w>=1&&i%2?"stone":"wood"),hi=1+(i+lv.n)%3;
       for(let j=0;j<hi;j++)blk(D+2.6,.5+j,1,1,fm);for(let j=0;j<Math.max(1,hi-1);j++)blk(D+3.6,.5+j,1,1,mat);
       if(hi>=2)blk(D+3.1,hi+.25,2.4,.5,"wood");}
     g.signs.push({d:D,text:labelFor(D,lv.lab||"p",rnd)});});
+  tntSigns.forEach(sg=>g.signs.push(sg));
   (lv.x||[]).forEach(w=>{const m=w.m||"wood";for(let j=0;j<w.h;j++)blk(w.x,.5+j,1,1,m,{wall:1});g.walls.push({x:w.x,h:w.h});});
+  (lv.o||[]).forEach(o=>{if(o.t==="tnt"){for(let j=0;j<(o.n||1);j++)blk(o.x,.5+j,1,1,"tnt");}
+    else if(o.t==="boulder"){const r=o.r||.9,b=M.Bodies.circle(o.x*PM,-(o.y||r)*PM,r*PM,{density:.0026,friction:.6,restitution:.05,frictionStatic:.9,sleepThreshold:40});Object.assign(b,{kind:"blk",mat:"stone",bw:2*r,bh:2*r,round:true,hp:200,hp0:200,seed:Math.floor(rnd()*1000),wall:false});add(b);}});
   Object.keys(lv.k).forEach(k=>{g.ammo[k]=lv.k[k];g.types.push(+k);});g.types.sort((a,b)=>a-b);g.sel=g.types[0];g.total=Object.values(lv.k).reduce((a,b)=>a+b,0);
   // dekor
   const dr=mulberry(lv.n*31+5);for(let x=-3.5;x<maxD+6;x+=2.5+dr()*5){if(g.walls.some(w=>Math.abs(w.x-x)<1.5)||lv.t.some(t=>Math.abs(t.d-x)<3))continue;
-    const pick=W.id==="oknen"?["cactus","rock","cactus"]:W.id==="isberget"?["rock","rock","fence"]:["bush","mush","bush","rock","fence"];g.decor.push({x,a:pick[Math.floor(dr()*pick.length)],s:.8+dr()*.6});}
+    const pick=W.id==="vulkan"||W.id==="manen"?["rock","rock","rock","mush"]:W.id==="oknen"?["cactus","rock","cactus"]:W.id==="isberget"?["rock","rock","fence"]:["bush","mush","bush","rock","fence"];g.decor.push({x,a:pick[Math.floor(dr()*pick.length)],s:.8+dr()*.6});}
   for(let i=0;i<6;i++)g.clouds.push({x:dr()*(maxD+10)-3,y:6+dr()*6,s:1.3+dr()*1.6,v:.12+dr()*.2});
   // kollisioner
   M.Events.on(eng,"collisionStart",e=>{for(const p of e.pairs)onHit(g,p.bodyA,p.bodyB);});
@@ -330,7 +360,15 @@ function hurtSlime(g,s){if(s.dead)return;s.hp--;s.cool=s.king?1.6:.5;s.hurt=.4;g
   if(s.hp<=0){s.dead=true;g.score+=s.king?500:100;const x=s.position.x/PM,y=-s.position.y/PM;puff(g,x,y,s.king?26:14,s.sk==="fire"?"#FF7A59":s.sk==="block"?"#46C46A":"#B987E8");stars(g,x,y,s.king?12:6);
     g.pop.push({x,y,t:0,txt:s.king?"+500":"+100"});g.M.Composite.remove(g.eng.world,s);snd("pop");g.lastKill=g.t;}
   else{snd("clonk");puff(g,s.position.x/PM,-s.position.y/PM,6,"#FFE08A");}}
-function breakBlock(g,b){const x=b.position.x/PM,y=-b.position.y/PM,col=b.mat==="stone"?"#AEB6C2":b.mat==="ice"?"#BDE8FF":"#D9A066";
+function explode(g,b){const px=b.position.x,py=b.position.y,R=4.6*PM;g.shake=Math.max(g.shake,13);
+  const x=px/PM,y=-py/PM;puff(g,x,y,26,"#FF8A2B");puff(g,x,y,18,"#3A2A24");puff(g,x,y,12,"#FFE27A");g.pop.push({x,y:y+1.2,t:0,txt:"BANG!"});snd("pop");snd("clonk");
+  g.parts.push({k:"ring",x,y,vx:0,vy:0,life:.5,life0:.5,r:4.6});
+  g.bodies.slice().forEach(o=>{if(o===b||o.isStatic||o.kind==="bird"&&false)return;const dx=o.position.x-px,dy=o.position.y-py,d=Math.hypot(dx,dy);if(d>R)return;const f=1-d/R;
+    const n=Math.hypot(dx,dy-30)||1,k=f*17*PM/120;setV(o,o.velocity.x+dx/n*k,o.velocity.y+(dy-30)/n*k);
+    if(o.kind==="blk"&&o.hp>0){o.hp-=f*260;if(o.hp<=0&&!o.boom){o.boom=1;setTimeout(()=>{if(G===g&&!g.over&&o.hp<=0&&g.bodies.includes(o))breakBlock(g,o);},o.mat==="tnt"?110:20);}}
+    else if(o.kind==="slime"&&!o.dead&&o.cool<=0&&f>.22)hurtSlime(g,o);});}
+function breakBlock(g,b){if(b.broken)return;b.broken=true;g.bodies=g.bodies.filter(o=>o!==b);if(b.mat==="tnt"){g.M.Composite.remove(g.eng.world,b);g.bodies.forEach(o=>{if(!o.isStatic)g.M.Sleeping.set(o,false);});explode(g,b);return;}
+  const x=b.position.x/PM,y=-b.position.y/PM,col=b.mat==="stone"?"#AEB6C2":b.mat==="ice"?"#BDE8FF":"#D9A066";
   for(let i=0;i<9;i++)g.parts.push({k:"chip",x:x+(Math.random()-.5)*b.bw,y:y+(Math.random()-.5)*b.bh,vx:(Math.random()-.5)*7,vy:Math.random()*6+1,r:Math.random()*6,vr:(Math.random()-.5)*12,s:.1+Math.random()*.18,life:1.1,col});
   puff(g,x,y,5,"#fff");g.M.Composite.remove(g.eng.world,b);g.bodies.forEach(o=>{if(!o.isStatic)g.M.Sleeping.set(o,false);});snd("clonk");g.shake=Math.max(g.shake,4);}
 function puff(g,x,y,n,col){for(let i=0;i<n;i++){const a=Math.random()*6.283,v=1+Math.random()*4;g.parts.push({k:"puff",x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v+1,s:.25+Math.random()*.35,life:.7+Math.random()*.4,col});}}
@@ -497,18 +535,26 @@ function hills(base,amp,seed,col,sc,par){const sh=cam.x*par;ctx.fillStyle=col;ct
 function drawSky(g){const W=g.W,gr=ctx.createLinearGradient(0,0,0,GY);gr.addColorStop(0,W.sky[0]);gr.addColorStop(1,W.sky[1]);ctx.fillStyle=gr;ctx.fillRect(0,0,cw,ch);
   if(W.sun){const sx=cw*.82,sy=GY*.22,r=ctx.createRadialGradient(sx,sy,0,sx,sy,GY*.5);r.addColorStop(0,"rgba(255,246,200,.95)");r.addColorStop(.18,"rgba(255,240,170,.55)");r.addColorStop(1,"rgba(255,240,170,0)");ctx.fillStyle=r;ctx.fillRect(0,0,cw,GY);ctx.fillStyle="#FFF6C9";ctx.beginPath();ctx.arc(sx,sy,GY*.045,0,7);ctx.fill();}
   for(const c of g.clouds){const x=X(c.x),y=Y(c.y),r=c.s*S;ctx.fillStyle="rgba(255,255,255,.82)";ctx.beginPath();ctx.ellipse(x,y,r*.9,r*.34,0,0,7);ctx.ellipse(x-r*.5,y+r*.08,r*.6,r*.26,0,0,7);ctx.ellipse(x+r*.55,y+r*.05,r*.65,r*.28,0,0,7);ctx.ellipse(x+r*.1,y-r*.2,r*.55,r*.3,0,0,7);ctx.fill();}
+  if(W.stars){ctx.fillStyle="#fff";for(let i=0;i<70;i++){const x=(i*211)%cw,y=((i*97)%Math.max(1,GY*.8)),tw=.5+.5*Math.sin(g.t*2+i);ctx.globalAlpha=.35+.5*tw;ctx.fillRect(x,y,1.6+(i%3)*.7,1.6+(i%3)*.7);}ctx.globalAlpha=1;}
   hills(GY-S*1.5,GY*.3,1.3,W.h1,5,.05);
   if(W.trees){ctx.fillStyle="rgba(24,92,70,.55)";for(let i=0;i<22;i++){const x=((i*cw/20+((i*37)%13)*5-cam.x*S*.12)%(cw+80)+cw+80)%(cw+80)-40,h=S*(3+(i*7)%4),y=GY-S*1.2;ctx.beginPath();ctx.moveTo(x,y-h);ctx.lineTo(x+h*.28,y);ctx.lineTo(x-h*.28,y);ctx.fill();ctx.beginPath();ctx.moveTo(x,y-h*.78);ctx.lineTo(x+h*.34,y-h*.2);ctx.lineTo(x-h*.34,y-h*.2);ctx.fill();}}
   hills(GY-S*.5,GY*.17,4.1,W.h2,6,.09);
+  if(W.embers){for(let i=0;i<40;i++){const t=g.t*.5+i*.41,x=((i*151)%cw+Math.sin(t*2+i)*20+cw)%cw,y=GY-((t*45+i*83)%GY);ctx.fillStyle=i%3?"rgba(255,170,60,.85)":"rgba(255,90,40,.8)";ctx.beginPath();ctx.arc(x,y,1.2+(i%3)*.6,0,7);ctx.fill();}}
   if(W.snow){ctx.fillStyle="rgba(255,255,255,.85)";for(let i=0;i<46;i++){const t=g.t*.4+i*.37,x=((i*173)%cw+Math.sin(t+i)*14+cw)%cw,y=((i*97+t*60)%GY);ctx.beginPath();ctx.arc(x,y,1.3+(i%3)*.7,0,7);ctx.fill();}}}
 function drawGround(g){const W=g.W,c=W.ground+"_c",ts=Math.max(S,24),y0=GY;let ox=((-cam.x*S)%ts+ts)%ts-ts;
   for(let x=ox;x<cw+ts;x+=ts){spriteAt(W.ground+"_t",x,y0-ts*.12,ts+1,ts+1);for(let y=y0-ts*.12+ts;y<ch+ts;y+=ts)spriteAt(c,x,y,ts+1,ts+1);}
+  if(W.tint){ctx.fillStyle=W.tint;ctx.fillRect(0,y0-ts*.12,cw,ch);}
   ctx.fillStyle="rgba(0,0,0,.12)";ctx.fillRect(0,y0-ts*.12,cw,3);}
 function dropShadow(x,y,w){ctx.fillStyle="rgba(0,0,0,.16)";ctx.beginPath();ctx.ellipse(x,y,w*.5,w*.1,0,0,7);ctx.fill();}
 function rr(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
+function blob2(x,y,r){ctx.fillStyle="#FFD23E";ctx.beginPath();ctx.arc(x,y,r,0,7);ctx.fill();ctx.fillStyle="#FF7A1A";ctx.beginPath();ctx.arc(x,y,r*.55,0,7);ctx.fill();}
 function drawBlock(b){const w=b.bw*S,h=b.bh*S,x=X(b.position.x/PM),y=Y(-b.position.y/PM);ctx.save();ctx.translate(x,y);ctx.rotate(b.angle);
   const ol=Math.max(1.6,S*.07),r=Math.min(w,h)*.14;
-  if(b.mat==="wood"&&b.bw===1&&b.bh===1)spriteAt("crate",-w*.53,-h*.53,w*1.06,h*1.06);
+  if(b.mat==="tnt"){const gr=ctx.createLinearGradient(0,-h/2,0,h/2);gr.addColorStop(0,"#F0584A");gr.addColorStop(1,"#B02A2A");ctx.fillStyle=gr;rr(-w/2,-h/2,w,h,r);ctx.fill();ctx.lineWidth=ol;ctx.strokeStyle="#4A1414";ctx.stroke();
+    ctx.fillStyle="rgba(255,235,200,.9)";ctx.fillRect(-w/2+w*.08,-h*.17,w*.84,h*.34);ctx.fillStyle="#3A1010";ctx.font="800 "+Math.max(8,h*.3)+"px sans-serif";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText("TNT",0,h*.02);
+    ctx.strokeStyle="#6B4A2A";ctx.lineWidth=Math.max(1.5,S*.07);ctx.beginPath();ctx.moveTo(0,-h/2);ctx.quadraticCurveTo(w*.15,-h/2-h*.2,w*.28,-h/2-h*.12);ctx.stroke();const fl=.5+.5*Math.sin(performance.now()/90);blob2(w*.28,-h/2-h*.12,Math.max(2,S*.1)*(1+fl*.6));}
+  else if(b.round){const R=w/2,gr=ctx.createRadialGradient(-R*.3,-R*.3,R*.1,0,0,R);gr.addColorStop(0,"#D5DBE3");gr.addColorStop(1,"#8E97A4");ctx.fillStyle=gr;ctx.beginPath();ctx.arc(0,0,R,0,7);ctx.fill();ctx.lineWidth=ol;ctx.strokeStyle="#3A2A24";ctx.stroke();ctx.strokeStyle="rgba(70,80,95,.45)";ctx.lineWidth=Math.max(1,S*.05);ctx.beginPath();ctx.arc(-R*.2,R*.1,R*.45,.5,2.4);ctx.stroke();}
+  else if(b.mat==="wood"&&b.bw===1&&b.bh===1)spriteAt("crate",-w*.53,-h*.53,w*1.06,h*1.06);
   else{
     if(b.mat==="wood"){const gr=ctx.createLinearGradient(0,-h/2,0,h/2);gr.addColorStop(0,"#E7B77C");gr.addColorStop(1,"#C58A4E");ctx.fillStyle=gr;}
     else if(b.mat==="stone"){const gr=ctx.createLinearGradient(0,-h/2,0,h/2);gr.addColorStop(0,"#C3CAD3");gr.addColorStop(1,"#98A1AD");ctx.fillStyle=gr;}
@@ -556,7 +602,7 @@ function plate(x,y,w,h,txt,fill,fs,col){ctx.save();ctx.translate(x,y);ctx.fillSt
   ctx.fillStyle=col||"#3A2414";ctx.font=`800 ${fs}px "Baloo 2",system-ui,sans-serif`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(txt,0,h*.04);ctx.restore();}
 function drawSigns(g){const fs=Math.max(13,S*.62);ctx.font=`800 ${fs}px "Baloo 2",system-ui,sans-serif`;
   g.signs.forEach(sg=>{const tw=ctx.measureText(sg.text).width,w=tw+fs*.9,h=fs*1.45,x=X(sg.d),y=GY+Math.max(h*.62,S*.9);
-    ctx.fillStyle="#E8C58F";ctx.beginPath();ctx.moveTo(x,GY+2);ctx.lineTo(x-fs*.3,GY+h*.18);ctx.lineTo(x+fs*.3,GY+h*.18);ctx.fill();plate(x,y,w,h,sg.text,"#F6DBA6",fs);});}
+    ctx.fillStyle="#E8C58F";ctx.beginPath();ctx.moveTo(x,GY+2);ctx.lineTo(x-fs*.3,GY+h*.18);ctx.lineTo(x+fs*.3,GY+h*.18);ctx.fill();plate(x,y,w,h,(sg.tnt?"💥 ":"")+sg.text,sg.tnt?"#FFC9B8":"#F6DBA6",fs);});}
 function drawRuler(g){if(g.lv.help<2||g.state!=="aim")return;const k=g.sel,fs=Math.max(11,S*.5);
   for(let i=1;i*k<=g.xMax-3;i++){const x0=X((i-1)*k),x1=X(i*k),mx=(x0+x1)/2,hh=Math.min(S*(.9+k*.06),S*3);ctx.strokeStyle="rgba(255,235,120,.9)";ctx.lineWidth=Math.max(2,S*.1);ctx.setLineDash([S*.28,S*.22]);
     ctx.beginPath();ctx.moveTo(x0,GY-3);ctx.quadraticCurveTo(mx,GY-hh*2-3,x1,GY-3);ctx.stroke();ctx.setLineDash([]);
@@ -573,7 +619,8 @@ function drawAimUI(g){if(!g.aim||g.state!=="aim")return;const a=g.aim,[ax,ay]=po
   ctx.font=`800 ${fs}px "Baloo 2",system-ui,sans-serif`;ctx.fillText(txt,0,prod?-fs*.42:0);
   if(prod){ctx.font=`800 ${fs*.62}px "Baloo 2",system-ui,sans-serif`;ctx.fillStyle="#FFE08A";ctx.fillText(prod,0,fs*.52);}ctx.restore();}
 function drawParts(g){for(const p of g.parts){const a=Math.max(0,Math.min(1,p.life*1.6));ctx.globalAlpha=a;
-  if(p.k==="puff"){ctx.fillStyle=p.col;ctx.beginPath();ctx.arc(X(p.x),Y(p.y),Math.max(.5,p.s*S),0,7);ctx.fill();}
+  if(p.k==="ring"){const a=Math.max(0,p.life/p.life0);ctx.strokeStyle="rgba(255,220,140,"+a+")";ctx.lineWidth=Math.max(2,S*.25*a);ctx.beginPath();ctx.arc(X(p.x),Y(p.y),S*p.r*(1-a)+4,0,7);ctx.stroke();}
+  else if(p.k==="puff"){ctx.fillStyle=p.col;ctx.beginPath();ctx.arc(X(p.x),Y(p.y),Math.max(.5,p.s*S),0,7);ctx.fill();}
   else if(p.k==="chip"){ctx.save();ctx.translate(X(p.x),Y(p.y));ctx.rotate(p.r);ctx.fillStyle=p.col;ctx.strokeStyle="rgba(40,25,15,.7)";ctx.lineWidth=1.2;ctx.fillRect(-p.s*S/2,-p.s*S*.3,p.s*S,p.s*S*.6);ctx.strokeRect(-p.s*S/2,-p.s*S*.3,p.s*S,p.s*S*.6);ctx.restore();}
   else{ctx.save();ctx.translate(X(p.x),Y(p.y));ctx.rotate(p.r);ctx.fillStyle="#FFD23E";ctx.strokeStyle="#B07A00";ctx.lineWidth=1.2;ctx.beginPath();for(let i=0;i<10;i++){const rr_=i%2?p.s*S*.22:p.s*S*.55,an=i/10*6.283-1.57;ctx.lineTo(Math.cos(an)*rr_,Math.sin(an)*rr_);}ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();}
   ctx.globalAlpha=1;}
