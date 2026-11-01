@@ -158,6 +158,7 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 @media (max-width:560px){.lvs{gap:6px;padding:12px 8px}.lvb small{font-size:.56rem}.hero h1{font-size:2.4rem}.hero .art{transform:scale(.8);transform-origin:bottom right}}
 @media (max-width:640px){#bar{flex-wrap:wrap;row-gap:2px}#cards{order:10;flex:1 1 100%;padding-bottom:4px}.hb{width:38px;height:38px}#pot{min-width:0}#bar .hb:nth-of-type(2){margin-left:auto}}
 #startb{white-space:nowrap}
+.cd.hint{animation:nx 1s ease-in-out infinite;box-shadow:0 0 0 4px #FFE066,0 4px 0 rgba(0,0,0,.22)}
 @media (prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important}}
 </style>
 </head>
@@ -188,7 +189,7 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
   <div id="bar"><button class="hb" id="quit" aria-label="Avsluta">✕</button><div id="pot"><span class="sun"></span><b id="potN">50</b></div><div id="cards"></div>
     <button class="hb" id="shovel" aria-label="Spade">⛏️</button><button class="hb" id="ffb" aria-label="Snabbare">⏩</button><button class="hb" id="helpB" aria-label="Djurboken">📖</button><button class="hb" id="snd" aria-label="Ljud">🔊</button><button class="hb" id="pauseBtn" aria-label="Paus">⏸</button></div>
   <div id="wbar"><i id="wfill"></i><span class="tx" id="wtx"></span></div>
-  <button id="startb">▶ Starta vågen</button>
+  <button id="startb">⏩ Kalla på fienderna</button>
   <div class="say" id="say" hidden></div>
   <div class="coach" id="coach" hidden role="dialog"><i class="arr" aria-hidden="true"></i><b id="coachT"></b><p id="coachP"></p><button id="coachOk">Okej!</button></div>
   <div class="ov" id="pause" hidden><div><b class="t">Paus</b><button class="go" id="resume">Fortsätt ▶</button><button class="alt" id="restart">Börja om banan</button><button class="alt" id="toMap">Till kartan</button></div></div>
@@ -315,7 +316,7 @@ function dmgEnemy(s,e,d,kind){if(e.hp<=0)return;e.hp-=d;e.flash=.12;s.ev.push({k
 function killEnemy(s,e,barrow){const i=s.enemies.indexOf(e);if(i<0)return;s.enemies.splice(i,1);s.killed++;e.hp=0;s.ev.push({k:"kill",e,barrow});
  if(ET[e.type].split&&!barrow&&e.hpMax>=6){const h=Math.round(e.hpMax/2);spawnEnemy(s,{type:"snigel",hp:h,child:true},e.x+.18,e.row);spawnEnemy(s,{type:"snigel",hp:h,child:true},e.x-.1,e.row);s.total+=2;s.ev.push({k:"split",e});}}
 function skyDrop(s,x,row,v,own){s.suns.push({id:s.uid++,x,y:own?row:-.8,ty:row,v,st:own?"rest":"fall",life:own?10:11,t:0,vy:0});}
-function step(s,dt){if(!s.running||s.over)return;dt=Math.min(dt,.05);s.t+=dt;s.clock+=dt;const lv=s.lv;
+function step(s,dt){if(!s.running||s.over)return;dt=Math.min(dt,.05);s.t+=dt;if(!s.hold)s.clock+=dt;const lv=s.lv;
  for(const id of s.load)if(s.cd[id]>0)s.cd[id]=Math.max(0,s.cd[id]-dt);
  if(s.buff>0)s.buff=Math.max(0,s.buff-dt);
  // sol från himlen
@@ -404,33 +405,47 @@ function layout(){if(!G)return;dpr=Math.min(2,devicePixelRatio||1);cw=cv.clientW
 addEventListener("resize",()=>{layout();});
 async function startGame(lv,load){stopGame();show("game");loadAnimalImgs(load);
  G=newSim(lv,load,lv.endless?(Date.now()%100000):lv.n*131+7);G.W=WORLDS[lv.w||0];UI={sel:null,shovel:false,hover:null,drag:null,ff:1,parts:[],pops:[],shake:0,flyS:[],tut:0,banT:0,warnShown:{}};
- buildCards();$("pause").hidden=true;$("lose").hidden=true;$("say").hidden=true;$("qz").hidden=true;$("startb").hidden=false;$("shovel").classList.remove("on");$("ffb").classList.remove("on");
+ buildCards();$("pause").hidden=true;$("lose").hidden=true;$("say").hidden=true;$("qz").hidden=true;G.running=true;$("startb").hidden=false;$("shovel").classList.remove("on");$("ffb").classList.remove("on");
  $("snd").textContent=window.Ljud&&Ljud.on?"🔊":"🔇";layout();hudUpdate(true);
  if(!lv.endless){const flags=lv.waves.map(t=>((t-lv.first)/(lv.T-lv.first)));$("wbar").querySelectorAll(".fl").forEach(x=>x.remove());flags.forEach((f,i)=>{const e=document.createElement("span");e.className="fl";e.textContent="🚩";e.style.left=(8+f*84)+"%";$("wbar").appendChild(e);});}
- if(lv.n===1)tutorial(0);else if(HINT[lv.n]&&!data.sett["h"+lv.n]){const k=lv.n;setTimeout(()=>{if(G&&G.lv===lv&&!G.running){say(HINT[k],8000);data.sett["h"+k]=1;save();}},400);}
+ if(lv.n===1){G.spawns[0].row=1;UI.tut=null;setTimeout(()=>{if(G&&G.lv===lv&&UI.tut==null)tutGo(0);},350);}else if(HINT[lv.n]&&!data.sett["h"+lv.n]){const k=lv.n;setTimeout(()=>{if(G&&G.lv===lv&&!G.running){say(HINT[k],8000);data.sett["h"+k]=1;save();}},400);}
  last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop);}
 const HINT={2:"Nya fiender: <b>möss</b> är snabba men har lite hälsa. Stenbjörnen står i vägen och köper tid.",7:"Nytt djur: <b>Dubbel-roboten ×2</b> dubblar skadan hos grannarna. Då blir 3 till 6!",9:"Nytt djur: <b>Plus-ugglan +3</b> lägger till skada i hela körfältet. <b>Först × sedan +</b>.",13:"Nu finns <b>Delarmasken ÷2</b>: den delas i två halvor när den faller. 24 blir 12 och 12.",12:"Bossbana! Slemkungen tål mycket och kallar på hjälp.",6:"Bossbana! Snigelkungen är stor och kallar på hjälp.",18:"Sista bossen! Frostkungen kommer. Lycka till!"};
 function loadAnimalImgs(load){load.forEach(id=>{const im=new Image();im.src=portrait(id);ANI[id].img=im;});}
 function buildCards(){$("cards").innerHTML=G.load.map(id=>{const d=ANI[id],tag=d.dmg?`<u>⚡${d.dmg}</u>`:d.prod?`<u class="sunb">+${d.prod}</u>`:d.mult?`<u class="mod">×${d.mult}</u>`:d.add?`<u class="mod">+${d.add}</u>`:`<u class="wall">${d.hp}</u>`;
   return `<button class="cd" data-id="${id}" aria-pressed="false" aria-label="${d.n}, ${d.cost} sol"><img src="${portrait(id)}" alt=""><span class="cs"><i>${d.cost}</i>${tag}</span><span class="cool"></span></button>`;}).join("");}
 function hudUpdate(force){if(!G)return;const sun=G.sun;if(UI.shownSun!==sun){if(UI.shownSun!=null&&sun>UI.shownSun){$("pot").classList.remove("pulse");void $("pot").offsetWidth;$("pot").classList.add("pulse");}UI.shownSun=sun;$("potN").textContent=sun;}
- $("cards").querySelectorAll(".cd").forEach(b=>{const id=b.dataset.id,d=ANI[id],cd=G.cd[id]||0;b.style.setProperty("--cd",d.cd?cd/d.cd:0);b.classList.toggle("no",sun<d.cost||cd>0);b.setAttribute("aria-pressed",UI.sel===id?"true":"false");});
+ $("cards").querySelectorAll(".cd").forEach(b=>{const id=b.dataset.id,d=ANI[id],cd=G.cd[id]||0;b.style.setProperty("--cd",d.cd?cd/d.cd:0);b.classList.toggle("no",sun<d.cost||cd>0);b.setAttribute("aria-pressed",UI.sel===id?"true":"false");b.classList.toggle("hint",G.lv.n===1&&((UI.tut===0&&id==="kanin")||(UI.tut===3&&id==="katt")));});
  if(!G.endless){const f=Math.min(1,G.killed/Math.max(1,G.total));$("wfill").style.width=(f*(100-1.2))+"%";$("wtx").textContent=`${G.total-G.killed} fiender kvar`;}else{$("wfill").style.width="100%";$("wtx").textContent=`Våg ${G.wave-2>0?G.wave-2:1} · ${G.killed} fällda`;}}
 let sayT=0;
 function say(html,ms){const e=$("say");e.innerHTML=html;e.hidden=false;e.style.opacity=1;clearTimeout(sayT);sayT=setTimeout(()=>{e.style.opacity=0;setTimeout(()=>{if(e.style.opacity==="0")e.hidden=true;},300);},ms||5000);}
 function hideCoach(){$("coach").hidden=true;}
-function coach(t,p,x,y){$("coachT").textContent=t;$("coachP").innerHTML=p;const c=$("coach");c.hidden=false;c.style.left=Math.max(8,Math.min(cw-310,x-150))+"px";c.style.top=y+"px";}
+function coach(t,p,x,y,nobtn){$("coachOk").style.display=nobtn?"none":"";$("coachT").textContent=t;$("coachP").innerHTML=p;const c=$("coach");c.hidden=false;c.style.left=Math.max(8,Math.min(cw-310,x-150))+"px";c.style.top=y+"px";}
 $("coachOk").onclick=hideCoach;
 /* Handledning i bana 1 (visas varje gång) */
-function tutorial(step){if(!G||G.lv.n!==1)return;UI.tut=step;
- if(step===0){setTimeout(()=>{if(G&&UI.tut===0){const b=$("cards").querySelector(".cd");const r=b.getBoundingClientRect();coach("Välj ett djur","Tryck på <b>Solkaninen</b> här uppe och sedan på en ruta i trädgården. Den ger dig <b>sol</b>. Sedan kommer Bollkatten.",r.left+r.width/2,r.bottom+26);}},300);}
- else if(step===1){hideCoach();say("Bra! Tryck på <b>solen</b> som faller för att samla den. Du behöver sol för att köpa fler djur.",7000);}
- else if(step===2){say("Siffran över sniglarna är deras <b>hälsa</b>. Bollkatten gör <b>3</b> skada per omgång. Då tar 12 hälsa <b>12 ÷ 3 = 4</b> omgångar.",9000);}}
+const TUT=["Välj ett djur","Placera djuret","Samla solen","Välj ett skjutdjur","Placera skytten","Här kommer fienden!","Bra jobbat!"];
+function tutGo(n){UI.tut=n;hideCoach();if(!G)return;
+ const cr=i=>{const b=$("cards").querySelectorAll(".cd")[i].getBoundingClientRect();return[b.left+b.width/2,b.bottom+26];};
+ if(n===0){G.hold=true;$("startb").hidden=true;const [x,y]=cr(0);coach("1. Välj ett djur","Tryck på <b>Solkaninen</b> här uppe. Den gör <b>sol</b>, som du betalar nya djur med.",x,y,true);}
+ else if(n===1){say("2. Tryck på rutan som <b>blinkar</b> för att sätta dit kaninen.",60000);UI.tutTile={r:1,c:0};}
+ else if(n===2){UI.tutTile=null;say("3. Solkaninen gör sol! Tryck på den <b>lysande solen</b> för att samla den. Du ser hur mycket du har uppe till vänster.",60000);}
+ else if(n===3){const [x,y]=cr(1);coach("4. Nu en skytt","Välj <b>Bollkatten</b>. Siffran <b>3</b> betyder att den gör <b>3 skada</b> per skott.",x,y,true);}
+ else if(n===4){hideCoach();say("5. Sätt katten i <b>samma rad</b> som fienden kommer. Tryck på rutan som blinkar.",60000);UI.tutTile={r:1,c:3};}
+ else if(n===5){UI.tutTile=null;G.hold=false;const nx=G.spawns[G.next];if(nx&&G.clock<nx.t-1.2)G.clock=nx.t-1.2;const hp=nx?nx.hp:12,k=Math.round(hp/3);say("6. En <b>snigel</b>! Siffran över den är dess <b>hälsa</b>: <b>"+hp+"</b>. Varje skott gör <b>−3</b>. Det tar <b>"+hp+" ÷ 3 = "+k+"</b> skott. Titta på talen som dyker upp!",16000);}
+ else if(n===6){say("Där försvann den! <b>Fler djur i raden = fler skott</b>. Titta på lappen <b>⚔</b> vid huset, den visar hur mycket skada raden gör. Lycka till!",11000);$("startb").hidden=true;}}
+function tutorial(step){tutGo(step);}
+function tutTick(){if(!G||G.lv.n!==1||UI.tut==null||UI.tut>=6)return;const n=UI.tut;
+ if(n===0&&UI.sel==="kanin")tutGo(1);
+ else if(n===1&&G.animals.some(a=>a.id==="kanin"))tutGo(2);
+ else if(n===2&&G.collected>=1)tutGo(3);
+ else if(n===3&&UI.sel==="katt")tutGo(4);
+ else if(n===4&&G.animals.some(a=>a.id==="katt"))tutGo(5);
+ else if(n===5&&G.killed>=1)tutGo(6);}
 /* ---------- Händelser ---------- */
 function handleEvents(){const s=G;for(const ev of s.ev){const T=L.T;
- if(ev.k==="place"){snd("pop");poof(ev.c+.5,ev.r+.7,6,"#fff");if(ev.id==="kanin"||s.lv.n!==1){}if(s.lv.n===1&&UI.tut===0&&s.placed===1)tutorial(1);}
+ if(ev.k==="place"){snd("pop");poof(ev.c+.5,ev.r+.7,6,"#fff");}
  else if(ev.k==="fire"){snd("shoot");}
- else if(ev.k==="dmg"){const e=ev.e;popText(e.x,e.row+.15,"−"+ev.d,"#fff","#C0392B");UI.parts.push({k:"ring",x:e.x,y:e.row+.55,t:0,l:.25,c:"#fff"});}
+ else if(ev.k==="dmg"){const e=ev.e;popText(e.x,e.row+.1,Math.ceil(e.hp+ev.d)+" − "+ev.d+" = "+Math.max(0,Math.ceil(e.hp)),"#fff","#C0392B",2.2);UI.parts.push({k:"ring",x:e.x,y:e.row+.55,t:0,l:.25,c:"#fff"});}
  else if(ev.k==="kill"){const e=ev.e,col=e.type==="lava"?"#FF7A59":e.type==="delare"?"#6DB3F2":"#B987E8";poof(e.x,e.row+.6,ET[e.type].king?24:10,col);starBurst(e.x,e.row+.5,ET[e.type].king?10:3);snd("pop");if(ET[e.type].king)UI.shake=Math.max(UI.shake,10);}
  else if(ev.k==="split"){popText(ev.e.x,ev.e.row,"÷ 2","#fff","#2C5FD0");snd("magic");}
  else if(ev.k==="summon"){popText(ev.e.x,ev.e.row,"Hjälp!","#fff","#7A4A00");snd("whoosh");}
@@ -439,20 +454,20 @@ function handleEvents(){const s=G;for(const ev of s.ev){const T=L.T;
  else if(ev.k==="adie"){poof(ev.c+.5,ev.r+.6,8,"#8A7355");snd("bad");}
  else if(ev.k==="shovel"){snd("clonk");}
  else if(ev.k==="barrow"){UI.shake=Math.max(UI.shake,8);snd("whoosh");say("Skottkärran räddar körfältet! Men bara en gång per körfält.",4000);}
- else if(ev.k==="spawn"){const e=ev.e;if(s.lv.n===1&&!UI.tut2&&s.running){UI.tut2=1;tutorial(2);}}
+ else if(ev.k==="spawn"){const e=ev.e;$("startb").hidden=true;}
  else if(ev.k==="lose"){UI.shake=14;}
 }
 s.ev.length=0;}
 function poof(x,y,n,col){for(let i=0;i<n;i++){const a=Math.random()*6.283,v=.6+Math.random()*2.4;UI.parts.push({k:"puff",x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-.8,t:0,l:.5+Math.random()*.35,s:.1+Math.random()*.16,c:col});}}
 function starBurst(x,y,n){for(let i=0;i<n;i++){const a=Math.random()*6.283,v=1.5+Math.random()*2.5;UI.parts.push({k:"star",x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-2,t:0,l:.9,r:0,vr:(Math.random()-.5)*8});}}
-function popText(x,y,txt,col,stroke){UI.pops.push({x,y,txt,col,stroke,t:0});}
+function popText(x,y,txt,col,stroke,life){UI.pops.push({x,y,txt,col,stroke,t:0,l:life||1.1});}
 /* ---------- Pekare ---------- */
 function ptrXY(e){const r=cv.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top];}
 function tileAt(x,y){const c=Math.floor((x-L.bx0)/L.T),r=Math.floor((y-L.by0)/L.T);if(r<0||c<0||r>=G.lanes||c>=COLS)return null;return{r,c};}
 function sunPx(u){return[L.bx0+u.x*L.T,L.by0+(u.y+.5)*L.T];}
 cv.addEventListener("pointerdown",e=>{if(!G||G.over||UI.paused)return;const [x,y]=ptrXY(e);
  // sol först
- for(const u of G.suns){if(u.st==="fly")continue;const [sx,sy]=sunPx(u);if(Math.hypot(x-sx,y-sy)<Math.max(30,L.T*.5)){collectSun(G,u);handleEvents();if(UI.tut===1&&G.lv.n===1&&G.running){hideCoach();}return;}}
+ for(const u of G.suns){if(u.st==="fly")continue;const [sx,sy]=sunPx(u);if(Math.hypot(x-sx,y-sy)<Math.max(30,L.T*.5)){collectSun(G,u);handleEvents();return;}}
  for(const q of G.stars){const sx=L.bx0+q.x*L.T,sy=L.by0+(q.row+.5)*L.T;if(Math.hypot(x-sx,y-sy)<Math.max(34,L.T*.55)){openQuiz(q);return;}}
  const t=tileAt(x,y);if(!t)return;
  if(UI.shovel){if(G.grid[t.r][t.c]){removeAnimal(G,t.r,t.c,true);handleEvents();}return;}
@@ -471,7 +486,7 @@ addEventListener("pointerup",e=>{if(!cdrag||e.pointerId!==cdrag.pid)return;const
 addEventListener("pointercancel",()=>{cdrag=null;UI.drag=null;});
 $("shovel").onclick=()=>{UI.shovel=!UI.shovel;UI.sel=null;$("shovel").classList.toggle("on",UI.shovel);if(UI.shovel)say("Spaden: tryck på ett djur för att ta bort det. Du får tillbaka hälften av priset.",3500);hudUpdate();};
 $("ffb").onclick=()=>{UI.ff=UI.ff===1?2:1;$("ffb").classList.toggle("on",UI.ff===2);};
-$("startb").onclick=()=>{if(!G||G.running)return;G.running=true;$("startb").hidden=true;hideCoach();snd("whoosh");if(G.lv.n===1&&UI.tut===0)tutorial(1);if(G.lv.n===1&&UI.tut<2)setTimeout(()=>{},0);};
+$("startb").onclick=()=>{if(!G||G.over||G.hold)return;const nx=G.spawns[G.next];if(nx&&G.clock<nx.t-2.5)G.clock=nx.t-2.5;$("startb").hidden=true;snd("whoosh");};
 /* ---------- Kraftfrågor ---------- */
 function qGen(w,rnd){const r=a=>a+Math.floor(rnd()*(8-a+1));let a,b,txt,ans;const k=Math.floor(rnd()*3);
  if(w===0){if(k===0){a=2+Math.floor(rnd()*4);b=2+Math.floor(rnd()*4);txt=`${a} · ${b}`;ans=a*b;}else if(k===1){a=5+Math.floor(rnd()*10);b=3+Math.floor(rnd()*9);txt=`${a} + ${b}`;ans=a+b;}else{b=2+Math.floor(rnd()*4);ans=2+Math.floor(rnd()*5);a=b*ans;txt=`${a} ÷ ${b}`;}}
@@ -517,11 +532,11 @@ $("bkA").onclick=()=>{bkTab="a";$("bkA").setAttribute("aria-pressed","true");$("
 $("bkE").onclick=()=>{bkTab="e";$("bkE").setAttribute("aria-pressed","true");$("bkA").setAttribute("aria-pressed","false");renderBook();};
 /* ---------- Loop och ritning ---------- */
 function loop(now){raf=requestAnimationFrame(loop);if(!G)return;const dt=Math.min(.05,(now-last)/1000);last=now;frame(dt);}
-function frame(dt){if(!G)return;if(!UI.paused&&G.running&&!G.over){let r=dt*UI.ff;while(r>0){const d=Math.min(r,.033);step(G,d);r-=d;}}
+function frame(dt){if(!G)return;tutTick();if(!UI.paused&&G.running&&!G.over){let r=dt*UI.ff;while(r>0){const d=Math.min(r,.033);step(G,d);r-=d;}}
  if(!UI.paused)uiStep(dt);handleEvents();hudUpdate();draw();
  if(G.over&&!G.fin){G.fin=true;const win=G.over==="win";if(win&&!reduced())UI.slow=.5;setTimeout(()=>{if(G&&G.fin===true){G.fin=2;finish(win);}},win?1500:900);}}
 function uiStep(dt){for(const p of UI.parts){p.t+=dt;if(p.k!=="ring"){p.x+=(p.vx||0)*dt;p.y+=(p.vy||0)*dt;if(p.k==="star"){p.vy+=7*dt;p.r+=p.vr*dt;}else p.vy=(p.vy||0)+.8*dt;}}UI.parts=UI.parts.filter(p=>p.t<p.l);
- for(const p of UI.pops)p.t+=dt;UI.pops=UI.pops.filter(p=>p.t<1.1);for(const f of UI.flyS)f.t+=dt;UI.flyS=UI.flyS.filter(f=>f.t<.5);UI.shake*=Math.pow(.02,dt);}
+ for(const p of UI.pops)p.t+=dt;UI.pops=UI.pops.filter(p=>p.t<p.l);for(const f of UI.flyS)f.t+=dt;UI.flyS=UI.flyS.filter(f=>f.t<.5);UI.shake*=Math.pow(.02,dt);}
 function spr(name,x,y,w,h,flip){const a=name,[sx,sy]=a;if(!atlas.complete||!atlas.naturalWidth)return;if(flip){ctx.save();ctx.translate(x+w,y);ctx.scale(-1,1);ctx.drawImage(atlas,sx,sy,128,128,0,0,w,h);ctx.restore();}else ctx.drawImage(atlas,sx,sy,128,128,x,y,w,h);}
 function rr(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
 function font(px,w){ctx.font=`${w||800} ${px}px "Baloo 2",system-ui,sans-serif`;}
@@ -602,6 +617,7 @@ function drawBg(){if(!SC)buildStatic();ctx.drawImage(SC,0,0,cw,ch);const W=G.W,t
  if(W.snow){ctx.fillStyle="rgba(255,255,255,.85)";for(let i=0;i<46;i++){const tt=G.t*.4+i*.37,x=((i*173)%cw+Math.sin(tt+i)*14+cw)%cw,y=((i*97+tt*60)%ch);ctx.beginPath();ctx.arc(x,y,1.3+(i%3)*.7,0,7);ctx.fill();}}
  drawBoardDyn();}
 function drawBoardDyn(){const T=L.T,{bx0,by0}=L,lanes=G.lanes,hx=L.house;
+ if(UI.tutTile){const h=UI.tutTile,k=.5+.5*Math.sin(G.t*6);ctx.fillStyle="rgba(255,255,255,"+(.18+.22*k)+")";ctx.fillRect(bx0+h.c*T,by0+h.r*T,T,T);ctx.strokeStyle="rgba(255,255,255,.95)";ctx.lineWidth=3;ctx.setLineDash([8,6]);ctx.strokeRect(bx0+h.c*T+3,by0+h.r*T+3,T-6,T-6);ctx.setLineDash([]);}
  if(UI.sel&&UI.hover&&!UI.shovel){const h=UI.hover,ok=canPlace(G,UI.sel,h.r,h.c)==="ok";ctx.fillStyle=ok?"rgba(80,220,120,.35)":"rgba(240,80,80,.3)";ctx.fillRect(bx0+h.c*T,by0+h.r*T,T,T);if(ok&&ANI[UI.sel].img&&ANI[UI.sel].img.complete){ctx.globalAlpha=.6;const iw=T*.8,ih=iw*7/6;ctx.drawImage(ANI[UI.sel].img,bx0+(h.c+.5)*T-iw/2,by0+(h.r+.9)*T-ih,iw,ih);ctx.globalAlpha=1;}}
  if(UI.shovel&&UI.hover&&G.grid[UI.hover.r][UI.hover.c]){const h=UI.hover;ctx.fillStyle="rgba(240,160,40,.4)";ctx.fillRect(bx0+h.c*T,by0+h.r*T,T,T);}
  for(let r=0;r<lanes;r++){const cy=by0+(r+.5)*T,b=G.barrows[r];if(b.st===2)continue;const bxp=b.st===1?bx0+b.x*T:bx0-T*.38;drawBarrow(bxp,cy+T*.12,T*.46,b.st===1);}
@@ -629,7 +645,8 @@ function drawEnemy(e){const T=L.T,t=ET[e.type],fr=SPR[t.spr],cell=T*1.05*t.sz,cx
  if(e.slow>0){ctx.fillStyle="rgba(120,200,255,.9)";ctx.font=`${T*.22}px sans-serif`;ctx.textAlign="center";ctx.fillText("❄",cx+cell*.3,by-cell*.6);}}
 function drawSun(u){const T=L.T;let [x,y]=sunPx(u);let sc=1,al=1;if(u.st==="fly"){const f=u.ft/.5,tx=$("pot").getBoundingClientRect(),ca=cv.getBoundingClientRect(),px=tx.left+tx.width*.2-ca.left,py=tx.top+tx.height*.5-ca.top;x+=(px-x)*f*f;y+=(py-y)*f*f;sc=1-f*.5;al=1-f*.3;}
  else if(u.st==="rest"&&u.life<2.5){al=.5+.5*Math.sin(u.life*10);}
- const bob=u.st==="rest"?Math.sin(G.t*3+u.id)*T*.04:0,r=Math.max(15,T*.3)*sc;ctx.save();ctx.globalAlpha=al;const g=ctx.createRadialGradient(x,y+bob,0,x,y+bob,r*2.1);g.addColorStop(0,"rgba(255,230,120,.75)");g.addColorStop(1,"rgba(255,230,120,0)");ctx.fillStyle=g;ctx.fillRect(x-r*2.2,y+bob-r*2.2,r*4.4,r*4.4);
+ const bob=u.st==="rest"?Math.sin(G.t*3+u.id)*T*.04:0,r=Math.max(15,T*.3)*sc;if(UI.tut===2&&u.st!=="fly"){const k=(G.t*1.4)%1;ctx.strokeStyle="rgba(255,255,255,"+(1-k)+")";ctx.lineWidth=4;ctx.beginPath();ctx.arc(x,y+bob,r*(1.1+k*1.2),0,7);ctx.stroke();}
+ ctx.save();ctx.globalAlpha=al;const g=ctx.createRadialGradient(x,y+bob,0,x,y+bob,r*2.1);g.addColorStop(0,"rgba(255,230,120,.75)");g.addColorStop(1,"rgba(255,230,120,0)");ctx.fillStyle=g;ctx.fillRect(x-r*2.2,y+bob-r*2.2,r*4.4,r*4.4);
  const g2=ctx.createRadialGradient(x-r*.3,y+bob-r*.3,0,x,y+bob,r);g2.addColorStop(0,"#FFF6B0");g2.addColorStop(.6,"#FFC933");g2.addColorStop(1,"#F29A00");ctx.fillStyle=g2;ctx.beginPath();ctx.arc(x,y+bob,r,0,7);ctx.fill();ctx.strokeStyle="#B86E00";ctx.lineWidth=Math.max(1.5,r*.1);ctx.stroke();
  ctx.fillStyle="#6B3E00";font(r*.95);ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(u.v,x,y+bob+r*.05);ctx.restore();}
 function draw(){ctx.setTransform(dpr,0,0,dpr,0,0);const sh=reduced()?0:UI.shake;ctx.save();if(sh>.3)ctx.translate((Math.random()-.5)*sh,(Math.random()-.5)*sh);
@@ -648,7 +665,7 @@ function draw(){ctx.setTransform(dpr,0,0,dpr,0,0);const sh=reduced()?0:UI.shake;
   else if(p.k==="ring"){ctx.strokeStyle=p.c;ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(x,y,T*.1+p.t*T*1.2,0,7);ctx.stroke();}
   else{ctx.save();ctx.translate(x,y);ctx.rotate(p.r);ctx.fillStyle="#FFD23E";ctx.strokeStyle="#B07A00";ctx.lineWidth=1.2;ctx.beginPath();for(let i=0;i<10;i++){const rr_=i%2?T*.06:T*.15,an=i/10*6.283-1.57;ctx.lineTo(Math.cos(an)*rr_,Math.sin(an)*rr_);}ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();}
   ctx.globalAlpha=1;}
- ctx.textAlign="center";for(const p of UI.pops){const a=Math.max(0,1-p.t/1.1),x=L.bx0+p.x*T,y=L.by0+(p.y+.3)*T-p.t*T*.5;ctx.globalAlpha=a;font(Math.max(15,T*.3));ctx.lineWidth=4;ctx.strokeStyle=p.stroke;ctx.strokeText(p.txt,x,y);ctx.fillStyle=p.col;ctx.fillText(p.txt,x,y);}ctx.globalAlpha=1;
+ ctx.textAlign="center";for(const p of UI.pops){const a=Math.min(1,Math.max(0,(1-p.t/p.l)*2.4)),x=L.bx0+p.x*T,y=L.by0+(p.y+.3)*T-Math.min(p.t,1.2)*T*.25;ctx.globalAlpha=a;font(Math.max(13,T*(p.txt.length>6?.24:.3)));ctx.lineWidth=4;ctx.strokeStyle=p.stroke;ctx.strokeText(p.txt,x,y);ctx.fillStyle=p.col;ctx.fillText(p.txt,x,y);}ctx.globalAlpha=1;
  // dragspöke
  if(UI.drag&&UI.px!=null){const im=ANI[UI.drag].img;if(im&&im.complete){const iw=T*.9,ih=iw*7/6;ctx.globalAlpha=.85;ctx.drawImage(im,UI.px-iw/2,UI.py-ih*.8,iw,ih);ctx.globalAlpha=1;}}
  // buff
