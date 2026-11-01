@@ -494,11 +494,11 @@ function qGen(w,rnd){const r=a=>a+Math.floor(rnd()*(8-a+1));let a,b,txt,ans;cons
  else{if(k===0){a=2+Math.floor(rnd()*5);b=2+Math.floor(rnd()*5);const c=2+Math.floor(rnd()*5);txt=`${a} + ${b} · ${c}`;ans=a+b*c;}else if(k===1){a=6+Math.floor(rnd()*6);b=6+Math.floor(rnd()*6);txt=`${a} · ${b}`;ans=a*b;}else{b=4+Math.floor(rnd()*6);ans=6+Math.floor(rnd()*7);a=b*ans;txt=`${a} ÷ ${b}`;}}
  const ch=new Set([ans]);let g=0;while(ch.size<3&&g++<40){const d=[1,2,-1,-2,10,-10,3][Math.floor(rnd()*7)];const v=ans+d;if(v>0)ch.add(v);}
  return{txt:txt+" = ?",ans,ch:[...ch].sort(()=>rnd()-.5)};}
-function openQuiz(q){if(!G||G.over)return;UI.paused=true;UI.quizStar=q;const Q=qGen(G.lv.w||0,Math.random);UI.Q=Q;$("qq").textContent=Q.txt;$("qc").innerHTML=Q.ch.map(v=>`<button data-v="${v}">${v}</button>`).join("");$("qz").hidden=false;}
-$("qc").onclick=e=>{const b=e.target.closest("[data-v]");if(!b||!UI.Q||UI.Q.done)return;UI.Q.done=true;const ok=+b.dataset.v===UI.Q.ans;b.classList.add(ok?"ok":"bad");
+function openQuiz(q){if(!G||G.over)return;UI.paused=true;UI.quizStar=q;const Q=qGen(G.lv.w||0,Math.random);UI.Q=Q;$("qq").textContent=Q.txt;$("qc").innerHTML=Q.ch.map(v=>`<button data-v="${v}">${v}</button>`).join("");$("qz").hidden=false;UI.qT=performance.now();}
+$("qc").onclick=e=>{const b=e.target.closest("[data-v]");if(!b||!UI.Q||UI.Q.done||performance.now()-UI.qT<600)return;UI.Q.done=true;const ok=+b.dataset.v===UI.Q.ans;b.classList.add(ok?"ok":"bad");
  if(!ok){$("qc").querySelectorAll("button").forEach(x=>{if(+x.dataset.v===UI.Q.ans)x.classList.add("ok");});snd("bad");}else snd("fanfare");
  setTimeout(()=>{$("qz").hidden=true;UI.paused=false;const i=G&&G.stars.indexOf(UI.quizStar);if(G&&i>=0)G.stars.splice(i,1);if(ok&&G){G.buff=14;say("Dubbel skada i 14 sekunder!",3000);starBurst(4,2,10);}last=performance.now();},ok?650:1300);};
-$("qx").onclick=()=>{$("qz").hidden=true;UI.paused=false;const i=G.stars.indexOf(UI.quizStar);if(i>=0)G.stars.splice(i,1);last=performance.now();};
+$("qx").onclick=()=>{if(performance.now()-UI.qT<600)return;$("qz").hidden=true;UI.paused=false;const i=G.stars.indexOf(UI.quizStar);if(i>=0)G.stars.splice(i,1);last=performance.now();};
 /* ---------- Avslut ---------- */
 function setPause(v){if(!G||G.over)return;UI.paused=v;$("pause").hidden=!v;}
 $("pauseBtn").onclick=()=>setPause(true);$("resume").onclick=()=>{setPause(false);last=performance.now();};
