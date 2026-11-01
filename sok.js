@@ -31,6 +31,7 @@ const IDX=[
  ['spel/skattjakten/','Skattjakten','Labyrint med textuppgifter och skatter','🗺️','labyrint skatt kista affär nyckel','Spelhörnan'],
  ['rutjakten/','Rutjakten','Hitta de tre talen som hör ihop i varje ruta','🟩','kors ruta addition multiplikation tid femhörning rutnät','Spelhörnan'],
  ['spel/kulbanan/','Kulbanan','Skjut svaret dit där tre kulor blir samma tal','🔺','kulor pyramid skjuta tabeller zuma','Spelhörnan'],
+ ['spel/slungan/','Slungan','Slunga ditt djur mot slemmen: räkna ut hur många steg','🎯','slunga katapult slangbella fysik steg multiplikation tabeller faktorer uttryck murar','Spelhörnan'],
  ['spel/sagoriket/','Sagoriket','Spring och hoppa med ditt djur och svara vid portarna','🏰','plattformsspel hoppa trollstav boss världar','Spelhörnan'],
  ['spel/sifferslottet/','Sifferslottet','Hämta talen i rätt ordning innan tiden tar slut','🏰','slott rum tal ordning ekvation tid nyckel','Spelhörnan'],
  ['spel/affaren/','Affären','Stå i kassan, räkna ihop och ge växel','🏪','butik kiosk kassa växel pengar handla priser','Spelhörnan'],
