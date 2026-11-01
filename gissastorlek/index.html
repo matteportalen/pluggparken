@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<script src="../tema.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hur stor är den? – Pluggparken</title>
+<meta name="description" content="Hur stor är den? Gissa storleken: en dront, en elefant, en blåval, en pyramid eller en planet. Dra i den röda siluetten tills du tror att den har rätt storlek jämfört med den blå.">
+<link rel="canonical" href="https://pluggparken.se/gissastorlek/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Pluggparken">
+<meta property="og:locale" content="sv_SE">
+<meta property="og:title" content="Hur stor är den? – Pluggparken">
+<meta property="og:description" content="Gissa storleken: dra i den röda siluetten tills du tror att den har rätt storlek jämfört med den blå. Djur, byggnader, fordon och planeter.">
+<meta property="og:url" content="https://pluggparken.se/gissastorlek/">
+<meta property="og:image" content="https://pluggparken.se/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#1F3A35">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/apple-touch-icon.png" sizes="180x180">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EAF3FF; --ink:#1D2B53; --muted:#56668F; --card:#FFFFFF; --line:#C6D6F2;
+  --good:#1E9E5E; --good-dark:#157548; --bad:#E5484D; --accent:#3D5AFE; --gold:#F2B707;
+  --font:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:760px;margin:0 auto;padding:12px 16px 48px}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;border:0;background:none}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+[hidden]{display:none!important}
+.card{background:var(--card,#fff);border-radius:22px;box-shadow:0 4px 0 var(--line);padding:16px}
+/* start */
+.hero{display:flex;gap:16px;align-items:center;background:linear-gradient(135deg,#1c2f5a,#0f1c3a);color:#fff;border-radius:24px;padding:18px;box-shadow:0 5px 0 #070f22;margin:6px 0 16px}
+.hero canvas{flex:none;width:150px;height:96px}
+.hero h1{margin:0;font-size:clamp(1.7rem,6vw,2.3rem);line-height:1.05}
+.hero p{margin:6px 0 0;font-weight:600;opacity:.92}
+.hur{display:grid;gap:10px;margin:0 0 14px;padding:0;list-style:none;counter-reset:s}
+.hur li{counter-increment:s;display:flex;gap:12px;align-items:center;background:var(--card,#fff);border-radius:16px;padding:10px 14px;box-shadow:0 3px 0 var(--line);font-weight:600}
+.hur li::before{content:counter(s);flex:none;width:34px;height:34px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:800}
+.stor{display:flex;align-items:center;gap:14px;width:100%;background:var(--good);color:#fff;border-radius:20px;padding:14px 18px;box-shadow:0 5px 0 var(--good-dark);font-weight:800;font-size:1.3rem}
+.stor .st{margin-left:auto;color:var(--gold);letter-spacing:2px;font-size:1.3rem}.stor .st .off{color:rgba(255,255,255,.4)}
+.kallor{color:var(--muted);font-size:.8rem;margin:12px 2px 0}.kallor summary{cursor:pointer;font-weight:700}.kallor p{margin:6px 0 0;line-height:1.35}
+.info{color:var(--muted);font-size:.9rem;margin:14px 2px 0}
+/* spel */
+.topp{display:flex;align-items:center;gap:10px;margin:4px 0 8px}
+.dots{display:flex;gap:6px;flex:1;flex-wrap:wrap}
+.dots i{width:12px;height:12px;border-radius:50%;background:var(--line)}
+.dots i.ok{background:var(--good)}.dots i.nu{background:var(--gold)}
+.pet{width:44px;height:44px;flex:none}
+.fraga{font-weight:800;font-size:1.25rem;line-height:1.2;margin:2px 0 8px}
+.fraga .bl{color:#3d78e8}.fraga .rd{color:#e0443a}
+.scen{position:relative;border-radius:20px;overflow:hidden;box-shadow:0 5px 0 #070f22;background:#0e1830}
+canvas#sc{display:block;width:100%;touch-action:none;cursor:ew-resize}
+.reg{display:flex;align-items:center;gap:10px;margin:12px 2px 4px}
+.reg label{font-weight:800;color:var(--muted);font-size:.9rem;flex:none}
+.reg input[type=range]{flex:1;accent-color:#e0443a;height:30px}
+.klar{display:block;width:100%;margin-top:8px;background:var(--accent);color:#fff;border-radius:18px;padding:12px;font-weight:800;font-size:1.2rem;box-shadow:0 5px 0 #2A3FB8}
+.klar:active,.nasta:active{transform:translateY(3px);box-shadow:0 1px 0 #2A3FB8}
+.facit{margin-top:12px;border-radius:20px;background:var(--card,#fff);box-shadow:0 4px 0 var(--line);padding:14px 16px}
+.facit .po{display:flex;align-items:baseline;gap:10px}
+.facit .po b{font-size:2.6rem;line-height:1;color:var(--good-dark)}.facit .po span{color:var(--muted);font-weight:800}
+.facit .po .rubrik{margin-left:auto;font-weight:800;font-size:1.1rem}
+.facit .rad{margin:6px 0 0;font-weight:700}
+.facit .fakta{margin:8px 0 0;color:var(--muted);font-weight:600;font-size:.95rem}
+.nasta{display:block;margin:12px auto 0;background:var(--accent);color:#fff;border-radius:16px;padding:10px 30px;font-weight:800;font-size:1.15rem;box-shadow:0 4px 0 #2A3FB8}
+/* resultat */
+.res{text-align:center}
+.res .stj{font-size:3rem;letter-spacing:6px;color:var(--gold);margin:6px 0}
+.res .stj .off{color:var(--line)}
+.knapp{display:inline-block;background:var(--good);color:#fff;border-radius:16px;padding:12px 26px;font-weight:800;font-size:1.15rem;box-shadow:0 5px 0 var(--good-dark);margin:6px}
+.knapp.vit{background:var(--card,#fff);color:var(--ink);box-shadow:0 5px 0 var(--line)}
+.lista{display:grid;gap:6px;margin:12px 0 4px;text-align:left}
+.lista div{display:flex;align-items:center;gap:10px;background:var(--card,#fff);border-radius:12px;padding:6px 10px;box-shadow:0 2px 0 var(--line);font-weight:700;font-size:.95rem}
+.lista .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lista .bar{flex:none;width:90px;height:10px;border-radius:6px;background:var(--line);overflow:hidden}.lista .bar i{display:block;height:100%;background:var(--good)}
+.lista .p{flex:none;width:34px;text-align:right}
+canvas#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50}
+@media(max-width:520px){.hero canvas{width:110px;height:72px}.fraga{font-size:1.1rem}}
+</style>
+</head>
+<body>
+<script src="../ljud.js"></script>
+<script src="../djur.js"></script>
+<script src="../huvud.js" data-titel="Hur stor är den?" data-ikon="📏" data-portal="ovriga"></script>
+<main class="wrap">
+
+<section class="screen" id="home">
+  <div class="hero">
+    <canvas id="heroC" width="300" height="192" aria-hidden="true"></canvas>
+    <div><h1>Hur stor är den?</h1><p>Gissa storleken! Dra i den röda tills du tror att den är lika stor som i verkligheten.</p></div>
+  </div>
+  <ol class="hur">
+    <li>Den <span style="color:#3d78e8;font-weight:800">blå</span> har en storlek som vi berättar.</li>
+    <li>Dra i den <span style="color:#e0443a;font-weight:800">röda</span> (eller använd reglaget) tills den är lika stor som du tror.</li>
+    <li>Tryck Klar. Då visas hur stor den egentligen är!</li>
+  </ol>
+  <button class="stor" id="spela">Spela <span class="st" id="hStj"></span></button>
+  <details class="kallor"><summary>Bilder och källor</summary><p>Djursiluetterna kommer från PhyloPic (phylopic.org): Dront: Ferran Sayol (CC0); Elefant: Steven Traver (CC0); Giraff: Matthew Speight (CC0); Häst: Andy Wilson (CC0); Noshörning: An Ignorant Atheist (CC0); Flodhäst: Steven Traver (CC0); Mammut: Kamil S. Jaron (CC0); T. rex: Richard Rich (CC0); Apatosaurus: Jagged Fang Designs (CC0); Blåval: okänd (Public Domain); Vithaj: Margot Michaud (CC0); Dromedar: An Ignorant Atheist (CC0); Ko: Ivan Iofrida (CC BY 4.0); Kanin: Ferran Sayol (CC0); Mus: Natalie Kestel (CC BY 4.0); Bi: Melissa Broussard (CC BY 4.0); Pingvin: okänd (CC0); Flamingo: Ferran Sayol (CC0); Människa: T. Michael Keesey (CC0); Isbjörn: Margot Michaud (CC0); Struts: Marie Attard (Public Domain); Krokodil: Ananth Srinivas (CC0).</p><p>Eiffeltornet: Eiffel Tower Silhouette.svg (CC0); Bil: Japan road sign symbols – Car (Side View).svg (public domain), båda från Wikimedia Commons. Pyramiden, Burj Khalifa, Mount Everest och planeterna är enkla former som vi ritat själva. Alla mått är ungefärliga.</p></details>
+  <p class="info">8 gissningar i varje runda: djur, dinosaurier, byggnader, fordon och planeter blandas. Du får poäng av 100 för varje gissning. Alla mått är ungefärliga.</p>
+</section>
+
+<section class="screen" id="game" hidden>
+  <button type="button" data-home hidden tabindex="-1" aria-hidden="true" onclick="hem()"></button>
+  <div class="topp"><div class="dots" id="dots"></div><span class="pet" id="pet"></span></div>
+  <div class="fraga" id="fraga" aria-live="polite"></div>
+  <div class="scen"><canvas id="sc"></canvas></div>
+  <div class="reg" id="reg"><label for="sl">Storlek</label><input type="range" id="sl" min="0" max="1000" value="500" aria-label="Storleken på den röda"></div>
+  <button class="klar" id="klar">Klar ✓</button>
+  <div class="facit" id="facit" hidden aria-live="polite">
+    <div class="po"><b id="fP">0</b><span>/ 100</span><div class="rubrik" id="fR"></div></div>
+    <p class="rad" id="fRad"></p>
+    <p class="fakta" id="fFakta"></p>
+  </div>
+  <button class="nasta" id="nasta" hidden>Nästa ▶</button>
+</section>
+
+<section class="screen res" id="result" hidden>
+  <h2 id="rRub" style="margin:10px 0 0">Bra gissat!</h2>
+  <div class="stj" id="rStj"></div>
+  <p id="rTxt" style="font-weight:700;margin:0 0 4px"></p>
+  <div class="lista" id="rLista"></div>
+  <div style="margin-top:10px"><button class="knapp" id="rIgen">Spela igen</button><button class="knapp vit" id="rHome">Tillbaka</button></div>
+</section>
+
+</main>
+<canvas id="fx" hidden></canvas>
+<script>
+const $=id=>document.getElementById(id);
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const KEY="mattespel-gissastorlek-v1";
+const data=(()=>{try{return Object.assign({stars:{},best:0},JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){return{stars:{},best:0}}})();
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}};
+const reduced=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
+const ROUND=8,BLA="#6aa6ff",ROD="#ee4b3f",GRN="#34d399";
+
+/* ---------- Föremål: noto = Googles Noto Emoji (Apache 2.0) i bilder/, svg = egen enkel siluett. dim h = höjd, w = längd. m = meter. ---------- */
+const CIRK='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>';
+const O=[
+ {id:"person",namn:"Människa",img:"ph-person.svg",dim:"h",m:1.75,txt:"1,75 m",ord:"lång",f:"En vuxen människa är ungefär 1,75 meter lång."},
+ {id:"dront",namn:"Dront",img:"ph-dront.svg",dim:"h",m:1,txt:"1 m",ord:"hög",f:"Dronten levde på ön Mauritius och dog ut på 1600-talet. Den kunde inte flyga."},
+ {id:"elefant",namn:"Elefant",img:"ph-elefant.svg",dim:"h",m:3.3,txt:"3,3 m",ord:"hög",f:"Den afrikanska elefanten är världens största landdjur. Den är ungefär 3,3 meter hög vid axeln."},
+ {id:"giraff",namn:"Giraff",img:"ph-giraff.svg",dim:"h",m:5,txt:"5 m",ord:"hög",f:"Giraffen är världens högsta djur. Bara halsen är ungefär två meter lång."},
+ {id:"hast",namn:"Häst",img:"ph-hast.svg",dim:"w",m:2.5,txt:"2,5 m",ord:"lång (nos till svans)",f:"En häst kan galoppera i över 50 kilometer i timmen."},
+ {id:"nashorning",namn:"Noshörning",img:"ph-nashorning.svg",dim:"w",m:3.8,txt:"3,8 m",ord:"lång",f:"Vit noshörning är näst störst bland landdjuren och väger ungefär två ton."},
+ {id:"flodhast",namn:"Flodhäst",img:"ph-flodhast.svg",dim:"w",m:3.5,txt:"3,5 m",ord:"lång",f:"Flodhästen väger ungefär ett och ett halvt ton, men kan springa fortare än en människa."},
+ {id:"mammut",namn:"Ullhårsmammut",img:"ph-mammut.svg",dim:"h",m:3.3,txt:"3,3 m",ord:"hög",f:"Mammuten levde under istiden och var ungefär lika stor som en asiatisk elefant."},
+ {id:"trex",namn:"Tyrannosaurus rex",img:"ph-trex.svg",dim:"w",m:12,txt:"12 m",ord:"lång",f:"T. rex kunde bli upp till 12 meter lång, men de flesta var lite kortare."},
+ {id:"sauropod",namn:"Apatosaurus",img:"ph-sauropod.svg",dim:"w",m:22,txt:"22 m",ord:"lång",f:"Apatosaurus var över 20 meter lång, men hjärnan var liten."},
+ {id:"blaval",namn:"Blåval",img:"ph-blaval.svg",dim:"w",m:25,txt:"25 m",ord:"lång",f:"Blåvalen är det största djur som någonsin har funnits. Den kan bli upp till 30 meter lång."},
+ {id:"haj",namn:"Vithaj",img:"ph-haj.svg",dim:"w",m:4.5,txt:"4,5 m",ord:"lång",f:"Vithajen blir ofta fyra till fem meter lång."},
+ {id:"kamel",namn:"Dromedar",img:"ph-kamel.svg",dim:"h",m:2.1,txt:"2,1 m",ord:"hög",f:"Dromedaren har en puckel och klarar sig länge utan vatten."},
+ {id:"ko",namn:"Ko",img:"ph-ko.svg",dim:"w",m:2.5,txt:"2,5 m",ord:"lång",f:"En ko väger ungefär 600 kilo."},
+ {id:"kanin",namn:"Kanin",img:"ph-kanin.svg",dim:"h",m:0.3,txt:"30 cm",ord:"hög (sittande)",f:"Kaninens långa öron hjälper den att höra faror."},
+ {id:"mus",namn:"Mus",img:"ph-mus.svg",dim:"w",m:0.17,txt:"17 cm",ord:"lång (med svansen)",f:"Möss kan klämma sig igenom mycket små hål."},
+ {id:"bi",namn:"Bi",img:"ph-bi.svg",dim:"w",m:0.015,txt:"1,5 cm",ord:"långt",f:"Ett bi är bara ungefär en och en halv centimeter långt."},
+ {id:"pingvin",namn:"Kejsarpingvin",img:"ph-pingvin.svg",dim:"h",m:1.15,txt:"1,15 m",ord:"hög",f:"Kejsarpingvinen är den största pingvinen."},
+ {id:"flamingo",namn:"Flamingo",img:"ph-flamingo.svg",dim:"h",m:1.4,txt:"1,4 m",ord:"hög",f:"Flamingor är rosa av maten de äter."},
+ {id:"isbjorn",namn:"Isbjörn",img:"ph-isbjorn.svg",dim:"w",m:2.5,txt:"2,5 m",ord:"lång",f:"Isbjörnen är världens största landlevande rovdjur."},
+ {id:"struts",namn:"Struts",img:"ph-struts.svg",dim:"h",m:2.5,txt:"2,5 m",ord:"hög",f:"Strutsen är världens största fågel och kan inte flyga, men den kan springa över 60 kilometer i timmen."},
+ {id:"krokodil",namn:"Nilkrokodil",img:"ph-krokodil.svg",dim:"w",m:4.5,txt:"4,5 m",ord:"lång",f:"Nilkrokodilen blir fyra till fem meter lång."},
+ {id:"bil",namn:"Bil",img:"cm-bil.svg",dim:"w",m:4.5,txt:"4,5 m",ord:"lång",f:"En vanlig personbil är ungefär 4,5 meter lång."},
+ {id:"eiffel",namn:"Eiffeltornet",img:"cm-eiffel.svg",dim:"h",m:330,txt:"330 m",ord:"högt",f:"Eiffeltornet i Paris byggdes 1889. Med antennen är det 330 meter högt."},
+ {id:"pyramid",namn:"Cheopspyramiden",svg:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 166 100"><path d="M0 100L83 0L166 100Z"/></svg>',dim:"h",m:139,txt:"139 m",ord:"hög",f:"Cheopspyramiden i Egypten byggdes för ungefär 4 500 år sedan. Då var den ännu högre, nästan 147 meter."},
+ {id:"burj",namn:"Burj Khalifa",svg:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 200"><path d="M4 200V150H8V110H12V80H15V50H17.5V20H19V0H21V20H22.5V50H25V80H28V110H32V150H36V200Z"/></svg>',dim:"h",m:828,txt:"828 m",ord:"hög",f:"Burj Khalifa i Dubai är världens högsta byggnad."},
+ {id:"everest",namn:"Mount Everest",svg:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100"><path d="M0 100L58 48L76 58L118 0L150 42L166 32L200 100Z"/></svg>',dim:"h",m:8849,txt:"8 849 m",ord:"högt över havet",f:"Mount Everest är jordens högsta berg."},
+ {id:"manen",namn:"Månen",svg:CIRK,dim:"w",m:3474000,txt:"3 474 km",ord:"bred (diameter)",f:"Månens diameter är drygt en fjärdedel av jordens."},
+ {id:"jorden",namn:"Jorden",svg:CIRK,dim:"w",m:12742000,txt:"12 742 km",ord:"bred (diameter)",f:"Jordens diameter är ungefär 12 700 kilometer."},
+ {id:"jupiter",namn:"Jupiter",svg:CIRK,dim:"w",m:139820000,txt:"139 820 km",ord:"bred (diameter)",f:"Jupiter är solsystemets största planet. Över 1 300 jordklot ryms inuti den."}];
+
+/* ---------- Siluetter: ritas som platta färger, beskärs tätt så att måtten stämmer ---------- */
+const SIL={};
+async function laddaBild(o){let src;
+  try{let t=o.svg;if(!t){t=await (await fetch("bilder/"+o.img)).text();}
+    const d=new DOMParser().parseFromString(t,"image/svg+xml").documentElement;let vb=(d.getAttribute("viewBox")||"").split(/[ ,]+/).map(Number);
+    let w=vb.length===4?vb[2]:parseFloat(d.getAttribute("width"))||100,h=vb.length===4?vb[3]:parseFloat(d.getAttribute("height"))||100;
+    if(vb.length!==4)d.setAttribute("viewBox","0 0 "+w+" "+h);d.setAttribute("width",1000);d.setAttribute("height",Math.round(1000*h/w));
+    src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(new XMLSerializer().serializeToString(d));}catch(e){return null;}
+  return new Promise(res=>{const im=new Image();im.onload=()=>res(im);im.onerror=()=>res(null);im.src=src;});}
+async function byggSil(o){const im=await laddaBild(o);if(!im)return false;
+  const S=512,c=document.createElement("canvas");c.width=c.height=S;const g=c.getContext("2d");
+  let iw=im.naturalWidth||128,ih=im.naturalHeight||128;const k=Math.min(S/iw,S/ih);const dw=iw*k,dh=ih*k;
+  g.drawImage(im,(S-dw)/2,(S-dh)/2,dw,dh);
+  const d=g.getImageData(0,0,S,S).data;let x0=S,y0=S,x1=-1,y1=-1;
+  for(let y=0;y<S;y++)for(let x=0;x<S;x++)if(d[(y*S+x)*4+3]>24){if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y;}
+  if(x1<0)return false;const bw=x1-x0+1,bh=y1-y0+1;
+  const cc=document.createElement("canvas");cc.width=bw;cc.height=bh;cc.getContext("2d").drawImage(c,x0,y0,bw,bh,0,0,bw,bh);
+  const farg={};const mk=col=>{const t=document.createElement("canvas");t.width=bw;t.height=bh;const q=t.getContext("2d");q.drawImage(cc,0,0);q.globalCompositeOperation="source-in";q.fillStyle=col;q.fillRect(0,0,bw,bh);return t;};
+  SIL[o.id]={asp:bw/bh,bla:mk(BLA),rod:mk(ROD),gron:mk(GRN)};
+  o.asp=bw/bh;o.wm=o.dim==="w"?o.m:o.m*o.asp;o.hm=o.dim==="h"?o.m:o.m/o.asp;return true;}
+let KLAR=null;
+function ladda(){if(!KLAR)KLAR=Promise.all(O.map(byggSil)).then(r=>{O.forEach((o,i)=>{o.ok=r[i];});heroRita();});return KLAR;}
+
+/* ---------- Format ---------- */
+const mellan=n=>String(n).replace(/\B(?=(\d{3})+(?!\d))/g," ");
+function fmt(m){
+  if(m>=1e6)return mellan(Math.round(m/1000))+" km";
+  if(m>=1000)return mellan(Math.round(m))+" m";
+  if(m>=10)return Math.round(m)+" m";
+  if(m>=1)return (Math.round(m*10)/10).toString().replace(".",",")+" m";
+  if(m>=.1)return Math.round(m*100)+" cm";
+  return (Math.round(m*1000)/10).toString().replace(".",",")+" cm";}
+
+/* ---------- Val av par ---------- */
+function gorRunda(){
+  const ok=O.filter(o=>o.ok);const par=[];const anv=new Set();
+  const valid=(a,b)=>{const r=Math.max(a.m,b.m)/Math.min(a.m,b.m);return r>=1.15&&r<=14;};
+  let f=0;
+  while(par.length<ROUND&&f++<400){
+    const a=pick(ok),b=pick(ok);if(a===b||anv.has(a.id)||anv.has(b.id)||!valid(a,b))continue;
+    const rymd=[a,b].filter(o=>["manen","jorden","jupiter"].includes(o.id)).length;
+    if(rymd&&par.some(p=>["manen","jorden","jupiter"].includes(p.ref.id)))continue;
+    anv.add(a.id);anv.add(b.id);par.push(Math.random()<.5?{ref:a,t:b}:{ref:b,t:a});}
+  return par;}
+
+/* ---------- Spelet ---------- */
+let G=null,ST=null,cv,cx,W,H,DPR=1;
+const LOGMIN=Math.log(1/8),LOGMAX=Math.log(2.2);
+function skala(){const r=ST.ref,t=ST.t;
+  const gapF=.04,mx=.04;const ytop=.2;
+  const wMax=W*(1-2*mx-gapF);
+  const wSum=r.wm+t.wm*LOGMAX_F();
+  const hMax=H*.7;
+  const hSum=Math.max(r.hm,t.hm*LOGMAX_F());
+  ST.ppm=Math.min(wMax/wSum,hMax/hSum);
+  ST.y0=H*.80;ST.xr=W*mx;ST.xt=ST.xr+r.wm*ST.ppm+W*gapF;}
+const LOGMAX_F=()=>Math.exp(LOGMAX);
+function pxAv(f){return ST.t.m*f*ST.ppm;}
+function formaT(px){const t=ST.t;return t.dim==="h"?{w:px*t.asp,h:px}:{w:px,h:px/t.asp};}
+function starta(){G={i:0,poang:[],par:gorRunda(),namn:[]};$("pet").innerHTML=owlSVG(lasDjur());$("pet").style.display="";show("game");nasta();}
+function resize(){const bb=cv.parentElement.getBoundingClientRect();DPR=Math.min(2,window.devicePixelRatio||1);W=Math.round(bb.width);H=Math.round(Math.max(250,Math.min(W*.54,400)));
+  cv.width=W*DPR;cv.height=H*DPR;cv.style.height=H+"px";cx.setTransform(DPR,0,0,DPR,0,0);if(ST){skala();rita();}}
+function prickar(){$("dots").innerHTML=Array.from({length:ROUND},(_,j)=>`<i class="${j<G.i?"ok":j===G.i?"nu":""}"></i>`).join("");}
+function nasta(){if(G.i>=ROUND){slut();return;}
+  const p=G.par[G.i];ST={ref:p.ref,t:p.t,fas:"gissa",f:0,anim:null,raknad:0};prickar();
+  const o=p.t,r=p.ref;
+  $("fraga").innerHTML=`<span class="bl">${r.namn}</span> är ${r.txt} ${r.ord}. Hur stor är <span class="rd">${o.namn}</span>? Dra i den röda!`;
+  $("facit").hidden=true;$("nasta").hidden=true;$("klar").hidden=false;$("reg").hidden=false;
+  resize();skala();
+  const start=Math.random()<.5?.3+Math.random()*.25:1.6+Math.random()*.5;
+  setF(start);$("sl").disabled=false;rita();}
+function sFran(f){return (Math.log(f)-LOGMIN)/(LOGMAX-LOGMIN);}
+function setF(f){f=Math.min(Math.exp(LOGMAX),Math.max(Math.exp(LOGMIN),f));ST.f=f;$("sl").value=String(Math.round(sFran(f)*1000));}
+function fraPekare(e){const b=cv.getBoundingClientRect(),x=e.clientX-b.left,y=e.clientY-b.top,t=ST.t;
+  let px=t.dim==="h"?ST.y0-y:x-ST.xt;px=Math.max(6,px);setF(px/(t.m*ST.ppm));}
+
+/* ---------- Teckning ---------- */
+function rita(){if(!ST)return;const {ref,t}=ST;const g=cx;
+  const bg=g.createLinearGradient(0,0,0,H);bg.addColorStop(0,"#0b1530");bg.addColorStop(1,"#142447");g.fillStyle=bg;g.fillRect(0,0,W,H);
+  g.fillStyle="rgba(120,160,255,.07)";for(let x=0;x<W;x+=40)g.fillRect(x,0,1,H);for(let y=0;y<H;y+=40)g.fillRect(0,y,W,1);
+  g.fillStyle="#0a1226";g.fillRect(0,ST.y0,W,H-ST.y0);g.fillStyle="rgba(150,190,255,.45)";g.fillRect(0,ST.y0,W,2);
+  /* referensen */
+  const rw=ref.wm*ST.ppm,rh=ref.hm*ST.ppm;g.drawImage(SIL[ref.id].bla,ST.xr,ST.y0-rh,rw,rh);
+  const rl=ref.namn+" · "+ref.txt;g.font='700 14px "Baloo 2",system-ui,sans-serif';const lw=g.measureText(rl).width;
+  etikett(rl,ST.xr,ST.y0+22,BLA);const sam=ST.xr+lw+14>ST.xt;
+  mattlinje(ref,ST.xr,rw,rh,BLA,ST.y0);
+  /* den röda */
+  const px=ST.anim?ST.anim.px:pxAv(ST.f),s=formaT(px);
+  g.save();g.globalAlpha=ST.fas==="facit"?.82:1;g.drawImage(SIL[t.id].rod,ST.xt,ST.y0-s.h,s.w,s.h);g.restore();
+  if(ST.fas==="facit"||ST.anim){const tp=t.m*ST.ppm,ts=formaT(tp);g.save();g.globalAlpha=Math.min(1,(ST.anim?ST.anim.k:1))*.62;g.drawImage(SIL[t.id].gron,ST.xt,ST.y0-ts.h,ts.w,ts.h);g.restore();
+    g.strokeStyle=GRN;g.lineWidth=2;g.setLineDash([6,5]);g.globalAlpha=Math.min(1,ST.anim?ST.anim.k:1);
+    if(t.dim==="h"){g.beginPath();g.moveTo(ST.xt-4,ST.y0-ts.h);g.lineTo(ST.xt+Math.max(ts.w,s.w)+4,ST.y0-ts.h);g.stroke();}
+    else{g.beginPath();g.moveTo(ST.xt+ts.w,ST.y0+4);g.lineTo(ST.xt+ts.w,ST.y0-Math.max(ts.h,s.h)-4);g.stroke();}
+    g.setLineDash([]);g.globalAlpha=1;}
+  mattlinje(t,ST.xt,s.w,s.h,ROD,ST.y0);
+  etikett(ST.fas==="facit"?t.namn+" · "+t.txt:t.namn+" · ?",ST.xt,ST.y0+(sam?44:22),ST.fas==="facit"?GRN:ROD);
+  if(ST.fas==="gissa"){ /* handtaget */
+    const hx=t.dim==="w"?ST.xt+s.w:ST.xt+s.w/2,hy=t.dim==="h"?ST.y0-s.h:ST.y0-s.h/2;
+    g.save();g.shadowColor="rgba(255,255,255,.8)";g.shadowBlur=14;g.fillStyle="#fff";g.beginPath();g.arc(hx,hy,13,0,Math.PI*2);g.fill();g.restore();
+    g.fillStyle=ROD;g.beginPath();g.arc(hx,hy,5.5,0,Math.PI*2);g.fill();
+    g.strokeStyle="#fff";g.lineWidth=2;g.beginPath();
+    if(t.dim==="h"){g.moveTo(hx,hy-24);g.lineTo(hx-5,hy-18);g.moveTo(hx,hy-24);g.lineTo(hx+5,hy-18);g.moveTo(hx,hy+24);g.lineTo(hx-5,hy+18);g.moveTo(hx,hy+24);g.lineTo(hx+5,hy+18);}
+    else{g.moveTo(hx+24,hy);g.lineTo(hx+18,hy-5);g.moveTo(hx+24,hy);g.lineTo(hx+18,hy+5);g.moveTo(hx-24,hy);g.lineTo(hx-18,hy-5);g.moveTo(hx-24,hy);g.lineTo(hx-18,hy+5);}
+    g.stroke();}}
+function etikett(txt,x,y,col){const g=cx;g.font='700 14px "Baloo 2",system-ui,sans-serif';g.fillStyle=col;g.textBaseline="alphabetic";
+  let t=txt;const mw=Math.max(80,W*.46);while(g.measureText(t).width>mw&&t.length>6)t=t.slice(0,-2);if(t!==txt)t=t.trim()+"…";g.fillText(t,x,y);}
+function mattlinje(o,x,w,h,col,y0){const g=cx;g.save();g.strokeStyle=col;g.fillStyle=col;g.lineWidth=1.6;g.globalAlpha=.75;
+  if(o.dim==="h"){const lx=x-9;g.beginPath();g.moveTo(lx,y0);g.lineTo(lx,y0-h);g.moveTo(lx-5,y0);g.lineTo(lx+5,y0);g.moveTo(lx-5,y0-h);g.lineTo(lx+5,y0-h);g.stroke();}
+  else{const ly=y0-h-9;g.beginPath();g.moveTo(x,ly);g.lineTo(x+w,ly);g.moveTo(x,ly-5);g.lineTo(x,ly+5);g.moveTo(x+w,ly-5);g.lineTo(x+w,ly+5);g.stroke();}
+  g.restore();}
+
+/* ---------- Gissa, facit ---------- */
+const poangAv=f=>Math.round(100*Math.exp(-Math.pow(Math.log(f),2)/(2*.45*.45)));
+function klarGissat(){if(!ST||ST.fas!=="gissa")return;ST.fas="facit";$("klar").hidden=true;$("reg").hidden=true;
+  const t=ST.t,f=ST.f,p=poangAv(f);const fran=pxAv(f),till=t.m*ST.ppm;const t0=performance.now(),D=reduced()?1:900;
+  const tick=now=>{const k=Math.min(1,(now-t0)/D),e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
+    ST.anim={px:fran+(till-fran)*e,k:e};$("fP").textContent=String(Math.round(p*e));rita();
+    if(k<1)requestAnimationFrame(tick);else{ST.anim=null;$("fP").textContent=String(p);rita();}};
+  requestAnimationFrame(tick);
+  const guess=t.m*f;const rub=Math.abs(Math.log(f))<.1?"Mitt i prick!":Math.abs(Math.log(f))<.25?"Mycket nära!":Math.abs(Math.log(f))<.5?"Ganska nära":f>1?"För stor":"För liten";
+  $("fR").textContent=rub;$("fR").style.color=p>=75?"var(--good-dark)":p>=40?"#b87500":"var(--bad)";
+  const fa=f>1?`${(Math.round(f*10)/10).toString().replace(".",",")} gånger för stor`:`${(Math.round(10/f)/10).toString().replace(".",",")} gånger för liten`;
+  $("fRad").innerHTML=`Du gissade <b>${fmt(guess)}</b>. Rätt svar är <b>${t.txt}</b>${Math.abs(Math.log(f))<.1?"":" ("+fa+")"}.`;
+  $("fFakta").textContent=t.f;$("facit").hidden=false;
+  G.poang[G.i]=p;G.namn[G.i]=ST.ref.namn+" · "+t.namn;
+  if(window.Ljud)p>=75?Ljud.ok&&Ljud.ok():p>=40?Ljud.ok&&Ljud.ok():Ljud.bad&&Ljud.bad();
+  $("nasta").hidden=false;$("nasta").textContent=G.i+1>=ROUND?"Se resultatet ▶":"Nästa ▶";$("nasta").focus({preventScroll:true});
+  const dd=$("dots").children[G.i];if(dd)dd.className="ok";}
+function slut(){const medel=Math.round(G.poang.reduce((a,b)=>a+b,0)/ROUND);const st=medel>=75?3:medel>=55?2:1;
+  const old=data.stars.r||0;data.stars.r=Math.max(old,st);data.best=Math.max(data.best||0,medel);save();
+  $("rRub").textContent=medel>=75?"Du har bra känsla för storlek!":medel>=55?"Bra gissat!":"Bra jobbat!";$("rStj").innerHTML=stjHtml(st);
+  $("rTxt").innerHTML=`Snittpoäng: <b>${medel}</b> av 100${medel>=(data.best||0)&&medel>0?" · bästa hittills":" · bäst: "+data.best}`;
+  $("rLista").innerHTML=G.poang.map((p,j)=>`<div><span class="nm">${G.namn[j]}</span><span class="bar"><i style="width:${p}%"></i></span><span class="p">${p}</span></div>`).join("");
+  show("result");if(st===3){window.Ljud&&Ljud.fanfare&&Ljud.fanfare();confetti();}}
+
+/* ---------- Skärmar ---------- */
+const stjHtml=n=>[1,2,3].map(i=>i<=n?"★":'<span class="off">★</span>').join("");
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
+function hem(){$("hStj").innerHTML=stjHtml(data.stars.r||0);show("home");}
+function heroRita(){const c=$("heroC");if(!c)return;const g=c.getContext("2d"),a=SIL.dront,b=SIL.hast;if(!a||!b)return;
+  g.clearRect(0,0,300,192);const base=170;const bw=190,hh=bw/b.asp;g.drawImage(b.rod,300-bw-8,base-hh,bw,hh);const dh=70,dw=dh*a.asp;g.drawImage(a.bla,18,base-dh,dw,dh);
+  g.fillStyle="rgba(150,190,255,.5)";g.fillRect(8,base,284,2);}
+function confetti(){if(reduced())return;const c=$("fx"),x=c.getContext("2d");c.hidden=false;c.width=innerWidth;c.height=innerHeight;const cols=["#3D8BFD","#FF9F43","#2BB673","#FFC93C","#7B61FF","#FF6B6B"];
+  const P=Array.from({length:90},()=>({x:Math.random()*c.width,y:-20-Math.random()*200,vx:(Math.random()-.5)*4,vy:2+Math.random()*3,r:6+Math.random()*7,a:Math.random()*6,va:(Math.random()-.5)*.3,c:pick(cols)}));
+  let t=0;(function f(){x.clearRect(0,0,c.width,c.height);P.forEach(p=>{p.vy+=.12;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore();});
+    if(++t<170)requestAnimationFrame(f);else{x.clearRect(0,0,c.width,c.height);c.hidden=true;}})();}
+
+/* ---------- Start ---------- */
+cv=$("sc");cx=cv.getContext("2d");
+let drar=false;
+cv.addEventListener("pointerdown",e=>{if(!ST||ST.fas!=="gissa")return;drar=true;cv.setPointerCapture(e.pointerId);fraPekare(e);rita();});
+cv.addEventListener("pointermove",e=>{if(drar&&ST&&ST.fas==="gissa"){fraPekare(e);rita();}});
+const upp=()=>{drar=false;};cv.addEventListener("pointerup",upp);cv.addEventListener("pointercancel",upp);
+$("sl").addEventListener("input",()=>{if(!ST||ST.fas!=="gissa")return;setF(Math.exp(LOGMIN+(+$("sl").value/1000)*(LOGMAX-LOGMIN)));rita();});
+$("klar").onclick=klarGissat;$("nasta").onclick=()=>{G.i++;nasta();};
+$("spela").onclick=async()=>{$("spela").disabled=true;await ladda();$("spela").disabled=false;starta();};
+$("rIgen").onclick=()=>starta();$("rHome").onclick=hem;
+addEventListener("resize",()=>{if(!$("game").hidden)resize();});
+document.addEventListener("keydown",e=>{if($("game").hidden)return;if((e.key==="Enter")&&!$("klar").hidden&&document.activeElement!==$("sl")){klarGissat();}else if(e.key==="Enter"&&!$("nasta").hidden){$("nasta").click();}});
+ladda();hem();
+</script>
+</body>
+</html>
