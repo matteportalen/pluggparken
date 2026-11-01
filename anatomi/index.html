@@ -78,23 +78,33 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;bac
 body.resa .reg,body.resa .hint,body.resa .zm,body.resa .lag,body.resa #kort,body.resa #lin{display:none!important}
 @media(max-width:760px){.rctl button{padding:7px 9px;min-width:36px}.rctl .rxb{font-size:.62rem;padding:7px 8px}.resa{bottom:10px;padding:12px 12px 10px}.resa p{font-size:.82rem;min-height:0}.rbar button{font-size:0}.rbar button span{display:none}.rbar button{height:22px}}
 
-/* meny som kan fällas ihop på mobil */
+/* meny som fälls ut vertikalt på mobil: hopfälld = en rad med lager */
+#dock{display:contents}
 #menyb{display:none}
 @media(max-width:760px){
-#menyb{display:flex;position:fixed;right:12px;bottom:12px;z-index:7;align-items:center;gap:8px;padding:9px 16px;border-radius:99px;border:1px solid var(--line);background:rgba(8,20,36,.72);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:var(--ink);font:inherit;font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer}
-#menyb:active{transform:scale(.97)}
-.lag,.reg,.kal,.zm{transition:opacity .28s ease,transform .32s cubic-bezier(.4,0,.2,1),bottom .32s cubic-bezier(.4,0,.2,1)}
-body.mini .lag,body.mini .reg{opacity:0;pointer-events:none;transform:translateY(34px) scale(.96)}
-body.mini .kal{opacity:0;pointer-events:none}
-body.mini .zm{bottom:70px}
+#dock{position:fixed;left:12px;right:68px;bottom:12px;z-index:5;display:flex;flex-direction:column;gap:8px}
+#dock .lag,#dock .reg,#dock .kal{position:static;transform:none;left:auto;right:auto;top:auto;bottom:auto;max-width:none;width:auto}
+#dock .reg{order:1;padding:2px;max-height:0;opacity:0;overflow:hidden;pointer-events:none;transition:max-height .38s cubic-bezier(.4,0,.2,1),opacity .28s ease}
+#dock .lag{order:2;flex-direction:row;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;max-height:48px;padding:2px;transition:max-height .38s cubic-bezier(.4,0,.2,1)}
+#dock .lag::-webkit-scrollbar{display:none}
+#dock .lag button{flex:none}
+#dock .kal{order:3;padding:0;max-height:0;opacity:0;overflow:hidden;transition:max-height .38s cubic-bezier(.4,0,.2,1),opacity .28s ease}
+body.open #dock .reg{max-height:52px;opacity:1;pointer-events:auto}
+body.open #dock .lag{flex-wrap:wrap;overflow:visible;max-height:170px}
+body.open #dock .kal{max-height:60px;opacity:1}
+.zm{bottom:72px;right:12px}
+#menyb{display:grid;place-items:center;position:fixed;right:12px;bottom:12px;z-index:7;width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:rgba(8,20,36,.72);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:var(--ink);font-size:1.15rem;cursor:pointer;transition:transform .3s}
+body.open #menyb{transform:rotate(180deg)}
+#menyb:active{transform:scale(.94)}
 }
-@media(prefers-reduced-motion:reduce){.lag,.reg,.kal,.zm{transition:none}}
+@media(prefers-reduced-motion:reduce){#dock .reg,#dock .lag,#dock .kal,#menyb{transition:none}}
 </style></head><body>
 <canvas id="c"></canvas>
 <div class="top"><a href="../fler/">← Fler ämnen</a><h1>Människokroppen</h1></div>
-<button id="menyb" aria-expanded="true" aria-controls="lag">▾ Dölj meny</button>
-<div class="lag" id="lag"></div>
-<div class="reg" id="reg"></div><div class="zm"><button id="zin" aria-label="Zooma in">+</button><button id="zut" aria-label="Zooma ut">−</button></div>
+<button id="menyb" aria-expanded="false" aria-controls="dock" aria-label="Visa meny">▴</button>
+<div id="dock"><div class="lag" id="lag"></div>
+<div class="reg" id="reg"></div><div class="kal">Modeller: Z-Anatomy (CC BY-SA 4.0) · BodyParts3D, Database Center for Life Science (CC BY-SA 2.1 Japan) · bearbetade och förenklade</div></div>
+<div class="zm"><button id="zin" aria-label="Zooma in">+</button><button id="zut" aria-label="Zooma ut">−</button></div>
 <div class="resa" id="resa" hidden>
  <div class="rtop"><span class="rn" id="rN"></span><b id="rT"></b><span class="rtid" id="rTid"></span></div>
  <p id="rP"></p>
@@ -105,7 +115,6 @@ body.mini .zm{bottom:70px}
 <svg id="lin" aria-hidden="true"><path id="linP" pathLength="1"/><circle id="linR" r="9"/><circle id="linD" r="3.6"/></svg>
 <div class="kort" id="kort" hidden></div>
 <div class="hint">Dra för att vrida · scrolla för att zooma · dubbeltryck på en del för att gå nära</div>
-<div class="kal">Modeller: Z-Anatomy (CC BY-SA 4.0) · BodyParts3D, Database Center for Life Science (CC BY-SA 2.1 Japan) · bearbetade och förenklade</div>
 <div id="lad">Laddar kroppen …</div>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 <script type="module">
@@ -224,8 +233,8 @@ las().then(loop);
 window.__a={S,cam,ctl,grp,all};
 </script><script>
 (function(){const b=document.getElementById("menyb");if(!b)return;
-function set(m){document.body.classList.toggle("mini",m);b.textContent=m?"▴ Meny":"▾ Dölj meny";b.setAttribute("aria-expanded",m?"false":"true");try{localStorage.setItem("pluggparken-anatomi-mini",m?"1":"0")}catch(e){}}
-let m0=false;try{m0=localStorage.getItem("pluggparken-anatomi-mini")==="1"}catch(e){}
-set(m0);b.onclick=()=>set(!document.body.classList.contains("mini"));})();
+function set(o){document.body.classList.toggle("open",o);b.textContent="▴";b.setAttribute("aria-expanded",o?"true":"false");b.setAttribute("aria-label",o?"Dölj meny":"Visa meny");try{localStorage.setItem("pluggparken-anatomi-open",o?"1":"0")}catch(e){}}
+let o0=false;try{o0=localStorage.getItem("pluggparken-anatomi-open")==="1"}catch(e){}
+set(o0);b.onclick=()=>set(!document.body.classList.contains("open"));})();
 </script>
 </body></html>
