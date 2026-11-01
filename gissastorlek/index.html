@@ -251,7 +251,7 @@ function nasta(){if(G.i>=ROUND){slut();return;}
 function sFran(f){return (Math.log(f)-LOGMIN)/(LOGMAX-LOGMIN);}
 function setF(f){f=Math.min(Math.exp(LOGMAX),Math.max(Math.exp(LOGMIN),f));ST.f=f;$("sl").value=String(Math.round(sFran(f)*1000));}
 function fraPekare(e){const b=cv.getBoundingClientRect(),x=e.clientX-b.left,y=e.clientY-b.top,t=ST.t;
-  let px=t.dim==="h"?ST.y0-y:x-ST.xt;px=Math.max(6,px);setF(px/(t.m*ST.ppm));}
+  let px=(t.dim==="h"?ST.y0-y:x-ST.xt)-(ST.off||0);px=Math.max(6,px);setF(px/(t.m*ST.ppm));}
 
 /* ---------- Teckning ---------- */
 function rita(){if(!ST)return;const {ref,t}=ST;const g=cx;
@@ -273,13 +273,15 @@ function rita(){if(!ST)return;const {ref,t}=ST;const g=cx;
     g.setLineDash([]);g.globalAlpha=1;}
   mattlinje(t,ST.xt,s.w,s.h,ROD,ST.y0);
   etikett(ST.fas==="facit"?t.namn+" · "+t.txt:t.namn+" · ?",ST.xt,ST.y0+(sam?44:22),ST.fas==="facit"?GRN:ROD);
-  if(ST.fas==="gissa"){ /* handtaget */
-    const hx=t.dim==="w"?ST.xt+s.w:ST.xt+s.w/2,hy=t.dim==="h"?ST.y0-s.h:ST.y0-s.h/2;
-    g.save();g.shadowColor="rgba(255,255,255,.8)";g.shadowBlur=14;g.fillStyle="#fff";g.beginPath();g.arc(hx,hy,13,0,Math.PI*2);g.fill();g.restore();
-    g.fillStyle=ROD;g.beginPath();g.arc(hx,hy,5.5,0,Math.PI*2);g.fill();
+  if(ST.fas==="gissa"){ /* handtaget ligger utanför formen så att små siluetter inte döljs */
+    const hh=t.dim==="w"?{x:ST.xt+s.w+26,y:ST.y0-s.h/2}:{x:ST.xt+s.w/2,y:ST.y0-s.h-26};ST.hand=hh;
+    g.save();g.strokeStyle="rgba(255,255,255,.55)";g.lineWidth=2;g.setLineDash([3,4]);g.beginPath();
+    if(t.dim==="w"){g.moveTo(ST.xt+s.w,hh.y);g.lineTo(hh.x-13,hh.y);}else{g.moveTo(hh.x,ST.y0-s.h);g.lineTo(hh.x,hh.y+13);}g.stroke();g.restore();
+    g.save();g.shadowColor="rgba(255,255,255,.8)";g.shadowBlur=14;g.fillStyle="#fff";g.beginPath();g.arc(hh.x,hh.y,13,0,Math.PI*2);g.fill();g.restore();
+    g.fillStyle=ROD;g.beginPath();g.arc(hh.x,hh.y,5.5,0,Math.PI*2);g.fill();
     g.strokeStyle="#fff";g.lineWidth=2;g.beginPath();
-    if(t.dim==="h"){g.moveTo(hx,hy-24);g.lineTo(hx-5,hy-18);g.moveTo(hx,hy-24);g.lineTo(hx+5,hy-18);g.moveTo(hx,hy+24);g.lineTo(hx-5,hy+18);g.moveTo(hx,hy+24);g.lineTo(hx+5,hy+18);}
-    else{g.moveTo(hx+24,hy);g.lineTo(hx+18,hy-5);g.moveTo(hx+24,hy);g.lineTo(hx+18,hy+5);g.moveTo(hx-24,hy);g.lineTo(hx-18,hy-5);g.moveTo(hx-24,hy);g.lineTo(hx-18,hy+5);}
+    if(t.dim==="h"){g.moveTo(hh.x,hh.y-24);g.lineTo(hh.x-5,hh.y-18);g.moveTo(hh.x,hh.y-24);g.lineTo(hh.x+5,hh.y-18);g.moveTo(hh.x,hh.y+24);g.lineTo(hh.x-5,hh.y+18);g.moveTo(hh.x,hh.y+24);g.lineTo(hh.x+5,hh.y+18);}
+    else{g.moveTo(hh.x+24,hh.y);g.lineTo(hh.x+18,hh.y-5);g.moveTo(hh.x+24,hh.y);g.lineTo(hh.x+18,hh.y+5);g.moveTo(hh.x-24,hh.y);g.lineTo(hh.x-18,hh.y-5);g.moveTo(hh.x-24,hh.y);g.lineTo(hh.x-18,hh.y+5);}
     g.stroke();}}
 function etikett(txt,x,y,col){const g=cx;g.font='700 14px "Baloo 2",system-ui,sans-serif';g.fillStyle=col;g.textBaseline="alphabetic";
   let t=txt;const mw=Math.max(80,W*.46);while(g.measureText(t).width>mw&&t.length>6)t=t.slice(0,-2);if(t!==txt)t=t.trim()+"…";g.fillText(t,x,y);}
@@ -327,7 +329,10 @@ function confetti(){if(reduced())return;const c=$("fx"),x=c.getContext("2d");c.h
 /* ---------- Start ---------- */
 cv=$("sc");cx=cv.getContext("2d");
 let drar=false;
-cv.addEventListener("pointerdown",e=>{if(!ST||ST.fas!=="gissa")return;drar=true;cv.setPointerCapture(e.pointerId);fraPekare(e);rita();});
+cv.addEventListener("pointerdown",e=>{if(!ST||ST.fas!=="gissa")return;drar=true;cv.setPointerCapture(e.pointerId);
+  const b=cv.getBoundingClientRect(),x=e.clientX-b.left,y=e.clientY-b.top,h=ST.hand;ST.off=0;
+  if(h&&Math.hypot(x-h.x,y-h.y)<34){const px0=pxAv(ST.f);ST.off=Math.max(0,(ST.t.dim==="h"?ST.y0-y:x-ST.xt)-px0);}
+  fraPekare(e);rita();});
 cv.addEventListener("pointermove",e=>{if(drar&&ST&&ST.fas==="gissa"){fraPekare(e);rita();}});
 const upp=()=>{drar=false;};cv.addEventListener("pointerup",upp);cv.addEventListener("pointercancel",upp);
 $("sl").addEventListener("input",()=>{if(!ST||ST.fas!=="gissa")return;setF(Math.exp(LOGMIN+(+$("sl").value/1000)*(LOGMAX-LOGMIN)));rita();});
