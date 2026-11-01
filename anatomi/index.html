@@ -75,45 +75,53 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;bac
 .rbar button span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rbar button.on{color:#fff;border-color:var(--acc);box-shadow:0 0 14px -4px var(--acc)}
 .rctl{display:flex;gap:6px;margin-top:9px;align-items:center}.rctl button{border:1px solid var(--line);background:rgba(9,24,40,.7);color:#d3ecf6;border-radius:10px;padding:7px 12px;font:inherit;font-size:.82rem;cursor:pointer;min-width:42px}.rctl button:hover{border-color:var(--acc);color:#fff}
 .rctl .rxb{margin-left:auto;letter-spacing:.06em;text-transform:uppercase;font-size:.7rem;font-weight:600}
-body.resa .reg,body.resa .hint,body.resa .zm,body.resa .lag,body.resa #kort,body.resa #lin{display:none!important}
+body.resa #pills,body.resa .resor,body.resa .reg,body.resa .hint,body.resa .zm,body.resa .lag,body.resa #dock,body.resa #kort,body.resa #lin{display:none!important}
 @media(max-width:760px){.rctl button{padding:7px 9px;min-width:36px}.rctl .rxb{font-size:.62rem;padding:7px 8px}.resa{bottom:10px;padding:12px 12px 10px}.resa p{font-size:.82rem;min-height:0}.rbar button{font-size:0}.rbar button span{display:none}.rbar button{height:22px}}
 
+@media(min-width:761px){.resor{top:auto;bottom:104px;left:16px}.resor .rh{display:block;color:var(--mut);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;margin:0 2px 2px}.resor button{min-width:210px}.resor button small{display:block;color:var(--mut);font-size:.68rem;letter-spacing:.02em;text-transform:none;font-weight:500}}
 /* mobil: allt ligger bakom en knapp "Lager" som viks ut uppåt, en knapp per rad */
 #dock{display:contents}
-#menyb{display:none}
+#menyb,#resb,#pills{display:none}
 @media(max-width:760px){
 #dock{position:fixed;left:12px;bottom:118px;right:12px;z-index:5;display:flex;flex-direction:column;align-items:flex-start;gap:6px;pointer-events:none}
-body.open #dock{pointer-events:auto}
+body.open #dock,body.openr #dock{pointer-events:auto}
+#dock .resor{position:absolute;left:0;bottom:0;order:0}
+#dock .resor .rh{display:none}
+#dock .resor button{min-width:210px}
+#dock .resor button small{display:block;color:var(--mut);font-size:.66rem;letter-spacing:.04em;text-transform:none;font-weight:500}
 #dock .lag,#dock .kal{position:static;transform:none;left:auto;right:auto;top:auto;bottom:auto;max-width:none;width:auto}
 #reg{position:fixed;left:12px;right:12px;bottom:12px;transform:none;max-width:none;z-index:6}
 #dock .lag{order:2;flex-direction:column;flex-wrap:nowrap;gap:6px;overflow:visible}
-#dock .lag button{min-width:176px;padding:8px 14px;font-size:.78rem}
+#dock #lag button{min-width:176px;padding:8px 14px;font-size:.78rem}
 #dock .kal{order:3;padding:0;text-align:left;max-width:calc(100% - 58px)}
-#dock .lag button,#dock .kal{opacity:0;transform:translateY(18px) scale(.94);transition:opacity .26s ease,transform .34s cubic-bezier(.2,.9,.3,1.15);transition-delay:0s}
-body.open #dock .lag button,body.open #dock .kal{opacity:1;transform:none}
-body.open #dock .lag button:nth-child(7){transition-delay:.02s}
-body.open #dock .lag button:nth-child(6){transition-delay:.06s}
-body.open #dock .lag button:nth-child(5){transition-delay:.10s}
-body.open #dock .lag button:nth-child(4){transition-delay:.14s}
-body.open #dock .lag button:nth-child(3){transition-delay:.18s}
-body.open #dock .lag button:nth-child(2){transition-delay:.22s}
-body.open #dock .lag button:nth-child(1){transition-delay:.26s}
+#dock .lag button,#dock .kal{pointer-events:none;opacity:0;transform:translateY(18px) scale(.94);transition:opacity .26s ease,transform .34s cubic-bezier(.2,.9,.3,1.15);transition-delay:0s}
+body.open #dock #lag button,body.openr #dock #resor button,body.open #dock .kal{opacity:1;transform:none;pointer-events:auto}
+body.openr #dock #resor button:nth-child(3){transition-delay:.02s}
+body.openr #dock #resor button:nth-child(2){transition-delay:.09s}
+body.open #dock #lag button:nth-child(7){transition-delay:.02s}
+body.open #dock #lag button:nth-child(6){transition-delay:.06s}
+body.open #dock #lag button:nth-child(5){transition-delay:.10s}
+body.open #dock #lag button:nth-child(4){transition-delay:.14s}
+body.open #dock #lag button:nth-child(3){transition-delay:.18s}
+body.open #dock #lag button:nth-child(2){transition-delay:.22s}
+body.open #dock #lag button:nth-child(1){transition-delay:.26s}
 body.open #dock .kal{transition-delay:.30s}
 .zm{bottom:66px;right:12px}
-#menyb{bottom:64px}
-#menyb{display:flex;align-items:center;gap:8px;position:fixed;left:12px;bottom:64px;z-index:7;height:46px;padding:0 20px;border-radius:99px;border:1px solid var(--line);background:rgba(8,20,36,.78);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:var(--ink);font:inherit;font-size:.8rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.06)}
-#menyb b{color:var(--acc);font-weight:800}
-#menyb i{font-style:normal;display:inline-block;transition:transform .34s cubic-bezier(.2,.9,.3,1.15)}
-body.open #menyb i{transform:rotate(180deg)}
-body.open #menyb{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc),0 0 22px -4px var(--acc)}
-#menyb:active{transform:scale(.96)}
+#pills{display:flex;gap:8px;position:fixed;left:12px;bottom:64px;z-index:7}
+#menyb,#resb{display:flex;align-items:center;gap:8px;height:46px;padding:0 18px;border-radius:99px;border:1px solid var(--line);background:rgba(8,20,36,.78);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:var(--ink);font:inherit;font-size:.8rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.06)}
+#menyb b,#resb b{color:var(--acc);font-weight:800}
+#menyb i,#resb i{font-style:normal;display:inline-block;transition:transform .34s cubic-bezier(.2,.9,.3,1.15)}
+body.open #menyb i,body.openr #resb i{transform:rotate(180deg)}
+body.open #menyb,body.openr #resb{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc),0 0 22px -4px var(--acc)}
+#menyb:active,#resb:active{transform:scale(.96)}
 }
 @media(prefers-reduced-motion:reduce){#dock .lag button,#dock .kal,#menyb i{transition:none}}
 </style></head><body>
 <canvas id="c"></canvas>
 <div class="top"><a href="../fler/">← Fler ämnen</a><h1>Människokroppen</h1></div>
-<button id="menyb" aria-expanded="false" aria-controls="dock" aria-label="Visa lager och områden"><i>▴</i> Lager <b id="menyn">0</b></button>
+<div id="pills"><button id="menyb" aria-expanded="false" aria-controls="dock" aria-label="Visa lager"><i>▴</i> Lager <b id="menyn">0</b></button><button id="resb" aria-expanded="false" aria-controls="resor" aria-label="Visa resor"><i>▴</i> Resor <b>2</b></button></div>
 <div id="dock"><div class="lag" id="lag"></div>
+<div class="lag resor" id="resor"><small class="rh">Resor genom kroppen</small><button data-resa="mat" style="--c:#f0b24a"><i></i>🍽 Matens resa<small>Från munnen till ändtarmen</small></button><button data-resa="syre" style="--c:#4ac8ff"><i></i>🫁 Syrets resa<small>Andning, hjärta och blod</small></button></div>
 <div class="kal">Modeller: Z-Anatomy (CC BY-SA 4.0) · BodyParts3D, Database Center for Life Science (CC BY-SA 2.1 Japan) · bearbetade och förenklade</div></div>
 <div class="reg" id="reg"></div>
 <div class="zm"><button id="zin" aria-label="Zooma in">+</button><button id="zut" aria-label="Zooma ut">−</button></div>
@@ -134,7 +142,7 @@ import * as THREE from "three";
 import {OrbitControls} from "three/addons/controls/OrbitControls.js";
 import {GLTFLoader} from "three/addons/loaders/GLTFLoader.js";
 import {DRACOLoader} from "three/addons/loaders/DRACOLoader.js";
-import {initResa} from "./resa.js?v=2";
+import {initResa} from "./resa.js?v=3";
 const SYS=[
  {id:"hud",namn:"Huden",c:"#e9b99a",pa:false},
  {id:"skelett",namn:"Skelettet",c:"#d9cfb8",pa:true},
@@ -240,15 +248,15 @@ function linUpd(){const ok=AN&&SO&&!kortEl.hidden&&grp[SO.userData.s].visible&&!
 let _t0=performance.now();
 function loop(){requestAnimationFrame(loop);const _n=performance.now(),_dt=(_n-_t0)/1000;_t0=_n;flyStep();RESA.frame(_dt);ctl.update();linUpd();R.render(S,cam);}
 const RESA=initResa({THREE,S,cam,ctl,grp,all,hudUpd,flyHome:()=>{if(HEL)flyTo(HEL.t,HEL.d);}});
-const rgo=document.createElement('button');rgo.className='rgo';rgo.textContent='🍽 Matens resa';rgo.onclick=()=>RESA.start();document.getElementById('reg').appendChild(rgo);
+document.querySelectorAll('#resor [data-resa]').forEach(b=>b.onclick=()=>{document.body.classList.remove('openr');RESA.start(b.dataset.resa);});
 las().then(loop);
 window.__a={S,cam,ctl,grp,all};
 </script><script>
-(function(){const b=document.getElementById("menyb");if(!b)return;const n=document.getElementById("menyn"),lag=document.getElementById("lag");
+(function(){const b=document.getElementById("menyb"),r=document.getElementById("resb");if(!b)return;const n=document.getElementById("menyn"),lag=document.getElementById("lag");
 function cnt(){if(n)n.textContent=lag?lag.querySelectorAll('button[aria-pressed="true"]').length:0;}
-function set(o){document.body.classList.toggle("open",o);b.setAttribute("aria-expanded",o?"true":"false");try{localStorage.setItem("pluggparken-anatomi-open",o?"1":"0")}catch(e){}}
+function set(w,o){document.body.classList.toggle("open",w==="l"&&o);document.body.classList.toggle("openr",w==="r"&&o);b.setAttribute("aria-expanded",w==="l"&&o?"true":"false");r.setAttribute("aria-expanded",w==="r"&&o?"true":"false");try{localStorage.setItem("pluggparken-anatomi-open",w==="l"&&o?"1":"0")}catch(e){}}
 let o0=false;try{o0=localStorage.getItem("pluggparken-anatomi-open")==="1"}catch(e){}
-set(o0);cnt();if(lag)new MutationObserver(cnt).observe(lag,{attributes:true,childList:true,subtree:true,attributeFilter:["aria-pressed"]});
-b.onclick=()=>set(!document.body.classList.contains("open"));})();
+set("l",o0);cnt();if(lag)new MutationObserver(cnt).observe(lag,{attributes:true,childList:true,subtree:true,attributeFilter:["aria-pressed"]});
+b.onclick=()=>set("l",!document.body.classList.contains("open"));r.onclick=()=>set("r",!document.body.classList.contains("openr"));})();
 </script>
 </body></html>
