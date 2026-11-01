@@ -82,15 +82,15 @@ body.resa .reg,body.resa .hint,body.resa .zm,body.resa .lag,body.resa #kort,body
 #dock{display:contents}
 #menyb{display:none}
 @media(max-width:760px){
-#dock{position:fixed;left:12px;bottom:66px;right:12px;z-index:5;display:flex;flex-direction:column;align-items:flex-start;gap:6px;pointer-events:none}
+#dock{position:fixed;left:12px;bottom:118px;right:12px;z-index:5;display:flex;flex-direction:column;align-items:flex-start;gap:6px;pointer-events:none}
 body.open #dock{pointer-events:auto}
-#dock .lag,#dock .reg,#dock .kal{position:static;transform:none;left:auto;right:auto;top:auto;bottom:auto;max-width:none;width:auto}
-#dock .reg{order:1;padding:2px;max-width:100%}
+#dock .lag,#dock .kal{position:static;transform:none;left:auto;right:auto;top:auto;bottom:auto;max-width:none;width:auto}
+#reg{position:fixed;left:12px;right:12px;bottom:12px;transform:none;max-width:none;z-index:6}
 #dock .lag{order:2;flex-direction:column;flex-wrap:nowrap;gap:6px;overflow:visible}
 #dock .lag button{min-width:176px;padding:8px 14px;font-size:.78rem}
 #dock .kal{order:3;padding:0;text-align:left;max-width:calc(100% - 58px)}
-#dock .lag button,#dock .reg,#dock .kal{opacity:0;transform:translateY(18px) scale(.94);transition:opacity .26s ease,transform .34s cubic-bezier(.2,.9,.3,1.15);transition-delay:0s}
-body.open #dock .lag button,body.open #dock .reg,body.open #dock .kal{opacity:1;transform:none}
+#dock .lag button,#dock .kal{opacity:0;transform:translateY(18px) scale(.94);transition:opacity .26s ease,transform .34s cubic-bezier(.2,.9,.3,1.15);transition-delay:0s}
+body.open #dock .lag button,body.open #dock .kal{opacity:1;transform:none}
 body.open #dock .lag button:nth-child(7){transition-delay:.02s}
 body.open #dock .lag button:nth-child(6){transition-delay:.06s}
 body.open #dock .lag button:nth-child(5){transition-delay:.10s}
@@ -98,23 +98,24 @@ body.open #dock .lag button:nth-child(4){transition-delay:.14s}
 body.open #dock .lag button:nth-child(3){transition-delay:.18s}
 body.open #dock .lag button:nth-child(2){transition-delay:.22s}
 body.open #dock .lag button:nth-child(1){transition-delay:.26s}
-body.open #dock .reg{transition-delay:.30s}
-body.open #dock .kal{transition-delay:.34s}
+body.open #dock .kal{transition-delay:.30s}
 .zm{bottom:66px;right:12px}
-#menyb{display:flex;align-items:center;gap:8px;position:fixed;left:12px;bottom:12px;z-index:7;height:46px;padding:0 20px;border-radius:99px;border:1px solid var(--line);background:rgba(8,20,36,.78);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:var(--ink);font:inherit;font-size:.8rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.06)}
+#menyb{bottom:64px}
+#menyb{display:flex;align-items:center;gap:8px;position:fixed;left:12px;bottom:64px;z-index:7;height:46px;padding:0 20px;border-radius:99px;border:1px solid var(--line);background:rgba(8,20,36,.78);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:var(--ink);font:inherit;font-size:.8rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.06)}
 #menyb b{color:var(--acc);font-weight:800}
 #menyb i{font-style:normal;display:inline-block;transition:transform .34s cubic-bezier(.2,.9,.3,1.15)}
 body.open #menyb i{transform:rotate(180deg)}
 body.open #menyb{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc),0 0 22px -4px var(--acc)}
 #menyb:active{transform:scale(.96)}
 }
-@media(prefers-reduced-motion:reduce){#dock .lag button,#dock .reg,#dock .kal,#menyb i{transition:none}}
+@media(prefers-reduced-motion:reduce){#dock .lag button,#dock .kal,#menyb i{transition:none}}
 </style></head><body>
 <canvas id="c"></canvas>
 <div class="top"><a href="../fler/">← Fler ämnen</a><h1>Människokroppen</h1></div>
 <button id="menyb" aria-expanded="false" aria-controls="dock" aria-label="Visa lager och områden"><i>▴</i> Lager <b id="menyn">0</b></button>
 <div id="dock"><div class="lag" id="lag"></div>
-<div class="reg" id="reg"></div><div class="kal">Modeller: Z-Anatomy (CC BY-SA 4.0) · BodyParts3D, Database Center for Life Science (CC BY-SA 2.1 Japan) · bearbetade och förenklade</div></div>
+<div class="kal">Modeller: Z-Anatomy (CC BY-SA 4.0) · BodyParts3D, Database Center for Life Science (CC BY-SA 2.1 Japan) · bearbetade och förenklade</div></div>
+<div class="reg" id="reg"></div>
 <div class="zm"><button id="zin" aria-label="Zooma in">+</button><button id="zut" aria-label="Zooma ut">−</button></div>
 <div class="resa" id="resa" hidden>
  <div class="rtop"><span class="rn" id="rN"></span><b id="rT"></b><span class="rtid" id="rTid"></span></div>
