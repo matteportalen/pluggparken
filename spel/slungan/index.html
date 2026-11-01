@@ -345,14 +345,16 @@ function resize(){if(!G)return;dpr=Math.min(2,window.devicePixelRatio||1);cw=cv.
 addEventListener("resize",resize);
 const X=x=>(x-cam.x)*S,Y=y=>GY-y*S;
 function baseCam(){const s=view.sg;if(view.fits||cw/s>=view.span)return{s,x:G.xMin-(cw/s-view.span)/2};return{s,x:-.2*cw/s};}
+function panLim(){const b=baseCam(),vis=cw/b.s;return[b.x,Math.max(b.x,G.xMax-vis)];}
 function camTarget(g){
+  if(g.manual&&g.state==="aim"&&!g.ov){const b=baseCam(),l=panLim();return{s:b.s,x:Math.max(l[0],Math.min(l[1],g.panX))};}
   if(g.ov){const s=view.sfit;return{s,x:g.xMin-(cw/s-view.span)/2};}
   const b=baseCam(),s=b.s,vis=cw/s,maxX=Math.max(b.x,g.xMax-vis);
   if(g.state==="aim"&&!g.introDone&&!view.fits){const t=g.t,far=maxX,e=u=>u*u*(3-2*u);
     if(t<.6)return b;if(t<1.9)return{s,x:b.x+(far-b.x)*e((t-.6)/1.3)};if(t<2.9)return{s,x:far};if(t<4.2)return{s,x:far+(b.x-far)*e((t-2.9)/1.3)};g.introDone=true;return b;}
   if((g.state==="fly"||g.state==="settle")&&g.lastX!=null&&!view.fits){return{s,x:Math.max(b.x,Math.min(maxX,g.lastX-.3*vis))};}
   return b;}
-function camUpdate(g,dt){const t=camTarget(g),k=1-Math.exp(-(g.ov?6:4.2)*dt);cam.s+=(t.s-cam.s)*k;cam.x+=(t.x-cam.x)*k;S=cam.s;}
+function camUpdate(g,dt){const t=camTarget(g),k=1-Math.exp(-(g.ov?6:g.manual?16:4.2)*dt);cam.s+=(t.s-cam.s)*k;cam.x+=(t.x-cam.x)*k;S=cam.s;}
 
 async function startLevel(n){
   stopGame();const lv=LV[n-1];if(!lv)return;data.lvl=n;save();show("game");$("lname").innerHTML=`${WORLDS[lv.w].icon} ${lv.boss?"👑 ":""}${lv.name}<small>Bana ${n}</small>`;
@@ -360,6 +362,7 @@ async function startLevel(n){
   loadPet();G=build(lv);G.n=n;cam.init=false;$("pause").hidden=true;$("lose").hidden=true;$("say").hidden=true;$("tipb").hidden=lv.help>=2;$("ovb").classList.remove("on");$("tipb").classList.remove("on");$("tipb").textContent="💡 Hjälp";
   settle(G,150);G.slimes.forEach(s=>{s.cool=0;s.y0=-s.position.y/PM;});resize();ammoUI();shotsUI();
   const first=[lv.hint,lv.lab?"lab_"+lv.lab:null].find(h=>h&&HINTS[h]&&!data.sett[h]);if(first){say(HINTS[first],7000);data.sett[first]=1;save();}
+  if(!view.fits&&!data.sett.pan){data.sett.pan=1;save();const gg=G;setTimeout(()=>{if(G===gg&&!gg.paused)say("Dra i bakgrunden (eller använd pilarna) för att flytta runt i banan.",5000);},4800);}
   $("snd").textContent=window.Ljud&&Ljud.on?"🔊":"🔇";
   last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop);}
 function stopGame(){cancelAnimationFrame(raf);if(G){G.over=true;try{G.M.World.clear(G.eng.world);G.M.Engine.clear(G.eng);}catch(e){}}G=null;}
@@ -380,13 +383,20 @@ function aimFromPtr(px,py){const [ax,ay]=pouchScr();let dx=ax-px,dy=py-ay;const 
 let ptr=null;function g_intro(){if(G)G.introDone=true;}
 function ptrXY(e){const r=cv.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top];}
 cv.addEventListener("pointerdown",e=>{if(!G||G.paused||G.over||G.state!=="aim")return;const [x,y]=ptrXY(e),[ax,ay]=pouchScr();
-  if(Math.hypot(x-ax,y-ay)<Math.max(62,S*2.6)){g_intro();ptr=e.pointerId;try{cv.setPointerCapture(e.pointerId);}catch(err){}G.aim=aimFromPtr(x,y);e.preventDefault();}});
+  if(Math.hypot(x-ax,y-ay)<Math.max(62,S*2.6)){g_intro();ptr=e.pointerId;try{cv.setPointerCapture(e.pointerId);}catch(err){}G.aim=aimFromPtr(x,y);e.preventDefault();}
+  else if(!view.fits&&!G.ov&&pan===null){g_intro();pan={id:e.pointerId,x0:x,cx0:cam.x};G.manual=true;G.panX=cam.x;try{cv.setPointerCapture(e.pointerId);}catch(err){}cv.style.cursor="grabbing";}});
+let pan=null;
+function panTo(x){if(!G)return;const l=panLim();G.manual=true;G.panX=Math.max(l[0],Math.min(l[1],x));}
+cv.addEventListener("pointermove",e=>{if(!G||!pan||pan.id!==e.pointerId)return;const [x]=ptrXY(e);panTo(pan.cx0-(x-pan.x0)/cam.s);});
+function endPan(e){if(pan&&pan.id===e.pointerId){pan=null;cv.style.cursor="";}}
+cv.addEventListener("pointerup",endPan);cv.addEventListener("pointercancel",endPan);
+cv.addEventListener("wheel",e=>{if(!G||view.fits||G.ov||G.state!=="aim")return;e.preventDefault();g_intro();panTo((G.manual?G.panX:cam.x)+(Math.abs(e.deltaX)>Math.abs(e.deltaY)?e.deltaX:e.deltaY)/cam.s);},{passive:false});
 cv.addEventListener("pointermove",e=>{if(!G||ptr!==e.pointerId)return;const [x,y]=ptrXY(e);G.aim=aimFromPtr(x,y);});
 function endAim(e,fire){if(!G||ptr!==e.pointerId)return;ptr=null;const a=G.aim;G.aim=null;if(fire&&a&&a.n>=1)shoot(a.n,a.th);}
 cv.addEventListener("pointerup",e=>endAim(e,true));cv.addEventListener("pointercancel",e=>endAim(e,false));
 
 function shoot(n,th){const g=G;if(!g||g.state!=="aim")return;const k=g.sel;if(!(g.ammo[k]>0))return;
-  g.ammo[k]--;g.shots++;g.introDone=true;g.curK=k;g.curN=n;g.wallHit=false;g.land=null;g.msg=null;
+  g.ammo[k]--;g.shots++;g.introDone=true;g.manual=false;g.curK=k;g.curN=n;g.wallHit=false;g.land=null;g.msg=null;
   const D=n*k,v=calib(D,th);const b=g.M.Bodies.circle(AX,AY,BR,{density:.0055,restitution:.18,friction:.5,frictionAir:0,sleepThreshold:Infinity,label:"bird"});
   Object.assign(b,{kind:"bird",landed:false,age:0,col:kcol(k),k});b.deltaTime=DTS;setV(b,v*Math.cos(th),-v*Math.sin(th));g.M.Composite.add(g.eng.world,b);g.bird=b;g.state="fly";g.trail=[];
   g.pinX=null;snd("shoot");snd("whoosh");g.shake=Math.max(g.shake,2);
@@ -442,7 +452,7 @@ function setPause(v){if(!G||G.over||G.state==="won")return;G.paused=v;$("pause")
 $("pauseBtn").onclick=()=>setPause(true);$("resume").onclick=()=>setPause(false);
 $("snd").onclick=()=>{if(window.Ljud){Ljud.set(!Ljud.on);$("snd").textContent=Ljud.on?"🔊":"🔇";}};
 document.addEventListener("visibilitychange",()=>{if(document.hidden&&G&&!G.paused&&G.state!=="won")setPause(true);});
-addEventListener("keydown",e=>{if(!G)return;if(e.key==="Escape"){if(!$("pause").hidden)setPause(false);else setPause(true);}});
+addEventListener("keydown",e=>{if(!G)return;if((e.key==="ArrowRight"||e.key==="ArrowLeft")&&G.state==="aim"&&!view.fits&&!G.ov){g_intro();panTo((G.manual?G.panX:cam.x)+(e.key==="ArrowRight"?4:-4));return;}if(e.key==="Escape"){if(!$("pause").hidden)setPause(false);else setPause(true);}});
 
 function loop(now){raf=requestAnimationFrame(loop);if(!G)return;const dt=Math.min(.05,(now-last)/1000);last=now;if(!G.paused)step(G,dt);camUpdate(G,dt);draw(G);}
 
