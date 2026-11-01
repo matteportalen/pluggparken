@@ -138,6 +138,22 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
 @media(max-width:700px){.lcells{grid-template-columns:repeat(8,1fr)}.monster button{width:46px}}
 .melod{margin-top:16px;padding:14px 14px 10px;border-radius:12px;background:#17181c;box-shadow:inset 0 2px 8px rgba(0,0,0,.5)}
 .ackpan{margin-top:16px;padding:14px 14px 12px;border-radius:12px;background:#17181c;box-shadow:inset 0 2px 8px rgba(0,0,0,.5)}
+.rackpan{margin-top:16px;padding:14px 14px 14px;border-radius:12px;background:#17181c;box-shadow:inset 0 2px 8px rgba(0,0,0,.5);position:relative}
+.rackhead{display:flex;align-items:center;gap:12px 24px;flex-wrap:wrap;margin-right:50px}.rackhead>b{letter-spacing:.2em;font-size:.95rem}.rackhead small{color:var(--dim);font-size:.78rem;flex:1;min-width:150px}
+.rktabs{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}.rktabs button{border:0;font:inherit;cursor:pointer;padding:7px 12px;border-radius:999px;font-weight:800;font-size:.74rem;letter-spacing:.1em;background:#2b2d33;color:var(--ink);box-shadow:0 2px 0 #0b0a05}.rktabs button i{font-style:normal;margin-left:4px;padding:0 6px;border-radius:999px;background:#0c0a06;color:var(--lcd)}
+.rktabs button.on{background:linear-gradient(180deg,#ffc94d,#f2a707);color:#241a00}.rktabs button.on i{background:#241a00;color:#ffc94d}
+.rkslots{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+.ped{background:#0f1013;border-radius:12px;padding:10px 10px 12px;border-top:4px solid var(--pc,#3b3d44);box-shadow:inset 0 2px 8px rgba(0,0,0,.6),0 0 0 1px #2b2d33;min-height:132px;display:flex;flex-direction:column;gap:10px}
+.ped.av{opacity:.55}.ped.tom{border-top-color:#3b3d44;align-items:stretch;justify-content:center;background:transparent;box-shadow:none;border:2px dashed #3b3d44}
+.ped.tom button{flex:1;border:0;background:transparent;color:var(--dim);font:inherit;font-weight:800;letter-spacing:.06em;cursor:pointer;border-radius:10px;min-height:96px}.ped.tom button:hover,.ped.tom button.sel{color:var(--lcd);background:rgba(255,176,0,.07)}
+.pedh{display:flex;align-items:center;gap:8px}.pedh>b{flex:1;letter-spacing:.1em;font-size:.78rem;color:var(--pc)}
+.pon{width:16px;height:16px;border-radius:50%;border:0;padding:0;cursor:pointer;background:#3a1010;box-shadow:inset 0 1px 2px #000,0 0 0 2px #2b2d33}.pon[aria-pressed=true]{background:#ff4a3a;box-shadow:0 0 8px #ff4a3a,0 0 0 2px #2b2d33}
+.pmv{display:flex;gap:3px}.pmv button{border:0;cursor:pointer;width:26px;height:24px;border-radius:6px;background:#2b2d33;color:var(--ink);font-size:.7rem;padding:0}.pmv button:disabled{opacity:.3;cursor:default}.pmv button:hover:not(:disabled){background:#3b3d44}
+.pedk{display:flex;justify-content:space-around;gap:6px;flex-wrap:wrap}.pedk .fx{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:70px}.pedk small{font-size:.62rem;letter-spacing:.1em;color:var(--dim);text-align:center}.pedk small em{display:block;font-style:normal;color:var(--lcd);font-weight:800;margin-top:1px}
+.pedtape{border:0;font:inherit;cursor:pointer;padding:9px 10px;border-radius:8px;font-weight:800;font-size:.72rem;letter-spacing:.08em;background:linear-gradient(180deg,#555862,#3a3c43);box-shadow:0 3px 0 rgba(0,0,0,.55);color:var(--ink)}
+.rkpick{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;padding:10px;border-radius:10px;background:#0f1013;box-shadow:inset 0 2px 6px rgba(0,0,0,.6)}.rkpick[hidden]{display:none}.rkpick>b{width:100%;font-size:.74rem;letter-spacing:.1em;color:var(--dim)}
+.rkpick button{border:0;font:inherit;cursor:pointer;padding:8px 12px;border-radius:8px;font-weight:800;font-size:.74rem;letter-spacing:.08em;background:#23252b;color:var(--ink);border-left:4px solid var(--pc);box-shadow:0 2px 0 #0b0a05}.rkpick button:hover{background:#34363d}.rkpick .avbryt{border-left-color:#555;color:var(--dim)}
+@media(max-width:900px){.rkslots{grid-template-columns:repeat(2,1fr)}}@media(max-width:480px){.rkslots{grid-template-columns:1fr}.ped{min-height:0}.ped.tom button{min-height:48px}}
 .ackhead{display:flex;align-items:center;gap:12px 24px;flex-wrap:wrap}.ackhead>b{letter-spacing:.2em;font-size:.95rem}.ackhead small{color:var(--dim);font-size:.78rem;flex:1;min-width:150px}
 .ackrad{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
 .ackrad>*{text-align:center;cursor:pointer;border:0;font:inherit;padding:12px 4px;border-radius:10px;background:#0c0a06;color:var(--lcd);font-weight:800;font-size:1.15rem;letter-spacing:.04em;box-shadow:inset 0 3px 6px #000,0 0 0 2px #3b3d44;transition:background .12s,color .12s}
@@ -373,6 +389,7 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
   <div class="padwrap" id="padwrap"><div class="padlab"><b>PADS</b><span>Trummorna längst upp (tangenterna A S D F G H J K). Under dem ljud och röster att spela och lägga i takten.</span></div>
     <div class="pads" id="pads" aria-label="Trumpads: spela själv"></div>
     <div class="padpan" id="padpan"></div></div>
+  <div class="rackpan" id="rackpan"></div>
   <div class="under">
     <div class="knapprad">
       <button class="lilla" id="bDela" type="button">🔗 DELA</button>
@@ -409,11 +426,12 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
 const $=s=>document.querySelector(s);
 const SK=["#E5484D","#F2780C","#F2B707","#F3EBD6","#4cc3ff","#7fe08a","#c58bff","#ff7bd0"];
 /* ---------- ljudmotor ---------- */
+let RK=null;const rkIn=k=>RK&&RK[k]?RK[k].inn:null;
 let drumBus=null,melBus=null,loopBus=null,eqL=null,eqH=null,padIn=null,padFxn=null,ctx=null,master=null,comp=null,pg=null,bf=null,mg=null,muteAll=false,brus=null,SAMP=null,SAMPMETA=[];
 function startaLjud(){if(ctx){if(ctx.state==="suspended")ctx.resume();return}
   const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;ctx=new AC();
   master=ctx.createGain();comp=ctx.createDynamicsCompressor();comp.threshold.value=-14;comp.ratio.value=5;comp.attack.value=.003;comp.release.value=.2;
-  padFxn=fxBygg(PFX,ctx,master);padIn=padFxn.inn;bf=ctx.createBiquadFilter();bf.type="highpass";bf.frequency.value=10;bf.Q.value=.7;eqL=ctx.createBiquadFilter();eqL.type="lowshelf";eqL.frequency.value=140;eqH=ctx.createBiquadFilter();eqH.type="highshelf";eqH.frequency.value=5500;master.connect(eqL);eqL.connect(eqH);eqH.connect(bf);bf.connect(comp);pg=ctx.createGain();pg.connect(master);melBus=ctx.createGain();melBus.connect(pg);drumBus=ctx.createGain();drumBus.connect(master);loopBus=ctx.createGain();loopBus.connect(master);mixSatt();mg=ctx.createGain();comp.connect(mg);mg.connect(ctx.destination);setMaster();setMute();
+  bf=ctx.createBiquadFilter();bf.type="highpass";bf.frequency.value=10;bf.Q.value=.7;eqL=ctx.createBiquadFilter();eqL.type="lowshelf";eqL.frequency.value=140;eqH=ctx.createBiquadFilter();eqH.type="highshelf";eqH.frequency.value=5500;master.connect(eqL);eqL.connect(eqH);eqH.connect(bf);bf.connect(comp);pg=ctx.createGain();pg.connect(master);melBus=ctx.createGain();melBus.connect(pg);drumBus=ctx.createGain();drumBus.connect(master);loopBus=ctx.createGain();loopBus.connect(master);RK=rackerNya(ctx);rackKoppla(RK);padFxn=fxBygg(PFX,ctx,RK.pa.inn);padIn=padFxn.inn;rackSyncAll();crushLaddaMod(ctx).then(()=>{if(RK&&ctx.crushmod)rackSyncAll()});mixSatt();mg=ctx.createGain();comp.connect(mg);mg.connect(ctx.destination);setMaster();setMute();
   const n=ctx.sampleRate*1.2;brus=ctx.createBuffer(1,n,ctx.sampleRate);const d=brus.getChannelData(0);for(let i=0;i<n;i++)d[i]=Math.random()*2-1;
   hamtaSampel();padLadda()}
 function hamtaSampel(){if(SAMP||!ctx||hamtaSampel.p)return;hamtaSampel.p=1;
@@ -502,7 +520,7 @@ const SPAR=[
 ];
 function roster(i){const sp=SPAR[i],r=sp.syn.map(([n,f])=>({n,f,s:null}));if(SAMP)SAMPMETA.forEach((m,k)=>{if(sp.grp.includes(m.k))r.push({n:"♪ "+m.n.toUpperCase(),f:null,s:k})});return r}
 function spela(i,t,vel){if(!ctx)return;const tr=S.t[i];if(tr.mute&&!vel)return;const v=roster(i),r=v[tr.v%v.length]||v[0];
-  const g=ctx.createGain();g.gain.value=(tr.vol/100)*(vel||1)*(TRIM[r.f]||1);g.connect(drumBus||master);
+  const g=ctx.createGain();g.gain.value=(tr.vol/100)*(vel||1)*(TRIM[r.f]||1);g.connect(rkIn("tr")||drumBus||master);
   if(r.s!=null&&SAMP){const b=ctx.createBufferSource();b.buffer=SAMP[r.s];b.connect(g);b.start(t)}else{SYN[r.f](t,g)}}
 /* ---------- melodispår: bas och lead i låsta skalor ---------- */
 const MROSTER=[[["RUND BAS","sub"],["GNÄLLBAS","saw"],["ACID","acid"],["ELBAS","elbas"]],[["LEAD","lead"],["KEYS","keys"],["KLOCKA","bell"],["PAD","pad"],["SUPERSAW","ssaw"],["MELODICA","melodica"],["STRÄNGAR","gitarr"],["KALIMBA","kalimba"],["UKULELE","ukulele"]]];
@@ -520,7 +538,7 @@ const arpI=(m,j,n)=>{if(m===2)return Math.min(n-1,[0,1,2,1][j%4]);if(m===3)retur
 const ackNy=()=>({p:-1,v:1,k:1,b:true,vol:70,mute:false});
 let ackBar=0;
 const ACKT={pad:1.7,ssaw:.8,epiano:.8,organ:.42,strings:.65,gitarr:.65,kalimba:.7,ukulele:.7,melodica:.65};
-function ackNota(v,midi,t,dur,gm){if(!ctx||!master)return;const g=ctx.createGain();g.gain.value=Math.pow((S.ack.vol==null?70:S.ack.vol)/100,1.4)*.9*gm*(ACKT[v]||1);g.connect(melBus||pg||master);MV[v](440*Math.pow(2,(midi-69)/12),t,Math.max(.06,dur),g)}
+function ackNota(v,midi,t,dur,gm){if(!ctx||!master)return;const g=ctx.createGain();g.gain.value=Math.pow((S.ack.vol==null?70:S.ack.vol)/100,1.4)*.9*gm*(ACKT[v]||1);g.connect(rkIn("ak")||melBus||pg||master);MV[v](440*Math.pow(2,(midi-69)/12),t,Math.max(.06,dur),g)}
 function ackTick(k,t,bar){const a=S.ack;if(!a||a.p<0||a.mute||bar<0)return;const pr=ackPr(a);if(!pr)return;const ch=pr[1][bar%pr[1].length],pc=(S.key+ch[0])%12,iv=ACKI[ch[1]],kk=ACKK[a.k%ACKK.length],sl=stegTid(k);
   const bi=kk[4].indexOf(k);if(a.b&&bi>=0){const nx=bi+1<kk[4].length?kk[4][bi+1]:16;ackNota("sub",36+((pc-36)%12+12)%12,t,(nx-k)*sl*.9,1)}
   const j=kk[1].indexOf(k);if(j<0)return;const base=50+((pc-50)%12+12)%12,v=ACKV[a.v%ACKV.length][1],d=kk[2]*sl;
@@ -602,7 +620,7 @@ function bldStep(k){if(!bld)return false;const rel=steg-bld.s;
   return brk}
 function bldAvbryt(){bld=null;bldArm=0;if(bf&&ctx){bf.frequency.cancelScheduledValues(0);bf.frequency.setValueAtTime(10,ctx.currentTime)}bldUI(false)}
 function pumpDuck(t){if(!pg||!(S.pump>0))return;const a=S.pump/100*.85,q=pg.gain;q.cancelScheduledValues(t);q.setValueAtTime(1-a,t);q.linearRampToValueAtTime(1,t+.24)}
-function nota(m,r,t,dur,gm){if(!ctx||!master)return;const v=MROSTER[m][S.mv[m]%MROSTER[m].length][1],g=ctx.createGain();g.gain.value=Math.pow(S.mvol[m]/100,1.4)*.9*(gm||1);g.connect(melBus||pg||master);MV[v](mFreq(m,r),t,Math.max(.06,dur),g)}
+function nota(m,r,t,dur,gm){if(!ctx||!master)return;const v=MROSTER[m][S.mv[m]%MROSTER[m].length][1],g=ctx.createGain();g.gain.value=Math.pow(S.mvol[m]/100,1.4)*.9*(gm||1);g.connect(rkIn("me")||melBus||pg||master);MV[v](mFreq(m,r),t,Math.max(.06,dur),g)}
 function melTick(k,t,md){for(let m=0;m<2;m++){if(S.mmute[m])continue;const v=MROSTER[m][S.mv[m]%MROSTER[m].length][1],sl=stegTid(k),str=md[m];
   for(let L=0;L<2;L++){const o=L*16,c=str[o+k];if(c===undefined||c==="."||c==="_")continue;let n=1;
     while(k+n<16&&str[o+k+n]==="_")n++;
@@ -693,7 +711,11 @@ const MALLAR=[
  ["Sorgsen pop",86,0,["x.......x.x.....","....x.......x...","","x.x.x.x.x.x.x.x.","","","",""],[8,3,0,4,0,0,6,0],{p:5,k:3,v:0,sc:1}]
 ];
 function autoNy(){const l=()=>Array(16).fill(null);return{pump:l(),echo:[l(),l(),l(),l()],filt:[l(),l(),l(),l()]}}
-function tomt(){return{bpm:90,swing:0,master:80,kit:0,namn:"Tomt",t:SPAR.map((s,i)=>({s:".".repeat(16),v:0,vol:i<2?100:75,mute:false})),pat:Array.from({length:8},()=>SPAR.map(()=>".".repeat(16))),cur:0,song:Array(32).fill(-1),loop:true,songOn:false,pvol:80,smp:Array(16).fill(null),spat:Array.from({length:8},()=>Array(16).fill(null)),lsong:[0,1,2,3].map(()=>".".repeat(32)),bld:".".repeat(32),key:0,scale:0,mel:[".".repeat(16),".".repeat(16)],mpat:Array.from({length:8},()=>[".".repeat(16),".".repeat(16)]),mv:[0,0],mvol:[85,70],mmute:[false,false],pump:0,auto:autoNy(),autoS:autoSNy(),chord:[false,false],smpMute:false,mix:{dr:80,me:80,lo:80,eb:0,eh:0},ack:ackNy(),del:[]}}
+/* ---------- pedalrader: data (själva ljudet byggs längre ner) ---------- */
+const RKK=["tr","me","ak","pa","l0","l1","l2","l3"],RKN={tr:"TRUMMOR",me:"MELODI",ak:"ACKORD",pa:"PADS",l0:"LOOP 1",l1:"LOOP 2",l2:"LOOP 3",l3:"LOOP 4"};
+function rackTomt(){const r={};RKK.forEach(k=>{r[k]=[null,null,null,null]});return r}
+const harRack=()=>!!S.rack&&RKK.some(k=>(S.rack[k]||[]).some(x=>x&&x.t));
+function tomt(){return{bpm:90,swing:0,master:80,kit:0,namn:"Tomt",t:SPAR.map((s,i)=>({s:".".repeat(16),v:0,vol:i<2?100:75,mute:false})),pat:Array.from({length:8},()=>SPAR.map(()=>".".repeat(16))),cur:0,song:Array(32).fill(-1),loop:true,songOn:false,pvol:80,smp:Array(16).fill(null),spat:Array.from({length:8},()=>Array(16).fill(null)),lsong:[0,1,2,3].map(()=>".".repeat(32)),bld:".".repeat(32),key:0,scale:0,mel:[".".repeat(16),".".repeat(16)],mpat:Array.from({length:8},()=>[".".repeat(16),".".repeat(16)]),mv:[0,0],mvol:[85,70],mmute:[false,false],pump:0,auto:autoNy(),autoS:autoSNy(),chord:[false,false],smpMute:false,mix:{dr:80,me:80,lo:80,eb:0,eh:0},ack:ackNy(),del:[],rack:rackTomt()}}
 let S=tomt(),spelar=false,steg=0,nasta=0,tid=0,timer=0,kö=[];
 function mall(i){const m=MALLAR[i],old=S;S=tomt();behall(old);S.bpm=m[1];S.swing=m[2];S.namn=m[0];m[3].forEach((p,k)=>{S.t[k].s=(p||"").padEnd(16,".").slice(0,16)});if(m[4])m[4].forEach((v,k)=>{S.t[k].v=v});if(m[5]){S.ack=Object.assign(ackNy(),S.ack,{p:m[5].p,k:m[5].k,v:m[5].v,b:true});S.scale=m[5].sc;if(m[5].pump!=null)S.pump=m[5].pump}if(S.kit)kitSatt(S.kit)}
 function kitSatt(k){S.kit=k;S.t.forEach((t,i)=>{const sy=SPAR[i].syn.length;t.v=k&&SAMP?sy:0})}   // bara kvar för gamla länkar
@@ -708,14 +730,14 @@ const MONAM=["A","B","C","D","E","F","G","H"],MONK=["var(--r)","var(--o)","var(-
 const harMel=()=>S.mel.some(s=>/[0-9a-b]/.test(s))||S.mpat.some((d,p)=>p!==S.cur&&d.some(s=>/[0-9a-b]/.test(s)));
 const egnaId=i=>i>=128&&i<160,harEgna=()=>S.smp.some(x=>x&&egnaId(x.i))||S.spat.some(d=>d.some(x=>x&&egnaId(x.i)));
 const harSmp=()=>S.smp.some(x=>x)||S.spat.some((d,p)=>p!==S.cur&&d.some(x=>x));
-const harExt=()=>S.ack.p>=0||(S.del&&S.del.length>0)||S.cur>=4||S.song.slice(16).some(x=>x>=0)||S.lsong.some(r=>r.slice(16).includes("x"))||S.bld.includes("x")||[4,5,6,7].some(p=>S.pat[p].some(s=>s.includes("x"))||S.mpat[p].some(s=>/[0-9a-b]/.test(s))||S.spat[p].some(x=>x));
+const harExt=()=>harRack()||S.ack.p>=0||(S.del&&S.del.length>0)||S.cur>=4||S.song.slice(16).some(x=>x>=0)||S.lsong.some(r=>r.slice(16).includes("x"))||S.bld.includes("x")||[4,5,6,7].some(p=>S.pat[p].some(s=>s.includes("x"))||S.mpat[p].some(s=>/[0-9a-b]/.test(s))||S.spat[p].some(x=>x));
 const HEX32=s=>HEX(s.slice(0,16))+HEX(s.slice(16,32)),BIN32=h=>BIN(h.slice(0,4))+BIN(h.slice(4,8));
 const harLat=()=>S.ack.p>=0||(S.del&&S.del.length>0)||harExt()||harSmp()||S.song.some(x=>x>=0)||S.pat.some((d,p)=>p!==S.cur&&d.some(s=>s.includes("x")))||harMel()||S.lsong.some(r=>r.includes("x"));
 function kod(){const c0=S.cur,u0=undoing;if(c0>=4){undoing=true;monsterVal(0)}try{return kod0(c0)}finally{if(c0>=4){monsterVal(c0);undoing=u0}}}
 function kod0(c0){const b=kodBas();if(!harLat())return b;
   const pats=[0,1,2,3].map(p=>p===S.cur?"":(S.pat[p].every(s=>!s.includes("x"))?"-":S.pat[p].map(HEX).join("."))),sg=S.song.slice(0,16).map(x=>x<0?".":MONAM[x]).join("").replace(/\.+$/,"");
   let r=b+"~"+S.cur+"~"+pats.join(",")+"~"+sg+"~"+(S.loop?1:0)+(S.songOn?1:0)+"~"+[S.key,S.scale,S.mv[0],S.mv[1],S.mvol[0],S.mvol[1],(S.mmute[0]?1:0)+""+(S.mmute[1]?1:0)].join(".")+"~"+[0,1,2,3].map(p=>{const d=melData(p);return /[0-9a-b]/.test(d.join(""))?d.join(":"):"-"}).join(",")+"~"+S.lsong.map(l=>HEX(l.slice(0,16))).join(".")+"~"+S.pvol+"~"+[0,1,2,3].map(p=>smpData(p).map(x=>x&&padNy(x.i)?x.i+"."+x.p+"."+(x.r?1:0):"").join(",")).join("|");
-  if(harExt()||c0>=4){const X={c:c0,p:[4,5,6,7].map(p=>S.pat[p].every(s=>!s.includes("x"))?"-":S.pat[p].map(HEX).join(".")),m:[4,5,6,7].map(p=>{const d=melData(p);return /[0-9a-b]/.test(d.join(""))?d.join(":"):"-"}),s:[4,5,6,7].map(p=>smpData(p).map(x=>x&&padNy(x.i)?x.i+"."+x.p+"."+(x.r?1:0):"").join(",")).join("|"),g:S.song.slice(16).map(x=>x<0?".":MONAM[x]).join("").replace(/\.+$/,""),l:S.lsong.map(l=>HEX(l.slice(16,32))).join("."),b:HEX32(S.bld)};if(S.ack.p>=0){X.a=[S.ack.p,S.ack.v,S.ack.k,S.ack.b?1:0,S.ack.vol,S.ack.mute?1:0];if(S.ack.p===ACKEG&&S.ack.c)X.ac=S.ack.c.map(c=>c[0]+"."+c[1]).join(",")}if(S.del&&S.del.length)X.d=S.del.map(d=>d.join(".")).join(",");r+="~"+JSON.stringify(X)}
+  if(harExt()||c0>=4){const X={c:c0,p:[4,5,6,7].map(p=>S.pat[p].every(s=>!s.includes("x"))?"-":S.pat[p].map(HEX).join(".")),m:[4,5,6,7].map(p=>{const d=melData(p);return /[0-9a-b]/.test(d.join(""))?d.join(":"):"-"}),s:[4,5,6,7].map(p=>smpData(p).map(x=>x&&padNy(x.i)?x.i+"."+x.p+"."+(x.r?1:0):"").join(",")).join("|"),g:S.song.slice(16).map(x=>x<0?".":MONAM[x]).join("").replace(/\.+$/,""),l:S.lsong.map(l=>HEX(l.slice(16,32))).join("."),b:HEX32(S.bld)};if(S.ack.p>=0){X.a=[S.ack.p,S.ack.v,S.ack.k,S.ack.b?1:0,S.ack.vol,S.ack.mute?1:0];if(S.ack.p===ACKEG&&S.ack.c)X.ac=S.ack.c.map(c=>c[0]+"."+c[1]).join(",")}if(S.del&&S.del.length)X.d=S.del.map(d=>d.join(".")).join(",");if(harRack())X.rk=rackKod();r+="~"+JSON.stringify(X)}
   return r}
 function avlat(o,pp){if(pp.length<5)return;const cur=+pp[1];if(cur>=0&&cur<4)o.cur=cur;const pl=pp[2].split(",");
   for(let p=0;p<4;p++){if(p===o.cur)continue;const q=pl[p];if(!q||q==="-")continue;const h=q.split(".");if(h.length===8&&h.every(x=>/^[0-9a-f]{4}$/i.test(x)))o.pat[p]=h.map(BIN)}
@@ -731,6 +753,7 @@ function avlat(o,pp){if(pp.length<5)return;const cur=+pp[1];if(cur>=0&&cur<4)o.c
     if(typeof X.g==="string")for(let i=0;i<16;i++){const x=MONAM.indexOf(X.g[i]);o.song[16+i]=x>=0?x:-1}
     if(typeof X.l==="string")X.l.split(".").forEach((q,i)=>{if(i<4&&/^[0-9a-f]{4}$/i.test(q))o.lsong[i]=o.lsong[i].slice(0,16)+BIN(q)});
     if(typeof X.b==="string"&&/^[0-9a-f]{8}$/i.test(X.b))o.bld=BIN32(X.b);
+    if(typeof X.rk==="string")o.rack=rackAvkod(X.rk);
     if(typeof X.d==="string"){const dd=X.d.split(",").map(t=>t.split(".").map(Number)).filter(t=>t.length===3&&t.every(Number.isInteger)&&t[0]>=0&&t[1]>0&&t[0]+t[1]<=32&&t[2]>=0&&t[2]<DELN.length).slice(0,12);o.del=dd}
     if(Array.isArray(X.a)&&(X.a.length===5||X.a.length===6)){const q=X.a.map(Number),c=(v,a,b)=>Math.max(a,Math.min(b,Math.round(v)));if(q.every(isFinite))o.ack={p:c(q[0],0,ACKEG),v:c(q[1],0,ACKV.length-1),k:c(q[2],0,ACKK.length-1),b:!!q[3],vol:c(q[4],0,100),mute:!!q[5]};if(o.ack.p===ACKEG){const cc=typeof X.ac==="string"?X.ac.split(",").map(t=>t.split(".").map(Number)):[];if(cc.length===4&&cc.every(t=>t.length===2&&t.every(isFinite)))o.ack.c=cc.map(t=>[c(t[0],0,11),c(t[1],0,ACKQN.length-1)]);else o.ack.p=-1}}
     if(Number.isInteger(X.c)&&X.c>=4&&X.c<8){const n=X.c;o.pat[o.cur]=o.t.map(t=>t.s);o.mpat[o.cur]=o.mel.slice();o.spat[o.cur]=o.smp.slice();o.cur=n;o.t.forEach((t,i)=>t.s=o.pat[n][i]);o.mel=o.mpat[n].slice();o.smp=o.spat[n].slice()}
@@ -780,7 +803,7 @@ function visa0(){mixSatt();mixUpd.forEach(u=>u());document.querySelectorAll(".ra
     const kn=r.querySelector("[data-vol]");kn.dispatchEvent(new Event("uppd"));});
   document.querySelectorAll("[data-vol]").forEach((k,i)=>{const f=S.t[i].vol/100;k.style.setProperty("--p",(f*270)+"deg");k.querySelector(".kap").style.transform="rotate("+(-135+f*270)+"deg)"});
   sev($("#sevBpm"),S.bpm);$("#namnLcd").textContent=S.namn;
-  $("#selMall").value=MALLAR.findIndex(m=>m[0]===S.namn);kn.tempo&&kn.tempo();kn.swing&&kn.swing();kn.master&&kn.master();kn.pump&&kn.pump();latRita();melRita();ackRita();padRita()}
+  $("#selMall").value=MALLAR.findIndex(m=>m[0]===S.namn);kn.tempo&&kn.tempo();kn.swing&&kn.swing();kn.master&&kn.master();kn.pump&&kn.pump();latRita();melRita();ackRita();padRita();rackRita();rackSyncAll()}
 const kn={};
 function krok(t){$("#krok").innerHTML=t}
 function toast(t){const e=document.createElement("div");e.className="toast";e.textContent=t;document.body.appendChild(e);setTimeout(()=>e.remove(),2200)}
@@ -808,7 +831,7 @@ const songLen=()=>{let n=0;S.song.forEach((x,i)=>{if(x>=0)n=i+1});return n};
 const monsterData=p=>p===S.cur?S.t.map(t=>t.s):S.pat[p];
 const melData=p=>p===S.cur?S.mel:S.mpat[p];
 const smpData=p=>p===S.cur?S.smp:S.spat[p];
-function behall(o){if(!o||!o.pat)return;S.pat=o.pat;S.cur=o.cur;S.song=o.song;S.loop=o.loop;S.songOn=o.songOn;S.pvol=o.pvol;S.smp=o.smp;S.spat=o.spat;S.lsong=o.lsong;S.key=o.key;S.scale=o.scale;S.mel=o.mel;S.mpat=o.mpat;S.mv=o.mv;S.mvol=o.mvol;S.mmute=o.mmute;S.pump=o.pump||0;S.auto=o.auto||autoNy();S.autoS=o.autoS||autoSNy();S.mix=o.mix||{dr:80,me:80,lo:80,eb:0,eh:0};S.chord=o.chord||[false,false];S.smpMute=!!o.smpMute;S.ack=o.ack?Object.assign(ackNy(),o.ack):ackNy();S.del=o.del||[]}
+function behall(o){if(!o||!o.pat)return;S.pat=o.pat;S.cur=o.cur;S.song=o.song;S.loop=o.loop;S.songOn=o.songOn;S.pvol=o.pvol;S.smp=o.smp;S.spat=o.spat;S.lsong=o.lsong;S.key=o.key;S.scale=o.scale;S.mel=o.mel;S.mpat=o.mpat;S.mv=o.mv;S.mvol=o.mvol;S.mmute=o.mmute;S.pump=o.pump||0;S.auto=o.auto||autoNy();S.autoS=o.autoS||autoSNy();S.mix=o.mix||{dr:80,me:80,lo:80,eb:0,eh:0};S.chord=o.chord||[false,false];S.smpMute=!!o.smpMute;S.ack=o.ack?Object.assign(ackNy(),o.ack):ackNy();S.del=o.del||[];S.rack=o.rack||rackTomt()}
 function monsterVal(n){if(n===S.cur)return;S.pat[S.cur]=S.t.map(t=>t.s);S.mpat[S.cur]=S.mel.slice();S.spat[S.cur]=S.smp.slice();S.cur=n;S.t.forEach((t,i)=>t.s=S.pat[n][i]);S.mel=S.mpat[n].slice();S.smp=S.spat[n].slice();visa()}
 let kopLage=false;
 function latBygg(){const m=$("#monster");MONAM.forEach((n,p)=>{const b=document.createElement("button");b.type="button";b.dataset.p=p;b.style.setProperty("--k",MONK[p]);b.setAttribute("aria-label","Mönster "+n);b.innerHTML="<b>"+n+"</b><svg viewBox='0 0 32 21' class='mini' aria-hidden='true'></svg>";m.appendChild(b)});
@@ -862,6 +885,7 @@ function vikInit(){let st={};try{st=JSON.parse(localStorage.getItem("pluggparken
   mk("#melod","melodin",(c,b)=>c.querySelector(".melhead").appendChild(b));
   mk("#ackpan","ackorden",(c,b)=>c.querySelector(".ackhead").appendChild(b));
   mk("#padwrap","padsen",(c,b)=>c.querySelector(".padlab").appendChild(b));
+  mk("#rackpan","effekterna",(c,b)=>c.querySelector(".rackhead").appendChild(b));
   mk("#loopmaskin","loopstationen",(c,b)=>c.querySelector(".topp").appendChild(b))}
 function init(){
   const P=$("#pads");const TANG=["a","s","d","f","g","h","j","k"];
@@ -876,7 +900,7 @@ function init(){
   [["#kMdr","dr",0,100],["#kMme","me",0,100],["#kMlo","lo",0,100],["#kMeb","eb",-100,100],["#kMeh","eh",-100,100]].forEach(([id,k,mn,mx])=>mixUpd.push(knob($(id),{min:mn,max:mx,reset:k==="eb"||k==="eh"?0:80,val:()=>S.mix[k],set:v=>{S.mix[k]=v;mixSatt()}})));
   mixUpd.push(knob($("#kMpd"),{min:0,max:100,reset:80,val:()=>S.pvol,set:v=>{S.pvol=v}}));
   kn.master=knob($("#kMaster"),{min:0,max:100,reset:80,val:()=>S.master,set:v=>{S.master=v;setMaster()}});
-  latBygg();melBygg();ackBygg();padBygg();visa();minnenRita();lpBygg();lastSnap=snapS();histKnappar();vikInit();
+  latBygg();melBygg();ackBygg();padBygg();rackBygg();visa();minnenRita();lpBygg();lastSnap=snapS();histKnappar();vikInit();
 }
 
 /* ---------- loopstation: spela in eget ljud och loopa det i valt antal takter ---------- */
@@ -888,7 +912,7 @@ const barDur=()=>16*60/S.bpm/4;
 const harLoopar=()=>LP.some(l=>l.layers.length||l.rec);
 function las(){if(harLoopar()){toast("Tempot är låst medan det finns loopar. Radera dem först.");return true}return false}
 function klick(t,hog){if(!ctx)return;const g=ctx.createGain();g.connect(master);osc(t,"square",hog?1800:1200,0,.045,.35,g)}
-function lpGain(l){if(!l.gain){l.gain=ctx.createGain();l.gain.connect(loopBus||master)}l.gain.gain.value=l.mute?0:Math.pow(l.vol/100,1.5)*1.3;return l.gain}
+function lpGain(l){if(!l.gain){l.gain=ctx.createGain();l.gain.connect(rkIn("l"+l.i)||loopBus||master)}l.gain.gain.value=l.mute?0:Math.pow(l.vol/100,1.5)*1.3;return l.gain}
 const MIKNYCKEL="pluggparken-trummaskin-mic";
 let micSet={fix:true,dev:""},mikNod=null;try{Object.assign(micSet,JSON.parse(localStorage.getItem(MIKNYCKEL)||"{}"))}catch(e){}
 const micSpara=()=>{try{localStorage.setItem(MIKNYCKEL,JSON.stringify(micSet))}catch(e){}};
@@ -912,7 +936,7 @@ async function micStart(){if(mic)return true;startaLjud();if(!ctx)return false;
   micLista();
   $("#bMic").classList.add("on");$("#bMic").setAttribute("aria-pressed","true");micMat();return true}
 /* byter man mikrofon eller hörlurar kan webbläsaren tappa ljudutgången (tyst eller telefonljud): bygg om hela ljudmotorn */
-async function ljudOm(){liveStopp(true);const spelade=spelar,micVar=!!mic;stopp();micStopp();const gammal=ctx;ctx=null;master=comp=mg=null;
+async function ljudOm(){liveStopp(true);const spelade=spelar,micVar=!!mic;stopp();micStopp();const gammal=ctx;ctx=null;master=comp=mg=null;RK=null;
   LP.forEach(l=>{l.gain=l.gate=l.fxn=null;l.srcs=[];l.gv=undefined});
   try{gammal&&await Promise.race([gammal.close(),new Promise(r=>setTimeout(r,800))])}catch(e){}
   startaLjud();if(micVar)await micStart();if(spelade)start();lpVisa();toast("Ljudet är återställt")}
@@ -990,6 +1014,106 @@ function fxBygg(l,c,dest){const inn=c.createGain(),f=c.createBiquadFilter(),dry=
   const set=()=>{const x=l.fx;ds.gain.value=x.echo/100*.9;dl.delayTime.value=60/S.bpm*ETID[x.et];rs.gain.value=x.hall/100*.9;fls.gain.value=x.flang/100*1.05;const v=x.filt;
     if(Math.abs(v)<4){f.type="lowpass";f.frequency.value=22000;f.Q.value=.0001}else if(v<0){f.type="lowpass";f.frequency.value=22050*Math.pow(180/22050,-v/100);f.Q.value=1.2}else{f.type="highpass";f.frequency.value=20*Math.pow(7000/20,v/100);f.Q.value=1.2}};
   set();return{inn,set,ds,f}}
+/* ---------- PEDALRADER: effekter man kopplar på trummorna, melodin, ackorden, padsen och varje loop ---------- */
+const PED=[
+ {id:"echo",n:"ECHO",f:["TID","ÅTERK.","BLAND"],d:[50,45,40],c:"#4cc3ff"},
+ {id:"pp",n:"PING-PONG",f:["TID","ÅTERK.","BLAND"],d:[50,50,45],c:"#4cc3ff"},
+ {id:"hall",n:"HALL",f:["MJUK","FÖRDR.","BLAND"],d:[55,20,40],c:"#7fe08a"},
+ {id:"flang",n:"FLANGER",f:["FART","DJUP","BLAND"],d:[35,60,60],c:"#c58bff"},
+ {id:"phas",n:"PHASER",f:["FART","DJUP","BLAND"],d:[30,70,70],c:"#c58bff"},
+ {id:"kor",n:"CHORUS",f:["FART","DJUP","BLAND"],d:[30,55,55],c:"#c58bff"},
+ {id:"trem",n:"TREMOLO",f:["FART","DJUP","PANORERA"],d:[40,65,0],c:"#ff7bd0"},
+ {id:"filt",n:"FILTER",f:["FILTER","RESONANS"],d:[28,30],c:"#F2B707"},
+ {id:"eq",n:"EQ",f:["BAS","MELLAN","DISKANT"],d:[50,50,50],c:"#F2B707"},
+ {id:"dist",n:"DISTORSION",f:["DRIV","TON","NIVÅ"],d:[40,60,45],c:"#E5484D"},
+ {id:"crush",n:"BITCRUSHER",f:["BITAR","STEG","BLAND"],d:[45,40,100],c:"#F2780C"},
+ {id:"tape",n:"TAPE STOP",f:["LÄNGD"],d:[40],c:"#F2780C"}];
+const PEDI=Object.fromEntries(PED.map((q,i)=>[q.id,i])),PEDTID=["1/16","1/8","3/16","1/4"];
+const pedTid=v=>(v<25?1:v<50?2:v<75?3:4)*60/S.bpm/4;
+const pv=(a,v,c,f)=>{if(f||!c.currentTime)a.value=v;else a.setTargetAtTime(v,c.currentTime,.03)};
+const irOf=c=>c._ir||(c._ir=irSkapa(c)),lfoNy=(c,hz)=>{const o=c.createOscillator();o.frequency.value=hz;o.start();return o};
+const stopp0=o=>{try{o.stop()}catch(e){}};
+const CRUSH='class C extends AudioWorkletProcessor{static get parameterDescriptors(){return[{name:"step",defaultValue:1,minValue:1,maxValue:64}]}constructor(){super();this.h=[0,0];this.n=[0,0]}process(i,o,p){const a=i[0],b=o[0];if(!a||!a.length)return true;const s=p.step[0];for(let c=0;c<b.length;c++){const x=a[Math.min(c,a.length-1)],y=b[c];let h=this.h[c]||0,n=this.n[c]||0;for(let k=0;k<y.length;k++){n+=1;if(n>=s){n-=s;h=x[k]}y[k]=h}this.h[c]=h;this.n[c]=n}return true}}registerProcessor("pp-crush",C)';
+async function crushLaddaMod(c){if(c.crushmod!==undefined)return;c.crushmod=false;if(c.audioWorklet&&window.AudioWorkletNode){try{await c.audioWorklet.addModule(URL.createObjectURL(new Blob([CRUSH],{type:"text/javascript"})));c.crushmod=true}catch(e){}}}
+const KURV={};
+function distKurva(){if(KURV.d)return KURV.d;const n=2048,a=new Float32Array(n);for(let i=0;i<n;i++){const x=i/(n-1)*2-1;a[i]=Math.tanh(x*2.6)/Math.tanh(2.6)}return KURV.d=a}
+function crushKurva(b){if(KURV[b])return KURV[b];const n=8193,L=Math.pow(2,b-1),a=new Float32Array(n);for(let i=0;i<n;i++){const x=i/(n-1)*2-1;a[i]=Math.round(x*L)/L}return KURV[b]=a}
+const PEDB={
+ echo(c){const inn=c.createGain(),out=c.createGain(),dl=c.createDelay(2),fb=c.createGain(),w=c.createGain(),lp=c.createBiquadFilter();lp.type="lowpass";lp.frequency.value=5200;
+  inn.connect(out);inn.connect(dl);dl.connect(lp);lp.connect(w);w.connect(out);lp.connect(fb);fb.connect(dl);
+  return{inn,out,set:(p,f)=>{pv(dl.delayTime,pedTid(p[0]),c,f);pv(fb.gain,p[1]/100*.85,c,f);pv(w.gain,p[2]/100*.9,c,f)},kill(){}}},
+ pp(c){const inn=c.createGain(),out=c.createGain(),dL=c.createDelay(2),dR=c.createDelay(2),f1=c.createGain(),f2=c.createGain(),w=c.createGain(),pL=c.createStereoPanner(),pR=c.createStereoPanner();pL.pan.value=-1;pR.pan.value=1;
+  inn.connect(out);inn.connect(dL);dL.connect(pL);pL.connect(w);dL.connect(f1);f1.connect(dR);dR.connect(pR);pR.connect(w);dR.connect(f2);f2.connect(dL);w.connect(out);
+  return{inn,out,set:(p,f)=>{const t=pedTid(p[0]),fb=p[1]/100*.85;pv(dL.delayTime,t,c,f);pv(dR.delayTime,t,c,f);pv(f1.gain,fb,c,f);pv(f2.gain,fb,c,f);pv(w.gain,p[2]/100*.95,c,f)},kill(){}}},
+ hall(c){const inn=c.createGain(),out=c.createGain(),pre=c.createDelay(.25),lp=c.createBiquadFilter(),cv=c.createConvolver(),w=c.createGain();cv.buffer=irOf(c);lp.type="lowpass";
+  inn.connect(out);inn.connect(pre);pre.connect(lp);lp.connect(cv);cv.connect(w);w.connect(out);
+  return{inn,out,set:(p,f)=>{pv(lp.frequency,1500*Math.pow(8,p[0]/100),c,f);pv(pre.delayTime,p[1]/100*.12,c,f);pv(w.gain,p[2]/100*1.3,c,f)},kill(){}}},
+ flang(c){const inn=c.createGain(),out=c.createGain(),fd=c.createDelay(.05),fb=c.createGain(),w=c.createGain(),lf=lfoNy(c,.4),lg=c.createGain();fd.delayTime.value=.0045;fb.gain.value=.68;lf.connect(lg);lg.connect(fd.delayTime);
+  inn.connect(out);inn.connect(fd);fd.connect(w);w.connect(out);fd.connect(fb);fb.connect(fd);
+  return{inn,out,set:(p,f)=>{pv(lf.frequency,.1+p[0]/100*2.4,c,f);pv(lg.gain,.0004+p[1]/100*.0036,c,f);pv(w.gain,p[2]/100*.85,c,f)},kill(){stopp0(lf)}}},
+ phas(c){const inn=c.createGain(),out=c.createGain(),w=c.createGain(),lf=lfoNy(c,.4),lg=c.createGain();lf.connect(lg);
+  const aps=[0,1,2,3,4,5].map(()=>{const a=c.createBiquadFilter();a.type="allpass";a.Q.value=.9;a.frequency.value=900;lg.connect(a.detune);return a});
+  inn.connect(out);inn.connect(aps[0]);aps.forEach((a,i)=>{if(i)aps[i-1].connect(a)});aps[5].connect(w);w.connect(out);
+  return{inn,out,set:(p,f)=>{pv(lf.frequency,.08+p[0]/100*2.6,c,f);pv(lg.gain,200+p[1]/100*2400,c,f);pv(w.gain,p[2]/100*1.05,c,f)},kill(){stopp0(lf)}}},
+ kor(c){const inn=c.createGain(),out=c.createGain(),w=c.createGain(),l1=lfoNy(c,.3),l2=lfoNy(c,.37),g1=c.createGain(),g2=c.createGain(),d1=c.createDelay(.06),d2=c.createDelay(.06);d1.delayTime.value=.021;d2.delayTime.value=.029;
+  l1.connect(g1);g1.connect(d1.delayTime);l2.connect(g2);g2.connect(d2.delayTime);inn.connect(out);inn.connect(d1);inn.connect(d2);d1.connect(w);d2.connect(w);w.connect(out);
+  return{inn,out,set:(p,f)=>{const r=.2+p[0]/100*3.8,d=.0005+p[1]/100*.0035;pv(l1.frequency,r,c,f);pv(l2.frequency,r*1.23,c,f);pv(g1.gain,d,c,f);pv(g2.gain,d,c,f);pv(w.gain,p[2]/100*.8,c,f)},kill(){stopp0(l1);stopp0(l2)}}},
+ trem(c){const inn=c.createGain(),out=c.createGain(),ag=c.createGain(),pn=c.createStereoPanner(),lf=lfoNy(c,4),la=c.createGain(),lp=c.createGain();
+  inn.connect(ag);ag.connect(pn);pn.connect(out);lf.connect(la);la.connect(ag.gain);lf.connect(lp);lp.connect(pn.pan);
+  return{inn,out,set:(p,f)=>{const d=p[1]/100,s=p[2]/100;pv(lf.frequency,.4+p[0]/100*11.6,c,f);pv(ag.gain,1-d*(1-s)/2,c,f);pv(la.gain,d*(1-s)/2,c,f);pv(lp.gain,d*s,c,f)},kill(){stopp0(lf)}}},
+ filt(c){const b=c.createBiquadFilter();b.type="lowpass";b.frequency.value=22000;
+  return{inn:b,out:b,set:(p,f)=>{const v=p[0];if(v>=46&&v<=54){b.type="lowpass";pv(b.frequency,22000,c,f)}else if(v<46){b.type="lowpass";pv(b.frequency,22050*Math.pow(180/22050,(46-v)/46),c,f)}else{b.type="highpass";pv(b.frequency,20*Math.pow(7000/20,(v-54)/46),c,f)}pv(b.Q,.6+p[1]/100*10,c,f)},kill(){}}},
+ eq(c){const lo=c.createBiquadFilter(),mi=c.createBiquadFilter(),hi=c.createBiquadFilter();lo.type="lowshelf";lo.frequency.value=120;mi.type="peaking";mi.frequency.value=1000;mi.Q.value=.9;hi.type="highshelf";hi.frequency.value=5000;lo.connect(mi);mi.connect(hi);
+  return{inn:lo,out:hi,set:(p,f)=>{[lo,mi,hi].forEach((n,i)=>pv(n.gain,(p[i]-50)/50*12,c,f))},kill(){}}},
+ dist(c){const pre=c.createGain(),ws=c.createWaveShaper(),tone=c.createBiquadFilter(),lv=c.createGain();ws.curve=distKurva();ws.oversample="4x";tone.type="lowpass";pre.connect(ws);ws.connect(tone);tone.connect(lv);
+  return{inn:pre,out:lv,set:(p,f)=>{pv(pre.gain,1+p[0]/100*30,c,f);pv(tone.frequency,900*Math.pow(14000/900,p[1]/100),c,f);pv(lv.gain,.15+p[2]/100*.9,c,f)},kill(){}}},
+ crush(c){const inn=c.createGain(),out=c.createGain(),q=c.createWaveShaper(),dry=c.createGain(),w=c.createGain();let hold=null,lp=null;
+  if(c.crushmod===true){hold=new AudioWorkletNode(c,"pp-crush",{numberOfInputs:1,numberOfOutputs:1,outputChannelCount:[2]})}else{lp=c.createBiquadFilter();lp.type="lowpass"}
+  const rate=hold||lp;inn.connect(dry);dry.connect(out);inn.connect(q);q.connect(rate);rate.connect(w);w.connect(out);
+  return{inn,out,set:(p)=>{const bits=2+Math.round(p[0]/100*14);q.curve=bits>=13?null:crushKurva(bits);const st=1+p[1]/100*30;if(hold)hold.parameters.get("step").value=st;else lp.frequency.value=Math.max(500,c.sampleRate/2/st);const m=p[2]/100;dry.gain.value=1-m;w.gain.value=m},kill(){try{hold&&hold.disconnect()}catch(e){}}}},
+ tape(c){const inn=c.createGain(),out=c.createGain(),dl=c.createDelay(4),g=c.createGain();inn.connect(dl);dl.connect(g);g.connect(out);let T=1,st=false,t0=0,busy=0;
+  return{inn,out,set:(p)=>{T=.4+p[0]/100*2.4},kill(){},get stoppad(){return st},
+   trig(){const n=c.currentTime;if(n<busy)return;dl.delayTime.cancelScheduledValues(n);g.gain.cancelScheduledValues(n);
+    if(!st){st=true;t0=n;const a=new Float32Array(64);for(let i=0;i<64;i++){const u=i/63;a[i]=T*u*u/2}dl.delayTime.setValueCurveAtTime(a,n,T);g.gain.setValueAtTime(1,n);g.gain.setValueAtTime(1,n+T*.7);g.gain.linearRampToValueAtTime(0,n+T*.98);busy=n+.15}
+    else{st=false;const u=Math.min(1,(n-t0)/T),cur=T*u*u/2,gv=u<.7?1:Math.max(0,1-(u-.7)/.28);dl.delayTime.setValueAtTime(cur,n);dl.delayTime.linearRampToValueAtTime(0,n+.28);g.gain.setValueAtTime(gv,n);g.gain.linearRampToValueAtTime(1,n+.12);busy=n+.3}}}}};
+function rackNy(c){const inn=c.createGain(),out=c.createGain();inn.connect(out);const r={inn,out,key:"",nod:[],act:[],bygg:undefined,mal(d){out.connect(d)}};
+  r.sync=(data,first)=>{const act=(data||[]).filter(s=>s&&s.on&&PEDB[s.t]),key=act.map(s=>s.t).join(",");
+    if(key!==r.key||r.bygg!==c.crushmod){r.nod.forEach(n=>{try{n.out.disconnect();n.kill()}catch(e){}});r.nod=[];try{inn.disconnect()}catch(e){}
+      let prev=inn;act.forEach(s=>{const n=PEDB[s.t](c);prev.connect(n.inn);prev=n.out;r.nod.push(n)});prev.connect(out);r.key=key;r.bygg=c.crushmod;first=true}
+    act.forEach((s,i)=>r.nod[i].set(s.p,first));r.act=act};
+  return r}
+function rackerNya(c){const R={};RKK.forEach(k=>{R[k]=rackNy(c)});return R}
+function rackKoppla(R){R.tr.mal(drumBus);R.me.mal(melBus);R.ak.mal(melBus);R.pa.mal(master);[0,1,2,3].forEach(i=>R["l"+i].mal(loopBus))}
+const rackSyncKey=k=>{if(RK&&RK[k]&&S.rack)RK[k].sync(S.rack[k])};
+const rackSyncAll=()=>{RKK.forEach(rackSyncKey)};
+function rackNod(k,i){const d=S.rack[k]||[];let n=0;for(let j=0;j<i;j++)if(d[j]&&d[j].on&&PEDB[d[j].t])n++;return RK&&RK[k]?RK[k].nod[n]:null}
+function rackRena(x){const R=rackTomt();if(!x||typeof x!=="object")return R;RKK.forEach(k=>{const a=Array.isArray(x[k])?x[k].slice(0,4):[];a.forEach((s,i)=>{if(!s||typeof s!=="object"||!PEDB[s.t])return;const P=PED[PEDI[s.t]];R[k][i]={t:s.t,p:P.d.map((d,j)=>{const v=Array.isArray(s.p)?+s.p[j]:NaN;return isFinite(v)?Math.max(0,Math.min(100,Math.round(v))):d}),on:(s.on===0||s.on===false)?0:1}})});return R}
+function rackKod(){return RKK.map(k=>S.rack[k].map(s=>s&&PEDB[s.t]?[PEDI[s.t]].concat(s.p,[s.on?1:0]).join("."):"-").join(",")).join("|")}
+function rackAvkod(t){const R=rackTomt();String(t).split("|").slice(0,RKK.length).forEach((q,ki)=>{q.split(",").slice(0,4).forEach((u,i)=>{if(!u||u==="-")return;const a=u.split(".").map(Number),P=PED[a[0]];if(!P||a.length!==P.d.length+2||a.some(v=>!isFinite(v)))return;R[RKK[ki]][i]={t:P.id,p:P.d.map((d,j)=>Math.max(0,Math.min(100,Math.round(a[1+j])))),on:a[a.length-1]?1:0}})});return R}
+let RKV="tr",RKPICK=-1;
+const pedTxt=(P,k,v)=>k===0&&(P.id==="echo"||P.id==="pp")?PEDTID[v<25?0:v<50?1:v<75?2:3]:v;
+function rackBygg(){const h=$("#rackpan");if(!h)return;
+  h.innerHTML='<div class="rackhead"><b>EFFEKTER</b><small>Koppla pedaler på trummorna, melodin, ackorden, padsen eller en loop. De spelar i ordning från vänster till höger.</small></div><div class="rktabs" id="rktabs" role="tablist" aria-label="Vad ska effekterna sitta på?"></div><div class="rkslots" id="rkslots"></div><div class="rkpick" id="rkpick" hidden></div>';
+  h.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const d=b.dataset;
+    if(d.rkv){RKV=d.rkv;RKPICK=-1;rackRita();return}
+    if(d.add!==undefined){RKPICK=+d.add;rackRita();return}
+    if(d.pickx!==undefined){RKPICK=-1;rackRita();return}
+    if(d.pick!==undefined&&RKPICK>=0){const P=PED[+d.pick];S.rack[RKV][RKPICK]={t:P.id,p:P.d.slice(),on:1};RKPICK=-1;startaLjud();visa();return}
+    const sl=d.s!==undefined?+d.s:-1;if(sl<0)return;const a=S.rack[RKV];
+    if(d.del!==undefined){a[sl]=null;visa()}
+    else if(d.on!==undefined){a[sl].on=a[sl].on?0:1;visa()}
+    else if(d.mv!==undefined){const j=sl+(+d.mv);if(j>=0&&j<4){[a[sl],a[j]]=[a[j],a[sl]];visa()}}
+    else if(d.tape!==undefined){startaLjud();const n=rackNod(RKV,sl);if(n&&n.trig){n.trig();setTimeout(()=>{b.textContent=n.stoppad?"▶ STARTA BANDET":"⏹ STOPPA BANDET"},30)}}})}
+function rackRita(){const t=$("#rktabs"),sl=$("#rkslots"),pk=$("#rkpick");if(!t||!sl||!S.rack)return;
+  t.innerHTML=RKK.map(k=>{const n=S.rack[k].filter(s=>s&&s.on).length;return '<button type="button" role="tab" data-rkv="'+k+'" aria-selected="'+(k===RKV)+'" class="'+(k===RKV?"on":"")+'">'+RKN[k]+(n?' <i>'+n+'</i>':'')+'</button>'}).join("");
+  sl.innerHTML="";const a=S.rack[RKV];
+  for(let i=0;i<4;i++){const s=a[i],el=document.createElement("div");
+    if(!s||!PEDB[s.t]){el.className="ped tom";el.innerHTML='<button type="button" data-add="'+i+'" class="'+(RKPICK===i?"sel":"")+'">＋ Lägg till effekt</button>';sl.appendChild(el);continue}
+    const P=PED[PEDI[s.t]];el.className="ped"+(s.on?"":" av");el.style.setProperty("--pc",P.c);
+    el.innerHTML='<div class="pedh"><button type="button" class="pon" data-on data-s="'+i+'" aria-pressed="'+(!!s.on)+'" title="'+(s.on?"Stäng av":"Slå på")+' '+P.n+'" aria-label="'+(s.on?"Stäng av ":"Slå på ")+P.n+'"></button><b>'+P.n+'</b><span class="pmv"><button type="button" data-mv="-1" data-s="'+i+'" aria-label="Flytta åt vänster"'+(i===0?" disabled":"")+'>◀</button><button type="button" data-mv="1" data-s="'+i+'" aria-label="Flytta åt höger"'+(i===3?" disabled":"")+'>▶</button><button type="button" data-del data-s="'+i+'" aria-label="Ta bort '+P.n+'">✕</button></span></div><div class="pedk">'+P.f.map((f,k)=>'<span class="fx"><div class="knob liten" role="slider" tabindex="0" data-k="'+k+'" aria-label="'+P.n+' '+f+'"><div class="kap"></div></div><small>'+f+' <em>'+pedTxt(P,k,s.p[k])+'</em></small></span>').join("")+'</div>'+(s.t==="tape"?'<button type="button" class="pedtape" data-tape data-s="'+i+'">⏹ STOPPA BANDET</button>':'');
+    sl.appendChild(el);
+    el.querySelectorAll(".knob").forEach(kb=>{const k=+kb.dataset.k,em=kb.parentNode.querySelector("em");knob(kb,{min:0,max:100,reset:P.d[k],val:()=>s.p[k],set:v=>{s.p[k]=v;em.textContent=pedTxt(P,k,v);rackSyncKey(RKV);histTrack()}})})}
+  if(RKPICK>=0){pk.hidden=false;pk.innerHTML='<b>Välj en effekt till plats '+(RKPICK+1)+'</b>'+PED.map((P,i)=>'<button type="button" data-pick="'+i+'" style="--pc:'+P.c+'">'+P.n+'</button>').join("")+'<button type="button" data-pickx class="avbryt">Avbryt</button>'}else{pk.hidden=true;pk.innerHTML=""}}
 /* ---------- AUTOTUNE: mät tonhöjden (YIN) och flytta varje sångperiod till närmaste ton i tonarten (PSOLA) ---------- */
 const DELN=["INTRO","VERS","REFRÄNG","BRYGGA","SLUT"];
 const TUNEN=["AV","MJUK","MEDEL","HÅRD"],TUNEST=[0,.45,.75,1],TUNESK=[[0,2,4,5,7,9,11],[0,2,3,5,7,8,10],[0,2,3,7,8]];
@@ -1294,8 +1418,8 @@ let exporterar=false;
 let renderar=false;
 async function renderaLat(){startaLjud();if(!ctx||renderar)return null;
   const len=songLen(),bars=len>0?S.song.slice(0,len):[S.cur,S.cur,S.cur,S.cur];let dur=.05;bars.forEach(()=>{for(let k=0;k<16;k++)dur+=stegTid(k)});dur+=2.6;
-  const sr=44100,off=new OfflineAudioContext(2,Math.ceil(dur*sr),sr),oc=ctx,om=master,ocp=comp,opg=pg,opi=padIn,opf=padFxn,obus=[drumBus,melBus,loopBus,eqL,eqH];
-  ctx=off;master=off.createGain();comp=off.createDynamicsCompressor();comp.threshold.value=-14;comp.ratio.value=5;comp.attack.value=.003;comp.release.value=.2;const bfo=off.createBiquadFilter();bfo.type="highpass";bfo.frequency.value=10;bfo.Q.value=.7;eqL=off.createBiquadFilter();eqL.type="lowshelf";eqL.frequency.value=140;eqH=off.createBiquadFilter();eqH.type="highshelf";eqH.frequency.value=5500;master.connect(eqL);eqL.connect(eqH);eqH.connect(bfo);bfo.connect(comp);comp.connect(off.destination);pg=off.createGain();pg.connect(master);melBus=off.createGain();melBus.connect(pg);drumBus=off.createGain();drumBus.connect(master);loopBus=off.createGain();loopBus.connect(master);mixSatt();padFxn=fxBygg(PFX,off,master);padIn=padFxn.inn;master.gain.value=Math.pow(S.master/100,1.6)*1.1;
+  const sr=44100,off=new OfflineAudioContext(2,Math.ceil(dur*sr),sr),oc=ctx,om=master,ocp=comp,opg=pg,opi=padIn,opf=padFxn,ork=RK,obus=[drumBus,melBus,loopBus,eqL,eqH];
+  ctx=off;master=off.createGain();comp=off.createDynamicsCompressor();comp.threshold.value=-14;comp.ratio.value=5;comp.attack.value=.003;comp.release.value=.2;const bfo=off.createBiquadFilter();bfo.type="highpass";bfo.frequency.value=10;bfo.Q.value=.7;eqL=off.createBiquadFilter();eqL.type="lowshelf";eqL.frequency.value=140;eqH=off.createBiquadFilter();eqH.type="highshelf";eqH.frequency.value=5500;master.connect(eqL);eqL.connect(eqH);eqH.connect(bfo);bfo.connect(comp);comp.connect(off.destination);pg=off.createGain();pg.connect(master);melBus=off.createGain();melBus.connect(pg);drumBus=off.createGain();drumBus.connect(master);loopBus=off.createGain();loopBus.connect(master);await crushLaddaMod(off);RK=rackerNya(off);rackKoppla(RK);rackSyncAll();mixSatt();padFxn=fxBygg(PFX,off,RK.pa.inn);padIn=padFxn.inn;master.gain.value=Math.pow(S.master/100,1.6)*1.1;
   const pump0=S.pump,stepT=[];renderar=true;
   try{const bar0=.05,starts=[];
     {let t=bar0;bars.forEach((p,bi)=>{starts.push(t);for(let k=0;k<16;k++){stepT.push([t,k,len>0?bi*16+k:-1]);t+=stegTid(k)}})}
@@ -1309,7 +1433,7 @@ async function renderaLat(){startaLjud();if(!ctx||renderar)return null;
         if(run&&!brk&&rel>=run.total/2){const pr=rel/run.total,vel=.45+.5*pr;if(pr>=.75||k%2===0)spela(1,t,vel);if(pr>=.9)spela(1,t+stegTid(k)/2,vel*.8)}
         if(run&&rel===run.total-1){bldDrop(bfo,master,t+stegTid(k));run=null}
         t+=stegTid(k)}};
-    LP.forEach(l=>{if(!l.mix)return;const g=off.createGain(),lg=off.createGain();lg.gain.value=l.mute?0:Math.pow(l.vol/100,1.5)*1.3;lg.connect(loopBus||master);const fx=fxBygg(l,off,lg);g.connect(fx.inn);
+    LP.forEach(l=>{if(!l.mix)return;const g=off.createGain(),lg=off.createGain();lg.gain.value=l.mute?0:Math.pow(l.vol/100,1.5)*1.3;lg.connect(rkIn("l"+l.i)||loopBus||master);const fx=fxBygg(l,off,lg);g.connect(fx.inn);
       {const ge=(kk,ab)=>autoGet("echo",l.i,ab,kk),gf=(kk,ab)=>autoGet("filt",l.i,ab,kk);stepT.forEach(([tt,kk,ab])=>{const v=ge(kk,ab);if(v!==null&&v!==undefined)fx.ds.gain.setValueAtTime(v/100*.9,tt)});
        const vs=stepT.map(([tt,kk,ab])=>gf(kk,ab)).filter(x=>x!==null&&x!==undefined),lo=vs.some(v=>v<-3),hi=vs.some(v=>v>3);if(vs.length&&lo!==hi){fx.f.type=lo?"lowpass":"highpass";fx.f.Q.value=1.2;stepT.forEach(([tt,kk,ab])=>{const v=gf(kk,ab);if(v!==null&&v!==undefined)fx.f.frequency.setValueAtTime(lo?(v<-3?22050*Math.pow(180/22050,-v/100):22000):(v>3?20*Math.pow(7000/20,v/100):20),tt)})}}
       const row=S.lsong[l.i];if(len>0&&row.includes("x")){g.gain.value=0;starts.forEach((bs,bi)=>g.gain.setTargetAtTime(row[bi]==="x"?1:0,bs,.006))}
@@ -1317,7 +1441,7 @@ async function renderaLat(){startaLjud();if(!ctx||renderar)return null;
     for(let bi=1;bi<bars.length;bi++){const b2=bi;off.suspend(Math.max(.01,starts[bi]-.3)).then(()=>{try{sched(b2)}finally{off.resume()}})}
     sched(0);
     return await off.startRendering();
-  }finally{ctx=oc;master=om;comp=ocp;pg=opg;padIn=opi;padFxn=opf;[drumBus,melBus,loopBus,eqL,eqH]=obus;S.pump=pump0;renderar=false}}
+  }finally{ctx=oc;master=om;comp=ocp;pg=opg;padIn=opi;padFxn=opf;RK=ork;[drumBus,melBus,loopBus,eqL,eqH]=obus;S.pump=pump0;renderar=false}}
 async function lameLadda(){if(window.lamejs)return true;try{await new Promise((res,rej)=>{const sc=document.createElement("script");sc.src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js";sc.onload=res;sc.onerror=rej;document.head.appendChild(sc)})}catch(e){return false}return !!window.lamejs}
 async function mp3Av(buf){let pk=0;const L=buf.getChannelData(0),R=buf.getChannelData(1),n=L.length;for(let i=0;i<n;i++){const a=Math.max(Math.abs(L[i]),Math.abs(R[i]));if(a>pk)pk=a}const g=pk>.98?.98/pk:1;
   const enc=new lamejs.Mp3Encoder(2,buf.sampleRate,128),out=[],bl=1152,li=new Int16Array(bl),ri=new Int16Array(bl);
@@ -1364,7 +1488,7 @@ const b64=u8=>{let t="";for(let i=0;i<u8.length;i+=32768)t+=String.fromCharCode.
 const unb64=t=>{const q=atob(t),u=new Uint8Array(q.length);for(let i=0;i<q.length;i++)u[i]=q.charCodeAt(i);return u};
 function bufTill(buf){const d=buf.getChannelData(0),n=d.length,v=new Int16Array(n);for(let i=0;i<n;i++)v[i]=Math.max(-32768,Math.min(32767,Math.round(d[i]*32767)));return{sr:buf.sampleRate,d:b64(new Uint8Array(v.buffer))}}
 function bufFran(o){if(!o||typeof o.d!=="string"||!(o.sr>=8000&&o.sr<=96000))throw 0;const u=unb64(o.d),n=u.length>>1;if(n<1||n>o.sr*130)throw 0;const v=new Int16Array(u.buffer,0,n),b=ctx.createBuffer(1,n,o.sr),f=b.getChannelData(0);for(let i=0;i<n;i++)f[i]=v[i]/32767;return b}
-function projSpara(){try{const o={pp:"musiklabbet",v:1,kod:kod(),namn:S.namn,pump:S.pump,auto:S.auto,autoS:S.autoS,chord:S.chord,smpMute:S.smpMute,mix:S.mix,pfx:PFX.fx,smp:S.smp,spat:S.spat,
+function projSpara(){try{const o={pp:"musiklabbet",v:1,kod:kod(),namn:S.namn,pump:S.pump,auto:S.auto,autoS:S.autoS,chord:S.chord,smpMute:S.smpMute,mix:S.mix,rack:S.rack,pfx:PFX.fx,smp:S.smp,spat:S.spat,
     loops:LP.map(l=>l.layers.length?{n:l.n,vol:l.vol,mute:l.mute,fx:l.fx,sl:l.sl,slp:l.slp,o:l.o,cuts:l.cuts,zone:l.zone,shift:l.shift,layers:l.layers.map(bufTill)}:null),
     egna:EGNA.map(e=>e?{n:e.n,b:bufTill(e.buf)}:null)};
   const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(o)],{type:"application/json"}));a.download="pluggparken-projekt.json";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),20000);
@@ -1378,7 +1502,7 @@ async function projLadda(f){startaLjud();if(!ctx||!f)return;if(f.size>150e6){toa
     stopp();LP.forEach((l,i)=>lpRadera(i));EGNA.fill(null);
     ny.namn=String(o.namn||"Projekt").slice(0,30);ny.pump=Math.max(0,Math.min(100,+o.pump||0));
     if(o.auto&&slopar(o.auto.pump,16)&&slopar(o.auto.echo,4)&&slopar(o.auto.filt,4)&&o.auto.echo.every(a=>slopar(a,16))&&o.auto.filt.every(a=>slopar(a,16)))ny.auto=o.auto;
-    if(slopar(o.chord,2))ny.chord=[!!o.chord[0],!!o.chord[1]];ny.smpMute=!!o.smpMute;if(o.mix&&typeof o.mix==="object"){for(const k of["dr","me","lo","eb","eh"]){const v=+o.mix[k];if(isFinite(v))ny.mix[k]=Math.max(k[0]==="e"?-100:0,Math.min(100,v))}}if(o.autoS&&o.autoS.pump&&Array.isArray(o.autoS.echo)&&o.autoS.echo.length===4&&Array.isArray(o.autoS.filt)&&o.autoS.filt.length===4){const cl=m=>{const r={};if(m&&typeof m==="object")for(const k of Object.keys(m).slice(0,600)){const v=+m[k];if(/^\d{1,3}$/.test(k)&&isFinite(v))r[k]=Math.max(-100,Math.min(100,v))}return r};ny.autoS={pump:cl(o.autoS.pump),echo:o.autoS.echo.map(cl),filt:o.autoS.filt.map(cl)}}if(o.pfx&&typeof o.pfx==="object"){for(const k of["echo","hall","flang","filt"]){const v=+o.pfx[k];if(isFinite(v))PFX.fx[k]=Math.max(k==="filt"?-100:0,Math.min(100,v))}if(padFxn)padFxn.set()}
+    if(slopar(o.chord,2))ny.chord=[!!o.chord[0],!!o.chord[1]];ny.smpMute=!!o.smpMute;if(o.rack)ny.rack=rackRena(o.rack);if(o.mix&&typeof o.mix==="object"){for(const k of["dr","me","lo","eb","eh"]){const v=+o.mix[k];if(isFinite(v))ny.mix[k]=Math.max(k[0]==="e"?-100:0,Math.min(100,v))}}if(o.autoS&&o.autoS.pump&&Array.isArray(o.autoS.echo)&&o.autoS.echo.length===4&&Array.isArray(o.autoS.filt)&&o.autoS.filt.length===4){const cl=m=>{const r={};if(m&&typeof m==="object")for(const k of Object.keys(m).slice(0,600)){const v=+m[k];if(/^\d{1,3}$/.test(k)&&isFinite(v))r[k]=Math.max(-100,Math.min(100,v))}return r};ny.autoS={pump:cl(o.autoS.pump),echo:o.autoS.echo.map(cl),filt:o.autoS.filt.map(cl)}}if(o.pfx&&typeof o.pfx==="object"){for(const k of["echo","hall","flang","filt"]){const v=+o.pfx[k];if(isFinite(v))PFX.fx[k]=Math.max(k==="filt"?-100:0,Math.min(100,v))}if(padFxn)padFxn.set()}
     if(gSmp(o.smp))ny.smp=o.smp;if((slopar(o.spat,4)||slopar(o.spat,8))&&o.spat.every(gSmp))o.spat.forEach((a,i)=>ny.spat[i]=a);
     const egna=(o.egna||[]).slice(0,16).map(e=>e&&e.b?{n:String(e.n||"EGET").slice(0,12),c:"Ditt eget ljud (sparas inte)",buf:bufFran(e.b)}:null);
     const lps=(o.loops||[]).slice(0,4).map(q=>q&&Array.isArray(q.layers)&&q.layers.length&&q.layers.length<=12?Object.assign({},q,{bufs:q.layers.map(bufFran)}):null);
@@ -1432,7 +1556,7 @@ document.addEventListener("keydown",e=>{if(e.target.closest&&e.target.closest("i
   const i=TK[e.key.toLowerCase()];if(i!=null&&!e.repeat){const sl=suddLage;if(e.shiftKey&&recLive)suddLage=true;slag(i);suddLage=sl}});
 document.addEventListener("visibilitychange",()=>{if(document.hidden)stopp()});
 init();
-window.MPTrummaskin={tuneDet:tuneDet,autoTune:autoTune,voice:(k,len)=>{startaLjud();const sr=44100,off=new OfflineAudioContext(1,Math.ceil(sr*(len||1.6)),sr),oc=ctx;ctx=off;try{const g=off.createGain();g.connect(off.destination);SYN[k](.01,g);return off.startRendering()}finally{ctx=oc}},SPAR:SPAR,kod:()=>kod(),avkod:k=>avkod(k),ljudOm:()=>ljudOm(),renderaLat:()=>renderaLat(),mp3Av:b=>mp3Av(b),lameLadda:()=>lameLadda(),LP:LP,lpKlick:lpKlick,lpRadera:lpRadera,lpAngra:lpAngra,micStart:micStart,fakeMic:null,slag:slag,get ctx(){return ctx},get master(){return master},get S(){return S},roster:roster,kitSatt:kitSatt,visa:visa};
+window.MPTrummaskin={tuneDet:tuneDet,autoTune:autoTune,voice:(k,len)=>{startaLjud();const sr=44100,off=new OfflineAudioContext(1,Math.ceil(sr*(len||1.6)),sr),oc=ctx;ctx=off;try{const g=off.createGain();g.connect(off.destination);SYN[k](.01,g);return off.startRendering()}finally{ctx=oc}},SPAR:SPAR,kod:()=>kod(),avkod:k=>avkod(k),ljudOm:()=>ljudOm(),renderaLat:()=>renderaLat(),mp3Av:b=>mp3Av(b),lameLadda:()=>lameLadda(),LP:LP,lpKlick:lpKlick,lpRadera:lpRadera,lpAngra:lpAngra,micStart:micStart,fakeMic:null,slag:slag,get ctx(){return ctx},get master(){return master},get S(){return S},roster:roster,kitSatt:kitSatt,visa:visa,PED:PED,PEDB:PEDB,rackRena:rackRena,rackKod:rackKod,rackAvkod:rackAvkod,rackSyncAll:rackSyncAll,rackNod:rackNod,get RK(){return RK},crushLaddaMod:crushLaddaMod};
 })();
 </script>
 </body>
