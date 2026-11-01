@@ -379,7 +379,7 @@ $("tipb").onclick=()=>{if(!G)return;G.tip=!G.tip;$("tipb").classList.toggle("on"
 const STEP=15; // pixlar per steg
 function pouchScr(){return[X(AX/PM),Y(-AY/PM)];}
 function aimFromPtr(px,py){const [ax,ay]=pouchScr();let dx=ax-px,dy=py-ay;const L=Math.hypot(dx,dy);let th=Math.atan2(dy,dx);
-  const lo=18*Math.PI/180,hi=82*Math.PI/180;th=Math.max(lo,Math.min(hi,th));th=Math.round(th*1800/Math.PI)/1800*Math.PI;const n=Math.max(0,Math.min(12,Math.round(L/STEP)));return{th,n,L:Math.min(L,12*STEP+10),px,py};}
+  const lo=-40*Math.PI/180,hi=82*Math.PI/180;th=Math.max(lo,Math.min(hi,th));const n=Math.max(0,Math.min(12,Math.round(L/STEP)));if(n>=1&&G){const D=n*G.sel,tmin=-Math.atan((H0-.45)/Math.max(D,1))*.85;th=Math.max(th,tmin);}th=Math.round(th*1800/Math.PI)/1800*Math.PI;return{th,n,L:Math.min(L,12*STEP+10),px,py};}
 let ptr=null;function g_intro(){if(G)G.introDone=true;}
 function ptrXY(e){const r=cv.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top];}
 cv.addEventListener("pointerdown",e=>{if(!G||G.paused||G.over||G.state!=="aim")return;const [x,y]=ptrXY(e),[ax,ay]=pouchScr();
