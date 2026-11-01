@@ -137,7 +137,7 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 <section id="game" class="screen" hidden>
   <canvas id="cv"></canvas>
   <div class="hud"><button class="hb" id="quit" aria-label="Avsluta">✕</button><span class="lname" id="lname"></span><span class="gap"></span>
-    <span class="shots" id="shots" aria-label="Djur kvar"></span><button class="hb" id="snd" aria-label="Ljud">🔊</button><button class="hb" id="pauseBtn" aria-label="Paus">⏸</button></div>
+    <span class="shots" id="shots" aria-label="Djur kvar"></span><button class="hb" id="infoB" aria-label="Förklara djuren">?</button><button class="hb" id="snd" aria-label="Ljud">🔊</button><button class="hb" id="pauseBtn" aria-label="Paus">⏸</button></div>
   <div class="say" id="say" hidden></div>
   <div class="coach" id="coach" hidden role="dialog" aria-label="Förklaring"><i class="arr" aria-hidden="true"></i><b id="coachT"></b><p id="coachP"></p><button id="coachOk">Okej!</button></div>
   <div class="turn" id="turn" hidden>📱 Vrid mobilen på tvären</div>
@@ -373,7 +373,7 @@ async function startLevel(n){
   loadPet();G=build(lv);G.n=n;cam.init=false;$("pause").hidden=true;$("lose").hidden=true;$("say").hidden=true;$("tipb").hidden=lv.help>=2;$("ovb").classList.remove("on");$("tipb").classList.remove("on");$("tipb").textContent="💡 Hjälp";
   settle(G,150);G.slimes.forEach(s=>{s.cool=0;s.y0=-s.position.y/PM;});resize();ammoUI();shotsUI();
   const first=[lv.hint,lv.lab?"lab_"+lv.lab:null].find(h=>h&&HINTS[h]&&!data.sett[h]);if(first){say(HINTS[first],7000);data.sett[first]=1;save();}
-  const mk=g_multi();if(!data.sett[mk]){data.sett[mk]=1;save();const gg=G,dly=(first||(!view.fits&&!data.sett.pan))?10800:1500;setTimeout(()=>{if(G===gg)showCoach(mk==="coach2");},dly);}
+  if(lv.n===1||lv.n===13){const gg=G,multi=lv.n===13,dly=(first||(!view.fits&&!data.sett.pan))?10800:1500;setTimeout(()=>{if(G===gg)showCoach(multi);},dly);}
   if(!view.fits&&!data.sett.pan){data.sett.pan=1;save();const gg=G;setTimeout(()=>{if(G===gg&&!gg.paused)say("Dra i bakgrunden (eller använd pilarna) för att flytta runt i banan.",5000);},4800);}
   $("snd").textContent=window.Ljud&&Ljud.on?"🔊":"🔇";
   last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop);}
@@ -393,6 +393,7 @@ function showCoach(multi){const g=G,chip=document.querySelector("#ammo .chp");if
   const r=chip.getBoundingClientRect(),c=$("coach");c.hidden=false;c.style.left=(r.right+22)+"px";c.style.top=Math.max(8,r.top-6)+"px";
   document.querySelectorAll(".chp").forEach(x=>x.classList.add("pulse"));clearTimeout(coachT);coachT=setTimeout(hideCoach,16000);}
 $("coachOk").onclick=hideCoach;
+$("infoB").onclick=()=>{if(!G)return;if(!$("coach").hidden)hideCoach();else showCoach(G.types.length>1);};
 function ammoUI(){if(!G)return;$("ammo").innerHTML=G.types.map(k=>`<button class="chp" data-k="${k}" style="--c:${kcol(k)}" aria-pressed="${G.sel===k}"${G.ammo[k]>0?"":" disabled"}><span class="dot">${k}</span><span>${k} m per steg <small>${G.ammo[k]} kvar</small></span></button>`).join("");}
 $("ammo").onclick=e=>{const b=e.target.closest("[data-k]");if(!b||!G||G.state!=="aim"||b.disabled)return;G.sel=+b.dataset.k;ammoUI();};
 $("ovb").onclick=()=>{if(!G)return;G.ov=!G.ov;G.introDone=true;$("ovb").classList.toggle("on",G.ov);};
