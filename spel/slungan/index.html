@@ -279,7 +279,7 @@ function labelFor(D,mode,rnd){
 function build(lv){
   const M=Matter,eng=M.Engine.create({enableSleeping:true,positionIterations:8,velocityIterations:6});eng.gravity.y=1;eng.gravity.scale=GSUB/(DTS*DTS);
   const W=WORLDS[lv.w],rnd=mulberry(lv.n*977+13);
-  const g={lv,W,eng,M,bodies:[],slimes:[],walls:[],signs:[],ammo:{},types:[],sel:0,bird:null,state:"aim",t:0,ts:1,acc:0,shots:0,tip:false,parts:[],pop:[],shake:0,land:null,stage:0,msgT:0,over:false,paused:false,score:0,missed:0,hintN:0,wallHit:false,settleT:0,lastBird:null,aim:null,decor:[],clouds:[],timers:[]};
+  const g={zm:1,lv,W,eng,M,bodies:[],slimes:[],walls:[],signs:[],ammo:{},types:[],sel:0,bird:null,state:"aim",t:0,ts:1,acc:0,shots:0,tip:false,parts:[],pop:[],shake:0,land:null,stage:0,msgT:0,over:false,paused:false,score:0,missed:0,hintN:0,wallHit:false,settleT:0,lastBird:null,aim:null,decor:[],clouds:[],timers:[]};
   const maxD=Math.max(...lv.t.map(t=>t.d));g.xMin=-4.5;g.xMax=maxD+7;
   g.ground=M.Bodies.rectangle(maxD*PM/2,200,(maxD+120)*PM,400,{isStatic:true,friction:.9,restitution:0,label:"ground"});g.ground.kind="ground";M.Composite.add(eng.world,g.ground);
   const add=b=>{M.Composite.add(eng.world,b);g.bodies.push(b);return b;};
@@ -351,21 +351,27 @@ function resize(){if(!G)return;dpr=Math.min(2,window.devicePixelRatio||1);cw=cv.
   const span=G.xMax-G.xMin;GY=ch-Math.max(54,Math.min(1.9*cw/28,84));
   const needH=Math.max(6.5,(Math.max(0,...G.walls.map(w=>w.h)))+3.2),hFit=(GY-74)/needH,fit=cw/span;
   view={span,hFit,sfit:Math.min(fit,hFit),sg:Math.min(hFit,fit>=cw/26?fit:Math.max(fit,cw/23)),fits:fit>=cw/26};
+  $("ovb").hidden=zmMin()>=.97;
   if(!cam.init||!G.camOk){const t=camTarget(G);cam.s=t.s;cam.x=t.x;cam.init=true;G.camOk=true;}
   $("turn").hidden=!(innerWidth<innerHeight&&innerWidth<700);}
 addEventListener("resize",resize);
 const X=x=>(x-cam.x)*S,Y=y=>GY-y*S;
-function baseCam(){const s=view.sg;if(view.fits||cw/s>=view.span)return{s,x:G.xMin-(cw/s-view.span)/2};return{s,x:-.2*cw/s};}
-function panLim(){const b=baseCam(),vis=cw/b.s;return[b.x,Math.max(b.x,G.xMax-vis)];}
+function baseCamZ(zm){const s=view.sg*zm,vis=cw/s;if(vis>=view.span)return{s,x:G.xMin-(vis-view.span)/2};return{s,x:-.2*vis};}
+function panLimZ(zm){const b=baseCamZ(zm),vis=cw/b.s;return[b.x,Math.max(b.x,G.xMax-vis)];}
+function baseCam(){return baseCamZ(G.zm);}
+function panLim(){return panLimZ(G.zm);}
+const zmMin=()=>Math.min(1,view.sfit/view.sg),zmMax=1.7;
+/* zooma: zm 1 = normal, zmMin = överblick; ankaret (skärm-x) står still */
+function zoomTo(zm,cx){if(!G||G.state!=="aim")return;const z=Math.max(zmMin(),Math.min(zmMax,zm)),a=cx==null?cw*.5:cx,wx=cam.x+a/cam.s;G.zm=z;const l=panLimZ(z),s1=view.sg*z;G.manual=true;G.panX=Math.max(l[0],Math.min(l[1],wx-a/s1));G.introDone=true;}
 function camTarget(g){
-  if(g.manual&&g.state==="aim"&&!g.ov){const b=baseCam(),l=panLim();return{s:b.s,x:Math.max(l[0],Math.min(l[1],g.panX))};}
-  if(g.ov){const s=view.sfit;return{s,x:g.xMin-(cw/s-view.span)/2};}
+  if(g.manual&&g.state==="aim"){const b=baseCam(),l=panLim();return{s:b.s,x:Math.max(l[0],Math.min(l[1],g.panX))};}
   const b=baseCam(),s=b.s,vis=cw/s,maxX=Math.max(b.x,g.xMax-vis);
   if(g.state==="aim"&&!g.introDone&&!view.fits){const t=g.t,far=maxX,e=u=>u*u*(3-2*u);
     if(t<.6)return b;if(t<1.9)return{s,x:b.x+(far-b.x)*e((t-.6)/1.3)};if(t<2.9)return{s,x:far};if(t<4.2)return{s,x:far+(b.x-far)*e((t-2.9)/1.3)};g.introDone=true;return b;}
   if((g.state==="fly"||g.state==="settle")&&g.lastX!=null&&!view.fits){return{s,x:Math.max(b.x,Math.min(maxX,g.lastX-.3*vis))};}
   return b;}
-function camUpdate(g,dt){const t=camTarget(g),k=1-Math.exp(-(g.ov?6:g.manual?16:4.2)*dt);cam.s+=(t.s-cam.s)*k;cam.x+=(t.x-cam.x)*k;S=cam.s;}
+function camUpdate(g,dt){const t=camTarget(g),k=1-Math.exp(-(pinch?20:g.manual?16:g.ov?6:4.2)*dt);cam.s+=(t.s-cam.s)*k;cam.x+=(t.x-cam.x)*k;S=cam.s;
+  const ov=g.zm<=zmMin()+.03&&zmMin()<.97;if(ov!==g.ov){g.ov=ov;$("ovb").classList.toggle("on",ov);}}
 
 async function startLevel(n){
   stopGame();const lv=LV[n-1];if(!lv)return;data.lvl=n;save();show("game");$("lname").innerHTML=`${WORLDS[lv.w].icon} ${lv.boss?"👑 ":""}${lv.name}<small>Bana ${n}</small>`;
@@ -374,7 +380,7 @@ async function startLevel(n){
   settle(G,150);G.slimes.forEach(s=>{s.cool=0;s.y0=-s.position.y/PM;});resize();ammoUI();shotsUI();
   const first=[lv.hint,lv.lab?"lab_"+lv.lab:null].find(h=>h&&HINTS[h]&&!data.sett[h]);if(first){say(HINTS[first],7000);data.sett[first]=1;save();}
   if(lv.n===1||lv.n===13){const gg=G,multi=lv.n===13,dly=(first||(!view.fits&&!data.sett.pan))?10800:1500;setTimeout(()=>{if(G===gg)showCoach(multi);},dly);}
-  if(!view.fits&&!data.sett.pan){data.sett.pan=1;save();const gg=G;setTimeout(()=>{if(G===gg&&!gg.paused)say("Dra i bakgrunden (eller använd pilarna) för att flytta runt i banan.",5000);},4800);}
+  if(!view.fits&&!data.sett.pan){data.sett.pan=1;save();const gg=G;setTimeout(()=>{if(G===gg&&!gg.paused)say("Dra i bakgrunden för att flytta runt. Nyp med två fingrar (eller Ctrl + hjul, + och −) för att zooma. 🔭 visar hela banan.",5000);},4800);}
   $("snd").textContent=window.Ljud&&Ljud.on?"🔊":"🔇";
   last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop);}
 function stopGame(){hideCoach();cancelAnimationFrame(raf);if(G){G.over=true;try{G.M.World.clear(G.eng.world);G.M.Engine.clear(G.eng);}catch(e){}}G=null;}
@@ -396,7 +402,7 @@ $("coachOk").onclick=hideCoach;
 $("infoB").onclick=()=>{if(!G)return;if(!$("coach").hidden)hideCoach();else showCoach(G.types.length>1);};
 function ammoUI(){if(!G)return;$("ammo").innerHTML=G.types.map(k=>`<button class="chp" data-k="${k}" style="--c:${kcol(k)}" aria-pressed="${G.sel===k}"${G.ammo[k]>0?"":" disabled"}><span class="dot">${k}</span><span>${k} m per steg <small>${G.ammo[k]} kvar</small></span></button>`).join("");}
 $("ammo").onclick=e=>{const b=e.target.closest("[data-k]");if(!b||!G||G.state!=="aim"||b.disabled)return;G.sel=+b.dataset.k;ammoUI();};
-$("ovb").onclick=()=>{if(!G)return;G.ov=!G.ov;G.introDone=true;$("ovb").classList.toggle("on",G.ov);};
+$("ovb").onclick=()=>{if(!G||G.state!=="aim")return;if(G.zm>zmMin()+.05){G.zmPrev=G.zm;zoomTo(zmMin());}else{zoomTo(G.zmPrev||1);if(G.zm>=.99)G.manual=false;}};
 $("tipb").onclick=()=>{if(!G)return;G.tip=!G.tip;$("tipb").classList.toggle("on",G.tip);$("tipb").textContent=G.tip?"💡 Hjälp på":"💡 Hjälp";if(G.tip)say("Hjälpen visar <b>steg · meter</b> medan du drar. Då får du bara två stjärnor.",4500);};
 
 /* ---------- Siktet ---------- */
@@ -408,13 +414,18 @@ let ptr=null;function g_intro(){if(G)G.introDone=true;}
 function ptrXY(e){const r=cv.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top];}
 cv.addEventListener("pointerdown",e=>{if(!G||G.paused||G.over||G.state!=="aim")return;const [x,y]=ptrXY(e),[ax,ay]=pouchScr();
   if(Math.hypot(x-ax,y-ay)<Math.max(62,S*2.6)){g_intro();ptr=e.pointerId;try{cv.setPointerCapture(e.pointerId);}catch(err){}G.aim=aimFromPtr(x,y);e.preventDefault();}
-  else if(!view.fits&&!G.ov&&pan===null){g_intro();pan={id:e.pointerId,x0:x,cx0:cam.x};G.manual=true;G.panX=cam.x;try{cv.setPointerCapture(e.pointerId);}catch(err){}cv.style.cursor="grabbing";}});
+  else{pts[e.pointerId]={x,y};const ids=Object.keys(pts);g_intro();
+    if(ids.length===2){pan=null;cv.style.cursor="";const a=pts[ids[0]],b=pts[ids[1]];pinch={d0:Math.max(20,Math.hypot(a.x-b.x,a.y-b.y)),z0:G.zm};try{cv.setPointerCapture(e.pointerId);}catch(err){}}
+    else if(ids.length===1&&pan===null){pan={id:e.pointerId,x0:x,cx0:cam.x};G.manual=true;G.panX=cam.x;try{cv.setPointerCapture(e.pointerId);}catch(err){}cv.style.cursor="grabbing";}}});
+const pts={};let pinch=null;
 let pan=null;
 function panTo(x){if(!G)return;const l=panLim();G.manual=true;G.panX=Math.max(l[0],Math.min(l[1],x));}
-cv.addEventListener("pointermove",e=>{if(!G||!pan||pan.id!==e.pointerId)return;const [x]=ptrXY(e);panTo(pan.cx0-(x-pan.x0)/cam.s);});
-function endPan(e){if(pan&&pan.id===e.pointerId){pan=null;cv.style.cursor="";}}
+cv.addEventListener("pointermove",e=>{if(!G)return;const [x,y]=ptrXY(e);if(pts[e.pointerId])pts[e.pointerId]={x,y};
+  if(pinch){const ids=Object.keys(pts);if(ids.length>=2){const a=pts[ids[0]],b=pts[ids[1]];zoomTo(pinch.z0*Math.hypot(a.x-b.x,a.y-b.y)/pinch.d0,(a.x+b.x)/2);}return;}
+  if(pan&&pan.id===e.pointerId)panTo(pan.cx0-(x-pan.x0)/cam.s);});
+function endPan(e){delete pts[e.pointerId];if(pinch&&Object.keys(pts).length<2){pinch=null;pan=null;cv.style.cursor="";}if(pan&&pan.id===e.pointerId){pan=null;cv.style.cursor="";}}
 cv.addEventListener("pointerup",endPan);cv.addEventListener("pointercancel",endPan);
-cv.addEventListener("wheel",e=>{if(!G||view.fits||G.ov||G.state!=="aim")return;e.preventDefault();g_intro();panTo((G.manual?G.panX:cam.x)+(Math.abs(e.deltaX)>Math.abs(e.deltaY)?e.deltaX:e.deltaY)/cam.s);},{passive:false});
+cv.addEventListener("wheel",e=>{if(!G||G.state!=="aim")return;e.preventDefault();g_intro();if(e.ctrlKey){const [x]=ptrXY(e);zoomTo(G.zm*Math.exp(-e.deltaY*.012),x);return;}panTo((G.manual?G.panX:cam.x)+(Math.abs(e.deltaX)>Math.abs(e.deltaY)?e.deltaX:e.deltaY)/cam.s);},{passive:false});
 cv.addEventListener("pointermove",e=>{if(!G||ptr!==e.pointerId)return;const [x,y]=ptrXY(e);G.aim=aimFromPtr(x,y);});
 function endAim(e,fire){if(!G||ptr!==e.pointerId)return;ptr=null;const a=G.aim;G.aim=null;if(fire&&a&&a.n>=1)shoot(a.n,a.th);}
 cv.addEventListener("pointerup",e=>endAim(e,true));cv.addEventListener("pointercancel",e=>endAim(e,false));
@@ -476,7 +487,7 @@ function setPause(v){if(!G||G.over||G.state==="won")return;G.paused=v;$("pause")
 $("pauseBtn").onclick=()=>setPause(true);$("resume").onclick=()=>setPause(false);
 $("snd").onclick=()=>{if(window.Ljud){Ljud.set(!Ljud.on);$("snd").textContent=Ljud.on?"🔊":"🔇";}};
 document.addEventListener("visibilitychange",()=>{if(document.hidden&&G&&!G.paused&&G.state!=="won")setPause(true);});
-addEventListener("keydown",e=>{if(!G)return;if((e.key==="ArrowRight"||e.key==="ArrowLeft")&&G.state==="aim"&&!view.fits&&!G.ov){g_intro();panTo((G.manual?G.panX:cam.x)+(e.key==="ArrowRight"?4:-4));return;}if(e.key==="Escape"){if(!$("pause").hidden)setPause(false);else setPause(true);}});
+addEventListener("keydown",e=>{if(!G)return;if((e.key==="+"||e.key==="="||e.key==="-"||e.key==="_")&&G.state==="aim"){zoomTo(G.zm*(e.key==="+"||e.key==="="?1.2:1/1.2));return;}if((e.key==="ArrowRight"||e.key==="ArrowLeft")&&G.state==="aim"){g_intro();panTo((G.manual?G.panX:cam.x)+(e.key==="ArrowRight"?4:-4));return;}if(e.key==="Escape"){if(!$("pause").hidden)setPause(false);else setPause(true);}});
 
 function loop(now){raf=requestAnimationFrame(loop);if(!G)return;const dt=Math.min(.05,(now-last)/1000);last=now;if(!G.paused)step(G,dt);camUpdate(G,dt);draw(G);}
 
