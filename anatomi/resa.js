@@ -2,7 +2,8 @@
    Röstfiler: ../ljud/matensresa/s<n>-1.mp3 (s0 inledning, s1–s7 stegen, s8 avslutning). Saknas en fil visas bara texten.
    Manus: manus/matensresa-manus.txt. Höj VER när en röstfil byts ut. */
 import {syreStory} from "./syre.js?v=1";
-const VER="2";
+import {nervStory} from "./nerv.js?v=5";
+const VER="4";
 const FARTER=[1,1.25,1.5,2];
 const MAT_STG=[
  {id:"munn",namn:"Munnen",tid:"ca 10–30 sekunder",dur:12,hl:["tunga"],c:0xe0b070,t:"Maten tuggas sönder av tänderna, och saliven gör den mjuk och börjar bryta ner den. Tungan för maten bakåt när du sväljer."},
@@ -61,7 +62,8 @@ export function initResa(C){
    m.visible=mat.opacity>.015&&(s!=="organ"||SPAR.has(id)||mat.opacity>.05);mat.depthWrite=mat.opacity>.85;}
   }};
  const SYRE=syreStory({THREE,all,grp,C,R:()=>R,VAG:()=>VAG,nyPartikel:(...a)=>nyPartikel(...a),tex});SYRE.SPAR=new Set();
- const STORIES={mat:MAT,syre:SYRE};
+ const NERV=nervStory({THREE,all,grp,C,R:()=>R,VAG:()=>VAG,nyPartikel:(...a)=>nyPartikel(...a),tex});
+ const STORIES={mat:MAT,syre:SYRE,nerv:NERV};
  function setStory(id){ST=STORIES[id]||MAT;STG=ST.STG;INTRO=ST.INTRO;FIN=ST.FIN;SPAR=ST.SPAR||MAT_SPAR;calc();}
 
  function start(id){if(R)return;setStory(id||"mat");ladda().then(v=>{if(R)return;VAG=v;
@@ -81,7 +83,7 @@ export function initResa(C){
  function kort(n,namn,tid,text){$("rN").textContent=n;$("rT").textContent=namn;$("rTid").textContent=tid||"";$("rP").textContent=text;
   const k=$("resa");k.classList.remove("in");void k.offsetWidth;k.classList.add("in");}
  function intro(){R.phase="intro";R.t=0;R.intro=0;R.stage=-1;kort("Start",ST.namn,"",INTRO);$("rPlay").textContent="⏸";rost(0);}
- function sluta(){R.phase="done";kort("Klar","Resan är slut","",FIN);rost(8);$("rPlay").textContent="↺";}
+ function sluta(){R.phase="done";kort("Klar","Resan är slut","",FIN);rost(STG.length+1);$("rPlay").textContent="↺";}
 
  function steg(i){R.stage=i;const s=STG[i];kort(`${i+1} / ${STG.length}`,s.namn,"I verkligheten: "+s.tid,s.t);
   R.dd=ST.dd[i];R.ddT=1.6;
