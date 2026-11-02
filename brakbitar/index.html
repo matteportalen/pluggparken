@@ -109,10 +109,11 @@ h1{font-size:2.5rem;line-height:1;margin:12px 0 4px;font-weight:800}
 .tools{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:10px}
 .tools button{height:44px;padding:0 14px;border-radius:14px;background:var(--card);box-shadow:0 3px 0 var(--line);font-weight:800;font-size:.95rem}
 .tools button:active{transform:translateY(2px)}
-.pad{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;margin-top:10px}
-.pad button{height:50px;border-radius:14px;background:var(--card);box-shadow:0 4px 0 var(--line);font-size:1.5rem;font-weight:800}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}
+.pad button{height:46px;border-radius:14px;background:var(--card);box-shadow:0 4px 0 var(--line);font-size:1.5rem;font-weight:800}
 .pad button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
 .pad .okb{background:var(--good);color:#fff;box-shadow:0 4px 0 var(--good-dark);font-size:1.2rem}
+@media (max-height:760px){.pad{gap:5px}.pad button{height:40px;font-size:1.4rem;border-radius:12px}}
 .choice{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:10px}
 .choice button{min-width:96px;min-height:64px;border-radius:16px;background:var(--card);box-shadow:0 4px 0 var(--line);font-weight:800;font-size:1.5rem;padding:4px 14px}
 .choice button:active{transform:translateY(3px)}
@@ -150,7 +151,7 @@ h1{font-size:2.5rem;line-height:1;margin:12px 0 4px;font-weight:800}
     <div>
       <div class="rows" id="rows"></div>
       <div class="tools"><button id="tUndo">↶ Ångra</button><button id="tClear">🧹 Rensa</button><button id="tTip">💡 Tips</button><div class="seg" id="segLab2"></div></div>
-      <div class="pad" id="pad"><button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button><button data-k="4">4</button><button data-k="5">5</button><button data-k="6">6</button><button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button><button data-k="0">0</button><button data-k="del" aria-label="Sudda">⌫</button><button data-k="ok" class="okb">OK</button></div>
+      <div class="pad" id="pad"><button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button><button data-k="4">4</button><button data-k="5">5</button><button data-k="6">6</button><button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button><button data-k="del" aria-label="Sudda">⌫</button><button data-k="0">0</button><button data-k="ok" class="okb">OK</button></div>
       <div class="choice" id="choice" hidden></div>
       <div class="foot"><div class="pet" id="pet" aria-hidden="true"></div></div>
     </div>

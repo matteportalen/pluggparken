@@ -103,10 +103,11 @@ h2{font-size:1.25rem;margin:18px 0 8px;font-weight:800}
 .fb{min-height:1.3em;text-align:center;font-weight:800}
 .fb.ok{color:var(--good)}.fb.bad{color:#B86E00}
 .tip{background:var(--warn-bg,#FFF4CC);border-radius:12px;padding:6px 10px;margin:6px 0;font-size:1rem}
-.keys{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
-.keys button{height:48px;border-radius:12px;background:var(--bg);font-size:1.4rem;font-weight:800;box-shadow:0 3px 0 var(--line)}
-.keys .ok{grid-column:span 2;background:var(--good);color:#fff;box-shadow:0 3px 0 var(--good-dark);font-size:1.2rem}
+.keys{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.keys button{height:44px;border-radius:12px;background:var(--bg);font-size:1.4rem;font-weight:800;box-shadow:0 3px 0 var(--line)}
+.keys .ok{background:var(--good);color:#fff;box-shadow:0 3px 0 var(--good-dark);font-size:1.2rem}
 .keys .del{font-size:1.2rem}
+@media (orientation:landscape) and (max-height:520px){.keys{grid-template-columns:repeat(6,1fr)}.keys button{height:40px}}
 .backbtn{display:block;margin:10px auto 0;color:var(--muted);font-weight:700;text-decoration:underline}
 
 /* Vinst */
@@ -199,8 +200,10 @@ h2{font-size:1.25rem;margin:18px 0 8px;font-weight:800}
     <div class="fb" id="dFb" aria-live="polite"></div>
     <div class="tip" id="dTip" hidden></div>
     <div class="keys" id="dKeys">
-      <button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button><button data-k="4">4</button><button data-k="5">5</button><button data-k="del" class="del" aria-label="Sudda">⌫</button>
-      <button data-k="6">6</button><button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button><button data-k="0">0</button><button data-k="ok" class="ok" style="grid-column:auto">OK</button>
+      <button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button>
+      <button data-k="4">4</button><button data-k="5">5</button><button data-k="6">6</button>
+      <button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button>
+      <button data-k="del" aria-label="Sudda">⌫</button><button data-k="0">0</button><button data-k="ok" class="ok">OK</button>
     </div>
     <button class="backbtn" id="dBack">Gå tillbaka och ta en annan väg</button>
   </div>

@@ -146,10 +146,11 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
 .go:active{transform:translateY(3px);box-shadow:0 2px 0 var(--good-dark)}
 .big{display:block;width:100%;padding:12px 16px;border-radius:18px;background:var(--card);box-shadow:0 4px 0 var(--line);font-weight:800;font-size:1.15rem}
 .big:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
-.pad{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:10px}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:10px}
 .pad button{height:54px;border-radius:16px;background:var(--card);box-shadow:0 4px 0 var(--line);font-size:1.7rem;font-weight:800}
 .pad button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
 .pad .okbtn{background:var(--good);color:#fff;box-shadow:0 4px 0 var(--good-dark);font-size:1.3rem}
+@media (max-height:760px){.pad{gap:6px}.pad button{height:44px;font-size:1.5rem}.pad .okbtn{font-size:1.1rem}}
 .result{text-align:center;padding-top:20px}
 .kort{display:flex;gap:12px;align-items:flex-start;margin-top:16px;background:var(--lc-F3F0FF,#F3F0FF);border-radius:18px;padding:12px 14px;text-decoration:none;color:var(--ink);box-shadow:0 4px 0 var(--lc-DCD3FF,#DCD3FF)}
 .kort:active{transform:translateY(3px);box-shadow:0 1px 0 var(--lc-DCD3FF,#DCD3FF)}
@@ -194,9 +195,10 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
   <div class="btns" id="splitBtns"><button class="big" id="resetBtn">↺ Börja om</button><button class="go" id="doneBtn">Klar ✓</button></div>
   <button class="go" id="fixBtn" style="margin-top:10px" hidden>↩ Ändra uppdelningen</button>
   <div class="pad" id="pad" hidden>
-    <button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button><button data-k="del" aria-label="Sudda">⌫</button>
-    <button data-k="4">4</button><button data-k="5">5</button><button data-k="6">6</button><button data-k="0">0</button>
-    <button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button><button data-k="ok" class="okbtn">OK</button>
+    <button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button>
+    <button data-k="4">4</button><button data-k="5">5</button><button data-k="6">6</button>
+    <button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button>
+    <button data-k="del" aria-label="Sudda">⌫</button><button data-k="0">0</button><button data-k="ok" class="okbtn">OK</button>
   </div>
   <button class="go" id="nextBtn" style="margin-top:10px" hidden>Nästa tal →</button>
   <div class="pet" id="pet" aria-hidden="true"></div>

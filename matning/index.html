@@ -75,10 +75,11 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
 .choices button.ok{background:var(--ok-bg,#E3F7EC);box-shadow:0 4px 0 #9ED9B6}
 .choices button.bad{background:var(--err-bg,#FFE3E5);box-shadow:0 4px 0 #F3B4B6}
 .choices .em{font-size:2rem}
-.pad{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
 .pad button{height:52px;border-radius:16px;background:var(--card);box-shadow:0 4px 0 var(--line);font-size:1.6rem;font-weight:800}
 .pad button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
 .pad .okbtn{background:var(--good);color:#fff;box-shadow:0 4px 0 var(--good-dark);font-size:1.3rem}
+@media (max-height:760px){.pad{gap:5px}.pad button{height:40px;font-size:1.4rem;border-radius:13px}.pad .okbtn{font-size:1.1rem}}
 .pour{display:block;margin:6px auto 0;padding:10px 18px;border-radius:16px;background:#3D8BFD;color:#fff;font-weight:800;font-size:1.15rem;box-shadow:0 4px 0 #2A62C0}
 .pour:active{transform:translateY(3px);box-shadow:0 1px 0 #2A62C0}
 .go{display:block;width:100%;padding:14px 16px;border-radius:18px;background:var(--good);color:#fff;box-shadow:0 5px 0 var(--good-dark);font-weight:800;font-size:1.3rem;margin-top:12px}
@@ -111,9 +112,10 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
   </div>
   <div class="choices" id="choices" hidden></div>
   <div class="pad" id="pad" hidden>
-    <button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button><button data-k="del" aria-label="Sudda">⌫</button>
-    <button data-k="4">4</button><button data-k="5">5</button><button data-k="6">6</button><button data-k="0">0</button>
-    <button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button><button data-k="ok" class="okbtn">OK</button>
+    <button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button>
+    <button data-k="4">4</button><button data-k="5">5</button><button data-k="6">6</button>
+    <button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button>
+    <button data-k="del" aria-label="Sudda">⌫</button><button data-k="0">0</button><button data-k="ok" class="okbtn">OK</button>
   </div>
   <button class="go" id="nextBtn" hidden>Nästa →</button>
 </section>
