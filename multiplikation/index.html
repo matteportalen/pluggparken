@@ -423,7 +423,7 @@ function renderHome(){
     nb.onclick=()=>{sel={tables:[T],facts:null};startGame('practice');};
     const lar=!!data.lar[T],ova=medal(T)>=1,test=hasRace(T);
     st.hidden=false;
-    st.innerHTML=`<button data-s="lar" class="${lar?'done':''}">${lar?'✓ ':'1 '}Lär<small>🎬 knepet för ${T}:an</small></button><button data-s="ova" class="${ova?'done':''}">${ova?'✓ ':'2 '}Öva<small>${ova?'brons klart':'rader med kakor'}</small></button><button data-s="test" class="${test?'done':''}">${test?'✓ ':'3 '}Testa<small>🏁 racet</small></button>`;
+    st.innerHTML=`<button data-s="lar" class="${lar?'done':''}">${lar?'✓ ':'1 '}Lär<small>🎬 så funkar det</small></button><button data-s="ova" class="${ova?'done':''}">${ova?'✓ ':'2 '}Öva<small>${ova?'brons klart':'rader med kakor'}</small></button><button data-s="test" class="${test?'done':''}">${test?'✓ ':'3 '}Testa<small>🏁 racet</small></button>`;
     st.onclick=e=>{const x=e.target.closest('[data-s]');if(!x)return;sel={tables:[T],facts:null};
       if(x.dataset.s==='lar')openFilm(T);else if(x.dataset.s==='ova')startGame('practice');else startGame('race');};
   }else{
@@ -742,19 +742,6 @@ let FT=2,filmFrom='home';
 const FM=MPFilm.make({section:$('#film'),goText:'Nu provar jag! →',onGo:()=>{sel={tables:[FT],facts:null};startGame('practice');},onClose:()=>{if(filmFrom==='modes')openModes();else goHome();},speak});
 const {A,to,el,wait,sfx,cap,eq,sparks,BOUNCE}=FM,F=FM;
 const GC='#2BB673',OC='#FF9F43',RC='#E5484D';
-/* knepet per tabell: a · b, text, och steg ({add: rader, dim: rader som tonas bort}) */
-const KN={
- 1:{b:7,cap:'Gånger 1: bara en rad. Talet är kvar.',st:[{add:1,col:GC,tag:'1 · 7',eq:'1 · 7 = 7'}]},
- 2:{b:7,cap:'Gånger 2 är dubbelt: två lika rader.',st:[{add:1,col:GC,tag:'7',eq:'7'},{add:1,col:OC,tag:'+ 7',eq:'7 + 7 = 14'}]},
- 3:{b:6,cap:'Knepet för 3:an: dubbelt, och en rad till.',st:[{add:2,col:GC,tag:'2 · 6 = 12',eq:'2 · 6 = 12'},{add:1,col:OC,tag:'+ 6',eq:'12 + 6 = 18'}]},
- 4:{b:6,cap:'Knepet för 4:an: dubbelt, och dubbelt igen.',st:[{add:2,col:GC,tag:'2 · 6 = 12',eq:'2 · 6 = 12'},{add:2,col:OC,tag:'dubbelt',eq:'12 + 12 = 24'}]},
- 5:{b:8,cap:'Knepet för 5:an: hälften av gånger 10.',st:[{add:10,col:GC,tag:'10 · 8 = 80',eq:'10 · 8 = 80'},{dim:5,col:RC,tag:'hälften',eq:'5 · 8 = 40'}]},
- 6:{b:7,cap:'Knepet för 6:an: 5 rader och en till.',st:[{add:5,col:GC,tag:'5 · 7 = 35',eq:'5 · 7 = 35'},{add:1,col:OC,tag:'+ 7',eq:'35 + 7 = 42'}]},
- 7:{b:6,cap:'Knepet för 7:an: 5 rader och 2 till.',st:[{add:5,col:GC,tag:'5 · 6 = 30',eq:'5 · 6 = 30'},{add:2,col:OC,tag:'2 · 6 = 12',eq:'30 + 12 = 42'}]},
- 8:{b:6,cap:'Knepet för 8:an: dubbla 4:ans svar.',st:[{add:4,col:GC,tag:'4 · 6 = 24',eq:'4 · 6 = 24'},{add:4,col:OC,tag:'dubbelt',eq:'24 + 24 = 48'}]},
- 9:{b:6,cap:'Knepet för 9:an: tio rader, minus en.',st:[{add:10,col:GC,tag:'10 · 6 = 60',eq:'10 · 6 = 60'},{dim:1,col:RC,tag:'− 6',eq:'60 − 6 = 54'}]},
- 10:{b:7,cap:'Knepet för 10:an: sätt en nolla.',st:[{add:10,col:GC,tag:'10 rader med 7',eq:'10 · 7 = 7<b class="z">0</b> = 70'}]}
-};
 function tray(R,C,o={}){
   const d=Math.max(12,Math.min(30,Math.floor(210/C)-4,Math.floor(240/R)-4)),g=4,pad=10,W=C*(d+g)-g+2*pad,H=R*(d+g)-g+2*pad;
   const x=o.center?Math.round((360-W)/2):22,y=Math.round(172+(262-H)/2);
@@ -769,8 +756,7 @@ const popRow=(row,delay,col,i)=>{if(col){row.style.setProperty('--c',col);row.cl
 const rowTag=(T,from,to_,text,col,delay)=>{const y=T.y+T.pad+((from+to_+1)/2)*(T.d+T.g)-T.g/2-14;
   const e=el('ftag mtag',text,{x:T.x+T.W+8,y,o:0,sc:.5});e.style.setProperty('--c',col);to(e,{o:1,sc:1},400,{delay,ease:BOUNCE});return e;};
 FM.build=()=>{
-  const k=KN[FT]||KN[2],R=k.st.reduce((n,s)=>n+(s.add||0),0);
-  F.T4=tray(4,6,{center:true});F.K=tray(R,k.b,{});
+  F.T4=tray(4,6,{center:true});F.tags=[];
   F.petS=el('mpets',owlSVG(pet),{x:286,y:476,o:0,sc:.7});F.petB=el('mpetb',owlSVG(pet),{x:115,y:230,o:0,sc:.6});
 };
 FM.scenes=[
@@ -784,16 +770,12 @@ FM.scenes=[
    F.T4.rows.forEach((_,i)=>sfx('pop',i*450+200,i+1));await wait(2600);},
  async()=>{cap('Vänd på plåten: nu är det 6 rader med 4 kakor. Ändå 24!');await wait(500);
    to(F.T4.grp,{r:90},900,{ease:F.SOFT||'ease'});sfx('whoosh',150);await wait(1100);eq('4 · 6 = 6 · 4 = <span class="n">24</span>');sfx('chime',200);await wait(2300);},
- async()=>{const k=KN[FT]||KN[2];cap(k.cap);to(F.T4.grp,{o:0},300);to(F.K.grp,{o:1,sc:1},550,{delay:200,ease:BOUNCE});await wait(900);
-   let used=0;
-   for(const s of k.st){
-     if(s.add){const from=used;for(let i=0;i<s.add;i++)popRow(F.K.rows[from+i],i*(s.add>6?120:260),s.col,from+i);used+=s.add;
-       await wait(s.add*(s.add>6?120:260)+350);rowTag(F.K,from,used-1,s.tag,s.col,0);eq(s.eq);await wait(1700);}
-     else{for(let i=0;i<s.dim;i++){const row=F.K.rows[used-1-i];row.style.setProperty('--c',s.col);A(row,[{opacity:1},{opacity:.22}],{duration:600,delay:i*160});}
-       await wait(s.dim*160+500);rowTag(F.K,used-s.dim,used-1,s.tag,s.col,0);eq(s.eq);sfx('clonk');await wait(1800);}
-   }
-   sfx('ok');sparks(F.K.x+F.K.W/2,F.K.y+F.K.H/2,'#2BB673',12);await wait(1500);},
- async()=>{cap(`Nu är det din tur! Redo att baka ${FT}:ans tabell?`);to(F.K.grp,{o:0},300);to(F.petS,{o:0},200);eq(`<span class="n">${FT}:ans tabell</span>`);
+ async()=>{cap('Så skriver man det: 4 · 6 = 24.');to(F.T4.grp,{r:0},700);sfx('whoosh',100);eq('4 · 6 = <span class="n">24</span>');await wait(1000);
+   const T=F.T4,tg=(t,x,y,c,d)=>{const e=el('ftag mtag',t,{x,y,o:0,sc:.5});e.style.setProperty('--c',c);(F.tags=F.tags||[]).push(e);to(e,{o:1,sc:1},400,{delay:d,ease:BOUNCE});};
+   tg('4 rader',8,T.y+T.H/2-14,'#3D5AFE',0);await wait(1100);
+   tg('6 kakor i varje rad',108,T.y-34,'#FF9F43',0);await wait(1300);
+   tg('24 kakor tillsammans',92,T.y+T.H+10,'#2BB673',0);sfx('ok');await wait(2400);},
+ async()=>{cap(`Nu är det din tur! Redo att baka ${FT}:ans tabell?`);to(F.T4.grp,{o:0},300);(F.tags||[]).forEach(e=>to(e,{o:0},300));to(F.petS,{o:0},200);eq(`<span class="n">${FT}:ans tabell</span>`);
    to(F.petB,{o:1,sc:1},600,{delay:200,ease:BOUNCE});sfx('fanfare',300);sparks(180,300,'#F2B707',14);await wait(2400);}
 ];
 function openFilm(T){FT=T||(nextTable()||{T:2}).T;data.lar[FT]=1;save();filmFrom=($('#modes').hidden?'home':'modes');show('film');FM.open();}
