@@ -379,12 +379,16 @@ function affin(v,p){ // u = a·x + c·y + e, w = b·x + d·y + f
     return[M[0][3]/M[0][0],M[1][3]/M[1][1],M[2][3]/M[2][2]]}
   var U=los(p.map(function(q){return q[0]})),W=los(p.map(function(q){return q[1]}));
   return[U[0],W[0],U[1],W[1],U[2],W[2]]}
-function vyTill(g,n,vy,tris){var W=vy.width||600,s=n/W,k=n/600;
-  tris.forEach(function(i){var m=VYKARTA[i],T=affin(m[0],m[1]);g.save();g.beginPath();
+function vyTill(g,n,vy,tris,tab){var W=vy.width||600,s=n/W,k=n/600;tab=tab||VYKARTA;
+  tris.forEach(function(i){var m=tab[i],T=affin(m[0],m[1]);g.save();g.beginPath();
     m[1].forEach(function(q,j){var x=q[0]*k,y=q[1]*k;if(j)g.lineTo(x,y);else g.moveTo(x,y)});g.closePath();g.clip();
     g.setTransform(T[0]*600/W*k,T[1]*600/W*k,T[2]*600/W*k,T[3]*600/W*k,T[4]*k,T[5]*k);g.drawImage(vy,0,0);g.restore()})}
 /* Läge (insMode): 'both' = din mun i öppningen där övre och undre delen går isär (INT 4–7) och den färdiga bilden i den lodräta (INT 0–3),
    'pre' = bara den färdiga bilden, 'own' = bara din egen mun. "Byt plats" växlar öppningarna. */
+/* Nov 2026, lärarens fynd efter en ny vikning: fälten C D A B ska byta plats med F E H G (A↔H, B↔G, C↔F, D↔E). Det är en spegling av hela insidan över arkets huvuddiagonal
+   (x,y) → (y,x): triangel A (mitt, 600/300, 600/0) hamnar då exakt på H, B på G, C på F och D på E. Varje triangel får samma del av vyn som förut, men på sin nya plats,
+   så att hjärnan hamnar i den lodräta öppningen och munnen där övre och undre delen går isär. "Byt plats" (swapInt) går tillbaka till den gamla fördelningen. */
+var VYSWAP={};(function(){for(var s=0;s<8;s++)VYSWAP[7-s]=[VYKARTA[s][0],VYKARTA[s][1].map(function(q){return[q[1],q[0]]})]})();
 var insMode='both', swapInt=false, presetCv=null, testInt=false;
 function presetInt(){
   if(presetCv)return presetCv;
@@ -424,9 +428,15 @@ function comboInt(n,L){
   var egen=document.createElement('canvas');egen.width=egen.height=n;var eg=egen.getContext('2d');if(L&&L.img)renderInto(eg,n,L);else{eg.fillStyle='#fff';eg.fillRect(0,0,n,n)}
   if(testInt){g.drawImage(egen,0,0);return c}   // testarket ritas rakt på trianglarna, utan vy
   var AD=[0,1,2,3],EH=[4,5,6,7],pre=presetInt();
-  if(insMode==='pre'){vyTill(g,n,pre,AD);vyTill(g,n,pre,EH)}
-  else if(insMode==='own'){vyTill(g,n,egen,AD);vyTill(g,n,egen,EH)}
-  else{vyTill(g,n,egen,swapInt?AD:EH);vyTill(g,n,pre,swapInt?EH:AD)}
+  if(!swapInt){ // ny fördelning: A–D visar det som förut låg på H–E (munnen) och E–H det som låg på D–A (hjärnan)
+    if(insMode==='pre'){vyTill(g,n,pre,AD,VYSWAP);vyTill(g,n,pre,EH,VYSWAP)}
+    else if(insMode==='own'){vyTill(g,n,egen,AD,VYSWAP);vyTill(g,n,egen,EH,VYSWAP)}
+    else{vyTill(g,n,egen,AD,VYSWAP);vyTill(g,n,pre,EH,VYSWAP)}
+  }else{
+    if(insMode==='pre'){vyTill(g,n,pre,AD);vyTill(g,n,pre,EH)}
+    else if(insMode==='own'){vyTill(g,n,egen,AD);vyTill(g,n,egen,EH)}
+    else{vyTill(g,n,egen,AD);vyTill(g,n,pre,EH)}
+  }
   return c;
 }
 /* Rättning efter lärarens vikta testark (okt 2026): på den riktiga loppan blev varje flik på utsidan spegelvänd längs den diagonal
