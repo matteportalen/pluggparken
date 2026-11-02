@@ -1,0 +1,29 @@
+# Idéer som väntar
+
+_Sparade idéer och diskussioner som inte är byggda. Detaljerad historik och beslut. Sammanfattning och arbetsregler finns i `CLAUDE.md`. Nya anteckningar läggs sist här._
+
+## Idéer som väntar
+
+- **Stjärnorna känns lite uttjatade** (lärarens känsla, okt 2026): mynt, butik, titlar, Mitt rum och säsongssaker är byggda (se Gemensam design). Följ hur eleverna använder det innan något mer läggs till.
+
+- **Hitta felet** i Uppställning: färdiga uppställningar med typiska misstag.
+
+- **Blandade uppgifter med saknat tal** (`__ · 5 = 15`, `__ + 7 = 12`) och "Stämmer det?" i fler övningar (addition, multiplikation osv.). Prövas först i Division (Kalaset); läraren gillar idén.
+
+- **Egen värld per övning**: klart i Division (Kalaset), Multiplikation (Bageriet), Lilla plus (Hönsgården) och Tiotal (Bussen). Kvar att fundera på: övriga övningar.
+
+- **Dra klossar i Tiobas**: bara om eleverna själva försöker dra (tryck räcker för nu).
+
+- **Små tryckytor i Formjakten** (Geometri): flaggan och trädstammen är små i mobilstorlek. Åtgärdas bara om det visar sig vara ett problem för eleverna.
+
+- Kort kod utan server (sammanfattning i 8–30 tecken) diskuterades men byggdes inte.
+
+- På sikt: riktiga konton för **privat bruk** (kräver server), och senare en skolversion med lärarvy. Elevdata på en server behöver stämmas av med dataskyddsombudet (GDPR), och slumpade användarnamn räcker inte för att undgå GDPR helt.
+
+- **Konton för vuxna med Google-konto** (diskuterat okt 2026, sparat till senare): en vuxen loggar in (Google, även e-postlänk) och skapar barnprofiler; barnen loggar aldrig in själva. Framstegen sparas som i dag och synkas till molnet, så de följer med mellan enheter och försvinner inte; `PKEYS` och `mergeBundles` (behåll den version som kommit längst) räcker som grund. Förslag: **Supabase** i EU (Frankfurt; Google-inloggning ingår) framför Firebase, båda gratis i den här storleken; GitHub Pages kan vara kvar. Steg: 1 inloggning och synk (allt fungerar utan inloggning som förut), 2 föräldravy `foralder/` (stjärnor, medaljer, Ord på en minut över tid, senast övat), 3 integritetspolicy, radera allt, ladda ner min data. GDPR: läraren blir personuppgiftsansvarig, minsta möjliga data (smeknamn och djur), biträdesavtal med tjänsten; föräldern samtycker för barn under 13. Börja med **privat bruk**; skolbruk kräver avtal med kommunen och dataskyddsombudet (Google i skolan är känsligt efter IMY:s granskningar). Öppna frågor: privat eller skolor, Supabase eller Firebase, betalning senare, ansvarig person eller företag. Läraren skapar själv kontot hos tjänsten.
+  - **Barnkonton under familjekontot** (utan e-post och lösenord): föräldern skapar barnen (smeknamn och djur) i föräldravyn. Barnen loggar in med **inloggningskortet med QR-kod** (kopplas till kontot), med **familjekod + bildkod** (t.ex. "KATT-482", tryck på sitt djur, välj tre bilder i rätt ordning; går utan att kunna läsa) eller väljer bara sitt djur på en enhet där föräldern loggat in. Glömd kod: föräldern byter med ett tryck. Bildkoden är medvetet enkel (bara stjärnor och resultat), det ska stå i integritetspolicyn; föräldrakontot skyddas via Google eller e-postlänk. Flera syskon per konto.
+  - **Fördelar:** inget försvinner, samma framsteg hemma och i skolan, föräldravy (stjärnor och medaljer per övning, tabeller som sitter och är svåra, Ord på en minut som kurva, hur ofta barnet övat, gärna en veckosammanfattning), "Ladda ner allt" och "Radera barnet / hela kontot" som raderar på riktigt, bättre skydd än i dag, grund för betalning per familj och en lärarvy som föräldern väljer att dela med.
+  - **Utan konto lika tydligt som med** (lärarens krav): profilrutan visar två lika stora val, "👨‍👩‍👧 Skapa familjekonto" (spara säkert och följ ditt barns utveckling) och "▶ Kör utan konto" (allt fungerar ändå, framstegen sparas bara i den här webbläsaren), och under dem "Du kan skapa ett konto när som helst. Det du redan har övat följer med."
+  - **Tydlig förklaring innan föräldern loggar in** ("Så fungerar familjekontot", vardagsspråk): ✅ det här sparas (smeknamn, djur, resultat), 🚫 det här sparas inte (riktiga namn, skola, bilder, röst; inga annonser, ingen försäljning av data), 🇪🇺 servrar inom EU, 👀 bara föräldern och barnet ser det, 🗑️ ladda ner eller radera med ett tryck, 🧒 barnen loggar in med kort eller bildkod; knappar Läs hela integritetspolicyn, Skapa konto och **Nej tack, kör utan konto**.
+  - **Påminnelser utan tjat:** gäster ser en diskret rad i profilrutan ("Dina framsteg finns bara i den här webbläsaren"), ingen popup; samma löften står i föräldravyn bredvid Ladda ner och Radera.
+  - **Namn och adress före konton** (lärarens fråga): att byta **namn** påverkar inte kontona (bara texten i integritetspolicyn och Googles inloggningsruta). Att byta **adress** (t.ex. matteportalen.github.io → matteportalen.se): kontodatan ligger kvar på servern, men alla måste logga in en gång till, tillåtna adresser i Supabase och Googles inställningar måste uppdateras, och QR-kort ska därför bara innehålla en kontokod, inte adressen. Gäster utan konto tappar framstegen (localStorage hör till adressen) om inte en flyttsida på den gamla adressen skickar dem vidare med flyttkoden. **Råd: skaffa en egen adress (ca 100–200 kr/år, kan pekas till GitHub Pages direkt) och bestäm namnet innan konton byggs**, så kan resten ändras senare utan att adressen byts.
