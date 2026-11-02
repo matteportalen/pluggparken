@@ -9,7 +9,7 @@ const IDX=[
  ['lillaplus/','Lilla plus & minus','Huvudräkning med tal upp till 10','🐔','addition subtraktion plus minus hönsgård ägg räkna','Matte'],
  ['tiotal/','Tiotalsövergång','Räkna via tiotalet med tioruta och tallinje','🚌','tiotalsövergång 10 addition subtraktion plus minus över tio tiokompisar buss tioruta hundraruta','Matte'],
  ['uppstallning/','Uppställning','Addition och subtraktion som i boken, med minnessiffra och växling','📝','uppställning minnessiffra växling skriftlig addition subtraktion plus minus låna','Matte'],
- ['multiplikation/','Multiplikation','Tabellerna 1–10. Samla medaljer','✖️','gånger tabeller multiplikationstabellen bageri medaljer','Matte'],
+ ['multiplikation/','Multiplikation','Tabellerna 1–10 med film, dagens pass och medaljer','✖️','gånger tabeller multiplikationstabellen bageri medaljer dagens pass knep film','Matte'],
  ['division/','Division','Dela lika, med och utan rest','➗','dividera dela lika rest kalas påsar','Matte'],
  ['delaupp/','Dela upp och dela','Dela upp täljaren i delar som är lätta att dela','🧱','division uppdelning täljare nämnare klossar','Matte'],
  ['kortdivision/','Kort division','Dela siffra för siffra med rest','➗','liggande stolen trappan division siffra för siffra rest decimaler','Matte'],

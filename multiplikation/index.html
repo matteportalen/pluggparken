@@ -193,6 +193,40 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
 .dots.cookies{width:fit-content;padding:8px 10px;background:linear-gradient(#C9D2E0,#AEB9CC);border-radius:10px;box-shadow:inset 0 0 0 3px #8E9AB5}
 .dots.cookies i{background:radial-gradient(circle at 35% 35%,#F2C98A,#D9A066 60%,#B97E45)}
 @media (prefers-reduced-motion:reduce){.pet svg,.jarin span{animation:none !important}}
+/* ---------- Tydlig väg: Fortsätt, Lär–Öva–Testa, Dagens pass ---------- */
+.next{display:flex;align-items:center;gap:14px;width:100%;margin-top:14px;padding:14px 16px;border-radius:20px;background:linear-gradient(135deg,#2BB673,#1E9E5E);color:#fff;text-align:left;box-shadow:0 5px 0 var(--good-dark);transition:transform .08s,box-shadow .08s}
+.next:active{transform:translateY(3px);box-shadow:0 2px 0 var(--good-dark)}
+.next .ic{font-size:2rem;flex:none;width:2.4rem;text-align:center}
+.next b{display:block;font-size:1.45rem;line-height:1.15}
+.next small{display:block;font-size:.98rem;opacity:.95;line-height:1.3}
+.stig{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.stig button{display:flex;flex-direction:column;align-items:center;gap:1px;padding:8px 4px;border-radius:14px;background:var(--card);box-shadow:0 3px 0 var(--line);font-weight:800;font-size:1rem;line-height:1.2}
+.stig button small{font-weight:700;font-size:.8rem;color:var(--muted)}
+.stig button.done{background:var(--ok-bg,#DDF5E7);color:var(--ok-ink,var(--good-dark))}
+.stig button.done small{color:inherit}
+.stig button:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
+.day{margin-top:12px}
+.sec{margin:22px 0 8px;font-size:1.15rem;font-weight:800;color:var(--muted)}
+.sec small{display:block;font-weight:700;font-size:.85rem;margin-top:1px}
+.tcard.nx{outline:4px solid var(--sun);outline-offset:3px}
+.tcard .kn{position:absolute;left:0;right:0;bottom:21%;text-align:center;font-size:.72rem;font-weight:800;opacity:.9}
+.tcard .nxl{position:absolute;left:50%;top:-11px;transform:translateX(-50%);background:var(--sun);color:var(--ink);font-size:.68rem;font-weight:800;border-radius:999px;padding:0 8px;white-space:nowrap;box-shadow:0 2px 0 rgba(29,43,83,.25)}
+.testbox{background:var(--card);border-radius:18px;padding:10px 12px 12px;margin:12px 0 4px;box-shadow:0 4px 0 var(--line)}
+.testbox p{margin:0 0 6px;font-weight:800}
+.testbox .t2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.testbox .big{margin-top:0;font-size:1.1rem;padding:10px 8px}
+.result .big.go2{background:linear-gradient(135deg,#2BB673,#1E9E5E);color:#fff;box-shadow:0 5px 0 var(--good-dark)}
+/* filmen: bakplåtar */
+.mpfilm .mgrp{background:linear-gradient(#C9D2E0,#AEB9CC);border-radius:12px;box-shadow:inset 0 0 0 3px #8E9AB5,0 3px 0 #7A869E}
+.mpfilm .mrow{position:absolute;display:flex;--c:transparent}
+.mpfilm .mrow i{flex:none;border-radius:50%;background:radial-gradient(circle at 35% 35%,#F2C98A,#D9A066 60%,#B97E45);box-shadow:inset 0 -2px 0 rgba(0,0,0,.15);position:relative}
+.mpfilm .mrow i::after{content:"";position:absolute;left:30%;top:32%;width:24%;height:24%;border-radius:50%;background:#6B4423;box-shadow:calc(var(--dd,6px)) 3px 0 #6B4423}
+.mpfilm .mrow.col i{box-shadow:inset 0 -2px 0 rgba(0,0,0,.15),0 0 0 3px var(--c)}
+.mpfilm .ftag.mtag{color:#fff;background:var(--c,#3D5AFE);font-size:15px}
+.mpfilm .mpets{width:64px}.mpfilm .mpetb{width:130px}
+.mpfilm .mpets svg,.mpfilm .mpetb svg{width:100%;height:auto;display:block}
+.mpfilm .feq b.z{color:#C0283C}
+
 
 </style>
 </head>
@@ -201,8 +235,13 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
 
 <!-- Startsida -->
 <section id="home" class="screen">
+  <div class="filmrow"><button class="filmpill" id="filmBtn">🎬 Se hur man gör</button></div>
   <div class="party"><div class="ppet pet" id="homePet" aria-hidden="true"></div>
-    <div><h1>Multiplikation <span class="world">🧁 Bageriet</span></h1><p class="lead" id="homeLead">Välj en tabell att träna på.</p></div></div>
+    <div><h1>Multiplikation <span class="world">🧁 Bageriet</span></h1><p class="lead" id="homeLead">Tryck på Fortsätt, så börjar du direkt.</p></div></div>
+  <button class="next" id="btnNext"></button>
+  <div class="stig" id="stig"></div>
+  <button class="big day" id="btnDay"><span class="ic">⚡</span><span><b>Dagens pass</b><small>10 uppgifter, ungefär 2 minuter. Mest på det du behöver öva.</small></span></button>
+  <div class="sec">Alla tabeller <small>Tryck på en tabell för att öva. Gul ram = nästa i ordningen.</small></div>
   <div id="tableGrid" class="tables"></div>
   <div class="bowl" id="bowl"></div>
   <div class="actions">
@@ -226,6 +265,7 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
 <!-- Välj läge -->
 <section id="modes" class="screen" hidden>
   <button class="back" data-home>← Tillbaka</button>
+  <div class="filmrow" id="modesFilm"><button class="filmpill" id="filmBtn2">🎬 Se hur man gör</button></div>
   <h2 id="modesTitle"></h2>
   <div id="medalInfo" class="medalinfo" hidden></div>
   <div class="modes">
@@ -281,9 +321,15 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
   <div id="rMedals"></div>
   <div class="slow" id="rSlow" hidden><p>Dina långsammaste</p><div class="row" id="rSlowList"></div>
     <button class="go" id="rTrainSlow">Träna på dessa</button></div>
+  <button class="big go2" id="rNextT" hidden></button>
+  <div class="testbox" id="rTest" hidden><p>Redo att testa dig?</p><div class="t2"><button class="big" id="rRace">🏁 Racet</button><button class="big" id="rBlitz">⚡ Blixtrunda</button></div></div>
   <button class="big" id="rAgain">Spela igen</button>
-  <button class="big" id="rModes">Välj ett annat läge</button>
+  <button class="big" id="rModes">Fler lägen</button>
+  <button class="big" id="rHomeBtn" data-home>🏠 Till startsidan</button>
 </section>
+
+<!-- Filmen -->
+<section id="film" class="screen" hidden></section>
 
 <!-- Mästartavlan -->
 <section id="boardScreen" class="screen" hidden>
@@ -308,6 +354,7 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
 <script src="../ljud.js"></script>
 <script src="../djur.js"></script>
 <script src="../huvud.js" data-titel="Multiplikation" data-ikon="✖️"></script>
+<script src="../film.js"></script>
 <script>
 const $=s=>document.querySelector(s);
 const $$=s=>document.querySelectorAll(s);
@@ -322,7 +369,7 @@ const carSvg=c=>`<svg viewBox="0 0 48 28" width="46" height="27" aria-hidden="tr
 /* ---------- Lagring (bara i den här webbläsaren) ---------- */
 const KEY='mattespel-multiplikation-v1';
 let data=load();
-function load(){try{const d=JSON.parse(localStorage.getItem(KEY)||'null');if(d&&d.facts)return Object.assign({race:{},blitz:{}},d);}catch(e){}return{facts:{},race:{},blitz:{}};}
+function load(){try{const d=JSON.parse(localStorage.getItem(KEY)||'null');if(d&&d.facts)return Object.assign({race:{},blitz:{},lar:{}},d);}catch(e){}return{facts:{},race:{},blitz:{},lar:{}};}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){}}
 const fk=(a,b)=>Math.min(a,b)+'x'+Math.max(a,b);   // 3·7 och 7·3 räknas som samma uppgift
 const hist=(a,b)=>data.facts[fk(a,b)]||[];
@@ -339,7 +386,7 @@ const BAKE=['🍪','🥐','🧁','🍩','🥨','🍰','🥧','🍞','🎂','🥯
 const bakeOf=t=>BAKE[(t-1)%10];
 const petFx=c=>{const p=$('#hpet');if(p){p.classList.remove('hop','hmm');void p.offsetWidth;p.classList.add(c);}};
 $('#homePet').innerHTML=owlSVG(pet);$('#hpet').innerHTML=owlSVG(pet);
-$('#homeLead').textContent=`Hjälp ${lc} att baka! Varje plåt har rader med kakor. Välj en tabell.`;
+$('#homeLead').textContent=`Hjälp ${lc} att baka! Varje plåt har rader med kakor. Tryck på Fortsätt, så börjar du direkt.`;
 
 /* ---------- Navigering ---------- */
 let sel={tables:[],facts:null,label:''};
@@ -352,21 +399,54 @@ function toast(msg){const t=$('#toast');t.textContent=msg;t.hidden=false;clearTi
 $$('[data-home]').forEach(b=>b.onclick=goHome);
 function goHome(){if(location.search)history.replaceState(null,'',location.pathname);renderHome();show('home');}
 
+/* Föreslagen ordning (förslag, inget låses): lätta tabeller först, sedan de svåra */
+const ORDER=[2,5,10,3,4,9,6,7,8,1];
+function nextTable(){for(const lim of [1,2,3])for(const T of ORDER)if(medal(T)<lim)return{T,lim};return null;}
+const cnt=(T,f)=>range(1,10).filter(k=>f(k,T)).length;
+const goalCount=(T,lim)=>lim===1?cnt(T,everRight):lim===2?cnt(T,(k,t)=>level(k,t)>=2):cnt(T,(k,t)=>level(k,t)===3);
+const hasRace=T=>!!(data.race&&data.race[String(T)]);
 function renderHome(){
-  const g=$('#tableGrid');g.innerHTML='';
+  const nt=nextTable(),g=$('#tableGrid');g.innerHTML='';
   range(1,10).forEach(T=>{
-    const m=medal(T),known=range(1,10).filter(k=>level(k,T)>=2).length;
+    const m=medal(T),known=range(1,10).filter(k=>level(k,T)>=2).length,isN=nt&&nt.T===T;
     const b=document.createElement('button');
-    b.className='tcard'+(T===3?' dark':'');b.style.setProperty('--c',tcolor(T));
-    b.setAttribute('aria-label',`${T}:ans tabell${m?', '+MEDALS[m]:''}, ${known} av 10 kan du`);
-    b.innerHTML=`<span class="num">${T}</span><span class="bar"><i style="width:${known*10}%"></i></span>${m?`<span class="medal" style="background:${MCOL[m]}">★</span>`:''}${m?`<span class="candy">${bakeOf(T)}</span>`:''}`;
-    b.onclick=()=>{sel={tables:[T],facts:null};openModes();};
+    b.className='tcard'+(T===3?' dark':'')+(isN?' nx':'');b.style.setProperty('--c',tcolor(T));
+    b.setAttribute('aria-label',`${T}:ans tabell${m?', '+MEDALS[m]:''}, ${known} av 10 kan du${isN?', nästa i ordningen':''}`);
+    b.innerHTML=`<span class="num">${T}</span><span class="kn">${known}/10</span><span class="bar"><i style="width:${known*10}%"></i></span>${m?`<span class="medal" style="background:${MCOL[m]}">★</span>`:''}${m?`<span class="candy">${bakeOf(T)}</span>`:''}${isN?'<span class="nxl">Nästa</span>':''}`;
+    b.onclick=()=>{sel={tables:[T],facts:null};startGame('practice');};
     g.appendChild(b);
   });
+  /* Fortsätt-knappen och Lär–Öva–Testa */
+  const nb=$('#btnNext'),st=$('#stig');
+  if(nt){const T=nt.T;
+    nb.innerHTML=`<span class="ic">▶</span><span><b>Fortsätt: ${T}:ans tabell</b><small>${nt.lim===1&&goalCount(T,1)===0?'En ny tabell att lära dig.':`${goalCount(T,nt.lim)} av 10 klara mot ${MEDALS[nt.lim].toLowerCase()}.`} Tryck så börjar du direkt.</small></span>`;
+    nb.onclick=()=>{sel={tables:[T],facts:null};startGame('practice');};
+    const lar=!!data.lar[T],ova=medal(T)>=1,test=hasRace(T);
+    st.hidden=false;
+    st.innerHTML=`<button data-s="lar" class="${lar?'done':''}">${lar?'✓ ':'1 '}Lär<small>🎬 knepet för ${T}:an</small></button><button data-s="ova" class="${ova?'done':''}">${ova?'✓ ':'2 '}Öva<small>${ova?'brons klart':'rader med kakor'}</small></button><button data-s="test" class="${test?'done':''}">${test?'✓ ':'3 '}Testa<small>🏁 racet</small></button>`;
+    st.onclick=e=>{const x=e.target.closest('[data-s]');if(!x)return;sel={tables:[T],facts:null};
+      if(x.dataset.s==='lar')openFilm(T);else if(x.dataset.s==='ova')startGame('practice');else startGame('race');};
+  }else{
+    nb.innerHTML=`<span class="ic">🏆</span><span><b>Alla tabeller har guld!</b><small>Kör Blixtrunda med alla tabeller och slå ditt rekord.</small></span>`;
+    nb.onclick=()=>{sel={tables:range(1,10),facts:null};openModes();};st.hidden=true;st.innerHTML='';
+  }
   /* Receptboken: ett nytt bakverk för varje tabell med brons */
   const got=range(1,10).filter(T=>medal(T)>=1).length;
   $('#bowl').innerHTML=`<b>Receptboken: ${got} av 10 bakverk</b><div class="sorts">${range(1,10).map(T=>medal(T)>=1?`<span title="${T}:ans tabell">${bakeOf(T)}</span>`:`<span class="no" title="${T}:ans tabell">${T}</span>`).join('')}</div><small>Få brons i en tabell, så lär sig ${lc} ett nytt recept.</small>`;
 }
+/* Dagens pass: 10 uppgifter, mest sådant som är svagt eller nytt */
+$('#btnDay').onclick=()=>{
+  const nt=nextTable(),base=nt?nt.T:null,cand=[];
+  for(let a=2;a<=10;a++)for(let b=a;b<=10;b++){const h=hist(a,b),lv=level(a,b);
+    if(!h.length&&a!==base&&b!==base)continue;
+    if(lv===3&&Math.random()<.75)continue;
+    cand.push({f:[a,b],s:lv*1.2+Math.random()*1.6-h.filter(x=>!x[0]).length*.6});}
+  let pick=cand.sort((x,y)=>x.s-y.s).slice(0,10).map(x=>x.f);
+  if(pick.length<10){const have=new Set(pick.map(f=>fk(...f))),rest=[];
+    for(let a=2;a<=10;a++)for(let b=a;b<=10;b++)if(!have.has(fk(a,b)))rest.push([a,b]);
+    pick=pick.concat(shuffle(rest).slice(0,10-pick.length));}
+  sel={tables:[],facts:shuffle(pick),label:'Dagens pass'};startGame('practice');
+};
 
 /* Blanda egen */
 let mixSet=new Set();
@@ -408,7 +488,7 @@ function openModes(){
   if(!sel.facts&&sel.tables.length===1){const T=sel.tables[0],m=medal(T);mi.hidden=false;
     mi.innerHTML=`<span class="medal" style="background:${m?MCOL[m]:'var(--bg)'};color:${m?'#fff':'var(--line)'}">★</span><span>${medalLine(T)}</span>`;}
   else mi.hidden=true;
-  $('#modeOrder').hidden=!!sel.facts;$('#shareBtn').hidden=!!sel.facts;
+  $('#modeOrder').hidden=!!sel.facts;$('#shareBtn').hidden=!!sel.facts;$('#modesFilm').hidden=!(sel.tables.length===1&&!sel.facts);
   const k=setKey();
   $('#bestRace').textContent=k&&data.race[k]?'Rekord\n'+fmt(data.race[k].time):'';
   $('#bestBlitz').textContent=k&&data.blitz[k]?'Rekord\n'+data.blitz[k]+' rätt':'';
@@ -624,11 +704,18 @@ function finish(){
   G.slowFacts=slow.map(s=>[s.a,s.b]);
   $('#rSlow').hidden=slow.length<2;
   $('#rSlowList').innerHTML=slow.map(s=>`<span>${s.a} · ${s.b} = ${s.a*s.b}</span>`).join('');
+  const nt=nextTable();
+  $('#rTest').hidden=G.mode!=='practice'&&G.mode!=='order';
+  const rn=$('#rNextT');rn.hidden=!(nt&&G.mode==='practice'&&!G.custom&&(sel.facts||(sel.tables.length===1&&sel.tables[0]!==nt.T)));
+  if(nt)rn.textContent=`▶ Nästa: ${nt.T}:ans tabell`;
   show('result');if(party)confetti();
 }
 $('#rAgain').onclick=()=>startGame(G.mode,G.custom);
 $('#rModes').onclick=openModes;
 $('#rTrainSlow').onclick=()=>startGame('practice',G.slowFacts);
+$('#rRace').onclick=()=>startGame('race',G.custom);
+$('#rBlitz').onclick=()=>startGame('blitz',G.custom);
+$('#rNextT').onclick=()=>{const nt=nextTable();if(!nt)return goHome();sel={tables:[nt.T],facts:null};startGame('practice');};
 
 /* ---------- Mästartavlan ---------- */
 $('#btnBoard').onclick=()=>{renderBoard();show('boardScreen');};
@@ -642,7 +729,76 @@ function renderBoard(){
   $('#boardLead').textContent=fast===55?'Alla 55 uppgifter sitter snabbt. Du är en multiplikationsmästare!':
     `${know} av 55 uppgifter kan du, och ${fast} av dem sitter snabbt. Färga hela tavlan grön!`;
 }
-$('#resetBtn').onclick=()=>{if(confirm('Vill du nollställa alla framsteg och rekord i den här webbläsaren?')){data={facts:{},race:{},blitz:{}};save();renderBoard();toast('Framstegen är nollställda.');}};
+$('#resetBtn').onclick=()=>{if(confirm('Vill du nollställa alla framsteg och rekord i den här webbläsaren?')){data={facts:{},race:{},blitz:{},lar:{}};save();renderBoard();toast('Framstegen är nollställda.');}};
+
+/* ---------- Filmen: Se hur man gör (mallen i film.js) ----------
+   Samma film för alla tabeller: 4 · 6 på en bakplåt (rader, upprepad addition, vänd plåten), sedan ett knep för just den tabellen. */
+let svVoice=null;function loadVoices(){try{svVoice=speechSynthesis.getVoices().find(v=>/^sv/i.test(v.lang))||null}catch(e){}}
+if('speechSynthesis' in window){loadVoices();speechSynthesis.onvoiceschanged=loadVoices;}
+function speak(text){if(!('speechSynthesis' in window))return toast('Uppläsning fungerar inte i den här webbläsaren.');loadVoices();
+  if(!svVoice&&speechSynthesis.getVoices().length)return toast('Den här datorn har ingen svensk röst för uppläsning.');
+  speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text.replace(/·/g,' gånger ').replace(/−/g,' minus '));u.lang='sv-SE';if(svVoice)u.voice=svVoice;u.rate=.9;speechSynthesis.speak(u);}
+let FT=2,filmFrom='home';
+const FM=MPFilm.make({section:$('#film'),goText:'Nu provar jag! →',onGo:()=>{sel={tables:[FT],facts:null};startGame('practice');},onClose:()=>{if(filmFrom==='modes')openModes();else goHome();},speak});
+const {A,to,el,wait,sfx,cap,eq,sparks,BOUNCE}=FM,F=FM;
+const GC='#2BB673',OC='#FF9F43',RC='#E5484D';
+/* knepet per tabell: a · b, text, och steg ({add: rader, dim: rader som tonas bort}) */
+const KN={
+ 1:{b:7,cap:'Gånger 1: bara en rad. Talet är kvar.',st:[{add:1,col:GC,tag:'1 · 7',eq:'1 · 7 = 7'}]},
+ 2:{b:7,cap:'Gånger 2 är dubbelt: två lika rader.',st:[{add:1,col:GC,tag:'7',eq:'7'},{add:1,col:OC,tag:'+ 7',eq:'7 + 7 = 14'}]},
+ 3:{b:6,cap:'Knepet för 3:an: dubbelt, och en rad till.',st:[{add:2,col:GC,tag:'2 · 6 = 12',eq:'2 · 6 = 12'},{add:1,col:OC,tag:'+ 6',eq:'12 + 6 = 18'}]},
+ 4:{b:6,cap:'Knepet för 4:an: dubbelt, och dubbelt igen.',st:[{add:2,col:GC,tag:'2 · 6 = 12',eq:'2 · 6 = 12'},{add:2,col:OC,tag:'dubbelt',eq:'12 + 12 = 24'}]},
+ 5:{b:8,cap:'Knepet för 5:an: hälften av gånger 10.',st:[{add:10,col:GC,tag:'10 · 8 = 80',eq:'10 · 8 = 80'},{dim:5,col:RC,tag:'hälften',eq:'5 · 8 = 40'}]},
+ 6:{b:7,cap:'Knepet för 6:an: 5 rader och en till.',st:[{add:5,col:GC,tag:'5 · 7 = 35',eq:'5 · 7 = 35'},{add:1,col:OC,tag:'+ 7',eq:'35 + 7 = 42'}]},
+ 7:{b:6,cap:'Knepet för 7:an: 5 rader och 2 till.',st:[{add:5,col:GC,tag:'5 · 6 = 30',eq:'5 · 6 = 30'},{add:2,col:OC,tag:'2 · 6 = 12',eq:'30 + 12 = 42'}]},
+ 8:{b:6,cap:'Knepet för 8:an: dubbla 4:ans svar.',st:[{add:4,col:GC,tag:'4 · 6 = 24',eq:'4 · 6 = 24'},{add:4,col:OC,tag:'dubbelt',eq:'24 + 24 = 48'}]},
+ 9:{b:6,cap:'Knepet för 9:an: tio rader, minus en.',st:[{add:10,col:GC,tag:'10 · 6 = 60',eq:'10 · 6 = 60'},{dim:1,col:RC,tag:'− 6',eq:'60 − 6 = 54'}]},
+ 10:{b:7,cap:'Knepet för 10:an: sätt en nolla.',st:[{add:10,col:GC,tag:'10 rader med 7',eq:'10 · 7 = 7<b class="z">0</b> = 70'}]}
+};
+function tray(R,C,o={}){
+  const d=Math.max(12,Math.min(30,Math.floor(210/C)-4,Math.floor(240/R)-4)),g=4,pad=10,W=C*(d+g)-g+2*pad,H=R*(d+g)-g+2*pad;
+  const x=o.center?Math.round((360-W)/2):22,y=Math.round(172+(262-H)/2);
+  const grp=el('mgrp','',{x,y,o:0,sc:.75});grp.style.width=W+'px';grp.style.height=H+'px';grp.style.setProperty('--dd',Math.round(d*.25)+'px');
+  const rows=[];
+  for(let r=0;r<R;r++){const row=document.createElement('div');row.className='mrow';row.style.cssText=`left:${pad}px;top:${pad+r*(d+g)}px;gap:${g}px;opacity:0`;
+    row.innerHTML=Array.from({length:C},()=>`<i style="width:${d}px;height:${d}px"></i>`).join('');grp.appendChild(row);rows.push(row);}
+  return{grp,rows,d,g,pad,W,H,x,y};
+}
+const popRow=(row,delay,col,i)=>{if(col){row.style.setProperty('--c',col);row.classList.add('col');}
+  A(row,[{opacity:0,transform:'translateY(-16px) scale(.9)'},{opacity:1,transform:'none'}],{duration:420,delay,easing:BOUNCE});sfx('pop',delay+120,(i||0)%6);};
+const rowTag=(T,from,to_,text,col,delay)=>{const y=T.y+T.pad+((from+to_+1)/2)*(T.d+T.g)-T.g/2-14;
+  const e=el('ftag mtag',text,{x:T.x+T.W+8,y,o:0,sc:.5});e.style.setProperty('--c',col);to(e,{o:1,sc:1},400,{delay,ease:BOUNCE});return e;};
+FM.build=()=>{
+  const k=KN[FT]||KN[2],R=k.st.reduce((n,s)=>n+(s.add||0),0);
+  F.T4=tray(4,6,{center:true});F.K=tray(R,k.b,{});
+  F.petS=el('mpets',owlSVG(pet),{x:286,y:476,o:0,sc:.7});F.petB=el('mpetb',owlSVG(pet),{x:115,y:230,o:0,sc:.6});
+};
+FM.scenes=[
+ async()=>{cap('Hur många kakor blir det?');eq('4 · 6 = <span class="q">?</span>');
+   to(F.T4.grp,{o:1,sc:1},550,{ease:BOUNCE});to(F.petS,{o:1,sc:1},500,{delay:300,ease:BOUNCE});sfx('whoosh',100);await wait(1900);},
+ async()=>{cap('4 rader med 6 kakor i varje.');
+   for(let r=0;r<4;r++){popRow(F.T4.rows[r],0,null,r);eq(`<span class="n">${(r+1)*6}</span>`);await wait(950);}
+   eq('4 · 6 = <span class="n">24</span>');sfx('ok');sparks(F.T4.x+F.T4.W/2,F.T4.y+F.T4.H/2,'#F2B707',12);await wait(1600);},
+ async()=>{cap('Gånger betyder: lika många, om och om igen.');eq('6 + 6 + 6 + 6 = <span class="n">24</span>');
+   F.T4.rows.forEach((row,i)=>A(row,[{transform:'scale(1)'},{transform:'scale(1.07)'},{transform:'scale(1)'}],{duration:600,delay:i*450}));
+   F.T4.rows.forEach((_,i)=>sfx('pop',i*450+200,i+1));await wait(2600);},
+ async()=>{cap('Vänd på plåten: nu är det 6 rader med 4 kakor. Ändå 24!');await wait(500);
+   to(F.T4.grp,{r:90},900,{ease:F.SOFT||'ease'});sfx('whoosh',150);await wait(1100);eq('4 · 6 = 6 · 4 = <span class="n">24</span>');sfx('chime',200);await wait(2300);},
+ async()=>{const k=KN[FT]||KN[2];cap(k.cap);to(F.T4.grp,{o:0},300);to(F.K.grp,{o:1,sc:1},550,{delay:200,ease:BOUNCE});await wait(900);
+   let used=0;
+   for(const s of k.st){
+     if(s.add){const from=used;for(let i=0;i<s.add;i++)popRow(F.K.rows[from+i],i*(s.add>6?120:260),s.col,from+i);used+=s.add;
+       await wait(s.add*(s.add>6?120:260)+350);rowTag(F.K,from,used-1,s.tag,s.col,0);eq(s.eq);await wait(1700);}
+     else{for(let i=0;i<s.dim;i++){const row=F.K.rows[used-1-i];row.style.setProperty('--c',s.col);A(row,[{opacity:1},{opacity:.22}],{duration:600,delay:i*160});}
+       await wait(s.dim*160+500);rowTag(F.K,used-s.dim,used-1,s.tag,s.col,0);eq(s.eq);sfx('clonk');await wait(1800);}
+   }
+   sfx('ok');sparks(F.K.x+F.K.W/2,F.K.y+F.K.H/2,'#2BB673',12);await wait(1500);},
+ async()=>{cap(`Nu är det din tur! Redo att baka ${FT}:ans tabell?`);to(F.K.grp,{o:0},300);to(F.petS,{o:0},200);eq(`<span class="n">${FT}:ans tabell</span>`);
+   to(F.petB,{o:1,sc:1},600,{delay:200,ease:BOUNCE});sfx('fanfare',300);sparks(180,300,'#F2B707',14);await wait(2400);}
+];
+function openFilm(T){FT=T||(nextTable()||{T:2}).T;data.lar[FT]=1;save();filmFrom=($('#modes').hidden?'home':'modes');show('film');FM.open();}
+$('#filmBtn').onclick=()=>{openFilm();};
+$('#filmBtn2').onclick=()=>{openFilm(sel.tables.length===1?sel.tables[0]:null);};
 
 /* ---------- Konfetti ---------- */
 function confetti(){window.Ljud&&Ljud.fanfare();
