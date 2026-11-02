@@ -199,7 +199,7 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
 .next .ic{font-size:2rem;flex:none;width:2.4rem;text-align:center}
 .next b{display:block;font-size:1.45rem;line-height:1.15}
 .next small{display:block;font-size:.98rem;opacity:.95;line-height:1.3}
-.stig{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.stig{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
 .stig button{display:flex;flex-direction:column;align-items:center;gap:1px;padding:8px 4px;border-radius:14px;background:var(--card);box-shadow:0 3px 0 var(--line);font-weight:800;font-size:1rem;line-height:1.2}
 .stig button small{font-weight:700;font-size:.8rem;color:var(--muted)}
 .stig button.done{background:var(--ok-bg,#DDF5E7);color:var(--ok-ink,var(--good-dark))}
@@ -420,11 +420,11 @@ function renderHome(){
   if(nt){const T=nt.T;
     nb.innerHTML=`<span class="ic">▶</span><span><b>Fortsätt: ${T}:ans tabell</b><small>${nt.lim===1&&goalCount(T,1)===0?'En ny tabell att lära dig.':`${goalCount(T,nt.lim)} av 10 klara mot ${MEDALS[nt.lim].toLowerCase()}.`} Tryck så börjar du direkt.</small></span>`;
     nb.onclick=()=>{sel={tables:[T],facts:null};startGame('practice');};
-    const lar=!!data.lar.all,ova=medal(T)>=1,test=hasRace(T);
+    const ova=medal(T)>=1,test=hasRace(T);
     st.hidden=false;
-    st.innerHTML=`<button data-s="lar" class="${lar?'done':''}">${lar?'✓ ':'1 '}Lär<small>🎬 så funkar det</small></button><button data-s="ova" class="${ova?'done':''}">${ova?'✓ ':'2 '}Öva<small>${ova?'brons klart':'rader med kakor'}</small></button><button data-s="test" class="${test?'done':''}">${test?'✓ ':'3 '}Testa<small>🏁 racet</small></button>`;
+    st.innerHTML=`<button data-s="ova" class="${ova?'done':''}">${ova?'✓ ':'1 '}Öva<small>${ova?'brons klart':'rader med kakor'}</small></button><button data-s="test" class="${test?'done':''}">${test?'✓ ':'2 '}Testa<small>🏁 racet</small></button>`;
     st.onclick=e=>{const x=e.target.closest('[data-s]');if(!x)return;sel={tables:[T],facts:null};
-      if(x.dataset.s==='lar')openFilm(T);else if(x.dataset.s==='ova')startGame('practice');else startGame('race');};
+      if(x.dataset.s==='ova')startGame('practice');else startGame('race');};
   }else{
     nb.innerHTML=`<span class="ic">🏆</span><span><b>Alla tabeller har guld!</b><small>Kör Blixtrunda med alla tabeller och slå ditt rekord.</small></span>`;
     nb.onclick=()=>{sel={tables:range(1,10),facts:null};openModes();};st.hidden=true;st.innerHTML='';
