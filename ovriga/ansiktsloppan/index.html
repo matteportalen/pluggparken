@@ -405,14 +405,14 @@ function presetInt(){
     g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,600,600);
     g.save();g.beginPath();g.moveTo(VT[0],VT[1]);g.lineTo(VR[0],VR[1]);g.lineTo(VB[0],VB[1]);g.lineTo(VL[0],VL[1]);g.closePath();g.clip();
     var bg=g.createRadialGradient(300,320,10,300,300,330);bg.addColorStop(0,'#050102');bg.addColorStop(.45,'#2B1215');bg.addColorStop(1,'#7C5655');g.fillStyle=bg;g.fillRect(0,0,600,600);
-    // tungan nere, mittfåran lodrätt
-    var tg=g.createRadialGradient(300,500,10,300,520,200);tg.addColorStop(0,'#C98AA6');tg.addColorStop(.6,'#9A5578');tg.addColorStop(1,'#6A3250');
-    g.fillStyle=tg;g.beginPath();g.ellipse(300,545,165,125,0,0,7);g.fill();
-    g.strokeStyle='rgba(60,15,35,.55)';g.lineWidth=7;g.lineCap='round';g.beginPath();g.moveTo(300,440);g.lineTo(300,600);g.stroke();
-    // hjärnan uppe vid toppen
-    if(hj){var hh=240,ww=hh*hj.naturalWidth/hj.naturalHeight;g.save();g.shadowColor='rgba(0,0,0,.55)';g.shadowBlur=18;g.drawImage(hj,300-ww/2,8,ww,hh);g.restore()}
-    // tänderna längs ytterkanten, från mungiporna (vänster och höger hörn) upp mot hjärnan och ner mot tungan
-    rad(VR,VT,.04,.58,44);rad(VL,VT,.04,.58,44);rad(VR,VB,.04,.55,44);rad(VL,VB,.04,.55,44);
+    // tungan nertill, bakom tänderna på vänster och höger sida, mittfåran lodrätt (lärarens skiss, nov 2026)
+    var tg=g.createRadialGradient(300,470,10,300,480,210);tg.addColorStop(0,'#D9607A');tg.addColorStop(.6,'#B83B55');tg.addColorStop(1,'#7A1F36');
+    g.fillStyle=tg;g.beginPath();g.ellipse(300,475,205,112,0,0,7);g.fill();
+    g.strokeStyle='rgba(60,15,35,.55)';g.lineWidth=7;g.lineCap='round';g.beginPath();g.moveTo(300,395);g.lineTo(300,600);g.stroke();
+    // hjärnan långt in i loppan, i mitten och delad av mittfåran, under tänderna
+    if(hj){var hh=270,ww=hh*hj.naturalWidth/hj.naturalHeight;g.save();g.shadowColor='rgba(0,0,0,.55)';g.shadowBlur=18;g.drawImage(hj,300-ww/2,95,ww,hh);g.restore()}
+    // tänderna längst ytterkanterna, runt hela öppningen
+    rad(VR,VT,.05,.95,40);rad(VL,VT,.05,.95,40);rad(VR,VB,.05,.95,40);rad(VL,VB,.05,.95,40);
     g.restore();
   }
   bygg(null);presetCv=c;
