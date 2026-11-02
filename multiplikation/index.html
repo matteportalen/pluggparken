@@ -265,7 +265,6 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
 <!-- Välj läge -->
 <section id="modes" class="screen" hidden>
   <button class="back" data-home>← Tillbaka</button>
-  <div class="filmrow" id="modesFilm"><button class="filmpill" id="filmBtn2">🎬 Se hur man gör</button></div>
   <h2 id="modesTitle"></h2>
   <div id="medalInfo" class="medalinfo" hidden></div>
   <div class="modes">
@@ -421,7 +420,7 @@ function renderHome(){
   if(nt){const T=nt.T;
     nb.innerHTML=`<span class="ic">▶</span><span><b>Fortsätt: ${T}:ans tabell</b><small>${nt.lim===1&&goalCount(T,1)===0?'En ny tabell att lära dig.':`${goalCount(T,nt.lim)} av 10 klara mot ${MEDALS[nt.lim].toLowerCase()}.`} Tryck så börjar du direkt.</small></span>`;
     nb.onclick=()=>{sel={tables:[T],facts:null};startGame('practice');};
-    const lar=!!data.lar[T],ova=medal(T)>=1,test=hasRace(T);
+    const lar=!!data.lar.all,ova=medal(T)>=1,test=hasRace(T);
     st.hidden=false;
     st.innerHTML=`<button data-s="lar" class="${lar?'done':''}">${lar?'✓ ':'1 '}Lär<small>🎬 så funkar det</small></button><button data-s="ova" class="${ova?'done':''}">${ova?'✓ ':'2 '}Öva<small>${ova?'brons klart':'rader med kakor'}</small></button><button data-s="test" class="${test?'done':''}">${test?'✓ ':'3 '}Testa<small>🏁 racet</small></button>`;
     st.onclick=e=>{const x=e.target.closest('[data-s]');if(!x)return;sel={tables:[T],facts:null};
@@ -488,7 +487,7 @@ function openModes(){
   if(!sel.facts&&sel.tables.length===1){const T=sel.tables[0],m=medal(T);mi.hidden=false;
     mi.innerHTML=`<span class="medal" style="background:${m?MCOL[m]:'var(--bg)'};color:${m?'#fff':'var(--line)'}">★</span><span>${medalLine(T)}</span>`;}
   else mi.hidden=true;
-  $('#modeOrder').hidden=!!sel.facts;$('#shareBtn').hidden=!!sel.facts;$('#modesFilm').hidden=!(sel.tables.length===1&&!sel.facts);
+  $('#modeOrder').hidden=!!sel.facts;$('#shareBtn').hidden=!!sel.facts;
   const k=setKey();
   $('#bestRace').textContent=k&&data.race[k]?'Rekord\n'+fmt(data.race[k].time):'';
   $('#bestBlitz').textContent=k&&data.blitz[k]?'Rekord\n'+data.blitz[k]+' rätt':'';
@@ -739,7 +738,7 @@ function speak(text){if(!('speechSynthesis' in window))return toast('Uppläsning
   if(!svVoice&&speechSynthesis.getVoices().length)return toast('Den här datorn har ingen svensk röst för uppläsning.');
   speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text.replace(/·/g,' gånger ').replace(/−/g,' minus '));u.lang='sv-SE';if(svVoice)u.voice=svVoice;u.rate=.9;speechSynthesis.speak(u);}
 let FT=2,filmFrom='home';
-const FM=MPFilm.make({section:$('#film'),goText:'Nu provar jag! →',onGo:()=>{sel={tables:[FT],facts:null};startGame('practice');},onClose:()=>{if(filmFrom==='modes')openModes();else goHome();},speak});
+const FM=MPFilm.make({section:$('#film'),goText:'Nu provar jag! →',onGo:()=>{sel={tables:[FT],facts:null};startGame('practice');},onClose:()=>goHome(),speak});
 const {A,to,el,wait,sfx,cap,eq,sparks,BOUNCE}=FM,F=FM;
 const GC='#2BB673',OC='#FF9F43',RC='#E5484D';
 function tray(R,C,o={}){
@@ -778,9 +777,8 @@ FM.scenes=[
  async()=>{cap(`Nu är det din tur! Redo att baka ${FT}:ans tabell?`);to(F.T4.grp,{o:0},300);(F.tags||[]).forEach(e=>to(e,{o:0},300));to(F.petS,{o:0},200);eq(`<span class="n">${FT}:ans tabell</span>`);
    to(F.petB,{o:1,sc:1},600,{delay:200,ease:BOUNCE});sfx('fanfare',300);sparks(180,300,'#F2B707',14);await wait(2400);}
 ];
-function openFilm(T){FT=T||(nextTable()||{T:2}).T;data.lar[FT]=1;save();filmFrom=($('#modes').hidden?'home':'modes');show('film');FM.open();}
+function openFilm(T){FT=T||(nextTable()||{T:2}).T;data.lar.all=1;save();filmFrom='home';show('film');FM.open();}
 $('#filmBtn').onclick=()=>{openFilm();};
-$('#filmBtn2').onclick=()=>{openFilm(sel.tables.length===1?sel.tables[0]:null);};
 
 /* ---------- Konfetti ---------- */
 function confetti(){window.Ljud&&Ljud.fanfare();
