@@ -92,3 +92,5 @@ Lilla b (skrivstil), omritad efter lärarens foto: stammen böjer in i magens bo
 - **k:** liten **ögla på armen** (övre diagonala strecket), som på skrivstilsaffischen.
 
 Lilla r (skrivstil): omritat efter lärarens förlaga (uppstreck, liten tak/hylla, snett ner till raden, snett upp som utgång). Osäkert: sammanhängande "rara" liknar fortfarande "vava"; läraren ska bedöma.
+
+Lilla r (skrivstil) **omgjort efter lärarens andra förlaga**: snett uppstreck, liten ögla på toppen, hylla åt höger, sedan nedåt i en båge längs raden och snett upp som utgång.
