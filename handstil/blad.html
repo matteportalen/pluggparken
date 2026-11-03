@@ -97,13 +97,17 @@ label.ck{display:flex;gap:8px;align-items:center;font-weight:700}
     <div class="seg" id="sStil"><button data-v="tryck" aria-pressed="true">Tryckbokstäver</button><button data-v="skrift" aria-pressed="false">Skrivstil</button></div></div>
 
   <div class="panel"><h2>Vad vill ni öva?</h2>
-    <div class="seg" id="sMode"><button data-v="bok" aria-pressed="true">Bokstäver</button><button data-v="sif" aria-pressed="false">Siffror</button><button data-v="ord" aria-pressed="false">Ord och namn</button></div>
+    <div class="seg" id="sMode"><button data-v="bok" aria-pressed="true">Bokstäver</button><button data-v="sif" aria-pressed="false">Siffror</button><button data-v="ord" aria-pressed="false">Ord och namn</button><button data-v="mon" aria-pressed="false">Mönster för handen</button></div>
     <div id="pBok">
       <div class="seg" id="sKind" style="margin-top:10px"><button data-v="bada" aria-pressed="true">Stora och små</button><button data-v="stor" aria-pressed="false">Bara stora</button><button data-v="sma" aria-pressed="false">Bara små</button></div>
       <div class="seg" id="sGrp" style="margin-top:8px"></div>
       <div class="chips" id="cBok"></div>
     </div>
     <div id="pSif" hidden><div class="chips" id="cSif"></div></div>
+    <div id="pMon" hidden>
+      <p class="hint" style="margin-top:10px">Vågor, sicksack, öglor och former som övar handen innan bokstäverna. Varje mönster får tre rader: en prickad rad att dra över, en där man fortsätter mönstret själv och en tom rad.</p>
+      <div class="chips" id="cMon"></div>
+    </div>
     <div id="pOrd" hidden>
       <textarea id="tOrd" rows="4" maxlength="200" placeholder="Skriv ett ord eller ett namn på varje rad" spellcheck="false" autocapitalize="sentences"></textarea>
       <p class="hint">Högst 16 ord, och högst 14 tecken i varje. Varje ord får en rad att titta på, en prickad rad och en tom rad. Inget sparas.</p>
@@ -126,17 +130,18 @@ const $=s=>document.querySelector(s);
 const NS='http://www.w3.org/2000/svg';
 const G=MPGlyfer.G||MPGlyfer.GROUPS;
 const RW=1033,RY0=-35,RH=190,ROWS=6;
-let st={stil:'tryck',mode:'bok',kind:'bada',bok:new Set(),sif:new Set('0123456789'.split('')),ord:''};
+let st={stil:'tryck',mode:'bok',kind:'bada',bok:new Set(),sif:new Set('0123456789'.split('')),ord:'',mon:new Set(MPGlyfer.MON.map(m=>m.id))};
 G.filter(g=>!g.pre&&g.id!=='g6').forEach(g=>g.items.forEach(it=>st.bok.add(it.u)));
 
 /* ---------- Val ---------- */
 const PAIRS=[];G.filter(g=>!g.pre&&g.id!=='g6').forEach(g=>g.items.forEach(it=>PAIRS.push(it)));
 function seg(id,fn){$(id).onclick=e=>{const b=e.target.closest('[data-v]');if(!b)return;[...$(id).children].forEach(x=>x.setAttribute('aria-pressed',String(x===b)));fn(b.dataset.v);};}
 seg('#sStil',v=>{st.stil=v;render();});
-seg('#sMode',v=>{st.mode=v;['Bok','Sif','Ord'].forEach((n,i)=>$('#p'+n).hidden=['bok','sif','ord'][i]!==v);render();});
+seg('#sMode',v=>{st.mode=v;['Bok','Sif','Ord','Mon'].forEach((n,i)=>$('#p'+n).hidden=['bok','sif','ord','mon'][i]!==v);$('#sStil').parentElement.style.opacity=v==='mon'?.4:1;render();});
 seg('#sKind',v=>{st.kind=v;render();});
 function chips(){const cb=$('#cBok');cb.innerHTML='';PAIRS.forEach(it=>{const b=document.createElement('button');b.textContent=it.u+it.l;b.setAttribute('aria-pressed',String(st.bok.has(it.u)));b.onclick=()=>{st.bok.has(it.u)?st.bok.delete(it.u):st.bok.add(it.u);b.setAttribute('aria-pressed',String(st.bok.has(it.u)));render();};cb.appendChild(b);});
   const cs=$('#cSif');cs.innerHTML='';'0123456789'.split('').forEach(c=>{const b=document.createElement('button');b.textContent=c;b.setAttribute('aria-pressed',String(st.sif.has(c)));b.onclick=()=>{st.sif.has(c)?st.sif.delete(c):st.sif.add(c);b.setAttribute('aria-pressed',String(st.sif.has(c)));render();};cs.appendChild(b);});
+  const cm=$('#cMon');cm.innerHTML='';MPGlyfer.MON.forEach(m=>{const b=document.createElement('button');b.textContent=m.n;b.setAttribute('aria-pressed',String(st.mon.has(m.id)));b.onclick=()=>{st.mon.has(m.id)?st.mon.delete(m.id):st.mon.add(m.id);b.setAttribute('aria-pressed',String(st.mon.has(m.id)));render();};cm.appendChild(b);});
   const sg=$('#sGrp');sg.innerHTML='';
   [['Alla',()=>PAIRS.map(i=>i.u)],['Inga',()=>[]],...G.filter(g=>!g.pre&&g.id!=='g6').map(g=>[g.n,()=>g.items.map(i=>i.u)])].forEach(([n,f])=>{const b=document.createElement('button');b.textContent=n;b.onclick=()=>{st.bok=new Set(f());chips();render();};sg.appendChild(b);});}
 $('#tOrd').oninput=e=>{st.ord=e.target.value;render();};
@@ -164,6 +169,15 @@ function glyphRow(ch){const g=MPGlyfer.prepare(MPGlyfer.get(st.stil,ch),2.5),cw=
 function wordRows(w){const g=MPGlyfer.word(w,st.stil,2.5),dx=Math.max(20,(RW-g.w)/2-0);const off=Math.min(40,Math.max(10,(RW-g.w)/6));
   return[rowSVG(model(g.S,off,true)),rowSVG(ghost(g.S,off,true)),rowSVG(starSVG(RW-34,60))];}
 
+/* mönsterrader: prickat mönster över hela raden, mönster som ska fortsättas, tom rad med bara startprick */
+function patRows(m){const g=MPGlyfer.prepare(m.gen(RW-70),2.5),dx=34,S=g.S;
+  const first=S[0],f=first.dot||first.pts[0];
+  const head=first.pts?first.pts.slice(0,Math.min(first.pts.length,16)).map(p=>[p[0]+dx,p[1]]):null;
+  const mark=`<circle class="sd" cx="${f[0]+dx}" cy="${f[1]}" r="8"/><text class="sn" x="${f[0]+dx}" y="${f[1]+3.4}" text-anchor="middle" font-size="9.5" font-weight="800">1</text>`;
+  const intro=head?`<path class="mod" d="${pd(head)}" fill="none" stroke-width="3.3" stroke-linecap="round"/>${arrow(head)}`:'';
+  const lim=g.w*.42,S2=[];S.forEach(s=>{if(s.dot){if(s.dot[0]<lim)S2.push(s);return;}const k=s.pts.findIndex(p=>p[0]>lim);const pts=k<0?s.pts:s.pts.slice(0,k);if(pts.length>1&&(k>=0||pts[pts.length-1][0]<lim))S2.push({pts});});
+  return[rowSVG(ghost(S,dx,false)+intro+mark),rowSVG(ghost(S2,dx,false)+intro+mark),rowSVG(mark+starSVG(RW-34,60))];}
+
 /* ---------- Sidor ---------- */
 function plan(){
   const rows=[];let titel='',sub='';
@@ -171,6 +185,7 @@ function plan(){
     list.forEach(it=>{if(st.kind!=='sma')rows.push([glyphRow(it.u)]);if(st.kind!=='stor')rows.push([glyphRow(it.l)]);});
     sub=list.length===PAIRS.length?'Hela alfabetet':list.length?`Bokstäverna ${list.map(i=>i.u+i.l).join(' ')}`:'Välj bokstäver';}
   else if(st.mode==='sif'){const l=[...st.sif].sort();l.forEach(c=>rows.push([glyphRow(c)]));sub=l.length?`Siffrorna ${l.join(' ')}`:'Välj siffror';}
+  else if(st.mode==='mon'){const l=MPGlyfer.MON.filter(m=>st.mon.has(m.id));l.forEach(m=>rows.push(patRows(m)));sub=l.length?'Mönster för handen':'Välj mönster';}
   else{const ws=st.ord.split('\n').map(x=>x.replace(/[^A-Za-zÅÄÖåäö ]/g,'').replace(/\s+/g,' ').trim().slice(0,14)).filter(Boolean).slice(0,16);
     ws.forEach(w=>rows.push(wordRows(w)));sub=ws.length?ws.join(', '):'Skriv ord eller namn';}
   return{rows,sub};}

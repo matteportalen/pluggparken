@@ -149,12 +149,21 @@ p4:()=>[L(40,0,0,100)],
 p5:()=>[arc(35,50,35,50,-90,-450)],
 p6:()=>[J(arc(22,100,22,45,-180,0),arc(66,100,22,45,-180,0))],
 p7:()=>[Array.from({length:61},(_,i)=>[i*2,75-24*Math.sin(i/60*4*Math.PI)])],
+p8:()=>[L(0,90,22,10,44,90,66,10,88,90,110,10,132,90)],
+p9:()=>[Array.from({length:150},(_,i)=>{const t=i/150*3*2*Math.PI;return[14*t-28*Math.sin(t),52-28*Math.cos(t)];})],
+p10:()=>[J(arc(25,30,25,55,180,0),arc(75,30,25,55,180,0),arc(125,30,25,55,180,0))],
+p11:()=>[Array.from({length:140},(_,i)=>{const t=i/140*3;const a=t*2*Math.PI,r=3+14*t;return[50+r*Math.cos(a),50+r*Math.sin(a)];})],
+p12:()=>[L(0,10,70,90),L(70,10,0,90)],
+p13:()=>[L(0,15,80,15,80,90,0,90,0,15)],
+p14:()=>[L(35,5,0,95,70,95,35,5)],
+p15:()=>[dot(0,50),dot(30,50),dot(60,50),dot(90,50),dot(120,50)],
+p16:()=>[L(0,10,0,92),L(28,10,28,92),L(56,10,56,92),L(84,10,84,92)],
 };
-const PRENAMN=[["p1","Lodrät linje"],["p2","Vågrät linje"],["p3","Snett neråt"],["p4","Snett uppåt"],["p5","Cirkel"],["p6","Bågar"],["p7","Våg"]];
+const PRENAMN=[["p1","Lodrät linje"],["p2","Vågrät linje"],["p3","Snett neråt"],["p4","Snett uppåt"],["p5","Cirkel"],["p6","Bågar"],["p7","Våg"],["p8","Sicksack"],["p9","Öglor"],["p10","Hängbågar"],["p11","Spiral"],["p12","Kryss"],["p13","Fyrkant"],["p14","Triangel"],["p15","Prickar"],["p16","Streck på rad"]];
 
 const par=(...t)=>t.map(c=>({id:c+c.toLowerCase(),u:c,l:c.toLowerCase()}));
 const GROUPS=[
- {id:"g0",n:"Förövningar",sub:"Linjer, cirklar och vågor innan bokstäverna",pre:true,items:PRENAMN.map(([id,label])=>({id,label,pre:true}))},
+ {id:"g0",n:"Förövningar",sub:"Linjer, vågor, sicksack, öglor och former innan bokstäverna",pre:true,items:PRENAMN.map(([id,label])=>({id,label,pre:true}))},
  {id:"g1",n:"Raka streck",sub:"Bokstäver som mest är streck",items:par("I","L","T","H","E","F")},
  {id:"g2",n:"Runda bokstäver",sub:"Bokstäver med runda former",items:par("O","C","S","G","Q","A","D")},
  {id:"g3",n:"Bågar och hakar",sub:"Bokstäver med bågar, bukter och ben",items:par("B","P","R","N","M","U","J")},
@@ -199,6 +208,19 @@ function wordCursive(text,step){
   raw.forEach(s=>{if(s.dot){S.push({dot:s.dot.slice()});mn=Math.min(mn,s.dot[0]);mx=Math.max(mx,s.dot[0]);}else{const pts=resample(s,step||2.5);pts.forEach(p=>{mn=Math.min(mn,p[0]);mx=Math.max(mx,p[0]);});S.push({pts});}});
   S.forEach(s=>{if(s.dot)s.dot[0]-=mn;else s.pts.forEach(p=>p[0]-=mn);});
   return{S,w:mx-mn};}
+/* ---------- mönster på rad för utskrift (motorik): gen(bredd) ger penndrag över hela raden ---------- */
+const MON=[
+ {id:"vag",n:"Vågor",gen:w=>[Array.from({length:Math.floor(w/3)+1},(_,i)=>[i*3,52+30*Math.sin(i*3/80*2*Math.PI)])]},
+ {id:"sicksack",n:"Sicksack",gen:w=>{const p=[];for(let x=0,k=0;x<=w;x+=28,k++)p.push([x,k%2?15:88]);return[p];}},
+ {id:"oglor",n:"Öglor",gen:w=>[Array.from({length:Math.floor(w/1.6)},(_,i)=>{const t=i/ (w/1.6)*(w/14);return[14*t-28*Math.sin(t),52-28*Math.cos(t)];})]},
+ {id:"hangbagar",n:"Hängande bågar",gen:w=>{const a=[];for(let x=0;x+60<=w;x+=60)a.push(arc(x+30,30,30,55,180,0));return[J(...a)];}},
+ {id:"bagarupp",n:"Bågar uppåt",gen:w=>{const a=[];for(let x=0;x+60<=w;x+=60)a.push(arc(x+30,92,30,55,-180,0));return[J(...a)];}},
+ {id:"cirklar",n:"Cirklar",gen:w=>{const a=[];for(let x=0;x+66<=w;x+=66)a.push(arc(x+30,52,30,40,-90,-450));return a;}},
+ {id:"streck",n:"Raka streck",gen:w=>{const a=[];for(let x=10;x<=w-10;x+=36)a.push(L(x,12,x,92));return a;}},
+ {id:"snedstreck",n:"Snedstreck",gen:w=>{const a=[];for(let x=0;x+24<=w;x+=34)a.push(L(x,92,x+22,12));return a;}},
+ {id:"kryss",n:"Kryss",gen:w=>{const a=[];for(let x=0;x+50<=w;x+=66){a.push(L(x,12,x+44,92));a.push(L(x+44,12,x,92));}return a;}},
+ {id:"fyrkanter",n:"Fyrkanter",gen:w=>{const a=[];for(let x=0;x+66<=w;x+=84)a.push(L(x,18,x+62,18,x+62,88,x,88,x,18));return a;}},
+];
 /* ---------- ordlistor att öva på (bara bokstäver, högst 14 tecken) ---------- */
 const ORD=[
 ["Första orden","jag och det är en på har med kan vi du han hon"],
@@ -228,5 +250,5 @@ const ORD=[
 ["Verb","springa hoppa läsa skriva måla leka sova äta dricka rita"],
 ["Ord med å, ä och ö","båt råd gård äpple älg väg öga öppna höst björn"],
 ].map(([n,l])=>({n,w:l.split(" ")}));
-return{get,GROUPS,PRE,CAP,LOW,CURB,prepare,word,resample,ORD};
+return{get,GROUPS,PRE,CAP,LOW,CURB,prepare,word,resample,ORD,MON};
 })();
