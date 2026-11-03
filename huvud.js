@@ -172,7 +172,8 @@ body.mph-mini #quit{display:none}
     // en avklarad runda (anropas av huvud.js när skärmen "result" visas, eller av en sida själv)
     runda(n){const m=myntLas(),nu=Date.now();if(nu-(m.senast||0)<15000)return 0;let f=n==null?6:n;if(m.dag!==idag()){f+=10;m.dag=idag();}
       m.m+=f;m.tj+=f;m.senast=nu;myntSpara(m);myntVisa(f);window.MPKonto&&MPKonto.puffa();return f;},
-    kop(id,pris){const m=myntLas();if(m.m<pris)return false;m.m-=pris;m.kopt=[...new Set([...(m.kopt||[]),id])];myntSpara(m);const el=document.querySelector('.mph-m');if(el)el.textContent=m.m;return true;},
+    kop(id,pris){const m=myntLas();if((m.kopt||[]).includes(id))return true;   // redan köpt: dra aldrig mynt två gånger
+      if(m.m<pris)return false;m.m-=pris;m.kopt=[...new Set([...(m.kopt||[]),id])];myntSpara(m);const el=document.querySelector('.mph-m');if(el)el.textContent=m.m;return true;},
     spara:myntSpara};
   function profilnamn(){try{const a=sessionStorage.getItem('mp-active');if(!a||a==='gast')return'';const p=(JSON.parse(localStorage.getItem('mp-profiles')||'[]')||[]).find(x=>x.id===a);return p?p.name:'';}catch(e){return''}}
   const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
