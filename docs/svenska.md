@@ -49,3 +49,6 @@ Startsidan var rörig (sidokolumn + två kolumner kort). Nu en smal kolumn (max 
 
 ### Handstil: ⏩ x2 i "Se"-steget
 Knapp som dubblar hastigheten på den animerade spårningen (`fart` 1 eller 2, gäller även mitt i animationen, kvar mellan bokstäverna men sparas inte). Visas under animationen och bredvid "Se igen".
+
+### Handstil: formen på förövningskorten
+Varje förövningskort visar en liten lila bild av formen (`preThumb` ritar penndragen ur `MPGlyfer.PRE` som SVG).

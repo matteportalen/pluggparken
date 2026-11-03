@@ -100,6 +100,7 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 .sec .gr:first-child h3{margin-top:6px}
 .sec .owl{margin:6px 0 4px;color:var(--muted);font-size:.95rem}
 .tile.pre{font-size:.85rem;overflow-wrap:anywhere}
+.tile .thumb{display:block;width:56px;height:56px;margin:0 auto 4px}
 @media (min-width:1000px){
   .wrap{max-width:1280px}
   #home{max-width:860px;margin:0 auto}
@@ -226,10 +227,15 @@ const itemKeys=(it,stil)=>it.pre?['pre:'+it.id]:it.one?[stil+':'+it.ch]:[stil+':
 
 /* ---------- Hem ---------- */
 let openSec='bok';
+function preThumb(id){const st=MPGlyfer.PRE[id](),pts=[];
+  st.forEach(s=>s.dot?pts.push(s.dot):s.forEach(p=>pts.push(p)));
+  const xs=pts.map(p=>p[0]),ys=pts.map(p=>p[1]),x0=Math.min(...xs)-8,x1=Math.max(...xs)+8,y0=Math.min(...ys)-8,y1=Math.max(...ys)+8,w=Math.max(x1-x0,y1-y0,40);
+  const cx=(x0+x1)/2,cy=(y0+y1)/2,pa=s=>s.dot?`<circle cx="${s.dot[0]}" cy="${s.dot[1]}" r="6" fill="#7B61FF"/>`:`<path d="M${s.map(p=>p[0].toFixed(1)+' '+p[1].toFixed(1)).join('L')}" fill="none" stroke="#7B61FF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>`;
+  return `<svg class="thumb" viewBox="${cx-w/2} ${cy-w/2} ${w} ${w}" aria-hidden="true">${st.map(pa).join('')}</svg>`;}
 function tileEl(g,it){const b=document.createElement('button');
   const keys=itemKeys(it,data.stil),lv=Math.min(...keys.map(k=>data.klar[k]||0));
   b.className='tile'+(it.pre?' pre':'')+(lv>=2?' k2':lv>=1?' k1':'');
-  b.innerHTML=it.pre?`${it.label}<small>${lv>=2?'✓ klar':''}</small>`:it.one?`${it.ch}<small>${lv>=2?'✓ klar':lv>=1?'påbörjad':''}</small>`:`${it.u}${it.l}<small>${lv>=2?'✓ klar':lv>=1?'påbörjad':''}</small>`;
+  b.innerHTML=it.pre?`${preThumb(it.id)}${it.label}<small>${lv>=2?'✓ klar':''}</small>`:it.one?`${it.ch}<small>${lv>=2?'✓ klar':lv>=1?'påbörjad':''}</small>`:`${it.u}${it.l}<small>${lv>=2?'✓ klar':lv>=1?'påbörjad':''}</small>`;
   b.setAttribute('aria-label',it.pre?it.label:it.one?`Siffran ${it.ch}`:`Bokstav ${it.u} ${it.l}`);
   b.onclick=()=>startItem(g,it);return b;}
 const gStars=g=>g.pre?(data.stars.pre||0):(data.stars[data.stil+'-'+g.id]||0);
