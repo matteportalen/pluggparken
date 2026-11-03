@@ -58,3 +58,6 @@ Ritas med öppen topp: rakt ner till mitten, 90° sväng åt höger (ett penndra
 
 ### Handstil: längre förövningsrader
 Förövningar som upprepas går nu längre: vågrät linje (240), snett från vänster/höger (6 streck bredvid varandra), bågar (6), våg (5 perioder), sicksack (14 streck), öglor (4), hängbågar (5), prickar (10), streck på rad (10). Skrivytan blir bredare efter övningen (`VW` beräknas ur `MPGlyfer.prepare(...).w`, som för ord). Övningsbladens mönster (`MON`) är oförändrade.
+
+### Övningsblad: startpunkter på samma plats
+Har två penndrag samma startpunkt (t.ex. stora E) lägger `model()` i `blad.html` de senare numrerade cirklarna lite åt höger och upp, så att alla siffror syns.
