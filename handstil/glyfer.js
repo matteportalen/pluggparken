@@ -130,7 +130,7 @@ const NUM={
 "6":()=>[J(arc(52,52,50,52,-100,-180),L(2,52,2,76),arc(25,76,23,24,180,-180))],   // fortsätter ner och runt (moturs), vänder inte vid magen
 "7":()=>[L(0,0,50,0,16,100)],
 "8":()=>[J(arc(25,26,21,26,-90,-270),arc(25,77,25,25,-90,270),arc(25,26,21,26,90,-90))],
-"9":()=>[J(arc(25,24,23,24,-20,-380),L(46.6,15.8,48,26,48,48),arc(-2,48,50,52,0,80))],   // runt (moturs) från toppen, sedan svansen ner
+"9":()=>[J(arc(25,24,23,24,-20,-380),L(46.6,15.8,48,26,48,100))],   // ring moturs, sedan ett rakt streck ner   // runt (moturs) från toppen, sedan svansen ner
 };
 
 function get(stil,ch){
