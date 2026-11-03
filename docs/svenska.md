@@ -104,3 +104,5 @@ Lilla r (skrivstil), fjärde försöket, **mätt direkt ur lärarens röda över
 Lilla r (skrivstil), femte försöket efter lärarens **numrerade pilar (1-2-3)**: 1 diagonalen rakt upp (den svänger inte in mot vänster), 2 öglan går **motsols**: upp på höger sida, över toppen, ner på vänster sida och över diagonalen, 3 hyllan åt höger, sedan bågen och snett upp. Tidigare gick öglan medsols (fel håll).
 
 Lilla r (skrivstil): öglan gjord **minimalt liten** (ca 5 × 8 enheter, tidigare 16 × 18), samma väg (motsols, korsar diagonalen).
+
+Handstil: `glyfer.js` laddas med `?v=…` i `handstil/index.html` och `blad.html` (GitHub Pages cachar filer i 10 minuter och webbläsare kan hålla kvar dem trots hård uppdatering). **Byt versionssiffran i båda filerna varje gång `glyfer.js` ändras.**
