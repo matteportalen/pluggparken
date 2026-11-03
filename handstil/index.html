@@ -78,7 +78,7 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 .btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
 .wf{display:flex;gap:8px;margin:6px 0 8px}
 .wf input{flex:1;min-width:0;font:inherit;font-family:var(--ord);font-size:1.2rem;padding:8px 12px;border-radius:14px;border:2px solid var(--line);background:var(--soft);color:var(--ink)}
-.chips .pr{margin:6px 0}.chips .pr b{display:block;font-size:.9rem;color:var(--muted)}
+.wl{display:block;font-weight:700;color:var(--muted);font-size:.95rem;margin:2px 0 6px}.wl select{display:block;width:100%;margin-top:4px;font:inherit;font-weight:700;padding:8px 10px;border-radius:12px;border:2px solid var(--line);background:var(--soft);color:var(--ink)}
 .chip{padding:5px 12px;border-radius:999px;background:var(--soft);box-shadow:0 2px 0 var(--line);font-family:var(--ord);font-weight:700;font-size:1rem;margin:3px 4px 3px 0}
 .printrow{margin:0 0 10px;display:flex;justify-content:flex-end}
 .printrow a{display:inline-block;padding:8px 14px;border-radius:14px;background:var(--card);box-shadow:0 3px 0 var(--line);font-weight:800;color:var(--ink);text-decoration:none}
@@ -217,8 +217,10 @@ function renderHome(){
     <form class="wf" id="wf"><input id="wIn" maxlength="14" autocomplete="off" autocapitalize="sentences" spellcheck="false" placeholder="Skriv ett ord eller ditt namn" aria-label="Ord eller namn"><button class="btn go" type="submit">Öva</button></form>
     <div class="chips" id="wChips"></div>`;
   gr.appendChild(w);
-  const PRESET=[['Veckodagar','måndag tisdag onsdag torsdag fredag lördag söndag'],['Färger','röd blå gul grön vit svart rosa'],['Djur','katt hund ko häst fisk groda'],['Första orden','jag och det är en på har med kan']];
-  const ch=$('#wChips');PRESET.forEach(([n,l])=>{const d2=document.createElement('div');d2.className='pr';d2.innerHTML=`<b>${n}</b>`;l.split(' ').forEach(o=>{const b=document.createElement('button');b.className='chip';b.textContent=o;b.onclick=()=>startWord(o);d2.appendChild(b);});ch.appendChild(d2);});
+  const ch=$('#wChips');
+  ch.innerHTML=`<label class="wl">Välj en lista med ord<select id="wCat">${MPGlyfer.ORD.map((c,i)=>`<option value="${i}">${c.n}</option>`).join('')}</select></label><div id="wWords"></div>`;
+  const fyll=()=>{const c=MPGlyfer.ORD[+$('#wCat').value],box=$('#wWords');box.innerHTML='';c.w.forEach(o=>{const b=document.createElement('button');b.className='chip';b.textContent=o;b.onclick=()=>startWord(o);box.appendChild(b);});};
+  $('#wCat').onchange=fyll;fyll();
   $('#wf').onsubmit=e=>{e.preventDefault();startWord($('#wIn').value);};
   }
 function startWord(raw){const t=raw.replace(/[^A-Za-zÅÄÖåäö ]/g,'').replace(/\s+/g,' ').trim().slice(0,14);

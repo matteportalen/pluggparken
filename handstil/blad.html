@@ -44,6 +44,7 @@ h1{margin:8px 0 2px;font-size:2rem}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .chips button{min-width:46px;padding:6px 8px;border-radius:12px;background:var(--soft);box-shadow:0 2px 0 var(--line);font-family:var(--ord);font-weight:700;font-size:1.05rem}
 .chips button[aria-pressed=true]{background:#FFE7C2;box-shadow:0 2px 0 #E8B66A}
+select{font:inherit;font-weight:700;padding:8px 10px;border-radius:12px;border:2px solid var(--line);background:var(--soft);color:var(--ink);max-width:100%}
 textarea{width:100%;font:inherit;font-family:var(--ord);font-size:1.15rem;padding:8px 12px;border-radius:14px;border:2px solid var(--line);background:var(--soft);color:var(--ink);resize:vertical}
 .opts{display:flex;flex-wrap:wrap;gap:14px 22px;align-items:center}
 label.ck{display:flex;gap:8px;align-items:center;font-weight:700}
@@ -105,7 +106,7 @@ label.ck{display:flex;gap:8px;align-items:center;font-weight:700}
     <div id="pSif" hidden><div class="chips" id="cSif"></div></div>
     <div id="pOrd" hidden>
       <textarea id="tOrd" rows="4" maxlength="200" placeholder="Skriv ett ord eller ett namn på varje rad" spellcheck="false" autocapitalize="sentences"></textarea>
-      <p class="hint">Högst åtta ord, och högst 14 tecken i varje. Varje ord får en rad att titta på, en prickad rad och en tom rad. Inget sparas.</p>
+      <p class="hint">Högst 16 ord, och högst 14 tecken i varje. Varje ord får en rad att titta på, en prickad rad och en tom rad. Inget sparas.</p>
       <div class="seg" id="sPre" style="margin-top:8px"></div>
     </div>
   </div>
@@ -139,8 +140,8 @@ function chips(){const cb=$('#cBok');cb.innerHTML='';PAIRS.forEach(it=>{const b=
   const sg=$('#sGrp');sg.innerHTML='';
   [['Alla',()=>PAIRS.map(i=>i.u)],['Inga',()=>[]],...G.filter(g=>!g.pre&&g.id!=='g6').map(g=>[g.n,()=>g.items.map(i=>i.u)])].forEach(([n,f])=>{const b=document.createElement('button');b.textContent=n;b.onclick=()=>{st.bok=new Set(f());chips();render();};sg.appendChild(b);});}
 $('#tOrd').oninput=e=>{st.ord=e.target.value;render();};
-const PRE=[['Veckodagar','måndag\ntisdag\nonsdag\ntorsdag\nfredag\nlördag\nsöndag'],['Färger','röd\nblå\ngul\ngrön\nvit\nsvart\nrosa'],['Första orden','jag\noch\ndet\när\nen\npå\nhar\nmed'],['Djur','katt\nhund\nko\nhäst\nfisk\ngroda']];
-PRE.forEach(([n,t])=>{const b=document.createElement('button');b.textContent=n;b.onclick=()=>{st.ord=t;$('#tOrd').value=t;render();};$('#sPre').appendChild(b);});
+const sel=document.createElement('select');sel.id='selOrd';sel.innerHTML='<option value="">Välj en färdig lista med ord …</option>'+MPGlyfer.ORD.map((c,i)=>`<option value="${i}">${c.n} (${c.w.length} ord)</option>`).join('');
+sel.onchange=()=>{if(sel.value==='')return;const t=MPGlyfer.ORD[+sel.value].w.slice(0,16).join('\n');st.ord=t;$('#tOrd').value=t;render();};$('#sPre').appendChild(sel);
 $('#bw').onchange=render;$('#pet').onchange=render;
 $('#print').onclick=()=>window.print();
 
@@ -170,7 +171,7 @@ function plan(){
     list.forEach(it=>{if(st.kind!=='sma')rows.push([glyphRow(it.u)]);if(st.kind!=='stor')rows.push([glyphRow(it.l)]);});
     sub=list.length===PAIRS.length?'Hela alfabetet':list.length?`Bokstäverna ${list.map(i=>i.u+i.l).join(' ')}`:'Välj bokstäver';}
   else if(st.mode==='sif'){const l=[...st.sif].sort();l.forEach(c=>rows.push([glyphRow(c)]));sub=l.length?`Siffrorna ${l.join(' ')}`:'Välj siffror';}
-  else{const ws=st.ord.split('\n').map(x=>x.replace(/[^A-Za-zÅÄÖåäö ]/g,'').replace(/\s+/g,' ').trim().slice(0,14)).filter(Boolean).slice(0,8);
+  else{const ws=st.ord.split('\n').map(x=>x.replace(/[^A-Za-zÅÄÖåäö ]/g,'').replace(/\s+/g,' ').trim().slice(0,14)).filter(Boolean).slice(0,16);
     ws.forEach(w=>rows.push(wordRows(w)));sub=ws.length?ws.join(', '):'Skriv ord eller namn';}
   return{rows,sub};}
 function render(){

@@ -199,5 +199,34 @@ function wordCursive(text,step){
   raw.forEach(s=>{if(s.dot){S.push({dot:s.dot.slice()});mn=Math.min(mn,s.dot[0]);mx=Math.max(mx,s.dot[0]);}else{const pts=resample(s,step||2.5);pts.forEach(p=>{mn=Math.min(mn,p[0]);mx=Math.max(mx,p[0]);});S.push({pts});}});
   S.forEach(s=>{if(s.dot)s.dot[0]-=mn;else s.pts.forEach(p=>p[0]-=mn);});
   return{S,w:mx-mn};}
-return{get,GROUPS,PRE,CAP,LOW,CURB,prepare,word,resample};
+/* ---------- ordlistor att öva på (bara bokstäver, högst 14 tecken) ---------- */
+const ORD=[
+["Första orden","jag och det är en på har med kan vi du han hon"],
+["Veckodagar","måndag tisdag onsdag torsdag fredag lördag söndag"],
+["Månader","januari februari mars april maj juni juli augusti september oktober november december"],
+["Tid","dag natt morgon kväll idag igår imorgon vår sommar höst vinter"],
+["Färger","röd blå gul grön vit svart rosa lila orange brun grå"],
+["Siffror som ord","noll ett två tre fyra fem sex sju åtta nio tio"],
+["Husdjur","katt hund kanin hamster fisk häst ko gris get får höna"],
+["Vilda djur","räv varg björn älg hare ekorre igelkott lo orm groda"],
+["Fåglar","uggla svan gås anka kråka mås örn talgoxe"],
+["Havet","val haj säl krabba sjöstjärna delfin bläckfisk fisk"],
+["Mat","bröd ost mjölk smör ägg korv pasta ris soppa"],
+["Frukt och grönt","äpple päron banan apelsin citron morot gurka tomat potatis"],
+["Kläder","tröja byxor jacka mössa sko strumpa halsduk vante kjol"],
+["Kroppen","huvud öga öra näsa mun arm hand ben fot mage"],
+["Familjen","mamma pappa syster bror farmor mormor farfar morfar barn"],
+["Skolan","penna sudd bok lärare skola bänk tavla rast klass"],
+["Vädret","sol regn snö vind moln åska dimma"],
+["Hemma","säng stol bord lampa dörr fönster soffa kök badrum"],
+["Fordon","bil buss cykel tåg båt flygplan lastbil traktor"],
+["Natur","skog sjö berg träd blomma sten gräs äng bäck"],
+["Yrken","läkare lärare brandman polis bagare bonde pilot kock"],
+["Lek och sport","boll fotboll hoppa springa simma gunga rutschkana kull"],
+["Rymden","sol måne stjärna planet raket jorden rymd"],
+["Känslor","glad ledsen arg trött rädd stolt snäll"],
+["Verb","springa hoppa läsa skriva måla leka sova äta dricka rita"],
+["Ord med å, ä och ö","båt råd gård äpple älg väg öga öppna höst björn"],
+].map(([n,l])=>({n,w:l.split(" ")}));
+return{get,GROUPS,PRE,CAP,LOW,CURB,prepare,word,resample,ORD};
 })();
