@@ -96,3 +96,5 @@ Lilla r (skrivstil): omritat efter lärarens förlaga (uppstreck, liten tak/hyll
 Lilla r (skrivstil) **omgjort efter lärarens andra förlaga**: snett uppstreck, liten ögla på toppen, hylla åt höger, sedan nedåt i en båge längs raden och snett upp som utgång.
 
 Lilla r (skrivstil), tredje försöket: punkterna mätta ur lärarens förlaga och ritade som jämn kurva (`CR`, Catmull-Rom, ny hjälpare i `glyfer.js`) i två delar så att spetsen på hyllan blir skarp. Ingången är en del av samma kurva (ingen knyck mellan `EN` och bokstaven).
+
+Lilla r (skrivstil): öglan uppe är **sluten och korsar uppstrecket** (går igenom sig själv), sedan hyllan åt höger (lärarens rättelse).
