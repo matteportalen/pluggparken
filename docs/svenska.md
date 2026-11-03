@@ -61,3 +61,6 @@ Förövningar som upprepas går nu längre: vågrät linje (240), snett från v�
 
 ### Övningsblad: startpunkter på samma plats
 Har två penndrag samma startpunkt (t.ex. stora E) lägger `model()` i `blad.html` de senare numrerade cirklarna lite åt höger och upp, så att alla siffror syns.
+
+### Skrivstil: lilla b (ändrad efter lärarens foto)
+Ett penndrag: upp och ner i uppstrecket, nere böjer den upp igen längs stammen och gör magen (upp, över, ner, runt) och går vidare ut mot nästa bokstav från nederkanten. Tidigare gick magen åt andra hållet.
