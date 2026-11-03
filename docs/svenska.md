@@ -52,3 +52,6 @@ Knapp som dubblar hastigheten på den animerade spårningen (`fart` 1 eller 2, g
 
 ### Handstil: formen på förövningskorten
 Varje förövningskort visar en liten lila bild av formen (`preThumb` ritar penndragen ur `MPGlyfer.PRE` som SVG).
+
+### Handstil: siffran 4
+Ritas med öppen topp: rakt ner till mitten, 90° sväng åt höger (ett penndrag), sedan det raka sträcket ner (läraren).
