@@ -55,6 +55,7 @@ h1{font-size:1.9rem;margin:8px 0 2px;display:flex;align-items:center;gap:10px}
 .it{position:relative}.it .sasm{position:absolute;top:4px;right:6px;font-size:.95rem}
 .tabs button.sas{background:var(--lc-FFF1D6,#FFF1D6);color:#8A4B00}.tabs button.sas[aria-pressed="true"]{background:#E06A00;color:#fff}
 .sasinfo{grid-column:1/-1;margin:0;font-weight:700;color:var(--muted);text-align:center;font-size:.92rem}
+.rens{margin-top:8px;padding:8px 14px;border-radius:12px;background:var(--card);box-shadow:0 3px 0 var(--line);font-weight:700;font-size:1rem}
 .it.prov{background:var(--warn-bg,#FFF6D6);box-shadow:0 0 0 3px var(--gold)}
 .msg{min-height:1.4em;font-weight:800;text-align:center;margin:8px 0 2px}
 .kop{display:block;margin:6px auto 0;padding:10px 18px;border-radius:16px;background:var(--good);color:#fff;font-weight:800;box-shadow:0 4px 0 var(--good-dark)}
@@ -93,7 +94,8 @@ h1{font-size:1.9rem;margin:8px 0 2px;display:flex;align-items:center;gap:10px}
     <div class="items" id="items"></div>
     <p class="msg" id="msg"></p>
     <button class="kop" id="kop" hidden></button>
-    <p class="tip">Tryck på en sak för att prova den i rummet. Köp den om du vill behålla den. Mynt får du när du tränar och tar stjärnor.</p>
+    <button class="rens" id="rens" hidden>↩ Ta bort proven</button>
+    <p class="tip">Tryck på saker för att prova dem i rummet, flera samtidigt. Köp dem om du vill behålla dem. Mynt får du när du tränar och tar stjärnor.</p>
   </div>
 </div>
 <script src="../ljud.js"></script>
@@ -122,7 +124,7 @@ const item=(slot,id)=>RUM[slot].items.find(x=>x[0]===id);
 const SN=window.sasongNu?sasongNu():null,kanKopa=it=>!it[4]||(SN&&SN.id===it[4]);
 const owned=(slot,id)=>{const it=item(slot,id);return !it||!it[3]||(MPMynt.get().kopt||[]).includes("rum:"+slot+":"+id);};
 // det som visas: valen, eller en sak man provar
-let prov=null;const vis=()=>prov?Object.assign({},data.val,{[prov.slot]:prov.id}):data.val;
+let prov={};const vis=()=>Object.assign({},data.val,prov);   // man kan prova flera saker samtidigt (en per plats), de ligger kvar när man byter flik
 
 /* ---------- Ritningen (400 × 300) ---------- */
 const INK="#1D2B53";
@@ -258,20 +260,26 @@ const sasongLista=()=>SN?Object.entries(RUM).flatMap(([k,v])=>v.items.filter(it=
 function panel(){const tabs=Object.entries(RUM).map(([k,v])=>[k,v.n]);if(SN&&sasongLista().length)tabs.unshift(["sasong",SASONGER[SN.id].ikon+" "+SASONGER[SN.id].namn]);
   $("tabs").innerHTML=tabs.map(([k,n])=>`<button data-tab="${k}" aria-pressed="${k===flik}"${k==="sasong"?' class="sas"':""}>${n}</button>`).join("");
   const v=vis(),lista=flik==="sasong"?sasongLista():RUM[flik].items.filter(it=>owned(flik,it[0])||kanKopa(it)).map(it=>[flik,it]);
-  $("items").innerHTML=(flik==="sasong"?`<p class="sasinfo">Säsongssaker går bara att köpa ${sasongSlut(SN)}. Det du köper har du kvar för alltid.</p>`:"")+lista.map(([k,[id,n,em,pris,sa]])=>{const har=owned(k,id),cls=data.val[k]===id?" sel":v[k]===id?" prov":"";
+  $("items").innerHTML=(flik==="sasong"?`<p class="sasinfo">Säsongssaker går bara att köpa ${sasongSlut(SN)}. Det du köper har du kvar för alltid.</p>`:"")+lista.map(([k,[id,n,em,pris,sa]])=>{const har=owned(k,id),cls=data.val[k]===id?" sel":prov[k]===id?" prov":"";
     return`<button class="it${cls}" data-slot="${k}" data-id="${id}">${sa?`<span class="sasm" aria-hidden="true">${SASONGER[sa].ikon}</span>`:""}<span class="em">${em}</span>${n}<small>${har?(data.val[k]===id?"Vald":"Din"):`🪙 ${pris}`}</small></button>`;}).join("");
-  const p=prov&&item(prov.slot,prov.id),m=MPMynt.get().m;
-  if(p&&!owned(prov.slot,prov.id)){$("kop").hidden=false;$("kop").disabled=m<p[3];$("kop").textContent=m<p[3]?`${p[1]} kostar ${p[3]} 🪙, du har ${m}`:`Köp ${p[1].toLowerCase()} för ${p[3]} 🪙`;$("msg").textContent=`Du provar: ${p[1]}`;}
+  const pv=provLista(),tot=pv.reduce((n,x)=>n+x[2][3],0),m=MPMynt.get().m;
+  $("rens").hidden=!Object.keys(prov).length;
+  if(pv.length){$("kop").hidden=false;$("kop").disabled=m<tot;
+    $("kop").textContent=pv.length===1?(m<tot?`${pv[0][2][1]} kostar ${tot} 🪙, du har ${m}`:`Köp ${pv[0][2][1].toLowerCase()} för ${tot} 🪙`):(m<tot?`${pv.length} saker kostar ${tot} 🪙, du har ${m}`:`Köp ${pv.length} saker för ${tot} 🪙`);
+    $("msg").textContent="Du provar: "+pv.map(x=>x[2][1]).join(", ")+(m<tot?". Ta bort något så går det.":"");}
   else $("kop").hidden=true;}
-$("tabs").onclick=e=>{const b=e.target.closest("[data-tab]");if(!b)return;flik=b.dataset.tab;prov=null;$("msg").textContent="";draw();panel();};
+function provLista(){return Object.entries(prov).map(([sl,id])=>[sl,id,item(sl,id)]).filter(([sl,id,it])=>it&&!owned(sl,id)&&kanKopa(it));}
+$("tabs").onclick=e=>{const b=e.target.closest("[data-tab]");if(!b)return;flik=b.dataset.tab;$("msg").textContent="";draw();panel();};
 $("items").onclick=e=>{const b=e.target.closest("[data-id]");if(!b)return;const id=b.dataset.id,k=b.dataset.slot;
-  if(owned(k,id)){data.val[k]=id;data.t[k]=Date.now();prov=null;save();$("msg").textContent=`${item(k,id)[1]} är vald.`;window.Ljud&&Ljud.ok&&Ljud.ok();}
-  else if(kanKopa(item(k,id)))prov={slot:k,id};
+  if(owned(k,id)){data.val[k]=id;data.t[k]=Date.now();delete prov[k];save();$("msg").textContent=`${item(k,id)[1]} är vald.`;window.Ljud&&Ljud.ok&&Ljud.ok();}
+  else if(kanKopa(item(k,id))){if(prov[k]===id)delete prov[k];else prov[k]=id;}
   draw();panel();};
-$("kop").onclick=()=>{if(!prov)return;const p=item(prov.slot,prov.id);
-  if(MPMynt.kop("rum:"+prov.slot+":"+prov.id,p[3])){data.val[prov.slot]=prov.id;data.t[prov.slot]=Date.now();save();$("msg").textContent=`Köpt! ${p[1]} är din. 🎉`;prov=null;window.Ljud&&Ljud.kaching&&Ljud.kaching();draw();panel();}};
+$("kop").onclick=()=>{const pv=provLista();if(!pv.length)return;let n=0;
+  for(const [sl,id,it] of pv){if(MPMynt.kop("rum:"+sl+":"+id,it[3])){data.val[sl]=id;data.t[sl]=Date.now();delete prov[sl];n++;}else break;}
+  if(n){save();$("msg").textContent=n===1?`Köpt! ${pv[0][2][1]} är din. 🎉`:`Köpt! ${n} saker är dina. 🎉`;window.Ljud&&Ljud.kaching&&Ljud.kaching();draw();panel();}};
+$("rens").onclick=()=>{prov={};$("msg").textContent="";draw();panel();};
 $("inred").onclick=()=>{const on=$("panel").hidden;$("panel").hidden=!on;$("inred").setAttribute("aria-pressed",String(on));$("inred").textContent=on?"✓ Klar":"🛒 Inred";
-  if(!on){prov=null;draw();}else{if(SN&&sasongLista().some(([k,it])=>!owned(k,it[0])))flik="sasong";panel();}};
+  if(!on){prov={};draw();}else{if(SN&&sasongLista().some(([k,it])=>!owned(k,it[0])))flik="sasong";panel();}};
 draw();
 </script>
 </body>
