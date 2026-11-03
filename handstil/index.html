@@ -82,23 +82,34 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 .chip{padding:5px 12px;border-radius:999px;background:var(--soft);box-shadow:0 2px 0 var(--line);font-family:var(--ord);font-weight:700;font-size:1rem;margin:3px 4px 3px 0}
 .printrow{margin:0 0 10px;display:flex;justify-content:flex-end}
 .printrow a{display:inline-block;padding:8px 14px;border-radius:14px;background:var(--card);box-shadow:0 3px 0 var(--line);font-weight:800;color:var(--ink);text-decoration:none}
-/* dator: bredare sida, grupperna i kolumner, övningen med skrivytan till vänster */
+.toprow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap;margin:0 0 6px}
+.toprow .tabs{flex:1 1 280px}
+.printlink{flex:1 1 100%;display:flex;align-items:center;justify-content:center;padding:8px 14px;border-radius:16px;background:var(--card);box-shadow:0 4px 0 var(--line);font-weight:800;color:var(--ink);text-decoration:none}
+.acc{display:grid;gap:12px}
+.sec{--c:#3D5AFE;border-radius:20px;background:#fff;box-shadow:0 5px 0 var(--line);overflow:hidden}
+.sec .sh{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;text-align:left;border-left:8px solid var(--c)}
+.sec .ic{flex:none;width:46px;height:46px;border-radius:14px;background:var(--c);color:#fff;display:grid;place-items:center;font-family:var(--ord);font-weight:700;font-size:1.1rem}
+.sec .tx b{display:block;font-size:1.25rem;line-height:1.15}.sec .tx small{display:block;color:var(--muted);font-size:.92rem;line-height:1.25}
+.sec .stt{margin-left:auto;font-weight:800;font-size:.95rem;white-space:nowrap}
+.sec .sh>.chev{flex:none;color:var(--muted);font-size:1.8rem;font-weight:800;transition:transform .2s;margin-left:6px}
+.sec .sh .stt+.chev{margin-left:6px}.sec .sh .tx+.chev{margin-left:auto}
+.sec.open .chev{transform:rotate(90deg)}
+.sec .sb{padding:6px 14px 14px;border-top:3px solid var(--c);background:color-mix(in srgb,var(--c) 6%,white)}
+.sec .gr h3{margin:12px 0 2px;display:flex;justify-content:space-between;align-items:center;font-size:1.08rem;color:var(--c)}
+.sec .gr p{margin:0 0 8px;color:var(--muted);font-size:.92rem}
+.sec .gr:first-child h3{margin-top:6px}
+.sec .owl{margin:6px 0 4px;color:var(--muted);font-size:.95rem}
+.tile.pre{font-size:.85rem;overflow-wrap:anywhere}
 @media (min-width:1000px){
   .wrap{max-width:1280px}
-  .hm{display:grid;grid-template-columns:340px minmax(0,1fr);gap:20px;align-items:start}
-  .sd{position:sticky;top:64px;max-height:calc(100vh - 80px);overflow:auto;padding:2px 4px 8px 2px}
-  #groups{columns:2;column-gap:16px}
-  #groups .grp{break-inside:avoid;margin-bottom:16px}
+  #home{max-width:860px;margin:0 auto}
   .tiles{grid-template-columns:repeat(auto-fill,minmax(84px,1fr))}
-  .tile{min-width:0;overflow:hidden}.tile.pre{font-size:.85rem;overflow-wrap:anywhere;hyphens:auto}
-  .printrow{justify-content:flex-start}
-  .hero{margin-bottom:18px}
+  .tile{min-width:0;overflow:hidden}
   :root{--bh:70vh}
   #game{display:grid;grid-template-columns:minmax(0,700px) 380px;justify-content:center;grid-template-areas:"bord top" "bord title" "bord fb" "bord btns" "bord .";column-gap:28px;row-gap:6px;align-items:start}
   #game>.gtop{grid-area:top}#game>.gt{grid-area:title}#game>.bord{grid-area:bord;margin:0 auto}#game>.fb{grid-area:fb}#game>.btns{grid-area:btns;justify-content:flex-start}
   .gt h2{font-size:1.7rem}.fb{text-align:left}
 }
-@media (min-width:1500px){#groups{columns:3}.wrap{max-width:1480px}}
 .res{text-align:center;padding-top:18px}
 .res .big{font-family:var(--ord);font-weight:700;font-size:4.5rem;line-height:1.1}
 .res .steps{display:grid;gap:6px;max-width:360px;margin:10px auto;text-align:left}
@@ -120,16 +131,15 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
     <svg viewBox="0 0 84 70" aria-hidden="true"><rect x="2" y="4" width="80" height="62" rx="12" fill="#fff"/><path d="M8 24H76M8 40H76M8 56H76" stroke="#C6D6F2" stroke-width="2"/><path d="M8 40H76" stroke="#7E94C8" stroke-width="2.5"/><path d="M22 52V24L36 52V24" stroke="#1D2B53" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1 9"/><path d="M50 36Q44 24 54 24 62 24 60 36 58 46 68 52" stroke="#F2780C" stroke-width="5" fill="none" stroke-linecap="round"/></svg>
     <div><h1>Handstil</h1><p>Se hur bokstaven skrivs, följ stigen med fingret och skriv själv.</p></div>
   </div>
-  <div class="hm"><aside class="sd">
-  <div class="tabs" id="tabs" role="group" aria-label="Stil">
-    <button data-stil="tryck" aria-pressed="true">Aa<small>Tryckbokstäver</small></button>
-    <button data-stil="skrift" aria-pressed="false"><span style="font-style:italic">Aa</span><small>Skrivstil</small></button>
+  <div class="toprow">
+    <div class="tabs" id="tabs" role="group" aria-label="Stil">
+      <button data-stil="tryck" aria-pressed="true">Aa<small>Tryckbokstäver</small></button>
+      <button data-stil="skrift" aria-pressed="false"><span style="font-style:italic">Aa</span><small>Skrivstil</small></button>
+    </div>
+    <a class="printlink" href="blad.html">🖨️ Skriv ut övningsblad</a>
   </div>
-  <div class="printrow"><a href="blad.html">🖨️ Skriv ut övningsblad</a></div>
   <p class="note" id="note"></p>
-  <div id="wordBox"></div>
-  </aside>
-  <div id="groups"></div></div>
+  <div class="acc" id="acc"></div>
 </section>
 
 <section class="screen" id="game" hidden>
@@ -215,35 +225,48 @@ const keyOf=(stil,st)=>st.pre?'pre:'+st.ch:st.word?'ord:'+st.ch:stil+':'+st.ch;
 const itemKeys=(it,stil)=>it.pre?['pre:'+it.id]:it.one?[stil+':'+it.ch]:[stil+':'+it.u,stil+':'+it.l];
 
 /* ---------- Hem ---------- */
+let openSec='bok';
+function tileEl(g,it){const b=document.createElement('button');
+  const keys=itemKeys(it,data.stil),lv=Math.min(...keys.map(k=>data.klar[k]||0));
+  b.className='tile'+(it.pre?' pre':'')+(lv>=2?' k2':lv>=1?' k1':'');
+  b.innerHTML=it.pre?`${it.label}<small>${lv>=2?'✓ klar':''}</small>`:it.one?`${it.ch}<small>${lv>=2?'✓ klar':lv>=1?'påbörjad':''}</small>`:`${it.u}${it.l}<small>${lv>=2?'✓ klar':lv>=1?'påbörjad':''}</small>`;
+  b.setAttribute('aria-label',it.pre?it.label:it.one?`Siffran ${it.ch}`:`Bokstav ${it.u} ${it.l}`);
+  b.onclick=()=>startItem(g,it);return b;}
+const gStars=g=>g.pre?(data.stars.pre||0):(data.stars[data.stil+'-'+g.id]||0);
 function renderHome(){
   document.querySelectorAll('#tabs button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.stil===data.stil)));
   $('#note').textContent=data.stil==='tryck'?'Rak, enkel stil. Varje bokstavspar övar du i tre steg: se, följ och skriv själv.':'Sammanhängande skrivstil: bokstäverna hakas ihop i ord. Första versionen, säg till om något ser fel ut. Se, följ och skriv själv.';
-  const gr=$('#groups');gr.innerHTML='';
-  G.forEach(g=>{
-    const s=g.pre?(data.stars.pre||0):(data.stars[data.stil+'-'+g.id]||0);
-    const d=document.createElement('div');d.className='grp';
-    d.innerHTML=`<h2>${g.n}<span class="st" aria-label="${s} av 3 stjärnor">${'⭐'.repeat(s)}${'☆'.repeat(3-s)}</span></h2><p>${g.sub}</p><div class="tiles"></div>`;
-    const tl=d.querySelector('.tiles');
-    g.items.forEach(it=>{const b=document.createElement('button');
-      const keys=itemKeys(it,data.stil),lv=Math.min(...keys.map(k=>data.klar[k]||0));
-      b.className='tile'+(it.pre?' pre':'')+(lv>=2?' k2':lv>=1?' k1':'');
-      b.innerHTML=it.pre?`${it.label}<small>${lv>=2?'✓ klar':''}</small>`:it.one?`${it.ch}<small>${lv>=2?'✓ klar':lv>=1?'påbörjad':''}</small>`:`${it.u}${it.l}<small>${lv>=2?'✓ klar':lv>=1?'påbörjad':''}</small>`;
-      b.setAttribute('aria-label',it.pre?it.label:it.one?`Siffran ${it.ch}`:`Bokstav ${it.u} ${it.l}`);
-      b.onclick=()=>startItem(g,it);tl.appendChild(b);});
-    gr.appendChild(d);});
-  /* ord och namn: ingenting sparas (namn är personuppgifter) */
-  const w=document.createElement('div');w.className='grp';
-  w.innerHTML=`<h2>Ord och namn</h2><p>Skriv ett ord eller ett namn och öva att skriva det. Det sparas inte.</p>
+  const gid=id=>G.find(g=>g.id===id);
+  const SEC=[
+    {id:'pre',n:'Förövningar',sub:'Linjer, vågor och former för handen',c:'#7B61FF',ic:'〰️',gs:[gid('g0')],max:3},
+    {id:'bok',n:'Bokstäver',sub:'Stora och små, grupp för grupp',c:'#3D5AFE',ic:'Aa',gs:['g1','g2','g3','g4','g5'].map(gid),max:15},
+    {id:'sif',n:'Siffror',sub:'0 till 9',c:'#1E9E5E',ic:'123',gs:[gid('g6')],max:3},
+    {id:'ord',n:'Ord och namn',sub:'Egna ord, namn och färdiga listor',c:'#F2780C',ic:'✎',words:true}];
+  const acc=$('#acc');acc.innerHTML='';
+  SEC.forEach(sec=>{
+    const open=openSec===sec.id,st=sec.words?0:sec.gs.reduce((n,g)=>n+gStars(g),0);
+    const d=document.createElement('section');d.className='sec'+(open?' open':'');d.style.setProperty('--c',sec.c);
+    d.innerHTML=`<button class="sh" aria-expanded="${open}"><span class="ic">${sec.ic}</span><span class="tx"><b>${sec.n}</b><small>${sec.sub}</small></span>${sec.words?'':`<span class="stt" aria-label="${st} av ${sec.max} stjärnor">${st}/${sec.max} ⭐</span>`}<span class="chev" aria-hidden="true">›</span></button><div class="sb"${open?'':' hidden'}></div>`;
+    d.querySelector('.sh').onclick=()=>{openSec=open?'':sec.id;renderHome();};
+    const sb=d.querySelector('.sb');acc.appendChild(d);
+    if(open){
+      if(sec.words)ordBody(sb);
+      else sec.gs.forEach(g=>{const w=document.createElement('div');w.className='gr';
+        if(sec.gs.length>1)w.innerHTML=`<h3>${g.n}<span class="st" aria-label="${gStars(g)} av 3 stjärnor">${'⭐'.repeat(gStars(g))}${'☆'.repeat(3-gStars(g))}</span></h3><p>${g.sub}</p>`;
+        const tl=document.createElement('div');tl.className='tiles';g.items.forEach(it=>tl.appendChild(tileEl(g,it)));w.appendChild(tl);sb.appendChild(w);});}
+  });
+}
+/* ord och namn: ingenting sparas (namn är personuppgifter) */
+function ordBody(sb){
+  sb.innerHTML=`<p class="owl">Skriv ett ord eller ett namn och öva att skriva det. Det sparas inte.</p>
     <form class="wf" id="wf"><input id="wIn" maxlength="14" autocomplete="off" autocapitalize="sentences" spellcheck="false" placeholder="Skriv ett ord eller ditt namn" aria-label="Ord eller namn"><button class="btn go" type="submit">Öva</button></form>
     <div class="chips" id="wChips"></div>`;
-  const wb=$('#wordBox');wb.innerHTML='';wb.appendChild(w);
   const ch=$('#wChips');
   const skF=data.stil==='skrift',alla=MPGlyfer.ORD.map((c,i)=>({c,i})),sk=alla.filter(x=>x.c.sk),ov=alla.filter(x=>!x.c.sk),op=l=>l.map(x=>`<option value="${x.i}">${x.c.n.replace('Skrivstil: ','')}</option>`).join('');
   ch.innerHTML=`<label class="wl">Välj en lista med ord<select id="wCat">${skF?`<optgroup label="Särskilt för skrivstil">${op(sk)}</optgroup><optgroup label="Vanliga ord">${op(ov)}</optgroup>`:`<optgroup label="Vanliga ord">${op(ov)}</optgroup><optgroup label="Ord för skrivstil">${op(sk)}</optgroup>`}</select></label><div id="wWords"></div>`;
   const fyll=()=>{const c=MPGlyfer.ORD[+$('#wCat').value],box=$('#wWords');box.innerHTML='';c.w.forEach(o=>{const b=document.createElement('button');b.className='chip';b.textContent=o;b.onclick=()=>startWord(o);box.appendChild(b);});};
   $('#wCat').onchange=fyll;fyll();
-  $('#wf').onsubmit=e=>{e.preventDefault();startWord($('#wIn').value);};
-  }
+  $('#wf').onsubmit=e=>{e.preventDefault();startWord($('#wIn').value);};}
 function startWord(raw){const t=raw.replace(/[^A-Za-zÅÄÖåäö ]/g,'').replace(/\s+/g,' ').trim().slice(0,14);
   if(!t){$('#wIn').focus();return;}const text=t.charAt(0)+t.slice(1);   // stor eller liten bokstav som man skrev
   startItem({id:'w'},{word:text});}
