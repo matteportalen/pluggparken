@@ -70,3 +70,6 @@ Ord som bara klarar `trolig()` (typ "pikitoto") godtas fortfarande men räknas s
 
 ### Sagobyggaren: boken som en sida och rubrik (nov 2026, lärarens önskan)
 Färdiga sagan visas nu som **en sida**: rubrik, en bild (sista scenen) och hela texten i större stil (utskrift 17 pt, `@page` 14 mm marginal), i stället för en bild per sida (de blev "tafatta" när eleven skrev själv). Nytt fält **Rubrik till sagan (frivilligt)** (`s.r`, sparas i Mina sagor; standard "Sagan om …"); rubriken används i uppläsning och listan. Sagans fyra stegsvyer under byggandet är oförändrade. Utskriften har inte testats på papper.
+
+### Skrivstil: lilla b stängs nere
+Magen på lilla b är nu en sluten oval nere vid stammen (stammen böjer ut mot botten av magen och magen går hela varvet), så att b inte förväxlas med h. Utgång till nästa bokstav från magens botten.

@@ -87,7 +87,7 @@ const TL=(x,y)=>bez([x,y],[x+7,y+5],[x+17,y+1]);
 const ASC=(fy)=>J(EN(10,8,fy),arc(5,8,5,8,0,-180));            // ingång upp till en smal ögla överst (b d f h k l)
 const CURB={
 a:fy=>({b:J(EN(32,54,fy),arc(22,75,20,25,-62,-392),L(41,63,41,95),TL(41,95)),x:[]}),
-b:fy=>({b:J(ASC(fy),L(0,8,0,94),bez([0,94],[3,101],[1.3,83.5]),arc(22,75,22,25,160,450),TL(22,100)),x:[]}),
+b:fy=>({b:J(ASC(fy),L(0,8,0,95),bez([0,95],[3,102],[22,100]),arc(22,75,22,25,90,450),TL(22,100)),x:[]}),
 c:fy=>({b:J(EN(36,58,fy),arc(21,75,21,25,-45,-320),TL(37,92)),x:[]}),
 d:fy=>({b:J(EN(37,59,fy),arc(22,75,20,25,-30,-360),L(42,75,48,8),arc(45,8,3,8,0,-180),L(42,8,42,95),TL(42,95)),x:[]}),   // runda ccw, rakt upp till taket utan stopp, ner längs samma sida
 e:fy=>({b:J(EN(36,73,fy),arc(21,75,21,25,-8,-318),TL(38,92)),x:[]}),
