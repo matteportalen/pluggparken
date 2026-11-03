@@ -80,6 +80,37 @@ GREJER.push({id:"illusioner",titel:"Optiska illusioner",kat:"Hjärnan",e:"👁�
    svg:(r)=>{let s="";for(let y=0;y<6;y++){const off=[0,24,48,24,0,24][y]-0;for(let x=-2;x<8;x++){const c=(x%2===0)?"#1D2B53":"#fff";s+=`<rect x="${x*48+off}" y="${y*38+10}" width="48" height="34" fill="${c}"/>`;}}
     let l="";for(let y=0;y<=6;y++)l+=`<line x1="0" y1="${y*38+10+(y?-2:-2)+ (y===0?2:0)}" x2="400" y2="${y*38+8+ (y===0?2:0)}" stroke="#9aa" stroke-width="4"/>`;
     return `<svg viewBox="0 0 400 250"><defs><clipPath id="cw"><rect width="400" height="250"/></clipPath></defs><g clip-path="url(#cw)">${s}${l}${r?[0,1,2,3,4,5,6].map(y=>`<line x1="0" y1="${y*38+9}" x2="400" y2="${y*38+9}" stroke="#E5484D" stroke-width="2.5"/>`).join(""):""}</g></svg>`}},
+  {n:"Schröders trappa",fraga:"Är det en trappa som går ner åt höger, eller en trappa som hänger i taket? Vrid på bilden!",svar:"Båda stämmer. Det är samma teckning, och hjärnan väljer hela tiden det sätt som känns mest 'rätt väg upp'.",varfor:"Teckningen har inga ledtrådar om vad som är närmast. Hjärnan gissar och vill helst se en vanlig trappa som står på marken. Vrid bilden: ibland hoppar trappan till tak, och ibland ser du en vanlig trappa igen, hur du än vrider. Det upptäckte den tyske forskaren Schröder år 1858.",
+   svg:()=>{const Q=[240,392],w=[215,-197],r=[118,26],h=[0,84],A=(p,q,k=1)=>[p[0]+q[0]*k,p[1]+q[1]*k],pts=a=>a.map(v=>v.join(",")).join(" "),
+     poly=(a,f)=>`<polygon points="${pts(a)}" fill="${f}" stroke="#14192b" stroke-width="3.5" stroke-linejoin="round"/>`;
+     const GRAY="#d3d4d7",DARK="#85868b",WHITE="#fff";let g="";
+     /* bakväggen */
+     g+=poly([[455,111],[927,218],[927,551],[809,525],[809,441],[691,415],[691,331],[573,305],[573,221],[455,195]],GRAY);
+     /* vänster sida (trappans profil) */
+     g+=poly([[122,282],[240,308],[240,392],[358,418],[358,502],[476,528],[476,612],[594,638],[594,722],[122,615]],GRAY);
+     /* översta ytan och första ställ­ytan */
+     g+=poly([[122,282],[337,85],[455,111],[240,308]],WHITE);
+     g+=poly([[240,308],[455,111],[455,195],[240,392]],DARK);
+     for(let k=0;k<3;k++){const q=A(Q,A([0,0],A(r,h),k)),a=q,b=A(q,w),c=A(b,r),d=A(q,r);
+       g+=poly([a,b,c,d],WHITE);
+       g+=poly([d,c,A(c,h),A(d,h)],DARK);}
+     const q3=A(Q,A(r,h),3);g+=poly([q3,A(q3,w),A(A(q3,w),r),A(q3,r)],WHITE);
+     return `<svg viewBox="0 0 1051 816" style="max-height:46vh"><g id="schr" transform="rotate(0 530 420)">${g}</g></svg>`},
+   bind(box){const svg=box.querySelector("svg"),G=box.querySelector("#schr");let ang=0,auto=0;
+     const set=a=>{ang=((a%360)+360)%360;G.setAttribute("transform",`rotate(${ang} 530 420)`);sl.value=Math.round(ang);lbl.textContent=Math.round(ang)+"°";};
+     const ctl=document.createElement("div");ctl.style.cssText="display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;margin-top:10px";
+     ctl.innerHTML='<button class="k" data-a="90">↻ Vrid ett kvarts varv</button><button class="k" data-a="180">⟳ Vänd upp och ned</button><button class="k" data-a="auto">⏯ Vrid sakta</button><label style="display:flex;align-items:center;gap:8px;color:#cfd3e6;font-weight:700">Vrid själv <input type="range" min="0" max="360" value="0" style="width:min(260px,50vw)"><b data-l style="min-width:3.2em;text-align:right">0°</b></label>';
+     ctl.className='ill-ctl';box.parentNode.insertBefore(ctl,box.nextSibling);const sl=ctl.querySelector("input"),lbl=ctl.querySelector("[data-l]");
+     sl.oninput=()=>{auto=0;set(+sl.value)};
+     ctl.onclick=e=>{const b=e.target.closest("[data-a]");if(!b)return;const v=b.dataset.a;if(v==="auto"){auto=auto?0:1;if(auto)tick();return}auto=0;
+       const from=ang,to=from+(+v),t0=performance.now();(function f(n){const t=Math.min(1,(n-t0)/700),e2=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;set(from+(to-from)*e2);if(t<1)requestAnimationFrame(f)})(t0)};
+     function tick(){if(!auto||!document.body.contains(svg))return;set(ang+.6);requestAnimationFrame(tick)}
+     /* dra runt bilden med fingret eller musen */
+     let drag=null;const center=()=>{const b=svg.getBoundingClientRect();return[b.left+b.width*(530/1051),b.top+b.height*(420/816)]};
+     svg.style.touchAction="none";svg.style.cursor="grab";
+     svg.onpointerdown=e=>{auto=0;const[c0,c1]=center();drag={a0:Math.atan2(e.clientY-c1,e.clientX-c0),r0:ang};svg.setPointerCapture(e.pointerId);svg.style.cursor="grabbing"};
+     svg.onpointermove=e=>{if(!drag)return;const[c0,c1]=center();set(drag.r0+(Math.atan2(e.clientY-c1,e.clientX-c0)-drag.a0)*180/Math.PI)};
+     svg.onpointerup=svg.onpointercancel=()=>{drag=null;svg.style.cursor="grab"};}},
   {n:"Hermanns rutnät",fraga:"Ser du grå prickar där linjerna korsas?",svar:"Det finns inga prickar! Titta på ett kryss, så försvinner dem du tittar på.",varfor:"Ögats nervceller jämför ljus och mörkt med närmaste granne. Vid korsningarna blir jämförelsen annorlunda, och hjärnan hittar på en grå prick.",
    svg:()=>{let s="";for(let i=0;i<4;i++)for(let j=0;j<4;j++)s+=`<rect x="${20+i*92}" y="${12+j*58}" width="78" height="46" rx="5" fill="#1D2B53"/>`;return `<svg viewBox="0 0 400 240"><rect width="400" height="240" fill="#fff"/>${s}</svg>`}},
   {n:"Försvinnande prickar",fraga:"Titta på krysset i mitten i 15 sekunder utan att flytta blicken.",svar:"De suddiga prickarna kan försvinna!",varfor:"Hjärnan slutar lägga märke till det som inte ändras. Det kallas Troxlers effekt.",
@@ -89,7 +120,7 @@ GREJER.push({id:"illusioner",titel:"Optiska illusioner",kat:"Hjärnan",e:"👁�
   host.innerHTML=`<div class="ill"><div class="kick" id="iN"></div><h3 class="ill-q" id="iQ"></h3><div class="ill-b" id="iB"></div><div class="ill-svar" id="iS"></div>
   <div class="ill-kn"><button class="k" id="iP">‹ Förra</button><button class="k ok" id="iV">Visa svaret</button><button class="k" id="iX">Nästa ›</button></div></div>`;
   const N=host.querySelector("#iN"),Q=host.querySelector("#iQ"),Bx=host.querySelector("#iB"),S=host.querySelector("#iS"),V=host.querySelector("#iV");
-  function rita(){const d=I[i];N.textContent=`${i+1} av ${I.length} · ${d.n}`;Q.textContent=d.fraga;Bx.innerHTML=d.svg(r);S.innerHTML=r?`<b>${d.svar}</b><span>${d.varfor||""}</span>`:"";V.textContent=r?"Dölj svaret":"Visa svaret";}
+  function rita(){const d=I[i];N.textContent=`${i+1} av ${I.length} · ${d.n}`;Q.textContent=d.fraga;host.querySelectorAll('.ill-ctl').forEach(x=>x.remove());Bx.innerHTML=d.svg(r);if(d.bind)d.bind(Bx);S.innerHTML=r?`<b>${d.svar}</b><span>${d.varfor||""}</span>`:"";V.textContent=r?"Dölj svaret":"Visa svaret";}
   host.querySelector("#iP").onclick=()=>{i=(i+I.length-1)%I.length;r=false;rita()};
   host.querySelector("#iX").onclick=()=>{i=(i+1)%I.length;r=false;rita()};
   V.onclick=()=>{r=!r;rita()};rita();return()=>{};
