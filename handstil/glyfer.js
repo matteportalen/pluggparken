@@ -112,7 +112,23 @@ CUR["ä"]=()=>[...CUR.a(),dot(12,36),dot(32,36)];
 CUR["ö"]=()=>[...CUR.o(),dot(12,36),dot(32,36)];
 const shear=(strokes,k)=>strokes.map(s=>s.dot?{dot:[s.dot[0]+(100-s.dot[1])*k,s.dot[1]]}:s.map(p=>[p[0]+(100-p[1])*k,p[1]]));
 
+/* ---------- siffror ---------- */
+const rot=(strokes)=>strokes.map(st=>st.dot?{dot:[50-st.dot[0],100-st.dot[1]]}:st.map(p=>[50-p[0],100-p[1]]).reverse());
+const NUM={
+"0":()=>[arc(26,50,26,50,-90,-450)],
+"1":()=>[L(8,18,24,0,24,100)],
+"2":()=>[J(arc(25,28,23,28,-170,25),L(46,42,2,100,50,100))],
+"3":()=>[J(arc(24,25,22,25,-150,90),arc(24,75,26,25,-90,150))],
+"4":()=>[L(38,0,0,66,50,66),L(38,26,38,100)],
+"5":()=>[J(L(44,0,6,0,3,46),arc(24,72,24,28,-125,150))],
+"6":()=>[J(arc(52,52,50,52,-100,-180),L(2,52,2,76),arc(25,76,23,24,-180,180))],
+"7":()=>[L(0,0,50,0,16,100)],
+"8":()=>[J(arc(25,26,21,26,-90,-270),arc(25,77,25,25,-90,270),arc(25,26,21,26,90,-90))],
+"9":()=>rot(NUM["6"]()),
+};
+
 function get(stil,ch){
+  if(/\d/.test(ch))return stil==="skrift"?shear(NUM[ch](),.16):NUM[ch]();
   const up=ch!==ch.toLowerCase()||ch==="Å"||ch==="Ä"||ch==="Ö";
   if(stil==="skrift")return up?shear(CAP[ch](),.16):shear(CUR[ch](),.16);
   return up?CAP[ch]():LOW[ch]();
@@ -137,7 +153,24 @@ const GROUPS=[
  {id:"g2",n:"Runda bokstäver",sub:"Bokstäver med runda former",items:par("O","C","S","G","Q","A","D")},
  {id:"g3",n:"Bågar och hakar",sub:"Bokstäver med bågar, bukter och ben",items:par("B","P","R","N","M","U","J")},
  {id:"g4",n:"Snedstreck",sub:"Bokstäver med sneda streck",items:par("V","W","X","Y","Z","K")},
- {id:"g5",n:"Ringar och prickar",sub:"Å, Ä och Ö",items:par("Å","Ä","Ö")}
+ {id:"g5",n:"Ringar och prickar",sub:"Å, Ä och Ö",items:par("Å","Ä","Ö")},
+ {id:"g6",n:"Siffror",sub:"0 till 9",items:"0123456789".split("").map(c=>({id:"n"+c,one:true,ch:c}))}
 ];
-return{get,GROUPS,PRE,CAP,LOW,CUR};
+/* ---------- gemensamt för sidan och utskriftsbladen: punkter med jämna avstånd, ord i rad ---------- */
+const dst=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
+function resample(pts,step){const out=[pts[0]];let carry=0;
+  for(let i=1;i<pts.length;i++){let a=pts[i-1],b=pts[i],d=dst(a,b);if(!d)continue;let t=step-carry;
+    while(t<=d){out.push([a[0]+(b[0]-a[0])*t/d,a[1]+(b[1]-a[1])*t/d]);t+=step;}carry=d-(t-step);}
+  const l=out[out.length-1],e=pts[pts.length-1];if(dst(l,e)>.8)out.push(e.slice());return out;}
+/* ett tecken: {S:[{pts}|{dot}], minx, maxx, w} med x från 0 */
+function prepare(strokes,step){const S=[];let mn=1e9,mx=-1e9;
+  const acc=p=>{mn=Math.min(mn,p[0]);mx=Math.max(mx,p[0]);};
+  strokes.forEach(s=>{if(s.dot){S.push({dot:s.dot.slice()});acc(s.dot);}else{const pts=resample(s,step||2.5);pts.forEach(acc);S.push({pts});}});
+  S.forEach(s=>{if(s.dot)s.dot[0]-=mn;else s.pts.forEach(p=>p[0]-=mn);});return{S,w:mx-mn};}
+/* ett ord: bokstäverna efter varandra, x från 0 */
+function word(text,stil,step){const out=[];let cur=0;const GAP=16;
+  [...text].forEach(c=>{if(c===" "){cur+=34;return;}const g=prepare(get(stil,c),step);
+    g.S.forEach(st=>{if(st.dot)st.dot[0]+=cur;else st.pts.forEach(p=>p[0]+=cur);out.push(st);});cur+=g.w+GAP;});
+  return{S:out,w:Math.max(0,cur-GAP)};}
+return{get,GROUPS,PRE,CAP,LOW,CUR,prepare,word,resample};
 })();

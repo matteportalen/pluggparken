@@ -57,6 +57,7 @@ const IDX=[
  ['fler/','Fler ämnen','Engelska, logik, kod och pengar','🧩','ämnen andra ämnen engelska logik digitalt pengar','Ämnen'],
  ['extra/','Extra','Saker att göra själv: optiska illusioner, pyssel och mer','✨','extra pyssel illusion skriva ut göra själv bonus','Ämnen'],
  ['ovriga/ordgomma/','Ordgömman','Hitta de gömda orden i tio teman','🔤','ordsök ord gömda bokstäver tema','Svenska'],
+ ['handstil/blad.html','Övningsblad för handstil','Skriv ut blad med bokstäver, siffror, ord och namn att öva handstil','🖨️','handstil övningsblad skriva ut utskrift blad skrivövning bokstäver namn siffror skrivstil tryckbokstäver','Svenska'],
  ['handstil/','Handstil','Öva att skriva bokstäver med fingret eller pennan: tryckbokstäver och skrivstil','✏️','handstil skriva skrivstil tryckbokstäver bokstäver alfabetet penna spåra följa stigen skrivövning svenska','Svenska'],
  ['meningsbyggaren/','Meningsbyggaren','Sätt orden i rätt ordning, stor bokstav och skiljetecken','🧩','mening meningar ord ordning stor bokstav punkt frågetecken utropstecken skiljetecken grammatik skriva svenska','Svenska'],
  ['ordkedjan/','Ordkedjan','Skriv ett ord som börjar på sista bokstaven i förra ordet','⛓️','ordkedja ord bokstav kedja katt tak kaka ordlek svenska stava','Svenska'],

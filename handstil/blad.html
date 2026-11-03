@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<script src="../tema.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Övningsblad för handstil – Pluggparken</title>
+<meta name="description" content="Skriv ut övningsblad för handstil: bokstäver, siffror, ord och namn med hjälplinjer, prickade bokstäver och tomma rader. Tryckbokstäver och skrivstil.">
+<link rel="canonical" href="https://pluggparken.se/handstil/blad.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Pluggparken">
+<meta property="og:locale" content="sv_SE">
+<meta property="og:title" content="Övningsblad för handstil – Pluggparken">
+<meta property="og:description" content="Skriv ut övningsblad för handstil med hjälplinjer, prickade bokstäver och tomma rader.">
+<meta property="og:url" content="https://pluggparken.se/handstil/blad.html">
+<meta property="og:image" content="https://pluggparken.se/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#1F3A35">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Andika:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EAF3FF; --ink:#1D2B53; --muted:#56668F; --card:#FFFFFF; --line:#C6D6F2; --soft:#F1F6FF;
+  --good:#1E9E5E; --good-dark:#157548; --accent:#3D5AFE;
+  --font:"Baloo 2","Trebuchet MS",system-ui,sans-serif; --ord:"Andika","Baloo 2",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:900px;margin:0 auto;padding:12px 16px 40px}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;border:0;background:none}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+[hidden]{display:none!important}
+h1{margin:8px 0 2px;font-size:2rem}
+.lead{margin:0 0 12px;color:var(--muted)}
+.panel{background:var(--card);border-radius:20px;padding:12px 14px;box-shadow:0 5px 0 var(--line);margin-bottom:12px}
+.panel h2{margin:0 0 6px;font-size:1.05rem}
+.seg{display:flex;flex-wrap:wrap;gap:8px}
+.seg button{padding:8px 14px;border-radius:14px;background:var(--soft);box-shadow:0 3px 0 var(--line);font-weight:800}
+.seg button[aria-pressed=true]{background:var(--ink);color:#fff;box-shadow:0 3px 0 #0E1735}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chips button{min-width:46px;padding:6px 8px;border-radius:12px;background:var(--soft);box-shadow:0 2px 0 var(--line);font-family:var(--ord);font-weight:700;font-size:1.05rem}
+.chips button[aria-pressed=true]{background:#FFE7C2;box-shadow:0 2px 0 #E8B66A}
+textarea{width:100%;font:inherit;font-family:var(--ord);font-size:1.15rem;padding:8px 12px;border-radius:14px;border:2px solid var(--line);background:var(--soft);color:var(--ink);resize:vertical}
+.opts{display:flex;flex-wrap:wrap;gap:14px 22px;align-items:center}
+label.ck{display:flex;gap:8px;align-items:center;font-weight:700}
+.go{padding:12px 22px;border-radius:16px;background:var(--good);color:#fff;box-shadow:0 4px 0 var(--good-dark);font-weight:800;font-size:1.15rem}
+.hint{color:var(--muted);font-size:.92rem;margin:4px 0 0}
+.stage{margin-top:12px;overflow:hidden}
+.pages{width:210mm;transform-origin:0 0}
+/* bladen: A4 */
+.sida{width:210mm;height:297mm;background:#fff;color:#1D2B53;position:relative;margin:0 0 8mm;box-shadow:0 4px 18px rgba(29,43,83,.18);padding:10mm 12mm 0 12mm;font-family:var(--font);overflow:hidden;break-after:page;page-break-after:always}
+.sida:last-child{break-after:auto;page-break-after:auto}
+.hd{display:flex;align-items:center;gap:6mm;height:24mm}
+.ban{flex:1;height:22mm;border-radius:6mm;background:linear-gradient(135deg,#FF9F43,#F2780C);color:#fff;display:flex;align-items:center;gap:4mm;padding:0 6mm;box-shadow:0 1.2mm 0 #B85A06;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.ban b{font-size:9mm;line-height:1}
+.ban small{display:block;font-size:3.6mm;font-weight:700;opacity:.95}
+.pet{width:19mm;height:19mm;flex:none}
+.pet svg{width:100%;height:100%}
+.nm{width:62mm;font-size:3.8mm;font-weight:700}
+.nm div{border-bottom:.35mm solid #1D2B53;margin:3.2mm 0 0;height:6.6mm;display:flex;align-items:flex-end}
+.nm span{font-size:3.2mm;opacity:.75;margin-right:2mm}
+.rows{margin-top:5mm}
+.rw{display:block;width:186mm;height:34.2mm;margin-bottom:2.6mm}
+.ft{position:absolute;left:12mm;right:12mm;bottom:6mm;display:flex;justify-content:space-between;font-size:3.4mm;font-weight:700;color:#56668F}
+.rw .g1{stroke:#C9D6F0}.rw .g2{stroke:#9DB4E4}.rw .g3{stroke:#6E86BF}
+.rw .mod{stroke:#1D2B53}.rw .arr{fill:#1D2B53}.rw .gh{stroke:#8C97B5}
+.rw .sd{fill:#F2780C}.rw .sn{fill:#fff}.rw .star{stroke:#F2B707;fill:none}
+.bw .ban{background:#fff;color:#000;box-shadow:none;border:.5mm solid #000}
+.bw .rw .g1{stroke:#ccc}.bw .rw .g2{stroke:#999}.bw .rw .g3{stroke:#555}
+.bw .rw .mod{stroke:#000}.bw .rw .arr{fill:#000}.bw .rw .gh{stroke:#777}
+.bw .rw .sd{fill:#000}.bw .rw .star{stroke:#999}
+@page{size:A4;margin:0}
+@media print{
+  body{background:#fff}.noprint{display:none!important}.wrap{max-width:none;padding:0;margin:0}
+  .stage{margin:0;overflow:visible;height:auto!important}
+  .pages{transform:none!important;width:210mm}
+  .sida{box-shadow:none;margin:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<script src="../ljud.js"></script>
+<script src="../djur.js"></script>
+<script src="../huvud.js" data-titel="Övningsblad" data-ikon="🖨️"></script>
+<script src="glyfer.js"></script>
+<main class="wrap">
+<div class="noprint">
+  <h1>Övningsblad för handstil</h1>
+  <p class="lead">Välj vad barnen ska öva, så får du blad att skriva ut på A4. Varje rad har en bokstav med pilar, prickade bokstäver att dra över och tomma rader att skriva själv på.</p>
+
+  <div class="panel"><h2>Stil</h2>
+    <div class="seg" id="sStil"><button data-v="tryck" aria-pressed="true">Tryckbokstäver</button><button data-v="skrift" aria-pressed="false">Skrivstil</button></div></div>
+
+  <div class="panel"><h2>Vad vill ni öva?</h2>
+    <div class="seg" id="sMode"><button data-v="bok" aria-pressed="true">Bokstäver</button><button data-v="sif" aria-pressed="false">Siffror</button><button data-v="ord" aria-pressed="false">Ord och namn</button></div>
+    <div id="pBok">
+      <div class="seg" id="sKind" style="margin-top:10px"><button data-v="bada" aria-pressed="true">Stora och små</button><button data-v="stor" aria-pressed="false">Bara stora</button><button data-v="sma" aria-pressed="false">Bara små</button></div>
+      <div class="seg" id="sGrp" style="margin-top:8px"></div>
+      <div class="chips" id="cBok"></div>
+    </div>
+    <div id="pSif" hidden><div class="chips" id="cSif"></div></div>
+    <div id="pOrd" hidden>
+      <textarea id="tOrd" rows="4" maxlength="200" placeholder="Skriv ett ord eller ett namn på varje rad" spellcheck="false" autocapitalize="sentences"></textarea>
+      <p class="hint">Högst åtta ord, och högst 14 tecken i varje. Varje ord får en rad att titta på, en prickad rad och en tom rad. Inget sparas.</p>
+      <div class="seg" id="sPre" style="margin-top:8px"></div>
+    </div>
+  </div>
+
+  <div class="panel"><div class="opts">
+    <label class="ck"><input type="checkbox" id="bw"> Svartvitt (för svartvit skrivare)</label>
+    <label class="ck"><input type="checkbox" id="pet" checked> Mitt djur på bladet</label>
+    <button class="go" id="print">🖨️ Skriv ut</button>
+    <a href="./" style="font-weight:800;color:var(--ink)">← Till övningen</a>
+  </div>
+  <p class="hint" id="info"></p></div>
+</div>
+<div class="stage" id="stage"><div class="pages" id="pages"></div></div>
+</main>
+<script>
+const $=s=>document.querySelector(s);
+const NS='http://www.w3.org/2000/svg';
+const G=MPGlyfer.G||MPGlyfer.GROUPS;
+const RW=1033,RY0=-35,RH=190,ROWS=6;
+let st={stil:'tryck',mode:'bok',kind:'bada',bok:new Set(),sif:new Set('0123456789'.split('')),ord:''};
+G.filter(g=>!g.pre&&g.id!=='g6').forEach(g=>g.items.forEach(it=>st.bok.add(it.u)));
+
+/* ---------- Val ---------- */
+const PAIRS=[];G.filter(g=>!g.pre&&g.id!=='g6').forEach(g=>g.items.forEach(it=>PAIRS.push(it)));
+function seg(id,fn){$(id).onclick=e=>{const b=e.target.closest('[data-v]');if(!b)return;[...$(id).children].forEach(x=>x.setAttribute('aria-pressed',String(x===b)));fn(b.dataset.v);};}
+seg('#sStil',v=>{st.stil=v;render();});
+seg('#sMode',v=>{st.mode=v;['Bok','Sif','Ord'].forEach((n,i)=>$('#p'+n).hidden=['bok','sif','ord'][i]!==v);render();});
+seg('#sKind',v=>{st.kind=v;render();});
+function chips(){const cb=$('#cBok');cb.innerHTML='';PAIRS.forEach(it=>{const b=document.createElement('button');b.textContent=it.u+it.l;b.setAttribute('aria-pressed',String(st.bok.has(it.u)));b.onclick=()=>{st.bok.has(it.u)?st.bok.delete(it.u):st.bok.add(it.u);b.setAttribute('aria-pressed',String(st.bok.has(it.u)));render();};cb.appendChild(b);});
+  const cs=$('#cSif');cs.innerHTML='';'0123456789'.split('').forEach(c=>{const b=document.createElement('button');b.textContent=c;b.setAttribute('aria-pressed',String(st.sif.has(c)));b.onclick=()=>{st.sif.has(c)?st.sif.delete(c):st.sif.add(c);b.setAttribute('aria-pressed',String(st.sif.has(c)));render();};cs.appendChild(b);});
+  const sg=$('#sGrp');sg.innerHTML='';
+  [['Alla',()=>PAIRS.map(i=>i.u)],['Inga',()=>[]],...G.filter(g=>!g.pre&&g.id!=='g6').map(g=>[g.n,()=>g.items.map(i=>i.u)])].forEach(([n,f])=>{const b=document.createElement('button');b.textContent=n;b.onclick=()=>{st.bok=new Set(f());chips();render();};sg.appendChild(b);});}
+$('#tOrd').oninput=e=>{st.ord=e.target.value;render();};
+const PRE=[['Veckodagar','måndag\ntisdag\nonsdag\ntorsdag\nfredag\nlördag\nsöndag'],['Färger','röd\nblå\ngul\ngrön\nvit\nsvart\nrosa'],['Första orden','jag\noch\ndet\när\nen\npå\nhar\nmed'],['Djur','katt\nhund\nko\nhäst\nfisk\ngroda']];
+PRE.forEach(([n,t])=>{const b=document.createElement('button');b.textContent=n;b.onclick=()=>{st.ord=t;$('#tOrd').value=t;render();};$('#sPre').appendChild(b);});
+$('#bw').onchange=render;$('#pet').onchange=render;
+$('#print').onclick=()=>window.print();
+
+/* ---------- Rader ---------- */
+const pd=pts=>'M'+pts.map(p=>p[0].toFixed(1)+' '+p[1].toFixed(1)).join('L');
+function guides(){return [[0,'g1',1],[50,'g2',1.1],[100,'g3',1.7],[150,'g1',1]].map(([y,c,w])=>`<line class="${c}" x1="3" x2="${RW-3}" y1="${y}" y2="${y}" stroke-width="${w}"${y===50?' stroke-dasharray="5 5"':''}/>`).join('');}
+function arrow(pts){const n=pts.length;if(n<2)return'';const p=pts[n-1],q=pts[Math.max(0,n-5)];let a=Math.atan2(p[1]-q[1],p[0]-q[0]);const L=11,W=6.5,tip=[p[0]+Math.cos(a)*5,p[1]+Math.sin(a)*5],b=[tip[0]-Math.cos(a)*L,tip[1]-Math.sin(a)*L];
+  return `<polygon class="arr" points="${tip[0]},${tip[1]} ${b[0]+Math.cos(a+Math.PI/2)*W/1},${b[1]+Math.sin(a+Math.PI/2)*W/1} ${b[0]+Math.cos(a-Math.PI/2)*W/1},${b[1]+Math.sin(a-Math.PI/2)*W/1}"/>`;}
+function model(S,dx,sm){const R=sm?5.6:8,F=sm?7:9.5,TY=sm?2.5:3.4;let o='',n=0;S.forEach(s=>{n++;if(s.dot){const x=s.dot[0]+dx,y=s.dot[1];o+=`<circle class="sd" cx="${x}" cy="${y}" r="${R}"/><text class="sn" x="${x}" y="${y+TY}" text-anchor="middle" font-size="${F}" font-weight="800">${n}</text>`;return;}
+  const pts=s.pts.map(p=>[p[0]+dx,p[1]]);o+=`<path class="mod" d="${pd(pts)}" fill="none" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round"/>${arrow(pts)}`;});
+  n=0;S.forEach(s=>{n++;if(s.dot)return;const p=s.pts[0],x=p[0]+dx,y=p[1];o+=`<circle class="sd" cx="${x}" cy="${y}" r="${R}"/><text class="sn" x="${x}" y="${y+TY}" text-anchor="middle" font-size="${F}" font-weight="800">${n}</text>`;});return o;}
+function ghost(S,dx,start){let o='';S.forEach((s,i)=>{if(s.dot){o+=`<circle class="gh" cx="${s.dot[0]+dx}" cy="${s.dot[1]}" r="2.6" fill="#8C97B5" style="fill:#8C97B5"/>`;return;}
+  o+=`<path class="gh" d="${pd(s.pts.map(p=>[p[0]+dx,p[1]]))}" fill="none" stroke-width="5.2" stroke-linecap="round" stroke-dasharray="0.1 8"/>`;});
+  if(start){S.forEach((s,i)=>{const p=s.dot||s.pts[0];o+=`<circle class="sd" cx="${p[0]+dx}" cy="${p[1]}" r="3.6" opacity=".9"/>`;});}return o;}
+const starSVG=(x,y)=>`<path class="star" d="M${x} ${y-14}l4.2 9.4 10.2 1.1-7.6 6.9 2.2 10-9-5.2-9 5.2 2.2-10-7.6-6.9 10.2-1.1z" stroke-width="2.2" stroke-linejoin="round"/>`;
+function rowSVG(inner){return `<svg class="rw" viewBox="0 ${RY0} ${RW} ${RH}" xmlns="${NS}" role="img" aria-hidden="true">${guides()}${inner}</svg>`;}
+function glyphRow(ch){const g=MPGlyfer.prepare(MPGlyfer.get(st.stil,ch),2.5),cw=Math.max(106,g.w+40),n=Math.min(9,Math.floor(RW/cw));
+  let o='';for(let k=0;k<n;k++){const dx=k*cw+(cw-g.w)/2;if(k===0)o+=model(g.S,dx);else if(k<=3)o+=ghost(g.S,dx,k===1);}
+  if(n>=6)o+=starSVG(RW-34,60);return rowSVG(o);}
+function wordRows(w){const g=MPGlyfer.word(w,st.stil,2.5),dx=Math.max(20,(RW-g.w)/2-0);const off=Math.min(40,Math.max(10,(RW-g.w)/6));
+  return[rowSVG(model(g.S,off,true)),rowSVG(ghost(g.S,off,true)),rowSVG(starSVG(RW-34,60))];}
+
+/* ---------- Sidor ---------- */
+function plan(){
+  const rows=[];let titel='',sub='';
+  if(st.mode==='bok'){const list=PAIRS.filter(i=>st.bok.has(i.u));
+    list.forEach(it=>{if(st.kind!=='sma')rows.push([glyphRow(it.u)]);if(st.kind!=='stor')rows.push([glyphRow(it.l)]);});
+    sub=list.length===PAIRS.length?'Hela alfabetet':list.length?`Bokstäverna ${list.map(i=>i.u+i.l).join(' ')}`:'Välj bokstäver';}
+  else if(st.mode==='sif'){const l=[...st.sif].sort();l.forEach(c=>rows.push([glyphRow(c)]));sub=l.length?`Siffrorna ${l.join(' ')}`:'Välj siffror';}
+  else{const ws=st.ord.split('\n').map(x=>x.replace(/[^A-Za-zÅÄÖåäö ]/g,'').replace(/\s+/g,' ').trim().slice(0,14)).filter(Boolean).slice(0,8);
+    ws.forEach(w=>rows.push(wordRows(w)));sub=ws.length?ws.join(', '):'Skriv ord eller namn';}
+  return{rows,sub};}
+function render(){
+  const {rows,sub}=plan(),stilN=st.stil==='tryck'?'Tryckbokstäver':'Skrivstil';
+  const pages=[];let cur=[],used=0;
+  rows.forEach(r=>{if(used+r.length>ROWS&&cur.length){pages.push(cur);cur=[];used=0;}cur.push(...r);used+=r.length;});
+  if(cur.length)pages.push(cur);
+  const pet=$('#pet').checked&&window.owlSVG&&window.lasDjur?owlSVG(lasDjur()):'';
+  $('#pages').className='pages'+($('#bw').checked?' bw':'');
+  $('#pages').innerHTML=pages.length?pages.map((p,i)=>`<section class="sida"><div class="hd"><div class="ban"><span style="font-size:9mm">✏️</span><div><b>Handstil</b><small>${stilN}${sub?' · '+sub.slice(0,60):''}</small></div></div>${pet?`<div class="pet">${pet}</div>`:''}<div class="nm"><div><span>Namn:</span></div></div></div><div class="rows">${p.join('')}</div><div class="ft"><span>pluggparken.se</span><span>Sida ${i+1} av ${pages.length}</span><span>Bra jobbat! ⭐</span></div></section>`).join(''):'<p class="noprint hint">Välj något att öva, så visas bladen här.</p>';
+  $('#info').textContent=pages.length?`${pages.length} ${pages.length===1?'sida':'sidor'} (A4). Välj Skriv ut, och skala "100 %" i skrivardialogen.`:'';
+  fit();}
+function fit(){const st=$('#stage'),pg=$('#pages');if(!pg.firstElementChild){st.style.height='';pg.style.transform='';return;}
+  const mm=96/25.4,w=210*mm,s=Math.min(1,(st.clientWidth||w)/w);pg.style.transform=`scale(${s})`;st.style.height=(pg.scrollHeight*s)+'px';}
+addEventListener('resize',fit);
+chips();render();
+</script>
+</body>
+</html>
