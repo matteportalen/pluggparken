@@ -82,6 +82,23 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 .chip{padding:5px 12px;border-radius:999px;background:var(--soft);box-shadow:0 2px 0 var(--line);font-family:var(--ord);font-weight:700;font-size:1rem;margin:3px 4px 3px 0}
 .printrow{margin:0 0 10px;display:flex;justify-content:flex-end}
 .printrow a{display:inline-block;padding:8px 14px;border-radius:14px;background:var(--card);box-shadow:0 3px 0 var(--line);font-weight:800;color:var(--ink);text-decoration:none}
+/* dator: bredare sida, grupperna i kolumner, övningen med skrivytan till vänster */
+@media (min-width:1000px){
+  .wrap{max-width:1280px}
+  .hm{display:grid;grid-template-columns:340px minmax(0,1fr);gap:20px;align-items:start}
+  .sd{position:sticky;top:64px;max-height:calc(100vh - 80px);overflow:auto;padding:2px 4px 8px 2px}
+  #groups{columns:2;column-gap:16px}
+  #groups .grp{break-inside:avoid;margin-bottom:16px}
+  .tiles{grid-template-columns:repeat(auto-fill,minmax(84px,1fr))}
+  .tile{min-width:0;overflow:hidden}.tile.pre{font-size:.85rem;overflow-wrap:anywhere;hyphens:auto}
+  .printrow{justify-content:flex-start}
+  .hero{margin-bottom:18px}
+  :root{--bh:70vh}
+  #game{display:grid;grid-template-columns:minmax(0,700px) 380px;justify-content:center;grid-template-areas:"bord top" "bord title" "bord fb" "bord btns" "bord .";column-gap:28px;row-gap:6px;align-items:start}
+  #game>.gtop{grid-area:top}#game>.gt{grid-area:title}#game>.bord{grid-area:bord;margin:0 auto}#game>.fb{grid-area:fb}#game>.btns{grid-area:btns;justify-content:flex-start}
+  .gt h2{font-size:1.7rem}.fb{text-align:left}
+}
+@media (min-width:1500px){#groups{columns:3}.wrap{max-width:1480px}}
 .res{text-align:center;padding-top:18px}
 .res .big{font-family:var(--ord);font-weight:700;font-size:4.5rem;line-height:1.1}
 .res .steps{display:grid;gap:6px;max-width:360px;margin:10px auto;text-align:left}
@@ -103,13 +120,16 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
     <svg viewBox="0 0 84 70" aria-hidden="true"><rect x="2" y="4" width="80" height="62" rx="12" fill="#fff"/><path d="M8 24H76M8 40H76M8 56H76" stroke="#C6D6F2" stroke-width="2"/><path d="M8 40H76" stroke="#7E94C8" stroke-width="2.5"/><path d="M22 52V24L36 52V24" stroke="#1D2B53" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1 9"/><path d="M50 36Q44 24 54 24 62 24 60 36 58 46 68 52" stroke="#F2780C" stroke-width="5" fill="none" stroke-linecap="round"/></svg>
     <div><h1>Handstil</h1><p>Se hur bokstaven skrivs, följ stigen med fingret och skriv själv.</p></div>
   </div>
+  <div class="hm"><aside class="sd">
   <div class="tabs" id="tabs" role="group" aria-label="Stil">
     <button data-stil="tryck" aria-pressed="true">Aa<small>Tryckbokstäver</small></button>
     <button data-stil="skrift" aria-pressed="false"><span style="font-style:italic">Aa</span><small>Skrivstil</small></button>
   </div>
   <div class="printrow"><a href="blad.html">🖨️ Skriv ut övningsblad</a></div>
   <p class="note" id="note"></p>
-  <div id="groups"></div>
+  <div id="wordBox"></div>
+  </aside>
+  <div id="groups"></div></div>
 </section>
 
 <section class="screen" id="game" hidden>
@@ -162,7 +182,7 @@ const last=s=>s.dot||s.pts[s.pts.length-1];
 const B={};      // aktuell bräda: svg, lager, penndrag
 function el(tag,attrs,parent){const e=document.createElementNS(NS,tag);Object.entries(attrs||{}).forEach(([k,v])=>e.setAttribute(k,v));(parent||B.svg).appendChild(e);return e;}
 function makeBoard(){
-  const bord=$('#bord');bord.innerHTML='';bord.style.width=`min(100%,calc(58vh*${VW}/220))`;
+  const bord=$('#bord');bord.innerHTML='';bord.style.width=`min(100%,calc(var(--bh,58vh)*${VW}/220))`;
   const svg=document.createElementNS(NS,'svg');svg.setAttribute('viewBox',`0 ${VY0} ${VW} ${VH}`);svg.setAttribute('role','img');svg.setAttribute('aria-label','Skrivyta med hjälplinjer');bord.appendChild(svg);B.svg=svg;
   /* hjälplinjer: övre, mitt (streckad), bas, nedre */
   [[0,'#D7E2F8',1,''],[50,'#9DB4E4',1.2,'4 4'],[100,'#6E86BF',1.8,''],[150,'#D7E2F8',1,'']].forEach(([y,c,w,d])=>el('line',{x1:3,x2:VW-3,y1:y,y2:y,stroke:c,'stroke-width':w,'stroke-dasharray':d}));
@@ -216,7 +236,7 @@ function renderHome(){
   w.innerHTML=`<h2>Ord och namn</h2><p>Skriv ett ord eller ett namn och öva att skriva det. Det sparas inte.</p>
     <form class="wf" id="wf"><input id="wIn" maxlength="14" autocomplete="off" autocapitalize="sentences" spellcheck="false" placeholder="Skriv ett ord eller ditt namn" aria-label="Ord eller namn"><button class="btn go" type="submit">Öva</button></form>
     <div class="chips" id="wChips"></div>`;
-  gr.appendChild(w);
+  const wb=$('#wordBox');wb.innerHTML='';wb.appendChild(w);
   const ch=$('#wChips');
   const skF=data.stil==='skrift',alla=MPGlyfer.ORD.map((c,i)=>({c,i})),sk=alla.filter(x=>x.c.sk),ov=alla.filter(x=>!x.c.sk),op=l=>l.map(x=>`<option value="${x.i}">${x.c.n.replace('Skrivstil: ','')}</option>`).join('');
   ch.innerHTML=`<label class="wl">Välj en lista med ord<select id="wCat">${skF?`<optgroup label="Särskilt för skrivstil">${op(sk)}</optgroup><optgroup label="Vanliga ord">${op(ov)}</optgroup>`:`<optgroup label="Vanliga ord">${op(ov)}</optgroup><optgroup label="Ord för skrivstil">${op(sk)}</optgroup>`}</select></label><div id="wWords"></div>`;
