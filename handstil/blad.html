@@ -41,9 +41,24 @@ h1{margin:8px 0 2px;font-size:2rem}
 .seg{display:flex;flex-wrap:wrap;gap:8px}
 .seg button{padding:8px 14px;border-radius:14px;background:var(--soft);box-shadow:0 3px 0 var(--line);font-weight:800}
 .seg button[aria-pressed=true]{background:var(--ink);color:#fff;box-shadow:0 3px 0 #0E1735}
+.tabs{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.tabs button{--c:#3D5AFE;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:16px;background:#fff;border:3px solid var(--c);color:var(--c);text-align:left;font-weight:800;line-height:1.15;box-shadow:0 4px 0 color-mix(in srgb,var(--c) 35%,white)}
+.tabs button i{flex:none;width:38px;height:38px;border-radius:12px;background:color-mix(in srgb,var(--c) 14%,white);display:grid;place-items:center;font-style:normal;font-size:1.05rem}
+.tabs button b{font-size:1.02rem}
+.tabs button[aria-pressed=true]{background:var(--c);color:#fff;box-shadow:0 4px 0 color-mix(in srgb,var(--c) 60%,black)}
+.tabs button[aria-pressed=true] i{background:rgba(255,255,255,.22)}
+.tabs button:active{transform:translateY(2px)}
+.modebody{--mc:#3D5AFE;margin-top:12px;padding:10px 12px 12px;border-radius:14px;border-top:6px solid var(--mc);background:color-mix(in srgb,var(--mc) 7%,white)}
+.mlabel{margin:0 0 6px;font-weight:800;font-size:.95rem;color:var(--mc)}
+/* val inne i en kategori: små piller med bock, inte stora flikar */
+.modebody .seg button{padding:5px 12px;border-radius:999px;background:#fff;border:2px solid color-mix(in srgb,var(--mc) 40%,white);box-shadow:none;font-weight:700;font-size:.92rem}
+.modebody .seg button[aria-pressed=true]{background:color-mix(in srgb,var(--mc) 16%,white);border-color:var(--mc);color:var(--ink)}
+.modebody .seg button[aria-pressed=true]::before{content:"✓ ";color:var(--mc);font-weight:800}
+.modebody select{border-color:color-mix(in srgb,var(--mc) 40%,white)}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .chips button{min-width:46px;padding:6px 8px;border-radius:12px;background:var(--soft);box-shadow:0 2px 0 var(--line);font-family:var(--ord);font-weight:700;font-size:1.05rem}
-.chips button[aria-pressed=true]{background:#FFE7C2;box-shadow:0 2px 0 #E8B66A}
+.chips button{background:#fff;border:2px solid color-mix(in srgb,var(--mc,#3D5AFE) 30%,white);box-shadow:none}
+.chips button[aria-pressed=true]{background:color-mix(in srgb,var(--mc,#3D5AFE) 18%,white);border-color:var(--mc,#3D5AFE)}
 select{font:inherit;font-weight:700;padding:8px 10px;border-radius:12px;border:2px solid var(--line);background:var(--soft);color:var(--ink);max-width:100%}
 textarea{width:100%;font:inherit;font-family:var(--ord);font-size:1.15rem;padding:8px 12px;border-radius:14px;border:2px solid var(--line);background:var(--soft);color:var(--ink);resize:vertical}
 .opts{display:flex;flex-wrap:wrap;gap:14px 22px;align-items:center}
@@ -101,8 +116,14 @@ label.ck{display:flex;gap:8px;align-items:center;font-weight:700}
   <div class="panel"><h2>Stil</h2>
     <div class="seg" id="sStil"><button data-v="tryck" aria-pressed="true">Tryckbokstäver</button><button data-v="skrift" aria-pressed="false">Skrivstil</button></div></div>
 
-  <div class="panel"><h2>Vad vill ni öva?</h2>
-    <div class="seg" id="sMode"><button data-v="bok" aria-pressed="true">Bokstäver</button><button data-v="sif" aria-pressed="false">Siffror</button><button data-v="ord" aria-pressed="false">Ord och namn</button><button data-v="mon" aria-pressed="false">Mönster för handen</button></div>
+  <div class="panel"><h2>1. Vad vill ni öva?</h2>
+    <div class="tabs" id="sMode" role="tablist" aria-label="Vad vill ni öva?">
+      <button data-v="bok" data-c="#3D5AFE" aria-pressed="true"><i>Aa</i><b>Bokstäver</b></button>
+      <button data-v="sif" data-c="#1E9E5E" aria-pressed="false"><i>123</i><b>Siffror</b></button>
+      <button data-v="ord" data-c="#F2780C" aria-pressed="false"><i>✎</i><b>Ord och namn</b></button>
+      <button data-v="mon" data-c="#7B61FF" aria-pressed="false"><i>〰️</i><b>Mönster för handen</b></button>
+    </div>
+    <div class="modebody" id="modeBody"><p class="mlabel" id="mLabel">2. Välj bokstäver</p>
     <div id="pBok">
       <div class="seg" id="sKind" style="margin-top:10px"><button data-v="bada" aria-pressed="true">Stora och små</button><button data-v="stor" aria-pressed="false">Bara stora</button><button data-v="sma" aria-pressed="false">Bara små</button></div>
       <div class="seg" id="sGrp" style="margin-top:8px"></div>
@@ -117,6 +138,7 @@ label.ck{display:flex;gap:8px;align-items:center;font-weight:700}
       <textarea id="tOrd" rows="4" maxlength="200" placeholder="Skriv ett ord eller ett namn på varje rad" spellcheck="false" autocapitalize="sentences"></textarea>
       <p class="hint">Högst 16 ord, och högst 14 tecken i varje. Varje ord får en rad att titta på, en prickad rad och en tom rad. Inget sparas.</p>
       <div class="seg" id="sPre" style="margin-top:8px"></div>
+    </div>
     </div>
   </div>
 
@@ -142,7 +164,9 @@ G.filter(g=>!g.pre&&g.id!=='g6').forEach(g=>g.items.forEach(it=>st.bok.add(it.u)
 const PAIRS=[];G.filter(g=>!g.pre&&g.id!=='g6').forEach(g=>g.items.forEach(it=>PAIRS.push(it)));
 function seg(id,fn){$(id).onclick=e=>{const b=e.target.closest('[data-v]');if(!b)return;[...$(id).children].forEach(x=>x.setAttribute('aria-pressed',String(x===b)));fn(b.dataset.v);};}
 seg('#sStil',v=>{st.stil=v;render();});
-seg('#sMode',v=>{st.mode=v;['Bok','Sif','Ord','Mon'].forEach((n,i)=>$('#p'+n).hidden=['bok','sif','ord','mon'][i]!==v);$('#sStil').parentElement.style.opacity=v==='mon'?.4:1;render();});
+const MODEC={bok:['#3D5AFE','2. Välj bokstäver'],sif:['#1E9E5E','2. Välj siffror'],ord:['#F2780C','2. Skriv ord och namn'],mon:['#7B61FF','2. Välj mönster']};
+function modeStyle(v){$('#modeBody').style.setProperty('--mc',MODEC[v][0]);$('#mLabel').textContent=MODEC[v][1];[...$('#sMode').children].forEach(b=>b.style.setProperty('--c',b.dataset.c));}
+seg('#sMode',v=>{modeStyle(v);st.mode=v;['Bok','Sif','Ord','Mon'].forEach((n,i)=>$('#p'+n).hidden=['bok','sif','ord','mon'][i]!==v);$('#sStil').parentElement.style.opacity=v==='mon'?.4:1;render();});
 seg('#sKind',v=>{st.kind=v;render();});
 function chips(){const cb=$('#cBok');cb.innerHTML='';PAIRS.forEach(it=>{const b=document.createElement('button');b.textContent=it.u+it.l;b.setAttribute('aria-pressed',String(st.bok.has(it.u)));b.onclick=()=>{st.bok.has(it.u)?st.bok.delete(it.u):st.bok.add(it.u);b.setAttribute('aria-pressed',String(st.bok.has(it.u)));render();};cb.appendChild(b);});
   const cs=$('#cSif');cs.innerHTML='';'0123456789'.split('').forEach(c=>{const b=document.createElement('button');b.textContent=c;b.setAttribute('aria-pressed',String(st.sif.has(c)));b.onclick=()=>{st.sif.has(c)?st.sif.delete(c):st.sif.add(c);b.setAttribute('aria-pressed',String(st.sif.has(c)));render();};cs.appendChild(b);});
@@ -207,7 +231,7 @@ function render(){
 function fit(){const st=$('#stage'),pg=$('#pages');if(!pg.firstElementChild){st.style.height='';pg.style.transform='';return;}
   const mm=96/25.4,w=210*mm,s=Math.min(1,(st.clientWidth||w)/w);pg.style.transform=`scale(${s})`;st.style.height=(pg.scrollHeight*s)+'px';}
 addEventListener('resize',fit);
-chips();render();
+modeStyle('bok');chips();render();
 </script>
 </body>
 </html>
