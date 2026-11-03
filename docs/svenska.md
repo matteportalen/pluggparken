@@ -90,3 +90,5 @@ Lilla b (skrivstil), omritad efter lärarens foto: stammen böjer in i magens bo
 - **Kopplingar mellan bokstäver:** ingen våg nere vid raden längre. Utgången (`TL`) är ett kort uppåtgående streck och nästa bokstavs ingång (`EN`) börjar där föregående slutade (`fy` = föregående utgångs höjd) och stiger rakt in i bokstaven. Gäller alla bokstäver.
 - **c:** kroppen slutar nere i botten och utgången stiger snett upp mot nästa bokstav (som i skissen).
 - **k:** liten **ögla på armen** (övre diagonala strecket), som på skrivstilsaffischen.
+
+Lilla r (skrivstil): omritat efter lärarens förlaga (uppstreck, liten tak/hylla, snett ner till raden, snett upp som utgång). Osäkert: sammanhängande "rara" liknar fortfarande "vava"; läraren ska bedöma.
