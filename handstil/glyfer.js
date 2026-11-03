@@ -86,7 +86,7 @@ const EN=(tx,ty,fy)=>{fy=fy||100;return fy>=90?bez([-12,100],[tx*.55-4,98],[tx,t
 const TL=(x,y)=>bez([x,y],[x+7,y+5],[x+17,y+1]);
 const ASC=(fy)=>J(EN(10,8,fy),arc(5,8,5,8,0,-180));            // ingång upp till en smal ögla överst (b d f h k l)
 const CURB={
-a:fy=>({b:J(EN(32,54,fy),arc(22,75,20,25,-62,-392),L(41,63,41,95),TL(41,95)),x:[]}),
+a:fy=>({b:J(EN(40,53,fy),bez([40,53],[5,50],[3,78]),bez([3,78],[2,101],[22,100],10),bez([22,100],[40,100],[37,80],10),L(37,80,40,53),L(40,53,41,95),TL(41,95)),x:[]}),   // droppform stängd uppe, sedan ner längs samma sida
 b:fy=>({b:J(ASC(fy),L(0,8,0,98),bez([0,98],[1,70],[22,50]),arc(22,75,22,25,270,505),bez([4.2,90.3],[9,104],[28,100]),TL(28,100)),x:[]}),
 c:fy=>({b:J(EN(36,58,fy),arc(21,75,21,25,-45,-320),TL(37,92)),x:[]}),
 d:fy=>({b:J(EN(37,59,fy),arc(22,75,20,25,-30,-360),L(42,75,48,8),arc(45,8,3,8,0,-180),L(42,8,42,95),TL(42,95)),x:[]}),   // runda ccw, rakt upp till taket utan stopp, ner längs samma sida

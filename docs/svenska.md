@@ -73,3 +73,6 @@ Färdiga sagan visas nu som **en sida**: rubrik, en bild (sista scenen) och hela
 
 ### Skrivstil: lilla b stängs i slutet av magen
 Lilla b: stammen ner, sedan uppåt i en diagonal från stammens fot, över magen och hela varvet runt så att magen **stängs mot stammen i slutet av magen** (inte före), och därifrån utgång längs raden mot nästa bokstav. Förstaförsöken (hake före magen) underkändes av läraren.
+
+### Skrivstil: lilla a med droppformad mage
+Magen på lilla a är en droppe som är spetsig och stängd uppe till höger (ingångsstrecket kommer in till spetsen, runt vänster och botten, tillbaka upp längs högra sidan), därefter stammen rakt ner. Ingångsstrecket korsar droppen på väg upp; om det ser rörigt ut, rita om ingången.
