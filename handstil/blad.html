@@ -145,7 +145,7 @@ function chips(){const cb=$('#cBok');cb.innerHTML='';PAIRS.forEach(it=>{const b=
   const sg=$('#sGrp');sg.innerHTML='';
   [['Alla',()=>PAIRS.map(i=>i.u)],['Inga',()=>[]],...G.filter(g=>!g.pre&&g.id!=='g6').map(g=>[g.n,()=>g.items.map(i=>i.u)])].forEach(([n,f])=>{const b=document.createElement('button');b.textContent=n;b.onclick=()=>{st.bok=new Set(f());chips();render();};sg.appendChild(b);});}
 $('#tOrd').oninput=e=>{st.ord=e.target.value;render();};
-const sel=document.createElement('select');sel.id='selOrd';sel.innerHTML='<option value="">Välj en färdig lista med ord …</option>'+MPGlyfer.ORD.map((c,i)=>`<option value="${i}">${c.n} (${c.w.length} ord)</option>`).join('');
+const sel=document.createElement('select');sel.id='selOrd';sel.innerHTML='<option value="">Välj en färdig lista med ord …</option>'+[['Vanliga ord',x=>!x.sk],['Ord för skrivstil',x=>x.sk]].map(([g,f])=>`<optgroup label="${g}">${MPGlyfer.ORD.map((c,i)=>({c,i})).filter(x=>f(x.c)).map(x=>`<option value="${x.i}">${x.c.n.replace('Skrivstil: ','')} (${x.c.w.length} ord)</option>`).join('')}</optgroup>`).join('');
 sel.onchange=()=>{if(sel.value==='')return;const t=MPGlyfer.ORD[+sel.value].w.slice(0,16).join('\n');st.ord=t;$('#tOrd').value=t;render();};$('#sPre').appendChild(sel);
 $('#bw').onchange=render;$('#pet').onchange=render;
 $('#print').onclick=()=>window.print();

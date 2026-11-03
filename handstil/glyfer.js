@@ -249,6 +249,14 @@ const ORD=[
 ["Känslor","glad ledsen arg trött rädd stolt snäll"],
 ["Verb","springa hoppa läsa skriva måla leka sova äta dricka rita"],
 ["Ord med å, ä och ö","båt råd gård äpple älg väg öga öppna höst björn"],
-].map(([n,l])=>({n,w:l.split(" ")}));
+["Skrivstil: korta ord","om av ut in ur så nu på vi du jo ni en ha se","s"],
+["Skrivstil: runda bokstäver (a, o, d, g, c, e)","sol ros dag god mod lada odla gädda cola glad grad ordna","s"],
+["Skrivstil: bågar (m, n, h, r, u)","mun hem hus mur ruta nu hummer människa munnen minut","s"],
+["Skrivstil: öglor (l, b, h, k, f)","lila bil bok hal kul fel flik blomma klocka bläck","s"],
+["Skrivstil: bokstäver som går under raden (g, j, p, y)","gul jag yxa pipa gryta pyjamas jordgubbe hjärta","s"],
+["Skrivstil: spetsiga bokstäver (v, w, x, z, k)","vit vår väg vaken xylofon zebra kex kaktus vacker vinter","s"],
+["Skrivstil: dubbla bokstäver","katt mamma pappa boll gubbe bubbla kanna tallrik tomma","s"],
+["Skrivstil: namn (stor bokstav först)","Anna Elsa Mia Alma Ella Maja Sara Emil Oskar Hugo Liam Noah Filip Ali","s"],
+].map(([n,l,s])=>({n,w:l.split(" "),sk:!!s}));
 return{get,GROUPS,PRE,CAP,LOW,CURB,prepare,word,resample,ORD,MON};
 })();

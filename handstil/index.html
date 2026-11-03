@@ -218,7 +218,8 @@ function renderHome(){
     <div class="chips" id="wChips"></div>`;
   gr.appendChild(w);
   const ch=$('#wChips');
-  ch.innerHTML=`<label class="wl">Välj en lista med ord<select id="wCat">${MPGlyfer.ORD.map((c,i)=>`<option value="${i}">${c.n}</option>`).join('')}</select></label><div id="wWords"></div>`;
+  const skF=data.stil==='skrift',alla=MPGlyfer.ORD.map((c,i)=>({c,i})),sk=alla.filter(x=>x.c.sk),ov=alla.filter(x=>!x.c.sk),op=l=>l.map(x=>`<option value="${x.i}">${x.c.n.replace('Skrivstil: ','')}</option>`).join('');
+  ch.innerHTML=`<label class="wl">Välj en lista med ord<select id="wCat">${skF?`<optgroup label="Särskilt för skrivstil">${op(sk)}</optgroup><optgroup label="Vanliga ord">${op(ov)}</optgroup>`:`<optgroup label="Vanliga ord">${op(ov)}</optgroup><optgroup label="Ord för skrivstil">${op(sk)}</optgroup>`}</select></label><div id="wWords"></div>`;
   const fyll=()=>{const c=MPGlyfer.ORD[+$('#wCat').value],box=$('#wWords');box.innerHTML='';c.w.forEach(o=>{const b=document.createElement('button');b.className='chip';b.textContent=o;b.onclick=()=>startWord(o);box.appendChild(b);});};
   $('#wCat').onchange=fyll;fyll();
   $('#wf').onsubmit=e=>{e.preventDefault();startWord($('#wIn').value);};
