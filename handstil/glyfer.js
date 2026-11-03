@@ -87,7 +87,7 @@ const TL=(x,y)=>bez([x,y],[x+7,y+5],[x+17,y+1]);
 const ASC=(fy)=>J(EN(10,8,fy),arc(5,8,5,8,0,-180));            // ingång upp till en smal ögla överst (b d f h k l)
 const CURB={
 a:fy=>({b:J(bez([-12,fy||100],[6,Math.min(fy||100,58)],[40,53],10),bez([40,53],[5,50],[3,78]),bez([3,78],[2,101],[22,100],10),bez([22,100],[40,100],[37,80],10),L(37,80,40,53),L(40,53,41,95),TL(41,95)),x:[]}),   // droppform stängd uppe, sedan ner längs samma sida
-b:fy=>({b:J(ASC(fy),L(0,8,0,96),bez([0,96],[2,102],[22,100]),arc(22,75,22,25,90,-165),bez([.7,68.5],[-2,54],[10,49],8),bez([10,49],[19,46],[17,55],8),bez([17,55],[14,62],[8,55],8),bez([8,55],[13,48],[30,50],8),L(30,50,40,49,50,52)),x:[]}),   // magen från stammens fot, tillbaka upp och ut från toppen (som o)
+b:fy=>({b:J(ASC(fy),L(0,8,0,82),bez([0,82],[1,98],[14,98],8),bez([14,98],[34,98],[34,72],10),bez([34,72],[33,58],[15,51],10),bez([15,51],[22,60],[32,58],8),bez([32,58],[38,56],[44,56],6)),x:[]}),   // efter lärarens foto: magen öppen uppe, liten ögla, utgång från x-höjd
 c:fy=>({b:J(bez([-12,fy||100],[-14,Math.min(fy||100,44)],[30,52],10),arc(21,75,21,25,-60,-320),TL(37,92)),x:[]}),   // ingången utanför bokstaven, över toppen
 d:fy=>({b:J(EN(37,59,fy),arc(22,75,20,25,-30,-360),L(42,75,48,8),arc(45,8,3,8,0,-180),L(42,8,42,95),TL(42,95)),x:[]}),   // runda ccw, rakt upp till taket utan stopp, ner längs samma sida
 e:fy=>({b:J(EN(36,73,fy),arc(21,75,21,25,-8,-318),TL(38,92)),x:[]}),
