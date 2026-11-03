@@ -46,3 +46,6 @@ _Högfrekventa ord, Läsfelslabbet, Mikrofonlabbet, Ordgåtan, Läsflyt, Bokstä
 
 ### Handstil: startsidan som dragspel (nov 2026)
 Startsidan var rörig (sidokolumn + två kolumner kort). Nu en smal kolumn (max 860 px): stilväxlare + "Skriv ut övningsblad", sedan ett **dragspel** med fyra färgade avsnitt (samma färger som flikarna i `blad.html`): Förövningar (lila), Bokstäver (blå, grupperna g1–g5 under varandra), Siffror (grön), Ord och namn (orange). Ett avsnitt öppet åt gången (`openSec`, Bokstäver som start), stjärnor per avsnitt i rubriken. **Ingen "Fortsätt/ta det här näst"-knapp** (läraren: liknande på Multiplikation gillades inte). Spelvyn på dator (bräde vänster, text höger) är oförändrad.
+
+### Handstil: ⏩ x2 i "Se"-steget
+Knapp som dubblar hastigheten på den animerade spårningen (`fart` 1 eller 2, gäller även mitt i animationen, kvar mellan bokstäverna men sparas inte). Visas under animationen och bredvid "Se igen".
