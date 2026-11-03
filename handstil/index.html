@@ -180,7 +180,7 @@ function startMarker(s,n,active){const p=first(s);
 
 /* ---------- Tillstånd ---------- */
 let game=null;   // {item,steps,i,S,phase,...}
-function glyphOf(stil,ch,item){return item.pre?MPGlyfer.PRE[item.id]():MPGlyfer.get(stil,ch);}
+function glyphOf(stil,ch,item){return item.pre?MPGlyfer.PRE[ch]():MPGlyfer.get(stil,ch);}   // för förövningar är ch id:t (p1 …)
 /* ord och namn: bokstäverna efter varandra, varje bokstav centrerad i sin ruta */
 function wordPrep(text,stil){const g=MPGlyfer.word(text,stil,2.5),out=g.S,wd=Math.max(VW0,g.w+36),off=(wd-g.w)/2;
   out.forEach(st=>{if(st.dot)st.dot[0]+=off;else st.pts.forEach(p=>p[0]+=off);});
