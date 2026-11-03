@@ -107,7 +107,7 @@ body.mph-mini #quit{display:none}
     if(top==='ovriga'){if(/^(ordgomma|ordgatan|hogfrekventa|lasflyt|bokstaver)$/.test(sub))return'svenska';if(/^(sverigekartan|europa|varlden)$/.test(sub))return'so';
       if(/^(rymdlabbet|solsystemet|vintergatan)$/.test(sub))return'rymd';if(sub==='ansiktsloppan')return'extra';return'fler';}
     if(top==='anatomi')return'fler';
-    if(/^(meningsbyggaren|ordkedjan|ordgissning|dubbelteckning|knepigaljud|sagobyggaren)$/.test(top))return'svenska';
+    if(/^(meningsbyggaren|ordkedjan|ordgissning|dubbelteckning|knepigaljud|sagobyggaren|handstil)$/.test(top))return'svenska';
     if(top==='tidslinjen')return'so';
     if(/^(schack|trerirad|sudoku|trafikstockning|gissastorlek|fylltillstrecket)$/.test(top))return'fler';
     if(top==='specialare')return'special';
@@ -128,7 +128,7 @@ body.mph-mini #quit{display:none}
     return T10.map(T=>{if(T10.every(n=>lv(n,T)===3))return 3;if(T10.every(n=>lv(n,T)>=2))return 2;if(T10.every(n=>h(n,T).some(x=>x[0])))return 1;return 0});
   }
   // stjärnor per övning (samma regler som startsidan); k = mappens namn, "spel:<spel>" för spelen i Spelhörnan, "spelhornan" för alla där
-  const STJ=['tradgard','gissastorlek','fylltillstrecket','tidslinjen','knepigaljud','sagobyggaren','meningsbyggaren','tiointe','klockan','geometri','brak','uppstallning','hundraruta','tiotal','taluppfattning','sverigekartan','ordgomma','europa','varlden','talfoljd','rutjakten','brakbitar','kortdivision','vagen','gomda','kulbanan','slungan','tradgard','affaren','hogfrekventa','rita','ordgatan','tangentbord','kodverkstan','delaupp','matning','pengar','lasflyt','sagoriket','sifferslottet','schack','trerirad','sudoku','trafikstockning'];
+  const STJ=['tradgard','gissastorlek','fylltillstrecket','tidslinjen','knepigaljud','sagobyggaren','meningsbyggaren','handstil','tiointe','klockan','geometri','brak','uppstallning','hundraruta','tiotal','taluppfattning','sverigekartan','ordgomma','europa','varlden','talfoljd','rutjakten','brakbitar','kortdivision','vagen','gomda','kulbanan','slungan','tradgard','affaren','hogfrekventa','rita','ordgatan','tangentbord','kodverkstan','delaupp','matning','pengar','lasflyt','sagoriket','sifferslottet','schack','trerirad','sudoku','trafikstockning'];
   const SPELSUB=['fly','mem','car','space','frog','tower','skatt','kiosk','bubbel','tug'];
   const SPELHORNAN=['skattjakten','kulbanan','slungan','tradgard','sagoriket','sifferslottet','affaren','rutjakten'];
   function stjFor(k){

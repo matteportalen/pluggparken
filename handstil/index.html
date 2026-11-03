@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<script src="../tema.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Handstil – Pluggparken</title>
+<meta name="description" content="Handstil: öva att skriva alla bokstäver med fingret eller pennan. Se hur bokstaven skrivs, följ stigen och skriv själv. Tryckbokstäver och skrivstil.">
+<link rel="canonical" href="https://pluggparken.se/handstil/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Pluggparken">
+<meta property="og:locale" content="sv_SE">
+<meta property="og:title" content="Handstil – Pluggparken">
+<meta property="og:description" content="Öva handstil på pekskärm: se, följ stigen och skriv själv. Alla bokstäver i tryckbokstäver och skrivstil.">
+<meta property="og:url" content="https://pluggparken.se/handstil/">
+<meta property="og:image" content="https://pluggparken.se/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#1F3A35">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/apple-touch-icon.png" sizes="180x180">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Andika:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EAF3FF; --ink:#1D2B53; --muted:#56668F; --card:#FFFFFF; --line:#C6D6F2; --soft:#F1F6FF;
+  --good:#1E9E5E; --good-dark:#157548; --bad:#E5484D; --accent:#3D5AFE; --gold:#F2B707; --hero1:#FF9F43; --hero2:#F2780C; --heroS:#B85A06;
+  --font:"Baloo 2","Trebuchet MS",system-ui,sans-serif; --ord:"Andika","Baloo 2",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:680px;margin:0 auto;padding:12px 16px 40px}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;border:0;background:none}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+[hidden]{display:none!important}
+.hero{display:flex;gap:16px;align-items:center;background:linear-gradient(135deg,var(--hero1),var(--hero2));color:#fff;border-radius:24px;padding:16px 18px;box-shadow:0 5px 0 var(--heroS);margin:6px 0 14px}
+.hero svg{flex:none;width:84px;height:auto}
+.hero h1{margin:0;font-size:2.1rem;line-height:1.05}
+.hero p{margin:4px 0 0;opacity:.95;font-size:1rem}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 6px}
+.tabs button{padding:10px 8px;border-radius:16px;background:var(--card);box-shadow:0 4px 0 var(--line);font-weight:800;font-size:1.1rem}
+.tabs button[aria-pressed=true]{background:var(--ink);color:#fff;box-shadow:0 4px 0 #0E1735}
+.tabs small{display:block;font-weight:700;font-size:.8rem;opacity:.75}
+.note{color:var(--muted);font-size:.95rem;margin:6px 2px 12px}
+.grp{background:var(--card);border-radius:22px;padding:12px 12px 14px;box-shadow:0 5px 0 var(--line);margin-bottom:14px}
+.grp h2{margin:0;font-size:1.25rem;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.grp .st{font-size:1.1rem;white-space:nowrap}
+.grp p{margin:0 0 8px;color:var(--muted);font-size:.95rem}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.tile{position:relative;border-radius:16px;background:var(--soft);box-shadow:0 3px 0 var(--line);padding:8px 2px 6px;text-align:center;font-family:var(--ord);font-weight:700;font-size:1.7rem;line-height:1.1}
+.tile:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
+.tile small{display:block;font-family:var(--font);font-size:.72rem;color:var(--muted);font-weight:700;min-height:1em}
+.tile.k1{background:#FFF4CC}.tile.k2{background:var(--ok-bg,#DDF5E7)}
+.tile.pre{font-size:.95rem;font-family:var(--font);padding:12px 4px}
+/* spelet */
+.gtop{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.back{display:inline-block;color:var(--muted);font-weight:700;padding:6px 0;font-size:1rem}
+.dots{display:flex;gap:6px}
+.dots i{width:12px;height:12px;border-radius:50%;background:var(--line)}
+.dots i.on{background:var(--accent);transform:scale(1.25)}.dots i.done{background:var(--good)}
+.gt{display:flex;align-items:center;gap:10px;margin:4px 0 6px}
+.gt h2{margin:0;font-size:1.4rem;line-height:1.15;flex:1}
+.gt small{display:block;font-weight:700;color:var(--muted);font-size:.95rem}
+.spk{flex:none;width:44px;height:44px;border-radius:50%;background:var(--card);box-shadow:0 3px 0 var(--line);font-size:1.2rem}
+.bord{background:#fff;border-radius:22px;box-shadow:0 5px 0 var(--line);padding:6px;margin:0 auto;width:min(100%,calc(58vh*170/220));transition:background .2s}
+.bord.ok{background:var(--ok-bg,#DDF5E7)}
+.bord svg{display:block;width:100%;height:auto;touch-action:none;user-select:none;-webkit-user-select:none}
+.fb{min-height:1.9em;text-align:center;font-weight:800;margin:6px 0 2px;font-size:1.05rem}
+.fb.bad{color:var(--bad)}.fb.good{color:var(--good-dark)}
+.fb span{display:inline-block;margin:0 6px}
+.btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:6px}
+.btn{padding:10px 18px;border-radius:16px;background:var(--card);box-shadow:0 4px 0 var(--line);font-weight:800;font-size:1.1rem}
+.btn.go{background:var(--good);color:#fff;box-shadow:0 4px 0 var(--good-dark)}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.res{text-align:center;padding-top:18px}
+.res .big{font-family:var(--ord);font-weight:700;font-size:4.5rem;line-height:1.1}
+.res .steps{display:grid;gap:6px;max-width:360px;margin:10px auto;text-align:left}
+.res .steps div{background:var(--card);border-radius:14px;padding:8px 12px;box-shadow:0 3px 0 var(--line);font-weight:700}
+.res .btn{display:block;width:100%;max-width:360px;margin:10px auto 0}
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:7}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<script src="../ljud.js"></script>
+<script src="../djur.js"></script>
+<script src="../huvud.js" data-titel="Handstil" data-ikon="✏️"></script>
+<script src="glyfer.js"></script>
+<main class="wrap">
+
+<section class="screen" id="home">
+  <div class="hero">
+    <svg viewBox="0 0 84 70" aria-hidden="true"><rect x="2" y="4" width="80" height="62" rx="12" fill="#fff"/><path d="M8 24H76M8 40H76M8 56H76" stroke="#C6D6F2" stroke-width="2"/><path d="M8 40H76" stroke="#7E94C8" stroke-width="2.5"/><path d="M22 52V24L36 52V24" stroke="#1D2B53" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1 9"/><path d="M50 36Q44 24 54 24 62 24 60 36 58 46 68 52" stroke="#F2780C" stroke-width="5" fill="none" stroke-linecap="round"/></svg>
+    <div><h1>Handstil</h1><p>Se hur bokstaven skrivs, följ stigen med fingret och skriv själv.</p></div>
+  </div>
+  <div class="tabs" id="tabs" role="group" aria-label="Stil">
+    <button data-stil="tryck" aria-pressed="true">Aa<small>Tryckbokstäver</small></button>
+    <button data-stil="skrift" aria-pressed="false"><span style="font-style:italic">Aa</span><small>Skrivstil</small></button>
+  </div>
+  <p class="note" id="note"></p>
+  <div id="groups"></div>
+</section>
+
+<section class="screen" id="game" hidden>
+  <div class="gtop"><button class="back" id="quit">← Avsluta</button><div class="dots" id="dots"></div></div>
+  <div class="gt"><h2 id="gTitle"></h2><button class="spk" id="gSpk" aria-label="Läs upp bokstaven">🔊</button></div>
+  <div class="bord" id="bord"></div>
+  <div class="fb" id="fb" aria-live="polite"></div>
+  <div class="btns" id="btns"></div>
+</section>
+
+<section class="screen res" id="result" hidden>
+  <h2 id="rT">Klart!</h2>
+  <div class="big" id="rBig"></div>
+  <div class="steps" id="rSteps"></div>
+  <button class="btn go" id="rNext">Nästa ▶</button>
+  <button class="btn" id="rAgain">Öva igen</button>
+  <button class="btn" id="rHome">Till alla bokstäver</button>
+</section>
+</main>
+<canvas id="fx" hidden></canvas>
+
+<script>
+const $=s=>document.querySelector(s);
+const NS='http://www.w3.org/2000/svg';
+const VW=170,VY0=-50,VH=220;
+const KEY='mattespel-handstil-v1';
+let data=(()=>{try{const d=JSON.parse(localStorage.getItem(KEY)||'null');if(d&&d.klar)return Object.assign({stil:'tryck',fp:{},stars:{}},d);}catch(e){}return{stil:'tryck',klar:{},fp:{},stars:{}};})();
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){}};
+const G=MPGlyfer.GROUPS;
+const dist=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- Penndrag: omräkning till punkter med jämna avstånd, centrerade i rutan ---------- */
+function resample(pts,step){const out=[pts[0]];let carry=0;
+  for(let i=1;i<pts.length;i++){let a=pts[i-1],b=pts[i],d=dist(a,b);if(!d)continue;let t=step-carry;
+    while(t<=d){out.push([a[0]+(b[0]-a[0])*t/d,a[1]+(b[1]-a[1])*t/d]);t+=step;}carry=d-(t-step);}
+  const l=out[out.length-1],e=pts[pts.length-1];if(dist(l,e)>.8)out.push(e.slice());return out;}
+function prep(strokes){
+  const S=[];let mn=1e9,mx=-1e9,my0=1e9,my1=-1e9;
+  const acc=p=>{mn=Math.min(mn,p[0]);mx=Math.max(mx,p[0]);my0=Math.min(my0,p[1]);my1=Math.max(my1,p[1]);};
+  strokes.forEach(s=>{if(s.dot){S.push({dot:s.dot.slice()});acc(s.dot);}else{const pts=resample(s,2.5);pts.forEach(acc);S.push({pts});}});
+  const dx=VW/2-(mn+mx)/2;
+  S.forEach(s=>{if(s.dot)s.dot[0]+=dx;else s.pts.forEach(p=>p[0]+=dx);});
+  S.h=my1-my0;return S;}
+const pathD=pts=>'M'+pts.map(p=>p[0].toFixed(1)+' '+p[1].toFixed(1)).join('L');
+const first=s=>s.dot||s.pts[0];
+const last=s=>s.dot||s.pts[s.pts.length-1];
+
+/* ---------- Skrivbordet ---------- */
+const B={};      // aktuell bräda: svg, lager, penndrag
+function el(tag,attrs,parent){const e=document.createElementNS(NS,tag);Object.entries(attrs||{}).forEach(([k,v])=>e.setAttribute(k,v));(parent||B.svg).appendChild(e);return e;}
+function makeBoard(){
+  const bord=$('#bord');bord.innerHTML='';
+  const svg=document.createElementNS(NS,'svg');svg.setAttribute('viewBox',`0 ${VY0} ${VW} ${VH}`);svg.setAttribute('role','img');svg.setAttribute('aria-label','Skrivyta med hjälplinjer');bord.appendChild(svg);B.svg=svg;
+  /* hjälplinjer: övre, mitt (streckad), bas, nedre */
+  [[0,'#D7E2F8',1,''],[50,'#9DB4E4',1.2,'4 4'],[100,'#6E86BF',1.8,''],[150,'#D7E2F8',1,'']].forEach(([y,c,w,d])=>el('line',{x1:3,x2:VW-3,y1:y,y2:y,stroke:c,'stroke-width':w,'stroke-dasharray':d}));
+  B.ghost=el('g');B.prog=el('g');B.start=el('g');B.user=el('g');B.pen=el('g');
+  return svg;}
+function toSvg(e){const r=B.svg.getBoundingClientRect();return[(e.clientX-r.left)/r.width*VW,VY0+(e.clientY-r.top)/r.height*VH];}
+function drawGhost(S,opacity){B.ghost.innerHTML='';S.forEach(s=>{
+  if(s.dot)el('circle',{cx:s.dot[0],cy:s.dot[1],r:6,fill:'#D5DCEF',opacity},B.ghost);
+  else el('path',{d:pathD(s.pts),fill:'none',stroke:'#D5DCEF','stroke-width':11,'stroke-linecap':'round','stroke-linejoin':'round',opacity},B.ghost);});}
+function startMarker(s,n,active){const p=first(s);
+  const g=el('g',{},B.start);
+  el('circle',{cx:p[0],cy:p[1],r:active?8.5:6.5,fill:active?'#F2780C':'#FFB86B',stroke:'#fff','stroke-width':2},g);
+  const t=el('text',{x:p[0],y:p[1]+3.2,'text-anchor':'middle','font-size':9,'font-weight':800,fill:'#fff','font-family':'Baloo 2, sans-serif'},g);t.textContent=n;
+  if(active&&!reduce){const a=el('circle',{cx:p[0],cy:p[1],r:8.5,fill:'none',stroke:'#F2780C','stroke-width':2},g);a.animate([{r:8.5,opacity:.9},{r:16,opacity:0}],{duration:1100,iterations:Infinity});}}
+
+/* ---------- Tillstånd ---------- */
+let game=null;   // {item,steps,i,S,phase,...}
+function glyphOf(stil,ch,item){return item.pre?MPGlyfer.PRE[item.id]():MPGlyfer.get(stil,ch);}
+function stepsOf(item){
+  if(item.pre)return ['se','folj','sjalv'].map(ph=>({ch:item.id,ph,pre:true,namn:item.label}));
+  const out=[];[item.u,item.l].forEach(ch=>['se','folj','sjalv'].forEach(ph=>out.push({ch,ph,stor:ch===item.u})));return out;}
+const keyOf=(stil,st)=>st.pre?'pre:'+st.ch:stil+':'+st.ch;
+
+/* ---------- Hem ---------- */
+function renderHome(){
+  document.querySelectorAll('#tabs button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.stil===data.stil)));
+  $('#note').textContent=data.stil==='tryck'?'Rak, enkel stil. Varje bokstavspar övar du i tre steg: se, följ och skriv själv.':'Lutande skrivstil med svep och öglor (första versionen, säg till om något ser fel ut). Se, följ och skriv själv.';
+  const gr=$('#groups');gr.innerHTML='';
+  G.forEach(g=>{
+    const s=g.pre?(data.stars.pre||0):(data.stars[data.stil+'-'+g.id]||0);
+    const d=document.createElement('div');d.className='grp';
+    d.innerHTML=`<h2>${g.n}<span class="st" aria-label="${s} av 3 stjärnor">${'⭐'.repeat(s)}${'☆'.repeat(3-s)}</span></h2><p>${g.sub}</p><div class="tiles"></div>`;
+    const tl=d.querySelector('.tiles');
+    g.items.forEach(it=>{const b=document.createElement('button');
+      const keys=it.pre?['pre:'+it.id]:[data.stil+':'+it.u,data.stil+':'+it.l],lv=Math.min(...keys.map(k=>data.klar[k]||0));
+      b.className='tile'+(it.pre?' pre':'')+(lv>=2?' k2':lv>=1?' k1':'');
+      b.innerHTML=it.pre?`${it.label}<small>${lv>=2?'✓ klar':''}</small>`:`${it.u}${it.l}<small>${lv>=2?'✓ klar':lv>=1?'påbörjad':''}</small>`;
+      b.setAttribute('aria-label',it.pre?it.label:`Bokstav ${it.u} ${it.l}`);
+      b.onclick=()=>startItem(g,it);tl.appendChild(b);});
+    gr.appendChild(d);});}
+$('#tabs').onclick=e=>{const b=e.target.closest('[data-stil]');if(!b)return;data.stil=b.dataset.stil;save();renderHome();};
+
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
+
+/* ---------- Ett bokstavspar ---------- */
+function startItem(g,item){game={g,item,steps:stepsOf(item),i:0,fails:{},res:{}};show('game');runStep();}
+function dots(){$('#dots').innerHTML=game.steps.map((s,i)=>`<i class="${i===game.i?'on':i<game.i?'done':''}"></i>`).join('');}
+const PHN={se:'Se hur den skrivs',folj:'Följ stigen',sjalv:'Skriv själv'};
+function runStep(){
+  const st=game.steps[game.i],stil=data.stil;
+  dots();stopAnim();makeBoard();
+  game.S=prep(glyphOf(stil,st.ch,st));game.st=st;game.done=false;game.fails.cur=0;
+  $('#gTitle').innerHTML=(st.pre?st.namn:(st.stor?'Stor bokstav ':'Liten bokstav ')+st.ch)+`<small>${PHN[st.ph]}</small>`;
+  $('#gSpk').hidden=!!st.pre;
+  $('#fb').textContent='';$('#fb').className='fb';$('#bord').classList.remove('ok');
+  if(st.ph==='se')phaseSe();else if(st.ph==='folj')phaseFolj();else phaseSjalv();}
+$('#gSpk').onclick=()=>{try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(game.st.ch);u.lang='sv-SE';speechSynthesis.speak(u);}catch(e){}};
+function buttons(list){const b=$('#btns');b.innerHTML='';list.forEach(([t,fn,cls])=>{const x=document.createElement('button');x.className='btn '+(cls||'');x.textContent=t;x.onclick=fn;b.appendChild(x);});}
+function nextStep(){game.i++;if(game.i>=game.steps.length)return finishItem();runStep();}
+
+/* --- Se --- */
+let animTok=0;
+function stopAnim(){animTok++;}
+function phaseSe(){
+  drawGhost(game.S,.55);game.S.forEach((s,i)=>startMarker(s,i+1,false));
+  buttons([]);const tok=++animTok;
+  const pen=el('circle',{r:6.5,fill:'#1D2B53',stroke:'#fff','stroke-width':2,opacity:0},B.pen);
+  (async()=>{
+    for(let i=0;i<game.S.length;i++){const s=game.S[i];if(tok!==animTok)return;
+      if(s.dot){pen.setAttribute('cx',s.dot[0]);pen.setAttribute('cy',s.dot[1]);pen.setAttribute('opacity',1);
+        el('circle',{cx:s.dot[0],cy:s.dot[1],r:6,fill:'#1E9E5E'},B.prog);await wait(600);continue;}
+      const path=el('path',{d:pathD(s.pts),fill:'none',stroke:'#1E9E5E','stroke-width':11,'stroke-linecap':'round','stroke-linejoin':'round'},B.prog);
+      const len=path.getTotalLength(),dur=reduce?200:Math.max(700,len*17);
+      path.setAttribute('stroke-dasharray',len);path.setAttribute('stroke-dashoffset',len);pen.setAttribute('opacity',1);
+      await new Promise(res=>{const t0=performance.now();(function f(n){if(tok!==animTok)return res();const t=Math.min(1,(n-t0)/dur),e=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+        path.setAttribute('stroke-dashoffset',len*(1-e));const p=path.getPointAtLength(len*e);pen.setAttribute('cx',p.x);pen.setAttribute('cy',p.y);
+        if(t<1)requestAnimationFrame(f);else res();})(t0);});
+      await wait(250);}
+    if(tok!==animTok)return;pen.setAttribute('opacity',0);
+    buttons([['Se igen ↻',()=>runStep()],['Följ stigen →',nextStep,'go']]);})();}
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+
+/* --- Följ stigen --- */
+function phaseFolj(){
+  drawGhost(game.S,1);
+  const P=game.P={cur:0,prog:game.S.map(()=>0),track:false,paths:[]};
+  game.S.forEach((s,i)=>{if(!s.dot)P.paths[i]=el('path',{d:'',fill:'none',stroke:'#1E9E5E','stroke-width':11,'stroke-linecap':'round','stroke-linejoin':'round'},B.prog);});
+  markers();
+  $('#fb').textContent='Börja vid den orange pricken och dra fingret längs bokstaven.';
+  buttons([['Se igen ↻',()=>{game.i--;runStep();}]]);
+  bindPointer({down:foljDown,move:foljMove,up:foljUp});}
+function markers(){B.start.innerHTML='';const P=game.P;game.S.forEach((s,i)=>{if(i>=P.cur)startMarker(s,i+1,i===P.cur);});}
+function foljDown(e){const P=game.P;if(P.cur>=game.S.length||game.done)return;const p=toSvg(e),s=game.S[P.cur];
+  if(s.dot){if(dist(p,s.dot)<16){P.paths[P.cur]=el('circle',{cx:s.dot[0],cy:s.dot[1],r:6,fill:'#1E9E5E'},B.prog);strokeDone();}return;}
+  const here=s.pts[P.prog[P.cur]];
+  if(P.prog[P.cur]===0?dist(p,here)<18:dist(p,here)<24)P.track=true;}
+function foljMove(e){const P=game.P;if(!P.track)return;const p=toSvg(e),s=game.S[P.cur],pr=P.prog[P.cur];
+  let best=-1;for(let j=Math.min(s.pts.length-1,pr+12);j>pr;j--){if(dist(p,s.pts[j])<16){best=j;break;}}
+  if(best>0){P.prog[P.cur]=best;P.paths[P.cur].setAttribute('d',pathD(s.pts.slice(0,best+1)));
+    if(best>=s.pts.length-3){P.paths[P.cur].setAttribute('d',pathD(s.pts));P.track=false;strokeDone();}}}
+function foljUp(){if(game.P)game.P.track=false;}
+function strokeDone(){const P=game.P;window.Ljud&&Ljud.pop&&Ljud.pop(P.cur%6);P.cur++;markers();
+  if(P.cur>=game.S.length){game.done=true;$('#bord').classList.add('ok');$('#fb').textContent='Snyggt! Nu skriver du själv.';$('#fb').className='fb good';
+    const k=keyOf(data.stil,game.st);data.klar[k]=Math.max(data.klar[k]||0,1);save();window.Ljud&&Ljud.ok&&Ljud.ok();
+    buttons([]);setTimeout(()=>{if(game&&game.st===game.steps[game.i])nextStep();},900);}}
+
+/* --- Skriv själv --- */
+function phaseSjalv(){
+  const st=game.st;game.U=[];game.cur=null;game.tries=0;
+  startMarker(game.S[0],1,false);
+  $('#fb').textContent='Skriv bokstaven själv. Tryck på Klar när du är färdig.';
+  buttons([['🧽 Sudda',clearUser],['✓ Klar',checkUser,'go']]);
+  bindPointer({down:ud,move:um,up:uu});}
+function clearUser(){game.U=[];B.user.innerHTML='';$('#fb').textContent='';$('#fb').className='fb';}
+function ud(e){game.cur=[toSvg(e)];game.U.push(game.cur);game.curPath=el('path',{d:'',fill:'none',stroke:'#1D2B53','stroke-width':4.5,'stroke-linecap':'round','stroke-linejoin':'round'},B.user);game.curPath.setAttribute('d',pathD([game.cur[0],game.cur[0]]));}
+function um(e){if(!game.cur)return;const p=toSvg(e),l=game.cur[game.cur.length-1];if(dist(p,l)<1)return;game.cur.push(p);game.curPath.setAttribute('d',pathD(game.cur));}
+function uu(){game.cur=null;}
+function evaluate(){
+  const S=game.S,U=game.U.filter(s=>s.length>0);
+  const T=[];S.forEach(s=>{if(s.dot)T.push(s.dot);else s.pts.forEach(p=>T.push(p));});
+  const Ur=[];U.forEach(u=>{(u.length>1?resample(u,3):[u[0]]).forEach(p=>Ur.push(p));});
+  if(!Ur.length)return{ok:false,msgs:[['bad','Skriv bokstaven först.']]};
+  const cov=T.filter(t=>Ur.some(u=>dist(t,u)<17)).length/T.length,prec=Ur.filter(u=>T.some(t=>dist(t,u)<22)).length/Ur.length;
+  let startOk=0,dirOk=0;
+  S.forEach(s=>{const f=first(s),l=last(s);const m=U.find(u=>dist(u[0],f)<28);if(m){startOk++;if(s.dot||dist(m[m.length-1],l)<36)dirOk++;}});
+  const ys=Ur.map(p=>p[1]),uh=Math.max(...ys)-Math.min(...ys),th=S.h||1,ratio=th<12?1:uh/th;
+  const sizeOk=th<12||(ratio>.6&&ratio<1.5),cntOk=U.length>=S.length-1&&U.length<=S.length+2;
+  const ok=cov>=.7&&prec>=.62&&sizeOk&&cntOk;
+  const msgs=[];
+  msgs.push([startOk>=S.length?'good':'bad',startOk>=S.length?'Rätt startpunkter':(U.length<S.length?'Det fattas ett streck':'Börja vid pricken')]);
+  if(startOk>0)msgs.push([dirOk>=startOk?'good':'bad',dirOk>=startOk?'Rätt håll':'Skriv åt andra hållet']);
+  msgs.push([sizeOk?'good':'bad',sizeOk?'Lagom stor':(ratio<=.6?'Lite för liten':'Lite för stor')]);
+  msgs.push([cov>=.7&&prec>=.62?'good':'bad',cov>=.7&&prec>=.62?'Formen stämmer':'Formen stämmer inte riktigt']);
+  return{ok,msgs};}
+function checkUser(){
+  const r=evaluate();const fb=$('#fb');
+  fb.innerHTML=r.msgs.map(([c,t])=>`<span class="${c}" style="color:var(${c==='good'?'--good-dark':'--bad'})">${c==='good'?'✓':'•'} ${t}</span>`).join('');
+  if(r.ok){const k=keyOf(data.stil,game.st);const first=game.tries===0;data.klar[k]=Math.max(data.klar[k]||0,2);if(first&&!data.fp[k]&&!(game.fails[k]))data.fp[k]=1;if(!first)delete data.fp[k];save();
+    $('#bord').classList.add('ok');window.Ljud&&Ljud.ok&&Ljud.ok();game.res[game.i]=first;game.done=true;
+    buttons([[game.i===game.steps.length-1?'Klart ✓':'Nästa →',nextStep,'go']]);}
+  else{game.tries++;(game.fails[keyOf(data.stil,game.st)]=1);
+    if(game.tries>=2)drawGhost(game.S,.45);
+    buttons([['Prova igen',()=>{clearUser();}],['✓ Klar',checkUser,'go']]);if(game.tries>=1)fb.innerHTML+='<br><small style="font-weight:700;color:var(--muted)">Tryck Sudda och försök igen. Jag visar bokstaven svagt som hjälp.</small>';
+    if(game.tries===1)drawGhost(game.S,.3);}}
+
+/* --- Pekhändelser (penna går före finger) --- */
+let usePen=false;
+function bindPointer(h){const svg=B.svg;
+  svg.onpointerdown=e=>{if(e.pointerType==='pen')usePen=true;else if(usePen&&e.pointerType==='touch')return;try{svg.setPointerCapture(e.pointerId);}catch(err){}B.active=e.pointerId;e.preventDefault();h.down(e);};
+  svg.onpointermove=e=>{if(B.active!==e.pointerId)return;e.preventDefault();h.move(e);};
+  const up=e=>{if(B.active!==e.pointerId)return;B.active=null;h.up(e);};
+  svg.onpointerup=svg.onpointercancel=up;}
+
+/* ---------- Resultat ---------- */
+function stars(){
+  G.forEach(g=>{const stilar=g.pre?[null]:['tryck','skrift'];
+    stilar.forEach(st=>{const keys=g.items.flatMap(it=>it.pre?['pre:'+it.id]:[st+':'+it.u,st+':'+it.l]);
+      const all1=keys.every(k=>(data.klar[k]||0)>=1),all2=keys.every(k=>(data.klar[k]||0)>=2),all3=all2&&keys.every(k=>data.fp[k]);
+      data.stars[g.pre?'pre':st+'-'+g.id]=all3?3:all2?2:all1?1:0;});});save();}
+function finishItem(){
+  stars();const it=game.item,stil=data.stil;
+  $('#rT').textContent=it.pre?'Bra övat!':'Bra jobbat!';
+  $('#rBig').textContent=it.pre?'✓':it.u+it.l;
+  const keys=it.pre?['pre:'+it.id]:[stil+':'+it.u,stil+':'+it.l];
+  $('#rSteps').innerHTML=keys.map(k=>{const ch=k.split(':')[1],v=data.klar[k]||0;return `<div>${it.pre?it.label:ch}: ${v>=2?(data.fp[k]?'✓ på första försöket':'✓ klar'):v>=1?'följt stigen':'inte klar'}</div>`;}).join('');
+  const nx=nextItem();$('#rNext').hidden=!nx;if(nx)$('#rNext').textContent='Nästa: '+(nx.it.pre?nx.it.label:nx.it.u+nx.it.l)+' ▶';
+  $('#rNext').onclick=()=>startItem(nx.g,nx.it);
+  show('result');confetti();}
+function nextItem(){const all=[];G.forEach(g=>g.items.forEach(it=>all.push({g,it})));const i=all.findIndex(x=>x.it===game.item);return all[i+1]||null;}
+$('#rAgain').onclick=()=>startItem(game.g,game.item);
+$('#rHome').onclick=()=>{renderHome();show('home');};
+$('#quit').onclick=()=>{stopAnim();game=null;renderHome();show('home');};
+
+/* ---------- Konfetti ---------- */
+function confetti(){if(reduce)return;const c=$('#fx'),x=c.getContext('2d'),dpr=devicePixelRatio||1,W=innerWidth,H=innerHeight;c.width=W*dpr;c.height=H*dpr;x.setTransform(dpr,0,0,dpr,0,0);c.hidden=false;
+  const cols=['#FF6B6B','#FF9F43','#F7C531','#2BB673','#3D8BFD','#7B61FF'],P=Array.from({length:110},()=>({x:W/2+(Math.random()-.5)*120,y:H*.3,vx:(Math.random()-.5)*14,vy:-Math.random()*13-4,r:Math.random()*6+4,c:cols[Math.floor(Math.random()*6)],a:Math.random()*6,va:(Math.random()-.5)*.4})),t0=performance.now();
+  (function f(n){x.clearRect(0,0,W,H);P.forEach(p=>{p.vy+=.45;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore();});
+    if(n-t0<2400)requestAnimationFrame(f);else{x.clearRect(0,0,W,H);c.hidden=true;}})(t0);}
+
+renderHome();
+window.__hs={get game(){return game},startItem,G,prep,evaluate,data,nextStep:()=>nextStep()};
+</script>
+</body>
+</html>
