@@ -81,3 +81,5 @@ Lilla a (skrivstil): ingångsstrecket genom droppen böjer nu uppåt och följer
 
 ### Skrivstil: b och c efter lärarens handskrivna förlaga
 **b:** uppstrecket (ögla), stammen ner, magen från stammens fot (höger, upp, tillbaka mot stammen) och **utgång från toppen av magen**, alltså nästa bokstav hakar i på x-höjd, precis som efter o, v och w (inte från raden). **c:** ingångsstrecket går utanför bokstaven och över toppen i stället för genom den (som a). Eventuell ändring av c:s utgång är inte gjord.
+
+Lilla b (skrivstil): magen stängs inte helt uppe vid stammen utan gör en liten ögla där och går vidare ut från toppen.
