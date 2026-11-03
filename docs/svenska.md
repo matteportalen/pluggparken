@@ -55,3 +55,6 @@ Varje förövningskort visar en liten lila bild av formen (`preThumb` ritar penn
 
 ### Handstil: siffran 4
 Ritas med öppen topp: rakt ner till mitten, 90° sväng åt höger (ett penndrag), sedan det raka sträcket ner (läraren).
+
+### Handstil: längre förövningsrader
+Förövningar som upprepas går nu längre: vågrät linje (240), snett från vänster/höger (6 streck bredvid varandra), bågar (6), våg (5 perioder), sicksack (14 streck), öglor (4), hängbågar (5), prickar (10), streck på rad (10). Skrivytan blir bredare efter övningen (`VW` beräknas ur `MPGlyfer.prepare(...).w`, som för ord). Övningsbladens mönster (`MON`) är oförändrade.

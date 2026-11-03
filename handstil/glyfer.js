@@ -175,21 +175,21 @@ function get(stil,ch){
 /* ---------- förövningar (samma för båda stilarna) ---------- */
 const PRE={
 p1:()=>[L(0,0,0,100)],
-p2:()=>[L(0,50,80,50)],
-p3:()=>[L(0,0,40,100)],
-p4:()=>[L(40,0,0,100)],
+p2:()=>[L(0,50,240,50)],
+p3:()=>Array.from({length:6},(_,i)=>L(i*40,0,i*40+40,100)),
+p4:()=>Array.from({length:6},(_,i)=>L(i*40+40,0,i*40,100)),
 p5:()=>[arc(35,50,35,50,-90,-450)],
-p6:()=>[J(arc(22,100,22,45,-180,0),arc(66,100,22,45,-180,0))],
-p7:()=>[Array.from({length:61},(_,i)=>[i*2,75-24*Math.sin(i/60*4*Math.PI)])],
-p8:()=>[L(0,90,22,10,44,90,66,10,88,90,110,10,132,90)],
-p9:()=>[Array.from({length:150},(_,i)=>{const t=i/150*3*2*Math.PI;return[14*t-28*Math.sin(t),52-28*Math.cos(t)];})],
-p10:()=>[J(arc(25,30,25,55,180,0),arc(75,30,25,55,180,0),arc(125,30,25,55,180,0))],
+p6:()=>[J(...Array.from({length:6},(_,i)=>arc(22+i*44,100,22,45,-180,0)))],
+p7:()=>[Array.from({length:151},(_,i)=>[i*2,75-24*Math.sin(i/150*10*Math.PI)])],
+p8:()=>[L(...Array.from({length:15},(_,i)=>[i*22,i%2?10:90]).flat())],
+p9:()=>[Array.from({length:150},(_,i)=>{const t=i/150*4*2*Math.PI;return[11*t-28*Math.sin(t),52-28*Math.cos(t)];})],
+p10:()=>[J(...Array.from({length:5},(_,i)=>arc(25+i*50,30,25,55,180,0)))],
 p11:()=>[Array.from({length:140},(_,i)=>{const t=i/140*3;const a=t*2*Math.PI,r=3+14*t;return[50+r*Math.cos(a),50+r*Math.sin(a)];})],
 p12:()=>[L(0,10,70,90),L(70,10,0,90)],
 p13:()=>[L(0,15,80,15,80,90,0,90,0,15)],
 p14:()=>[L(35,5,0,95,70,95,35,5)],
-p15:()=>[dot(0,50),dot(30,50),dot(60,50),dot(90,50),dot(120,50)],
-p16:()=>[L(0,10,0,92),L(28,10,28,92),L(56,10,56,92),L(84,10,84,92)],
+p15:()=>Array.from({length:10},(_,i)=>dot(i*30,50)),
+p16:()=>Array.from({length:10},(_,i)=>L(i*28,10,i*28,92)),
 };
 const PRENAMN=[["p1","Lodrät linje"],["p2","Vågrät linje"],["p3","Snett från vänster"],["p4","Snett från höger"],["p5","Cirkel"],["p6","Bågar"],["p7","Våg"],["p8","Sicksack"],["p9","Öglor"],["p10","Hängbågar"],["p11","Spiral"],["p12","Kryss"],["p13","Fyrkant"],["p14","Triangel"],["p15","Prickar"],["p16","Streck på rad"]];
 

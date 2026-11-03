@@ -287,7 +287,8 @@ const PHN={se:'Se hur den skrivs',folj:'Följ stigen',sjalv:'Skriv själv'};
 function runStep(){
   const st=game.steps[game.i],stil=data.stil;
   dots();stopAnim();VW=VW0;
-  const S=st.word?wordPrep(st.ch,stil):prep(glyphOf(stil,st.ch,st));VW=S.VW||VW0;makeBoard();
+  if(st.pre){VW=Math.max(VW0,MPGlyfer.prepare(glyphOf(stil,st.ch,st)).w+36);}
+  const S=st.word?wordPrep(st.ch,stil):prep(glyphOf(stil,st.ch,st));VW=S.VW||VW;makeBoard();
   game.S=S;game.st=st;game.done=false;game.fails.cur=0;
   $('#gTitle').innerHTML=(st.pre||st.word?st.namn:st.one?'Siffran '+st.ch:(st.stor?'Stor bokstav ':'Liten bokstav ')+st.ch)+`<small>${PHN[st.ph]}</small>`;
   $('#gSpk').hidden=!!st.pre;
