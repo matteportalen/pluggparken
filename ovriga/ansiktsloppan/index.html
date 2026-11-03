@@ -252,6 +252,7 @@ function sample(kind){
   var gr=g.createLinearGradient(0,0,0,600); gr.addColorStop(0,'#E9B99C'); gr.addColorStop(1,'#DDA487');
   g.fillStyle=gr; g.fillRect(0,0,600,600);
   if(kind==='int'){   // insidan är bara en stor öppen mun (ögonen sitter på utsidan)
+    g.fillStyle='#C03355'; g.fillRect(0,0,600,600);   // läppen går hela vägen upp, ingen hudfärg (lärarens önskan nov 2026)
     g.fillStyle='#C03355'; g.beginPath(); g.ellipse(300,300,285,215,0,0,7); g.fill();
     g.save(); g.beginPath(); g.ellipse(300,300,232,162,0,0,7); g.clip();
     g.fillStyle='#4A0F1B'; g.fillRect(0,0,600,600);
