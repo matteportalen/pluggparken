@@ -100,3 +100,5 @@ Lilla r (skrivstil), tredje försöket: punkterna mätta ur lärarens förlaga o
 Lilla r (skrivstil): öglan uppe är **sluten och korsar uppstrecket** (går igenom sig själv), sedan hyllan åt höger (lärarens rättelse).
 
 Lilla r (skrivstil), fjärde försöket, **mätt direkt ur lärarens röda överlagring** på vår ritning: rak diagonal som blir öglans vänstra sida, öglan går över toppen (lite över x-höjd) och tillbaka över diagonalen, hyllan sluttar svagt ner och sedan upp till en spets, bågen är smalare och brantare än förut.
+
+Lilla r (skrivstil), femte försöket efter lärarens **numrerade pilar (1-2-3)**: 1 diagonalen rakt upp (den svänger inte in mot vänster), 2 öglan går **motsols**: upp på höger sida, över toppen, ner på vänster sida och över diagonalen, 3 hyllan åt höger, sedan bågen och snett upp. Tidigare gick öglan medsols (fel håll).
