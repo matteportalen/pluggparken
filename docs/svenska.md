@@ -85,3 +85,8 @@ Lilla a (skrivstil): ingångsstrecket genom droppen böjer nu uppåt och följer
 Lilla b (skrivstil): magen stängs inte helt uppe vid stammen utan gör en liten ögla där och går vidare ut från toppen.
 
 Lilla b (skrivstil), omritad efter lärarens foto: stammen böjer in i magens botten, magen går upp längs högra sidan och är **öppen uppe** (nuddar inte stammen): den svänger upp-vänster, gör en liten ögla och går tillbaka åt höger som utgång från x-höjd.
+
+### Skrivstil: kopplingar utan vågor, c, k (efter lärarens skiss "ce")
+- **Kopplingar mellan bokstäver:** ingen våg nere vid raden längre. Utgången (`TL`) är ett kort uppåtgående streck och nästa bokstavs ingång (`EN`) börjar där föregående slutade (`fy` = föregående utgångs höjd) och stiger rakt in i bokstaven. Gäller alla bokstäver.
+- **c:** kroppen slutar nere i botten och utgången stiger snett upp mot nästa bokstav (som i skissen).
+- **k:** liten **ögla på armen** (övre diagonala strecket), som på skrivstilsaffischen.

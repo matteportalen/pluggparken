@@ -82,13 +82,13 @@ LOW["ö"]=()=>[...LOW.o(),dot(12,36),dot(32,36)];
    Funktionen får höjden där föregående bokstav slutade (100 = baslinjen, ~52 = uppe vid mittlinjen) och ritar ingången därifrån.
    Första versionen, ska granskas av läraren. ---------- */
 const bez=(a,b,c,n)=>{n=n||7;const p=[];for(let i=0;i<=n;i++){const t=i/n,u=1-t;p.push([u*u*a[0]+2*u*t*b[0]+t*t*c[0],u*u*a[1]+2*u*t*b[1]+t*t*c[1]]);}return p;};
-const EN=(tx,ty,fy)=>{fy=fy||100;return fy>=90?bez([-12,100],[tx*.55-4,98],[tx,ty]):bez([-12,fy],[(tx-12)/2,fy+2],[tx,ty]);};
-const TL=(x,y)=>bez([x,y],[x+7,y+5],[x+17,y+1]);
+const EN=(tx,ty,fy)=>{fy=fy||100;return fy>=90?bez([-12,fy],[-12+(tx+12)*.3,ty+(fy-ty)*.25],[tx,ty]):bez([-12,fy],[(tx-12)/2,fy+2],[tx,ty]);};
+const TL=(x,y)=>bez([x,y],[x+6,y-1],[x+12,y-6]);
 const ASC=(fy)=>J(EN(10,8,fy),arc(5,8,5,8,0,-180));            // ingång upp till en smal ögla överst (b d f h k l)
 const CURB={
 a:fy=>({b:J(bez([-12,fy||100],[6,Math.min(fy||100,58)],[40,53],10),bez([40,53],[5,50],[3,78]),bez([3,78],[2,101],[22,100],10),bez([22,100],[40,100],[37,80],10),L(37,80,40,53),L(40,53,41,95),TL(41,95)),x:[]}),   // droppform stängd uppe, sedan ner längs samma sida
 b:fy=>({b:J(ASC(fy),L(0,8,0,82),bez([0,82],[1,98],[14,98],8),bez([14,98],[34,98],[34,72],10),bez([34,72],[33,58],[15,51],10),bez([15,51],[22,60],[32,58],8),bez([32,58],[38,56],[44,56],6)),x:[]}),   // efter lärarens foto: magen öppen uppe, liten ögla, utgång från x-höjd
-c:fy=>({b:J(bez([-12,fy||100],[-14,Math.min(fy||100,44)],[30,52],10),arc(21,75,21,25,-60,-320),TL(37,92)),x:[]}),   // ingången utanför bokstaven, över toppen
+c:fy=>({b:J(bez([-12,fy||100],[-14,Math.min(fy||100,44)],[30,52],10),arc(21,75,21,25,-60,-270),TL(21,100)),x:[]}),   // ingången utanför bokstaven, över toppen
 d:fy=>({b:J(EN(37,59,fy),arc(22,75,20,25,-30,-360),L(42,75,48,8),arc(45,8,3,8,0,-180),L(42,8,42,95),TL(42,95)),x:[]}),   // runda ccw, rakt upp till taket utan stopp, ner längs samma sida
 e:fy=>({b:J(EN(36,73,fy),arc(21,75,21,25,-8,-318),TL(38,92)),x:[]}),
 f:fy=>({b:J(ASC(fy),L(0,8,2,70,5,118),bez([5,118],[5,146],[-8,148]),bez([-8,148],[-18,148],[-12,130]),bez([-12,130],[-2,112],[14,102]),L(14,102,34,98)),x:[L(-12,52,22,52)]}),
@@ -96,7 +96,7 @@ g:fy=>({b:J(EN(32,54,fy),arc(22,75,20,25,-62,-392),L(41,63,41,122),arc(25,122,16
 h:fy=>({b:J(ASC(fy),L(0,8,0,100),L(0,100,3,74),arc(21,72,18,22,-180,0),L(39,72,39,95),TL(39,95)),x:[]}),
 i:fy=>({b:J(EN(3,54,fy),L(3,54,3,95),TL(3,95)),x:[dot(6,30)]}),
 j:fy=>({b:J(EN(4,54,fy),L(4,54,4,122),arc(-6,122,10,26,0,150),L(-14,135,-8,112,10,100,24,98)),x:[dot(7,30)]}),
-k:fy=>({b:J(ASC(fy),L(0,8,0,100),L(0,100,2,80,34,52,6,76,16,80,38,98),TL(38,98)),x:[]}),
+k:fy=>({b:J(ASC(fy),L(0,8,0,100),L(0,100,2,80),bez([2,80],[16,66],[32,52]),bez([32,52],[44,46],[40,60],8),bez([40,60],[34,66],[6,78],8),L(6,78,16,82,38,98),TL(38,98)),x:[]}),   // ögla på armen
 l:fy=>({b:J(ASC(fy),L(0,8,0,95),TL(0,95)),x:[]}),
 m:fy=>({b:J(EN(3,54,fy),L(3,54,3,100),L(3,100,6,74),arc(21,72,15,22,-180,0),L(36,72,36,100),L(36,100,39,74),arc(54,72,15,22,-180,0),L(69,72,69,95),TL(69,95)),x:[]}),
 n:fy=>({b:J(EN(3,54,fy),L(3,54,3,100),L(3,100,6,74),arc(23,72,17,22,-180,0),L(40,72,40,95),TL(40,95)),x:[]}),
@@ -230,7 +230,7 @@ function wordCursive(text,step){
     const up=c!==c.toLowerCase();
     if(up){flush();const g=prepare(get("skrift",c),step);
       g.S.forEach(st=>{if(st.dot)st.dot[0]+=cursor;else st.pts.forEach(p=>p[0]+=cursor);raw.push(st.dot?{dot:st.dot}:st.pts);});cursor+=g.w+14;return;}
-    const fy=exit?(exit[1]<85?exit[1]:100):100,r=CURB[c](fy),b=r.b.map(sh),ox=(exit?exit[0]:cursor)+12;
+    const fy=exit?exit[1]:100,r=CURB[c](fy),b=r.b.map(sh),ox=(exit?exit[0]:cursor)+12;
     const pl=b.map(p=>[p[0]+ox,p[1]]);
     if(path){path=path.concat(pl.slice(1));}else path=pl;exit=pl[pl.length-1];
     r.x.forEach(x=>extras.push(x.dot?{dot:[sh(x.dot)[0]+ox,x.dot[1]]}:x.map(sh).map(p=>[p[0]+ox,p[1]])));});
