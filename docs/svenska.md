@@ -114,3 +114,5 @@ Skrivstil, r efter bokstäver som slutar på x-höjd (rättat): sträcket gör e
 Skrivstil, r efter bokstäver som slutar nere vid raden (a, u, n, m …): **rak diagonal direkt** från där bokstaven slutade upp till öglan, inga krokar nere. Efter bokstäver som slutar på x-höjd (b, o, v, w) gäller u-svängen ovan. Gränsen är utgångens höjd (`fy` < 75). `glyfer.js?v=20261103e`.
 
 Skrivstil, avstånd: r efter en bokstav som slutar på x-höjd (b, o, v, w) flyttas 14 enheter närmare (avståndet o→r var för långt). Övriga bokstavspar är inte mätta; säg till om något par ser glest eller tätt ut. `glyfer.js?v=20261103f`.
+
+Skrivstil, r (efter lärarens markeringar på "orm" och "arm"): efter b/o/v/w en **mjuk grund u-böj** (ner ca 25 enheter, inte skarp), efter a/u/n/m m.fl. flyttas r 16 enheter närmare (diagonalen var för lång). Stegen i `r` i `CURB`: `lead` (ingång efter föregående utgång), `A` och `B` (kroppen) flyttas med `m`. `glyfer.js?v=20261103g`.
