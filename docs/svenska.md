@@ -67,3 +67,6 @@ Ett penndrag: upp och ner i uppstrecket, nere böjer den upp igen längs stammen
 
 ### Ordkedjan: gissade ord och namnlista (nov 2026, lärarens önskan)
 Ord som bara klarar `trolig()` (typ "pikitoto") godtas fortfarande men räknas som **gissningar**: märks med streckad ram och ❓ i kedjan, texten blir "Det ordet kan jag inte vara säker på, men jag tror på dig!", **högst två per runda** (`G.gissat`; den tredje nekas), och en runda med gissningar ger **högst två stjärnor**. Nytt `NAMN` i sidan (ca 300 förnamn, länder, städer, landskap, hav/berg; SALDO saknar egennamn): godtas som riktiga ord, även med genitiv-s. Fler namn: lägg i strängen `NAMN`.
+
+### Sagobyggaren: boken som en sida och rubrik (nov 2026, lärarens önskan)
+Färdiga sagan visas nu som **en sida**: rubrik, en bild (sista scenen) och hela texten i större stil (utskrift 17 pt, `@page` 14 mm marginal), i stället för en bild per sida (de blev "tafatta" när eleven skrev själv). Nytt fält **Rubrik till sagan (frivilligt)** (`s.r`, sparas i Mina sagor; standard "Sagan om …"); rubriken används i uppläsning och listan. Sagans fyra stegsvyer under byggandet är oförändrade. Utskriften har inte testats på papper.

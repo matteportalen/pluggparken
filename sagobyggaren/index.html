@@ -133,14 +133,15 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 .bok h2{margin:2px 0 0;text-align:center;font-size:1.6rem}
 .bok .sidk{background:var(--card);border-radius:22px;box-shadow:0 4px 0 var(--line);padding:10px 10px 14px}
 .bok .sidk .scen{box-shadow:none}
-.bok .sidk p{font-family:var(--ord);font-size:1.2rem;font-weight:700;line-height:1.6;margin:10px 6px 0}
+.bok .sidk .saga{margin:12px 8px 4px}.bok .sidk p{font-family:var(--ord);font-size:1.45rem;font-weight:700;line-height:1.65;margin:0 0 .5em}
+.rubin{display:block;font-weight:800;color:var(--muted);margin:0 0 10px}.rubin input{display:block;width:100%;margin-top:4px;font:inherit;font-family:var(--ord);font-size:1.2rem;color:var(--ink);padding:10px 14px;border:2px solid var(--line);border-radius:14px;background:#fff}
 .mina{display:grid;gap:10px}
 .mina .m{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:18px;box-shadow:0 4px 0 var(--line);padding:10px 12px;text-align:left;width:100%}
 .mina .m .scen{flex:none;width:96px;border-radius:12px;box-shadow:none}
 .mina .m b{display:block;font-size:1.05rem;line-height:1.2}.mina .m small{color:var(--muted);font-weight:600}
 .mina .m .x{margin-left:auto;font-size:1.1rem;padding:6px}
 .stjtoast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:var(--ink);color:#fff;border-radius:999px;padding:10px 22px;font-weight:800;z-index:60;box-shadow:0 8px 24px rgba(0,0,0,.3);animation:sPop .4s both}
-@media print{.insp,.guide{display:none}body *{visibility:hidden}.bok,.bok *{visibility:visible}.bok{position:absolute;left:0;top:0;width:100%}.nav{display:none}.scen .sp,.scen .dek{animation:none}}
+@media print{@page{margin:14mm}.bok h2{font-size:26pt}.bok .sidk{box-shadow:none;padding:0}.bok .sidk p{font-size:17pt;line-height:1.6}.insp,.guide{display:none}body *{visibility:hidden}.bok,.bok *{visibility:visible}.bok{position:absolute;left:0;top:0;width:100%}.nav{display:none}.scen .sp,.scen .dek{animation:none}}
 
 </style>
 </head>
@@ -185,6 +186,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
     <div class="nav"><button class="knapp vit" id="bBak" type="button">◀ Tillbaka</button><button class="knapp bla" id="bFram" type="button" disabled>Nästa ▶</button></div>
   </div>
   <div id="vBok" hidden>
+    <label class="rubin">Rubrik till sagan (frivilligt)<input id="rub" maxlength="60" autocomplete="off" placeholder="Skriv en rubrik, till exempel Draken i slottet"></label>
     <div class="bok" id="bok"></div>
     <div class="nav"><button class="knapp vit" id="bLasBok" type="button">🔊 Läs upp</button><button class="knapp vit" id="bSkriv" type="button">🖨️ Skriv ut</button><button class="knapp" id="bNy" type="button">Ny saga</button><button class="knapp vit" id="bMinaB" type="button">Mina sagor</button></div>
   </div>
@@ -375,13 +377,15 @@ function klarSaga(){const s={l:G.lvl,v:G.v.id,p:G.p.id,e:G.e.id,t:G.t.slice(0,4)
 function toast(t){const d=document.createElement("div");d.className="stjtoast";d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),3200);}
 let bokS=null;
 function visaBok(s){bokS=s;const h=HJ.find(x=>x.id===s.v)||HJ[0],p=PL.find(x=>x.id===s.p)||PL[0],e=EV.find(x=>x.id===s.e)||EV[0];
-  $("bok").innerHTML=`<h2>Sagan om ${esc(h.def)}</h2>`+s.t.map((t,i)=>`<div class="sidk">${scen(p,h,e,i)}<p>${esc(t)}</p></div>`).join("");visa("bok");}
-$("bLasBok").onclick=()=>{if(bokS){const h=HJ.find(x=>x.id===bokS.v);lasUpp(`Sagan om ${h?h.def:""}. `+bokS.t.join(" "));}};
+  $("rub").value=s.r||"";
+  $("bok").innerHTML=`<h2 id="bRub">${esc(s.r||"Sagan om "+h.def)}</h2><div class="sidk">${scen(p,h,e,3)}<div class="saga">${s.t.map(t=>`<p>${esc(t)}</p>`).join("")}</div></div>`;visa("bok");}
+$("rub").oninput=()=>{if(!bokS)return;bokS.r=$("rub").value.trim();const h=HJ.find(x=>x.id===bokS.v)||HJ[0];$("bRub").textContent=bokS.r||"Sagan om "+h.def;save();};
+$("bLasBok").onclick=()=>{if(bokS){const h=HJ.find(x=>x.id===bokS.v);lasUpp((bokS.r||`Sagan om ${h?h.def:""}`)+". "+bokS.t.join(" "));}};
 $("bSkriv").onclick=()=>window.print();
 $("bNy").onclick=()=>begin(G&&G.lvl||1);
 $("bMinaB").onclick=()=>minaSagor();$("bMinaH").onclick=()=>minaSagor();$("bHemM").onclick=hem;
 function minaSagor(){show("game");visa("mina");$("mina").innerHTML=data.sagor.length?data.sagor.map((s,i)=>{const h=HJ.find(x=>x.id===s.v)||HJ[0],p=PL.find(x=>x.id===s.p)||PL[0],e=EV.find(x=>x.id===s.e)||EV[0];
-  return `<div class="m"><button class="m" data-v="${i}" type="button" style="box-shadow:none;padding:0;background:none;gap:12px">${scen(p,h,e,1,true)}<span><b>Sagan om ${esc(h.def)}</b><small>${new Date(s.d).toLocaleDateString("sv-SE")} · nivå ${s.l}</small></span></button><button class="x" data-x="${i}" type="button" aria-label="Ta bort sagan">🗑️</button></div>`;}).join(""):`<p class="info">Du har inte skrivit några sagor än. Börja med en ny!</p>`;}
+  return `<div class="m"><button class="m" data-v="${i}" type="button" style="box-shadow:none;padding:0;background:none;gap:12px">${scen(p,h,e,1,true)}<span><b>${esc(s.r||"Sagan om "+h.def)}</b><small>${new Date(s.d).toLocaleDateString("sv-SE")} · nivå ${s.l}</small></span></button><button class="x" data-x="${i}" type="button" aria-label="Ta bort sagan">🗑️</button></div>`;}).join(""):`<p class="info">Du har inte skrivit några sagor än. Börja med en ny!</p>`;}
 $("mina").onclick=e=>{const v=e.target.closest("[data-v]"),x=e.target.closest("[data-x]");if(v){visaBok(data.sagor[+v.dataset.v]);return;}
   if(x&&confirm("Ta bort den här sagan?")){data.sagor.splice(+x.dataset.x,1);save();minaSagor();}};
 // nivåerna: egen lista med antal sagor
