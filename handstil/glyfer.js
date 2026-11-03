@@ -82,6 +82,7 @@ LOW["ö"]=()=>[...LOW.o(),dot(12,36),dot(32,36)];
    Funktionen får höjden där föregående bokstav slutade (100 = baslinjen, ~52 = uppe vid mittlinjen) och ritar ingången därifrån.
    Första versionen, ska granskas av läraren. ---------- */
 const bez=(a,b,c,n)=>{n=n||7;const p=[];for(let i=0;i<=n;i++){const t=i/n,u=1-t;p.push([u*u*a[0]+2*u*t*b[0]+t*t*c[0],u*u*a[1]+2*u*t*b[1]+t*t*c[1]]);}return p;};
+const CR=(P,n)=>{n=n||8;const o=[];for(let i=0;i<P.length-1;i++){const p0=P[Math.max(0,i-1)],p1=P[i],p2=P[i+1],p3=P[Math.min(P.length-1,i+2)];for(let k=0;k<n;k++){const t=k/n,t2=t*t,t3=t2*t;o.push([0,1].map(d=>.5*((2*p1[d])+(-p0[d]+p2[d])*t+(2*p0[d]-5*p1[d]+4*p2[d]-p3[d])*t2+(-p0[d]+3*p1[d]-3*p2[d]+p3[d])*t3)));}}o.push(P[P.length-1].slice());return o;};   // jämn kurva genom punkterna
 const EN=(tx,ty,fy)=>{fy=fy||100;return fy>=90?bez([-12,fy],[-12+(tx+12)*.3,ty+(fy-ty)*.25],[tx,ty]):bez([-12,fy],[(tx-12)/2,fy+2],[tx,ty]);};
 const TL=(x,y)=>bez([x,y],[x+6,y-1],[x+12,y-6]);
 const ASC=(fy)=>J(EN(10,8,fy),arc(5,8,5,8,0,-180));            // ingång upp till en smal ögla överst (b d f h k l)
@@ -103,7 +104,7 @@ n:fy=>({b:J(EN(3,54,fy),L(3,54,3,100),L(3,100,6,74),arc(23,72,17,22,-180,0),L(40
 o:fy=>({b:J(EN(22,50,fy),arc(22,75,22,25,-90,-450),L(22,50,34,49,48,52)),x:[]}),
 p:fy=>({b:J(EN(3,54,fy),L(3,54,3,150),L(3,150,6,100),arc(25,75,20,25,-180,95),TL(23,100)),x:[]}),
 q:fy=>({b:J(EN(32,54,fy),arc(22,75,20,25,-62,-392),L(41,63,41,148),L(41,148,50,150,58,142)),x:[]}),
-r:fy=>({b:J(EN(25,65,fy),bez([25,65],[29,57],[33,49],6),bez([33,49],[41,47],[38,60],6),bez([38,60],[37,64],[44,66],4),L(44,66,55,66),bez([55,66],[44,70],[43,95],8),bez([43,95],[44,104],[55,101],6),bez([55,101],[68,100],[79,85],8)),x:[]}),   // förlaga: uppstreck, liten ögla uppe, hylla åt höger, ner i bågen och snett upp
+r:fy=>({b:J(CR([[-12,fy||100],[-.5,91.7],[8,79],[13,64.6],[16,57],[18.2,51],[22,48.5],[26,50],[28,54],[27,59],[24,62],[27.6,65.6],[33.8,67.3],[40,66],[44,65]],6),CR([[44,65],[41,70],[37,77],[32.8,85.4],[31,92.7],[32.4,98.5],[37,101.5],[44,101],[53.6,97],[62,90.6],[67,85]],6)),x:[]}),   // efter lärarens förlaga: snett upp, rund ögla, hylla med spets, ner i bågen och snett upp
 s:fy=>({b:J(EN(30,56,fy),arc(17,62.5,16,12.5,-35,-270),arc(17,87.5,17,12.5,-90,95),TL(18,99)),x:[]}),
 t:fy=>({b:J(EN(10,20,fy),L(10,20,10,92),TL(10,92)),x:[L(-4,50,26,50)]}),
 u:fy=>({b:J(EN(2,52,fy),L(2,52,2,78),arc(20,78,18,22,180,0),L(38,78,38,52),L(38,52,40,96),TL(40,96)),x:[]}),

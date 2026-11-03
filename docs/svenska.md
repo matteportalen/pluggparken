@@ -94,3 +94,5 @@ Lilla b (skrivstil), omritad efter lärarens foto: stammen böjer in i magens bo
 Lilla r (skrivstil): omritat efter lärarens förlaga (uppstreck, liten tak/hylla, snett ner till raden, snett upp som utgång). Osäkert: sammanhängande "rara" liknar fortfarande "vava"; läraren ska bedöma.
 
 Lilla r (skrivstil) **omgjort efter lärarens andra förlaga**: snett uppstreck, liten ögla på toppen, hylla åt höger, sedan nedåt i en båge längs raden och snett upp som utgång.
+
+Lilla r (skrivstil), tredje försöket: punkterna mätta ur lärarens förlaga och ritade som jämn kurva (`CR`, Catmull-Rom, ny hjälpare i `glyfer.js`) i två delar så att spetsen på hyllan blir skarp. Ingången är en del av samma kurva (ingen knyck mellan `EN` och bokstaven).
