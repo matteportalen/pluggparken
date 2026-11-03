@@ -151,7 +151,7 @@ const LEK=[
  ["specialare/#l/raket","Hur fungerar en raket?","Minilektion · Rymden","🚀","Rymden lektion bildspel film mysterium","Specialare"],
  ["specialare/#l/curie","Marie Curie","Minilektion · Historia","👩‍🔬","Historia lektion bildspel film mysterium","Specialare"],
  ["specialare/#g/storlek","Storleksresan","Prova själv · Zooma från en atom till hela universum.","🔭","Rymden prova själv interaktiv","Specialare"],
- ["specialare/#g/illusioner","Optiska illusioner","Prova själv · Lura hjärnan. Mät sedan själv!","👁️","Hjärnan prova själv interaktiv","Specialare"],
+ ["specialare/#g/optiska","Optiska illusioner","Prova själv · Lura hjärnan. Mät sedan själv!","👁️","Hjärnan prova själv interaktiv","Specialare"],
  ["specialare/#g/svarthal","Inuti ett svart hål","Prova själv · En film i sju steg: flykthastighet, händelsehorisonten och vad som händer med den som faller in.","🕳️","Rymden prova själv interaktiv","Specialare"],
  ["specialare/#g/pengar","Pengar i skala","Prova själv · En miljon, en miljard och en biljon kronor som sedelstaplar. Hur högt blir de?","💰","Tal prova själv interaktiv","Specialare"],
  ["specialare/#g/ritloop","Oändlig ritloop","Prova själv · Spirografen ritar själv, för alltid. Eller rita med kalejdoskop.","🌀","Skapa prova själv interaktiv","Specialare"],

@@ -59,7 +59,7 @@ GREJER.push({id:"storlek",titel:"Storleksresan",kat:"Rymden",e:"🔭",c:"#3F51B5
 }});
 
 /* ---------- Illusioner ---------- */
-GREJER.push({id:"illusioner",titel:"Optiska illusioner",kat:"Hjärnan",e:"👁️",c:"#D14B8F",mork:true,beskr:"Lura hjärnan. Mät sedan själv!",start(host){
+GREJER.push({id:"optiska",titel:"Optiska illusioner",kat:"Hjärnan",e:"👁️",c:"#D14B8F",mork:true,beskr:"Lura hjärnan. Mät sedan själv!",start(host){
   const I=[
   {n:"Müller-Lyer",fraga:"Vilken linje är längst?",svar:"De är exakt lika långa!",varfor:"Pilspetsarna får hjärnan att tro att den ena linjen är längre bort, så den tolkar den som längre.",
    svg:(r)=>`<svg viewBox="0 0 400 220"><g stroke="#1D2B53" stroke-width="6" stroke-linecap="round" fill="none">
