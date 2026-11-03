@@ -159,7 +159,7 @@ p14:()=>[L(35,5,0,95,70,95,35,5)],
 p15:()=>[dot(0,50),dot(30,50),dot(60,50),dot(90,50),dot(120,50)],
 p16:()=>[L(0,10,0,92),L(28,10,28,92),L(56,10,56,92),L(84,10,84,92)],
 };
-const PRENAMN=[["p1","Lodrät linje"],["p2","Vågrät linje"],["p3","Snett neråt"],["p4","Snett uppåt"],["p5","Cirkel"],["p6","Bågar"],["p7","Våg"],["p8","Sicksack"],["p9","Öglor"],["p10","Hängbågar"],["p11","Spiral"],["p12","Kryss"],["p13","Fyrkant"],["p14","Triangel"],["p15","Prickar"],["p16","Streck på rad"]];
+const PRENAMN=[["p1","Lodrät linje"],["p2","Vågrät linje"],["p3","Snett från vänster"],["p4","Snett från höger"],["p5","Cirkel"],["p6","Bågar"],["p7","Våg"],["p8","Sicksack"],["p9","Öglor"],["p10","Hängbågar"],["p11","Spiral"],["p12","Kryss"],["p13","Fyrkant"],["p14","Triangel"],["p15","Prickar"],["p16","Streck på rad"]];
 
 const par=(...t)=>t.map(c=>({id:c+c.toLowerCase(),u:c,l:c.toLowerCase()}));
 const GROUPS=[
