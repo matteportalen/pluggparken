@@ -30,3 +30,4 @@ _Högfrekventa ord, Läsfelslabbet, Mikrofonlabbet, Ordgåtan, Läsflyt, Bokstä
 - **Handstil: stora E** skrivs som ett L (stammen ner och bottenstrecket i ett drag), sedan övre strecket och sist mittstrecket (lärarens skolas penndrag, nov 2026).
 - **Handstil: lilla k** skrivs med två drag: stammen, sedan armen och benet i ett drag (lärarens skolas penndrag, nov 2026).
 - **Handstil, skrivstil: lilla d** har samma bågade uppdrag till taket som h (en mjuk kurva uppåt höger ur cirkeln, ögla över toppen och ner längs stammen), nov 2026.
+- **Handstil, skrivstil: lilla d** går direkt från rundan rakt upp till taket utan stopp (rundan moturs, upp längs rundans högra sida, en smal ögla över toppen och ner längs samma sida), lärarens korrigering nov 2026; ersätter bågen "i samma böj som h".
