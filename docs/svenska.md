@@ -78,3 +78,6 @@ Lilla b: stammen ner, sedan uppåt i en diagonal från stammens fot, över magen
 Magen på lilla a är en droppe som är spetsig och stängd uppe till höger (ingångsstrecket kommer in till spetsen, runt vänster och botten, tillbaka upp längs högra sidan), därefter stammen rakt ner. Ingångsstrecket korsar droppen på väg upp; om det ser rörigt ut, rita om ingången.
 
 Lilla a (skrivstil): ingångsstrecket genom droppen böjer nu uppåt och följer ringens översida (tidigare böjde det nedåt).
+
+### Skrivstil: b och c efter lärarens handskrivna förlaga
+**b:** uppstrecket (ögla), stammen ner, magen från stammens fot (höger, upp, tillbaka mot stammen) och **utgång från toppen av magen**, alltså nästa bokstav hakar i på x-höjd, precis som efter o, v och w (inte från raden). **c:** ingångsstrecket går utanför bokstaven och över toppen i stället för genom den (som a). Eventuell ändring av c:s utgång är inte gjord.
