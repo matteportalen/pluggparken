@@ -116,7 +116,7 @@ const RUM={
  vaxt:{n:"Växt",items:[["ingen","Ingen","➖",0],["kaktus","Kaktus","🌵",30],["kruk","Krukväxt","🪴",40],["palm","Palm","🌴",90],["julgran","Julgran","🎄",120,"jul"],["paskris","Påskris","🪶",80,"pask"],["solros","Solros","🌻",60,"sommar"]]},
  husdjur:{n:"Husdjur",items:[["ingen","Inget","➖",0],["hamster","Hamster","🐹",100],["fagel","Fågel i bur","🐦",120],["robot","Liten robot","🤖",150],["spoke","Litet spöke","👻",120,"halloween"],["kyckling","Kyckling","🐥",100,"pask"]]}};
 const START={tapet:"slat",golv:"tra",fonster:"dag",sang:"enkel",tak:"inget",matta:"ingen",hylla:"ingen",tavla:"ingen",vaxt:"ingen",husdjur:"ingen"};
-const data=(()=>{try{const d=JSON.parse(localStorage.getItem(KEY)||"{}");return{val:Object.assign({},START,d.val||{}),fx:Object.assign({lampa:true,gardin:false},d.fx||{})};}catch(e){return{val:Object.assign({},START),fx:{lampa:true,gardin:false}};}})();
+const data=(()=>{try{const d=JSON.parse(localStorage.getItem(KEY)||"{}");return{val:Object.assign({},START,d.val||{}),t:d.t||{},fx:Object.assign({lampa:true,gardin:false},d.fx||{})};}catch(e){return{val:Object.assign({},START),t:{},fx:{lampa:true,gardin:false}};}})();
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){}};
 const item=(slot,id)=>RUM[slot].items.find(x=>x[0]===id);
 const SN=window.sasongNu?sasongNu():null,kanKopa=it=>!it[4]||(SN&&SN.id===it[4]);
@@ -265,11 +265,11 @@ function panel(){const tabs=Object.entries(RUM).map(([k,v])=>[k,v.n]);if(SN&&sas
   else $("kop").hidden=true;}
 $("tabs").onclick=e=>{const b=e.target.closest("[data-tab]");if(!b)return;flik=b.dataset.tab;prov=null;$("msg").textContent="";draw();panel();};
 $("items").onclick=e=>{const b=e.target.closest("[data-id]");if(!b)return;const id=b.dataset.id,k=b.dataset.slot;
-  if(owned(k,id)){data.val[k]=id;prov=null;save();$("msg").textContent=`${item(k,id)[1]} är vald.`;window.Ljud&&Ljud.ok&&Ljud.ok();}
+  if(owned(k,id)){data.val[k]=id;data.t[k]=Date.now();prov=null;save();$("msg").textContent=`${item(k,id)[1]} är vald.`;window.Ljud&&Ljud.ok&&Ljud.ok();}
   else if(kanKopa(item(k,id)))prov={slot:k,id};
   draw();panel();};
 $("kop").onclick=()=>{if(!prov)return;const p=item(prov.slot,prov.id);
-  if(MPMynt.kop("rum:"+prov.slot+":"+prov.id,p[3])){data.val[prov.slot]=prov.id;save();$("msg").textContent=`Köpt! ${p[1]} är din. 🎉`;prov=null;window.Ljud&&Ljud.kaching&&Ljud.kaching();draw();panel();}};
+  if(MPMynt.kop("rum:"+prov.slot+":"+prov.id,p[3])){data.val[prov.slot]=prov.id;data.t[prov.slot]=Date.now();save();$("msg").textContent=`Köpt! ${p[1]} är din. 🎉`;prov=null;window.Ljud&&Ljud.kaching&&Ljud.kaching();draw();panel();}};
 $("inred").onclick=()=>{const on=$("panel").hidden;$("panel").hidden=!on;$("inred").setAttribute("aria-pressed",String(on));$("inred").textContent=on?"✓ Klar":"🛒 Inred";
   if(!on){prov=null;draw();}else{if(SN&&sasongLista().some(([k,it])=>!owned(k,it[0])))flik="sasong";panel();}};
 draw();

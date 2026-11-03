@@ -205,7 +205,7 @@ body.mph-mini #quit{display:none}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',stjLappar);else setTimeout(stjLappar,0);
   // konton i molnet: konto.js laddas bara om profilen på enheten har ett konto
   try{const ow=localStorage.getItem('mp-owner'),ps=JSON.parse(localStorage.getItem('mp-profiles')||'[]'),p=ow&&ps.find(x=>x.id===ow);
-    if(p&&p.konto&&!window.MPKonto){const k=document.createElement('script');k.src=rotUrl+'konto.js?v=1';document.head.appendChild(k);}}catch(e){}
+    if(p&&p.konto&&!window.MPKonto){const k=document.createElement('script');k.src=rotUrl+'konto.js?v=2';document.head.appendChild(k);}}catch(e){}
   window.MPSokOpen=function(){
     if(window.MPSok)return MPSok.open();
     const sc=document.createElement('script');sc.src=rotUrl+'sok.js?v=1';sc.onload=()=>MPSok.open();document.head.appendChild(sc);};
