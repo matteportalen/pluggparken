@@ -182,11 +182,7 @@ function startMarker(s,n,active){const p=first(s);
 let game=null;   // {item,steps,i,S,phase,...}
 function glyphOf(stil,ch,item){return item.pre?MPGlyfer.PRE[item.id]():MPGlyfer.get(stil,ch);}
 /* ord och namn: bokstäverna efter varandra, varje bokstav centrerad i sin ruta */
-function wordPrep(text,stil){const out=[];let cur=0;const GAP=16;
-  [...text].forEach(c=>{if(c===' '){cur+=34;return;}
-    const g=prep(MPGlyfer.get(stil,c),false),w=g.maxx-g.minx;
-    g.forEach(st=>{const dx=cur-g.minx;if(st.dot)st.dot[0]+=dx;else st.pts.forEach(p=>p[0]+=dx);out.push(st);});cur+=w+GAP;});
-  const total=cur-GAP,wd=Math.max(VW0,total+36),off=(wd-total)/2;
+function wordPrep(text,stil){const g=MPGlyfer.word(text,stil,2.5),out=g.S,wd=Math.max(VW0,g.w+36),off=(wd-g.w)/2;
   out.forEach(st=>{if(st.dot)st.dot[0]+=off;else st.pts.forEach(p=>p[0]+=off);});
   let y0=1e9,y1=-1e9;out.forEach(st=>{(st.dot?[st.dot]:st.pts).forEach(p=>{y0=Math.min(y0,p[1]);y1=Math.max(y1,p[1]);});});
   out.h=y1-y0;out.VW=wd;return out;}
@@ -201,7 +197,7 @@ const itemKeys=(it,stil)=>it.pre?['pre:'+it.id]:it.one?[stil+':'+it.ch]:[stil+':
 /* ---------- Hem ---------- */
 function renderHome(){
   document.querySelectorAll('#tabs button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.stil===data.stil)));
-  $('#note').textContent=data.stil==='tryck'?'Rak, enkel stil. Varje bokstavspar övar du i tre steg: se, följ och skriv själv.':'Lutande skrivstil med svep och öglor (första versionen, säg till om något ser fel ut). Se, följ och skriv själv.';
+  $('#note').textContent=data.stil==='tryck'?'Rak, enkel stil. Varje bokstavspar övar du i tre steg: se, följ och skriv själv.':'Sammanhängande skrivstil: bokstäverna hakas ihop i ord. Första versionen, säg till om något ser fel ut. Se, följ och skriv själv.';
   const gr=$('#groups');gr.innerHTML='';
   G.forEach(g=>{
     const s=g.pre?(data.stars.pre||0):(data.stars[data.stil+'-'+g.id]||0);

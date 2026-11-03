@@ -77,39 +77,45 @@ LOW["å"]=()=>[...LOW.a(),arc(22,32,9,9,-90,-450)];
 LOW["ä"]=()=>[...LOW.a(),dot(12,36),dot(32,36)];
 LOW["ö"]=()=>[...LOW.o(),dot(12,36),dot(32,36)];
 
-/* ---------- skrivstil: lutande, med utgångssvep och öglor (första version, granska) ---------- */
-const TAIL=x=>[[x,96],[x+6,100],[x+16,97]];
-const CUR={
-a:()=>[arc(22,75,20,25,-30,-390),J(L(42,52,42,96),TAIL(42))],
-b:()=>[L(-6,14,0,2,0,100),arc(21,75,21,25,-180,180)],
-c:()=>[arc(21,75,21,25,-40,-320)],
-d:()=>[arc(22,75,20,25,-30,-390),J(L(42,0,42,96),TAIL(42))],
-e:()=>[J(L(2,76,40,72),arc(21,75,21,25,-8,-318))],
-f:()=>[J(arc(34,22,12,22,-40,-180),L(22,22,22,150)),L(6,50,38,50)],
-g:()=>[arc(22,75,20,25,-30,-390),J(L(42,52,42,125),arc(24,125,18,25,0,160))],
-h:()=>[L(-6,14,0,2,0,100),J(arc(21,72,21,22,-180,0),L(42,72,42,96),TAIL(42))],
-i:()=>[J(L(2,50,2,96),TAIL(2)),dot(4,30)],
-j:()=>[J(L(4,50,4,125),arc(-8,125,12,25,0,150)),dot(4,30)],
-k:()=>[L(-6,14,0,2,0,100),L(38,50,2,76,40,100)],
-l:()=>[J(L(-4,98,8,50,16,10),arc(8,10,8,10,0,-180),L(0,10,0,96),TAIL(0))],
-m:()=>[L(2,52,2,100),J(arc(19,72,17,22,-180,0),L(36,72,36,100)),J(arc(53,72,17,22,-180,0),L(70,72,70,96),TAIL(70))],
-n:()=>[L(2,52,2,100),J(arc(21,72,19,22,-180,0),L(40,72,40,96),TAIL(40))],
-o:()=>[arc(22,75,22,25,-90,-450)],
-p:()=>[L(0,50,0,150),arc(21,75,21,25,-180,180)],
-q:()=>[arc(22,75,20,25,-30,-390),L(42,50,42,150)],
-r:()=>[L(2,52,2,100),arc(18,72,16,22,-180,-50)],
-s:()=>[S(34,50,50)],
-t:()=>[J(L(12,20,12,86),arc(28,86,16,14,180,60)),L(0,50,32,50)],
-u:()=>[J(L(0,50,0,78),arc(20,78,20,22,180,0)),J(L(40,50,40,96),TAIL(40))],
-v:()=>[L(0,50,22,100,44,50)],
-w:()=>[L(0,50,14,100,30,64,46,100,60,50)],
-x:()=>[L(0,50,40,100),L(40,50,0,100)],
-y:()=>[L(0,50,20,100),L(40,50,10,150)],
-z:()=>[L(0,50,38,50,0,100,38,100)],
+/* ---------- skrivstil: sammanhängande. Varje liten bokstav är ETT penndrag med ingångssvep (från baslinjen eller mittlinjen)
+   och utgångssvep, så att bokstäverna hänger ihop i ord; prickar, tvärstreck och ringar läggs till efteråt (pennan lyfts).
+   Funktionen får höjden där föregående bokstav slutade (100 = baslinjen, ~52 = uppe vid mittlinjen) och ritar ingången därifrån.
+   Första versionen, ska granskas av läraren. ---------- */
+const bez=(a,b,c,n)=>{n=n||7;const p=[];for(let i=0;i<=n;i++){const t=i/n,u=1-t;p.push([u*u*a[0]+2*u*t*b[0]+t*t*c[0],u*u*a[1]+2*u*t*b[1]+t*t*c[1]]);}return p;};
+const EN=(tx,ty,fy)=>{fy=fy||100;return fy>=90?bez([-12,100],[tx*.55-4,98],[tx,ty]):bez([-12,fy],[(tx-12)/2,fy+2],[tx,ty]);};
+const TL=(x,y)=>bez([x,y],[x+7,y+5],[x+17,y+1]);
+const ASC=(fy)=>J(EN(10,8,fy),arc(5,8,5,8,0,-180));            // ingång upp till en smal ögla överst (b d f h k l)
+const CURB={
+a:fy=>({b:J(EN(32,54,fy),arc(22,75,20,25,-62,-392),L(41,63,41,95),TL(41,95)),x:[]}),
+b:fy=>({b:J(ASC(fy),L(0,8,0,98),bez([0,98],[10,102],[22,100]),arc(22,75,22,25,90,-270),TL(22,100)),x:[]}),
+c:fy=>({b:J(EN(36,58,fy),arc(21,75,21,25,-45,-320),TL(37,92)),x:[]}),
+d:fy=>({b:J(EN(32,54,fy),arc(22,75,20,25,-62,-392),L(41,63,38,10),arc(43,8,5,8,-180,0),L(48,8,48,95),TL(48,95)),x:[]}),
+e:fy=>({b:J(EN(36,73,fy),arc(21,75,21,25,-8,-318),TL(38,92)),x:[]}),
+f:fy=>({b:J(ASC(fy),L(0,8,2,70,5,118),bez([5,118],[5,146],[-8,148]),bez([-8,148],[-18,148],[-12,130]),bez([-12,130],[-2,112],[14,102]),L(14,102,34,98)),x:[L(-12,52,22,52)]}),
+g:fy=>({b:J(EN(32,54,fy),arc(22,75,20,25,-62,-392),L(41,63,41,122),arc(25,122,16,26,0,150),L(11,135,20,112,40,100,52,98)),x:[]}),
+h:fy=>({b:J(ASC(fy),L(0,8,0,100),L(0,100,3,74),arc(21,72,18,22,-180,0),L(39,72,39,95),TL(39,95)),x:[]}),
+i:fy=>({b:J(EN(3,54,fy),L(3,54,3,95),TL(3,95)),x:[dot(6,30)]}),
+j:fy=>({b:J(EN(4,54,fy),L(4,54,4,122),arc(-6,122,10,26,0,150),L(-14,135,-8,112,10,100,24,98)),x:[dot(7,30)]}),
+k:fy=>({b:J(ASC(fy),L(0,8,0,100),L(0,100,2,80,34,52,6,76,16,80,38,98),TL(38,98)),x:[]}),
+l:fy=>({b:J(ASC(fy),L(0,8,0,95),TL(0,95)),x:[]}),
+m:fy=>({b:J(EN(3,54,fy),L(3,54,3,100),L(3,100,6,74),arc(21,72,15,22,-180,0),L(36,72,36,100),L(36,100,39,74),arc(54,72,15,22,-180,0),L(69,72,69,95),TL(69,95)),x:[]}),
+n:fy=>({b:J(EN(3,54,fy),L(3,54,3,100),L(3,100,6,74),arc(23,72,17,22,-180,0),L(40,72,40,95),TL(40,95)),x:[]}),
+o:fy=>({b:J(EN(22,50,fy),arc(22,75,22,25,-90,-450),L(22,50,34,49,48,52)),x:[]}),
+p:fy=>({b:J(EN(3,54,fy),L(3,54,3,150),L(3,150,6,100),arc(25,75,20,25,-180,95),TL(23,100)),x:[]}),
+q:fy=>({b:J(EN(32,54,fy),arc(22,75,20,25,-62,-392),L(41,63,41,148),L(41,148,50,150,58,142)),x:[]}),
+r:fy=>({b:J(EN(3,54,fy),L(3,54,3,100),L(3,100,6,70),arc(18,70,12,20,-180,-70),L(22,51,32,50,42,52)),x:[]}),
+s:fy=>({b:J(EN(30,56,fy),arc(17,62.5,16,12.5,-35,-270),arc(17,87.5,17,12.5,-90,95),TL(18,99)),x:[]}),
+t:fy=>({b:J(EN(10,20,fy),L(10,20,10,92),TL(10,92)),x:[L(-4,50,26,50)]}),
+u:fy=>({b:J(EN(2,52,fy),L(2,52,2,78),arc(20,78,18,22,180,0),L(38,78,38,52),L(38,52,40,96),TL(40,96)),x:[]}),
+v:fy=>({b:J(EN(2,52,fy),L(2,52,22,98,44,52),L(44,52,52,50,60,52)),x:[]}),
+w:fy=>({b:J(EN(2,52,fy),L(2,52,14,98,30,64,46,98,60,52),L(60,52,68,50,76,52)),x:[]}),
+x:fy=>({b:J(EN(2,52,fy),L(2,52,38,98),TL(38,98)),x:[L(38,52,2,98)]}),
+y:fy=>({b:J(EN(2,52,fy),L(2,52,2,78),arc(20,78,18,22,180,0),L(38,78,38,52),L(38,52,36,122),arc(18,122,18,26,0,160),L(1,134,10,112,30,100,46,98)),x:[]}),
+z:fy=>({b:J(EN(2,52,fy),L(2,52,34,52,2,98,36,98),TL(36,98)),x:[]}),
 };
-CUR["å"]=()=>[...CUR.a(),arc(22,32,9,9,-90,-450)];
-CUR["ä"]=()=>[...CUR.a(),dot(12,36),dot(32,36)];
-CUR["ö"]=()=>[...CUR.o(),dot(12,36),dot(32,36)];
+CURB["å"]=fy=>{const r=CURB.a(fy);r.x=[arc(22,32,9,9,-90,-450)];return r;};
+CURB["ä"]=fy=>{const r=CURB.a(fy);r.x=[dot(12,36),dot(32,36)];return r;};
+CURB["ö"]=fy=>{const r=CURB.o(fy);r.x=[dot(12,36),dot(32,36)];return r;};
 const shear=(strokes,k)=>strokes.map(s=>s.dot?{dot:[s.dot[0]+(100-s.dot[1])*k,s.dot[1]]}:s.map(p=>[p[0]+(100-p[1])*k,p[1]]));
 
 /* ---------- siffror ---------- */
@@ -130,7 +136,7 @@ const NUM={
 function get(stil,ch){
   if(/\d/.test(ch))return stil==="skrift"?shear(NUM[ch](),.16):NUM[ch]();
   const up=ch!==ch.toLowerCase()||ch==="Å"||ch==="Ä"||ch==="Ö";
-  if(stil==="skrift")return up?shear(CAP[ch](),.16):shear(CUR[ch](),.16);
+  if(stil==="skrift"){if(up)return shear(CAP[ch](),.16);const r=CURB[ch](100);return shear([r.b,...r.x],.16);}
   return up?CAP[ch]():LOW[ch]();
 }
 
@@ -167,10 +173,31 @@ function prepare(strokes,step){const S=[];let mn=1e9,mx=-1e9;
   const acc=p=>{mn=Math.min(mn,p[0]);mx=Math.max(mx,p[0]);};
   strokes.forEach(s=>{if(s.dot){S.push({dot:s.dot.slice()});acc(s.dot);}else{const pts=resample(s,step||2.5);pts.forEach(acc);S.push({pts});}});
   S.forEach(s=>{if(s.dot)s.dot[0]-=mn;else s.pts.forEach(p=>p[0]-=mn);});return{S,w:mx-mn};}
-/* ett ord: bokstäverna efter varandra, x från 0 */
-function word(text,stil,step){const out=[];let cur=0;const GAP=16;
+/* ett ord: bokstäverna efter varandra, x från 0. Skrivstil: små bokstäver hakas ihop i ett enda penndrag, prickar och tvärstreck kommer sist. */
+function word(text,stil,step){
+  if(stil==="skrift")return wordCursive(text,step);
+  const out=[];let cur=0;const GAP=16;
   [...text].forEach(c=>{if(c===" "){cur+=34;return;}const g=prepare(get(stil,c),step);
     g.S.forEach(st=>{if(st.dot)st.dot[0]+=cur;else st.pts.forEach(p=>p[0]+=cur);out.push(st);});cur+=g.w+GAP;});
   return{S:out,w:Math.max(0,cur-GAP)};}
-return{get,GROUPS,PRE,CAP,LOW,CUR,prepare,word,resample};
+function wordCursive(text,step){
+  const raw=[],extras=[],K=.16;let path=null,exit=null,cursor=0;
+  const flush=()=>{if(path){raw.push(path);cursor=Math.max(cursor,exit[0]+8);path=null;exit=null;}};
+  const sh=(p)=>[p[0]+(100-p[1])*K,p[1]];
+  [...text].forEach(c=>{
+    if(c===" "){flush();cursor+=34;return;}
+    const up=c!==c.toLowerCase();
+    if(up){flush();const g=prepare(get("skrift",c),step);
+      g.S.forEach(st=>{if(st.dot)st.dot[0]+=cursor;else st.pts.forEach(p=>p[0]+=cursor);raw.push(st.dot?{dot:st.dot}:st.pts);});cursor+=g.w+14;return;}
+    const fy=exit?(exit[1]<85?exit[1]:100):100,r=CURB[c](fy),b=r.b.map(sh),ox=(exit?exit[0]:cursor)+12;
+    const pl=b.map(p=>[p[0]+ox,p[1]]);
+    if(path){path=path.concat(pl.slice(1));}else path=pl;exit=pl[pl.length-1];
+    r.x.forEach(x=>extras.push(x.dot?{dot:[sh(x.dot)[0]+ox,x.dot[1]]}:x.map(sh).map(p=>[p[0]+ox,p[1]])));});
+  flush();raw.push(...extras);
+  /* jämna avstånd och flytta så att ordet börjar vid x = 0 */
+  const S=[];let mn=1e9,mx=-1e9;
+  raw.forEach(s=>{if(s.dot){S.push({dot:s.dot.slice()});mn=Math.min(mn,s.dot[0]);mx=Math.max(mx,s.dot[0]);}else{const pts=resample(s,step||2.5);pts.forEach(p=>{mn=Math.min(mn,p[0]);mx=Math.max(mx,p[0]);});S.push({pts});}});
+  S.forEach(s=>{if(s.dot)s.dot[0]-=mn;else s.pts.forEach(p=>p[0]-=mn);});
+  return{S,w:mx-mn};}
+return{get,GROUPS,PRE,CAP,LOW,CURB,prepare,word,resample};
 })();
