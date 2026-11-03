@@ -108,3 +108,5 @@ Lilla r (skrivstil): öglan gjord **minimalt liten** (ca 5 × 8 enheter, tidigar
 Handstil: `glyfer.js` laddas med `?v=…` i `handstil/index.html` och `blad.html` (GitHub Pages cachar filer i 10 minuter och webbläsare kan hålla kvar dem trots hård uppdatering). **Byt versionssiffran i båda filerna varje gång `glyfer.js` ändras.**
 
 Skrivstil, r efter bokstäver som slutar på x-höjd (b, o, v, w): sträcket går **direkt** från bokstavens utgång in i r:s ögla i stället för att ta omvägen ner till raden (`r` i `CURB` väljer ingång efter `fy`). `glyfer.js?v=20261103c`.
+
+Skrivstil, r efter bokstäver som slutar på x-höjd (rättat): sträcket gör en **ganska skarp u-sväng** neråt (till ca y 84, inte hela vägen till raden) och upp igen in i öglan. Ersätter "direkt väg". `glyfer.js?v=20261103d`.
