@@ -38,3 +38,4 @@ _Högfrekventa ord, Läsfelslabbet, Mikrofonlabbet, Ordgåtan, Läsflyt, Bokstä
 - **Handstil: siffran 6 rättad** (nov 2026, lärarens fynd: den vände vid magen): 6 går från toppen ner längs vänster sida och fortsätter **ner och runt** (rundan moturs: ner, höger, upp, över toppen och tillbaka) utan att vända; **9** ritas nu som en ring moturs med start uppe till höger följd av svansen ner (förut en roterad 6). Kontrollerat som kontaktark.
 - **Handstil: 9** skrivs som en ring moturs (start uppe till höger) följd av ett **rakt streck ner** (lärarens önskan, nov 2026; den böjda svansen togs bort).
 - **Handstil: stora M** skrivs nerifrån i ett enda svep: upp, ner mot mitten, upp, ner (lärarens önskan, nov 2026).
+- **Handstil: stora K** görs i två rörelser: stammen, sedan armen och benet i ett drag (lärarens önskan, nov 2026).
