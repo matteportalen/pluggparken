@@ -64,3 +64,6 @@ Har två penndrag samma startpunkt (t.ex. stora E) lägger `model()` i `blad.htm
 
 ### Skrivstil: lilla b (ändrad efter lärarens foto)
 Ett penndrag: upp och ner i uppstrecket, nere böjer den upp igen längs stammen och gör magen (upp, över, ner, runt) och går vidare ut mot nästa bokstav från nederkanten. Tidigare gick magen åt andra hållet.
+
+### Ordkedjan: gissade ord och namnlista (nov 2026, lärarens önskan)
+Ord som bara klarar `trolig()` (typ "pikitoto") godtas fortfarande men räknas som **gissningar**: märks med streckad ram och ❓ i kedjan, texten blir "Det ordet kan jag inte vara säker på, men jag tror på dig!", **högst två per runda** (`G.gissat`; den tredje nekas), och en runda med gissningar ger **högst två stjärnor**. Nytt `NAMN` i sidan (ca 300 förnamn, länder, städer, landskap, hav/berg; SALDO saknar egennamn): godtas som riktiga ord, även med genitiv-s. Fler namn: lägg i strängen `NAMN`.

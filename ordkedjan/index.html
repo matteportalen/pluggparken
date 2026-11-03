@@ -81,6 +81,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 .kedja .o.s{background:#E3EAFF;border-color:var(--accent)}
 .kedja .o.d{background:#FFF1DC;border-color:#F2A455}
 .kedja .o b{color:#E5484D}
+.kedja .o.g{border-style:dashed}.kedja .o.g::after{content:' ❓';font-size:.9rem}
 @keyframes ink{from{transform:scale(.7);opacity:0}}
 .inrad{display:flex;gap:8px}
 .inrad input{flex:1;min-width:0;font-family:var(--ord);font-size:1.35rem;font-weight:700;border:3px solid var(--line);border-radius:14px;padding:10px 14px;background:var(--card);color:var(--ink);text-transform:lowercase}
@@ -184,13 +185,15 @@ function kant(w){if(SET.has(w))return w;
   return null;}
 // ord som inte finns i listan godtas om de ser ut som ord (datorn tror på eleven): minst tre bokstäver, en vokal, inga tre likadana i rad, inte för många konsonanter i rad
 function trolig(w){return w.length>=3&&/[aeiouyåäö]/.test(w)&&!/(.)\1\1/.test(w)&&!/[^aeiouyåäö]{7}/.test(w)&&!/^(.{1,3})\1{2,}$/.test(w)&&/[aeiouyåäö]/.test(w.slice(-3));}
+const NAMN=new Set("anna erik lars karl maria johan per nils olof sven gustav anders peter mikael thomas daniel jonas fredrik henrik andreas magnus oskar william lucas liam noah hugo elias alfred adam axel ludvig theo leo felix viktor filip emil simon isak albin ebba alice maja olivia wilma saga elsa astrid vera selma stella freja alma lilly ella klara sara emma julia linnea ida moa hanna sofia elin lisa eva karin kristina ingrid margareta birgitta helena lena monica susanne camilla jessica matilda amanda josefin frida agnes signe tilde molly nora lova tuva siri ines felicia rebecka sandra malin jenny pernilla ulrika cecilia charlotte gunnar bengt lennart hans stefan kjell roland ulf mats jan bo tomas martin patrik robin david markus samuel jakob ivar sixten folke melker vilgot colin tim jesper rasmus joel max ali omar ahmed mohammed amir hassan yusuf leon ture otto edvin vidar love tor sture gösta rune sverige norge danmark finland island tyskland frankrike spanien italien england polen ryssland grekland turkiet kina japan indien brasilien kanada mexiko australien egypten irak iran syrien somalia eritrea afghanistan thailand vietnam portugal holland belgien schweiz österrike ungern rumänien bulgarien estland lettland litauen ukraina argentina chile peru kuba usa afrika asien europa amerika stockholm göteborg malmö uppsala västerås örebro linköping helsingborg jönköping norrköping lund umeå gävle borås eskilstuna södertälje karlstad täby växjö halmstad sundsvall luleå trollhättan östersund borlänge falun kalmar kristianstad skövde karlskrona skellefteå uddevalla varberg örnsköldsvik nyköping motala visby kiruna ystad trelleborg landskrona sigtuna oslo köpenhamn helsingfors reykjavik london paris berlin madrid rom wien prag warszawa moskva aten istanbul bryssel amsterdam lissabon skåne småland halland blekinge öland gotland bohuslän dalarna värmland närke uppland västmanland södermanland östergötland västergötland jämtland härjedalen medelpad ångermanland lappland norrland svealand götaland östersjön atlanten vättern vänern mälaren siljan kebnekaise himalaya alperna nilen amazonas thames rhen donau".split(" "));
+const namnOk=w=>NAMN.has(w)||(w.length>3&&/s$/.test(w)&&NAMN.has(w.slice(0,-1)));
 // stor ordlista (SALDO, Språkbanken, CC BY 4.0): ca 850 000 böjda former, hämtas i bakgrunden; sammansatta ord godtas om delarna finns
 let STOR=null;
 fetch("ord.txt").then(r=>r.ok?r.text():null).then(t=>{if(!t)return;const s=new Set();let p="";for(const rad of t.split("\n")){if(!rad)continue;p=p.slice(0,rad.charCodeAt(0)-48)+rad.slice(1);s.add(p);}STOR=s;}).catch(()=>{});
 function delOk(a){return STOR.has(a)||(a.length>3&&"saoue".includes(a.slice(-1))&&STOR.has(a.slice(0,-1)))||STOR.has(a+"e")||STOR.has(a+"a")||(a.length>3&&STOR.has(a.slice(0,-1)+"e"))||(a.length>3&&STOR.has(a.slice(0,-1)+"a"));}
 function iStor(w,djup){if(!STOR)return false;if(STOR.has(w))return true;if((djup||0)>2)return false;
   for(let i=3;i<=w.length-3;i++){if(delOk(w.slice(0,i))&&iStor(w.slice(i),(djup||0)+1))return true;}return false;}
-function begin(lvl){G={lvl,mal:NIVX[lvl].mal,n:0,tips:0,anv:new Set(),kedja:[],res:[],slut:false};$("nivT").textContent="Nivå "+lvl;$("pet").innerHTML=owlSVG(lasDjur());
+function begin(lvl){G={lvl,mal:NIVX[lvl].mal,n:0,tips:0,gissat:0,anv:new Set(),kedja:[],res:[],slut:false};$("nivT").textContent="Nivå "+lvl;$("pet").innerHTML=owlSVG(lasDjur());
   $("kedja").innerHTML="";$("tips").innerHTML="";$("fb").textContent="";$("fb").className="fb";$("inp").value="";
   show("game");prickar(G.mal,0,[]);
   // datorn börjar
@@ -214,11 +217,11 @@ function skicka(w){if(!w)return;const b=sist();
   if(w[0]!==b){fb(`Ordet ska börja på ${b.toUpperCase()}.`);skaka();window.Ljud&&Ljud.bad&&Ljud.bad();return;}
   if(w.length<2){fb("Skriv ett helt ord.");skaka();return;}
   let bas=kant(w),okant=false;
-  if(!bas&&iStor(w))bas=w;
-  if(!bas){if(!trolig(w)){fb("Hmm, det där ser inte ut som ett ord. Är det rätt stavat? Prova igen, eller tryck 💡.");skaka();return;}bas=w;okant=true;}
+  if(!bas&&(iStor(w)||namnOk(w)))bas=w;
+  if(!bas){if(!trolig(w)){fb("Hmm, det där ser inte ut som ett ord. Är det rätt stavat? Prova igen, eller tryck 💡.");skaka();return;}if(G.gissat>=2){fb("Det ordet kan jag inte kolla, och du har redan gissat två gånger. Prova ett ord jag kan kontrollera, eller tryck 💡.");skaka();return;}bas=w;okant=true;}
   if(G.anv.has(bas)||G.anv.has(w)){fb("Det ordet har redan använts. Hitta ett nytt!");skaka();return;}
-  G.anv.add(bas);lagg(w,"s");G.n++;G.res.push(true);prickar(G.mal,G.n,G.res);window.Ljud&&Ljud.ok&&Ljud.ok();haj();$("fb").textContent="";$("tips").innerHTML="";
-  if(okant)fb("Det ordet kunde jag inte kolla, men jag tror på dig! 😊",true);
+  G.anv.add(bas);lagg(w,okant?"s g":"s");if(okant)G.gissat++;G.n++;G.res.push(true);prickar(G.mal,G.n,G.res);window.Ljud&&Ljud.ok&&Ljud.ok();haj();$("fb").textContent="";$("tips").innerHTML="";
+  if(okant)fb("Det ordet kan jag inte vara säker på, men jag tror på dig! 😊 (Gissade ord: "+G.gissat+" av 2)",true);
   if(G.n>=G.mal){slutKedja(false);return;}
   G.vantar=true;setTimeout(()=>{if(G.slut)return;const sl=w.slice(-1),d=datorOrd(sl);
     if(!d){fb(`Oj, jag kommer inte på något ord som börjar på ${sl.toUpperCase()}! Du vann kedjan!`,true);slutKedja(true);return;}
@@ -227,8 +230,8 @@ $("bTips").onclick=()=>{if(G.slut)return;const b=sist(),fria=(START[b]||[]).filt
   if(!fria.length){fb("Jag har inga tips på den bokstaven. Du är bra!",true);return;}
   G.tips++;$("tips").innerHTML=shuffle(fria.slice()).slice(0,3).map(w=>`<button data-t="${w}">${w}</button>`).join("");};
 $("tips").onclick=e=>{const b=e.target.closest("[data-t]");if(b)skicka(b.dataset.t);};
-function slutKedja(tidigt){G.slut=true;setTimeout(()=>{const st=G.tips===0?3:G.tips<=2?2:1;
-  resultat(st,`Du byggde en kedja med ${G.n} ord${tidigt?" och datorn gav upp":""} på nivå ${G.lvl}. ${G.tips===0?"Utan några tips!":`Du använde tips ${G.tips} ${G.tips===1?"gång":"gånger"}.`}${st<3?" Försök utan 💡 för tre stjärnor!":""}`);},tidigt?1400:600);}
+function slutKedja(tidigt){G.slut=true;setTimeout(()=>{const st=Math.min(G.tips===0?3:G.tips<=2?2:1,G.gissat?2:3);
+  resultat(st,`Du byggde en kedja med ${G.n} ord${tidigt?" och datorn gav upp":""} på nivå ${G.lvl}. ${G.tips===0?"Utan några tips!":`Du använde tips ${G.tips} ${G.tips===1?"gång":"gånger"}.`}${G.gissat?` ${G.gissat} ord kunde jag inte kolla (❓), så mer än två stjärnor går inte. Skriv ord jag kan kolla för tre!`:""}${st<3&&!G.gissat?" Försök utan 💡 för tre stjärnor!":""}`);},tidigt?1400:600);}
 window.__ok={ORD,kant,begin,skicka,datorOrd};
 
 hem();
