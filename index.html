@@ -163,7 +163,6 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 .tool small{display:block;color:var(--muted);font-weight:700;font-size:.8rem}
 .new{display:inline-block;background:#FF5FA2;color:#fff;border-radius:999px;padding:0 7px;font-size:.72rem;font-weight:800;margin-left:4px;vertical-align:middle}
 .new[hidden]{display:none}
-.soundbtn{display:inline-block;margin-top:10px;border:0;border-radius:999px;background:var(--card);box-shadow:0 3px 0 var(--line);padding:6px 14px;font:inherit;font-weight:800;color:var(--ink);cursor:pointer}
 .modal{position:fixed;inset:0;background:rgba(29,43,83,.55);display:grid;place-items:center;z-index:20;padding:14px}
 .modal[hidden]{display:none}
 .sheet{background:var(--card,#fff);border-radius:24px;width:100%;max-width:520px;max-height:92vh;overflow:auto;padding:14px 16px 18px;box-shadow:0 8px 0 rgba(0,0,0,.15)}
@@ -446,7 +445,7 @@ html[data-tema="mork"] .herosok{background:#1A2748;color:#A3B0D6}
 
   <a class="tavlalank" href="larare/"><span class="tl-ik" aria-hidden="true"><svg viewBox="0 0 48 48"><rect class="s" x="5" y="7" width="38" height="25" rx="3.5"/><path class="sq" d="M11 22c3-7 5-7 7-1s4 6 6-1 4-6 7 0"/><path d="M13 14h10"/><path d="M12 38h20"/><g class="pn"><path d="M31 37l10-10"/><path class="f" d="M40 25.6l2.4 2.4-1.7 1.7-2.4-2.4z"/></g></svg></span><span class="tl-txt"><b>Klasstavlan</b><small>Interaktiv whiteboard för klassrummet</small></span><span class="tl-for">För lärare ›</span></a>
 
-  <p class="foot">Dina stjärnor och rekord sparas på den här enheten. Med ett gratis konto (☁️ Logga in) kan du ta med dem till andra enheter.<br><a class="intlank" href="integritet/">Integritet och personuppgifter</a><br><button class="soundbtn" id="soundBtn"></button></p>
+  <p class="foot">Dina stjärnor och rekord sparas på den här enheten. Med ett gratis konto (☁️ Logga in) kan du ta med dem till andra enheter.<br><a class="intlank" href="integritet/">Integritet och personuppgifter</a></p>
   <section class="om" aria-labelledby="omH"><h2 id="omH">Om Pluggparken</h2><p>Pluggparken är en gratis lekpark för hjärnan med matteövningar, spel och fler ämnen för barn i åk 1–6: multiplikationstabellerna, klockan, bråk, uppställning och division, läsning, rymden, Sverige och världen. Allt fungerar i webbläsaren och utan reklam, och du behöver inget konto för att öva. Framstegen sparas på din egen enhet, och med ett gratis konto (ett påhittat användarnamn, ingen e-post) kan du ta med dem till andra enheter.</p></section>
 </main>
 
@@ -522,6 +521,7 @@ html[data-tema="mork"] .herosok{background:#1A2748;color:#A3B0D6}
   <div class="top"><h2>☁️ Skapa ett konto</h2><button class="close" data-close aria-label="Stäng">✕</button></div>
   <p style="margin:0 0 8px">Med ett konto sparas dina framsteg också i molnet. Då kan du logga in på en annan dator eller iPad och fortsätta där du var.</p>
   <ul class="kinfo"><li>✅ Du får ett påhittat användarnamn och ett lösenord, till exempel <b>tokigkatt</b> och <b>pannkaka</b>.</li><li>🚫 Inga riktiga namn och ingen e-post sparas.</li><li>🇸🇪 Servern ligger i Sverige.</li><li>🗑️ Du kan radera kontot när du vill.</li><li>📝 Skriv upp namnet och lösenordet, eller skriv ut ditt kort. Lösenordet går inte att få tillbaka om det försvinner.</li></ul>
+  <p style="margin:0 0 8px;font-size:.9rem"><a href="integritet/" target="_blank" rel="noopener" style="color:var(--muted)">Läs mer om hur vi hanterar uppgifter</a></p>
   <p class="pinmsg" id="kNyMsg"></p>
   <button class="gobtn" id="kNyGo">Skapa mitt konto</button>
 </div></div>
@@ -864,13 +864,9 @@ document.querySelectorAll(".modal").forEach(m=>m.addEventListener("click",e=>{if
 
 /* ---------- Ljud ---------- */
 try{drawOwl();wardBadge();}catch(e){console.error(e)}
-function soundLabel(){$("soundBtn").textContent=window.Ljud&&Ljud.on?"🔊 Ljud: på":"🔇 Ljud: av";}
-$("soundBtn").onclick=()=>{if(!window.Ljud)return;Ljud.set(!Ljud.on);soundLabel();Ljud.ok();document.dispatchEvent(new Event("mp-ljud-andrat"));};
-document.addEventListener("mp-ljud",soundLabel);
 /* Djuret i sidhuvudet öppnar garderoben, och övningssidornas sidhuvud leder hit med #garderob */
 try{const pet=window.MPS&&MPS.huvud&&MPS.huvud.querySelector(".mph-pet");if(pet)pet.onclick=e=>{e.preventDefault();$("owlBtn").click();};}catch(e){}
 if(location.hash==="#garderob"){history.replaceState(null,"",location.pathname);setTimeout(()=>$("owlBtn").click(),50);}
-soundLabel();
 
 /* ---------- Ugglan hälsar ---------- */
 drawOwl();wardBadge();
