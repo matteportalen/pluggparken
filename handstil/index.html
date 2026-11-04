@@ -268,6 +268,7 @@ const unitDone=u=>unitKlar(u)===u.items.length;
 /* Ta det här näst (lärarens upplägg): varje omgång börjar med en **kort uppvärmning** (2 förövningar ur olika grupper) och fortsätter med
    **4 bokstäver man inte klarat förut** ur olika grupper (aldrig en hel grupp av samma sort). Är bokstäverna klara kommer siffrorna
    (4 åt gången), sedan färdiga ordlistor. Klar = "skrivit själv" i vald stil (klar ≥ 2). */
+const idag=()=>new Date().toLocaleDateString('sv-SE');
 const rot=(a,n)=>a.length?a.slice(n%a.length).concat(a.slice(0,n%a.length)):a;
 function forstaOklara(secId,antal,rotera){const U=enheter().filter(u=>u.sec===secId);
   return rot(U.map(u=>{const it=u.items.find(x=>itemLv(x)<2);return it&&{g:u.g,it};}).filter(Boolean),rotera).slice(0,antal);}
@@ -285,15 +286,15 @@ function ordSession(){const sk=data.stil==='skrift',L=MPGlyfer.ORD.filter(c=>!!c
   return {id:'ord',sec:'ord',n:'Ord: '+c.n.replace('Skrivstil: ',''),sub:'Ord',ordlista:true,g:{id:'w'},pairs:c.w.map(w=>({g:{id:'w'},it:{word:w}})),items:c.w.map(w=>({word:w}))};}
 function nextUnit(){const U=enheter(),sum=sec=>U.filter(u=>u.sec===sec).reduce((n,u)=>n+unitKlar(u),0);
   const preK=sum('pre'),letK=sum('bok');
-  const bok=forstaOklara('bok',4,letK),warm=forstaOklara('pre',2,preK);
-  if(bok.length){const ord=ordMedKlaraBokstaver(bok),pairs=[...warm,...bok,...(ord?[ord]:[])];return {id:'runda',sec:'bok',n:`Uppvärmning, ${bok.length} nya bokstäver${ord?' och ett ord':''}`,sub:'Bokstäver',titel:'Omgången',g:pairs[0].g,pairs,items:pairs.map(x=>x.it)};}
+  const bok=forstaOklara('bok',4,letK),upp=data.upDag===idag()?[]:forstaOklara('pre',2,preK);   // uppvärmning högst en gång per dag
+  if(bok.length){const ord=ordMedKlaraBokstaver(bok),pairs=[...upp,...bok,...(ord?[ord]:[])];return {id:'runda',sec:'bok',n:`${upp.length?'Uppvärmning, ':''}${bok.length} nya bokstäver${ord?' och ett ord':''}`,sub:'Bokstäver',titel:'Omgången',harUpp:upp.length>0,g:pairs[0].g,pairs,items:pairs.map(x=>x.it)};}
   const sif=U.find(x=>x.sec==='sif'),nya=sif.items.filter(x=>itemLv(x)<2).slice(0,4);
-  if(nya.length){const pairs=[...warm,...nya.map(it=>({g:sif.g,it}))];return {id:'runda',sec:'sif',n:`Uppvärmning och ${nya.length} nya siffror`,sub:'Siffror',titel:'Omgången',g:pairs[0].g,pairs,items:pairs.map(x=>x.it)};}
+  if(nya.length){const pairs=[...upp,...nya.map(it=>({g:sif.g,it}))];return {id:'runda',sec:'sif',n:`${upp.length?'Uppvärmning och ':''}${nya.length} nya siffror`,sub:'Siffror',titel:'Omgången',harUpp:upp.length>0,g:pairs[0].g,pairs,items:pairs.map(x=>x.it)};}
   return ordSession();}
 const itemLabel=it=>it.word||(it.pre?it.label:it.one?it.ch:it.u+it.l);
 function startQueue(list,sparaTitel){   // list: [{g,it}]
   const q=list.slice();startItem(q[0].g,q[0].it);game.queue=q;game.qi=0;game.qtitel=sparaTitel||'';runStep();}
-const startUnit=u=>{const q=u.pairs||u.items.map(it=>({g:u.g,it}));startQueue(q,u.titel||u.n);game.unit=u.id;if(u.ordlista)game.ordlista=true;};
+const startUnit=u=>{const q=u.pairs||u.items.map(it=>({g:u.g,it}));startQueue(q,u.titel||u.n);game.unit=u.id;if(u.ordlista)game.ordlista=true;if(u.harUpp){data.upDag=idag();save();}};
 let openUn={};
 function renderHome(){
   document.querySelectorAll('#tabs button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.stil===data.stil)));
