@@ -85,3 +85,5 @@ Läraren frågade vad man ska se upp med för att inte riskera böter (IP-loggni
 **`v1/` (gamla designen) borttagen** (nov 2026, lärarens ja; den nåddes inte längre från sajten, `DESIGN` är alltid `"ny"`). Finns i git-historiken. Den döda listan `PORTALER` i `huvud.js` pekar nu på `matte/` i stället för `v1/`.
 
 **Första sidans sidfot (nov 2026):** ljudknappen "Ljud: på/av" i sidfoten är **borttagen** (samma funktion finns som 🔊 i sidhuvudet på alla sidor), så sidfoten slutar nu med länken "Integritet och personuppgifter". Rutan "Skapa ett konto" har dessutom länken "Läs mer om hur vi hanterar uppgifter" till `integritet/`.
+
+**Sudden på griffeltavlan på Windows/Firefox** (nov 2026, lärarens fynd: på Mac rör sig sudden, på Windows står den stilla): troligaste orsaken är att Windows med "Visa animeringar" avstängt gör att webbläsaren rapporterar `prefers-reduced-motion: reduce`, och då hade sudden ingen animation alls. Nu får den en **liten** rörelse (±10 px, 0,35 s, `suddanLiten`) i det läget i stället för ingen. Orsaken är inte bekräftad på en Windows-dator.

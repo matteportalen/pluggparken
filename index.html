@@ -377,7 +377,8 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 .tavlahint{position:absolute;right:22px;bottom:22px;z-index:1;color:rgba(243,240,228,.42);font-weight:700;font-size:.9rem;pointer-events:none;transition:opacity .6s;display:none}
 @media(hover:hover) and (min-width:900px){.tavlahint{display:block}}
 .tavlahint.bort{opacity:0}
-@media(prefers-reduced-motion:reduce){.park .d-sudd.sudda{animation:none}}
+@keyframes suddanLiten{0%,100%{transform:translateX(0)}30%{transform:translateX(-10px)}70%{transform:translateX(10px)}}
+@media(prefers-reduced-motion:reduce){.park .d-sudd.sudda{animation:suddanLiten .35s ease-in-out}}   /* bara en liten rörelse, så att man ser att sudden användes (Windows med animationer avstängda rapporterar reduce) */
 
 html[data-tema="mork"] .herosok{background:#1A2748;color:#A3B0D6}
 /* profilraden: logga in, stjärnor, Garderoben, Mitt rum och Klistermärken på en rad */
