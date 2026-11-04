@@ -116,3 +116,6 @@ Skrivstil, r efter bokstäver som slutar nere vid raden (a, u, n, m …): **rak 
 Skrivstil, avstånd: r efter en bokstav som slutar på x-höjd (b, o, v, w) flyttas 14 enheter närmare (avståndet o→r var för långt). Övriga bokstavspar är inte mätta; säg till om något par ser glest eller tätt ut. `glyfer.js?v=20261103f`.
 
 Skrivstil, r (efter lärarens markeringar på "orm" och "arm"): efter b/o/v/w en **mjuk grund u-böj** (ner ca 25 enheter, inte skarp), efter a/u/n/m m.fl. flyttas r 16 enheter närmare (diagonalen var för lång). Stegen i `r` i `CURB`: `lead` (ingång efter föregående utgång), `A` och `B` (kroppen) flyttas med `m`. `glyfer.js?v=20261103g`.
+
+### Handstil: öva hela ordlistan och x2 som standard
+Under Ord och namn finns **▶ Öva hela listan**: alla ord i den valda listan körs efter varandra (se, följ, skriv själv) utan resultatruta emellan, titeln visar "ord (3 av 13)", och efter sista ordet visas "Hela listan klar". Körs som `game.queue`/`game.qi` (`startList`). Ordens framsteg sparas inte (som förut). **⏩ x2 är nu förinställd** i Se-steget (`fart=2`), knappen kan slå av den.
