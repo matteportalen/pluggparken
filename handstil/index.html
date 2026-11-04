@@ -83,6 +83,22 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 .toprow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap;margin:0 0 6px}
 .toprow .tabs{flex:1 1 280px}
 .printlink{flex:1 1 100%;display:flex;align-items:center;justify-content:center;padding:8px 14px;border-radius:16px;background:var(--card);box-shadow:0 4px 0 var(--line);font-weight:800;color:var(--ink);text-decoration:none}
+.ta{display:flex;align-items:center;gap:14px;width:100%;margin:8px 0 4px;padding:14px 18px;border-radius:22px;background:var(--good);color:#fff;text-align:left;box-shadow:0 6px 0 var(--good-dark)}
+.ta:active{transform:translateY(4px);box-shadow:0 2px 0 var(--good-dark)}
+.ta .ti{flex:none;display:grid;place-items:center;width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.22);font-size:1.6rem}
+.ta .tt b{display:block;font-size:1.35rem;line-height:1.15}.ta .tt small{display:block;font-size:.95rem;opacity:.92;line-height:1.3}
+.un{border-top:1px solid color-mix(in srgb,var(--c) 25%,transparent);padding:6px 0}.un:first-child{border-top:0}
+.un .uh{display:flex;align-items:center;gap:8px}
+.un .uk{flex:1;display:flex;align-items:center;gap:8px;padding:10px 4px;text-align:left;font:inherit;font-size:1.05rem;color:var(--ink)}
+.un .uk b{color:var(--c)}.un .uk .st{margin-left:auto;font-size:.95rem;white-space:nowrap;color:var(--muted)}
+.chev2{display:inline-block;font-size:1.4rem;font-weight:800;color:var(--muted);transition:transform .2s;width:1ch}
+.un.open .chev2{transform:rotate(90deg)}
+.un .alla{flex:none;padding:6px 12px;border-radius:999px;background:var(--c);color:#fff;font-weight:800;font-size:.9rem;box-shadow:0 3px 0 rgba(0,0,0,.18)}
+.un .tiles{margin:4px 0 8px}
+.ordlista{margin-top:10px;display:grid;gap:10px}
+.btn.stor{width:100%;padding:14px 18px;font-size:1.2rem}
+.enskilt summary{cursor:pointer;color:var(--muted);font-weight:700;padding:6px 2px}
+.enskilt .chips{margin-top:8px}
 .acc{display:grid;gap:12px}
 .sec{--c:#3D5AFE;border-radius:20px;background:#fff;box-shadow:0 5px 0 var(--line);overflow:hidden}
 .sec .sh{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;text-align:left;border-left:8px solid var(--c)}
@@ -137,6 +153,7 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
     </div>
     <a class="printlink" href="blad.html">🖨️ Skriv ut övningsblad</a>
   </div>
+  <button class="ta" id="taDet" type="button" hidden></button>
   <p class="note" id="note"></p>
   <div class="acc" id="acc"></div>
 </section>
@@ -237,44 +254,76 @@ function tileEl(g,it){const b=document.createElement('button');
   b.setAttribute('aria-label',it.pre?it.label:it.one?`Siffran ${it.ch}`:`Bokstav ${it.u} ${it.l}`);
   b.onclick=()=>startItem(g,it);return b;}
 const gStars=g=>g.pre?(data.stars.pre||0):(data.stars[data.stil+'-'+g.id]||0);
+/* enheter: det man övar en grupp i taget ("Ta det här"): Förövningarna i fyra små grupper, bokstavsgrupperna, siffrorna */
+const PREG=[['Linjer','p1 p2 p3 p4'],['Kurvor','p5 p6 p7 p10'],['Mönster på rad','p8 p9 p15 p16'],['Former','p11 p12 p13 p14']];
+function enheter(){
+  const gid=id=>G.find(g=>g.id===id),g0=gid('g0'),U=[];
+  PREG.forEach(([n,ids],k)=>U.push({id:'pre'+k,sec:'pre',n,sub:'Förövningar',g:g0,items:ids.split(' ').map(x=>g0.items.find(it=>it.id===x))}));
+  ['g1','g2','g3','g4','g5'].forEach(id=>{const g=gid(id);U.push({id,sec:'bok',n:g.n,sub:'Bokstäver',g,items:g.items});});
+  const g6=gid('g6');U.push({id:'g6',sec:'sif',n:'Siffror 0–9',sub:'Siffror',g:g6,items:g6.items});
+  return U;}
+const itemLv=it=>Math.min(...itemKeys(it,data.stil).map(k=>data.klar[k]||0));
+const unitKlar=u=>u.items.filter(it=>itemLv(it)>=2).length;
+const unitDone=u=>unitKlar(u)===u.items.length;
+/* Ta det här: högst EN förövningsgrupp före bokstäverna (lärarens önskan), sedan bokstavsgrupperna och siffrorna, och sist de övriga förövningsgrupperna */
+function nextUnit(){const U=enheter(),pre=U.filter(u=>u.sec==='pre'),rest=U.filter(u=>u.sec!=='pre');
+  const ordning=[...(pre.some(unitDone)?[]:pre.slice(0,1)),...rest,...pre];
+  return ordning.find(u=>!unitDone(u))||null;}
+const itemLabel=it=>it.pre?it.label:it.one?it.ch:it.u+it.l;
+function startQueue(list,sparaTitel){   // list: [{g,it}]
+  const q=list.slice();startItem(q[0].g,q[0].it);game.queue=q;game.qi=0;game.qtitel=sparaTitel||'';runStep();}
+const startUnit=u=>{const q=u.items.map(it=>({g:u.g,it}));startQueue(q,u.n);game.unit=u.id;};
+let openUn={};
 function renderHome(){
   document.querySelectorAll('#tabs button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.stil===data.stil)));
-  $('#note').textContent=data.stil==='tryck'?'Rak, enkel stil. Varje bokstavspar övar du i tre steg: se, följ och skriv själv.':'Sammanhängande skrivstil: bokstäverna hakas ihop i ord. Första versionen, säg till om något ser fel ut. Se, följ och skriv själv.';
-  const gid=id=>G.find(g=>g.id===id);
+  $('#note').textContent=data.stil==='tryck'?'Rak, enkel stil. Varje bokstavspar övar du i tre steg: se, följ och skriv själv.':'Sammanhängande skrift: bokstäverna hakas ihop i ord. Se, följ och skriv själv.';
+  const U=enheter(),nu=nextUnit(),ta=$('#taDet');
+  if(nu){ta.hidden=false;ta.innerHTML=`<span class="ti">▶</span><span class="tt"><b>Ta det här: ${nu.n}</b><small>${nu.sub} · ${nu.sec==='pre'?nu.items.length+' övningar':nu.items.map(itemLabel).join(' ')}</small></span>`;ta.onclick=()=>startUnit(nu);}
+  else{ta.hidden=false;ta.onclick=null;ta.innerHTML=`<span class="ti">🎉</span><span class="tt"><b>Allt är klart i den här stilen!</b><small>Öva något igen nedan, eller byt stil</small></span>`;}
   const SEC=[
-    {id:'pre',n:'Förövningar',sub:'Linjer, vågor och former för handen',c:'#7B61FF',ic:'〰️',gs:[gid('g0')],max:3},
-    {id:'bok',n:'Bokstäver',sub:'Stora och små, grupp för grupp',c:'#3D5AFE',ic:'Aa',gs:['g1','g2','g3','g4','g5'].map(gid),max:15},
-    {id:'sif',n:'Siffror',sub:'0 till 9',c:'#1E9E5E',ic:'123',gs:[gid('g6')],max:3},
+    {id:'pre',n:'Förövningar',sub:'Linjer, vågor och former för handen',c:'#7B61FF',ic:'〰️'},
+    {id:'bok',n:'Bokstäver',sub:'Stora och små, grupp för grupp',c:'#3D5AFE',ic:'Aa'},
+    {id:'sif',n:'Siffror',sub:'0 till 9',c:'#1E9E5E',ic:'123'},
     {id:'ord',n:'Ord och namn',sub:'Egna ord, namn och färdiga listor',c:'#F2780C',ic:'✎',words:true}];
   const acc=$('#acc');acc.innerHTML='';
   SEC.forEach(sec=>{
-    const open=openSec===sec.id,st=sec.words?0:sec.gs.reduce((n,g)=>n+gStars(g),0);
+    const open=openSec===sec.id,us=U.filter(u=>u.sec===sec.id);
+    const klar=us.reduce((n,u)=>n+unitKlar(u),0),tot=us.reduce((n,u)=>n+u.items.length,0);
     const d=document.createElement('section');d.className='sec'+(open?' open':'');d.style.setProperty('--c',sec.c);
-    d.innerHTML=`<button class="sh" aria-expanded="${open}"><span class="ic">${sec.ic}</span><span class="tx"><b>${sec.n}</b><small>${sec.sub}</small></span>${sec.words?'':`<span class="stt" aria-label="${st} av ${sec.max} stjärnor">${st}/${sec.max} ⭐</span>`}<span class="chev" aria-hidden="true">›</span></button><div class="sb"${open?'':' hidden'}></div>`;
+    d.innerHTML=`<button class="sh" aria-expanded="${open}"><span class="ic">${sec.ic}</span><span class="tx"><b>${sec.n}</b><small>${sec.sub}</small></span>${sec.words?'':`<span class="stt" aria-label="${klar} av ${tot} klara">${klar}/${tot} ✓</span>`}<span class="chev" aria-hidden="true">›</span></button><div class="sb"${open?'':' hidden'}></div>`;
     d.querySelector('.sh').onclick=()=>{openSec=open?'':sec.id;renderHome();};
     const sb=d.querySelector('.sb');acc.appendChild(d);
-    if(open){
-      if(sec.words)ordBody(sb);
-      else sec.gs.forEach(g=>{const w=document.createElement('div');w.className='gr';
-        if(sec.gs.length>1)w.innerHTML=`<h3>${g.n}<span class="st" aria-label="${gStars(g)} av 3 stjärnor">${'⭐'.repeat(gStars(g))}${'☆'.repeat(3-gStars(g))}</span></h3><p>${g.sub}</p>`;
-        const tl=document.createElement('div');tl.className='tiles';g.items.forEach(it=>tl.appendChild(tileEl(g,it)));w.appendChild(tl);sb.appendChild(w);});}
+    if(!open)return;
+    if(sec.words){ordBody(sb);return;}
+    // en grupp öppen i taget; standard: den som är näst på tur i avsnittet
+    if(!openUn[sec.id]||!us.some(u=>u.id===openUn[sec.id]))openUn[sec.id]=(us.find(u=>!unitDone(u))||us[0]).id;
+    us.forEach(u=>{
+      const uo=openUn[sec.id]===u.id,k=unitKlar(u),w=document.createElement('div');w.className='un'+(uo?' open':'');
+      const stjarnor=u.sec==='bok'||u.sec==='sif'?`<span class="st">${'⭐'.repeat(gStars(u.g))}${'☆'.repeat(3-gStars(u.g))}</span>`:`<span class="st">${k}/${u.items.length} ✓</span>`;
+      if(us.length>1){
+        w.innerHTML=`<div class="uh"><button class="uk" aria-expanded="${uo}"><span class="chev2" aria-hidden="true">›</span><b>${u.n}</b>${stjarnor}</button><button class="alla" aria-label="Öva hela gruppen ${u.n}">▶ Alla</button></div>`;
+        w.querySelector('.uk').onclick=()=>{openUn[sec.id]=uo?'':u.id;renderHome();};
+      }else w.innerHTML=`<div class="uh"><span class="uk"><b>${u.items.length} tecken</b>${stjarnor}</span><button class="alla" aria-label="Öva hela gruppen">▶ Alla</button></div>`;
+      w.querySelector('.alla').onclick=()=>startUnit(u);
+      if(uo||us.length===1){const tl=document.createElement('div');tl.className='tiles';u.items.forEach(it=>tl.appendChild(tileEl(u.g,it)));w.appendChild(tl);}
+      sb.appendChild(w);});
   });
 }
 /* ord och namn: ingenting sparas (namn är personuppgifter) */
 function ordBody(sb){
+  const skF=data.stil==='skrift',alla=MPGlyfer.ORD.map((c,i)=>({c,i})),sk=alla.filter(x=>x.c.sk),ov=alla.filter(x=>!x.c.sk),op=l=>l.map(x=>`<option value="${x.i}">${x.c.n.replace('Skrivstil: ','')}</option>`).join('');
   sb.innerHTML=`<p class="owl">Skriv ett ord eller ett namn och öva att skriva det. Det sparas inte.</p>
     <form class="wf" id="wf"><input id="wIn" maxlength="14" autocomplete="off" autocapitalize="sentences" spellcheck="false" placeholder="Skriv ett ord eller ditt namn" aria-label="Ord eller namn"><button class="btn go" type="submit">Öva</button></form>
-    <div class="chips" id="wChips"></div>`;
-  const ch=$('#wChips');
-  const skF=data.stil==='skrift',alla=MPGlyfer.ORD.map((c,i)=>({c,i})),sk=alla.filter(x=>x.c.sk),ov=alla.filter(x=>!x.c.sk),op=l=>l.map(x=>`<option value="${x.i}">${x.c.n.replace('Skrivstil: ','')}</option>`).join('');
-  ch.innerHTML=`<label class="wl">Välj en lista med ord<select id="wCat">${skF?`<optgroup label="Särskilt för skrivstil">${op(sk)}</optgroup><optgroup label="Vanliga ord">${op(ov)}</optgroup>`:`<optgroup label="Vanliga ord">${op(ov)}</optgroup><optgroup label="Ord för skrivstil">${op(sk)}</optgroup>`}</select></label><div id="wWords"></div><button class="btn go" id="wAll" type="button" style="margin-top:10px">▶ Öva hela listan</button>`;
+    <div class="ordlista"><label class="wl">Eller en färdig lista med ord<select id="wCat">${skF?`<optgroup label="Särskilt för skrivstil">${op(sk)}</optgroup><optgroup label="Vanliga ord">${op(ov)}</optgroup>`:`<optgroup label="Vanliga ord">${op(ov)}</optgroup><optgroup label="Ord för skrivstil">${op(sk)}</optgroup>`}</select></label>
+    <button class="btn go stor" id="wAll" type="button">▶ Öva hela listan</button>
+    <details class="enskilt"><summary>Eller välj ett enda ord</summary><div id="wWords" class="chips"></div></details></div>`;
   const fyll=()=>{const c=MPGlyfer.ORD[+$('#wCat').value],box=$('#wWords');box.innerHTML='';c.w.forEach(o=>{const b=document.createElement('button');b.className='chip';b.textContent=o;b.onclick=()=>startWord(o);box.appendChild(b);});};
   $('#wCat').onchange=fyll;fyll();$('#wAll').onclick=()=>startList(MPGlyfer.ORD[+$('#wCat').value].w);
   $('#wf').onsubmit=e=>{e.preventDefault();startWord($('#wIn').value);};}
 function startWord(raw){const t=raw.replace(/[^A-Za-zÅÄÖåäö ]/g,'').replace(/\s+/g,' ').trim().slice(0,14);
   if(!t){$('#wIn').focus();return;}const text=t.charAt(0)+t.slice(1);   // stor eller liten bokstav som man skrev
   startItem({id:'w'},{word:text});}
-function startList(words){const q=words.slice();startItem({id:'w'},{word:q[0]});game.queue=q;game.qi=0;runStep();}
+function startList(words){startQueue(words.map(w=>({g:{id:'w'},it:{word:w}})),'');game.ordlista=true;}
 $('#tabs').onclick=e=>{const b=e.target.closest('[data-stil]');if(!b)return;data.stil=b.dataset.stil;save();renderHome();};
 
 function show(id){document.querySelectorAll('.screen').forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
@@ -289,7 +338,7 @@ function runStep(){
   if(st.pre){VW=Math.max(VW0,MPGlyfer.prepare(glyphOf(stil,st.ch,st)).w+36);}
   const S=st.word?wordPrep(st.ch,stil):prep(glyphOf(stil,st.ch,st));VW=S.VW||VW;makeBoard();
   game.S=S;game.st=st;game.done=false;game.fails.cur=0;
-  $('#gTitle').innerHTML=(st.pre||st.word?st.namn+(game.queue?` <span class="qn">(${game.qi+1} av ${game.queue.length})</span>`:''):st.one?'Siffran '+st.ch:(st.stor?'Stor bokstav ':'Liten bokstav ')+st.ch)+`<small>${PHN[st.ph]}</small>`;
+  $('#gTitle').innerHTML=(st.pre||st.word?st.namn:st.one?'Siffran '+st.ch:(st.stor?'Stor bokstav ':'Liten bokstav ')+st.ch)+(game.queue?` <span class="qn">(${game.qi+1} av ${game.queue.length})</span>`:'')+`<small>${PHN[st.ph]}</small>`;
   $('#gSpk').hidden=!!st.pre;
   $('#fb').textContent='';$('#fb').className='fb';$('#bord').classList.remove('ok');
   if(st.ph==='se')phaseSe();else if(st.ph==='folj')phaseFolj();else phaseSjalv();}
@@ -399,17 +448,25 @@ function stars(){
       const all1=keys.every(k=>(data.klar[k]||0)>=1),all2=keys.every(k=>(data.klar[k]||0)>=2),all3=all2&&keys.every(k=>data.fp[k]);
       data.stars[g.pre?'pre':st+'-'+g.id]=all3?3:all2?2:all1?1:0;});});save();}
 function finishItem(){
-  if(game.queue&&game.qi<game.queue.length-1){const q=game.queue,i=game.qi+1;window.Ljud&&Ljud.pop&&Ljud.pop(3);startItem({id:'w'},{word:q[i]});game.queue=q;game.qi=i;runStep();return;}
-  stars();const it=game.item,stil=data.stil;
-  $('#rT').textContent=game.queue?`Hela listan klar, ${game.queue.length} ord!`:it.pre?'Bra övat!':'Bra jobbat!';
-  $('#rBig').textContent=it.pre||game.queue?'✓':it.word?it.word:it.one?it.ch:it.u+it.l;
+  stars();
+  if(game.queue&&game.qi<game.queue.length-1){const q=game.queue,i=game.qi+1,t=game.qtitel,u=game.unit,o=game.ordlista;window.Ljud&&Ljud.pop&&Ljud.pop(3);const nx=q[i];startItem(nx.g,nx.it);game.queue=q;game.qi=i;game.qtitel=t;game.unit=u;game.ordlista=o;runStep();return;}
+  const it=game.item,stil=data.stil;
+  if(game.queue){   // en hel grupp eller ordlista är klar
+    const lista=game.ordlista;
+    $('#rT').textContent=lista?`Hela listan klar, ${game.queue.length} ord!`:`${game.qtitel} klar!`;$('#rBig').textContent='✓';
+    $('#rSteps').innerHTML=lista?'':game.queue.map(x=>{const lv=itemLv(x.it);return `<div>${itemLabel(x.it)}: ${lv>=2?'✓ klar':lv>=1?'följt stigen':'inte klar'}</div>`;}).join('');
+    const nu=lista?null:nextUnit();$('#rNext').hidden=!nu;if(nu){$('#rNext').textContent='Ta det här: '+nu.n+' ▶';$('#rNext').onclick=()=>startUnit(nu);}
+    $('#rAgain').onclick=()=>{const q=game.queue,t=game.qtitel,u=game.unit,o=game.ordlista;startQueue(q,t);game.unit=u;game.ordlista=o;};
+    show('result');confetti();return;}
+  $('#rT').textContent=it.pre?'Bra övat!':'Bra jobbat!';
+  $('#rBig').textContent=it.pre?'✓':it.word?it.word:it.one?it.ch:it.u+it.l;
   const keys=it.word?[]:itemKeys(it,stil);
   $('#rSteps').innerHTML=keys.map(k=>{const ch=k.split(':')[1],v=data.klar[k]||0;return `<div>${it.pre?it.label:ch}: ${v>=2?(data.fp[k]?'✓ på första försöket':'✓ klar'):v>=1?'följt stigen':'inte klar'}</div>`;}).join('');
   const nx=it.word?null:nextItem();$('#rNext').hidden=!nx;if(nx)$('#rNext').textContent='Nästa: '+(nx.it.pre?nx.it.label:nx.it.one?nx.it.ch:nx.it.u+nx.it.l)+' ▶';
   $('#rNext').onclick=()=>startItem(nx.g,nx.it);
+  $('#rAgain').onclick=()=>startItem(game.g,game.item);
   show('result');confetti();}
 function nextItem(){const all=[];G.forEach(g=>g.items.forEach(it=>all.push({g,it})));const i=all.findIndex(x=>x.it===game.item);return all[i+1]||null;}
-$('#rAgain').onclick=()=>startItem(game.g,game.item);
 $('#rHome').onclick=()=>{renderHome();show('home');};
 $('#quit').onclick=()=>{stopAnim();game=null;renderHome();show('home');};
 
