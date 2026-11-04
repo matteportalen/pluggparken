@@ -265,10 +265,14 @@ function enheter(){
 const itemLv=it=>Math.min(...itemKeys(it,data.stil).map(k=>data.klar[k]||0));
 const unitKlar=u=>u.items.filter(it=>itemLv(it)>=2).length;
 const unitDone=u=>unitKlar(u)===u.items.length;
-/* Ta det här: högst EN förövningsgrupp före bokstäverna (lärarens önskan), sedan bokstavsgrupperna och siffrorna, och sist de övriga förövningsgrupperna */
-function nextUnit(){const U=enheter(),pre=U.filter(u=>u.sec==='pre'),rest=U.filter(u=>u.sec!=='pre');
-  const ordning=[...(pre.some(unitDone)?[]:pre.slice(0,1)),...rest,...pre];
-  return ordning.find(u=>!unitDone(u))||null;}
+/* Ta det här, förövningar: en liten **blandning**, en övning ur varje grupp (den första man inte klarat), så att det inte bara blir raka streck.
+   Högst en sådan uppvärmning före bokstäverna (lärarens önskan); resten av förövningarna kommer efter siffrorna. */
+function uppvarmning(){const U=enheter().filter(u=>u.sec==='pre'),items=U.map(u=>u.items.find(it=>itemLv(it)<2)).filter(Boolean);
+  return items.length?{id:'upp',sec:'pre',n:'Uppvärmning',sub:'Förövningar',g:U[0].g,items}:null;}
+function nextUnit(){const U=enheter(),rest=U.filter(u=>u.sec!=='pre'),warm=uppvarmning();
+  const preKlar=U.some(u=>u.sec==='pre'&&unitKlar(u)>0);
+  const ordning=[...(!preKlar&&warm?[warm]:[]),...rest,...(warm?[warm]:[])];
+  return ordning.find(u=>u.id==='upp'||!unitDone(u))||null;}
 const itemLabel=it=>it.pre?it.label:it.one?it.ch:it.u+it.l;
 function startQueue(list,sparaTitel){   // list: [{g,it}]
   const q=list.slice();startItem(q[0].g,q[0].it);game.queue=q;game.qi=0;game.qtitel=sparaTitel||'';runStep();}
@@ -344,14 +348,14 @@ function runStep(){
   if(st.ph==='se')phaseSe();else if(st.ph==='folj')phaseFolj();else phaseSjalv();}
 $('#gSpk').onclick=()=>{try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(game.st.ch);u.lang='sv-SE';speechSynthesis.speak(u);}catch(e){}};
 function buttons(list){const b=$('#btns');b.innerHTML='';list.forEach(([t,fn,cls])=>{const x=document.createElement('button');x.className='btn '+(cls||'');x.textContent=t;x.onclick=fn;b.appendChild(x);});}
-function nextStep(){game.i++;if(game.i>=game.steps.length)return finishItem();runStep();}
+function nextStep(){if(!game)return;game.i++;if(game.i>=game.steps.length)return finishItem();runStep();}
 
 /* --- Se --- */
 let animTok=0,fart=2;
 const fartBtn=()=>['⏩ x2'+(fart===2?' ✓':''),()=>{fart=fart===2?1:2;document.querySelectorAll('#btns .fart').forEach(b=>b.textContent='⏩ x2'+(fart===2?' ✓':''));},'fart'];
 function stopAnim(){animTok++;}
 function phaseSe(){
-  drawGhost(game.S,.55);game.S.forEach((s,i)=>startMarker(s,i+1,false));
+  if(!game||!game.S)return;drawGhost(game.S,.55);game.S.forEach((s,i)=>startMarker(s,i+1,false));
   buttons([fartBtn()]);const tok=++animTok;
   const pen=el('circle',{r:6.5,fill:'#1D2B53',stroke:'#fff','stroke-width':2,opacity:0},B.pen);
   (async()=>{
