@@ -271,16 +271,26 @@ const unitDone=u=>unitKlar(u)===u.items.length;
 const rot=(a,n)=>a.length?a.slice(n%a.length).concat(a.slice(0,n%a.length)):a;
 function forstaOklara(secId,antal,rotera){const U=enheter().filter(u=>u.sec===secId);
   return rot(U.map(u=>{const it=u.items.find(x=>itemLv(x)<2);return it&&{g:u.g,it};}).filter(Boolean),rotera).slice(0,antal);}
+const anvOrd=new Set();   // ord som redan kommit i den här omgången av besöket (sparas inte)
+/* ett kort ord som bara använder bokstäver man redan klarat (plus dem i den här omgången) */
+function ordMedKlaraBokstaver(nya){
+  const stil=data.stil,har=new Set();
+  enheter().filter(u=>u.sec==='bok').forEach(u=>u.items.forEach(it=>{if(itemLv(it)>=2){har.add(it.l);}}));
+  nya.forEach(x=>{if(x.it.l)har.add(x.it.l);});
+  const kand=[];MPGlyfer.ORD.forEach(c=>c.w.forEach(w=>{const lw=w.toLowerCase();if(lw.length>=2&&lw.length<=6&&!anvOrd.has(lw)&&/^[a-zåäö]+$/.test(lw)&&[...lw].every(ch=>har.has(ch)))kand.push(w);}));
+  if(!kand.length)return null;
+  const langre=kand.filter(w=>w.length>=3),lista=langre.length?langre:kand,w=lista[Math.floor(Math.random()*lista.length)];
+  anvOrd.add(w.toLowerCase());return {g:{id:'w'},it:{word:w}};}
 function ordSession(){const sk=data.stil==='skrift',L=MPGlyfer.ORD.filter(c=>!!c.sk===sk);if(!L.length)return null;const c=L[(data.ordN||0)%L.length];
   return {id:'ord',sec:'ord',n:'Ord: '+c.n.replace('Skrivstil: ',''),sub:'Ord',ordlista:true,g:{id:'w'},pairs:c.w.map(w=>({g:{id:'w'},it:{word:w}})),items:c.w.map(w=>({word:w}))};}
 function nextUnit(){const U=enheter(),sum=sec=>U.filter(u=>u.sec===sec).reduce((n,u)=>n+unitKlar(u),0);
   const preK=sum('pre'),letK=sum('bok');
   const bok=forstaOklara('bok',4,letK),warm=forstaOklara('pre',2,preK);
-  if(bok.length){const pairs=[...warm,...bok];return {id:'runda',sec:'bok',n:`Uppvärmning och ${bok.length} nya bokstäver`,sub:'Bokstäver',titel:'Omgången',g:pairs[0].g,pairs,items:pairs.map(x=>x.it)};}
+  if(bok.length){const ord=ordMedKlaraBokstaver(bok),pairs=[...warm,...bok,...(ord?[ord]:[])];return {id:'runda',sec:'bok',n:`Uppvärmning, ${bok.length} nya bokstäver${ord?' och ett ord':''}`,sub:'Bokstäver',titel:'Omgången',g:pairs[0].g,pairs,items:pairs.map(x=>x.it)};}
   const sif=U.find(x=>x.sec==='sif'),nya=sif.items.filter(x=>itemLv(x)<2).slice(0,4);
   if(nya.length){const pairs=[...warm,...nya.map(it=>({g:sif.g,it}))];return {id:'runda',sec:'sif',n:`Uppvärmning och ${nya.length} nya siffror`,sub:'Siffror',titel:'Omgången',g:pairs[0].g,pairs,items:pairs.map(x=>x.it)};}
   return ordSession();}
-const itemLabel=it=>it.pre?it.label:it.one?it.ch:it.u+it.l;
+const itemLabel=it=>it.word||(it.pre?it.label:it.one?it.ch:it.u+it.l);
 function startQueue(list,sparaTitel){   // list: [{g,it}]
   const q=list.slice();startItem(q[0].g,q[0].it);game.queue=q;game.qi=0;game.qtitel=sparaTitel||'';runStep();}
 const startUnit=u=>{const q=u.pairs||u.items.map(it=>({g:u.g,it}));startQueue(q,u.titel||u.n);game.unit=u.id;if(u.ordlista)game.ordlista=true;};
@@ -377,7 +387,8 @@ function phaseSe(){
         if(t<1)requestAnimationFrame(f);else res();})(last);});
       await wait(250/fart);}
     if(tok!==animTok)return;pen.setAttribute('opacity',0);
-    buttons([['Se igen ↻',()=>runStep()],fartBtn(),['Följ stigen →',nextStep,'go']]);})();}
+    buttons([['Se igen ↻',()=>runStep()],fartBtn(),['Följ stigen →',nextStep,'go']]);
+    setTimeout(()=>{if(game&&tok===animTok&&game.st===game.steps[game.i]&&game.st.ph==='se')nextStep();},1500);})();}   // går vidare själv (färre klick); Se igen hinner man trycka på
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 
 /* --- Följ stigen --- */
@@ -438,7 +449,8 @@ function checkUser(){
   fb.innerHTML=r.msgs.map(([c,t])=>`<span class="${c}" style="color:var(${c==='good'?'--good-dark':'--bad'})">${c==='good'?'✓':'•'} ${t}</span>`).join('');
   if(r.ok){const k=keyOf(data.stil,game.st);const first=game.tries===0;if(!game.st.word){data.klar[k]=Math.max(data.klar[k]||0,2);if(first&&!data.fp[k]&&!(game.fails[k]))data.fp[k]=1;if(!first)delete data.fp[k];save();}
     $('#bord').classList.add('ok');window.Ljud&&Ljud.ok&&Ljud.ok();game.res[game.i]=first;game.done=true;
-    buttons([[game.i===game.steps.length-1?'Klart ✓':'Nästa →',nextStep,'go']]);}
+    buttons([[game.i===game.steps.length-1?'Klart ✓':'Nästa →',nextStep,'go']]);
+    if(game.queue){const stNu=game.st;setTimeout(()=>{if(game&&game.done&&game.st===stNu&&stNu===game.steps[game.i])nextStep();},1700);}}   // i en omgång går det vidare själv
   else{game.tries++;if(!game.st.word)(game.fails[keyOf(data.stil,game.st)]=1);
     if(game.tries>=2)drawGhost(game.S,.45);
     buttons([['Prova igen',()=>{clearUser();}],['✓ Klar',checkUser,'go']]);if(game.tries>=1)fb.innerHTML+='<br><small style="font-weight:700;color:var(--muted)">Tryck Sudda och försök igen. Jag visar bokstaven svagt som hjälp.</small>';
@@ -465,7 +477,7 @@ function finishItem(){
   if(game.queue){   // en hel grupp eller ordlista är klar
     const lista=game.ordlista;
     $('#rT').textContent=lista?`Hela listan klar, ${game.queue.length} ord!`:`${game.qtitel} klar!`;$('#rBig').textContent='✓';
-    $('#rSteps').innerHTML=lista?'':game.queue.map(x=>{const lv=itemLv(x.it);return `<div>${itemLabel(x.it)}: ${lv>=2?'✓ klar':lv>=1?'följt stigen':'inte klar'}</div>`;}).join('');
+    $('#rSteps').innerHTML=lista?'':game.queue.map(x=>{if(x.it.word)return `<div>${x.it.word}: ✓ övat</div>`;const lv=itemLv(x.it);return `<div>${itemLabel(x.it)}: ${lv>=2?'✓ klar':lv>=1?'följt stigen':'inte klar'}</div>`;}).join('');
     if(lista&&game.unit==='ord'){data.ordN=(data.ordN||0)+1;save();}
     const nu=lista&&game.unit!=='ord'?null:nextUnit();$('#rNext').hidden=!nu;if(nu){$('#rNext').textContent='Ta det här näst: '+nu.n+' ▶';$('#rNext').onclick=()=>startUnit(nu);}
     $('#rAgain').onclick=()=>{const q=game.queue,t=game.qtitel,u=game.unit,o=game.ordlista;startQueue(q,t);game.unit=u;game.ordlista=o;};
