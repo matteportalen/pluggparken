@@ -977,7 +977,7 @@ const ZONES=[{from:0,name:"🌳 Marken"},{from:5,name:"☁️ Molnen"},{from:10,
 const zoneOf=n=>ZONES.filter(z=>n>=z.from).pop();
 const BLOCKCOL=["#FF6B6B","#FFC93C","#3D8BFD","#2BB673","#FF9F43","#7B61FF","#17AFC4","#FF5FA2"]; // två balkar i rad har aldrig samma färg
 const TW=360,BW=120,BH=24,FH=24,MPV=3; // ... och meter per våning för höjdmätaren // världens bredd, balkens bredd och höjd, grundens höjd (världsenheter)
-const MATTER_URL="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.20.0/matter.min.js";
+const MATTER_URL="/lib/matter/matter.min.js";
 const MATTER_SRI="sha512-6+7rTBmR6pRFe9fa0vCFjFaHZj/XYa7774bEBzRtxgdpIJOS++R3cKd6Prg/eJmxtsJotd8KAg4g57uuVQsZKA==";
 const crewImg=new Image();crewImg.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(owlSVG(Object.assign({},owlCfg,{hat:"bygg"}),"",true));
 function loadMatter(){return new Promise((ok,no)=>{if(window.Matter)return ok();const s=document.createElement("script");s.src=MATTER_URL;s.integrity=MATTER_SRI;s.crossOrigin="anonymous";s.referrerPolicy="no-referrer";s.onload=()=>ok();s.onerror=no;document.head.appendChild(s);});}

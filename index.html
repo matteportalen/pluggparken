@@ -1026,7 +1026,7 @@ $("pMove").onclick=async()=>{
   $("moveCode").value=code;$("qrBox").innerHTML="";$("qrNote").textContent="";openM("mMove");
   if(url.length>2300){$("qrNote").textContent="Du har samlat så mycket att koden blev för lång för en QR-kod. Använd flyttkoden eller filen i stället.";return;}
   const draw=()=>{try{new QRCode($("qrBox"),{text:url,width:220,height:220,correctLevel:QRCode.CorrectLevel.L});$("qrNote").textContent="Koden innehåller bara ditt namn i Pluggparken och dina framsteg. Du loggar in med samma kod som vanligt.";}catch(e){$("qrNote").textContent="QR-koden kunde inte visas. Använd flyttkoden i stället.";}};
-  if(window.QRCode)draw();else{const s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";s.onload=draw;s.onerror=()=>{$("qrNote").textContent="QR-koden kräver internet. Använd flyttkoden i stället.";};document.head.appendChild(s);}
+  if(window.QRCode)draw();else{const s=document.createElement("script");s.src="/lib/qrcodejs/qrcode.min.js";s.onload=draw;s.onerror=()=>{$("qrNote").textContent="QR-koden kräver internet. Använd flyttkoden i stället.";};document.head.appendChild(s);}
 };
 $("moveCopy").onclick=async()=>{try{await navigator.clipboard.writeText($("moveCode").value);$("moveCopy").textContent="Kopierad! ✓";}catch(e){$("moveCode").select();document.execCommand("copy");$("moveCopy").textContent="Kopierad! ✓";}};
 $("moveFile").onclick=()=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([$("moveCode").value],{type:"text/plain"}));a.download=`pluggparken-${me.name.replace(/[^\wåäöÅÄÖ-]+/g,"_")}.txt`;document.body.appendChild(a);a.click();a.remove();};
@@ -1057,7 +1057,7 @@ $("pCard").onclick=async()=>{
   $("lcKonto").hidden=!me.konto;if(me.konto)$("lcKonto").innerHTML=`<span>Konto</span>${esc(me.konto.namn)} · ${esc(me.konto.kod)}`;
   $("lcOwl").innerHTML=owlOf(me.id);$("lcName").textContent=me.name;$("lcQr").innerHTML="";$("lcNote").textContent="";openM("mCard");
   if(url.length>2900){$("lcNote").textContent="Du har samlat så mycket att koden blev för stor för ett kort. Använd Flytta mina framsteg i stället.";return;}
-  try{await loadScript("https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js");
+  try{await loadScript("/lib/qrcodejs/qrcode.min.js");
     new QRCode($("lcQr"),{text:url,width:520,height:520,correctLevel:url.length>900?QRCode.CorrectLevel.L:QRCode.CorrectLevel.M});
     $("lcNote").textContent="Kortet sparar dina framsteg som de är idag. Skriv gärna ut ett nytt kort ibland.";}
   catch(e){$("lcNote").textContent="QR-koden kräver internet. Försök igen när du är uppkopplad.";}
@@ -1083,7 +1083,7 @@ $("scanBtn").onclick=async()=>{
   catch(e){$("scanMsg").textContent="Kameran gick inte att starta. Tillåt kameran i webbläsaren och försök igen.";return;}
   const v=$("scanVideo");v.srcObject=scanStream;await v.play().catch(()=>{});
   if("BarcodeDetector" in window){try{detector=new BarcodeDetector({formats:["qr_code"]});}catch(e){detector=null;}}
-  if(!detector){try{await loadScript("https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js");}catch(e){$("scanMsg").textContent="QR-läsaren kräver internet.";return;}}
+  if(!detector){try{await loadScript("/lib/jsqr/jsQR.js");}catch(e){$("scanMsg").textContent="QR-läsaren kräver internet.";return;}}
   $("scanMsg").textContent="";
   const c=$("scanCanvas"),x=c.getContext("2d",{willReadFrequently:true});let busy=false;
   const tick=async()=>{

@@ -267,7 +267,7 @@ function openHome(){stopGame();syncStars();save();const nx=nextLvl();
 $("worlds").onclick=e=>{const b=e.target.closest("[data-l]");if(!b||b.disabled)return;startLevel(+b.dataset.l);};
 
 /* ---------- Matter ---------- */
-const MATTER_URL="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.20.0/matter.min.js";
+const MATTER_URL="/lib/matter/matter.min.js";
 const MATTER_SRI="sha512-6+7rTBmR6pRFe9fa0vCFjFaHZj/XYa7774bEBzRtxgdpIJOS++R3cKd6Prg/eJmxtsJotd8KAg4g57uuVQsZKA==";
 function loadMatter(){return new Promise((ok,no)=>{if(window.Matter)return ok();const s=document.createElement("script");s.src=MATTER_URL;s.integrity=MATTER_SRI;s.crossOrigin="anonymous";s.referrerPolicy="no-referrer";s.onload=()=>ok();s.onerror=no;document.head.appendChild(s);});}
 const atlas=new Image();atlas.src="bilder/atlas.png";

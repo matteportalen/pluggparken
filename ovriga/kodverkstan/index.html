@@ -203,9 +203,9 @@ div.kvhi,button.kvhi{outline:4px solid #FFB800;outline-offset:2px;border-radius:
 <script src="../../ljud.js"></script>
 <script src="../../djur.js"></script>
 <script src="../../huvud.js" data-titel="Kodverkstan" data-ikon="🧩" data-portal="ovriga"></script>
-<script src="https://cdn.jsdelivr.net/npm/blockly@11.2.2/blockly_compressed.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/blockly@11.2.2/blocks_compressed.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/blockly@11.2.2/msg/sv.js"></script>
+<script src="/lib/blockly/blockly_compressed.js"></script>
+<script src="/lib/blockly/blocks_compressed.js"></script>
+<script src="/lib/blockly/msg/sv.js"></script>
 <script>
 "use strict";
 const KEY="mattespel-kodverkstan-v1";
@@ -777,7 +777,7 @@ $("homeBtn").addEventListener("click",()=>{stopRun(true);clearMinis(MINIS);close
 function ensureWs(){
   if(ws)return;
   ws=Blockly.inject("blockly",{toolbox:TOOLBOX,renderer:"zelos",sounds:false,
-    media:"https://cdn.jsdelivr.net/npm/blockly@11.2.2/media/",
+    media:"/lib/blockly/media/",
     zoom:{controls:true,wheel:false,startScale:.85,maxScale:1.6,minScale:.45,scaleSpeed:1.15},
     trashcan:true,grid:{spacing:24,length:2,colour:"#e6e0f7",snap:true},
     move:{scrollbars:true,drag:true,wheel:true}});
@@ -851,7 +851,7 @@ function renderMbox(){
 }
 /* små skrivskyddade blockbilder (förklaringskort och facit): en bild per block-stapel, så att ingenting hamnar över varandra */
 function mini(el,state){
-  const w=Blockly.inject(el,{readOnly:true,renderer:"zelos",sounds:false,media:"https://cdn.jsdelivr.net/npm/blockly@11.2.2/media/",
+  const w=Blockly.inject(el,{readOnly:true,renderer:"zelos",sounds:false,media:"/lib/blockly/media/",
     move:{scrollbars:false,drag:false,wheel:false},zoom:{startScale:.8},trashcan:false});
   try{Blockly.serialization.workspaces.load(JSON.parse(JSON.stringify(state)),w);}catch(e){console.error(e);}
   el.style.height="90px";Blockly.svgResize(w);

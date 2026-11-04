@@ -1552,7 +1552,7 @@ async function renderaLat(){startaLjud();if(!ctx||renderar)return null;
     sched(0);
     return await off.startRendering();
   }finally{ctx=oc;master=om;comp=ocp;pg=opg;padIn=opi;padFxn=opf;RK=ork;[drumBus,melBus,loopBus,eqL,eqH]=obus;S.pump=pump0;renderar=false}}
-async function lameLadda(){if(window.lamejs)return true;try{await new Promise((res,rej)=>{const sc=document.createElement("script");sc.src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js";sc.onload=res;sc.onerror=rej;document.head.appendChild(sc)})}catch(e){return false}return !!window.lamejs}
+async function lameLadda(){if(window.lamejs)return true;try{await new Promise((res,rej)=>{const sc=document.createElement("script");sc.src="/lib/lamejs/lame.min.js";sc.onload=res;sc.onerror=rej;document.head.appendChild(sc)})}catch(e){return false}return !!window.lamejs}
 async function mp3Av(buf){let pk=0;const L=buf.getChannelData(0),R=buf.getChannelData(1),n=L.length;for(let i=0;i<n;i++){const a=Math.max(Math.abs(L[i]),Math.abs(R[i]));if(a>pk)pk=a}const g=pk>.98?.98/pk:1;
   const enc=new lamejs.Mp3Encoder(2,buf.sampleRate,128),out=[],bl=1152,li=new Int16Array(bl),ri=new Int16Array(bl);
   for(let i=0,c=0;i<n;i+=bl,c++){const m=Math.min(bl,n-i);for(let j=0;j<m;j++){li[j]=Math.max(-32768,Math.min(32767,L[i+j]*g*32767));ri[j]=Math.max(-32768,Math.min(32767,R[i+j]*g*32767))}

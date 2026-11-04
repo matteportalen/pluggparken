@@ -136,7 +136,7 @@ body.open #menyb,body.openr #resb{border-color:var(--acc);box-shadow:0 0 0 1px v
 <div class="kort" id="kort" hidden></div>
 <div class="hint">Dra för att vrida · scrolla för att zooma · dubbeltryck på en del för att gå nära</div>
 <div id="lad">Laddar kroppen …</div>
-<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="importmap">{"imports":{"three":"/lib/three/build/three.module.js","three/addons/":"/lib/three/examples/jsm/"}}</script>
 <script type="module">
 import * as THREE from "three";
 import {OrbitControls} from "three/addons/controls/OrbitControls.js";
@@ -160,7 +160,7 @@ const d2=new THREE.DirectionalLight(0x4fd6ff,1.5);d2.position.set(-2.5,1.8,-2.5)
 for(const [r0,r1,o] of [[.5,.515,.55],[.78,.785,.22]]){const rg=new THREE.Mesh(new THREE.RingGeometry(r0,r1,128),new THREE.MeshBasicMaterial({color:0x22d3ee,transparent:true,opacity:o,side:THREE.DoubleSide,depthWrite:false}));rg.rotation.x=-Math.PI/2;rg.position.y=.003;S.add(rg);}
 const ctl=new OrbitControls(cam,cv);ctl.enableDamping=true;ctl.dampingFactor=.08;ctl.minDistance=.25;ctl.maxDistance=6;ctl.zoomToCursor=true;
 const grp={},mats={};let all=[];
-const gl=new GLTFLoader(),dr=new DRACOLoader();dr.setDecoderPath("https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/libs/draco/gltf/");gl.setDRACOLoader(dr);
+const gl=new GLTFLoader(),dr=new DRACOLoader();dr.setDecoderPath("/lib/three/examples/jsm/libs/draco/gltf/");gl.setDRACOLoader(dr);
 let GR={},hudM=null,hudGlas=false,musGlas=false;const musM=new Set();
 function hudUpd(){const inn=['skelett','organ','karl','ven','nerver'].some(k=>grp[k]&&grp[k].visible);musGlas=false;const a=['skelett','muskler','organ','karl','ven','nerver'].some(k=>grp[k]&&grp[k].visible);hudGlas=a&&!!(grp.hud&&grp.hud.visible);if(!hudM)return;hudM.opacity=hudGlas?.14:1;hudM.depthWrite=!hudGlas;}
 function bygg(s,g){const sd=SYS.find(x=>x.id===s),G=grp[s]||new THREE.Group();G.name=s;
