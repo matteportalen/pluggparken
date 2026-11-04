@@ -265,24 +265,31 @@ function enheter(){
 const itemLv=it=>Math.min(...itemKeys(it,data.stil).map(k=>data.klar[k]||0));
 const unitKlar=u=>u.items.filter(it=>itemLv(it)>=2).length;
 const unitDone=u=>unitKlar(u)===u.items.length;
-/* Ta det här, förövningar: en liten **blandning**, en övning ur varje grupp (den första man inte klarat), så att det inte bara blir raka streck.
-   Högst en sådan uppvärmning före bokstäverna (lärarens önskan); resten av förövningarna kommer efter siffrorna. */
-function uppvarmning(){const U=enheter().filter(u=>u.sec==='pre'),items=U.map(u=>u.items.find(it=>itemLv(it)<2)).filter(Boolean);
-  return items.length?{id:'upp',sec:'pre',n:'Uppvärmning',sub:'Förövningar',g:U[0].g,items}:null;}
-function nextUnit(){const U=enheter(),rest=U.filter(u=>u.sec!=='pre'),warm=uppvarmning();
-  const preKlar=U.some(u=>u.sec==='pre'&&unitKlar(u)>0);
-  const ordning=[...(!preKlar&&warm?[warm]:[]),...rest,...(warm?[warm]:[])];
-  return ordning.find(u=>u.id==='upp'||!unitDone(u))||null;}
+/* Ta det här näst: alltid en **blandning**, aldrig en hel grupp av samma sort (barnen orkar inte bara raka streck, lärarens rättelse):
+   • Uppvärmning: en förövning ur varje grupp (Linjer, Kurvor, Mönster, Former)
+   • Blandade bokstäver: första bokstavsparet man inte klarat ur varje grupp (raka, runda, bågar ...)
+   • Siffror: fem åt gången.
+   Ordning: uppvärmning först, sedan växelvis (en uppvärmning per två bokstavsomgångar) tills allt är klart. */
+const mix=(id,sec,n,sub,pairs)=>pairs.length?{id,sec,n,sub,g:pairs[0].g,pairs,items:pairs.map(x=>x.it)}:null;
+function uppvarmning(){const pre=enheter().filter(u=>u.sec==='pre');
+  return mix('upp','pre','Uppvärmning','Förövningar',pre.map(u=>{const it=u.items.find(x=>itemLv(x)<2);return it&&{g:u.g,it};}).filter(Boolean));}
+function blandadeBokstaver(){const bok=enheter().filter(u=>u.sec==='bok');
+  return mix('blandat','bok','Blandade bokstäver','Bokstäver',bok.map(u=>{const it=u.items.find(x=>itemLv(x)<2);return it&&{g:u.g,it};}).filter(Boolean));}
+function siffrorNu(){const u=enheter().find(x=>x.sec==='sif');return mix('siffror','sif','Siffror','Siffror',u.items.filter(x=>itemLv(x)<2).slice(0,5).map(it=>({g:u.g,it})));}
+function nextUnit(){const U=enheter(),sum=sec=>U.filter(u=>u.sec===sec).reduce((n,u)=>n+unitKlar(u),0),preK=sum('pre'),letK=sum('bok');
+  const w=uppvarmning(),b=blandadeBokstaver();
+  if(w&&(preK===0||(b&&preK*2<letK)))return w;
+  return b||siffrorNu()||w||null;}
 const itemLabel=it=>it.pre?it.label:it.one?it.ch:it.u+it.l;
 function startQueue(list,sparaTitel){   // list: [{g,it}]
   const q=list.slice();startItem(q[0].g,q[0].it);game.queue=q;game.qi=0;game.qtitel=sparaTitel||'';runStep();}
-const startUnit=u=>{const q=u.items.map(it=>({g:u.g,it}));startQueue(q,u.n);game.unit=u.id;};
+const startUnit=u=>{const q=u.pairs||u.items.map(it=>({g:u.g,it}));startQueue(q,u.n);game.unit=u.id;};
 let openUn={};
 function renderHome(){
   document.querySelectorAll('#tabs button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.stil===data.stil)));
   $('#note').textContent=data.stil==='tryck'?'Rak, enkel stil. Varje bokstavspar övar du i tre steg: se, följ och skriv själv.':'Sammanhängande skrift: bokstäverna hakas ihop i ord. Se, följ och skriv själv.';
   const U=enheter(),nu=nextUnit(),ta=$('#taDet');
-  if(nu){ta.hidden=false;ta.innerHTML=`<span class="ti">▶</span><span class="tt"><b>Ta det här: ${nu.n}</b><small>${nu.sub} · ${nu.sec==='pre'?nu.items.length+' övningar':nu.items.map(itemLabel).join(' ')}</small></span>`;ta.onclick=()=>startUnit(nu);}
+  if(nu){ta.hidden=false;ta.innerHTML=`<span class="ti">▶</span><span class="tt"><b>Ta det här näst: ${nu.n}</b><small>${nu.sub} · ${nu.sec==='pre'?nu.items.length+' övningar':nu.items.map(itemLabel).join(' ')}</small></span>`;ta.onclick=()=>startUnit(nu);}
   else{ta.hidden=false;ta.onclick=null;ta.innerHTML=`<span class="ti">🎉</span><span class="tt"><b>Allt är klart i den här stilen!</b><small>Öva något igen nedan, eller byt stil</small></span>`;}
   const SEC=[
     {id:'pre',n:'Förövningar',sub:'Linjer, vågor och former för handen',c:'#7B61FF',ic:'〰️'},
@@ -459,7 +466,7 @@ function finishItem(){
     const lista=game.ordlista;
     $('#rT').textContent=lista?`Hela listan klar, ${game.queue.length} ord!`:`${game.qtitel} klar!`;$('#rBig').textContent='✓';
     $('#rSteps').innerHTML=lista?'':game.queue.map(x=>{const lv=itemLv(x.it);return `<div>${itemLabel(x.it)}: ${lv>=2?'✓ klar':lv>=1?'följt stigen':'inte klar'}</div>`;}).join('');
-    const nu=lista?null:nextUnit();$('#rNext').hidden=!nu;if(nu){$('#rNext').textContent='Ta det här: '+nu.n+' ▶';$('#rNext').onclick=()=>startUnit(nu);}
+    const nu=lista?null:nextUnit();$('#rNext').hidden=!nu;if(nu){$('#rNext').textContent='Ta det här näst: '+nu.n+' ▶';$('#rNext').onclick=()=>startUnit(nu);}
     $('#rAgain').onclick=()=>{const q=game.queue,t=game.qtitel,u=game.unit,o=game.ordlista;startQueue(q,t);game.unit=u;game.ordlista=o;};
     show('result');confetti();return;}
   $('#rT').textContent=it.pre?'Bra övat!':'Bra jobbat!';
