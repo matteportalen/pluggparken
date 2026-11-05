@@ -145,7 +145,9 @@ _`extra/trummaskin/`: trummaskin, melodi, ackord, pads, loopstation, effekter, l
 
 ## Plan (inte byggt): Synt-maskin som del av Musiklabbet (nov 2026, lärarens önskan, "bara förbereda")
 
-**Önskan:** en synt i stil med play.thefirmwarehub.com (VIBE FM: en tom maskin där "firmware" byts), första modulen en polyfonisk analog synt i Oberheim-anda (fyra spår A–D, ENV, LFO, ARP, SEQ). Ska ligga **inne i Musiklabbet men som en egen maskin**: en knapp växlar mellan trummaskinen och synten, och **ljuden från synten ska kunna användas när man gör en låt** (låtläge, delningskod, export). Inget byggs än; tokens/tid avgör när.
+**Grundregel (lärarens beslut): vi bygger eget och hämtar bara inspiration.** Inga namn, märken, kod, firmware eller ljud från andra används. Allt som heter något i maskinen (maskinen, modulerna, presets, reglage) får **egna namn**, och det gäller **varje modul som kopplas på senare**. Andras instrument och firmware kopieras eller läggs aldrig i repot.
+
+**Önskan:** en synt som hämtar **inspiration** från en webbaserad hårdvarusynt där instrumentets "program" kan bytas (en tom maskin plus utbytbara moduler), med en första modul som är en polyfonisk analog synt (fyra spår A–D, ENV, LFO, ARP, SEQ). Ska ligga **inne i Musiklabbet men som en egen maskin**: en knapp växlar mellan trummaskinen och synten, och **ljuden från synten ska kunna användas när man gör en låt** (låtläge, delningskod, export). Inget byggs än; tokens/tid avgör när.
 
 **Upptäckt i koden (`extra/trummaskin/index.html`, 1673 rader) som styr upplägget**
 - Ett gemensamt `AudioContext` (`ctx`), `master`, `comp` och bussar (`drumBus`, `melBus`, loopbussen). Synten ska få en egen **`synBus`** in i samma kedja.
@@ -159,7 +161,7 @@ _`extra/trummaskin/`: trummaskin, melodi, ackord, pads, loopstation, effekter, l
 - **Modulgränssnitt:** `{id, namn, version, params:[{id,namn,min,max,steg,standard}], create(ctx,{ut,bpm}) -> {noteOn(midi,vel,t), noteOff(midi,t), setParam(id,v,t), allOff(), hamta(), satt(preset), stang()}}`. Alla moduler måste gå att skapa i en offline-kontext.
 - **Växling:** knapp i maskinens överkant (`#maskin`) som visar/döljer `#syntmaskin`; transport (spela/stopp, BPM, swing) och master är gemensamma, spåren är separata.
 
-**Första modulen (arbetsnamn, namnet "OberVave" och "VIBE FM" får inte användas: andras verk/varumärke; deras firmware har egna licenser och får inte läggas i repot utan upphovspersonens tillstånd)**
+**Första modulen (eget namn, väljs när vi börjar)**
 - 4 spår, åtta röster totalt (färre på svaga Chromebooks), per röst två oscillatorer (sågtand/puls/triangel, **PolyBLEP** mot ljud som "hackar"), ett självsvängande **ZDF-filter** (24 dB), ENV för filter och volym, LFO (fart, djup, mål), liten slumpad ojämnhet per röst (drift), arpeggiator, sekvenserare med 16 steg per spår.
 - Kvalitet: rendera toner till wav i Node (`skript/`), mät aliasing/spektrum/nivåer automatiskt; läraren bedömer slutresultatet med örat.
 
@@ -170,4 +172,4 @@ _`extra/trummaskin/`: trummaskin, melodi, ackord, pads, loopstation, effekter, l
 4. SEQ per spår, med i låtläget, i delningskoden och i exporten (kontrollera export i `OfflineAudioContext`).
 5. (valfritt, senare) egna moduler som man släpper som fil: **bara bakom en liten "Utvecklare"-flik**, eftersom en laddad fil är kod som körs i sajten (inte för barn eller delade skoldatorer).
 
-**Risker/att komma ihåg:** CPU på Chromebooks och iPads (begränsa röster, "lätt läge"), `AudioWorklet` kräver säker sida (vi kör https), ljudstart kräver tryck (som i dagens `startaLjud()`), nya delningskoden får inte bryta gamla länkar, nytt element i maskinen ska följa reglerna om tangentbord och fingrar (stora tryckytor). Kontrollera att `index.html` inte växer mer än nödvändigt.
+**Risker/att komma ihåg:** (se grundregeln överst: egna namn och egen kod) CPU på Chromebooks och iPads (begränsa röster, "lätt läge"), `AudioWorklet` kräver säker sida (vi kör https), ljudstart kräver tryck (som i dagens `startaLjud()`), nya delningskoden får inte bryta gamla länkar, nytt element i maskinen ska följa reglerna om tangentbord och fingrar (stora tryckytor). Kontrollera att `index.html` inte växer mer än nödvändigt.
