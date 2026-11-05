@@ -142,3 +142,32 @@ _`extra/trummaskin/`: trummaskin, melodi, ackord, pads, loopstation, effekter, l
 - **Autotune följer ackorden** (nov 2026): knappen 🎯 bläddrar SKALA → MELODIN → **ACKORD** (`l.fx.tmod` 2, `ackTgt()`): rösten dras till närmaste ton i det ackord som spelas (halvtakter om ACKORD har två per takt; loopens första takt = ackordgångens första). Är ACKORD av används skalan. Mätt med syntetisk röst (270 Hz mot {E, A} → 329 Hz); inte lyssnat på riktig röst.
 - **Loopstationens knappar sorterade i fyra grupper** (nov 2026, lärarens önskan; bara layout, inga funktioner ändrade): varje loopspår har under vågen sektionerna **REDIGERA** (Markera/Flytta/◀ ▶, fyra redigeringsknappar i ett rutnät, Spela-zonerna i rutnät), **TON** (TONHÖJD, RÖST, BAKLÄNGES, och en rad AUTOTUNE med läge, SKALA/MELODIN/ACKORD och GLID-ratten), **EFFEKTER** (ECHO med ¼-knapp, HALL, FLANGER, FILTER i fyra lika kolumner) och **SLICER**; små rubriker (`.lsec h6`). Kontrollerat i 1200 och 375 px (ingen sidledsscroll).
 - **Loopstationen: raden "Spela: Hela, ½·1 … ¼·4" borttagen** (nov 2026, lärarens önskan: onödig; Spela bara och Beskär med markering räcker). Kvar är ↺ (återställ alla ändringar) i Markera-raden. `data-z`-koden finns kvar oanvänd.
+
+## Plan (inte byggt): Synt-maskin som del av Musiklabbet (nov 2026, lärarens önskan, "bara förbereda")
+
+**Önskan:** en synt i stil med play.thefirmwarehub.com (VIBE FM: en tom maskin där "firmware" byts), första modulen en polyfonisk analog synt i Oberheim-anda (fyra spår A–D, ENV, LFO, ARP, SEQ). Ska ligga **inne i Musiklabbet men som en egen maskin**: en knapp växlar mellan trummaskinen och synten, och **ljuden från synten ska kunna användas när man gör en låt** (låtläge, delningskod, export). Inget byggs än; tokens/tid avgör när.
+
+**Upptäckt i koden (`extra/trummaskin/index.html`, 1673 rader) som styr upplägget**
+- Ett gemensamt `AudioContext` (`ctx`), `master`, `comp` och bussar (`drumBus`, `melBus`, loopbussen). Synten ska få en egen **`synBus`** in i samma kedja.
+- Takten drivs av `tick()` (rad ~855, `nasta`/`steg`, 16-delar, lookahead 0,12 s). Syntspåren ska få sina noter ur samma `tick()`.
+- **Export (rad ~1531) bygger om hela ljudkedjan i en `OfflineAudioContext`** och byter globala variabler. Därför måste en syntmodul gå att **skapa på valfri `BaseAudioContext`** (`create(ctx, …)`), inte bara på den levande. `AudioWorklet` fungerar i `OfflineAudioContext` om `addModule` anropas på just den.
+- Låtläge: `S.song` (16 positioner med mönster 0–3 plus 4–7 i `harExt`), `S.songOn`, delningskoden i raderna ~778–790 (kompakt text i adressen). Syntmönster måste få en egen del i koden (valfri, så gamla länkar fortsätter fungera) och en egen del i `harExt/harLat`.
+- Filen är stor: **synten läggs i egna filer**, inte in i `index.html`.
+
+**Föreslagen struktur**
+- `extra/trummaskin/synt/synt.js` (maskinens vy och styrning), `synt/dsp.js` (ren ljudmatte utan DOM, går att testa i Node), `synt/worklet.js` (AudioWorkletProcessor som använder `dsp.js`), `synt/moduler/<namn>.js` (en modul per instrument).
+- **Modulgränssnitt:** `{id, namn, version, params:[{id,namn,min,max,steg,standard}], create(ctx,{ut,bpm}) -> {noteOn(midi,vel,t), noteOff(midi,t), setParam(id,v,t), allOff(), hamta(), satt(preset), stang()}}`. Alla moduler måste gå att skapa i en offline-kontext.
+- **Växling:** knapp i maskinens överkant (`#maskin`) som visar/döljer `#syntmaskin`; transport (spela/stopp, BPM, swing) och master är gemensamma, spåren är separata.
+
+**Första modulen (arbetsnamn, namnet "OberVave" och "VIBE FM" får inte användas: andras verk/varumärke; deras firmware har egna licenser och får inte läggas i repot utan upphovspersonens tillstånd)**
+- 4 spår, åtta röster totalt (färre på svaga Chromebooks), per röst två oscillatorer (sågtand/puls/triangel, **PolyBLEP** mot ljud som "hackar"), ett självsvängande **ZDF-filter** (24 dB), ENV för filter och volym, LFO (fart, djup, mål), liten slumpad ojämnhet per röst (drift), arpeggiator, sekvenserare med 16 steg per spår.
+- Kvalitet: rendera toner till wav i Node (`skript/`), mät aliasing/spektrum/nivåer automatiskt; läraren bedömer slutresultatet med örat.
+
+**Etapper (en i taget, fråga läraren efter varje)**
+1. Modulgränssnitt + synt-vy med en enkel mono-test-modul, knappen som växlar, gemensam transport.
+2. Polysynten (DSP, presets, rattar).
+3. ENV, LFO, ARP.
+4. SEQ per spår, med i låtläget, i delningskoden och i exporten (kontrollera export i `OfflineAudioContext`).
+5. (valfritt, senare) egna moduler som man släpper som fil: **bara bakom en liten "Utvecklare"-flik**, eftersom en laddad fil är kod som körs i sajten (inte för barn eller delade skoldatorer).
+
+**Risker/att komma ihåg:** CPU på Chromebooks och iPads (begränsa röster, "lätt läge"), `AudioWorklet` kräver säker sida (vi kör https), ljudstart kräver tryck (som i dagens `startaLjud()`), nya delningskoden får inte bryta gamla länkar, nytt element i maskinen ska följa reglerna om tangentbord och fingrar (stora tryckytor). Kontrollera att `index.html` inte växer mer än nödvändigt.
