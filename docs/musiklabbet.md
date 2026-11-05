@@ -266,3 +266,7 @@ Efter klippfunktionen gav läraren klartecken att bygga LOOPSTATION som egen fli
 - En knapp ovanför panelerna visar **LOOPINSPELNING PÅGÅR · VISA LOOPSTATIONEN** även när inspelningen sker på en dold flik. Försvinner när inspelningen är klar. Tangentbordsnavigation med vänster/höger och Home/End finns för flikarna; på mobil ordnas flikarna i två kolumner utan sidöverflöde.
 - Klippöverföringen öppnas nu från LOOPSTATION-fliken och återgår till valt syntspår vid LÄGG PÅ PADS. Spara/öppna, ljud, loopar, effekter och export behåller samma dataformat.
 - **Verifierat med `skript/test-musiklabbet-flikar.cjs`:** exakt en synlig maskin och en markerad flik; faktisk inspelningskedja med en syntetisk MediaStream fångar en 330 Hz-ton till en loop medan andra flikar visas; inspelningen blir klar, överföringsknappen aktiveras och ljudkontexten/transporten är samma. LOOPSTATION/MELODI behåller arrangemangsläget. Piltangenter och mobil 390×844/375×667 utan sidöverflöde. Inga JS-fel. Klippsviten uppdaterades att välja loopfliken före överföring.
+
+### Automatisk paus vid klippöverföring (5 nov 2026)
+
+När klippredigeraren öppnas stoppas den gemensamma transporten via `stopPlayback:stopp`, även vid justering av befintliga röstklipp. Ljudkontexten lämnas tillgänglig för provlyssning; provlyssning och LÄGG PÅ PADS startar inte bakgrundsloopen igen. START återupptar uppspelningen från början. Klippsviten kontrollerar att transporten stannar vid öppning och förblir stoppad efter provlyssning och överföring.
