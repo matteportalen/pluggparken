@@ -25,7 +25,7 @@ function merge(a,b){const out=Object.assign({},a);
     // Glödväktaren: förena fynd/uppdrag per matteval, så att två enheters resor bevaras.
     if(k==="mattespel-glodvaktaren-v1"){try{const x=JSON.parse(a[k]),y=JSON.parse(b[k]),o={...y,...x,stars:{},campaigns:{}};
       for(const m of ["plus","hundra","tabell","stor"]){o.stars[m]=Math.max(x.stars?.[m]||0,y.stars?.[m]||0);const u=x.campaigns?.[m]||{},v=y.campaigns?.[m]||{},c={...v,...u};
-        c.defeated=[...new Set([...(u.defeated||[]),...(v.defeated||[])])];c.ore=[...new Set([...(u.ore||[]),...(v.ore||[])])];for(const f of ["shield","boots","shortcut","bridge","won"])c[f]=!!u[f]||!!v[f];c.checkpoint=u.checkpoint===2560||v.checkpoint===2560?2560:384;c.deaths=Math.max(u.deaths||0,v.deaths||0);o.campaigns[m]=c;}
+        c.defeated=[...new Set([...(u.defeated||[]),...(v.defeated||[])])];c.ore=[...new Set([...(u.ore||[]),...(v.ore||[])])];for(const f of ["shield","boots","shortcut","bridge","canopyFound","won"])c[f]=!!u[f]||!!v[f];c.checkpoint=u.checkpoint===2560||v.checkpoint===2560?2560:384;c.deaths=Math.max(u.deaths||0,v.deaths||0);o.campaigns[m]=c;}
       out[k]=JSON.stringify(o);}catch(e){}return;}
     // Läsflyt: läsningarna läggs ihop (inget försvinner), bokstäverna: senaste markeringen vinner
     if(k==="mattespel-lasflyt-v1"){try{const x=JSON.parse(a[k]),y=JSON.parse(b[k]),o=Object.assign({},x);
