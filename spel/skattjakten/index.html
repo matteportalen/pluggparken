@@ -162,13 +162,17 @@ h2{font-size:1.25rem;margin:18px 0 8px;font-weight:800}
 .chest-loot span{display:flex;align-items:center;gap:2px;font-weight:800;font-size:1.25rem;--s:40px}
 
 @media (prefers-reduced-motion:reduce){*{transition:none !important}}
+#game{background:#1f3c38}.hud{background:#183d37;padding:10px 16px;border-bottom:1px solid #accab22c}.hud .lv{background:#3c5c4c}.quest-progress{margin:0;padding:10px 16px;background:#f0e5c7;color:#234f43;display:flex;align-items:center;gap:12px;box-shadow:0 3px 12px #102d3030;z-index:1}.quest-progress button{font:800 .95rem var(--font);text-align:left;flex:1;min-height:36px}.quest-progress small{font-size:.7rem;letter-spacing:.08em;font-weight:800}.hint{top:auto;bottom:16px;background:#fff7dfed;border:1px solid #d2c39d;box-shadow:0 3px 12px #102d3030;max-width:min(92%,600px)}#cv{image-rendering:auto}.lootbar{background:#17362f;border-top:1px solid #afccaa30}.pad{background:#183d37}.pad button{background:#446859}.dcard{border:1px solid #c8b890;box-shadow:0 14px 70px #061b2760;max-width:610px;padding:20px}.dlg{align-items:center;background:#102c3677;backdrop-filter:blur(4px)}.quest-journal{display:grid;gap:10px;margin:15px 0}.quest-journal>div{display:grid;grid-template-columns:38px 1fr;gap:1px 10px;background:#eff3e5;padding:12px;border-radius:12px}.quest-journal span{grid-row:span 2;align-self:center;text-align:center;font-weight:800;color:#386f51}.quest-journal small{font-weight:700;color:#63785e}.quest-route{display:block;width:100%;min-height:48px;background:#24614d;color:white;border-radius:12px;font-weight:800;padding:10px}#home .world{color:#49765d;background:#e8efdc}.levels button{border-radius:17px}.party{border-radius:20px;background:#edf2e3;padding:22px}.lootbar .wallet{background:#f7d67c;color:#3a4529}.quest-seals{display:flex;gap:12px;justify-content:center;font-size:2rem}
+@media(max-width:600px){.hud{gap:5px;padding:7px 10px}.hud .hl{font-size:.85rem}.hud .lv{font-size:.8rem}.quest-progress{padding:5px 10px;gap:5px}.quest-progress button{font-size:.78rem}.quest-progress small{display:none}.dcard{padding:13px}.who canvas{width:44px;height:44px}.quest-progress button{min-height:40px}.hint{font-size:.8rem}.pad{grid-template-columns:repeat(3,54px);grid-template-rows:repeat(2,44px);gap:5px;padding:6px}.lootbar{min-height:55px}}
+
+.mechanism{padding:14px;margin:12px 0;background:#eaf0e2;border:1px solid #c8d7ba;border-radius:14px}.mechanism-picture{text-align:center;font:800 1.8rem ui-monospace,monospace;color:#637f65}.mechanism p{font-size:.9rem;font-weight:700;margin:7px 0}.mechanism-options{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.mechanism-options button{min-height:48px;background:white;border:1px solid #acc3a4;border-radius:10px;font-weight:800;color:#315e44}.seal-code{display:flex;align-items:center;justify-content:center;gap:12px}.seal-code span{padding:10px 18px;border-radius:12px;background:#ffefbc;text-align:center}.seal-code small{display:block;font-size:.65rem}.seal-code b{font-size:1.5rem}.quest-route.explore{margin-top:8px;background:#ede5cb;color:#42634a}.quest-finale{flex-basis:100%;margin:12px 0;padding:20px;background:#e5efd8;border-radius:18px}.quest-seals span{display:block;color:#b68935;background:#ffefba;width:65px;height:65px;border-radius:50%;line-height:65px;box-shadow:0 3px 0 #cabc8a}
 </style>
 </head>
 <body>
 <div class="wrap" id="home">
   <a class="back" href="../">← Spelhörnan</a>
   <div class="party"><div class="ppet pet" id="homePet" aria-hidden="true"></div>
-    <div><h1>Skattjakten <span class="world">🗝️ Labyrint</span></h1><p class="lead" id="homeLead">Leta skatter i labyrinten och sälj dem i affären. Utgången är låst: köp nyckeln för att ta dig ut! Hindren släpper bara förbi den som löser deras uppgift.</p></div></div>
+    <div><h1>Skattjakten <span class="world">🗝️ Labyrint</span></h1><p class="lead" id="homeLead">Ett äventyr väntar! Hjälp till vid tre platser, samla delarna till det sista låset och hitta skatter att sälja. Välj din väg och rädda världen bakom porten.</p></div></div>
   <h2>Välj tema</h2>
   <div class="themes" id="themes"></div>
   <h2>Välj nivå</h2>
@@ -180,7 +184,7 @@ h2{font-size:1.25rem;margin:18px 0 8px;font-weight:800}
 <section id="game" hidden>
   <div class="hud"><button class="quit" id="quit">← Avsluta</button><span class="lv" id="hudLv"></span>
     <span class="hl"><span id="hudChest"></span><button class="snd" id="snd" aria-label="Ljud av eller på">🔊</button></span></div>
-  <div class="stage" id="stage"><canvas id="cv"></canvas><div class="hint" id="hint"></div></div>
+  <div class="quest-progress"><small>DITT ÄVENTYR</small><button id="questProgress" type="button">Visa uppdrag</button></div><div class="stage" id="stage"><canvas id="cv"></canvas><div class="hint" id="hint"></div></div>
   <div class="lootbar" id="lootbar" aria-label="Ryggsäcken och dina mynt"><span class="lbl">🎒</span><span class="bag" id="slots"></span><span class="wallet" id="wallet">🪙 0</span><span class="owned" id="owned"></span></div>
   <div class="pad" id="pad" aria-label="Pilknappar">
     <button class="u" data-d="0,-1" aria-label="Upp">▲</button><button class="l" data-d="-1,0" aria-label="Vänster">◀</button>
@@ -388,13 +392,14 @@ function newGame(){
   const pris={nyckel:Math.min(tak[0],rund(total*.5)),lykta:Math.min(tak[1],rund(total*.13)),karta:Math.min(tak[1],rund(total*.16)),skor:Math.min(tak[1],rund(total*.1))};
   G={n,g,objs,look,th,sheet:sheetOf(data.theme),px:1,py:1,ax:1,ay:1,seen:Array.from({length:n},()=>Array(n).fill(false)),
      chests:Object.values(objs).filter(o=>o.t==="chest").length,found:0,loot:{},solved:0,firstTry:0,busy:false,over:false,anim:null,sparks:[],
-     R:3.2,bag:[],coins:0,owned:{},pris,shop:shopAt,total,sold:0};
+     R:4.6,bag:[],coins:0,owned:{},pris,shop:shopAt,total,sold:0};
+  questSetup(free,used,put,d);Object.values(objs).filter(o=>o.t==='foe').slice(0,2).forEach(contextualObstacle);
   G.seen[shopAt[1]][shopAt[0]]=true; // affärens skylt lyser i mörkret
   reveal();
   $("hudLv").textContent=`${th.name} · Nivå ${data.level}`;updHud();
   $("home").hidden=true;$("win").hidden=true;$("game").hidden=false;if(window.MPS)MPS.visa("game");
   renderSlots();if(window.Ljud&&Ljud.ambient)Ljud.ambient.start(data.theme);sndIcon();
-  resize();hint(`${th.exit.name} är låst. Leta skatter, sälj dem i affären 🏪 och köp nyckeln!`,5000);
+  resize();hint(G.adventure.intro,6000);
 }
 function reveal(){for(let y=0;y<G.n;y++)for(let x=0;x<G.n;x++)if(Math.hypot(x-G.px,y-G.py)<=G.R+.4)G.seen[y][x]=true;}
 function updHud(){$("hudChest").innerHTML=`<small>Poäng</small> ${G.points||0} &nbsp;<small>Kistor</small> ${G.found}/${G.chests}`;}
@@ -404,31 +409,9 @@ let hintT;function hint(t,ms){const h=$("hint");h.textContent=t;h.style.opacity=
 const cv=$("cv"),ctx=cv.getContext("2d");let TS=48,W=0,H=0,dpr=1;
 function resize(){const r=$("stage").getBoundingClientRect();dpr=window.devicePixelRatio||1;W=r.width;H=r.height;cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);
   /* rutorna är alltid en hel multipel av 16 pixlar, så att pixelgrafiken förblir skarp */
-  TS=16*Math.max(2,Math.min(6,Math.floor(Math.min(W,H)/7.2/16)));draw();}
+  TS=16*Math.max(2,Math.min(7,Math.floor(Math.min(W,H)/5.8/16)));draw();}
 addEventListener("resize",()=>{if(G&&!$("game").hidden)resize();});
-function draw(){
-  if(!G)return;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.imageSmoothingEnabled=false;
-  ctx.fillStyle="#141C38";ctx.fillRect(0,0,W,H);
-  const camX=G.ax*TS+TS/2-W/2,camY=G.ay*TS+TS/2-H/2,th=G.th,s=G.sheet;
-  const x0=Math.max(0,Math.floor(camX/TS)-1),y0=Math.max(0,Math.floor(camY/TS)-1),x1=Math.min(G.n-1,Math.ceil((camX+W)/TS)+1),y1=Math.min(G.n-1,Math.ceil((camY+H)/TS)+1);
-  for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){
-    if(!G.seen[y][x])continue;const dx=Math.round(x*TS-camX),dy=Math.round(y*TS-camY),lk=G.look[y][x];
-    ctx.fillStyle=th.bg;ctx.fillRect(dx,dy,TS,TS);
-    tile(ctx,s,th.floor[Math.floor(lk*th.floor.length)],dx,dy,TS);
-    if(G.g[y][x]===1)tile(ctx,s,th.walls[Math.floor(lk*th.walls.length)],dx,dy,TS);
-    const o=G.objs[x+","+y];
-    if(o&&o.t==="shop")drawShop(dx,dy);
-    if(o){if(o.t==="chest")tile(ctx,CHEST.s,CHEST.i,dx,dy,TS);else if(o.t==="exit")tile(ctx,th.exit.s,th.exit.i,dx,dy,TS);else if(o.t==="foe"&&!o.solved)tile(ctx,o.f.s,o.f.i,dx,dy,TS);}
-  }
-  /* allt utanför synfältet blir mörkare: man ser bara en bit runt sig */
-  for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){if(!G.seen[y][x])continue;const dd=Math.hypot(x-G.ax,y-G.ay);
-    if(dd>G.R&&!(G.objs[x+","+y]&&G.objs[x+","+y].t==="shop")){ctx.fillStyle="rgba(20,28,56,.62)";ctx.fillRect(Math.round(x*TS-camX),Math.round(y*TS-camY),TS,TS);}}
-  const grd=ctx.createRadialGradient(W/2,H/2,TS*2,W/2,H/2,TS*(G.R+1.4));grd.addColorStop(0,"rgba(20,28,56,0)");grd.addColorStop(1,"rgba(20,28,56,.55)");ctx.fillStyle=grd;ctx.fillRect(0,0,W,H);
-  /* elevens djur */
-  if(petImg.complete){const pw=TS*1.05,ph=pw*280/240;ctx.imageSmoothingEnabled=true;ctx.drawImage(petImg,W/2-pw/2,H/2+TS/2-ph*.92,pw,ph);ctx.imageSmoothingEnabled=false;}
-  pilTillAffaren(camX,camY);
-  G.sparks.forEach(p=>{ctx.globalAlpha=Math.max(0,p.l);ctx.font=`${Math.round(TS*.45)}px serif`;ctx.textAlign="center";ctx.fillText(p.e,p.x-camX,p.y-camY);});ctx.globalAlpha=1;
-}
+function draw(){drawWorld()}
 /* affären: en upplyst skylt som syns på avstånd */
 function drawShop(dx,dy){ctx.save();ctx.fillStyle="#FFE58A";ctx.globalAlpha=.35;ctx.beginPath();ctx.arc(dx+TS/2,dy+TS/2,TS*.75,0,7);ctx.fill();ctx.globalAlpha=1;
   ctx.fillStyle="#FFF4CC";ctx.fillRect(dx+2,dy+2,TS-4,TS-4);ctx.font=`${Math.round(TS*.72)}px serif`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText("🏪",dx+TS/2,dy+TS/2+2);ctx.restore();}
@@ -451,6 +434,7 @@ function move(dx,dy){
   if(!G||G.over||G.anim||!$("dlg").hidden)return;
   const x=G.px+dx,y=G.py+dy;if(G.g[y][x]===1){window.Ljud&&Ljud.clonk&&Ljud.clonk();return;}
   const o=G.objs[x+","+y];
+  if(o&&o.t==="quest"&&!o.solved){openFoe(o,x,y);return;}
   if(o&&o.t==="foe"&&!o.solved){openFoe(o,x,y);return;}
   if(o&&o.t==="shop"){openShop();return;}
   G.anim={fx:G.px,fy:G.py,t0:performance.now(),ms:reduced()?1:G.owned.skor?70:140};G.px=x;G.py=y;reveal();kick();
@@ -458,7 +442,7 @@ function move(dx,dy){
 function arrive(){
   const k=G.px+","+G.py,o=G.objs[k];if(!o)return;
   if(o.t==="chest"){openChest(o,k,G.px,G.py);updHud();kick();}
-  else if(o.t==="exit"){if(G.owned.nyckel)win();else hint(`${G.th.exit.name} är låst. Köp nyckeln i affären 🏪!`,3200);}
+  else if(o.t==="exit"||o.t==="final"){if(G.owned.nyckel)openFinal(o,G.px,G.py);else hint(`${G.th.exit.name} är låst. Köp nyckeln i affären 🏪!`,3200);}
 }
 /* En kista innehåller en till tre blandade skatter. De hoppar ur kistan, svävar en stund och flyger till skattraden. */
 function openChest(o,k,cx,cy){
@@ -470,7 +454,7 @@ function openChest(o,k,cx,cy){
   else setTimeout(()=>hint(`Ryggsäcken är full! ${o.items.length===1?"En skatt":o.items.length+" skatter"} ligger kvar i kistan.`,3200),got.length*420+600);
   window.Ljud&&(Ljud.kaching?Ljud.kaching():Ljud.ok());
   for(let i=0;i<5;i++)G.sparks.push({x:cx*TS+TS/2+rnd(-18,18),y:cy*TS+rnd(-4,10),l:1,e:"✨"});
-  const r=cv.getBoundingClientRect(),sx=r.left+W/2+(cx-G.ax)*TS+TS/2,sy=r.top+H/2+(cy-G.ay)*TS+TS/2;
+  const r=cv.getBoundingClientRect(),sx=r.left+cx*TS+TS/2-G.camX,sy=r.top+cy*TS+TS/2-G.camY;
   const big=innerWidth>=900?96:64;
   got.forEach((x,i)=>setTimeout(()=>flyTreasure(x,sx,sy,big,i,got.length),i*420));
   setTimeout(renderSlots,got.length*420+1500);
@@ -516,11 +500,11 @@ cv.addEventListener("pointerup",e=>{if(!sw)return;const dx=e.clientX-sw.x,dy=e.c
 let F=null;
 function openFoe(o,x,y){
   if(!o.p)o.p=problem(data.level);o.tries=o.tries||0;F={o,x,y,input:"",kind:"foe"};
-  $("shopMenu").hidden=true;$("dlg").classList.remove("meny");$("dBack").textContent="Gå tillbaka och ta en annan väg";
-  const pc=$("dPic").getContext("2d");pc.imageSmoothingEnabled=false;pc.clearRect(0,0,64,64);pc.fillStyle=G.th.bg;pc.fillRect(0,0,64,64);tile(pc,G.sheet,G.th.floor[0],0,0,64);tile(pc,o.f.s,o.f.i,0,0,64);
+  $("shopMenu").hidden=true;$("dlg").classList.remove("meny");$("dBack").textContent=o.bypass?"Gå tillbaka och leta efter omvägen":"Gå tillbaka";
+  const pc=$("dPic").getContext("2d");pc.imageSmoothingEnabled=false;pc.clearRect(0,0,64,64);pc.fillStyle=G.th.bg;pc.fillRect(0,0,64,64);tile(pc,G.sheet,G.th.floor[0],0,0,64);tile(pc,o.f.s,o.f.i,0,0,64);if(o.t==='quest'||o.t==='final'){pc.fillStyle='#f7e6b1';pc.fillRect(0,0,64,64);pc.fillStyle='#426855';pc.font='bold 36px serif';pc.textAlign='center';pc.fillText(o.t==='final'?'✦':G.adventure.symbols[o.index],32,46);}
   $("dName").textContent=o.f.name;$("dSay").textContent=o.f.say;$("dQ").textContent=o.p.q;$("dUnit").textContent=o.p.unit||"";
   $("dFb").textContent="";$("dFb").className="fb";$("dTip").hidden=!o.tries;if(o.tries)$("dTip").textContent="Tips: "+o.p.tip;
-  showAns();$("toast").hidden=true;$("dlg").hidden=false;dlgOpen();window.Ljud&&Ljud.chirp&&Ljud.chirp();
+  mechanism(o);showAns();$("toast").hidden=true;$("dlg").hidden=false;dlgOpen();window.Ljud&&Ljud.chirp&&Ljud.chirp();
 }
 function showAns(){const a=$("dAns");a.textContent=F.input||"?";a.classList.toggle("empty",!F.input);}
 function key(k){if(!F||F.done||F.kind==="meny")return;
@@ -529,14 +513,15 @@ document.querySelectorAll("#dKeys button").forEach(b=>b.onclick=()=>key(b.datase
 function check(){
   if(F.kind!=="foe")return checkShop();
   const o=F.o,ok=+F.input===o.p.a;
-  if(ok){F.done=true;const pts=o.tries?5:10;G.points=(G.points||0)+pts;updHud();if(!o.tries)G.firstTry++;G.solved++;o.solved=true;$("dFb").textContent=pick(["Rätt!","Snyggt!","Klockrent!","Toppen!"])+` +${pts} poäng. ${o.f.name} släpper förbi dig.`;$("dFb").className="fb ok";
+  if(ok){if(o.t==='quest'){G.adventure.parts.push(o.index);questHud();}if(o.t==='final'){G.adventure.finished=true;closeFoe();win();return}F.done=true;const pts=o.tries?5:10;G.points=(G.points||0)+pts;updHud();if(!o.tries)G.firstTry++;G.solved++;o.solved=true;$("dFb").textContent=pick(["Rätt!","Snyggt!","Klockrent!","Toppen!"])+` +${pts} poäng. ${o.f.name} släpper förbi dig.`;$("dFb").className="fb ok";
     window.Ljud&&Ljud.ok();for(let i=0;i<5;i++)G.sparks.push({x:F.x*TS+TS/2+rnd(-16,16),y:F.y*TS+rnd(0,12),l:1,e:"✨"});
+    if(o.t==='quest')$("dFb").textContent=`Rätt! Du hittade del ${o.index+1} med talet ${G.adventure.values[o.index]}. ${G.adventure.parts.length} av 3 delar klara.`;
     setTimeout(()=>{closeFoe();kick();},900);}
   else{o.tries++;window.Ljud&&Ljud.bad();$("dFb").textContent="Inte riktigt. Försök igen!";$("dFb").className="fb bad";
     if(o.tries>=2)$("dFb").textContent="Inte riktigt. Läs tipset och försök igen, eller ta en annan väg.";
     $("dTip").hidden=false;$("dTip").textContent="Tips: "+o.p.tip;F.input="";showAns();}
 }
-function closeFoe(){$("dlg").hidden=true;F=null;$("shopMenu").hidden=true;document.querySelector(".ansrow").hidden=false;$("dKeys").hidden=false;if("speechSynthesis" in window)speechSynthesis.cancel();}
+function closeFoe(){if($("dMech"))$("dMech").hidden=true;$("dlg").hidden=true;F=null;$("shopMenu").hidden=true;document.querySelector(".ansrow").hidden=false;$("dKeys").hidden=false;if("speechSynthesis" in window)speechSynthesis.cancel();}
 function dlgBack(){if(F&&(F.kind==="sell"||F.kind==="buy"))shopMeny();else closeFoe();} // Escape och knappen längst ner gör samma sak: ett steg bakåt
 $("dBack").onclick=dlgBack;
 $("dSpk").onclick=()=>{if(!F)return;if(F.kind==="foe")speak(`${F.o.f.name} säger: ${F.o.f.say} ${F.o.p.q}`);else speak(F.las||"");};
@@ -545,7 +530,7 @@ $("dSpk").onclick=()=>{if(!F)return;if(F.kind==="foe")speak(`${F.o.f.name} säge
 function shopPic(){const pc=$("dPic").getContext("2d");pc.clearRect(0,0,64,64);pc.fillStyle="#FFF4CC";pc.fillRect(0,0,64,64);pc.font="44px serif";pc.textAlign="center";pc.textBaseline="middle";pc.fillText("🏪",32,35);}
 const tagHTML=items=>`<div class="tags">${items.map(x=>`<span class="ptag" title="${x.t.one}">${spr(x.cell,40)}<b>${varde(x.t)} 🪙</b></span>`).join("")}</div>`;
 function openShop(){if(!$("dlg").hidden)return;$("toast").hidden=true;$("dlg").hidden=false;dlgOpen();shopMeny(true);window.Ljud&&Ljud.chime&&Ljud.chime();}
-function shopMeny(forst){
+function shopMeny(forst){if($("dMech"))$("dMech").hidden=true;
   F={kind:"meny",input:""};shopPic();$("dlg").classList.add("meny");
   ["ansrow","dKeys"].forEach(()=>{});document.querySelector(".ansrow").hidden=true;$("dKeys").hidden=true;$("dTip").hidden=true;$("dFb").textContent="";$("dFb").className="fb";
   $("dName").textContent="Affären";
@@ -578,7 +563,7 @@ function checkShop(){const ok=+F.input===F.p.a;
   if(F.kind==="sell"){G.coins+=F.sum;G.sold+=G.bag.length;G.bag=[];$("dFb").textContent=`Rätt! Du får ${F.sum} mynt.`;}
   else{const v=F.v;G.coins-=G.pris[v.k];G.owned[v.k]=true;$("dFb").textContent=`Rätt! Nu har du ${v.def}.`;
     if(v.k==="lykta"){G.R=5.2;reveal();}
-    if(v.k==="karta"){Object.entries(G.objs).forEach(([k,o])=>{if(o.t==="chest"||o.t==="exit"){const[x,y]=k.split(",").map(Number);G.seen[y][x]=true;}});}}
+    if(v.k==="karta"){Object.entries(G.objs).forEach(([k,o])=>{if(o.t==="chest"||o.t==="exit"||o.t==="quest"){const[x,y]=k.split(",").map(Number);G.seen[y][x]=true;}});}}
   $("dFb").className="fb ok";renderSlots();const w=$("wallet");w.classList.remove("bump");void w.offsetWidth;w.classList.add("bump");draw();
   const kind=F.kind,v=F.v;setTimeout(()=>{if($("dlg").hidden)return;shopMeny();
     if(kind==="buy"&&v.k==="nyckel"){$("dFb").textContent=`🗝️ Nu kan du låsa upp ${G.th.exit.name.toLowerCase()}!`;$("dFb").className="fb ok";}},1100);}
@@ -598,10 +583,10 @@ function win(){
   G.over=true;const half=G.found>=Math.ceil(G.chests/2),all=G.found===G.chests,st=1+(half?1:0)+(all?1:0);
   if(st>(data.stars[data.level]||0))data.stars[data.level]=st;
   Object.entries(G.loot).forEach(([k,v])=>data.chamber[k]=(data.chamber[k]||0)+v);data.runs++;const pts=G.points||0;data.points=(data.points||0)+pts;data.best=data.best||{};const rec=pts>(data.best[data.level]||0);if(rec)data.best[data.level]=pts;save();window.Ljud&&Ljud.ambient&&Ljud.ambient.stop();
-  $("wTitle").textContent=all?"Alla skatter och utgången!":"Du hittade utgången!";
+  $("wTitle").textContent=G.adventure.finished?({tradgarden:'Växthuset grönskar igen!',grottan:'Kristallgrottan lyser igen!',vintern:'Vinterfyren visar vägen hem!'})[data.theme]:all?"Alla skatter och utgången!":"Du hittade utgången!";
   $("wStars").innerHTML=[1,2,3].map(i=>i<=st?"★":'<span class="off">★</span>').join("");
-  $("wSub").textContent=`Du köpte nyckeln och kom ut${G.coins?` med ${G.coins} mynt över`:""}! ${pts} poäng${rec&&pts?" – nytt rekord!":data.best[data.level]?` (rekord ${data.best[data.level]}).`:"."} ${G.found} av ${G.chests} skattkistor. ${G.solved} ${G.solved===1?"hinder":"hinder"} löst${G.firstTry?`, ${G.firstTry} rätt direkt`:""}.`+(st<3?(half?" Hitta alla kistor för tre stjärnor.":" Hitta minst hälften av kistorna för två stjärnor."):"");
-  $("wLoot").innerHTML=lootHTML(G.loot)||"<span>Inga skatter den här gången.</span>";
+  $("wSub").textContent=`Du hjälpte till vid alla tre platser och öppnade ${G.adventure.final.toLowerCase()}. Du köpte nyckeln och kom ut${G.coins?` med ${G.coins} mynt över`:""}! ${pts} poäng${rec&&pts?" – nytt rekord!":data.best[data.level]?` (rekord ${data.best[data.level]}).`:"."} ${G.found} av ${G.chests} skattkistor. ${G.solved} ${G.solved===1?"hinder":"hinder"} löst${G.firstTry?`, ${G.firstTry} rätt direkt`:""}.`+(st<3?(half?" Hitta alla kistor för tre stjärnor.":" Hitta minst hälften av kistorna för två stjärnor."):"");
+  $("wLoot").innerHTML=`<div class="quest-finale"><div class="quest-seals">${G.adventure.symbols.map(x=>`<span>${x}</span>`).join('')}</div><b>Alla tre platser hjälpta · sista låset öppnat</b></div>`+(lootHTML(G.loot)||"<span>Inga skatter den här gången.</span>");
   $("game").hidden=true;$("win").hidden=false;if(window.MPS)MPS.visa("win");window.Ljud&&Ljud.fanfare&&Ljud.fanfare();confetti();
 }
 $("wAgain").onclick=newGame;$("wHome").onclick=openHome;
@@ -619,9 +604,7 @@ function confetti(){
 }
 
 /* ---------- Startsidan: tema, nivå och skattkammaren ---------- */
-function preview(cvEl,key){const th=THEMES[key],s=sheetOf(key),c=cvEl.getContext("2d");c.imageSmoothingEnabled=false;
-  const m=[[1,1,1],[0,2,3],[1,0,1]];for(let y=0;y<3;y++)for(let x=0;x<3;x++){c.fillStyle=th.bg;c.fillRect(x*32,y*32,32,32);tile(c,s,th.floor[0],x*32,y*32,32);
-    const v=m[y][x];if(v===1)tile(c,s,th.walls[(x+y)%th.walls.length],x*32,y*32,32);if(v===2)tile(c,th.foes[0].s,th.foes[0].i,x*32,y*32,32);if(v===3)tile(c,CHEST.s,CHEST.i,x*32,y*32,32);}}
+function preview(cvEl,key){const c=cvEl.getContext('2d'),winter=key==='vintern',cave=key==='grottan';c.clearRect(0,0,96,96);c.fillStyle=cave?'#506574':winter?'#dbe6e3':'#84a469';c.fillRect(0,0,96,96);c.strokeStyle=cave?'#91a0a0':winter?'#b1cbd4':'#bdba8a';c.lineWidth=20;c.lineCap='round';c.beginPath();c.moveTo(0,76);c.lineTo(45,76);c.lineTo(45,28);c.lineTo(96,28);c.stroke();[[15,20],[76,70]].forEach(([x,y])=>{c.fillStyle='#263c3b50';c.beginPath();c.ellipse(x+2,y+15,16,6,0,0,7);c.fill();c.fillStyle=cave?'#849aa4':winter?'#95b8b0':'#42764e';c.beginPath();c.ellipse(x,y,17,20,0,0,7);c.fill();c.fillStyle=cave?'#b3d3d6':winter?'#e3eee6':'#76a568';c.beginPath();c.ellipse(x-4,y-7,9,5,-.4,0,7);c.fill()});c.fillStyle='#f8df85';c.font='26px serif';c.textAlign='center';c.fillText('✦',71,40);}
 function openHome(){
   $("game").hidden=true;$("win").hidden=true;$("home").hidden=false;window.scrollTo(0,0);if(window.MPS)MPS.visa("home");
   $("themes").innerHTML=Object.entries(THEMES).map(([k,t])=>`<button class="theme" data-t="${k}" aria-pressed="${data.theme===k}"><canvas width="96" height="96" data-p="${k}"></canvas>${t.name}</button>`).join("");
@@ -636,6 +619,46 @@ function openHome(){
 }
 $("start").onclick=()=>{ready.then(newGame);};
 ready.then(openHome);openHome();
+/* Ett kort äventyr per labyrint, med världsbundna problem och en final. */
+const ADVENTURE={tradgarden:{title:'Väck den sovande trädgården',intro:'Tre platser behöver din hjälp. Hitta solfröna och öppna växthuset!',places:['Bäcken','Den gamla kvarnen','Växthuset'],symbols:['≈','⚙','❧'],colors:['#285b48','#72a96b','#d8c294'],final:'Växthusets lås'},grottan:{title:'Tänd kristallgrottan',intro:'Hitta tre ljuskristaller och väck den slocknade kristallporten.',places:['Underjordiska bron','Gruvvagnen','Kristallkällan'],symbols:['≈','◆','✦'],colors:['#24354e','#51647a','#a2abb1'],final:'Kristallportens lås'},vintern:{title:'Rädda vinterlyktan',intro:'Samla tre stjärnor och tänd fyren som visar vägen hem.',places:['Isbron','Slädstationen','Vinterfyren'],symbols:['≈','❄','✦'],colors:['#45627b','#91b6c3','#e0e8e4'],final:'Fyrens lås'}};
+function questSetup(free,used,put,d){const story=ADVENTURE[data.theme],candidates=free.filter(([x,y])=>!used.has(x+','+y)).sort((a,b)=>d[a[1]][a[0]]-d[b[1]][b[0]]);G.adventure={...story,parts:[],values:[],finished:false,sites:[]};for(let i=0;i<3;i++){const available=candidates.filter(p=>!used.has(p.join(',')));const at=available[Math.min(available.length-1,Math.floor(available.length*(i+.35)/3))];if(!at)throw Error('Äventyret saknar en plats');const value=rnd(1,data.level===1?6:data.level===2?30:300);G.adventure.values.push(value);G.adventure.sites.push(at);put(at[0],at[1],{t:'quest',index:i,f:{name:story.places[i],say:i===0?'Bygg övergången så att vi kommer vidare.':i===1?'Hjälp mig ordna förrådet.':'Lös mekanismen och hitta den sista delen.'},p:questProblem(i)});}questHud();}
+function questProblem(i){const lv=data.level,a=rnd(2,lv===1?9:lv===2?30:90),b=rnd(2,lv===1?9:lv===2?30:90);if(i===0)return {q:`Bron behöver ${a+b} meter plankor. Du har ${a} meter. Hur många meter fattas?`,a:b,unit:'m',tip:`Hela bron är ${a+b} meter. Ta bort de ${a} meter du har.`,sol:`${a+b} − ${a} = ${b}`};if(i===1){const groups=lv===1?2:rnd(3,5),each=rnd(2,lv===1?5:lv===2?9:20);return {q:`Här finns ${groups} lådor med ${each} delar i varje. Hur många delar finns tillsammans?`,a:groups*each,tip:`Lägg ihop ${Array(groups).fill(each).join(' + ')}.`,sol:`${groups} · ${each} = ${groups*each}`}}return {q:`Mekanismen ska ha ${a+b} vikter. ${a} är redan på plats. Hur många ska du lägga till?`,a:b,tip:`Vad fattas från ${a} upp till ${a+b}?`,sol:`${a+b} − ${a} = ${b}`};}
+function questHud(){if(!G?.adventure)return;const a=G.adventure;$('questProgress').textContent=a.parts.length===3?'Tre delar funna · gå till finalen':`${a.parts.length} av 3 delar · ${a.title}`;$('questProgress').setAttribute('aria-label',`Visa uppdrag: ${a.parts.length} av tre delar`);}
+function questJournal(){if(!G?.adventure)return;if($('dMech'))$('dMech').hidden=true;const a=G.adventure;$('dlg').hidden=false;dlgOpen();F={kind:'meny'};$('dlg').classList.add('meny');$('dName').textContent=a.title;$('dSay').textContent=a.intro;$('dQ').textContent='Besök platserna i valfri ordning. Sälj vanliga skatter för att köpa utgångens nyckel.';document.querySelector('.ansrow').hidden=true;$('dKeys').hidden=true;$('dTip').hidden=true;$('dFb').textContent='';$('shopMenu').hidden=false;$('shopMenu').innerHTML=`<div class="quest-journal">${a.places.map((n,i)=>`<div><span>${a.parts.includes(i)?'✓':i+1}</span><b>${n}</b><small>${a.parts.includes(i)?'Del funnen · talet '+a.values[i]:'Utforska och hjälp till här'}</small></div>`).join('')}</div><p>Vid vägskälen kan du välja en kortare väg genom ett hinder eller leta efter en omväg och fler skatter.</p><button class="quest-route" id="questRoute">🧭 Mot nästa delmål</button><button class="quest-route explore" id="questExplore">💎 Utforska mot en skatt i stället</button>`;$('questRoute').onclick=()=>questDirection();$('questExplore').onclick=()=>questDirection(true);$('dBack').textContent='Tillbaka till äventyret';}
+function questDirection(explore=false){const a=G.adventure,i=[0,1,2].find(i=>!a.parts.includes(i)),dest=(i===undefined?Object.entries(G.objs).find(([,o])=>o.t==='exit')[0].split(',').map(Number):a.sites[i]).slice();const route=bfs(G.g,G.px,G.py);if(explore){const chests=Object.entries(G.objs).filter(([,o])=>o.t==='chest').map(([k])=>k.split(',').map(Number)).sort((a,b)=>route.d[a[1]][a[0]]-route.d[b[1]][b[0]]);if(!chests.length){closeFoe();hint('Alla skatter är hittade. Följ delmålen till finalen.');return}dest[0]=chests[0][0];dest[1]=chests[0][1];}let q=dest.slice();while(route.prev[q.join(',')]&&route.prev[q.join(',')].join(',')!==[G.px,G.py].join(','))q=route.prev[q.join(',')];const dx=q[0]-G.px,dy=q[1]-G.py,dir=dx>0?'höger →':dx<0?'vänster ←':dy>0?'nedåt ↓':'uppåt ↑';closeFoe();hint(`Börja ${dir} mot ${explore?'en skatt':i===undefined?'finalen':a.places[i]} (${route.d[dest[1]][dest[0]]} steg längs vägen). Hinder kan finnas längs vägen.`,5000)}
+function openFinal(o,x,y){const a=G.adventure;if(a.parts.length<3){hint(`Du har ${a.parts.length} av 3 delar. Besök de tre platserna först!`,4000);questJournal();return}const values=a.values;o.t='final';o.f={name:a.final,say:'Du har samlat alla tre delarna. Använd deras tal för att öppna porten!'};o.p={q:`Dina delar har talen ${values.join(', ')}. Vad blir summan som öppnar låset?`,a:values.reduce((a,b)=>a+b,0),tip:`Lägg ihop ${values.join(' + ')}. Du får titta på delarna.`,sol:values.join(' + ')+' = '+values.reduce((a,b)=>a+b,0)};openFoe(o,x,y);}
+function contextualObstacle(o){const n=rnd(3,data.level===1?9:data.level===2?40:150),m=rnd(2,data.level===1?8:data.level===2?30:120);const key=Object.keys(G.objs).find(k=>G.objs[k]===o),pos=key.split(',').map(Number),blocked=G.g.map(r=>r.slice());blocked[pos[1]][pos[0]]=1;const exit=Object.entries(G.objs).find(([,v])=>v.t==='exit')[0].split(',').map(Number);o.bypass=bfs(blocked,1,1).d[exit[1]][exit[0]]>=0;o.world=true;o.f={...o.f,name:data.theme==='tradgarden'?'Den fallna grenen':data.theme==='grottan'?'Stenraset':'Snödrivan',say:o.bypass?'Öppna den korta vägen, eller gå tillbaka och undersök en omväg.':'Röj passagen så att du kan fortsätta äventyret.'};o.p={q:`Det behövs ${n+m} delar för att röja vägen. ${n} är klara. Hur många återstår?`,a:m,tip:`${n+m} − ${n}.`,sol:`${n+m} − ${n} = ${m}`};}
+/* Handritad mark, djup och dimma. Rutnätet finns kvar för enkel styrning. */
+function worldCamera(){return {x:Math.max(-TS*.35,Math.min(G.n*TS-W+TS*.35,G.ax*TS+TS/2-W/2)),y:Math.max(-TS*.35,Math.min(G.n*TS-H+TS*.35,G.ay*TS+TS/2-H/2))}}
+function drawWorld(){if(!G)return;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.imageSmoothingEnabled=true;const winter=data.theme==='vintern',cave=data.theme==='grottan',{x:camX,y:camY}=worldCamera();G.camX=camX;G.camY=camY;const px=G.ax*TS+TS/2-camX,py=G.ay*TS+TS/2-camY;ctx.fillStyle=cave?'#152638':winter?'#627f98':'#344f40';ctx.fillRect(0,0,W,H);
+ const x0=Math.max(0,Math.floor(camX/TS)-1),y0=Math.max(0,Math.floor(camY/TS)-2),x1=Math.min(G.n-1,Math.ceil((camX+W)/TS)+1),y1=Math.min(G.n-1,Math.ceil((camY+H)/TS)+1);
+ for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){const dx=x*TS-camX,dy=y*TS-camY,lk=G.look[y][x],dd=Math.hypot(x-G.ax,y-G.ay),vis=1;ctx.globalAlpha=vis;ctx.fillStyle=cave?(lk>.5?'#526474':'#4b5e6c'):winter?'#dbe6e3':'#84a469';ctx.fillRect(dx-.5,dy-.5,TS+1,TS+1);
+  if(G.g[y][x]===0){ctx.strokeStyle=cave?'#77878b':winter?'#c1d5d8':'#b3b17c';ctx.lineWidth=TS*.52;ctx.lineCap='round';for(const [vx,vy]of [[0,1],[1,0],[-1,0],[0,-1]])if(G.g[y+vy]?.[x+vx]===0){ctx.beginPath();ctx.moveTo(dx+TS*.5,dy+TS*.5);ctx.lineTo(dx+TS*(.5+vx*.52),dy+TS*(.5+vy*.52));ctx.stroke()}ctx.fillStyle=cave?'#82929455':winter?'#ffffff60':'#d3d2a655';for(let j=0;j<3;j++){ctx.beginPath();ctx.ellipse(dx+TS*(.15+(lk*3+j*.27)% .72),dy+TS*(.2+j*.25),TS*.07,TS*.025,lk,0,7);ctx.fill()}if(lk>.82&&!cave&&!winter){ctx.fillStyle='#f4dc8a';ctx.beginPath();ctx.arc(dx+TS*.76,dy+TS*.34,TS*.025,0,7);ctx.fill()}}
+  if(G.g[y][x]===1){ctx.fillStyle='#15292f35';ctx.beginPath();ctx.ellipse(dx+TS*.56,dy+TS*.81,TS*.44,TS*.16,0,0,7);ctx.fill();if(cave){ctx.fillStyle='#344959';ctx.beginPath();ctx.moveTo(dx+TS*.05,dy+TS*.82);ctx.lineTo(dx+TS*.16,dy+TS*.27);ctx.lineTo(dx+TS*.47,dy+TS*.08);ctx.lineTo(dx+TS*.84,dy+TS*.22);ctx.lineTo(dx+TS*.95,dy+TS*.78);ctx.closePath();ctx.fill();ctx.fillStyle='#718b98';ctx.beginPath();ctx.moveTo(dx+TS*.16,dy+TS*.27);ctx.lineTo(dx+TS*.47,dy+TS*.08);ctx.lineTo(dx+TS*.58,dy+TS*.57);ctx.closePath();ctx.fill();if(lk>.9){ctx.fillStyle='#95cfd5';ctx.beginPath();ctx.moveTo(dx+TS*.36,dy+TS*.5);ctx.lineTo(dx+TS*.44,dy+TS*.18);ctx.lineTo(dx+TS*.55,dy+TS*.5);ctx.fill()}}
+  else{ctx.fillStyle='#70523d';ctx.fillRect(dx+TS*.44,dy+TS*.45,TS*.13,TS*.4);const shades=winter?['#628b8b','#82aaa0','#d8e5db']:[`hsl(${126+lk*12} 28% ${29+lk*6}%)`,`hsl(${123+lk*12} 28% ${37+lk*6}%)`,`hsl(${116+lk*12} 27% ${46+lk*6}%)`];[[.5+(lk-.5)*.08,.33+lk*.08,.35+lk*.06],[.29,.5+lk*.06,.25+lk*.04],[.71,.48+lk*.04,.24+lk*.04]].forEach(([cx,cy,r],j)=>{ctx.fillStyle=shades[j];ctx.beginPath();ctx.ellipse(dx+TS*cx,dy+TS*cy,TS*r,TS*r*.85,0,0,7);ctx.fill()});ctx.fillStyle=winter?'#edf3e8':'#a0c078';ctx.globalAlpha=vis*.5;ctx.beginPath();ctx.ellipse(dx+TS*.43,dy+TS*.25,TS*.19,TS*.08,-.3,0,7);ctx.fill();ctx.globalAlpha=vis}}
+ }
+ for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){if(!G.seen[y][x])continue;const dx=x*TS-camX,dy=y*TS-camY,o=G.objs[x+','+y];if(!o)continue;ctx.globalAlpha=Math.hypot(x-G.ax,y-G.ay)>G.R?.42:1;
+  if(o.t==='quest'){drawLandmark(dx,dy,o);continue}if(o.t==='shop'){drawShop(dx,dy);continue}if(o.t==='exit'||o.t==='final'){ctx.fillStyle='#203c40';ctx.beginPath();ctx.roundRect(dx+TS*.15,dy+TS*.1,TS*.7,TS*.8,[TS*.3,TS*.3,5,5]);ctx.fill();ctx.strokeStyle='#d0bd7d';ctx.lineWidth=TS*.05;ctx.stroke();for(let i=0;i<3;i++){ctx.fillStyle=G.adventure.parts.includes(i)?'#f8df84':'#577572';ctx.beginPath();ctx.arc(dx+TS*(.32+i*.18),dy+TS*.26,TS*.05,0,7);ctx.fill()}ctx.font=`${TS*.3}px serif`;ctx.textAlign='center';ctx.fillText(G.owned.nyckel?'✦':'🔒',dx+TS*.5,dy+TS*.71);continue}
+  if(o.t==='chest'){ctx.fillStyle='#412f2345';ctx.beginPath();ctx.ellipse(dx+TS*.52,dy+TS*.8,TS*.32,TS*.1,0,0,7);ctx.fill();ctx.fillStyle='#8b573a';ctx.beginPath();ctx.roundRect(dx+TS*.2,dy+TS*.28,TS*.6,TS*.48,TS*.07);ctx.fill();ctx.fillStyle='#bb8050';ctx.beginPath();ctx.roundRect(dx+TS*.2,dy+TS*.22,TS*.6,TS*.25,[TS*.12,TS*.12,0,0]);ctx.fill();ctx.fillStyle='#e8c375';ctx.fillRect(dx+TS*.28,dy+TS*.25,TS*.06,TS*.5);ctx.fillRect(dx+TS*.67,dy+TS*.25,TS*.06,TS*.5);ctx.fillRect(dx+TS*.44,dy+TS*.43,TS*.13,TS*.13);}else if(o.t==='foe'&&!o.solved){if(o.world){ctx.fillStyle=cave?'#8c9b9d':winter?'#e4eeeb':'#986d48';ctx.save();ctx.translate(dx+TS*.5,dy+TS*.55);ctx.rotate(-.3);ctx.beginPath();ctx.roundRect(-TS*.42,-TS*.13,TS*.84,TS*.26,TS*.12);ctx.fill();ctx.strokeStyle=cave?'#546b77':winter?'#a9cbd1':'#c19b69';ctx.lineWidth=TS*.04;ctx.stroke();ctx.restore();}else tile(ctx,o.f.s||G.sheet,o.f.i??G.th.foes[0].i,dx+TS*.1,dy+TS*.1,TS*.8);ctx.fillStyle='#ffedb4';ctx.font=`bold ${TS*.25}px sans-serif`;ctx.textAlign='center';ctx.fillText('?',dx+TS*.8,dy+TS*.2)}
+ }
+ ctx.globalAlpha=1;const fog=ctx.createRadialGradient(px,py,TS*1.7,px,py,TS*(G.R+1.5));fog.addColorStop(0,'#122a3100');fog.addColorStop(.5,'#122a3110');fog.addColorStop(.82,cave?'#102331b0':'#193934a0');fog.addColorStop(1,cave?'#102331':'#193934');ctx.fillStyle=fog;ctx.fillRect(0,0,W,H);
+ if(G.owned.karta){ctx.font=`${TS*.24}px serif`;ctx.textAlign='center';Object.entries(G.objs).forEach(([key,o])=>{if(!['chest','quest','exit','final'].includes(o.t))return;const [x,y]=key.split(',').map(Number);if(Math.hypot(x-G.ax,y-G.ay)<=G.R)return;const sx=x*TS+TS/2-camX,sy=y*TS+TS/2-camY;if(sx>0&&sx<W&&sy>0&&sy<H){ctx.fillStyle='#ffe7a4';ctx.fillText(o.t==='chest'?'◆':o.t==='quest'?'✦':'⚑',sx,sy)}})}
+ if(petImg.complete){ctx.fillStyle='#162f3445';ctx.beginPath();ctx.ellipse(px,py+TS*.29,TS*.3,TS*.11,0,0,7);ctx.fill();const pw=TS*.82,ph=pw*280/240;ctx.drawImage(petImg,px-pw/2,py+TS*.36-ph,pw,ph)}pilTillAffaren(camX,camY);G.sparks.forEach(p=>{ctx.globalAlpha=Math.max(0,p.l);ctx.font=`${TS*.4}px serif`;ctx.textAlign='center';ctx.fillText(p.e,p.x-camX,p.y-camY)});ctx.globalAlpha=1;
+}
+function drawLandmark(dx,dy,o){const i=o.index,done=G.adventure.parts.includes(i),theme=data.theme;ctx.save();ctx.translate(dx,dy);const T=TS;ctx.fillStyle='#22393840';ctx.beginPath();ctx.ellipse(T*.5,T*.8,T*.45,T*.14,0,0,7);ctx.fill();
+ if(i===0){ctx.fillStyle=theme==='vintern'?'#91c8d2':'#65aebd';ctx.beginPath();ctx.roundRect(-T*.04,T*.2,T*1.08,T*.56,T*.1);ctx.fill();ctx.strokeStyle=theme==='grottan'?'#aeb8b3':'#d8bc8d';ctx.lineWidth=T*.065;for(let j=0;j<(done?5:2);j++){ctx.beginPath();ctx.moveTo(T*(.14+j*.18),T*.14);ctx.lineTo(T*(.14+j*.18),T*.84);ctx.stroke()}}
+ else if(i===1&&theme==='grottan'){ctx.strokeStyle='#475259';ctx.lineWidth=T*.035;[.7,.87].forEach(y=>{ctx.beginPath();ctx.moveTo(0,T*y);ctx.lineTo(T,T*y);ctx.stroke()});ctx.fillStyle='#b5a17e';ctx.beginPath();ctx.moveTo(T*.12,T*.25);ctx.lineTo(T*.88,T*.25);ctx.lineTo(T*.77,T*.65);ctx.lineTo(T*.23,T*.65);ctx.closePath();ctx.fill();ctx.fillStyle='#324957';[.28,.72].forEach(x=>{ctx.beginPath();ctx.arc(T*x,T*.71,T*.12,0,7);ctx.fill()});ctx.fillStyle='#9bdbdb';ctx.beginPath();ctx.moveTo(T*.32,T*.25);ctx.lineTo(T*.43,T*.02);ctx.lineTo(T*.52,T*.27);ctx.fill()}
+ else if(i===1&&theme==='vintern'){ctx.strokeStyle='#795940';ctx.lineWidth=T*.05;ctx.beginPath();ctx.moveTo(T*.12,T*.76);ctx.quadraticCurveTo(T*.84,T*.94,T*.95,T*.58);ctx.stroke();ctx.fillStyle='#af7752';ctx.beginPath();ctx.roundRect(T*.14,T*.36,T*.68,T*.3,T*.06);ctx.fill();ctx.fillStyle='#f3dcaa';ctx.fillRect(T*.27,T*.2,T*.3,T*.2)}
+ else if(i===1){ctx.fillStyle='#d6bf8d';ctx.beginPath();ctx.moveTo(T*.2,T*.84);ctx.lineTo(T*.3,T*.2);ctx.lineTo(T*.7,T*.2);ctx.lineTo(T*.8,T*.84);ctx.fill();ctx.fillStyle='#7d5b43';ctx.beginPath();ctx.moveTo(T*.22,T*.25);ctx.lineTo(T*.5,0);ctx.lineTo(T*.78,T*.25);ctx.fill();ctx.strokeStyle='#fff0c8';ctx.lineWidth=T*.06;[[.17,.25,.83,.7],[.2,.72,.8,.18]].forEach(([a,b,c,d])=>{ctx.beginPath();ctx.moveTo(T*a,T*b);ctx.lineTo(T*c,T*d);ctx.stroke()})}
+ else if(theme==='vintern'){ctx.fillStyle='#edf0d9';ctx.beginPath();ctx.moveTo(T*.3,T*.86);ctx.lineTo(T*.37,T*.17);ctx.lineTo(T*.63,T*.17);ctx.lineTo(T*.7,T*.86);ctx.fill();ctx.fillStyle=done?'#ffe58a':'#89a3a8';ctx.fillRect(T*.33,T*.13,T*.34,T*.22);ctx.fillStyle='#517477';ctx.fillRect(T*.3,T*.09,T*.4,T*.06);ctx.fillRect(T*.34,T*.6,T*.32,T*.08)}
+ else if(theme==='grottan'){ctx.fillStyle=done?'#c9ffff':'#75afbb';[[.23,.5],[.5,.9],[.75,.65]].forEach(([x,h])=>{ctx.beginPath();ctx.moveTo(T*(x-.14),T*.83);ctx.lineTo(T*x,T*(.84-h*.75));ctx.lineTo(T*(x+.13),T*.83);ctx.fill()})}
+ else{ctx.fillStyle='#a9cbb1';ctx.beginPath();ctx.moveTo(T*.09,T*.78);ctx.lineTo(T*.09,T*.3);ctx.lineTo(T*.5,T*.03);ctx.lineTo(T*.91,T*.3);ctx.lineTo(T*.91,T*.78);ctx.closePath();ctx.fill();ctx.strokeStyle='#e2e8c8';ctx.lineWidth=T*.03;[.3,.5,.7].forEach(x=>{ctx.beginPath();ctx.moveTo(T*x,T*.23);ctx.lineTo(T*x,T*.78);ctx.stroke()});ctx.beginPath();ctx.moveTo(T*.1,T*.52);ctx.lineTo(T*.9,T*.52);ctx.stroke();if(done){ctx.fillStyle='#427b48';[.3,.5,.7].forEach(x=>{ctx.beginPath();ctx.ellipse(T*x,T*.7,T*.1,T*.13,.3,0,7);ctx.fill()})}}
+ ctx.fillStyle=done?'#2d674a':'#fff0af';ctx.beginPath();ctx.arc(T*.5,T*.48,T*.15,0,7);ctx.fill();ctx.fillStyle=done?'white':'#745423';ctx.font=`bold ${T*.21}px serif`;ctx.textAlign='center';ctx.fillText(done?'✓':G.adventure.symbols[i],T*.5,T*.55);ctx.font=`800 ${Math.max(10,T*.105)}px sans-serif`;ctx.fillStyle='#fffcdf';ctx.fillText(G.adventure.places[i],T*.5,T*.97);ctx.restore();}
+
+$('questProgress').onclick=questJournal;
+function mechanism(o){let el=$('dMech');if(!el){el=document.createElement('div');el.id='dMech';el.className='mechanism';document.querySelector('.ansrow').before(el)}el.hidden=!['quest','final'].includes(o.t);if(el.hidden)return;
+  if(o.t==='final'){el.innerHTML=`<div class="seal-code">${G.adventure.values.map((n,i)=>`<span><small>DEL ${i+1}</small><b>${n}</b></span>`).join('<i>+</i>')}</div>`;return}
+  const unit=o.index===0?'m':o.index===2?'vikter':'delar',answer=o.p.a,options=shuffle([...new Set([Math.max(1,answer-1),answer,answer+1,answer+2])]).slice(0,4);el.innerHTML=`<div class="mechanism-picture" aria-hidden="true">${o.index===0?'🌊 ━━ ░░ 🌊':o.index===1?'▣ ▣ ▣':'⚖️ ▣ ＋ ░'}</div><p>${o.index===0?'Välj plankorna som fattas.':o.index===1?'Välj hur många delar som finns i lådorna.':'Välj vikterna som fattas.'}</p><div class="mechanism-options">${options.map(n=>`<button type="button" data-part="${n}">${n} ${unit}</button>`).join('')}</div>`;el.querySelectorAll('[data-part]').forEach(b=>b.onclick=()=>{if(!F||F.done)return;F.input=b.dataset.part;showAns();check()});}
 </script>
 </body>
 </html>
