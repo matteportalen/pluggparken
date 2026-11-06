@@ -420,9 +420,9 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
   </div>
   <section id="melodi-vy" role="tabpanel" aria-labelledby="vyMel" hidden><div class="melod" id="melod"></div>
   <div class="ackpan" id="ackpan"></div></section>
-  <div class="padwrap" id="padwrap"><div class="padlab"><b>PADS</b><span>Trummorna längst upp (tangenterna A S D F G H J K). Under dem ljud och röster att spela och lägga i takten.</span></div>
+  <div class="padwrap" id="padwrap"><div class="padlab"><b>TRUMPADS</b><span>Spela trummorna med A S D F G H J K. Samplepaketen finns i syntmaskinen.</span></div>
     <div class="pads" id="pads" aria-label="Trumpads: spela själv"></div>
-    <div class="padpan" id="padpan"></div></div>
+    </div>
 <div class="loopmaskin" id="loopmaskin" hidden role="tabpanel" aria-labelledby="vyLoop">
   <div class="topp" style="margin-bottom:12px"><div class="logga"><b>LOOPSTATION <i>LS-4</i></b><small>PLUGGPARKEN · 4 SPÅR · MIKROFON</small></div><div style="flex:1"></div><button type="button" class="micb" id="bPaus" aria-pressed="false" title="Pausa och fortsätt (loopar, trummor och melodi)">⏸ PAUSA</button><button type="button" class="micb" id="bMic" aria-pressed="false">🎤 MIKROFON</button><select class="sel" id="selMic" hidden aria-label="Välj mikrofon"></select><button type="button" class="micb" id="bLjudOm" title="Tryck om ljudet har blivit tyst eller låter dåligt efter att du bytt mikrofon eller hörlurar">🔄 ÅTERSTÄLL LJUD</button><button type="button" class="micb on" id="bFix" aria-pressed="true" title="Slår på mikrofonens automatiska volym och brusfilter. Bra för röst. Stäng av för instrument.">✨ FÖRBÄTTRA RÖST</button><span class="meter" aria-hidden="true"><i id="meterI"></i></span><div class="grupp" style="flex-direction:row;gap:8px"><div class="knob liten" id="kJust" role="slider" tabindex="0" aria-label="Justera inspelningens timing"><div class="kap"></div></div><span class="l" id="justT">Timing 0 ms</span></div></div>
   <div class="lstat" id="lstatus" aria-live="polite"></div>
@@ -440,7 +440,7 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
 </div>
 <details class="info">
   <summary>Om ljuden, källor och licens</summary>
-  <p>Trummorna skapas direkt i din webbläsare (tryck på ◀ ▶ vid ett spår för att byta ljud). De gamla klippen finns i <b>SAMPLE-PADS</b> (<b>GAMLA 1–3</b>): korta klipp ur riktigt gamla inspelningar (ungefär 1900–1950), ur <a href="https://citizen-dj.labs.loc.gov/" target="_blank" rel="noopener">Citizen DJ</a> från Library of Congress i USA. Klippen är utvalda automatiskt, så några kan låta överraskande.</p>
+  <p>Trummorna skapas direkt i din webbläsare (tryck på ◀ ▶ vid ett spår för att byta ljud). De gamla klippen finns i syntmaskinens <b>Samplepaket</b> (<b>GAMLA 1–3</b>): korta klipp ur riktigt gamla inspelningar (ungefär 1900–1950), ur <a href="https://citizen-dj.labs.loc.gov/" target="_blank" rel="noopener">Citizen DJ</a> från Library of Congress i USA. Klippen är utvalda automatiskt, så några kan låta överraskande.</p>
   <p>Biblioteket har markerat inspelningarna som fria att använda och remixa, även i andra sammanhang. Källor:</p>
   <ul>
     <li>The National Jukebox (folkmusik, jazz, blues, populärmusik): allmän egendom.</li>
@@ -702,24 +702,7 @@ const padRevM=new Map();
 function padBuf(c,rev){if(!rev)return c.buf;let r=padRevM.get(c);if(!r){const n=c.buf.length;r=ctx.createBuffer(1,n,c.buf.sampleRate);const a=c.buf.getChannelData(0),d=r.getChannelData(0);for(let i=0;i<n;i++)d[i]=a[n-1-i];padRevM.set(c,r)}return r}
 function padSpela(id,t,p,rev){const c=padKlipp(id);if(!c||!ctx||!master)return;const s=ctx.createBufferSource(),g=ctx.createGain();s.buffer=padBuf(c,rev);s.playbackRate.value=Math.pow(2,(p||0)/12);g.gain.value=Math.pow(S.pvol/100,1.4)*1.1;s.connect(g);g.connect(padIn||master);s.start(t)}
 const padId=pi=>padBank===9?PFAV[pi]:padBank*16+pi;
-function padBygg(){const h=$("#padpan");
-  h.innerHTML=`<div class="padhead"><b>SAMPLE-PADS</b><div class="pbank" id="pbank" role="group" aria-label="Samplingsbank">${PORD.map(i=>`<button type="button" data-pb="${i}">${PBANK[i][1]}</button>`).join("")}</div></div>
-  <div class="padctl"><div class="grp"><b>KLIPP</b><span class="fx"><div class="knob liten" id="kPpit" role="slider" tabindex="0" aria-label="Tonhöjd på klippen"><div class="kap"></div></div><small id="ppitT">TONHÖJD 0</small></span><span class="fx"><button type="button" id="bPrev" aria-pressed="false">⇄ BAKLÄNGES</button></span><span class="fx"><div class="knob liten" id="kPvol" role="slider" tabindex="0" aria-label="Volym sample-pads"><div class="kap"></div></div><small>VOLYM</small></span></div><div class="grp"><b>EFFEKTER</b><span class="fx"><div class="knob liten" id="kPe" role="slider" tabindex="0" aria-label="Echo på sample-pads"><div class="kap"></div></div><small>ECHO</small></span><span class="fx"><div class="knob liten" id="kPh" role="slider" tabindex="0" aria-label="Hall på sample-pads"><div class="kap"></div></div><small>HALL</small></span><span class="fx"><div class="knob liten" id="kPf" role="slider" tabindex="0" aria-label="Flanger på sample-pads"><div class="kap"></div></div><small>FLANGER</small></span><span class="fx"><div class="knob liten" id="kPfi" role="slider" tabindex="0" aria-label="Filter på sample-pads"><div class="kap"></div></div><small>FILTER</small></span></div><div class="grp"><b>FAVORITER</b><span class="fx"><button type="button" id="bPstj" aria-pressed="false" title="Tryck på ett klipp för att lägga det bland dina favoriter (⭐ MINA)">⭐ MARKERA</button></span></div><small id="pkalla" style="color:var(--dim);flex:1;min-width:160px;align-self:center">Tryck på en pad. Kom ihåg: REC (R) spelar in dem i takten.</small></div>
-  <div class="egnarad" id="egnarad" hidden><button type="button" class="lilla" id="bEgRec">🎤 SPELA IN</button><button type="button" class="lilla" id="bEgFil">📂 LADDA FIL</button>${[1,2,3,4].map(i=>`<button type="button" class="lilla" data-eg="${i-1}">L${i} → PAD</button>`).join("")}<button type="button" class="lilla" id="bEgTom">TÖM</button><input type="file" id="egFil" accept="audio/*" hidden><small style="color:var(--dim);flex:1;min-width:200px">Tryck på en tom pad för att välja plats. Dina egna ljud sparas inte: spara låten som mp3 när du är klar.</small></div>
-  <div class="spgrid" id="spgrid">${Array.from({length:16},(_,i)=>`<button type="button" class="sp" data-sp="${i}"><kbd>${SPK[i].toUpperCase()}</kbd><span></span></button>`).join("")}</div>
-  <div class="smpl"><span>SAMPLE-SPÅR</span><button type="button" class="lilla" id="bSmpM" aria-pressed="false" title="Tysta sample-spåret i takten (padsen du spelar själv hörs ändå)">🔇 TYSTA SPÅRET</button><button type="button" class="lilla" id="bSmpTom">TÖM SPÅR</button><small style="color:var(--dim)">Tryck på en pad och sedan på en ruta för att lägga klippet där, eller spela in med REC.</small></div>
-  <div class="smprad" id="smprad">${Array.from({length:16},(_,i)=>`<button type="button" data-sk="${i}" aria-label="Sample-spår steg ${i+1}"></button>`).join("")}</div>`;
-  knob($("#kPpit"),{min:-12,max:12,reset:0,val:()=>padPit,set:v=>{padPit=v;$("#ppitT").textContent="TONHÖJD "+(v>0?"+":"")+v}});
-  knob($("#kPvol"),{min:0,max:100,reset:80,val:()=>S.pvol,set:v=>{S.pvol=v}});
-  [["#kPe","echo",0],["#kPh","hall",0],["#kPf","flang",0],["#kPfi","filt",-100]].forEach(([id,k,mn])=>knob($(id),{min:mn,max:100,reset:0,val:()=>PFX.fx[k],set:v=>{PFX.fx[k]=v;padFxn&&padFxn.set()}}));
-  $("#egFil").addEventListener("change",e=>{egnaFil(e.target.files[0]);e.target.value=""})}
-function padRita(){PPSynt.render();const h=$("#padpan");if(!h||!h.firstChild)return;{const mb=$("#bSmpM");if(mb){mb.classList.toggle("on",!!S.smpMute);mb.setAttribute("aria-pressed",!!S.smpMute);mb.textContent=S.smpMute?"🔇 SPÅRET TYST":"🔊 SPÅRET PÅ"}}h.hidden=!!S.songOn;
-  h.querySelectorAll("#pbank button").forEach(b=>b.classList.toggle("on",+b.dataset.pb===padBank));$("#egnarad").hidden=padBank!==8;
-  const col=PBANK[padBank][2];h.style.setProperty("--sk",col);
-  h.querySelectorAll(".sp").forEach((b,pi)=>{const id=padId(pi),c=id==null?null:padKlipp(id);b.querySelector("span").textContent=c?c.n:(PADS?"":"…");b.classList.toggle("tom",!c);b.classList.toggle("vald",id!=null&&id===padVald);b.style.setProperty("--sk",id==null?col:PBANK[id>>4][2]);
-    let st=b.querySelector("i");if(c&&PFAV.includes(id)){if(!st){st=document.createElement("i");st.textContent="⭐";b.appendChild(st)}}else if(st)st.remove()});
-  $("#bPrev").setAttribute("aria-pressed",padRevV);$("#bPstj").setAttribute("aria-pressed",padStj);
-  const sr=$("#smprad");sr.querySelectorAll("button").forEach((b,k)=>{const x=S.smp[k],c=x&&padKlipp(x.i);b.classList.toggle("p",!!x);if(x){b.style.setProperty("--sk",PBANK[x.i>>4][2]);b.textContent=c?c.n.replace(/ /g,"").slice(0,7):"♪";b.title=c?c.n+(x.p?" ("+(x.p>0?"+":"")+x.p+")":"")+(x.r?" baklänges":""):""}else{b.textContent="";b.title=""}})}
+function padRita(){PPSynt.render()}
 function smpMark(k){document.querySelectorAll("#smprad button.nu").forEach(b=>b.classList.remove("nu"));if(k>=0){const b=document.querySelector('#smprad button[data-sk="'+k+'"]');if(b)b.classList.add("nu")}}
 function stegNu(at){if(!ctx||!spelar||!hist.length)return -1;const nu=(Number.isFinite(at)?at:ctx.currentTime)-PADOFF/1000;if(recFran&&nu<recFran-.03)return -1;let b=hist[0];for(const h of hist)if(Math.abs(h[0]-nu)<Math.abs(b[0]-nu))b=h;return b[1]}
 function padSlag(pi){startaLjud();if(!ctx)return;if(!PADS){padLadda();return}const id=padId(pi),c=id==null?null:padKlipp(id);if(!c){if(padBank===8&&id!=null){padVald=id;padRita()}return}
@@ -978,7 +961,7 @@ function init(){
   mixUpd.push(knob($("#kMsy"),{min:0,max:100,reset:80,val:()=>S.synth.vol,set:v=>{S.synth.vol=v;mixSatt()}}));
   mixUpd.push(knob($("#kMpd"),{min:0,max:100,reset:80,val:()=>S.pvol,set:v=>{S.pvol=v}}));
   kn.master=knob($("#kMaster"),{min:0,max:100,reset:80,val:()=>S.master,set:v=>{S.master=v;setMaster()}});
-  latBygg();melBygg();ackBygg();padBygg();rackBygg();visa();minnenRita();lpBygg();lastSnap=snapS();histKnappar();vikInit();rackKnappar();
+  latBygg();melBygg();ackBygg();rackBygg();visa();minnenRita();lpBygg();lastSnap=snapS();histKnappar();vikInit();rackKnappar();
 }
 
 /* ---------- loopstation: spela in eget ljud och loopa det i valt antal takter ---------- */
@@ -1644,18 +1627,6 @@ async function projLadda(f){startaLjud();if(!ctx||!f)return;if(f.size>150e6){toa
     lpVisa();padRita();$("#bAutoTom").hidden=!autoHar();toast("Projektet är öppnat. Tryck START")}
   catch(e){toast("Projektfilen är skadad")}}
 $("#bProjS").onclick=projSpara;$("#bProjL").onclick=()=>$("#projFil").click();$("#projFil").onchange=e=>{projLadda(e.target.files[0]);e.target.value=""};
-$("#padpan").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
-  if(b.dataset.pb!=null){padBank=+b.dataset.pb;padRita();startaLjud();pad2Behov();return}
-  if(b.id==="bPrev"){padRevV=!padRevV;padRita();return}
-  if(b.id==="bPstj"){padStj=!padStj;padRita();if(padStj)toast("Tryck på ett klipp för att lägga det bland favoriterna (⭐ MINA)");return}
-  if(b.id==="bEgRec"){startaLjud();egnaRec();return}
-  if(b.id==="bEgFil"){$("#egFil").click();return}
-  if(b.id==="bEgTom"){EGNA.fill(null);if(egnaId(padVald))padVald=-1;padRita();return}
-  if(b.dataset.eg!=null){startaLjud();egnaFranLoop(+b.dataset.eg);return}
-  if(b.id==="bSmpM"){S.smpMute=!S.smpMute;padRita();return}
-  if(b.id==="bSmpTom"){S.smp=Array(16).fill(null);visa();return}
-  if(b.dataset.sk!=null){const k=+b.dataset.sk,x=S.smp[k];if(padVald>=0&&!(x&&x.i===padVald&&x.p===padPit&&!!x.r===padRevV))S.smp[k]={i:padVald,p:padPit,r:padRevV?1:0};else S.smp[k]=null;S.namn="Egen rytm";visa();return}});
-document.addEventListener("pointerdown",e=>{const b=e.target.closest(".sp");if(b)padSlag(+b.dataset.sp)});
 $("#bPaus").onclick=()=>{if(!ctx)return;const b=$("#bPaus");
   if(ctx.state==="running"){if(!spelar){toast("Starta först, sedan kan du pausa");return}if(LP.some(l=>l.rec)){toast("Vänta tills inspelningen är klar");return}ctx.suspend();b.textContent="▶ FORTSÄTT";b.classList.add("on");b.setAttribute("aria-pressed","true")}
   else{ctx.resume();b.textContent="⏸ PAUSA";b.classList.remove("on");b.setAttribute("aria-pressed","false")}};
@@ -1680,11 +1651,10 @@ $("#bAutoTom").onclick=()=>{S.auto=autoNy();S.autoS=autoSNy();$("#bAutoTom").hid
 $("#bRec").onclick=()=>sattRec(!recLive);
 $("#bSudd").onclick=()=>{suddLage=!suddLage;$("#bSudd").setAttribute("aria-pressed",suddLage)};
 knob($("#kPadtid"),{min:-100,max:100,reset:0,val:()=>PADOFF,set:v=>{PADOFF=v;$("#padT").textContent="Pad-tid "+(v>0?"+":"")+v+" ms"}});
-document.addEventListener("keydown",e=>{if(PPSyntKlipp.isOpen())return;if(e.target.closest&&e.target.closest("input,select,textarea"))return;if((e.metaKey||e.ctrlKey)&&!e.altKey&&(e.key==="z"||e.key==="Z")){e.preventDefault();e.shiftKey?gorOm():angra();return}if(e.metaKey||e.ctrlKey||e.altKey)return;
+document.addEventListener("keydown",e=>{if(PPSyntKlipp.isOpen()||RKOPEN)return;if(e.target.closest&&e.target.closest("input,select,textarea,[contenteditable=\"true\"]"))return;if((e.metaKey||e.ctrlKey)&&!e.altKey&&(e.key==="z"||e.key==="Z")){e.preventDefault();e.shiftKey?gorOm():angra();return}if(e.metaKey||e.ctrlKey||e.altKey)return;
   if(e.key===" "&&!e.target.closest("button")){e.preventDefault();spelar?stopp():start();return}
   if((e.key==="r"||e.key==="R")&&!e.repeat){sattRec(!recLive);return}
   if((e.key==="m"||e.key==="M")&&!e.repeat){mutaAlla(!muteAll);return}
-  if(SPK.includes(e.key)&&!e.repeat){padSlag(SPK.indexOf(e.key));return}
   const i=TK[e.key.toLowerCase()];if(i!=null&&!e.repeat){const sl=suddLage;if(e.shiftKey&&recLive)suddLage=true;slag(i);suddLage=sl}});
 document.addEventListener("visibilitychange",()=>{if(document.hidden)stopp()});
 init();
