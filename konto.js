@@ -9,7 +9,7 @@
 if(window.MPKonto)return;
 const ADR="https://tjbifeckuielfbbaoxnj.supabase.co",NYCKEL="sb_publishable_IRMsYh9XN-71eITjSOxFZg_mCqikRdt";
 // alla nycklar som hör till en profil (profilbyte, flyttkod, inloggningskort och konton)
-const PKEYS=["mattespel-tradgard-v1","mattespel-slungan-v1","mattespel-gissastorlek-v1","mattespel-fylltillstrecket-v1","mattespel-tidslinjen-v1","mattespel-knepigaljud-v1","mattespel-sagobyggaren-v1","mattespel-meningsbyggaren-v1","mattespel-handstil-v1","mattespel-tiointe-v1","mattespel-sifferslottet-v1","mattespel-sagoriket-v1","mattespel-lasflyt-v1","mattespel-pengar-v1","mattespel-multiplikation-v1","matteportalen-rum","mattespel-division-v1","mattespel-klockan-v1","mattespel-tiotal-v1","mattespel-taluppfattning-v1","mattespel-lillaplus-v1",
+const PKEYS=["mattespel-glodvaktaren-v1","mattespel-tradgard-v1","mattespel-slungan-v1","mattespel-gissastorlek-v1","mattespel-fylltillstrecket-v1","mattespel-tidslinjen-v1","mattespel-knepigaljud-v1","mattespel-sagobyggaren-v1","mattespel-meningsbyggaren-v1","mattespel-handstil-v1","mattespel-tiointe-v1","mattespel-sifferslottet-v1","mattespel-sagoriket-v1","mattespel-lasflyt-v1","mattespel-pengar-v1","mattespel-multiplikation-v1","matteportalen-rum","mattespel-division-v1","mattespel-klockan-v1","mattespel-tiotal-v1","mattespel-taluppfattning-v1","mattespel-lillaplus-v1",
   "mattespel-spel-v1","mattespel-geometri-v1","mattespel-brak-v1","mattespel-hundraruta-v1","mattespel-uppstallning-v1","np3-resultat","mattespel-skattjakten-v1","mattespel-sverigekartan-v1","mattespel-ordgomma-v1","mattespel-hogfrekventa-v1","mattespel-europa-v1","mattespel-varlden-v1","mattespel-talfoljd-v1","mattespel-rutjakten-v1","mattespel-brakbitar-v1","mattespel-kortdivision-v1","mattespel-vagen-v1","mattespel-gomda-v1","mattespel-kulbanan-v1","mattespel-affaren-v1","mattespel-rita-v1","mattespel-ordgatan-v1","mattespel-tangentbord-v1","mattespel-delaupp-v1","mattespel-matning-v1","mattespel-kodverkstan-v1","mattespel-schack-v1","mattespel-sudoku-v1","mattespel-trafikstockning-v1","mattespel-trerirad-v1","matteportalen-mynt","matteportalen-uggla","matteportalen-klister","matteportalen-dagar"];
 const lsGet=k=>{try{return localStorage.getItem(k)}catch(e){return null}},lsSet=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
 const jGet=k=>{try{return JSON.parse(lsGet(k)||"null")}catch(e){return null}};
@@ -22,6 +22,11 @@ function merge(a,b){const out=Object.assign({},a);
   Object.keys(b||{}).forEach(k=>{if(!(k in a)){out[k]=b[k];return;}
     if(k==="matteportalen-dagar"||k==="matteportalen-klister"){try{const x=JSON.parse(a[k]),y=JSON.parse(b[k]),f=k==="matteportalen-dagar"?"days":"seen";
       x[f]=[...new Set([...(x[f]||[]),...(y[f]||[])])].sort();out[k]=JSON.stringify(x);}catch(e){}return;}
+    // Glödväktaren: förena fynd/uppdrag per matteval, så att två enheters resor bevaras.
+    if(k==="mattespel-glodvaktaren-v1"){try{const x=JSON.parse(a[k]),y=JSON.parse(b[k]),o={...y,...x,stars:{},campaigns:{}};
+      for(const m of ["plus","hundra","tabell","stor"]){o.stars[m]=Math.max(x.stars?.[m]||0,y.stars?.[m]||0);const u=x.campaigns?.[m]||{},v=y.campaigns?.[m]||{},c={...v,...u};
+        c.defeated=[...new Set([...(u.defeated||[]),...(v.defeated||[])])];c.ore=[...new Set([...(u.ore||[]),...(v.ore||[])])];for(const f of ["shield","boots","shortcut","bridge","won"])c[f]=!!u[f]||!!v[f];c.checkpoint=u.checkpoint===2560||v.checkpoint===2560?2560:384;c.deaths=Math.max(u.deaths||0,v.deaths||0);o.campaigns[m]=c;}
+      out[k]=JSON.stringify(o);}catch(e){}return;}
     // Läsflyt: läsningarna läggs ihop (inget försvinner), bokstäverna: senaste markeringen vinner
     if(k==="mattespel-lasflyt-v1"){try{const x=JSON.parse(a[k]),y=JSON.parse(b[k]),o=Object.assign({},x);
       o.las={...(x.las||{})};Object.entries(y.las||{}).forEach(([id,r])=>{const m=new Map([...(o.las[id]||[]),...r].map(e=>[e.d,e]));o.las[id]=[...m.values()].sort((p,q)=>p.d-q.d).slice(-20);});
