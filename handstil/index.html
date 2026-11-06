@@ -381,7 +381,8 @@ function phaseSe(){
       if(s.dot){pen.setAttribute('cx',s.dot[0]);pen.setAttribute('cy',s.dot[1]);pen.setAttribute('opacity',1);
         el('circle',{cx:s.dot[0],cy:s.dot[1],r:6,fill:'#1E9E5E'},B.prog);await wait(600/fart);continue;}
       const path=el('path',{d:pathD(s.pts),fill:'none',stroke:'#1E9E5E','stroke-width':11,'stroke-linecap':'round','stroke-linejoin':'round'},B.prog);
-      const len=path.getTotalLength(),dur=reduce?200:Math.max(700,len*17);
+      // Penndraget visar hur man skriver och behöver vara läsbart även med minskad rörelse.
+      const len=path.getTotalLength(),dur=Math.max(700,len*17);
       path.setAttribute('stroke-dasharray',len);path.setAttribute('stroke-dashoffset',len);pen.setAttribute('opacity',1);
       await new Promise(res=>{let tt=0,last=performance.now();(function f(n){if(tok!==animTok)return res();tt+=(n-last)*fart/dur;last=n;const t=Math.min(1,tt),e=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
         path.setAttribute('stroke-dashoffset',len*(1-e));const p=path.getPointAtLength(len*e);pen.setAttribute('cx',p.x);pen.setAttribute('cy',p.y);
