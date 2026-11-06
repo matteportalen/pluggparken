@@ -217,3 +217,5 @@ Portalernas melodiska pling har ersatts av ett lågt vinddrag med mörk resonans
 ### Nästa förbättring av klockstaden (användarens återkoppling)
 
 Kvarteret är över för snabbt. Klockans slutmekanism ska få ett riktigt matematiskt pussel som släpper igång tiden, i stället för att lösas med ett enda E-tryck. Fler meningsfulla händelser och upptäckter behövs före avslutet. Spåkvinnans nuvarande kortoverlay känns som en generisk app-ruta; scenen ska gestaltas mer som en fysisk del av spelets rum och mörka värld. Användaren bad att titelskärm och portalljud skulle göras klart först, så dessa punkter är sparade för nästa steg och ännu inte genomförda.
+
+Fortsättning på användarens idé: spelaren möter en vålnad som har varit låst bortom tiden i århundraden. Vålnaden ger fragment av vad som hände i staden och ledtrådar om hur tiden kan startas igen. Den bör vara en del av banans handling och det kommande matematiska klockpusslet, inte bara en informationsruta. Detta är fortfarande planering för nästa steg, efter titelskärmen och portalljudet.
