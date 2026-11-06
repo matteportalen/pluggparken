@@ -274,3 +274,15 @@ När klippredigeraren öppnas stoppas den gemensamma transporten via `stopPlayba
 ### REC väcker inte stoppade loopar (6 nov 2026)
 
 REC från stoppat läge startar nu den gemensamma stegtransporten och inräkningen utan `lpStarta`. Det gäller syntens REC, stora REC och R. Redan spelande loopar påverkas inte av REC. Vanliga START spelar fortfarande upp looparna. Klippsviten verifierar med en sparad ljudloop att inga loopkällor startar under inräkning eller syntinspelning och att START samt REC under pågående uppspelning behåller loopuppspelningen.
+
+### Syntmaskinens effektknapp (6 nov 2026)
+
+SM-4 har samma EFFEKTER-knapp och fyra pedalplatser som övriga maskiner. Ny racknyckel `sy` ligger sist i RKK för kompatibilitet med gamla delningslänkar. Ljudkedjan är spårens befintliga syntmotorer/egna effekter → synBus (syntvolym/M) → syntens pedalrad → master, både live och i offlineexport. Syntens parametrar ändras inte av pedalerna; rack och synt sparas separat i befintliga projekt/länkformat. Äldre rack normaliseras med rackRena. `test-synt-effekter.cjs` verifierar knapp, pedalval, faktisk ljudpåverkan i export, oförändrade syntinställningar, delningsrunda, äldre rack och mobilbredd. Inspelning/M regressionstestas separat.
+
+### Samplepaket i SM-4 (6 nov 2026)
+
+Nytt ljudläge **Samplepaket** i ljudratten och ljudväljaren. Varje A–D-spår väljer separat bank: Vokal, Röster, Rymd, Smäll, Swish, Dub, Reggae, Skrik och Gamla 1–3. Samma lokala pad.wav/pad2.wav/samples.wav och befintliga metadata/buffer återanvänds; inget ljud hämtas från annan domän. Egna inspelningar används fortsatt via Röstklipp; favoritlistan och mikrofonpads är kvar i gamla panelen. Bankval sparas i syntens spårdata och valideras vid import, utan att ändra gamla sample-spår eller deras dataformat. Gamla panelen finns kvar för kompatibilitet.
+
+Varje pad/tangent mappar modulo 16 till ett namngivet klipp (15 i Dub/Skrik, sista paden tom). Sample-klipp spelas en gång, fortsätter efter släpp och avslutas enligt ljudets längd/tonhöjd, även från sekvenseraren; Röstklipps håll-för-loop är oförändrat. KLANG styr tonhöjd, övriga filter/rörelse/rymd och syntens pedalrad fungerar. Arpeggio/oktav är avstängda i sampleläget. REC spelar in klippvalet på valt syntspår. Bankerna laddas asynkront och före offlineexport; tomma/ej laddade pads är avstängda.
+
+`test-synt-samplepaket.cjs`: alla 11 banker, separata A/B-val, REC, verkligt ändligt och hörbart ljud i export, one-shot efter tidigt släpp, bank/noter genom länk och sparad projektfil, återöppning och mobilbredd samt inga anrop till externa domäner. Ljudbankstester exkluderar sampleläget utan buffer på samma sätt som Röstklipp; verkliga ljud testas i den nya sviten.
