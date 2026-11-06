@@ -43,6 +43,7 @@
     glod(kind){if(!isOn())return;const c=ac();if(!c)return;
       const v=.94+Math.random()*.12;
       const ring=(base,dur,gain,start=0)=>[1,1.47,2.09,2.71].forEach((r,i)=>tone(base*r*v,start,dur/(1+i*.35),'sine',gain/(1+i*2.5)));
+      if(kind==='bell'){ring(146,2.2,.14);tone(73,0,2.3,'sine',.10);noiseBurst(c,0,.09,700,1,.06);return;}
       if(kind==='swing'){noiseBurst(c,0,.15,1800,.65,.10,450);return;}
       if(kind==='parry'){noiseBurst(c,0,.07,2900,1.3,.11);ring(740,.32,.08);tone(125,0,.1,'triangle',.08,85);return;}
       if(kind==='ember'){noiseBurst(c,0,.5,350,.65,.16,1500);tone(90,0,.45,'sine',.15,42);return;}
