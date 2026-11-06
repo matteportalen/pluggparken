@@ -25,7 +25,7 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 15
     permissions:
       pages: write
       id-token: write
@@ -37,5 +37,5 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
         with:
-          # Large asset transfers can exceed GitHub's default ten-minute limit.
-          timeout: 1800000
+          # Pages enforces a ten-minute maximum; concurrency avoids overlapping uploads.
+          timeout: 600000
