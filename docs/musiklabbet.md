@@ -270,3 +270,7 @@ Efter klippfunktionen gav läraren klartecken att bygga LOOPSTATION som egen fli
 ### Automatisk paus vid klippöverföring (5 nov 2026)
 
 När klippredigeraren öppnas stoppas den gemensamma transporten via `stopPlayback:stopp`, även vid justering av befintliga röstklipp. Ljudkontexten lämnas tillgänglig för provlyssning; provlyssning och LÄGG PÅ PADS startar inte bakgrundsloopen igen. START återupptar uppspelningen från början. Klippsviten kontrollerar att transporten stannar vid öppning och förblir stoppad efter provlyssning och överföring.
+
+### REC väcker inte stoppade loopar (6 nov 2026)
+
+REC från stoppat läge startar nu den gemensamma stegtransporten och inräkningen utan `lpStarta`. Det gäller syntens REC, stora REC och R. Redan spelande loopar påverkas inte av REC. Vanliga START spelar fortfarande upp looparna. Klippsviten verifierar med en sparad ljudloop att inga loopkällor startar under inräkning eller syntinspelning och att START samt REC under pågående uppspelning behåller loopuppspelningen.
