@@ -12,7 +12,7 @@ const assert=require('node:assert/strict');
     await page.goto(new URL('/spel/glodvaktaren/',base).href);
     await page.waitForFunction(()=>window.MPGlod?.ready,{},{timeout:20000});
     assert(helpers.size>=5,'The published site must serve all imported _lib.js helpers');
-    await page.getByRole('button',{name:'Börja äventyret →',exact:true}).click();
+    await require('./glod-test-helpers.cjs').begin(page);
     assert(await page.locator('#game').isVisible());
     assert.equal(await page.locator('#home').isVisible(),false);
     const before=await page.evaluate(()=>MPGlod.state().x);

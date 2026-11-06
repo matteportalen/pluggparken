@@ -8,3 +8,6 @@ async function reply(p,correct=true){const b=(await state(p)).battle,n=answer(b.
 async function fight(p,id){assert.equal((await state(p)).battle.enemy,id);let count=0;while((await state(p)).battle){assert(count++<40,'Fight must make progress');const b=(await state(p)).battle;if(b.phase==='enemyThink'||b.phase==='playerThink')await reply(p);else if(b.phase==='playerChoose'){await p.locator(`[data-action="${b.energy>=2?'ember':'attack'}"]`).click();await p.waitForFunction(()=>MPGlod.state().battle?.phase==='playerThink')}else await p.waitForFunction(()=>!MPGlod.state().battle||!['enemyAct','playerAct'].includes(MPGlod.state().battle.phase))}assert((await state(p)).campaign.defeated.includes(id))}
 async function smith(p){await p.keyboard.press('e');assert.equal((await state(p)).room,'forge');await walk(p,600);await p.keyboard.press('e');assert(await p.locator('#speech').isVisible());await walk(p,120);await p.keyboard.press('e');assert.equal((await state(p)).room,null)}
 module.exports={state,answer,walk,encounter,jump,reply,fight,smith};
+
+async function begin(p){await p.locator('#play').click();if(await p.locator('#titleSettingsPanel').isVisible())await p.locator('#titleApply').click()}
+module.exports.begin=begin;

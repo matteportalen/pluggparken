@@ -207,3 +207,13 @@ Efter bergsfyren väntar spåkvinnan vid bordet i smedjan. E öppnar tre illustr
 Första kvarteret i klockstaden har sluss, urmakarhus med spelbar interiör och takutgång, en takväg över kanalen, valfri kista, två olika mattefiender och klockverket. Kuggvakten använder saknat tal; Spegelriddaren jämför två uttryck. Rätt svar bryter försvaret, sedan slår spelaren direkt med svärdet, utan ännu en mattefråga eller tidspress. Två träffar per vakt. Klockan syns i fonden under färden och börjar röra sig när verket startas; en gångbro ger en ny väg tillbaka. Vatten återför riddaren till stadens viloplats.
 
 Art direction är användarens mörkare soulslike-riktning: kall sten, dämpade färger, huvtäckt spåkvinna och funktionella kugghjul snarare än dekorativ steampunk. Alla bilder ligger lokalt. Manifest, promptuppsättning, kritisk väg och begränsning till första kvarteret: `spel/glodvaktaren/bilder/KLOCKSTADEN.md`. Tester: `test-glodvaktaren-klockstaden.cjs` och `test-glodvaktaren-klockstaden-mobil.cjs` plus befintlig genomspelning av båda äldre kapitlen.
+
+### Glödväktaren – titelskärm och portalövergång
+
+Första sidan är nu en mörk titelskärm med separat bildritad GLÖDVÄKTAREN-logotyp, ensam riddare på stenbron och en avlägsen fyr. Meny: Börja/Fortsätt, Nytt äventyr när en resa finns och Inställningar. Matteval och sparstatus står direkt under menyn. Ny resa öppnar matteval först; om valt matteområde redan har en resa krävs uttrycklig bekräftelse innan den ersätts. Andra matteområden och stjärnor behålls. Avbrutna inställningar ändrar ingenting. Bildkällor finns i egen dialog. Animationen är tidsbaserad, stoppas i spelet/dold flik och stängs av vid reduced motion. Ingen automatisk ljuduppspelning på titelskärmen.
+
+Portalernas melodiska pling har ersatts av ett lågt vinddrag med mörk resonans, även vid glödfröets teleport. Bildmanifest och prompter: `spel/glodvaktaren/bilder/TITELSKARM.md`. `test-glodvaktaren-titelskarm.cjs` kontrollerar menyer, matteval, bevarade resor och verkligt portalljud; gemensamma speltesthjälparen `begin` hanterar det nya mattevalet före första starten.
+
+### Nästa förbättring av klockstaden (användarens återkoppling)
+
+Kvarteret är över för snabbt. Klockans slutmekanism ska få ett riktigt matematiskt pussel som släpper igång tiden, i stället för att lösas med ett enda E-tryck. Fler meningsfulla händelser och upptäckter behövs före avslutet. Spåkvinnans nuvarande kortoverlay känns som en generisk app-ruta; scenen ska gestaltas mer som en fysisk del av spelets rum och mörka värld. Användaren bad att titelskärm och portalljud skulle göras klart först, så dessa punkter är sparade för nästa steg och ännu inte genomförda.
