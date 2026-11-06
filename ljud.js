@@ -3,7 +3,7 @@
    Ljudet slås på och av på startsidan och gäller sedan överallt. */
 (function(){
   const KEY='matteportalen-ljud';
-  let ctx=null;
+  let ctx=null,voiceNodes=[];
   const isOn=()=>{try{return localStorage.getItem(KEY)!=='av'}catch(e){return true}};
   function ac(){
     if(!ctx){const A=window.AudioContext||window.webkitAudioContext;if(!A)return null;ctx=new A();}
@@ -38,6 +38,39 @@
     laser(){if(!isOn())return;tone(1500,0,.16,'square',.045,180);tone(900,0,.12,'sawtooth',.03,120);},
     /* Turbo: stigande sus */
     whoosh(){if(!isOn())return;const c=ac();if(!c)return;noiseBurst(c,0,.45,500,.8,.18,3000);tone(200,0,.4,'sawtooth',.03,700);},
+    /* Glödväktaren: korta, omusikaliska materialljud. Inga fanfarer i strid.
+       Samma AudioContext och ljudinställning som resten av sajten. */
+    glod(kind){if(!isOn())return;const c=ac();if(!c)return;
+      const v=.94+Math.random()*.12;
+      const ring=(base,dur,gain,start=0)=>[1,1.47,2.09,2.71].forEach((r,i)=>tone(base*r*v,start,dur/(1+i*.35),'sine',gain/(1+i*2.5)));
+      if(kind==='swing'){noiseBurst(c,0,.15,1800,.65,.10,450);return;}
+      if(kind==='parry'){noiseBurst(c,0,.07,2900,1.3,.11);ring(740,.32,.08);tone(125,0,.1,'triangle',.08,85);return;}
+      if(kind==='ember'){noiseBurst(c,0,.5,350,.65,.16,1500);tone(90,0,.45,'sine',.15,42);return;}
+      if(kind==='break'){[0,.045,.12].forEach((d,i)=>noiseBurst(c,d,.12,1100-i*260,.7,.10/(1+i*.4)));tone(145,0,.16,'triangle',.09,65);return;}
+      if(kind==='slime'){noiseBurst(c,0,.22,550,1,.12,160);tone(180,0,.18,'sine',.09,48);return;}
+      if(kind==='stone'){tone(78,0,.62,'sine',.18,32);[0,.09,.24,.39].forEach((d,i)=>noiseBurst(c,d,.25,700-i*120,.6,.12/(1+i*.35)));return;}
+      if(kind==='fall'){// Armour hits the earth, followed by loose metal settling.
+        tone(105,0,.32,'triangle',.14,42);noiseBurst(c,0,.2,700,.7,.16);
+        [0,.11,.27].forEach((d,i)=>{ring(310-i*38,.38,.075/(i+1),d);noiseBurst(c,d,.065,2300-i*350,1.2,.07/(i+1));});return;
+      }
+      // A sword impact: low body plus a short, inharmonic steel resonance.
+      noiseBurst(c,0,.095,1900,1,.12);tone(135,0,.16,'triangle',.12,65);ring(480,.22,.065);
+    },
+    /* Kort ordlöst prat, med två formanter och varierade stavelser. */
+    glodTalk(deep=false,length=40){this.glodTalkStop();if(!isOn())return;const c=ac();if(!c)return;
+      const count=Math.max(3,Math.min(7,Math.ceil(length/13))),base=deep?88:132;
+      for(let i=0;i<count;i++){
+        const t=c.currentTime+i*.125+(i>3?.09:0),dur=.085+Math.random()*.035;
+        const o=c.createOscillator(),f=c.createBiquadFilter(),f2=c.createBiquadFilter(),g2=c.createGain(),g=c.createGain();
+        o.type='sawtooth';const pitch=base*(.91+Math.random()*.18);o.frequency.setValueAtTime(pitch,t);o.frequency.linearRampToValueAtTime(pitch*(i%2?.94:1.06),t+dur);
+        f.type=f2.type='bandpass';f.frequency.setValueAtTime((deep?370:520)+Math.random()*190,t);f.frequency.linearRampToValueAtTime(deep?300:430,t+dur);f.Q.value=2;
+        f2.frequency.value=(deep?900:1300)+Math.random()*250;f2.Q.value=3;g2.gain.value=.32;
+        g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.10,t+.018);g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+        o.connect(f).connect(g);o.connect(f2).connect(g2).connect(g);g.connect(c.destination);
+        const entry={o,g};voiceNodes.push(entry);o.onended=()=>{[o,f,f2,g2,g].forEach(n=>n.disconnect());voiceNodes=voiceNodes.filter(n=>n!==entry)};o.start(t);o.stop(t+dur+.015);
+      }
+    },
+    glodTalkStop(){for(const {o,g} of voiceNodes){g.gain.cancelScheduledValues(0);g.gain.value=0;try{o.stop()}catch(e){}}voiceNodes=[];},
     /* Motorljud som går hela tiden: start(), set(0–1), stop() */
     engine:{
       start(){if(!isOn()||this.o)return;const c=ac();if(!c)return;
@@ -186,7 +219,7 @@
         self.timer2=setTimeout(glit,3000);},
       stop(){clearTimeout(this.timer);clearTimeout(this.timer2);if(!this.g)return;const c=ac(),t=c.currentTime;this.g.gain.setTargetAtTime(0.0001,t,.6);this.nodes.forEach(x=>{try{x.stop(t+3)}catch(e){}});this.g=null;}
     },
-    stopLoops(){this.engine.stop();this.space.stop();this.water.stop();this.ambient.stop(true);this.rymd.stop();}
+    stopLoops(){this.glodTalkStop();this.engine.stop();this.space.stop();this.water.stop();this.ambient.stop(true);this.rymd.stop();}
   };
   function croakPulse(c,start){
     const t=c.currentTime+start,o=c.createOscillator(),f=c.createBiquadFilter(),g=c.createGain(),am=c.createOscillator(),ag=c.createGain();

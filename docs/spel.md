@@ -193,3 +193,9 @@ Skog, berg, gruva och smedja använder nu lokala genererade miljöbilder inne i 
 Små fladdermöss har hängning, varning, dykning och återhämtning. De kan slås med mellanslag/svärdsknappen mellan mattestriderna. Krukor/lådor spricker, kistor öppnas med E och glödpoäng samlas i den aktuella matteresan. Alla småfiender stannar under mattestrider. Poäng och redan hämtade fynd följer elevprofilen (maxpoäng/union vid sammanslagning), separat från portalens mynt.
 
 Gruvan är ett eget spelbart rum med höjdväg till järnådern, två fladdermöss, förstörbar vägg och järngömma. Högra tunnelutgången leder bakom skogsvakten. Järngömman kan ersätta ett av vakternas järn så eleven får ett verkligt vägval. Förändrad terräng och förstörbara lådor ingår i kollisionsytorna. Journalen beskriver kontrollerna och vägvalen.
+
+### Glödväktaren – materialljud och prat (6 november 2026)
+
+Spelets strider använder `Ljud.glod`: metallisk parering och svärdsträff, rustningsfall för riddare, stenras för stenfiender, mjukt materialljud för slem, svärdssus och glödvåg. Väktarnas nederlag spelar inte längre portalens glada fanfar och pareringen använder inte övningarnas rätt-svar-pling. Små tonhöjdsvariationer motverkar identiska upprepningar. Övriga övningars ljud är oförändrade.
+
+Nya pratbubblor spelar ett kort ordlöst mummel, med mörkare formanter för smeden. Högst sju stavelser, under en sekund; inget tal fortsätter medan eleven läser. Samma bubbla upprepad triggar inte ljudet igen. Stängning, byte av bubbla, ljud av och dold sida stoppar rösten. Allt syntetiseras lokalt med befintlig Web Audio-kontext och respekterar den gemensamma ljudinställningen. `skript/test-glodvaktaren-ljud.cjs` renderar ljudgrafer offline och testar faktiska strids- och pratbubbelhändelser.
