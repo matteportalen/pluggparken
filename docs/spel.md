@@ -239,3 +239,5 @@ Enskilt lopp med rekordspöke, eller fyra lopp i mästerskap mot Nova/Otto/Vera 
 Verifiering: `NODE_PATH=/opt/homebrew/lib/node_modules node skript/test-racerbanan.cjs` mot lokal server på port 8765 (eller `BASE_URL`).
 
 Ytterligare kontroller: `skript/test-racerbanan-kontroller.cjs` för köp, mattefördelningar, valda tabeller, fel svar och sladd; `skript/test-racerbanan-synk.cjs` för kontosammanslagning av äldre/nya rekord i båda riktningar.
+
+Glödväktarens ingångar (2026-11-07): ny lokal artwork för gruva, stenvalv, kall portal och verkstadsdörrar på samtliga rumspassager. Gruvans skymmande stam är flyttad och ingången ritas framför träden; interaktionspunkten x=1640 och klätterytor behålls. Ursprung/manifest: `spel/glodvaktaren/bilder/INGANGAR.md`. Provspelning av tur- och returvägar samt mobil/datorsikt: `skript/test-glodvaktaren-portaler.cjs`.
