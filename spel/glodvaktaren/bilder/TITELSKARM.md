@@ -14,7 +14,7 @@ Båda tillgångarna genererades med **inbyggda OpenAI image_gen** och kopierades
 | --- | --- | --- |
 | title-landscape-v1.png | exec-9f205ff6-161c-43e4-a087-e4ac0cf5a27a.png | 1672×941; opak; title canvas, cover-skalning och responsivt utsnitt |
 | title-logo-v1.png | exec-ee3eddb6-5d0f-4701-ba4f-a03e72cf1c21.png | 2172×724; nativ alfakanal; egen logotyp, inga knappar eller textlager utöver namnet |
-| kort.png | Skärmbild av den faktiska nya titelskärmen | Spelhörnans kort, fångas av integrationstestet |
+| kort.png | Äldre skärmbild av titelskärmen | Sparad tidigare miniatyr. Det aktuella spelkortet använder ett CSS-utsnitt av title-landscape-v1.png; se TIDENS-VAKTARE.md. |
 
 Canvas använder långsamma, tidsbaserade rörelser och få glödpartiklar. prefers-reduced-motion ger en stilla bild. Animationen stoppas när spelet öppnas eller sidan är dold. Inget ljud spelas automatiskt när sidan laddas. Spelets ljudinställning finns i inställningsvyn.
 

@@ -221,3 +221,9 @@ Kvarteret är över för snabbt. Klockans slutmekanism ska få ett riktigt matem
 Fortsättning på användarens idé: spelaren möter en vålnad som har varit låst bortom tiden i århundraden. Vålnaden ger fragment av vad som hände i staden och ledtrådar om hur tiden kan startas igen. Den bör vara en del av banans handling och det kommande matematiska klockpusslet, inte bara en informationsruta. Detta är fortfarande planering för nästa steg, efter titelskärmen och portalljudet.
 
 Användaren tycker också att den kodritade urtavlan på klocktornet är ful och inte passar den detaljerade miljön. Vid arbetet med klockpusslet ska den ersättas av en sammanhållen, sliten och mörk urtavla med material, infattning och visare som visuellt hör till tornet. Den nuvarande enkla cirkeln/markeringarna är inte godkänd slutlig grafik.
+
+### Genomfört: vålnaden och det tredelade klockverket
+
+Återkopplingen ovan är nu genomförd: vålnaden berättar om stadens frusna tid och pekar ut pendelns hjärta i huset, sigillet ovanför taken och motvikten i de nya spelbara valven. De tre delarna krävs före slutpusslet. Tre separata fästen repareras genom att vrida en talring så ett matematiskt uttryck balanserar och dra handtaget. Felsvar ger ledtråd; lagade fästen sparas; inget tidspåslag förrän tredje fästet är klart. Därefter börjar visarna röra sig, bron sänks och vålnaden får nästa sekund. Slutsekvensen sker inne i världen.
+
+Spåkvinnans generiska ruta har ersatts med en bild av bordet: frågor på korten, svar som benbrickor på duken och repliker direkt i scenen. Urtavlan är en ny bildritad sten-/järntavla med separata rörliga visare. Spelhörnans miniatyr justerades sist till en ljus närbild av väktaren via CSS, utan att ändra titelbilden. Manifest/prompter: `spel/glodvaktaren/bilder/TIDENS-VAKTARE.md`. Tester: utökad klockstadsgenomspelning, `test-glodvaktaren-tid.cjs` för alla matteval samt mobil- och profiltester.
