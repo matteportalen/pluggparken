@@ -24,3 +24,7 @@ Två nya ImageGen-original, kopierade med ursprunglig inbäddad metadata från C
 Den valda bilen komponeras lokalt på titelskärmen så lack och modell alltid motsvarar depåvalet. Förinställningen syns även i text. Bakgrunden har mycket långsam kamerarörelse; minskad rörelse stänger av den.
 
 Färgerna använder nu HSL-baserad selektiv maskning av originalets orange lack i Canvas. Hela bildens hue-filter har tagits bort. Gula lackens målton är 50°, blå 210°, grön 139°; svart sänker lackens ljushet. Neutrala ytor, glas, lampor och alfakanal lämnas kvar. `test-racerbanan-farger.cjs` kontrollerar alla 6×5 varianter och skapar en kontaktkarta från den verkliga renderaren.
+
+## Fartkänsla, 7 november 2026
+
+Ingen nygenererad bildgrafik. Befintliga miljöer, titelskärm, fordon och selektiva lackfärger bevaras. Nya vägkantsföremål, räcken, reflektorer och fartstreck är kodritade och perspektivprojicerade i banornas befintliga paletter. Föremålen har fasta världspositioner utifrån banans frö. Farteffekterna ligger i periferin; matematik och HUD hålls skarpa. Kamerapresentation är separat från körsimuleringen. Ingen 3D-motor eller extern resurs har tillkommit.

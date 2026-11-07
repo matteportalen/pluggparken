@@ -97,6 +97,18 @@
         this.o.frequency.setTargetAtTime(base,t,.15);this.o2.frequency.setTargetAtTime(base/2,t,.15);this.f.frequency.setTargetAtTime(350+v*900,t,.15);this.lfo.frequency.setTargetAtTime(14+v*20,t,.2);},
       stop(){if(!this.o)return;const c=ac(),t=c.currentTime,{o,o2,lfo,g}=this;g.gain.setTargetAtTime(0.0001,t,.12);[o,o2,lfo].forEach(x=>{try{x.stop(t+.5)}catch(e){}});this.o=null;}
     },
+    /* Racerbanans separata motor-, däck- och vindmix. Den äldre engine-rösten är orörd. */
+    rally:{
+      start(){if(!isOn()||this.nodes)return;const c=ac();if(!c)return;const out=c.createGain(),engine=c.createBiquadFilter(),wind=c.createBiquadFilter(),tire=c.createBiquadFilter(),wg=c.createGain(),tg=c.createGain(),nodes=[];
+        out.gain.setValueAtTime(0,c.currentTime);out.gain.linearRampToValueAtTime(.85,c.currentTime+.18);out.connect(c.destination);engine.type='lowpass';engine.frequency.value=450;engine.Q.value=.7;engine.connect(out);
+        for(const [type,harmonic,gain] of [['triangle',1,.038],['sawtooth',2,.013],['sine',.5,.025]]){const o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.value=55*harmonic;g.gain.value=gain;o.connect(g).connect(engine);o.start();o.harmonic=harmonic;nodes.push(o)}
+        // Local deterministic noise must not consume the game's Math.random sequence.
+        const buf=c.createBuffer(1,c.sampleRate*2,c.sampleRate),a=buf.getChannelData(0);let seed=1977;for(let i=0;i<a.length;i++){seed=(Math.imul(seed,1664525)+1013904223)>>>0;a[i]=seed/2147483648-1}
+        wind.type='lowpass';wind.frequency.value=700;wind.Q.value=.5;wg.gain.value=0;wind.connect(wg).connect(out);tire.type='bandpass';tire.frequency.value=1450;tire.Q.value=.8;tg.gain.value=0;tire.connect(tg).connect(out);
+        for(const filter of [wind,tire]){const n=c.createBufferSource();n.buffer=buf;n.loop=true;n.connect(filter);n.start();nodes.push(n)}Object.assign(this,{nodes,out,engine,wind,wg,tg});},
+      set({speed=0,turbo=false,drift=false,draft=0}={}){if(!isOn()){this.stop();return}if(!this.nodes)return;const c=ac(),t=c.currentTime,v=Math.max(0,Math.min(1.8,speed));for(const o of this.nodes)if(o.harmonic)o.frequency.setTargetAtTime((48+v*46+(turbo?8:0))*o.harmonic,t,.12);this.engine.frequency.setTargetAtTime(320+v*420,t,.16);this.wind.frequency.setTargetAtTime(450+v*1100,t,.2);this.wg.gain.setTargetAtTime((.003+v*.014+(turbo?.008:0))*(1-Math.max(0,Math.min(1,draft))*.12),t,.18);this.tg.gain.setTargetAtTime(drift?.012:0,t,.1);},
+      stop(){if(!this.nodes)return;const c=ac(),nodes=this.nodes,out=this.out,t=c.currentTime;out.gain.cancelScheduledValues(t);out.gain.setTargetAtTime(0,t,.02);nodes.forEach(n=>{try{n.stop(t+.1)}catch(e){}});nodes.at(-1).onended=()=>out.disconnect();this.nodes=null;this.out=null;}
+    },
     /* Rymdljud i bakgrunden: mjuka toner och svagt brus */
     space:{
       start(){if(!isOn()||this.g)return;const c=ac();if(!c)return;
@@ -233,7 +245,7 @@
         self.timer2=setTimeout(glit,3000);},
       stop(){clearTimeout(this.timer);clearTimeout(this.timer2);if(!this.g)return;const c=ac(),t=c.currentTime;this.g.gain.setTargetAtTime(0.0001,t,.6);this.nodes.forEach(x=>{try{x.stop(t+3)}catch(e){}});this.g=null;}
     },
-    stopLoops(){window.MPGlodAudio?.stop();this.glodTalkStop();this.engine.stop();this.space.stop();this.water.stop();this.ambient.stop(true);this.rymd.stop();}
+    stopLoops(){window.MPGlodAudio?.stop();this.glodTalkStop();this.engine.stop();this.rally.stop();this.space.stop();this.water.stop();this.ambient.stop(true);this.rymd.stop();}
   };
   function croakPulse(c,start){
     const t=c.currentTime+start,o=c.createOscillator(),f=c.createBiquadFilter(),g=c.createGain(),am=c.createOscillator(),ag=c.createGain();
