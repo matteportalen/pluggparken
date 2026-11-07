@@ -40,3 +40,5 @@ Tillgängliga rum, lösningar, ledtrådar och avslut sparas per matteval. Alla h
 ## Svårighet och läsbarhet efter ventiluppgiften
 
 Läraren accepterar kluriga uppgifter så länge de är bra och meningsfulla. Nuvarande A/B/C-uppgift fungerar, men undvik att eskalera kraftigt i abstraktion eller antal beroenden. Svårigheten ska komma från matematiken, inte från svårtolkat språk. Gör först instruktionerna lättare att följa och ge användbara ledtrådar. Flera villkor ska delas upp i tydligt märkta delar, med varje del på egen rad och med läsbara radbrytningar på mobil. Denna läsbarhetsändring ska inte i sig ändra svar eller matematisk svårighet.
+
+- Stora mekanismer behöver en E-yta som följer hela föremålet, med synlig markering även när en pratbubbla visas. Hjärtvalvets pump aktiveras över hela sin bredd; servicehissen ska fortfarande gå att använda efter finalen.

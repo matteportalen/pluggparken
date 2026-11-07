@@ -275,3 +275,5 @@ Startsidan följer nu samma spelmenystruktur som Glödväktaren: fullskärmsmål
 Depån är en överlagrad spelmeny med fyra sidor (bil, lopp, matematik, hjälp). Alla sex bilmodeller, köp/priser/mynt, fem färger, fyra banor, mästerskap, matteval/tabeller, tre/fyra svarsfiler, gamla rekord och rekordspöke behålls. Val sparas direkt; man kan starta från huvudmenyn eller depån. Fokus hålls i depån, återställs till öppnaren med Escape och bevaras när ett bil-/färg-/tabellval ritas om. Tangentbordets pilar navigerar titelmenyn och depåflikarna. Retur från lopp visar huvudmenyn.
 
 Lackfärgningen gäller en mask av orange kaross, inte hela bilden: gult blir gult på alla modeller, med glas/däck/metall/transparent bakgrund bevarade. Samma färgade sprite används i titeln, garaget och loppet. `test-racerbanan-titel.cjs` provar panelerna, sparade val och mobil/landskap; `test-racerbanan-farger.cjs` granskar alla 30 varianter. Kontroll- och mästerskapstesterna använder den nya menyvägen.
+
+Hjärtvalvets pump har en bredare E-yta centrerad på själva pumpbilden och en synlig markering ovanför den. Efter finalen har servicehissens passage företräde i överlappningen.
