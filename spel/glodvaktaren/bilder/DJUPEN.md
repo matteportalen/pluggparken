@@ -33,3 +33,20 @@ Mekanismer: “Production transparent foreground props atlas, strict 2×2 grid, 
 ## Provspelning
 
 Se `skript/test-glodvaktaren-djupen*.cjs` och `skript/test-glodvaktaren-djupen-data.mjs`. Hela rumsgrafen, klättervägen, fel svar, fysiska broytan, NPC-ledtrådar, smygning, sista kedjan, slutet, omladdning och retur till tidigare kapitel kontrolleras. Mekanismvyer granskas i 390 px stående mobil, 844×390 liggande och dator.
+
+## Innehållspass efter provspelning (7 november)
+
+Ytterligare sex lokala ImageGen-original med bevarad metadata och nativ alfa:
+
+| Fil | Produktion och användning |
+| --- | --- |
+| depth-enemies-v1.png | 3×2 atlas: rostkrabba och skugglarv, vardera patrull, förvarning och anfall. Samma figur/proportioner per rad, sidovy åt vänster; 48–55 px i spelet. |
+| depth-chain-links-v1.png | 2×2: framvänd oval järnlänk, sidovänd länk, bruten länk och boja. Slitet mörkt järn med rost och ljusa nötta kanter. 24 px länkar repeteras längs hängande kedjor; brott ger fallande länkar. Även sigillvyn använder denna artwork. |
+| depth-guardian-free-v1.png | Den befintliga kedjade väktaren som referens, samma hjälm/rustning, nu stående med fria armar och korta brutna bojor; 270 px. Inga nya personer från referensatlasen. |
+| depth-heart-pump-v1.png | Monumental hjärtpump i granit/koppar/järn med mörk tryckkammare, två kolvar, tre röranslutningar och utlopp; 300 px. Vatten, ljus och kolvrörelse läggs ovanpå i spelet. |
+| depth-loot-v1.png | 2×2: samma kista stängd/öppen, glaslykta och bryne. Blanketter, text och UI uteslutna. |
+| depth-fountain-v1.png | Stadens återställda tvådelade stenfontän, mörk granit och ärgad koppar, utan inritat vatten. Spelet animerar strålen efter finalen; 130 px. |
+
+Gemensamma promptkrav: production transparent sprites, painterly HD-2D dark gothic soulslike, muted teal/violet grey, pitted rust and worn metal bevels, readable silhouettes, full uncropped objects in equal atlas cells with alpha padding, no scenery/floor/text/UI/cuteness/ornamental gear clutter. Kedjelänkarnas öppningar ska också vara transparenta. Fiendeatlasen har två arter och tre tydliga poser. Den fria väktaren genererades med `depth-characters-v1.png` som identitetsreferens.
+
+`djupen-liv.js` läser varje cellgräns mot alfa vid laddning. Fiendeposer delar radens höjdskala för att kroppen inte ska krympa när klorna höjs. Renderade fotpunkter, patrullgränser och skattpositioner följer de verkliga plattformarna. Minskad rörelse tar bort fallande kedjefragment/partiklar och rörliga kolvar.

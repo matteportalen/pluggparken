@@ -244,7 +244,7 @@ Glödväktarens ingångar (2026-11-07): ny lokal artwork för gruva, stenvalv, k
 
 ## Glödväktaren — De glömda djupen (2026-11-07)
 
-Efter återstartad klocka: E vid klockverket/hissen på x≈2720 leder ner. Nio verkliga sammanlänkade rum i `spel/glodvaktaren/djupen.js`, med separata målningar, höjdvägar, en valfri bostadsgren och två genvägar. Tio pusselsteg: motvikt, tömning av vatten, ordning av uttryck, lika fördelning, likvärdiga brohalvor, cisternens uppdelning, tre kedjesigill, samt hjärtvalvets ledningar. Ett svärdshugg bryter sista kedjan efter sigillen. Fel svar ändrar inte lösningsflaggan eller tar liv; mekanismen visar en konkret ledtråd. Det befintliga valet plus/hundra/tabell/stor styr innehållet.
+Efter återstartad klocka: E vid klockverket/hissen på x≈2720 leder ner. Nio verkliga sammanlänkade rum i `spel/glodvaktaren/djupen.js`, med separata målningar, höjdvägar, en valfri bostadsgren och två genvägar. Tretton pusselsteg: motvikt, tömning av vatten, ordning av uttryck, lika fördelning, likvärdiga brohalvor, cisternens uppdelning, tre kedjesigill, samt hjärtvalvets ledningar. Ett svärdshugg bryter sista kedjan efter sigillen. Fel svar ändrar inte lösningsflaggan eller tar liv; mekanismen visar en konkret ledtråd. Det befintliga valet plus/hundra/tabell/stor styr innehållet.
 
 Slussvakten, lärlingen Iri och den kedjade väktaren ger korta återkommande repliker utifrån framsteg. E upprepar dem; journalen bevarar upptäckta berättelsefragment. I cisternen hör en blind väktare steg, hopp och svärd: håll S/↓ eller tryck Smyg för tyst gång. Pussel använder en mekanismvy inne i spelskärmen, med pekknappar, tangentbord, fokusfälla och Esc. Säker återkomst om man faller vid bron. Sparat rum är återstartspunkt.
 
@@ -253,3 +253,15 @@ Samma nyckel `mattespel-glodvaktaren-v1`, samma version 2; bakåtkompatibelt til
 Ljud: Glödväktaren laddar sin lokala `ljudmotor.js` via gemensamma `Ljud`. 32 CC0-materialljud från Kenney ersätter generiska enstaka boink/brus i svärd, parering, nedslag, dörrar och steg. Lager med sten/metall/trä, tonhöjdsvariation, rumsklang, huvudmarginal/kompressor, ordlösa röster och låg rumston. Mekanik, kedjor, vatten och portal får egna längre förlopp. Ljudavstängning stoppar källor, röster och efterklang. WAV-filer och licenser finns lokalt i `ljud/`. Andra övningars ljud fungerar med tidigare implementation när Glödväktarens motor inte är laddad.
 
 Kontroller: `test-glodvaktaren-djupen.cjs`, `test-glodvaktaren-djupen-mobil.cjs`, `test-glodvaktaren-djupen-data.mjs`, `test-glodvaktaren-materialljud.cjs`; tidigare portalrutter kontrolleras av `test-glodvaktaren-portaler.cjs`.
+
+### Djupens innehållspass efter lärarens provspelning
+
+18 sparade småfiender i nio rum: rostkrabbor rusar efter förvarning, skugglarver hoppar på sina avsatser. Svärdshugg måste vara åt rätt håll. Fiender reagerar med stun/knuff, ger poäng en gång och återkommer inte efter rumsskifte/omladdning. NPC-repliker och pussel fryser angrepp så man kan läsa. Den blinda väktaren träffar bara på sin egen höjd.
+
+Tio nåbara höjdskatter gör avstickarna meningsfulla: glaslyktan visar dolda märken, Länkbrytarens bryne gör ett hugg starkare, slussens skyddstecken stoppar första träffen i varje rum; övriga ger glödvatten, poäng och sparade berättelseminnen. Journalen visar fynden. Kedjor ritas med målade länkar/bojor och fallande fragment per brutet sigill. Väktaren övergår till en stående fri gestalt efter sista svärdshugget.
+
+Motvikt, pump och cistern har nu två sparade delsteg. Ordning, lika fördelning och kedjesigill kräver fler räkneled inom valt talområde. Finalen har tre samtidiga ventilvärden och riktad hjälp för första villkoret som inte stämmer. Framgång startar en 12-sekunders sekvens: hjärtpumpen slår, kolvar rör sig och vatten forsar, med rubriken **DJUPENS HJÄRTA SLÅR**. E kan avsluta sekvensen. Den fria väktaren vakar vid hjärtat; efter servicehissen är stadens fontäner igång och vålnaden bekräftar vad man räddat.
+
+`depth.revision=2` utökar sparningen med `looted`, `defeated`, `stages` och `heartAwake`. Okända ID:n filtreras. Äldre betaavslut bevarar alla andra pussel men behöver det nya slutpusslet innan hjärtat räknas som återställt. Kontosynken förenar fynd, besegrade småfiender, delsteg och hjärtslag. Ingen ändring av övriga kapitel eller profilnycklar.
+
+Nya kontroller: `test-glodvaktaren-djupen-skatter.cjs` når samtliga tio kistor och provar svärdsuppgraderingen samt skydd mot återkommande poäng. `test-glodvaktaren-djupen-final.cjs` provar tre separata kedjebrott, felaktiga samtidiga ventiler, slutsekvens på mobil, fontäner och bestående avslut. Helbanetestet använder riktiga svärdshugg via `depth-test-helpers.cjs`. Bildmanifestet beskriver de sex nya tillgångarna.

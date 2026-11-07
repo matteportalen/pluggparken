@@ -24,6 +24,15 @@ Uppdaterad 2026-11-07 efter lärarens återkoppling. Läs innan nya kapitel bygg
 6. **Brogalleriet**: vrid brodelar tills två uttryck motsvarar varandra. Den faktiska gångbron blir spelbar.
 7. **Cisternen**: fördela vatten mellan behållare med en bestämd total. Vägen till fången öppnas.
 8. **Kedjekammaren**: kedjad väktare; tre skilda matematiska sigill bryter hans kedjor, sedan ett verkligt svärdshugg. Hans repliker förändras för varje kedja.
-9. **Hjärtvalvet**: ett sista sambandspussel återställer vattnets väg. Slutet är en upptäckt, inte ännu en boss. Genväg tillbaka till hissen.
+9. **Hjärtvalvet**: tre tillflöden måste stämma samtidigt. Hjärtpumpen börjar slå i en tydlig slutsekvens, väktaren är fri och stadens fontäner rinner efter återkomsten. Genväg tillbaka till hissen.
 
 Tillgängliga rum, lösningar, ledtrådar och avslut sparas per matteval. Alla huvudrum går att återbesöka. Ingen ny återvändsgränd ska tvinga fram en omstart.
+
+## Återkoppling efter första provspelningen av Djupen
+
+- Ett rum får inte kännas färdigt bara för att det har två plattformar. Varje höjdväg ska leda till skatt, mekanism, berättelsefynd eller passage. Alla tio skattpositioner ska kunna nås med riktig rörelse.
+- Småfiender behövs mellan mekanismerna; Djupen har rostkrabbor och skugglarver, med synlig förvarning, återhämtning och olika angrepp. Inga fler fladdermöss som enda utfyllnad. Separerade kollisionshöjder: en väktare på marken får inte träffa genom en plattform.
+- Skatter ska ge något: lykta som avslöjar märken, bättre svärdsegg, skyddstecken, glödvatten eller minnen. Första insamling/död ger belöning; återbesök får inte bli poängfarm.
+- Matematik ska kräva flera tankesteg även inom det lätta talområdet. Vissa mekanismer har två delar; finalen har tre samtidiga villkor. Spara delsteg och ge riktad hjälp utan att automatiskt lösa uppgiften.
+- Kedjor ska ha målade metallänkar, riktiga infästningar och brott; tre raka streck räcker inte. Frigiven väktare ska ha en fri stående gestalt.
+- Ett slut måste synas och kännas: hjärtat slår, kolvar rör sig, vatten strömmar och en tydlig målrubrik visas. Sedan ska den räddade stadens fontäner ge bestående bevis. Enbart ett textmeddelande och en öppnad hiss räcker inte.

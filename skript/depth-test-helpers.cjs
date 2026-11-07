@@ -1,0 +1,6 @@
+const assert=require('node:assert/strict'),old=require('./glod-test-helpers.cjs');
+const state=old.state;
+async function fightNear(p){for(let i=0;i<6;i++){const s=await state(p);const e=s.depth?.enemies?.find(e=>!['dead','dissolve'].includes(e.state)&&Math.abs(e.x-s.x)<110&&Math.abs(e.y-s.y)<70);if(!e)return;await p.keyboard.up('ArrowLeft');await p.keyboard.up('ArrowRight');const key=e.x<s.x?'ArrowLeft':'ArrowRight';await p.keyboard.down(key);await p.waitForTimeout(45);await p.keyboard.up(key);await p.keyboard.press('Space');await p.waitForTimeout(360);if((await state(p)).hp<=0)throw Error('Player fell in fight');}}
+async function walk(p,x){const start=await state(p);if(start.region!=='depths')return old.walk(p,x);let until=Date.now()+22000;while(Date.now()<until){const s=await state(p);if(Math.abs(s.x-x)<15)break;await fightNear(p);const key=x>(await state(p)).x?'ArrowRight':'ArrowLeft';await p.keyboard.down(key);await p.waitForTimeout(80);await p.keyboard.up(key)}await fightNear(p);const s=await state(p);assert(Math.abs(s.x-x)<40,`Walk ${x}: ${JSON.stringify(s)}`)}
+async function jump(p,x,y){await fightNear(p);await old.jump(p,x,y);await fightNear(p)}
+module.exports={...old,walk,jump,fightNear};
