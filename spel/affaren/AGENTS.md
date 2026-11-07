@@ -11,3 +11,5 @@ Kundärendets varor plockas på de verkliga hyllorna. Alla varor måste vara nå
 Kör `skript/test-affaren-arenden.cjs` och `skript/test-affaren-butik.cjs` med lokal server och Playwright. Kontrollera dator/mobil, alla nivåer, fel svar, gratis leveranser med tom kassa, manuella inköp och återupptagning. Uppdatera `docs/spel.md` efter ändringar.
 
 Läraren valde att behålla den tidigare målade stilen efter att ha övervägt en verklighetstrogen närbutik. Gör ingen sådan stiländring utan ny instruktion. Nya inredningsbilder ska matcha den befintliga lokalen. Bordsprylars och kassans fotpunkt ska ligga på den synliga träskivan, inte på diskbildens transparenta överkant. Behåll den lugna bakgrunden utanför den tydligt inramade spelrutan. Testa köpbara saker även utrustade, med fullt sortiment; särskilt kassan får inte täcka en hyllvara.
+
+Varje faktisk varurad ska ha ett hyllplan även när rutnätet radbryts på mobil. Beskurna varubilders nederkant förankras på träytan; prislappar får inte skjuta upp varorna. Bevara den synliga knappsatsen i kundärendets summasteg: 1 2 3 överst, sudda, 0 och OK nederst; touch och vanligt tangentbord ska båda fungera.

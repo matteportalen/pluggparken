@@ -59,3 +59,7 @@ Production sprite atlas matching warm painted gouache forestgreen wooden shop re
 ### Prompt: alfaredigering, en per atlas
 
 Precise background extraction edit: Remove ALL white paper background and ALL gray gridlines from this sprite sheet, make those areas genuinely fully transparent alpha0. Preserve the twelve [andra atlasen: eight] illustrated props in exactly their current positions, shapes, colors and sizes. Keep original4column3row [andra atlasen: original4column2row] layout and canvas ratio. No checkerboard drawn, no haze, no paper rectangle, no new objects. Only the12 [andra atlasen: 8] individual objects on fully transparent empty space. Need usable game cutouts with clean alpha silhouettes.
+
+### Varubildernas fotpunkter
+
+`varor/0.webp` till `varor/33.webp` är normaliserade utsnitt ur befintliga `varor-malade-v1.webp`, i samma ID-ordning som VAROR. Ursprunglig atlas ligger kvar. Varje 8×5-cell beskärs till alfakanalens innehåll (>32), sparas proportionellt som WebP kvalitet 94/metod 4 och visas med `contain`/`center bottom`. Ingen nygenerering eller kreativ bildredigering, endast utskärning av spelatlas. Detta tar bort varierande tomrum under maten så att högarna får en verklig fotpunkt mot hyllan.

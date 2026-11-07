@@ -86,3 +86,19 @@ body::before{background:repeating-linear-gradient(0deg,#00000006 0 1px,transpare
 /* Fotpunkten ligger inne på den synliga träskivan, efter bildens transparenta överkant. */
 .shop{--counter-surface:27.5%}
 .prop-sign-preview{position:relative;width:72px;display:block}.prop-sign-preview>img{width:100%;display:block}.prop-sign-preview>span{position:absolute;inset:40% 0 0;color:#f2dfb0;font:bold 11px Georgia;text-align:center}.prop-sign-preview.neon{filter:drop-shadow(0 0 4px #c56eaf)}.prop-sign-preview.neon>span{color:#ffb6e0;text-shadow:0 0 3px #f272c9}
+/* Varje visuell varurad får ett eget hyllplan, även när rutnätet radbryts. */
+.spr{background-image:var(--food);background-size:contain;background-position:center bottom;background-repeat:no-repeat}
+.shelves{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:24px 0;align-items:end}
+.shop:not(.stocked-big) .shelves{grid-template-columns:repeat(4,minmax(0,1fr))}
+.shelves .shelf{display:contents}.shelves .shelf::after{display:none}
+.shelves .ware{display:flex;align-items:center;justify-content:flex-end;align-self:end;width:100%;max-width:none;min-height:72px;padding:0 0 8px;margin:0;z-index:1;position:relative}
+.shelves .ware::after{content:'';position:absolute;left:-1px;right:-1px;bottom:0;height:8px;background:linear-gradient(#d6b177,#a8753f 40%,#614227);box-shadow:0 4px 4px #31231455;z-index:-1}
+.shelves .ware .plabel{position:absolute;top:calc(100% - 6px);margin:0;left:50%;transform:translateX(-50%);z-index:2}
+.shelves .ware:nth-child(2n) .plabel{transform:translateX(-50%)}
+.shelves .ware:hover .pile{transform:none}
+@media(max-width:600px){.shelves{grid-template-columns:repeat(4,minmax(0,1fr));gap:20px 0}.shelves .ware{min-height:65px;--w:42px}.shop.stocked-big .shelves{grid-template-columns:repeat(4,minmax(0,1fr))}}
+/* Hela hyllplanet fortsätter även förbi en ofullständig sista varurad. */
+.shelves{grid-auto-rows:72px;background:repeating-linear-gradient(to bottom,transparent 0 64px,#d6b177 64px,#a8753f 67px,#614227 72px,transparent 72px 96px)}
+.shelves .ware{height:100%}.shelves .ware::after{display:none}
+@media(max-width:600px){.shelves{grid-auto-rows:65px;background:repeating-linear-gradient(to bottom,transparent 0 57px,#d6b177 57px,#a8753f 60px,#614227 65px,transparent 65px 85px)}}
+#errandForm{display:block;width:100%}.sum-entry{display:flex;align-items:center;justify-content:center;gap:10px;margin:8px 0 18px}#errandForm .pad{max-width:360px;margin:auto}#errandForm .pad button{min-height:52px}

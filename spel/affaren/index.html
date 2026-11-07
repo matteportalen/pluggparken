@@ -271,7 +271,7 @@ body{background:radial-gradient(ellipse at top,#ffedd6,#f5f0e8 70%)}
 
 .goal-shop{display:block;min-height:44px;margin-top:10px;padding:8px 16px;border-radius:10px;background:#2b6953;color:white;font-weight:800}
 </style>
-<link rel="stylesheet" href="butik.css?v=2">
+<link rel="stylesheet" href="butik.css?v=3">
 </head>
 <body>
 <section id="home" class="screen">
@@ -428,7 +428,7 @@ function deliverStock(){if(!automaticStock())return;initLager();sortiment().forE
 const iLager=()=>(G&&G.utbud?G.utbud:sortiment()).filter(i=>lag(i)>0);
 // lönen: affären tjänar per kund (inte hela köpet), lite mer på svårare nivåer; allt köpt på ungefär 15 speldagar
 const MULT={1:1,2:1,3:1.2,4:1.4},LON=(direkt,n)=>Math.round((direkt?12:6)*MULT[n]);
-const spr=(i,w)=>`<span class="spr" style="--x:${i%8};--y:${Math.floor(i/8)}${w?`;--w:${w}px`:""}"></span>`;
+const spr=(i,w)=>`<span class="spr" style="--food:url(bilder/varor/${i}.webp)${w?`;--w:${w}px`:""}"></span>`;
 
 /* ---------- Pengarna ---------- */
 const MONEY={1:{t:"coin",c:"s",sz:30},2:{t:"coin",c:"s",sz:36},5:{t:"coin",c:"g",sz:34},10:{t:"coin",c:"g",sz:40},
@@ -449,7 +449,7 @@ const KUNDER=8;
 const HYLLA=14;
 /* Varorna på hyllan: en hög som visar hur många som finns kvar (ingen siffra) och en hylletikett med priset */
 const PILE={1:[[.04,0,.92]],2:[[0,0,.68],[.32,0,.68]],3:[[0,0,.6],[.4,0,.6],[.2,.36,.6]],4:[[0,0,.55],[.24,0,.55],[.46,0,.55],[.24,.4,.55]]};
-const pileInner=i=>(PILE[Math.max(1,Math.min(4,lag(i)))]||PILE[1]).map(([x,y,k])=>`<span class="spr" style="--x:${i%8};--y:${Math.floor(i/8)};--w:calc(var(--w0)*${k});left:${x*100}%;bottom:${y*100}%"></span>`).join("");
+const pileInner=i=>(PILE[Math.max(1,Math.min(4,lag(i)))]||PILE[1]).map(([x,y,k])=>`<span class="spr" style="--food:url(bilder/varor/${i}.webp);--w:calc(var(--w0)*${k});left:${x*100}%;bottom:${y*100}%"></span>`).join("");
 function wareHtml(i,pr,o){const n=lag(i);o=o||{};pr=pr||{};
   if(n===0)return `<span class="ware sh out" data-i="${i}"><span class="pile">${pileInner(i)}</span><span class="plabel slut">SLUT</span></span>`;
   const off=o.offer&&o.offer.i===i;
@@ -965,14 +965,18 @@ function renderErrand(enter){const t=G.t,phase=errandPhase(t),onc=t.picked.map(i
   const panel=$('panel');let inner='';
   if(t.phase==='pick')inner=`<p class="ask">Plocka varorna direkt på hyllorna.</p><div class="shopping-list">${t.items.map(i=>`<span class="${t.picked.includes(i)?'checked':''}">${t.picked.includes(i)?'✓':'○'} ${NAMN(i)}</span>`).join('')}</div>`;
   if(t.phase==='scan')inner='<p class="ask">Dra varorna på bandet till skannern — eller tryck på dem.</p>';
-  if(t.phase==='sum')inner='<p class="ask">Vad kostar varorna tillsammans?</p><form id="errandForm"><input id="errandAnswer" aria-label="Summa i kronor" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" autocomplete="off"><span>kr</span><button class="done">Kontrollera ✓</button></form>';
+  if(t.phase==='sum')inner=`<p class="ask">Vad kostar varorna tillsammans?</p><form id="errandForm"><div class="sum-entry"><input id="errandAnswer" aria-label="Summa i kronor" type="text" inputmode="none" pattern="[0-9]*" maxlength="3" autocomplete="off" value="${t.sumInput||''}"><span>kr</span></div><div class="pad" aria-label="Sifferknappar">${[1,2,3,4,5,6,7,8,9].map(n=>`<button type="button" data-sum-key="${n}">${n}</button>`).join('')}<button type="button" data-sum-key="del" aria-label="Sudda senaste siffran">⌫</button><button type="button" data-sum-key="0">0</button><button type="submit" class="okbtn">OK</button></div></form>`;
   if(t.phase==='pay')inner=`<p class="ask">Varorna kostar ${t.tot} kr. Kunden räcker fram:</p><button class="accept-pay" id="acceptPay">${moneyHtml(t.pay,true)}<b>Ta emot ${t.pay} kr</b></button>`;
   if(t.phase==='change')inner=`<p class="ask">Kunden betalade ${t.pay} kr. Ge växel för köpet på ${t.tot} kr.</p><div class="tray" id="errandTray">${t.coins.map((v,i)=>`<button data-return="${i}" aria-label="Ta bort ${v} kronor">${moneyHtml(v)}</button>`).join('')}</div><small>På disken: ${t.coins.reduce((a,b)=>a+b,0)} kr</small><div class="drawer">${G.N.val.filter(v=>v<t.pay).map(v=>`<button data-coin="${v}" aria-label="Ge ${v} kronor">${moneyHtml(v,1.3)}</button>`).join('')}</div><button class="done" id="errandDone">Lämna växeln ✓</button>`;
   panel.innerHTML=`<div class="errand-label">KUNDUPPDRAG · ${t.purpose.toUpperCase()}</div><ol class="errand-steps">${errandSteps.map((x,i)=>`<li class="${i===phase?'current':i<phase?'complete':''}" ${i===phase?'aria-current="step"':''}>${i<phase?'✓':i+1} ${x}</li>`).join('')}</ol>${inner}<p class="errand-message" role="status">${t.message||''}</p>`;
   if(t.phase==='pick')document.querySelectorAll('#gameShop .shelf .ware:not(.out)').forEach(b=>{b.dataset.take=b.dataset.i;b.setAttribute('role','button');b.tabIndex=0;b.setAttribute('aria-label','Plocka '+VAROR[+b.dataset.i]);b.setAttribute('aria-pressed',t.picked.includes(+b.dataset.i));b.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();b.click()}};});
   document.querySelectorAll('#gameShop [data-take]').forEach(b=>b.onclick=()=>{const i=+b.dataset.take;if(!t.items.includes(i)){t.message='Titta på listan. Den varan behövs inte till det här ärendet.';renderErrand(false);return}if(!t.picked.includes(i)){t.picked.push(i);window.Ljud?.clonk?.();}if(t.picked.length===t.items.length){t.phase='scan';t.message='Varorna är plockade. Nu skannar vi dem!'}renderErrand(false)});
   if(document.activeElement===document.body){const first=panel.querySelector('input,button')||document.querySelector('#gameShop [data-take][aria-pressed="false"]')||document.querySelector('#onc .ware.skan');if(first){if(!first.hasAttribute('tabindex')&&first.tagName==='SPAN'){first.tabIndex=0;first.setAttribute('role','button');first.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();first.click()}}}first.focus({preventScroll:true})}}
-  if($('errandForm'))$('errandForm').onsubmit=e=>{e.preventDefault();const raw=$('errandAnswer').value;if(!/^\d+$/.test(raw))return;if(+raw===t.tot){t.phase='pay';t.message='Rätt summa! Nu tar vi betalt.';renderErrand(false)}else errandWrong(t,`Räkna ihop prislapparna: ${t.items.map(i=>G.prices[i]).join(' + ')}.`)};
+  if($('errandForm')){
+    const answer=$('errandAnswer');answer.oninput=()=>{answer.value=answer.value.replace(/[^0-9]/g,'').slice(0,3);t.sumInput=answer.value;};
+    panel.querySelectorAll('[data-sum-key]').forEach(button=>button.onclick=()=>{const k=button.dataset.sumKey;answer.value=k==='del'?answer.value.slice(0,-1):(answer.value+k).slice(0,3);t.sumInput=answer.value;});
+    $('errandForm').onsubmit=e=>{e.preventDefault();const raw=answer.value;if(!/^\d+$/.test(raw))return;if(+raw===t.tot){t.phase='pay';t.message='Rätt summa! Nu tar vi betalt.';renderErrand(false)}else{t.sumInput='';errandWrong(t,`Räkna ihop prislapparna: ${t.items.map(i=>G.prices[i]).join(' + ')}.`)}};
+  }
   if($('acceptPay'))$('acceptPay').onclick=()=>{t.phase='change';t.message='Hur mycket ska kunden få tillbaka?';renderErrand(false)};
   panel.querySelectorAll('[data-coin]').forEach(b=>{const add=()=>{if(t.coins.length>=20)return;t.coins.push(+b.dataset.coin);t.message='';renderErrand(false)};b.onclick=()=>{if(b.dataset.dragged)return;add()};b.onpointerdown=e=>{const x=e.clientX,y=e.clientY;let ghost=null;b.setPointerCapture(e.pointerId);b.onpointermove=ev=>{if(!ghost&&Math.hypot(ev.clientX-x,ev.clientY-y)>8){ghost=document.createElement('div');ghost.className='cghost';ghost.innerHTML=moneyHtml(+b.dataset.coin,1.3);document.body.appendChild(ghost)}if(ghost){ghost.style.left=ev.clientX+'px';ghost.style.top=ev.clientY+'px'}};b.onpointerup=ev=>{b.onpointermove=b.onpointerup=null;if(!ghost)return;ghost.remove();b.dataset.dragged='1';setTimeout(()=>delete b.dataset.dragged,0);const r=$('errandTray').getBoundingClientRect();if(ev.clientX>=r.left&&ev.clientX<=r.right&&ev.clientY>=r.top&&ev.clientY<=r.bottom)add()};b.onpointercancel=()=>{ghost?.remove();b.onpointermove=b.onpointerup=null}}});
   panel.querySelectorAll('[data-return]').forEach(b=>b.onclick=()=>{t.coins.splice(+b.dataset.return,1);renderErrand(false)});
