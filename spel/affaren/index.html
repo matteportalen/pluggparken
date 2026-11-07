@@ -55,7 +55,7 @@ h2{font-size:1.6rem;margin:18px 0 8px;font-weight:800}
 .shelf{position:relative;display:flex;flex-wrap:wrap;justify-content:center;gap:2px 8px;padding:6px 4px 3px;border-bottom:7px solid transparent;background:linear-gradient(rgba(120,80,40,.13),rgba(120,80,40,0) 80%);border-radius:6px 6px 0 0}
 .shelf::after{content:"";position:absolute;left:-1.5%;right:-1.5%;bottom:-7px;height:9px;border-radius:3px;background:linear-gradient(#DDAA70,#B07A3F 55%,#8D5E2E);box-shadow:0 4px 5px rgba(60,30,0,.28)}
 .ware{display:flex;flex-direction:column;align-items:center;width:var(--w,46px)}
-.spr{width:var(--w,46px);height:var(--w,46px);background:url(bilder/varor.png) no-repeat;background-size:calc(var(--w,46px)*8) auto;background-position:calc(var(--x)*var(--w,46px)*-1) calc(var(--y)*var(--w,46px)*-1)}
+.spr{width:var(--w,46px);height:var(--w,46px);background:url(bilder/varor-malade-v1.webp) no-repeat;background-size:calc(var(--w,46px)*8) calc(var(--w,46px)*5);background-position:calc(var(--x)*var(--w,46px)*-1) calc(var(--y)*var(--w,46px)*-1)}
 .tag{font-size:.64rem;font-weight:800;background:var(--card,#fff);border-radius:6px;padding:0 4px;line-height:1.35;box-shadow:0 1px 0 rgba(0,0,0,.15);white-space:nowrap;margin-top:-4px}
 .tag.offer{background:#FFD43B}
 .tag.slut{background:#E5484D;color:#fff}
@@ -271,17 +271,22 @@ body{background:radial-gradient(ellipse at top,#ffedd6,#f5f0e8 70%)}
 
 .goal-shop{display:block;min-height:44px;margin-top:10px;padding:8px 16px;border-radius:10px;background:#2b6953;color:white;font-weight:800}
 </style>
+<link rel="stylesheet" href="butik.css?v=1">
 </head>
 <body>
 <section id="home" class="screen">
 <div class="wrap">
-  <h1>Affären</h1>
+  <header class="store-title"><span>PLUGGPARKENS KVARTERSBUTIK</span><h1>Affären</h1><p>En liten butik. Stora planer.</p></header>
   <p class="lead">Din egen kvartersbutik! Följ kundens inköpslista från hyllan till kvittot, ge växel och spara till nya avdelningar.</p>
   <div id="homeShop"></div>
+  <button class="go" id="titlePlay">Vänd på skylten · Öppna affären</button>
+  <details class="shop-settings"><summary>Din arbetsdag · butik, nivå & leveranser</summary>
   <h2>Vilken affär?</h2>
   <div class="levels" id="butiker"></div>
   <h2>Vilken nivå?</h2>
   <div class="levels" id="levels"></div>
+  <fieldset class="delivery"><legend>Vem fyller på hyllorna?</legend><label><input type="radio" name="delivery" value="auto" id="autoStock"> Leverantören sköter det</label><p>Gratis leveranser mellan kunderna. Du fokuserar på kunder, priser och växel.</p><label><input type="radio" name="delivery" value="manual" id="manualStock"> Jag vill beställa själv</label><p>Öva även inköp. Beställningar betalas ur butikens kassa.</p></fieldset>
+  </details>
   <button class="go" id="play">Öppna affären ▶</button>
   <button class="mine" id="lagerBtn"><span><b>🚚 Fyll på hyllorna</b><small id="lagerInfo">Beställ varor som håller på att ta slut</small></span></button>
   <button class="mine" id="rushBtn"><span><b>⏱️ Rusning: <span id="rushT">av</span></b><small>Kunderna blir otåliga och en kö bildas. Bara om du vill ha mer fart!</small></span></button>
@@ -452,6 +457,10 @@ const INK=[2,2,2,2,1,1,1,4, 3,3,3,4, 3,3,2,3,2,1,4,2, 2,4,3, 2,1,1, 2,3,2, 3, 3,
 if(!data.lager)data.lager={};
 function initLager(){sortiment().forEach(i=>{if(data.lager[i]==null)data.lager[i]=FULL;});}
 const lag=i=>data.lager[i]??FULL;
+// Valfritt kassaläge: leveranser ingår, utan att belasta sparpengar eller inköp.
+const automaticStock=()=>data.autoStock===true;
+function deliverStock(){if(!automaticStock())return;initLager();sortiment().forEach(i=>data.lager[i]=FULL);save();}
+
 // det som finns på hyllan i dag (dagens utbud) och inte är slut
 const iLager=()=>(G&&G.utbud?G.utbud:sortiment()).filter(i=>lag(i)>0);
 // lönen: affären tjänar per kund (inte hela köpet), lite mer på svårare nivåer; allt köpt på ungefär 15 speldagar
@@ -482,6 +491,8 @@ function wareHtml(i,pr,o){const n=lag(i);o=o||{};pr=pr||{};
   if(n===0)return `<span class="ware sh out" data-i="${i}"><span class="pile">${pileInner(i)}</span><span class="plabel slut">SLUT</span></span>`;
   const off=o.offer&&o.offer.i===i;
   return `<span class="ware sh" data-i="${i}" title="${n} kvar"><span class="pile">${pileInner(i)}</span>${pr[i]!=null?`<span class="plabel${off?" offer":""}">${off?`2 för <b>${o.offer.p}</b>`:`<b>${pr[i]}</b> kr`}</span>`:""}</span>`;}
+const paintedAnimals=['uggla','katt','kanin','rav','panda','pingvin','robot','drake','enhorning','groda','hund','bjorn'];
+function customerArt(cfg){const i=Math.max(0,paintedAnimals.indexOf(cfg.animal));return `<span class="painted-person" style="--cx:${i%4};--cy:${Math.floor(i/4)}" role="img" aria-label="${PETNAME[cfg.animal]||'Kund'}"></span>`;}
 function shopHtml(o){o=o||{};const pr=o.prices||{},sor=(o.utbud||sortiment()).slice(0,HYLLA),pet=lasDjur();
   const rows=[sor.slice(0,Math.ceil(sor.length/2)),sor.slice(Math.ceil(sor.length/2))];
   const shelf=r=>`<div class="shelf">${r.map(i=>wareHtml(i,pr,o)).join("")}</div>`;
@@ -492,32 +503,35 @@ function shopHtml(o){o=o||{};const pr=o.prices||{},sor=(o.utbud||sortiment()).sl
   const DW={radio:62,kaffe:40,tv:58,nalle:44,blommor:44};
   const disk=E.disk==="radio"?`<button class="ondisk radio${data.radio?" play":""}" aria-label="Radio, tryck för att byta kanal">${deco("radio",DW.radio,{ch:data.radio||0})}</button>`
     :E.disk!=="ingen"?`<button class="ondisk int${(E.disk==="tv"&&F.tv)||(E.disk==="kaffe"&&F.kaffe)?" on":""}" data-int="${E.disk}" aria-label="${E.disk}">${deco(E.disk,DW[E.disk],{on:E.disk==="tv"?F.tv:F.kaffe})}</button>`:"";
-  return `<div class="shop" style="--a1:${MARKIS[E.markis]};background:${TAPET[E.tapet]}">
-    <div class="awn"></div>${tak}
+  return `<div class="shop${sor.length>8?' stocked-big':''}" style="--a1:${MARKIS[E.markis]};--wall:${TAPET[E.tapet]};background:${TAPET[E.tapet]}">
+    <div class="painted-room" aria-hidden="true"></div><div class="awn"></div>${tak}
     ${E.skylt!=="ingen"?`<div class="sign${E.skylt==="neon"?" neon":""}">${namn}</div>`:""}
     <div class="shelves" style="${E.skylt!=="ingen"?"top:82px":""}">${shelf(rows[0])}${rows[1].length?shelf(rows[1]):""}</div>
-    <div class="shop-floor-label">DIN KVARTERSBUTIK</div><div class="departments">${UPS.filter(u=>has(u.id)).map(u=>`<span>${u.name}</span>`).join('')}</div><div class="counter"></div>${disk}
+    <div class="shop-floor-label">DIN KVARTERSBUTIK</div><div class="departments">${UPS.filter(u=>has(u.id)).map(u=>`<span>${u.name}</span>`).join('')}</div><div class="counter"><img src="bilder/disk-v1.webp" alt="" draggable="false"></div>${disk}
     <button class="reg" id="regBtn" style="--rc:${KASSA[E.kassa]}" data-k="${E.kassa}" aria-label="Kassaapparat"><div class="scr" id="regScr">${o.reg||""}</div><div class="box"></div><div class="lada"><i></i><i></i><i></i><i></i></div></button>
-    <div class="keeper">${owlSVG(Object.assign({},pet,{neck:"forklade"}))}</div>
-    ${(o.kq||[]).map((c,j)=>`<div class="kq" style="left:${27+j*11}%">${owlSVG(c)}</div>`).join("")}${o.cust?`<div class="cust${o.away?" away":""}" id="cust">${o.pb||""}${owlSVG(o.cust)}${o.nm?`<span class="nm">${o.nm}</span>`:""}</div>`:""}
+    <div class="keeper">${customerArt(pet)}<span class="painted-apron" aria-hidden="true"></span></div>
+    ${(o.kq||[]).map((c,j)=>`<div class="kq" style="left:${27+j*11}%">${customerArt(c)}</div>`).join("")}${o.cust?`<div class="cust${o.away?" away":""}" id="cust">${o.pb||""}${customerArt(o.cust)}${o.nm?`<span class="nm">${o.nm}</span>`:""}</div>`:""}
     ${E.golv!=="ingen"?`<button class="ongolv int${E.golv==="lampa"&&F.lampa?" on":""}" data-int="${E.golv}" aria-label="${E.golv}">${deco(E.golv,{lampa:44,hangare:42,vaxt:46,pall:44,hogtalare:38}[E.golv],{on:F.lampa})}</button>`:""}
     <div class="onc" id="onc">${o.onc||""}</div></div>
     ${o.say?`<div class="bubble" id="bubble">${o.say}<button class="spk" id="spk" aria-label="Läs upp">🔊</button></div>`:""}`;}
 
 /* ---------- Skärmar ---------- */
-function show(id){document.querySelectorAll(".screen").forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
+function show(id){const changed=document.body.dataset.screen!==id;document.body.dataset.screen=id;document.querySelectorAll(".screen").forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);if(changed)requestAnimationFrame(()=>{const target=id==='home'?$('titlePlay'):document.querySelector(`#${id} input,#${id} button:not([disabled])`);target?.focus({preventScroll:true});});}
 const starHtml=n=>`<span class="stars">${[1,2,3].map(i=>i<=n?"★":'<span class="off">★</span>').join("")}</span>`;
 function openHome(){stopPat();G=null;
   $("butiker").innerHTML=Object.entries(BUT).map(([k,b])=>{const las=butikLas(k);return `<button class="lvl" data-b="${k}" aria-pressed="${butik()===k}" ${las?"disabled":""}><b>${b.e} ${b.n}</b><small>${las?"🔒 "+las:k==="livs"?"Allt du har köpt":({frukt:"Bara frukt och bär",bageri:"Bara bröd och bakverk",glass:"Glass, godis och kyl"})[k]}</small></button>`}).join("");
+  $("lagerBtn").hidden=automaticStock();$("rLager").hidden=automaticStock();
+  $("autoStock").checked=automaticStock();$("manualStock").checked=!automaticStock();
   $("rushT").textContent=data.rush?"på":"av";
   $("homeShop").innerHTML=shopHtml()+expansionCard();if($("goalShop"))$("goalShop").onclick=openMine;if($("savingGoal"))$("savingGoal").onchange=e=>{data.sparmal=e.target.value;save();openHome()};
   $("levels").innerHTML=Object.entries(NIVA).map(([n,v])=>`<button class="lvl" data-n="${n}" aria-pressed="${data.niva==n}"><b>${n}. ${v.name}</b><small>${v.desc}</small>${starHtml(data.stars[n]||0)}</button>`).join("");
   $("mineK").textContent=`💰 ${data.kassa} kr`;initLager();const lagt=sortiment().filter(i=>lag(i)<=1).length;
   {const tr=STAM.filter(x=>(data.stam[x.id]||{}).b).length,vn=STAM.filter(x=>hjarton(x.id)>0).length;$("bookInfo").textContent=tr?`${tr} av ${STAM.length} träffade · ${vn} ${vn===1?"vän":"vänner"}`:"Träffa dem som handlar hos dig";}
-  $("lagerInfo").textContent=lagt?`${lagt} ${lagt===1?"vara håller":"varor håller"} på att ta slut`:"Hyllorna är fulla";show("home");}
+  $("lagerInfo").textContent=automaticStock()?"Automatisk påfyllning är på · gratis leveranser":lagt?`${lagt} ${lagt===1?"vara håller":"varor håller"} på att ta slut`:"Hyllorna är fulla";show("home");}
 $("lagerBtn").onclick=()=>openLager();
 $("levels").onclick=e=>{const b=e.target.closest("[data-n]");if(!b)return;data.niva=+b.dataset.n;save();$("levels").querySelectorAll("[data-n]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.n==data.niva));};
-$("play").onclick=()=>startDay();
+$("play").onclick=$("titlePlay").onclick=()=>startDay();
+document.querySelectorAll('[name="delivery"]').forEach(input=>input.onchange=()=>{data.autoStock=input.value==='auto';save();openHome();input.focus();});
 $("butiker").onclick=e=>{const b=e.target.closest("[data-b]");if(!b||b.disabled)return;data.butik=b.dataset.b;save();openHome();};
 $("rushBtn").onclick=()=>{data.rush=!data.rush;save();$("rushT").textContent=data.rush?"på":"av";};
 $("mineBtn").onclick=()=>openMine();$("mineBack").onclick=()=>openHome();
@@ -595,7 +609,7 @@ $("lagerBack").onclick=()=>openHome();
 
 /* ---------- Dagen ---------- */
 let G=null;
-function startDay(){if(data.radio&&eqRadio())radioCtx();const N=NIVA[data.niva],sor=sortiment(),prices={};
+function startDay(){deliverStock();if(data.radio&&eqRadio())radioCtx();const N=NIVA[data.niva],sor=sortiment(),prices={};
   initLager();const egna=new Set();data.pris=data.pris||{};sor.forEach(i=>{if(data.pris[i]!=null){prices[i]=Math.min(prisMax(i),Math.max(INK[i]+1,data.pris[i]));egna.add(i);}else prices[i]=Math.max(INK[i]+1,rnd(N.pris[0],N.pris[1]));});
   // erbjudande på nivå 4: "2 för X kr" på en vara
   let offer=null;if(data.niva===4){const i=pick(sor);offer={i,p:prices[i]*2-rnd(2,Math.max(3,Math.floor(prices[i]/2)))};}
@@ -611,8 +625,8 @@ function startDay(){if(data.radio&&eqRadio())radioCtx();const N=NIVA[data.niva],
   show("game");nextCust();}
 function custCfg(){const pet=lasDjur(),an=pick(WARD.animal.items.map(x=>x.id).filter(a=>a!==pet.animal));
   return{animal:an,color:"natur",glasses:pick(["inga","inga","runda","sol"]),hat:pick(["ingen","ingen","keps","mossa","party"]),neck:pick(["ingen","rosett","halsduk"])};}
-function hud(){$("hudT").textContent=`Dag ${data.dagar+1} · Kund ${Math.min(G.k+1,KUNDER)} av ${KUNDER}`;$("hudK").textContent=`💰 ${G.kassa} / ${G.mal} kr`;}
-function nextCust(){if(G.k>=KUNDER)return endDay();
+function hud(){$("hudT").textContent=`Dag ${data.dagar+1} · Kund ${Math.min(G.k+1,KUNDER)} av ${KUNDER}${automaticStock()?" · Leveranser ingår":""}`;$("hudK").textContent=`💰 ${G.kassa} / ${G.mal} kr`;}
+function nextCust(){if(G.k>=KUNDER)return endDay();deliverStock();
   const typ=G.typer[G.k];FB={m:"",h:false};G.bad=false;const sl=G.slots[G.k],fi=sl?VAROR.indexOf(sl.fav):-1;G.must=sl&&fi>=0&&iLager().includes(fi)&&Math.random()<.8?fi:null;G.prat=null;
   G.t=([0,4].includes(G.k)?makeErrand():null)||makeTask(typ);G.scan=new Set();if(G.t.typ==="summa"&&G.t.items&&G.t.items.length>=2&&Math.random()<.75)G.t.skan=true;G.t.cust=sl?stamLook(sl):custCfg();G.pers={s:sl,nm:sl?sl.n:null,fi:G.t.items&&G.must!=null&&G.t.items.includes(G.must)?G.must:-1};G.tries=0;G.inp="";G.tray=[];G.sel=new Set();G.done=false;G.helped=false;
   hud();G.kvStep=0;render(true);startPat();const kk=G.k;
@@ -730,7 +744,7 @@ function render(enter){if(G.t.arende&&!G.done)return renderErrand(enter);const t
   $("spk").onclick=()=>speak(sayFor(t).replace(/kr\b/g,"kronor"));
   document.querySelectorAll("#onc .pick").forEach(x=>x.onclick=()=>pickWare(+x.dataset.j));
   renderPanel();}
-function scanBind(){document.querySelectorAll("#onc .ware.skan").forEach(w=>{w.onpointerdown=e=>{if(G.done||w.classList.contains("gone"))return;e.preventDefault();const j=+w.dataset.j,sx=e.clientX,sy=e.clientY;let moved=false;try{w.setPointerCapture(e.pointerId);}catch(x){}w.style.position="relative";w.style.zIndex=50;
+function scanBind(){document.querySelectorAll("#onc .ware.skan").forEach(w=>{w.tabIndex=0;w.setAttribute("role","button");w.setAttribute("aria-label","Skanna "+VAROR[G.t.items[+w.dataset.j]]);w.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();scanned(+w.dataset.j)}};w.onpointerdown=e=>{if(G.done||w.classList.contains("gone"))return;e.preventDefault();const j=+w.dataset.j,sx=e.clientX,sy=e.clientY;let moved=false;try{w.setPointerCapture(e.pointerId);}catch(x){}w.style.position="relative";w.style.zIndex=50;
   w.onpointermove=ev=>{const dx=ev.clientX-sx,dy=ev.clientY-sy;if(Math.abs(dx)+Math.abs(dy)>8)moved=true;w.style.transform=`translate(${dx}px,${dy}px) scale(1.12)`;const rg=document.querySelector("#gameShop .reg").getBoundingClientRect(),ov=ev.clientX>=rg.left-10&&ev.clientX<=rg.right+10&&ev.clientY>=rg.top-10&&ev.clientY<=rg.bottom+10;if(ov&&moved){w.onpointermove=w.onpointerup=null;scanned(j);}};
   w.onpointerup=ev=>{w.onpointermove=w.onpointerup=null;const rg=document.querySelector("#gameShop .reg").getBoundingClientRect(),over=ev.clientX>=rg.left-16&&ev.clientX<=rg.right+16&&ev.clientY>=rg.top-16&&ev.clientY<=rg.bottom+16;if(over||!moved)scanned(j);else{w.style.transform="";w.style.zIndex="";}};};});}
 function scanned(j){if(!G||G.done||G.scan.has(j))return;if(G.t.arende){G.scan.add(j);window.Ljud?.pip?.();if(G.scan.size===G.t.items.length){G.t.phase='sum';G.t.message='Alla varor är skannade. Räkna nu ihop priset.'}renderErrand(false);return}G.scan.add(j);window.Ljud&&(Ljud.pip||Ljud.clonk)&&(Ljud.pip||Ljud.clonk)();render(false);
@@ -854,7 +868,7 @@ function serve(msg,shown){const t=G.t;G.done=true;stopPat();
   if(t.typ==="vaxel"&&G.helped){const lb=document.querySelector("#panel #lineBox");if(lb)lb.innerHTML=countUp(t.tot,t.pay);}
   const c=$("cust");if(c&&!reduced()){c.animate([{transform:"translateY(0)"},{transform:"translateY(-16px)"},{transform:"translateY(0)"}],{duration:450});}}
 function endDay(){stopPat();const st=G.miss===0?3:G.miss<=2?2:1,old=data.stars[G.niva]||0;data.stars[G.niva]=Math.max(old,st);G.st=st;
-  const rap=[],k0=G.kassa;if(G.errands)rap.push(`<li>🛒 ${G.errands} hela kundärenden: plockat, skannat, räknat och gett växel.</li>`);
+  const rap=[],k0=G.kassa;if(automaticStock())rap.push("<li>Leverantören fyllde på mellan kunderna. Leveranserna ingick utan kostnad.</li>");if(G.errands)rap.push(`<li>🛒 ${G.errands} hela kundärenden: plockat, skannat, räknat och gett växel.</li>`);
   G.bonus=G.miss===0?Math.round(20*MULT[G.niva]):0;G.kassa+=G.bonus;
   if(k0>=G.mal){const mb=Math.round(10*MULT[G.niva]);G.kassa+=mb;rap.push(`<li class="ok">🎯 Dagens mål (${G.mal} kr) nåddes! +${mb} kr</li>`);}else rap.push(`<li>🎯 Dagens mål var ${G.mal} kr. Du fick ${k0} kr, nästan!</li>`);
   Object.keys(G.met).forEach(id=>{const s0=STAM.find(x=>x.id===id),d=data.stam[id]||(data.stam[id]={b:0,g:0}),h0=hjarton(id);d.b++;if(G.met[id])d.g++;const h1=hjarton(id);
@@ -894,7 +908,7 @@ $("cashSkip").onclick=()=>slutDag();
 /* Stamkundsboken */
 function openBook(){const d0=id=>data.stam[id]||{b:0,g:0};
   $("bookList").innerHTML=STAM.map(s0=>{const d=d0(s0.id),ny=!d.b,fi=VAROR.indexOf(s0.fav),h=hjarton(s0.id);
-    return `<div class="bk${ny?" ny":""}"><div class="pic">${owlSVG(stamLook(s0))}</div><b>${ny?"???":s0.n}</b>${ny?"<small>Har inte besökt än</small>":`<small>${d.b} ${d.b===1?"besök":"besök"}</small><div class="fav">${spr(fi,34)} ${s0.fav}</div>`}<div class="hj">${[0,1,2].map(i=>i<h?"❤️":'<span class="off">❤️</span>').join("")}</div></div>`;}).join("");show("book");}
+    return `<div class="bk${ny?" ny":""}"><div class="pic">${customerArt(stamLook(s0))}</div><b>${ny?"???":s0.n}</b>${ny?"<small>Har inte besökt än</small>":`<small>${d.b} ${d.b===1?"besök":"besök"}</small><div class="fav">${spr(fi,34)} ${s0.fav}</div>`}<div class="hj">${[0,1,2].map(i=>i<h?"❤️":'<span class="off">❤️</span>').join("")}</div></div>`;}).join("");show("book");}
 $("bookBtn").onclick=()=>openBook();$("bookBack").onclick=()=>openHome();
 $("rAgain").onclick=()=>startDay();$("rMine").onclick=()=>openMine();$("rLager").onclick=()=>openLager();$("rHome").onclick=()=>openHome();
 $("quit").onclick=()=>{stopPat();G=null;openHome();};
@@ -988,13 +1002,15 @@ function errandSay(t){return `Jag ska ordna ${t.purpose}. Hjälp mig köpa ${t.i
 function renderErrand(enter){const t=G.t,phase=errandPhase(t),onc=t.picked.map(i=>{const j=t.items.indexOf(i);return `<span class="ware${t.phase==='scan'?' skan'+(G.scan.has(j)?' gone':''):''}" data-j="${j}">${spr(i)}<span class="tag">${G.prices[i]} kr</span></span>`}).join('');
   $('gameShop').innerHTML=shopHtml({prices:G.prices,utbud:G.utbud,cust:t.cust,nm:G.pers?.nm,away:enter,onc,reg:t.phase==='scan'?G.scan.size+' / '+t.items.length:t.phase==='pay'||t.phase==='change'?t.tot+' kr':'',say:errandSay(t)});$('spk').onclick=()=>speak(errandSay(t));if(t.phase==='scan')scanBind();if(enter&&!reduced())requestAnimationFrame(()=>requestAnimationFrame(()=>$('cust')?.classList.remove('away')));else $('cust')?.classList.remove('away');
   const panel=$('panel');let inner='';
-  if(t.phase==='pick')inner=`<p class="ask">Plocka varorna på kundens lista.</p><div class="shopping-list">${t.items.map(i=>`<span class="${t.picked.includes(i)?'checked':''}">${t.picked.includes(i)?'✓':'○'} ${NAMN(i)}</span>`).join('')}</div><div class="errand-goods">${G.utbud.filter(i=>lag(i)>0).map(i=>`<button data-take="${i}" aria-label="Plocka ${VAROR[i]}" aria-pressed="${t.picked.includes(i)}">${spr(i)}<b>${NAMN(i)}</b><small>${G.prices[i]} kr</small></button>`).join('')}</div>`;
+  if(t.phase==='pick')inner=`<p class="ask">Plocka varorna direkt på hyllorna.</p><div class="shopping-list">${t.items.map(i=>`<span class="${t.picked.includes(i)?'checked':''}">${t.picked.includes(i)?'✓':'○'} ${NAMN(i)}</span>`).join('')}</div>`;
   if(t.phase==='scan')inner='<p class="ask">Dra varorna på bandet till skannern — eller tryck på dem.</p>';
   if(t.phase==='sum')inner='<p class="ask">Vad kostar varorna tillsammans?</p><form id="errandForm"><input id="errandAnswer" aria-label="Summa i kronor" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" autocomplete="off"><span>kr</span><button class="done">Kontrollera ✓</button></form>';
   if(t.phase==='pay')inner=`<p class="ask">Varorna kostar ${t.tot} kr. Kunden räcker fram:</p><button class="accept-pay" id="acceptPay">${moneyHtml(t.pay,true)}<b>Ta emot ${t.pay} kr</b></button>`;
   if(t.phase==='change')inner=`<p class="ask">Kunden betalade ${t.pay} kr. Ge växel för köpet på ${t.tot} kr.</p><div class="tray" id="errandTray">${t.coins.map((v,i)=>`<button data-return="${i}" aria-label="Ta bort ${v} kronor">${moneyHtml(v)}</button>`).join('')}</div><small>På disken: ${t.coins.reduce((a,b)=>a+b,0)} kr</small><div class="drawer">${G.N.val.filter(v=>v<t.pay).map(v=>`<button data-coin="${v}" aria-label="Ge ${v} kronor">${moneyHtml(v,1.3)}</button>`).join('')}</div><button class="done" id="errandDone">Lämna växeln ✓</button>`;
   panel.innerHTML=`<div class="errand-label">KUNDUPPDRAG · ${t.purpose.toUpperCase()}</div><ol class="errand-steps">${errandSteps.map((x,i)=>`<li class="${i===phase?'current':i<phase?'complete':''}" ${i===phase?'aria-current="step"':''}>${i<phase?'✓':i+1} ${x}</li>`).join('')}</ol>${inner}<p class="errand-message" role="status">${t.message||''}</p>`;
-  panel.querySelectorAll('[data-take]').forEach(b=>b.onclick=()=>{const i=+b.dataset.take;if(!t.items.includes(i)){t.message='Titta på listan. Den varan behövs inte till det här ärendet.';renderErrand(false);return}if(!t.picked.includes(i))t.picked.push(i);if(t.picked.length===t.items.length){t.phase='scan';t.message='Varorna är plockade. Nu skannar vi dem!'}renderErrand(false)});
+  if(t.phase==='pick')document.querySelectorAll('#gameShop .shelf .ware:not(.out)').forEach(b=>{b.dataset.take=b.dataset.i;b.setAttribute('role','button');b.tabIndex=0;b.setAttribute('aria-label','Plocka '+VAROR[+b.dataset.i]);b.setAttribute('aria-pressed',t.picked.includes(+b.dataset.i));b.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();b.click()}};});
+  document.querySelectorAll('#gameShop [data-take]').forEach(b=>b.onclick=()=>{const i=+b.dataset.take;if(!t.items.includes(i)){t.message='Titta på listan. Den varan behövs inte till det här ärendet.';renderErrand(false);return}if(!t.picked.includes(i)){t.picked.push(i);window.Ljud?.clonk?.();}if(t.picked.length===t.items.length){t.phase='scan';t.message='Varorna är plockade. Nu skannar vi dem!'}renderErrand(false)});
+  if(document.activeElement===document.body){const first=panel.querySelector('input,button')||document.querySelector('#gameShop [data-take][aria-pressed="false"]')||document.querySelector('#onc .ware.skan');if(first){if(!first.hasAttribute('tabindex')&&first.tagName==='SPAN'){first.tabIndex=0;first.setAttribute('role','button');first.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();first.click()}}}first.focus({preventScroll:true})}}
   if($('errandForm'))$('errandForm').onsubmit=e=>{e.preventDefault();const raw=$('errandAnswer').value;if(!/^\d+$/.test(raw))return;if(+raw===t.tot){t.phase='pay';t.message='Rätt summa! Nu tar vi betalt.';renderErrand(false)}else errandWrong(t,`Räkna ihop prislapparna: ${t.items.map(i=>G.prices[i]).join(' + ')}.`)};
   if($('acceptPay'))$('acceptPay').onclick=()=>{t.phase='change';t.message='Hur mycket ska kunden få tillbaka?';renderErrand(false)};
   panel.querySelectorAll('[data-coin]').forEach(b=>{const add=()=>{if(t.coins.length>=20)return;t.coins.push(+b.dataset.coin);t.message='';renderErrand(false)};b.onclick=()=>{if(b.dataset.dragged)return;add()};b.onpointerdown=e=>{const x=e.clientX,y=e.clientY;let ghost=null;b.setPointerCapture(e.pointerId);b.onpointermove=ev=>{if(!ghost&&Math.hypot(ev.clientX-x,ev.clientY-y)>8){ghost=document.createElement('div');ghost.className='cghost';ghost.innerHTML=moneyHtml(+b.dataset.coin,1.3);document.body.appendChild(ghost)}if(ghost){ghost.style.left=ev.clientX+'px';ghost.style.top=ev.clientY+'px'}};b.onpointerup=ev=>{b.onpointermove=b.onpointerup=null;if(!ghost)return;ghost.remove();b.dataset.dragged='1';setTimeout(()=>delete b.dataset.dragged,0);const r=$('errandTray').getBoundingClientRect();if(ev.clientX>=r.left&&ev.clientX<=r.right&&ev.clientY>=r.top&&ev.clientY<=r.bottom)add()};b.onpointercancel=()=>{ghost?.remove();b.onpointermove=b.onpointerup=null}}});
