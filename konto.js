@@ -27,6 +27,16 @@ function merge(a,b){const out=Object.assign({},a);
       for(const m of ["plus","hundra","tabell","stor"]){o.stars[m]=Math.max(x.stars?.[m]||0,y.stars?.[m]||0);const u=x.campaigns?.[m]||{},v=y.campaigns?.[m]||{},c={...v,...u};
         c.score=Math.max(u.score||0,v.score||0);c.claimed=[...new Set([...(u.claimed||[]),...(v.claimed||[])])];c.defeated=[...new Set([...(u.defeated||[]),...(v.defeated||[])])];c.ore=[...new Set([...(u.ore||[]),...(v.ore||[])])];for(const f of ["shield","boots","shortcut","bridge","canopyFound","won","passBriefed","passVisited","relayFound","passBridge","passWon","portalUnlocked","cityVisited","citySluice","cityRestored","ghostMet"])c[f]=!!u[f]||!!v[f];c.checkpoint=u.checkpoint===2560||v.checkpoint===2560?2560:384;c.passCheckpoint=u.passCheckpoint===2176||v.passCheckpoint===2176?2176:128;c.timeFragments=[...new Set([...(u.timeFragments||[]),...(v.timeFragments||[])])];c.clockLocks=Math.max(u.clockLocks||0,v.clockLocks||0);c.oracleCards=Math.max(u.oracleCards||0,v.oracleCards||0);c.cityCheckpoint=Math.max(u.cityCheckpoint||128,v.cityCheckpoint||128);c.region=(u.region||v.region)==='city'?'city':(u.region||v.region)==='pass'?'pass':'forest';c.deaths=Math.max(u.deaths||0,v.deaths||0);o.campaigns[m]=c;}
       out[k]=JSON.stringify(o);}catch(e){}return;}
+    // Racerbanan delar nyckel med Spelhörnan. Behåll övriga spels tidigare merge,
+    // förena garage och välj varje banrekord som en helhet (tid + spökets körning).
+    if(k==="mattespel-spel-v1"){try{const x=JSON.parse(a[k]),y=JSON.parse(b[k]),o=progressOf(b[k])>progressOf(a[k])?{...y}:{...x};
+      o.carOwned=[...new Set([...(x.carOwned||['1']),...(y.carOwned||['1'])])];o.car={};
+      for(const cat of new Set([...Object.keys(x.car||{}),...Object.keys(y.car||{})])){const u=x.car?.[cat]||{},v=y.car?.[cat]||{};
+        const old=Number(v.time)>0&&(!(Number(u.time)>0)||v.time<u.time)?v:u,c={...v,...u,...old,stars:Math.max(u.stars||0,v.stars||0),rallyV1:{}};
+        for(const id of new Set([...Object.keys(u.rallyV1||{}),...Object.keys(v.rallyV1||{})])){const l=u.rallyV1?.[id],r=v.rallyV1?.[id],win=!l?r:!r?l:r.time<l.time?r:l;c.rallyV1[id]={...win,stars:Math.max(l?.stars||0,r?.stars||0)};}o.car[cat]=c;}
+      o.carRallyCup={...x.carRallyCup};for(const [cat,n] of Object.entries(y.carRallyCup||{}))o.carRallyCup[cat]=Math.max(o.carRallyCup[cat]||0,n);
+      for(const f of ['carWon','carPerfect'])o[f]=!!x[f]||!!y[f];o.carPlayed=Math.max(x.carPlayed||0,y.carPlayed||0);out[k]=JSON.stringify(o);
+    }catch(e){}return;}
     // Läsflyt: läsningarna läggs ihop (inget försvinner), bokstäverna: senaste markeringen vinner
     if(k==="mattespel-lasflyt-v1"){try{const x=JSON.parse(a[k]),y=JSON.parse(b[k]),o=Object.assign({},x);
       o.las={...(x.las||{})};Object.entries(y.las||{}).forEach(([id,r])=>{const m=new Map([...(o.las[id]||[]),...r].map(e=>[e.d,e]));o.las[id]=[...m.values()].sort((p,q)=>p.d-q.d).slice(-20);});

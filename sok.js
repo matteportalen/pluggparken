@@ -41,7 +41,7 @@ const IDX=[
  ['spel/#tower','Tornbygget','Svara rätt och bygg tornet mot månen','🏗️','torn kran balk bygga','Spelhörnan'],
  ['spel/#mem','Memory','Hitta paren, själv eller mot en vän','🃏','minnesspel par två spelare kort','Spelhörnan'],
  ['spel/#tug','Dragkampen','Räkna snabbast och dra repet','🪢','rep dra två spelare robot','Spelhörnan'],
- ['spel/#car','Racerbanan','Svara rätt och kör om motståndarna','🏎️','bil race garage tävling','Spelhörnan'],
+ ['spel/racerbanan/','Racerbanan','Kör rally, lös matte och tävla i mästerskapet','🏎️','bil race garage tävling','Spelhörnan'],
  ['spel/#frog','Grodhoppet','Hoppa med grodan','🐸','groda hopp tallinje','Spelhörnan'],
  ['hundraruta/#verktyg','Hundrarutan (verktyg)','Markera tal och hoppa','💯','hundra ruta verktyg hoppa','Verktygslådan'],
  ['verktyg/tallinjen/','Tallinjen','Hoppa fram och tillbaka på en tallinje','📏','tallinje hoppa addition subtraktion','Verktygslådan'],

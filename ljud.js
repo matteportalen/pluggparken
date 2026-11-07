@@ -20,6 +20,14 @@
     o.connect(g).connect(c.destination);o.start(t);o.stop(t+dur+.05);
   }
   const Ljud={
+    race(kind){if(!isOn())return;const c=ac();if(!c)return;
+      if(kind==='bump'){noiseBurst(c,0,.18,180,.7,.16,65);tone(90,0,.14,'triangle',.09,42);}
+      else if(kind==='skid')noiseBurst(c,0,.2,1900,.9,.055,850);
+      else if(kind==='turbo'){noiseBurst(c,0,.45,420,.6,.09,2200);tone(80,0,.35,'sawtooth',.025,180);}
+      else if(kind==='coin'){tone(1200,0,.035,'triangle',.055,700);}
+      else if(kind==='finish'){noiseBurst(c,0,.5,600,.6,.06,140);tone(180,0,.3,'sawtooth',.035,95);tone(270,.12,.3,'triangle',.04,135);}
+      else {tone(kind==='start'?440:240,0,.09,'square',.035);noiseBurst(c,.03,.08,600,1,.025);}
+    },
     get on(){return isOn()},
     set(v){try{localStorage.setItem(KEY,v?'på':'av')}catch(e){}if(!v)this.stopLoops();},
     /* Rätt svar: ett glatt litet pling */

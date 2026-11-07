@@ -533,7 +533,7 @@ $("btnMem").onclick=()=>{game="mem";renderChoose();showOnly("choose");};
 $("btnTower").onclick=()=>{game="tower";if(cat==="klocka")cat="hundra";renderChoose();showOnly("choose");};
 $("btnFrog").onclick=()=>{game="frog";if(cat==="klocka")cat="plus10";renderChoose();showOnly("choose");};
 $("frogChips").onclick=e=>{const b=e.target.closest("[data-m]");if(!b)return;data.frogMode=b.dataset.m;save();renderChoose();};
-$("btnCar").onclick=()=>{game="car";if(cat==="klocka")cat="plus10";renderChoose();showOnly("choose");};
+$("btnCar").onclick=()=>{location.href="racerbanan/";};
 $("laneChips").onclick=e=>{const b=e.target.closest("[data-l]");if(!b)return;data.lanes=+b.dataset.l;save();renderChoose();};
 $("backMenu").onclick=()=>showOnly("menu");
 const starHtml=n=>`<span class="stars">${[1,2,3].map(i=>i<=n?"★":'<span class="off">★</span>').join("")}</span>`;

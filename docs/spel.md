@@ -227,3 +227,15 @@ Användaren tycker också att den kodritade urtavlan på klocktornet är ful och
 Återkopplingen ovan är nu genomförd: vålnaden berättar om stadens frusna tid och pekar ut pendelns hjärta i huset, sigillet ovanför taken och motvikten i de nya spelbara valven. De tre delarna krävs före slutpusslet. Tre separata fästen repareras genom att vrida en talring så ett matematiskt uttryck balanserar och dra handtaget. Felsvar ger ledtråd; lagade fästen sparas; inget tidspåslag förrän tredje fästet är klart. Därefter börjar visarna röra sig, bron sänks och vålnaden får nästa sekund. Slutsekvensen sker inne i världen.
 
 Spåkvinnans generiska ruta har ersatts med en bild av bordet: frågor på korten, svar som benbrickor på duken och repliker direkt i scenen. Urtavlan är en ny bildritad sten-/järntavla med separata rörliga visare. Spelhörnans miniatyr justerades sist till en ljus närbild av väktaren via CSS, utan att ändra titelbilden. Manifest/prompter: `spel/glodvaktaren/bilder/TIDENS-VAKTARE.md`. Tester: utökad klockstadsgenomspelning, `test-glodvaktaren-tid.cjs` för alla matteval samt mobil- och profiltester.
+
+## Racerbanan — Rallyklubben (2026-11-07)
+
+Den aktiva Racerbanan finns nu på `spel/racerbanan/`. Spelhörnans kort och gamla `spel/#car` leder dit. Egen depå, sex bakifrån målade fordon, fem färger, fyra målade miljöer och Canvas-väg med perspektiv, kurvor och höjdskillnader. Inga ramverk eller externa tillgångar under körning. Bildproduktion: `spel/racerbanan/bilder/PRODUKTION.md`.
+
+Åtta mattecheckar per lopp; tiden och motståndarna väntar medan eleven räknar. Addition/subtraktion till 10, 20 eller 100 samt valda multiplikations-/divisionstabeller. Tre eller fyra svarsfiler. Rätt svar ger turbo och öppnar nästa genväg. Mellan kontrollerna: styrning, kurvsladd, slipstream, omkörningar, mynt, koner/olja och två vägval. Tangenter, pekknappar och dragstyrning. Paus vid fokusförlust; minskad rörelse respekteras. Ljud syntetiseras lokalt via `Ljud.race` och den befintliga motorn.
+
+Enskilt lopp med rekordspöke, eller fyra lopp i mästerskap mot Nova/Otto/Vera (10/6/4/2 poäng). Garaget och originalrekorden behåller `mattespel-spel-v1`, `carOwned`, `carCoins`, `carSel`, `car[matteval].time/pace/stars`. Gamla rekord visas separat. Nya bankörningar sparas i `car[matteval].rallyV1["bana:filer"]` med tid, stjärnor, kontrolltider och spökspår. Mästerskapets bästa poäng i `carRallyCup`. Pågående lopp/mästerskap sparas inte. Konto-synken förenar köpta bilar och väljer varje nytt banrekord tillsammans med dess matchande spökspår. Övriga Spelhörnan-data skrivs inte över av racing-sidan.
+
+Verifiering: `NODE_PATH=/opt/homebrew/lib/node_modules node skript/test-racerbanan.cjs` mot lokal server på port 8765 (eller `BASE_URL`).
+
+Ytterligare kontroller: `skript/test-racerbanan-kontroller.cjs` för köp, mattefördelningar, valda tabeller, fel svar och sladd; `skript/test-racerbanan-synk.cjs` för kontosammanslagning av äldre/nya rekord i båda riktningar.
