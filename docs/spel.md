@@ -267,3 +267,11 @@ Motvikt, pump och cistern har nu två sparade delsteg. Ordning, lika fördelning
 Nya kontroller: `test-glodvaktaren-djupen-skatter.cjs` når samtliga tio kistor och provar svärdsuppgraderingen samt skydd mot återkommande poäng. `test-glodvaktaren-djupen-final.cjs` provar tre separata kedjebrott, felaktiga samtidiga ventiler, slutsekvens på mobil, fontäner och bestående avslut. Helbanetestet använder riktiga svärdshugg via `depth-test-helpers.cjs`. Bildmanifestet beskriver de sex nya tillgångarna.
 
 Hjärtvalvets instruktion (2026-11-07): de tre villkoren visas på varsin tydligt märkt A-, B- och C-rad, med indrag vid radbrytning på mobil. Matematik och svar är oförändrade.
+
+### Racerbanans titelskärm och färger (2026-11-07)
+
+Startsidan följer nu samma spelmenystruktur som Glödväktaren: fullskärmsmålning, egen illustrerad titel och fyra huvudval (Till startlinjen, Bil & färg, Bana & mästerskap, Räknesätt). Den valda bilen står i depåmålningen och ändras med bil/färg. En kort sammanfattning visar modell/lack, bana eller mästerskap samt matematiken. Ljud och hjälp ligger i sidfoten. Valen är kvar i sina tidigare sparfält.
+
+Depån är en överlagrad spelmeny med fyra sidor (bil, lopp, matematik, hjälp). Alla sex bilmodeller, köp/priser/mynt, fem färger, fyra banor, mästerskap, matteval/tabeller, tre/fyra svarsfiler, gamla rekord och rekordspöke behålls. Val sparas direkt; man kan starta från huvudmenyn eller depån. Fokus hålls i depån, återställs till öppnaren med Escape och bevaras när ett bil-/färg-/tabellval ritas om. Tangentbordets pilar navigerar titelmenyn och depåflikarna. Retur från lopp visar huvudmenyn.
+
+Lackfärgningen gäller en mask av orange kaross, inte hela bilden: gult blir gult på alla modeller, med glas/däck/metall/transparent bakgrund bevarade. Samma färgade sprite används i titeln, garaget och loppet. `test-racerbanan-titel.cjs` provar panelerna, sparade val och mobil/landskap; `test-racerbanan-farger.cjs` granskar alla 30 varianter. Kontroll- och mästerskapstesterna använder den nya menyvägen.

@@ -13,3 +13,14 @@ Gemensam riktning: handmålad arkadracing, petrolblått, varm gräddvit och brä
 - `vinter.png`: snöigt bergspass med blå barrskog, blek lavendelhimmel och små varma ljuspunkter; samma komposition och stil.
 
 Originalen behålls även i Codex generated_images. Bilderna ersätter inte de tidigare Kenney-filerna, som finns kvar för äldre kod. Den nya Racerbanan laddar endast sina egna bilder här.
+
+## Titelskärm och depå, 2026-11-07
+
+Två nya ImageGen-original, kopierade med ursprunglig inbäddad metadata från Codex generated_images. Inga externa bildanrop i spelet.
+
+- `title-pit-v1.png`: opak 16:9 målning av en kustdepå i blå skymning. Mörk lugn vänsterhalva för titel och meny, öppen betongyta på höger sida för den separat renderade valda bilen. Belyst bergsväg, hav och kustljus utanför, varm arbetslampa och enstaka verktyg/flagga. Handmålad HD-2D med petrolblått, skiffer och återhållna orange accenter. Promptkrav: inga fordon, människor, texter, logotyper eller UI; en faktisk spelöppning, inte en webbhero.
+- `title-logo-v1.png`: nativ alfa. Specialritad motorsporttitel “RACERBANAN”, två sammanhängande rader RACER/BANAN, lutande skulpterad elfenbensmetall, blå stålskugga och små slitna orange kanter. Diskret schackflaggeaccent, utan skyltplatta, bil, extra ord eller bakgrund. Läslig vid 320 px bredd.
+
+Den valda bilen komponeras lokalt på titelskärmen så lack och modell alltid motsvarar depåvalet. Förinställningen syns även i text. Bakgrunden har mycket långsam kamerarörelse; minskad rörelse stänger av den.
+
+Färgerna använder nu HSL-baserad selektiv maskning av originalets orange lack i Canvas. Hela bildens hue-filter har tagits bort. Gula lackens målton är 50°, blå 210°, grön 139°; svart sänker lackens ljushet. Neutrala ytor, glas, lampor och alfakanal lämnas kvar. `test-racerbanan-farger.cjs` kontrollerar alla 6×5 varianter och skapar en kontaktkarta från den verkliga renderaren.
