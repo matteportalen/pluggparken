@@ -39,4 +39,4 @@ Tillgängliga rum, lösningar, ledtrådar och avslut sparas per matteval. Alla h
 
 ## Svårighet och läsbarhet efter ventiluppgiften
 
-Läraren tycker att den nuvarande nivån fungerar men ligger nära gränsen. Slutuppgiften A/B/C är kapitlets övre riktmärke; öka inte abstraktion, antal beroenden eller räkneled ytterligare utan ny avstämning. Gör först språket lättare att följa. Flera villkor ska delas upp i tydligt märkta delar, med varje del på egen rad och med läsbara radbrytningar på mobil. Denna läsbarhetsändring ska inte i sig ändra svar eller matematisk svårighet.
+Läraren accepterar kluriga uppgifter så länge de är bra och meningsfulla. Nuvarande A/B/C-uppgift fungerar, men undvik att eskalera kraftigt i abstraktion eller antal beroenden. Svårigheten ska komma från matematiken, inte från svårtolkat språk. Gör först instruktionerna lättare att följa och ge användbara ledtrådar. Flera villkor ska delas upp i tydligt märkta delar, med varje del på egen rad och med läsbara radbrytningar på mobil. Denna läsbarhetsändring ska inte i sig ändra svar eller matematisk svårighet.
