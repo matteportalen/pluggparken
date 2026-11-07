@@ -36,3 +36,7 @@ Tillgängliga rum, lösningar, ledtrådar och avslut sparas per matteval. Alla h
 - Matematik ska kräva flera tankesteg även inom det lätta talområdet. Vissa mekanismer har två delar; finalen har tre samtidiga villkor. Spara delsteg och ge riktad hjälp utan att automatiskt lösa uppgiften.
 - Kedjor ska ha målade metallänkar, riktiga infästningar och brott; tre raka streck räcker inte. Frigiven väktare ska ha en fri stående gestalt.
 - Ett slut måste synas och kännas: hjärtat slår, kolvar rör sig, vatten strömmar och en tydlig målrubrik visas. Sedan ska den räddade stadens fontäner ge bestående bevis. Enbart ett textmeddelande och en öppnad hiss räcker inte.
+
+## Svårighet och läsbarhet efter ventiluppgiften
+
+Läraren tycker att den nuvarande nivån fungerar men ligger nära gränsen. Slutuppgiften A/B/C är kapitlets övre riktmärke; öka inte abstraktion, antal beroenden eller räkneled ytterligare utan ny avstämning. Gör först språket lättare att följa. Flera villkor ska delas upp i tydligt märkta delar, med varje del på egen rad och med läsbara radbrytningar på mobil. Denna läsbarhetsändring ska inte i sig ändra svar eller matematisk svårighet.

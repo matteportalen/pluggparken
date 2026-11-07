@@ -265,3 +265,5 @@ Motvikt, pump och cistern har nu två sparade delsteg. Ordning, lika fördelning
 `depth.revision=2` utökar sparningen med `looted`, `defeated`, `stages` och `heartAwake`. Okända ID:n filtreras. Äldre betaavslut bevarar alla andra pussel men behöver det nya slutpusslet innan hjärtat räknas som återställt. Kontosynken förenar fynd, besegrade småfiender, delsteg och hjärtslag. Ingen ändring av övriga kapitel eller profilnycklar.
 
 Nya kontroller: `test-glodvaktaren-djupen-skatter.cjs` når samtliga tio kistor och provar svärdsuppgraderingen samt skydd mot återkommande poäng. `test-glodvaktaren-djupen-final.cjs` provar tre separata kedjebrott, felaktiga samtidiga ventiler, slutsekvens på mobil, fontäner och bestående avslut. Helbanetestet använder riktiga svärdshugg via `depth-test-helpers.cjs`. Bildmanifestet beskriver de sex nya tillgångarna.
+
+Hjärtvalvets instruktion (2026-11-07): de tre villkoren visas på varsin tydligt märkt A-, B- och C-rad, med indrag vid radbrytning på mobil. Matematik och svar är oförändrade.
