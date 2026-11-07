@@ -241,3 +241,15 @@ Verifiering: `NODE_PATH=/opt/homebrew/lib/node_modules node skript/test-racerban
 Ytterligare kontroller: `skript/test-racerbanan-kontroller.cjs` för köp, mattefördelningar, valda tabeller, fel svar och sladd; `skript/test-racerbanan-synk.cjs` för kontosammanslagning av äldre/nya rekord i båda riktningar.
 
 Glödväktarens ingångar (2026-11-07): ny lokal artwork för gruva, stenvalv, kall portal och verkstadsdörrar på samtliga rumspassager. Gruvans skymmande stam är flyttad och ingången ritas framför träden; interaktionspunkten x=1640 och klätterytor behålls. Ursprung/manifest: `spel/glodvaktaren/bilder/INGANGAR.md`. Provspelning av tur- och returvägar samt mobil/datorsikt: `skript/test-glodvaktaren-portaler.cjs`.
+
+## Glödväktaren — De glömda djupen (2026-11-07)
+
+Efter återstartad klocka: E vid klockverket/hissen på x≈2720 leder ner. Nio verkliga sammanlänkade rum i `spel/glodvaktaren/djupen.js`, med separata målningar, höjdvägar, en valfri bostadsgren och två genvägar. Tio pusselsteg: motvikt, tömning av vatten, ordning av uttryck, lika fördelning, likvärdiga brohalvor, cisternens uppdelning, tre kedjesigill, samt hjärtvalvets ledningar. Ett svärdshugg bryter sista kedjan efter sigillen. Fel svar ändrar inte lösningsflaggan eller tar liv; mekanismen visar en konkret ledtråd. Det befintliga valet plus/hundra/tabell/stor styr innehållet.
+
+Slussvakten, lärlingen Iri och den kedjade väktaren ger korta återkommande repliker utifrån framsteg. E upprepar dem; journalen bevarar upptäckta berättelsefragment. I cisternen hör en blind väktare steg, hopp och svärd: håll S/↓ eller tryck Smyg för tyst gång. Pussel använder en mekanismvy inne i spelskärmen, med pekknappar, tangentbord, fokusfälla och Esc. Säker återkomst om man faller vid bron. Sparat rum är återstartspunkt.
+
+Samma nyckel `mattespel-glodvaktaren-v1`, samma version 2; bakåtkompatibelt tillägg `campaigns[matteval].depth = {room,visited,solved,clues,completed}`, region `depths` bara efter `cityRestored`. Rumsnamn och fynd valideras. Kontosynk förenar lösningar, besök och ledtrådar. Gamla fynd och kapitel behålls. Kvalitetskrav och rumsgraf: `spel/glodvaktaren/KVALITET.md`; bildmanifest: `bilder/DJUPEN.md`.
+
+Ljud: Glödväktaren laddar sin lokala `ljudmotor.js` via gemensamma `Ljud`. 32 CC0-materialljud från Kenney ersätter generiska enstaka boink/brus i svärd, parering, nedslag, dörrar och steg. Lager med sten/metall/trä, tonhöjdsvariation, rumsklang, huvudmarginal/kompressor, ordlösa röster och låg rumston. Mekanik, kedjor, vatten och portal får egna längre förlopp. Ljudavstängning stoppar källor, röster och efterklang. WAV-filer och licenser finns lokalt i `ljud/`. Andra övningars ljud fungerar med tidigare implementation när Glödväktarens motor inte är laddad.
+
+Kontroller: `test-glodvaktaren-djupen.cjs`, `test-glodvaktaren-djupen-mobil.cjs`, `test-glodvaktaren-djupen-data.mjs`, `test-glodvaktaren-materialljud.cjs`; tidigare portalrutter kontrolleras av `test-glodvaktaren-portaler.cjs`.

@@ -48,7 +48,7 @@
     whoosh(){if(!isOn())return;const c=ac();if(!c)return;noiseBurst(c,0,.45,500,.8,.18,3000);tone(200,0,.4,'sawtooth',.03,700);},
     /* Glödväktaren: korta, omusikaliska materialljud. Inga fanfarer i strid.
        Samma AudioContext och ljudinställning som resten av sajten. */
-    glod(kind){if(!isOn())return;const c=ac();if(!c)return;
+    glod(kind){if(!isOn())return;const c=ac();if(!c)return;if(window.MPGlodAudio?.play(kind,c,isOn()))return;
       const v=.94+Math.random()*.12;
       const ring=(base,dur,gain,start=0)=>[1,1.47,2.09,2.71].forEach((r,i)=>tone(base*r*v,start,dur/(1+i*.35),'sine',gain/(1+i*2.5)));
       if(kind==='tick'){noiseBurst(c,0,.045,1100,.8,.045);tone(170,0,.055,'triangle',.04,120);return;}
@@ -68,7 +68,7 @@
       noiseBurst(c,0,.095,1900,1,.12);tone(135,0,.16,'triangle',.12,65);ring(480,.22,.065);
     },
     /* Kort ordlöst prat, med två formanter och varierade stavelser. */
-    glodTalk(deep=false,length=40){this.glodTalkStop();if(!isOn())return;const c=ac();if(!c)return;
+    glodTalk(deep=false,length=40){this.glodTalkStop();if(!isOn())return;const c=ac();if(!c)return;if(window.MPGlodAudio){window.MPGlodAudio.talk(deep,length,c);return;}
       const count=Math.max(3,Math.min(7,Math.ceil(length/13))),base=deep?88:132;
       for(let i=0;i<count;i++){
         const t=c.currentTime+i*.125+(i>3?.09:0),dur=.085+Math.random()*.035;
@@ -81,7 +81,10 @@
         const entry={o,g};voiceNodes.push(entry);o.onended=()=>{[o,f,f2,g2,g].forEach(n=>n.disconnect());voiceNodes=voiceNodes.filter(n=>n!==entry)};o.start(t);o.stop(t+dur+.015);
       }
     },
-    glodTalkStop(){for(const {o,g} of voiceNodes){g.gain.cancelScheduledValues(0);g.gain.value=0;try{o.stop()}catch(e){}}voiceNodes=[];},
+    glodTalkStop(){window.MPGlodAudio?.talkStop();for(const {o,g} of voiceNodes){g.gain.cancelScheduledValues(0);g.gain.value=0;try{o.stop()}catch(e){}}voiceNodes=[];},
+    glodScene(kind){if(isOn()){const c=ac();if(c)window.MPGlodAudio?.scene(kind,c)}},
+    glodStop(){window.MPGlodAudio?.stop()},
+    glodWarm(){if(isOn()){const c=ac();if(c)return window.MPGlodAudio?.warm(c)}},
     /* Motorljud som går hela tiden: start(), set(0–1), stop() */
     engine:{
       start(){if(!isOn()||this.o)return;const c=ac();if(!c)return;
@@ -230,7 +233,7 @@
         self.timer2=setTimeout(glit,3000);},
       stop(){clearTimeout(this.timer);clearTimeout(this.timer2);if(!this.g)return;const c=ac(),t=c.currentTime;this.g.gain.setTargetAtTime(0.0001,t,.6);this.nodes.forEach(x=>{try{x.stop(t+3)}catch(e){}});this.g=null;}
     },
-    stopLoops(){this.glodTalkStop();this.engine.stop();this.space.stop();this.water.stop();this.ambient.stop(true);this.rymd.stop();}
+    stopLoops(){window.MPGlodAudio?.stop();this.glodTalkStop();this.engine.stop();this.space.stop();this.water.stop();this.ambient.stop(true);this.rymd.stop();}
   };
   function croakPulse(c,start){
     const t=c.currentTime+start,o=c.createOscillator(),f=c.createBiquadFilter(),g=c.createGain(),am=c.createOscillator(),ag=c.createGain();
