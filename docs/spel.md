@@ -341,3 +341,5 @@ Vägband, kantmålning och filstreck delas nu vid sina fasta världsgränser och
 Tre korta, handbläddrade prologscener före en ny resa. Riddarens tystnade hemland, en okänd röst vid sista elden och hammarslagen från byn antyder bakgrunden utan att avslöja senare kapitel. Befintliga målningar av bergspasset, riddaren på bron och byn återanvänds i mörka helskärmsutsnitt. Levande läsbar text direkt över motivet; ingen kortpanel eller automatisk lästid. Tangentbord, pekknappar, hoppa över och reduced-motion stöds. Spelvärlden startar först efter avslut.
 
 `introSeen` sparas och valideras per matteområde i befintlig kampanj; fortsätt hoppar över prologen, ny resa visar den igen. Äldre resor med framsteg fortsätter direkt. Andra resor och stjärnor behålls. Verifierat tre scener, fokus, hopp över, omladdning/fortsätt och olika matteområden på 1280×900, 390×844 och 844×390 med minskad rörelse; befintligt titelskärmstest passerar inklusive bekräftad omstart och andra sparade resor.
+
+Titelmenyn har även ”Minnet av elden” för återvisning utan omstart eller ändring av sparad resa.
