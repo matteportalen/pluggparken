@@ -335,3 +335,9 @@ Verifiering: `test-racerbanan-mynt.cjs` kontrollerar faktisk insamling, skydd mo
 ### Racerbanan: mjukare väg (8 nov 2026)
 
 Vägband, kantmålning och filstreck delas nu vid sina fasta världsgränser och interpoleras genom samma projektion som övriga objekt. De hoppar inte längre mellan kamerans geometrisegment. Ett äldre teckenfel i filstreckens hörn korrigeras så att de ritas som smala streck i stället för trianglar. Körsimulering och sparande är orörda. Verifierat kontinuerlig rörelse med små distanssteg på fyra banor och tre/fyra filer; deterministisk körjämförelse mot tidigare baseline är exakt oförändrad. Mobilbild visuellt kontrollerad.
+
+### Glödväktaren: Minnet av elden (8 nov 2026)
+
+Tre korta, handbläddrade prologscener före en ny resa. Riddarens tystnade hemland, en okänd röst vid sista elden och hammarslagen från byn antyder bakgrunden utan att avslöja senare kapitel. Befintliga målningar av bergspasset, riddaren på bron och byn återanvänds i mörka helskärmsutsnitt. Levande läsbar text direkt över motivet; ingen kortpanel eller automatisk lästid. Tangentbord, pekknappar, hoppa över och reduced-motion stöds. Spelvärlden startar först efter avslut.
+
+`introSeen` sparas och valideras per matteområde i befintlig kampanj; fortsätt hoppar över prologen, ny resa visar den igen. Äldre resor med framsteg fortsätter direkt. Andra resor och stjärnor behålls. Verifierat tre scener, fokus, hopp över, omladdning/fortsätt och olika matteområden på 1280×900, 390×844 och 844×390 med minskad rörelse; befintligt titelskärmstest passerar inklusive bekräftad omstart och andra sparade resor.

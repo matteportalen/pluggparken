@@ -9,5 +9,5 @@ async function fight(p,id){assert.equal((await state(p)).battle.enemy,id);let co
 async function smith(p){await p.keyboard.press('e');assert.equal((await state(p)).room,'forge');await walk(p,600);await p.keyboard.press('e');assert(await p.locator('#speech').isVisible());await walk(p,120);await p.keyboard.press('e');assert.equal((await state(p)).room,null)}
 module.exports={state,answer,walk,encounter,jump,reply,fight,smith};
 
-async function begin(p){await p.locator('#play').click();if(await p.locator('#titleSettingsPanel').isVisible())await p.locator('#titleApply').click()}
+async function begin(p){await p.locator('#play').click();if(await p.locator('#titleSettingsPanel').isVisible())await p.locator('#titleApply').click();if(await p.locator('#prologue').isVisible())await p.locator('#memorySkip').click()}
 module.exports.begin=begin;

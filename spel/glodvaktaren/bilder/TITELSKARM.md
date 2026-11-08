@@ -27,3 +27,7 @@ Portaler använder `Ljud.glod('portal')`: filtrerat vinddrag och låg fallande r
 
 ## Kontroll
 Titelskärmstestet täcker 1440×950, 320×780, 390×844 och 844×390; start, avbrutna inställningar, matteval, menyretur, bildkällor, sparad resa och bekräftad omstart av ett valt matteområde. Bilderna bedöms också i den riktiga sidan på dator och mobil. Källbildens alfakanal och logotypens stavning kontrolleras separat.
+
+## Prolog: Minnet av elden, 8 november 2026
+
+`prolog.js` återanvänder `pass-landscape-v2.png`, `title-landscape-v1.png` och `forge-landscape-v2.png` som tre helskärmsbilder. Inga nya eller externa bildresurser. Den mörka toningen och berättartexten är separata CSS/DOM-lager. Läsaren styr takten; kort intoning stängs av vid reduced-motion. Prologen kommer efter matteval för en ny resa och före den spelbara världen.
