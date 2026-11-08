@@ -349,3 +349,9 @@ Titelmenyn har även ”Minnet av elden” för återvisning utan omstart eller 
 `Ljud.glodPrologue` använder befintlig AudioContext och materialmix. Tre scenbundna lager: mörkt, långsamt filtrerat vindsus och låga svävande toner; utdragna lokala knarrljud med glest metall-/kedjerassel; avlägsna tvådelade hammarslag vid bybilden. Ingen glad segerklang eller ny extern ljudkälla. Prologen har egen ljudknapp som följer gemensamma ljudvalet, och spelstart/inställningar läser tillbaka valet.
 
 Scenbyte stoppar föregående källor och schemaläggning. Skip/slut stoppar prologljudet innan spelvärldens ljud startar. Dold flik stoppar ljudet; synlig prolog återupptar aktuell scen. Generationskontroll hindrar sen ljudavkodning från att återstarta en avslutad scen. Prologtest på dator/mobil/liggande passerar. `test-glodvaktaren-prolog-ljud.cjs` renderar åtta sekunder per scen och kontrollerar signal, headroom och städning, plus scenbyte, av/på, dold flik och återvisning. Befintligt materialljudstest passerar.
+
+### Glödväktaren: hammarslag i smedjan (8 nov 2026)
+
+Lätt metallhammrande hörs i smedjan. Utanför dörren i Gläntan hörs samma arbete svagare, lågpassfiltrerat genom väggarna, och avtar till tystnad på 420 världsavstånd. Tre slag med en längre arbetspaus använder befintliga lokala metallinspelningar. Egen mjuk nivå/filterstyrning i materialmixen. Uppdateringen schemalägger slag utan fristående timer; paus, meny, ljud av och dold flik stoppar arbetet. Inga nya resurser, spelframsteg eller sparformat.
+
+Verifiering: `test-glodvaktaren-smedjeljud.cjs` renderar inne/ute med lägre uppmätt nivå ute och testar riktig gång genom dörren, paus/fortsätt, av/på samt avståndsavtagande. Befintligt materialljudstest passerar.

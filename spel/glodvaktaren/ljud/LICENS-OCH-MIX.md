@@ -15,3 +15,7 @@ Lokal ljudmotor: `../ljudmotor.js`, aktiveras bara av Glödväktaren genom det g
 ## Prolog, 8 november 2026
 
 Befintliga lokala CC0-filer `creak1`, `creak2`, `metalLatch`, `metalPot2`, `impactMetal_heavy_001` och `impactMetal_medium_002` används långsammare och med rumsklang för utdraget knarr, kedjeklang och avlägset smide. Vindsus är lokalt genererat, filtrerat brus med långsam modulation, tillsammans med två mycket låga toner. Samma materialmix, ljudinställning och AudioContext som spelet. Inga nya nedladdade tillgångar.
+
+## Smedjans omgivningsljud, 8 november 2026
+
+Befintliga `impactMetal_heavy_001` och `impactMetal_medium_002` ger tre varierade hammarslag följda av arbetspaus. Inne: låg nivå och 3600 Hz lågpass. Ute: högst cirka 11 dB lägre nivå, avståndsavtagande och 650 Hz lågpass. Samma ljudval och materialmix. Ingen ny licens eller tillgång.
