@@ -28,3 +28,7 @@ Färgerna använder nu HSL-baserad selektiv maskning av originalets orange lack 
 ## Fartkänsla, 7 november 2026
 
 Ingen nygenererad bildgrafik. Befintliga miljöer, titelskärm, fordon och selektiva lackfärger bevaras. Nya vägkantsföremål, räcken, reflektorer och fartstreck är kodritade och perspektivprojicerade i banornas befintliga paletter. Föremålen har fasta världspositioner utifrån banans frö. Farteffekterna ligger i periferin; matematik och HUD hålls skarpa. Kamerapresentation är separat från körsimuleringen. Ingen 3D-motor eller extern resurs har tillkommit.
+
+## Myntrespons, 8 november 2026
+
+Pop, små guldglimtar och flygande mynt är kodritade Canvas-effekter i befintlig guldpalett. Räknaren är HTML/CSS. Inga nya bildfiler eller externa resurser. Reduced-motion visar belöningen direkt utan rörelse.

@@ -99,6 +99,8 @@
     },
     /* Racerbanans separata motor-, däck- och vindmix. Den äldre engine-rösten är orörd. */
     rally:{
+      pickup(chain=0){if(!isOn())return;if(!this.out)this.start();if(!this.out)return;const c=ac(),t=c.currentTime,o=c.createOscillator(),g=c.createGain(),note=880*Math.pow(2,Math.max(0,Math.min(6,chain))/12);o.type='triangle';o.frequency.setValueAtTime(note,t);o.frequency.exponentialRampToValueAtTime(note*1.12,t+.055);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.045,t+.008);g.gain.exponentialRampToValueAtTime(.0001,t+.13);o.connect(g).connect(this.out);o.start(t);o.stop(t+.14);},
+
       start(){if(!isOn()||this.nodes)return;const c=ac();if(!c)return;const out=c.createGain(),engine=c.createBiquadFilter(),wind=c.createBiquadFilter(),tire=c.createBiquadFilter(),wg=c.createGain(),tg=c.createGain(),nodes=[];
         out.gain.setValueAtTime(0,c.currentTime);out.gain.linearRampToValueAtTime(.85,c.currentTime+.18);out.connect(c.destination);engine.type='lowpass';engine.frequency.value=450;engine.Q.value=.7;engine.connect(out);
         for(const [type,harmonic,gain] of [['triangle',1,.038],['sawtooth',2,.013],['sine',.5,.025]]){const o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.value=55*harmonic;g.gain.value=gain;o.connect(g).connect(engine);o.start();o.harmonic=harmonic;nodes.push(o)}

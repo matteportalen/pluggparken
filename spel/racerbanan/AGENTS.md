@@ -9,3 +9,5 @@ Lack färgas selektivt i `vehicleSprite`; använd inte hue-rotate över hela bil
 Kontrollera mobil, liggande skärm, tangentbordsfokus, Escape, depåns sparade val och retur från lopp. Uppdatera `../../docs/spel.md` och `bilder/PRODUKTION.md` när struktur eller artwork ändras. Skilj push från lyckad Pages-publicering.
 
 Fartkänslan i `fartkansla.js` är presentation. Ändra inte `R.speed`, sträcka eller svarstid för att förstärka den. Behåll gemensam projektion för bilar/väg/hinder/svar och använd den för pekstyrning. Vägkantens föremål har stabila fröbaserade världspositioner; låt dem inte slumpas om per bildruta. Kamerarörelse och fartstreck ska respektera reduced-motion. Ljud använder separat `Ljud.rally`; ändra inte äldre `Ljud.engine` för detta spel. Körmeddelanden får inte täcka uppgiften.
+
+Myntresponsen i `myntkansla.js` är presentation: bokför alltid belöningen direkt i `R.coins`, aldrig när animationen anländer. Behåll paus, mål/omstart och reduced-motion utan dubbla belöningar. Myntljud använder `Ljud.rally` och effekter får inte skymma matematiken.
