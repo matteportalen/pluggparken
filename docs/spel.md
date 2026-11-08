@@ -367,3 +367,9 @@ Verifiering: riktiga Chromium-touchsekvenser med två fingrar, riktningsglidning
 ### Glödväktaren: mindre skymmande touchknappar (8 nov 2026)
 
 Efter mobilåterkoppling: vanliga touchkontroller döljs helt under mattestrider; befintliga svar och stridsval sköter hela striden, inklusive klockstadens motattack. Vid utforskning ersätts den breda hoppplattan av en rund 52×52-knapp; svärd och rulla ligger på samma kompakta rad. Riktningsytorna är 52×56 och kontextknappen syns vid namngivna handlingar. Alla tryckytor är minst 44 px. Tangentbordsstyrning behålls. Verifierat en hel verklig mattestrid med återkomst av kontroller efteråt, samt befintliga tvåtums-/glidnings-/multitouchtester på fyra skärmstorlekar. Stående strids- och utforskningsvyer visuellt granskade.
+
+### Glödväktaren: egen kontrollyta i stående läge (8 nov 2026)
+
+Stående touchskärm har nu en separat kontrollremsa under Canvas. Inga rörelse-/handlingsknappar täcker mark, småfiender eller hinder. Spelbildens höjd räknas från faktisk topprad/HUD, dynamisk viewport och remsans höjd så att allt ryms utan scrollning mellan bild och knappar. Vid mattestrid fälls remsan undan och spelbilden använder utrymmet. ResizeObserver håller Canvas-proportionerna synkroniserade. Liggende touch behåller placeringen inne i spelvyn och den tidigare tvåtumsfördelningen; orienteringsbyte flyttar samma knappar utan att skapa dubbla inmatningar.
+
+Verifierat att hela Canvas och alla knappar ryms samtidigt på 320×568, 390×700, 390×844, 820×1180 och 844×390, inklusive återrotation. Separationskontroll säkerställer att knapparnas övre kant är under Canvas i stående läge. Multitouch och hel mattestrid med återkomst av kontroller passerar. Mobilbild visuellt granskad.
