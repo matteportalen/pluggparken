@@ -5,3 +5,5 @@ Läs `KVALITET.md` före ändringar i spelet. Dokumentet samlar lärarens tidiga
 Bevara riddaren, verkliga portalpositioner och tidigare kampanjer. Provspela ändrade resvägar och pussel med riktiga inmatningar, även mobil; kontrollera fel svar och återupptagning. Förklara skillnaden mellan push och lyckad Pages-publicering i leveransen.
 
 Touchstyrningen är lokal i `mobilkontroller.js`: separata pointer-ID:n, glidning över vänster/höger, hopp till höger och inga dubbla syntetiska klick. Rensa pekinmatning vid paus/resväxling. Behåll fysikens befintliga hoppbuffert och coyote time i gemensamma plattformsmotorn; ändra inte andra spel för lokal kontrollayout. Situationsetiketter ska följa samma avstånd/höjd som verklig interaktion, även i Djupen. Landskapshöjden räknar bort verklig sidtopprad och safe-area.
+
+Touchknappar får inte skymma strider: dölj den vanliga kontrollgruppen under mattestrid och använd befintliga svar/stridsval. Under utforskning ska de vara kompakta men minst 44 px; undvik breda hoppplattor. Kontrollera återkomsten efter strid och att klockstadens motattack fortfarande finns.

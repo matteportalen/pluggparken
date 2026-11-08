@@ -52,14 +52,14 @@ body{background:#0c0a11}button{border-radius:0;background:#241d30;border-color:#
 @media(pointer:coarse){
  .controls{left:max(12px,env(safe-area-inset-left));right:max(12px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom));align-items:flex-end}
  .controls,.controls button{touch-action:none;-webkit-touch-callout:none;user-select:none}
- .controls .move-controls{display:grid;grid-template-columns:repeat(2,56px);gap:4px}.controls .move-controls button{height:66px;font-size:28px}
- .controls .action-controls{display:grid;grid-template-columns:48px 58px 48px;grid-template-rows:46px 64px;gap:5px;align-items:stretch}
+ .controls .move-controls{display:grid;grid-template-columns:repeat(2,52px);gap:4px}.controls .move-controls button{height:56px;font-size:26px}
+ .controls .action-controls{display:grid;grid-template-columns:44px 52px 52px;grid-template-rows:44px 52px;gap:5px;align-items:stretch}
  .controls button{border:1px solid #8b8e7b99;border-bottom:3px solid #66685a;background:#101b23db;border-radius:14px;color:#e8e0cb;min-width:44px;min-height:44px}
  .controls button.pa{background:#596251ed;transform:translateY(1px)}
- .controls #interact{grid-column:1/3;grid-row:1;flex-direction:row;padding:4px}.controls #interact .action-icon{display:none}.controls #interact .context-label{display:block;font:14px Georgia;white-space:normal}
- .controls #roll{grid-column:3;grid-row:1}.controls #attack{grid-column:1;grid-row:2}.controls .jump-control{grid-column:2/4;grid-row:2;font-size:27px;border-color:#c3ac79;background:#263733e8}
- .controls .jump-control span{display:block;font:14px Georgia}.controls button[data-shortcut]:after{display:none}
- .controls #roll:after{content:'Rulla';display:block;font:9px Georgia}.controls #attack:after{content:'Slå';display:block;font:11px Georgia}
+ .controls #interact{grid-column:2/4;grid-row:1;flex-direction:row;padding:4px}.controls #interact .action-icon{display:none}.controls #interact .context-label{display:block;font:14px Georgia;white-space:normal}
+ .controls #roll{grid-column:1;grid-row:2}.controls #attack{grid-column:2;grid-row:2}.controls .jump-control{grid-column:3;grid-row:2;font-size:27px;border-color:#c3ac79;background:#263733e8}
+ .controls .jump-control span{display:none}.controls button[data-shortcut]:after{display:none}
+ .controls #roll:after,.controls #attack:after{display:none}.controls #roll,.controls #attack,.controls .jump-control{border-radius:50%;background:#101b2399}.controls .jump-control{background:#263733b0}#gameTools[data-battle=true] .controls{display:none}#gameTools[data-context-ready=false] #interact{visibility:hidden}
 }
 @media(pointer:coarse) and (orientation:landscape) and (max-height:550px){.game{padding:0 max(4px,env(safe-area-inset-right)) 0 max(4px,env(safe-area-inset-left))}.hud{height:40px;min-height:40px;margin:0;flex-wrap:nowrap}.hud .brand{display:none}.stage{height:calc(100dvh - var(--glod-game-top,54px) - 44px);min-height:180px}.controls{bottom:max(8px,env(safe-area-inset-bottom))}.quest-line span{max-width:55%}}
 </style></head><body class="glod-title-active">
@@ -412,7 +412,7 @@ function mobileContext(){if(!G)return 'Använd';const b=G.body,x=b.x,y=b.y,c=C()
  if(G.region==='city'){if(G.room==='crypt')return x<180&&y>550?'Gå ut':near(930,95)&&y>550?'Prata':near(1150,120)&&y<330&&!hasPart('weight')?'Ta motvikten':y<575?'Klättra ner':'Undersök';if(G.room==='workshop')return near(550,75)&&Math.abs(y-460)<12&&!hasPart('pendulum')?'Ta pendeln':x<180&&y>550||x>800&&y<410?'Gå ut':y<575?'Klättra ner':'Undersök';return near(c.cityRestored?2590:420,95)&&y>550?'Prata':near(1930,95)&&Math.abs(y-200)<15&&!hasPart('seal')?'Ta sigillet':near(2260,55)&&y>550?'Gå ner':near(2720,115)&&y>550?(c.cityRestored?'Ta hissen':'Undersök uret'):near(140,90)&&y>550?'Till smedjan':near(1250,100)&&y>550?'Gå in':near(2160,90)&&y>550?'Vila':y<575?'Klättra ner':'Undersök';}
  if(G.region==='pass')return near(1400,115)&&y<=270?'Ta nyckeln':near(2960,130)&&y<=310?'Tänd fyren':y<GROUND-65?'Klättra ner':near(80,46)?'Till byn':near(220,70)||near(2250,75)?'Vila':near(1780)?'Öppna bron':'Undersök';
  if(y<GROUND-65)return near(1560,115)&&y<350?(c.canopyFound?'Till smedjan':'Ta glödfrö'):'Klättra ner';return near(80,46)&&c.won?'Till bergen':near(640,130)?'Gå in':near(384)||near(2560)?'Vila':near(1640)?'Gå ner':near(2430)?'Öppna väg':near(2780,125)?'Fäll bron':near(4130,140)?'Tänd fyren':'Undersök';}
-function syncMobileContext(){const label=mobileContext(),b=$('interact');if(b.dataset.context!==label){b.dataset.context=label;b.querySelector('.context-label').textContent=label;b.setAttribute('aria-label',label)}}
+function syncMobileContext(){$('gameTools').dataset.battle=String(!!G?.combat);const label=mobileContext();$('gameTools').dataset.contextReady=String(!['Undersök','Använd'].includes(label)||G?.region==='depths');const b=$('interact');if(b.dataset.context!==label){b.dataset.context=label;b.querySelector('.context-label').textContent=label;b.setAttribute('aria-label',label)}}
 function loop(t){if(!G?.active)return;syncMobileContext();const dt=lastT?Math.min(.12,(t-lastT)/1000):0;lastT=t;if(!$('dialog').hidden){draw();raf=requestAnimationFrame(loop);return}fxTime+=dt;fire.update(reduce?0:dt);for(const f of Object.values(scenery))f.update(reduce?0:dt);for(const fx of G.effects)fx.fx.update(dt);G.effects=G.effects.filter(x=>!x.fx.done());update(dt);draw();raf=requestAnimationFrame(loop)}
 function drawCover(){cancelAnimationFrame(titleRAF);titleRAF=0;if(!$('home').hidden)drawTitleFrame(performance.now())}
 
