@@ -373,3 +373,7 @@ Efter mobilåterkoppling: vanliga touchkontroller döljs helt under mattestrider
 Stående touchskärm har nu en separat kontrollremsa under Canvas. Inga rörelse-/handlingsknappar täcker mark, småfiender eller hinder. Spelbildens höjd räknas från faktisk topprad/HUD, dynamisk viewport och remsans höjd så att allt ryms utan scrollning mellan bild och knappar. Vid mattestrid fälls remsan undan och spelbilden använder utrymmet. ResizeObserver håller Canvas-proportionerna synkroniserade. Liggende touch behåller placeringen inne i spelvyn och den tidigare tvåtumsfördelningen; orienteringsbyte flyttar samma knappar utan att skapa dubbla inmatningar.
 
 Verifierat att hela Canvas och alla knappar ryms samtidigt på 320×568, 390×700, 390×844, 820×1180 och 844×390, inklusive återrotation. Separationskontroll säkerställer att knapparnas övre kant är under Canvas i stående läge. Multitouch och hel mattestrid med återkomst av kontroller passerar. Mobilbild visuellt granskad.
+
+### Glödväktaren: kontrollremsa även i liggande (8 nov 2026)
+
+Efter nytt skärmfoto med skymd ingång får även liggande touch en egen 70 px låg kontrollremsa under Canvas. Alla handlingar ligger på en rad med hopp längst till höger. Ingen kontrollknapp ligger över världen i något touchläge. Bild och knappar ryms samtidigt utifrån verklig HUD-position och dynamisk viewport, även 667×320. Stående remsa behålls. Mattestrid kan fälla undan remsan. Verifierat skärmgränser och separation i båda riktningarna, rotation tillbaka, multitouch samt Djupens mobilpussel; liggande skärmbild visuellt granskad.

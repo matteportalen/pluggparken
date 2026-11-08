@@ -9,3 +9,5 @@ Touchstyrningen är lokal i `mobilkontroller.js`: separata pointer-ID:n, glidnin
 Touchknappar får inte skymma strider: dölj den vanliga kontrollgruppen under mattestrid och använd befintliga svar/stridsval. Under utforskning ska de vara kompakta men minst 44 px; undvik breda hoppplattor. Kontrollera återkomsten efter strid och att klockstadens motattack fortfarande finns.
 
 Stående mobil kräver egen kontrollremsa under Canvas; mindre överlagrade knappar löser inte att småfiender och hinder skyms. Hela spelbilden och knapparna måste rymmas samtidigt i tillgänglig dynamisk viewport. Liggande behåller överlagrad tvåtumsplacering. Prova återrotation och mattestridens in/utgång när layout ändras.
+
+Senare rättning: även liggande touch måste ha egen låg kontrollremsa under Canvas. Tidigare antagande att överlagrade knappar fungerar i landskap gäller inte; lärarens skärmfoto visar skymda ingångar. Behåll både hela bilden och alla kontroller i samma viewport.
