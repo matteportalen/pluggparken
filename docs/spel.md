@@ -355,3 +355,11 @@ Scenbyte stoppar föregående källor och schemaläggning. Skip/slut stoppar pro
 Lätt metallhammrande hörs i smedjan. Utanför dörren i Gläntan hörs samma arbete svagare, lågpassfiltrerat genom väggarna, och avtar till tystnad på 420 världsavstånd. Tre slag med en längre arbetspaus använder befintliga lokala metallinspelningar. Egen mjuk nivå/filterstyrning i materialmixen. Uppdateringen schemalägger slag utan fristående timer; paus, meny, ljud av och dold flik stoppar arbetet. Inga nya resurser, spelframsteg eller sparformat.
 
 Verifiering: `test-glodvaktaren-smedjeljud.cjs` renderar inne/ute med lägre uppmätt nivå ute och testar riktig gång genom dörren, paus/fortsätt, av/på samt avståndsavtagande. Befintligt materialljudstest passerar.
+
+### Glödväktaren: tvåtumsstyrning på mobil (8 nov 2026)
+
+Större vänster/höger-ytor på vänster sida, stor hoppknapp till höger med svärd och mindre rullknapp. Vänstertummen kan glida mellan riktningarna utan att lyftas. Lokala `mobilkontroller.js` håller separata pointer-ID:n för riktning och hopp; pointercancel/lostcapture och paus rensar inmatning. Svärd/rulla/interagera reagerar direkt vid tryck utan ett extra syntetiskt klick. Gemensam tangentbordsstyrning och andra plattformsspel behålls.
+
+Situationsknappen visar handlingar som Vila, Gå in, Gå ut, Prata, Fäll bron och Undersök; inga tangentbordsbokstäver på touchknapparna. Djupen ger egen etikett från närliggande NPC, mekanism eller passage. Landskapsvyn tar hänsyn till sidans faktiska topprad och skärmens safe-area. Befintlig hoppbuffert (0,12 s) och kantmarginal (0,10 s) bevaras; ingen ändring av hoppfysik eller sparformat.
+
+Verifiering: riktiga Chromium-touchsekvenser med två fingrar, riktningsglidning, avbruten beröring, ett svärdshugg per tryck, tryckytor och skärmgränser på 320×780, 390×844, 844×390 och 820×1180. Riktig in/ut-passage via situationsknappen. Befintliga tester för mobilrörelse, stövlar/bron, paus, ljud och Djupens mobilpussel passerar. Skärmbilder granskade i stående och liggande läge. Inte provat på fysisk telefon.
