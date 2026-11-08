@@ -377,3 +377,7 @@ Verifierat att hela Canvas och alla knappar ryms samtidigt på 320×568, 390×70
 ### Glödväktaren: kontrollremsa även i liggande (8 nov 2026)
 
 Efter nytt skärmfoto med skymd ingång får även liggande touch en egen 70 px låg kontrollremsa under Canvas. Alla handlingar ligger på en rad med hopp längst till höger. Ingen kontrollknapp ligger över världen i något touchläge. Bild och knappar ryms samtidigt utifrån verklig HUD-position och dynamisk viewport, även 667×320. Stående remsa behålls. Mattestrid kan fälla undan remsan. Verifierat skärmgränser och separation i båda riktningarna, rotation tillbaka, multitouch samt Djupens mobilpussel; liggande skärmbild visuellt granskad.
+
+### Glödväktaren: sidoytor i liggande (8 nov 2026)
+
+Liggande touch använder nu bredden i stället för höjden: egna kontrollfält vid vänster/höger sida, Canvas mellan dem med full tillgänglig höjd. Ingen nedre kontrollremsa i liggande. Varje sidofält tar 124 px; skärmgränstest kontrollerar minst skärmbredd minus 270 px fri bild och att ingen knapp överlappar Canvas. Stående remsa under bilden behålls. Mattestrid återtar sidornas bredd. Verifierat 844×390 och 667×320 samt rotation tillbaka till stående; granskad skärmbild visar smedjans dörr och fladdermusen fria framför riddaren. Befintliga touch- och Djupen-pusseltester körda för regression.
