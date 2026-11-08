@@ -331,3 +331,7 @@ Insamlade vägmynt poppar, ger en kort glimt och flyger till en egen mynträknar
 Belöningen registreras omedelbart i `R.coins`; endast räknarens presentation väntar på flygningen. Paus fryser animationen, mål tömmer väntande animationer och omstart återställer visningen. Reduced-motion ger direkt räknaruppdatering utan flygning eller studs. Sparnycklar, belöningar och körregler behålls.
 
 Verifiering: `test-racerbanan-mynt.cjs` kontrollerar faktisk insamling, skydd mot dubbel belöning, stigande tonhöjd och ljudavstängning, paus, kontrollbelöning, mål/omstart, mobil/liggande vy och reduced-motion. Deterministiska körningar med tidigare baseline gav exakt oförändrad körning och myntutfall.
+
+### Racerbanan: mjukare väg (8 nov 2026)
+
+Vägband, kantmålning och filstreck delas nu vid sina fasta världsgränser och interpoleras genom samma projektion som övriga objekt. De hoppar inte längre mellan kamerans geometrisegment. Ett äldre teckenfel i filstreckens hörn korrigeras så att de ritas som smala streck i stället för trianglar. Körsimulering och sparande är orörda. Verifierat kontinuerlig rörelse med små distanssteg på fyra banor och tre/fyra filer; deterministisk körjämförelse mot tidigare baseline är exakt oförändrad. Mobilbild visuellt kontrollerad.

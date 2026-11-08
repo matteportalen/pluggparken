@@ -32,3 +32,5 @@ Ingen nygenererad bildgrafik. Befintliga miljöer, titelskärm, fordon och selek
 ## Myntrespons, 8 november 2026
 
 Pop, små guldglimtar och flygande mynt är kodritade Canvas-effekter i befintlig guldpalett. Räknaren är HTML/CSS. Inga nya bildfiler eller externa resurser. Reduced-motion visar belöningen direkt utan rörelse.
+
+Väguppdatering 8 november 2026: kodritade band och filstreck glider med interpolerade världsgränser. Paletter och bildfiler behålls; felaktigt triangulära filstreck rättade.
