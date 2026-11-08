@@ -343,3 +343,9 @@ Tre korta, handbläddrade prologscener före en ny resa. Riddarens tystnade heml
 `introSeen` sparas och valideras per matteområde i befintlig kampanj; fortsätt hoppar över prologen, ny resa visar den igen. Äldre resor med framsteg fortsätter direkt. Andra resor och stjärnor behålls. Verifierat tre scener, fokus, hopp över, omladdning/fortsätt och olika matteområden på 1280×900, 390×844 och 844×390 med minskad rörelse; befintligt titelskärmstest passerar inklusive bekräftad omstart och andra sparade resor.
 
 Titelmenyn har även ”Minnet av elden” för återvisning utan omstart eller ändring av sparad resa.
+
+### Glödväktaren: prologens ljudbild (8 nov 2026)
+
+`Ljud.glodPrologue` använder befintlig AudioContext och materialmix. Tre scenbundna lager: mörkt, långsamt filtrerat vindsus och låga svävande toner; utdragna lokala knarrljud med glest metall-/kedjerassel; avlägsna tvådelade hammarslag vid bybilden. Ingen glad segerklang eller ny extern ljudkälla. Prologen har egen ljudknapp som följer gemensamma ljudvalet, och spelstart/inställningar läser tillbaka valet.
+
+Scenbyte stoppar föregående källor och schemaläggning. Skip/slut stoppar prologljudet innan spelvärldens ljud startar. Dold flik stoppar ljudet; synlig prolog återupptar aktuell scen. Generationskontroll hindrar sen ljudavkodning från att återstarta en avslutad scen. Prologtest på dator/mobil/liggande passerar. `test-glodvaktaren-prolog-ljud.cjs` renderar åtta sekunder per scen och kontrollerar signal, headroom och städning, plus scenbyte, av/på, dold flik och återvisning. Befintligt materialljudstest passerar.

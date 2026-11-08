@@ -11,3 +11,7 @@ Hämtade oförändrade Ogg-källor via speglingen `GeorgeQLe/assets-sfx-combat`,
 Svärd: knifeSlice/drawKnife; steg: footstep_concrete/cloth; dörrar: doorOpen/metalLatch; mekanismer: creak/metalPot/impactMetal; sten: nedstämda impactWood-lager; böcker: bookFlip; klockslag: impactBell med låga inharmoniska resonanser.
 
 Lokal ljudmotor: `../ljudmotor.js`, aktiveras bara av Glödväktaren genom det gemensamma `Ljud`-API:et och dess AudioContext/avstängning. Slumpade prov/nyanser, torr ansats plus konvolverad rumsklang, separata röst- och miljönivåer, masterheadroom och kompressor. Långsammare sten/kedje-/vattenförlopp byggs av flera lager. Portal/klocka får mörk resonans snarare än framgångspling. Röster är ordlösa, varierade formantstavelser. Inga verkliga personers röster eller talsyntestjänster används.
+
+## Prolog, 8 november 2026
+
+Befintliga lokala CC0-filer `creak1`, `creak2`, `metalLatch`, `metalPot2`, `impactMetal_heavy_001` och `impactMetal_medium_002` används långsammare och med rumsklang för utdraget knarr, kedjeklang och avlägset smide. Vindsus är lokalt genererat, filtrerat brus med långsam modulation, tillsammans med två mycket låga toner. Samma materialmix, ljudinställning och AudioContext som spelet. Inga nya nedladdade tillgångar.

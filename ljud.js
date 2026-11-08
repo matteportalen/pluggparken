@@ -82,6 +82,7 @@
       }
     },
     glodTalkStop(){window.MPGlodAudio?.talkStop();for(const {o,g} of voiceNodes){g.gain.cancelScheduledValues(0);g.gain.value=0;try{o.stop()}catch(e){}}voiceNodes=[];},
+    glodPrologue(index){if(isOn()){const c=ac();if(c)window.MPGlodAudio?.prologue(index,c)}},
     glodScene(kind){if(isOn()){const c=ac();if(c)window.MPGlodAudio?.scene(kind,c)}},
     glodStop(){window.MPGlodAudio?.stop()},
     glodWarm(){if(isOn()){const c=ac();if(c)return window.MPGlodAudio?.warm(c)}},
