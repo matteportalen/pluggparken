@@ -8,9 +8,10 @@ on:
 permissions:
   contents: read
 
+# En nyare push ersätter en äldre publicering som väntar eller hänger sig, så att en hängande deploy inte blockerar kön.
 concurrency:
   group: pages
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -25,7 +26,7 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 8   # en deploy som hänger ska misslyckas snabbt, inte stå kvar i kön
     permissions:
       pages: write
       id-token: write
@@ -37,5 +38,5 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
         with:
-          # Pages enforces a ten-minute maximum; concurrency avoids overlapping uploads.
-          timeout: 600000
+          # Väntar högst fem minuter på att Pages blir klar (Pages tillåter tio); concurrency ersätter äldre körningar.
+          timeout: 300000
