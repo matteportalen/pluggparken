@@ -769,11 +769,22 @@ function fyllTimer(b,w){const o=w,c=CLOCK[o.id]||(CLOCK[o.id]={kvar:o.d.tot,igan
     requestAnimationFrame(()=>{r.scrollTop=(mi-1)*40;});   // sätts när rutan finns på sidan
     r.addEventListener("scroll",()=>{cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{const k=Math.max(0,Math.min(119,Math.round(r.scrollTop/40)));if(o.d.tot!==(k+1)*60){o.d.tot=(k+1)*60;c.kvar=o.d.tot;c.igang=false;spara();}r.querySelectorAll(".rm").forEach((e,n)=>{e.classList.toggle("on",n===k);e.setAttribute("aria-selected",n===k);});});});
     r.addEventListener("keydown",ev=>{if(ev.key==="ArrowUp"||ev.key==="ArrowDown"){r.scrollBy({top:ev.key==="ArrowUp"?-40:40,behavior:"smooth"});ev.preventDefault();}else if(ev.key==="Enter"){b.querySelector('[data-t="go"]').click();}});
-    /* mus och penna: dra i hjulet (pekskärm svepar som vanligt); släpper man snäpper det till närmaste minut */
-    let dr=null;
-    r.addEventListener("pointerdown",ev=>{if(ev.pointerType==="touch"||ev.button!==0)return;dr={y:ev.clientY,s:r.scrollTop,m:false,id:ev.pointerId};});
-    r.addEventListener("pointermove",ev=>{if(!dr||ev.pointerId!==dr.id)return;const dy=ev.clientY-dr.y;if(!dr.m&&Math.abs(dy)>4){dr.m=true;r.style.scrollSnapType="none";r.classList.add("dras");try{r.setPointerCapture(ev.pointerId);}catch(_){}}if(dr.m)r.scrollTop=dr.s-dy;});
-    const slut=()=>{if(!dr)return;const flyttad=dr.m;dr=null;r.classList.remove("dras");r.style.scrollSnapType="";if(flyttad){r.scrollTo({top:Math.round(r.scrollTop/40)*40,behavior:"smooth"});}};
+    /* mus och penna: dra i hjulet (pekskärm svepar som vanligt). Kastar man hjulet fortsätter det rulla en bit och bromsar mjukt; sedan snäpper det till närmaste minut. */
+    let dr=null,mom=0,hist=[];const reducerad=matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const stoppaMom=()=>{if(mom){cancelAnimationFrame(mom);mom=0;}r.style.scrollSnapType="";};
+    const snappa=()=>{r.style.scrollSnapType="";r.scrollTo({top:Math.round(r.scrollTop/40)*40,behavior:reducerad?"auto":"smooth"});};
+    r.addEventListener("wheel",stoppaMom,{passive:true});r.addEventListener("keydown",stoppaMom);
+    r.addEventListener("pointerdown",ev=>{if(ev.pointerType==="touch"||ev.button!==0)return;stoppaMom();dr={y:ev.clientY,s:r.scrollTop,m:false,id:ev.pointerId};hist=[[ev.timeStamp,r.scrollTop]];});
+    r.addEventListener("pointermove",ev=>{if(!dr||ev.pointerId!==dr.id)return;const dy=ev.clientY-dr.y;if(!dr.m&&Math.abs(dy)>4){dr.m=true;r.style.scrollSnapType="none";r.classList.add("dras");try{r.setPointerCapture(ev.pointerId);}catch(_){}}
+      if(dr.m){r.scrollTop=dr.s-dy;hist.push([ev.timeStamp,r.scrollTop]);if(hist.length>8)hist.shift();}});
+    const slut=ev=>{if(!dr)return;const flyttad=dr.m;dr=null;r.classList.remove("dras");if(!flyttad){r.style.scrollSnapType="";return;}
+      const nu=ev&&ev.timeStamp?ev.timeStamp:performance.now(),sist=hist[hist.length-1],fran=hist.find(h=>sist[0]-h[0]<=110)||sist;
+      let v=(nu-sist[0]<90&&sist[0]>fran[0])?(sist[1]-fran[1])/(sist[0]-fran[0]):0;   // px per ms, positivt = rullar nedåt i listan (högre tal)
+      if(reducerad||Math.abs(v)<.25){snappa();return;}
+      v=Math.max(-5,Math.min(5,v));let t0=performance.now();const max=r.scrollHeight-r.clientHeight;
+      const steg=t=>{const dt=Math.min(34,t-t0);t0=t;r.scrollTop=Math.max(0,Math.min(max,r.scrollTop+v*dt));v*=Math.exp(-dt/240);
+        if(Math.abs(v)<.03||r.scrollTop<=0||r.scrollTop>=max){mom=0;snappa();return;}mom=requestAnimationFrame(steg);};
+      mom=requestAnimationFrame(steg);};
     r.addEventListener("pointerup",slut);r.addEventListener("pointercancel",slut);
     return;}
   const mitt=c.kvar>0&&c.kvar<o.d.tot-.05;
