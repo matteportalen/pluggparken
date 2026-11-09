@@ -1,9 +1,9 @@
 /* A hand-paced opening. The running world starts only after completion or skip. */
 window.GlodProlog=(()=>{
  const scenes=[
-  {image:'pass-landscape-v2.png',position:'50% 50%',lines:['Han kom från ett land där eldarna hade slocknat.','Ingen i byarna längre söderut kände dess namn.']},
-  {image:'title-landscape-v1.png',position:'86% 50%',lines:['Vid den sista elden hade någon viskat:','»Låt den inte slockna.«','Han mindes rösten. Men inte ansiktet.']},
-  {image:'forge-landscape-v2.png',position:'50% 50%',lines:['Bortom skogen stod en fyr utan ljus.','Från byn nedanför hördes ännu en hammare.']}
+  {image:'pass-landscape-v2.webp',position:'50% 50%',lines:['Han kom från ett land där eldarna hade slocknat.','Ingen i byarna längre söderut kände dess namn.']},
+  {image:'title-landscape-v1.webp',position:'86% 50%',lines:['Vid den sista elden hade någon viskat:','»Låt den inte slockna.«','Han mindes rösten. Men inte ansiktet.']},
+  {image:'forge-landscape-v2.webp',position:'50% 50%',lines:['Bortom skogen stod en fyr utan ljus.','Från byn nedanför hördes ännu en hammare.']}
  ];
  const style=document.createElement('style');style.textContent=`
  .ember-prologue{position:fixed;inset:0;z-index:60;isolation:isolate;background:#070e13;color:#ece3ce;display:flex;flex-direction:column;justify-content:flex-end;padding:max(24px,env(safe-area-inset-top)) clamp(24px,8vw,130px) max(24px,env(safe-area-inset-bottom));font-family:Georgia,serif;overflow:auto}

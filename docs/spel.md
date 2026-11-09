@@ -385,3 +385,11 @@ Liggande touch använder nu bredden i stället för höjden: egna kontrollfält 
 ### Glödväktaren: blockera markering vid långtryck (9 nov 2026)
 
 Alla knappar och deras text-/SVG-barn har nu både `-webkit-user-select:none`, `user-select:none`, avstängd touch-callout och native drag. Delegerat skydd blockerar `selectstart`, `contextmenu` och `dragstart` endast på knappar; inmatningsfält bevaras. Mobilkontrollskriptets cacheversion höjs. Chromium verifierar beräknad stil och avbrutna browserhändelser samt bevarad selektion i inmatningsfält. Tvåtums-/håll-/glidningstester passerar. WebKit-motorn saknas lokalt, så Safari har inte provats i denna verifiering.
+
+### Glödväktaren: bilderna som WebP (9 nov 2026)
+
+Alla 37 bilder i `spel/glodvaktaren/bilder/` är konverterade från PNG till **WebP, kvalitet 90** (transparens kvar): 72 MB blev 9,6 MB, hela spelmappen 75 MB blev 12 MB. Kvalitet 90 valdes efter jämförelse av utsnitt (pixelkonst och fin tygtextur blir mjukare vid 80; mörka målade landskap klarar 80). PNG-originalen är borttagna ur arbetsträdet men finns i git-historiken före denna ändring. Koden (`index.html`, `djupen.js`, `djupen-liv.js`, `prolog.js` och Spelhörnans kort i `spel/index.html`) pekar på `.webp`; bildnamn byggs delvis dynamiskt (`entrance-<typ>-v1`, `depth-<rum>-v1`, `<nyckel>-landscape-v2`), så nya bilder ska heta likadant. Manifesten (`*.md` i `bilder/`) nämner fortfarande `.png`-namnen som de såg ut när bilderna kom; läs `.png` som `.webp`.
+
+**Nya bilder:** lägg PNG i `bilder/`, kör `python3 skript/till-webp.py spel/glodvaktaren/bilder`, byt filändelse i koden och ta bort PNG:n.
+
+Verifierat: 24 av 26 testfiler i `skript/test-glodvaktaren*` går igenom. `test-glodvaktaren-pratbubblor.cjs` (bubblan ryms inte i spelbilden) och `test-glodvaktaren-varld.cjs` ("Walking and striking must defeat the first bat") fallerar **även före ändringen** (kört mot oförändrad HEAD) och är inte åtgärdade. Bildgranskat titelskärm och spelvärld på dator; inte genomspelat på riktig mobil/iPad.
