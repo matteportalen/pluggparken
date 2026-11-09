@@ -156,8 +156,17 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 .tm .tid{position:absolute;inset:0;display:grid;place-items:center;font-size:3.6rem;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-1px}
 .tm .rad{display:flex;gap:6px;justify-content:center;margin:8px 0 0;flex-wrap:wrap}
 .tm .rad button{min-width:44px;height:42px;border-radius:12px;background:#F1F6FF;border:2px solid var(--line);font-weight:800;padding:0 10px}
-.tm .rad.tider{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;max-width:300px;margin:8px auto 0}
-.tm .rad.tider button{min-width:0;padding:0 4px}
+.tm .rad.min{gap:14px;align-items:center;margin-top:14px}
+.tm .rad button.rund{width:46px;min-width:46px;height:46px;border-radius:50%;padding:0;font-size:1.15rem;background:#F1F6FF}.tm .rad button.rund:disabled{opacity:.3;cursor:default}
+.tm .tid.andra{cursor:pointer;border-radius:50%;transition:background .15s}.tm .tid.andra:hover{background:rgba(242,120,12,.07)}
+.tm.val{width:230px}.rullbox{position:relative;width:200px;margin:2px auto 0}
+.rband{position:absolute;left:0;right:0;top:80px;height:40px;border-radius:12px;background:rgba(242,120,12,.13)}
+.rull{position:relative;height:200px;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;outline:none;touch-action:pan-y;overscroll-behavior:contain;-webkit-mask-image:linear-gradient(transparent,#000 34%,#000 66%,transparent);mask-image:linear-gradient(transparent,#000 34%,#000 66%,transparent)}
+.rull::-webkit-scrollbar{display:none}.rull:focus-visible{box-shadow:0 0 0 3px var(--accent);border-radius:12px}
+.rullin{padding:80px 0}
+.ljudrad{display:flex;gap:6px;margin-top:3px}.ljudrad select{flex:1;min-width:0;font:inherit;font-weight:700;border:2px solid var(--line);border-radius:10px;padding:5px 8px;background:#fff;color:var(--ink)}.ljudrad .lyssna{width:42px;border-radius:10px;background:#F1F6FF;border:2px solid var(--line);font-size:1.05rem}
+.rm{height:40px;line-height:40px;scroll-snap-align:center;text-align:center;font-size:1.7rem;font-weight:800;color:#A3AED0;cursor:pointer;font-variant-numeric:tabular-nums;transition:transform .12s,color .12s}.rm.ev{color:#6E7DA6}.rm.on{color:var(--ink);transform:scale(1.4)}
+.renhet{position:absolute;top:80px;left:calc(50% + 38px);height:40px;line-height:40px;font-weight:800;color:var(--muted);font-size:1.05rem;pointer-events:none}
 .tm .rad button.stor{background:var(--good);color:#fff;border-color:var(--good);min-width:96px;font-size:1.1rem}
 .tm .rad button.stor.paus{background:#F2780C;border-color:#F2780C}
 .w.slut{animation:blink .6s 6}
@@ -587,7 +596,7 @@ function laggTill(n){const c=S.widgets.length*28%140;let w;
   if(n==="lista")w={typ:"lista",x:120+c,y:100+c,s:1,d:{titel:"Du behöver:",farg:"lista",items:[]}};
   else if(n==="lista2")w={typ:"lista",x:140+c,y:130+c,s:1,d:{titel:"När du är klar:",farg:"lista2",items:[]}};
   else if(n==="tom")w={typ:"lista",x:140+c,y:130+c,s:1,d:{titel:"",farg:"lista",items:[]}};
-  else if(n==="timer")w={typ:"timer",x:Math.max(40,innerWidth-420)+c,y:90+c,s:1,d:{tot:300}};
+  else if(n==="timer")w={typ:"timer",x:Math.max(40,innerWidth-420)+c,y:90+c,s:1,d:{tot:300,val:true}};
   else if(n==="hjul")w={typ:"hjul",x:Math.max(40,innerWidth-480)+c,y:120+c,s:1,d:{namn:[],tabort:false,rot:0}};
   else if(n==="grupper")w={typ:"grupper",x:Math.max(40,innerWidth-560)+c,y:100+c,s:1,d:{namn:[],franv:[],lage:"par",n:3,res:[],edit:false}};
   else if(n==="video")w={typ:"video",x:Math.max(40,innerWidth-560)+c,y:60+c,s:1,d:{id:"",list:""}};
@@ -720,22 +729,57 @@ $("widgets").addEventListener("input",e=>{const s=e.target.closest("[data-sid]")
 /* timer */
 const fm=s=>{s=Math.max(0,Math.ceil(s));return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");};
 function kvar(o){const c=CLOCK[o.id];return c&&c.igang?Math.max(0,(c.slut-Date.now())/1000):(c?c.kvar:o.d.tot);}
-function fyllTimer(b,w){const o=w,c=CLOCK[o.id]||(CLOCK[o.id]={kvar:o.d.tot,igang:false});
-  b.innerHTML=`<div class="tm"><div class="ring"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="44" fill="none" stroke="#FFE3C2" stroke-width="9"/><circle class="fyll" cx="50" cy="50" r="44" fill="none" stroke="#F2780C" stroke-width="9" stroke-linecap="round" stroke-dasharray="276.5" stroke-dashoffset="0"/></svg><div class="tid" aria-live="off">${fm(kvar(o))}</div></div>
-  <div class="rad"><button data-t="-60" aria-label="En minut mindre">−1</button><button class="stor ${c.igang?"paus":""}" data-t="go">${c.igang?"⏸ Paus":"▶ Start"}</button><button data-t="60" aria-label="En minut mer">+1</button><button data-t="reset" aria-label="Börja om">↺</button></div>
-  <div class="rad tider">${[5,10,15,20,30,40,50,60].map(m=>`<button data-m="${m}">${m} min</button>`).join("")}</div>${S.tavlor.length?`<label class="efter">När tiden är slut:<select data-efter aria-label="När tiden är slut"><option value="">Gör ingenting</option>${S.tavlor.map(t=>`<option value="${t.id}"${o.d.efter===t.id?" selected":""}>Byt till tavlan ${esc(t.n)}</option>`).join("")}</select></label>`:""}</div>`;uppdTimer(o);}
+/* Timerns slutljud: egna, mjuka ljud som skapas med Web Audio (inga ljudfiler) och som inte används av övningarna. Ljudet låses upp av första trycket på sidan. Följer det gemensamma ljudvalet (Ljud av). */
+let AC=null;
+function ac(){try{if(!AC){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;AC=new C();}if(AC.state==="suspended")AC.resume();}catch(e){return null;}return AC;}
+["pointerdown","keydown"].forEach(t=>addEventListener(t,()=>ac(),{capture:true,passive:true}));
+const TLJUD=[{id:"klock",n:"Klockspel"},{id:"skal",n:"Sångskål"},{id:"marimba",n:"Marimba"},{id:"inget",n:"Inget ljud"}];
+function revBuf(c){const len=Math.floor(c.sampleRate*1.8),b=c.createBuffer(2,len,c.sampleRate);for(let ch=0;ch<2;ch++){const d=b.getChannelData(ch);let sd=12345+ch*77;for(let i=0;i<len;i++){sd=(sd*1664525+1013904223)>>>0;d[i]=((sd/4294967296)*2-1)*Math.pow(1-i/len,2.6);}}return b;}
+/* schemalägger slutljudet typ på ljudmiljön c (kan vara en OfflineAudioContext, för test) från tiden t0 */
+function tidLjudPa(c,typ,t0){
+  const komp=c.createDynamicsCompressor();komp.threshold.value=-14;komp.ratio.value=4;komp.connect(c.destination);
+  const master=c.createGain();master.gain.value=.85;master.connect(komp);
+  const rev=c.createConvolver();rev.buffer=revBuf(c);const wet=c.createGain();wet.gain.value=.34;rev.connect(wet);wet.connect(master);
+  const mix=c.createGain();mix.connect(master);mix.connect(rev);
+  const ton=(f,t,dur,vol,del)=>del.forEach(([r,a,dd])=>{const o=c.createOscillator(),g=c.createGain();o.type="sine";o.frequency.value=f*r;
+    g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(Math.max(.0002,vol*a),t+.008);g.gain.exponentialRampToValueAtTime(.0001,t+dur*dd);o.connect(g);g.connect(mix);o.start(t);o.stop(t+dur*dd+.05);});
+  if(typ==="skal"){   // sångskål: djup, lång och lugn, slås an två gånger
+    [0,2.6].forEach((d,i)=>[[1,1,1],[1.004,.8,1],[2.71,.34,.62],[5.1,.1,.34]].forEach(([r,a,dd])=>ton(261.6,t0+d,5.2,.2*(i?.8:1),[[r,a,dd]])));
+  }else if(typ==="marimba"){   // marimba: kort, varm och lekfull
+    [587.3,740,880,1174.7,880].forEach((f,i)=>ton(f,t0+i*.17,.7,.24,[[1,1,1],[4,.16,.16]]));
+  }else{   // klockspel: fyra klara toner uppåt som klingar ut
+    [783.99,1046.5,1318.5,1568].forEach((f,i)=>ton(f,t0+i*.21,i===3?2.8:1.7,.17,[[1,1,1],[2.76,.22,.5],[5.4,.07,.28]]));
+  }
+}
+function tidLjud(typ){if(typ==="inget"||(window.Ljud&&Ljud.on===false))return;const c=ac();if(!c)return;tidLjudPa(c,TLJUD.some(x=>x.id===typ)?typ:"klock",c.currentTime+.05);}
+/* timer i två lägen: bara ringen, tiden och knapparna (minimalt), eller en rullande tidsväljare när man ska välja tid (d.val) */
+function fyllTimer(b,w){const o=w,c=CLOCK[o.id]||(CLOCK[o.id]={kvar:o.d.tot,igang:false});if(o.d.val&&c.igang)o.d.val=false;
+  if(o.d.val){const mi=Math.max(1,Math.min(120,Math.round(o.d.tot/60))),efter=S.tavlor.length?`<label class="efter">Byt tavla när tiden är slut:<select data-efter aria-label="Byt tavla när tiden är slut"><option value="">Gör ingenting</option>${S.tavlor.map(t=>`<option value="${t.id}"${o.d.efter===t.id?" selected":""}>Byt till tavlan ${esc(t.n)}</option>`).join("")}</select></label>`:"",ljudval=`<label class="efter">Ljud när tiden är slut:<span class="ljudrad"><select data-tljud aria-label="Ljud när tiden är slut">${TLJUD.map(x=>`<option value="${x.id}"${(o.d.ljud||"klock")===x.id?" selected":""}>${x.n}</option>`).join("")}</select><button class="lyssna" data-t="lyssna" title="Lyssna" aria-label="Lyssna på ljudet">🔊</button></span></label>`;
+    b.innerHTML=`<div class="tm val"><div class="rullbox"><div class="rband"></div><div class="rull" tabindex="0" role="listbox" aria-label="Välj antal minuter">${"<div class=\"rullin\">"+Array.from({length:120},(_,k)=>k+1).map(m=>`<div class="rm${[5,10,15,20,30,45,60,90,120].includes(m)?" ev":""}${m===mi?" on":""}" data-rm="${m}" role="option" aria-selected="${m===mi}">${m}</div>`).join("")+"</div>"}</div><div class="renhet">min</div></div>${ljudval}${efter}<div class="rad"><button class="stor" data-t="klar">✓ Klar</button></div></div>`;
+    const r=b.querySelector(".rull");let raf=0;
+    requestAnimationFrame(()=>{r.scrollTop=(mi-1)*40;});   // sätts när rutan finns på sidan
+    r.addEventListener("scroll",()=>{cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{const k=Math.max(0,Math.min(119,Math.round(r.scrollTop/40)));if(o.d.tot!==(k+1)*60){o.d.tot=(k+1)*60;c.kvar=o.d.tot;c.igang=false;spara();}r.querySelectorAll(".rm").forEach((e,n)=>{e.classList.toggle("on",n===k);e.setAttribute("aria-selected",n===k);});});});
+    r.addEventListener("keydown",ev=>{if(ev.key==="ArrowUp"||ev.key==="ArrowDown"){r.scrollBy({top:ev.key==="ArrowUp"?-40:40,behavior:"smooth"});ev.preventDefault();}else if(ev.key==="Enter"){b.querySelector('[data-t="klar"]').click();}});
+    return;}
+  b.innerHTML=`<div class="tm"><div class="ring"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="44" fill="none" stroke="#FFE3C2" stroke-width="9"/><circle class="fyll" cx="50" cy="50" r="44" fill="none" stroke="#F2780C" stroke-width="9" stroke-linecap="round" stroke-dasharray="276.5" stroke-dashoffset="0"/></svg><div class="tid${c.igang?"":" andra"}"${c.igang?' aria-live="off"':' data-t="val" role="button" tabindex="0" title="Tryck för att ändra tiden"'}>${fm(kvar(o))}</div></div>
+  <div class="rad min"><button class="rund" data-t="reset" aria-label="Börja om" title="Börja om">↺</button><button class="stor ${c.igang?"paus":""}" data-t="go">${c.igang?"⏸ Paus":"▶ Start"}</button><button class="rund" data-t="val" aria-label="Ändra tiden" title="${c.igang?"Pausa först för att ändra tiden":"Ändra tiden"}"${c.igang?" disabled":""}>✎</button></div></div>`;uppdTimer(o);}
 function uppdTimer(o){const e=elOf(o.id);if(!e)return;const k=kvar(o),tot=o.d.tot||1;const t=e.querySelector(".tid"),f=e.querySelector(".fyll");if(t)t.textContent=fm(k);if(f)f.style.strokeDashoffset=String(276.5*(1-Math.max(0,Math.min(1,k/tot))));}
 $("widgets").addEventListener("click",e=>{const w=e.target.closest(".w");if(!w)return;const o=S.widgets.find(x=>x.id===w.dataset.id);if(!o||o.typ!=="timer")return;const c=CLOCK[o.id]||(CLOCK[o.id]={kvar:o.d.tot,igang:false});
-  const t=e.target.closest("[data-t]"),m=e.target.closest("[data-m]");
-  if(m){o.d.tot=+m.dataset.m*60;c.igang=false;c.kvar=o.d.tot;spara();}
-  else if(t){const v=t.dataset.t;
+  const t=e.target.closest("[data-t]"),rmEl=e.target.closest("[data-rm]");
+  if(rmEl){const r=w.querySelector(".rull");if(r)r.scrollTo({top:(+rmEl.dataset.rm-1)*40,behavior:"smooth"});return;}
+  if(t){const v=t.dataset.t;
     if(v==="go"){if(c.igang){c.kvar=kvar(o);c.igang=false;}else{if(c.kvar<=0)c.kvar=o.d.tot;c.slut=Date.now()+c.kvar*1000;c.igang=true;w.classList.remove("slut");}}
     else if(v==="reset"){c.igang=false;c.kvar=o.d.tot;w.classList.remove("slut");}
-    else{const d=+v;if(c.igang){c.slut+=d*1000;o.d.tot=Math.max(60,o.d.tot+d);}else{o.d.tot=Math.max(60,o.d.tot+d);c.kvar=o.d.tot;}spara();}}
+    else if(v==="klar"){o.d.val=false;c.kvar=o.d.tot;c.igang=false;w.classList.remove("slut");}
+    else if(v==="val"){if(c.igang)return;o.d.val=true;}
+    else if(v==="lyssna"){tidLjud(o.d.ljud);return;}
+    spara();}
   else return;fyllTimer(w.querySelector(".wb"),o);});
+$("widgets").addEventListener("change",e=>{const sel=e.target.closest("[data-tljud]");if(!sel)return;const w=e.target.closest(".w"),o=S.widgets.find(x=>x.id===w.dataset.id);if(!o||o.typ!=="timer")return;o.d.ljud=TLJUD.some(x=>x.id===sel.value)?sel.value:"klock";spara();tidLjud(o.d.ljud);});   // byter man ljud hör man det direkt
+$("widgets").addEventListener("keydown",e=>{const t=e.target.closest('.tid[data-t="val"]');if(t&&(e.key==="Enter"||e.key===" ")){e.preventDefault();t.click();}});
 setInterval(()=>{S.widgets.forEach(o=>{if(o.typ!=="timer")return;const c=CLOCK[o.id];if(!c||!c.igang)return;const k=kvar(o);uppdTimer(o);
   if(k<=0){c.igang=false;c.kvar=0;const e=elOf(o.id);if(e){e.classList.add("slut");fyllTimer(e.querySelector(".wb"),o);}
-    [0,700,1400].forEach(t=>setTimeout(()=>{window.Ljud&&Ljud.chime&&Ljud.chime();},t));
+    tidLjud(o.d.ljud);
     const tv=o.d.efter&&S.tavlor.find(x=>x.id===o.d.efter);if(tv)setTimeout(()=>bytTavla(tv.id,"Tiden är slut. "),1800);}});},250);
 
 /* lyckohjul */
@@ -804,7 +848,7 @@ const JPG=/^data:image\/jpeg;base64,[A-Za-z0-9+\/=]*$/;
 const tal=(v,a,b,d)=>{v=+v;return Number.isFinite(v)?Math.max(a,Math.min(b,v)):d;};
 function renaWidget(o,medNamn){if(!o||!TYPER.includes(o.typ))return null;const d=o.d||{},n={id:uid(),typ:o.typ,min:!!o.min,lock:!!o.lock,x:o.typ==="textruta"?tal(o.x,-1e7,1e7,100):tal(o.x,-300,2300,100),y:o.typ==="textruta"?tal(o.y,-1e7,1e7,100):tal(o.y,0,2400,100),s:o.typ==="textruta"?tal(o.s,.0005,5000,1):tal(o.s,.5,3,1),d:{}};
   if(o.typ==="lista"){n.d={titel:String(d.titel||"").slice(0,40),farg:d.farg==="lista2"?"lista2":"lista",items:(Array.isArray(d.items)?d.items:[]).slice(0,30).map(i=>({k:String((i&&i.k)||"bok").slice(0,40),t:i&&i.t?String(i.t).slice(0,30):undefined,sid:String((i&&i.sid)||"").slice(0,30),img:i&&typeof i.img==="string"&&JPG.test(i.img)&&i.img.length<120000?i.img:"",e:i&&i.e?String(i.e).slice(0,8):"",bok:!!(i&&i.bok)}))};}
-  else if(o.typ==="timer")n.d={tot:tal(d.tot,60,7200,300),efter:/^[\w-]{3,20}$/.test(d.efter||"")?d.efter:""};
+  else if(o.typ==="timer")n.d={tot:tal(d.tot,60,7200,300),efter:/^[\w-]{3,20}$/.test(d.efter||"")?d.efter:"",ljud:["klock","skal","marimba","inget"].includes(d.ljud)?d.ljud:"klock"};
   else if(o.typ==="hjul")n.d={namn:medNamn&&Array.isArray(d.namn)?d.namn.slice(0,60).map(x=>String(x).slice(0,30)):[],tabort:!!d.tabort,rot:0,n:tal(d.n,2,60,25)};
   else if(o.typ==="text"){n.rot=tal(o.rot,-6,6,0);n.d={text:String(d.text||"").slice(0,600),c:LAPPFARG.includes(d.c)?d.c:"gul"};}
   else if(o.typ==="video"){const ok=/^[\w-]{11}$/,okl=/^[\w-]{10,60}$/;n.d={id:ok.test(d.id||"")?d.id:"",list:okl.test(d.list||"")?d.list:""};}
@@ -866,7 +910,7 @@ $("widgets").addEventListener("input",e=>{const t=e.target.closest("[data-gnamn]
    En timer kan byta tavla när tiden är slut (o.d.efter = tavlans id). */
 function renaTavlor(a){const r=[];if(!Array.isArray(a))return r;a.slice(0,20).forEach(t=>{if(!t||typeof t!=="object")return;const n=String(t.n||"").trim().slice(0,30);if(!n||!Array.isArray(t.widgets))return;let id=/^[\w-]{3,20}$/.test(t.id||"")?t.id:uid();if(r.some(x=>x.id===id))id=uid();
   r.push({id,n,bg:BG.includes(t.bg)?t.bg:"vit",widgets:t.widgets.slice(0,40).map(w=>renaWidget(w,true)).filter(Boolean),rits:(Array.isArray(t.rits)||(t.rits&&t.rits.v===2&&Array.isArray(t.rits.s)))&&JSON.stringify(t.rits).length<1.5e6?t.rits:null,vy:t.vy&&typeof t.vy==="object"?{x:+t.vy.x||0,y:+t.vy.y||0,z:Math.max(ZMIN,Math.min(ZMAX,+t.vy.z||1))}:null,lager:t.lager?renaLager(t.lager):null,lagerAkt:typeof t.lagerAkt==="string"?t.lagerAkt:""});});return r;}
-function nuTavla(){const w=JSON.parse(JSON.stringify(S.widgets.filter(o=>!o.lock)));w.forEach(o=>{if(o.typ==="lista"){delete o.d.pal;delete o.d.egen;delete o.d.red;}if(o.typ==="grupper")o.d.edit=false;});
+function nuTavla(){const w=JSON.parse(JSON.stringify(S.widgets.filter(o=>!o.lock)));w.forEach(o=>{if(o.typ==="lista"){delete o.d.pal;delete o.d.egen;delete o.d.red;}if(o.typ==="grupper")o.d.edit=false;if(o.typ==="timer")o.d.val=false;});
   let r=strokes.length?ritData():null,stor=false;if(r&&JSON.stringify(r).length>1.5e6){r=null;stor=true;}return{t:{bg:S.bg,widgets:w,rits:r,vy:{x:V.x,y:V.y,z:V.z},lager:JSON.parse(JSON.stringify(S.lager)),lagerAkt:S.lagerAkt},stor};}
 function uppdTimrar(){S.widgets.forEach(o=>{if(o.typ!=="timer")return;const e=elOf(o.id);if(e)fyllTimer(e.querySelector(".wb"),o);});}
 function rensaEfter(id){[S.widgets].concat(S.tavlor.map(t=>t.widgets)).forEach(a=>a.forEach(o=>{if(o.typ==="timer"&&o.d&&o.d.efter===id)o.d.efter="";}));}
