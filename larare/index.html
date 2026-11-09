@@ -83,7 +83,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 .gpgo{justify-self:center;background:var(--accent);color:#fff;border-radius:14px;padding:10px 26px;font-weight:800;font-size:1.3rem;box-shadow:0 4px 0 #2A3FB8}.gpgo:disabled{opacity:.5}
 .gpres{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}.gptom{color:var(--muted);font-weight:700;text-align:center}
 .gpk{border:3px solid;border-radius:14px;padding:8px 12px}.gpk h5{margin:0 0 4px;font-size:.9rem;color:var(--muted)}.gpk div{font-weight:800;font-size:1.35rem;line-height:1.25;color:var(--ink)}
-@media(prefers-reduced-motion:no-preference){.gpk{animation:gpIn .3s ease-out both}@keyframes gpIn{from{transform:scale(.85);opacity:0}}}
+@media(prefers-reduced-motion:no-preference){.gpres.ny .gpk{animation:gpIn .3s ease-out both}@keyframes gpIn{from{transform:scale(.85);opacity:0}}}
 .gpchips{display:flex;flex-wrap:wrap;gap:6px}.gpchips button{border-radius:999px;padding:4px 12px;background:#F1F6FF;border:2px solid var(--line);font-weight:800;font-size:.95rem}.gpchips button.borta{opacity:.45;text-decoration:line-through}
 .gp textarea{width:100%;height:130px;font:inherit;font-weight:700;border:2px solid var(--line);border-radius:12px;padding:8px;resize:vertical;color:var(--ink)}
 .gpsm{justify-self:start;background:#F1F6FF;border:2px solid var(--line);border-radius:10px;padding:6px 12px;font-weight:800;font-size:.9rem}.gpnot{font-size:.8rem;font-weight:700;color:var(--muted)}
@@ -729,20 +729,22 @@ function gpHjulNamn(){const h=S.widgets.find(x=>x.typ==="hjul"&&x.d&&Array.isArr
 function gpSlumpa(d){const nv=gpNarvarande(d);if(nv.length<2)return false;const a=nv.slice();for(let i=a.length-1;i>0;i--){const j=slumpTal(i+1);[a[i],a[j]]=[a[j],a[i]];}
   const g=Math.max(1,d.lage==="par"?Math.floor(a.length/2):d.lage==="storlek"?Math.ceil(a.length/d.n):Math.min(d.n,a.length)),bas=Math.floor(a.length/g),extra=a.length%g,res=[];let k=0;
   for(let i=0;i<g;i++){const sz=bas+(i<extra?1:0);res.push(a.slice(k,k+sz));k+=sz;}d.res=res;return true;}
-function fyllGrupper(b,w){const d=w.d,nv=gpNarvarande(d),sa=d.lage==="par"?"Par":"Grupp",redigera=d.edit||!d.namn.length,hj=gpHjulNamn();if(redigera)d.edit=true;
+function fyllGrupper(b,w,anim){const d=w.d,nv=gpNarvarande(d),sa=d.lage==="par"?"Par":"Grupp",redigera=d.edit||!d.namn.length,hj=gpHjulNamn();if(redigera)d.edit=true;
   const res=d.res&&d.res.length?d.res.map((g,i)=>`<div class="gpk" style="background:${GPF[i%8]};border-color:${HJFARGER[i%8]}"><h5>${sa} ${i+1}</h5>${g.map(n=>`<div>${esc(n)}</div>`).join("")}</div>`).join(""):`<div class="gptom" style="grid-column:1/-1">${nv.length<2?"Lägg in minst två namn nedanför.":"Tryck på Slumpa."}</div>`;
   b.innerHTML=`<div class="gp"><div class="gplage" role="group" aria-label="Hur ska ni dela in"><button data-gm="par" class="${d.lage==="par"?"v":""}">👥 Par</button><button data-gm="storlek" class="${d.lage==="storlek"?"v":""}">Grupper om …</button><button data-gm="antal" class="${d.lage==="antal"?"v":""}">Antal grupper</button></div>
   ${d.lage!=="par"?`<div class="gpn"><button data-gn="-1" aria-label="Färre">−</button><b>${d.n}</b><span>${d.lage==="storlek"?"elever i varje grupp":"grupper"}</span><button data-gn="1" aria-label="Fler">+</button></div>`:""}
-  <button class="gpgo" data-gs ${nv.length<2?"disabled":""}>🎲 Slumpa</button><div class="gpres" aria-live="polite">${res}</div>
+  <button class="gpgo" data-gs ${nv.length<2?"disabled":""}>🎲 Slumpa</button><div class="gpres${anim?" ny":""}" aria-live="polite">${res}</div>
   ${redigera?`<textarea data-gnamn placeholder="Skriv alla namn efter varandra med mellanslag eller komma emellan, till exempel: Alma Bilal Chiara. Två ord i ett namn: Anna_B" aria-label="Namn">${esc(gpText(d))}</textarea>${hj?`<button class="gpsm" data-ghj>📥 Hämta namnen från lyckohjulet (${hj.length})</button>`:""}<button class="gpsm" data-ge>✓ Klar med namnen</button>`
   :`<div class="gpnot">Tryck på ett namn om någon är borta.</div><div class="gpchips">${d.namn.map((n,i)=>`<button data-gf="${i}" class="${d.franv.includes(n)?"borta":""}" aria-pressed="${d.franv.includes(n)}">${esc(n)}</button>`).join("")}</div><button class="gpsm" data-ge>✏️ Ändra namn (${d.namn.length})</button>`}
   <div class="gpnot">Namnen sparas bara i den här webbläsaren.</div></div>`;}
 $("widgets").addEventListener("click",e=>{const w=e.target.closest(".w");if(!w)return;const o=S.widgets.find(x=>x.id===w.dataset.id);if(!o||o.typ!=="grupper")return;const d=o.d,
   gm=e.target.closest("[data-gm]"),gn=e.target.closest("[data-gn]"),gs=e.target.closest("[data-gs]"),ge=e.target.closest("[data-ge]"),gf=e.target.closest("[data-gf]"),gh=e.target.closest("[data-ghj]");
-  if(gm)d.lage=gm.dataset.gm;else if(gn)d.n=Math.max(2,Math.min(12,d.n+(+gn.dataset.gn)));else if(gs){if(!gpSlumpa(d))return;}else if(ge)d.edit=!d.edit;
+  let anim=false;   // korten tonas bara in när det faktiskt slumpas, annars ser det ut som att grupperna ändrats
+  if(gm||gn){if(gm)d.lage=gm.dataset.gm;else d.n=Math.max(2,Math.min(12,d.n+(+gn.dataset.gn)));if(d.res.length&&gpNarvarande(d).length>=2){gpSlumpa(d);anim=true;}}   // byter man läge eller antal slumpas det om direkt
+  else if(gs){if(!gpSlumpa(d))return;anim=true;}else if(ge)d.edit=!d.edit;
   else if(gf){const nm=d.namn[+gf.dataset.gf];if(nm===undefined)return;const i=d.franv.indexOf(nm);if(i>=0)d.franv.splice(i,1);else d.franv.push(nm);}
   else if(gh){const h=gpHjulNamn();if(!h)return;d.namn=h.slice(0,60).map(x=>String(x).slice(0,30));d.franv=[];}else return;
-  fyllGrupper(w.querySelector(".wb"),o);spara();});
+  fyllGrupper(w.querySelector(".wb"),o,anim);spara();});
 $("widgets").addEventListener("input",e=>{const t=e.target.closest("[data-gnamn]");if(!t)return;const w=t.closest(".w"),o=S.widgets.find(x=>x.id===w.dataset.id);if(!o||o.typ!=="grupper")return;
   o.d.namn=gpNamn(t.value);o.d.franv=o.d.franv.filter(n=>o.d.namn.includes(n));const go=w.querySelector("[data-gs]");if(go)go.disabled=gpNarvarande(o.d).length<2;spara();});
 
