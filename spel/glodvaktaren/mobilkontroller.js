@@ -1,6 +1,7 @@
 /* Local multi-pointer controls. Keyboard and the shared platform engine stay intact. */
 window.GlodTouch={mount({input,active,actions}){
  const root=document.querySelector('.ktrl'),pointers=new Map(),buttons=[...root.querySelectorAll('button')],move=root.querySelector('.move-controls');
+ for(const type of ['contextmenu','selectstart','dragstart'])document.addEventListener(type,e=>{if(e.target instanceof Element&&e.target.closest('button'))e.preventDefault()},true);
  const keys=['v','h','u'];function sync(){for(const k of keys){input[k]=[...pointers.values()].some(p=>p.key===k);const b=root.querySelector(`[data-k="${k}"]`);b?.classList.toggle('pa',input[k])}}
  function reset(){pointers.clear();for(const k of keys)input[k]=false;input.uT=false;buttons.forEach(b=>b.classList.remove('pa'))}
  root.addEventListener('pointerdown',e=>{const b=e.target.closest('button');if(!b)return;e.preventDefault();e.stopImmediatePropagation();if(!active())return;const key=b.dataset.k;if(key){if(key==='u'&&!input.u)input.uT=true;pointers.set(e.pointerId,{key,move:key!=='u'});sync()}else{b.classList.add('pa');pointers.set(e.pointerId,{button:b});actions[b.id]?.()}try{b.setPointerCapture(e.pointerId)}catch{}},true);

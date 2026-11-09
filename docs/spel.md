@@ -381,3 +381,7 @@ Efter nytt skärmfoto med skymd ingång får även liggande touch en egen 70 px 
 ### Glödväktaren: sidoytor i liggande (8 nov 2026)
 
 Liggande touch använder nu bredden i stället för höjden: egna kontrollfält vid vänster/höger sida, Canvas mellan dem med full tillgänglig höjd. Ingen nedre kontrollremsa i liggande. Varje sidofält tar 124 px; skärmgränstest kontrollerar minst skärmbredd minus 270 px fri bild och att ingen knapp överlappar Canvas. Stående remsa under bilden behålls. Mattestrid återtar sidornas bredd. Verifierat 844×390 och 667×320 samt rotation tillbaka till stående; granskad skärmbild visar smedjans dörr och fladdermusen fria framför riddaren. Befintliga touch- och Djupen-pusseltester körda för regression.
+
+### Glödväktaren: blockera markering vid långtryck (9 nov 2026)
+
+Alla knappar och deras text-/SVG-barn har nu både `-webkit-user-select:none`, `user-select:none`, avstängd touch-callout och native drag. Delegerat skydd blockerar `selectstart`, `contextmenu` och `dragstart` endast på knappar; inmatningsfält bevaras. Mobilkontrollskriptets cacheversion höjs. Chromium verifierar beräknad stil och avbrutna browserhändelser samt bevarad selektion i inmatningsfält. Tvåtums-/håll-/glidningstester passerar. WebKit-motorn saknas lokalt, så Safari har inte provats i denna verifiering.

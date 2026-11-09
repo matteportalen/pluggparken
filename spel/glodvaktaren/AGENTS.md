@@ -13,3 +13,5 @@ Stående mobil kräver egen kontrollremsa under Canvas; mindre överlagrade knap
 Senare rättning: även liggande touch måste ha egen låg kontrollremsa under Canvas. Tidigare antagande att överlagrade knappar fungerar i landskap gäller inte; lärarens skärmfoto visar skymda ingångar. Behåll både hela bilden och alla kontroller i samma viewport.
 
 Slutlig landskapsrättning: använd sidoytor för touch, inte en undre remsa som tar av den redan begränsade höjden. Canvas ska behålla full tillgänglig höjd mellan vänster/högerkontroller. Stående behåller undre remsa. Verifiera att bildbredden fortfarande visar vägen framför riddaren och att ingen knapp överlappar Canvas.
+
+Långtryck på spelknappar får aldrig markera etiketter eller öppna native meny. Sätt även WebKit-prefix och regler på knappens barn (text/SVG), och blockera selectstart/contextmenu/dragstart avgränsat till knappar. Bevara inmatningsfält och pekstyrning.
