@@ -41,7 +41,12 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 #rita.hand{cursor:grab}#rita.tag{cursor:grabbing}
 #zoomrad{position:fixed;right:14px;bottom:14px;z-index:150;display:flex;gap:4px;background:rgba(31,58,53,.94);border-radius:16px;padding:6px;box-shadow:0 6px 18px rgba(0,0,0,.28)}
 #zoomrad button{min-width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.12);color:#fff;font-weight:800;font-size:1.1rem;padding:0 10px}#zoomrad button:hover{background:rgba(255,255,255,.24)}
-#bar.mini ~ #zoomrad{display:none}
+#bar.mini ~ #zoomrad,#bar.mini ~ .fly{display:none}
+.grp{position:relative}.grp::after{content:"▸";position:absolute;right:5px;bottom:2px;font-size:.7rem;opacity:.75}.grp.oppen{background:rgba(255,255,255,.3)!important}
+.fly{position:fixed;z-index:205;background:#fff;border-radius:16px;padding:8px;box-shadow:0 10px 30px rgba(0,0,0,.3);display:grid;gap:6px;min-width:280px}
+.fly button{display:flex;align-items:center;gap:12px;width:100%;height:48px;padding:0 14px;border-radius:12px;background:#F1F6FF;font-weight:800;font-size:1.02rem;text-align:left}.fly button i{font-style:normal;font-size:1.3rem;width:1.6rem;text-align:center;flex:none}.fly button:hover{background:#E3EAFF}.fly button:disabled{opacity:.45;cursor:default}
+.pop.lager{width:430px;box-sizing:border-box;grid-template-columns:minmax(0,1fr);white-space:normal}
+.lagrad{display:flex;gap:4px}.lagrad button{flex:0 0 44px;padding:0}.lagrad .ln{flex:1 1 auto;min-width:0;padding:0 10px;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.lagrad.dold .ln{opacity:.5}.lagop{display:grid;gap:4px;font-weight:800;font-size:.9rem;color:var(--muted);padding:2px 4px}.lagop b{color:var(--ink);float:right}.lagop input{width:100%}
 #barGrepp{height:16px;margin:-2px 0 -2px;display:grid;place-items:center;color:rgba(255,255,255,.5);cursor:grab;touch-action:none;font-size:1rem;letter-spacing:2px;line-height:1}#barGrepp:active{cursor:grabbing}
 #rita.av{pointer-events:none}
 #widgets{position:absolute;left:0;top:0;transform-origin:0 0;pointer-events:none}
@@ -234,7 +239,18 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 #hjalp{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:150;background:rgba(31,58,53,.92);color:#fff;border-radius:16px;padding:10px 18px;font-weight:700;text-align:center;max-width:min(560px,90vw);box-shadow:0 6px 18px rgba(0,0,0,.3)}
 #hjalp button{margin-left:10px;background:#F4D35E;color:#1F3A35;border-radius:10px;padding:2px 12px;font-weight:800}
 @media(max-width:700px){#barGrepp{display:none}#bar{flex-direction:row;flex-wrap:wrap;left:6px;right:6px;top:6px}#bar button,#bar a{width:44px;height:44px;font-size:1.3rem}}
-@media print{#bar,#zoomrad,#hjalp,.pop{display:none!important}}
+/* Apple-känsla: frostat glas, mjuka hörn, diskreta skuggor och en liten inzoomning från knappen. Samma stil på alla paneler och på verktygsfältet. */
+.pop,.fly{background:rgba(255,255,255,.84);-webkit-backdrop-filter:blur(26px) saturate(180%);backdrop-filter:blur(26px) saturate(180%);border:1px solid rgba(255,255,255,.7);border-radius:22px;padding:10px;box-shadow:0 24px 64px rgba(15,25,60,.3),0 0 0 1px rgba(20,30,70,.06);transform-origin:left center;animation:panelIn .17s cubic-bezier(.2,.9,.3,1.12)}
+@keyframes panelIn{from{opacity:0;transform:scale(.93) translateX(-8px)}}
+#bar{-webkit-backdrop-filter:blur(22px) saturate(160%);backdrop-filter:blur(22px) saturate(160%);background:rgba(31,58,53,.84);border:1px solid rgba(255,255,255,.14);box-shadow:0 10px 34px rgba(0,0,0,.32)}
+#bar button,#bar a,#zoomrad button{transition:background .15s,transform .12s}#bar button:active,#bar a:active,#zoomrad button:active{transform:scale(.93)}
+#zoomrad{-webkit-backdrop-filter:blur(22px) saturate(160%);backdrop-filter:blur(22px) saturate(160%);background:rgba(31,58,53,.84);border:1px solid rgba(255,255,255,.14)}
+.fly{min-width:300px;padding:8px}.fly button{background:transparent;border-radius:14px;height:50px;transition:background .12s}.fly button:hover:not(:disabled){background:rgba(61,90,254,.1)}.fly button:active:not(:disabled){background:rgba(61,90,254,.18)}
+.fly button i{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:rgba(61,90,254,.1);font-size:1.2rem}
+#flyBg button i{background:rgba(123,97,255,.14)}#flyMer button i{background:rgba(86,102,143,.14)}
+.fly kbd{margin-left:auto;font:inherit;font-size:.8rem;font-weight:800;color:var(--muted);background:rgba(86,102,143,.12);border-radius:7px;padding:1px 8px}
+.pop button:not(.fg):not(.tj){transition:background .12s}
+@media print{#bar,#zoomrad,.fly,#hjalp,.pop{display:none!important}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -253,20 +269,18 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
   <button id="bHand" title="Flytta tavlan (H, eller håll ner mellanslag)" aria-label="Flytta tavlan">🖐️</button>
   <button id="bFarg" title="Färg och tjocklek" aria-label="Färg och tjocklek"><span id="fargprick" style="width:26px;height:26px;border-radius:50%;background:#1D2B53;border:3px solid #fff;display:block"></span></button>
   <button id="bAngra" title="Ångra (Ctrl+Z)" aria-label="Ångra">↶</button>
-  <button id="bRensa" title="Sudda hela ritningen" aria-label="Sudda hela ritningen">🧹</button>
   <hr>
-  <button id="bLagg" title="Lägg till en ruta" aria-label="Lägg till en ruta">➕</button>
-  <button id="bOrd" title="Ordna rutorna snyggt" aria-label="Ordna rutorna">🗂️</button>
   <button id="bTav" title="Mina tavlor: spara och byt mellan tavlor" aria-label="Mina tavlor">📚</button>
-  <button id="bFyll" title="Fyll tavlan: rutorna bredvid varandra, så stora det går" aria-label="Fyll tavlan med rutorna, så stora det går">↔️</button>
-  <button id="bBg" title="Byt bakgrund" aria-label="Byt bakgrund">🖼️</button>
-  <button id="bStl" title="Storlek på rutor och rader" aria-label="Storlek på rutor och rader">📐</button>
-  <button id="bFull" title="Helskärm (F)" aria-label="Helskärm">⛶</button>
-  <button id="bFil" title="Spara eller ladda tavlan som fil" aria-label="Spara eller ladda tavlan som fil">💾</button>
-  <button id="bSnd" title="Ljud av eller på (timer och lyckohjul)" aria-label="Ljud av eller på">🔔</button>
+  <button id="bLag" title="Lager" aria-label="Lager">📑</button>
+  <button id="bGrRutor" class="grp" data-fly="flyRutor" aria-haspopup="menu" aria-expanded="false" title="Rutor: lägg till, ordna, fyll tavlan" aria-label="Rutor">🧩</button>
+  <button id="bGrBg" class="grp" data-fly="flyBg" aria-haspopup="menu" aria-expanded="false" title="Bakgrund: byt och storlek på rutor" aria-label="Bakgrund">🖼️</button>
+  <button id="bGrMer" class="grp" data-fly="flyMer" aria-haspopup="menu" aria-expanded="false" title="Mer: helskärm, fil, ljud, sudda allt" aria-label="Mer">⚙️</button>
 </div>
 <div id="zoomrad" role="group" aria-label="Zoom"><button id="zMinus" title="Zooma ut (−)" aria-label="Zooma ut">−</button><button id="zProc" title="Tillbaka till början (0)" aria-label="Tillbaka till början">1 ×</button><button id="zPlus" title="Zooma in (+)" aria-label="Zooma in">+</button><button id="zAlla" title="Visa hela ritningen" aria-label="Visa hela ritningen">⤢</button></div>
-<div id="hjalp" role="status">Tryck på ➕ för att lägga till rutor. Dra i en rutas rubrik för att flytta den, så snappar rutorna mot varandra (håll ner Alt för att slå av det). 🗂️ ordnar alla rutor, ↔️ gör dem så stora det går, 📚 sparar och byter tavlor. Rita fritt med ✏️. Zooma med scrollhjulet eller två fingrar, 🖐️ flyttar tavlan.<button id="hjalpX">Ok</button></div>
+<div class="fly" id="flyRutor" hidden role="menu" aria-label="Rutor"><button id="bLagg" title="Lägg till en ruta" aria-label="Lägg till en ruta"><i>➕</i><span>Lägg till en ruta</span></button><button id="bOrd" title="Ordna rutorna snyggt" aria-label="Ordna rutorna"><i>🗂️</i><span>Ordna rutorna snyggt</span></button><button id="bFyll" title="Fyll tavlan: rutorna bredvid varandra, så stora det går" aria-label="Fyll tavlan med rutorna, så stora det går"><i>↔️</i><span>Fyll tavlan, så stora det går</span></button></div>
+<div class="fly" id="flyBg" hidden role="menu" aria-label="Bakgrund"><button id="bBg" title="Byt bakgrund" aria-label="Byt bakgrund"><i>🖼️</i><span>Byt bakgrund</span></button><button id="bStl" title="Storlek på rutor och rader" aria-label="Storlek på rutor och rader"><i>📐</i><span>Storlek på rutor och rader</span></button></div>
+<div class="fly" id="flyMer" hidden role="menu" aria-label="Mer"><button id="bFull" title="Helskärm (F)" aria-label="Helskärm"><i>⛶</i><span>Helskärm</span><kbd>F</kbd></button><button id="bFil" title="Spara eller ladda tavlan som fil" aria-label="Spara eller ladda tavlan som fil"><i>💾</i><span>Spara eller ladda som fil</span></button><button id="bSnd" title="Ljud av eller på (timer och lyckohjul)" aria-label="Ljud av eller på"><i>🔔</i><span>Ljud av eller på</span></button><button id="bRensa" title="Sudda hela ritningen" aria-label="Sudda hela ritningen"><i>🧹</i><span>Sudda hela ritningen</span></button></div>
+<div id="hjalp" role="status">Tryck på ➕ för att lägga till rutor. Dra i en rutas rubrik för att flytta den, så snappar rutorna mot varandra (håll ner Alt för att slå av det). 🗂️ ordnar alla rutor, ↔️ gör dem så stora det går, 📚 sparar och byter tavlor. Rita fritt med ✏️, lager i 📑. Zooma med scrollhjulet eller två fingrar, 🖐️ flyttar tavlan.<button id="hjalpX">Ok</button></div>
 <script src="../ljud.js"></script>
 <script>
 const $=id=>document.getElementById(id);
@@ -307,7 +321,7 @@ if(!S||!Array.isArray(S.widgets)){S=mall();}
 if(S.v!==2){const k=1920/Math.max(600,innerWidth);S.widgets.forEach(w=>{w.x=Math.round((+w.x||0)*k);w.y=Math.round((+w.y||0)*k)});S.v=2;}   // äldre tavlor sparade i skärmpixlar: räknas om till tavlans mått (1920 breda)
 S.pen=S.pen||{c:"#1D2B53",w:6,v:"penna"};if(!S.namn||typeof S.namn!=="object")S.namn={};if(!Array.isArray(S.bank))S.bank=null;S.fav=renaFav(S.fav);if(!BG.includes(S.bg))S.bg="vit";if(!S.stl||typeof S.stl!=="object")S.stl={rutat:1,linjerat:1};
 let sparaT=0;
-function sparaNu(){clearTimeout(sparaT);try{localStorage.setItem(KEY,JSON.stringify({v:2,bg:S.bg,pen:S.pen,namn:S.namn,bank:S.bank||null,stl:S.stl,fav:S.fav||[],tavlor:S.tavlor||[],vy:S.vy||null,bar:S.bar||null,widgets:S.widgets}));return true;}catch(e){return false;}}
+function sparaNu(){clearTimeout(sparaT);try{localStorage.setItem(KEY,JSON.stringify({v:2,bg:S.bg,pen:S.pen,namn:S.namn,bank:S.bank||null,stl:S.stl,fav:S.fav||[],tavlor:S.tavlor||[],lager:S.lager,lagerAkt:S.lagerAkt,vy:S.vy||null,bar:S.bar||null,widgets:S.widgets}));return true;}catch(e){return false;}}
 function spara(){clearTimeout(sparaT);sparaT=setTimeout(sparaNu,250);}
 /* sparar direkt när man lämnar sidan eller byter flik, så att det man nyss skrev (t.ex. på en post-it) alltid finns kvar */
 addEventListener("pagehide",sparaNu);document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden")sparaNu();});
@@ -320,10 +334,18 @@ let z=60;
 const cv=$("rita"),cx=cv.getContext("2d");let strokes=[],cur=null,DPR=1;
 /* Tavlan är en oändlig yta. Ritningen ligger i världskoordinater (samma enheter som rutorna, tavlan är 1920 enheter bred).
    V.x, V.y = punkten som ligger överst till vänster på skärmen, V.z = zoom (1 = som förut). Rutorna ligger kvar fast på skärmen och följer inte med. */
+/* Lager: S.lager = [{id,n,v (synligt),l (låst)}] nerifrån och upp, S.lagerAkt = det man ritar på. Varje streck har ly = lagrets id. Suddet raderar bara på det valda lagret. Rutorna ligger alltid överst. */
+const LMAX=6,lagId=()=>"l"+uid().slice(-6);
+function renaLager(a){const r=[];if(Array.isArray(a))a.slice(0,LMAX).forEach(l=>{if(!l||typeof l!=="object")return;let id=/^[\w-]{1,12}$/.test(l.id||"")?l.id:lagId();if(r.some(x=>x.id===id))id=lagId();r.push({id,n:String(l.n||"Lager").slice(0,24),v:l.v!==false,l:!!l.l,o:isFinite(+l.o)?Math.max(.1,Math.min(1,+l.o)):1});});if(!r.length)r.push({id:lagId(),n:"Lager 1",v:true,l:false,o:1});return r;}
+const lagerVal=()=>S.lager.find(l=>l.id===S.lagerAkt)||S.lager[S.lager.length-1];
+const aktOverst=()=>{const v=S.lager.filter(l=>l.v);return v.length>0&&v[v.length-1].id===lagerVal().id;};
+const direkt=()=>(S.lager.length===1||aktOverst())&&(lagerVal().o==null||lagerVal().o>=1);   // ritas rakt på ytan bara när lagret är ogenomskinligt och överst
+const lagerSyns=t=>{const l=S.lager.find(x=>x.id===t.ly);return !l||l.v;};
+function fixaLager(){strokes.forEach(t=>{if(!S.lager.some(l=>l.id===t.ly))t.ly=S.lager[0].id;});}
 const V={x:0,y:0,z:1},ZMIN=.02,ZMAX=100;
 const kz=()=>K*V.z;
 const tillVarld=(sx,sy)=>[V.x+sx/kz(),V.y+sy/kz()];
-function sattT(){const k=kz()*DPR;cx.setTransform(k,0,0,k,-V.x*k,-V.y*k);}
+function sattT(g){g=g||cx;const k=kz()*DPR;g.setTransform(k,0,0,k,-V.x*k,-V.y*k);}
 function storlek(){scenen();DPR=Math.min(2,devicePixelRatio||1);cv.width=Math.round(innerWidth*DPR);cv.height=Math.round(innerHeight*DPR);omrita();vyBakgrund();hudZoom();}
 /* ---- penslar: varje streck har en pensel (s.b), ett slumpfrö (s.sd, så att kanten blir likadan vid varje omritning) och ev. en breddfaktor per punkt (q[2]) ---- */
 const PENSLAR=[{id:"penna",n:"Penna",e:"✏️"},{id:"pensel",n:"Pensel",e:"🖌️"},{id:"tusch",n:"Tuschpenna",e:"🖊️"},{id:"over",n:"Överstrykare",e:"🟨"},{id:"krita",n:"Krita",e:"🧱"},{id:"regn",n:"Regnbåge",e:"🌈"},{id:"streck",n:"Streckad",e:"⋯"}],PIDS=PENSLAR.map(b=>b.id);
@@ -373,7 +395,7 @@ function ritaStreck(g,s,k){const b=s.e?"penna":(PIDS.includes(s.b)?s.b:"penna"),
   else if(b==="over"){g.globalAlpha=.4;g.lineWidth=lw*3.2;g.lineCap="square";if(p.length===1)g.fillRect(p[0][0]-lw*1.6,p[0][1]-lw*1.6,lw*3.2,lw*3.2);else{spar(g,p);g.stroke();}}
   else if(b==="streck"){g.lineWidth=lw;if(p.length===1)prick(g,p[0][0],p[0][1],lw/2);else{g.setLineDash([lw*1.8,lw*2.2]);spar(g,p);g.stroke();g.setLineDash([]);}}
   else{g.lineWidth=lw;if(p.length===1)prick(g,p[0][0],p[0][1],lw/2);else{spar(g,p);g.stroke();}}}
-function linje(s){cx.save();sattT();ritaStreck(cx,s,kz());cx.restore();}
+function linje(s,g){g=g||cx;g.save();sattT(g);ritaStreck(g,s,kz());g.restore();}
 /* former: rät linje (Shift = hakar fast vid vågrätt, lodrätt och 45°), cirkel (centrum där man trycker) och rektangel (Shift = kvadrat), ritade med vald pensel */
 function formPunkter(m,a,b,w,shift){
   if(m==="linje"){let dx=b[0]-a[0],dy=b[1]-a[1];const len=Math.hypot(dx,dy);if(shift&&len>0){const ang=Math.atan2(dy,dx),st=Math.PI/4,t=Math.round(ang/st)*st;if(Math.abs(ang-t)<.1){dx=Math.cos(t)*len;dy=Math.sin(t)*len;}}
@@ -385,7 +407,12 @@ let rafN=0;function ritaNu(){if(rafN)return;rafN=requestAnimationFrame(()=>{rafN
 /* omgivande ruta för ett streck (sparas i s.bb) så att bara det som syns ritas */
 function bbox(s){if(s.bb&&s!==cur)return s.bb;let a=1e18,b=1e18,c=-1e18,d=-1e18;for(const q of s.p){if(q[0]<a)a=q[0];if(q[0]>c)c=q[0];if(q[1]<b)b=q[1];if(q[1]>d)d=q[1];}const pad=s.w*(s.b==="over"?1.8:1.4);return s.bb=[a-pad,b-pad,c+pad,d+pad];}
 function synlig(s){const b=bbox(s),k=kz();if(b[2]<V.x||b[0]>V.x+innerWidth/k||b[3]<V.y||b[1]>V.y+innerHeight/k)return false;return Math.max(b[2]-b[0],b[3]-b[1])*k>=.6;}
-function omrita(){cx.setTransform(1,0,0,1,0,0);cx.clearRect(0,0,cv.width,cv.height);strokes.forEach(s=>{if(s===cur||synlig(s))linje(s);});}
+const tmpCv=document.createElement("canvas"),tmpG=tmpCv.getContext("2d");
+function omrita(){cx.setTransform(1,0,0,1,0,0);cx.clearRect(0,0,cv.width,cv.height);const L=S.lager;
+  if(L.length===1&&L[0].v&&(L[0].o==null||L[0].o>=1)){strokes.forEach(s=>{if(s===cur||synlig(s))linje(s);});return;}
+  if(tmpCv.width!==cv.width||tmpCv.height!==cv.height){tmpCv.width=cv.width;tmpCv.height=cv.height;}
+  L.forEach(l=>{if(!l.v)return;const mine=strokes.filter(s=>(L.some(x=>x.id===s.ly)?s.ly:L[0].id)===l.id&&(s===cur||synlig(s)));if(!mine.length)return;
+    tmpG.setTransform(1,0,0,1,0,0);tmpG.clearRect(0,0,tmpCv.width,tmpCv.height);mine.forEach(s=>linje(s,tmpG));cx.globalAlpha=l.o==null?1:l.o;cx.drawImage(tmpCv,0,0);cx.globalAlpha=1;});}   // ett lager i taget, så att suddet bara raderar på sitt lager
 /* rutor och rader på bakgrunden följer med zoom och flytt (täta rutor slås ihop till var femte linje) */
 function vyBakgrund(){const l=STL[S.bg];if(!l)return;const i=Math.min(Math.max(S.stl[S.bg]==null?1:+S.stl[S.bg],0),3),g=l[i][1];let gz=g*V.z;while(gz<9)gz*=5;while(gz>450)gz/=5;
   const k=kz(),mod=(a,m)=>((a%m)+m)%m,oy=mod(-V.y*k,gz),b=$("board").style;b.setProperty("--gz",gz+"px");b.setProperty("--bx",mod(-V.x*k,gz)+"px");b.setProperty("--by",oy+"px");b.setProperty("--byl",(oy+gz*(1-16/g))+"px");}
@@ -394,7 +421,7 @@ function vyUppd(){S.vy={x:Math.round(V.x*1000)/1000,y:Math.round(V.y*1000)/1000,
 function hudZoom(){const e=$("zProc");if(e)e.textContent=((V.z!==1||V.x||V.y)?"🏠 ":"")+(V.z>=10?Math.round(V.z):V.z>=1?(Math.round(V.z*10)/10):Math.round(V.z*100)/100).toString().replace(".",",")+" ×";}
 function zoomVid(sx,sy,f){const w=tillVarld(sx,sy);V.z=Math.max(ZMIN,Math.min(ZMAX,V.z*f));V.x=w[0]-sx/kz();V.y=w[1]-sy/kz();vyUppd();}
 function visaHem(){V.x=0;V.y=0;V.z=1;vyUppd();}
-function visaAllt(){if(!strokes.length){hjalpText("Det finns ingen ritning att visa");return;}let a=1e18,b=1e18,c=-1e18,d=-1e18;strokes.forEach(s=>{if(s.e)return;const q=bbox(s);a=Math.min(a,q[0]);b=Math.min(b,q[1]);c=Math.max(c,q[2]);d=Math.max(d,q[3]);});if(a>c){hjalpText("Det finns ingen ritning att visa");return;}
+function visaAllt(){if(!strokes.length){hjalpText("Det finns ingen ritning att visa");return;}let a=1e18,b=1e18,c=-1e18,d=-1e18;strokes.forEach(s=>{if(s.e||!lagerSyns(s))return;const q=bbox(s);a=Math.min(a,q[0]);b=Math.min(b,q[1]);c=Math.max(c,q[2]);d=Math.max(d,q[3]);});if(a>c){hjalpText("Det finns ingen ritning att visa");return;}
   const bw=Math.max(c-a,1e-3),bh=Math.max(d-b,1e-3),z=Math.max(ZMIN,Math.min(ZMAX,Math.min(innerWidth*.86/(bw*K),innerHeight*.86/(bh*K))));V.z=z;V.x=(a+c)/2-innerWidth/2/kz();V.y=(b+d)/2-innerHeight/2/kz();vyUppd();}
 function satt(vy){const v=vy&&typeof vy==="object"?vy:{};V.x=isFinite(+v.x)?+v.x:0;V.y=isFinite(+v.y)?+v.y:0;V.z=isFinite(+v.z)?Math.max(ZMIN,Math.min(ZMAX,+v.z)):1;if(V.z===0)V.z=1;vyUppd();}
 /* pekare: ett finger/mus ritar (eller flyttar med 🖐️, mittenknappen eller mellanslag), två fingrar zoomar och flyttar */
@@ -406,8 +433,9 @@ cv.addEventListener("pointerdown",e=>{if(e.button===2)return;try{cv.setPointerCa
   if(ptrs.size>2)return;
   if(e.button===1||S.pen.v==="hand"||rymd){pan={x:e.clientX,y:e.clientY};cv.classList.add("tag");e.preventDefault();return;}
   if(e.button>0)return;
+  const lg=lagerVal();if(!lg.v||lg.l){hjalpText(!lg.v?"Lagret är dolt. Visa det i 📑 först.":"Lagret är låst. Lås upp det i 📑.");return;}
   const e_=S.pen.v==="sudd",bb=e_?"penna":bNu(),px=e_?44:S.pen.w*((e.pointerType==="pen"&&bb==="penna")?(.4+e.pressure*1.2):1),w0=tillVarld(e.clientX,e.clientY);
-  cur={c:S.pen.c,w:px/kz(),e:e_,b:bb,sd:(Math.random()*1e9)|0,p:[w0],p0:w0.slice(),fv:1,form:e_?"fri":fNu(),sh:false,lx:e.clientX,ly:e.clientY,lt:e.timeStamp};strokes.push(cur);linje(cur);e.preventDefault();});
+  cur={c:S.pen.c,w:px/kz(),e:e_,ly:lg.id,b:bb,sd:(Math.random()*1e9)|0,p:[w0],p0:w0.slice(),fv:1,form:e_?"fri":fNu(),sh:false,lpx:e.clientX,lpy:e.clientY,lpt:e.timeStamp};strokes.push(cur);if(direkt()&&(S.lager.length===1||(!e_&&bb==="penna")))linje(cur);else ritaNu();e.preventDefault();});
 cv.addEventListener("pointermove",e=>{if(ptrs.has(e.pointerId))ptrs.set(e.pointerId,[e.clientX,e.clientY]);
   if(gest&&ptrs.size>=2){uppdGest();e.preventDefault();return;}
   if(pan){V.x-=(e.clientX-pan.x)/kz();V.y-=(e.clientY-pan.y)/kz();pan.x=e.clientX;pan.y=e.clientY;vyUppd();e.preventDefault();return;}
@@ -416,15 +444,15 @@ cv.addEventListener("pointermove",e=>{if(ptrs.has(e.pointerId))ptrs.set(e.pointe
   if(m!=="fri"){cur.p=formPunkter(m,cur.p0,wp,cur.w,e.shiftKey);cur.sh=true;cur.bb=null;ritaNu();e.preventDefault();return;}
   if(cur.sh){cur.sh=false;cur.p=[cur.p0.slice()];omrita();}
   let f=null;
-  if(cur.b==="pensel"){const dd=Math.hypot(e.clientX-cur.lx,e.clientY-cur.ly);if(dd<1)return;const v=dd/Math.max(1,e.timeStamp-cur.lt),tgt=(e.pointerType==="pen"&&e.pressure>0)?.2+e.pressure*1.9:Math.max(.16,Math.min(2.1,2.15-.7*v));cur.fv=cur.fv*.55+tgt*.45;f=Math.round(cur.fv*100)/100;}   // bredden följer farten (eller trycket)
-  cur.lx=e.clientX;cur.ly=e.clientY;cur.lt=e.timeStamp;cur.p.push(f==null?wp:[wp[0],wp[1],f]);cur.bb=null;
-  if(cur.b==="penna"||cur.e){/* snabbväg: rita bara det nya segmentet */
+  if(cur.b==="pensel"){const dd=Math.hypot(e.clientX-cur.lpx,e.clientY-cur.lpy);if(dd<1)return;const v=dd/Math.max(1,e.timeStamp-cur.lpt),tgt=(e.pointerType==="pen"&&e.pressure>0)?.2+e.pressure*1.9:Math.max(.16,Math.min(2.1,2.15-.7*v));cur.fv=cur.fv*.55+tgt*.45;f=Math.round(cur.fv*100)/100;}   // bredden följer farten (eller trycket)
+  cur.lpx=e.clientX;cur.lpy=e.clientY;cur.lpt=e.timeStamp;cur.p.push(f==null?wp:[wp[0],wp[1],f]);cur.bb=null;
+  if((cur.b==="penna"||cur.e)&&direkt()&&(S.lager.length===1||!cur.e)){/* snabbväg: rita bara det nya segmentet */
     const p=cur.p,n=p.length;if(n>=3){const a=p[n-3],b=p[n-2],c=p[n-1];cx.save();sattT();cx.lineCap="round";cx.lineJoin="round";cx.lineWidth=Math.max(cur.w,.8/kz());cx.globalCompositeOperation=cur.e?"destination-out":"source-over";cx.strokeStyle=cur.e?"#000":cur.c;
       cx.beginPath();cx.moveTo((a[0]+b[0])/2,(a[1]+b[1])/2);cx.quadraticCurveTo(b[0],b[1],(b[0]+c[0])/2,(b[1]+c[1])/2);cx.stroke();cx.restore();}
     else{linje(cur);}}
   else ritaNu();
   e.preventDefault();});
-const slutPtr=e=>{ptrs.delete(e.pointerId);if(ptrs.size<2)gest=null;if(!ptrs.size){pan=null;cv.classList.remove("tag");}if(cur&&!ptrs.size){if(cur.b!=="penna"||cur.sh)omrita();sparaRitning();cur=null;}else if(cur&&e.type==="pointercancel"){sparaRitning();cur=null;}};
+const slutPtr=e=>{ptrs.delete(e.pointerId);if(ptrs.size<2)gest=null;if(!ptrs.size){pan=null;cv.classList.remove("tag");}if(cur&&!ptrs.size){if(cur.b!=="penna"||cur.sh||S.lager.length>1||!direkt())omrita();sparaRitning();cur=null;}else if(cur&&e.type==="pointercancel"){sparaRitning();cur=null;}};
 cv.addEventListener("pointerup",slutPtr);cv.addEventListener("pointercancel",slutPtr);
 /* scrollhjul: musen zoomar (där pekaren är), pekplatta med två fingrar flyttar, nyp eller Ctrl+hjul zoomar */
 cv.addEventListener("wheel",e=>{e.preventDefault();const pad=e.deltaMode===0&&!e.ctrlKey&&(e.deltaX!==0||Math.abs(e.deltaY)<40);
@@ -432,14 +460,14 @@ cv.addEventListener("wheel",e=>{e.preventDefault();const pad=e.deltaMode===0&&!e
 /* ritningen sparas i webbläsaren (bara på den här enheten) i världskoordinater: {v:2,s:[…]}; äldre format (en lista, koordinater delade med fönsterbredden) läses också */
 const RKEY=KEY+"-ritning";let ritT=0;
 function ritData(){return{v:2,s:strokes.map(t=>{const dp=Math.pow(10,Math.max(0,Math.min(5,Math.ceil(-Math.log10(Math.max(1e-6,t.w/40)))))),r=q=>Math.round(q*dp)/dp,min=Math.max(.05,t.w*.25);
-  return{c:t.c,w:Math.round(t.w*dp*100)/(dp*100),e:t.e?1:0,b:t.b&&t.b!=="penna"?t.b:undefined,sd:t.b&&t.b!=="penna"?(t.sd|0):undefined,p:t.p.filter((q,i,a)=>i===0||i===a.length-1||Math.abs(q[0]-a[i-1][0])+Math.abs(q[1]-a[i-1][1])>=min).map(q=>q.length>2?[r(q[0]),r(q[1]),Math.round(q[2]*100)/100]:[r(q[0]),r(q[1])])};})};}
+  return{c:t.c,w:Math.round(t.w*dp*100)/(dp*100),e:t.e?1:0,y:t.ly,b:t.b&&t.b!=="penna"?t.b:undefined,sd:t.b&&t.b!=="penna"?(t.sd|0):undefined,p:t.p.filter((q,i,a)=>i===0||i===a.length-1||Math.abs(q[0]-a[i-1][0])+Math.abs(q[1]-a[i-1][1])>=min).map(q=>q.length>2?[r(q[0]),r(q[1]),Math.round(q[2]*100)/100]:[r(q[0]),r(q[1])])};})};}
 function ritFran(d){const gammal=Array.isArray(d),lista=gammal?d:(d&&d.v===2&&Array.isArray(d.s)?d.s:null);if(!lista)return[];
   return lista.slice(0,3000).filter(t=>t&&typeof t.c==="string"&&/^#[0-9A-Fa-f]{3,8}$/.test(t.c)&&Array.isArray(t.p)&&t.p.length).map(t=>{
     const w=gammal?Math.max(1,Math.min(60,+t.w||6))/K:Math.max(1e-4,Math.min(1e5,+t.w||6));
-    return{c:t.c,w,e:!!t.e,b:PIDS.includes(t.b)?t.b:"penna",sd:(+t.sd|0)||0,p:t.p.slice(0,20000).map(q=>gammal?[(+q[0]||0)*1920,(+q[1]||0)*1920]:(q.length>2&&isFinite(+q[2])?[+q[0]||0,+q[1]||0,+q[2]]:[+q[0]||0,+q[1]||0]))};});}
+    return{c:t.c,w,e:!!t.e,ly:typeof t.y==="string"?t.y.slice(0,12):undefined,b:PIDS.includes(t.b)?t.b:"penna",sd:(+t.sd|0)||0,p:t.p.slice(0,20000).map(q=>gammal?[(+q[0]||0)*1920,(+q[1]||0)*1920]:(q.length>2&&isFinite(+q[2])?[+q[0]||0,+q[1]||0,+q[2]]:[+q[0]||0,+q[1]||0]))};});}
 function sparaRitning(){clearTimeout(ritT);ritT=setTimeout(()=>{try{if(!strokes.length){localStorage.removeItem(RKEY);return;}
   const j=JSON.stringify(ritData());if(j.length>2.5e6){hjalpText("Ritningen är för stor för att sparas. Sudda något.");return;}localStorage.setItem(RKEY,j);}catch(e){}},400);}
-function laddaRitning(){try{strokes=ritFran(JSON.parse(localStorage.getItem(RKEY)||"null"));}catch(e){strokes=[];}}
+function laddaRitning(){try{strokes=ritFran(JSON.parse(localStorage.getItem(RKEY)||"null"));}catch(e){strokes=[];}fixaLager();}
 function angra(){if(strokes.length){strokes.pop();omrita();sparaRitning();}}
 function rensaRitning(){if(!strokes.length)return;const rits=JSON.stringify(strokes),snap=JSON.stringify(S.widgets);strokes=[];omrita();sparaRitning();angraRuta("Ritningen är struken",snap,rits);}
 addEventListener("resize",storlek);
@@ -464,14 +492,14 @@ $("bAngra").onclick=angra;$("bRensa").onclick=rensaRitning;
 $("bMin").onclick=()=>{$("bar").classList.toggle("mini");$("widgets").classList.toggle("pres",$("bar").classList.contains("mini"));stangPop();};
 $("bOrd").onclick=()=>{ordna(true);hjalpText("Rutorna är ordnade");};
 $("bFyll").onclick=fyllTavlan;
-function sndIkon(){$("bSnd").textContent=window.Ljud&&Ljud.on===false?"🔕":"🔔";}
+function sndIkon(){$("bSnd").querySelector("i").textContent=window.Ljud&&Ljud.on===false?"🔕":"🔔";}
 $("bSnd").onclick=()=>{if(window.Ljud&&Ljud.set){Ljud.set(!Ljud.on);sndIkon();hjalpText(Ljud.on?"Ljud på":"Ljud av");}};
 document.addEventListener("mp-ljud",sndIkon);
 $("bFull").onclick=()=>{if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen().catch(()=>{});};
 function skrivBild(g){const H=Math.round(g*4.6),y0=Math.round(g*.8),c="#8FAAE0",d=[y0,y0+g,y0+2*g,y0+3*g];
   const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="${H}"><line x1="0" x2="24" y1="${d[0]}" y2="${d[0]}" stroke="${c}" stroke-width="1.5"/><line x1="0" x2="24" y1="${d[1]}" y2="${d[1]}" stroke="${c}" stroke-width="1.5" stroke-dasharray="6 6"/><line x1="0" x2="24" y1="${d[2]}" y2="${d[2]}" stroke="#5B78D6" stroke-width="2.6"/><line x1="0" x2="24" y1="${d[3]}" y2="${d[3]}" stroke="${c}" stroke-width="1.5"/></svg>`;
   return{img:`url("data:image/svg+xml,${encodeURIComponent(svg)}")`,H};}
-function rutStorlek(){const l=STL[S.bg];$("bStl").style.display=l?"":"none";if(l){const i=Math.min(Math.max(S.stl[S.bg]==null?1:+S.stl[S.bg],0),3);$("board").style.setProperty("--g",l[i][1]+"px");vyBakgrund();}}
+function rutStorlek(){const l=STL[S.bg];$("bStl").disabled=!l;$("bStl").title=l?"Storlek på rutor och rader":"Rutstorlek finns bara på rutat och linjerat";if(l){const i=Math.min(Math.max(S.stl[S.bg]==null?1:+S.stl[S.bg],0),3);$("board").style.setProperty("--g",l[i][1]+"px");vyBakgrund();}}
 function bakgrund(bg){S.bg=bg;$("board").className=bg==="vit"?"":bg;rutStorlek();
   if(bg==="tavla"&&S.pen.c==="#1D2B53")penFarg("#FFFFFF");else if(bg!=="tavla"&&S.pen.c==="#FFFFFF")penFarg("#1D2B53");spara();}
 function penFarg(c){S.pen.c=c;$("fargprick").style.background=c;spara();}
@@ -495,10 +523,10 @@ $("bLagg").onclick=()=>{if(pop&&pop.dataset.t==="lagg"){stangPop();return;}
 document.addEventListener("pointerdown",e=>{if(pop&&!pop.contains(e.target)&&!e.target.closest("#bar"))stangPop();});
 addEventListener("keydown",e=>{if(e.target.closest&&e.target.closest("input,textarea,[contenteditable]"))return;
   if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="z"){angra();e.preventDefault();}
-  else if(e.key==="p"||e.key==="P")verktyg("penna");else if(e.key==="h"||e.key==="H")verktyg("hand");else if(e.key==="0")visaHem();else if(e.key==="+"||e.key==="=")$("zPlus").click();else if(e.key==="-"||e.key==="_")$("zMinus").click();else if(e.key==="e"||e.key==="E")verktyg("sudd");else if(e.key==="f"||e.key==="F")$("bFull").click();else if(e.key==="Escape")stangPop();});
+  else if(e.key==="p"||e.key==="P")verktyg("penna");else if(e.key==="h"||e.key==="H")verktyg("hand");else if(e.key==="0")visaHem();else if(e.key==="+"||e.key==="=")$("zPlus").click();else if(e.key==="-"||e.key==="_")$("zMinus").click();else if(e.key==="e"||e.key==="E")verktyg("sudd");else if(e.key==="f"||e.key==="F")$("bFull").click();else if(e.key==="Escape"){stangPop();stangFly();}});
 function hjalpText(t){const h=$("hjalp");h.hidden=false;h.innerHTML=esc(t);clearTimeout(hjalpText.t);hjalpText.t=setTimeout(()=>{h.hidden=true;},2200);}
-function angraRuta(txt,snap,rits,bg,vy){const h=$("hjalp");h.hidden=false;h.innerHTML=esc(txt)+'<button id="angB">↩ Ångra</button>';clearTimeout(hjalpText.t);hjalpText.t=setTimeout(()=>{h.hidden=true;},9000);
-  $("angB").onclick=()=>{S.widgets=JSON.parse(snap);if(rits){strokes=JSON.parse(rits);omrita();sparaRitning();}if(bg&&BG.includes(bg))bakgrund(bg);if(vy)satt(vy);ritaAlla();spara();h.hidden=true;};}
+function angraRuta(txt,snap,rits,bg,vy,fn){const h=$("hjalp");h.hidden=false;h.innerHTML=esc(txt)+'<button id="angB">↩ Ångra</button>';clearTimeout(hjalpText.t);hjalpText.t=setTimeout(()=>{h.hidden=true;},9000);
+  $("angB").onclick=()=>{S.widgets=JSON.parse(snap);if(rits){strokes=JSON.parse(rits);omrita();sparaRitning();}if(fn)fn();if(bg&&BG.includes(bg))bakgrund(bg);if(vy)satt(vy);fixaLager();omrita();ritaAlla();spara();h.hidden=true;};}
 $("hjalpX").onclick=()=>{$("hjalp").hidden=true;try{localStorage.setItem(KEY+"-hjalp","1")}catch(e){}};
 try{if(localStorage.getItem(KEY+"-hjalp"))$("hjalp").hidden=true;}catch(e){}
 
@@ -835,9 +863,9 @@ $("widgets").addEventListener("input",e=>{const t=e.target.closest("[data-gnamn]
    En sparad tavla = rutor (utom låsta, som ligger kvar mellan tavlorna) + ritning + bakgrund. Sparas i S.tavlor (samma nyckel som tavlan, bara den här webbläsaren).
    En timer kan byta tavla när tiden är slut (o.d.efter = tavlans id). */
 function renaTavlor(a){const r=[];if(!Array.isArray(a))return r;a.slice(0,20).forEach(t=>{if(!t||typeof t!=="object")return;const n=String(t.n||"").trim().slice(0,30);if(!n||!Array.isArray(t.widgets))return;let id=/^[\w-]{3,20}$/.test(t.id||"")?t.id:uid();if(r.some(x=>x.id===id))id=uid();
-  r.push({id,n,bg:BG.includes(t.bg)?t.bg:"vit",widgets:t.widgets.slice(0,40).map(w=>renaWidget(w,true)).filter(Boolean),rits:(Array.isArray(t.rits)||(t.rits&&t.rits.v===2&&Array.isArray(t.rits.s)))&&JSON.stringify(t.rits).length<1.5e6?t.rits:null,vy:t.vy&&typeof t.vy==="object"?{x:+t.vy.x||0,y:+t.vy.y||0,z:Math.max(ZMIN,Math.min(ZMAX,+t.vy.z||1))}:null});});return r;}
+  r.push({id,n,bg:BG.includes(t.bg)?t.bg:"vit",widgets:t.widgets.slice(0,40).map(w=>renaWidget(w,true)).filter(Boolean),rits:(Array.isArray(t.rits)||(t.rits&&t.rits.v===2&&Array.isArray(t.rits.s)))&&JSON.stringify(t.rits).length<1.5e6?t.rits:null,vy:t.vy&&typeof t.vy==="object"?{x:+t.vy.x||0,y:+t.vy.y||0,z:Math.max(ZMIN,Math.min(ZMAX,+t.vy.z||1))}:null,lager:t.lager?renaLager(t.lager):null,lagerAkt:typeof t.lagerAkt==="string"?t.lagerAkt:""});});return r;}
 function nuTavla(){const w=JSON.parse(JSON.stringify(S.widgets.filter(o=>!o.lock)));w.forEach(o=>{if(o.typ==="lista"){delete o.d.pal;delete o.d.egen;delete o.d.red;}if(o.typ==="grupper")o.d.edit=false;});
-  let r=strokes.length?ritData():null,stor=false;if(r&&JSON.stringify(r).length>1.5e6){r=null;stor=true;}return{t:{bg:S.bg,widgets:w,rits:r,vy:{x:V.x,y:V.y,z:V.z}},stor};}
+  let r=strokes.length?ritData():null,stor=false;if(r&&JSON.stringify(r).length>1.5e6){r=null;stor=true;}return{t:{bg:S.bg,widgets:w,rits:r,vy:{x:V.x,y:V.y,z:V.z},lager:JSON.parse(JSON.stringify(S.lager)),lagerAkt:S.lagerAkt},stor};}
 function uppdTimrar(){S.widgets.forEach(o=>{if(o.typ!=="timer")return;const e=elOf(o.id);if(e)fyllTimer(e.querySelector(".wb"),o);});}
 function rensaEfter(id){[S.widgets].concat(S.tavlor.map(t=>t.widgets)).forEach(a=>a.forEach(o=>{if(o.typ==="timer"&&o.d&&o.d.efter===id)o.d.efter="";}));}
 const tavlaNamnFinns=(n,utan)=>S.tavlor.some(x=>x.id!==utan&&x.n.toLowerCase()===n.toLowerCase());
@@ -849,11 +877,11 @@ function sparaTavla(namn,ers){const n=String(namn||"").trim().slice(0,30);const 
   uppdTimrar();return stor?"Sparad, men ritningen var för stor för att följa med.":null;}
 /* byter till en sparad tavla: låsta rutor ligger kvar, allt annat (rutor, ritning, bakgrund) ersätts. Ångra finns kvar i nio sekunder. */
 function bytTavla(id,orsak){const t=S.tavlor.find(x=>x.id===id);if(!t)return false;
-  const snap=JSON.stringify(S.widgets),rits=JSON.stringify(strokes),bg0=S.bg,vy0={x:V.x,y:V.y,z:V.z};
+  const snap=JSON.stringify(S.widgets),rits=JSON.stringify(strokes),bg0=S.bg,vy0={x:V.x,y:V.y,z:V.z},lag0=JSON.stringify({l:S.lager,a:S.lagerAkt});
   S.widgets.filter(o=>!o.lock).forEach(o=>{if(o.typ==="timer")delete CLOCK[o.id];if(o.typ==="ljud")stoppaMatare(o.id);});
   const nya=t.widgets.map(w=>{const c=JSON.parse(JSON.stringify(w));c.id=uid();return c;});
-  S.widgets=S.widgets.filter(o=>o.lock).concat(nya);strokes=ritFran(t.rits);sparaRitning();if(BG.includes(t.bg))bakgrund(t.bg);satt(t.vy);
-  ritaAlla();spara();angraRuta((orsak||"")+"Tavlan är nu: "+t.n,snap,rits,bg0,vy0);return true;}
+  S.widgets=S.widgets.filter(o=>o.lock).concat(nya);S.lager=t.lager?JSON.parse(JSON.stringify(t.lager)):renaLager(null);S.lagerAkt=S.lager.some(l=>l.id===t.lagerAkt)?t.lagerAkt:S.lager[S.lager.length-1].id;strokes=ritFran(t.rits);fixaLager();sparaRitning();if(BG.includes(t.bg))bakgrund(t.bg);satt(t.vy);omrita();ikonLager();
+  ritaAlla();spara();angraRuta((orsak||"")+"Tavlan är nu: "+t.n,snap,rits,bg0,vy0,()=>{const o=JSON.parse(lag0);S.lager=o.l;S.lagerAkt=o.a;ikonLager();});return true;}
 function visaTavlor(msg){
   const rader=S.tavlor.map(t=>`<div class="tavrad" data-id="${t.id}"><button class="tn" data-g="byt" title="Byt till ${esc(t.n)}">${esc(t.n)}</button><button data-g="namn" title="Döp om" aria-label="Döp om ${esc(t.n)}">✏️</button><button data-g="ers" title="Spara om med tavlan som den ser ut nu" aria-label="Spara om ${esc(t.n)} med tavlan som den ser ut nu">💾</button><button data-g="ta" title="Ta bort" aria-label="Ta bort ${esc(t.n)}">🗑️</button></div>`).join("");
   const p=oppnaPop($("bTav"),`<h4>Mina tavlor</h4>${rader||'<div class="tomtav">Inga sparade tavlor än. Ställ in tavlan som du vill ha den och spara den här nedanför.</div>'}<h4>Spara tavlan som …</h4><div class="tavny"><input type="text" id="tavNamn" maxlength="30" placeholder="till exempel Matte" aria-label="Namn på tavlan"><button data-g="ny">💾 Spara</button></div><div class="tavinfo">${esc(msg||"Låsta rutor (🔒) följer med mellan tavlorna och sparas inte i dem.")}</div>`,"tavlor");p.dataset.t="tav";
@@ -867,6 +895,14 @@ function visaTavlor(msg){
 $("bTav").onclick=()=>{if(pop&&pop.dataset.t==="tav"){stangPop();return;}visaTavlor();};
 $("widgets").addEventListener("change",e=>{const sel=e.target.closest("[data-efter]");if(!sel)return;const w=e.target.closest(".w"),o=S.widgets.find(x=>x.id===w.dataset.id);if(!o||o.typ!=="timer")return;o.d.efter=S.tavlor.some(t=>t.id===sel.value)?sel.value:"";spara();});
 
+/* grupperade verktyg: 🧩 Rutor, 🖼️ Bakgrund och ⚙️ Mer öppnar små paneler med textetiketter (knapparna ligger kvar på sina platser, så att inget hoppar när man byter bakgrund) */
+let fly=null;
+function stangFly(){if(!fly)return;fly.hidden=true;const b=document.querySelector(`.grp[data-fly="${fly.id}"]`);if(b){b.classList.remove("oppen");b.setAttribute("aria-expanded","false");}fly=null;}
+function oppnaFly(btn){const f=$(btn.dataset.fly);if(fly===f){stangFly();return;}stangFly();stangPop();f.hidden=false;const r=btn.getBoundingClientRect(),smal=innerWidth<=700;
+  f.style.left=(smal?Math.max(6,Math.min(innerWidth-f.offsetWidth-6,r.left)):r.right+8)+"px";f.style.top=(smal?r.bottom+8:Math.max(8,Math.min(innerHeight-f.offsetHeight-8,r.top)))+"px";btn.classList.add("oppen");btn.setAttribute("aria-expanded","true");fly=f;}
+document.querySelectorAll(".grp").forEach(b=>b.onclick=()=>oppnaFly(b));
+document.querySelectorAll(".fly").forEach(f=>f.addEventListener("click",e=>{if(e.target.closest("button:not(:disabled)"))stangFly();}));
+document.addEventListener("pointerdown",e=>{if(fly&&!fly.contains(e.target)&&!e.target.closest(".grp"))stangFly();});
 /* mellanslag hålls nere = flytta tavlan; verktygsfältet kan flyttas (⠿ överst, dubbelklick = tillbaka) */
 let kbNav=false;addEventListener("keydown",e=>{if(e.key==="Tab")kbNav=true;},true);addEventListener("pointerdown",()=>{kbNav=false;},true);
 addEventListener("keydown",e=>{if(e.code!=="Space"||e.repeat)return;const t=e.target;if(t.closest&&t.closest("input,textarea,select,[contenteditable]"))return;if(t.matches&&t.matches("button")&&kbNav)return;   /* bara en knapp man tabbat till med tangentbordet ska få mellanslag; en som man klickat på med musen ska inte stoppa flytten */
@@ -884,10 +920,30 @@ $("barGrepp").addEventListener("pointerdown",e=>{if(innerWidth<=700)return;const
 $("barGrepp").addEventListener("dblclick",()=>{S.bar=null;barEl.style.left=barEl.style.top=barEl.style.maxHeight="";spara();});
 addEventListener("resize",barBorja);
 
+/* lagermenyn: 👁 visa/dölj, 🔒 lås, namnet väljer lagret man ritar på, ✏️ döp om, ▲▼ ordning, 🗑️ ta bort */
+function ikonLager(){const b=$("bLag"),i=S.lager.findIndex(l=>l.id===lagerVal().id);b.innerHTML="📑"+(S.lager.length>1?`<small>${i+1}/${S.lager.length}</small>`:"");b.title="Lager: "+lagerVal().n+(S.lager.length>1?` (${i+1} av ${S.lager.length})`:"");}
+function visaLager(msg){
+  const rader=S.lager.slice().reverse().map(l=>{const n=strokes.filter(t=>t.ly===l.id&&!t.e).length,akt=l.id===lagerVal().id;
+    return`<div class="lagrad${l.v?"":" dold"}" data-id="${l.id}"><button data-lg="vis" title="${l.v?"Dölj lagret":"Visa lagret"}" aria-label="${l.v?"Dölj":"Visa"} ${esc(l.n)}">${l.v?"👁️":"🙈"}</button><button data-lg="las" title="${l.l?"Lås upp":"Lås lagret"}" aria-label="${l.l?"Lås upp":"Lås"} ${esc(l.n)}">${l.l?"🔒":"🔓"}</button><button class="ln ${akt?"v":""}" data-lg="val" title="Rita på det här lagret">${esc(l.n)} <small style="opacity:.6">${n}</small></button><button data-lg="namn" title="Döp om" aria-label="Döp om ${esc(l.n)}">✏️</button><button data-lg="upp" title="Flytta upp" aria-label="Flytta ${esc(l.n)} upp">▲</button><button data-lg="ner" title="Flytta ner" aria-label="Flytta ${esc(l.n)} ner">▼</button><button data-lg="ta" title="Ta bort" aria-label="Ta bort ${esc(l.n)}">🗑️</button></div>`;}).join("");
+  const p=oppnaPop($("bLag"),`<h4>Lager (överst först)</h4>${rader}<button data-lg="ny" ${S.lager.length>=LMAX?"disabled":""}>➕ Nytt lager</button><label class="lagop">Genomskinlighet för «${esc(lagerVal().n)}» <b id="lagopv">${Math.round((lagerVal().o==null?1:lagerVal().o)*100)} %</b><input type="range" id="lagop" min="10" max="100" step="5" value="${Math.round((lagerVal().o==null?1:lagerVal().o)*100)}" aria-label="Genomskinlighet för valt lager"></label><div class="tavinfo">${esc(msg||"Pennan och suddet ritar bara på det valda lagret. Dolda eller låsta lager går inte att rita på. Rutorna ligger alltid överst.")}</div>`,"lager");p.dataset.t="lag";
+  p.addEventListener("input",ev=>{if(ev.target.id!=="lagop")return;const l=lagerVal();l.o=+ev.target.value/100;p.querySelector("#lagopv").textContent=ev.target.value+" %";ritaNu();spara();});
+  p.onclick=ev=>{const b=ev.target.closest("[data-lg]");if(!b||b.disabled)return;const g=b.dataset.lg,rad=b.closest(".lagrad"),id=rad&&rad.dataset.id,i=S.lager.findIndex(l=>l.id===id),l=S.lager[i];
+    const klar=m=>{omrita();ikonLager();spara();sparaRitning();visaLager(m);};
+    if(g==="ny"){if(S.lager.length>=LMAX)return;const k=S.lager.length+1,nl={id:lagId(),n:"Lager "+k,v:true,l:false};S.lager.splice(S.lager.findIndex(x=>x.id===lagerVal().id)+1,0,nl);S.lagerAkt=nl.id;return klar();}
+    if(!l)return;
+    if(g==="vis"){l.v=!l.v;klar();}else if(g==="las"){l.l=!l.l;klar();}else if(g==="val"){S.lagerAkt=l.id;klar();}
+    else if(g==="namn"){const n=prompt("Nytt namn på lagret:",l.n);if(n===null)return;l.n=n.trim().slice(0,24)||l.n;klar();}
+    else if(g==="upp"&&i<S.lager.length-1){[S.lager[i],S.lager[i+1]]=[S.lager[i+1],S.lager[i]];klar();}
+    else if(g==="ner"&&i>0){[S.lager[i],S.lager[i-1]]=[S.lager[i-1],S.lager[i]];klar();}
+    else if(g==="ta"){if(S.lager.length<2)return visaLager("Det måste finnas minst ett lager.");const n=strokes.filter(t=>t.ly===l.id).length;if(n&&!confirm("Ta bort lagret «"+l.n+"» och det som är ritat på det?"))return;
+      const lag=JSON.stringify({l:S.lager,a:S.lagerAkt}),rits=JSON.stringify(strokes),snap=JSON.stringify(S.widgets);strokes=strokes.filter(t=>t.ly!==l.id);S.lager.splice(i,1);if(S.lagerAkt===l.id)S.lagerAkt=S.lager[Math.min(i,S.lager.length-1)].id;
+      omrita();ikonLager();spara();sparaRitning();stangPop();angraRuta("Lagret «"+l.n+"» togs bort",snap,rits,undefined,undefined,()=>{const o=JSON.parse(lag);S.lager=o.l;S.lagerAkt=o.a;ikonLager();});}};}
+$("bLag").onclick=()=>{if(pop&&pop.dataset.t==="lag"){stangPop();return;}stangFly();visaLager();};
+
 /* ---------- start ---------- */
-S.tavlor=renaTavlor(S.tavlor);
+S.tavlor=renaTavlor(S.tavlor);S.lager=renaLager(S.lager);if(!S.lager.some(l=>l.id===S.lagerAkt))S.lagerAkt=S.lager[S.lager.length-1].id;
 bakgrund(S.bg);$("fargprick").style.background=S.pen.c;verktyg(S.pen.v==="sudd"?"sudd":"penna");
-laddaRitning();storlek();satt(S.vy);barBorja();ritaAlla();sndIkon();if(S.ordnaNy){delete S.ordnaNy;ordna(false);}
+laddaRitning();storlek();satt(S.vy);barBorja();ritaAlla();sndIkon();ikonLager();if(S.ordnaNy){delete S.ordnaNy;ordna(false);}
 </script>
 </body>
 </html>
