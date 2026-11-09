@@ -31,3 +31,7 @@ Titelskärmstestet täcker 1440×950, 320×780, 390×844 och 844×390; start, av
 ## Prolog: Minnet av elden, 8 november 2026
 
 `prolog.js` återanvänder `pass-landscape-v2.png`, `title-landscape-v1.png` och `forge-landscape-v2.png` som tre helskärmsbilder. Inga nya eller externa bildresurser. Den mörka toningen och berättartexten är separata CSS/DOM-lager. Läsaren styr takten; kort intoning stängs av vid reduced-motion. Prologen kommer efter matteval för en ny resa och före den spelbara världen.
+
+## Ny berättelsetext och WebP, 9 november 2026
+
+Aktiva prologbilder är nu Claudes optimerade `pass-landscape-v2.webp`, `title-landscape-v1.webp` och `forge-landscape-v2.webp`. De används oförändrade för de tre fragmenten om stängda dörrar, riddarens löfte och smedens tystnade hammare. Ingen bildgenerering eller återgång till PNG. Texten och valen är fortfarande separata DOM-lager med läsarstyrt tempo, hoppa över och ljudknapp.

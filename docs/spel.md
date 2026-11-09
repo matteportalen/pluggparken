@@ -393,3 +393,9 @@ Alla 37 bilder i `spel/glodvaktaren/bilder/` är konverterade från PNG till **W
 **Nya bilder:** lägg PNG i `bilder/`, kör `python3 skript/till-webp.py spel/glodvaktaren/bilder`, byt filändelse i koden och ta bort PNG:n.
 
 Verifierat: 24 av 26 testfiler i `skript/test-glodvaktaren*` går igenom. `test-glodvaktaren-pratbubblor.cjs` (bubblan ryms inte i spelbilden) och `test-glodvaktaren-varld.cjs` ("Walking and striking must defeat the first bat") fallerar **även före ändringen** (kört mot oförändrad HEAD) och är inte åtgärdade. Bildgranskat titelskärm och spelvärld på dator; inte genomspelat på riktig mobil/iPad.
+
+### Glödväktaren: prologens löfte och tvekan (9 nov 2026)
+
+”Minnet av elden” får tre nya fragment: människorna låste dörrarna när ljuset slocknade, några av lättnad; riddaren minns ett löfte och varningen ”tänd inte förrän du vet”; smeden håller elden vid liv men hammaren tystnar när riddaren kommer. Frågan om vad ljusen väcker lämnas öppen. Den sista scenens smidesljud spelar en kort gång och upprepas inte. Smedens första sköldreplik antyder att han sett glöden förut, men ger samma sköld och tydliga uppdrag om tre glödjärn. Ingen ny kampanjflagga, förgrening eller ändring av senare kapitel.
+
+Claudes befintliga WebP-optimering bevaras: prologen använder `pass-landscape-v2.webp`, `title-landscape-v1.webp` och `forge-landscape-v2.webp`. Inga nya bildfiler eller återställda PNG-filer. Cacheversionerna för prolog och ljudmotor höjs. Prologtester på dator/mobil/liggande inklusive skip/återvisning/sparade resor och reduced-motion passerar; ljudtesterna passerar. Ny text och bilder granskade på mobil. Mötet med smeden provspelat med riktiga inmatningar: ny replik, sköld och järnuppdrag verifierade.

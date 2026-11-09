@@ -1,9 +1,9 @@
 /* A hand-paced opening. The running world starts only after completion or skip. */
 window.GlodProlog=(()=>{
  const scenes=[
-  {image:'pass-landscape-v2.webp',position:'50% 50%',lines:['Han kom från ett land där eldarna hade slocknat.','Ingen i byarna längre söderut kände dess namn.']},
-  {image:'title-landscape-v1.webp',position:'86% 50%',lines:['Vid den sista elden hade någon viskat:','»Låt den inte slockna.«','Han mindes rösten. Men inte ansiktet.']},
-  {image:'forge-landscape-v2.webp',position:'50% 50%',lines:['Bortom skogen stod en fyr utan ljus.','Från byn nedanför hördes ännu en hammare.']}
+  {image:'pass-landscape-v2.webp',position:'50% 50%',lines:['När det sista ljuset slocknade låste människorna sina dörrar.','Några av lättnad.']},
+  {image:'title-landscape-v1.webp',position:'86% 50%',lines:['Han mindes inte vem han hade lovat.','Bara orden:','»När du kommer fram — tänd inte förrän du vet.«']},
+  {image:'forge-landscape-v2.webp',position:'50% 50%',lines:['I Gläntan höll smeden ännu elden vid liv.','När riddaren kom slutade hammaren slå.']}
  ];
  const style=document.createElement('style');style.textContent=`
  .ember-prologue{position:fixed;inset:0;z-index:60;isolation:isolate;background:#070e13;color:#ece3ce;display:flex;flex-direction:column;justify-content:flex-end;padding:max(24px,env(safe-area-inset-top)) clamp(24px,8vw,130px) max(24px,env(safe-area-inset-bottom));font-family:Georgia,serif;overflow:auto}
@@ -14,7 +14,7 @@ window.GlodProlog=(()=>{
  `;document.head.append(style);
  const el=document.createElement('section');el.className='ember-prologue';el.id='prologue';el.hidden=true;el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');el.setAttribute('aria-labelledby','memoryHeading');el.innerHTML='<img alt=""><button id="memorySound" class="memory-sound" type="button" aria-pressed="false">Ljud: på</button><div class="memory" aria-live="polite"><h2 id="memoryHeading">MINNET AV ELDEN</h2><div id="memoryLines"></div></div><footer><span class="page" aria-hidden="true"></span><button id="memoryNext" type="button">Fortsätt →</button><button id="memorySkip" type="button" class="skip">Hoppa över</button></footer>';document.body.append(el);
  let index=0,done=null;const next=el.querySelector('#memoryNext'),skip=el.querySelector('#memorySkip');
- function paint(){syncSound();window.Ljud?.glodPrologue?.(index);const scene=scenes[index],img=el.querySelector('img');img.src='./bilder/'+scene.image;img.style.objectPosition=scene.position;const lines=el.querySelector('#memoryLines');lines.replaceChildren(...scene.lines.map(text=>{const p=document.createElement('p');p.textContent=text;return p}));el.querySelector('.page').textContent=`${index+1} / ${scenes.length}`;next.textContent=index===scenes.length-1?'Följ hammarslagen →':'Fortsätt →';const memory=el.querySelector('.memory');memory.getAnimations().forEach(a=>{a.cancel();a.play()})}
+ function paint(){syncSound();window.Ljud?.glodPrologue?.(index);const scene=scenes[index],img=el.querySelector('img');img.src='./bilder/'+scene.image;img.style.objectPosition=scene.position;const lines=el.querySelector('#memoryLines');lines.replaceChildren(...scene.lines.map(text=>{const p=document.createElement('p');p.textContent=text;return p}));el.querySelector('.page').textContent=`${index+1} / ${scenes.length}`;next.textContent=index===scenes.length-1?'Gå in i Gläntan →':'Fortsätt →';const memory=el.querySelector('.memory');memory.getAnimations().forEach(a=>{a.cancel();a.play()})}
  const sound=el.querySelector('#memorySound');function syncSound(){const on=window.Ljud?.on!==false;sound.textContent=on?'Ljud: på':'Ljud: av';sound.setAttribute('aria-pressed',String(!on));sound.setAttribute('aria-label',on?'Stäng av ljud':'Slå på ljud')}sound.onclick=()=>{const on=window.Ljud?.on===false;window.Ljud?.set?.(on);syncSound();if(on)window.Ljud?.glodPrologue?.(index)};
  function finish(){if(!done)return;const cb=done;done=null;window.Ljud?.glodStop?.();el.hidden=true;document.getElementById('home').inert=false;cb()}
  document.addEventListener('visibilitychange',()=>{if(done&&!document.hidden)window.Ljud?.glodPrologue?.(index)});
