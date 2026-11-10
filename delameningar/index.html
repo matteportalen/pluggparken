@@ -102,12 +102,17 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 .puls{animation:puls .6s}
 @keyframes puls{40%{transform:scale(1.12)}}
 .fraga.q{background:#E3EAFF;color:#2A3FB8}.fraga.ok{display:none}
-.text{display:flex;flex-wrap:wrap;gap:8px 4px;justify-content:center;padding:10px 0 14px;line-height:1}
+.text{display:flex;flex-wrap:wrap;gap:8px 4px;justify-content:center;padding:26px 0 14px;line-height:1}
 .ord{display:inline-flex;align-items:center;font-family:var(--ord);font-size:1.3rem;font-weight:700;background:#fff;border:2px solid var(--line);border-radius:14px;padding:8px 6px 8px 12px;box-shadow:0 3px 0 var(--line);color:var(--ink);min-height:48px;gap:2px}
 .ord:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
 .ord .tk{display:inline-block;min-width:16px;padding-right:6px;color:var(--accent);font-size:2.2rem;font-weight:800;line-height:.7;align-self:flex-end;padding-bottom:6px}
 .ord.har{background:#E3EAFF;border-color:var(--accent);box-shadow:0 3px 0 var(--accent)}
-.ord.slut{pointer-events:none}.br{flex-basis:100%;height:0}
+.ord.slut{pointer-events:none}
+.ord.s0{background:#E3EAFF;border-color:#3D5AFE;box-shadow:0 3px 0 #3D5AFE}.ord.s1{background:#FFE7C2;border-color:#F2780C;box-shadow:0 3px 0 #F2780C}
+.ord.s2{background:#DDF4E6;border-color:#1E9E5E;box-shadow:0 3px 0 #1E9E5E}.ord.s3{background:#F3E3FF;border-color:#8E5BD6;box-shadow:0 3px 0 #8E5BD6}
+.antal{display:flex;gap:8px;justify-content:center;align-items:center;font-weight:800;color:var(--muted);margin:0 0 12px;font-size:1.15rem}
+.antal i{width:22px;height:22px;border-radius:50%;border:3px solid #9DB0D8;background:#fff}.antal i.p{background:var(--accent);border-color:var(--accent)}
+.ord{position:relative}.hand{position:absolute;left:50%;top:-34px;margin-left:-14px;font-size:1.7rem;pointer-events:none;animation:peka 1s ease-in-out infinite}.br{flex-basis:100%;height:0}
 .tk.t1{color:#2A3FB8}.tk.t2{color:#B85A06}.tk.t3{color:#C4252B}
 .ord.rosa .tk{color:#C4252B}
 .ord.ratt{background:#E6F7EE;border-color:var(--good);box-shadow:0 3px 0 var(--good)}
@@ -137,6 +142,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
   <div class="topp"><div class="dots" id="dots"></div><span class="niva-t" id="nivT"></span><span class="pet" id="pet"></span></div>
   <div class="kort">
     <div class="fraga" id="fraga"></div>
+    <div class="antal" id="antal"></div>
     <div class="text" id="text" aria-label="Texten"></div>
     <div class="stor" id="stor" hidden></div>
   </div>
@@ -203,11 +209,14 @@ function nasta(){if(window.speechSynthesis)speechSynthesis.cancel();if(G.i>=RUND
   if(G.lvl===1)G.val[G.q.ord.length-1]=".";   // sista tecknet fixar vi på nivå 1
   prickar(RUND,G.i,G.res);$("fb").textContent="";$("fb").className="fb";$("bNasta").hidden=true;$("bLas").hidden=true;$("stor").hidden=true;$("text").hidden=false;$("bOm").hidden=false;render();}
 function render(){
-  $("fraga").className="fraga "+(G.gjort?"ok":"q");$("fraga").innerHTML=G.gjort?"":G.lvl===1?'<span class="ik">👆</span> Var slutar den första meningen?':'<span class="ik">👆</span> Sista ordet i varje mening';
-  const n=G.q.ord.length;
-  $("text").innerHTML=G.q.ord.map((w,j)=>{const m=G.val[j]||"";let k="ord";if(m)k+=" har";if(G.lvl===1&&j===n-1)k+=" slut";
+  $("fraga").className="fraga "+(G.gjort?"ok":"q");$("fraga").innerHTML=G.gjort?"":G.lvl===1?'<span class="ik">👆</span> Var slutar första meningen?':'<span class="ik">👆</span> Var tar varje mening slut?';
+  const n=G.q.ord.length,marks=Object.keys(G.val).map(Number),tot=Object.keys(G.q.tk).length,satt=marks.length-(G.lvl===1?1:0);
+  $("antal").innerHTML=(G.gjort?"":`<span>${tot} meningar</span>`+Array.from({length:tot},(_,k)=>`<i class="${k<satt?"p":""}"></i>`).join(""));
+  const demoJ=(G.lvl===1&&!data.demo&&G.i===0&&!G.gjort&&satt===0)?Number(Object.keys(G.q.tk)[0]):-1;
+  $("text").innerHTML=G.q.ord.map((w,j)=>{const m=G.val[j]||"";let k="ord";if(G.lvl===1&&j===n-1)k+=" slut";
+    const sist=Math.max(-1,...Object.keys(G.val).map(Number));if(j<=sist){k+=" s"+(marks.filter(x=>x<j).length%4);}
     if(G.rosa&&G.rosa.has(j))k+=" rosa";
-    return`<button class="${k}" data-j="${j}"${G.gjort?" disabled":""}>${w}<span class="tk ${m==="."?"t1":m==="?"?"t2":m==="!"?"t3":""}">${m}</span></button>`+(m&&j<n-1?'<span class="br"></span>':"");}).join("");
+    return`<button class="${k}" data-j="${j}"${G.gjort?" disabled":""}>${j===demoJ?'<span class="hand">👆</span>':""}${w}<span class="tk ${m==="."?"t1":m==="?"?"t2":m==="!"?"t3":""}">${m}</span></button>`+(m&&j<n-1?'<span class="br"></span>':"");}).join("");
   $("bKlar").disabled=G.gjort||!Object.keys(G.val).length||(G.lvl===1&&Object.keys(G.val).length<2);}
 $("text").onclick=e=>{const b=e.target.closest("[data-j]");if(!b||G.gjort)return;const j=+b.dataset.j;if(G.lvl===1&&j===G.q.ord.length-1)return;
   const cur=G.val[j]||"";const rad=G.lvl===1?[".",""]:[".","?","!",""];const nx=rad[(rad.indexOf(cur)+1)%rad.length];
@@ -220,7 +229,7 @@ function fel(hint,rosa){G.felNu++;if(G.felNu===1)G.fel++;window.Ljud&&Ljud.bad&&
   G.rosa=null;
   G.res[G.i]=false;G.i++;prickar(RUND,G.i,G.res);visaRatt();
   f.className="fb fel";f.textContent="Så här blir det:";$("bKlar").disabled=true;$("bNasta").hidden=false;$("bLas").hidden=false;}
-function ratt(){G.res[G.i]=!G.felNu;G.i++;prickar(RUND,G.i,G.res);visaRatt();
+function ratt(){if(G.lvl===1&&G.i===0){data.demo=1;save();}G.res[G.i]=!G.felNu;G.i++;prickar(RUND,G.i,G.res);visaRatt();
   const f=$("fb");f.className="fb ratt";f.textContent="✔ Rätt!";haj();$("stor").classList.add("puls");window.Ljud&&Ljud.ok&&Ljud.ok();
   $("bKlar").disabled=true;$("bNasta").hidden=false;$("bNasta").focus({preventScroll:true});$("bLas").hidden=false;}
 $("bKlar").onclick=()=>{if(G.gjort)return;const q=G.q,mine=Object.keys(G.val).map(Number).sort((a,b)=>a-b),fa=Object.keys(q.tk).map(Number).sort((a,b)=>a-b);
