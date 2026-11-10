@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<script src="../tema.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Adjektiv – Pluggparken</title>
+<meta name="description" content="Adjektiv: hitta orden som berättar hur något är eller ser ut. Träna adjektiv i meningar.">
+<link rel="canonical" href="https://pluggparken.se/adjektiv/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Pluggparken">
+<meta property="og:locale" content="sv_SE">
+<meta property="og:title" content="Adjektiv – Pluggparken">
+<meta property="og:description" content="Adjektiv: hitta orden som berättar hur något är eller ser ut. Träna adjektiv i meningar.">
+<meta property="og:url" content="https://pluggparken.se/adjektiv/">
+<meta property="og:image" content="https://pluggparken.se/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#1F3A35">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/apple-touch-icon.png" sizes="180x180">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+:root{
+  --bg:#EAF3FF; --ink:#1D2B53; --muted:#56668F; --card:#FFFFFF; --line:#C6D6F2; --soft:#F1F6FF;
+  --good:#1E9E5E; --good-dark:#157548; --bad:#E5484D; --accent:#3D5AFE; --gold:#F2B707; --hero1:#FF9F43; --hero2:#F2780C; --heroS:#B85A06;
+  --font:"Baloo 2","Trebuchet MS",system-ui,sans-serif; --ord:"Andika","Baloo 2",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:680px;margin:0 auto;padding:12px 16px 48px}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;border:0;background:none}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+[hidden]{display:none!important}
+.hero{display:flex;gap:16px;align-items:center;background:linear-gradient(135deg,var(--hero1),var(--hero2));color:#fff;border-radius:24px;padding:18px;box-shadow:0 5px 0 var(--heroS);margin:6px 0 16px}
+.hero svg{flex:none;width:130px;height:auto;filter:drop-shadow(0 3px 0 rgba(0,0,0,.15))}
+.hero h1{margin:0;font-size:clamp(1.7rem,6vw,2.3rem);line-height:1.05}
+.hero p{margin:6px 0 0;font-weight:600;opacity:.95}
+.niv{display:grid;gap:10px}
+.niv button{display:flex;align-items:center;gap:14px;background:var(--card);border-radius:18px;padding:12px 14px;box-shadow:0 4px 0 var(--line);text-align:left;width:100%}
+.niv button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.niv .nr{flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-weight:800;font-size:1.4rem;color:#fff}
+.niv b{display:block;font-size:1.12rem;line-height:1.15}
+.niv small{display:block;color:var(--muted);font-weight:600;font-size:.88rem;line-height:1.25}
+.niv .st{margin-left:auto;flex:none;color:var(--gold);font-size:1.15rem;letter-spacing:1px}
+.niv .st .off{color:var(--line)}
+.info{color:var(--muted);font-size:.9rem;margin:14px 2px 0}
+.topp{display:flex;align-items:center;gap:10px;margin:4px 0 10px}
+.dots{display:flex;gap:6px;flex:1;flex-wrap:wrap}
+.dots i{width:12px;height:12px;border-radius:50%;background:var(--line)}
+.dots i.ok{background:var(--good)}.dots i.f{background:var(--bad)}.dots i.nu{background:var(--gold)}
+.niva-t{font-weight:800;color:var(--muted);font-size:.9rem}
+.pet{flex:none;width:48px;height:52px;pointer-events:none}.pet svg{width:100%;height:100%}
+.pet.hopp{animation:hopp .55s ease}
+@keyframes hopp{40%{transform:translateY(-18px)}}
+.kort{background:var(--card);border-radius:22px;box-shadow:0 4px 0 var(--line);padding:16px}
+.fb{text-align:center;font-weight:700;margin:12px 0 0;min-height:2.6em;font-size:1.05rem}
+.fb.ratt{color:var(--good-dark)}.fb.fel{color:#B4232A}
+.knapp{display:inline-block;background:var(--good);color:#fff;border-radius:16px;padding:12px 26px;font-weight:800;font-size:1.15rem;box-shadow:0 5px 0 var(--good-dark);margin:6px}
+.knapp.vit{background:var(--card);color:var(--ink);box-shadow:0 5px 0 var(--line)}
+.knapp.bla{background:var(--accent);box-shadow:0 5px 0 #2A3FB8}
+.knapp:disabled{opacity:.4;pointer-events:none}
+.knapp:active{transform:translateY(3px)}
+.lyssna{display:inline-flex;align-items:center;gap:6px;background:var(--soft);border-radius:999px;padding:6px 14px;font-weight:700;font-size:.95rem;box-shadow:0 2px 0 var(--line)}
+.res{text-align:center}
+.res .stj{font-size:3rem;letter-spacing:6px;color:var(--gold);margin:8px 0}
+.res .stj .off{color:var(--line)}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:50}
+@media(max-width:420px){.hero svg{width:96px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.fraga{text-align:center;font-weight:800;color:var(--muted);margin:0 0 8px;font-size:1rem}
+.svar{display:flex;flex-wrap:wrap;gap:8px;min-height:68px;padding:10px 4px;border-bottom:3px dashed var(--line);margin-bottom:12px;align-content:flex-start}
+.svar.tom::before{content:"Tryck på orden i rätt ordning";color:var(--muted);font-weight:600;align-self:center;margin:0 auto}
+.pool{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;min-height:52px}
+.chip{font-family:var(--ord);font-size:1.3rem;font-weight:700;background:#fff;border:2px solid var(--line);border-radius:14px;padding:8px 14px;box-shadow:0 3px 0 var(--line);color:var(--ink)}
+.chip:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
+.svar .chip{background:#FFF3E0;border-color:#F2A455;box-shadow:0 3px 0 #F2A455}
+.chip.kod{background:#E6F7EE;border-color:var(--good);box-shadow:0 3px 0 var(--good)}
+.chip.rosa{background:#FDE7E8;border-color:#F0A3A6;box-shadow:0 3px 0 #F0A3A6}
+.marks{display:flex;gap:10px;justify-content:center;margin:0 0 12px}
+.marks button{width:60px;height:56px;border-radius:14px;background:#fff;border:2px solid var(--line);box-shadow:0 3px 0 var(--line);font-family:var(--ord);font-weight:700;font-size:1.8rem}
+.marks button.v{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 3px 0 #2A3FB8}
+.fix{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:6px 0 4px}
+.fix .chip{padding:8px 12px}
+.fix .chip.pa{background:#E3EAFF;border-color:var(--accent);box-shadow:0 3px 0 var(--accent)}
+.fix .mk{font-family:var(--ord);font-size:1.6rem;font-weight:700;align-self:center;padding:0 2px}
+.svar .mk{font-family:var(--ord);font-size:1.5rem;font-weight:700;align-self:center;color:var(--accent)}
+.rad{display:flex;gap:6px;justify-content:center;margin-top:10px;flex-wrap:wrap}
+
+
+.fraga{color:var(--ink);font-size:1.6rem;line-height:1.15;font-weight:800;margin:0 0 10px;padding:12px 10px;border-radius:16px;background:var(--soft);text-align:center}
+.fraga .ik{display:inline-block;animation:peka 1.2s ease-in-out infinite}
+@keyframes peka{50%{transform:translateY(-5px)}}
+.fraga.ok{display:none}
+.fb{font-size:1.3rem;font-weight:800}
+.skaka{animation:skaka .45s}
+@keyframes skaka{20%{transform:translateX(-9px)}40%{transform:translateX(9px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+.puls{animation:puls .6s}
+@keyframes puls{40%{transform:scale(1.08)}}
+.meng{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:10px 0 14px}
+.chip.cV{background:#FFE7C2;border-color:#F2780C;box-shadow:0 3px 0 #F2780C}
+.chip.cS{background:#E3EAFF;border-color:#3D5AFE;box-shadow:0 3px 0 #3D5AFE}
+.chip.cA{background:#DDF4E6;border-color:#1E9E5E;box-shadow:0 3px 0 #1E9E5E}
+.chip.rosa{background:#FDE7E8;border-color:#F0A3A6;box-shadow:0 3px 0 #F0A3A6}
+.chip[disabled]{cursor:default;color:var(--ink)}
+.tools{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:0 0 10px}
+.tools button{min-width:104px;height:52px;border-radius:14px;font-weight:800;font-size:1.05rem;border:3px solid transparent;color:#1D2B53}
+.tools button.tV{background:#FFE7C2;border-color:#F2780C}.tools button.tS{background:#E3EAFF;border-color:#3D5AFE}.tools button.tA{background:#DDF4E6;border-color:#1E9E5E}
+.tools button.valt{outline:4px solid var(--ink);outline-offset:2px}
+.tips{margin-top:8px;font-size:1.05rem;font-weight:700;color:var(--ink);background:#FFF7DD;border-radius:14px;padding:10px 12px;text-align:left;line-height:1.5}
+.tips b{font-weight:800}
+:root{--hero1:#3DC48A;--hero2:#1E9E5E;--heroS:#157548}
+
+</style>
+</head>
+<body>
+<script src="../ljud.js"></script>
+<script src="../djur.js"></script>
+<script src="../huvud.js" data-titel="Adjektiv" data-ikon="🌈"></script>
+<main class="wrap">
+
+<section class="screen" id="home">
+  <div class="hero">
+    <svg viewBox="0 0 120 64" aria-hidden="true"><rect x="2" y="2" width="116" height="60" rx="10" fill="#fff"/><g font-family="Andika, Baloo 2, sans-serif" font-weight="700" font-size="12" text-anchor="middle"><rect x="8" y="10" width="36" height="22" rx="8" fill="#fff" stroke="#C6D6F2" stroke-width="2"/><text x="26.0" y="26" fill="#1D2B53">Den</text><rect x="50" y="10" width="52" height="22" rx="8" fill="#DDF4E6" stroke="#1E9E5E" stroke-width="2"/><text x="76.0" y="26" fill="#1D2B53">röda</text><rect x="8" y="38" width="60" height="22" rx="8" fill="#fff" stroke="#C6D6F2" stroke-width="2"/><text x="38.0" y="54" fill="#1D2B53">bilen</text><rect x="74" y="38" width="38" height="22" rx="8" fill="#fff" stroke="#C6D6F2" stroke-width="2"/><text x="93.0" y="54" fill="#1D2B53">är</text></g></svg>
+    <div><h1>Adjektiv</h1><p>Hitta orden som berättar hur något är!</p></div>
+  </div>
+  <div class="niv" id="niv"></div>
+  
+</section>
+
+<section class="screen" id="game" hidden>
+  <div class="topp"><div class="dots" id="dots"></div><span class="niva-t" id="nivT"></span><span class="pet" id="pet"></span></div>
+  <div class="kort">
+    <div class="fraga" id="fraga"></div>
+    <div class="tools" id="tools" hidden></div>
+    <div class="meng" id="meng" aria-label="Meningen"></div>
+    <div class="tips" id="tips" hidden></div>
+  </div>
+  <div class="rad"><button class="knapp vit" id="bTips">💡 Tips</button><button class="knapp" id="bKlar" disabled>Klar ✓</button><button class="knapp bla" id="bNasta" hidden>Nästa ▶</button></div>
+  <div class="fb" id="fb" aria-live="polite"></div>
+  <div style="text-align:center"><button class="lyssna" id="bLas" hidden>🔊 Lyssna</button></div>
+</section>
+
+<section class="screen res" id="result" hidden>
+  <h2 id="rRub" style="margin:10px 0 0">Bra jobbat!</h2>
+  <div class="stj" id="rStj"></div>
+  <p id="rTxt" style="font-weight:700;margin:0 0 14px"></p>
+  <button class="knapp" id="rIgen">Spela igen</button>
+  <button class="knapp vit" id="rHome">Välj nivå</button>
+</section>
+
+</main>
+<canvas id="fx" hidden></canvas>
+<script>
+const $=id=>document.getElementById(id);
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const KEY="mattespel-adjektiv-v1";
+const data=(()=>{try{return Object.assign({stars:{}},JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){return{stars:{}}}})();
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}};
+const reduced=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
+const NIV_UNUSED=[null].concat([{"namn": "Nivå 1: Ordning", "txt": "Sätt orden i rätt ordning. Stor bokstav och punkt är med.", "col": "#2BB673"}, {"namn": "Nivå 2: Skiljetecken", "txt": "Ordning och rätt tecken på slutet: punkt, frågetecken eller utropstecken.", "col": "#FF9F43"}, {"namn": "Nivå 3: Stor bokstav", "txt": "Ordning, tecken och stor bokstav i början och på namn.", "col": "#7B61FF"}]);
+const stjHtml=n=>[1,2,3].map(i=>i<=n?"★":'<span class="off">★</span>').join("");
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
+function hem(){
+  $("niv").innerHTML=[1,2,3].map(l=>`<button data-l="${l}"><span class="nr" style="background:${NIV[l].col}">${l}</span><span><b>${NIV[l].namn}</b><small>${NIV[l].txt}</small></span><span class="st">${stjHtml(data.stars[l]||0)}</span></button>`).join("");
+  if(window.speechSynthesis)speechSynthesis.cancel();show("home");}
+$("niv").onclick=e=>{const b=e.target.closest("[data-l]");if(b)begin(+b.dataset.l);};
+// uppläsning bara när man trycker (svensk röst)
+let svVoice=null;function laddaRoster(){try{svVoice=speechSynthesis.getVoices().find(v=>/^sv/i.test(v.lang))||null}catch(e){}}
+if("speechSynthesis" in window){laddaRoster();speechSynthesis.onvoiceschanged=laddaRoster;}
+function lasUpp(t){if(!("speechSynthesis" in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="sv-SE";if(svVoice)u.voice=svVoice;u.rate=.9;speechSynthesis.speak(u);}
+function prickar(n,i,res){$("dots").innerHTML=Array.from({length:n},(_,j)=>`<i class="${j<i?(res[j]?"ok":"f"):j===i?"nu":""}"></i>`).join("");}
+function haj(){const p=$("pet");if(!p)return;p.classList.remove("hopp");void p.offsetWidth;p.classList.add("hopp");}
+function resultat(st,txt){const old=data.stars[G.lvl]||0;data.stars[G.lvl]=Math.max(old,st);save();
+  $("rStj").innerHTML=stjHtml(st);$("rRub").textContent=st===3?"Perfekt! 🎉":st===2?"Bra jobbat!":"Bra kämpat!";$("rTxt").textContent=txt;
+  show("result");if(st===3){window.Ljud&&Ljud.fanfare&&Ljud.fanfare();confetti();}else window.Ljud&&Ljud.chime&&Ljud.chime();}
+$("rIgen").onclick=()=>begin(G.lvl);$("rHome").onclick=hem;
+function confetti(){if(reduced())return;const cols=["#3D8BFD","#FF9F43","#2BB673","#FFC93C","#7B61FF","#FF6B6B"];
+  const c=$("fx"),x=c.getContext("2d"),dpr=window.devicePixelRatio||1,W=innerWidth,H=innerHeight;c.width=W*dpr;c.height=H*dpr;x.setTransform(dpr,0,0,dpr,0,0);c.hidden=false;
+  const P=Array.from({length:150},()=>({x:W/2+(Math.random()-.5)*120,y:H*.3,vx:(Math.random()-.5)*16,vy:-Math.random()*15-4,r:Math.random()*7+5,c:pick(cols),a:Math.random()*6,va:(Math.random()-.5)*.4}));
+  let t=0;(function f(){x.clearRect(0,0,W,H);P.forEach(p=>{p.vy+=.45;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore();});
+    if(++t<150)requestAnimationFrame(f);else c.hidden=true;})();}
+const NIV=[null].concat([{"namn": "Nivå 1: Korta meningar", "txt": "Hitta adjektivet i en kort mening.", "col": "#2BB673"}, {"namn": "Nivå 2: Längre meningar", "txt": "Hitta adjektivet bland fler ord.", "col": "#FF9F43"}, {"namn": "Nivå 3: Flera adjektiv", "txt": "Längre meningar, ibland två adjektiv.", "col": "#7B61FF"}]);
+let G=null;
+const COLX={"V": ["#F2780C", "#FFE7C2", "#B85A06", "Verb"], "S": ["#3D5AFE", "#E3EAFF", "#2A3FB8", "Substantiv"], "A": ["#1E9E5E", "#DDF4E6", "#157548", "Adjektiv"]};
+
+const RUND=8;
+const CFG={"mode": "en", "kl": "A"};
+const BANK={"1": ["Katten_S sover_V på soffan_S.", "Hunden_S springer_V i parken_S.", "Solen_S skiner_V.", "Snön_S är_V kall_A.", "Bilen_S är_V röd_A.", "Mamma_S bakar_V en kaka_S.", "Barnen_S leker_V.", "Fisken_S simmar_V.", "Pappa_S läser_V en bok_S.", "Hästen_S äter_V hö_S.", "Himlen_S är_V blå_A.", "Vi gungar_V.", "Jag ritar_V en katt_S.", "Gräset_S är_V grönt_A.", "Kakan_S är_V god_A.", "Pojken_S kastar_V bollen_S.", "Flickan_S cyklar_V hem.", "Isen_S är_V hal_A.", "Vattnet_S är_V varmt_A.", "Fåglarna_S sjunger_V.", "Citronen_S är_V sur_A.", "Nallen_S är_V mjuk_A.", "Soppan_S är_V het_A.", "Ormen_S kryper_V i gräset_S."], "2": ["Den lilla_A hunden_S springer_V i parken_S.", "Mormor_S stickar_V en varm_A halsduk_S.", "Barnen_S bygger_V ett stort_A snöhus_S.", "Kalla_A vinden_S blåser_V över sjön_S.", "Jag ser_V en röd_A fågel_S i trädet_S.", "Katten_S jagar_V en liten_A mus_S.", "Vi äter_V en god_A middag_S.", "Traktorn_S kör_V över det stora_A fältet_S.", "Läraren_S läser_V en spännande_A saga_S.", "Den gamla_A klockan_S tickar_V i hallen_S.", "Pappa_S lagar_V god_A mat_S.", "Eleverna_S skriver_V i sina böcker_S.", "Pojken_S har_V en blå_A mössa_S.", "Flickan_S målar_V en gul_A sol_S.", "Hunden_S gräver_V ett djupt_A hål_S.", "Vi plockar_V blåbär_S i skogen_S.", "Fåglarna_S flyger_V över det blå_A havet_S.", "Det lilla_A barnet_S skrattar_V.", "Kossan_S står_V på en grön_A äng_S.", "Tåget_S stannar_V vid stationen_S.", "Snön_S faller_V på taket_S."], "3": ["De små_A barnen_S vill_V leka_V i den stora_A parken_S.", "Mamma_S och pappa_S ska_V åka_V till en liten_A stad_S.", "Den hungriga_A katten_S äter_V och dricker_V ur sin skål_S.", "Pojken_S är_V glad_A och hoppar_V över ett högt_A staket_S.", "Jag tycker_V om den söta_A glassen_S.", "Hunden_S springer_V efter den runda_A bollen_S och skäller_V.", "Vår nya_A lärare_S är_V snäll_A.", "Den stora_A björnen_S sover_V hela vintern_S i en mörk_A håla_S.", "Flickan_S har_V en röd_A cykel_S och cyklar_V till skolan_S.", "Fåglarna_S bygger_V ett litet_A bo_S i det höga_A trädet_S.", "Barnen_S åker_V pulka_S i den branta_A backen_S.", "Den lilla_A musen_S gömmer_V sig i ett stort_A hål_S.", "Vi lagar_V en varm_A soppa_S och dukar_V bordet_S.", "Skogen_S är_V mörk_A och tyst_A.", "Himlen_S är_V grå_A och regnet_S faller_V.", "Solen_S skiner_V över det gröna_A fältet_S.", "Den kalla_A vinden_S blåser_V och träden_S gungar_V.", "Pappa_S köper_V en ny_A cykel_S åt barnen_S.", "Ugglan_S sitter_V i trädet_S och tittar_V med stora_A ögon_S."]};
+const NAMNK={V:"verb",S:"substantiv",A:"adjektiv"};
+const FARG={V:"orange",S:"blå",A:"grön"};
+const TIPS={V:'<b>Verb</b> säger vad någon gör eller är.<br>Testa: kan man säga <b>jag</b> före? <i>jag springer</i> ✔ &nbsp; <i>jag hunden</i> ✗',S:'<b>Substantiv</b> är namn på saker, djur och människor.<br>Testa: kan man säga <b>en</b> eller <b>ett</b> före? <i>en hund</i>, <i>ett hus</i> ✔',A:'<b>Adjektiv</b> berättar hur något är.<br>Testa: <i>en <b>liten</b> hund</i>, <i>kall</i> snö, <i>röd</i> bil ✔'};
+function parse(line){const toks=line.split(" ").map(w=>{const m=w.match(/^(.+?)(?:_([VSA]))?([.,!?]*)$/);return{t:m[1]+(m[3]||""),k:m[2]||""};});return{toks,txt:toks.map(x=>x.t).join(" ")};}
+function urval(lvl){let l=BANK[lvl];
+  if(CFG.mode==="en")l=l.filter(s=>s.indexOf("_"+CFG.kl)>=0);
+  else if(lvl===1)l=l.filter(s=>s.indexOf("_A")<0);
+  if(l.length<RUND)l=BANK[lvl];return shuffle(l.slice()).slice(0,RUND).map(parse);}
+function begin(lvl){G={lvl,i:0,fel:0,res:[],felNu:0,gjort:false};$("nivT").textContent="Nivå "+lvl;$("pet").innerHTML=owlSVG(lasDjur());G.set=urval(lvl);show("game");nasta();}
+function verktyg(){return CFG.mode==="en"?[CFG.kl]:(G.lvl===1?["V","S"]:["V","S","A"]);}
+function nasta(){if(window.speechSynthesis)speechSynthesis.cancel();if(G.i>=RUND){slut();return;}
+  G.q=G.set[G.i];G.felNu=0;G.gjort=false;G.val=new Set();G.col={};G.rosa=null;G.tool=verktyg()[0];
+  prickar(RUND,G.i,G.res);$("fb").textContent="";$("fb").className="fb";$("bNasta").hidden=true;$("bLas").hidden=true;$("tips").hidden=true;$("bTips").hidden=false;render();}
+function fraga(){const ik='<span class="ik">👆</span> ';
+  if(CFG.mode==="en"){const c=COLX[CFG.kl];return ik+'Tryck på alla <span style="color:'+c[2]+'">'+NAMNK[CFG.kl]+'</span>';}
+  return ik+"Färga orden";}
+function render(){
+  $("fraga").className="fraga"+(G.gjort?" ok":"");$("fraga").innerHTML=G.gjort?"":fraga();
+  const tl=$("tools");if(CFG.mode==="alla"&&!G.gjort){tl.hidden=false;tl.innerHTML=verktyg().map(k=>`<button class="t${k}${G.tool===k?" valt":""}" data-t="${k}">${COLX[k][3]}</button>`).join("");}else tl.hidden=true;
+  $("meng").innerHTML=G.q.toks.map((x,j)=>{let k="chip",c="";
+    if(G.gjort)c=CFG.mode==="en"?(x.k===CFG.kl?x.k:""):x.k;
+    else if(CFG.mode==="en")c=G.val.has(j)?CFG.kl:"";else c=G.col[j]||"";
+    if(c)k+=" c"+c;if(G.rosa&&G.rosa.has(j))k+=" rosa";
+    return`<button class="${k}" data-j="${j}"${G.gjort?" disabled":""}>${x.t}</button>`;}).join("");
+  const n=CFG.mode==="en"?G.val.size:Object.keys(G.col).length;$("bKlar").disabled=G.gjort||!n;}
+$("tools").onclick=e=>{const b=e.target.closest("[data-t]");if(!b||G.gjort)return;G.tool=b.dataset.t;render();};
+$("meng").onclick=e=>{const b=e.target.closest("[data-j]");if(!b||G.gjort)return;const j=+b.dataset.j;G.rosa=null;
+  if(CFG.mode==="en"){G.val.has(j)?G.val.delete(j):G.val.add(j);}else{if(G.col[j]===G.tool)delete G.col[j];else G.col[j]=G.tool;}
+  window.Ljud&&Ljud.pop&&Ljud.pop(1);render();};
+$("bTips").onclick=()=>{const t=$("tips");if(!t.hidden){t.hidden=true;return;}t.innerHTML=CFG.mode==="en"?TIPS[CFG.kl]:verktyg().map(k=>TIPS[k]).join("<br><br>");t.hidden=false;};
+function skaka(){const m=$("meng");m.classList.remove("skaka");void m.offsetWidth;m.classList.add("skaka");}
+function fel(hint,rosa){G.felNu++;if(G.felNu===1)G.fel++;window.Ljud&&Ljud.bad&&Ljud.bad();const f=$("fb");
+  if(G.felNu<2){skaka();G.rosa=new Set(rosa||[]);render();setTimeout(()=>{G.rosa=null;if(!G.gjort)render();},1100);f.className="fb fel";f.textContent=hint;return;}
+  G.rosa=null;G.gjort=true;G.res[G.i]=false;G.i++;prickar(RUND,G.i,G.res);render();
+  f.className="fb fel";f.textContent="Så här var det:";$("bKlar").disabled=true;$("bNasta").hidden=false;$("bLas").hidden=false;$("bTips").hidden=true;}
+function ratt(){G.gjort=true;G.res[G.i]=!G.felNu;G.i++;prickar(RUND,G.i,G.res);render();
+  const f=$("fb");f.className="fb ratt";f.textContent="✔ Rätt!";haj();$("meng").classList.add("puls");window.Ljud&&Ljud.ok&&Ljud.ok();
+  $("bKlar").disabled=true;$("bNasta").hidden=false;$("bNasta").focus({preventScroll:true});$("bLas").hidden=false;$("bTips").hidden=true;}
+const rent=t=>t.replace(/[.,!?]+$/,"");
+$("bKlar").onclick=()=>{if(G.gjort)return;const T=G.q.toks;
+  if(CFG.mode==="en"){const mal=T.map((x,j)=>x.k===CFG.kl?j:-1).filter(j=>j>=0),extra=[...G.val].filter(j=>T[j].k!==CFG.kl);
+    if(extra.length)return fel('"'+rent(T[extra[0]].t)+'" är inte ett '+NAMNK[CFG.kl]+'.',extra);
+    if(mal.some(j=>!G.val.has(j)))return fel("Det finns fler "+NAMNK[CFG.kl]+". Leta mer!",[]);
+    ratt();return;}
+  const fela=T.map((x,j)=>(G.col[j]||"")!==x.k?j:-1).filter(j=>j>=0);
+  if(!fela.length){ratt();return;}
+  const j=fela[0],x=T[j],c=G.col[j]||"";
+  if(c&&!x.k)return fel('"'+rent(x.t)+'" ska inte ha någon färg.',fela);
+  if(c&&x.k)return fel('"'+rent(x.t)+'" har fel färg.',fela);
+  fel("Det finns fler ord att färga.",fela);};
+$("bNasta").onclick=nasta;
+$("bLas").onclick=()=>lasUpp(G.q.txt);
+function slut(){const st=G.fel===0?3:G.fel<=2?2:1;resultat(st,`${RUND-G.fel} av ${RUND} meningar rätt på första försöket på nivå ${G.lvl}.${st<3?" Spela igen och se om du kan få alla rätt!":""}`);}
+document.addEventListener("keydown",e=>{if($("game").hidden||e.key!=="Enter")return;if(!$("bNasta").hidden)$("bNasta").click();else if(!$("bKlar").disabled)$("bKlar").click();});
+window.__ok={BANK,parse,begin,CFG};
+
+hem();
+</script>
+</body>
+</html>
