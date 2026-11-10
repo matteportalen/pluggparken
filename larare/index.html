@@ -249,6 +249,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 .lj.inst input[type=range]{width:160px}.lj.inst select,.bu.inst select,.bu.inst input[type=text]{font:inherit;font-weight:600;padding:6px 8px;border-radius:10px;border:2px solid var(--line);max-width:180px;background:#fff;color:var(--ink)}
 .lj.inst .kryss input{width:24px;height:24px}
 .lj.inst .sek{background:var(--c);color:#fff;border-radius:12px;padding:8px 14px;font-weight:800}.lj.inst .sek:disabled{opacity:.45}
+.lj .db{font-size:.8rem;font-weight:700;color:var(--muted);min-height:1.1em;margin-top:3px}
 .lj .reg{display:grid;gap:2px;margin-top:10px}.lj .reg label{display:flex;align-items:center;justify-content:space-between;gap:10px;font-weight:700;font-size:.9rem;color:var(--muted)}.lj .reg input{flex:1;min-width:0;height:30px;max-width:190px}
 .lj .not{font-size:.78rem;color:var(--muted);font-weight:700;line-height:1.3}
 .w.hogt{animation:hogt .5s infinite alternate}
@@ -898,6 +899,7 @@ function fyllLjud(b,w){const d=w.d,igang=!!MAT[w.id];
     <div class="rad"><button class="rund" data-l="inst" aria-label="Klar med inställningarna" title="Klar">✓</button></div></div>`;micLista(b,w);return;}
   b.innerHTML=`<div class="lj" data-lj><div class="ans">${igang?"😌":"🎤"}</div><div class="lbl">${igang?"Lyssnar …":"Tryck på Starta"}</div>
   <div class="mat"><div class="fyll"></div><div class="skym"></div><div class="gr" style="left:${d.gr}%"></div></div>
+  <div class="db" data-db></div>
   <div class="rad"><button data-l="go">${igang?"⏹ Stoppa":"🎤 Starta"}</button></div>
   <div class="reg"><label>Gräns <input type="range" min="30" max="95" value="${d.gr}" data-gr aria-label="Gräns för för högt ljud"></label><label>Känslighet <input type="range" min="0" max="100" value="${d.kans==null?40:d.kans}" data-kans aria-label="Mikrofonens känslighet"></label></div></div>`;
   if(d.pa&&!igang&&!b.dataset.auto){b.dataset.auto="1";autoStart(w);}}
@@ -916,14 +918,17 @@ async function startaMatare(o,igen){if(MAT[o.id])return true;
     const loop=()=>{if(MAT[o.id]!==m)return;if(ac2.state!=="running"){try{ac2.resume();}catch(e){}}an.getFloatTimeDomainData(buf);let q=0;for(let i=0;i<buf.length;i++)q+=buf[i]*buf[i];
       const db=20*Math.log10(Math.max(Math.sqrt(q/buf.length),1e-5)),nu=performance.now();m.sum+=db;m.cnt++;
       if(nu-m.t1>=1000){m.sek.push(m.sum/m.cnt);if(m.sek.length>180)m.sek.shift();m.sum=0;m.cnt=0;m.t1=nu;
-        if(m.sek.length>=8)m.golv=Math.max(-90,Math.min(-45,Math.min(...m.sek)));
+        if(m.sek.length>=8)m.golv=Math.max(-90,Math.min(-25,Math.min(...m.sek)));
         m.tyst=Math.max(...m.sek.slice(-8))<-90&&m.sek.length>=8?m.tyst+1:0;}
-      const R=30*Math.pow(110/30,(100-(o.d.kans==null?40:o.d.kans))/100),t=Math.max(0,Math.min(1,(db-m.golv)/R));   // R = hur många dB över tystnaden som är full stapel; högre känslighet = mindre Rm.lv+=(t-m.lv)*(t>m.lv?.5:.06);
+      const R=30*Math.pow(110/30,(100-(o.d.kans==null?40:o.d.kans))/100),t=Math.max(0,Math.min(1,(db-m.golv)/R));
+      /* R = hur många dB över tystnaden som är full stapel; högre känslighet = mindre R */
+      m.lv+=(t-m.lv)*(t>m.lv?.5:.06);
       const g=o.d.gr/100,el=elOf(o.id),k=m.lv>=g?3:m.lv>=g*.8?2:m.lv>=g*.5?1:0;
       if(m.lv>=g){m.hog+=1;if(m.hog===46&&o.d.ljud&&nu-m.sig>30000){m.sig=nu;tidLjud("skal");}}else m.hog=Math.max(0,m.hog-2);
       if(el){const sk=el.querySelector(".skym");
         if(sk){sk.style.width=(100-m.lv*100)+"%";const lj=el.querySelector("[data-lj]"),A=LSTAT[k];
           lj.className="lj "+A[0];const pau=ac2.state!=="running";el.querySelector(".ans").textContent=pau?"👆":m.tyst>=8?"🎤":A[1];el.querySelector(".lbl").textContent=pau?"Tryck på skärmen för att starta mätningen":m.tyst>=8?"Ingen ljudsignal":A[2];}
+        const dbE=el.querySelector("[data-db]");if(dbE&&nu-(m.tdb||0)>250){m.tdb=nu;dbE.textContent=Math.round(db)+" dB";}
         const lv2=el.querySelector("[data-live]");if(lv2)lv2.textContent="Signal just nu: "+Math.round(db)+" dB (tystnad "+Math.round(m.golv)+" dB). Pratar du ska siffran stiga.";
         if(m.hog>45)el.classList.add("hogt");else if(m.hog<20)el.classList.remove("hogt");}
       m.raf=requestAnimationFrame(loop);};loop();return true;
