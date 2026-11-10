@@ -32,11 +32,26 @@ jobs:
       id-token: write
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: https://pluggparken.se/
     steps:
-      - name: Publicera till GitHub Pages
-        id: deployment
+      # Pages hänger sig ibland i "syncing_files". En frisk publicering är klar på några sekunder, så varje försök får bara 90 sekunder
+      # och sedan provar vi om (nytt försök av samma paket) i stället för att vänta fem minuter på ett som ändå inte går igenom.
+      - name: Publicera till GitHub Pages (försök 1)
+        id: d1
+        continue-on-error: true
         uses: actions/deploy-pages@v4
         with:
-          # Väntar högst fem minuter på att Pages blir klar (Pages tillåter tio); concurrency ersätter äldre körningar.
-          timeout: 300000
+          timeout: 90000
+      - name: Publicera till GitHub Pages (försök 2)
+        id: d2
+        if: steps.d1.outcome == 'failure'
+        continue-on-error: true
+        uses: actions/deploy-pages@v4
+        with:
+          timeout: 90000
+      - name: Publicera till GitHub Pages (försök 3)
+        id: d3
+        if: steps.d1.outcome == 'failure' && steps.d2.outcome == 'failure'
+        uses: actions/deploy-pages@v4
+        with:
+          timeout: 120000
