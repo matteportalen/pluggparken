@@ -164,3 +164,6 @@ Bonusläge, **inte** en ersättning för startsidan (lärarens val): en liten ö
 - **Uppdrag:** *Åkpasset* (åk alla tre, `aka-karusell`/`aka-hjul`/`aka-berg` i `SV.seen`, `spel-akpass` ger prydnad och stjärnregn).
 - Tornet i Spel-parken flyttades till (24,-10) med hjulet vid (12,-10) och klipporna inåt (-22,-6) och (22,18), så att banan inte skär dem. Hjulet och banan får egen plats via `hjulDx` och `berg`.
 - OBS: huvudön och Svenska-tornet hade ändrats av en annan session innan detta (hubbens terräng, ljusbrädet); allt testades ihop.
+
+- **Hoppa av (alla åkturer):** under en åktur visar den gula knappen "⏹ Hoppa av"; även mellanslag/Hoppa-knappen, Enter och Escape avslutar. Man står då där man steg på (säkert även mitt i berg-och-dalbanan eller högt upp i hjulet). Åkturen räknas till Åkpasset bara om man åkt minst hälften (`slutRida`); annars kommer en vänlig påminnelse.
+- **Karusellen flyttades** från hörnet "Kul tillsammans" till en egen plats (`PARKER.spel.karusell`, (-22,-24)) med egen skylt; hörnet fick i stället en dragkampsrep och tre spelkort (`dragkamp`). Biljetter som krav för att få åka **valdes bort** av läraren (alla åker fritt).

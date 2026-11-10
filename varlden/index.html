@@ -198,14 +198,14 @@ PARKER.so={namn:'SO-parken',e:'🌍',c:0xF2780C,O:46,oval:1.15,trad:'savann',sam
   stigar:[[[-40,10],[-34,16],[-22,22],[-10,24]],[[-40,10],[-28,2],[-10,-2],[4,-6],[16,-8]],[[-10,24],[0,14],[10,4],[16,-8]],[[16,-8],[26,2],[36,12],[40,20]],[[16,-8],[22,-20],[30,-30]]],
   klippor:[{x:-41,z:-16,s:3},{x:43,z:-18,s:1},{x:4,z:38,s:6}],
   stjarnor:[[6,36,1.3,'Europa','Här ligger Sverige.',0x3D5AFE],[43,-18,0,'Asien','Världens största världsdel.',0xE5484D],[-20,-38,1.3,'Afrika','Här finns Sahara, världens största varma öken.',0xF2B707],[-41,-16,0,'Nordamerika','Här ligger USA och Kanada.',0x1E9E5E],[20,34,1.3,'Sydamerika','Här finns Amazonas regnskog.',0x17AFC4],[50,-2,1.3,'Oceanien','Här ligger Australien.',0xFF9A5C],[4,38,0,'Antarktis','Världens kallaste plats.',0xBFEFFF]]};
-PARKER.spel={namn:'Spel-parken',e:'🎮',c:0xFFB400,O:50,oval:1.2,trad:'host',tradPal:[0xFF7EB6,0xFFD23F,0x7FD6A8,0xB28DFF,0xFF9A5C],regn:true,tornNamn:'Hopptornet',tornDekor:'hjul',hjulDx:-12,berg:[[-40,8],[-42,-8],[-38,-26],[-26,-38],[-8,-44],[10,-42],[26,-38],[42,-26],[50,-8],[48,12],[40,30],[24,40],[4,44],[-20,40],[-34,26]],samla:'biljetter',samlaE:'🎟️',samlaAlla:'biljetterna',
+PARKER.spel={namn:'Spel-parken',e:'🎮',c:0xFFB400,O:50,oval:1.2,trad:'host',tradPal:[0xFF7EB6,0xFFD23F,0x7FD6A8,0xB28DFF,0xFF9A5C],regn:true,tornNamn:'Hopptornet',tornDekor:'hjul',hjulDx:-12,karusell:{x:-22,z:-24},berg:[[-40,8],[-42,-8],[-38,-26],[-26,-38],[-8,-44],[10,-42],[26,-38],[42,-26],[50,-8],[48,12],[40,30],[24,40],[4,44],[-20,40],[-34,26]],samla:'biljetter',samlaE:'🎟️',samlaAlla:'biljetterna',
   gras:0x8EE08A,sand:0xFFE9A8,vatten:0x4CC3F0,himmel:['#7FB8F5','#FFD1E0','#FFF1D6'],dimma:0xFFE6EE,molnFarg:0xFFE3EF,molnOp:.9,klippFarg:0xC45A8A,
   ljus:{h:0xFFE8F0,g:0x8A7A9A,hi:1.7,s:0xFFD6A0,si:2,sp:[-40,30,30]},slant:9,
   hornor:[
     {n:'Skjuta & sikta',e:'🎯',c:0xE5484D,prop:'bubblor',x:-14,z:28,rik:Math.PI/2,h:1.5,p:[{n:'Bubbelskjutaren',e:'🫧',h:'spel/#bub'},{n:'Kulbanan',e:'🔮',h:'spel/kulbanan/'},{n:'Slungan',e:'🏹',h:'spel/slungan/'},{n:'Trädgårdsvakten',e:'🌻',h:'spel/tradgard/'}]},
     {n:'Äventyr',e:'🏰',c:0x7B61FF,prop:'slott',x:-34,z:-14,rik:Math.PI,h:3.5,p:[{n:'Sagoriket',e:'🧙',h:'spel/sagoriket/'},{n:'Glödväktaren',e:'🔥',h:'spel/glodvaktaren/'},{n:'Sifferslottet',e:'🏰',h:'spel/sifferslottet/'},{n:'Skattjakten',e:'💎',h:'spel/skattjakten/'}]},
     {n:'Tävla & bygg',e:'🏁',c:0x1E9E5E,prop:'kran',x:10,z:-26,rik:-Math.PI/2,h:2.5,p:[{n:'Racerbanan',e:'🏎️',h:'spel/racerbanan/'},{n:'Tornbygget',e:'🏗️',h:'spel/#tower'},{n:'Grodhoppet',e:'🐸',h:'spel/#frog'},{n:'Affären',e:'🛒',h:'spel/affaren/'}]},
-    {n:'Kul tillsammans',e:'🤝',c:0xFF9A5C,prop:'karusell',x:34,z:6,rik:0,h:4.5,p:[{n:'Memory',e:'🃏',h:'spel/#mem'},{n:'Dragkampen',e:'💪',h:'spel/#tug'},{n:'Rutjakten',e:'🔢',h:'rutjakten/'}]},
+    {n:'Kul tillsammans',e:'🤝',c:0xFF9A5C,prop:'dragkamp',x:34,z:6,rik:0,h:4.5,p:[{n:'Memory',e:'🃏',h:'spel/#mem'},{n:'Dragkampen',e:'💪',h:'spel/#tug'},{n:'Rutjakten',e:'🔢',h:'rutjakten/'}]},
     {n:'Brädspel',e:'♟️',c:0x3D5AFE,prop:'bradspel',x:0,z:4,rik:-Math.PI/3,h:3,p:[{n:'Schack',e:'♟️',h:'schack/'},{n:'Sudoku',e:'🔢',h:'sudoku/'},{n:'Trerirad',e:'⭕',h:'trerirad/'},{n:'Trafikstockning',e:'🚗',h:'trafikstockning/'}]}],
   kullar:[{x:-12,z:-34,rt:5,rs:5,h:-1.7},{x:-10,z:-10,rt:4,rs:10,h:2},{x:22,z:-8,rt:5,rs:12,h:2.2},{x:-30,z:12,rt:4,rs:11,h:1.8}],
   dammar:[{x:-12,z:-34,r:8,y:-.55}],
@@ -731,6 +731,12 @@ function byggProp(typ,C,farg,g){
     const pj=(x,z,h,c)=>{const gr=new THREE.Group();gr.position.set(x,.65,z);const b=new THREE.Mesh(new THREE.CylinderGeometry(.45,.6,.4,12),M(c));b.position.y=.2;gr.add(b);const k=new THREE.Mesh(new THREE.CylinderGeometry(.25,.4,h,12),M(c));k.position.y=h/2+.3;gr.add(k);const hd=new THREE.Mesh(new THREE.SphereGeometry(.45,12,10),M(c));hd.position.y=h+.7;gr.add(hd);g.add(gr);return gr;};
     pj(-1.6,-1,1.6,0xF4F0E4);pj(0,.8,2.2,0x2B3A67);const kg=pj(1.7,-.6,3.0,0xF4F0E4);const kr=new THREE.Mesh(new THREE.BoxGeometry(.2,.7,.2),M(0xFFC93C));kr.position.y=4.5;kg.add(kr);const kr2=new THREE.Mesh(new THREE.BoxGeometry(.6,.2,.2),M(0xFFC93C));kr2.position.y=4.55;kg.add(kr2);
     S.liv.push(t=>{kg.position.y=.65+Math.abs(Math.sin(t*1.6))*.4;});
+  }else if(typ==='dragkamp'){
+    const m=M(0x8A5A2B);for(const x of[-3.6,3.6]){const st=new THREE.Mesh(new THREE.CylinderGeometry(.2,.28,3.4,6),m);st.position.set(x,1.7,0);g.add(st);}
+    const rep=new THREE.Mesh(new THREE.CylinderGeometry(.14,.14,7.4,7),M(0xE9D9B0));rep.rotation.z=Math.PI/2;rep.position.y=1.2;g.add(rep);
+    const fl=new THREE.Mesh(new THREE.BoxGeometry(.9,.7,.06),M(0xE5484D));fl.position.set(0,1.8,0);g.add(fl);
+    [[-1.6,.6,0x3D5AFE,'♠'],[0,.6,0xE5484D,'♥'],[1.6,.6,0x1E9E5E,'♣']].forEach(([x,z,c,t],i)=>{const k=new THREE.Mesh(new THREE.BoxGeometry(1.1,1.6,.12),new THREE.MeshLambertMaterial({map:siffraTextur(t,hex(c),'#fff',70,128,176)}));k.position.set(x,.9,2+(i%2)*.4);k.rotation.set(-.3,i*.3-.3,0);g.add(k);});
+    S.liv.push(t=>{const q=Math.sin(t*1.6)*1.4;fl.position.x=q;rep.rotation.y=Math.sin(t*1.6)*.03;});
   }else if(typ==='galax'){
     const n=420,pp=new Float32Array(n*3),cc=new Float32Array(n*3),co=new THREE.Color();
     for(let i=0;i<n;i++){const arm=i%3,rr=.4+Math.pow(i/n,.7)*3.6,a=rr*1.3+arm*Math.PI*2/3+(Math.random()-.5)*.35;pp[i*3]=Math.cos(a)*rr;pp[i*3+1]=(Math.random()-.5)*.35;pp[i*3+2]=Math.sin(a)*rr;co.setHSL(.55+rr*.06,.8,.6+Math.random()*.25);cc[i*3]=co.r;cc[i*3+1]=co.g;cc[i*3+2]=co.b;}
@@ -816,6 +822,8 @@ function byggPark(id){
     S.liv.push(t=>{const d=Math.min(.05,t-R.last)||.016;R.last=t;R.ang+=d*(rida&&rida.typ==='hjul'?.24:.12);hj.rotation.z=R.ang;hj.children.forEach(c=>{if(c.userData.a!==undefined)c.rotation.z=-R.ang;});});
     const sk4=etikett('Pariserhjulet','🎡',5,'#FFC93C');sk4.position.set(wx,wb+19.5,tz);add(sk4);}
   if(D.berg)bygBerg(D);
+  if(D.karusell){const kx=D.karusell.x,kz=D.karusell.z,g=new THREE.Group();g.position.set(kx,S.hojd(kx,kz),kz);S.W.add(g);byggProp('karusell',null,0xFF9A5C,g);
+    S.kollider.push({x:kx,z:kz,r:1,top:99});S.fria.push({x:kx,z:kz,r:9});const sk5=etikett('Karusellen','🎠',5,'#FF9A5C');sk5.position.set(0,8.6,0);g.add(sk5);}
   stjarnaUt(id,D.stjarnor);
   // klippor med en sak på toppen
   (D.klippor||[]).forEach(k=>{const top=klippa(k.x,k.z,D.klippFarg||0x8B7B6B);if(k.s!=null&&S.stjarnor[k.s]){const q=S.stjarnor[k.s];q.y=q.y0=top+1.2;q.m.position.y=q.y;}});
@@ -1010,11 +1018,11 @@ function ritaK(dt){
 /* ---------- Ingångar ---------- */
 const tang={};let dlgOpen=false;
 addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;const k=e.key.toLowerCase();
-  if(k==='escape'){stangDlg();$('panel').hidden=true;if(rida&&rida.typ==='karusell')slutRida();return;}
+  if(k==='escape'){stangDlg();$('panel').hidden=true;if(rida)slutRida();return;}
   if(dlgOpen)return;
   if([' ','arrowup','arrowdown','arrowleft','arrowright'].includes(k))e.preventDefault();
   if(k===' '&&!tang[' '])P.hoppKo=true;tang[k]=true;
-  if(k==='enter'&&!e.repeat){if(narmaste)gaIn(narmaste);else if(narNpc)oppnaDlg();else if(narRide)startRida(narRide);}});
+  if(k==='enter'&&!e.repeat){if(rida){slutRida();return;}if(narmaste)gaIn(narmaste);else if(narNpc)oppnaDlg();else if(narRide)startRida(narRide);}});
 addEventListener('keyup',e=>{tang[e.key.toLowerCase()]=false;});
 addEventListener('blur',()=>{for(const k in tang)tang[k]=false;});
 const stick=$('stick'),knob=$('knob');let jid=null,jx=0,jy=0;
@@ -1149,12 +1157,14 @@ function akt(typ){
 }
 function startRida(r){
   if(rida||gaar)return;stangDlg();
-  rida={typ:r.typ,t:0,fran:{x:P.x,z:P.z,yaw:P.ang,cam:camYaw}};P.fartX=P.fartZ=0;P.vy=0;P.mark=true;pling(520,780);prompt.hidden=true;
+  rida={typ:r.typ,t:0,fran:{x:P.x,z:P.z,yaw:P.ang,cam:camYaw}};P.fartX=P.fartZ=0;P.vy=0;P.mark=true;pling(520,780);P.hoppKo=false;prompt.hidden=true;
   if(r.typ==='karusell'){let b=1e9;S.ref.karusell.hs.forEach((h,i)=>{h.getWorldPosition(_v);const d=Math.hypot(_v.x-P.x,_v.z-P.z);if(d<b){b=d;rida.hast=i;}});rida.dur=24;}
   else if(r.typ==='hjul'){const R=S.ref.hjul;let b=2;R.gonds.forEach((gd,i)=>{const sn=Math.sin(gd.userData.a+R.ang);if(sn<b){b=sn;rida.gond=i;}});rida.a0=R.ang;}
   else rida.s=0;
 }
-function slutRida(){const r=rida,f=r.fran;if(r.typ==='berg')S.berg.reset();rida=null;placera(f.x,f.z,f.yaw,camYaw);akt(r.typ);}
+function slutRida(){const r=rida,f=r.fran;let fr=1;if(r.typ==='karusell')fr=r.t/r.dur;else if(r.typ==='hjul')fr=(S.ref.hjul.ang-r.a0)/(Math.PI*2);else fr=r.s/S.berg.L;
+  if(r.typ==='berg')S.berg.reset();rida=null;placera(f.x,f.z,f.yaw,camYaw);prompt.hidden=true;
+  if(fr>=.5)akt(r.typ);else toast('Du hoppade av. Åk lite längre nästa gång för att det ska räknas!');}
 function stegRida(dt){
   const r=rida;r.t+=dt;P.fartX=P.fartZ=0;P.vy=0;P.mark=true;
   if(r.typ==='karusell'){const R=S.ref.karusell;R.hs[r.hast].getWorldPosition(_v);P.x=_v.x;P.z=_v.z;P.y=_v.y+.5;P.ang=Math.atan2(_v.z-R.cz,-(_v.x-R.cx));if(r.t>r.dur)slutRida();}
@@ -1199,7 +1209,7 @@ function gaIn(po){
   $('fade').classList.add('pa');
   setTimeout(()=>{location.href=new URL('../'+po.p.h,location.href).href;},REDUCE?60:420);
 }
-prompt.addEventListener('click',()=>{if(narmaste)gaIn(narmaste);else if(narNpc)oppnaDlg();else if(narRide)startRida(narRide);});
+prompt.addEventListener('click',()=>{if(rida){slutRida();return;}if(narmaste)gaIn(narmaste);else if(narNpc)oppnaDlg();else if(narRide)startRida(narRide);});
 addEventListener('pagehide',()=>sparaPlats());
 addEventListener('pageshow',e=>{if(e.persisted||gaar){gaar=false;$('fade').classList.remove('pa');const s=lasPlats();
   if(S.klot){if(s&&s.scen===S.id&&isFinite(s.hx))placeraK(new V3(s.x,s.y,s.z),new V3(s.hx,s.hy,s.hz));}else if(s&&(s.scen||'hub')===S.id&&isFinite(s.x))placera(s.x,s.z,s.yaw||0,s.cam!=null?s.cam:s.yaw||0);uppdateraArende();}});
@@ -1226,7 +1236,7 @@ const v3=new THREE.Vector3();
 function steg(dt){
   const varPaMark=P.mark;
   tid+=dt;
-  if(rida){stegRida(dt);prompt.hidden=true;return;}
+  if(rida){if(P.hoppKo){P.hoppKo=false;slutRida();return;}stegRida(dt);if(rida){prompt.hidden=false;if(prompt.textContent!=='⏹ Hoppa av')prompt.textContent='⏹ Hoppa av';}return;}
   let ix=0,iz=0;
   if(!dlgOpen){
     if(tang['w']||tang['arrowup'])iz+=1;if(tang['s']||tang['arrowdown'])iz-=1;
