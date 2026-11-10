@@ -199,3 +199,5 @@ Bonusläge, **inte** en ersättning för startsidan (lärarens val): en liten ö
 - Kvar att bygga av de föreslagna övningarna: Ett hjärtslag, Klurig kub, Pussel med bilder, Karta över havet, Beat-spelet, Bygg ett instrument, Skriv en saga med ord som faller.
 
 - **Saker att samla ser ut som ämnet** (lärarens önskan: inte bara bollar): Extra = 3D-**noter** (Do–Do, `noteModell`), SO = **världsdelar** som extruderade kontinentformer (`kontModell`, `KONT`), Fler ämnen = **tingestar** (penna, schackbonde, linjal, tangent, mynt, kod `{ }`, sudokubricka; `tingModell`), Matte = **kristaller** (`samlaForm:'kristall'`, `gemModell`), Rymdlabbet = **planeter med textur** (Jupiters band, Jordens kontinenter, Mars kratrar; `planetTextur`), Kroppen = riktiga **organ**. Svenska (bokstavskuber), Spel (biljetter) och huvudön (stjärnor) har sina egna former. Poster i `stjarnor` anger formen i sjunde fältet: `'ton:freq'`, `'k:namn'`, `'ting:namn'`, `'organ:namn'`, `'biljett'`.
+
+- **Engelska ord behålls** (läraren gör om bilderna själv med ChatGPT senare). Rimmaskinen, Raketbygget och Månbasen är borttagna; fler snabba frågeövningar byggs inte (se minnet `inga-snabba-fragor`).
