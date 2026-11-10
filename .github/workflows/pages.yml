@@ -47,6 +47,7 @@ jobs:
           for id in $(gh api "repos/$REPO/deployments?environment=github-pages&per_page=8" --jq '.[].id'); do
             st=$(gh api "repos/$REPO/deployments/$id/statuses" --jq '.[0].state' || echo "")
             sha=$(gh api "repos/$REPO/deployments/$id" --jq '.sha')
+            if [ "$sha" = "${{ github.sha }}" ]; then continue; fi   # körningens egen deployment ska inte avbrytas
             if [ "$st" != "success" ] && [ "$st" != "inactive" ]; then
               echo "Avbryter $sha (läge: $st)"
               gh api -X POST "repos/$REPO/pages/deployments/$sha/cancel" || echo "  (gick inte att avbryta, hoppar över)"
