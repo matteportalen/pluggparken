@@ -71,3 +71,5 @@ _Fler ämnen-sidan med Ordgömman, Solsystemet 3D och Rymdlabbet, Sverigekartan,
 - **Rymdlabbet har en liten länk "← Alla ämnen"** överst på menyn (som Specialare), till första sidan.
 
 - **Vikingatiden** (`vikingatiden/`, nov 2026, lärarens önskan): frågor om vikingarna i tre nivåer (skepp, runor och gudar; långhus och resor; runor, städer och tider). Samma frågemotor som Rimmaskinen. Kort i SO-sidan, portal i SO-parken (stationen Vikingatiden, bredvid Sverigekartan).
+
+- **Fler nya frågeövningar** (nov 2026, samma frågemotor som Vikingatiden): **Sveriges landskap** och **Demokrati** (kort i SO-sidan, portaler i SO-parken: stationerna Vikingatiden och Idag), **Raketbygget** och **Månbasen** (kort i Rymdlabbets lägen under Stjärnor och universum, portaler i Rymdlabbet-parken, hörnet Stjärnor & universum). Sidorna ligger i roten (`raketbygget/`, `manbasen/`) och räknas som Rymd i `amneAv()`.
