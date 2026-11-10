@@ -189,6 +189,12 @@ body.mph-mini #quit{display:none}
     <span class="mph-title">${titel?`<span class="mph-sep">›</span> ${ikon?ikon+' ':''}${esc(titel)}`:''}</span>
     <span class="mph-right"><a class="mph-pet" href="${hem}#garderob" aria-label="Ditt djur och dina stjärnor">${pet}${namn?`<span class="mph-name">${esc(namn)}</span>`:''}<span>⭐&nbsp;<span class="mph-n">${MPStjarnor()}</span></span><span class="mph-mynt">🪙&nbsp;<span class="mph-m">${myntLas().m}</span></span></a><button class="mph-sok" aria-label="Sök övning" title="Sök (tryck /)">🔍</button><button class="mph-snd" aria-label="Ljud av eller på"></button><button class="mph-tema" aria-label="Byt mellan ljust och mörkt läge"></button></span>`;
   document.body.prepend(h);
+  // kom man hit från Pluggparken-världen (varlden/) finns en 🌍-knapp som går tillbaka dit
+  try{if(sessionStorage.getItem('mp-fran-varlden')==='1'&&!/\/varlden\/?$/.test(location.pathname)){
+    if(!document.getElementById('mph-varld-css')){const vs=document.createElement('style');vs.id='mph-varld-css';
+      vs.textContent='.mph .mph-varld{display:inline-flex;align-items:center;gap:5px;min-height:40px;padding:0 12px;border-radius:999px;background:#1E9E5E;color:#fff;font-weight:800;font-size:.95rem;box-shadow:0 2px 0 rgba(0,0,0,.25);white-space:nowrap}.mph .mph-varld:active{transform:translateY(2px)}.mph-varld em{font-style:normal}@media(max-width:560px){.mph-varld em{display:none}}';document.head.appendChild(vs);}
+    const va=document.createElement('a');va.className='mph-varld';va.href=hem+'varlden/';va.setAttribute('aria-label','Tillbaka till Pluggparken-världen');va.innerHTML='🏝️<em>Världen</em>';
+    const hr=h.querySelector('.mph-right');if(hr)hr.prepend(va);}}catch(e){}
   // sökning: sok.js hämtas först när den behövs
   const rotUrl=new URL('.',(me&&me.src)||location.href).href;
   // stjärnlapp på varje kort som ger stjärnor: "⭐ 5 stjärnor" (grå "☆ 0 stjärnor" om inga än)
