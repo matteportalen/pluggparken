@@ -137,7 +137,7 @@ const HUB=[
 ];
 /* Parkerna. hornor = ämnessidans grupper; varje hörn har en egen lekplats (prop) och portaler till övningarna. */
 const PARKER={
-  matte:{namn:'Matte-parken',e:'🔢',c:0x3D5AFE,O:50,form:'ruta',trad:'kristall',rutor:[0x8E7CC3,0x7566B0],sand:0x5B4C9A,sand2:0x3E3375,vatten:0x4A5FD0,himmel:['#2A2370','#7B5EA7','#F7A8B8'],dimma:0xD7A6D8,molnFarg:0xFFD0EC,molnOp:.8,
+  matte:{samlaForm:'kristall',namn:'Matte-parken',e:'🔢',c:0x3D5AFE,O:50,form:'ruta',trad:'kristall',rutor:[0x8E7CC3,0x7566B0],sand:0x5B4C9A,sand2:0x3E3375,vatten:0x4A5FD0,himmel:['#2A2370','#7B5EA7','#F7A8B8'],dimma:0xD7A6D8,molnFarg:0xFFD0EC,molnOp:.8,
     ljus:{h:0xD6C4FF,g:0x6A5FA0,hi:1.55,s:0xFFB48A,si:1.5,sp:[-30,30,20]},
     hornor:[
       {n:'Spela & utforska',e:'🎮',c:0x3D5AFE,prop:'tarning',p:[{n:'Spelhörnan',e:'🎲',h:'spel/'},{n:'Verktygslådan',e:'🧰',h:'verktyg/'}]},
@@ -247,7 +247,7 @@ PARKER.so={namn:'SO-parken',e:'🌍',c:0xF2780C,O:34,oval:1.94,trad:'karta',gles
       const tx=new THREE.CanvasTexture(c2);tx.colorSpace=THREE.SRGBColorSpace;const en=new THREE.Mesh(new THREE.SphereGeometry(3.2,16,12),new THREE.MeshLambertMaterial({map:tx}));en.position.y=5.2;en.scale.y=1.2;g.add(en);
       for(const[x,z]of[[-.8,-.8],[.8,-.8],[-.8,.8],[.8,.8]]){const r=new THREE.Mesh(new THREE.CylinderGeometry(.04,.04,3.6,4),M(0x444444));r.position.set(x*1.1,1.6,z*1.1);r.rotation.set(z*.12,0,-x*.12);g.add(r);}
       return g;}});}};
-PARKER.so.stjarnor=SO_KONT.map(([x,z,r,col,namn,fakta,farg,dy])=>[x,z,dy,namn,fakta,farg]);
+PARKER.so.stjarnor=SO_KONT.map(([x,z,r,col,namn,fakta,farg,dy])=>[x,z,dy,namn,fakta,farg,'k:'+namn.toLowerCase()]);
 PARKER.spel={namn:'Spel-parken',e:'🎮',c:0xFFB400,O:50,oval:1.2,trad:'host',tradPal:[0xFF7EB6,0xFFD23F,0x7FD6A8,0xB28DFF,0xFF9A5C],regn:true,tornNamn:'Hopptornet',tornDekor:'hjul',hjulDx:-12,karusell:{x:14,z:30},berg:[[-40,8],[-42,-8],[-38,-26],[-26,-38],[-8,-44],[10,-42],[26,-38],[42,-26],[50,-8],[48,12],[40,30],[24,40],[4,44],[-20,40],[-34,26]],samla:'biljetter',samlaE:'🎟️',samlaAlla:'biljetterna',
   gras:0x8EE08A,sand:0xFFE9A8,vatten:0x4CC3F0,himmel:['#7FB8F5','#FFD1E0','#FFF1D6'],dimma:0xFFE6EE,molnFarg:0xFFE3EF,molnOp:.9,klippFarg:0xC45A8A,
   ljus:{h:0xFFE8F0,g:0x8A7A9A,hi:1.7,s:0xFFD6A0,si:2,sp:[-40,30,30]},slant:9,
@@ -310,7 +310,7 @@ Object.assign(PARKER.kroppen,{form:'rund',ext:[58,38],oval:1,O:26,textur:kroppst
   start:{x:0,z:12,ang:Math.PI},tillbaka:{x:8,z:14},tornPos:[-8,-4],npc:{x:-6,z:10,namn:'Mimmi',animal:'pingvin',farg:['#2B3A67','#141D3D'],hat:'keps'},
   stigar:[0,1,2,3,4].map(k=>[[0,0],pt(k,14),pt(k,26)]).concat([0,1,2,3,4].map(k=>[pt(k,26),pt(k,34)])),
   klippor:[{x:pt(0,26,.28)[0],z:pt(0,26,.28)[1],s:5},{x:pt(3,26,-.28)[0],z:pt(3,26,-.28)[1],s:6}],
-  stjarnor:[[...pt(0,24,-.15),1.3,'Pennan','Rita ett ord och låt datorn gissa!',0xFF7EB6],[...pt(1,24,.15),1.3,'Schackpjäsen','Schack är ett mycket gammalt spel.',0x1B1F2E],[...pt(2,24,-.15),1.3,'Linjalen','Gissa storleken först, mät sen.',0xF2B707],[...pt(3,24,.15),1.3,'Tangenten','Skriv snabbt med alla tio fingrar.',0x1FBF7F],[...pt(4,24,-.15),1.3,'Myntet','Spara lite i taget, så växer det.',0xFFC93C],[...pt(0,26,.28),0,'Koden','Ett program är kommandon i rätt ordning.',0x3D5AFE],[...pt(3,26,-.28),0,'Sudokurutan','I sudoku får ingen siffra upprepas.',0xB28DFF]],
+  stjarnor:[[...pt(0,24,-.15),1.3,'Pennan','Rita ett ord och låt datorn gissa!',0xFF7EB6,'ting:pennan'],[...pt(1,24,.15),1.3,'Schackpjäsen','Schack är ett mycket gammalt spel.',0x1B1F2E,'ting:schack'],[...pt(2,24,-.15),1.3,'Linjalen','Gissa storleken först, mät sen.',0xF2B707,'ting:linjal'],[...pt(3,24,.15),1.3,'Tangenten','Skriv snabbt med alla tio fingrar.',0x1FBF7F,'ting:tangent'],[...pt(4,24,-.15),1.3,'Myntet','Spara lite i taget, så växer det.',0xFFC93C,'ting:mynt'],[...pt(0,26,.28),0,'Koden','Ett program är kommandon i rätt ordning.',0x3D5AFE,'ting:kod'],[...pt(3,26,-.28),0,'Sudokurutan','I sudoku får ingen siffra upprepas.',0xB28DFF,'ting:sudoku']],
   aktUppdrag:{typ:'linbana',e:'🚡',n:'Åk linbanan över alla fem armarna',klart:'Du flög över hela Fler ämnen!'},
   bana:()=>{bygBana({typ:'linbana',namn:'linbanan',e:'🚡',off:-.2,r:6,
     pts:[0,1,2,3,4].map(k=>pt(k,44)),
@@ -724,10 +724,57 @@ function plattform(x,z,r,h,farg){
   const kant=add(new THREE.Mesh(new THREE.CylinderGeometry(r+.04,r+.04,.22,14),M(0xFFFFFF)));kant.position.set(x,h-.11,z);
   S.kollider.push({x,z,r,top:h});
 }
+
+/* ---------- Saker att samla: 3D-modeller per ö ---------- */
+function noteModell(c){
+  const g=new THREE.Group(),m=M(c,{flatShading:false}),hd=new THREE.Mesh(new THREE.SphereGeometry(.5,16,12),m);hd.scale.set(1.3,.85,1);hd.rotation.z=.45;hd.position.set(-.35,-.8,0);g.add(hd);
+  const st=new THREE.Mesh(new THREE.CylinderGeometry(.07,.07,2.1,6),m);st.position.set(.17,.28,0);g.add(st);
+  const sh=new THREE.Shape();sh.moveTo(0,0);sh.bezierCurveTo(.7,-.1,1,-.6,.8,-1.2);sh.bezierCurveTo(.9,-.5,.5,-.35,0,-.35);sh.closePath();
+  const fl=new THREE.Mesh(new THREE.ExtrudeGeometry(sh,{depth:.12,bevelEnabled:false}),m);fl.position.set(.17,1.32,-.06);g.add(fl);
+  g.scale.setScalar(1.7);return g;}
+const KONT={
+  europa:[[-.9,.2],[-.5,.6],[-.1,.7],[.3,.5],[.8,.6],[.9,.2],[.5,.0],[.6,-.4],[.1,-.6],[-.3,-.3],[-.7,-.4]],
+  asien:[[-.9,.1],[-.6,.7],[0,.9],[.7,.8],[.95,.3],[.7,-.2],[.9,-.6],[.4,-.7],[.1,-.3],[-.3,-.6],[-.7,-.3]],
+  afrika:[[-.5,.8],[.2,.9],[.6,.5],[.9,.3],[.5,-.2],[.3,-.9],[-.1,-.95],[-.4,-.4],[-.8,.1]],
+  nordamerika:[[-.9,.6],[-.2,.9],[.5,.8],[.9,.4],[.5,0],[.2,-.4],[0,-.9],[-.3,-.5],[-.8,-.1]],
+  sydamerika:[[-.3,.9],[.4,.7],[.7,.2],[.3,-.4],[0,-.95],[-.3,-.5],[-.6,.1]],
+  oceanien:[[-.9,.1],[-.4,.5],[.4,.4],[.9,0],[.6,-.5],[-.2,-.6],[-.7,-.4]],
+  antarktis:Array.from({length:12},(_,i)=>[Math.cos(i/12*6.283)*.9,Math.sin(i/12*6.283)*.85])};
+function kontModell(namn,c){
+  const pts=KONT[namn]||KONT.europa,sh=new THREE.Shape();pts.forEach(([x,y],i)=>i?sh.lineTo(x,y):sh.moveTo(x,y));sh.closePath();
+  const ge=new THREE.ExtrudeGeometry(sh,{depth:.35,bevelEnabled:true,bevelSize:.07,bevelThickness:.07,bevelSegments:1});ge.center();
+  const m=new THREE.Mesh(ge,M(c,{emissive:new THREE.Color(c).multiplyScalar(.18)}));m.scale.setScalar(2);const g=new THREE.Group();m.rotation.x=-.5;g.add(m);
+  if(namn==='oceanien'){for(const[x,z,r]of[[1.5,-.4,.28],[1.8,.2,.2],[-1.4,.9,.22]]){const o=new THREE.Mesh(new THREE.CylinderGeometry(r,r,.3,8),M(c));o.position.set(x,z,0);o.rotation.x=Math.PI/2-.5;g.add(o);}}
+  return g;}
+function ruttextur(txt,bg,fg,fs,w,h){return siffraTextur(txt,bg,fg,fs,w,h);}
+function tingModell(namn,c){
+  const g=new THREE.Group(),sm={flatShading:false};
+  if(namn==='pennan'){const k=new THREE.Mesh(new THREE.CylinderGeometry(.16,.16,2.4,6),M(0xFFC93C,sm));g.add(k);const sp=new THREE.Mesh(new THREE.ConeGeometry(.16,.5,6),M(0xF5DDBB,sm));sp.position.y=-1.45;sp.rotation.x=Math.PI;g.add(sp);const bly=new THREE.Mesh(new THREE.ConeGeometry(.06,.18,6),M(0x1D2B53,sm));bly.position.y=-1.74;bly.rotation.x=Math.PI;g.add(bly);const ra=new THREE.Mesh(new THREE.CylinderGeometry(.17,.17,.35,6),M(0xFF9DB6,sm));ra.position.y=1.38;g.add(ra);g.rotation.z=.5;}
+  else if(namn==='schack'){const b=new THREE.Mesh(new THREE.CylinderGeometry(.6,.75,.35,16),M(0x1B1F2E,sm));b.position.y=-.9;g.add(b);const k=new THREE.Mesh(new THREE.CylinderGeometry(.22,.5,1.4,16),M(0x1B1F2E,sm));k.position.y=-.1;g.add(k);const kr=new THREE.Mesh(new THREE.TorusGeometry(.38,.08,8,16),M(0x1B1F2E,sm));kr.position.y=.6;kr.rotation.x=Math.PI/2;g.add(kr);const h=new THREE.Mesh(new THREE.SphereGeometry(.5,16,12),M(0x2B3350,sm));h.position.y=1.1;g.add(h);}
+  else if(namn==='linjal'){const b=new THREE.Mesh(new THREE.BoxGeometry(3,.7,.14),M(0xF2B707,sm));g.add(b);for(let i=0;i<13;i++){const t=new THREE.Mesh(new THREE.BoxGeometry(.05,i%4?.2:.34,.16),M(0x1D2B53));t.position.set(-1.35+i*.225,.35-(i%4?.1:.17),0);g.add(t);}g.rotation.z=.5;}
+  else if(namn==='tangent'){const k=new THREE.Mesh(new THREE.BoxGeometry(1.6,.9,1.6),[M(0x9AA8D0),M(0x9AA8D0),new THREE.MeshLambertMaterial({map:ruttextur('A','#EAF0FF','#1D2B53',82,128,128)}),M(0x9AA8D0),M(0x9AA8D0),M(0x9AA8D0)]);g.add(k);g.rotation.x=.4;}
+  else if(namn==='mynt'){const cn=new THREE.Mesh(new THREE.CylinderGeometry(1,1,.22,28),M(0xF2B707,sm));cn.rotation.x=Math.PI/2;g.add(cn);const rn=new THREE.Mesh(new THREE.TorusGeometry(.9,.07,8,28),M(0xFFE08A,sm));g.add(rn);const k=new THREE.Mesh(new THREE.BoxGeometry(.3,.9,.06),M(0xFFE08A));k.position.z=.14;g.add(k);}
+  else if(namn==='kod'){const b=new THREE.Mesh(new THREE.BoxGeometry(2.2,1.3,.4),[M(0x1D2B53),M(0x1D2B53),M(0x1D2B53),M(0x1D2B53),new THREE.MeshLambertMaterial({map:ruttextur('{ }','#0B1B2B','#3DFFA0',70,256,128)}),M(0x1D2B53)]);g.add(b);}
+  else{const b=new THREE.Mesh(new THREE.BoxGeometry(1.8,1.8,.3),[M(0xB28DFF),M(0xB28DFF),M(0xB28DFF),M(0xB28DFF),new THREE.MeshLambertMaterial({map:ruttextur('5 3\n','#FFFFFF','#1D2B53',64,128,128)}),M(0xB28DFF)]);g.add(b);}
+  g.scale.setScalar(1.15);return g;}
+function gemModell(c){const g=new THREE.Group(),m=new THREE.Mesh(new THREE.OctahedronGeometry(1,0),new THREE.MeshLambertMaterial({color:c,flatShading:true,emissive:new THREE.Color(c).multiplyScalar(.35)}));m.scale.set(.9,1.4,.9);g.add(m);
+  const r=new THREE.Mesh(new THREE.OctahedronGeometry(1.25,0),new THREE.MeshBasicMaterial({color:c,transparent:true,opacity:.18,wireframe:true}));r.scale.set(.9,1.4,.9);g.add(r);return g;}
+function planetTextur(namn,c){
+  const cv=document.createElement('canvas');cv.width=256;cv.height=128;const q=cv.getContext('2d'),col='#'+c.toString(16).padStart(6,'0');q.fillStyle=col;q.fillRect(0,0,256,128);let s2=namn.length*7;const rr=()=>{s2=(s2*16807)%2147483647;return(s2-1)/2147483646;};
+  const band=(cols,n)=>{for(let i=0;i<n;i++){q.fillStyle=cols[i%cols.length];q.globalAlpha=.55;q.fillRect(0,i*128/n+rr()*4,256,128/n*(.6+rr()*.5));}q.globalAlpha=1;};
+  if(namn==='Jupiter')band(['#B5744A','#F0D9B5','#C98B5A','#E8C99A'],9);else if(namn==='Saturnus')band(['#D9BF7A','#F2E2B0','#C9AA5E'],7);
+  else if(namn==='Jorden'){q.fillStyle='#3FAE5A';[[40,40,26],[100,70,20],[170,50,28],[215,90,18]].forEach(([x,y,r])=>{q.beginPath();q.ellipse(x,y,r*1.4,r,0,0,7);q.fill();});q.fillStyle='rgba(255,255,255,.7)';[[20,25,30],[120,35,24],[200,70,28]].forEach(([x,y,r])=>{q.beginPath();q.ellipse(x,y,r*1.2,r*.35,0,0,7);q.fill();});}
+  else if(namn==='Mars'||namn==='Merkurius'){for(let i=0;i<30;i++){q.fillStyle=namn==='Mars'?'rgba(120,40,20,.45)':'rgba(90,90,90,.5)';q.beginPath();q.arc(rr()*256,rr()*128,3+rr()*9,0,7);q.fill();}if(namn==='Mars'){q.fillStyle='rgba(255,255,255,.7)';q.fillRect(0,0,256,10);q.fillRect(0,118,256,10);}}
+  else if(namn==='Venus'){band(['#E8C27A','#F5DDA0','#D9AA60'],11);}
+  else{band([col,'#ffffff55',col],5);}
+  const t=new THREE.CanvasTexture(cv);t.colorSpace=THREE.SRGBColorSpace;return t;}
+
 function stjarnaUt(id,lista){
   const tagna=SV.stj[id]||[];
   lista.forEach(([x,z,y0,ch,fakta,farg,form],i)=>{const y=S.hojd(x,z)+y0,namn=ch&&ch.length>1&&form!=='biljett'?ch:null,ton=form&&form.startsWith('ton:')?+form.slice(4):0;let m;
-    if(form&&form.startsWith('ton:')){m=add(new THREE.Group());m.add(new THREE.Mesh(new THREE.SphereGeometry(.75,16,12),new THREE.MeshLambertMaterial({color:farg})));const lb=etikett(ch,'♪',3.4,hex(farg));lb.position.y=1.8;m.add(lb);m.position.set(x,y,z);}
+    if(form&&form.startsWith('ton:')){m=add(new THREE.Group());m.add(noteModell(farg));const lb=etikett(ch,'♪',3.4,hex(farg));lb.position.y=2.9;m.add(lb);m.position.set(x,y+.5,z);}
+    else if(form&&form.startsWith('k:')){m=add(new THREE.Group());m.add(kontModell(form.slice(2),farg));const lb=etikett(ch,'',3.8,hex(farg));lb.position.y=2.3;m.add(lb);m.position.set(x,y+.6,z);}
+    else if(form&&form.startsWith('ting:')){m=add(new THREE.Group());m.add(tingModell(form.slice(5),farg));const lb=etikett(ch,'',3.8,hex(farg));lb.position.y=2.4;m.add(lb);m.position.set(x,y+.6,z);}
     else if(form&&form.startsWith('organ:')){m=add(new THREE.Group());const nm=form.slice(6);
       const fb=new THREE.Mesh(new THREE.SphereGeometry(.75,16,12),new THREE.MeshLambertMaterial({color:farg}));m.add(fb);
       const lb=etikett(ch,'',3.8,hex(farg));lb.position.y=3.3;m.add(lb);m.position.set(x,y,z);
@@ -735,7 +782,7 @@ function stjarnaUt(id,lista){
       else laddaOrgan().then(M2=>{const o=M2.get(nm);if(o){const c=o.clone();c.scale.setScalar(nm==='lungor'||nm==='tunntarm'||nm==='tjocktarm'?3.4:nm==='hjarta'||nm==='urinblasa'?2.6:3);fb.visible=false;m.add(c);}});}
     else if(form==='biljett'){m=add(new THREE.Mesh(new THREE.BoxGeometry(1.9,1.05,.12),new THREE.MeshLambertMaterial({map:siffraTextur('BILJETT','#FFC93C','#1D2B53',34,256,128)})));m.position.set(x,y,z);}
     else if(namn){m=add(new THREE.Group());m.add(new THREE.Mesh(new THREE.SphereGeometry(.75,16,12),new THREE.MeshLambertMaterial({color:farg})));const lb=etikett(namn,'',3.8,hex(farg));lb.position.y=1.8;m.add(lb);m.position.set(x,y,z);}
-    else{m=add(ch?new THREE.Mesh(new THREE.BoxGeometry(1.3,1.3,1.3),new THREE.MeshLambertMaterial({map:siffraTextur(ch,'#E5484D','#fff',92)})):new THREE.Mesh(stjarnaGeo(.85,.38,.3),M(0xFFD23F,{emissive:0x7a5a00})));m.position.set(x,y,z);}
+    else{const gem=!ch&&PARKER[id]&&PARKER[id].samlaForm==='kristall';m=add(ch?new THREE.Mesh(new THREE.BoxGeometry(1.3,1.3,1.3),new THREE.MeshLambertMaterial({map:siffraTextur(ch,'#E5484D','#fff',92)})):gem?gemModell([0x6BE0FF,0xB28DFF,0xFF7EDB][i%3]):new THREE.Mesh(stjarnaGeo(.85,.38,.3),M(0xFFD23F,{emissive:0x7a5a00})));m.position.set(x,y+(gem?.4:0),z);}
     m.visible=!tagna.includes(i);
     S.stjarnor.push({m,x,y,z,idx:i,bokstav:ch&&ch.length===1?ch:null,namn,fakta,biljett:form==='biljett',ton,tagen:tagna.includes(i),y0:y});});
 }
@@ -1338,7 +1385,7 @@ function byggKlot(id){
   const tagna=SV.stj[id]||[];
   D.planeter.forEach(([namn,farg,sz,la,lo,fakta],i)=>{
     const dir=dll(la,lo),pv=dir.clone().multiplyScalar(S.Rs(dir)+3.4),g=new THREE.Group();g.position.copy(pv);
-    const sp=new THREE.Mesh(new THREE.SphereGeometry(sz*.9,18,14),new THREE.MeshLambertMaterial({color:farg}));g.add(sp);
+    const sp=new THREE.Mesh(new THREE.SphereGeometry(sz*.9,22,16),new THREE.MeshLambertMaterial({map:planetTextur(namn,farg)}));g.add(sp);
     if(namn==='Saturnus'){const r=new THREE.Mesh(new THREE.TorusGeometry(sz*1.5,.12,6,36),new THREE.MeshLambertMaterial({color:0xE9D08F}));r.rotation.x=1.2;g.add(r);}
     g.visible=!tagna.includes(i);S.W.add(g);
     S.stjarnor.push({m:g,pv,dir,idx:i,namn,fakta,tagen:tagna.includes(i),bokstav:null});
