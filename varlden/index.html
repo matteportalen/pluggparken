@@ -727,11 +727,11 @@ function plattform(x,z,r,h,farg){
 
 /* ---------- Saker att samla: 3D-modeller per ö ---------- */
 function noteModell(c){
-  const g=new THREE.Group(),m=M(c,{flatShading:false}),hd=new THREE.Mesh(new THREE.SphereGeometry(.5,16,12),m);hd.scale.set(1.3,.85,1);hd.rotation.z=.45;hd.position.set(-.35,-.8,0);g.add(hd);
-  const st=new THREE.Mesh(new THREE.CylinderGeometry(.07,.07,2.1,6),m);st.position.set(.17,.28,0);g.add(st);
+  const g=new THREE.Group(),m=M(c,{flatShading:false}),hd=new THREE.Mesh(new THREE.SphereGeometry(.62,18,14),m);hd.scale.set(1.35,.85,.8);hd.rotation.z=.45;hd.position.set(-.35,-.95,0);g.add(hd);
+  const st=new THREE.Mesh(new THREE.CylinderGeometry(.12,.12,2.5,8),m);st.position.set(.22,.3,0);g.add(st);
   const sh=new THREE.Shape();sh.moveTo(0,0);sh.bezierCurveTo(.7,-.1,1,-.6,.8,-1.2);sh.bezierCurveTo(.9,-.5,.5,-.35,0,-.35);sh.closePath();
-  const fl=new THREE.Mesh(new THREE.ExtrudeGeometry(sh,{depth:.12,bevelEnabled:false}),m);fl.position.set(.17,1.32,-.06);g.add(fl);
-  g.scale.setScalar(1.7);return g;}
+  const fl=new THREE.Mesh(new THREE.ExtrudeGeometry(sh,{depth:.12,bevelEnabled:false}),m);fl.position.set(.22,1.52,-.1);fl.scale.set(1.2,1.2,2);g.add(fl);
+  g.scale.setScalar(2.1);return g;}
 const KONT={
   europa:[[-.9,.2],[-.5,.6],[-.1,.7],[.3,.5],[.8,.6],[.9,.2],[.5,.0],[.6,-.4],[.1,-.6],[-.3,-.3],[-.7,-.4]],
   asien:[[-.9,.1],[-.6,.7],[0,.9],[.7,.8],[.95,.3],[.7,-.2],[.9,-.6],[.4,-.7],[.1,-.3],[-.3,-.6],[-.7,-.3]],
@@ -783,7 +783,7 @@ function stjarnaUt(id,lista){
     else if(form==='biljett'){m=add(new THREE.Mesh(new THREE.BoxGeometry(1.9,1.05,.12),new THREE.MeshLambertMaterial({map:siffraTextur('BILJETT','#FFC93C','#1D2B53',34,256,128)})));m.position.set(x,y,z);}
     else if(namn){m=add(new THREE.Group());m.add(new THREE.Mesh(new THREE.SphereGeometry(.75,16,12),new THREE.MeshLambertMaterial({color:farg})));const lb=etikett(namn,'',3.8,hex(farg));lb.position.y=1.8;m.add(lb);m.position.set(x,y,z);}
     else{const gem=!ch&&PARKER[id]&&PARKER[id].samlaForm==='kristall';m=add(ch?new THREE.Mesh(new THREE.BoxGeometry(1.3,1.3,1.3),new THREE.MeshLambertMaterial({map:siffraTextur(ch,'#E5484D','#fff',92)})):gem?gemModell([0x6BE0FF,0xB28DFF,0xFF7EDB][i%3]):new THREE.Mesh(stjarnaGeo(.85,.38,.3),M(0xFFD23F,{emissive:0x7a5a00})));m.position.set(x,y+(gem?.4:0),z);}
-    m.visible=!tagna.includes(i);
+    m.visible=!tagna.includes(i);S.fria.push({x,z,r:5});
     S.stjarnor.push({m,x,y,z,idx:i,bokstav:ch&&ch.length===1?ch:null,namn,fakta,biljett:form==='biljett',ton,tagen:tagna.includes(i),y0:y});});
 }
 const stjarnaText=()=>{const n=S.stjarnor.filter(s=>s.tagen).length,b=S.stjarnor.length&&S.stjarnor[0].bokstav,pl=S.stjarnor.length&&S.stjarnor[0].namn;$('stj').textContent=(S.samlaE?S.samlaE+' ':pl?'🪐 ':b?'🔤 ':'⭐ ')+n+' av '+S.stjarnor.length+(n===S.stjarnor.length?' 🎉':'');};
