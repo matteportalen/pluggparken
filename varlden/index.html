@@ -185,19 +185,43 @@ PARKER.rymdlabbet={namn:'Rymdlabbet',e:'🚀',c:0x1E9E5E,klot:true,R:40,toppH:9,
     {n:'Stjärnor & universum',e:'🌌',c:0xD6409F,prop:'galax',lat:15,lon:230,rik:4.4,p:[{n:'Jättarna i rymden',e:'⭐',h:'ovriga/rymdlabbet/#jattar'},{n:'Svarta hål',e:'⚫',h:'ovriga/rymdlabbet/#hal'},{n:'Stjärnhimlen',e:'🌠',h:'ovriga/rymdlabbet/#himmel'}]},
     {n:'Filmer',e:'🎬',c:0x7B61FF,prop:'skarm',lat:35,lon:25,rik:1.2,p:[{n:'Zooma ut i universum',e:'🔭',h:'ovriga/rymdlabbet/#film-zoom'},{n:'Inuti ett svart hål',e:'🕳️',h:'ovriga/rymdlabbet/#film-svarthal'},{n:'En stjärnas liv',e:'🌟',h:'ovriga/rymdlabbet/#film-stjarna'}]}],
   planeter:[['Merkurius',0xB5B0A8,.8,-15,55,'Den minsta planeten och närmast solen.'],['Venus',0xE8C27A,1.1,-40,70,'Den hetaste planeten.'],['Jorden',0x3D7BE0,1.1,35,120,'Vår planet, den enda med liv.'],['Mars',0xD9532E,.9,-10,190,'Den röda planeten.'],['Jupiter',0xD9A877,1.9,50,200,'Störst av alla planeter.'],['Saturnus',0xE9D08F,1.6,-50,250,'Den har stora ringar.'],['Uranus',0x8FE0E0,1.3,5,290,'Den rullar på sidan.'],['Neptunus',0x3D5AFE,1.3,-30,330,'Blå och längst bort från solen.']]};
-PARKER.so={namn:'SO-parken',e:'🌍',c:0xF2780C,O:46,oval:1.15,trad:'savann',samla:'varldsdelar',samlaE:'🌍',samlaAlla:'sju världsdelarna',tornNamn:'Utsiktstornet',
-  gras:0xD6B25A,sand:0xF0DCA0,vatten:0x2FB6C8,himmel:['#4FA8E8','#9FD3F2','#FFF1CC'],dimma:0xFFE9B8,molnFarg:0xFFFFFF,molnOp:.9,klippFarg:0xB5653A,
+const SO_KONT=[[24,12,7.5,'#3D5AFE','Europa','Här ligger Sverige.',0x3D5AFE,1.3],[44,-18,8.5,'#E5484D','Asien','Världens största världsdel.',0xE5484D,0],[-4,-20,7.5,'#F2B707','Afrika','Här finns Sahara, världens största varma öken.',0xF2B707,1.3],[-40,-22,8,'#1E9E5E','Nordamerika','Här ligger USA och Kanada.',0x1E9E5E,0],[-24,24,7,'#17AFC4','Sydamerika','Här finns Amazonas regnskog.',0x17AFC4,1.3],[44,20,6.5,'#FF9A5C','Oceanien','Här ligger Australien.',0xFF9A5C,1.3],[0,30,7,'#BFEFFF','Antarktis','Världens kallaste plats.',0xBFEFFF,0]];
+function kartaTextur(c,N,W){
+  const X=x=>(x+W)/(2*W)*N,Z=z=>(z+W)/(2*W)*N,sk=N/(2*W),R=th=>S.randR(th);
+  c.fillStyle='#8FD3E8';c.fillRect(0,0,N,N);
+  const poly=(d)=>{c.beginPath();for(let i=0;i<=200;i++){const th=i/200*Math.PI*2,r=R(th)+d;i?c.lineTo(X(Math.cos(th)*r),Z(Math.sin(th)*r)):c.moveTo(X(Math.cos(th)*r),Z(Math.sin(th)*r));}c.closePath();};
+  poly(1.5);c.fillStyle='#F5EAC0';c.fill();poly(-4);c.fillStyle='#EBD9A6';c.fill();
+  c.strokeStyle='rgba(120,90,40,.18)';c.lineWidth=1.5;for(let g=-W;g<=W;g+=12){c.beginPath();c.moveTo(X(g),0);c.lineTo(X(g),N);c.stroke();c.beginPath();c.moveTo(0,Z(g));c.lineTo(N,Z(g));c.stroke();}
+  SO_KONT.forEach(([x,z,r,col],k)=>{c.fillStyle=col+'88';for(let i=0;i<5;i++){const a=i*1.9+k,dx=Math.cos(a)*r*.45,dz=Math.sin(a)*r*.45;c.beginPath();c.ellipse(X(x+dx),Z(z+dz),r*sk*(.7+((i*3+k)%3)*.12),r*sk*(.55+((i*5+k)%3)*.1),a,0,7);c.fill();}
+    c.strokeStyle=col;c.lineWidth=3;c.beginPath();c.ellipse(X(x),Z(z),r*sk*1.1,r*sk*.9,0,0,7);c.stroke();});
+  // kompassros nere till höger
+  const cx=X(W*.62),cz=Z(W*.3),rr=sk*9;c.save();c.translate(cx,cz);c.fillStyle='#7A5A2B';for(let i=0;i<4;i++){c.rotate(Math.PI/2);c.beginPath();c.moveTo(0,-rr);c.lineTo(rr*.18,-rr*.2);c.lineTo(-rr*.18,-rr*.2);c.closePath();c.fill();}c.strokeStyle='#7A5A2B';c.lineWidth=2;c.beginPath();c.arc(0,0,rr*.55,0,7);c.stroke();c.restore();
+}
+PARKER.so={namn:'SO-parken',e:'🌍',c:0xF2780C,O:34,oval:1.94,trad:'karta',glest:true,samla:'varldsdelar',samlaE:'🌍',samlaAlla:'sju världsdelarna',tornNamn:'Utsiktstornet',textur:kartaTextur,
+  sand:0xF5EAC0,vatten:0x2FB6C8,himmel:['#4FA8E8','#9FD3F2','#FFF1CC'],dimma:0xFFE9B8,molnFarg:0xFFFFFF,molnOp:.9,klippFarg:0xB5653A,
   ljus:{h:0xFFF2D0,g:0xB08A50,hi:1.7,s:0xFFE2A0,si:2,sp:[40,50,10]},slant:9,
   hornor:[
-    {n:'Sverige',e:'🗺️',c:0x3D5AFE,prop:'flaggstang',x:-10,z:24,rik:Math.PI/2,h:2,p:[{n:'Sverigekartan',e:'🗺️',h:'ovriga/sverigekartan/'}]},
-    {n:'Europa & världen',e:'🌍',c:0x1E9E5E,prop:'jordglob',x:16,z:-8,rik:0,h:3.5,p:[{n:'Europakartan',e:'🌍',h:'ovriga/europa/'},{n:'Världskartan',e:'🌎',h:'ovriga/varlden/'}]},
-    {n:'Historia',e:'🏰',c:0xF2780C,prop:'pelare',x:40,z:20,rik:.3,h:4.5,p:[{n:'Tidslinjen',e:'🏰',h:'tidslinjen/'}]}],
-  kullar:[{x:-8,z:-26,rt:5,rs:5,h:-1.7},{x:-30,z:-4,rt:6,rs:14,h:3},{x:26,z:12,rt:5,rs:12,h:2.2}],
-  dammar:[{x:-8,z:-26,r:8,y:-.55}],
-  start:{x:-40,z:10,ang:1.2},tillbaka:{x:-46,z:18},tornPos:[30,-30],npc:{x:-34,z:12,namn:'Sandy',animal:'rav',farg:['#E8A24C','#B5672A'],hat:'solhatt'},
-  stigar:[[[-40,10],[-34,16],[-22,22],[-10,24]],[[-40,10],[-28,2],[-10,-2],[4,-6],[16,-8]],[[-10,24],[0,14],[10,4],[16,-8]],[[16,-8],[26,2],[36,12],[40,20]],[[16,-8],[22,-20],[30,-30]]],
-  klippor:[{x:-41,z:-16,s:3},{x:43,z:-18,s:1},{x:4,z:38,s:6}],
-  stjarnor:[[6,36,1.3,'Europa','Här ligger Sverige.',0x3D5AFE],[43,-18,0,'Asien','Världens största världsdel.',0xE5484D],[-20,-38,1.3,'Afrika','Här finns Sahara, världens största varma öken.',0xF2B707],[-41,-16,0,'Nordamerika','Här ligger USA och Kanada.',0x1E9E5E],[20,34,1.3,'Sydamerika','Här finns Amazonas regnskog.',0x17AFC4],[50,-2,1.3,'Oceanien','Här ligger Australien.',0xFF9A5C],[4,38,0,'Antarktis','Världens kallaste plats.',0xBFEFFF]]};
+    {n:'Stenåldern',e:'🔥',c:0x8A7F72,prop:'grotta',x:-36,z:-8,rik:Math.PI/2,h:1.5,p:[{n:'Tidslinjen',e:'🏰',h:'tidslinjen/'}]},
+    {n:'Vikingatiden',e:'⚓',c:0x3D5AFE,prop:'vikingaskepp',x:-10,z:18,rik:-Math.PI/3,h:1.5,p:[{n:'Sverigekartan',e:'🗺️',h:'ovriga/sverigekartan/'}]},
+    {n:'Medeltiden',e:'🏰',c:0x7B61FF,prop:'slott',x:14,z:-14,rik:Math.PI/2,h:2.5,p:[{n:'Europakartan',e:'🌍',h:'ovriga/europa/'}]},
+    {n:'Idag',e:'🏙️',c:0x1E9E5E,prop:'stad',x:40,z:8,rik:Math.PI/2,h:1.5,p:[{n:'Världskartan',e:'🌎',h:'ovriga/varlden/'}]}],
+  kullar:[{x:0,z:-4,rt:6,rs:12,h:2},{x:-26,z:8,rt:4,rs:10,h:1.5}],
+  start:{x:-54,z:2,ang:1.2},tillbaka:{x:-58,z:10},tornPos:[30,-26],npc:{x:-50,z:6,namn:'Sandy',animal:'rav',farg:['#E8A24C','#B5672A'],hat:'solhatt'},
+  stigar:[[[-54,2],[-48,-2],[-42,-8],[-36,-8]],[[-36,-8],[-26,4],[-18,14],[-10,18]],[[-10,18],[0,6],[8,-6],[14,-14]],[[14,-14],[26,-8],[34,0],[40,8]],[[14,-14],[22,-20],[30,-26]]],
+  klippor:[{x:-40,z:-22,s:3},{x:44,z:-18,s:1},{x:0,z:30,s:6}],
+  aktUppdrag:{typ:'ballong',e:'🎈',n:'Åk luftballongen över hela kartan',klart:'Du flög över hela kartan!'},
+  bana:()=>{bygBana({typ:'ballong',namn:'luftballongen',e:'🎈',off:1.2,r:6,
+    pts:[[-48,16],[-34,-18],[-6,-26],[22,-22],[46,-10],[52,12],[34,26],[6,30],[-22,26],[-40,24]],
+    prof:u=>{const k=smoothS(0,.1,u)*(1-smoothS(.9,1,u));return .8+k*(15+3*Math.sin(u*Math.PI*6));},
+    speed:u=>(u<.1||u>.9)?4.5:7,
+    visa:(P2)=>{const p=P2[0],pf=new THREE.Mesh(new THREE.CylinderGeometry(3.4,3.6,.35,18),M(0xE9D9B0));pf.position.set(p.x,S.hojd(p.x,p.z)+.18,p.z);S.W.add(pf);
+      const sk=etikett('Luftballongen','🎈',5.6,'#FF9A5C');sk.position.set(p.x,S.hojd(p.x,p.z)+13,p.z);S.W.add(sk);},
+    vagn:()=>{const g=new THREE.Group(),ko=new THREE.Mesh(new THREE.BoxGeometry(1.8,1,1.8),M(0x8A5A2B));ko.position.y=-.2;g.add(ko);
+      const c2=document.createElement('canvas');c2.width=128;c2.height=128;const q=c2.getContext('2d');for(let i=0;i<8;i++){q.fillStyle=['#E5484D','#FFC93C','#3D5AFE','#FFFFFF'][i%4];q.fillRect(i*16,0,16,128);}
+      const tx=new THREE.CanvasTexture(c2);tx.colorSpace=THREE.SRGBColorSpace;const en=new THREE.Mesh(new THREE.SphereGeometry(3.2,16,12),new THREE.MeshLambertMaterial({map:tx}));en.position.y=5.2;en.scale.y=1.2;g.add(en);
+      for(const[x,z]of[[-.8,-.8],[.8,-.8],[-.8,.8],[.8,.8]]){const r=new THREE.Mesh(new THREE.CylinderGeometry(.04,.04,3.6,4),M(0x444444));r.position.set(x*1.1,1.6,z*1.1);r.rotation.set(z*.12,0,-x*.12);g.add(r);}
+      return g;}});}};
+PARKER.so.stjarnor=SO_KONT.map(([x,z,r,col,namn,fakta,farg,dy])=>[x,z,dy,namn,fakta,farg]);
 PARKER.spel={namn:'Spel-parken',e:'🎮',c:0xFFB400,O:50,oval:1.2,trad:'host',tradPal:[0xFF7EB6,0xFFD23F,0x7FD6A8,0xB28DFF,0xFF9A5C],regn:true,tornNamn:'Hopptornet',tornDekor:'hjul',hjulDx:-12,karusell:{x:14,z:30},berg:[[-40,8],[-42,-8],[-38,-26],[-26,-38],[-8,-44],[10,-42],[26,-38],[42,-26],[50,-8],[48,12],[40,30],[24,40],[4,44],[-20,40],[-34,26]],samla:'biljetter',samlaE:'🎟️',samlaAlla:'biljetterna',
   gras:0x8EE08A,sand:0xFFE9A8,vatten:0x4CC3F0,himmel:['#7FB8F5','#FFD1E0','#FFF1D6'],dimma:0xFFE6EE,molnFarg:0xFFE3EF,molnOp:.9,klippFarg:0xC45A8A,
   ljus:{h:0xFFE8F0,g:0x8A7A9A,hi:1.7,s:0xFFD6A0,si:2,sp:[-40,30,30]},slant:9,
@@ -295,7 +319,7 @@ function rensaScen(){
   S=null;
 }
 const Y=(x,z)=>S.hojd(x,z);
-function nyScen(id,O){S={rides:[],ref:{},berg:null,hojd:()=>0,randR:null,a:O,b:O,id,O,W:new THREE.Group(),liv:[],kollider:[],portaler:[],stjarnor:[],plattformar:[],fria:[],flagga:null,npc:null,moln:[]};scene.add(S.W);sd=11;return S;}
+function nyScen(id,O){S={rides:[],ref:{},berg:null,banor:{},hojd:()=>0,randR:null,a:O,b:O,id,O,W:new THREE.Group(),liv:[],kollider:[],portaler:[],stjarnor:[],plattformar:[],fria:[],flagga:null,npc:null,moln:[]};scene.add(S.W);sd=11;return S;}
 const add=o=>{S.W.add(o);return o;};
 
 function ogrund(O,gras,sand,vattenFarg,oval){
@@ -385,7 +409,7 @@ function planteraKropp(D){
   rod.count=r1;vit.count=r2;
 }
 function planteraSavann(D){
-  const mm=new THREE.Matrix4(),qq=new THREE.Quaternion(),sc=new THREE.Vector3(),pp=new THREE.Vector3(),na=lagt?14:24,nc=lagt?12:22,ng=lagt?80:190;
+  const mm=new THREE.Matrix4(),qq=new THREE.Quaternion(),sc=new THREE.Vector3(),pp=new THREE.Vector3(),gl=D.glest?.35:1,na=Math.floor((lagt?14:24)*gl),nc=Math.floor((lagt?12:22)*gl),ng=Math.floor((lagt?80:190)*gl);
   const stam=add(new THREE.InstancedMesh(new THREE.CylinderGeometry(.2,.32,3.2,6),M(0x6B4A2A),na)),kr=add(new THREE.InstancedMesh(new THREE.SphereGeometry(2.6,9,6),M(0x8FA83C),na));
   let a=0;
   for(let f=0;a<na&&f<1500;f++){const[x,z]=slumpPunkt(3);if(!fri(x,z))continue;const k=.8+sr()*.6,y0=S.hojd(x,z);qq.setFromAxisAngle(new THREE.Vector3(0,1,0),sr()*3);
@@ -433,9 +457,10 @@ function plantera(O,kronFarg){
 function bygTerrang(D){
   const ov=D.oval||1,a=D.O*ov,b=D.O,p=D.form==='ruta'?6:2,wob=D.form==='ruta'?0:1;S.a=a;S.b=b;
   S.randR=th=>{const c=Math.abs(Math.cos(th)),s2=Math.abs(Math.sin(th));let r=1/(Math.pow(c/a,p)+Math.pow(s2/b,p))**(1/p);if(wob)r*=1+.06*Math.sin(3*th+1.3)+.04*Math.sin(5*th+.4);return r;};
+  if(D.rand)S.randR=D.rand;if(D.ext){S.a=D.ext[0];S.b=D.ext[1];}
   const kul=D.kullar;
   S.hojd=(x,z)=>{let hi=0,lo=0;for(const k of kul){const d=Math.hypot(x-k.x,z-k.z),t=Math.min(1,Math.max(0,(d-k.rt)/k.rs)),w=1-t*t*(3-2*t),v=k.h*w;if(v>hi)hi=v;if(v<lo)lo=v;}return hi+lo;};
-  const W=Math.max(a,b)+8,N=lagt?80:128,geo=new THREE.PlaneGeometry(2*W,2*W,N,N);geo.rotateX(-Math.PI/2);
+  const W=Math.max(S.a,S.b)+8,N=lagt?80:128,geo=new THREE.PlaneGeometry(2*W,2*W,N,N);geo.rotateX(-Math.PI/2);
   const pos=geo.attributes.position,col=new Float32Array(pos.count*3),gc=new THREE.Color(D.gras||0xffffff),sc2=new THREE.Color(D.sand),tmp=new THREE.Color();
   for(let i=0;i<pos.count;i++){
     const x=pos.getX(i),z=pos.getZ(i),d=S.randR(Math.atan2(z,x))-Math.hypot(x,z),k=Math.min(1,Math.max(0,d/5)),ks=k*k*(3-2*k),hh=S.hojd(x,z);
@@ -449,7 +474,8 @@ function bygTerrang(D){
     const c=document.createElement('canvas');c.width=c.height=128;const q=c.getContext('2d');q.fillStyle=hex(D.rutor[0]);q.fillRect(0,0,128,128);q.fillStyle=hex(D.rutor[1]);q.fillRect(0,0,64,64);q.fillRect(64,64,64,64);
     const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(W/3,W/3);
     mat=new THREE.MeshLambertMaterial({map:t,flatShading:true});
-  }else mat=new THREE.MeshLambertMaterial({vertexColors:true,flatShading:true});
+  }else if(D.textur){const N2=1024,c=document.createElement('canvas');c.width=c.height=N2;const q=c.getContext('2d');D.textur(q,N2,W);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=4;mat=new THREE.MeshLambertMaterial({map:t,flatShading:true});}
+  else mat=new THREE.MeshLambertMaterial({vertexColors:true,flatShading:true});
   add(new THREE.Mesh(geo,mat));
   const v=add(new THREE.Mesh(new THREE.CircleGeometry(300,48),new THREE.MeshLambertMaterial({color:D.vatten,transparent:true,opacity:.92})));v.rotation.x=-Math.PI/2;v.position.y=-2.2;
   // klippor och block längs kusten
@@ -794,6 +820,31 @@ function byggProp(typ,C,farg,g){
     const st=new THREE.Mesh(new THREE.CylinderGeometry(.35,.5,1.8,8),M(0xE8D2F0));st.position.set(.2,-1.8,-.3);gr.add(st);
     const nv=[];for(let i=0;i<6;i++){const a=i/6*Math.PI*2,n2=new THREE.Mesh(new THREE.CylinderGeometry(.05,.05,3.6,5),new THREE.MeshBasicMaterial({color:0xFFE08A}));n2.position.set(Math.cos(a)*1.7,-1.5,Math.sin(a)*1.7);n2.rotation.set(Math.sin(a)*.5,0,-Math.cos(a)*.5);g.add(n2);nv.push(n2);}
     S.liv.push(t=>{gr.rotation.y=t*.4;nv.forEach((n2,i)=>{n2.material.opacity=1;n2.scale.y=.85+Math.abs(Math.sin(t*3+i))*.3;});});
+  }else if(typ==='grotta'){
+    const st=M(0x8A7F72),dk=new THREE.MeshBasicMaterial({color:0x1B1612});
+    const dom=new THREE.Mesh(new THREE.SphereGeometry(3.8,12,8,0,Math.PI*2,0,Math.PI/2),st);dom.scale.y=.85;g.add(dom);
+    for(let i=0;i<7;i++){const a=-Math.PI*.9+i/6*Math.PI*1.8,b=new THREE.Mesh(new THREE.IcosahedronGeometry(1.1+((i*5)%3)*.3,0),st);b.position.set(Math.sin(a)*3.9,.7,-Math.cos(a)*3.9);b.rotation.set(i,i*2,i*3);g.add(b);}
+    const dr=new THREE.Mesh(new THREE.CircleGeometry(1.5,16),dk);dr.scale.y=1.4;dr.position.set(0,1.5,3.2);g.add(dr);
+    const eld=new THREE.Group();eld.position.set(0,.1,5.4);g.add(eld);
+    for(let i=0;i<5;i++){const a=i/5*Math.PI*2,ro=new THREE.Mesh(new THREE.IcosahedronGeometry(.3,0),st);ro.position.set(Math.cos(a)*.8,.2,Math.sin(a)*.8);eld.add(ro);}
+    const lg=[0xFF7A1A,0xFFC93C,0xFF4D1A].map((c,i)=>{const f=new THREE.Mesh(new THREE.ConeGeometry(.5-i*.1,1.5-i*.2,6),new THREE.MeshBasicMaterial({color:c}));f.position.y=.8;eld.add(f);return f;});
+    S.liv.push(t=>{lg.forEach((f,i)=>{f.scale.set(1,.8+Math.abs(Math.sin(t*9+i*2))*.5,1);});});
+  }else if(typ==='vikingaskepp'){
+    const gr=new THREE.Group();gr.position.y=.7;g.add(gr);const tra=M(0x8A5A2B);
+    const hull=new THREE.Mesh(new THREE.SphereGeometry(1,14,10),tra);hull.scale.set(4.4,.95,1.5);hull.position.y=.4;gr.add(hull);
+    for(const sx of[-1,1]){const pr=new THREE.Mesh(new THREE.ConeGeometry(.35,2.6,6),tra);pr.position.set(sx*4.3,1.7,0);pr.rotation.z=-sx*.35;gr.add(pr);const kn=new THREE.Mesh(new THREE.SphereGeometry(.4,8,6),M(0xE5484D));kn.position.set(sx*4.55,3,0);gr.add(kn);}
+    const ma=new THREE.Mesh(new THREE.CylinderGeometry(.1,.14,5.6,6),tra);ma.position.y=3.2;gr.add(ma);
+    const c2=document.createElement('canvas');c2.width=128;c2.height=128;const q=c2.getContext('2d');for(let i=0;i<8;i++){q.fillStyle=i%2?'#FFFFFF':'#E5484D';q.fillRect(i*16,0,16,128);}
+    const tx=new THREE.CanvasTexture(c2);tx.colorSpace=THREE.SRGBColorSpace;const sg=new THREE.Mesh(new THREE.PlaneGeometry(3.4,3.2),new THREE.MeshBasicMaterial({map:tx,side:THREE.DoubleSide}));sg.position.set(0,3.9,0);sg.rotation.y=Math.PI/2;gr.add(sg);
+    for(let i=0;i<6;i++){for(const sz of[-1,1]){const sk=new THREE.Mesh(new THREE.CylinderGeometry(.42,.42,.08,10),M(i%2?0xFFC93C:0x3D5AFE));sk.rotation.x=Math.PI/2;sk.position.set(-2.6+i*1.05,.9,sz*1.35);gr.add(sk);}}
+    S.liv.push(t=>{gr.rotation.z=Math.sin(t*1.1)*.05;gr.rotation.x=Math.sin(t*.8)*.04;gr.position.y=.7+Math.sin(t*1.1)*.1;});
+  }else if(typ==='stad'){
+    const c2=document.createElement('canvas');c2.width=64;c2.height=128;const q=c2.getContext('2d');q.fillStyle='#3B4B6B';q.fillRect(0,0,64,128);for(let y=6;y<124;y+=14)for(let x=6;x<60;x+=14){q.fillStyle=(x*y)%3?'#FFE08A':'#8FB4E8';q.fillRect(x,y,8,8);}
+    const tx=new THREE.CanvasTexture(c2);tx.colorSpace=THREE.SRGBColorSpace;tx.wrapS=tx.wrapT=THREE.RepeatWrapping;
+    [[-3,0,7,2.4],[0,-1,10.5,2.6],[3.2,.4,5.5,2.2],[0,3,8.5,2.4]].forEach(([x,z,h,w],i)=>{const t2=tx.clone();t2.needsUpdate=true;t2.repeat.set(w/2.4,h/6);const b=new THREE.Mesh(new THREE.BoxGeometry(w,h,w),new THREE.MeshLambertMaterial({map:t2}));b.position.set(x,h/2,z);g.add(b);});
+    const an=new THREE.Mesh(new THREE.CylinderGeometry(.06,.06,3,5),M(0xDDDDDD));an.position.set(0,12,-1);g.add(an);const li=new THREE.Mesh(new THREE.SphereGeometry(.22,8,6),new THREE.MeshBasicMaterial({color:0xFF3B3B}));li.position.set(0,13.6,-1);g.add(li);
+    const sch=new THREE.Mesh(new THREE.SphereGeometry(1.1,12,8,0,Math.PI*2,0,Math.PI/2),M(0xFFFFFF));sch.rotation.x=-1.1;sch.position.set(3.2,6,.4);g.add(sch);
+    S.liv.push(t=>{li.visible=Math.sin(t*3)>0;sch.rotation.y=t*.5;});
   }else if(typ==='galax'){
     const n=420,pp=new Float32Array(n*3),cc=new Float32Array(n*3),co=new THREE.Color();
     for(let i=0;i<n;i++){const arm=i%3,rr=.4+Math.pow(i/n,.7)*3.6,a=rr*1.3+arm*Math.PI*2/3+(Math.random()-.5)*.35;pp[i*3]=Math.cos(a)*rr;pp[i*3+1]=(Math.random()-.5)*.35;pp[i*3+2]=Math.sin(a)*rr;co.setHSL(.55+rr*.06,.8,.6+Math.random()*.25);cc[i*3]=co.r;cc[i*3+1]=co.g;cc[i*3+2]=co.b;}
@@ -831,8 +882,22 @@ function bygBerg(D){
   const car=new THREE.Group();const kr=new THREE.Mesh(new THREE.BoxGeometry(1.7,.55,3),M(0xE5484D));car.add(kr);
   const ba=new THREE.Mesh(new THREE.BoxGeometry(1.5,.7,.2),M(0xFFC93C));ba.position.set(0,.5,-1.2);car.add(ba);const no=new THREE.Mesh(new THREE.ConeGeometry(.6,.9,6),M(0xFFC93C));no.rotation.x=Math.PI/2;no.position.z=1.9;car.add(no);S.W.add(car);
   const sett=()=>{car.position.copy(p0).add(new THREE.Vector3(0,.45,0));car.lookAt(p0.clone().add(t0).add(new THREE.Vector3(0,.45,0)));};sett();
-  S.berg={P:P2,T:T2,N,L,ds,prof,car,reset:sett};S.rides.push({typ:'berg',x:p0.x,z:p0.z,r:6,namn:'berg-och-dalbanan',e:'🎢'});
+  S.berg={P:P2,T:T2,N,L,ds,prof,car,reset:sett,off:.45,closed:true,speed:u=>u<.12?5.5:Math.max(4,Math.sqrt(16+18*(16-prof(u))))};S.banor.berg=S.berg;S.rides.push({typ:'berg',x:p0.x,z:p0.z,r:6,namn:'berg-och-dalbanan',e:'🎢'});
   S.fria.push({x:p0.x,z:p0.z,r:8});
+}
+function bygBana(c){
+  const closed=c.closed!==false,cv=new THREE.CatmullRomCurve3(c.pts.map(([x,z])=>new THREE.Vector3(x,0,z)),closed,'catmullrom',.5),N=lagt?360:640,L=cv.getLength(),M2=closed?N:N-1,ds=L/M2;
+  const P2=[],T2=[];
+  for(let i=0;i<N;i++){const u=Math.min(.9999,i/M2),q=cv.getPointAt(u);P2.push(new THREE.Vector3(q.x,S.hojd(q.x,q.z)+c.prof(i/M2),q.z));}
+  for(let i=0;i<N;i++){const a=P2[closed?(i+1)%N:Math.min(N-1,i+1)],b=P2[closed?(i+N-1)%N:Math.max(0,i-1)];T2.push(a.clone().sub(b).normalize());}
+  const side=T2.map(t=>new THREE.Vector3(-t.z,0,t.x).normalize());
+  if(c.visa)c.visa(P2,T2,side,N);
+  const p0=P2[0],t0=T2[0];
+  const car=c.vagn(p0,t0);S.W.add(car);
+  const sett=()=>{car.position.copy(p0).add(new THREE.Vector3(0,c.off||.45,0));car.lookAt(p0.clone().add(t0).add(new THREE.Vector3(0,c.off||.45,0)));};sett();
+  S.banor[c.typ]={P:P2,T:T2,N,L,ds,speed:c.speed,car,reset:sett,off:c.off||.45,closed};
+  S.rides.push({typ:c.typ,x:p0.x,z:p0.z,r:c.r||6,namn:c.namn,e:c.e});S.fria.push({x:p0.x,z:p0.z,r:8});
+  return S.banor[c.typ];
 }
 function byggPark(id){
   const D=PARKER[id],sk=.72,sp=6.8;
@@ -879,12 +944,13 @@ function byggPark(id){
     S.liv.push(t=>{const d=Math.min(.05,t-R.last)||.016;R.last=t;R.ang+=d*(rida&&rida.typ==='hjul'?.24:.12);hj.rotation.z=R.ang;hj.children.forEach(c=>{if(c.userData.a!==undefined)c.rotation.z=-R.ang;});});
     const sk4=etikett('Pariserhjulet','🎡',5,'#FFC93C');sk4.position.set(wx,wb+19.5,tz);add(sk4);}
   if(D.berg)bygBerg(D);
+  if(D.bana)D.bana();
   if(D.karusell){const kx=D.karusell.x,kz=D.karusell.z,g=new THREE.Group();g.position.set(kx,S.hojd(kx,kz),kz);S.W.add(g);byggProp('karusell',null,0xFF9A5C,g);
     S.kollider.push({x:kx,z:kz,r:1,top:99});S.fria.push({x:kx,z:kz,r:9});const sk5=etikett('Karusellen','🎠',5,'#FF9A5C');sk5.position.set(0,8.6,0);g.add(sk5);}
   stjarnaUt(id,D.stjarnor);
   // klippor med en sak på toppen
   (D.klippor||[]).forEach(k=>{const top=klippa(k.x,k.z,D.klippFarg||0x8B7B6B);if(k.s!=null&&S.stjarnor[k.s]){const q=S.stjarnor[k.s];q.y=q.y0=top+1.2;q.m.position.y=q.y;}});
-  if(D.trad==='kristall'){planteraKristall(D.O);ljuspunkter(lagt?70:160,D.O,0xFFF3B0);}else if(D.trad==='host'){planteraHost(D.O,D.oval||1,D.tradPal);fallandeLov(lagt?30:70,D.O,D.oval||1,D.tradPal);if(D.regn)ballonger();}else if(D.trad==='savann')planteraSavann(D);else if(D.trad==='kropp'){planteraKropp(D);ljuspunkter(lagt?50:110,D.O,0xFFFFFF);}
+  if(D.trad==='kristall'){planteraKristall(D.O);ljuspunkter(lagt?70:160,D.O,0xFFF3B0);}else if(D.trad==='host'){planteraHost(D.O,D.oval||1,D.tradPal);fallandeLov(lagt?30:70,D.O,D.oval||1,D.tradPal);if(D.regn)ballonger();}else if(D.trad==='savann'||D.trad==='karta')planteraSavann(D);else if(D.trad==='kropp'){planteraKropp(D);ljuspunkter(lagt?50:110,D.O,0xFFFFFF);}
   atMoln(lagt?5:9,D.molnFarg,D.molnOp);
   byggNpc(D.npc);
   S.start=D.start;
@@ -1160,6 +1226,7 @@ function uppdragFor(id){
   else if(D.samla==='vokaler')lista.push({id:id+'-stj',e:'🔤',n:'Hitta alla vokaler: A E I O U Y Å Ä Ö',fram:()=>S.stjarnor.map(q=>q.tagen?q.bokstav:'_').join(' ')});
   else if(D.samla==='planeter')lista.push({id:id+'-stj',e:'🪐',n:'Hoppa efter alla 8 planeter',fram:()=>S.stjarnor.filter(q=>q.tagen).map(q=>q.namn).join(', ')||'inga än'});
   else lista.push({id:id+'-stj',e:'⭐',n:'Hitta de '+S.stjarnor.length+' gömda stjärnorna',fram:antalTagna});
+  if(D.aktUppdrag)lista.push({id:id+'-'+D.aktUppdrag.typ,e:D.aktUppdrag.e,n:D.aktUppdrag.n,fram:()=>''});
   if(D.berg)lista.push({id:id+'-akpass',e:'🎢',n:'Åkpasset: åk karusellen, pariserhjulet och berg-och-dalbanan',fram:()=>['karusell','hjul','berg'].filter(x=>SV.seen.includes('aka-'+x)).length+' av 3'});
   lista.push({id:id+'-torn',e:'🏁',n:(D.klot?'Hoppa upp på toppen av ':'Hoppa upp till flaggan på ')+(D.tornNamn||'Hopptornet'),fram:()=>''});
   return lista;
@@ -1212,6 +1279,7 @@ $('panelStang').addEventListener('click',()=>{$('panel').hidden=true;});
 /* ---------- Åkattraktioner: karusell, pariserhjul och berg-och-dalbana ---------- */
 let rida=null,narRide=null;const _v=new THREE.Vector3();
 function akt(typ){
+  const AU=PARKER[S.id]&&PARKER[S.id].aktUppdrag;if(AU&&AU.typ===typ){if(klart(S.id+'-'+typ,AU.klart))return;toast('Åkturen är slut!');pling(660,990);return;}
   const id='aka-'+typ;if(!SV.seen.includes(id)){SV.seen.push(id);sparaSV();}
   const n=['karusell','hjul','berg'].filter(x=>SV.seen.includes('aka-'+x)).length;
   if(n===3&&klart('spel-akpass','Du har åkt alla tre attraktionerna!'))return;
@@ -1224,16 +1292,16 @@ function startRida(r){
   else if(r.typ==='hjul'){const R=S.ref.hjul;let b=2;R.gonds.forEach((gd,i)=>{const sn=Math.sin(gd.userData.a+R.ang);if(sn<b){b=sn;rida.gond=i;}});rida.a0=R.ang;}
   else rida.s=0;
 }
-function slutRida(){const r=rida,f=r.fran;let fr=1;if(r.typ==='karusell')fr=r.t/r.dur;else if(r.typ==='hjul')fr=(S.ref.hjul.ang-r.a0)/(Math.PI*2);else fr=r.s/S.berg.L;
-  if(r.typ==='berg')S.berg.reset();rida=null;placera(f.x,f.z,f.yaw,camYaw);prompt.hidden=true;
+function slutRida(){const r=rida,f=r.fran;let fr=1;if(r.typ==='karusell')fr=r.t/r.dur;else if(r.typ==='hjul')fr=(S.ref.hjul.ang-r.a0)/(Math.PI*2);else fr=r.s/S.banor[r.typ].L;
+  if(S.banor[r.typ])S.banor[r.typ].reset();rida=null;placera(f.x,f.z,f.yaw,camYaw);prompt.hidden=true;
   if(fr>=.5)akt(r.typ);else toast('Du hoppade av. Åk lite längre nästa gång för att det ska räknas!');}
 function stegRida(dt){
   const r=rida;r.t+=dt;P.fartX=P.fartZ=0;P.vy=0;P.mark=true;
   if(r.typ==='karusell'){const R=S.ref.karusell;R.hs[r.hast].getWorldPosition(_v);P.x=_v.x;P.z=_v.z;P.y=_v.y+.5;P.ang=Math.atan2(_v.z-R.cz,-(_v.x-R.cx));if(r.t>r.dur)slutRida();}
   else if(r.typ==='hjul'){const R=S.ref.hjul;R.gonds[r.gond].getWorldPosition(_v);P.x=_v.x;P.z=_v.z;P.y=_v.y-.5;P.ang=0;if(R.ang-r.a0>=Math.PI*2-.04)slutRida();}
-  else{const B=S.berg,u=r.s/B.L,v=u<.12?5.5:Math.max(4,Math.sqrt(16+18*(16-B.prof(u))));r.s+=v*dt;if(r.s>=B.L-.1){slutRida();return;}
+  else{const B=S.banor[r.typ],u=r.s/B.L,v=B.speed(u);r.s+=v*dt;if(r.s>=B.L-.1){slutRida();return;}
     const f=r.s/B.ds,i0=Math.floor(f)%B.N,i1=(i0+1)%B.N,k=f-Math.floor(f),a=B.P[i0],b=B.P[i1],ta=B.T[i0],tb=B.T[i1];
-    const x=a.x+(b.x-a.x)*k,y=a.y+(b.y-a.y)*k+.45,z=a.z+(b.z-a.z)*k,tx=ta.x+(tb.x-ta.x)*k,ty=ta.y+(tb.y-ta.y)*k,tz=ta.z+(tb.z-ta.z)*k;
+    const x=a.x+(b.x-a.x)*k,y=a.y+(b.y-a.y)*k+B.off,z=a.z+(b.z-a.z)*k,tx=ta.x+(tb.x-ta.x)*k,ty=ta.y+(tb.y-ta.y)*k,tz=ta.z+(tb.z-ta.z)*k;
     B.car.position.set(x,y,z);B.car.lookAt(x+tx*3,y+ty*3,z+tz*3);P.x=x;P.y=y;P.z=z;P.ang=Math.atan2(tx,tz);
     let d=P.ang-camYaw;d=Math.atan2(Math.sin(d),Math.cos(d));camYaw+=d*Math.min(1,1.6*dt);}
 }
