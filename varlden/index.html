@@ -189,12 +189,7 @@ Object.assign(PARKER.svenska,{O:44,oval:1.45,form:'ruta',trad:'bok',textur:bokte
     pts:[[-6,-34],[-10,-22],[-4,-10],[4,2],[-2,14],[-8,26],[-8,40]],
     prof:u=>6.6*Math.pow(1-u,1.15)+.5*u*0,
     speed:u=>Math.max(4,Math.sqrt(16+18*(6.6-6.6*Math.pow(1-u,1.15)))),
-    visa:(P2,T2,side,N)=>{const pos=[],idx=[];for(let i=0;i<N;i++){for(const sg of[-1,1]){const q=P2[i].clone().addScaledVector(side[i],1.3*sg);pos.push(q.x,q.y+.05,q.z);}if(i<N-1){const k=i*2;idx.push(k,k+1,k+2,k+1,k+3,k+2);}}
-      const ge=new THREE.BufferGeometry();ge.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));ge.setIndex(idx);ge.computeVertexNormals();S.W.add(new THREE.Mesh(ge,new THREE.MeshLambertMaterial({color:0xE5484D,side:THREE.DoubleSide})));
-      for(const sg of[-1,1]){const pts=P2.map((p,i)=>p.clone().addScaledVector(side[i],1.4*sg).add(new THREE.Vector3(0,.3,0)));S.W.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),N,.17,5,false),M(0xFFC93C)));}
-      const ns=Math.floor(N/16),sp=new THREE.InstancedMesh(new THREE.CylinderGeometry(.12,.16,1,5),M(0x8A5A2B),ns),mm=new THREE.Matrix4(),qq=new THREE.Quaternion(),sc=new THREE.Vector3();
-      for(let k=0;k<ns;k++){const p=P2[k*16],gy=S.hojd(p.x,p.z),h=Math.max(.01,p.y-.2-gy);sc.set(1,h,1);sp.setMatrixAt(k,mm.compose(new THREE.Vector3(p.x,gy+h/2,p.z),qq,sc));}S.W.add(sp);
-      const p=P2[0],sk=etikett('Rutschkanan','🛝',5,'#E5484D');sk.position.set(p.x,p.y+3.2,p.z);S.W.add(sk);},
+    visa:rutschVisa(0xE5484D,0xFFC93C,'Rutschkanan','🛝'),
     vagn:()=>{const g=new THREE.Group(),b=new THREE.Mesh(new THREE.BoxGeometry(1.6,.3,2.2),M(0x3D5AFE));b.position.y=-.2;g.add(b);const s2=new THREE.Mesh(new THREE.BoxGeometry(1.5,.12,2.1),M(0xFFF7E0));s2.position.y=-.02;g.add(s2);return g;}});}});
 [{x:-38,z:-12,rik:Math.PI/2,h:1},{x:-40,z:26,rik:-.4,h:1.2},{x:24,z:-26,rik:Math.PI/2,h:1.2},{x:38,z:8,rik:Math.PI/2,h:1},{x:12,z:24,rik:-Math.PI/2,h:1.2}].forEach((l,i)=>Object.assign(PARKER.svenska.hornor[i],l));
 PARKER.rymdlabbet={namn:'Rymdlabbet',e:'🚀',c:0x1E9E5E,klot:true,R:40,toppH:9,topp:[45,310],mark:0xBDB8CC,samla:'planeter',tornNamn:'Månberget',
@@ -207,8 +202,9 @@ PARKER.rymdlabbet={namn:'Rymdlabbet',e:'🚀',c:0x1E9E5E,klot:true,R:40,toppH:9,
     {n:'Filmer',e:'🎬',c:0x7B61FF,prop:'skarm',lat:35,lon:25,rik:1.2,p:[{n:'Zooma ut i universum',e:'🔭',h:'ovriga/rymdlabbet/#film-zoom'},{n:'Inuti ett svart hål',e:'🕳️',h:'ovriga/rymdlabbet/#film-svarthal'},{n:'En stjärnas liv',e:'🌟',h:'ovriga/rymdlabbet/#film-stjarna'}]}],
   planeter:[['Merkurius',0xB5B0A8,.8,-15,55,'Den minsta planeten och närmast solen.'],['Venus',0xE8C27A,1.1,-40,70,'Den hetaste planeten.'],['Jorden',0x3D7BE0,1.1,35,120,'Vår planet, den enda med liv.'],['Mars',0xD9532E,.9,-10,190,'Den röda planeten.'],['Jupiter',0xD9A877,1.9,50,200,'Störst av alla planeter.'],['Saturnus',0xE9D08F,1.6,-50,250,'Den har stora ringar.'],['Uranus',0x8FE0E0,1.3,5,290,'Den rullar på sidan.'],['Neptunus',0x3D5AFE,1.3,-30,330,'Blå och längst bort från solen.']]};
 const SO_KONT=[[24,12,7.5,'#3D5AFE','Europa','Här ligger Sverige.',0x3D5AFE,1.3],[44,-18,8.5,'#E5484D','Asien','Världens största världsdel.',0xE5484D,0],[-4,-20,7.5,'#F2B707','Afrika','Här finns Sahara, världens största varma öken.',0xF2B707,1.3],[-40,-22,8,'#1E9E5E','Nordamerika','Här ligger USA och Kanada.',0x1E9E5E,0],[-24,24,7,'#17AFC4','Sydamerika','Här finns Amazonas regnskog.',0x17AFC4,1.3],[44,20,6.5,'#FF9A5C','Oceanien','Här ligger Australien.',0xFF9A5C,1.3],[0,30,7,'#BFEFFF','Antarktis','Världens kallaste plats.',0xBFEFFF,0]];
-function kartaTextur(c,N,W){
-  const X=x=>(x+W)/(2*W)*N,Z=z=>(z+W)/(2*W)*N,sk=N/(2*W),R=th=>S.randR(th);
+function kartaTextur(c,N,W0,KK){
+  const W=W0/(KK||1);
+  const X=x=>(x+W)/(2*W)*N,Z=z=>(z+W)/(2*W)*N,sk=N/(2*W),R=th=>S.randR(th)/(KK||1);
   c.fillStyle='#8FD3E8';c.fillRect(0,0,N,N);
   const poly=(d)=>{c.beginPath();for(let i=0;i<=200;i++){const th=i/200*Math.PI*2,r=R(th)+d;i?c.lineTo(X(Math.cos(th)*r),Z(Math.sin(th)*r)):c.moveTo(X(Math.cos(th)*r),Z(Math.sin(th)*r));}c.closePath();};
   poly(1.5);c.fillStyle='#F5EAC0';c.fill();poly(-4);c.fillStyle='#EBD9A6';c.fill();
@@ -272,6 +268,34 @@ PARKER.kroppen={namn:'Kroppen',e:'🫀',c:0xE0558A,O:46,oval:1.15,trad:'kropp',s
   stigar:[[[-40,12],[-36,6],[-32,0],[-30,-6]],[[-40,12],[-30,18],[-18,22],[-8,22]],[[-8,22],[4,18],[14,14],[24,10]],[[-8,22],[-4,8],[0,-6],[6,-22]],[[6,-22],[20,-20],[34,-18]],[[-30,-6],[-20,-8],[-6,-14],[6,-22]]],
   klippor:[{x:-24,z:-30,s:7},{x:42,z:-2,s:0},{x:-4,z:36,s:2}],
   stjarnor:[[42,-2,0,'Hjärtat','Det pumpar runt blodet i hela kroppen.',0xE5484D],[-40,-12,1.3,'Lungorna','Där tar kroppen upp syre när vi andas.',0xFFB3C1],[-4,36,0,'Hjärnan','Den styr kroppen och hjälper oss att tänka.',0xC9A0DC],[26,-32,1.3,'Magsäcken','Där blandas maten med magsaft.',0xFF9A7A],[14,30,1.3,'Levern','Den hjälper kroppen att ta hand om näringen.',0x8A4B3A],[-26,30,1.3,'Njurarna','De rengör blodet.',0xB5535A],[36,24,1.3,'Tunntarmen','Där tas näringen från maten upp i blodet.',0xFFC9A8],[-24,-30,0,'Urinblåsan','Där samlas kissen.',0xFFE08A]]};
+{const angd=(a,b)=>{const d=a-b;return Math.atan2(Math.sin(d),Math.cos(d));};
+Object.assign(PARKER.kroppen,{form:'rund',ext:[58,38],oval:1,O:26,textur:kroppstextur,
+  rand:th=>{let r=1/Math.sqrt(Math.pow(Math.cos(th)/38,2)+Math.pow(Math.sin(th)/26,2));r+=18*Math.exp(-Math.pow(angd(th,Math.PI)/.5,2));
+    r+=11*(Math.exp(-Math.pow(angd(th,Math.PI/2)/.28,2))+Math.exp(-Math.pow(angd(th,-Math.PI/2)/.28,2)));r+=16*(Math.exp(-Math.pow(angd(th,.28)/.22,2))+Math.exp(-Math.pow(angd(th,-.28)/.22,2)));return r;},
+  tornNamn:'Munnen',tornFarg:[0xFFB3C1,0xFF8FA3,0xFFB3C1,0xFF8FA3,0xFFE08A],
+  kullar:[{x:-6,z:0,rt:12,rs:20,h:2}],dammar:[{x:44,z:6,r:5,y:.12,farg:0xBFEFFF}],
+  start:{x:-36,z:2,ang:.0},tillbaka:{x:-34,z:12},tornPos:[-42,12],npc:{x:-32,z:6,namn:'Doktor Kanin',animal:'kanin',farg:['#FFFFFF','#E0D8F0'],hat:'ingen'},
+  stigar:[[[-36,2],[-40,-1],[-44,-4]],[[-36,2],[-30,-2],[-22,-6]],[[-22,-6],[-10,-10],[0,-8]],[[0,-8],[10,-4],[22,-6]],[[-36,2],[-38,8],[-42,12]]],
+  klippor:[{x:30,z:-16,s:0},{x:-40,z:-14,s:2},{x:-16,z:-16,s:7}],
+  stjarnor:[[30,-16,0,'Hjärtat','Det pumpar runt blodet i hela kroppen.',0xE5484D],[-14,18,1.3,'Lungorna','Där tar kroppen upp syre när vi andas.',0xFFB3C1],[-40,-14,0,'Hjärnan','Den styr kroppen och hjälper oss att tänka.',0xC9A0DC],[14,-18,1.3,'Magsäcken','Där blandas maten med magsaft.',0xFF9A7A],[-6,-20,1.3,'Levern','Den hjälper kroppen att ta hand om näringen.',0x8A4B3A],[4,20,1.3,'Njurarna','De rengör blodet.',0xB5535A],[20,-14,1.3,'Tunntarmen','Där tas näringen från maten upp i blodet.',0xFFC9A8],[-16,-16,0,'Urinblåsan','Där samlas kissen.',0xFFE08A]],
+  aktUppdrag:{typ:'rutsch',e:'🛝',n:'Åk matsmältningsrutschkanan genom tarmarna',klart:'Du åkte genom hela matsmältningen!'},
+  bana:()=>{bygBana({typ:'rutsch',namn:'rutschkanan',e:'🛝',closed:false,slut:true,hy:true,off:.55,r:5,
+    pts:[[-42,12],[-34,18],[-22,10],[-12,18],[0,8],[12,18],[24,8],[36,14],[44,6]],
+    prof:u=>6.6*Math.pow(1-u,1.15),speed:u=>Math.max(4,Math.sqrt(16+18*(6.6-6.6*Math.pow(1-u,1.15)))),
+    visa:rutschVisa(0xFFB38A,0xFF8A65,'Matsmältningen','🛝'),
+    vagn:()=>{const g=new THREE.Group(),r=new THREE.Mesh(new THREE.TorusGeometry(.9,.35,8,16),M(0xFF8A65));r.rotation.x=Math.PI/2;r.position.y=-.1;g.add(r);return g;}});}});
+[{x:-22,z:-6,rik:-Math.PI/2,h:1.2},{x:-44,z:-4,rik:Math.PI,h:1.5},{x:0,z:-8,rik:-Math.PI/2,h:1.5},{x:22,z:-6,rik:-Math.PI/2,h:1}].forEach((l,i)=>{const ord=['Hjärtat','Hjärnan','Syret','Maten'];const h=PARKER.kroppen.hornor.find(q=>q.n===ord[i]);Object.assign(h,l);});}
+/* Mer yta: varje ö förstoras genom att alla platser i datat flyttas ut (föremålen behåller sin storlek, så det blir luftigare). */
+function skalaPark(D,k){
+  D.skala=k;D.O*=k;if(D.ext)D.ext=D.ext.map(v=>v*k);
+  const xz=o=>{if(o){o.x*=k;o.z*=k;}};
+  (D.hornor||[]).forEach(xz);xz(D.start);xz(D.tillbaka);xz(D.npc);xz(D.karusell);xz(D.ordbro);(D.kullar||[]).forEach(xz);(D.dammar||[]).forEach(xz);(D.klippor||[]).forEach(xz);
+  if(D.tornPos)D.tornPos=D.tornPos.map(v=>v*k);
+  if(D.stigar)D.stigar=D.stigar.map(l=>l.map(([x,z])=>[x*k,z*k]));
+  if(D.stjarnor)D.stjarnor.forEach(a=>{a[0]*=k;a[1]*=k;});
+  if(D.berg)D.berg=D.berg.map(([x,z])=>[x*k,z*k]);
+}
+skalaPark(PARKER.matte,1.3);skalaPark(PARKER.svenska,1.25);skalaPark(PARKER.so,1.3);skalaPark(PARKER.spel,1.45);skalaPark(PARKER.kroppen,1.25);
 const RING=27,O_HUB=40;
 
 /* ---------- Prydnader (belöningar, syns på huvudön) ---------- */
@@ -415,6 +439,20 @@ function ballonger(){
     sc.set(1,h/3,1);pp.set(x,y0+h/2,z);st.setMatrixAt(c,mm.compose(pp,qq,sc));c++;}
   ba.count=st.count=c;
 }
+function kroppstextur(c,N,W0,KK){
+  const W=W0/(KK||1);
+  const X=x=>(x+W)/(2*W)*N,Z=z=>(z+W)/(2*W)*N,sk=N/(2*W),R=th=>S.randR(th)/(KK||1);
+  c.fillStyle='#FFCAD4';c.fillRect(0,0,N,N);
+  const poly=d=>{c.beginPath();for(let i=0;i<=240;i++){const th=i/240*Math.PI*2,r=R(th)+d;i?c.lineTo(X(Math.cos(th)*r),Z(Math.sin(th)*r)):c.moveTo(X(Math.cos(th)*r),Z(Math.sin(th)*r));}c.closePath();};
+  poly(1.5);c.fillStyle='#E89AA6';c.fill();poly(-2);c.fillStyle='#F9C5B5';c.fill();
+  // organ under hörnen
+  const bl=(x,z,rx,rz,col)=>{c.fillStyle=col;c.beginPath();c.ellipse(X(x),Z(z),rx*sk,rz*sk,0,0,7);c.fill();};
+  bl(-44,-4,10,9,'rgba(201,160,220,.55)');bl(-22,-6,7,7,'rgba(229,72,77,.5)');bl(-4,-8,6,9,'rgba(255,179,193,.7)');bl(4,-8,6,9,'rgba(255,179,193,.7)');bl(22,-6,9,6,'rgba(255,154,122,.55)');
+  // blodådror: röda och blå slingor
+  let sd2=9;const rr=()=>{sd2=(sd2*16807)%2147483647;return(sd2-1)/2147483646;};
+  for(let k=0;k<16;k++){const x0=-48+rr()*96,z0=-20+rr()*40;c.strokeStyle=k%2?'rgba(229,72,77,.5)':'rgba(61,90,254,.4)';c.lineWidth=(.5+rr()*.5)*sk;c.lineCap='round';c.beginPath();c.moveTo(X(x0),Z(z0));
+    for(let t=1;t<=5;t++){c.quadraticCurveTo(X(x0+t*7+rr()*8-4),Z(z0+(rr()-.5)*18),X(x0+t*9),Z(z0+(rr()-.5)*14));}c.stroke();}
+}
 function planteraKropp(D){
   const mm=new THREE.Matrix4(),qq=new THREE.Quaternion(),sc=new THREE.Vector3(),pp=new THREE.Vector3(),pal=[0xFF8FA3,0xFF6F91,0xFFB3C1,0xFFCFA3,0xE85D75],n=lagt?24:40;
   const stam=add(new THREE.InstancedMesh(new THREE.CylinderGeometry(.22,.34,2.4,7),M(0xFFE9D8),n)),kr=add(new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1.7,1),new THREE.MeshLambertMaterial({color:0xffffff}),n)),kr2=add(new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1.1,1),new THREE.MeshLambertMaterial({color:0xffffff}),n));let c=0;
@@ -429,6 +467,14 @@ function planteraKropp(D){
     if(r1%4===3&&r2<vit.count){vit.setMatrixAt(r2++,mm.compose(pp,qq,sc));}else rod.setMatrixAt(r1,mm.compose(pp,qq,sc));r1++;}
   rod.count=r1;vit.count=r2;
 }
+const rutschVisa=(band,rail,namn,e)=>(P2,T2,side,N)=>{
+  const pos=[],idx=[];for(let i=0;i<N;i++){for(const sg of[-1,1]){const q=P2[i].clone().addScaledVector(side[i],1.3*sg);pos.push(q.x,q.y+.05,q.z);}if(i<N-1){const k=i*2;idx.push(k,k+1,k+2,k+1,k+3,k+2);}}
+  const ge=new THREE.BufferGeometry();ge.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));ge.setIndex(idx);ge.computeVertexNormals();S.W.add(new THREE.Mesh(ge,new THREE.MeshLambertMaterial({color:band,side:THREE.DoubleSide})));
+  for(const sg of[-1,1]){const pts=P2.map((p,i)=>p.clone().addScaledVector(side[i],1.4*sg).add(new THREE.Vector3(0,.3,0)));S.W.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),N,.17,5,false),M(rail)));}
+  const ns=Math.floor(N/16),sp=new THREE.InstancedMesh(new THREE.CylinderGeometry(.12,.16,1,5),M(0x8A5A2B),ns),mm=new THREE.Matrix4(),qq=new THREE.Quaternion(),sc=new THREE.Vector3();
+  for(let k=0;k<ns;k++){const p=P2[k*16],gy=S.hojd(p.x,p.z),h=Math.max(.01,p.y-.2-gy);sc.set(1,h,1);sp.setMatrixAt(k,mm.compose(new THREE.Vector3(p.x,gy+h/2,p.z),qq,sc));}S.W.add(sp);
+  const p=P2[0],sk=etikett(namn,e,5.4,hex(band));sk.position.set(p.x,p.y+3.2,p.z);S.W.add(sk);
+};
 function bygOrdbro(D){
   const o=D.ordbro,n=o.ord.length,pal=[0xE5484D,0x3D5AFE,0x1E9E5E,0xF2B707,0x7B61FF,0xFF7EB6];let last=null;
   for(let i=0;i<n;i++){const x=o.x+i*4.2,z=o.z+Math.sin(i*1.1)*2,b=S.hojd(x,z),h=b+.9+i*1.05;
@@ -452,8 +498,9 @@ function planteraBok(D){
     pp.set(x,y0+1.7,z);pe.setMatrixAt(q,mm.compose(pp,qq,sc));pp.set(x,y0+3.7,z);sp.setMatrixAt(q,mm.compose(pp,qq,sc));S.kollider.push({x,z,r:.4,top:99});q++;}
   pe.count=sp.count=q;
 }
-function boktextur(c,N,W){
-  const X=x=>(x+W)/(2*W)*N,Z=z=>(z+W)/(2*W)*N,sk=N/(2*W),R=th=>S.randR(th);
+function boktextur(c,N,W0,KK){
+  const W=W0/(KK||1);
+  const X=x=>(x+W)/(2*W)*N,Z=z=>(z+W)/(2*W)*N,sk=N/(2*W),R=th=>S.randR(th)/(KK||1);
   c.fillStyle='#5E9BB0';c.fillRect(0,0,N,N);
   const poly=d=>{c.beginPath();for(let i=0;i<=240;i++){const th=i/240*Math.PI*2,r=R(th)+d;i?c.lineTo(X(Math.cos(th)*r),Z(Math.sin(th)*r)):c.moveTo(X(Math.cos(th)*r),Z(Math.sin(th)*r));}c.closePath();};
   poly(2.5);c.fillStyle='#8A4E2B';c.fill();poly(.8);c.fillStyle='#C99B6A';c.fill();poly(-2.2);c.fillStyle='#FBF3DC';c.fill();
@@ -514,7 +561,7 @@ function plantera(O,kronFarg){
 function bygTerrang(D){
   const ov=D.oval||1,a=D.O*ov,b=D.O,p=D.form==='ruta'?6:2,wob=D.form==='ruta'?0:1;S.a=a;S.b=b;
   S.randR=th=>{const c=Math.abs(Math.cos(th)),s2=Math.abs(Math.sin(th));let r=1/(Math.pow(c/a,p)+Math.pow(s2/b,p))**(1/p);if(wob)r*=1+.06*Math.sin(3*th+1.3)+.04*Math.sin(5*th+.4);return r;};
-  if(D.rand)S.randR=D.rand;if(D.ext){S.a=D.ext[0];S.b=D.ext[1];}
+  if(D.rand){const kk=D.skala||1;S.randR=th=>D.rand(th)*kk;}if(D.ext){S.a=D.ext[0];S.b=D.ext[1];}
   const kul=D.kullar;
   S.hojd=(x,z)=>{let hi=0,lo=0;for(const k of kul){const d=Math.hypot(x-k.x,z-k.z),t=Math.min(1,Math.max(0,(d-k.rt)/k.rs)),w=1-t*t*(3-2*t),v=k.h*w;if(v>hi)hi=v;if(v<lo)lo=v;}return hi+lo;};
   const W=Math.max(S.a,S.b)+8,N=lagt?80:128,geo=new THREE.PlaneGeometry(2*W,2*W,N,N);geo.rotateX(-Math.PI/2);
@@ -531,7 +578,7 @@ function bygTerrang(D){
     const c=document.createElement('canvas');c.width=c.height=128;const q=c.getContext('2d');q.fillStyle=hex(D.rutor[0]);q.fillRect(0,0,128,128);q.fillStyle=hex(D.rutor[1]);q.fillRect(0,0,64,64);q.fillRect(64,64,64,64);
     const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(W/3,W/3);
     mat=new THREE.MeshLambertMaterial({map:t,flatShading:true});
-  }else if(D.textur){const N2=1024,c=document.createElement('canvas');c.width=c.height=N2;const q=c.getContext('2d');D.textur(q,N2,W);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=4;mat=new THREE.MeshLambertMaterial({map:t,flatShading:true});}
+  }else if(D.textur){const N2=1024,c=document.createElement('canvas');c.width=c.height=N2;const q=c.getContext('2d');D.textur(q,N2,W,D.skala||1);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=4;mat=new THREE.MeshLambertMaterial({map:t,flatShading:true});}
   else mat=new THREE.MeshLambertMaterial({vertexColors:true,flatShading:true});
   add(new THREE.Mesh(geo,mat));
   const v=add(new THREE.Mesh(new THREE.CircleGeometry(300,48),new THREE.MeshLambertMaterial({color:D.vatten,transparent:true,opacity:.92})));v.rotation.x=-Math.PI/2;v.position.y=-2.2;
@@ -943,7 +990,7 @@ function bygBerg(D){
   S.fria.push({x:p0.x,z:p0.z,r:8});
 }
 function bygBana(c){
-  const closed=c.closed!==false,cv=new THREE.CatmullRomCurve3(c.pts.map(([x,z])=>new THREE.Vector3(x,0,z)),closed,'catmullrom',.5),N=lagt?360:640,L=cv.getLength(),M2=closed?N:N-1,ds=L/M2;
+  const closed=c.closed!==false,cv=new THREE.CatmullRomCurve3(c.pts.map(([x,z])=>new THREE.Vector3(x*(S.skala||1),0,z*(S.skala||1))),closed,'catmullrom',.5),N=lagt?360:640,L=cv.getLength(),M2=closed?N:N-1,ds=L/M2;
   const P2=[],T2=[];
   for(let i=0;i<N;i++){const u=Math.min(.9999,i/M2),q=cv.getPointAt(u);P2.push(new THREE.Vector3(q.x,S.hojd(q.x,q.z)+c.prof(i/M2),q.z));}
   for(let i=0;i<N;i++){const a=P2[closed?(i+1)%N:Math.min(N-1,i+1)],b=P2[closed?(i+N-1)%N:Math.max(0,i-1)];T2.push(a.clone().sub(b).normalize());}
@@ -959,7 +1006,7 @@ function bygBana(c){
 function byggPark(id){
   const D=PARKER[id],sk=.72,sp=6.8;
   nyScen(id,D.O);himmel(D.himmel);scene.fog.color.set(D.dimma);stallLjus(D.ljus);
-  S.tornNamn=D.tornNamn||'Hopptornet';S.samla=D.samla||'stjarnor';S.samlaE=D.samlaE;S.samlaAlla=D.samlaAlla;
+  S.skala=D.skala||1;S.tornNamn=D.tornNamn||'Hopptornet';S.samla=D.samla||'stjarnor';S.samlaE=D.samlaE;S.samlaAlla=D.samlaAlla;
   // kullar: startplatsen, hörnens platåer (portalerna står på dem) och några extra
   const kul=[{x:D.start.x,z:D.start.z,rt:6,rs:6,h:.5}].concat(D.kullar||[]);
   D.hornor.forEach(h=>{h.ra=Math.max(6.5,sp*(h.p.length-1)/2.6);kul.push({x:h.x,z:h.z,rt:h.ra+3.5,rs:D.slant||9,h:h.h});});
