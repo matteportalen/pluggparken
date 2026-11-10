@@ -62,6 +62,10 @@ body.touch #stick,body.touch #jump{display:block}
 #dlg p{margin:0 0 14px;font-size:1.15rem;font-weight:700;line-height:1.35}
 #dlgKn{display:flex;gap:10px;flex-wrap:wrap}
 #dlgKn .pri{background:#FFC93C;box-shadow:0 4px 0 #C99A0A}
+#pil{position:fixed;left:calc(10px + env(safe-area-inset-left,0px));top:calc(66px + env(safe-area-inset-top,0px));z-index:4;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.92);border-radius:999px;padding:4px 14px 4px 6px;box-shadow:0 4px 0 var(--line);font-weight:800}
+#pil[hidden]{display:none}
+#pilI{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:#FFC93C;font-size:1.3rem;transition:transform .1s}
+#pil small{font-size:.9rem;font-weight:800;color:#1D2B53}
 #toast{position:fixed;left:50%;top:calc(80px + env(safe-area-inset-top,0px));transform:translate(-50%,-20px);max-width:min(92vw,520px);background:#1E9E5E;color:#fff;font-weight:800;line-height:1.3;border-radius:20px;padding:12px 18px;z-index:14;opacity:0;pointer-events:none;transition:opacity .4s,transform .4s;text-align:center}
 #toast.syns{opacity:1;transform:translate(-50%,0)}
 #stj{font-weight:800}
@@ -79,6 +83,7 @@ body.touch #stick,body.touch #jump{display:block}
 <button id="jump" type="button" aria-label="Hoppa">Hoppa</button>
 <div id="panel" hidden><div id="panelInn"></div><button class="btn" id="panelStang" type="button">Stäng</button></div>
 <div id="dlg" hidden role="dialog" aria-modal="true" aria-label="Samtal"><div class="box"><div class="who">🤖 <b id="dlgNamn">Piff</b></div><p id="dlgTxt"></p><div id="dlgKn"></div></div></div>
+<div id="pil" hidden aria-live="off"><span id="pilI">▲</span><small id="pilT"></small></div>
 <div id="toast" role="status" aria-live="polite"></div>
 <div id="fade"></div>
 <div id="load"><div><span class="em" id="ldEm">🦉</span>Laddar världen…</div></div>
@@ -115,7 +120,7 @@ const HUB=[
   {n:'Svenska-parken',e:'📖',scen:'svenska',c:0xE5484D},
   {n:'Spel',e:'🎮',h:'spel/',c:0xFFB400},
   {n:'SO',e:'🌍',h:'so/',c:0xF2780C},
-  {n:'Rymdlabbet',e:'🚀',h:'ovriga/rymdlabbet/',c:0x1E9E5E},
+  {n:'Rymdlabbet',e:'🚀',scen:'rymdlabbet',c:0x1E9E5E},
   {n:'Kroppen',e:'🫀',h:'anatomi/',c:0xE0558A},
   {n:'Specialare',e:'✨',h:'specialare/',c:0x7B61FF},
   {n:'Fler ämnen',e:'🧩',h:'fler/',c:0x0E9AA7},
@@ -171,6 +176,14 @@ const PARKER={
   stjarnor:[[-40,14,1.3,'A'],[-16,42,1.3,'E'],[4,2,1.3,'I'],[-20,-42,1.3,'O'],[-52,-4,0,'U'],[28,-36,0,'Y'],[-48,-22,1.3,'Å'],[56,-4,1.3,'Ä'],[50,-18,0,'Ö']]}
 };
 for(const id in L){const l=L[id],D=PARKER[id];D.hornor.forEach((h,i)=>Object.assign(h,l.hornor[i]));const r=Object.assign({},l);delete r.hornor;Object.assign(D,r);delete D.extraPlatt;}}
+PARKER.rymdlabbet={namn:'Rymdlabbet',e:'🚀',c:0x1E9E5E,klot:true,R:40,toppH:9,topp:[45,310],mark:0xBDB8CC,samla:'planeter',tornNamn:'Månberget',
+  himmel:['#02030A','#050818','#0A1030'],ljus:{h:0x8FA0D8,g:0x2A2A44,hi:.8,s:0xFFFFFF,si:2.4,sp:[150,100,80]},
+  npc:{namn:'Kosmo',animal:'robot',farg:['#AEB9CC','#6B7894']},
+  hornor:[
+    {n:'Rymdlabbet',e:'🔭',c:0x3D5AFE,prop:'teleskop',lat:20,lon:80,rik:.3,p:[{n:'Rymdlabbet',e:'🔭',h:'ovriga/rymdlabbet/'},{n:'Månens faser',e:'🌙',h:'ovriga/solsystemet/#jorden'}]},
+    {n:'Solsystemet',e:'🪐',c:0xFFB400,prop:'antenn',lat:-25,lon:150,rik:2.5,p:[{n:'Solsystemet i 3D',e:'🪐',h:'ovriga/solsystemet/'}]},
+    {n:'Galaxen',e:'🌌',c:0xD6409F,prop:'galax',lat:15,lon:230,rik:4.4,p:[{n:'Vintergatan',e:'🌌',h:'ovriga/vintergatan/'}]}],
+  planeter:[['Merkurius',0xB5B0A8,.8,10,40,'Den minsta planeten och närmast solen.'],['Venus',0xE8C27A,1.1,-40,70,'Den hetaste planeten.'],['Jorden',0x3D7BE0,1.1,35,120,'Vår planet, den enda med liv.'],['Mars',0xD9532E,.9,-10,190,'Den röda planeten.'],['Jupiter',0xD9A877,1.9,50,200,'Störst av alla planeter.'],['Saturnus',0xE9D08F,1.6,-50,250,'Den har stora ringar.'],['Uranus',0x8FE0E0,1.3,5,290,'Den rullar på sidan.'],['Neptunus',0x3D5AFE,1.3,-30,330,'Blå och längst bort från solen.']]};
 const RING=27,O_HUB=40;
 
 /* ---------- Prydnader (belöningar, syns på huvudön) ---------- */
@@ -390,12 +403,12 @@ function stjarnaUt(id,lista){
   lista.forEach(([x,z,y0,ch],i)=>{const y=S.hojd(x,z)+y0;const m=add(ch?new THREE.Mesh(new THREE.BoxGeometry(1.3,1.3,1.3),new THREE.MeshLambertMaterial({map:siffraTextur(ch,'#E5484D','#fff',92)})):new THREE.Mesh(stjarnaGeo(.85,.38,.3),M(0xFFD23F,{emissive:0x7a5a00})));m.position.set(x,y,z);m.visible=!tagna.includes(i);
     S.stjarnor.push({m,x,y,z,idx:i,bokstav:ch||null,tagen:tagna.includes(i),y0:y});});
 }
-const stjarnaText=()=>{const n=S.stjarnor.filter(s=>s.tagen).length,b=S.stjarnor.length&&S.stjarnor[0].bokstav;$('stj').textContent=(b?'🔤 ':'⭐ ')+n+' av '+S.stjarnor.length+(n===S.stjarnor.length?' 🎉':'');};
+const stjarnaText=()=>{const n=S.stjarnor.filter(s=>s.tagen).length,b=S.stjarnor.length&&S.stjarnor[0].bokstav,pl=S.stjarnor.length&&S.stjarnor[0].namn;$('stj').textContent=(pl?'🪐 ':b?'🔤 ':'⭐ ')+n+' av '+S.stjarnor.length+(n===S.stjarnor.length?' 🎉':'');};
 
 /* ---------- Portaler ---------- */
-function portalBygg(spec,px,pz,tx,tz,sk,kapp){
-  const g=new THREE.Group();g.position.set(px,S.hojd(px,pz),pz);
-  const yaw=Math.atan2(tx-px,tz-pz);g.rotation.y=yaw;
+function portalBygg(spec,px,pz,tx,tz,sk,fram){
+  const g=new THREE.Group();let yaw=0;
+  if(fram){g.position.copy(fram.pos);g.quaternion.copy(fram.q);}else{g.position.set(px,S.hojd(px,pz),pz);yaw=Math.atan2(tx-px,tz-pz);g.rotation.y=yaw;}
   const fm=M(spec.c),vit=M(0xFFFFFF),ph=3.4*sk,br=2.4*sk;
   for(const sx of[-1,1]){
     const pil=new THREE.Mesh(new THREE.CylinderGeometry(.5*sk,.62*sk,ph,10),fm);pil.position.set(sx*br,ph/2,0);g.add(pil);
@@ -410,8 +423,9 @@ function portalBygg(spec,px,pz,tx,tz,sk,kapp){
   const sk2=etikett(spec.n,spec.e,Math.max(4.6,5.6*sk),hex(spec.c));sk2.position.set(0,ph+Math.max(2.3,3.2*sk),0);g.add(sk2);
   S.W.add(g);
   const zx=Math.sin(yaw),zz=Math.cos(yaw),xx=Math.cos(yaw),xz=-Math.sin(yaw);
-  for(const sx of[-1,1])S.kollider.push({x:px+xx*sx*br,z:pz+xz*sx*br,r:.7*sk,top:99});
-  const po={p:spec,g,yta,ljus,zx,zz,xx,xz,fas:S.portaler.length,sk,mark:null};
+  if(fram){g.updateMatrixWorld(true);for(const sx of[-1,1])S.k3.push({pos:g.localToWorld(new THREE.Vector3(sx*br,0,0)),n:fram.up.clone(),r:.7*sk,h:99});}
+  else for(const sx of[-1,1])S.kollider.push({x:px+xx*sx*br,z:pz+xz*sx*br,r:.7*sk,top:99});
+  const po={p:spec,g,yta,ljus,zx,zz,xx,xz,fas:S.portaler.length,sk,mark:null,zv:new THREE.Vector3(0,0,1).applyQuaternion(g.quaternion)};
   S.portaler.push(po);return po;
 }
 function markera(po){ // en studsande pil över portalen man ska till
@@ -551,6 +565,32 @@ function byggProp(typ,C,farg,g){
     for(let r=0;r<3;r++){const pl=new THREE.Mesh(new THREE.BoxGeometry(4.5,.2,1),tra);pl.position.set(0,.4+r*1.6,0);g.add(pl);
       let x=-1.8;for(let i=0;i<8;i++){const w=.3+((i*7+r*3)%4)*.08,h=.9+((i*5+r)%3)*.25,b=new THREE.Mesh(new THREE.BoxGeometry(w,h,.7),M(pal[(i+r*2)%6]));b.position.set(x+w/2,.5+r*1.6+h/2,0);g.add(b);x+=w+.06;}}
     const tak=new THREE.Mesh(new THREE.BoxGeometry(4.5,.2,1),tra);tak.position.set(0,5,0);g.add(tak);
+  }else if(typ==='raket'){
+    const w=M(0xFFFFFF),r=M(farg);const k=new THREE.Mesh(new THREE.CylinderGeometry(1,1.1,4.6,14),w);k.position.y=2.3+.5;g.add(k);
+    const n=new THREE.Mesh(new THREE.ConeGeometry(1,1.8,14),r);n.position.y=4.6+.5+.9;g.add(n);
+    for(let i=0;i<3;i++){const f=new THREE.Mesh(new THREE.BoxGeometry(.12,1.6,1.2),r);const a=i/3*Math.PI*2;f.position.set(Math.cos(a)*1.2,1.3+.5,Math.sin(a)*1.2);f.rotation.y=-a;g.add(f);}
+    const f=new THREE.Mesh(new THREE.SphereGeometry(.45,10,8),M(0x6BE0FF));f.position.set(0,3.4+.5,.95);g.add(f);
+    const fl=new THREE.Mesh(new THREE.ConeGeometry(.7,1.4,8),new THREE.MeshBasicMaterial({color:0xFFA24C}));fl.rotation.x=Math.PI;fl.position.y=.2;g.add(fl);
+    S.liv.push(t=>{fl.scale.set(1,.8+Math.sin(t*14)*.25,1);});
+  }else if(typ==='teleskop'){
+    const gr=new THREE.Group();g.add(gr);const w=M(0xE9E2D0),c=M(farg);
+    for(let i=0;i<3;i++){const a=i/3*Math.PI*2,l=new THREE.Mesh(new THREE.CylinderGeometry(.1,.14,2.8,6),w);l.position.set(Math.cos(a)*.8,1.3,Math.sin(a)*.8);l.rotation.set(Math.sin(a)*.3,0,-Math.cos(a)*.3);g.add(l);}
+    const tub=new THREE.Mesh(new THREE.CylinderGeometry(.5,.62,4,12),c);tub.rotation.z=Math.PI/2-.75;tub.position.set(0,3.3,0);gr.add(tub);
+    const lins=new THREE.Mesh(new THREE.CylinderGeometry(.55,.55,.1,12),M(0x6BE0FF));lins.rotation.z=Math.PI/2-.75;lins.position.set(1.4,4.45,0);gr.add(lins);
+    S.liv.push(t=>{gr.rotation.y=t*.4;});
+  }else if(typ==='antenn'){
+    const w=M(0xE9E2D0),st=new THREE.Mesh(new THREE.CylinderGeometry(.15,.2,3,6),w);st.position.y=1.5;g.add(st);
+    const gr=new THREE.Group();gr.position.y=3.2;g.add(gr);
+    const sk=new THREE.Mesh(new THREE.SphereGeometry(2,18,8,0,Math.PI*2,0,Math.PI/2.2),new THREE.MeshLambertMaterial({color:0xFFFFFF,side:THREE.DoubleSide,flatShading:true}));sk.rotation.x=-1.1;gr.add(sk);
+    const mat=new THREE.Mesh(new THREE.CylinderGeometry(.05,.05,1.6,5),M(farg));mat.position.set(0,.9,-.85);mat.rotation.x=-1.1;gr.add(mat);
+    S.liv.push(t=>{gr.rotation.y=t*.3;});
+  }else if(typ==='galax'){
+    const n=420,pp=new Float32Array(n*3),cc=new Float32Array(n*3),co=new THREE.Color();
+    for(let i=0;i<n;i++){const arm=i%3,rr=.4+Math.pow(i/n,.7)*3.6,a=rr*1.3+arm*Math.PI*2/3+(Math.random()-.5)*.35;pp[i*3]=Math.cos(a)*rr;pp[i*3+1]=(Math.random()-.5)*.35;pp[i*3+2]=Math.sin(a)*rr;co.setHSL(.55+rr*.06,.8,.6+Math.random()*.25);cc[i*3]=co.r;cc[i*3+1]=co.g;cc[i*3+2]=co.b;}
+    const ge=new THREE.BufferGeometry();ge.setAttribute('position',new THREE.BufferAttribute(pp,3));ge.setAttribute('color',new THREE.BufferAttribute(cc,3));
+    const pts=new THREE.Points(ge,new THREE.PointsMaterial({size:.22,vertexColors:true,transparent:true,depthWrite:false}));pts.position.y=4;g.add(pts);
+    const k=new THREE.Mesh(new THREE.SphereGeometry(.5,12,10),new THREE.MeshBasicMaterial({color:0xFFF3B0}));k.position.y=4;g.add(k);
+    S.liv.push(t=>{pts.rotation.y=t*.35;});
   }else if(typ==='penna'){
     const gr=new THREE.Group();gr.rotation.z=.32;gr.position.y=2.9;g.add(gr);
     const k=new THREE.Mesh(new THREE.CylinderGeometry(.6,.6,5,6),M(0xFFC93C));gr.add(k);
@@ -609,17 +649,180 @@ let camYaw=0,camPitch=.5,camDist=11.5;
 function placera(x,z,ang,cy){P.x=x;P.z=z;P.y=S&&S.hojd?S.hojd(x,z):0;P.vy=0;P.fartX=P.fartZ=0;P.ang=ang||0;camYaw=cy!=null?cy:(ang||0);cam.position.set(x-Math.sin(camYaw)*camDist,5,z-Math.cos(camYaw)*camDist);}
 function lasPlats(){let s=null;try{s=JSON.parse(lsGet('mp-varlden-pos')||'null');}catch(e){}return s;}
 function laddaScen(id,plats){
-  rensaScen();if(id==='hub')byggHub();else byggPark(PARKER[id]?id:'matte');
-  const st=plats||S.start;
-  placera(st.x,st.z,st.ang,st.cam!=null?st.cam:st.ang);
-  stjarnaText();uppdateraArende();
+  rensaScen();$('pil').hidden=true;if(id==='hub')byggHub();else if(PARKER[id]&&PARKER[id].klot)byggKlot(id);else byggPark(PARKER[id]?id:'matte');
+  if(S.klot){const st=plats&&plats.pv?plats:S.start;djur.rotation.set(0,0,0);placeraK(st.pv,st.hd);}
+  else{const st=plats||S.start;cam.up.set(0,1,0);camUpK.set(0,1,0);djur.quaternion.identity();skugga.rotation.set(-Math.PI/2,0,0);placera(st.x,st.z,st.ang,st.cam!=null?st.cam:st.ang);}
+  stjarnaText();uppdateraArende();dimma();
 }
 function startVarlden(){
   const s=lasPlats();let id=s&&(s.scen==='hub'||PARKER[s.scen])?s.scen:'hub';
   laddaScen(id,null);
   const O=S.O;
-  if(s&&(s.scen||'hub')===id&&isFinite(s.x)&&isFinite(s.z)&&Math.hypot(s.x,s.z)<O-1)placera(s.x,s.z,s.yaw||0,s.cam!=null?s.cam:s.yaw||0);
-  else{const st=S.start;placera(st.x,st.z,st.ang,st.ang);}
+  if(S.klot){if(s&&s.scen===id&&isFinite(s.x)&&isFinite(s.y)&&isFinite(s.z)&&isFinite(s.hx)){const v=new V3(s.x,s.y,s.z);if(v.length()>S.R*.7&&v.length()<S.R*1.6)placeraK(v,new V3(s.hx,s.hy,s.hz));}}
+  else if(s&&(s.scen||'hub')===id&&isFinite(s.x)&&isFinite(s.z)&&Math.hypot(s.x,s.z)<O-1)placera(s.x,s.z,s.yaw||0,s.cam!=null?s.cam:s.yaw||0);
+  else if(!S.klot){const st=S.start;placera(st.x,st.z,st.ang,st.ang);}
+}
+
+
+/* ---------- Klotet: Rymdlabbet (en rund måne man springer runt på) ---------- */
+const V3=THREE.Vector3;
+const Pv=new V3(),hdK=new V3(0,0,1),fvK=new V3(0,0,1),vtK=new V3(),camUpK=new V3(0,1,0);let vrK=0,prevYaw=0;
+const GK=13,HOPPK=11.5; // månens svaga tyngdkraft: höga hopp
+const dll=(la,lo)=>{la*=Math.PI/180;lo*=Math.PI/180;return new V3(Math.cos(la)*Math.cos(lo),Math.sin(la),Math.cos(la)*Math.sin(lo));};
+const tangTill=(d,v)=>v.clone().addScaledVector(d,-v.dot(d)).normalize();
+function pktKlot(C,ang,arc){const e1=new V3(0,1,0).cross(C);if(e1.lengthSq()<1e-4)e1.set(1,0,0).cross(C);e1.normalize();const e2=new V3().crossVectors(C,e1),a=arc/S.R;
+  return C.clone().multiplyScalar(Math.cos(a)).addScaledVector(e1,Math.cos(ang)*Math.sin(a)).addScaledVector(e2,Math.sin(ang)*Math.sin(a)).normalize();}
+const oriQ=(up,fw)=>{const x=new V3().crossVectors(up,fw).normalize(),z=new V3().crossVectors(x,up);return new THREE.Quaternion().setFromRotationMatrix(new THREE.Matrix4().makeBasis(x,up,z));};
+const smoothS=(a,b,x)=>{const t=Math.min(1,Math.max(0,(x-a)/(b-a)));return t*t*(3-2*t);};
+const vinkel=(a,b)=>Math.acos(Math.min(1,Math.max(-1,a.dot(b))));
+function byggNpcK(dir,namn,conf,mot){
+  const g=djurModell(conf);g.position.copy(dir).multiplyScalar(S.Rs(dir));g.quaternion.copy(oriQ(dir,tangTill(dir,mot)));S.W.add(g);
+  const sk=etikett(namn,'',3.2,'#FFC93C');sk.position.set(0,3.5,0);g.add(sk);const ut=etikett('❗','',1.2,'#FFC93C');ut.position.set(0,4.5,0);g.add(ut);
+  S.k3.push({pos:g.position.clone(),n:dir.clone(),r:.9,h:99});
+  S.npc={g,ut,pv:g.position.clone(),namn};
+  S.liv.push(t=>{g.userData.inner.position.y=Math.abs(Math.sin(t*2))*.12;ut.position.y=4.5+Math.sin(t*4)*.15;});
+}
+function byggKlot(id){
+  const D=PARKER[id],R0=D.R;
+  nyScen(id,R0);S.klot=true;S.R=R0;S.k3=[];
+  himmel(D.himmel);scene.fog.color.set(0x03040C);stallLjus(D.ljus);
+  S.tornNamn=D.tornNamn;S.samla=D.samla;
+  const startD=dll(0,0),sites=[{d:startD,rad:.24}];
+  D.hornor.forEach(h=>{h.ra=Math.max(6.5,6.8*(h.p.length-1)/2.6);h.C=dll(h.lat,h.lon);sites.push({d:h.C,rad:(h.ra+3.5)/R0});});
+  const topD=dll(D.topp[0],D.topp[1]);
+  const kr=[];
+  for(let f=0;kr.length<(lagt?12:18)&&f<800;f++){const d=new V3(sr()*2-1,sr()*2-1,sr()*2-1);if(d.lengthSq()>1||d.lengthSq()<.05)continue;d.normalize();const r=.09+sr()*.11;let ok=true;
+    for(const q of sites)if(vinkel(d,q.d)<q.rad+r*1.5+.03)ok=false;if(vinkel(d,topD)<.42+r*1.5)ok=false;for(const k of kr)if(vinkel(d,k.d)<(k.r+r)*1.3)ok=false;
+    if(ok)kr.push({d,r,dep:1.2+sr()*1.8});}
+  const hK=d=>{let h=0;for(const k of kr){const t=vinkel(d,k.d)/k.r;if(t<1.5){h+=(t<1?-k.dep*Math.pow(1-t*t,2):0)+k.dep*.35*Math.exp(-Math.pow((t-1.05)/.14,2));}}
+    for(const q of sites)h*=smoothS(q.rad,q.rad+.12,vinkel(d,q.d));
+    return h+D.toppH*(1-smoothS(0,.42,vinkel(d,topD)));};
+  S.Rs=d=>R0+hK(d);
+  // ytan
+  const geo=new THREE.IcosahedronGeometry(R0,lagt?22:36),pos=geo.attributes.position,col=new Float32Array(pos.count*3),c=new THREE.Color(),d=new V3();
+  for(let i=0;i<pos.count;i++){d.set(pos.getX(i),pos.getY(i),pos.getZ(i)).normalize();const h=hK(d),r=R0+h;pos.setXYZ(i,d.x*r,d.y*r,d.z*r);
+    const n=(Math.sin(d.x*40)+Math.cos(d.y*37)+Math.sin(d.z*43))*.012;c.set(D.mark);c.offsetHSL(0,0,n+(h<-.6?-.12:0)+(h>2?Math.min(.14,h*.018):0));col[i*3]=c.r;col[i*3+1]=c.g;col[i*3+2]=c.b;}
+  geo.setAttribute('color',new THREE.BufferAttribute(col,3));geo.computeVertexNormals();
+  add(new THREE.Mesh(geo,new THREE.MeshLambertMaterial({vertexColors:true,flatShading:true})));
+  // rymden: stjärnor, jorden och solen
+  {const n=lagt?900:1800,pp=new Float32Array(n*3);for(let i=0;i<n;i++){const q=new V3(sr()*2-1,sr()*2-1,sr()*2-1).normalize().multiplyScalar(320);pp[i*3]=q.x;pp[i*3+1]=q.y;pp[i*3+2]=q.z;}
+   const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(pp,3));add(new THREE.Points(g,new THREE.PointsMaterial({color:0xffffff,size:1.8,sizeAttenuation:false,fog:false})));
+   const c2=document.createElement('canvas');c2.width=256;c2.height=128;const q=c2.getContext('2d');q.fillStyle='#2E6FD8';q.fillRect(0,0,256,128);q.fillStyle='#3FAE5A';
+   [[40,40,28],[90,70,22],[170,50,30],[210,90,20],[130,100,14]].forEach(([x,y,r])=>{q.beginPath();q.ellipse(x,y,r*1.4,r,0,0,7);q.fill();});q.fillStyle='rgba(255,255,255,.7)';[[20,20,34],[110,30,26],[190,60,30],[70,100,24]].forEach(([x,y,r])=>{q.beginPath();q.ellipse(x,y,r*1.2,r*.35,0,0,7);q.fill();});
+   const tx=new THREE.CanvasTexture(c2);tx.colorSpace=THREE.SRGBColorSpace;
+   const jord=add(new THREE.Mesh(new THREE.SphereGeometry(16,28,20),new THREE.MeshLambertMaterial({map:tx})));jord.position.set(-120,90,-210);S.liv.push(t=>{jord.rotation.y=t*.04;});
+   const sun=add(new THREE.Mesh(new THREE.SphereGeometry(10,20,14),new THREE.MeshBasicMaterial({color:0xFFE27A,fog:false})));sun.position.set(...D.ljus.sp).normalize().multiplyScalar(290);}
+  // delar av ytan som är platta (start och hörn): en tunn kalott i hörnets färg
+  const kalott=(Cd,rad,farg)=>{const m=add(new THREE.Mesh(new THREE.SphereGeometry(R0+.09,36,6,0,Math.PI*2,0,rad),new THREE.MeshLambertMaterial({color:farg,transparent:true,opacity:.5,side:THREE.DoubleSide,depthWrite:false})));m.quaternion.setFromUnitVectors(new V3(0,1,0),Cd);};
+  const sk=.72,north=new V3(.01,1,.02).normalize();
+  // startplatsen: raket, figuren och tillbaka-portalen
+  kalott(startD,.2,D.c);
+  {const rd=pktKlot(startD,-Math.PI/2,6.5),g=new THREE.Group();g.position.copy(rd).multiplyScalar(S.Rs(rd));g.quaternion.copy(oriQ(rd,tangTill(rd,startD)));S.W.add(g);byggProp('raket',rd,0xE5484D,g);S.k3.push({pos:g.position.clone(),n:rd.clone(),r:1.8,h:99});}
+  {const bd=pktKlot(startD,Math.PI/2,7);portalBygg({n:'Tillbaka till ön',e:'🏝️',scen:'hub',c:0x1E9E5E},0,0,0,0,.8,{pos:bd.clone().multiplyScalar(S.Rs(bd)),up:bd.clone(),q:oriQ(bd,tangTill(bd,startD))});}
+  byggNpcK(pktKlot(startD,.9,6.5),D.npc.namn,{animal:D.npc.animal,farg:D.npc.farg,hat:D.npc.hat||'ingen'},startD);
+  // hörnen
+  D.hornor.forEach(h=>{
+    const np=h.p.length,ra=h.ra,step=6.8/ra;kalott(h.C,(ra*.9)/R0,h.c);
+    const g=new THREE.Group();g.position.copy(h.C).multiplyScalar(S.Rs(h.C));g.quaternion.copy(oriQ(h.C,tangTill(h.C,north)));S.W.add(g);byggProp(h.prop,h.C,h.c,g);
+    S.k3.push({pos:g.position.clone(),n:h.C.clone(),r:1.9,h:99});
+    const sk2=etikett(h.n,h.e,7.2,hex(h.c));sk2.position.set(0,8.4,0);g.add(sk2);
+    h.p.forEach((p,j)=>{const dir=pktKlot(h.C,h.rik+(j-(np-1)/2)*step,ra);portalBygg(Object.assign({c:h.c},p),0,0,0,0,sk,{pos:dir.clone().multiplyScalar(S.Rs(dir)),up:dir.clone(),q:oriQ(dir,tangTill(dir,h.C))});});
+  });
+  // Månberget med en flagga
+  {const g=new THREE.Group();g.position.copy(topD).multiplyScalar(S.Rs(topD));g.quaternion.copy(oriQ(topD,tangTill(topD,north)));S.W.add(g);
+   const pole=new THREE.Mesh(new THREE.CylinderGeometry(.08,.1,3,6),M(0xDDDDDD));pole.position.y=1.5;g.add(pole);
+   const fl=new THREE.Mesh(new THREE.BoxGeometry(1.6,1,.06),M(0xE5484D));fl.position.set(.85,2.5,0);g.add(fl);S.liv.push(t=>{fl.rotation.y=Math.sin(t*3)*.25;});
+   const sk3=etikett(D.tornNamn,'🏁',5.4,'#E5484D');sk3.position.set(0,7,0);g.add(sk3);
+   S.topp={d:topD,pv:g.position.clone()};}
+  // planeterna: hittas genom att hoppa efter dem
+  const tagna=SV.stj[id]||[];
+  D.planeter.forEach(([namn,farg,sz,la,lo,fakta],i)=>{
+    const dir=dll(la,lo),pv=dir.clone().multiplyScalar(S.Rs(dir)+3.4),g=new THREE.Group();g.position.copy(pv);
+    const sp=new THREE.Mesh(new THREE.SphereGeometry(sz*.9,18,14),new THREE.MeshLambertMaterial({color:farg}));g.add(sp);
+    if(namn==='Saturnus'){const r=new THREE.Mesh(new THREE.TorusGeometry(sz*1.5,.12,6,36),new THREE.MeshLambertMaterial({color:0xE9D08F}));r.rotation.x=1.2;g.add(r);}
+    g.visible=!tagna.includes(i);S.W.add(g);
+    S.stjarnor.push({m:g,pv,dir,idx:i,namn,fakta,tagen:tagna.includes(i),bokstav:null});
+    S.liv.push(t=>{g.position.copy(pv).addScaledVector(dir,Math.sin(t*2+i)*.3);sp.rotation.y=t*.6;});
+  });
+  atMolnIngen=true;
+  S.start={pv:startD.clone().multiplyScalar(R0),hd:tangTill(startD,pktKlot(startD,0,5))};
+}
+let atMolnIngen=false;
+function placeraK(pos,hd){
+  Pv.copy(pos);hdK.copy(hd);const up=Pv.clone().normalize();hdK.addScaledVector(up,-hdK.dot(up)).normalize();fvK.copy(hdK);vtK.set(0,0,0);vrK=0;P.mark=true;P.hopp=0;P.fartX=P.fartZ=0;prevYaw=camYaw;
+  camUpK.copy(up);cam.up.copy(up);cam.position.copy(Pv).addScaledVector(hdK,-camDist*Math.cos(camPitch)).addScaledVector(up,1.7+Math.sin(camPitch)*camDist);
+  P.x=Pv.x;P.y=Pv.y;P.z=Pv.z;
+}
+function malK(){
+  const a=SV.arende;if(a&&a.scen===S.id&&!a.besokt){const po=S.portaler.find(p=>p.p.h===a.h);if(po)return{pos:po.g.position,txt:a.e+' '+a.namn};}
+  let best=null,bd=1e9;for(const q of S.stjarnor)if(!q.tagen){const dd=Pv.distanceTo(q.pv);if(dd<bd){bd=dd;best=q;}}
+  if(best)return{pos:best.pv,txt:'🪐 planet'};
+  if(!SV.seen.includes(S.id+'-torn'))return{pos:S.topp.pv,txt:'🏁 '+S.tornNamn};
+  return null;
+}
+function stegK(dt){
+  tid+=dt;
+  const up=Pv.clone().normalize();
+  const dy=camYaw-prevYaw;prevYaw=camYaw;if(dy)hdK.applyAxisAngle(up,dy);
+  hdK.addScaledVector(up,-hdK.dot(up)).normalize();
+  let ix=0,iz=0;
+  if(!dlgOpen){
+    if(tang['w']||tang['arrowup'])iz+=1;if(tang['s']||tang['arrowdown'])iz-=1;
+    if(tang['d']||tang['arrowright'])ix+=1;if(tang['a']||tang['arrowleft'])ix-=1;
+    if(jid!==null){ix+=jx;iz-=jy;}
+    if(tang['q'])camYaw+=1.9*dt;if(tang['e'])camYaw-=1.9*dt;
+  }
+  const m=Math.hypot(ix,iz);if(m>1){ix/=m;iz/=m;}
+  const rt=new V3().crossVectors(hdK,up),wish=hdK.clone().multiplyScalar(iz).addScaledVector(rt,ix),mal=wish.clone().multiplyScalar(FART);
+  const ac=P.mark?14:7;vtK.addScaledVector(mal.sub(vtK),Math.min(1,ac*dt));
+  const gar=vtK.length()>.6;
+  if(gar){gomHint();const w=tangTill(up,vtK);fvK.lerp(w,Math.min(1,12*dt));fvK.addScaledVector(up,-fvK.dot(up)).normalize();}
+  if(P.hoppKo){P.hoppKo=false;if(dlgOpen){}else if(P.mark){vrK=HOPPK;P.mark=false;P.hopp=1;hoppljud();gomHint();}else if(P.hopp<2){vrK=HOPPK*.9;P.hopp=2;pling(420,660);}}
+  Pv.addScaledVector(vtK,dt).addScaledVector(up,vrK*dt);vrK-=GK*dt;
+  // hållas kvar på ytan: farten ska vara längs ytan på nya platsen
+  const up2=Pv.clone().normalize();vtK.addScaledVector(up2,-vtK.dot(up2));
+  // hinder (portalpelare, byggnader, figurer)
+  for(const k of S.k3){const dv=Pv.clone().sub(k.pos),dn=dv.dot(k.n);if(dn>k.h)continue;const tv=dv.addScaledVector(k.n,-dn),dd=tv.length(),min=k.r+.5;if(dd<min&&dd>1e-4&&dn<k.h-.55)Pv.addScaledVector(tv.multiplyScalar(1/dd),min-dd);}
+  const dir=Pv.clone().normalize(),Rs=S.Rs(dir),r=Pv.length();
+  if(r<=Rs&&vrK<=0){Pv.setLength(Rs);vrK=0;P.mark=true;P.hopp=0;}else if(P.mark&&vrK<=0&&r-Rs<.7){Pv.setLength(Rs);vrK=0;}else if(r>Rs+.05)P.mark=false;
+  P.x=Pv.x;P.y=Pv.y;P.z=Pv.z;
+  // portaler
+  narmaste=null;narNpc=false;
+  if(!gaar)for(const po of S.portaler){const l=po.g.worldToLocal(Pv.clone()),k=po.sk;
+    if(Math.abs(l.x)<2*k&&l.z>-1*k&&l.z<1*k&&l.y<3.5){gaIn(po);break;}
+    if(Math.abs(l.x)<5*k&&l.z>0&&l.z<8.5*k&&Math.abs(l.y)<6)narmaste=po;}
+  if(!narmaste&&S.npc&&Pv.distanceTo(S.npc.pv)<4.2)narNpc=true;
+  if(!gaar&&!dlgOpen&&(narmaste||narNpc)){prompt.hidden=false;const t=narmaste?'🚪 Gå in: '+narmaste.p.e+' '+narmaste.p.n:'💬 Prata med '+S.npc.namn;if(prompt.textContent!==t)prompt.textContent=t;}else prompt.hidden=true;
+  // planeter
+  const mitt=Pv.clone().addScaledVector(dir,1);
+  for(const s of S.stjarnor){if(s.tagen)continue;
+    if(mitt.distanceTo(s.m.position)<2.6){s.tagen=true;s.m.visible=false;pling(660,990);
+      (SV.stj[S.id]=SV.stj[S.id]||[]).push(s.idx);sparaSV();stjarnaText();
+      const kvar=S.stjarnor.filter(q=>!q.tagen).length;if(kvar)toast('Du hittade '+s.namn+'! '+s.fakta+' '+(kvar===1?'Bara 1 kvar.':kvar+' kvar.'));
+      if(!kvar)klart(S.id+'-stj','Du hittade alla planeterna!');}}
+  // Månberget
+  if(!SV.seen.includes(S.id+'-torn')&&vinkel(dir,S.topp.d)<2.6/S.R&&r>=S.Rs(S.topp.d)-.6)klart(S.id+'-torn','Du nådde toppen av '+S.tornNamn+'!');
+}
+function ritaK(dt){
+  const t=tid,up=Pv.clone().normalize(),dir=up;
+  djur.position.copy(Pv);djur.quaternion.copy(oriQ(up,tangTill(up,fvK)));
+  const hojd=Pv.length()-S.Rs(dir);
+  skugga.position.copy(dir).multiplyScalar(S.Rs(dir)+.06);skugga.quaternion.setFromUnitVectors(new V3(0,0,1),up);skugga.scale.setScalar(Math.max(.5,1-hojd*.06));
+  const fart=vtK.length(),gar=fart>.6&&P.mark,inner=djur.userData.inner;
+  const vag=gar?Math.abs(Math.sin(t*14*Math.min(1,fart/FART+.3))):0,sq=P.mark?1:1+Math.max(-.12,Math.min(.18,vrK*.02));
+  inner.position.y=vag*.2;inner.scale.set(1/Math.sqrt(sq),sq,1/Math.sqrt(sq));inner.rotation.z=gar?Math.sin(t*14)*.06:0;
+  djur.userData.fot.forEach((f,i)=>{f.position.z=.12+(gar?Math.sin(t*14+i*Math.PI)*.22:0);f.position.y=.2+(P.mark?(gar?Math.max(0,Math.sin(t*14+i*Math.PI))*.15:0):.25);});
+  if(!window.__oversikt){
+    const tgt=Pv.clone().addScaledVector(hdK,-camDist*Math.cos(camPitch)).addScaledVector(up,1.7+Math.sin(camPitch)*camDist);
+    const cd=tgt.clone().normalize(),mr=S.Rs(cd)+1.8;if(tgt.length()<mr)tgt.setLength(mr);
+    cam.position.lerp(tgt,Math.min(1,dt*10));camUpK.lerp(up,Math.min(1,dt*8)).normalize();cam.up.copy(camUpK);cam.lookAt(Pv.clone().addScaledVector(up,2.7));
+  }
+  for(const f of S.liv)f(t);firaSteg(dt);
+  for(const po of S.portaler){po.yta.material.opacity=.42+Math.sin(t*2+po.fas)*.1;po.ljus.rotation.z=t*1.5;po.ljus.scale.setScalar(.85+Math.sin(t*2+po.fas)*.15);if(po.mark)po.mark.position.y=(3.4*po.sk)+Math.max(2.3,3.2*po.sk)+1.6+Math.sin(t*5)*.3;}
+  // pilen mot närmaste uppdrag
+  const ml=malK(),pil=$('pil');
+  if(ml){const rt=new V3().crossVectors(hdK,up),tv=tangTill(up,ml.pos.clone().sub(Pv).addScaledVector(up,0)),ang=Math.atan2(tv.dot(rt),tv.dot(hdK)),avst=Math.round(S.R*vinkel(up,ml.pos.clone().normalize()));
+    pil.hidden=false;$('pilI').style.transform='rotate('+ang+'rad)';$('pilT').textContent=ml.txt+' · '+avst+' m';}else pil.hidden=true;
 }
 
 /* ---------- Ingångar ---------- */
@@ -657,22 +860,27 @@ function fanfar(){pling(523,659);setTimeout(()=>pling(659,784),180);setTimeout((
 const FIR=[],firGeo=stjarnaGeo(.3,.13,.08),firMat=[new THREE.MeshBasicMaterial({color:0xFFD23F,fog:false}),new THREE.MeshBasicMaterial({color:0xFFFFFF,fog:false}),new THREE.MeshBasicMaterial({color:0xFF9FD0,fog:false})];
 let firRing=null;
 function firande(stor){
-  const n=REDUCE?12:(stor?56:28);
+  const n=REDUCE?12:(stor?56:28),K=S.klot,up=K?Pv.clone().normalize():null,rt=K?new THREE.Vector3().crossVectors(hdK,up):null;
   for(let i=0;i<n;i++){
-    const m=new THREE.Mesh(firGeo,firMat[i%3]),a=i/n*Math.PI*2+Math.random()*.4,sp=REDUCE?0:(stor?2.5:1.6)+Math.random()*(stor?4.5:3);
-    m.position.set(P.x+(REDUCE?Math.cos(a)*1.6:0),P.y+(REDUCE?1.5+Math.sin(a)*1.2:1.6),P.z+(REDUCE?Math.sin(a)*.4:0));
+    const m=new THREE.Mesh(firGeo,firMat[i%3]),a=i/n*Math.PI*2+Math.random()*.4,sp=REDUCE?0:(stor?2.5:1.6)+Math.random()*(stor?4.5:3),vy=REDUCE?0:5+Math.random()*(stor?6:4);
+    if(K){m.position.copy(Pv).addScaledVector(up,1.6);if(REDUCE)m.position.addScaledVector(hdK,Math.cos(a)*1.6).addScaledVector(up,Math.sin(a)*1.2);}
+    else m.position.set(P.x+(REDUCE?Math.cos(a)*1.6:0),P.y+(REDUCE?1.5+Math.sin(a)*1.2:1.6),P.z+(REDUCE?Math.sin(a)*.4:0));
     m.scale.setScalar(.7+Math.random()*.9);
-    scene.add(m);FIR.push({m,vx:Math.cos(a)*sp,vz:Math.sin(a)*sp,vy:REDUCE?0:5+Math.random()*(stor?6:4),life:REDUCE?1.8:2.2+Math.random()*.8,spin:(Math.random()-.5)*8});
+    const v=K?up.clone().multiplyScalar(vy).addScaledVector(hdK,Math.cos(a)*sp).addScaledVector(rt,Math.sin(a)*sp):new THREE.Vector3(Math.cos(a)*sp,vy,Math.sin(a)*sp);
+    scene.add(m);FIR.push({m,v,life:REDUCE?1.8:2.2+Math.random()*.8,spin:(Math.random()-.5)*8});
   }
   if(firRing)scene.remove(firRing);
   firRing=new THREE.Mesh(new THREE.TorusGeometry(1,.08,6,36),new THREE.MeshBasicMaterial({color:0xFFE07A,transparent:true,opacity:.9,fog:false,depthWrite:false}));
-  firRing.rotation.x=Math.PI/2;firRing.position.set(P.x,P.y+.15,P.z);firRing.userData.t=0;scene.add(firRing);
-  if(!REDUCE&&stor&&P.mark){P.vy=HOPP*.9;P.mark=false;P.hopp=1;} // en glädjehoppning
+  if(K){firRing.position.copy(Pv).addScaledVector(up,.2);firRing.quaternion.setFromUnitVectors(new THREE.Vector3(0,0,1),up);}
+  else{firRing.rotation.x=Math.PI/2;firRing.position.set(P.x,P.y+.15,P.z);}
+  firRing.userData.t=0;scene.add(firRing);
+  if(!REDUCE&&stor&&P.mark){if(K)vrK=HOPPK*.9;else P.vy=HOPP*.9;P.mark=false;P.hopp=1;}
 }
 function firaSteg(dt){
   for(let i=FIR.length-1;i>=0;i--){const f=FIR[i];f.life-=dt;
     if(f.life<=0){scene.remove(f.m);FIR.splice(i,1);continue;}
-    f.vy-=9*dt;f.m.position.x+=f.vx*dt;f.m.position.y+=f.vy*dt;f.m.position.z+=f.vz*dt;f.m.rotation.y+=f.spin*dt;f.m.rotation.z+=f.spin*.4*dt;
+    if(S.klot)f.v.addScaledVector(f.m.position.clone().normalize(),-9*dt);else f.v.y-=9*dt;
+    f.m.position.addScaledVector(f.v,dt);f.m.rotation.y+=f.spin*dt;f.m.rotation.z+=f.spin*.4*dt;
     f.m.scale.multiplyScalar(f.life<.5?.94:1);}
   if(firRing){firRing.userData.t+=dt;const k=firRing.userData.t;firRing.scale.setScalar(1+k*(REDUCE?0:9));firRing.material.opacity=Math.max(0,.9-k*1.1);if(k>.9){scene.remove(firRing);firRing.geometry.dispose();firRing.material.dispose();firRing=null;}}
 }
@@ -696,8 +904,9 @@ function uppdragFor(id){
   const D=PARKER[id];if(!D)return[];
   const lista=[];
   if(D.samla==='vokaler')lista.push({id:id+'-stj',e:'🔤',n:'Hitta alla vokaler: A E I O U Y Å Ä Ö',fram:()=>S.stjarnor.map(q=>q.tagen?q.bokstav:'_').join(' ')});
+  else if(D.samla==='planeter')lista.push({id:id+'-stj',e:'🪐',n:'Hoppa efter alla 8 planeter',fram:()=>S.stjarnor.filter(q=>q.tagen).map(q=>q.namn).join(', ')||'inga än'});
   else lista.push({id:id+'-stj',e:'⭐',n:'Hitta de '+S.stjarnor.length+' gömda stjärnorna',fram:antalTagna});
-  lista.push({id:id+'-torn',e:'🏁',n:'Hoppa upp till flaggan på '+(D.tornNamn||'Hopptornet'),fram:()=>''});
+  lista.push({id:id+'-torn',e:'🏁',n:(D.klot?'Hoppa upp på toppen av ':'Hoppa upp till flaggan på ')+(D.tornNamn||'Hopptornet'),fram:()=>''});
   return lista;
 }
 function dagensMal(){
@@ -756,10 +965,11 @@ function stoppa(){
 let narmaste=null,narNpc=false,gaar=false;
 const prompt=$('prompt');
 function platsFor(po){return{x:po.g.position.x+po.zx*5.2*Math.max(.75,po.sk),z:po.g.position.z+po.zz*5.2*Math.max(.75,po.sk),yaw:Math.atan2(-po.zx,-po.zz)};}
-function sparaPlats(extra){if(gaar&&!extra)return;lsSet('mp-varlden-pos',JSON.stringify(extra||{scen:S.id,x:P.x,z:P.z,yaw:P.ang,cam:camYaw}));}
+function platsForK(po){const zv=new V3(0,0,1).applyQuaternion(po.g.quaternion),p=po.g.position.clone().addScaledVector(zv,5.2*Math.max(.75,po.sk));p.setLength(S.Rs(p.clone().normalize()));const h=tangTill(p.clone().normalize(),zv.clone().negate());return{x:p.x,y:p.y,z:p.z,hx:h.x,hy:h.y,hz:h.z};}
+function sparaPlats(extra){if(gaar&&!extra)return;lsSet('mp-varlden-pos',JSON.stringify(extra||(S.klot?{scen:S.id,x:Pv.x,y:Pv.y,z:Pv.z,hx:hdK.x,hy:hdK.y,hz:hdK.z}:{scen:S.id,x:P.x,z:P.z,yaw:P.ang,cam:camYaw})));}
 function gaIn(po){
   if(gaar)return;gaar=true;pling(440,880);stangDlg();
-  const p=platsFor(po);
+  const p=S.klot?platsForK(po):platsFor(po);
   if(po.p.scen){ // till en annan scen på samma sida
     const mal=po.p.scen;
     $('fade').classList.add('pa');
@@ -771,7 +981,7 @@ function gaIn(po){
     },REDUCE?60:420);
     return;
   }
-  sparaPlats({scen:S.id,x:p.x,z:p.z,yaw:p.yaw,cam:p.yaw});
+  sparaPlats(S.klot?Object.assign({scen:S.id},p):{scen:S.id,x:p.x,z:p.z,yaw:p.yaw,cam:p.yaw});
   try{sessionStorage.setItem('mp-fran-varlden','1');}catch(e){}
   if(SV.arende&&SV.arende.h===po.p.h&&SV.arende.scen===S.id){SV.arende.besokt=true;sparaSV();}
   $('fade').classList.add('pa');
@@ -780,7 +990,7 @@ function gaIn(po){
 prompt.addEventListener('click',()=>{if(narmaste)gaIn(narmaste);else if(narNpc)oppnaDlg();});
 addEventListener('pagehide',()=>sparaPlats());
 addEventListener('pageshow',e=>{if(e.persisted||gaar){gaar=false;$('fade').classList.remove('pa');const s=lasPlats();
-  if(s&&(s.scen||'hub')===S.id&&isFinite(s.x))placera(s.x,s.z,s.yaw||0,s.cam!=null?s.cam:s.yaw||0);uppdateraArende();}});
+  if(S.klot){if(s&&s.scen===S.id&&isFinite(s.hx))placeraK(new V3(s.x,s.y,s.z),new V3(s.hx,s.hy,s.hz));}else if(s&&(s.scen||'hub')===S.id&&isFinite(s.x))placera(s.x,s.z,s.yaw||0,s.cam!=null?s.cam:s.yaw||0);uppdateraArende();}});
 setInterval(()=>sparaPlats(),4000);
 
 /* ---------- Hjälptext ---------- */
@@ -792,11 +1002,11 @@ let hintBort=false;const gomHint=()=>{if(!hintBort){hintBort=true;setTimeout(()=
 /* ---------- Lågt läge ---------- */
 function stallLagt(v,bygg){const andrad=v!==lagt;lagt=v;$('lagt').setAttribute('aria-pressed',String(v));$('lagt').innerHTML=v?'🐢<span class="tx"> Lågt läge: på</span>':'🐢<span class="tx"> Lågt läge</span>';
   lsSet('mp-varlden-lagt',v?'1':'0');renderer.setPixelRatio(skala());storlek();
-  if(andrad&&S&&bygg!==false){const id=S.id,x=P.x,z=P.z,a=P.ang,c=camYaw;laddaScen(id,{x,z,ang:a,cam:c});}}
+  if(andrad&&S&&bygg!==false){const id=S.id,x=P.x,z=P.z,a=P.ang,c=camYaw;laddaScen(id,S.klot?{pv:Pv.clone(),hd:hdK.clone()}:{x,z,ang:a,cam:c});}}
 $('lagt').addEventListener('click',()=>stallLagt(!lagt));
 function storlek(){const w=innerWidth,h=innerHeight;renderer.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();}
 addEventListener('resize',storlek);storlek();
-function dimma(){scene.fog.near=lagt?45:60;scene.fog.far=lagt?105:150;}
+function dimma(){if(S&&S.klot){scene.fog.near=500;scene.fog.far=1200;}else{scene.fog.near=lagt?45:60;scene.fog.far=lagt?105:150;}}
 
 /* ---------- Slingan ---------- */
 const clock=new THREE.Clock();let tid=0,fpsSum=0,fpsN=0,fpsKoll=true;
@@ -869,12 +1079,12 @@ startVarlden();dimma();
 let sistaFas=0;
 renderer.setAnimationLoop(()=>{
   const dt=Math.min(.05,clock.getDelta());
-  steg(dt);rita(dt);renderer.render(scene,cam);
+  if(S.klot){stegK(dt);ritaK(dt);}else{steg(dt);rita(dt);}renderer.render(scene,cam);
   if(!sistaFas){sistaFas=1;$('load').classList.add('klar');}
   if(fpsKoll&&tid>1&&tid<5){fpsSum+=dt;fpsN++;}
   if(fpsKoll&&tid>=5){fpsKoll=false;if(fpsN&&fpsSum/fpsN>1/26&&!lagt){stallLagt(true);dimma();}}
 });
-window.__varlden={placera,scene,cam,P,get S(){return S;},SV,gaIn,laddaScen,klart,oppnaDlg,get dlg(){return dlgOpen;}};
+window.__varlden={Pv,hdK,placeraK,placera,scene,cam,P,get S(){return S;},SV,gaIn,laddaScen,klart,oppnaDlg,get dlg(){return dlgOpen;}};
 </script>
 </body>
 </html>
