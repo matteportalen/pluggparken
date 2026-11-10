@@ -112,7 +112,7 @@ const dagNr=()=>Math.floor((Date.now()-new Date().getTimezoneOffset()*60000)/864
 /* ---------- Innehåll ---------- */
 const HUB=[
   {n:'Matte-parken',e:'🔢',scen:'matte',c:0x3D5AFE},
-  {n:'Svenska',e:'📖',h:'svenska/',c:0xE5484D},
+  {n:'Svenska-parken',e:'📖',scen:'svenska',c:0xE5484D},
   {n:'Spel',e:'🎮',h:'spel/',c:0xFFB400},
   {n:'SO',e:'🌍',h:'so/',c:0xF2780C},
   {n:'Rymdlabbet',e:'🚀',h:'ovriga/rymdlabbet/',c:0x1E9E5E},
@@ -136,6 +136,21 @@ const PARKER={
     stjarnor:[[-30,-10,3.4],[-22,38,1.3],[44,-20,1.3]],
     tornPos:[30,18],  // hopptornet mellan två hörn
     npc:{x:6,z:-5,namn:'Piff'},
+    start:{x:0,z:0,ang:Math.PI/2},tornNamn:'Hopptornet',extraPlatt:[[-30,-10,2.2,2.4,0xFFA24C]]},
+  svenska:{namn:'Svenska-parken',e:'📖',c:0xE5484D,O:48,oval:1.3,trad:'host',samla:'vokaler',tornNamn:'Bokstavstornet',
+    gras:0xC9A24B,sand:0xE8CFA0,vatten:0x5E9BB0,himmel:['#8FB8D8','#E8D9C0','#FFF1DC'],dimma:0xEBDDC4,molnFarg:0xFFFFFF,molnOp:.85,
+    ljus:{h:0xFFE8C8,g:0xA0703A,hi:1.6,s:0xFFC27A,si:1.7,sp:[-40,28,30]},
+    hornor:[
+      {n:'Ord & stavning',e:'🔤',c:0xE5484D,prop:'bokstaver',p:[{n:'Ordgömman',e:'🔍',h:'ovriga/ordgomma/'},{n:'Ordgåtan',e:'🧩',h:'ovriga/ordgatan/'},{n:'Knepiga ljud',e:'🔊',h:'knepigaljud/'},{n:'Dubbelteckning',e:'✌️',h:'dubbelteckning/'},{n:'Ordgissning',e:'💭',h:'ordgissning/'},{n:'Ordkedjan',e:'🔗',h:'ordkedjan/'}]},
+      {n:'Berätta & skriva',e:'📚',c:0xF2780C,prop:'bok',p:[{n:'Sagobyggaren',e:'📚',h:'sagobyggaren/'},{n:'Handstil',e:'✍️',h:'handstil/'}]},
+      {n:'Meningar',e:'✏️',c:0x3D5AFE,prop:'ord',p:[{n:'Meningsbyggaren',e:'🧱',h:'meningsbyggaren/'},{n:'Vem gör vad?',e:'🕵️',h:'vemgorvad/'},{n:'Dela upp i meningar',e:'✂️',h:'delameningar/'}]},
+      {n:'Ordklasser',e:'🎨',c:0x1E9E5E,prop:'kolumner',p:[{n:'Verb',e:'🏃',h:'verb/'},{n:'Substantiv',e:'🏠',h:'substantiv/'},{n:'Adjektiv',e:'🌈',h:'adjektiv/'},{n:'Ordfärgaren',e:'🎨',h:'ordfargaren/'},{n:'Sortera orden',e:'🗂️',h:'sorteraord/'},{n:'Ordregn',e:'🌧️',h:'ordregn/'}]},
+      {n:'Läsa tillsammans',e:'👩‍🏫',c:0x7B61FF,prop:'hylla',p:[{n:'Högfrekventa ord',e:'👀',h:'ovriga/hogfrekventa/'},{n:'Bokstäver',e:'🔤',h:'ovriga/bokstaver/'},{n:'Läsflyt',e:'📖',h:'ovriga/lasflyt/'}]}
+    ],
+    stjarnor:[[42,-22,1.3,'A'],[-40,2,1.3,'E'],[28,30,3.4,'I'],[20,-40,1.3,'O'],[-50,-10,1.3,'U'],[0,-38,1.3,'Y'],[-26,40,1.3,'Å'],[20,42,1.3,'Ä'],[-45,30,1.3,'Ö']],
+    extraPlatt:[[28,30,2.2,2.4,0xFFA24C]],
+    tornPos:[-12,34],
+    npc:{x:6,z:-5,namn:'Ordis',animal:'uggla',farg:['#C9772E','#8A4E1A'],hat:'troll'},
     start:{x:0,z:0,ang:Math.PI/2}}
 };
 const RING=27,O_HUB=40;
@@ -194,8 +209,8 @@ function etikett(text,emoji,bred,farg){
   const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;
   const s=new THREE.Sprite(new THREE.SpriteMaterial({map:t,transparent:true,depthWrite:false}));s.scale.set(bred,bred/4,1);return s;
 }
-function siffraTextur(txt,bg,fg,fs){const c=document.createElement('canvas');c.width=c.height=128;const g=c.getContext('2d');g.fillStyle=bg;g.fillRect(0,0,128,128);g.strokeStyle='rgba(255,255,255,.7)';g.lineWidth=8;g.strokeRect(4,4,120,120);
-  g.fillStyle=fg||'#fff';g.font='800 '+(fs||84)+'px "Baloo 2","Trebuchet MS",system-ui,sans-serif';g.textAlign='center';g.textBaseline='middle';g.fillText(txt,64,70);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;return t;}
+function siffraTextur(txt,bg,fg,fs,w,h){w=w||128;h=h||128;const c=document.createElement('canvas');c.width=w;c.height=h;const g=c.getContext('2d');g.fillStyle=bg;g.fillRect(0,0,w,h);g.strokeStyle='rgba(255,255,255,.7)';g.lineWidth=8;g.strokeRect(4,4,w-8,h-8);
+  g.fillStyle=fg||'#fff';g.font='800 '+(fs||84)+'px "Baloo 2","Trebuchet MS",system-ui,sans-serif';g.textAlign='center';g.textBaseline='middle';g.fillText(txt,w/2,h/2+6);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;return t;}
 
 /* ---------- Scenens tillstånd ---------- */
 let S=null;                // aktuell scen: {id,W,O,liv,kollider,portaler,stjarnor,npc,...}
@@ -208,13 +223,14 @@ function rensaScen(){
 function nyScen(id,O){S={id,O,W:new THREE.Group(),liv:[],kollider:[],portaler:[],stjarnor:[],plattformar:[],fria:[],flagga:null,npc:null,moln:[]};scene.add(S.W);sd=11;return S;}
 const add=o=>{S.W.add(o);return o;};
 
-function ogrund(O,gras,sand,vattenFarg){
-  const g=add(new THREE.Mesh(new THREE.CylinderGeometry(O,O+1.5,3,56),M(gras)));g.position.y=-1.5;
-  const s=add(new THREE.Mesh(new THREE.CylinderGeometry(O+1.6,O+4,2.4,56),M(sand)));s.position.y=-2.7;
+function ogrund(O,gras,sand,vattenFarg,oval){
+  oval=oval||1;
+  const g=add(new THREE.Mesh(new THREE.CylinderGeometry(O,O+1.5,3,56),M(gras)));g.position.y=-1.5;g.scale.x=oval;
+  const s=add(new THREE.Mesh(new THREE.CylinderGeometry(O+1.6,O+4,2.4,56),M(sand)));s.position.y=-2.7;s.scale.x=oval;
   const v=add(new THREE.Mesh(new THREE.CircleGeometry(300,48),new THREE.MeshLambertMaterial({color:vattenFarg||0x4CC3F0,transparent:true,opacity:.92})));v.rotation.x=-Math.PI/2;v.position.y=-2.2;
   const sten=add(new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1,0),M(0xB7B2A5),56));
   const mm=new THREE.Matrix4(),qq=new THREE.Quaternion(),sc=new THREE.Vector3(),pp=new THREE.Vector3();
-  for(let i=0;i<56;i++){const a=i/56*Math.PI*2,r=O-.4+sr()*.6,k=.5+sr()*.7;pp.set(Math.cos(a)*r,.1,Math.sin(a)*r);sc.set(k*1.2,k*.8,k);qq.setFromAxisAngle(new THREE.Vector3(0,1,0),sr()*6);sten.setMatrixAt(i,mm.compose(pp,qq,sc));}
+  for(let i=0;i<56;i++){const a=i/56*Math.PI*2,r=O-.4+sr()*.6,k=.5+sr()*.7;pp.set(Math.cos(a)*r*oval,.1,Math.sin(a)*r);sc.set(k*1.2,k*.8,k);qq.setFromAxisAngle(new THREE.Vector3(0,1,0),sr()*6);sten.setMatrixAt(i,mm.compose(pp,qq,sc));}
 }
 function atMoln(n,farg,op){
   for(let i=0;i<n;i++){const g=new THREE.Group(),m=new THREE.MeshLambertMaterial({color:farg||0xffffff,flatShading:true,transparent:true,opacity:op||.93});
@@ -261,6 +277,32 @@ function planteraKristall(O){
     pp.set(x,.2,z);qq.setFromEuler(new THREE.Euler(sr()*.8,sr()*3,sr()*.8));sc.setScalar(.7+sr()*.8);kub.setMatrixAt(c,mm.compose(pp,qq,sc));kub.setColorAt(c,new THREE.Color(pal[c%pal.length]));c++;}
   kub.count=c;
 }
+function planteraHost(O,ov){
+  const n=lagt?26:46,mm=new THREE.Matrix4(),qq=new THREE.Quaternion(),sc=new THREE.Vector3(),pp=new THREE.Vector3(),pal=[0xE8793A,0xD64B2E,0xF2B33D,0xA8B03A,0xC7522A];
+  const stam=add(new THREE.InstancedMesh(new THREE.CylinderGeometry(.3,.42,2.2,6),M(0x7A4A24),n));
+  const m1=new THREE.MeshLambertMaterial({color:0xffffff,flatShading:true}),k1=add(new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1.9,0),m1,n)),k2=add(new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1.35,0),m1,n));
+  let c=0;
+  for(let f=0;c<n&&f<2000;f++){const a=sr()*Math.PI*2,r=14+sr()*(O-17),x=Math.cos(a)*r*ov,z=Math.sin(a)*r;if(!fri(x,z))continue;
+    const s=.8+sr()*.6;sc.set(s,s,s);qq.setFromAxisAngle(new THREE.Vector3(0,1,0),sr()*3);
+    pp.set(x,1.1*s,z);stam.setMatrixAt(c,mm.compose(pp,qq,sc));
+    pp.set(x,3.6*s,z);sc.set(s*1.1,s*.95,s*1.1);k1.setMatrixAt(c,mm.compose(pp,qq,sc));
+    pp.set(x,5.1*s,z);sc.set(s,s,s);k2.setMatrixAt(c,mm.compose(pp,qq,sc));
+    const col=new THREE.Color(pal[c%pal.length]);k1.setColorAt(c,col);k2.setColorAt(c,col.clone().offsetHSL(.02,0,.07));
+    S.kollider.push({x,z,r:.7*s,top:99});c++;}
+  stam.count=k1.count=k2.count=c;
+  // lövhögar på marken
+  const nl=lagt?100:240,lov=add(new THREE.InstancedMesh(new THREE.CircleGeometry(.38,5),new THREE.MeshLambertMaterial({color:0xffffff,side:THREE.DoubleSide}),nl));let q=0;
+  for(let f=0;q<nl&&f<3000;f++){const a=sr()*Math.PI*2,r=8+sr()*(O-9),x=Math.cos(a)*r*ov,z=Math.sin(a)*r;if(!fri(x,z))continue;
+    pp.set(x,.06+sr()*.03,z);qq.setFromEuler(new THREE.Euler(-Math.PI/2,0,sr()*6));sc.setScalar(.8+sr()*.9);lov.setMatrixAt(q,mm.compose(pp,qq,sc));lov.setColorAt(q,new THREE.Color(pal[q%pal.length]));q++;}
+  lov.count=q;
+}
+function fallandeLov(n,O,ov){
+  if(REDUCE)return;
+  const geo=new THREE.CircleGeometry(.28,5),pal=[0xE8793A,0xD64B2E,0xF2B33D,0xA8B03A],mats=pal.map(c=>new THREE.MeshBasicMaterial({color:c,side:THREE.DoubleSide,fog:true}));
+  const l=[];for(let i=0;i<n;i++){const m=new THREE.Mesh(geo,mats[i%4]);m.position.set((sr()*2-1)*O*ov*.95,sr()*16,(sr()*2-1)*O*.95);m.userData={v:.7+sr()*.7,ph:sr()*6,sp:1+sr()*3};add(m);l.push(m);}
+  let lt=0;S.liv.push(t=>{const d=Math.min(.05,t-lt)||.016;lt=t;for(const m of l){m.position.y-=m.userData.v*d;m.position.x+=Math.sin(t*1.2+m.userData.ph)*.7*d;m.position.z+=Math.cos(t*.9+m.userData.ph)*.6*d;
+    m.rotation.x=t*m.userData.sp*.4;m.rotation.z=t*m.userData.sp*.3;if(m.position.y<.1){m.position.y=16;m.position.x=(sr()*2-1)*O*ov*.95;m.position.z=(sr()*2-1)*O*.95;}}});
+}
 function fri(x,z,extra){const rr=Math.hypot(x,z);if(rr<12)return false;
   for(const k of S.kollider)if(Math.hypot(x-k.x,z-k.z)<k.r+2.2)return false;
   for(const k of S.fria)if(Math.hypot(x-k.x,z-k.z)<k.r)return false;return true;}
@@ -289,10 +331,10 @@ function plattform(x,z,r,h,farg){
 }
 function stjarnaUt(id,lista){
   const tagna=SV.stj[id]||[];
-  lista.forEach(([x,z,y],i)=>{const m=add(new THREE.Mesh(stjarnaGeo(.85,.38,.3),M(0xFFD23F,{emissive:0x7a5a00})));m.position.set(x,y,z);m.visible=!tagna.includes(i);
-    S.stjarnor.push({m,x,y,z,idx:i,tagen:tagna.includes(i),y0:y});});
+  lista.forEach(([x,z,y,ch],i)=>{const m=add(ch?new THREE.Mesh(new THREE.BoxGeometry(1.3,1.3,1.3),new THREE.MeshLambertMaterial({map:siffraTextur(ch,'#E5484D','#fff',92)})):new THREE.Mesh(stjarnaGeo(.85,.38,.3),M(0xFFD23F,{emissive:0x7a5a00})));m.position.set(x,y,z);m.visible=!tagna.includes(i);
+    S.stjarnor.push({m,x,y,z,idx:i,bokstav:ch||null,tagen:tagna.includes(i),y0:y});});
 }
-const stjarnaText=()=>{const n=S.stjarnor.filter(s=>s.tagen).length;$('stj').textContent='⭐ '+n+' av '+S.stjarnor.length+(n===S.stjarnor.length?' 🎉':'');};
+const stjarnaText=()=>{const n=S.stjarnor.filter(s=>s.tagen).length,b=S.stjarnor.length&&S.stjarnor[0].bokstav;$('stj').textContent=(b?'🔤 ':'⭐ ')+n+' av '+S.stjarnor.length+(n===S.stjarnor.length?' 🎉':'');};
 
 /* ---------- Portaler ---------- */
 function portalBygg(spec,px,pz,tx,tz,sk,kapp){
@@ -358,7 +400,7 @@ const skugga=new THREE.Mesh(new THREE.CircleGeometry(.7,16),new THREE.MeshBasicM
 scene.add(djur,skugga);
 
 function byggNpc(pos){
-  const g=djurModell({animal:'robot',farg:['#FF8A5C','#C4531F'],hat:'party'});g.position.set(pos.x,0,pos.z);g.rotation.y=Math.atan2(-pos.x,-pos.z);S.W.add(g);
+  const g=djurModell({animal:pos.animal||'robot',farg:pos.farg||['#FF8A5C','#C4531F'],hat:pos.hat||'party'});g.position.set(pos.x,0,pos.z);g.rotation.y=Math.atan2(-pos.x,-pos.z);S.W.add(g);
   const sk=etikett(pos.namn,'',3.2,'#FFC93C');sk.position.set(0,3.5,0);g.add(sk);
   const ut=etikett('❗','',1.2,'#FFC93C');ut.position.set(0,4.5,0);g.add(ut);
   S.kollider.push({x:pos.x,z:pos.z,r:.9,top:99});
@@ -426,6 +468,33 @@ function byggProp(typ,C,farg,g){
       P.forEach(([x,y])=>{q.beginPath();q.arc(x,y,12,0,7);q.fill();});const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;return new THREE.MeshLambertMaterial({map:t});};
     const d=new THREE.Mesh(new THREE.BoxGeometry(2.4,2.4,2.4),[1,6,2,5,3,4].map(dots));d.position.y=3;g.add(d);
     S.liv.push(t=>{d.rotation.y=t*.9;d.rotation.x=t*.6;d.position.y=3+Math.abs(Math.sin(t*1.8))*.8;});
+  }else if(typ==='bokstaver'){
+    [['A',0xE5484D,-.9,0,0],['B',0x3D5AFE,.9,0,.2],['Å',0x1E9E5E,0,1.6,.1]].forEach(([t,c,x,y,z],i)=>{
+      const k=new THREE.Mesh(new THREE.BoxGeometry(1.7,1.7,1.7),new THREE.MeshLambertMaterial({map:siffraTextur(t,hex(c),'#fff',96)}));k.position.set(x,.85+y,z);k.rotation.y=i*.6-.3;g.add(k);});
+    S.liv.push(t=>{g.rotation.y=Math.sin(t*.4)*.4;});
+  }else if(typ==='bok'){
+    const bk=new THREE.Group(),sid=M(farg),pap=M(0xFFF7E0);bk.position.y=3.2;g.add(bk);
+    for(const sx of[-1,1]){const h=new THREE.Group();h.rotation.z=sx*.42;h.position.x=sx*.05;bk.add(h);
+      const om=new THREE.Mesh(new THREE.BoxGeometry(2.4,.16,3.2),sid);om.position.set(sx*1.2,-.1,0);h.add(om);
+      const sd2=new THREE.Mesh(new THREE.BoxGeometry(2.25,.2,3.0),pap);sd2.position.set(sx*1.2,.04,0);h.add(sd2);}
+    S.liv.push(t=>{bk.rotation.y=t*.6;bk.position.y=3.2+Math.sin(t*1.5)*.3;});
+  }else if(typ==='ord'){
+    const gr=new THREE.Group();gr.position.y=.9;g.add(gr);
+    [['Katten',0xE5484D,0],['hoppar',0x3D5AFE,1.3],['högt',0x1E9E5E,2.6]].forEach(([w,c,y],i)=>{
+      const b=new THREE.Mesh(new THREE.BoxGeometry(3.2,1.1,.8),new THREE.MeshLambertMaterial({map:siffraTextur(w,hex(c),'#fff',58,256,96)}));b.position.set(Math.sin(i*1.4)*.4,y,0);gr.add(b);});
+    S.liv.push(t=>{gr.rotation.y=t*.5;});
+  }else if(typ==='kolumner'){
+    [['V',0xE5484D,2.2,-2],['S',0x3D5AFE,3.2,0],['A',0x1E9E5E,4.2,2]].forEach(([t,c,h,x])=>{
+      const k=new THREE.Mesh(new THREE.CylinderGeometry(.8,.9,h,10),M(c));k.position.set(x,h/2,0);g.add(k);
+      const b=new THREE.Mesh(new THREE.BoxGeometry(1.2,1.2,1.2),new THREE.MeshLambertMaterial({map:siffraTextur(t,hex(c),'#fff',84)}));b.position.set(x,h+.9,0);g.add(b);
+      S.liv.push(tt=>{b.rotation.y=tt*1.2+x;b.position.y=h+.9+Math.sin(tt*2+x)*.15;});});
+  }else if(typ==='hylla'){
+    const tra=M(0x8A5A2B);
+    for(const sx of[-1,1]){const st=new THREE.Mesh(new THREE.BoxGeometry(.3,5,1),tra);st.position.set(sx*2.1,2.5,0);g.add(st);}
+    const pal=[0xE5484D,0x3D5AFE,0xFFB400,0x1E9E5E,0x7B61FF,0xFF7EB6];
+    for(let r=0;r<3;r++){const pl=new THREE.Mesh(new THREE.BoxGeometry(4.5,.2,1),tra);pl.position.set(0,.4+r*1.6,0);g.add(pl);
+      let x=-1.8;for(let i=0;i<8;i++){const w=.3+((i*7+r*3)%4)*.08,h=.9+((i*5+r)%3)*.25,b=new THREE.Mesh(new THREE.BoxGeometry(w,h,.7),M(pal[(i+r*2)%6]));b.position.set(x+w/2,.5+r*1.6+h/2,0);g.add(b);x+=w+.06;}}
+    const tak=new THREE.Mesh(new THREE.BoxGeometry(4.5,.2,1),tra);tak.position.set(0,5,0);g.add(tak);
   }else if(typ==='penna'){
     const gr=new THREE.Group();gr.rotation.z=.32;gr.position.y=2.9;g.add(gr);
     const k=new THREE.Mesh(new THREE.CylinderGeometry(.6,.6,5,6),M(0xFFC93C));gr.add(k);
@@ -438,17 +507,18 @@ function byggProp(typ,C,farg,g){
 function byggPark(id){
   const D=PARKER[id],O=D.O;
   nyScen(id,O);himmel(D.himmel);scene.fog.color.set(D.dimma);stallLjus(D.ljus);
-  if(D.form==='ruta'){S.box=true;ogrundKvadrat(O,D);}else ogrund(O,D.gras,D.sand);
+  if(D.form==='ruta'){S.box=true;ogrundKvadrat(O,D);}else ogrund(O,D.gras,D.sand,D.vatten,D.oval);
+  S.oval=D.oval||1;S.tornNamn=D.tornNamn||'Hopptornet';S.samla=D.samla||'stjarnor';const ov=S.oval;
   const stig=M(0xFFF1C9);
   const torg=add(new THREE.Mesh(new THREE.CylinderGeometry(5,5,.12,32),stig));torg.position.y=.03;
   const tr=add(new THREE.Mesh(new THREE.TorusGeometry(5,.2,6,40),M(D.c)));tr.rotation.x=Math.PI/2;tr.position.y=.12;
   S.fria.push({x:0,z:0,r:10});
   const n=D.hornor.length,Rc=30,sk=.72,sp=6.8;
   D.hornor.forEach((h,k)=>{
-    const th=k/n*Math.PI*2,C={x:Math.cos(th)*Rc,z:Math.sin(th)*Rc},np=h.p.length;
+    const th0=k/n*Math.PI*2,C={x:Math.cos(th0)*Rc*ov,z:Math.sin(th0)*Rc},th=Math.atan2(C.z,C.x),np=h.p.length;
     const ra=Math.max(6.5,sp*(np-1)/2.6);
     // stig från mitten till hörnet och en plan golv
-    const lng=Rc-ra*.3,sg=add(new THREE.Mesh(new THREE.BoxGeometry(3,.1,lng),stig));sg.position.set(Math.cos(th)*lng/2,.02,Math.sin(th)*lng/2);sg.rotation.y=-th+Math.PI/2;
+    const lng=Math.hypot(C.x,C.z)-ra*.3,sg=add(new THREE.Mesh(new THREE.BoxGeometry(3,.1,lng),stig));sg.position.set(Math.cos(th)*lng/2,.02,Math.sin(th)*lng/2);sg.rotation.y=-th+Math.PI/2;
     const gol=add(new THREE.Mesh(new THREE.CylinderGeometry(ra*.9,ra*.95,.5,36),M(h.c,{transparent:true,opacity:.55})));gol.position.set(C.x,.25,C.z);
     S.kollider.push({x:C.x,z:C.z,r:ra*.9,top:.5});
     const kant=add(new THREE.Mesh(new THREE.TorusGeometry(ra*.9,.18,6,48),M(h.c)));kant.rotation.x=Math.PI/2;kant.position.set(C.x,.52,C.z);
@@ -469,11 +539,11 @@ function byggPark(id){
   {const pole=add(new THREE.Mesh(new THREE.CylinderGeometry(.08,.1,3,6),M(0xDDDDDD)));pole.position.set(tx,6.5+1.5,tz);
    const fl=add(new THREE.Mesh(new THREE.BoxGeometry(1.6,1,.06),M(0xE5484D)));fl.position.set(tx+.85,6.5+2.5,tz);S.liv.push(t=>{fl.rotation.y=Math.sin(t*3)*.25;});
    S.flagga={x:tx,z:tz,y:6.5};
-   const sk3=etikett('Hopptornet','🏁',5,'#E5484D');sk3.position.set(tx,13.4,tz);add(sk3);}
-  plattform(-30,-10,2.2,2.4,0xFFA24C);
+   const sk3=etikett(D.tornNamn||'Hopptornet','🏁',5.4,'#E5484D');sk3.position.set(tx,13.4,tz);add(sk3);}
+  (D.extraPlatt||[]).forEach(a=>plattform(...a));
   stjarnaUt(id,D.stjarnor);
-  if(D.trad==='kristall'){planteraKristall(O);ljuspunkter(lagt?70:160,O,0xFFF3B0);}else plantera(O,[0x35A36A,0x4FC283]);atMoln(lagt?5:9,D.molnFarg,D.molnOp);
-  byggNpc({x:D.npc.x,z:D.npc.z,namn:D.npc.namn});
+  if(D.trad==='kristall'){planteraKristall(O);ljuspunkter(lagt?70:160,O,0xFFF3B0);}else if(D.trad==='host'){planteraHost(O,ov);fallandeLov(lagt?30:70,O,ov);}else plantera(O,[0x35A36A,0x4FC283]);atMoln(lagt?5:9,D.molnFarg,D.molnOp);
+  byggNpc(D.npc);
   S.start=D.start;
 }
 
@@ -562,17 +632,22 @@ function gePrydnad(){
 }
 function klart(id,text){
   if(SV.seen.includes(id))return false;
-  SV.seen.push(id);const extra=gePrydnad();sparaSV();fanfar();firande(id==='matte-torn');toast('🎉 Uppdrag klart! '+text+extra);return true;
+  SV.seen.push(id);const extra=gePrydnad();sparaSV();fanfar();firande(/-torn$/.test(id));toast('🎉 Uppdrag klart! '+text+extra);return true;
 }
-const UPPDRAG={
-  hub:[{id:'hub-stj',e:'⭐',n:'Plocka alla 7 stjärnor på ön',fram:()=>S.stjarnor.filter(s=>s.tagen).length+' av '+S.stjarnor.length}],
-  matte:[{id:'matte-stj',e:'⭐',n:'Hitta de 3 gömda stjärnorna',fram:()=>S.stjarnor.filter(s=>s.tagen).length+' av '+S.stjarnor.length},
-         {id:'matte-torn',e:'🏁',n:'Hoppa upp till flaggan på Hopptornet',fram:()=>''}]
-};
+const antalTagna=()=>S.stjarnor.filter(s=>s.tagen).length+' av '+S.stjarnor.length;
+function uppdragFor(id){
+  if(id==='hub')return[{id:'hub-stj',e:'⭐',n:'Plocka alla 7 stjärnor på ön',fram:antalTagna}];
+  const D=PARKER[id];if(!D)return[];
+  const lista=[];
+  if(D.samla==='vokaler')lista.push({id:id+'-stj',e:'🔤',n:'Hitta alla vokaler: A E I O U Y Å Ä Ö',fram:()=>S.stjarnor.map(q=>q.tagen?q.bokstav:'_').join(' ')});
+  else lista.push({id:id+'-stj',e:'⭐',n:'Hitta de '+S.stjarnor.length+' gömda stjärnorna',fram:antalTagna});
+  lista.push({id:id+'-torn',e:'🏁',n:'Hoppa upp till flaggan på '+(D.tornNamn||'Hopptornet'),fram:()=>''});
+  return lista;
+}
 function dagensMal(){
   const pool=[];S.portaler.forEach(po=>{if(po.p.h)pool.push(po);});
   if(!pool.length)return null;
-  const si=S.id==='hub'?0:1;return pool[(dagNr()*7+si*3)%pool.length];
+  const si=[...S.id].reduce((a,c)=>a+c.charCodeAt(0),0);return pool[(dagNr()*7+si*3)%pool.length];
 }
 const arendeId=()=>'dag-'+idag()+'-'+S.id;
 function arendeKlart(){return SV.seen.includes(arendeId());}
@@ -603,7 +678,7 @@ function stangDlg(){dlgOpen=false;$('dlg').hidden=true;}
 $('qbtn').addEventListener('click',()=>{const p=$('panel');p.hidden=!p.hidden;if(!p.hidden)ritaPanel();});
 function ritaPanel(){
   const rows=[];
-  (UPPDRAG[S.id]||[]).forEach(q=>{const k=SV.seen.includes(q.id);rows.push(`<li class="${k?'k':''}"><span>${k?'✅':q.e}</span><span>${q.n}${k?'':q.fram()?' <small>('+q.fram()+')</small>':''}</span></li>`);});
+  uppdragFor(S.id).forEach(q=>{const k=SV.seen.includes(q.id);rows.push(`<li class="${k?'k':''}"><span>${k?'✅':q.e}</span><span>${q.n}${k?'':q.fram()?' <small>('+q.fram()+')</small>':''}</span></li>`);});
   const a=SV.arende;let ar;
   if(arendeKlart())ar='<li class="k"><span>✅</span><span>Dagens uppdrag från '+(S.npc?S.npc.namn:'Piff')+'</span></li>';
   else if(a&&a.scen===S.id)ar=`<li><span>💬</span><span>Gå in i ${a.e} ${a.namn} och kom tillbaka <small>(${a.besokt?'nästan klart!':'pågår'})</small></span></li>`;
@@ -620,7 +695,7 @@ function markhojd(x,z,fy){let h=0;for(const k of S.kollider)if(k.top<90&&Math.hy
 function stoppa(){
   for(const k of S.kollider){const dx=P.x-k.x,dz=P.z-k.z,d=Math.hypot(dx,dz),min=k.r+.5;
     if(d<min&&P.y<k.top-.55){const n=d||1;P.x=k.x+dx/n*min;P.z=k.z+dz/n*min;}}
-  const mx=S.O-1.2;if(S.box){P.x=Math.max(-mx,Math.min(mx,P.x));P.z=Math.max(-mx,Math.min(mx,P.z));}else{const rr=Math.hypot(P.x,P.z);if(rr>mx){P.x*=mx/rr;P.z*=mx/rr;}}
+  const mx=S.O-1.2;if(S.oval&&S.oval!==1){const nx=P.x/S.oval,rr=Math.hypot(nx,P.z);if(rr>mx){P.x=nx*mx/rr*S.oval;P.z*=mx/rr;}}else if(S.box){P.x=Math.max(-mx,Math.min(mx,P.x));P.z=Math.max(-mx,Math.min(mx,P.z));}else{const rr=Math.hypot(P.x,P.z);if(rr>mx){P.x*=mx/rr;P.z*=mx/rr;}}
 }
 let narmaste=null,narNpc=false,gaar=false;
 const prompt=$('prompt');
@@ -706,10 +781,11 @@ function steg(dt){
     if(Math.hypot(P.x-s.x,P.z-s.z)<1.3&&Math.abs(P.y+1-s.y)<1.6){
       s.tagen=true;s.m.visible=false;pling(660,990);
       (SV.stj[S.id]=SV.stj[S.id]||[]).push(s.idx);sparaSV();stjarnaText();
-      if(S.stjarnor.every(q=>q.tagen))klart(S.id+'-stj','Du hittade alla stjärnor!');}
+      if(s.bokstav){const kvar=S.stjarnor.filter(q=>!q.tagen).length;if(kvar)toast('Du hittade vokalen '+s.bokstav+'! '+(kvar===1?'Bara 1 kvar.':kvar+' kvar.'));}
+      if(S.stjarnor.every(q=>q.tagen))klart(S.id+'-stj',s.bokstav?'Du hittade alla vokaler!':'Du hittade alla stjärnor!');}
   }
   // hopptornet
-  if(S.flagga&&!SV.seen.includes('matte-torn')&&P.y>=S.flagga.y-.2&&Math.hypot(P.x-S.flagga.x,P.z-S.flagga.z)<2.6)klart('matte-torn','Du nådde toppen av Hopptornet!');
+  if(S.flagga&&!SV.seen.includes(S.id+'-torn')&&P.y>=S.flagga.y-.2&&Math.hypot(P.x-S.flagga.x,P.z-S.flagga.z)<2.6)klart(S.id+'-torn','Du nådde toppen av '+S.tornNamn+'!');
 }
 function rita(dt){
   const t=tid;
