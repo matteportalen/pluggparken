@@ -61,6 +61,8 @@ const IDX=[
  ['handstil/blad.html','Övningsblad för handstil','Skriv ut blad med bokstäver, siffror, ord och namn att öva handstil','🖨️','handstil övningsblad skriva ut utskrift blad skrivövning bokstäver namn siffror skrivstil tryckbokstäver','Svenska'],
  ['handstil/','Handstil','Öva att skriva bokstäver med fingret eller pennan: tryckbokstäver och skrivstil','✏️','handstil skriva skrivstil tryckbokstäver bokstäver alfabetet penna spåra följa stigen skrivövning svenska','Svenska'],
  ['meningsbyggaren/','Meningsbyggaren','Sätt orden i rätt ordning, stor bokstav och skiljetecken','🧩','mening meningar ord ordning stor bokstav punkt frågetecken utropstecken skiljetecken grammatik skriva svenska','Svenska'],
+ ['vemgorvad/','Vem gör vad?','Hitta den som gör något i meningen och ordet som säger vad som händer','🔎','mening meningar subjekt verb vem vad gör gör vad ordklass grammatik svenska','Svenska'],
+ ['delameningar/','Dela upp i meningar','En text utan punkter: hitta var varje mening slutar','✂️','mening meningar dela upp punkt frågetecken utropstecken stor bokstav text skiljetecken svenska','Svenska'],
  ['ordkedjan/','Ordkedjan','Skriv ett ord som börjar på sista bokstaven i förra ordet','⛓️','ordkedja ord bokstav kedja katt tak kaka ordlek svenska stava','Svenska'],
  ['ordgissning/','Ordgissning','Gissa det hemliga ordet, grönt gult grått, som Wordle','🔤','wordle gissa ord bokstäver ordlek ledtråd svenska stava','Svenska'],
  ['dubbelteckning/','Dubbelteckning','Kamma eller kama? Stavning med två konsonanter','✍️','dubbelteckning stavning dubbla konsonanter kamma kama ck stava svenska kort vokal lång vokal','Svenska'],
