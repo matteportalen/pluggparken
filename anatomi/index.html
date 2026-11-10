@@ -249,7 +249,7 @@ let _t0=performance.now();
 function loop(){requestAnimationFrame(loop);const _n=performance.now(),_dt=(_n-_t0)/1000;_t0=_n;flyStep();RESA.frame(_dt);ctl.update();linUpd();R.render(S,cam);}
 const RESA=initResa({THREE,S,cam,ctl,grp,all,hudUpd,flyHome:()=>{if(HEL)flyTo(HEL.t,HEL.d);}});
 document.querySelectorAll('#resor [data-resa]').forEach(b=>b.onclick=()=>{document.body.classList.remove('openr');RESA.start(b.dataset.resa);});
-las().then(loop);
+las().then(()=>{loop();const m=(location.hash||'').match(/^#resa-(mat|syre|nerv)$/);if(m)setTimeout(()=>RESA.start(m[1]),700);});
 window.__a={S,cam,ctl,grp,all};
 </script><script>
 (function(){const b=document.getElementById("menyb"),r=document.getElementById("resb");if(!b)return;const n=document.getElementById("menyn"),lag=document.getElementById("lag");

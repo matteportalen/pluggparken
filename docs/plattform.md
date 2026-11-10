@@ -167,3 +167,11 @@ Bonusläge, **inte** en ersättning för startsidan (lärarens val): en liten ö
 
 - **Hoppa av (alla åkturer):** under en åktur visar den gula knappen "⏹ Hoppa av"; även mellanslag/Hoppa-knappen, Enter och Escape avslutar. Man står då där man steg på (säkert även mitt i berg-och-dalbanan eller högt upp i hjulet). Åkturen räknas till Åkpasset bara om man åkt minst hälften (`slutRida`); annars kommer en vänlig påminnelse.
 - **Karusellen flyttades** från hörnet "Kul tillsammans" till en egen plats (`PARKER.spel.karusell`, (-22,-24)) med egen skylt; hörnet fick i stället en dragkampsrep och tre spelkort (`dragkamp`). Biljetter som krav för att få åka **valdes bort** av läraren (alla åker fritt).
+
+### Kroppen-parken och Hem-knappen (nov 2026)
+
+- Sjätte ön: **Kroppen** (`PARKER.kroppen`), en mjuk, rosa värld: kullar, "celler" som träd (klotformade kronor på krämvita stammar), röda och vita **blodkroppar** på marken, vita svävande punkter, en rosa blodsjö, ben som klippor och Ryggraden som torn. Fyra hörn, var och ett med ett **organ** som lekplats som rör sig: **Hjärtat** (slår, Människokroppen i 3D), **Maten** (magsäck, Matens resa), **Syret** (andande lungor, Syrets resa) och **Hjärnan** (nerver som blinkar, Hjärnan och nerverna). Figuren heter Doktor Kanin.
+- **Uppdrag:** hitta alla **8 organ** (Hjärtat, Lungorna, Hjärnan, Magsäcken, Levern, Njurarna, Tunntarmen, Urinblåsan) med en snäll fakta vid varje fynd, och hoppa upp på Ryggraden.
+- **Djuplänkar i Människokroppen:** `anatomi/#resa-mat`, `#resa-syre` och `#resa-nerv` startar resorna direkt (efter att modellen laddats, 0,7 s fördröjning). Resorna är bara tre; själva kroppen har en portal utan djuplänk.
+- **🏠 Hem-knapp** uppe till vänster i alla parker (inte på huvudön): tonar ut och landar på huvudöns torg (`tillHuben`), avbryter en åktur. Platsen i parken man lämnar sparas inte specifikt (portalen tar en dit igen).
+- Kvar utan egen ö: Specialare, Fler ämnen, Extra.
