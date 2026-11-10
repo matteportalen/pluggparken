@@ -249,6 +249,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 .lj.inst input[type=range]{width:160px}.lj.inst select,.bu.inst select,.bu.inst input[type=text]{font:inherit;font-weight:600;padding:6px 8px;border-radius:10px;border:2px solid var(--line);max-width:180px;background:#fff;color:var(--ink)}
 .lj.inst .kryss input{width:24px;height:24px}
 .lj.inst .sek{background:var(--c);color:#fff;border-radius:12px;padding:8px 14px;font-weight:800}.lj.inst .sek:disabled{opacity:.45}
+.lj .reg{display:grid;gap:2px;margin-top:10px}.lj .reg label{display:flex;align-items:center;justify-content:space-between;gap:10px;font-weight:700;font-size:.9rem;color:var(--muted)}.lj .reg input{flex:1;min-width:0;height:30px;max-width:190px}
 .lj .not{font-size:.78rem;color:var(--muted);font-weight:700;line-height:1.3}
 .w.hogt{animation:hogt .5s infinite alternate}
 @keyframes hogt{to{box-shadow:0 0 0 14px rgba(229,72,77,.45)}}
@@ -636,7 +637,7 @@ function laggTill(n){const c=S.widgets.length*28%140;let w;
   else if(n==="textruta")w={typ:"textruta",x:0,y:0,s:1/V.z,d:{text:"",c:TXTF[0],fet:true,w:560}};
   else if(n==="skrivrad")w={typ:"skrivrad",x:60+c,y:200+c,s:1,d:{}};
   else if(n==="burk")w={typ:"burk",x:Math.max(40,innerWidth-380)+c,y:130+c,s:1,d:{namn:"Burken",mal:20,antal:0,kalla:"hand",sek:30,sak:"kula"}};
-  else if(n==="ljud")w={typ:"ljud",x:Math.max(40,innerWidth-420)+c,y:420+c,s:1,d:{gr:70}};
+  else if(n==="ljud")w={typ:"ljud",x:Math.max(40,innerWidth-420)+c,y:420+c,s:1,d:{gr:70,kans:40}};
   else w={typ:"text",x:200+c,y:160+c,s:1,rot:Math.round((Math.random()*6-3)*10)/10,d:{text:"",c:LAPPFARG[S.widgets.filter(x=>x.typ==="text").length%4]}};
   w.id=uid();S.widgets.push(w);ritaAlla();plats(w);fram(w.id);spara();if(w.typ==="textruta"){const t=elOf(w.id)&&elOf(w.id).querySelector(".tt");if(t)t.focus();}}
 const CLOCK={};            // timer-tillstånd som inte sparas
@@ -888,15 +889,15 @@ const MAT={};
 const LSTAT=[["l0","😌","Lugnt"],["l1","🙂","Lagom"],["l2","😐","Snart för högt"],["l3","😬","För högt!"]];
 function fyllLjud(b,w){const d=w.d,igang=!!MAT[w.id];
   if(d.inst){
-    b.innerHTML=`<div class="lj inst"><label>Gräns <input type="range" min="30" max="95" value="${d.gr}" data-gr aria-label="Gräns för för högt ljud"></label>
-    <button class="sek" data-l="kal"${igang?"":" disabled"}>🎯 Så här högt är lagom nu</button><div class="not" data-kn>${igang?"Tryck när klassen jobbar som den ska. Det mäts i fem sekunder.":"Starta mätaren först."}</div>
+    b.innerHTML=`<div class="lj inst"><button class="sek" data-l="kal"${igang?"":" disabled"}>🎯 Så här högt är lagom nu</button><div class="not" data-kn>${igang?"Tryck när klassen jobbar som den ska. Det mäts i fem sekunder.":"Starta mätaren först."}</div>
     <label>🎤 Mikrofon <select data-mic aria-label="Mikrofon"><option value="">Standard</option></select></label>
     <label class="kryss"><span>Mjuk signal när det är för högt</span><input type="checkbox" data-ljv${d.ljud?" checked":""}></label>
     <div class="not">Ljudet spelas aldrig in och skickas ingenstans. Bara nivån mäts, här i webbläsaren.</div>
     <div class="rad"><button class="rund" data-l="inst" aria-label="Klar med inställningarna" title="Klar">✓</button></div></div>`;micLista(b,w);return;}
   b.innerHTML=`<div class="lj" data-lj><div class="ans">${igang?"😌":"🎤"}</div><div class="lbl">${igang?"Lyssnar …":"Tryck på Starta"}</div>
   <div class="mat"><div class="fyll"></div><div class="skym"></div><div class="gr" style="left:${d.gr}%"></div></div>
-  <div class="rad"><button data-l="go">${igang?"⏹ Stoppa":"🎤 Starta"}</button></div></div>`;
+  <div class="rad"><button data-l="go">${igang?"⏹ Stoppa":"🎤 Starta"}</button></div>
+  <div class="reg"><label>Gräns <input type="range" min="30" max="95" value="${d.gr}" data-gr aria-label="Gräns för för högt ljud"></label><label>Känslighet <input type="range" min="0" max="100" value="${d.kans==null?40:d.kans}" data-kans aria-label="Mikrofonens känslighet"></label></div></div>`;
   if(d.pa&&!igang&&!b.dataset.auto){b.dataset.auto="1";autoStart(w);}}
 async function autoStart(o){try{const r=await navigator.permissions.query({name:"microphone"});if(r.state==="granted")startaMatare(o);}catch(e){}}   // startar själv efter omladdning om mikrofonen redan är tillåten
 async function micLista(b,w){const s=b.querySelector("[data-mic]");if(!s||!navigator.mediaDevices||!navigator.mediaDevices.enumerateDevices)return;
@@ -915,7 +916,7 @@ async function startaMatare(o,igen){if(MAT[o.id])return true;
       if(nu-m.t1>=1000){m.sek.push(m.sum/m.cnt);if(m.sek.length>180)m.sek.shift();m.sum=0;m.cnt=0;m.t1=nu;
         if(m.sek.length>=8)m.golv=Math.max(-72,Math.min(-45,Math.min(...m.sek)));
         m.tyst=Math.max(...m.sek.slice(-8))<-90&&m.sek.length>=8?m.tyst+1:0;}
-      const t=Math.max(0,Math.min(1,(db-m.golv)/40));m.lv+=(t-m.lv)*(t>m.lv?.5:.06);
+      const R=75-.45*(o.d.kans==null?40:o.d.kans),t=Math.max(0,Math.min(1,(db-m.golv)/R));   // R = hur många dB över tystnaden som är full stapel; högre känslighet = mindre Rm.lv+=(t-m.lv)*(t>m.lv?.5:.06);
       const g=o.d.gr/100,el=elOf(o.id),k=m.lv>=g?3:m.lv>=g*.8?2:m.lv>=g*.5?1:0;
       if(m.lv>=g){m.hog+=1;if(m.hog===46&&o.d.ljud&&nu-m.sig>30000){m.sig=nu;tidLjud("skal");}}else m.hog=Math.max(0,m.hog-2);
       if(el){const sk=el.querySelector(".skym");
@@ -927,13 +928,13 @@ async function startaMatare(o,igen){if(MAT[o.id])return true;
 function kalibrera(o){const m=MAT[o.id],e=elOf(o.id);if(!m||m.kal||!e)return;const v=[],n=e.querySelector("[data-kn]");let s=5;m.kal=1;
   const iv=setInterval(()=>{if(!MAT[o.id]){clearInterval(iv);return;}v.push(MAT[o.id].lv);s-=.25;const nn=elOf(o.id)&&elOf(o.id).querySelector("[data-kn]");if(nn)nn.textContent="Mäter … "+Math.ceil(s);
     if(s<=0){clearInterval(iv);m.kal=null;const mean=v.reduce((a,b)=>a+b,0)/v.length;o.d.gr=Math.max(30,Math.min(95,Math.round(mean*100+15)));spara();
-      const el=elOf(o.id);if(el){const r=el.querySelector("[data-gr]");if(r)r.value=o.d.gr;const x=el.querySelector("[data-kn]");if(x)x.textContent="Klart! Gränsen är satt till "+o.d.gr+" %.";}}},250);}
+      const el=elOf(o.id);if(el){const r=el.querySelector("[data-gr]");if(r)r.value=o.d.gr;const gl=el.querySelector(".gr");if(gl)gl.style.left=o.d.gr+"%";const x=el.querySelector("[data-kn]");if(x)x.textContent="Klart! Gränsen är satt till "+o.d.gr+" %.";}}},250);}
 $("widgets").addEventListener("click",async e=>{const w=e.target.closest(".w");if(!w)return;const o=S.widgets.find(x=>x.id===w.dataset.id);if(!o||o.typ!=="ljud")return;const L=e.target.closest("[data-l]");if(!L)return;const b=w.querySelector(".wb"),k=L.dataset.l;
   if(k==="inst"){o.d.inst=false;spara();fyllLjud(b,o);return;}
   if(k==="kal"){kalibrera(o);return;}
   if(MAT[o.id]){stoppaMatare(o.id);o.d.pa=false;spara();w.classList.remove("hogt");fyllLjud(b,o);return;}
   const ok=await startaMatare(o);if(!ok){const l=b.querySelector(".lbl");if(l)l.textContent="Ingen tillgång till mikrofonen. Tillåt den i webbläsaren och försök igen.";}});
-$("widgets").addEventListener("input",e=>{const r=e.target.closest("[data-gr]");if(!r)return;const w=e.target.closest(".w"),o=S.widgets.find(x=>x.id===w.dataset.id);if(!o)return;o.d.gr=+r.value;spara();});
+$("widgets").addEventListener("input",e=>{const k=e.target.closest("[data-kans]");if(k){const w2=e.target.closest(".w"),o2=S.widgets.find(x=>x.id===w2.dataset.id);if(o2){o2.d.kans=+k.value;spara();}return;}const r=e.target.closest("[data-gr]");if(!r)return;const w=e.target.closest(".w"),o=S.widgets.find(x=>x.id===w.dataset.id);if(!o)return;o.d.gr=+r.value;const gl=w.querySelector(".gr");if(gl)gl.style.left=o.d.gr+"%";spara();});
 $("widgets").addEventListener("change",async e=>{const w=e.target.closest(".w");if(!w)return;const o=S.widgets.find(x=>x.id===w.dataset.id);if(!o||o.typ!=="ljud")return;
   if(e.target.matches("[data-ljv]")){o.d.ljud=e.target.checked;spara();if(o.d.ljud)tidLjud("skal");}
   else if(e.target.matches("[data-mic]")){o.d.mic=/^[\w+\/=-]{0,200}$/.test(e.target.value)?e.target.value:"";spara();if(MAT[o.id]){stoppaMatare(o.id);await startaMatare(o);}}});
@@ -999,7 +1000,7 @@ function renaWidget(o,medNamn){if(!o||!TYPER.includes(o.typ))return null;const d
   else if(o.typ==="grupper"){const nm=a=>Array.isArray(a)?a.slice(0,60).map(x=>String(x).slice(0,30)):[];n.d={namn:medNamn?nm(d.namn):[],franv:medNamn?nm(d.franv):[],lage:["par","storlek","antal"].includes(d.lage)?d.lage:"par",n:tal(d.n,2,12,3),res:medNamn&&Array.isArray(d.res)?d.res.slice(0,30).map(nm):[],edit:false};}
   else if(o.typ==="skrivrad")n.d={};
   else if(o.typ==="burk"){const mal=[5,10,15,20,30,40].includes(+d.mal)?+d.mal:20;n.d={namn:String(d.namn||"Burken").slice(0,24),mal,antal:tal(d.antal,0,mal,0),kalla:["hand","ljud","timer"].includes(d.kalla)?d.kalla:"hand",sek:[10,30,60,120,300].includes(+d.sek)?+d.sek:30,sak:["kula","stjarna","hjarta","kaka","blomma"].includes(d.sak)?d.sak:"kula"};}
-  else n.d={gr:tal(d.gr,30,95,70),ljud:!!d.ljud,mic:/^[\w+\/=-]{0,200}$/.test(d.mic||"")?String(d.mic||""):"",pa:!!d.pa};
+  else n.d={gr:tal(d.gr,30,95,70),kans:tal(d.kans,0,100,40),ljud:!!d.ljud,mic:/^[\w+\/=-]{0,200}$/.test(d.mic||"")?String(d.mic||""):"",pa:!!d.pa};
   return n;}
 function renaBank(b){if(!Array.isArray(b))return null;const r=[];b.slice(0,60).forEach(x=>{if(!x||typeof x!=="object")return;const k=String(x.k||"");if(!/^[a-z0-9]{2,30}$/.test(k)||r.some(y=>y.k===k))return;const n=String(x.n||"").slice(0,30);if(!n)return;
   r.push({k,n,e:String(x.e||"").slice(0,8),svg:SVG[x.svg]?x.svg:"",bok:!!x.bok,img:typeof x.img==="string"&&JPG.test(x.img)&&x.img.length<120000?x.img:""});});return r.length?r:null;}
