@@ -89,7 +89,6 @@ const IDX=[
  ['spegelbilder/','Spegelbilder','Välj den bild som är spegelbilden. Träna symmetri.','🪞','spegel spegelbild symmetri geometri former spegling','Matte'],
  ['rutnat/','Rutnät och koordinater','Hitta skatten i rutnätet. Läs av bokstav och siffra.','🗺️','rutnät koordinater karta bokstav siffra skattkarta geometri','Matte'],
  ['stavningsjakten/','Stavningsjakten','Hur stavas ordet på bilden? Hitta rätt stavning.','🔎','stavning stava rättstavning ord bild svenska','Svenska'],
- ['sverigeslandskap/','Sveriges landskap','Var ligger landskapen och vad är de kända för?','🏞️','landskap sverige geografi skåne lappland gotland götaland svealand norrland','SO'],
  ['demokrati/','Demokrati','Hur bestämmer vi tillsammans? Röstning, riksdag och rättigheter.','🗳️','demokrati rösta val riksdag regeringen lag rättigheter samhälle','SO'],
  ['engelskaord/','Engelska ord','Vad heter det på engelska? Ord, färger och artighet.','🇬🇧','engelska ord english hello thank you färger djur','Engelska'],
  ['klockanengelska/','Klockan på engelska','Hur säger man klockslaget? Half past och quarter to.','⏰','klockan engelska time clock oclock half past quarter','Engelska'],

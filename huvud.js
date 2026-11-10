@@ -109,7 +109,7 @@ body.mph-mini #quit{display:none}
     if(top==='anatomi')return'fler';
     if(/^(stavningsjakten|rimmaskinen|meningsbyggaren|vemgorvad|delameningar|verb|substantiv|adjektiv|ordfargaren|sorteraord|ordregn|ordkedjan|ordgissning|dubbelteckning|knepigaljud|sagobyggaren|handstil)$/.test(top))return'svenska';
     if(top==='raketbygget'||top==='manbasen')return'rymd';
-    if(top==='tidslinjen'||top==='vikingatiden'||top==='sverigeslandskap'||top==='demokrati')return'so';
+    if(top==='tidslinjen'||top==='vikingatiden'||top==='demokrati')return'so';
     if(/^(engelskaord|klockanengelska|sinnena|tanderna|schack|trerirad|sudoku|trafikstockning|gissastorlek|fylltillstrecket)$/.test(top))return'fler';
     if(top==='specialare')return'special';
     if(/^(mittrum|flytta)$/.test(top))return'hem';
