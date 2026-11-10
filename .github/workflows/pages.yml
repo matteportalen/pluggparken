@@ -31,10 +31,28 @@ jobs:
     permissions:
       pages: write
       id-token: write
+      deployments: read
     environment:
       name: github-pages
       url: https://pluggparken.se/
     steps:
+      # Pages vägrar en ny publicering så länge en gammal, nedgiven deployment fortfarande räknas som pågående i GitHubs backend
+      # ("due to in progress deployment. Please cancel <sha> first"). Det är därför publiceringen fastnar efter en körning som gett upp.
+      # Här avbryts alla tidigare deployments som inte slutade i success innan vi försöker; fel ignoreras (redan klara går inte att avbryta).
+      - name: Avbryt gamla deployments som står i vägen
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          for id in $(gh api "repos/$REPO/deployments?environment=github-pages&per_page=8" --jq '.[].id'); do
+            st=$(gh api "repos/$REPO/deployments/$id/statuses" --jq '.[0].state' || echo "")
+            sha=$(gh api "repos/$REPO/deployments/$id" --jq '.sha')
+            if [ "$st" != "success" ] && [ "$st" != "inactive" ]; then
+              echo "Avbryter $sha (läge: $st)"
+              gh api -X POST "repos/$REPO/pages/deployments/$sha/cancel" || echo "  (gick inte att avbryta, hoppar över)"
+            fi
+          done
+          sleep 5
       # Ett enda, tåligt försök: Pages kan stå i kö eller synka i flera minuter när något stort ändrats. Omförsök i samma körning
       # fungerar inte (samma version får samma deployment-id och avbryts direkt), men en ny körning en stund senare går igenom.
       - name: Publicera till GitHub Pages
