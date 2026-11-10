@@ -39,6 +39,18 @@ body{font-family:var(--font);color:var(--ink);-webkit-tap-highlight-color:transp
 #jump{position:fixed;right:calc(26px + env(safe-area-inset-right,0px));bottom:calc(40px + env(safe-area-inset-bottom,0px));width:96px;height:96px;border-radius:50%;border:3px solid rgba(255,255,255,.9);background:rgba(255,201,60,.92);color:var(--ink);font:800 1.15rem var(--font);z-index:5;touch-action:none;display:none;box-shadow:0 5px 0 #C99A0A}
 #jump:active{transform:translateY(3px)}
 body.touch #stick,body.touch #jump{display:block}
+body.bio #stick,body.bio #jump,body.bio #prompt,body.bio #hint{display:none!important}
+#fjarr{position:fixed;right:calc(14px + env(safe-area-inset-right,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:6;display:flex;flex-direction:column;align-items:flex-end;gap:8px;pointer-events:none}
+#fjarr[hidden]{display:none}
+#fjarr>*{pointer-events:auto}
+#fjarr .fj{display:grid;grid-template-columns:repeat(3,54px);grid-template-rows:repeat(3,46px);gap:5px;padding:8px;border-radius:26px;background:#1B1F2E;box-shadow:0 5px 0 #0B0D18,0 10px 24px rgba(0,0,0,.4)}
+#fjarr .fj button{border:0;border-radius:16px;background:#2E3550;color:#fff;font:800 22px var(--font);cursor:pointer;box-shadow:0 3px 0 #11142A}
+#fjarr .fj button:active{transform:translateY(3px);box-shadow:none}
+#fjarr .fj .ok{grid-column:2;grid-row:2;background:#F2B707;color:var(--ink);font-size:20px}
+#fjarr .fj .u{grid-column:2;grid-row:1}#fjarr .fj .d{grid-column:2;grid-row:3}#fjarr .fj .l{grid-column:1;grid-row:2}#fjarr .fj .r{grid-column:3;grid-row:2}
+#fjarr small{display:none}
+#fjarr small.x{color:#fff;background:rgba(20,16,43,.78);padding:4px 12px;border-radius:12px;font:700 13px var(--font);text-align:center}
+@media (max-height:520px){#fjarr .fj{grid-template-columns:repeat(3,46px);grid-template-rows:repeat(3,38px)}}
 #load{position:fixed;inset:0;z-index:20;display:grid;place-items:center;background:linear-gradient(#7FD0F5,#CFEFFF);text-align:center;font-weight:800;font-size:1.3rem;padding:20px;transition:opacity .5s}
 #load.klar{opacity:0;pointer-events:none}
 #load .em{font-size:4rem;display:block;animation:hopp 1s ease-in-out infinite}
@@ -79,6 +91,7 @@ body.touch #stick,body.touch #jump{display:block}
 <div id="topR"><button class="btn pill" id="qbtn" type="button" aria-label="Uppdrag">📋<span class="tx"> Uppdrag</span></button><span class="btn pill" id="stj" aria-live="polite">⭐ 0 av 7</span><button class="btn pill" id="lagt" type="button" aria-pressed="false" title="Gör världen enklare om den går trögt" aria-label="Lågt läge">🐢<span class="tx"> Lågt läge</span></button></div>
 <div id="hint"></div>
 <button class="btn" id="prompt" type="button" hidden></button>
+<div id="fjarr" hidden><div class="fj"><button class="u" data-k="up" aria-label="Upp">▲</button><button class="l" data-k="left" aria-label="Vänster">◀</button><button class="ok" data-k="ok">OK</button><button class="r" data-k="right" aria-label="Höger">▶</button><button class="d" data-k="down" aria-label="Ner">▼</button></div><button class="btn" data-k="x" type="button" style="font-size:14px;padding:8px 14px;min-height:40px">✕ Lägg ner</button></div>
 <div id="stick" aria-hidden="true"><div id="knob"></div></div>
 <button id="jump" type="button" aria-label="Hoppa">Hoppa</button>
 <div id="panel" hidden><div id="panelInn"></div><button class="btn" id="panelStang" type="button">Stäng</button></div>
@@ -131,7 +144,7 @@ const HUB=[
   {n:'SO-parken',e:'🌍',scen:'so',c:0xF2780C},
   {n:'Rymdlabbet',e:'🚀',scen:'rymdlabbet',c:0x1E9E5E},
   {n:'Kroppen',e:'🫀',scen:'kroppen',c:0xE0558A},
-  {n:'Specialare',e:'✨',h:'specialare/',c:0x7B61FF},
+  {n:'Biografen',e:'🎬',scen:'bio',c:0x7B61FF},
   {n:'Fler ämnen',e:'🧩',scen:'fler',c:0x0E9AA7},
   {n:'Extra',e:'🎵',scen:'extra',c:0xD6409F}
 ];
@@ -348,6 +361,34 @@ Object.assign(PARKER.kroppen,{form:'rund',ext:[58,38],oval:1,O:26,textur:kroppst
       if(i<7&&i!==2){const b=new THREE.Mesh(new THREE.BoxGeometry(2,1,2),M(0x1B1B26));b.position.set(x+1.7,y0+.9,z+1.9);S.W.add(b);S.kollider.push({x:x+1.7,z:z+1.9,r:1,halv:true,top:y0+1.4});S.pads.push({x:x+1.7,z:z+1.9,r:1,halv:true,top:y0+1.4,f:NOT[i]*2.4,boost:0});}}
     S.fria.push({x:0,z:22,r:12});}};
 }
+/* ---------- Biografen (Specialare): egen ö med en stor skärm och en fjärrkontroll ---------- */
+function biotextur(c,N,W0,KK){
+  const W=W0/(KK||1),X=x=>(x+W)/(2*W)*N,Z=z=>(z+W)/(2*W)*N,sk=N/(2*W);
+  c.fillStyle='#1B1240';c.fillRect(0,0,N,N);
+  const kust=(d)=>{c.beginPath();for(let i=0;i<=96;i++){const th=i/96*Math.PI*2,r=S.randR(th)+d;const x=Math.cos(th)*r,z=Math.sin(th)*r;i?c.lineTo(X(x),Z(z)):c.moveTo(X(x),Z(z));}c.closePath();};
+  kust(1.5);c.fillStyle='#E6C58A';c.fill();kust(-3.5);c.fillStyle='#3A2A72';c.fill();
+  // rutmönster som en gammal biograf
+  c.save();kust(-3.5);c.clip();c.globalAlpha=.16;for(let i=-60;i<60;i+=4)for(let j=-60;j<60;j+=4)if(((i+j)/4)%2===0){c.fillStyle='#8E6BFF';c.fillRect(X(i),Z(j),4*sk,4*sk);}c.globalAlpha=1;
+  // torg framför biografen och röd matta
+  c.beginPath();c.arc(X(0),Z(40),11*sk,0,7);c.fillStyle='#4A3590';c.fill();
+  c.fillStyle='#B3122D';c.fillRect(X(-3.4),Z(-30),6.8*sk,(76)*sk);
+  c.strokeStyle='#F2B707';c.lineWidth=.5*sk;c.strokeRect(X(-3.4),Z(-30),6.8*sk,(76)*sk);
+  c.fillStyle='#F2B707';for(let z=-28;z<46;z+=4){c.beginPath();c.arc(X(-3.4),Z(z),.35*sk,0,7);c.arc(X(3.4),Z(z),.35*sk,0,7);c.fill();}
+  c.restore();
+}
+PARKER.bio={namn:'Biografen',e:'🎬',c:0x7B61FF,O:52,oval:1.1,form:'cirkel',trad:'bio',textur:biotextur,tornNamn:'Filmtornet',tornFarg:[0xB3122D,0xF2B707,0xB3122D,0x7B61FF,0xFFC93C],
+  vatten:0x2A1A66,himmel:['#0E0A2A','#3A1F6B','#FF8A5C'],dimma:0x4A2A7A,molnFarg:0xFFC0A0,molnOp:.55,klippFarg:0x4A3A6A,stenFarg:0x6A5A8A,
+  ljus:{h:0xD8C8FF,g:0x4A3A7A,hi:1.55,s:0xFFC896,si:1.6,sp:[-20,40,30]},slant:8,
+  samla:'biljetter',
+  hornor:[{n:'Foajén',e:'🎟️',c:0x7B61FF,prop:'skarm',x:-36,z:18,rik:0,h:.8,p:[{n:'Alla specialare',e:'✨',h:'specialare/'}]}],
+  kullar:[{x:42,z:-30,rt:6,rs:12,h:3},{x:-42,z:-34,rt:6,rs:12,h:3}],
+  start:{x:0,z:44,ang:Math.PI},tillbaka:{x:12,z:42},tornPos:[36,16],npc:{x:-9,z:40,namn:'Biljettkillen',animal:'katt',farg:['#F4A259','#C9772E'],hat:'party'},
+  stigar:[[[0,30],[-16,22],[-30,19]]],
+  klippor:[{x:-46,z:-18,s:2},{x:46,z:-12,s:3}],
+  stjarnor:[[-44,10,0,'Biljett','',0xFFC93C,'biljett'],[44,2,0,'Biljett','',0xFFC93C,'biljett'],[-46,-18,0,'Biljett','',0xFFC93C,'biljett'],[46,-12,0,'Biljett','',0xFFC93C,'biljett'],[-30,36,1.3,'Biljett','',0xFFC93C,'biljett'],[30,30,0,'Biljett','',0xFFC93C,'biljett'],[-8,-46,1.3,'Biljett','',0xFFC93C,'biljett'],[14,-45,1.3,'Biljett','',0xFFC93C,'biljett']],
+  aktUppdrag:{typ:'film',e:'🎬',n:'Ta fjärrkontrollen och välj en film',klart:'Du valde din första film!'},
+  bioUppdrag:true,
+  bio:()=>bygBio()};
 /* Mer yta: varje ö förstoras genom att alla platser i datat flyttas ut (föremålen behåller sin storlek, så det blir luftigare). */
 function skalaPark(D,k){
   D.skala=k;D.O*=k;if(D.ext)D.ext=D.ext.map(v=>v*k);
@@ -1274,16 +1315,73 @@ function byggPark(id){
   if(D.berg)bygBerg(D);
   if(D.bana)D.bana();
   if(D.pads)D.pads();
+  if(D.bio)D.bio();
   if(D.ordbro)bygOrdbro(D);
   if(D.karusell){const kx=D.karusell.x,kz=D.karusell.z,g=new THREE.Group();g.position.set(kx,S.hojd(kx,kz),kz);S.W.add(g);byggProp('karusell',null,0xFF9A5C,g);
     S.kollider.push({x:kx,z:kz,r:1,top:99});S.fria.push({x:kx,z:kz,r:9});const sk5=etikett('Karusellen','🎠',5,'#FF9A5C');sk5.position.set(0,8.6,0);g.add(sk5);}
   stjarnaUt(id,D.stjarnor);
   // klippor med en sak på toppen
   (D.klippor||[]).forEach(k=>{const top=klippa(k.x,k.z,D.klippFarg||0x8B7B6B);if(k.s!=null&&S.stjarnor[k.s]){const q=S.stjarnor[k.s];q.y=q.y0=top+1.2;q.x=k.x;q.z=k.z;q.m.position.set(k.x,q.y,k.z);}});
-  if(D.trad==='kristall'){planteraKristall(D.O);ljuspunkter(lagt?70:160,D.O,0xFFF3B0);}else if(D.trad==='host'){planteraHost(D.O,D.oval||1,D.tradPal);if(!D.ingaLov)fallandeLov(lagt?30:70,D.O,D.oval||1,D.tradPal);if(D.regn)ballonger();}else if(D.trad==='savann'||D.trad==='karta')planteraSavann(D);else if(D.trad==='musik')planteraMusik(D);else if(D.trad==='bok'){planteraBok(D);fallandeLov(lagt?24:50,D.O,D.oval||1,[0xFFFFFF,0xFBF3DC,0xFFE9A8,0xFFD6D6]);}else if(D.trad==='kropp'){planteraKropp(D);ljuspunkter(lagt?50:110,D.O,0xFFFFFF);}
+  if(D.trad==='kristall'){planteraKristall(D.O);ljuspunkter(lagt?70:160,D.O,0xFFF3B0);}else if(D.trad==='host'){planteraHost(D.O,D.oval||1,D.tradPal);if(!D.ingaLov)fallandeLov(lagt?30:70,D.O,D.oval||1,D.tradPal);if(D.regn)ballonger();}else if(D.trad==='savann'||D.trad==='karta')planteraSavann(D);else if(D.trad==='musik')planteraMusik(D);else if(D.trad==='bok'){planteraBok(D);fallandeLov(lagt?24:50,D.O,D.oval||1,[0xFFFFFF,0xFBF3DC,0xFFE9A8,0xFFD6D6]);}else if(D.trad==='bio'){plantera(D.O,[0x8E4DD6,0xFF7EB6]);ljuspunkter(lagt?60:130,D.O,0xFFD9A0);}else if(D.trad==='kropp'){planteraKropp(D);ljuspunkter(lagt?50:110,D.O,0xFFFFFF);}
   atMoln(lagt?5:9,D.molnFarg,D.molnOp);
   byggNpc(D.npc);
   S.start=D.start;
+}
+
+/* ---------- Biografens byggnad: skärm, ridåer, stolar och fjärrkontrollen ---------- */
+const BIO_Z=-34,BIO_SW=32,BIO_SH=18,BIO_SY=12.5;
+function bygBio(){
+  const g0=S.hojd(0,BIO_Z),mörk=M(0x14102B),rod=M(0xB3122D),guld=M(0xF2B707);
+  // skärmen
+  const ram=add(new THREE.Mesh(new THREE.BoxGeometry(BIO_SW+2.6,BIO_SH+2.6,.9),mörk));ram.position.set(0,BIO_SY,BIO_Z);
+  const cv=document.createElement('canvas');cv.width=1280;cv.height=720;const tex=new THREE.CanvasTexture(cv);tex.colorSpace=THREE.SRGBColorSpace;tex.anisotropy=4;
+  const plan=add(new THREE.Mesh(new THREE.PlaneGeometry(BIO_SW,BIO_SH),new THREE.MeshBasicMaterial({map:tex,toneMapped:false,fog:false})));plan.position.set(0,BIO_SY,BIO_Z+.48);
+  S.ref.bio={cv,tex,plan,g:cv.getContext('2d')};
+  { const g=cv.getContext('2d');g.fillStyle='#0B0A1E';g.fillRect(0,0,1280,720);g.fillStyle='#F2F0FF';g.font='800 64px "Baloo 2",system-ui,sans-serif';g.textAlign='center';g.fillText('Pluggparken-bio',640,340);g.font='700 34px "Baloo 2",system-ui,sans-serif';g.fillStyle='#F2B707';g.fillText('Ta fjärrkontrollen och välj en film',640,400);tex.needsUpdate=true;}
+  for(const sx of[-1,1]){const p=add(new THREE.Mesh(new THREE.CylinderGeometry(.9,1.1,BIO_SY*2+3,8),mörk));p.position.set(sx*(BIO_SW/2+3.2),g0+BIO_SY+1.5,BIO_Z);
+    // ridåer med veck
+    for(let i=0;i<5;i++){const v=add(new THREE.Mesh(new THREE.CylinderGeometry(.8,.8,BIO_SH+4,8),i%2?M(0x8E0F25):rod));v.position.set(sx*(BIO_SW/2+1.2+i*.62),BIO_SY+.4,BIO_Z+1+(i%2)*.2);}}
+  const val=add(new THREE.Mesh(new THREE.BoxGeometry(BIO_SW+10,2.2,1.6),rod));val.position.set(0,BIO_SY+BIO_SH/2+2.6,BIO_Z+.8);
+  const gl=add(new THREE.Mesh(new THREE.BoxGeometry(BIO_SW+10,.35,1.8),guld));gl.position.set(0,BIO_SY+BIO_SH/2+1.4,BIO_Z+.8);
+  const skylt=etikett('Pluggparken-bio','🎬',13,'#B3122D');skylt.position.set(0,BIO_SY+BIO_SH/2+7.6,BIO_Z+1);add(skylt);
+  // glödlampor runt skärmen
+  { const n=lagt?24:44,bm=new THREE.MeshBasicMaterial({color:0xFFE07A,fog:false}),ins=add(new THREE.InstancedMesh(new THREE.SphereGeometry(.26,8,6),bm,n*2)),mm=new THREE.Matrix4();
+    for(let i=0;i<n;i++){const x=-BIO_SW/2-1+i/(n-1)*(BIO_SW+2);ins.setMatrixAt(i,mm.makeTranslation(x,BIO_SY+BIO_SH/2+1.15,BIO_Z+.6));ins.setMatrixAt(n+i,mm.makeTranslation(x,BIO_SY-BIO_SH/2-1.15,BIO_Z+.6));}
+    S.liv.push(t=>{bm.color.setHSL(.12,1,.62+Math.sin(t*3)*.08);}); }
+  // väggen bakom: man går runt skärmen
+  for(let x=-21;x<=21;x+=3)S.kollider.push({x,z:BIO_Z+.8,r:2,top:99});
+  // stolar: rader med en gång i mitten
+  const stolM=M(0xB3122D),ryggM=M(0x8E0F25);let n=0;
+  for(const z of[-27,-23,-19,-15])for(let i=-4;i<=4;i++){if(i===0)continue;const x=i*3.6+(i>0?-1:1)*0;if(Math.abs(x)>18)continue;
+    const s=add(new THREE.Mesh(new THREE.BoxGeometry(2.4,1,2),stolM));s.position.set(x,S.hojd(x,z)+.5,z);const r=add(new THREE.Mesh(new THREE.BoxGeometry(2.4,1.5,.4),ryggM));r.position.set(x,S.hojd(x,z)+1.4,z-.9);
+    S.kollider.push({x,z,r:1.2,halv:true,top:S.hojd(x,z)+1});n++;}
+  for(let z=0;z<=44;z+=8)S.fria.push({x:0,z,r:9});
+  S.fria.push({x:0,z:-22,r:22},{x:-14,z:-22,r:12},{x:14,z:-22,r:12},{x:0,z:BIO_Z,r:24});
+  // fjärrkontrollen på ett litet bord mitt i gången
+  { const rx=0,rz=-9,y0=S.hojd(rx,rz),gr=new THREE.Group();gr.position.set(rx,y0,rz);S.W.add(gr);
+    const bord=new THREE.Mesh(new THREE.CylinderGeometry(.9,1.1,1.1,12),M(0xF2B707));bord.position.y=.55;gr.add(bord);
+    const ring=new THREE.Mesh(new THREE.TorusGeometry(1.5,.12,6,28),M(0xFFFFFF,{emissive:0x886600}));ring.rotation.x=Math.PI/2;ring.position.y=.2;gr.add(ring);
+    const fj=new THREE.Group();const kropp=new THREE.Mesh(new THREE.BoxGeometry(.7,.28,2.2),M(0x1B1F2E));fj.add(kropp);
+    [[0xE5484D,-.7],[0x1E9E5E,-.2],[0x3D5AFE,.3],[0xFFC93C,.8]].forEach(([c,z])=>{const b=new THREE.Mesh(new THREE.SphereGeometry(.17,8,6),M(c,{emissive:c,emissiveIntensity:.35}));b.position.set(0,.18,z);fj.add(b);});
+    fj.position.y=1.7;fj.scale.setScalar(1.2);gr.add(fj);
+    const lb=etikett('Fjärrkontrollen','📺',4.6,'#7B61FF',null,true);lb.position.y=4.2;gr.add(lb);
+    S.kollider.push({x:rx,z:rz,r:.9,top:y0+1.2});
+    S.liv.push(t=>{fj.position.y=1.7+Math.sin(t*2.2)*.15;fj.rotation.y=t*.9;ring.rotation.z=t;});
+    S.rides.push({typ:'fjarr',x:rx,z:rz,r:3.4,namn:'fjärrkontrollen',e:'📺'}); }
+  // popcornvagn
+  { const px=-22,pz=-4,y0=S.hojd(px,pz),gr=new THREE.Group();gr.position.set(px,y0,pz);gr.rotation.y=.5;S.W.add(gr);
+    const b=new THREE.Mesh(new THREE.BoxGeometry(3.4,1.8,2.2),M(0xE5484D));b.position.y=1.5;gr.add(b);
+    for(const sx of[-1.2,1.2]){const h=new THREE.Mesh(new THREE.CylinderGeometry(.6,.6,.2,12),M(0x333344));h.rotation.x=Math.PI/2;h.position.set(sx,.6,1.2);gr.add(h);}
+    const glas=new THREE.Mesh(new THREE.BoxGeometry(3,1.5,1.8),new THREE.MeshLambertMaterial({color:0xFFF3C4,transparent:true,opacity:.75}));glas.position.y=3.1;gr.add(glas);
+    for(let i=0;i<14;i++){const p=new THREE.Mesh(new THREE.IcosahedronGeometry(.28,0),M(i%3?0xFFF1B8:0xFFFFFF));p.position.set((sr()-.5)*2.6,2.6+sr()*1.1,(sr()-.5)*1.4);gr.add(p);}
+    for(let i=0;i<4;i++){const st=new THREE.Mesh(new THREE.BoxGeometry(.78,.18,2.3),M(i%2?0xFFFFFF:0xE5484D));st.position.set(-1.17+i*.78,4.05,0);st.rotation.z=0;gr.add(st);}
+    const lb=etikett('Popcorn','🍿',3.2,'#E5484D');lb.position.y=6;gr.add(lb);S.kollider.push({x:px,z:pz,r:2,top:99});S.fria.push({x:px,z:pz,r:6}); }
+  // strålkastare som sveper över himlen
+  for(const sx of[-1,1]){const bam=new THREE.Mesh(new THREE.ConeGeometry(7,70,16,1,true),new THREE.MeshBasicMaterial({color:0xFFF3C4,transparent:true,opacity:.1,depthWrite:false,side:THREE.DoubleSide,fog:false}));
+    const gr=new THREE.Group();gr.position.set(sx*30,S.hojd(sx*30,34),34);S.W.add(gr);bam.position.y=35;gr.add(bam);const lamp=new THREE.Mesh(new THREE.CylinderGeometry(.9,1.2,1.4,10),mörk);lamp.position.y=.7;gr.add(lamp);
+    S.liv.push(t=>{gr.rotation.z=sx*(.35+Math.sin(t*.6+sx)*.28);gr.rotation.x=Math.sin(t*.5+sx*2)*.22;});S.fria.push({x:sx*30,z:34,r:4});}
+  // lampstolpar med glödlampor längs mattan
+  for(let i=0;i<8;i++){const z=40-i*9,sx=i%2?1:-1;for(const s2 of[-1,1]){const x=s2*6.5;if(Math.abs(z)<8)continue;const y=S.hojd(x,z),p=add(new THREE.Mesh(new THREE.CylinderGeometry(.1,.14,3,6),M(0x2A2A3A)));p.position.set(x,y+1.5,z);const l=add(new THREE.Mesh(new THREE.SphereGeometry(.4,10,8),new THREE.MeshBasicMaterial({color:0xFFE07A,fog:false})));l.position.set(x,y+3.2,z);S.kollider.push({x,z,r:.35,top:99});}}
 }
 
 /* ---------- Spelaren, plats ---------- */
@@ -1292,7 +1390,7 @@ let camYaw=0,camPitch=.5,camDist=11.5;
 function placera(x,z,ang,cy){P.x=x;P.z=z;P.y=S&&S.hojd?S.hojd(x,z):0;P.vy=0;P.fartX=P.fartZ=0;P.ang=ang||0;camYaw=cy!=null?cy:(ang||0);cam.position.set(x-Math.sin(camYaw)*camDist,5,z-Math.cos(camYaw)*camDist);}
 function lasPlats(){let s=null;try{s=JSON.parse(lsGet('mp-varlden-pos')||'null');}catch(e){}return s;}
 function tillHuben(){
-  if(gaar||S.id==='hub')return;gaar=true;stangDlg();rida=null;prompt.hidden=true;$('fade').classList.add('pa');
+  if(gaar||S.id==='hub')return;slutBio(true);gaar=true;stangDlg();rida=null;prompt.hidden=true;$('fade').classList.add('pa');
   setTimeout(()=>{laddaScen('hub',{x:0,z:7,ang:Math.PI/2});gaar=false;sparaPlats();$('fade').classList.remove('pa');},REDUCE?60:420);
 }
 function laddaScen(id,plats){
@@ -1308,6 +1406,7 @@ function startVarlden(){
   if(S.klot){if(s&&s.scen===id&&isFinite(s.x)&&isFinite(s.y)&&isFinite(s.z)&&isFinite(s.hx)){const v=new V3(s.x,s.y,s.z);if(v.length()>S.R*.7&&v.length()<S.R*1.6)placeraK(v,new V3(s.hx,s.hy,s.hz));}}
   else if(s&&(s.scen||'hub')===id&&isFinite(s.x)&&isFinite(s.z)&&Math.hypot(s.x,s.z)<O-1)placera(s.x,s.z,s.yaw||0,s.cam!=null?s.cam:s.yaw||0);
   else if(!S.klot){const st=S.start;placera(st.x,st.z,st.ang,st.ang);}
+  try{if(S.id==='bio'&&sessionStorage.getItem('mp-bio-tillbaka')){sessionStorage.removeItem('mp-bio-tillbaka');startBio();}}catch(e){}
 }
 
 
@@ -1472,9 +1571,149 @@ function ritaK(dt){
     pil.hidden=false;$('pilI').style.transform='rotate('+ang+'rad)';$('pilT').textContent=ml.txt+' · '+avst+' m';}else pil.hidden=true;
 }
 
+/* ---------- Biografen: Netflix-vyn på skärmen och fjärrkontrollen ---------- */
+let bio=null;
+const bioBild={};
+function bioImg(id){let b=bioBild[id];if(b)return b.ok?b.im:null;b=bioBild[id]={ok:false,im:new Image()};b.im.onload=()=>{b.ok=true;if(bio)bio.smutsig=true;};b.im.onerror=()=>{};b.im.src='../specialare/bilder/'+id+'-1.jpg';return null;}
+let bioLaddat=null;
+function laddaBio(){
+  if(bioLaddat)return bioLaddat;
+  const las=src=>new Promise(res=>{const s=document.createElement('script');s.src=src;s.onload=()=>res(true);s.onerror=()=>res(false);document.head.appendChild(s);});
+  return bioLaddat=Promise.all([las('../specialare/lektioner.js'),las('../specialare/grejer.js')]);
+}
+function bioRader(){
+  const L=window.LEKTIONER||[],G=window.GREJER||[];
+  const li=l=>({t:'l',id:l.id,titel:l.titel,e:l.e,c:l.c||'#3D5AFE',kat:l.kat,film:!!l.film,tx:(l.rutor&&l.rutor[0]&&l.rutor[0][2])||''});
+  const gi=g=>({t:'g',id:g.id,titel:g.titel,e:g.e,c:g.c||'#7B61FF',kat:'Prova själv',tx:g.beskr||''});
+  const alla=L.map(li),R=[];
+  const sett=[...new Set((SV.bio&&SV.bio.sett)||[])].reverse().map(id=>alla.find(x=>x.id===id)||G.map(gi).find(x=>x.id===id)).filter(Boolean).slice(0,10);
+  if(sett.length)R.push({namn:'▶ Titta igen',items:sett});
+  const d=dagNr()*5%Math.max(1,alla.length);R.push({namn:'⭐ Dagens film',items:[0,1,2,3,4,5].map(i=>alla[(d+i)%alla.length]).filter(Boolean)});
+  [['Natur','🌿 Natur och djur'],['Historia','🏛️ Historia'],['Rymden','🚀 Rymden'],['Kroppen','🫀 Kroppen'],['Tal','🔢 Tal och siffror']].forEach(([k,n])=>{const it=alla.filter(x=>x.kat===k);if(it.length)R.push({namn:n,items:it});});
+  const rest=alla.filter(x=>!['Natur','Historia','Rymden','Kroppen','Tal'].includes(x.kat));if(rest.length)R.push({namn:'✨ Mer att upptäcka',items:rest});
+  if(G.length)R.push({namn:'🧪 Prova själv',items:G.map(gi)});
+  return R;
+}
+function bioKamera(){
+  const asp=innerWidth/innerHeight,th=Math.tan(58/2*Math.PI/180);
+  const d=Math.max(20,(BIO_SW/2*1.22)/(th*asp),(BIO_SH/2*1.55)/th);
+  bio.cp.set(0,8.5,BIO_Z+d);bio.lp.set(0,BIO_SY-2.6,BIO_Z);
+}
+function startBio(){
+  if(bio||gaar||!S.ref.bio)return;stangDlg();rida=null;prompt.hidden=true;
+  const B=S.ref.bio;
+  bio=Object.assign({cv:B.cv,g:B.g,tex:B.tex,plan:B.plan,r:0,k:[],ry:0,sx:[],rader:[],hit:[],smutsig:true,klar:false,cp:new THREE.Vector3(),lp:new THREE.Vector3(),look:new THREE.Vector3(P.x,P.y+2.7,P.z)},{});
+  const sp=SV.bio&&SV.bio.sist;
+  document.body.classList.add('bio');$('fjarr').hidden=false;djur.visible=false;skugga.visible=false;P.fartX=P.fartZ=0;
+  bioKamera();pling(523,784);
+  if(innerHeight>innerWidth)toast('📱 Vrid mobilen så blir skärmen större.');
+  laddaBio().then(()=>{if(!bio)return;bio.rader=bioRader();bio.rader.forEach((r,i)=>{bio.k[i]=0;bio.sx[i]=0;});
+    if(sp&&sp.n!=null){const i=bio.rader.findIndex(r=>r.namn===sp.n);if(i>=0){bio.r=bio.ry=i;const j=bio.rader[i].items.findIndex(x=>x.id===sp.id);if(j>=0)bio.k[i]=j;}}
+    bio.klar=true;bio.smutsig=true;});
+}
+function slutBio(tyst){
+  if(!bio)return;bio=null;document.body.classList.remove('bio');$('fjarr').hidden=true;djur.visible=true;skugga.visible=true;if(!tyst)pling(660,440);
+}
+function bioFlytta(dr,dk){
+  if(!bio||!bio.klar)return;const R=bio.rader;let r=bio.r,k=bio.k[r];
+  if(dr){const nr=Math.max(0,Math.min(R.length-1,r+dr));if(nr!==r){bio.r=nr;pling(500,560);}}
+  else if(dk){const n=R[r].items.length,nk=Math.max(0,Math.min(n-1,k+dk));if(nk!==k){bio.k[r]=nk;pling(620,700);}}
+  bio.smutsig=true;
+}
+function bioOppna(){
+  if(!bio||!bio.klar)return;const it=bio.rader[bio.r].items[bio.k[bio.r]];if(!it)return;
+  SV.bio=SV.bio||{sett:[],sist:null};if(!Array.isArray(SV.bio.sett))SV.bio.sett=[];
+  SV.bio.sett=SV.bio.sett.filter(x=>x!==it.id);SV.bio.sett.push(it.id);SV.bio.sist={n:bio.rader[bio.r].namn,id:it.id};
+  const a=klart('bio-film','Du valde din första film!'),fem=new Set(SV.bio.sett).size>=5&&klart('bio-fem','Du har tittat på fem olika filmer!');sparaSV();
+  if(gaar)return;gaar=true;pling(440,880);
+  sparaPlats({scen:S.id,x:P.x,z:P.z,yaw:P.ang,cam:P.ang});
+  try{sessionStorage.setItem('mp-fran-varlden','1');sessionStorage.setItem('mp-bio-tillbaka','1');}catch(e){}
+  $('fade').classList.add('pa');
+  setTimeout(()=>{location.href=new URL('../specialare/#'+(it.t==='g'?'g/':'l/')+it.id,location.href).href;},(a||fem)?1500:(REDUCE?60:420));
+}
+function bioKnapp(k){
+  if(k==='escape'||k==='x')return slutBio();
+  if(k==='enter'||k===' '||k==='ok')return bioOppna();
+  if(k==='arrowup'||k==='w'||k==='up')return bioFlytta(-1,0);
+  if(k==='arrowdown'||k==='s'||k==='down')return bioFlytta(1,0);
+  if(k==='arrowleft'||k==='a'||k==='left')return bioFlytta(0,-1);
+  if(k==='arrowright'||k==='d'||k==='right')return bioFlytta(0,1);
+}
+const bioFont=(w,s)=>w+' '+s+'px "Baloo 2","Trebuchet MS",system-ui,sans-serif';
+function bioRunda(g,x,y,w,h,r){g.beginPath();g.roundRect(x,y,w,h,r);}
+function bioCover(g,im,x,y,w,h){const s=Math.max(w/im.width,h/im.height),dw=im.width*s,dh=im.height*s;g.drawImage(im,x+(w-dw)/2,y+(h-dh)/2,dw,dh);}
+function bioRad(g,txt,x,y,maxW,lh,maxRader){const ord=txt.split(' ');let rad='',n=0;for(let i=0;i<ord.length;i++){const t=rad?rad+' '+ord[i]:ord[i];if(g.measureText(t).width>maxW&&rad){if(++n>=maxRader){g.fillText(rad.replace(/[ ,.]+$/,'')+' …',x,y);return;}g.fillText(rad,x,y);y+=lh;rad=ord[i];}else rad=t;}g.fillText(rad,x,y);}
+function bioPassa(g,txt,maxW){let t=txt;while(g.measureText(t).width>maxW&&t.length>3)t=t.slice(0,-2);return t===txt?t:t.trimEnd()+'…';}
+function bioRita(){
+  const g=bio.g,W=1280,H=720;
+  const bg=g.createLinearGradient(0,0,0,H);bg.addColorStop(0,'#16113A');bg.addColorStop(1,'#07061A');g.fillStyle=bg;g.fillRect(0,0,W,H);
+  if(!bio.klar){g.fillStyle='#F2F0FF';g.font=bioFont(800,56);g.textAlign='center';g.fillText('🎬 Laddar filmerna …',W/2,H/2);g.textAlign='left';bio.tex.needsUpdate=true;return;}
+  const R=bio.rader,fr=R[bio.r],fi=fr.items[bio.k[bio.r]];bio.hit=[];
+  // hjälten: den film man står på
+  g.save();bioRunda(g,0,0,W,336,0);g.clip();
+  const im=bioImg(fi.id);
+  if(im)bioCover(g,im,0,0,W,336);else{const gr=g.createLinearGradient(0,0,W,336);gr.addColorStop(0,fi.c);gr.addColorStop(1,'#0B0A1E');g.fillStyle=gr;g.fillRect(0,0,W,336);g.font=bioFont(800,230);g.textAlign='center';g.globalAlpha=.9;g.fillText(fi.e||'🎬',W-300,255);g.globalAlpha=1;g.textAlign='left';}
+  let gr2=g.createLinearGradient(0,0,W,0);gr2.addColorStop(0,'rgba(8,6,28,.96)');gr2.addColorStop(.55,'rgba(8,6,28,.7)');gr2.addColorStop(1,'rgba(8,6,28,.12)');g.fillStyle=gr2;g.fillRect(0,0,W,336);
+  gr2=g.createLinearGradient(0,220,0,336);gr2.addColorStop(0,'rgba(8,6,28,0)');gr2.addColorStop(1,'rgba(8,6,28,1)');g.fillStyle=gr2;g.fillRect(0,220,W,116);
+  g.restore();
+  g.textBaseline='alphabetic';g.textAlign='left';
+  g.fillStyle='#fff';g.font=bioFont(800,34);g.fillText('Plugg',48,56);const pw=g.measureText('Plugg').width;g.fillStyle='#F2B707';g.fillText('parken',48+pw,56);const bx=48+pw+g.measureText('parken').width+16;
+  g.fillStyle='#B3122D';bioRunda(g,bx,28,62,36,10);g.fill();g.fillStyle='#fff';g.font=bioFont(800,22);g.fillText('BIO',bx+12,54);
+  g.fillStyle='#F2B707';g.font=bioFont(800,26);g.fillText((fi.kat||'').toUpperCase()+(fi.film?'  ·  FILM':fi.t==='g'?'  ·  PROVA SJÄLV':''),48,118);
+  g.fillStyle='#fff';let fs=68;g.font=bioFont(800,fs);while(g.measureText(fi.titel).width>800&&fs>40){fs-=4;g.font=bioFont(800,fs);}g.fillText(fi.titel,48,118+fs*.95);
+  g.fillStyle='#D8D4F0';g.font=bioFont(600,26);bioRad(g,fi.tx,48,118+fs*.95+38,760,32,2);
+  g.fillStyle='#F2B707';bioRunda(g,48,274,300,54,27);g.fill();g.fillStyle='#1D2B53';g.font=bioFont(800,28);g.fillText('▶  OK för att titta',74,311);
+  g.fillStyle='rgba(255,255,255,.7)';g.font=bioFont(700,22);g.textAlign='right';g.fillText((bio.k[bio.r]+1)+' / '+fr.items.length,W-40,56);g.textAlign='left';
+  // raderna
+  g.save();g.beginPath();g.rect(0,340,W,H-340);g.clip();
+  const PW=236,PH=133,GAP=18;
+  for(let i=Math.max(0,Math.floor(bio.ry)-1);i<Math.min(R.length,Math.ceil(bio.ry)+3);i++){
+    const y0=352+(i-bio.ry)*196,rad=R[i],foc=Math.abs(i-bio.ry)<.5;
+    g.globalAlpha=foc?1:.5;
+    g.fillStyle='#fff';g.font=bioFont(800,28);g.fillText(rad.namn,48,y0+22);
+    const sx=bio.sx[i]||0;
+    for(let j=0;j<rad.items.length;j++){
+      const it=rad.items[j],x=48+(j-sx)*(PW+GAP);if(x>W||x+PW<0)continue;
+      const f=i===bio.r&&j===bio.k[i],y=y0+40;
+      g.save();if(f){g.translate(x+PW/2,y+PH/2);g.scale(1.07,1.07);g.translate(-PW/2,-PH/2);}else g.translate(x,y);
+      g.save();bioRunda(g,0,0,PW,PH,14);g.clip();
+      const pi=bioImg(it.id);
+      if(pi)bioCover(g,pi,0,0,PW,PH);else{const gg=g.createLinearGradient(0,0,PW,PH);gg.addColorStop(0,it.c);gg.addColorStop(1,'#14102B');g.fillStyle=gg;g.fillRect(0,0,PW,PH);g.font=bioFont(800,64);g.textAlign='center';g.fillText(it.e||'🎬',PW/2,PH/2+14);g.textAlign='left';}
+      const sh=g.createLinearGradient(0,PH-52,0,PH);sh.addColorStop(0,'rgba(8,6,28,0)');sh.addColorStop(1,'rgba(8,6,28,.92)');g.fillStyle=sh;g.fillRect(0,PH-52,PW,52);
+      g.fillStyle='#fff';g.font=bioFont(800,23);g.fillText(bioPassa(g,it.titel,PW-24),12,PH-12);
+      g.restore();
+      if(f){g.lineWidth=6;g.strokeStyle='#F2B707';bioRunda(g,0,0,PW,PH,14);g.stroke();}
+      g.restore();
+      if(Math.abs(i-bio.ry)<.5)bio.hit.push({x,y,w:PW,h:PH,r:i,k:j});
+    }
+    g.globalAlpha=1;
+  }
+  g.restore();
+  bio.tex.needsUpdate=true;
+}
+function stegBio(dt){
+  prompt.hidden=true;P.fartX=P.fartZ=0;P.vy=0;
+  if(!bio.klar){if(bio.smutsig){bioRita();bio.smutsig=false;}return;}
+  const R=bio.rader,a=REDUCE?1:Math.min(1,dt*14);
+  let rorlig=false;
+  const dy=bio.r-bio.ry;if(Math.abs(dy)>.002){bio.ry+=dy*a;rorlig=true;}else bio.ry=bio.r;
+  R.forEach((rad,i)=>{const t=Math.max(0,Math.min(Math.max(0,rad.items.length-5),bio.k[i]-2)),d=t-bio.sx[i];if(Math.abs(d)>.002){bio.sx[i]+=d*a;rorlig=true;}else bio.sx[i]=t;});
+  if(rorlig||bio.smutsig){bioRita();bio.smutsig=false;}
+}
+// klick och tryck direkt på skärmen
+{const rc=new THREE.Raycaster(),nd=new THREE.Vector2();let ned=null;
+ canvas.addEventListener('pointerdown',e=>{ned={x:e.clientX,y:e.clientY};});
+ canvas.addEventListener('pointerup',e=>{if(!bio||!bio.klar||!ned)return;const flyttat=Math.hypot(e.clientX-ned.x,e.clientY-ned.y);ned=null;if(flyttat>8)return;
+   nd.set(e.clientX/innerWidth*2-1,-(e.clientY/innerHeight)*2+1);rc.setFromCamera(nd,cam);const h=rc.intersectObject(bio.plan)[0];if(!h||!h.uv)return;
+   const x=h.uv.x*1280,y=(1-h.uv.y)*720;
+   if(x>48&&x<348&&y>274&&y<328)return bioOppna();
+   for(const q of bio.hit)if(x>=q.x&&x<=q.x+q.w&&y>=q.y&&y<=q.y+q.h){if(q.r===bio.r&&q.k===bio.k[bio.r])return bioOppna();bio.r=q.r;bio.k[q.r]=q.k;pling(620,700);bio.smutsig=true;return;}});}
+document.querySelectorAll('#fjarr [data-k]').forEach(b=>b.addEventListener('click',()=>bioKnapp(b.dataset.k)));
+
 /* ---------- Ingångar ---------- */
 const tang={};let dlgOpen=false;
 addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;const k=e.key.toLowerCase();
+  if(bio){if(['arrowup','arrowdown','arrowleft','arrowright',' ','enter','escape','w','a','s','d'].includes(k)){e.preventDefault();if(!e.repeat||k.startsWith('arrow')||'wasd'.includes(k))bioKnapp(k);}return;}
   if(k==='escape'){stangDlg();$('panel').hidden=true;if(rida)slutRida(true);return;}
   if(dlgOpen)return;
   if([' ','arrowup','arrowdown','arrowleft','arrowright'].includes(k))e.preventDefault();
@@ -1560,6 +1799,7 @@ function uppdragFor(id){
   if(D.ordbro)lista.push({id:id+'-ord',e:'🔤',n:'Hoppa över bokstavsbron: '+D.ordbro.ord.split('').join('-'),fram:()=>''});
   if(D.aktUppdrag)lista.push({id:id+'-'+D.aktUppdrag.typ,e:D.aktUppdrag.e,n:D.aktUppdrag.n,fram:()=>''});
   if(D.berg)lista.push({id:id+'-akpass',e:'🎢',n:'Åkpasset: åk karusellen, pariserhjulet och berg-och-dalbanan',fram:()=>['karusell','hjul','berg'].filter(x=>SV.seen.includes('aka-'+x)).length+' av 3'});
+  if(D.bioUppdrag)lista.push({id:id+'-fem',e:'🍿',n:'Titta på fem olika filmer',fram:()=>new Set((SV.bio&&SV.bio.sett)||[]).size+' av 5'});
   lista.push({id:id+'-torn',e:'🏁',n:(D.klot?'Hoppa upp på toppen av ':'Hoppa upp till flaggan på ')+(D.tornNamn||'Hopptornet'),fram:()=>''});
   return lista;
 }
@@ -1618,7 +1858,7 @@ function akt(typ){
   toast('Åkturen är slut! Du har åkt '+n+' av 3 attraktioner.');pling(660,990);
 }
 function startRida(r){
-  if(rida||gaar)return;stangDlg();
+  if(rida||gaar)return;if(r.typ==='fjarr'){startBio();return;}stangDlg();
   rida={typ:r.typ,t:0,fran:{x:P.x,z:P.z,yaw:P.ang,cam:camYaw}};P.fartX=P.fartZ=0;P.vy=0;P.mark=true;pling(520,780);P.hoppKo=false;prompt.hidden=true;
   if(r.typ==='karusell'){let b=1e9;S.ref.karusell.hs.forEach((h,i)=>{h.getWorldPosition(_v);const d=Math.hypot(_v.x-P.x,_v.z-P.z);if(d<b){b=d;rida.hast=i;}});rida.dur=24;}
   else if(r.typ==='hjul'){const R=S.ref.hjul;let b=2;R.gonds.forEach((gd,i)=>{const sn=Math.sin(gd.userData.a+R.ang);if(sn<b){b=sn;rida.gond=i;}});rida.a0=R.ang;}
@@ -1700,6 +1940,7 @@ const v3=new THREE.Vector3();
 function steg(dt){
   const varPaMark=P.mark;
   tid+=dt;
+  if(bio){stegBio(dt);return;}
   if(rida){if(P.hoppKo){P.hoppKo=false;slutRida(true);return;}stegRida(dt);if(rida){prompt.hidden=false;if(prompt.textContent!=='⏹ Hoppa av')prompt.textContent='⏹ Hoppa av';}return;}
   let ix=0,iz=0;
   if(!dlgOpen){
@@ -1732,7 +1973,7 @@ function steg(dt){
   }
   if(!narmaste&&S.npc&&Math.hypot(P.x-S.npc.x,P.z-S.npc.z)<4.2)narNpc=true;
   narRide=null;if(!narmaste&&!narNpc)for(const q of S.rides)if(Math.hypot(P.x-q.x,P.z-q.z)<q.r&&Math.abs(P.y-(q.hy!=null?q.hy:S.hojd(P.x,P.z)))<2.6){narRide=q;break;}
-  if(!gaar&&!dlgOpen&&(narmaste||narNpc||narRide)){prompt.hidden=false;const t=narmaste?'🚪 Gå in: '+narmaste.p.e+' '+narmaste.p.n:narNpc?'💬 Prata med '+S.npc.namn:narRide.e+' Åk '+narRide.namn;if(prompt.textContent!==t)prompt.textContent=t;}else prompt.hidden=true;
+  if(!gaar&&!dlgOpen&&(narmaste||narNpc||narRide)){prompt.hidden=false;const t=narmaste?'🚪 Gå in: '+narmaste.p.e+' '+narmaste.p.n:narNpc?'💬 Prata med '+S.npc.namn:narRide.typ==='fjarr'?'📺 Ta fjärrkontrollen':narRide.e+' Åk '+narRide.namn;if(prompt.textContent!==t)prompt.textContent=t;}else prompt.hidden=true;
   // stjärnor
   for(const s of S.stjarnor){
     if(s.tagen)continue;
@@ -1761,7 +2002,8 @@ function rita(dt){
   inner.rotation.z=gar?Math.sin(t*14)*.06:0;
   djur.userData.fot.forEach((f,i)=>{f.position.z=.12+(gar?Math.sin(t*14+i*Math.PI)*.22:0);f.position.y=.2+(P.mark?(gar?Math.max(0,Math.sin(t*14+i*Math.PI))*.15:0):.25);});
   const cx=P.x-Math.sin(camYaw)*Math.cos(camPitch)*camDist,cz=P.z-Math.cos(camYaw)*Math.cos(camPitch)*camDist,cy=P.y+1.7+Math.sin(camPitch)*camDist;
-  if(!window.__oversikt){cam.position.lerp(v3.set(cx,Math.max(cy,S.hojd(cx,cz)+1.6),cz),Math.min(1,dt*10));
+  if(bio){cam.position.lerp(bio.cp,REDUCE?1:Math.min(1,dt*3));bio.look.lerp(bio.lp,REDUCE?1:Math.min(1,dt*3));cam.lookAt(bio.look);}
+  else if(!window.__oversikt){cam.position.lerp(v3.set(cx,Math.max(cy,S.hojd(cx,cz)+1.6),cz),Math.min(1,dt*10));
   cam.lookAt(P.x,P.y+2.7,P.z);}
   for(const f of S.liv)f(t);firaSteg(dt);
   for(const s of S.stjarnor)if(!s.tagen){s.m.rotation.y=t*2;s.m.position.y=s.y0+Math.sin(t*2.4+s.x)*.18;}
@@ -1778,7 +2020,7 @@ renderer.setAnimationLoop(()=>{
   if(fpsKoll&&tid>1&&tid<5){fpsSum+=dt;fpsN++;}
   if(fpsKoll&&tid>=5){fpsKoll=false;if(fpsN&&fpsSum/fpsN>1/26&&!lagt){stallLagt(true);dimma();}}
 });
-window.__varlden={rida:()=>rida,Pv,hdK,placeraK,placera,scene,cam,P,get S(){return S;},SV,gaIn,laddaScen,klart,oppnaDlg,get dlg(){return dlgOpen;}};
+window.__varlden={rida:()=>rida,startBio,bioKnapp,get bio(){return bio;},Pv,hdK,placeraK,placera,scene,cam,P,get S(){return S;},SV,gaIn,laddaScen,klart,oppnaDlg,get dlg(){return dlgOpen;}};
 </script>
 </body>
 </html>
