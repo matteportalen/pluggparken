@@ -5,13 +5,13 @@
 <script src="../tema.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Vikingatiden – Pluggparken</title>
-<meta name="description" content="Vikingatiden: skepp, runor, gudar och gårdar. Svara på frågor om hur vikingarna levde.">
+<meta name="description" content="Vikingatiden: utforska riktiga bilder, avgör vad som är myt och sant och skriv ditt namn med runor.">
 <link rel="canonical" href="https://pluggparken.se/vikingatiden/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Pluggparken">
 <meta property="og:locale" content="sv_SE">
 <meta property="og:title" content="Vikingatiden – Pluggparken">
-<meta property="og:description" content="Vikingatiden: skepp, runor, gudar och gårdar. Svara på frågor om hur vikingarna levde.">
+<meta property="og:description" content="Vikingatiden: utforska riktiga bilder, avgör vad som är myt och sant och skriv ditt namn med runor.">
 <meta property="og:url" content="https://pluggparken.se/vikingatiden/">
 <meta property="og:image" content="https://pluggparken.se/og.jpg">
 <meta property="og:image:width" content="1200">
@@ -107,6 +107,39 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 .fb{font-size:1.3rem;font-weight:800;text-align:center}
 .skaka{animation:skaka .45s}
 @keyframes skaka{20%{transform:translateX(-9px)}40%{transform:translateX(9px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+
+.utk{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0}
+.utk button{font:inherit;border:0;border-radius:18px;padding:0;overflow:hidden;background:#fff;box-shadow:0 4px 0 var(--line);cursor:pointer;text-align:center;position:relative;touch-action:manipulation}
+.utk button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.utk img{width:100%;height:110px;object-fit:cover;display:block}
+.utk b{display:block;padding:8px 6px;font-size:1.05rem;color:var(--ink)}
+.utk .ok{position:absolute;right:8px;top:8px;background:#1E9E5E;color:#fff;border-radius:999px;width:28px;height:28px;display:grid;place-items:center;font-weight:800}
+.foto{position:relative;margin:6px auto;width:fit-content;max-width:100%;border-radius:14px;overflow:hidden;cursor:crosshair;touch-action:manipulation;background:#000}
+.foto img{display:block;max-width:100%;max-height:68vh;width:auto;height:auto}
+.ring{position:absolute;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;border:5px solid #1E9E5E;opacity:0;pointer-events:none}
+.ring.vis{animation:ringa 1.1s forwards}
+.ring.fel{border-color:#E5484D}
+.ring.tips{border-color:#FFC93C;animation:ringp .9s 3}
+@keyframes ringa{0%{transform:scale(.4);opacity:1}100%{transform:scale(1.6);opacity:0}}
+@keyframes ringp{0%,100%{opacity:0;transform:scale(.8)}50%{opacity:1;transform:scale(1.3)}}
+.kred{font-size:.78rem;color:var(--muted);text-align:center;margin:2px 0 6px}
+#rIn{width:100%;font:inherit;font-weight:800;font-size:1.6rem;text-align:center;border:3px solid var(--line);border-radius:14px;padding:10px;color:var(--ink);background:#fff;margin:4px 0 10px}
+.rrad{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;min-height:100px;margin:6px 0}
+.rk{border:0;background:#fff;border-radius:12px;box-shadow:0 3px 0 var(--line);padding:6px 6px 4px;cursor:pointer;text-align:center;font:inherit;touch-action:manipulation}
+.rk svg{width:36px;height:58px;display:block}
+.rk small{font-weight:800;color:var(--muted);font-size:.8rem}
+.rk.valt{outline:3px solid var(--accent)}
+.rtab summary{cursor:pointer;font-weight:800;margin:10px 0}
+.rtabi{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.rtabi div{text-align:center;background:#fff;border-radius:10px;padding:4px;font-size:.8rem;font-weight:700;color:var(--ink)}
+.rtabi svg{width:28px;height:44px}
+#rSten svg{width:100%;max-width:520px;display:block;margin:8px auto}
+.rp{fill:none;stroke:#C23A2E;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:100;stroke-dashoffset:100;animation:rist .55s forwards}
+@keyframes rist{to{stroke-dashoffset:0}}
+.tolkarad{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:8px 0}
+.tolkarad svg{width:38px;height:60px;background:#fff;border-radius:10px;padding:4px}
+@media (prefers-reduced-motion:reduce){.rp{animation:none;stroke-dashoffset:0}.ring.vis{animation:none;opacity:1}}
+@media print{.mph,.topp,.rad,#rIn,.fraga,#rRad,#rInfo,details,.nav,header{display:none!important}#rSten{display:block!important}}
 :root{--hero1:#4F8DF5;--hero2:#3D5AFE;--heroS:#2A3FB8}
 
 </style>
@@ -120,7 +153,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 <section class="screen" id="home">
   <div class="hero">
     <svg viewBox="0 0 120 64" aria-hidden="true"><rect x="2" y="2" width="116" height="60" rx="10" fill="#fff"/><text x="60" y="48" font-size="42" text-anchor="middle">⚓</text></svg>
-    <div><h1>Vikingatiden</h1><p>Skepp, runor och gudar! Vad vet du om vikingarna?</p></div>
+    <div><h1>Vikingatiden</h1><p>Hur levde och bodde vikingarna?</p></div>
   </div>
   <div class="niv" id="niv"></div>
   
@@ -136,6 +169,32 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
   </div>
   <div class="fb" id="fb" aria-live="polite"></div>
   <div class="rad"><button class="knapp bla" id="bNasta" hidden>Nästa ▶</button></div>
+</section>
+
+<section class="screen" id="ut" hidden>
+  <div class="topp"><span class="niva-t" id="utT">Utforska</span><span class="pet" id="utPet"></span></div>
+  <div class="kort" id="utGrid"></div>
+  <div class="kort" id="utVy" hidden>
+    <div class="fraga" id="utQ"></div>
+    <div class="foto" id="foto"><img id="fotoBild" alt=""><div class="ring" id="ring"></div></div>
+    <div class="kred" id="utKred"></div>
+    <div class="fb" id="utFb" aria-live="polite"></div>
+    <div class="forkl" id="utFakta" hidden></div>
+    <div class="rad"><button class="knapp vit" id="utTill">← Bilderna</button><button class="knapp bla" id="utNasta" hidden>Nästa ▶</button></div>
+  </div>
+</section>
+<section class="screen" id="runor" hidden>
+  <div class="topp"><span class="niva-t">Runskrivaren</span><span class="pet" id="rPet"></span></div>
+  <div class="kort">
+    <div class="fraga">Skriv ditt namn eller ett ord, så ser du det i runor!</div>
+    <input id="rIn" type="text" maxlength="14" placeholder="Skriv här" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Skriv ett ord eller namn">
+    <div class="rrad" id="rRad"></div>
+    <div class="forkl" id="rInfo">Tryck på en runa för att se vad den heter. I runalfabetet fanns bara <b>16 tecken</b>, så flera bokstäver delade runa.</div>
+    <div class="rad"><button class="knapp" id="rRista">🔨 Rista på runsten</button><button class="knapp vit" id="rTolka">🔍 Tolka runor</button></div>
+    <div id="rSten" hidden></div>
+    <div id="rTolkaBox" hidden></div>
+    <details class="rtab"><summary>Alla runor</summary><div class="rtabi" id="rTab"></div></details>
+  </div>
 </section>
 
 <section class="screen res" id="result" hidden>
@@ -179,30 +238,67 @@ function confetti(){if(reduced())return;const cols=["#3D8BFD","#FF9F43","#2BB673
   const P=Array.from({length:150},()=>({x:W/2+(Math.random()-.5)*120,y:H*.3,vx:(Math.random()-.5)*16,vy:-Math.random()*15-4,r:Math.random()*7+5,c:pick(cols),a:Math.random()*6,va:(Math.random()-.5)*.4}));
   let t=0;(function f(){x.clearRect(0,0,W,H);P.forEach(p=>{p.vy+=.45;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore();});
     if(++t<150)requestAnimationFrame(f);else c.hidden=true;})();}
-const NIV=[null].concat([{"namn": "Nivå 1: Vikingarna", "txt": "Enkla frågor om skepp och liv.", "col": "#2BB673"}, {"namn": "Nivå 2: Resor och sagor", "txt": "Gudarna, långhusen och resorna.", "col": "#FF9F43"}, {"namn": "Nivå 3: Vikingatidens Sverige", "txt": "Svårare frågor om runor, städer och tider.", "col": "#7B61FF"}]);
+const NIV=[null].concat([{"namn": "Utforska med bilder", "txt": "Hitta saker i riktiga bilder från vikingatiden.", "col": "#2BB673"}, {"namn": "Myt eller sant?", "txt": "Vad stämmer om vikingarna?", "col": "#FF9F43"}, {"namn": "Runskrivaren", "txt": "Skriv ditt namn med runor och rista det i sten.", "col": "#7B61FF"}]);
 let G=null;
-
 const RUND=8;
-const BANK={"1": [{"q": "När levde vikingarna?", "a": ["För 10 år sedan", "För 100 år sedan", "För ungefär 1 000 år sedan", "För 100 000 år sedan"], "r": 2, "f": "Vikingatiden var ungefär mellan år 800 och år 1050."}, {"q": "Vad reste vikingarna över havet med?", "a": ["Tåg", "Långskepp", "Flygplan", "Cykel"], "r": 1, "f": "Vikingarnas skepp var långa och smala och hade både segel och åror."}, {"q": "Vad hade vikingarna för att skydda sig i strid?", "a": ["En sköld", "Ett paraply", "En cykelhjälm", "En kudde"], "r": 0, "f": "En sköld av trä skyddade vikingen."}, {"q": "Vad skrev vikingarna med?", "a": ["Bokstäver på datorn", "Runor", "Teckenspråk", "Morsekod"], "r": 1, "f": "Runor ristades in i sten och trä. Stenar med runor kallas runstenar."}, {"q": "Vad åt vikingarna ofta?", "a": ["Gröt, bröd och fisk", "Pizza och glass", "Hamburgare", "Godis och chips"], "r": 0, "f": "Vikingarna åt det de odlade och fångade: gröt, bröd, fisk och kött."}, {"q": "Vad kallades vikingarnas möten där man bestämde saker?", "a": ["Tinget", "Cirkusen", "Skolan", "Marknaden"], "r": 0, "f": "På tinget bestämde man lagar och löste tvister."}, {"q": "Vilken gud hade en hammare?", "a": ["Tor", "Odin", "Frej", "Rudolf"], "r": 0, "f": "Tor var åskans gud. Hans hammare hette Mjölner."}, {"q": "Var bodde de flesta vikingar?", "a": ["På en gård", "I en skyskrapa", "På ett skepp hela livet", "I ett slott av sten"], "r": 0, "f": "De flesta vikingar var bönder och bodde på gårdar."}, {"q": "I vilka länder bodde vikingarna?", "a": ["Sverige, Norge och Danmark", "Egypten och Kina", "Brasilien", "Australien"], "r": 0, "f": "Vikingarna kom från Skandinavien."}], "2": [{"q": "Vad kallades vikingarnas resor för handel och strid?", "a": ["Vikingatåg", "Skolresor", "Bussresor", "Utflykter"], "r": 0, "f": "Under vikingatåg seglade man till många länder."}, {"q": "Vad satt ofta längst fram på ett vikingaskepp?", "a": ["Ett drakhuvud", "En radio", "En fotbollsflagga", "En blomma"], "r": 0, "f": "Drakhuvudet skulle skrämma bort onda andar."}, {"q": "Några vikingar seglade ända till...", "a": ["Nordamerika", "Månen", "Antarktis", "Australien"], "r": 0, "f": "Leif Eriksson seglade till Nordamerika för ungefär 1 000 år sedan."}, {"q": "Vad hette människornas värld i sagorna?", "a": ["Midgård", "Asgård", "Hogwarts", "Sagolandet"], "r": 0, "f": "Midgård betyder mittengården. Gudarna bodde i Asgård."}, {"q": "Vad hette gudarnas hem?", "a": ["Asgård", "Midgård", "Drottningholm", "Stockholm"], "r": 0, "f": "Asgård var gudarnas stad."}, {"q": "Vad var skeppen mest gjorda av?", "a": ["Trä", "Plast", "Metall", "Papper"], "r": 0, "f": "Skeppen byggdes av ek och furu."}, {"q": "Hur kom skeppet fram när det inte blåste?", "a": ["Man rodde med åror", "Man tryckte på en knapp", "Man simmade bredvid", "Man väntade i en vecka"], "r": 0, "f": "Alla ombord kunde ro med långa åror."}, {"q": "Vad kallades ett vikingahus som var långt och smalt?", "a": ["Långhus", "Skyskrapa", "Villa", "Radhus"], "r": 0, "f": "I ett långhus bodde hela familjen, och ofta fanns djuren i ena änden."}, {"q": "Vad är en hövding?", "a": ["En ledare", "En kock", "En skeppshund", "En lärare"], "r": 0, "f": "En hövding bestämde över sitt folk och sina krigare."}], "3": [{"q": "När brukar man säga att vikingatiden tar slut?", "a": ["Omkring år 1050", "Omkring år 1500", "Omkring år 1900", "Omkring år 2000"], "r": 0, "f": "Då hade de flesta blivit kristna, och landet fick kungar."}, {"q": "Vad jobbade de flesta vikingar med?", "a": ["De var bönder", "De var piloter", "De var lärare", "De var skådespelare"], "r": 0, "f": "Jordbruk och djur var vanligast."}, {"q": "Vad hette Odins åttabenta häst?", "a": ["Sleipner", "Bamse", "Blixten", "Fenrir"], "r": 0, "f": "Sleipner var snabbast av alla hästar."}, {"q": "Vilka två korpar hade Odin?", "a": ["Hugin och Munin", "Kalle och Pelle", "Tor och Frej", "Siri och Sigge"], "r": 0, "f": "Hugin och Munin flög runt världen och berättade för Odin vad de sett."}, {"q": "Vilken stad vid Mälaren var viktig för handel på vikingatiden?", "a": ["Birka", "Kiruna", "Malmö", "Umeå"], "r": 0, "f": "Birka var en av Sveriges första städer."}, {"q": "Vad är en runsten?", "a": ["En sten med inristad skrift", "En sten man kan äta", "Ett smycke", "En sorts boll"], "r": 0, "f": "Det finns tusentals runstenar i Sverige, många i Uppland."}, {"q": "Vilket språk pratade vikingarna?", "a": ["Fornnordiska", "Latin", "Engelska", "Spanska"], "r": 0, "f": "Fornnordiska är en tidig form av svenska, norska och danska."}, {"q": "Vem var Leif Eriksson?", "a": ["En viking som seglade till Nordamerika", "En svensk kung", "En gud", "En bonde i Skåne"], "r": 0, "f": "Han kom dit omkring år 1000, långt före Columbus."}, {"q": "Hur många tecken hade det yngre runalfabetet?", "a": ["16", "3", "29", "100"], "r": 0, "f": "Ett kort alfabet med 16 runor användes i Norden."}]};
 
-function begin(lvl){G={lvl,i:0,fel:0,res:[],felNu:0,gjort:false};$("nivT").textContent="Nivå "+lvl;$("pet").innerHTML=owlSVG(lasDjur());
-  G.set=(typeof skapa==="function"?skapa(lvl):shuffle(BANK[lvl].slice())).slice(0,RUND);show("game");nasta();}
-function nasta(){if(G.i>=RUND){slut();return;}
-  G.q=G.set[G.i];G.felNu=0;G.gjort=false;prickar(RUND,G.i,G.res);const q=G.q;G.ord=shuffle(q.a.map((_,i)=>i));
-  $("fraga").innerHTML=q.q;$("stor").innerHTML=q.e||"";const al=$("alt");al.className="alt"+(q.en?" en":"");
-  al.innerHTML=G.ord.map(i=>`<button class="val" data-i="${i}">${q.a[i]}</button>`).join("");
-  $("fb").textContent="";$("fb").className="fb";$("forkl").hidden=true;$("bNasta").hidden=true;}
-function markera(){document.querySelectorAll("#alt .val").forEach(b=>{b.disabled=true;if(+b.dataset.i===G.q.r)b.classList.add("ratt");});}
-$("alt").onclick=e=>{const b=e.target.closest(".val");if(!b||G.gjort||b.disabled)return;const i=+b.dataset.i,f=$("fb");
-  if(i===G.q.r){G.gjort=true;G.res[G.i]=!G.felNu;G.i++;prickar(RUND,G.i,G.res);markera();f.className="fb ratt";f.textContent="✔ Rätt!";haj();window.Ljud&&Ljud.ok&&Ljud.ok();
-    if(G.q.f){$("forkl").innerHTML=G.q.f;$("forkl").hidden=false;}$("bNasta").hidden=false;$("bNasta").focus({preventScroll:true});return;}
-  G.felNu++;if(G.felNu===1)G.fel++;window.Ljud&&Ljud.bad&&Ljud.bad();b.classList.add("fel");b.disabled=true;
-  if(G.felNu<2){const a=$("alt");a.classList.remove("skaka");void a.offsetWidth;a.classList.add("skaka");f.className="fb fel";f.textContent="Nästan! Prova igen.";return;}
-  G.gjort=true;G.res[G.i]=false;G.i++;prickar(RUND,G.i,G.res);markera();f.className="fb fel";f.textContent="Så här var det:";
-  $("forkl").innerHTML=G.q.f||"";$("forkl").hidden=!G.q.f;$("bNasta").hidden=false;};
-$("bNasta").onclick=nasta;
-function slut(){const st=G.fel===0?3:G.fel<=2?2:1;resultat(st,`${RUND-G.fel} av ${RUND} rätt på första försöket på nivå ${G.lvl}.${st<3?" Spela igen och se om du kan få alla rätt!":""}`);}
-document.addEventListener("keydown",e=>{if($("game").hidden||e.key!=="Enter")return;if(!$("bNasta").hidden)$("bNasta").click();});
+const TEMAN=[{"id": "skepp", "titel": "Skeppet", "e": "⛵", "bild": "skepp.jpg", "alt": "Oseberg-skeppet på ett museum i Oslo", "uppg": [{"q": "Tryck på <b>stäven</b>, där skeppet slutar i en vacker spiral.", "m": [[50, 6, 9]], "f": "Stäven kallas skeppets främre del. Den var ofta snidad och dekorerad."}, {"q": "Tryck på <b>skrovet</b>. Det är byggt av långa, smala plankor som överlappar varandra.", "m": [[41, 62, 16]], "f": "Plankorna kallas bordläggning. Skeppet blev lätt, böjligt och starkt."}], "fakta": "Det här är Oseberg-skeppet. Det byggdes omkring år 820, är ungefär 22 meter långt och har plats för 30 roddare. Det hittades i en gravhög i Norge.", "kred": "Foto: Daderot, Public domain, Wikimedia Commons"}, {"id": "hus", "titel": "Huset", "e": "🏠", "bild": "hus.jpg", "alt": "Ett långhus i Trelleborg, Danmark", "uppg": [{"q": "Tryck på <b>taket</b>. Det är täckt av trä och växter.", "m": [[50, 39, 15]], "f": "Taken var ofta täckta med halm, torv eller spån."}, {"q": "Tryck på de <b>stolpar</b> som bär upp husets långa sida.", "m": [[50, 56, 13]], "f": "Stolparna var grävda ner i marken och höll upp taket."}, {"q": "Hitta ett av de <b>krökta hörnen</b> högst upp på taket.", "m": [[31, 33, 6], [68, 38, 6]], "f": "De krökta ändarna kallas gavelhorn."}], "fakta": "Så här kan ett vikingatida långhus ha sett ut. Familjen bodde i ena änden och djuren i den andra. Mitt i huset brann en eld.", "kred": "Foto: Schorle, CC BY-SA 4.0, Wikimedia Commons"}, {"id": "klader", "titel": "Kläderna", "e": "👕", "bild": "klader.jpg", "alt": "Familj i vikingatida kläder", "uppg": [{"q": "Tryck på <b>hatten</b>. Den är flätad av halm.", "m": [[54, 11, 10]], "f": "Hattar av halm skyddade mot solen under hövändan."}, {"q": "Tryck på <b>bältet</b> som är flätat av färgade trådar.", "m": [[55, 42, 8]], "f": "Ett bälte höll ihop kläderna och bar knivar och väskor."}, {"q": "Tryck på ett par <b>skor</b>. De är gjorda av läder, utan klack.", "m": [[37, 56, 9], [65, 87, 8], [21, 91, 8], [72, 98, 8]], "f": "Skorna var mjuka och sys av läder."}], "fakta": "Kläderna vävdes av ull och lin, och färgades med växter. Barn och vuxna klädde sig på ungefär samma sätt.", "kred": "Foto: Marsilar, CC BY-SA 4.0, Wikimedia Commons"}, {"id": "mat", "titel": "Maten", "e": "🥣", "bild": "mat.jpg", "alt": "Mat i skålar i en vikingaby", "uppg": [{"q": "Tryck på en <b>skål</b>. De är gjorda av trä.", "m": [[16, 76, 9], [26, 67, 9], [40, 70, 11], [62, 70, 12], [81, 68, 9]], "f": "Skålar och skedar var oftast gjorda av trä."}, {"q": "Tryck på ett <b>tält</b>. Vikingar bodde i tält när de reste.", "m": [[19, 25, 16], [50, 17, 14]], "f": "Tälten gav skydd under marknader och resor."}], "fakta": "Vikingarna åt gröt, bröd, fisk, kött, svamp, bär och rotfrukter. Maten lagades över öppen eld.", "kred": "Foto: Monica Ferreira Ask, CC BY-SA 4.0, Wikimedia Commons"}, {"id": "runsten", "titel": "Runstenen", "e": "🪨", "bild": "runsten.jpg", "alt": "En runsten från Uppland", "uppg": [{"q": "Tryck på <b>runorna</b>. De är de röda tecknen runt kanten.", "m": [[25, 49, 10], [50, 9, 9], [80, 40, 10], [62, 66, 9]], "f": "Texten går i ett band runt stenen. Runorna kallas runalfabetet."}, {"q": "Tryck på <b>ormen</b> som slingrar sig mitt på stenen.", "m": [[50, 37, 16]], "f": "Den slingrande ormen eller draken var vanlig på runstenar."}], "fakta": "Runstenar restes ofta till minne av någon som dött. De var målade i starka färger, bland annat rött, blått och vitt.", "kred": "Foto: Berig, CC BY-SA 4.0, Wikimedia Commons"}, {"id": "thor", "titel": "Smycket", "e": "🔨", "bild": "thor.jpg", "alt": "Ett hammarsmycke av silver", "uppg": [{"q": "Tryck på hammarens <b>huvud</b>, den breda delen högst upp.", "m": [[52, 17, 10]], "f": "Hammaren hette Mjölner och tillhörde guden Tor."}, {"q": "Tryck på <b>öglan</b> där man kunde trä på ett band.", "m": [[52, 55, 8]], "f": "Man bar smycket i ett band runt halsen."}], "fakta": "Många bar en liten hammare som smycke. Det är bara några centimeter stort, och skulle skydda den som bar den.", "kred": "Foto: Portable Antiquities Scheme from London, England, CC BY 2.0, Wikimedia Commons"}],CLAIMS=[{"q": "Vikingarna hade hjälmar med horn.", "e": "hjalm", "r": "myt", "f": "Myt! Inga hjälmar med horn har hittats. Det här är hjälmen från Gjermundbu i Norge. Bilden med horn blev populär långt senare, bland annat i teater och opera på 1800-talet.", "kred": "Foto: Skadinaujo, CC BY 3.0, Wikimedia Commons"}, {"q": "Vikingarna bodde i långhus.", "e": "hus", "r": "sant", "f": "Sant! Många bodde i långa trähus där familjen och djuren fanns under samma tak.", "kred": "Foto: Schorle, CC BY-SA 4.0, Wikimedia Commons"}, {"q": "Vikingarna skrev med runor och ristade dem i sten.", "e": "runsten", "r": "sant", "f": "Sant! Det finns tusentals runstenar, särskilt i Sverige.", "kred": "Foto: Berig, CC BY-SA 4.0, Wikimedia Commons"}, {"q": "Alla vikingar var krigare.", "e": "", "r": "myt", "f": "Myt! De flesta var bönder, fiskare, hantverkare och handelsmän.", "kred": ""}, {"q": "Många vikingar bar Tors hammare som smycke.", "e": "thor", "r": "sant", "f": "Sant! Hammarsmycken har hittats på många platser.", "kred": "Foto: Portable Antiquities Scheme from London, England, CC BY 2.0, Wikimedia Commons"}, {"q": "Vikingarna tvättade sig aldrig.", "e": "", "r": "myt", "f": "Myt! De hade kammar och badade. Ordet lördag kommer troligen från ett ord som betyder badardag.", "kred": ""}, {"q": "Alla vikingar hade ett svärd.", "e": "svard", "r": "myt", "f": "Myt! Svärd var dyra. Många hade yxa, spjut eller kniv.", "kred": "Foto: Roger from Derby, UK, CC BY 3.0, Wikimedia Commons"}, {"q": "Vikingarna betalade ofta med silver som man vägde.", "e": "silver", "r": "sant", "f": "Sant! Silverbitar och mynt vägdes på en liten våg.", "kred": "Foto: The Portable Antiquities Scheme, Dot Boughton, 2011-08-05 15, CC BY-SA 2.0, Wikimedia Commons"}, {"q": "Vikingarna åt bara kött.", "e": "mat", "r": "myt", "f": "Myt! De åt också gröt, bröd, fisk, svamp, bär och grönsaker.", "kred": "Foto: Monica Ferreira Ask, CC BY-SA 4.0, Wikimedia Commons"}, {"q": "Vikingarna handlade på marknader och reste långt för att byta varor.", "e": "marknad", "r": "sant", "f": "Sant! Handel var en viktig del av vikingatiden.", "kred": "Foto: Mads Jensen, CC BY-SA 4.0, Wikimedia Commons"}],RUNOR=[["fe", "f", "fé", ["M20,6 V58", "M20,22 L33,9", "M20,36 L33,23"]], ["ur", "u, o, v, w, ö", "úr", ["M12,58 V10", "M12,10 L28,24", "M28,24 V58"]], ["thurs", "th", "þurs", ["M14,6 V58", "M14,18 L30,32 L14,46"]], ["oss", "å", "óss", ["M16,6 V58", "M16,16 L32,30", "M16,30 L32,44"]], ["reid", "r", "reið", ["M12,6 V58", "M12,6 L30,19 L12,33", "M12,33 L30,58"]], ["kaun", "k, g, c, q", "kaun", ["M16,6 V58", "M16,36 L32,18"]], ["hagall", "h", "hagall", ["M20,6 V58", "M8,18 L32,46", "M32,18 L8,46"]], ["naud", "n", "nauðr", ["M20,6 V58", "M9,20 L31,44"]], ["iss", "i, e, j, y", "íss", ["M20,6 V58"]], ["ar", "a, ä", "ár", ["M20,6 V58", "M9,40 L31,22"]], ["sol", "s, z", "sól", ["M30,6 L12,22 L30,38 L12,56"]], ["tyr", "t, d", "týr", ["M20,6 V58", "M8,22 L20,6 L32,22"]], ["bjarkan", "b, p", "bjarkan", ["M12,6 V58", "M12,6 L28,18 L12,30", "M12,30 L28,44 L12,58"]], ["madr", "m", "maðr", ["M20,6 V58", "M9,8 L20,30 L31,8"]], ["logr", "l", "lögr", ["M12,6 V58", "M12,6 L30,22"]], ["yr", "y", "yr", ["M20,58 V28", "M20,28 L8,10", "M20,28 L32,10"]]],BILD="bilder/";
+const BILDER=n=>BILD+n+".jpg";
+let UT={klara:new Set(),t:null,u:0,miss:0};
+/* ---------- Läge 1: utforska bilderna ---------- */
+function visaGrid(){$("utGrid").hidden=false;$("utVy").hidden=true;$("utGrid").innerHTML='<div class="fraga">Välj en bild och hitta det som efterfrågas!</div><div class="utk">'+TEMAN.map(t=>`<button data-t="${t.id}"><img src="${BILDER(t.id)}" alt="${t.alt}" loading="lazy"><b>${t.e} ${t.titel}</b>${UT.klara.has(t.id)?'<span class="ok">✓</span>':''}</button>`).join("")+'</div>';}
+function begin(lvl){G={lvl,i:0,fel:0,res:[],felNu:0,gjort:false};
+  if(lvl===1){UT={klara:new Set(),t:null,u:0,miss:0};$("utPet").innerHTML=owlSVG(lasDjur());visaGrid();show("ut");return;}
+  if(lvl===3){$("rPet").innerHTML=owlSVG(lasDjur());show("runor");byggRunor();return;}
+  $("nivT").textContent="Myt eller sant?";$("pet").innerHTML=owlSVG(lasDjur());G.set=shuffle(CLAIMS.slice());show("game");nastaM();}
+$("utGrid").onclick=e=>{const b=e.target.closest("[data-t]");if(!b)return;UT.t=TEMAN.find(t=>t.id===b.dataset.t);UT.u=0;uppgift();};
+function uppgift(){const t=UT.t,u=t.uppg[UT.u];UT.miss=0;$("utGrid").hidden=true;$("utVy").hidden=false;$("fotoBild").src=BILDER(t.id);$("fotoBild").alt=t.alt;$("utKred").textContent=t.kred;
+  $("utQ").innerHTML=u.q;$("utFb").textContent="";$("utFb").className="fb";$("utFakta").hidden=true;$("utNasta").hidden=true;UT.klar=false;}
+function ringa(x,y,kl){const r=$("ring");r.style.left=x+"%";r.style.top=y+"%";r.className="ring";void r.offsetWidth;r.className="ring "+kl;}
+$("foto").onclick=e=>{if(UT.klar||!UT.t)return;const im=$("fotoBild").getBoundingClientRect(),px=(e.clientX-im.left)/im.width*100,py=(e.clientY-im.top)/im.height*100,u=UT.t.uppg[UT.u];
+  const tr=u.m.find(([x,y,r])=>Math.hypot((px-x)/100*im.width,(py-y)/100*im.height)<=r/100*im.width);
+  if(tr){UT.klar=true;ringa(tr[0],tr[1],"vis");$("utFb").className="fb ratt";$("utFb").textContent="✔ Rätt!";haj();window.Ljud&&Ljud.ok&&Ljud.ok();
+    $("utFakta").innerHTML=u.f;$("utFakta").hidden=false;const sist=UT.u>=UT.t.uppg.length-1;$("utNasta").hidden=false;$("utNasta").textContent=sist?"Klart ✓":"Nästa ▶";$("utNasta").focus({preventScroll:true});return;}
+  UT.miss++;ringa(px,py,"vis fel");window.Ljud&&Ljud.bad&&Ljud.bad();$("utFb").className="fb fel";
+  if(UT.miss>=2){const [x,y]=u.m[0];setTimeout(()=>ringa(x,y,"tips"),500);$("utFb").textContent="Titta här! Det är där cirkeln blinkar.";}else $("utFb").textContent="Nästan! Titta noga och prova igen.";};
+$("utNasta").onclick=()=>{const t=UT.t;if(UT.u<t.uppg.length-1){UT.u++;uppgift();return;}
+  UT.klara.add(t.id);$("utFakta").innerHTML="<b>"+t.titel+"</b>: "+t.fakta;$("utFakta").hidden=false;$("utNasta").hidden=true;$("utFb").textContent="";
+  setTimeout(()=>{if(UT.klara.size>=TEMAN.length){resultat(3,"Du har utforskat hela vikingatiden: skeppet, huset, kläderna, maten, runstenen och smycket!");return;}visaGrid();},2600);};
+$("utTill").onclick=visaGrid;
+/* ---------- Läge 2: myt eller sant ---------- */
+function nastaM(){if(G.i>=G.set.length){slutM();return;}const q=G.q=G.set[G.i];G.felNu=0;G.gjort=false;prickar(G.set.length,G.i,G.res);
+  $("fraga").innerHTML=q.q;$("stor").innerHTML=q.e?`<img src="${BILDER(q.e)}" alt="" style="max-width:100%;max-height:230px;border-radius:12px"><div class="kred">${q.kred}</div>`:'<div style="font-size:4rem">🤔</div>';
+  const al=$("alt");al.className="alt";al.innerHTML='<button class="val" data-r="sant">✔ Sant</button><button class="val" data-r="myt">✘ Myt</button>';$("fb").textContent="";$("fb").className="fb";$("forkl").hidden=true;$("bNasta").hidden=true;}
+$("alt").onclick=e=>{const b=e.target.closest(".val");if(!b||G.gjort||b.disabled||!G.q.r)return;const f=$("fb");
+  G.gjort=true;const ratt=b.dataset.r===G.q.r;G.res[G.i]=ratt;if(!ratt)G.fel++;G.i++;prickar(G.set.length,G.i,G.res);
+  document.querySelectorAll("#alt .val").forEach(x=>{x.disabled=true;if(x.dataset.r===G.q.r)x.classList.add("ratt");else if(x===b)x.classList.add("fel");});
+  f.className="fb "+(ratt?"ratt":"fel");f.textContent=ratt?"✔ Rätt!":"Inte riktigt.";if(ratt){haj();window.Ljud&&Ljud.ok&&Ljud.ok();}else window.Ljud&&Ljud.bad&&Ljud.bad();
+  $("forkl").innerHTML=G.q.f;$("forkl").hidden=false;$("bNasta").hidden=false;$("bNasta").focus({preventScroll:true});};
+$("bNasta").onclick=nastaM;
+function slutM(){const st=G.fel===0?3:G.fel<=2?2:1;resultat(st,`${G.set.length-G.fel} av ${G.set.length} rätt. ${st<3?"Spela igen och se om du kan få alla rätt!":"Du kan allt om myterna!"}`);}
+/* ---------- Läge 3: Runskrivaren ---------- */
+const MAPP={a:"ar",b:"bjarkan",c:"kaun",d:"tyr",e:"iss",f:"fe",g:"kaun",h:"hagall",i:"iss",j:"iss",k:"kaun",l:"logr",m:"madr",n:"naud",o:"ur",p:"bjarkan",q:"kaun",r:"reid",s:"sol",t:"tyr",u:"ur",v:"ur",w:"ur",y:"iss",z:"sol","å":"oss","ä":"ar","ö":"ur"};
+const RUN=Object.fromEntries(RUNOR.map(r=>[r[0],r]));
+function tillRunor(s){const ut=[];for(const ch of s.toLowerCase()){if(ch==="x"){ut.push(["k","kaun"],["s","sol"]);continue;}const r=MAPP[ch];if(r)ut.push([ch,r]);}return ut;}
+function runaSvg(id,kl){const r=RUN[id];return `<svg viewBox="0 0 40 64" aria-hidden="true">`+r[3].map(d=>`<path d="${d}" fill="none" stroke="${kl||"#1D2B53"}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>`).join("")+`</svg>`;}
+function byggRunor(){const el=$("rIn");const rita=()=>{const t=tillRunor(el.value);$("rRad").innerHTML=t.length?t.map(([b,r],i)=>`<button class="rk" data-r="${r}" aria-label="${b.toUpperCase()}">${runaSvg(r)}<small>${b.toUpperCase()}</small></button>`).join(""):'<span style="color:var(--muted);font-weight:700;align-self:center">Skriv något ovanför ✏️</span>';$("rSten").hidden=true;};
+  el.oninput=rita;rita();$("rTab").innerHTML=RUNOR.map(r=>`<div>${runaSvg(r[0])}<br>${r[1].toUpperCase()}<br><i>${r[2]}</i></div>`).join("");}
+$("rRad").onclick=e=>{const b=e.target.closest("[data-r]");if(!b)return;document.querySelectorAll(".rk").forEach(x=>x.classList.remove("valt"));b.classList.add("valt");const r=RUN[b.dataset.r];
+  $("rInfo").innerHTML=`Runan heter <b>${r[2]}</b> och används för <b>${r[1]}</b>.`;window.Ljud&&Ljud.pop&&Ljud.pop(1);};
+$("rRista").onclick=()=>{const t=tillRunor($("rIn").value);if(!t.length){$("rInfo").textContent="Skriv ett namn eller ett ord först!";return;}
+  const rad=Math.ceil(t.length/6),per=Math.min(6,t.length),W=400,H=130+rad*80;let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Din runsten"><defs><linearGradient id="gr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#C9C4BB"/><stop offset="1" stop-color="#A39E95"/></linearGradient></defs><path d="M40 ${H-10} C20 ${H*.5} 24 40 80 14 C150 -4 260 4 340 20 C384 40 384 ${H*.6} 360 ${H-10} Z" fill="url(#gr)" stroke="#7E7A72" stroke-width="3"/>`;
+  s+=`<path d="M70 ${H-30} C54 ${H*.5} 56 56 100 36 C170 22 250 24 320 38 C354 56 352 ${H*.6} 336 ${H-30}" fill="none" stroke="#B3503F" stroke-width="3" opacity=".5"/>`;
+  t.forEach(([b,r],i)=>{const row=Math.floor(i/6),col=i%6,n=Math.min(6,t.length-row*6),x0=(W-n*50)/2+col*50+5,y=60+row*80;
+    s+=`<g transform="translate(${x0},${y}) scale(.95)">`+RUN[r][3].map(d=>`<path class="rp" pathLength="100" style="animation-delay:${i*.4}s" d="${d}"/>`).join("")+`</g>`;});
+  s+=`</svg><p style="text-align:center;font-weight:800;margin:0">Så kunde "${$("rIn").value.trim()}" stå på en runsten! <button class="knapp vit" id="rSkriv" style="min-height:44px">🖨️ Skriv ut</button></p>`;
+  const sten=$("rSten");sten.innerHTML=s;sten.hidden=false;sten.scrollIntoView({behavior:"smooth",block:"nearest"});
+  t.forEach((_,i)=>setTimeout(()=>window.Ljud&&Ljud.pop&&Ljud.pop(1),i*400));
+  $("rSkriv").onclick=()=>window.print();
+  if(!G.sten){G.sten=1;setTimeout(()=>resultat(3,"Du ristade ditt eget namn i runor! Vikingarna ristade sina namn och minnen i sten."),t.length*400+2600);}};
+const TOLKA=["sol","hus","båt","fisk","tor","skepp","hav","korn","gård","bröd"];
+$("rTolka").onclick=()=>{const ord=TOLKA[Math.floor(Math.random()*TOLKA.length)],mal=tillRunor(ord).map(x=>x[1]).join(","),box=$("rTolkaBox");box.hidden=false;
+  box.innerHTML=`<div class="fraga">Vilket ord står det? Använd tabellen och skriv ordet.</div><div class="tolkarad">${tillRunor(ord).map(x=>runaSvg(x[1])).join("")}</div><input id="rSvar" type="text" maxlength="14" autocomplete="off" autocapitalize="off" placeholder="Skriv ordet" style="width:100%;font:inherit;font-weight:800;font-size:1.3rem;text-align:center;border:3px solid var(--line);border-radius:14px;padding:10px"><div class="rad"><button class="knapp" id="rKolla">Kolla ✓</button></div><div class="fb" id="rFb"></div>`;
+  $("rKolla").onclick=()=>{const v=tillRunor($("rSvar").value).map(x=>x[1]).join(",");if(v===mal&&v){$("rFb").className="fb ratt";$("rFb").textContent="✔ Rätt! Ordet var "+ord+".";haj();window.Ljud&&Ljud.ok&&Ljud.ok();}else{$("rFb").className="fb fel";$("rFb").textContent="Nästan! Titta på runorna en gång till.";window.Ljud&&Ljud.bad&&Ljud.bad();}};};
 
 hem();
 </script>

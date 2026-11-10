@@ -73,3 +73,21 @@ _Fler ämnen-sidan med Ordgömman, Solsystemet 3D och Rymdlabbet, Sverigekartan,
 - **Vikingatiden** (`vikingatiden/`, nov 2026, lärarens önskan): frågor om vikingarna i tre nivåer (skepp, runor och gudar; långhus och resor; runor, städer och tider). Samma frågemotor som Rimmaskinen. Kort i SO-sidan, portal i SO-parken (stationen Vikingatiden, bredvid Sverigekartan).
 
 - **Fler nya frågeövningar** (nov 2026, samma frågemotor som Vikingatiden): **Demokrati** (Sveriges landskap togs bort: läraren tyckte att den kändes billig) (kort i SO-sidan, portaler i SO-parken: stationerna Vikingatiden och Idag), **Raketbygget** och **Månbasen** (kort i Rymdlabbets lägen under Stjärnor och universum, portaler i Rymdlabbet-parken, hörnet Stjärnor & universum). Sidorna ligger i roten (`raketbygget/`, `manbasen/`) och räknas som Rymd i `amneAv()`.
+
+- **Vikingatiden gjordes om** (nov 2026, lärarens önskan: mer interaktivt, med bilder, hur de levde, såg ut och bodde): `vikingatiden/` har tre lägen. **Utforska med bilder:** riktiga foton, och eleven ska **trycka på rätt ställe i bilden** (stäven, taket, bältet, skålen, runorna, öglan …); fel ger en ny chans och en blinkande ring som tips, rätt ger en faktamening; sex teman (skeppet, huset, kläderna, maten, runstenen, smycket). **Myt eller sant?** tio påståenden med bild (t.ex. horn på hjälmen är en myt). **Runskrivaren:** skriv ett namn, se det i runor (16 egna ritade runor, SVG, inte teckensnitt), rista det på en runsten med animation, skriv ut, och tolka ett runord. Frågeversionen togs bort; Demokrati behåller frågorna tills vidare. **Sveriges landskap togs bort** (Sverigekartan är den riktiga övningen med kartor).
+- **Bilder i `vikingatiden/bilder/`** (Wikimedia Commons, nedladdade 10 nov 2026, ca 1 MB, skalade till 800 px):
+
+| Fil | Motiv | Fotograf | Licens |
+| --- | --- | --- | --- |
+| `skepp.jpg` | Oseberg-skeppet, Oslo | Daderot | Public domain |
+| `hus.jpg` | Långhus, Trelleborg (Danmark) | se Commons | CC BY-SA 4.0 |
+| `klader.jpg` | Familj i tidigmedeltida kläder | se Commons | CC BY-SA 4.0 |
+| `mat.jpg` | Matlagning i vikingaby | Monica Ferreira Ask | CC BY-SA 4.0 |
+| `silver.jpg` | Vikingatida silverskatt | se Commons | CC BY-SA 2.0 |
+| `runsten.jpg` | Runsten U 614, Torsätra | se Commons | CC BY-SA 4.0 |
+| `thor.jpg` | Hammarsmycke av silver | se Commons | CC BY 2.0 |
+| `hjalm.jpg` | Gjermundbu-hjälmen | se Commons | CC BY 3.0 |
+| `svard.jpg` | Vikingasvärd, Derby Museum | se Commons | CC BY 3.0 |
+| `marknad.jpg` | Järnåldersmarknad, Odense | se Commons | CC BY-SA 4.0 |
+
+  Fotografens namn visas under varje bild i övningen (tas ur Commons metadata). Titlarna är `File:Oseberg ship - IMG 9186.jpg`, `File:Trelleborg Langhaus.JPG`, `File:02026 0064 Reenactor family in early medieval clothing.jpg`, `File:Matlaging i vikinglandsby 01.jpg`, `File:Viking silver hoard 2011T283 (FindID 440107).jpg`, `File:U 614, Torsätra.jpg`, `File:Viking silver Thors hammer pendant.jpg`, `File:Gjermundbu helmet.JPG`, `File:Derby Museum Viking Sword.jpg`, `File:Iron age market at Odins Odense.jpg`.
