@@ -92,13 +92,24 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 .rad{display:flex;gap:6px;justify-content:center;margin-top:10px;flex-wrap:wrap}
 
 
-.fraga small{display:block;font-weight:600;font-size:.9rem;margin-top:2px}
+
+.fraga{font-size:1.6rem;line-height:1.15;font-weight:800;color:var(--ink);margin:0 0 10px;padding:12px 10px;border-radius:16px;background:var(--soft)}
+.fraga .ik{display:inline-block;animation:peka 1.2s ease-in-out infinite}
+@keyframes peka{50%{transform:translateY(-5px)}}
+.fb{font-size:1.3rem;font-weight:800}
+.skaka{animation:skaka .45s}
+@keyframes skaka{20%{transform:translateX(-9px)}40%{transform:translateX(9px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+.puls{animation:puls .6s}
+@keyframes puls{40%{transform:scale(1.12)}}
+.fraga.q{background:#E3EAFF;color:#2A3FB8}.fraga.ok{display:none}
 .text{display:flex;flex-wrap:wrap;gap:8px 4px;justify-content:center;padding:10px 0 14px;line-height:1}
 .ord{display:inline-flex;align-items:center;font-family:var(--ord);font-size:1.3rem;font-weight:700;background:#fff;border:2px solid var(--line);border-radius:14px;padding:8px 6px 8px 12px;box-shadow:0 3px 0 var(--line);color:var(--ink);min-height:48px;gap:2px}
 .ord:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
-.ord .tk{display:inline-block;min-width:14px;padding-right:6px;color:var(--accent);font-size:1.5rem}
+.ord .tk{display:inline-block;min-width:16px;padding-right:6px;color:var(--accent);font-size:2.2rem;font-weight:800;line-height:.7;align-self:flex-end;padding-bottom:6px}
 .ord.har{background:#E3EAFF;border-color:var(--accent);box-shadow:0 3px 0 var(--accent)}
-.ord.slut{pointer-events:none}
+.ord.slut{pointer-events:none}.br{flex-basis:100%;height:0}
+.tk.t1{color:#2A3FB8}.tk.t2{color:#B85A06}.tk.t3{color:#C4252B}
+.ord.rosa .tk{color:#C4252B}
 .ord.ratt{background:#E6F7EE;border-color:var(--good);box-shadow:0 3px 0 var(--good)}
 .ord.rosa{background:#FDE7E8;border-color:#F0A3A6;box-shadow:0 3px 0 #F0A3A6}
 .ord:disabled{opacity:1;color:var(--ink)}
@@ -116,10 +127,10 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 <section class="screen" id="home">
   <div class="hero">
     <svg viewBox="0 0 120 64" aria-hidden="true"><rect x="2" y="2" width="116" height="60" rx="10" fill="#fff"/><g font-family="Andika, Baloo 2, sans-serif" font-weight="700" font-size="12" text-anchor="middle"><rect x="6" y="12" width="40" height="22" rx="8" fill="#fff" stroke="#C6D6F2" stroke-width="2"/><text x="26" y="28" fill="#1D2B53">katten</text><rect x="50" y="12" width="50" height="22" rx="8" fill="#E3EAFF" stroke="#3D5AFE" stroke-width="2"/><text x="70" y="28" fill="#1D2B53">sover</text><text x="92" y="29" font-size="18" fill="#3D5AFE">.</text><rect x="6" y="38" width="46" height="20" rx="8" fill="#fff" stroke="#C6D6F2" stroke-width="2"/><text x="29" y="53" fill="#1D2B53">hunden</text><rect x="56" y="38" width="50" height="20" rx="8" fill="#fff" stroke="#C6D6F2" stroke-width="2"/><text x="81" y="53" fill="#1D2B53">springer</text></g></svg>
-    <div><h1>Dela upp i meningar</h1><p>Här har alla punkter försvunnit! Hitta var varje mening slutar.</p></div>
+    <div><h1>Dela upp i meningar</h1><p>Hitta var meningarna slutar!</p></div>
   </div>
   <div class="niv" id="niv"></div>
-  <p class="info">Läs texten högt och lyssna efter pauserna. Tryck på sista ordet i varje mening.</p>
+  
 </section>
 
 <section class="screen" id="game" hidden>
@@ -192,32 +203,35 @@ function nasta(){if(window.speechSynthesis)speechSynthesis.cancel();if(G.i>=RUND
   if(G.lvl===1)G.val[G.q.ord.length-1]=".";   // sista tecknet fixar vi på nivå 1
   prickar(RUND,G.i,G.res);$("fb").textContent="";$("fb").className="fb";$("bNasta").hidden=true;$("bLas").hidden=true;$("stor").hidden=true;$("text").hidden=false;$("bOm").hidden=false;render();}
 function render(){
-  $("fraga").innerHTML=G.gjort?"":G.lvl===1?"Det här är två meningar utan punkt.<small>Tryck på det ord där den första meningen slutar.</small>":"Det här är flera meningar utan tecken.<small>Tryck på sista ordet i varje mening. Tryck igen för att byta tecken: . ? !</small>";
+  $("fraga").className="fraga "+(G.gjort?"ok":"q");$("fraga").innerHTML=G.gjort?"":G.lvl===1?'<span class="ik">👆</span> Var slutar den första meningen?':'<span class="ik">👆</span> Sista ordet i varje mening';
   const n=G.q.ord.length;
   $("text").innerHTML=G.q.ord.map((w,j)=>{const m=G.val[j]||"";let k="ord";if(m)k+=" har";if(G.lvl===1&&j===n-1)k+=" slut";
-    if(G.gjort&&G.fasit)k=G.fasit[j]===true?"ord ratt":G.fasit[j]===false?"ord rosa":"ord";
-    return`<button class="${k}" data-j="${j}"${G.gjort?" disabled":""}>${w}<span class="tk">${m}</span></button>`;}).join("");
+    if(G.rosa&&G.rosa.has(j))k+=" rosa";
+    return`<button class="${k}" data-j="${j}"${G.gjort?" disabled":""}>${w}<span class="tk ${m==="."?"t1":m==="?"?"t2":m==="!"?"t3":""}">${m}</span></button>`+(m&&j<n-1?'<span class="br"></span>':"");}).join("");
   $("bKlar").disabled=G.gjort||!Object.keys(G.val).length||(G.lvl===1&&Object.keys(G.val).length<2);}
 $("text").onclick=e=>{const b=e.target.closest("[data-j]");if(!b||G.gjort)return;const j=+b.dataset.j;if(G.lvl===1&&j===G.q.ord.length-1)return;
   const cur=G.val[j]||"";const rad=G.lvl===1?[".",""]:[".","?","!",""];const nx=rad[(rad.indexOf(cur)+1)%rad.length];
   if(nx)G.val[j]=nx;else delete G.val[j];window.Ljud&&Ljud.pop&&Ljud.pop(1);render();};
 $("bOm").onclick=()=>{G.val={};if(G.lvl===1)G.val[G.q.ord.length-1]=".";$("fb").textContent="";render();};
 function visaRatt(){G.gjort=true;G.fasit=null;$("text").hidden=true;$("bOm").hidden=true;$("fraga").innerHTML="";const s=$("stor");s.hidden=false;s.textContent=G.q.orig;}
-function fel(hint){G.felNu++;if(G.felNu===1)G.fel++;window.Ljud&&Ljud.bad&&Ljud.bad();const f=$("fb");
-  if(G.felNu<2){f.className="fb fel";f.textContent=hint+" Prova igen.";return;}
+function skaka(){const m=$("text");m.classList.remove("skaka");void m.offsetWidth;m.classList.add("skaka");}
+function fel(hint,rosa){G.felNu++;if(G.felNu===1)G.fel++;window.Ljud&&Ljud.bad&&Ljud.bad();const f=$("fb");
+  if(G.felNu<2){skaka();G.rosa=new Set(rosa||[]);render();setTimeout(()=>{G.rosa=null;if(!G.gjort)render();},1100);f.className="fb fel";f.textContent=hint;return;}
+  G.rosa=null;
   G.res[G.i]=false;G.i++;prickar(RUND,G.i,G.res);visaRatt();
-  f.className="fb fel";f.textContent="Så här blir det.";$("bKlar").disabled=true;$("bNasta").hidden=false;$("bLas").hidden=false;}
+  f.className="fb fel";f.textContent="Så här blir det:";$("bKlar").disabled=true;$("bNasta").hidden=false;$("bLas").hidden=false;}
 function ratt(){G.res[G.i]=!G.felNu;G.i++;prickar(RUND,G.i,G.res);visaRatt();
-  const f=$("fb");f.className="fb ratt";f.textContent="Rätt! Nu ser man var varje mening börjar och slutar.";haj();window.Ljud&&Ljud.ok&&Ljud.ok();
+  const f=$("fb");f.className="fb ratt";f.textContent="✔ Rätt!";haj();$("stor").classList.add("puls");window.Ljud&&Ljud.ok&&Ljud.ok();
   $("bKlar").disabled=true;$("bNasta").hidden=false;$("bNasta").focus({preventScroll:true});$("bLas").hidden=false;}
 $("bKlar").onclick=()=>{if(G.gjort)return;const q=G.q,mine=Object.keys(G.val).map(Number).sort((a,b)=>a-b),fa=Object.keys(q.tk).map(Number).sort((a,b)=>a-b);
   const sammaPlats=mine.length===fa.length&&mine.every((j,k)=>j===fa[k]);
   if(!sammaPlats){
-    if(mine.length<fa.length)return fel("Det finns fler meningar än så. Läs högt och lyssna efter var det blir en paus.");
-    if(mine.length>fa.length)return fel("En av meningarna är inte slut än. Läs högt: hör du att meningen fortsätter?");
-    return fel("Ett av tecknen sitter på fel ord. Läs högt, var tar meningen slut?");}
+    const extra=mine.filter(j=>!fa.includes(j));
+    if(mine.length<fa.length)return fel("Det är fler meningar. Läs högt!",extra);
+    if(mine.length>fa.length)return fel("Den meningen är inte slut. Läs högt!",extra);
+    return fel("Fel ord. Läs högt, var blir det paus?",extra);}
   const bad=fa.find(j=>G.val[j]!==q.tk[j]);
-  if(bad!==undefined)return fel(q.tk[bad]==="?"?"En av meningarna är en fråga.":q.tk[bad]==="!"?"En av meningarna är ett utrop, någon ropar eller blir glad.":"En av meningarna är ett vanligt påstående och ska ha punkt.");
+  if(bad!==undefined)return fel(q.tk[bad]==="?"?"Den här är en fråga: ?":q.tk[bad]==="!"?"Den här är ett utrop: !":"Den här är ett vanligt påstående: .",[bad]);
   ratt();};
 $("bNasta").onclick=nasta;
 $("bLas").onclick=()=>lasUpp(G.q.orig);
