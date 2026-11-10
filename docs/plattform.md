@@ -147,3 +147,10 @@ Bonusläge, **inte** en ersättning för startsidan (lärarens val): en liten ö
 - **Uppdrag:** hitta alla **sju världsdelarna** (Europa, Asien, Afrika, Nordamerika, Sydamerika, Oceanien, Antarktis) som färgade klot med namnskylt, gömda på ön och på klipporna, med en kort faktameningar vid varje fynd ("Här finns Sahara, världens största varma öken."). Tornet heter Utsiktstornet.
 - Nya byggdelar: `dammar` (vattenyta i en svacka, negativ kulle i `kullar`), `planteraSavann`, `stjarnor`-poster med namn/fakta/färg (`[x,z,dy,namn,fakta,färg]`), `samlaE`/`samlaAlla` (emoji och text för "alla"), byggnaderna `jordglob`, `flaggstang`, `pelare`.
 - Kvar utan egen ö: Kroppen, Spel, Specialare, Fler ämnen, Extra.
+
+### Spel-parken (nov 2026)
+
+- Femte ön: **tivoli och lekland** (`PARKER.spel`): godisfärgade träd, konfetti som faller, ballonger på ön, ett **pariserhjul** (`tornDekor:'hjul'`) bakom Pariserhjulet-tornet, en liten damm, rosa klippor. Fem hörn med egna attraktioner: **Skjuta & sikta** (bubblor: Bubbelskjutaren, Kulbanan, Slungan, Trädgårdsvakten), **Äventyr** (slott: Sagoriket, Glödväktaren, Sifferslottet, Skattjakten), **Tävla & bygg** (byggkran: Racerbanan, Tornbygget, Grodhoppet, Affären), **Kul tillsammans** (karusell: Memory, Dragkampen, Rutjakten) och **Brädspel** (jättelikt schackbräde: Schack, Sudoku, Trerirad, Trafikstockning, de ligger inte på Spel-sidan men får portal här). Totalt 19 portaler. Figuren heter Bobo (panda med partyhatt).
+- **Uppdrag:** hitta alla **8 biljetter** 🎟️ (`samla:'biljetter'`, poster med `form:'biljett'`) och hoppa upp i Pariserhjulet-tornet.
+- **Djuplänkar** fanns redan på Spel-sidan: `spel/#bub`, `#tower`, `#mem`, `#tug`, `#frog` (och `#car`) öppnar spelets val; Racerbanan har egen sida (`spel/racerbanan/`). En ny matte-spel på Spel-sidan måste också läggas i `PARKER.spel.hornor`.
+- Kvar utan egen ö: Kroppen, Specialare, Fler ämnen, Extra.
