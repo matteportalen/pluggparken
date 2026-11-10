@@ -153,6 +153,24 @@ const PARKER={
     npc:{x:6,z:-5,namn:'Ordis',animal:'uggla',farg:['#C9772E','#8A4E1A'],hat:'troll'},
     start:{x:0,z:0,ang:Math.PI/2}}
 };
+
+/* Layout per park: var hörnen ligger (x, z), åt vilket håll portalerna står (rik), hur högt platån är (h), stigar, klippor och startplats.
+   Alla koordinater är i världens enheter (ön är ca 100 breda). Hörnen ligger på kullar och är inte ordnade i en cirkel. */
+{const L={
+ matte:{hornor:[{x:-8,z:32,rik:Math.PI/2,h:1.2},{x:-28,z:4,rik:Math.PI,h:2},{x:8,z:6,rik:Math.PI/3,h:3.5},{x:30,z:-20,rik:-Math.PI/2,h:3},{x:-4,z:-30,rik:-Math.PI/2,h:4.5},{x:36,z:24,rik:Math.PI/2,h:2.2}],
+  kullar:[{x:-14,z:-14,rt:4,rs:9,h:2.5},{x:22,z:14,rt:5,rs:10,h:1.5}],slant:7,
+  start:{x:-38,z:30,ang:1.5},tillbaka:{x:-44,z:38},tornPos:[14,38],npc:{x:-34,z:25,namn:'Piff'},
+  stigar:[[[-38,30],[-28,31],[-18,34],[-8,32]],[[-8,32],[-3,22],[3,13],[8,6]],[[8,6],[0,9],[-10,7],[-22,4]],[[8,6],[16,-3],[24,-10],[30,-20]],[[8,6],[5,-8],[0,-20],[-4,-30]],[[30,-20],[38,-6],[40,10],[36,24]],[[-8,32],[2,38],[14,38]],[[-38,30],[-36,18],[-32,10],[-28,4]]],
+  klippor:[{x:-44,z:-24,s:0},{x:46,z:8,s:1}],klippFarg:0x6E5FA8,
+  stjarnor:[[-44,-24,0],[46,8,0],[-14,-14,1.3]]},
+ svenska:{hornor:[{x:-2,z:28,rik:Math.PI/2,h:1.5},{x:-30,z:34,rik:Math.PI/2,h:1.5},{x:-26,z:-8,rik:Math.PI/2,h:3},{x:14,z:-18,rik:-Math.PI/2,h:2.5},{x:40,z:18,rik:0,h:4}],
+  kullar:[{x:4,z:2,rt:3,rs:9,h:3},{x:30,z:6,rt:4,rs:12,h:2}],slant:10,
+  start:{x:-42,z:14,ang:.2},tillbaka:{x:-40,z:26},tornPos:[24,36],npc:{x:-38,z:18,namn:'Ordis',animal:'uggla',farg:['#C9772E','#8A4E1A'],hat:'troll'},
+  stigar:[[[-42,14],[-40,24],[-35,31],[-30,34]],[[-30,34],[-22,32],[-12,30],[-2,28]],[[-2,28],[6,14],[10,0],[14,-18]],[[-42,14],[-40,4],[-33,-2],[-26,-8]],[[-26,-8],[-12,-14],[0,-20],[14,-18]],[[14,-18],[26,-10],[36,0],[40,18]],[[-2,28],[14,36],[24,36]]],
+  klippor:[{x:-52,z:-4,s:4},{x:50,z:-18,s:8},{x:28,z:-36,s:5}],klippFarg:0x8B6B4A,
+  stjarnor:[[-40,14,1.3,'A'],[-16,42,1.3,'E'],[4,2,1.3,'I'],[-20,-42,1.3,'O'],[-52,-4,0,'U'],[28,-36,0,'Y'],[-48,-22,1.3,'Å'],[56,-4,1.3,'Ä'],[50,-18,0,'Ö']]}
+};
+for(const id in L){const l=L[id],D=PARKER[id];D.hornor.forEach((h,i)=>Object.assign(h,l.hornor[i]));const r=Object.assign({},l);delete r.hornor;Object.assign(D,r);delete D.extraPlatt;}}
 const RING=27,O_HUB=40;
 
 /* ---------- Prydnader (belöningar, syns på huvudön) ---------- */
@@ -220,7 +238,8 @@ function rensaScen(){
   S.W.traverse(o=>{if(o.geometry)o.geometry.dispose();const m=o.material;if(m){(Array.isArray(m)?m:[m]).forEach(x=>{if(x.map)x.map.dispose();x.dispose();});}});
   S=null;
 }
-function nyScen(id,O){S={id,O,W:new THREE.Group(),liv:[],kollider:[],portaler:[],stjarnor:[],plattformar:[],fria:[],flagga:null,npc:null,moln:[]};scene.add(S.W);sd=11;return S;}
+const Y=(x,z)=>S.hojd(x,z);
+function nyScen(id,O){S={hojd:()=>0,randR:null,a:O,b:O,id,O,W:new THREE.Group(),liv:[],kollider:[],portaler:[],stjarnor:[],plattformar:[],fria:[],flagga:null,npc:null,moln:[]};scene.add(S.W);sd=11;return S;}
 const add=o=>{S.W.add(o);return o;};
 
 function ogrund(O,gras,sand,vattenFarg,oval){
@@ -237,22 +256,8 @@ function atMoln(n,farg,op){
     for(let k=0;k<4;k++){const b=new THREE.Mesh(new THREE.IcosahedronGeometry(2.2+sr()*1.4,0),m);b.position.set(k*2.4-3.6,sr()*.8,sr()*1.2);g.add(b);}
     const a=sr()*Math.PI*2,r=30+sr()*60;g.position.set(Math.cos(a)*r,22+sr()*16,Math.sin(a)*r);g.userData.v=.4+sr()*.5;add(g);S.moln.push(g);}
 }
-function ogrundKvadrat(h,D){
-  const c=document.createElement('canvas');c.width=c.height=128;const q=c.getContext('2d');q.fillStyle=hex(D.rutor[0]);q.fillRect(0,0,128,128);q.fillStyle=hex(D.rutor[1]);q.fillRect(0,0,64,64);q.fillRect(64,64,64,64);
-  const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(h/3,h/3);
-  const sida=M(D.sand),top=new THREE.MeshLambertMaterial({map:t});
-  const g=add(new THREE.Mesh(new THREE.BoxGeometry(2*h,3,2*h),[sida,sida,top,sida,sida,sida]));g.position.y=-1.5;
-  const s2=add(new THREE.Mesh(new THREE.BoxGeometry(2*h+3,2.4,2*h+3),M(D.sand2)));s2.position.y=-2.7;
-  const v=add(new THREE.Mesh(new THREE.CircleGeometry(300,48),new THREE.MeshLambertMaterial({color:D.vatten,transparent:true,opacity:.92})));v.rotation.x=-Math.PI/2;v.position.y=-2.2;
-  // låg mur av färgade block runt kanten
-  const n=Math.floor(h*2/3.2)*4,bl=add(new THREE.InstancedMesh(new THREE.BoxGeometry(1.8,1,1.8),new THREE.MeshLambertMaterial({color:0xffffff,flatShading:true}),n));
-  const mm=new THREE.Matrix4(),qq=new THREE.Quaternion(),sc=new THREE.Vector3(),pp=new THREE.Vector3(),pal=[0xFF7EB6,0x6BE0FF,0xB28DFF,0xFFD23F,0x7FFFD4];
-  const per=n/4;for(let i=0;i<n;i++){const sd2=Math.floor(i/per),u=((i%per)/per*2-1)*(h-.9),k=.6+sr()*1.2;
-    const x=sd2===0?u:sd2===1?h-.4:sd2===2?-u:-h+.4,z=sd2===0?-h+.4:sd2===1?u:sd2===2?h-.4:-u;
-    pp.set(x,k/2,z);sc.set(1,k,1);qq.setFromAxisAngle(new THREE.Vector3(0,1,0),sr()*.3);bl.setMatrixAt(i,mm.compose(pp,qq,sc));bl.setColorAt(i,new THREE.Color(pal[i%pal.length]));}
-}
 function ljuspunkter(n,h,farg){
-  const pos=new Float32Array(n*3);for(let i=0;i<n;i++){pos[i*3]=(sr()*2-1)*h;pos[i*3+1]=1+sr()*8;pos[i*3+2]=(sr()*2-1)*h;}
+  const pos=new Float32Array(n*3);for(let i=0;i<n;i++){const[x,z]=slumpPunkt(1);pos[i*3]=x;pos[i*3+1]=S.hojd(x,z)+1+sr()*8;pos[i*3+2]=z;}
   const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(pos,3));
   const pts=add(new THREE.Points(g,new THREE.PointsMaterial({color:farg,size:.28,transparent:true,opacity:.9,depthWrite:false,fog:false})));
   S.liv.push(t=>{pts.position.y=Math.sin(t*.7)*.4;pts.rotation.y=t*.03;});
@@ -264,17 +269,16 @@ function planteraKristall(O){
   const stam=add(new THREE.InstancedMesh(new THREE.BoxGeometry(.5,1.6,.5),M(0x5E4A8A),n)),k1=add(new THREE.InstancedMesh(new THREE.BoxGeometry(2.4,1.4,2.4),new THREE.MeshLambertMaterial({color:0xffffff,flatShading:true}),n)),k2=add(new THREE.InstancedMesh(new THREE.BoxGeometry(1.6,1.2,1.6),new THREE.MeshLambertMaterial({color:0xffffff,flatShading:true}),n));
   let a=0,b=0;
   for(let f=0;a+b<n&&f<2500;f++){
-    const x=(sr()*2-1)*(O-3),z=(sr()*2-1)*(O-3);if(!fri(x,z))continue;const s=.8+sr()*.7;
-    if(sr()<.55){sc.set(1.1*s,2.4*s,1.1*s);pp.set(x,2.1*s,z);qq.setFromAxisAngle(new THREE.Vector3(0,1,0),sr()*3);kr.setMatrixAt(a,mm.compose(pp,qq,sc));kr.setColorAt(a,new THREE.Color(pal[a%pal.length]));a++;S.kollider.push({x,z,r:.8*s,top:99});}
+    const[x,z]=slumpPunkt(2.5);if(!fri(x,z))continue;const s=.8+sr()*.7,y0=S.hojd(x,z);
+    if(sr()<.55){sc.set(1.1*s,2.4*s,1.1*s);pp.set(x,y0+2.1*s,z);qq.setFromAxisAngle(new THREE.Vector3(0,1,0),sr()*3);kr.setMatrixAt(a,mm.compose(pp,qq,sc));kr.setColorAt(a,new THREE.Color(pal[a%pal.length]));a++;S.kollider.push({x,z,r:.8*s,top:99});}
     else{const r=sr()*3;qq.setFromAxisAngle(new THREE.Vector3(0,1,0),r);sc.set(s,s,s);
-      pp.set(x,.8*s,z);stam.setMatrixAt(b,mm.compose(pp,qq,sc));pp.set(x,2.3*s,z);k1.setMatrixAt(b,mm.compose(pp,qq,sc));pp.set(x,3.6*s,z);k2.setMatrixAt(b,mm.compose(pp,qq,sc));
+      pp.set(x,y0+.8*s,z);stam.setMatrixAt(b,mm.compose(pp,qq,sc));pp.set(x,y0+2.3*s,z);k1.setMatrixAt(b,mm.compose(pp,qq,sc));pp.set(x,y0+3.6*s,z);k2.setMatrixAt(b,mm.compose(pp,qq,sc));
       const c=new THREE.Color(pal2[b%pal2.length]);k1.setColorAt(b,c);k2.setColorAt(b,c.clone().offsetHSL(.05,0,.06));b++;S.kollider.push({x,z,r:1.2*s,top:99});}
   }
   kr.count=a;stam.count=k1.count=k2.count=b;
-  // små kuber på marken i stället för blommor
   const nk=lagt?60:140,kub=add(new THREE.InstancedMesh(new THREE.BoxGeometry(.5,.5,.5),new THREE.MeshLambertMaterial({color:0xffffff,flatShading:true}),nk));let c=0;
-  for(let f=0;c<nk&&f<3000;f++){const x=(sr()*2-1)*(O-2),z=(sr()*2-1)*(O-2);if(!fri(x,z))continue;
-    pp.set(x,.2,z);qq.setFromEuler(new THREE.Euler(sr()*.8,sr()*3,sr()*.8));sc.setScalar(.7+sr()*.8);kub.setMatrixAt(c,mm.compose(pp,qq,sc));kub.setColorAt(c,new THREE.Color(pal[c%pal.length]));c++;}
+  for(let f=0;c<nk&&f<3000;f++){const[x,z]=slumpPunkt(1.5);if(!fri(x,z))continue;
+    pp.set(x,S.hojd(x,z)+.2,z);qq.setFromEuler(new THREE.Euler(sr()*.8,sr()*3,sr()*.8));sc.setScalar(.7+sr()*.8);kub.setMatrixAt(c,mm.compose(pp,qq,sc));kub.setColorAt(c,new THREE.Color(pal[c%pal.length]));c++;}
   kub.count=c;
 }
 function planteraHost(O,ov){
@@ -282,28 +286,28 @@ function planteraHost(O,ov){
   const stam=add(new THREE.InstancedMesh(new THREE.CylinderGeometry(.3,.42,2.2,6),M(0x7A4A24),n));
   const m1=new THREE.MeshLambertMaterial({color:0xffffff,flatShading:true}),k1=add(new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1.9,0),m1,n)),k2=add(new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1.35,0),m1,n));
   let c=0;
-  for(let f=0;c<n&&f<2000;f++){const a=sr()*Math.PI*2,r=14+sr()*(O-17),x=Math.cos(a)*r*ov,z=Math.sin(a)*r;if(!fri(x,z))continue;
-    const s=.8+sr()*.6;sc.set(s,s,s);qq.setFromAxisAngle(new THREE.Vector3(0,1,0),sr()*3);
-    pp.set(x,1.1*s,z);stam.setMatrixAt(c,mm.compose(pp,qq,sc));
-    pp.set(x,3.6*s,z);sc.set(s*1.1,s*.95,s*1.1);k1.setMatrixAt(c,mm.compose(pp,qq,sc));
-    pp.set(x,5.1*s,z);sc.set(s,s,s);k2.setMatrixAt(c,mm.compose(pp,qq,sc));
+  for(let f=0;c<n&&f<2000;f++){const[x,z]=slumpPunkt(2.5);if(!fri(x,z))continue;
+    const s=.8+sr()*.6,y0=S.hojd(x,z);sc.set(s,s,s);qq.setFromAxisAngle(new THREE.Vector3(0,1,0),sr()*3);
+    pp.set(x,y0+1.1*s,z);stam.setMatrixAt(c,mm.compose(pp,qq,sc));
+    pp.set(x,y0+3.6*s,z);sc.set(s*1.1,s*.95,s*1.1);k1.setMatrixAt(c,mm.compose(pp,qq,sc));
+    pp.set(x,y0+5.1*s,z);sc.set(s,s,s);k2.setMatrixAt(c,mm.compose(pp,qq,sc));
     const col=new THREE.Color(pal[c%pal.length]);k1.setColorAt(c,col);k2.setColorAt(c,col.clone().offsetHSL(.02,0,.07));
     S.kollider.push({x,z,r:.7*s,top:99});c++;}
   stam.count=k1.count=k2.count=c;
-  // lövhögar på marken
   const nl=lagt?100:240,lov=add(new THREE.InstancedMesh(new THREE.CircleGeometry(.38,5),new THREE.MeshLambertMaterial({color:0xffffff,side:THREE.DoubleSide}),nl));let q=0;
-  for(let f=0;q<nl&&f<3000;f++){const a=sr()*Math.PI*2,r=8+sr()*(O-9),x=Math.cos(a)*r*ov,z=Math.sin(a)*r;if(!fri(x,z))continue;
-    pp.set(x,.06+sr()*.03,z);qq.setFromEuler(new THREE.Euler(-Math.PI/2,0,sr()*6));sc.setScalar(.8+sr()*.9);lov.setMatrixAt(q,mm.compose(pp,qq,sc));lov.setColorAt(q,new THREE.Color(pal[q%pal.length]));q++;}
+  for(let f=0;q<nl&&f<3000;f++){const[x,z]=slumpPunkt(1.5);if(!fri(x,z))continue;
+    pp.set(x,S.hojd(x,z)+.16+sr()*.03,z);qq.setFromEuler(new THREE.Euler(-Math.PI/2,0,sr()*6));sc.setScalar(.8+sr()*.9);lov.setMatrixAt(q,mm.compose(pp,qq,sc));lov.setColorAt(q,new THREE.Color(pal[q%pal.length]));q++;}
   lov.count=q;
 }
 function fallandeLov(n,O,ov){
   if(REDUCE)return;
   const geo=new THREE.CircleGeometry(.28,5),pal=[0xE8793A,0xD64B2E,0xF2B33D,0xA8B03A],mats=pal.map(c=>new THREE.MeshBasicMaterial({color:c,side:THREE.DoubleSide,fog:true}));
-  const l=[];for(let i=0;i<n;i++){const m=new THREE.Mesh(geo,mats[i%4]);m.position.set((sr()*2-1)*O*ov*.95,sr()*16,(sr()*2-1)*O*.95);m.userData={v:.7+sr()*.7,ph:sr()*6,sp:1+sr()*3};add(m);l.push(m);}
+  const l=[],ny=m=>{const[x,z]=slumpPunkt(1);m.position.set(x,S.hojd(x,z)+14+sr()*4,z);};
+  for(let i=0;i<n;i++){const m=new THREE.Mesh(geo,mats[i%4]);ny(m);m.position.y-=sr()*14;m.userData={v:.7+sr()*.7,ph:sr()*6,sp:1+sr()*3};add(m);l.push(m);}
   let lt=0;S.liv.push(t=>{const d=Math.min(.05,t-lt)||.016;lt=t;for(const m of l){m.position.y-=m.userData.v*d;m.position.x+=Math.sin(t*1.2+m.userData.ph)*.7*d;m.position.z+=Math.cos(t*.9+m.userData.ph)*.6*d;
-    m.rotation.x=t*m.userData.sp*.4;m.rotation.z=t*m.userData.sp*.3;if(m.position.y<.1){m.position.y=16;m.position.x=(sr()*2-1)*O*ov*.95;m.position.z=(sr()*2-1)*O*.95;}}});
+    m.rotation.x=t*m.userData.sp*.4;m.rotation.z=t*m.userData.sp*.3;if(m.position.y<S.hojd(m.position.x,m.position.z)+.1)ny(m);}});
 }
-function fri(x,z,extra){const rr=Math.hypot(x,z);if(rr<12)return false;
+function fri(x,z,extra){
   for(const k of S.kollider)if(Math.hypot(x-k.x,z-k.z)<k.r+2.2)return false;
   for(const k of S.fria)if(Math.hypot(x-k.x,z-k.z)<k.r)return false;return true;}
 function plantera(O,kronFarg){
@@ -324,6 +328,58 @@ function plantera(O,kronFarg){
     if(!fri(x,z))continue;pp.set(x,.22,z);blom.setMatrixAt(nb,mm.compose(pp,qq,sc));blom.setColorAt(nb,new THREE.Color(bfarg[nb%bfarg.length]));nb++;}
   blom.count=nb;
 }
+
+/* ---------- Terräng: kullar, kust, stigar, klippor ---------- */
+function bygTerrang(D){
+  const ov=D.oval||1,a=D.O*ov,b=D.O,p=D.form==='ruta'?6:2,wob=D.form==='ruta'?0:1;S.a=a;S.b=b;
+  S.randR=th=>{const c=Math.abs(Math.cos(th)),s2=Math.abs(Math.sin(th));let r=1/(Math.pow(c/a,p)+Math.pow(s2/b,p))**(1/p);if(wob)r*=1+.06*Math.sin(3*th+1.3)+.04*Math.sin(5*th+.4);return r;};
+  const kul=D.kullar;
+  S.hojd=(x,z)=>{let hi=0,lo=0;for(const k of kul){const d=Math.hypot(x-k.x,z-k.z),t=Math.min(1,Math.max(0,(d-k.rt)/k.rs)),w=1-t*t*(3-2*t),v=k.h*w;if(v>hi)hi=v;if(v<lo)lo=v;}return hi+lo;};
+  const W=Math.max(a,b)+8,N=lagt?80:128,geo=new THREE.PlaneGeometry(2*W,2*W,N,N);geo.rotateX(-Math.PI/2);
+  const pos=geo.attributes.position,col=new Float32Array(pos.count*3),gc=new THREE.Color(D.gras||0xffffff),sc2=new THREE.Color(D.sand),tmp=new THREE.Color();
+  for(let i=0;i<pos.count;i++){
+    const x=pos.getX(i),z=pos.getZ(i),d=S.randR(Math.atan2(z,x))-Math.hypot(x,z),k=Math.min(1,Math.max(0,d/5)),ks=k*k*(3-2*k),hh=S.hojd(x,z);
+    pos.setY(i,ks*hh+(1-ks)*-2.7);
+    const v=((Math.sin(x*1.7)+Math.cos(z*1.3))*.025);
+    tmp.copy(d<3?sc2:gc).offsetHSL(0,0,v+(hh>0?Math.min(.06,hh*.012):0));col[i*3]=tmp.r;col[i*3+1]=tmp.g;col[i*3+2]=tmp.b;
+  }
+  geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+  let mat;
+  if(D.rutor){ // rutmönster (Matte)
+    const c=document.createElement('canvas');c.width=c.height=128;const q=c.getContext('2d');q.fillStyle=hex(D.rutor[0]);q.fillRect(0,0,128,128);q.fillStyle=hex(D.rutor[1]);q.fillRect(0,0,64,64);q.fillRect(64,64,64,64);
+    const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(W/3,W/3);
+    mat=new THREE.MeshLambertMaterial({map:t,flatShading:true});
+  }else mat=new THREE.MeshLambertMaterial({vertexColors:true,flatShading:true});
+  add(new THREE.Mesh(geo,mat));
+  const v=add(new THREE.Mesh(new THREE.CircleGeometry(300,48),new THREE.MeshLambertMaterial({color:D.vatten,transparent:true,opacity:.92})));v.rotation.x=-Math.PI/2;v.position.y=-2.2;
+  // klippor och block längs kusten
+  const n=lagt?60:110,sten=add(new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1,0),M(D.stenFarg||0xB7B2A5),n)),mm=new THREE.Matrix4(),qq=new THREE.Quaternion(),sc=new THREE.Vector3(),pp=new THREE.Vector3();
+  for(let i=0;i<n;i++){const th=i/n*Math.PI*2+sr()*.05,r=S.randR(th)-1+sr()*.4,x=Math.cos(th)*r,z=Math.sin(th)*r,k=.5+sr()*1;pp.set(x,S.hojd(x,z)+.1,z);sc.set(k*1.2,k*(.7+sr()*.8),k);qq.setFromAxisAngle(new THREE.Vector3(0,1,0),sr()*6);sten.setMatrixAt(i,mm.compose(pp,qq,sc));}
+}
+function inomO(x,z,m){return Math.hypot(x,z)<S.randR(Math.atan2(z,x))-m;}
+function slumpPunkt(m){for(let i=0;i<30;i++){const x=(sr()*2-1)*S.a,z=(sr()*2-1)*S.b;if(inomO(x,z,m))return[x,z];}return[0,0];}
+function bygStig(pts,bredd,farg){
+  const cv=new THREE.CatmullRomCurve3(pts.map(([x,z])=>new THREE.Vector3(x,0,z)),false,'catmullrom',.5),len=cv.getLength(),N=Math.max(8,Math.floor(len/1.4)),pos=[],idx=[];
+  for(let i=0;i<=N;i++){const t=i/N,q=cv.getPoint(t),tg=cv.getTangent(t),l=Math.hypot(tg.x,tg.z)||1,nx=-tg.z/l*bredd/2,nz=tg.x/l*bredd/2;
+    for(const sg of[-1,1]){const x=q.x+nx*sg,z=q.z+nz*sg;pos.push(x,S.hojd(x,z)+.14,z);}
+    if(i%3===0)S.fria.push({x:q.x,z:q.z,r:bredd*1.1});
+    if(i<N){const k=i*2;idx.push(k,k+1,k+2,k+1,k+3,k+2);}}
+  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.setIndex(idx);g.computeVertexNormals();
+  add(new THREE.Mesh(g,new THREE.MeshLambertMaterial({color:farg,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2})));
+}
+/* En klippa: trappsten upp till en hög sten. Returnerar höjden på toppen. */
+function klippa(x,z,farg){
+  const b=S.hojd(x,z),m=M(farg),ang=Math.atan2(-z,-x);
+  const sten=(px,pz,r,top,mat)=>{const c=add(new THREE.Mesh(new THREE.CylinderGeometry(r*.85,r,top-S.hojd(px,pz)+1.5,7),mat||m));c.position.set(px,(top+S.hojd(px,pz)-1.5)/2,pz);c.rotation.y=sr()*3;
+    const l=add(new THREE.Mesh(new THREE.CylinderGeometry(r*.8,r*.8,.18,7),M(0xFFFFFF)));l.position.set(px,top-.09,pz);l.rotation.y=c.rotation.y;
+    S.kollider.push({x:px,z:pz,r:r*.95,top});};
+  [1.4,2.8,4.2].forEach((h,i)=>{const a=ang+(i-1)*.55,d=6.5-i*1.4,px=x+Math.cos(a)*d,pz=z+Math.sin(a)*d;sten(px,pz,2.1-i*.15,b+h);});
+  const topp=b+5.6;sten(x,z,2.7,topp);
+  // lösa stenblock runt om
+  for(let i=0;i<4;i++){const a=i*1.7+1,px=x+Math.cos(a)*4.4,pz=z+Math.sin(a)*4.4,k=.8+sr()*.7,r=add(new THREE.Mesh(new THREE.IcosahedronGeometry(k,0),m));r.position.set(px,S.hojd(px,pz)+k*.5,pz);r.rotation.set(sr()*3,sr()*3,sr()*3);S.fria.push({x:px,z:pz,r:2});}
+  S.fria.push({x,z,r:9});
+  return topp;
+}
 function plattform(x,z,r,h,farg){
   const m=add(new THREE.Mesh(new THREE.CylinderGeometry(r,r+.25,h+1,14),M(farg)));m.position.set(x,h/2-.5,z);
   const kant=add(new THREE.Mesh(new THREE.CylinderGeometry(r+.04,r+.04,.22,14),M(0xFFFFFF)));kant.position.set(x,h-.11,z);
@@ -331,14 +387,14 @@ function plattform(x,z,r,h,farg){
 }
 function stjarnaUt(id,lista){
   const tagna=SV.stj[id]||[];
-  lista.forEach(([x,z,y,ch],i)=>{const m=add(ch?new THREE.Mesh(new THREE.BoxGeometry(1.3,1.3,1.3),new THREE.MeshLambertMaterial({map:siffraTextur(ch,'#E5484D','#fff',92)})):new THREE.Mesh(stjarnaGeo(.85,.38,.3),M(0xFFD23F,{emissive:0x7a5a00})));m.position.set(x,y,z);m.visible=!tagna.includes(i);
+  lista.forEach(([x,z,y0,ch],i)=>{const y=S.hojd(x,z)+y0;const m=add(ch?new THREE.Mesh(new THREE.BoxGeometry(1.3,1.3,1.3),new THREE.MeshLambertMaterial({map:siffraTextur(ch,'#E5484D','#fff',92)})):new THREE.Mesh(stjarnaGeo(.85,.38,.3),M(0xFFD23F,{emissive:0x7a5a00})));m.position.set(x,y,z);m.visible=!tagna.includes(i);
     S.stjarnor.push({m,x,y,z,idx:i,bokstav:ch||null,tagen:tagna.includes(i),y0:y});});
 }
 const stjarnaText=()=>{const n=S.stjarnor.filter(s=>s.tagen).length,b=S.stjarnor.length&&S.stjarnor[0].bokstav;$('stj').textContent=(b?'🔤 ':'⭐ ')+n+' av '+S.stjarnor.length+(n===S.stjarnor.length?' 🎉':'');};
 
 /* ---------- Portaler ---------- */
 function portalBygg(spec,px,pz,tx,tz,sk,kapp){
-  const g=new THREE.Group();g.position.set(px,0,pz);
+  const g=new THREE.Group();g.position.set(px,S.hojd(px,pz),pz);
   const yaw=Math.atan2(tx-px,tz-pz);g.rotation.y=yaw;
   const fm=M(spec.c),vit=M(0xFFFFFF),ph=3.4*sk,br=2.4*sk;
   for(const sx of[-1,1]){
@@ -400,7 +456,7 @@ const skugga=new THREE.Mesh(new THREE.CircleGeometry(.7,16),new THREE.MeshBasicM
 scene.add(djur,skugga);
 
 function byggNpc(pos){
-  const g=djurModell({animal:pos.animal||'robot',farg:pos.farg||['#FF8A5C','#C4531F'],hat:pos.hat||'party'});g.position.set(pos.x,0,pos.z);g.rotation.y=Math.atan2(-pos.x,-pos.z);S.W.add(g);
+  const g=djurModell({animal:pos.animal||'robot',farg:pos.farg||['#FF8A5C','#C4531F'],hat:pos.hat||'party'});g.position.set(pos.x,S.hojd(pos.x,pos.z),pos.z);g.rotation.y=Math.atan2(pos.dx!=null?pos.dx:-pos.x,pos.dz!=null?pos.dz:-pos.z);S.W.add(g);
   const sk=etikett(pos.namn,'',3.2,'#FFC93C');sk.position.set(0,3.5,0);g.add(sk);
   const ut=etikett('❗','',1.2,'#FFC93C');ut.position.set(0,4.5,0);g.add(ut);
   S.kollider.push({x:pos.x,z:pos.z,r:.9,top:99});
@@ -505,44 +561,44 @@ function byggProp(typ,C,farg,g){
   }
 }
 function byggPark(id){
-  const D=PARKER[id],O=D.O;
-  nyScen(id,O);himmel(D.himmel);scene.fog.color.set(D.dimma);stallLjus(D.ljus);
-  if(D.form==='ruta'){S.box=true;ogrundKvadrat(O,D);}else ogrund(O,D.gras,D.sand,D.vatten,D.oval);
-  S.oval=D.oval||1;S.tornNamn=D.tornNamn||'Hopptornet';S.samla=D.samla||'stjarnor';const ov=S.oval;
-  const stig=M(0xFFF1C9);
-  const torg=add(new THREE.Mesh(new THREE.CylinderGeometry(5,5,.12,32),stig));torg.position.y=.03;
-  const tr=add(new THREE.Mesh(new THREE.TorusGeometry(5,.2,6,40),M(D.c)));tr.rotation.x=Math.PI/2;tr.position.y=.12;
-  S.fria.push({x:0,z:0,r:10});
-  const n=D.hornor.length,Rc=30,sk=.72,sp=6.8;
-  D.hornor.forEach((h,k)=>{
-    const th0=k/n*Math.PI*2,C={x:Math.cos(th0)*Rc*ov,z:Math.sin(th0)*Rc},th=Math.atan2(C.z,C.x),np=h.p.length;
-    const ra=Math.max(6.5,sp*(np-1)/2.6);
-    // stig från mitten till hörnet och en plan golv
-    const lng=Math.hypot(C.x,C.z)-ra*.3,sg=add(new THREE.Mesh(new THREE.BoxGeometry(3,.1,lng),stig));sg.position.set(Math.cos(th)*lng/2,.02,Math.sin(th)*lng/2);sg.rotation.y=-th+Math.PI/2;
-    const gol=add(new THREE.Mesh(new THREE.CylinderGeometry(ra*.9,ra*.95,.5,36),M(h.c,{transparent:true,opacity:.55})));gol.position.set(C.x,.25,C.z);
-    S.kollider.push({x:C.x,z:C.z,r:ra*.9,top:.5});
-    const kant=add(new THREE.Mesh(new THREE.TorusGeometry(ra*.9,.18,6,48),M(h.c)));kant.rotation.x=Math.PI/2;kant.position.set(C.x,.52,C.z);
+  const D=PARKER[id],sk=.72,sp=6.8;
+  nyScen(id,D.O);himmel(D.himmel);scene.fog.color.set(D.dimma);stallLjus(D.ljus);
+  S.tornNamn=D.tornNamn||'Hopptornet';S.samla=D.samla||'stjarnor';
+  // kullar: startplatsen, hörnens platåer (portalerna står på dem) och några extra
+  const kul=[{x:D.start.x,z:D.start.z,rt:6,rs:6,h:.5}].concat(D.kullar||[]);
+  D.hornor.forEach(h=>{h.ra=Math.max(6.5,sp*(h.p.length-1)/2.6);kul.push({x:h.x,z:h.z,rt:h.ra+3.5,rs:D.slant||9,h:h.h});});
+  bygTerrang(Object.assign({},D,{kullar:kul}));
+  const stig=0xFFF1C9;
+  // startplatsen: ett litet torg
+  {const t=add(new THREE.Mesh(new THREE.CylinderGeometry(5,5,.12,32),M(stig)));t.position.set(D.start.x,S.hojd(D.start.x,D.start.z)+.06,D.start.z);
+   const r=add(new THREE.Mesh(new THREE.TorusGeometry(5,.2,6,40),M(D.c)));r.rotation.x=Math.PI/2;r.position.set(D.start.x,S.hojd(D.start.x,D.start.z)+.14,D.start.z);
+   S.fria.push({x:D.start.x,z:D.start.z,r:8});}
+  D.stigar.forEach(pts=>bygStig(pts,3,stig));
+  D.hornor.forEach(h=>{
+    const C={x:h.x,z:h.z},ra=h.ra,np=h.p.length,y0=S.hojd(h.x,h.z);
+    const gol=add(new THREE.Mesh(new THREE.CylinderGeometry(ra*.9,ra*.9,.12,36),M(h.c,{transparent:true,opacity:.5})));gol.position.set(C.x,y0+.08,C.z);
+    const kant=add(new THREE.Mesh(new THREE.TorusGeometry(ra*.9,.18,6,48),M(h.c)));kant.rotation.x=Math.PI/2;kant.position.set(C.x,y0+.16,C.z);
     S.fria.push({x:C.x,z:C.z,r:ra+5});
-    const g=new THREE.Group();g.position.set(C.x,.5,C.z);S.W.add(g);byggProp(h.prop,C,h.c,g);
+    const g=new THREE.Group();g.position.set(C.x,y0,C.z);S.W.add(g);byggProp(h.prop,C,h.c,g);
     S.kollider.push({x:C.x,z:C.z,r:1.9,top:99});
     const sk2=etikett(h.n,h.e,7.2,hex(h.c));sk2.position.set(0,8.4,0);g.add(sk2);
-    // portalerna i en båge på hörnets yttre sida, vända mot hörnets mitt
     const step=sp/ra;
-    h.p.forEach((p,j)=>{const ph=th+(j-(np-1)/2)*step,px=C.x+Math.cos(ph)*ra,pz=C.z+Math.sin(ph)*ra;
+    h.p.forEach((p,j)=>{const ph=h.rik+(j-(np-1)/2)*step,px=C.x+Math.cos(ph)*ra,pz=C.z+Math.sin(ph)*ra;
       portalBygg(Object.assign({c:h.c},p),px,pz,C.x,C.z,sk);});
   });
-  // tillbaka till huvudön
-  portalBygg({n:'Tillbaka till ön',e:'🏝️',scen:'hub',c:0x1E9E5E},0,10,0,0,.8);
-  // hopptornet: en spiral av klossar upp till en flagga
-  const[tx,tz]=D.tornPos;S.fria.push({x:tx,z:tz,r:9});
-  [1.3,2.6,3.9,5.2,6.5].forEach((h,i)=>{const a=i*1.05+.4,r=i===4?0:5;plattform(tx+Math.cos(a)*r,tz+Math.sin(a)*r,i===4?2.2:1.9,h,[0xFF9A5C,0xFFD23F,0x58C4F0,0xB28DFF,0xFF7EB6][i]);});
-  {const pole=add(new THREE.Mesh(new THREE.CylinderGeometry(.08,.1,3,6),M(0xDDDDDD)));pole.position.set(tx,6.5+1.5,tz);
-   const fl=add(new THREE.Mesh(new THREE.BoxGeometry(1.6,1,.06),M(0xE5484D)));fl.position.set(tx+.85,6.5+2.5,tz);S.liv.push(t=>{fl.rotation.y=Math.sin(t*3)*.25;});
-   S.flagga={x:tx,z:tz,y:6.5};
-   const sk3=etikett(D.tornNamn||'Hopptornet','🏁',5.4,'#E5484D');sk3.position.set(tx,13.4,tz);add(sk3);}
-  (D.extraPlatt||[]).forEach(a=>plattform(...a));
+  portalBygg({n:'Tillbaka till ön',e:'🏝️',scen:'hub',c:0x1E9E5E},D.tillbaka.x,D.tillbaka.z,D.start.x,D.start.z,.8);
+  // hopptornet
+  const[tx,tz]=D.tornPos,tb=S.hojd(tx,tz);S.fria.push({x:tx,z:tz,r:9});
+  [1.3,2.6,3.9,5.2,6.5].forEach((h,i)=>{const a=i*1.05+.4,r=i===4?0:5;plattform(tx+Math.cos(a)*r,tz+Math.sin(a)*r,i===4?2.2:1.9,tb+h,[0xFF9A5C,0xFFD23F,0x58C4F0,0xB28DFF,0xFF7EB6][i]);});
+  {const pole=add(new THREE.Mesh(new THREE.CylinderGeometry(.08,.1,3,6),M(0xDDDDDD)));pole.position.set(tx,tb+6.5+1.5,tz);
+   const fl=add(new THREE.Mesh(new THREE.BoxGeometry(1.6,1,.06),M(0xE5484D)));fl.position.set(tx+.85,tb+6.5+2.5,tz);S.liv.push(t=>{fl.rotation.y=Math.sin(t*3)*.25;});
+   S.flagga={x:tx,z:tz,y:tb+6.5};
+   const sk3=etikett(S.tornNamn,'🏁',5.4,'#E5484D');sk3.position.set(tx,tb+13.4,tz);add(sk3);}
   stjarnaUt(id,D.stjarnor);
-  if(D.trad==='kristall'){planteraKristall(O);ljuspunkter(lagt?70:160,O,0xFFF3B0);}else if(D.trad==='host'){planteraHost(O,ov);fallandeLov(lagt?30:70,O,ov);}else plantera(O,[0x35A36A,0x4FC283]);atMoln(lagt?5:9,D.molnFarg,D.molnOp);
+  // klippor med en sak på toppen
+  (D.klippor||[]).forEach(k=>{const top=klippa(k.x,k.z,D.klippFarg||0x8B7B6B);if(k.s!=null&&S.stjarnor[k.s]){const q=S.stjarnor[k.s];q.y=q.y0=top+1.2;q.m.position.y=q.y;}});
+  if(D.trad==='kristall'){planteraKristall(D.O);ljuspunkter(lagt?70:160,D.O,0xFFF3B0);}else if(D.trad==='host'){planteraHost(D.O,D.oval||1);fallandeLov(lagt?30:70,D.O,D.oval||1);}
+  atMoln(lagt?5:9,D.molnFarg,D.molnOp);
   byggNpc(D.npc);
   S.start=D.start;
 }
@@ -550,7 +606,7 @@ function byggPark(id){
 /* ---------- Spelaren, plats ---------- */
 const P={x:0,y:0,z:7,vy:0,hopp:0,fartX:0,fartZ:0,mark:true,ang:0};
 let camYaw=0,camPitch=.5,camDist=11.5;
-function placera(x,z,ang,cy){P.x=x;P.z=z;P.y=0;P.vy=0;P.fartX=P.fartZ=0;P.ang=ang||0;camYaw=cy!=null?cy:(ang||0);cam.position.set(x-Math.sin(camYaw)*camDist,5,z-Math.cos(camYaw)*camDist);}
+function placera(x,z,ang,cy){P.x=x;P.z=z;P.y=S&&S.hojd?S.hojd(x,z):0;P.vy=0;P.fartX=P.fartZ=0;P.ang=ang||0;camYaw=cy!=null?cy:(ang||0);cam.position.set(x-Math.sin(camYaw)*camDist,5,z-Math.cos(camYaw)*camDist);}
 function lasPlats(){let s=null;try{s=JSON.parse(lsGet('mp-varlden-pos')||'null');}catch(e){}return s;}
 function laddaScen(id,plats){
   rensaScen();if(id==='hub')byggHub();else byggPark(PARKER[id]?id:'matte');
@@ -691,11 +747,11 @@ $('panelStang').addEventListener('click',()=>{$('panel').hidden=true;});
 
 /* ---------- Spelregler ---------- */
 const G=24,HOPP=9.2,FART=9;
-function markhojd(x,z,fy){let h=0;for(const k of S.kollider)if(k.top<90&&Math.hypot(x-k.x,z-k.z)<k.r&&k.top<=fy+.55&&k.top>h)h=k.top;return h;}
+function markhojd(x,z,fy){let h=S.hojd(x,z);for(const k of S.kollider)if(k.top<90&&Math.hypot(x-k.x,z-k.z)<k.r&&k.top<=fy+.55&&k.top>h)h=k.top;return h;}
 function stoppa(){
   for(const k of S.kollider){const dx=P.x-k.x,dz=P.z-k.z,d=Math.hypot(dx,dz),min=k.r+.5;
     if(d<min&&P.y<k.top-.55){const n=d||1;P.x=k.x+dx/n*min;P.z=k.z+dz/n*min;}}
-  const mx=S.O-1.2;if(S.oval&&S.oval!==1){const nx=P.x/S.oval,rr=Math.hypot(nx,P.z);if(rr>mx){P.x=nx*mx/rr*S.oval;P.z*=mx/rr;}}else if(S.box){P.x=Math.max(-mx,Math.min(mx,P.x));P.z=Math.max(-mx,Math.min(mx,P.z));}else{const rr=Math.hypot(P.x,P.z);if(rr>mx){P.x*=mx/rr;P.z*=mx/rr;}}
+  if(S.randR){const rr=Math.hypot(P.x,P.z),mxr=S.randR(Math.atan2(P.z,P.x))-1.8;if(rr>mxr){P.x*=mxr/rr;P.z*=mxr/rr;}}else{const mx=S.O-1.2;if(S.oval&&S.oval!==1){const nx=P.x/S.oval,rr=Math.hypot(nx,P.z);if(rr>mx){P.x=nx*mx/rr*S.oval;P.z*=mx/rr;}}else if(S.box){P.x=Math.max(-mx,Math.min(mx,P.x));P.z=Math.max(-mx,Math.min(mx,P.z));}else{const rr=Math.hypot(P.x,P.z);if(rr>mx){P.x*=mx/rr;P.z*=mx/rr;}}}
 }
 let narmaste=null,narNpc=false,gaar=false;
 const prompt=$('prompt');
@@ -766,11 +822,11 @@ function steg(dt){
   stoppa();
   P.vy-=G*dt;P.y+=P.vy*dt;
   const mh=markhojd(P.x,P.z,P.y-P.vy*dt);
-  if(P.y<=mh&&P.vy<=0){P.y=mh;P.vy=0;P.mark=true;P.hopp=0;}else if(P.y>mh+.05)P.mark=false;
+  if(P.y<=mh&&P.vy<=0){P.y=mh;P.vy=0;P.mark=true;P.hopp=0;}else if(P.mark&&P.vy<=0&&P.y-mh<.7){P.y=mh;P.vy=0;}else if(P.y>mh+.05)P.mark=false;
   narmaste=null;narNpc=false;
   if(!gaar)for(const po of S.portaler){
     const dx=P.x-po.g.position.x,dz=P.z-po.g.position.z,lx=dx*po.xx+dz*po.xz,lz=dx*po.zx+dz*po.zz,k=po.sk;
-    if(Math.abs(lx)<2*k&&lz>-1*k&&lz<1*k&&P.y<3.5){gaIn(po);break;}
+    if(Math.abs(lx)<2*k&&lz>-1*k&&lz<1*k&&P.y-po.g.position.y<3.5){gaIn(po);break;}
     if(Math.abs(lx)<5*k&&lz>0&&lz<8.5*k)narmaste=po;
   }
   if(!narmaste&&S.npc&&Math.hypot(P.x-S.npc.x,P.z-S.npc.z)<4.2)narNpc=true;
@@ -801,8 +857,8 @@ function rita(dt){
   inner.rotation.z=gar?Math.sin(t*14)*.06:0;
   djur.userData.fot.forEach((f,i)=>{f.position.z=.12+(gar?Math.sin(t*14+i*Math.PI)*.22:0);f.position.y=.2+(P.mark?(gar?Math.max(0,Math.sin(t*14+i*Math.PI))*.15:0):.25);});
   const cx=P.x-Math.sin(camYaw)*Math.cos(camPitch)*camDist,cz=P.z-Math.cos(camYaw)*Math.cos(camPitch)*camDist,cy=P.y+1.7+Math.sin(camPitch)*camDist;
-  cam.position.lerp(v3.set(cx,cy,cz),Math.min(1,dt*10));
-  cam.lookAt(P.x,P.y+2.7,P.z);
+  if(!window.__oversikt){cam.position.lerp(v3.set(cx,Math.max(cy,S.hojd(cx,cz)+1.6),cz),Math.min(1,dt*10));
+  cam.lookAt(P.x,P.y+2.7,P.z);}
   for(const f of S.liv)f(t);firaSteg(dt);
   for(const s of S.stjarnor)if(!s.tagen){s.m.rotation.y=t*2;s.m.position.y=s.y0+Math.sin(t*2.4+s.x)*.18;}
   for(const po of S.portaler){po.yta.material.opacity=.42+Math.sin(t*2+po.fas)*.1;po.ljus.rotation.z=t*1.5;po.ljus.scale.setScalar(.85+Math.sin(t*2+po.fas)*.15);if(po.mark)po.mark.position.y=(3.4*po.sk)+Math.max(2.3,3.2*po.sk)+1.6+Math.sin(t*5)*.3;}
@@ -818,7 +874,7 @@ renderer.setAnimationLoop(()=>{
   if(fpsKoll&&tid>1&&tid<5){fpsSum+=dt;fpsN++;}
   if(fpsKoll&&tid>=5){fpsKoll=false;if(fpsN&&fpsSum/fpsN>1/26&&!lagt){stallLagt(true);dimma();}}
 });
-window.__varlden={P,get S(){return S;},SV,gaIn,laddaScen,klart,oppnaDlg,get dlg(){return dlgOpen;}};
+window.__varlden={placera,scene,cam,P,get S(){return S;},SV,gaIn,laddaScen,klart,oppnaDlg,get dlg(){return dlgOpen;}};
 </script>
 </body>
 </html>
