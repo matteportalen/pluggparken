@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<script src="../tema.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ordregn – Pluggparken</title>
+<meta name="description" content="Ordregn: ord faller från himlen. Fånga verb, substantiv och adjektiv i rätt låda på 60 sekunder.">
+<link rel="canonical" href="https://pluggparken.se/ordregn/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Pluggparken">
+<meta property="og:locale" content="sv_SE">
+<meta property="og:title" content="Ordregn – Pluggparken">
+<meta property="og:description" content="Ordregn: ord faller från himlen. Fånga verb, substantiv och adjektiv i rätt låda på 60 sekunder.">
+<meta property="og:url" content="https://pluggparken.se/ordregn/">
+<meta property="og:image" content="https://pluggparken.se/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#1F3A35">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/apple-touch-icon.png" sizes="180x180">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+:root{
+  --bg:#EAF3FF; --ink:#1D2B53; --muted:#56668F; --card:#FFFFFF; --line:#C6D6F2; --soft:#F1F6FF;
+  --good:#1E9E5E; --good-dark:#157548; --bad:#E5484D; --accent:#3D5AFE; --gold:#F2B707; --hero1:#FF9F43; --hero2:#F2780C; --heroS:#B85A06;
+  --font:"Baloo 2","Trebuchet MS",system-ui,sans-serif; --ord:"Andika","Baloo 2",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:680px;margin:0 auto;padding:12px 16px 48px}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;border:0;background:none}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+[hidden]{display:none!important}
+.hero{display:flex;gap:16px;align-items:center;background:linear-gradient(135deg,var(--hero1),var(--hero2));color:#fff;border-radius:24px;padding:18px;box-shadow:0 5px 0 var(--heroS);margin:6px 0 16px}
+.hero svg{flex:none;width:130px;height:auto;filter:drop-shadow(0 3px 0 rgba(0,0,0,.15))}
+.hero h1{margin:0;font-size:clamp(1.7rem,6vw,2.3rem);line-height:1.05}
+.hero p{margin:6px 0 0;font-weight:600;opacity:.95}
+.niv{display:grid;gap:10px}
+.niv button{display:flex;align-items:center;gap:14px;background:var(--card);border-radius:18px;padding:12px 14px;box-shadow:0 4px 0 var(--line);text-align:left;width:100%}
+.niv button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.niv .nr{flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-weight:800;font-size:1.4rem;color:#fff}
+.niv b{display:block;font-size:1.12rem;line-height:1.15}
+.niv small{display:block;color:var(--muted);font-weight:600;font-size:.88rem;line-height:1.25}
+.niv .st{margin-left:auto;flex:none;color:var(--gold);font-size:1.15rem;letter-spacing:1px}
+.niv .st .off{color:var(--line)}
+.info{color:var(--muted);font-size:.9rem;margin:14px 2px 0}
+.topp{display:flex;align-items:center;gap:10px;margin:4px 0 10px}
+.dots{display:flex;gap:6px;flex:1;flex-wrap:wrap}
+.dots i{width:12px;height:12px;border-radius:50%;background:var(--line)}
+.dots i.ok{background:var(--good)}.dots i.f{background:var(--bad)}.dots i.nu{background:var(--gold)}
+.niva-t{font-weight:800;color:var(--muted);font-size:.9rem}
+.pet{flex:none;width:48px;height:52px;pointer-events:none}.pet svg{width:100%;height:100%}
+.pet.hopp{animation:hopp .55s ease}
+@keyframes hopp{40%{transform:translateY(-18px)}}
+.kort{background:var(--card);border-radius:22px;box-shadow:0 4px 0 var(--line);padding:16px}
+.fb{text-align:center;font-weight:700;margin:12px 0 0;min-height:2.6em;font-size:1.05rem}
+.fb.ratt{color:var(--good-dark)}.fb.fel{color:#B4232A}
+.knapp{display:inline-block;background:var(--good);color:#fff;border-radius:16px;padding:12px 26px;font-weight:800;font-size:1.15rem;box-shadow:0 5px 0 var(--good-dark);margin:6px}
+.knapp.vit{background:var(--card);color:var(--ink);box-shadow:0 5px 0 var(--line)}
+.knapp.bla{background:var(--accent);box-shadow:0 5px 0 #2A3FB8}
+.knapp:disabled{opacity:.4;pointer-events:none}
+.knapp:active{transform:translateY(3px)}
+.lyssna{display:inline-flex;align-items:center;gap:6px;background:var(--soft);border-radius:999px;padding:6px 14px;font-weight:700;font-size:.95rem;box-shadow:0 2px 0 var(--line)}
+.res{text-align:center}
+.res .stj{font-size:3rem;letter-spacing:6px;color:var(--gold);margin:8px 0}
+.res .stj .off{color:var(--line)}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:50}
+@media(max-width:420px){.hero svg{width:96px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.fraga{text-align:center;font-weight:800;color:var(--muted);margin:0 0 8px;font-size:1rem}
+.svar{display:flex;flex-wrap:wrap;gap:8px;min-height:68px;padding:10px 4px;border-bottom:3px dashed var(--line);margin-bottom:12px;align-content:flex-start}
+.svar.tom::before{content:"Tryck på orden i rätt ordning";color:var(--muted);font-weight:600;align-self:center;margin:0 auto}
+.pool{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;min-height:52px}
+.chip{font-family:var(--ord);font-size:1.3rem;font-weight:700;background:#fff;border:2px solid var(--line);border-radius:14px;padding:8px 14px;box-shadow:0 3px 0 var(--line);color:var(--ink)}
+.chip:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
+.svar .chip{background:#FFF3E0;border-color:#F2A455;box-shadow:0 3px 0 #F2A455}
+.chip.kod{background:#E6F7EE;border-color:var(--good);box-shadow:0 3px 0 var(--good)}
+.chip.rosa{background:#FDE7E8;border-color:#F0A3A6;box-shadow:0 3px 0 #F0A3A6}
+.marks{display:flex;gap:10px;justify-content:center;margin:0 0 12px}
+.marks button{width:60px;height:56px;border-radius:14px;background:#fff;border:2px solid var(--line);box-shadow:0 3px 0 var(--line);font-family:var(--ord);font-weight:700;font-size:1.8rem}
+.marks button.v{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 3px 0 #2A3FB8}
+.fix{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:6px 0 4px}
+.fix .chip{padding:8px 12px}
+.fix .chip.pa{background:#E3EAFF;border-color:var(--accent);box-shadow:0 3px 0 var(--accent)}
+.fix .mk{font-family:var(--ord);font-size:1.6rem;font-weight:700;align-self:center;padding:0 2px}
+.svar .mk{font-family:var(--ord);font-size:1.5rem;font-weight:700;align-self:center;color:var(--accent)}
+.rad{display:flex;gap:6px;justify-content:center;margin-top:10px;flex-wrap:wrap}
+
+
+.hud{display:flex;align-items:center;gap:12px;margin:4px 0 8px;font-weight:800;font-size:1.2rem}
+.hud .tid{min-width:70px}.hud .po{color:var(--ink)}.hud .ser{color:#B85A06;min-width:60px}.hud .ml{flex:1}
+.hud .pet{flex:none}
+.hud button{background:var(--card);border-radius:12px;box-shadow:0 3px 0 var(--line);padding:6px 12px;font-weight:800}
+.himmel{position:relative;height:clamp(300px,52vh,520px);border-radius:20px;overflow:hidden;background:linear-gradient(#A9DAFF,#D9EEFF 60%,#F2F9FF);box-shadow:0 4px 0 var(--line);touch-action:manipulation}
+.himmel .mo{position:absolute;background:#fff;border-radius:50px;opacity:.85;filter:blur(1px)}
+.fall{position:absolute;top:0;left:0;will-change:transform;background:#fff;border:2px solid #C6D6F2;border-radius:14px;padding:6px 14px;font-family:var(--ord);font-weight:800;font-size:1.55rem;line-height:1.25;box-shadow:0 4px 0 #C6D6F2;white-space:nowrap;color:var(--ink)}
+.fall.fokus{border-color:#1D2B53;box-shadow:0 0 0 4px rgba(61,90,254,.35),0 4px 0 #1D2B53}
+.fall.mening{white-space:normal;font-size:1.12rem;width:92%;text-align:center;font-weight:700}
+.fall mark{background:#FFE27A;border-radius:6px;padding:0 6px;font-weight:800}
+.fall.felad{background:#FDE7E8;border-color:#F0A3A6}
+.fall.bort{transition:transform .3s ease-in,opacity .3s ease-in;opacity:0}
+.fall.plopp{transition:opacity .35s;opacity:0}
+.stor{position:absolute;inset:0;display:grid;place-items:center;font-size:5rem;font-weight:800;color:#1D2B53;background:rgba(255,255,255,.55);z-index:5;text-align:center;line-height:1.1}
+.stor.liten{font-size:1.5rem;padding:20px}
+.lador{display:grid;grid-template-columns:repeat(var(--n),1fr);gap:8px;margin-top:10px}
+.lada{display:flex;flex-direction:column;border-radius:16px;border:3px solid var(--c);background:var(--bg2);overflow:hidden;color:var(--ink);padding:0;text-align:center;touch-action:manipulation;box-shadow:0 4px 0 var(--c);position:relative;min-height:96px}
+.lada:active{transform:translateY(3px);box-shadow:0 1px 0 var(--c)}
+.lada b{display:block;background:var(--c);color:#fff;padding:8px 4px;font-size:1.1rem}
+.lada .ant{font-size:2rem;font-weight:800;line-height:1.2;padding:4px}
+.lada.fel{animation:skaka .45s;border-color:#E5484D}
+@keyframes skaka{20%{transform:translateX(-9px)}40%{transform:translateX(9px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+.lada.ja{animation:ja .3s}
+@keyframes ja{40%{transform:scale(1.06)}}
+.spl{position:absolute;left:50%;top:20%;width:10px;height:10px;border-radius:50%;pointer-events:none;animation:spl .7s ease-out forwards}
+@keyframes spl{to{transform:translate(var(--dx),var(--dy));opacity:0}}
+.tips2{text-align:center;color:var(--muted);font-weight:700;font-size:.9rem;margin-top:8px}
+:root{--hero1:#5AA9FF;--hero2:#2F7DE1;--heroS:#1F5DB0}
+@media(prefers-reduced-motion:reduce){.spl{display:none}}
+
+</style>
+</head>
+<body>
+<script src="../ljud.js"></script>
+<script src="../djur.js"></script>
+<script src="../huvud.js" data-titel="Ordregn" data-ikon="🌧️"></script>
+<main class="wrap">
+
+<section class="screen" id="home">
+  <div class="hero">
+    <svg viewBox="0 0 120 64" aria-hidden="true"><rect x="2" y="2" width="116" height="60" rx="10" fill="#D9EEFF"/><g font-family="Andika, Baloo 2, sans-serif" font-weight="700" font-size="10" text-anchor="middle"><rect x="14" y="6" width="38" height="16" rx="6" fill="#fff" stroke="#C6D6F2" stroke-width="2"/><text x="33" y="18">hund</text><rect x="68" y="20" width="38" height="16" rx="6" fill="#fff" stroke="#C6D6F2" stroke-width="2"/><text x="87" y="32">röd</text><rect x="8" y="42" width="32" height="16" rx="5" fill="#FFE7C2" stroke="#F2780C" stroke-width="2"/><rect x="44" y="42" width="32" height="16" rx="5" fill="#E3EAFF" stroke="#3D5AFE" stroke-width="2"/><rect x="80" y="42" width="32" height="16" rx="5" fill="#DDF4E6" stroke="#1E9E5E" stroke-width="2"/></g></svg>
+    <div><h1>Ordregn</h1><p>Fånga orden i rätt låda!</p></div>
+  </div>
+  <div class="niv" id="niv"></div>
+  <p class="info">Varje runda är 60 sekunder. Tryck på lådan när ordet faller. Tangentbord: 1 2 3.</p>
+</section>
+
+<section class="screen" id="game" hidden>
+  <div class="hud"><span class="tid" id="hTid">⏱ 1:00</span><span class="po" id="hPo">⭐ 0</span><span class="ser" id="hSer"></span><span class="ml"></span><button id="bPaus" aria-label="Pausa">⏸</button><span class="pet" id="pet"></span></div>
+  <div class="himmel" id="himmel"><i class="mo" style="left:6%;top:12%;width:90px;height:30px"></i><i class="mo" style="left:60%;top:28%;width:120px;height:36px"></i><i class="mo" style="left:22%;top:58%;width:100px;height:28px"></i><div class="stor" id="stor" hidden></div></div>
+  <div class="lador" id="lador"></div>
+  <div class="tips2" id="tips2">Tryck på lådan när ordet är rätt sort. Tangentbord: 1 2 3.</div>
+</section>
+
+<section class="screen res" id="result" hidden>
+  <h2 id="rRub" style="margin:10px 0 0">Bra jobbat!</h2>
+  <div class="stj" id="rStj"></div>
+  <p id="rTxt" style="font-weight:700;margin:0 0 14px"></p>
+  <button class="knapp" id="rIgen">Spela igen</button>
+  <button class="knapp vit" id="rHome">Välj nivå</button>
+</section>
+
+</main>
+<canvas id="fx" hidden></canvas>
+<script>
+const $=id=>document.getElementById(id);
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const KEY="mattespel-ordregn-v1";
+const data=(()=>{try{return Object.assign({stars:{}},JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){return{stars:{}}}})();
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}};
+const reduced=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
+const NIV_UNUSED=[null].concat([{"namn": "Nivå 1: Ordning", "txt": "Sätt orden i rätt ordning. Stor bokstav och punkt är med.", "col": "#2BB673"}, {"namn": "Nivå 2: Skiljetecken", "txt": "Ordning och rätt tecken på slutet: punkt, frågetecken eller utropstecken.", "col": "#FF9F43"}, {"namn": "Nivå 3: Stor bokstav", "txt": "Ordning, tecken och stor bokstav i början och på namn.", "col": "#7B61FF"}]);
+const stjHtml=n=>[1,2,3].map(i=>i<=n?"★":'<span class="off">★</span>').join("");
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
+function hem(){
+  $("niv").innerHTML=[1,2,3].map(l=>`<button data-l="${l}"><span class="nr" style="background:${NIV[l].col}">${l}</span><span><b>${NIV[l].namn}</b><small>${NIV[l].txt}</small></span><span class="st">${stjHtml(data.stars[l]||0)}</span></button>`).join("");
+  if(window.speechSynthesis)speechSynthesis.cancel();show("home");}
+$("niv").onclick=e=>{const b=e.target.closest("[data-l]");if(b)begin(+b.dataset.l);};
+// uppläsning bara när man trycker (svensk röst)
+let svVoice=null;function laddaRoster(){try{svVoice=speechSynthesis.getVoices().find(v=>/^sv/i.test(v.lang))||null}catch(e){}}
+if("speechSynthesis" in window){laddaRoster();speechSynthesis.onvoiceschanged=laddaRoster;}
+function lasUpp(t){if(!("speechSynthesis" in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="sv-SE";if(svVoice)u.voice=svVoice;u.rate=.9;speechSynthesis.speak(u);}
+function prickar(n,i,res){$("dots").innerHTML=Array.from({length:n},(_,j)=>`<i class="${j<i?(res[j]?"ok":"f"):j===i?"nu":""}"></i>`).join("");}
+function haj(){const p=$("pet");if(!p)return;p.classList.remove("hopp");void p.offsetWidth;p.classList.add("hopp");}
+function resultat(st,txt){const old=data.stars[G.lvl]||0;data.stars[G.lvl]=Math.max(old,st);save();
+  $("rStj").innerHTML=stjHtml(st);$("rRub").textContent=st===3?"Perfekt! 🎉":st===2?"Bra jobbat!":"Bra kämpat!";$("rTxt").textContent=txt;
+  show("result");if(st===3){window.Ljud&&Ljud.fanfare&&Ljud.fanfare();confetti();}else window.Ljud&&Ljud.chime&&Ljud.chime();}
+$("rIgen").onclick=()=>begin(G.lvl);$("rHome").onclick=hem;
+function confetti(){if(reduced())return;const cols=["#3D8BFD","#FF9F43","#2BB673","#FFC93C","#7B61FF","#FF6B6B"];
+  const c=$("fx"),x=c.getContext("2d"),dpr=window.devicePixelRatio||1,W=innerWidth,H=innerHeight;c.width=W*dpr;c.height=H*dpr;x.setTransform(dpr,0,0,dpr,0,0);c.hidden=false;
+  const P=Array.from({length:150},()=>({x:W/2+(Math.random()-.5)*120,y:H*.3,vx:(Math.random()-.5)*16,vy:-Math.random()*15-4,r:Math.random()*7+5,c:pick(cols),a:Math.random()*6,va:(Math.random()-.5)*.4}));
+  let t=0;(function f(){x.clearRect(0,0,W,H);P.forEach(p=>{p.vy+=.45;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore();});
+    if(++t<150)requestAnimationFrame(f);else c.hidden=true;})();}
+const NIV=[null].concat([]);
+let G=null;
+
+let TID=60;
+const ORD={"V": ["springer", "sover", "äter", "simmar", "hoppar", "läser", "skriver", "sjunger", "ritar", "cyklar", "dansar", "leker", "badar", "ringer", "klättrar", "målar", "bakar", "tittar"], "S": ["hund", "katt", "hus", "bil", "bok", "boll", "cykel", "skola", "träd", "sol", "bord", "fisk", "mamma", "blomma", "stol", "kaka", "häst", "måne"], "A": ["stor", "liten", "röd", "snabb", "kall", "varm", "glad", "snäll", "hög", "gul", "ny", "mjuk", "tung", "söt", "blå", "stark", "rolig", "grön"]};
+const BANK3=["De små_A barnen_S vill_V leka_V i den stora_A parken_S.", "Mamma_S och pappa_S ska_V åka_V till en liten_A stad_S.", "Den hungriga_A katten_S äter_V och dricker_V ur sin skål_S.", "Pojken_S är_V glad_A och hoppar_V över ett högt_A staket_S.", "Jag tycker_V om den söta_A glassen_S.", "Hunden_S springer_V efter den runda_A bollen_S och skäller_V.", "Vår nya_A lärare_S är_V snäll_A.", "Den stora_A björnen_S sover_V hela vintern_S i en mörk_A håla_S.", "Flickan_S har_V en röd_A cykel_S och cyklar_V till skolan_S.", "Fåglarna_S bygger_V ett litet_A bo_S i det höga_A trädet_S.", "Barnen_S åker_V pulka_S i den branta_A backen_S.", "Den lilla_A musen_S gömmer_V sig i ett stort_A hål_S.", "Vi lagar_V en varm_A soppa_S och dukar_V bordet_S.", "Skogen_S är_V mörk_A och tyst_A.", "Himlen_S är_V grå_A och regnet_S faller_V.", "Solen_S skiner_V över det gröna_A fältet_S.", "Den kalla_A vinden_S blåser_V och träden_S gungar_V.", "Pappa_S köper_V en ny_A cykel_S åt barnen_S.", "Ugglan_S sitter_V i trädet_S och tittar_V med stora_A ögon_S."];
+const COLX={"V": ["#F2780C", "#FFE7C2", "#B85A06", "Verb"], "S": ["#3D5AFE", "#E3EAFF", "#2A3FB8", "Substantiv"], "A": ["#1E9E5E", "#DDF4E6", "#157548", "Adjektiv"]};
+const NAMN={V:"verb",S:"substantiv",A:"adjektiv"};
+const MODER=[
+ {id:"V",namn:"Fånga verb",txt:"Tryck på lådan när ett verb faller. Låt de andra falla.",col:"#F2780C",ik:"🏃"},
+ {id:"S",namn:"Fånga substantiv",txt:"Tryck på lådan när ett substantiv faller.",col:"#3D5AFE",ik:"🐕"},
+ {id:"A",namn:"Fånga adjektiv",txt:"Tryck på lådan när ett adjektiv faller.",col:"#1E9E5E",ik:"🌈"},
+ {id:"alla",namn:"Alla tre",txt:"Tre lådor. Vilken sort är ordet?",col:"#7B61FF",ik:"🎯"},
+ {id:"mening",namn:"Meningar",txt:"Vilken sort är det markerade ordet i meningen?",col:"#0E9AA7",ik:"📜"}];
+function hem(){$("niv").innerHTML=MODER.map(m=>`<button data-l="${m.id}"><span class="nr" style="background:${m.col}">${m.ik}</span><span><b>${m.namn}</b><small>${m.txt}</small></span><span class="st">${stjHtml(data.stars[m.id]||0)}</span></button>`).join("");
+  stoppa();if(window.speechSynthesis)speechSynthesis.cancel();show("home");}
+$("niv").onclick=e=>{const b=e.target.closest("[data-l]");if(b)begin(b.dataset.l);};
+let loopId=0,tmo=[];
+function stoppa(){cancelAnimationFrame(loopId);loopId=0;tmo.forEach(clearTimeout);tmo=[];}
+function parseTok(w){const m=w.match(/^(.+?)(?:_([VSA]))?([.,!?]*)$/);return{t:m[1]+(m[3]||""),w:m[1],k:m[2]||""};}
+function lador(){return G.mode==="V"||G.mode==="S"||G.mode==="A"?[G.mode]:["V","S","A"];}
+function ritaLador(){const L=lador();$("lador").style.setProperty("--n",L.length);
+  $("lador").innerHTML=L.map(k=>{const c=COLX[k];return`<button class="lada" data-k="${k}" style="--c:${c[0]};--bg2:${c[1]}" aria-label="${c[3]}"><b>${c[3]}</b><span class="ant">${G.box[k]}</span></button>`;}).join("");}
+function kon(){return G.mode==="mening"?{fall:[9.5,7.2],int:[4.4,3.4],max:2}:G.mode==="alla"?{fall:[6.2,4.3],int:[2.1,1.35],max:4}:{fall:[6.8,4.8],int:[2.0,1.3],max:4};}
+function kort(){
+  if(G.mode==="mening"){if(!G.kö.length){const alla=[];BANK3.forEach(s=>{const T=s.split(" ").map(parseTok);T.forEach((x,j)=>{if(x.k)alla.push({k:x.k,T,j});});});G.kö=shuffle(alla);}return G.kö.pop();}
+  if(!G.kö.length){const ks=G.mode==="alla"?["V","S","A"]:[G.mode],ut=[];
+    if(G.mode==="alla")ks.forEach(k=>shuffle(ORD[k].slice()).forEach(w=>ut.push({w,k})));
+    else{const an=["V","S","A"].filter(k=>k!==G.mode);shuffle(ORD[G.mode].slice()).forEach(w=>ut.push({w,k:G.mode}));shuffle(ORD[an[0]].slice(0,9).concat(ORD[an[1]].slice(0,9))).forEach(w=>{const k=ORD[an[0]].includes(w)?an[0]:an[1];ut.push({w,k});});}
+    G.kö=shuffle(ut);}
+  return G.kö.pop();}
+function begin(mode){stoppa();G={lvl:mode,mode,t:0,ord:[],ratt:0,fel:0,serie:0,bast:0,paus:false,igang:false,sist:0,nasta:0,kö:[],box:{V:0,S:0,A:0},poang:0};
+  $("himmel").querySelectorAll(".fall,.spl").forEach(e=>e.remove());$("pet").innerHTML=owlSVG(lasDjur());ritaLador();uppdHud();show("game");
+  const st=$("stor");st.hidden=false;st.className="stor";let n=3;st.textContent=n;
+  const steg=()=>{n--;if(n>0){st.textContent=n;tmo.push(setTimeout(steg,650));}else if(n===0){st.textContent="Gå!";tmo.push(setTimeout(steg,500));}else{st.hidden=true;G.igang=true;G.sist=performance.now();loopId=requestAnimationFrame(tick);}};
+  tmo.push(setTimeout(steg,650));}
+function uppdHud(){const s=Math.max(0,Math.ceil(TID-G.t));$("hTid").textContent="⏱ "+Math.floor(s/60)+":"+String(s%60).padStart(2,"0");$("hPo").textContent="⭐ "+G.poang;$("hSer").textContent=G.serie>=3?"🔥 x"+G.serie:"";}
+function lagg(){const K=kon(),f=Math.min(1,G.t/TID),fallT=K.fall[0]+(K.fall[1]-K.fall[0])*f,c=kort();if(!c)return;
+  const el=document.createElement("div");el.className="fall";
+  if(c.T){el.classList.add("mening");el.innerHTML=c.T.map((x,j)=>j===c.j?`<mark>${x.t}</mark>`:x.t).join(" ");el.style.left="4%";}
+  else{el.textContent=c.w;}
+  $("himmel").appendChild(el);const W=$("himmel").clientWidth;if(!c.T)el.style.left=Math.round(Math.random()*Math.max(10,W-el.offsetWidth-16)+8)+"px";
+  const o={k:c.k,w:c.w,el,y:0,fallT,h:el.offsetHeight,felad:false,klar:false};G.ord.push(o);return o;}
+function lagst(){let b=null;G.ord.forEach(o=>{if(!o.klar&&(!b||o.y>b.y))b=o;});return b;}
+function tick(now){loopId=requestAnimationFrame(tick);const dt=Math.min(.05,(now-G.sist)/1000);G.sist=now;if(G.paus)return;
+  G.t+=dt;const K=kon(),f=Math.min(1,G.t/TID),H=$("himmel").clientHeight;
+  if(G.t<TID-3&&G.nasta<=G.t&&G.ord.filter(o=>!o.klar).length<K.max&&!G.ord.some(o=>!o.klar&&o.y<.2)){lagg();G.nasta=G.t+K.int[0]+(K.int[1]-K.int[0])*f;}
+  G.ord.forEach(o=>{if(o.klar)return;o.y+=dt/o.fallT;
+    if(o.y>=1){o.y=1;marken(o);}
+    o.el.style.transform="translateY("+Math.round(o.y*(H-o.h-4))+"px)";});
+  const l=lagst();G.ord.forEach(o=>o.el.classList.toggle("fokus",o===l));
+  G.ord=G.ord.filter(o=>!o.klar||o.el.isConnected);uppdHud();if(G.t>=TID)slut();}
+function marken(o){o.klar=true;const enkel=G.mode==="V"||G.mode==="S"||G.mode==="A";
+  if(enkel&&o.k!==G.mode){G.ratt++;}
+  else{G.fel++;G.serie=0;window.Ljud&&Ljud.bad&&Ljud.bad();}
+  o.el.classList.add("plopp");setTimeout(()=>o.el.remove(),400);}
+function stank(k){const b=$("lador").querySelector(`[data-k="${k}"]`);if(!b)return;const c=COLX[k][0];
+  for(let i=0;i<10;i++){const s=document.createElement("i");s.className="spl";s.style.cssText=`background:${c};--dx:${Math.round((Math.random()-.5)*120)}px;--dy:${-Math.round(Math.random()*90+20)}px`;b.appendChild(s);setTimeout(()=>s.remove(),750);}}
+function trycka(k){if(!G.igang||G.paus||G.t>=TID)return;const o=lagst();if(!o)return;const b=$("lador").querySelector(`[data-k="${k}"]`);
+  if(o.k===k){o.klar=true;G.ratt++;G.serie++;G.bast=Math.max(G.bast,G.serie);G.poang+=10+Math.min(10,G.serie>1?G.serie:0);G.box[k]++;
+    const hr=$("himmel").getBoundingClientRect(),br=b.getBoundingClientRect(),er=o.el.getBoundingClientRect();
+    o.el.classList.add("bort");o.el.style.transform="translate("+Math.round(br.left+br.width/2-er.left-er.width/2)+"px,"+Math.round(br.top-hr.top-er.height/2)+"px) scale(.3)";setTimeout(()=>o.el.remove(),320);
+    b.querySelector(".ant").textContent=G.box[k];b.classList.remove("ja");void b.offsetWidth;b.classList.add("ja");stank(k);window.Ljud&&Ljud.ok&&Ljud.ok();uppdHud();return;}
+  if(!o.felad){o.felad=true;G.fel++;G.serie=0;}o.el.classList.add("felad");o.y=Math.max(0,o.y-.1);window.Ljud&&Ljud.bad&&Ljud.bad();b.classList.remove("fel");void b.offsetWidth;b.classList.add("fel");uppdHud();}
+$("lador").addEventListener("pointerdown",e=>{const b=e.target.closest("[data-k]");if(b){e.preventDefault();trycka(b.dataset.k);}});
+const TANG={"1":"V","2":"S","3":"A",ArrowLeft:"V",ArrowDown:"S",ArrowRight:"A",v:"V",s:"S",a:"A"};
+document.addEventListener("keydown",e=>{if($("game").hidden||e.ctrlKey||e.metaKey||e.altKey)return;let k=TANG[e.key]||TANG[e.key.toLowerCase()];
+  if(G&&(G.mode==="V"||G.mode==="S"||G.mode==="A")&&(k||e.key===" "||e.key==="Enter"))k=G.mode;if(e.key===" "&&G&&G.mode==="alla")return;
+  if(k&&lador().includes(k)){e.preventDefault();trycka(k);}else if(e.key==="p"||e.key==="Escape"){paus();}});
+function paus(){if(!G||!G.igang||G.t>=TID)return;G.paus=!G.paus;const st=$("stor");st.hidden=!G.paus;st.className="stor liten";st.textContent="Paus. Tryck för att fortsätta.";$("bPaus").textContent=G.paus?"▶":"⏸";G.sist=performance.now();}
+$("bPaus").onclick=paus;$("stor").onclick=()=>{if(G.paus)paus();};
+document.addEventListener("visibilitychange",()=>{if(document.hidden&&G&&G.igang&&!G.paus&&G.t<TID)paus();});
+function slut(){stoppa();G.igang=false;const N=G.ratt+G.fel,acc=N?G.ratt/N:0,st=N>=8&&acc>=.9?3:N>=6&&acc>=.7?2:1;
+  $("himmel").querySelectorAll(".fall").forEach(e=>e.remove());
+  resultat(st,`${G.ratt} av ${N} ord rätt (${Math.round(acc*100)} %). ${G.poang} poäng. Längsta serie: ${G.bast}.${st<3?" Spela igen och se om du kan få fler rätt!":""}`);}
+window.__or={begin,MODER,ORD,BANK3};
+
+hem();
+</script>
+</body>
+</html>

@@ -65,6 +65,8 @@ const IDX=[
  ['substantiv/','Substantiv','Hitta orden för saker, djur och människor','🐕','substantiv namnord ordklass ordklasser grammatik svenska','Svenska'],
  ['adjektiv/','Adjektiv','Hitta orden som berättar hur något är','🌈','adjektiv beskrivande ord ordklass ordklasser grammatik svenska','Svenska'],
  ['ordfargaren/','Ordfärgaren','Färga verb, substantiv och adjektiv','🎨','ordfärgaren ordklasser verb substantiv adjektiv färga grammatik svenska','Svenska'],
+ ['sorteraord/','Sortera orden','Sortera orden i lådor: verb, substantiv eller adjektiv','🧺','sortera orden lådor verb substantiv adjektiv ordklass ordklasser grammatik svenska','Svenska'],
+ ['ordregn/','Ordregn','Ord faller från himlen: fånga dem i rätt låda på 60 sekunder','🌧️','ordregn spel fånga ord verb substantiv adjektiv ordklass ordklasser grammatik svenska','Svenska'],
  ['vemgorvad/','Vem gör vad?','Hitta den som gör något i meningen och ordet som säger vad som händer','🔎','mening meningar subjekt verb vem vad gör gör vad ordklass grammatik svenska','Svenska'],
  ['delameningar/','Dela upp i meningar','En text utan punkter: hitta var varje mening slutar','✂️','mening meningar dela upp punkt frågetecken utropstecken stor bokstav text skiljetecken svenska','Svenska'],
  ['ordkedjan/','Ordkedjan','Skriv ett ord som börjar på sista bokstaven i förra ordet','⛓️','ordkedja ord bokstav kedja katt tak kaka ordlek svenska stava','Svenska'],
