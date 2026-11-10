@@ -92,7 +92,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 .rad{display:flex;gap:6px;justify-content:center;margin-top:10px;flex-wrap:wrap}
 
 
-.fraga.q1{background:#E3EAFF;color:#2A3FB8}.fraga.q2{background:#FFE7C2;color:#B85A06}.fraga.ok{display:none}
+.fraga.q1 b{color:#B85A06;text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:4px}.fraga.q2 b{color:#2A3FB8;text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:4px}.fraga.q1{background:#E3EAFF;color:#2A3FB8}.fraga.q2{background:#FFE7C2;color:#B85A06}.fraga.ok{display:none}
 
 .fraga{font-size:1.6rem;line-height:1.15;font-weight:800;color:var(--ink);margin:0 0 10px;padding:12px 10px;border-radius:16px;background:var(--soft)}
 .fraga .ik{display:inline-block;animation:peka 1.2s ease-in-out infinite}
@@ -182,7 +182,7 @@ function confetti(){if(reduced())return;const cols=["#3D8BFD","#FF9F43","#2BB673
   const P=Array.from({length:150},()=>({x:W/2+(Math.random()-.5)*120,y:H*.3,vx:(Math.random()-.5)*16,vy:-Math.random()*15-4,r:Math.random()*7+5,c:pick(cols),a:Math.random()*6,va:(Math.random()-.5)*.4}));
   let t=0;(function f(){x.clearRect(0,0,W,H);P.forEach(p=>{p.vy+=.45;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore();});
     if(++t<150)requestAnimationFrame(f);else c.hidden=true;})();}
-const NIV=[null].concat([{"namn":"Nivå 1: Vem eller vad?","txt":"Hitta den som gör något i meningen.","col":"#2BB673"},{"namn":"Nivå 2: Vad gör den?","txt":"Hitta ordet som säger vad som händer.","col":"#FF9F43"},{"namn":"Nivå 3: Båda två","txt":"Först den som gör något, sedan vad den gör. Längre meningar.","col":"#7B61FF"}]);
+const NIV=[null].concat([{"namn":"Nivå 1: Vem eller vad?","txt":"Frågan hjälper dig: vem eller vad gör det?","col":"#2BB673"},{"namn":"Nivå 2: Vad gör den?","txt":"Frågan visar vem. Hitta ordet som säger vad den gör.","col":"#FF9F43"},{"namn":"Nivå 3: Båda två","txt":"Först ordet som säger vad som händer, sedan vem eller vad. Längre meningar.","col":"#7B61FF"}]);
 let G=null;
 
 const RUND=8;
@@ -198,16 +198,21 @@ function parse(line){const toks=[];line.replace(/\[([^\]]+)\]|\(([^)]+)\)([.!?,]
 function begin(lvl){G={lvl,i:0,fel:0,res:[],felNu:0,gjort:false};$("nivT").textContent="Nivå "+lvl;$("pet").innerHTML=owlSVG(lasDjur());
   G.set=shuffle(D[lvl].slice()).slice(0,RUND).map(parse);show("game");nasta();}
 function nasta(){if(window.speechSynthesis)speechSynthesis.cancel();if(G.i>=RUND){slut();return;}
-  G.q=G.set[G.i];G.felNu=0;G.gjort=false;G.steg=G.lvl===2?2:1;G.val=new Set();
+  G.q=G.set[G.i];G.felNu=0;G.gjort=false;G.steg=G.lvl>=2?2:1;G.klar1=false;G.val=new Set();
   prickar(RUND,G.i,G.res);$("fb").textContent="";$("fb").className="fb";$("bNasta").hidden=true;$("bLas").hidden=true;$("leg").hidden=true;render();}
-function fragetext(){return G.steg===1?'<span class="ik">👆</span> Vem gör något?':'<span class="ik">👆</span> Vad gör den?';}
+const NAMN=new Set("Kalle Lisa Tomas Stina Elsa Oskar Sara Johan Nora Mia".split(" "));
+const lc=t=>t.split(" ").map(w=>NAMN.has(w)?w:w.charAt(0).toLowerCase()+w.slice(1)).join(" ");
+function fragetext(){const T=G.q.toks,vb=rent(T.find(x=>x.r===2).t),su=lc(T.filter(x=>x.r===1).map(x=>x.t).join(" "));
+  const ik='<span class="ik">👆</span> ';
+  if(G.steg===1)return ik+`Vem eller vad <b>${vb}</b>?`;
+  return G.lvl===2?ik+`Vad gör <b>${su}</b>?`:ik+"Vilket ord säger vad som händer?";}
 function render(){
   $("fraga").className="fraga "+(G.gjort?"ok":G.steg===1?"q1":"q2");$("fraga").innerHTML=G.gjort?"":fragetext();
   $("meng").innerHTML=G.q.toks.map((x,j)=>{let k="chip";
     if(G.gjort){if(x.r===1)k+=" rtt1";else if(x.r===2)k+=" rtt2";}
     else if(G.rosa&&G.rosa.has(j))k+=" rosa";
     else if(G.val.has(j))k+=G.steg===1?" val1":" val2";
-    else if(G.steg===2&&G.klar1&&x.r===1)k+=" rtt1";
+    else if(G.steg===1&&G.klar1&&x.r===2)k+=" rtt2";
     return`<button class="${k}" data-j="${j}"${G.gjort?" disabled":""}>${x.t}</button>`;}).join("");
   $("bKlar").disabled=G.gjort||!G.val.size;}
 $("meng").onclick=e=>{const b=e.target.closest("[data-j]");if(!b||G.gjort)return;const j=+b.dataset.j;
@@ -229,14 +234,13 @@ $("bKlar").onclick=()=>{if(G.gjort||!G.val.size)return;const T=G.q.toks,v=[...G.
   if(G.steg===1){
     const rtt=T.map((x,j)=>x.r===1?j:-1).filter(j=>j>=0),ok=rtt.length===v.length&&rtt.every(j=>G.val.has(j));
     if(!ok){
-      if(G.val.has(vj))return fel(`Fråga: vem eller vad ${rent(T[vj].t)}?`);
+      if(G.val.has(vj))return fel(`Det ordet är vad som händer. Vem eller vad gör det?`);
       if(v.every(j=>T[j].r===1))return fel("Fler ord hör ihop. Ta med alla.");
       if(v.some(j=>T[j].r===1))return fel("Ett ord för mycket. Bara den som gör något.");
       return fel(`Fråga: vem eller vad ${rent(T[vj].t)}?`);}
-    if(G.lvl===3){G.steg=2;G.klar1=true;G.val=new Set();window.Ljud&&Ljud.ok&&Ljud.ok();$("fb").className="fb ratt";$("fb").textContent="✔ Rätt!";render();return;}
     ratt();return;}
   // steg 2: verbet
-  if(v.length===1&&v[0]===vj){G.klar1=false;ratt();return;}
+  if(v.length===1&&v[0]===vj){if(G.lvl===3){G.steg=1;G.klar1=true;G.val=new Set();window.Ljud&&Ljud.ok&&Ljud.ok();$("fb").className="fb ratt";$("fb").textContent="✔ Rätt!";render();return;}G.klar1=false;ratt();return;}
   if(T[v[0]].r===1)return fel("Det är den som gör något. Vad gör den?");
   fel("Vad händer i meningen? Vad gör någon?");};
 $("bNasta").onclick=()=>{G.klar1=false;nasta();};
