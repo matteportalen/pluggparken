@@ -163,7 +163,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 .tinst{margin-top:10px;border-top:1px dashed var(--line);padding-top:6px}.tm .rad button.rund.ok{background:var(--good);border-color:var(--good);color:#fff;font-weight:800}
 .tm.val{width:230px}.rullbox{position:relative;width:200px;margin:2px auto 0}
 .rband{position:absolute;left:0;right:0;top:80px;height:40px;border-radius:12px;background:rgba(242,120,12,.13)}
-.rull{position:relative;height:200px;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;outline:none;touch-action:pan-y;overscroll-behavior:contain;-webkit-mask-image:linear-gradient(transparent,#000 34%,#000 66%,transparent);mask-image:linear-gradient(transparent,#000 34%,#000 66%,transparent)}
+.rull{position:relative;height:200px;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;outline:none;touch-action:none;overscroll-behavior:contain;-webkit-mask-image:linear-gradient(transparent,#000 34%,#000 66%,transparent);mask-image:linear-gradient(transparent,#000 34%,#000 66%,transparent)}
 .rull{cursor:grab}.rull.dras{cursor:grabbing}.rull::-webkit-scrollbar{display:none}.rull:focus-visible{box-shadow:0 0 0 3px var(--accent);border-radius:12px}
 .rullin{padding:80px 0}
 .ljudrad{display:flex;gap:6px;margin-top:3px}.ljudrad select{flex:1;min-width:0;font:inherit;font-weight:700;border:2px solid var(--line);border-radius:10px;padding:5px 8px;background:#fff;color:var(--ink)}.ljudrad .lyssna{width:42px;border-radius:10px;background:#F1F6FF;border:2px solid var(--line);font-size:1.05rem}
@@ -773,8 +773,9 @@ function fyllTimer(b,w){const o=w,c=CLOCK[o.id]||(CLOCK[o.id]={kvar:o.d.tot,igan
     let dr=null,mom=0,hist=[];const reducerad=matchMedia("(prefers-reduced-motion: reduce)").matches;
     const stoppaMom=()=>{if(mom){cancelAnimationFrame(mom);mom=0;}r.style.scrollSnapType="";};
     const snappa=()=>{r.style.scrollSnapType="";r.scrollTo({top:Math.round(r.scrollTop/40)*40,behavior:reducerad?"auto":"smooth"});};
-    r.addEventListener("wheel",stoppaMom,{passive:true});r.addEventListener("keydown",stoppaMom);
-    r.addEventListener("pointerdown",ev=>{if(ev.pointerType==="touch"||ev.button!==0)return;stoppaMom();dr={y:ev.clientY,s:r.scrollTop,m:false,id:ev.pointerId};hist=[[ev.timeStamp,r.scrollTop]];});
+    /* hjul och pekplatta: egen rullning utan webbläsarens snäpp (Firefox på PC stoppar annars svepet direkt); snäpper när det blivit stilla */
+    let wt=0;r.addEventListener("wheel",ev=>{ev.preventDefault();stoppaMom();r.style.scrollSnapType="none";r.scrollTop+=ev.deltaY*(ev.deltaMode===1?40:ev.deltaMode===2?200:1);clearTimeout(wt);wt=setTimeout(snappa,reducerad?0:130);},{passive:false});r.addEventListener("keydown",stoppaMom);
+    r.addEventListener("pointerdown",ev=>{if(ev.button!==0)return;stoppaMom();dr={y:ev.clientY,s:r.scrollTop,m:false,id:ev.pointerId};hist=[[ev.timeStamp,r.scrollTop]];});
     r.addEventListener("pointermove",ev=>{if(!dr||ev.pointerId!==dr.id)return;const dy=ev.clientY-dr.y;if(!dr.m&&Math.abs(dy)>4){dr.m=true;r.style.scrollSnapType="none";r.classList.add("dras");try{r.setPointerCapture(ev.pointerId);}catch(_){}}
       if(dr.m){r.scrollTop=dr.s-dy;hist.push([ev.timeStamp,r.scrollTop]);if(hist.length>8)hist.shift();}});
     const slut=ev=>{if(!dr)return;const flyttad=dr.m;dr=null;r.classList.remove("dras");if(!flyttad){r.style.scrollSnapType="";return;}
