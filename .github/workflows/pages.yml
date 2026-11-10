@@ -8,10 +8,11 @@ on:
 permissions:
   contents: read
 
-# En nyare push ersätter en äldre publicering som väntar eller hänger sig, så att en hängande deploy inte blockerar kön.
+# Publiceringar köar i stället för att avbryta varandra: en avbruten deployment lever kvar i Pages och får nästa att stå i kö
+# (och en ny deployment av samma version återanvänder den avbrutna och avbryts direkt). Högst en väntar, den nyaste.
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -26,7 +27,7 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    timeout-minutes: 8   # en deploy som hänger ska misslyckas snabbt, inte stå kvar i kön
+    timeout-minutes: 16
     permissions:
       pages: write
       id-token: write
@@ -34,24 +35,9 @@ jobs:
       name: github-pages
       url: https://pluggparken.se/
     steps:
-      # Pages hänger sig ibland i "syncing_files". En frisk publicering är klar på några sekunder, så varje försök får bara 90 sekunder
-      # och sedan provar vi om (nytt försök av samma paket) i stället för att vänta fem minuter på ett som ändå inte går igenom.
-      - name: Publicera till GitHub Pages (försök 1)
-        id: d1
-        continue-on-error: true
+      # Ett enda, tåligt försök: Pages kan stå i kö eller synka i flera minuter när något stort ändrats. Omförsök i samma körning
+      # fungerar inte (samma version får samma deployment-id och avbryts direkt), men en ny körning en stund senare går igenom.
+      - name: Publicera till GitHub Pages
         uses: actions/deploy-pages@v4
         with:
-          timeout: 90000
-      - name: Publicera till GitHub Pages (försök 2)
-        id: d2
-        if: steps.d1.outcome == 'failure'
-        continue-on-error: true
-        uses: actions/deploy-pages@v4
-        with:
-          timeout: 90000
-      - name: Publicera till GitHub Pages (försök 3)
-        id: d3
-        if: steps.d1.outcome == 'failure' && steps.d2.outcome == 'failure'
-        uses: actions/deploy-pages@v4
-        with:
-          timeout: 120000
+          timeout: 840000
