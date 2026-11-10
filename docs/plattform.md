@@ -187,3 +187,10 @@ Bonusläge, **inte** en ersättning för startsidan (lärarens val): en liten ö
 
 - **SO: epokerna är skyltar, inte portaler** (lärarens fynd: "Vikingatiden" såg ut som en övning man kan köra). Stationerna (Stenåldern, Vikingatiden, Medeltiden, Idag) har nu bara en **vägskylt i trä** med årtal (`eraSkylt`), och portalskylten visar bara övningens namn. En egen **Vikingatiden-övning** för SO-sidan är en idé (inte byggd); då får stationen en riktig portal.
 - Portalskyltar ritas ovanpå byggnader (`etikett(...,ovan)` med `depthTest:false`), så att höga hus inte skymmer dem.
+
+### Fler ämnen och Extra (nov 2026)
+
+- **Fler ämnen = en sjöstjärna** (`PARKER.fler`): kustlinjen har fem **armar** (`rand`), varje arm är ett ämne med **egen markbild** (`flerTextur`): Engelska (kullersten med röd stråk, staffli och telefonkiosk), Logik (rutigt golv, tre-i-rad-spel), Gissa och uppskatta (rutat papper, balansvåg), Digitalt (kretskort med gröna ledningar, tangenter som vågar) och Pengar (guldmynt, spargris). Alla 10 övningar från Fler ämnen-sidan har portal (Människokroppen ligger i Kroppen). **Linbanan** (`typ:'linbana'`, en sluten bana mellan alla fem armspetsar högt över vattnet) är ön egna sak. Uppdrag: hitta 7 idéer (`samla:'ideer'`) och åk linbanan.
+- **Extra = en vinylskiva** (`PARKER.extra`, `form:'cirkel'`): marken är en svart skiva med spår och en röd etikett, **trumpads** som studsar och spelar en ton, en **pianotrappa** (stegvisa tangenter, varje tangent spelar en ton, `S.pads`), equalizer-staplar som dansar, högtalare och svävande toner. **Skivan** (`typ:'skiva'`) är en åktur längs spåret från kanten in till mitten med melodi (`klang`). Hörnen: Musiklabbet (trummor), Hörnillusioner (roterande kub), Ansiktsloppan (en loppa). Uppdrag: hitta de åtta tonerna Do–Do (`ton:`-poster som spelar tonen när man tar dem) och åk skivan.
+- Nya byggdelar: `S.pads` (studs- och tonplattor), `form:'cirkel'`, `ingaLov`, ton-poster, `klang` i banor.
+- Idé: använda de riktiga organmodellerna ur `anatomi/modell/organ.glb` (och Blender, finns installerat) som saker att plocka i Kroppen; liknande riktiga modeller för andra öar.
