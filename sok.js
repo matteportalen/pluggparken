@@ -84,8 +84,6 @@ const IDX=[
  ['varlden/','Pluggparken-världen','Gå runt på en ö i 3D med ditt djur, hoppa in i portaler, ta uppdrag och besök Matte-parken','🏝️','värld ö 3d portal hoppa spel öppen värld djur utforska uppdrag park matte-parken prydnader stjärnor','Utforska'],
  ['vikingatiden/','Vikingatiden','Skepp, runor och gudar. Vad vet du om vikingarna?','⚓','vikingar vikingatiden skepp långskepp runor tor odin historia sverige','SO'],
  ['rimmaskinen/','Rimmaskinen','Hitta ord som rimmar. Lyssna efter slutljuden.','🎤','rim rimma ord ljud slutljud dikt svenska','Svenska'],
- ['sinnena/','Sinnena','Syn, hörsel, lukt, smak och känsel. Vad använder du när?','👁️','sinnen syn hörsel lukt smak känsel öga öra näsa tunga','NO'],
- ['tanderna/','Tänderna','Hur du tar hand om tänderna och vad de gör.','🦷','tänder tandborste tandvård tandläkare mjölktänder emalj','NO'],
  ['spegelbilder/','Spegelbilder','Välj den bild som är spegelbilden. Träna symmetri.','🪞','spegel spegelbild symmetri geometri former spegling','Matte'],
  ['rutnat/','Rutnät och koordinater','Hitta skatten i rutnätet. Läs av bokstav och siffra.','🗺️','rutnät koordinater karta bokstav siffra skattkarta geometri','Matte'],
  ['stavningsjakten/','Stavningsjakten','Hur stavas ordet på bilden? Hitta rätt stavning.','🔎','stavning stava rättstavning ord bild svenska','Svenska'],
