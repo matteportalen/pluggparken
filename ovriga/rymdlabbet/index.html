@@ -1422,6 +1422,10 @@ $('lSl').addEventListener('input',e=>{cancelAnimationFrame(lAnim);lV=+e.target.v
 $('lNext').onclick=()=>lTo(Math.min(4,Math.floor(lV+.001)+1));$('lPrev').onclick=()=>lTo(Math.max(0,Math.ceil(lV-.001)-1));
 
 show('home');
+// djuplänkar (t.ex. från Pluggparken-världen): rymdlabbet/#dag öppnar Dag och natt, #film-zoom startar filmen
+{const h=(location.hash||'').slice(1);try{const el=h&&document.getElementById(h);
+  if(el&&el.classList.contains('screen'))show(h);
+  else if(/^film-/.test(h)){const b=document.querySelector('[data-film="'+h.slice(5)+'"]');if(b)b.click();}}catch(e){}}
 window.LAB={get sHit(){return sHit},show,get T(){return T},sunPos,dayInfo,declin,get state(){return{dDoy,dClock,aDoy,city:city.n,eAng,sZoom,vT,yT}},set eAng(v){eAng=v;drawEcl();}};
 </script>
 </body>

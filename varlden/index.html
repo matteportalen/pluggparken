@@ -180,10 +180,11 @@ PARKER.rymdlabbet={namn:'Rymdlabbet',e:'🚀',c:0x1E9E5E,klot:true,R:40,toppH:9,
   himmel:['#02030A','#050818','#0A1030'],ljus:{h:0x8FA0D8,g:0x2A2A44,hi:.8,s:0xFFFFFF,si:2.4,sp:[150,100,80]},
   npc:{namn:'Kosmo',animal:'robot',farg:['#AEB9CC','#6B7894']},
   hornor:[
-    {n:'Rymdlabbet',e:'🔭',c:0x3D5AFE,prop:'teleskop',lat:20,lon:80,rik:.3,p:[{n:'Rymdlabbet',e:'🔭',h:'ovriga/rymdlabbet/'},{n:'Månens faser',e:'🌙',h:'ovriga/solsystemet/#jorden'}]},
-    {n:'Solsystemet',e:'🪐',c:0xFFB400,prop:'antenn',lat:-25,lon:150,rik:2.5,p:[{n:'Solsystemet i 3D',e:'🪐',h:'ovriga/solsystemet/'}]},
-    {n:'Galaxen',e:'🌌',c:0xD6409F,prop:'galax',lat:15,lon:230,rik:4.4,p:[{n:'Vintergatan',e:'🌌',h:'ovriga/vintergatan/'}]}],
-  planeter:[['Merkurius',0xB5B0A8,.8,10,40,'Den minsta planeten och närmast solen.'],['Venus',0xE8C27A,1.1,-40,70,'Den hetaste planeten.'],['Jorden',0x3D7BE0,1.1,35,120,'Vår planet, den enda med liv.'],['Mars',0xD9532E,.9,-10,190,'Den röda planeten.'],['Jupiter',0xD9A877,1.9,50,200,'Störst av alla planeter.'],['Saturnus',0xE9D08F,1.6,-50,250,'Den har stora ringar.'],['Uranus',0x8FE0E0,1.3,5,290,'Den rullar på sidan.'],['Neptunus',0x3D5AFE,1.3,-30,330,'Blå och längst bort från solen.']]};
+    {n:'Jorden & månen',e:'🌍',c:0x3D5AFE,prop:'teleskop',lat:20,lon:80,rik:.3,p:[{n:'Dag och natt',e:'🌍',h:'ovriga/rymdlabbet/#dag'},{n:'Årstiderna',e:'🍂',h:'ovriga/rymdlabbet/#arstid'},{n:'Månens faser',e:'🌙',h:'ovriga/solsystemet/#jorden'},{n:'Förmörkelser',e:'🌑',h:'ovriga/rymdlabbet/#morker'}]},
+    {n:'Planeterna',e:'🪐',c:0xFFB400,prop:'antenn',lat:-25,lon:150,rik:2.5,p:[{n:'Hur stora är de?',e:'📏',h:'ovriga/rymdlabbet/#storlek'},{n:'Hur långt bort?',e:'🛣️',h:'ovriga/rymdlabbet/#avstand'},{n:'Ett år på varje planet',e:'🗓️',h:'ovriga/rymdlabbet/#ar'},{n:'Väg dig och hoppa',e:'⚖️',h:'ovriga/rymdlabbet/#vikt'},{n:'Solsystemet i 3D',e:'🔭',h:'ovriga/solsystemet/'}]},
+    {n:'Stjärnor & universum',e:'🌌',c:0xD6409F,prop:'galax',lat:15,lon:230,rik:4.4,p:[{n:'Jättarna i rymden',e:'⭐',h:'ovriga/rymdlabbet/#jattar'},{n:'Svarta hål',e:'⚫',h:'ovriga/rymdlabbet/#hal'},{n:'Stjärnhimlen',e:'🌠',h:'ovriga/rymdlabbet/#himmel'}]},
+    {n:'Filmer',e:'🎬',c:0x7B61FF,prop:'skarm',lat:35,lon:25,rik:1.2,p:[{n:'Zooma ut i universum',e:'🔭',h:'ovriga/rymdlabbet/#film-zoom'},{n:'Inuti ett svart hål',e:'🕳️',h:'ovriga/rymdlabbet/#film-svarthal'},{n:'En stjärnas liv',e:'🌟',h:'ovriga/rymdlabbet/#film-stjarna'}]}],
+  planeter:[['Merkurius',0xB5B0A8,.8,-15,55,'Den minsta planeten och närmast solen.'],['Venus',0xE8C27A,1.1,-40,70,'Den hetaste planeten.'],['Jorden',0x3D7BE0,1.1,35,120,'Vår planet, den enda med liv.'],['Mars',0xD9532E,.9,-10,190,'Den röda planeten.'],['Jupiter',0xD9A877,1.9,50,200,'Störst av alla planeter.'],['Saturnus',0xE9D08F,1.6,-50,250,'Den har stora ringar.'],['Uranus',0x8FE0E0,1.3,5,290,'Den rullar på sidan.'],['Neptunus',0x3D5AFE,1.3,-30,330,'Blå och längst bort från solen.']]};
 const RING=27,O_HUB=40;
 
 /* ---------- Prydnader (belöningar, syns på huvudön) ---------- */
@@ -584,6 +585,13 @@ function byggProp(typ,C,farg,g){
     const sk=new THREE.Mesh(new THREE.SphereGeometry(2,18,8,0,Math.PI*2,0,Math.PI/2.2),new THREE.MeshLambertMaterial({color:0xFFFFFF,side:THREE.DoubleSide,flatShading:true}));sk.rotation.x=-1.1;gr.add(sk);
     const mat=new THREE.Mesh(new THREE.CylinderGeometry(.05,.05,1.6,5),M(farg));mat.position.set(0,.9,-.85);mat.rotation.x=-1.1;gr.add(mat);
     S.liv.push(t=>{gr.rotation.y=t*.3;});
+  }else if(typ==='skarm'){
+    const gr=new THREE.Group();g.add(gr);const c=document.createElement('canvas');c.width=256;c.height=150;const q=c.getContext('2d');q.fillStyle='#0B1030';q.fillRect(0,0,256,150);q.strokeStyle='#fff';q.lineWidth=6;q.strokeRect(4,4,248,142);
+    q.fillStyle='#FFC93C';q.beginPath();q.moveTo(100,40);q.lineTo(100,110);q.lineTo(165,75);q.closePath();q.fill();q.fillStyle='#fff';q.font='800 26px "Baloo 2",system-ui,sans-serif';q.textAlign='center';q.fillText('FILM',128,138);
+    const tx=new THREE.CanvasTexture(c);tx.colorSpace=THREE.SRGBColorSpace;
+    const sk=new THREE.Mesh(new THREE.BoxGeometry(4.6,2.7,.25),[M(farg),M(farg),M(farg),M(farg),new THREE.MeshBasicMaterial({map:tx}),new THREE.MeshBasicMaterial({map:tx})]);sk.position.y=3.6;gr.add(sk);
+    for(const x of[-1.6,1.6]){const l=new THREE.Mesh(new THREE.CylinderGeometry(.12,.16,2.4,6),M(0xE9E2D0));l.position.set(x,1.2,0);gr.add(l);}
+    S.liv.push(t=>{gr.rotation.y=Math.sin(t*.5)*.6;});
   }else if(typ==='galax'){
     const n=420,pp=new Float32Array(n*3),cc=new Float32Array(n*3),co=new THREE.Color();
     for(let i=0;i<n;i++){const arm=i%3,rr=.4+Math.pow(i/n,.7)*3.6,a=rr*1.3+arm*Math.PI*2/3+(Math.random()-.5)*.35;pp[i*3]=Math.cos(a)*rr;pp[i*3+1]=(Math.random()-.5)*.35;pp[i*3+2]=Math.sin(a)*rr;co.setHSL(.55+rr*.06,.8,.6+Math.random()*.25);cc[i*3]=co.r;cc[i*3+1]=co.g;cc[i*3+2]=co.b;}
