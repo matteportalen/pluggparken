@@ -184,3 +184,6 @@ Bonusläge, **inte** en ersättning för startsidan (lärarens val): en liten ö
 - **Svenska = uppslagen bok:** rektangulär ö med textrader och stora initialer på marken, ryggen i mitten, träd av boktravar och pennor, fallande papper; **Bokberget** (torn av färgade böcker) där **bokmärkesrutschkanan** (röd rutschkana) börjar, och **Bokstavsbron** (SKOLA, hoppa på jättebokstäver). Vokaljakten finns kvar.
 - **Kroppen = en sovande jätte:** ön har huvud, armar och ben, huden med blodådror och organ målade på marken, organ-hörnen i rad längs kroppen, **Munnen** som torn och en **matsmältningsrutschkana** genom tarmarna som slutar i en pöl.
 - Öarna är förstorade: Matte ×1,3, Svenska ×1,25, SO ×1,3, Spel ×1,45, Kroppen ×1,25.
+
+- **SO: epokerna är skyltar, inte portaler** (lärarens fynd: "Vikingatiden" såg ut som en övning man kan köra). Stationerna (Stenåldern, Vikingatiden, Medeltiden, Idag) har nu bara en **vägskylt i trä** med årtal (`eraSkylt`), och portalskylten visar bara övningens namn. En egen **Vikingatiden-övning** för SO-sidan är en idé (inte byggd); då får stationen en riktig portal.
+- Portalskyltar ritas ovanpå byggnader (`etikett(...,ovan)` med `depthTest:false`), så att höga hus inte skymmer dem.

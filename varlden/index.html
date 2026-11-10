@@ -218,10 +218,10 @@ PARKER.so={namn:'SO-parken',e:'🌍',c:0xF2780C,O:34,oval:1.94,trad:'karta',gles
   sand:0xF5EAC0,vatten:0x2FB6C8,himmel:['#4FA8E8','#9FD3F2','#FFF1CC'],dimma:0xFFE9B8,molnFarg:0xFFFFFF,molnOp:.9,klippFarg:0xB5653A,
   ljus:{h:0xFFF2D0,g:0xB08A50,hi:1.7,s:0xFFE2A0,si:2,sp:[40,50,10]},slant:9,
   hornor:[
-    {n:'Stenåldern',e:'🔥',c:0x8A7F72,prop:'grotta',utanSkylt:true,x:-36,z:-8,rik:2.64,h:1.5,p:[{n:'Tidslinjen',sub:'Stenåldern',e:'⏳',h:'tidslinjen/'}]},
-    {n:'Vikingatiden',e:'⚓',c:0x3D5AFE,prop:'vikingaskepp',utanSkylt:true,x:-10,z:18,rik:-2.68,h:1.5,p:[{n:'Sverigekartan',sub:'Vikingatiden',e:'🗺️',h:'ovriga/sverigekartan/'}]},
-    {n:'Medeltiden',e:'🏰',c:0x7B61FF,prop:'slott',utanSkylt:true,x:14,z:-14,rik:2.2,h:2.5,p:[{n:'Europakartan',sub:'Medeltiden',e:'🌍',h:'ovriga/europa/'}]},
-    {n:'Idag',e:'🏙️',c:0x1E9E5E,prop:'stad',utanSkylt:true,x:40,z:8,rik:-2.21,h:1.5,p:[{n:'Världskartan',sub:'Idag',e:'🌎',h:'ovriga/varlden/'}]}],
+    {n:'Stenåldern',e:'🔥',c:0x8A7F72,prop:'grotta',utanSkylt:true,eraSkylt:['Stenåldern','för många tusen år sedan'],x:-36,z:-8,rik:2.64,h:1.5,p:[{n:'Tidslinjen',e:'⏳',h:'tidslinjen/'}]},
+    {n:'Vikingatiden',e:'⚓',c:0x3D5AFE,prop:'vikingaskepp',utanSkylt:true,eraSkylt:['Vikingatiden','ungefär år 800 till 1050'],x:-10,z:18,rik:-2.68,h:1.5,p:[{n:'Sverigekartan',e:'🗺️',h:'ovriga/sverigekartan/'}]},
+    {n:'Medeltiden',e:'🏰',c:0x7B61FF,prop:'slott',utanSkylt:true,eraSkylt:['Medeltiden','ungefär år 1100 till 1500'],x:14,z:-14,rik:2.2,h:2.5,p:[{n:'Europakartan',e:'🌍',h:'ovriga/europa/'}]},
+    {n:'Idag',e:'🏙️',c:0x1E9E5E,prop:'stad',utanSkylt:true,eraSkylt:['Idag','nutiden'],x:40,z:8,rik:-2.21,h:1.5,p:[{n:'Världskartan',e:'🌎',h:'ovriga/varlden/'}]}],
   kullar:[{x:0,z:-4,rt:6,rs:12,h:2},{x:-26,z:8,rt:4,rs:10,h:1.5}],
   start:{x:-54,z:2,ang:1.2},tillbaka:{x:-58,z:10},tornPos:[30,-26],npc:{x:-50,z:6,namn:'Sandy',animal:'rav',farg:['#E8A24C','#B5672A'],hat:'solhatt'},
   stigar:[[[-54,2],[-48,-2],[-42,-8],[-36,-8]],[[-36,-8],[-26,4],[-18,14],[-10,18]],[[-10,18],[0,6],[8,-6],[14,-14]],[[14,-14],[26,-8],[34,0],[40,8]],[[14,-14],[22,-20],[30,-26]]],
@@ -1027,6 +1027,15 @@ function byggPark(id){
     const g=new THREE.Group();g.position.set(C.x,y0,C.z);S.W.add(g);byggProp(h.prop,C,h.c,g);
     S.kollider.push({x:C.x,z:C.z,r:1.9,top:99});
     if(!h.utanSkylt){const sk2=etikett(h.n,h.e,7.2,hex(h.c));sk2.position.set(0,8.4,0);g.add(sk2);}
+    if(h.eraSkylt){ // en vägskylt av trä: ser ut som information, inte som något man kan gå in i
+      const c2=document.createElement('canvas');c2.width=512;c2.height=170;const q=c2.getContext('2d');q.fillStyle='#8A5A2B';q.fillRect(0,0,512,170);q.strokeStyle='#5E3B1C';q.lineWidth=10;q.strokeRect(5,5,502,160);
+      q.fillStyle='rgba(255,255,255,.08)';for(let y=20;y<170;y+=26)q.fillRect(0,y,512,3);
+      q.fillStyle='#FFF3D6';q.textAlign='center';q.textBaseline='middle';q.font='800 62px "Baloo 2","Trebuchet MS",serif';q.fillText(h.eraSkylt[0],256,70);q.font='700 34px "Baloo 2","Trebuchet MS",serif';q.fillStyle='#F4D9A0';q.fillText(h.eraSkylt[1],256,126);
+      const tx=new THREE.CanvasTexture(c2);tx.colorSpace=THREE.SRGBColorSpace;const bm=new THREE.MeshLambertMaterial({map:tx});
+      const sg=new THREE.Group(),an=h.rik+Math.PI/2;sg.position.set(Math.cos(an)*5.4,0,Math.sin(an)*5.4);sg.rotation.y=Math.atan2(Math.cos(h.rik),Math.sin(h.rik));g.add(sg);
+      const po=new THREE.Mesh(new THREE.CylinderGeometry(.12,.16,2.8,6),M(0x5E3B1C));po.position.y=1.4;sg.add(po);
+      const bd=new THREE.Mesh(new THREE.BoxGeometry(3.3,1.1,.14),[M(0x5E3B1C),M(0x5E3B1C),M(0x5E3B1C),M(0x5E3B1C),bm,bm]);bd.position.y=2.7;sg.add(bd);
+      S.kollider.push({x:C.x+Math.cos(an)*5.4,z:C.z+Math.sin(an)*5.4,r:.3,top:99});}
     const step=sp/ra;
     h.p.forEach((p,j)=>{const ph=h.rik+(j-(np-1)/2)*step,px=C.x+Math.cos(ph)*ra,pz=C.z+Math.sin(ph)*ra;
       portalBygg(Object.assign({c:h.c},p),px,pz,C.x,C.z,sk);});
