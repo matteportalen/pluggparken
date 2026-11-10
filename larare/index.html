@@ -918,7 +918,7 @@ async function startaMatare(o,igen){if(MAT[o.id])return true;
       if(nu-m.t1>=1000){m.sek.push(m.sum/m.cnt);if(m.sek.length>180)m.sek.shift();m.sum=0;m.cnt=0;m.t1=nu;
         if(m.sek.length>=8)m.golv=Math.max(-90,Math.min(-45,Math.min(...m.sek)));
         m.tyst=Math.max(...m.sek.slice(-8))<-90&&m.sek.length>=8?m.tyst+1:0;}
-      const R=75-.45*(o.d.kans==null?40:o.d.kans),t=Math.max(0,Math.min(1,(db-m.golv)/R));   // R = hur många dB över tystnaden som är full stapel; högre känslighet = mindre Rm.lv+=(t-m.lv)*(t>m.lv?.5:.06);
+      const R=30*Math.pow(110/30,(100-(o.d.kans==null?40:o.d.kans))/100),t=Math.max(0,Math.min(1,(db-m.golv)/R));   // R = hur många dB över tystnaden som är full stapel; högre känslighet = mindre Rm.lv+=(t-m.lv)*(t>m.lv?.5:.06);
       const g=o.d.gr/100,el=elOf(o.id),k=m.lv>=g?3:m.lv>=g*.8?2:m.lv>=g*.5?1:0;
       if(m.lv>=g){m.hog+=1;if(m.hog===46&&o.d.ljud&&nu-m.sig>30000){m.sig=nu;tidLjud("skal");}}else m.hog=Math.max(0,m.hog-2);
       if(el){const sk=el.querySelector(".skym");
