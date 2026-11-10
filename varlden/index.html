@@ -731,7 +731,7 @@ function noteModell(c){
   const st=new THREE.Mesh(new THREE.CylinderGeometry(.12,.12,2.5,8),m);st.position.set(.22,.3,0);g.add(st);
   const sh=new THREE.Shape();sh.moveTo(0,0);sh.bezierCurveTo(.7,-.1,1,-.6,.8,-1.2);sh.bezierCurveTo(.9,-.5,.5,-.35,0,-.35);sh.closePath();
   const fl=new THREE.Mesh(new THREE.ExtrudeGeometry(sh,{depth:.12,bevelEnabled:false}),m);fl.position.set(.22,1.52,-.1);fl.scale.set(1.2,1.2,2);g.add(fl);
-  g.scale.setScalar(2.1);return g;}
+  g.scale.setScalar(1.1);return g;}
 const KONT={
   europa:[[-.9,.2],[-.5,.6],[-.1,.7],[.3,.5],[.8,.6],[.9,.2],[.5,.0],[.6,-.4],[.1,-.6],[-.3,-.3],[-.7,-.4]],
   asien:[[-.9,.1],[-.6,.7],[0,.9],[.7,.8],[.95,.3],[.7,-.2],[.9,-.6],[.4,-.7],[.1,-.3],[-.3,-.6],[-.7,-.3]],
@@ -772,7 +772,7 @@ function planetTextur(namn,c){
 function stjarnaUt(id,lista){
   const tagna=SV.stj[id]||[];
   lista.forEach(([x,z,y0,ch,fakta,farg,form],i)=>{const y=S.hojd(x,z)+y0,namn=ch&&ch.length>1&&form!=='biljett'?ch:null,ton=form&&form.startsWith('ton:')?+form.slice(4):0;let m;
-    if(form&&form.startsWith('ton:')){m=add(new THREE.Group());m.add(noteModell(farg));const lb=etikett(ch,'♪',3.4,hex(farg));lb.position.y=2.9;m.add(lb);m.position.set(x,y+.5,z);}
+    if(form&&form.startsWith('ton:')){m=add(new THREE.Group());m.add(noteModell(farg));const lb=etikett(ch,'♪',3,hex(farg));lb.position.y=2.2;m.add(lb);m.position.set(x,y+.3,z);}
     else if(form&&form.startsWith('k:')){m=add(new THREE.Group());m.add(kontModell(form.slice(2),farg));const lb=etikett(ch,'',3.8,hex(farg));lb.position.y=2.3;m.add(lb);m.position.set(x,y+.6,z);}
     else if(form&&form.startsWith('ting:')){m=add(new THREE.Group());m.add(tingModell(form.slice(5),farg));const lb=etikett(ch,'',3.8,hex(farg));lb.position.y=2.4;m.add(lb);m.position.set(x,y+.6,z);}
     else if(form&&form.startsWith('organ:')){m=add(new THREE.Group());const nm=form.slice(6);
@@ -1279,7 +1279,7 @@ function byggPark(id){
     S.kollider.push({x:kx,z:kz,r:1,top:99});S.fria.push({x:kx,z:kz,r:9});const sk5=etikett('Karusellen','🎠',5,'#FF9A5C');sk5.position.set(0,8.6,0);g.add(sk5);}
   stjarnaUt(id,D.stjarnor);
   // klippor med en sak på toppen
-  (D.klippor||[]).forEach(k=>{const top=klippa(k.x,k.z,D.klippFarg||0x8B7B6B);if(k.s!=null&&S.stjarnor[k.s]){const q=S.stjarnor[k.s];q.y=q.y0=top+1.2;q.m.position.y=q.y;}});
+  (D.klippor||[]).forEach(k=>{const top=klippa(k.x,k.z,D.klippFarg||0x8B7B6B);if(k.s!=null&&S.stjarnor[k.s]){const q=S.stjarnor[k.s];q.y=q.y0=top+1.2;q.x=k.x;q.z=k.z;q.m.position.set(k.x,q.y,k.z);}});
   if(D.trad==='kristall'){planteraKristall(D.O);ljuspunkter(lagt?70:160,D.O,0xFFF3B0);}else if(D.trad==='host'){planteraHost(D.O,D.oval||1,D.tradPal);if(!D.ingaLov)fallandeLov(lagt?30:70,D.O,D.oval||1,D.tradPal);if(D.regn)ballonger();}else if(D.trad==='savann'||D.trad==='karta')planteraSavann(D);else if(D.trad==='musik')planteraMusik(D);else if(D.trad==='bok'){planteraBok(D);fallandeLov(lagt?24:50,D.O,D.oval||1,[0xFFFFFF,0xFBF3DC,0xFFE9A8,0xFFD6D6]);}else if(D.trad==='kropp'){planteraKropp(D);ljuspunkter(lagt?50:110,D.O,0xFFFFFF);}
   atMoln(lagt?5:9,D.molnFarg,D.molnOp);
   byggNpc(D.npc);
