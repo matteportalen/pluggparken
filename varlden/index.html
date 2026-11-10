@@ -1475,11 +1475,11 @@ function ritaK(dt){
 /* ---------- Ingångar ---------- */
 const tang={};let dlgOpen=false;
 addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;const k=e.key.toLowerCase();
-  if(k==='escape'){stangDlg();$('panel').hidden=true;if(rida)slutRida();return;}
+  if(k==='escape'){stangDlg();$('panel').hidden=true;if(rida)slutRida(true);return;}
   if(dlgOpen)return;
   if([' ','arrowup','arrowdown','arrowleft','arrowright'].includes(k))e.preventDefault();
   if(k===' '&&!tang[' '])P.hoppKo=true;tang[k]=true;
-  if(k==='enter'&&!e.repeat){if(rida){slutRida();return;}if(narmaste)gaIn(narmaste);else if(narNpc)oppnaDlg();else if(narRide)startRida(narRide);}});
+  if(k==='enter'&&!e.repeat){if(rida){slutRida(true);return;}if(narmaste)gaIn(narmaste);else if(narNpc)oppnaDlg();else if(narRide)startRida(narRide);}});
 addEventListener('keyup',e=>{tang[e.key.toLowerCase()]=false;});
 addEventListener('blur',()=>{for(const k in tang)tang[k]=false;});
 const stick=$('stick'),knob=$('knob');let jid=null,jx=0,jy=0;
@@ -1624,8 +1624,9 @@ function startRida(r){
   else if(r.typ==='hjul'){const R=S.ref.hjul;let b=2;R.gonds.forEach((gd,i)=>{const sn=Math.sin(gd.userData.a+R.ang);if(sn<b){b=sn;rida.gond=i;}});rida.a0=R.ang;}
   else rida.s=0;
 }
-function slutRida(){const r=rida;let f=r.fran;if(S.banor[r.typ]&&S.banor[r.typ].slut)f={x:P.x,z:P.z,yaw:P.ang};let fr=1;if(r.typ==='karusell')fr=r.t/r.dur;else if(r.typ==='hjul')fr=(S.ref.hjul.ang-r.a0)/(Math.PI*2);else fr=r.s/S.banor[r.typ].L;
-  if(S.banor[r.typ])S.banor[r.typ].reset();rida=null;placera(f.x,f.z,f.yaw,camYaw);prompt.hidden=true;
+function slutRida(man){const r=rida;let f=r.fran;if(S.banor[r.typ]&&S.banor[r.typ].slut)f={x:P.x,z:P.z,yaw:P.ang};let fr=1;if(r.typ==='karusell')fr=r.t/r.dur;else if(r.typ==='hjul')fr=(S.ref.hjul.ang-r.a0)/(Math.PI*2);else fr=r.s/S.banor[r.typ].L;
+  if(S.banor[r.typ])S.banor[r.typ].reset();rida=null;prompt.hidden=true;
+  if(man===true&&!REDUCE){const a=P.ang;P.vy=HOPP*.95;P.mark=false;P.hopp=1;P.fartX=Math.sin(a)*3;P.fartZ=Math.cos(a)*3;hoppljud();}else placera(f.x,f.z,f.yaw,camYaw);
   if(fr>=.5)akt(r.typ);else toast('Du hoppade av. Åk lite längre nästa gång för att det ska räknas!');}
 function stegRida(dt){
   const r=rida;r.t+=dt;P.fartX=P.fartZ=0;P.vy=0;P.mark=true;
@@ -1672,7 +1673,7 @@ function gaIn(po){
   setTimeout(()=>{location.href=new URL('../'+po.p.h,location.href).href;},REDUCE?60:420);
 }
 $('hem2').addEventListener('click',tillHuben);
-prompt.addEventListener('click',()=>{if(rida){slutRida();return;}if(narmaste)gaIn(narmaste);else if(narNpc)oppnaDlg();else if(narRide)startRida(narRide);});
+prompt.addEventListener('click',()=>{if(rida){slutRida(true);return;}if(narmaste)gaIn(narmaste);else if(narNpc)oppnaDlg();else if(narRide)startRida(narRide);});
 addEventListener('pagehide',()=>sparaPlats());
 addEventListener('pageshow',e=>{if(e.persisted||gaar){gaar=false;$('fade').classList.remove('pa');const s=lasPlats();
   if(S.klot){if(s&&s.scen===S.id&&isFinite(s.hx))placeraK(new V3(s.x,s.y,s.z),new V3(s.hx,s.hy,s.hz));}else if(s&&(s.scen||'hub')===S.id&&isFinite(s.x))placera(s.x,s.z,s.yaw||0,s.cam!=null?s.cam:s.yaw||0);uppdateraArende();}});
@@ -1699,7 +1700,7 @@ const v3=new THREE.Vector3();
 function steg(dt){
   const varPaMark=P.mark;
   tid+=dt;
-  if(rida){if(P.hoppKo){P.hoppKo=false;slutRida();return;}stegRida(dt);if(rida){prompt.hidden=false;if(prompt.textContent!=='⏹ Hoppa av')prompt.textContent='⏹ Hoppa av';}return;}
+  if(rida){if(P.hoppKo){P.hoppKo=false;slutRida(true);return;}stegRida(dt);if(rida){prompt.hidden=false;if(prompt.textContent!=='⏹ Hoppa av')prompt.textContent='⏹ Hoppa av';}return;}
   let ix=0,iz=0;
   if(!dlgOpen){
     if(tang['w']||tang['arrowup'])iz+=1;if(tang['s']||tang['arrowdown'])iz-=1;
