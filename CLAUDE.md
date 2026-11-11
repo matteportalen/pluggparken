@@ -1,7 +1,7 @@
 # Pluggparken (hette Matte-Portalen)
 
 Matteövningar, spel och övriga ämnen för åk 1–3 (och äldre), byggda av en lärare för sin egen klass (och andra klasser).
-Publiceras med GitHub Pages på **pluggparken.se** från repot `pluggparken` (okt 2026; filen `CNAME`). Sajten hette Matte-Portalen och låg på matteportalen.github.io; det repot är nu bara en **omdirigering** (grenen `flytt-till-pluggparken`: `index.html` och `404.html` med samma skript) som packar allt i localStorage (komprimerat, base64url) och skickar det till **`flytta/`** här, som lägger in det (bara en gång per webbläsare, `mp-flyttad`; finns det redan data här slås det ihop: mynten med mest tjänat och köpen ihop, profilerna ihop, annars det längsta) och öppnar samma sida på nya adressen. Är Spegelmålas teckningar för stora (över ca 1,5 MB) följer de inte med, och sidan säger det. Webbläsare utan `CompressionStream` skickar okomprimerat. Profilrutan på startsidan har en rad "Hämta dina framsteg därifrån" tills flytten gjorts (`#hamtaGammal`). **Den gamla adressen får aldrig tas bort och det gamla repot får aldrig kopplas till en egen domän** (då omdirigerar GitHub på servern och datan blir oåtkomlig). Testat lokalt med två adresser: djup länk, andra besöket, tom webbläsare, sammanslagning, stora teckningar, utan komprimering, länk till annan sajt. Allt språk på sajten är **svenska**.
+Publiceras med GitHub Pages på **pluggparken.se** från repot `pluggparken` (filen `CNAME`). Sajten hette Matte-Portalen och låg på matteportalen.github.io; det repot är nu bara en **omdirigering** som tar med elevens localStorage till **`flytta/`** här (en gång per webbläsare, `mp-flyttad`). **Den gamla adressen får aldrig tas bort och det gamla repot får aldrig kopplas till en egen domän** (då omdirigerar GitHub på servern och datan blir oåtkomlig). Hur flytten fungerar i detalj står i `docs/historik/plattform.md`. Allt språk på sajten är **svenska**.
 
 **Namnet** (okt 2026, lärarens val efter lång brainstorm: inget mattefokus, eget ord som syns på Google, inga å/ä/ö i adressen, inte -o-ändelse, inte för likt Bingel): **Pluggparken**, "Lekparken för hjärnan". Skrivs "Plugg" i vitt och "parken" i gult. localStorage-nycklarna heter fortfarande `matteportalen-…` och `mattespel-…` och får **inte** byta namn (då försvinner framstegen).
 
@@ -9,7 +9,7 @@ Publiceras med GitHub Pages på **pluggparken.se** från repot `pluggparken` (ok
 
 - Ren HTML, CSS och JavaScript. **Inga ramverk, inget byggsteg.** Varje övning är en enda `index.html` i en egen mapp, med CSS och JS i samma fil. Bilder som hämtats utifrån eller ritats av läraren får ligga i en undermapp `bilder/` i övningens mapp (sajten används alltid via webbläsaren). Ange källa och licens i tabellen nedan.
 - All data sparas i **localStorage** i elevens webbläsare. Ingen server, inga konton på nätet.
-- Typsnitt: **Baloo 2** från Google Fonts (vikt 500/700/800), med `"Trebuchet MS", system-ui, sans-serif` som reserv.
+- Typsnitt: **Baloo 2** (vikt 500/700/800) ur `fonts/` (aldrig från Google Fonts, se nedan), med `"Trebuchet MS", system-ui, sans-serif` som reserv.
 - Delat ljud: `ljud.js` i roten. Alla sidor laddar den med `<script src="../ljud.js">` (startsidan med `ljud.js`).
 - **Plattformsspelen: `spel/plattform.js`** (`MPPlatt`), används av Sagoriket och Sifferslottet: fysiken (`steg`: spring, hopp, dubbelhopp som aldrig bromsar, studsfjädrar, rörliga plankor), styrningen (`styrning`: tangenter och pekknappar; varje nytt tryck sätter även `IN.uT`/`IN.mT` så att snabba tryck mellan två bilder inte missas), musikmotorn (`musik`, Web Audio, slingor med 32 åttondelar) och djuret med trollstaven (`djur`). Banor, rum, kamera och bossar ligger kvar i spelen. **Inga kopior** i sidorna.
 - **Klockan: `klocka.js`** i roten (`MPKlocka`), används av Klockan och Verktygslådans klocka. **Inga kopior** i sidorna. Innehåller: `phrase(h,m)` (alla minuter: femminuterstiderna som i Pedagogiska beslut; övriga 1–24 över ("tjugotvå minuter över fyra", **inte** "åtta minuter i halv", lärarens regel), 26–29 i halv ("två minuter i halv fem"), 31–34 över halv, 36–59 i ("sju minuter i nio")), `fmtDur`, `short`, `clockSVG(h,m,o)` (o: `small`, `halves` = fyra fält: 0–25 **över** (grön), 25–30 **i halv** (ljust orange), 30–35 **över halv** (ljust grön), 35–60 **i** (orange), eftersom det är tvärtom runt halv och det är svårt att lära sig (lärarens önskan; syns i verktygets "Över / i" och i hjälpbilderna i Klockan), `ring`, `wedge`, `wide` = större viewBox för blockringar, `mark` = röd slutmarkering på en minut), `setHands`, `setWedge(svg,start,T)` (orange tårtbit från start till minutvisaren; varje helt varv gör urtavlan svagt orange), `drag(svg,{get,set,step,mod})` (man tar visaren man trycker närmast, steg 1 eller 5 min), `blocks(host,{svg,start,end,base,showSum,onChange})` (**tidsblock** 1 tim, 30, 15, 10, 5, 1 i färg: knappar, tidslinje med linjal och Start/Slut, och ringbitar runt klockan, ett varv per ring; tryck på ett block tar bort det).
@@ -19,11 +19,17 @@ Publiceras med GitHub Pages på **pluggparken.se** från repot `pluggparken` (ok
 - Delat djur: `djur.js` i roten (`WARD`, `NATUR`, `itemOf`, `owlSVG`, `PETNAME`, `lasDjur()`). Laddas av startsidan, Spelhörnan, Skattjakten och alla övningar med elevens djur (Geometri, Bråk, Division, Multiplikation, Lilla plus, Tiotal, Klockan). **Inga kopior** av djurmallen i sidorna, ändra bara i `djur.js`.
 - **Inga externa typsnitt eller bibliotek** (dataskydd, nov 2026: besökarens IP-adress ska inte skickas till Google, Cloudflare eller jsdelivr). Typsnitten (Baloo 2, Andika, Inter, Source Serif 4) ligger i `fonts/` och laddas med `<link rel="stylesheet" href="/fonts/fonts.css">`; biblioteken ligger i `lib/` (qrcodejs, jsQR, Matter.js, lamejs, TensorFlow.js, Blockly 11.2.2 med media, three.js 0.160 med OrbitControls, GLTFLoader, DRACOLoader). **Nya sidor ska aldrig länka till fonts.googleapis.com eller en CDN: lägg filen i `lib/` eller `fonts/`.** Kvar externt med flit: MapLibre och kartplattorna i Stockholmskartan (kartan är extern i sig) och Transformers.js med modellerna från Hugging Face i `lasfel.js` och `kbwhisper.js` (valbara motorer i Högfrekventa ord; modellen hämtas bara om läraren väljer motorn, ljudet lämnar aldrig enheten).
 
-- **Mer finns i `docs/`** (se tabellen längst ner): `huvud.js` (sidhuvud, ← bakåtknapp, ☰-menyn, stjärnor och mynt), filmmotorn `svarthal.js`, Escape-regeln, sökmotorsoptimering, ljust/mörkt läge (`tema.js`) och allt övrigt som förut stod här ligger i `docs/plattform.md` och `docs/specialare-filmer.md`.
+- **Fler delade filer i roten** (inga kopior i sidorna): `klossar.js` (`MPKlossar`, träklossarna i Tiobas, Kort division och Dela upp och dela), `film.js` (`MPFilm`, mallen för instruktionsfilmerna "🎬 Se hur man gör"), `konto.js` (`MPKonto`, molnkonton och `PKEYS`), `svarthal.js` (filmmotorn med röst) med filmerna `stjarnfilm.js` och `zoomfilm.js`, `sok.js` (sökningen), `huvud.js` och `tema.js`.
+- **Mer finns i `docs/`** (se tabellen nedan): `huvud.js` (sidhuvud, ← bakåtknapp, ☰-menyn, stjärnor och mynt), filmmotorn `svarthal.js`, Escape-regeln, sökmotorsoptimering, ljust/mörkt läge (`tema.js`) och allt övrigt som förut stod här ligger i `docs/plattform.md` och `docs/specialare-filmer.md`.
 
 ## Var hittar jag vad (docs/)
 
-`CLAUDE.md` är medvetet kort: den innehåller bara det som alltid gäller. All detaljerad dokumentation per område ligger i `docs/`. **Läs den fil som hör till det du arbetar med, inte alla.** Efter varje ändring: lägg anteckningen **sist i rätt docs-fil** (och bara det som är nytt eller ett beslut), inte här. Är du osäker på vilken fil: sök med `grep -rn "ord" docs/`.
+`CLAUDE.md` är medvetet kort: den innehåller bara det som alltid gäller. Varje område har **två filer**:
+
+- **`docs/<område>.md`** (kort, 5–10 kB): det som gäller nu. Var filerna ligger, regler, lärarens beslut, vad som är borttaget med flit och vad som väntar. **Läs den som hör till det du arbetar med, inte alla.**
+- **`docs/historik/<område>.md`** (lång): hur allt byggdes, alla tal, funktionsnamn och tidigare versioner. **Läs aldrig hela.** Sök med `grep -n "ord" docs/historik/<område>.md` när du behöver en detalj.
+
+Efter varje ändring: är det en **ny regel eller ett nytt beslut**, skriv en kort rad i rätt avsnitt i `docs/<område>.md` (och ta bort det som inte längre gäller). **Beskrivningen av vad som byggdes** (detaljer, mått, vad som testats) läggs sist i `docs/historik/<område>.md`. Ingenting av det läggs här. `docs/design.md`, `docs/ideer.md` och `docs/instagram.md` är korta och har ingen historikfil. Är du osäker på vilken fil: sök med `grep -rn "ord" docs/`.
 
 | Fil | Innehåll |
 | --- | --- |
@@ -43,10 +49,10 @@ Publiceras med GitHub Pages på **pluggparken.se** från repot `pluggparken` (ok
 
 ### När en ny övning läggs till
 
-Startsidan måste uppdateras på **fyra** ställen, annars följer framstegen inte med:
+Fem saker måste uppdateras (fyra på startsidan och en i `sok.js`), annars följer framstegen inte med:
 1. Ett kort under rätt rubrik (`<h2 class="grp">` + `<nav class="cards">`) med ett `badge`-element.
 2. Stjärnorna räknas in i `S.stars` (läs nyckeln, summera `stars`).
-3. Nyckeln läggs i listan `snap` (dagar i rad) och i **`PKEYS`** i profilskriptet (profiler, flyttkod och inloggningskort).
+3. Nyckeln läggs i listan `snap` (dagar i rad) på startsidan och i **`PKEYS`** i `konto.js` (profiler, flyttkod, inloggningskort och molnkonton).
 4. Gärna ett eller två klistermärken i `STICKERS`.
 5. **En rad i `sok.js`** (listan `IDX`: adress, namn, kort text, ikon, sökord, plats), annars hittas övningen inte av sökningen. Nya minilektioner eller prova-själv-saker i Specialare: kör `node skript/bygg-sok.js`.
 ## Gemensam design
