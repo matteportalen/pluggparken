@@ -143,6 +143,8 @@ body.mph-mini #quit{display:none}
   window.MPStjarnor=function(){
     return stjFor('multiplikation')+stjFor('division')+SPELSUB.reduce((a,x)=>a+stjFor('spel:'+x),0)+STJ.reduce((a,x)=>a+stjFor(x),0)+stjFor('skattjakten');
   };
+  // Pluggparken-världen laddar filen bara för stjärnräkningen (data-bara="stjarnor"): inget sidhuvud, inga mynt
+  if(ds.bara==='stjarnor')return;
 
   /* ---------- Mynt (matteportalen-mynt) ----------
      Stjärnorna visar vad man kan och samlas för alltid; mynten tjänas på att träna och används i Garderoben.

@@ -103,6 +103,7 @@ body.bio #stick,body.bio #jump,body.bio #prompt,body.bio #hint{display:none!impo
 <div id="fel"><div><p style="font-size:3rem;margin:0">🌍</p><p id="felTxt">Världen kunde inte startas. Din webbläsare kanske inte klarar 3D. Prova en annan webbläsare, eller gå tillbaka till startsidan.</p><a class="btn" href="/">← Startsidan</a></div></div>
 
 <script src="../djur.js"></script>
+<script src="../huvud.js?v=varld1" data-bara="stjarnor"></script>
 <script type="module">
 /* Pluggparken-världen: en liten ö i 3D (three.js, lib/) och en egen park för varje ämne (hittills Matte).
    Elevens djur går runt och hoppar och går genom portaler till ämnessidorna och övningarna.
@@ -469,7 +470,7 @@ function rensaScen(){
   S=null;
 }
 const Y=(x,z)=>S.hojd(x,z);
-function nyScen(id,O){S={pads:[],rides:[],ref:{},berg:null,banor:{},hojd:()=>0,randR:null,a:O,b:O,id,O,W:new THREE.Group(),liv:[],kollider:[],portaler:[],stjarnor:[],plattformar:[],fria:[],flagga:null,npc:null,moln:[]};scene.add(S.W);sd=11;return S;}
+function nyScen(id,O){S={pads:[],rides:[],ref:{},berg:null,banor:{},hojd:()=>0,randR:null,a:O,b:O,id,O,W:new THREE.Group(),liv:[],kollider:[],portaler:[],stjarnor:[],plattformar:[],fria:[],flagga:null,npc:null,moln:[]};scene.add(S.W);sd=11;fxRensa();return S;}
 const add=o=>{S.W.add(o);return o;};
 
 function ogrund(O,gras,sand,vattenFarg,oval){
@@ -831,7 +832,7 @@ const stjarnaText=()=>{const n=S.stjarnor.filter(s=>s.tagen).length,b=S.stjarnor
 
 /* ---------- Portaler ---------- */
 function portalBygg(spec,px,pz,tx,tz,sk,fram){
-  const g=new THREE.Group();let yaw=0;
+  const g=new THREE.Group();let yaw=0,po0=null;
   if(fram){g.position.copy(fram.pos);g.quaternion.copy(fram.q);}else{g.position.set(px,S.hojd(px,pz),pz);yaw=Math.atan2(tx-px,tz-pz);g.rotation.y=yaw;}
   const fm=M(spec.c),vit=M(0xFFFFFF),ph=3.4*sk,br=2.4*sk;
   for(const sx of[-1,1]){
@@ -845,11 +846,12 @@ function portalBygg(spec,px,pz,tx,tz,sk,fram){
   const plat=new THREE.Mesh(new THREE.CylinderGeometry(4.2*sk,4.6*sk,.28,28),M(spec.c));plat.position.set(0,.05,1.2*sk);g.add(plat);
   const plat2=new THREE.Mesh(new THREE.CylinderGeometry(3.5*sk,3.5*sk,.3,28),M(0xFFFFFF));plat2.position.set(0,.06,1.2*sk);g.add(plat2);
   const sk2=etikett(spec.n,spec.e,Math.max(4.6,5.6*sk),hex(spec.c),spec.sub,true);sk2.position.set(0,ph+Math.max(2.3,3.2*sk),0);g.add(sk2);
+  {const ns=portalStj(spec);if(ns!=null){const b=stjBricka(ns),bs=Math.max(.8,sk);b.scale.set(2.5*bs,.94*bs,1);b.position.set(0,ph+br*.45,0);g.add(b);po0=b;}}
   S.W.add(g);
   const zx=Math.sin(yaw),zz=Math.cos(yaw),xx=Math.cos(yaw),xz=-Math.sin(yaw);
   if(fram){g.updateMatrixWorld(true);for(const sx of[-1,1])S.k3.push({pos:g.localToWorld(new THREE.Vector3(sx*br,0,0)),n:fram.up.clone(),r:.7*sk,h:99});}
   else{S.fria.push({x:px,z:pz,r:7*sk});for(const sx of[-1,1])S.kollider.push({x:px+xx*sx*br,z:pz+xz*sx*br,r:.7*sk,top:99});}
-  const po={p:spec,g,yta,ljus,zx,zz,xx,xz,fas:S.portaler.length,sk,mark:null,zv:new THREE.Vector3(0,0,1).applyQuaternion(g.quaternion)};
+  const po={p:spec,g,yta,ljus,stj:po0,zx,zz,xx,xz,fas:S.portaler.length,sk,mark:null,zv:new THREE.Vector3(0,0,1).applyQuaternion(g.quaternion)};
   S.portaler.push(po);return po;
 }
 function markera(po){ // en studsande pil över portalen man ska till
@@ -931,6 +933,7 @@ function byggHub(){
   byggLjusbrade();
   plantera(O_HUB,[0x3FAE5A,0x58C46E]);atMoln(lagt?5:9);
   byggNpc({x:11.3,z:4,namn:'Piff'});
+  S.damm=0xF3E7BE;byggLiv();
   S.start={x:Math.cos(0)*(RING-6),z:0,ang:Math.PI/2};
 }
 /* Hoppa till den lysande rutan. En landning räknas, aldrig att bara gå över. */
@@ -1266,7 +1269,7 @@ function byggPark(id){
   const kul=[{x:D.start.x,z:D.start.z,rt:6,rs:6,h:.5}].concat(D.kullar||[]);
   D.hornor.forEach(h=>{h.ra=Math.max(6.5,sp*(h.p.length-1)/2.6);kul.push({x:h.x,z:h.z,rt:h.ra+3.5,rs:D.slant||9,h:h.h});});
   bygTerrang(Object.assign({},D,{kullar:kul}));
-  (D.dammar||[]).forEach(d=>{const w=add(new THREE.Mesh(new THREE.CircleGeometry(d.r,36),new THREE.MeshLambertMaterial({color:d.farg||D.vatten,transparent:true,opacity:.85})));w.rotation.x=-Math.PI/2;w.position.set(d.x,d.y,d.z);S.fria.push({x:d.x,z:d.z,r:d.r+3});});
+  (D.dammar||[]).forEach(d=>{const w=add(new THREE.Mesh(new THREE.CircleGeometry(d.r,36),new THREE.MeshLambertMaterial({color:d.farg||D.vatten,transparent:true,opacity:.85})));w.rotation.x=-Math.PI/2;w.position.set(d.x,d.y,d.z);S.fria.push({x:d.x,z:d.z,r:d.r+3});(S.dammar=S.dammar||[]).push(d);});
   const stig=0xFFF1C9;
   // startplatsen: ett litet torg
   {const t=add(new THREE.Mesh(new THREE.CylinderGeometry(5,5,.12,32),M(stig)));t.position.set(D.start.x,S.hojd(D.start.x,D.start.z)+.06,D.start.z);
@@ -1326,6 +1329,7 @@ function byggPark(id){
   atMoln(lagt?5:9,D.molnFarg,D.molnOp);
   byggNpc(D.npc);
   S.start=D.start;
+  S.damm=D.dammFarg||0xEFE6CF;byggLiv();
 }
 
 /* ---------- Biografens byggnad: skärm, ridåer, stolar och fjärrkontrollen ---------- */
@@ -1935,6 +1939,192 @@ addEventListener('resize',storlek);storlek();
 function dimma(){if(S&&S.klot){scene.fog.near=500;scene.fog.far=1200;}else{scene.fog.near=lagt?45:60;scene.fog.far=lagt?105:150;}}
 
 /* ---------- Slingan ---------- */
+/* ---------- Liv i världen (nov 2026): stjärnor på portalerna, fjärilar, fåglar, fiskar och smådjur, damm, plask och fotspår ---------- */
+// Stjärnor från elevens framsteg: samma räkning som sidhuvudet (MPStjarnorFor i huvud.js, laddad med data-bara="stjarnor").
+function portalNyckel(h){
+  if(!h)return null;const d=h.split('#'),p=d[0],hash=d[1];
+  if(p==='spel/')return hash?({bub:'spel:bubbel',tower:'spel:tower',mem:'spel:mem',tug:'spel:tug',frog:'spel:frog',car:'spel:car'})[hash]||null:'spelhornan';
+  if(p==='spel/racerbanan/')return'spel:car';
+  if(hash)return null;   /* djuplänkar (Rymdlabbets lägen, resorna i kroppen) har inga egna stjärnor */
+  return p.replace(/\/$/,'').split('/').pop()||null;}
+function stjFor(k){try{return k&&window.MPStjarnorFor?window.MPStjarnorFor(k):null;}catch(e){return null;}}
+function portalStj(spec){
+  if(spec.h)return stjFor(portalNyckel(spec.h));
+  if(spec.scen&&PARKER[spec.scen]){let n=0,nagon=false;for(const h of PARKER[spec.scen].hornor||[])for(const p of h.p||[]){const v=p.h?stjFor(portalNyckel(p.h)):null;if(v!=null){nagon=true;n+=v;}}return nagon?n:null;}
+  return null;}
+function stjBricka(n){
+  const c=document.createElement('canvas');c.width=256;c.height=96;const g=c.getContext('2d');
+  g.fillStyle=n?'rgba(29,43,83,.92)':'rgba(29,43,83,.5)';g.beginPath();g.roundRect(5,5,246,86,43);g.fill();
+  g.lineWidth=6;g.strokeStyle=n?'#FFC93C':'rgba(255,255,255,.6)';g.stroke();
+  g.font='800 54px "Baloo 2","Trebuchet MS",system-ui,sans-serif';g.textAlign='center';g.textBaseline='middle';g.fillStyle=n?'#FFD23F':'rgba(255,255,255,.85)';
+  g.fillText((n?'⭐ ':'☆ ')+n,128,52);
+  const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;
+  return new THREE.Sprite(new THREE.SpriteMaterial({map:t,transparent:true,depthWrite:false}));}
+
+// Små effekter som återanvänds (ligger i scenen, inte i ön): puffar, ringar och fotspår
+const FX=new THREE.Group();scene.add(FX);
+const PUFF=[],RINGAR=[],SPAR=[];
+const puffGeo=new THREE.IcosahedronGeometry(.12,0),ringGeo=new THREE.RingGeometry(.5,.62,24),sparGeo=new THREE.CircleGeometry(.15,8);
+ringGeo.rotateX(-Math.PI/2);sparGeo.rotateX(-Math.PI/2);
+function puff(x,y,z,n,farg,sp,upp,grav){
+  if(REDUCE)return;
+  for(let i=0;i<n;i++){
+    let p=PUFF.find(q=>q.life<=0);
+    if(!p){if(PUFF.length>=48)return;const m=new THREE.Mesh(puffGeo,new THREE.MeshBasicMaterial({transparent:true,depthWrite:false}));FX.add(m);p={m,v:new THREE.Vector3(),life:0,max:1,g:1};PUFF.push(p);}
+    const a=Math.random()*6.283,s=sp*(.5+Math.random()*.7);
+    p.m.material.color.set(farg);p.m.position.set(x+Math.cos(a)*.25,y+.14,z+Math.sin(a)*.25);p.v.set(Math.cos(a)*s,upp*(.6+Math.random()*.6),Math.sin(a)*s);
+    p.max=p.life=.42+Math.random()*.3;p.g=grav;p.s0=.6+Math.random()*.7;p.m.visible=true;}
+}
+function ring(x,y,z,farg,stor){
+  if(REDUCE)return;
+  let r=RINGAR.find(q=>q.life<=0);
+  if(!r){if(RINGAR.length>=12)return;const m=new THREE.Mesh(ringGeo,new THREE.MeshBasicMaterial({transparent:true,depthWrite:false,side:THREE.DoubleSide,fog:false}));FX.add(m);r={m,life:0,stor:1};RINGAR.push(r);}
+  r.m.material.color.set(farg);r.m.position.set(x,y,z);r.life=.8;r.stor=stor;r.m.visible=true;
+}
+let sparNr=0;
+function fotspar(x,y,z,ang){
+  let f=SPAR[sparNr%26];
+  if(!f){const m=new THREE.Mesh(sparGeo,new THREE.MeshBasicMaterial({color:0x1D2B53,transparent:true,depthWrite:false}));m.scale.set(1,1,1.5);FX.add(m);f={m,life:0};SPAR[sparNr%26]=f;}
+  sparNr++;f.m.position.set(x,y,z);f.m.rotation.y=ang;f.life=5;f.m.visible=true;
+}
+function fxSteg(dt){
+  for(const p of PUFF){if(p.life<=0)continue;p.life-=dt;if(p.life<=0){p.m.visible=false;continue;}
+    p.v.y-=p.g*dt;p.v.x*=1-2.2*dt;p.v.z*=1-2.2*dt;p.m.position.addScaledVector(p.v,dt);
+    const k=p.life/p.max;p.m.material.opacity=k*.6;p.m.scale.setScalar(p.s0*(p.g>4?k*.6+.5:1.9-k));}
+  for(const r of RINGAR){if(r.life<=0)continue;r.life-=dt;if(r.life<=0){r.m.visible=false;continue;}
+    const k=1-r.life/.8;r.m.scale.setScalar(r.stor*(.5+k*2.6));r.m.material.opacity=(1-k)*.75;}
+  for(const f of SPAR){if(!f||f.life<=0)continue;f.life-=dt;if(f.life<=0){f.m.visible=false;continue;}f.m.material.opacity=Math.min(.24,f.life*.12);}
+}
+function fxRensa(){for(const p of PUFF){p.life=0;p.m.visible=false;}for(const r of RINGAR){r.life=0;r.m.visible=false;}for(const f of SPAR)if(f){f.life=0;f.m.visible=false;}}
+function iVatten(){const l=S.dammar;if(l)for(const d of l)if(Math.hypot(P.x-d.x,P.z-d.z)<d.r-.2&&P.y<d.y+.5)return d;return null;}
+let stegStr=0,stegSida=1,dammT=0,plaskT=0;
+function landaFx(v){
+  const w=iVatten();
+  if(w){ring(P.x,w.y+.05,P.z,0xFFFFFF,1.4);puff(P.x,w.y,P.z,10,0xBFE9FF,2.2,4.6,10);}
+  else puff(P.x,P.y,P.z,v<-9?9:5,S.damm||0xEFE6CF,2.3,.9,1.4);
+}
+function gaFx(dt,gar){
+  if(!P.mark||!gar)return;
+  const w=iVatten(),f=Math.hypot(P.fartX,P.fartZ);
+  if(w){plaskT-=dt;if(plaskT<=0){plaskT=.3;ring(P.x,w.y+.05,P.z,0xFFFFFF,.9);puff(P.x,w.y,P.z,2,0xBFE9FF,1,2.6,10);}return;}
+  dammT-=dt;if(dammT<=0&&f>FART*.7){dammT=.22;puff(P.x-Math.sin(P.ang)*.45,P.y,P.z-Math.cos(P.ang)*.45,1,S.damm||0xEFE6CF,.6,.7,1);}
+  stegStr+=f*dt;if(stegStr>.85){stegStr=0;stegSida=-stegSida;fotspar(P.x+Math.cos(P.ang)*.24*stegSida,P.y+.05,P.z-Math.sin(P.ang)*.24*stegSida,P.ang);}
+}
+
+// Djurlivet: egna färger och smådjur per ö (fj = fjärilar, fa = fåglar, sma = [djur, [färg, färg]])
+const LIVD={
+  hub:{fj:[0xFF7EB6,0xFFD23F,0x58C4F0],fa:0xFFFFFF,sma:[['kanin',['#FFFFFF','#E8D9C8']],['katt',['#F5A45C','#C4702A']]]},
+  matte:{fj:[0xFFF3B0,0xB28DFF,0x7FE7F2],fa:0xD6C4FF,sma:[['robot',['#B28DFF','#6A5FA0']]]},
+  svenska:{fj:[0xFFFFFF,0xF2B33D],fa:0x3D5AFE,sma:[['uggla',['#B98A5C','#7A5230']]]},
+  so:{fj:[0xFFD23F,0xFF9A5C],fa:0xFFF3D6,sma:[['rav',['#F2780C','#B5530A']]]},
+  spel:{fj:[0xFF7EB6,0x58C4F0,0xFFD23F],fa:0xFFFFFF,sma:[['hund',['#C99A6B','#8A5A2B']],['kanin',['#FFB3D1','#E0558A']]]},
+  kroppen:{fj:[0xFFFFFF,0xFFB3D1],fa:0xFFFFFF,sma:[['kanin',['#FFFFFF','#FFD0DC']]]},
+  fler:{fj:[0x7FE7F2,0xFFD23F],fa:0xFFFFFF,sma:[['pingvin',['#2B3A55','#1D2B53']]]},
+  extra:{fj:[0xD6409F,0xFFD23F],fa:0xFFFFFF,sma:[['groda',['#58C46E','#2F8F47']]]},
+  bio:{fj:[0xFFD23F],fa:0xFFFFFF,sma:[['katt',['#39415E','#1D2B53']]]}
+};
+function friPunkt(m,bortFran){
+  /* smala öar (sjöstjärnan) träffas sällan av slumpen: många försök, och sista tredjedelen med mindre marginal */
+  for(let i=0;i<240;i++){const x=(Math.random()*2-1)*S.a,z=(Math.random()*2-1)*S.b,mm=i<160?m:1.5;
+    if(inomO(x,z,mm)&&fri(x,z)&&(!bortFran||Math.hypot(x-P.x,z-P.z)>bortFran))return[x,z];}
+  return null;}
+function byggLiv(){
+  const C=LIVD[S.id];if(!C||REDUCE)return;
+  const data=S.livData={fj:[],flockar:[],sma:[],fisk:null};
+  // fjärilar: fladdrar runt en egen plats och viker undan när man kommer nära
+  const vingGeo=new THREE.PlaneGeometry(.3,.36);vingGeo.rotateX(-Math.PI/2);vingGeo.translate(.15,0,0);
+  const fjMat=C.fj.map(c=>new THREE.MeshBasicMaterial({color:c,side:THREE.DoubleSide})),krMat=new THREE.MeshBasicMaterial({color:0x2A2A3A}),krGeo=new THREE.BoxGeometry(.05,.05,.3);
+  for(let i=0,n=lagt?4:10;i<n;i++){
+    const pt=friPunkt(3);if(!pt)break;
+    const g=new THREE.Group(),v=[1,-1].map(s=>{const w=new THREE.Mesh(vingGeo,fjMat[i%fjMat.length]);w.scale.x=s;g.add(w);return w;});g.add(new THREE.Mesh(krGeo,krMat));add(g);
+    data.fj.push({g,v,hx:pt[0],hz:pt[1],ph:Math.random()*6.28,r:1.6+Math.random()*2,w:.5+Math.random()*.5,ox:0,oz:0,px:pt[0],pz:pt[1]});
+  }
+  // fåglar: sitter i små flockar och lyfter när man springer dit
+  const G={kropp:new THREE.SphereGeometry(.22,8,6),huvud:new THREE.SphereGeometry(.14,8,6),nabb:new THREE.ConeGeometry(.05,.16,5),stjart:new THREE.BoxGeometry(.16,.04,.3),vinge:new THREE.PlaneGeometry(.44,.26)};
+  G.vinge.rotateX(-Math.PI/2);G.vinge.translate(.22,0,0);
+  const faMat=M(C.fa),faV=M(C.fa,{side:THREE.DoubleSide}),nabbMat=M(0xFFA24C);
+  const fagel=()=>{const g=new THREE.Group(),b=new THREE.Mesh(G.kropp,faMat);b.scale.set(1,.9,1.45);b.position.y=.24;g.add(b);
+    const h=new THREE.Mesh(G.huvud,faMat);h.position.set(0,.42,.24);g.add(h);
+    const nb=new THREE.Mesh(G.nabb,nabbMat);nb.rotation.x=Math.PI/2;nb.position.set(0,.4,.42);g.add(nb);
+    const st=new THREE.Mesh(G.stjart,faMat);st.position.set(0,.27,-.38);st.rotation.x=.35;g.add(st);
+    const v=[1,-1].map(s=>{const w=new THREE.Mesh(G.vinge,faV);w.scale.x=s;w.position.set(0,.3,0);g.add(w);return w;});
+    g.userData.v=v;g.scale.setScalar(1.3);return g;};
+  for(let k=0,nk=lagt?1:2;k<nk;k++){
+    const pt=friPunkt(5,12)||friPunkt(5);if(!pt)break;
+    const F={x:pt[0],z:pt[1],sit:true,b:[]};
+    for(let i=0,n=3+k;i<n;i++){const g=fagel(),a=i/n*6.28,ox=Math.cos(a)*(.7+Math.random()*.5),oz=Math.sin(a)*(.7+Math.random()*.5);
+      g.position.set(F.x+ox,S.hojd(F.x+ox,F.z+oz),F.z+oz);g.rotation.y=Math.random()*6.28;add(g);
+      F.b.push({g,ox,oz,ph:Math.random()*6,t:0,T:1,H:1,R:1,S:new THREE.Vector3(),E:new THREE.Vector3()});}
+    data.flockar.push(F);
+  }
+  // smådjur: skuttar omkring och springer undan om man kommer för nära
+  const smaLista=lagt?C.sma.slice(0,1):C.sma;
+  for(const[an,farg]of smaLista){
+    const pt=friPunkt(4,9)||friPunkt(4);if(!pt)break;
+    const g=djurModell({animal:an,farg});g.scale.setScalar(.42);g.position.set(pt[0],S.hojd(pt[0],pt[1]),pt[1]);add(g);
+    data.sma.push({g,x:pt[0],z:pt[1],tx:pt[0],tz:pt[1],hop:1,ax:0,az:0,bx:0,bz:0,vila:1+Math.random()*2,dur:.34,ang:0,radd:false});
+  }
+  // en fisk som hoppar i havet, på den sida av ön där man står
+  {const g=new THREE.Group(),m=M(0xFF9A5C),k=new THREE.Mesh(new THREE.SphereGeometry(.3,8,6),m);k.scale.set(.55,.8,1.5);g.add(k);
+   const st=new THREE.Mesh(new THREE.ConeGeometry(.24,.4,4),m);st.rotation.x=Math.PI/2;st.position.z=-.55;st.scale.x=.3;g.add(st);g.visible=false;add(g);
+   data.fisk={g,t:-1,vanta:2+Math.random()*3,x0:0,z0:0,dx:0,dz:0};}
+  let lt=0;
+  S.liv.push(t=>{
+    const d=Math.min(.05,t-lt)||.016;lt=t;
+    for(const f of data.fj){
+      const x0=f.hx+Math.cos(t*f.w+f.ph)*f.r,z0=f.hz+Math.sin(t*f.w*1.37+f.ph*2)*f.r,dx=x0+f.ox-P.x,dz=z0+f.oz-P.z,dd=Math.hypot(dx,dz);
+      let mx=0,mz=0;if(dd<2.6){const q=(2.6-dd)/(dd||1)*1.6;mx=dx*q;mz=dz*q;}
+      f.ox+=(mx-f.ox)*Math.min(1,d*4);f.oz+=(mz-f.oz)*Math.min(1,d*4);
+      const x=x0+f.ox,z=z0+f.oz;
+      f.g.position.set(x,S.hojd(x,z)+1.1+Math.sin(t*1.7+f.ph)*.45,z);
+      if(Math.hypot(x-f.px,z-f.pz)>.002)f.g.rotation.y=Math.atan2(x-f.px,z-f.pz);f.px=x;f.pz=z;
+      const fl=.25+Math.abs(Math.sin(t*13+f.ph))*1.05;f.v[0].rotation.z=fl;f.v[1].rotation.z=-fl;
+    }
+    for(const F of data.flockar){
+      if(F.sit){
+        if(Math.hypot(P.x-F.x,P.z-F.z)<5.2){
+          const pt=friPunkt(5,15)||friPunkt(5)||[F.x,F.z];F.sit=false;
+          F.b.forEach((b,i)=>{b.t=-i*.11;b.S.copy(b.g.position);const ex=pt[0]+b.ox,ez=pt[1]+b.oz;b.E.set(ex,S.hojd(ex,ez),ez);b.T=4.6+Math.random()*1.6;b.H=6+Math.random()*3.5;b.R=(Math.random()<.5?-1:1)*(4+Math.random()*4);});
+          F.x=pt[0];F.z=pt[1];
+        }else for(const b of F.b){const pk=Math.max(0,Math.sin(t*1.3+b.ph)-.72)*3;b.g.rotation.x=pk;b.g.userData.v[0].rotation.z=-1.25;b.g.userData.v[1].rotation.z=1.25;}
+      }else{
+        let klara=0;
+        for(const b of F.b){
+          b.t+=d;if(b.t<0)continue;
+          const u=Math.min(1,b.t/b.T),e=u*u*(3-2*u),lx=b.E.x-b.S.x,lz=b.E.z-b.S.z,ll=Math.hypot(lx,lz)||1,sv=Math.sin(u*6.283)*b.R;
+          const x=b.S.x+lx*e-lz/ll*sv,z=b.S.z+lz*e+lx/ll*sv,y=b.S.y+(b.E.y-b.S.y)*e+b.H*Math.pow(Math.sin(u*Math.PI),.7);
+          const px=b.g.position.x,py=b.g.position.y,pz=b.g.position.z;b.g.position.set(x,y,z);
+          if(u<1){b.g.rotation.y=Math.atan2(x-px,z-pz);b.g.rotation.x=Math.max(-.6,Math.min(.6,-(y-py)/(Math.hypot(x-px,z-pz)||1)*.6));
+            const fl=Math.sin(t*24+b.ph)*.95;b.g.userData.v[0].rotation.z=fl;b.g.userData.v[1].rotation.z=-fl;}
+          else{b.g.rotation.x=0;klara++;}
+        }
+        if(klara===F.b.length)F.sit=true;
+      }
+    }
+    for(const a of data.sma){
+      const pd=Math.hypot(P.x-a.x,P.z-a.z);
+      if(pd<3.2&&!a.radd){a.radd=true;a.dur=.22;a.vila=0;
+        let ok=false;for(let i=0;i<8&&!ok;i++){const an=Math.atan2(a.z-P.z,a.x-P.x)+(Math.random()-.5)*1.4,x=a.x+Math.cos(an)*7,z=a.z+Math.sin(an)*7;if(inomO(x,z,3)&&fri(x,z)){a.tx=x;a.tz=z;ok=true;}}
+        if(!ok){const pt=friPunkt(4,8);if(pt){a.tx=pt[0];a.tz=pt[1];}}}
+      if(a.hop<1){a.hop=Math.min(1,a.hop+d/a.dur);const k=a.hop;a.x=a.ax+(a.bx-a.ax)*k;a.z=a.az+(a.bz-a.az)*k;
+        a.g.position.set(a.x,S.hojd(a.x,a.z)+Math.sin(k*Math.PI)*.42,a.z);}
+      else{
+        const dx=a.tx-a.x,dz=a.tz-a.z,dl=Math.hypot(dx,dz);
+        if(dl>.35){const st=Math.min(1.15,dl);a.ax=a.x;a.az=a.z;a.bx=a.x+dx/dl*st;a.bz=a.z+dz/dl*st;a.hop=0;a.ang=Math.atan2(dx,dz);}
+        else{a.radd=false;a.dur=.34;a.vila-=d;if(pd<8)a.ang=Math.atan2(P.x-a.x,P.z-a.z);
+          if(a.vila<=0){a.vila=1.5+Math.random()*3;for(let i=0;i<8;i++){const an=Math.random()*6.28,r=2.5+Math.random()*4,x=a.x+Math.cos(an)*r,z=a.z+Math.sin(an)*r;if(inomO(x,z,3)&&fri(x,z)){a.tx=x;a.tz=z;break;}}}}
+      }
+      let dr=a.ang-a.g.rotation.y;dr=Math.atan2(Math.sin(dr),Math.cos(dr));a.g.rotation.y+=dr*Math.min(1,d*10);
+    }
+    const fi=data.fisk;
+    if(fi.t<0){fi.vanta-=d;if(fi.vanta<=0&&S.randR){const th=Math.atan2(P.z,P.x)+(Math.random()-.5)*1.6,r=S.randR(th)+3+Math.random()*4,ta=th+Math.PI/2*(Math.random()<.5?1:-1);
+        fi.x0=Math.cos(th)*r;fi.z0=Math.sin(th)*r;fi.dx=Math.cos(ta)*2.4;fi.dz=Math.sin(ta)*2.4;fi.t=0;fi.g.visible=true;fi.g.rotation.y=Math.atan2(fi.dx,fi.dz);ring(fi.x0,-2.14,fi.z0,0xFFFFFF,1.1);}}
+    else{fi.t+=d/.95;const u=fi.t;
+      if(u>=1){fi.t=-1;fi.g.visible=false;fi.vanta=(lagt?8:4)+Math.random()*6;ring(fi.x0+fi.dx,-2.14,fi.z0+fi.dz,0xFFFFFF,1.1);}
+      else{fi.g.position.set(fi.x0+fi.dx*u,-2.3+Math.sin(u*Math.PI)*1.9,fi.z0+fi.dz*u);fi.g.rotation.x=-Math.cos(u*Math.PI)*1.1;}}
+  });
+}
+
 const clock=new THREE.Clock();let tid=0,fpsSum=0,fpsN=0,fpsKoll=true;
 const v3=new THREE.Vector3();
 function steg(dt){
@@ -1959,10 +2149,11 @@ function steg(dt){
   if(P.hoppKo){P.hoppKo=false;if(dlgOpen){}else if(P.mark){P.vy=HOPP;P.mark=false;P.hopp=1;hoppljud();gomHint();}else if(P.hopp<2){P.vy=HOPP*.9;P.hopp=2;pling(420,660);}}
   P.x+=P.fartX*dt;P.z+=P.fartZ*dt;
   stoppa();
-  P.vy-=G*dt;P.y+=P.vy*dt;
+  P.vy-=G*dt;P.y+=P.vy*dt;const fallV=P.vy;
   const mh=markhojd(P.x,P.z,P.y-P.vy*dt);
   if(P.y<=mh&&P.vy<=0){P.y=mh;P.vy=0;P.mark=true;P.hopp=0;}else if(P.mark&&P.vy<=0&&P.y-mh<.7){P.y=mh;P.vy=0;}else if(P.y>mh+.05)P.mark=false;
-  if(!varPaMark&&P.mark)landaLjusbrade();
+  if(!varPaMark&&P.mark){landaLjusbrade();landaFx(fallV);}
+  gaFx(dt,gar);
   if(S.pads)for(const q of S.pads){const dx=P.x-q.x,dz=P.z-q.z,inne=(q.halv?Math.max(Math.abs(dx),Math.abs(dz))<q.r:Math.hypot(dx,dz)<q.r)&&P.y<=q.top+.4;
     if(inne&&!q.inne){q.inne=true;pling(q.f,q.f*1.5);if(q.boost){P.vy=q.boost;P.mark=false;P.hopp=1;}}else if(!inne)q.inne=false;}
   narmaste=null;narNpc=false;
@@ -1978,7 +2169,7 @@ function steg(dt){
   for(const s of S.stjarnor){
     if(s.tagen)continue;
     if(Math.hypot(P.x-s.x,P.z-s.z)<1.3&&Math.abs(P.y+1-s.y)<1.6){
-      s.tagen=true;s.m.visible=false;if(s.ton)pling(s.ton*2,s.ton*2.4);else pling(660,990);
+      s.tagen=true;s.m.visible=false;P.glad=.7;if(s.ton)pling(s.ton*2,s.ton*2.4);else pling(660,990);
       (SV.stj[S.id]=SV.stj[S.id]||[]).push(s.idx);sparaSV();stjarnaText();
       if(s.bokstav){const kvar=S.stjarnor.filter(q=>!q.tagen).length;if(kvar)toast('Du hittade vokalen '+s.bokstav+'! '+(kvar===1?'Bara 1 kvar.':kvar+' kvar.'));}
       else if(s.biljett){const kvar=S.stjarnor.filter(q=>!q.tagen).length;if(kvar)toast('Du hittade en biljett! '+(kvar===1?'Bara 1 kvar.':kvar+' kvar.'));}
@@ -2000,6 +2191,7 @@ function rita(dt){
   const sq=P.mark?1:1+Math.max(-.12,Math.min(.18,P.vy*.02));
   inner.position.y=vag*.2;inner.scale.set(1/Math.sqrt(sq),sq,1/Math.sqrt(sq));
   inner.rotation.z=gar?Math.sin(t*14)*.06:0;
+  if(P.glad>0){P.glad-=dt;inner.rotation.y=REDUCE?0:(1-Math.max(0,P.glad)/.7)*Math.PI*2;}else inner.rotation.y=0;
   djur.userData.fot.forEach((f,i)=>{f.position.z=.12+(gar?Math.sin(t*14+i*Math.PI)*.22:0);f.position.y=.2+(P.mark?(gar?Math.max(0,Math.sin(t*14+i*Math.PI))*.15:0):.25);});
   const cx=P.x-Math.sin(camYaw)*Math.cos(camPitch)*camDist,cz=P.z-Math.cos(camYaw)*Math.cos(camPitch)*camDist,cy=P.y+1.7+Math.sin(camPitch)*camDist;
   if(bio){cam.position.lerp(bio.cp,REDUCE?1:Math.min(1,dt*3));bio.look.lerp(bio.lp,REDUCE?1:Math.min(1,dt*3));cam.lookAt(bio.look);}
@@ -2015,12 +2207,12 @@ startVarlden();dimma();
 let sistaFas=0;
 renderer.setAnimationLoop(()=>{
   const dt=Math.min(.05,clock.getDelta());
-  if(S.klot){stegK(dt);ritaK(dt);}else{steg(dt);rita(dt);}renderer.render(scene,cam);
+  if(S.klot){stegK(dt);ritaK(dt);}else{steg(dt);rita(dt);}fxSteg(dt);renderer.render(scene,cam);
   if(!sistaFas){sistaFas=1;$('load').classList.add('klar');}
   if(fpsKoll&&tid>1&&tid<5){fpsSum+=dt;fpsN++;}
   if(fpsKoll&&tid>=5){fpsKoll=false;if(fpsN&&fpsSum/fpsN>1/26&&!lagt){stallLagt(true);dimma();}}
 });
-window.__varlden={rida:()=>rida,startBio,bioKnapp,get bio(){return bio;},Pv,hdK,placeraK,placera,scene,cam,P,get S(){return S;},SV,gaIn,laddaScen,klart,oppnaDlg,get dlg(){return dlgOpen;}};
+window.__varlden={fx:{PUFF,RINGAR,SPAR},portalStj,portalNyckel,rida:()=>rida,startBio,bioKnapp,get bio(){return bio;},Pv,hdK,placeraK,placera,scene,cam,P,get S(){return S;},SV,gaIn,laddaScen,klart,oppnaDlg,get dlg(){return dlgOpen;}};
 </script>
 </body>
 </html>

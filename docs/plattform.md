@@ -73,6 +73,8 @@ Sajten loggar inget och har ingen analys eller kakor. Inga externa typsnitt elle
 - Epoker och platser som inte är övningar är skyltar, inte portaler.
 - Platsen sparas vid varje portal (`mp-varlden-pos`), så man kommer tillbaka framför samma portal. Sidhuvudet visar 🏝️ Världen när man kommit därifrån.
 - "🐢 Lågt läge" slås på av sig självt på svaga enheter. Inga skuggor.
+- **Stjärnor på portalerna:** varje portal till en övning som ger stjärnor visar elevens stjärnor ("⭐ 5", grå "☆ 0"), och portalerna till öarna visar öns summa. Världen laddar `huvud.js` med `data-bara="stjarnor"` (bara räkningen, inget sidhuvud, inga mynt) och frågar `MPStjarnorFor`; höj `?v=` på den raden om stjärnreglerna ändras.
+- **Liv på öarna** (`byggLiv`, `LIVD` per ö): fjärilar, fåglar som lyfter när man kommer nära, smådjur som skuttar undan och en fisk som hoppar i havet. Djuret lämnar fotspår och damm, plaskar i dammar och snurrar när det hittar något. Allt är avstängt vid `prefers-reduced-motion`, färre i Lågt läge, och finns inte på månen (Rymdlabbet). Ny ö: lägg en post i `LIVD`.
 - Test: `__varlden` och `window.__oversikt=true` ger översiktskamera. Kontrollera att portaler och föremål ligger innanför kusten.
 
 ## Väntar
