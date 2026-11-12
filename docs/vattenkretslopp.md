@@ -1,0 +1,23 @@
+# Vattnets kretslopp (NO åk 1–3, flaggskepp)
+
+_Under bygge (nov 2026). Den som tar över läser bara den här filen och `vattenkretslopp/index.html`._
+
+## Beslut (lärarens, 12 nov 2026)
+- Fjärde flaggskeppet, **för de yngsta (åk 1–3)**: samma recept som Sjön, Elkretsen och Kontinentaldrift (bygga, laborera, gissa först), men med enkla ord och handgripliga knappar. Kort under 🔬 NO i `fler/index.html`.
+- Ritat i kod (canvas): hav, sol, berg, moln, flod. Figurerna är lärarens ok (SVG/canvas för flaggskeppen). Starkt förenklat, det ska stå på sidan.
+- Spara tokens: små tester, få skärmbilder, en incheckning per steg, uppdatera Status.
+
+## Hur det fungerar
+- **Partikelsimulering:** ca 210 vattenpartiklar i sex tillstånd: `H` hav, `V` ånga (på väg upp), `M` moln, `R` regn, `S` snö (faller), `L` snö som ligger kvar, `F` flod. Övergångar sker slumpmässigt per sekund: hav→ånga ∝ sol × värme, moln→regn (eller snö vid ≤ 0 °C), snö smälter till flod vid > 0 °C, flodens vatten rinner tillbaka till havet. Allt vatten bevaras. Havets nivå följer antalet havspartiklar.
+- **Nivå 1 Följ droppen:** eleven trycker på solen (droppen avdunstar), på molnet (det regnar), droppen rinner ner för berget i floden och tillbaka till havet. Sedan sätter eleven ord (Avdunstning, Moln, Regn, Flod) på fyra markörer. Stjärnor efter antal fel.
+- **Nivå 2 Laborera:** reglage för sol och temperatur, färdiga lägen (vanlig dag, ingen sol, vinter), mätare för hav, moln, flod och snö. Inga stjärnor.
+- **Nivå 3 Gissa först:** fem frågor (solen släcks och molnen, mycket varmare och regnet, minusgrader och floden, vart vattnet tar vägen utan sol, snön smälter). Eleven gissar, simuleringen körs i snabbspolning, facit kommer ur simuleringen.
+- Nyckel `mattespel-vattenkretslopp-v1` = {stars:{1,3}}.
+
+## Inkopplingar (kryssa av)
+Kort i `fler/index.html` (NO), `sok.js`, `sitemap.xml`, `konto.js` (`PKEYS`), `STJ` i `huvud.js`, stjärnor och `snap` i `index.html`, rad i `CLAUDE.md`.
+
+## Status
+- [ ] Sidan byggd (simulering, nivå 1–3)
+- [ ] Testad i tre storlekar
+- [ ] Inkopplad, pushad
