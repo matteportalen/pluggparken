@@ -103,6 +103,8 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 .scen{position:relative;border-radius:20px;overflow:hidden;box-shadow:0 4px 0 var(--line);background:#9FD8F5;touch-action:manipulation}
 .scen>svg{display:block;width:100%;height:auto;max-height:38vh}
 .sp{transition:opacity .45s}
+.plask{fill:none;stroke:#fff;stroke-width:2;transform-box:fill-box;transform-origin:center;animation:ringut .8s ease-out forwards}
+@keyframes ringut{from{transform:scale(1);opacity:.95}to{transform:scale(7);opacity:0}}
 .sp.ut{opacity:0}
 .toast{position:absolute;left:8px;right:8px;bottom:8px;display:grid;gap:4px;pointer-events:none}
 .toast div{background:rgba(29,43,83,.88);color:#fff;border-radius:12px;padding:4px 10px;font-weight:800;font-size:.9rem;text-align:center;animation:in .3s ease both}
@@ -234,8 +236,9 @@ const reduced=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
 const ljud=n=>{window.Ljud&&Ljud[n]&&Ljud[n]();};
 const NIV=[null,
   {namn:"Bygg",txt:"Näringskedjan, näringsväven och kretsloppet.",col:"#2BB673"},
-  {namn:"Rädda sjön",txt:"Fyra uppdrag. Något har gått fel i sjön.",col:"#1E9ED8"},
-  {namn:"Gissa först",txt:"Vad händer i sjön? Gissa, och se sedan om du hade rätt.",col:"#7B61FF"}];
+  {namn:"Laborera i sjön",txt:"Fyra utmaningar. Släpp ut och fånga djur och se vad som händer.",col:"#1E9ED8"},
+  {namn:"Gissa först",txt:"Vad händer i sjön? Gissa, och se sedan om du hade rätt.",col:"#7B61FF"},
+  {namn:"Fri sjö",txt:"Ingen uppgift. Experimentera som du vill.",col:"#E58A1F"}];
 
 /* ---------- Arterna ---------- */
 const ART=[
@@ -250,14 +253,14 @@ const VB={A:"0 0 100 60",V:"0 0 100 60",M:"0 0 100 60",G:"0 0 160 60",F:"0 0 140
 const ico=id=>`<svg viewBox="${VB[id]}" aria-hidden="true"><use href="#${SYM[id]}"/></svg>`;
 const stjHtml=n=>[1,2,3].map(i=>i<=n?"★":'<span class="off">★</span>').join("");
 function show(id){document.querySelectorAll(".screen").forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
-function hem(){stoppa();$("niv").innerHTML=[1,2,3].map(l=>`<button data-l="${l}"><span class="nr" style="background:${NIV[l].col}">${l}</span><span><b>${NIV[l].namn}</b><small>${NIV[l].txt}</small></span><span class="st">${stjHtml(data.stars[l]||0)}</span></button>`).join("");show("home");}
+function hem(){stoppa();$("niv").innerHTML=[1,2,3,4].map(l=>`<button data-l="${l}"><span class="nr" style="background:${NIV[l].col}">${l}</span><span><b>${NIV[l].namn}</b><small>${NIV[l].txt}</small></span><span class="st">${l===4?"":stjHtml(data.stars[l]||0)}</span></button>`).join("");show("home");}
 $("niv").onclick=e=>{const b=e.target.closest("[data-l]");if(b)starta(+b.dataset.l);};
 
 /* ---------- Gemensamt för spelen ---------- */
 let G=null,tim=[],raf=0;
 const rensa=()=>{tim.forEach(clearTimeout);tim=[];};
 function stoppa(){rensa();cancelAnimationFrame(raf);raf=0;G=null;}
-function starta(l){stoppa();G={lvl:l,fel:0,res:[],i:0};$("nivT").textContent=NIV[l].namn;$("yta").className=l===1?"n1":"";show("game");l===1?startNiva1():l===2?startNiva2():startNiva3();}
+function starta(l){stoppa();G={lvl:l,fel:0,res:[],i:0};$("nivT").textContent=NIV[l].namn;$("yta").className=l===1?"n1":"";show("game");l===1?startNiva1():l===2?startNiva2():l===3?startNiva3():startNiva4();}
 function prickar(n){$("dots").innerHTML=Array.from({length:n},(_,j)=>`<i class="${j<G.i?(G.res[j]?"ok":"f"):j===G.i?"nu":""}"></i>`).join("");}
 function fb(t,c){const f=$("forkl");if(f){f.textContent=t||"";f.className="forkl"+(c?" "+c:"");}}
 function skaka(el){if(!el)return;el.classList.remove("skaka");void el.offsetWidth;el.classList.add("skaka");}
@@ -353,7 +356,13 @@ const PAR_TOT=UPPDRAG.reduce((a,u)=>a+u.par,0);
 /* sprites: [antal vid jämvikt, tak, bredd, höjd, y-zon, fart px/s] */
 const SPR={A:{n:7,max:18,w:34,h:20,y:[58,86],v:4},V:{n:6,max:14,w:22,h:13,y:[72,170],v:16},M:{n:5,max:11,w:36,h:22,y:[90,200],v:26},G:{n:2.2,max:5,w:70,h:26,y:[130,205],v:16},F:{n:1.2,max:3,w:62,h:36,y:[8,34],v:46}};
 let S2=null;
-function startNiva2(){G_l=2;jamvikt();G.m=0;G.ing=0;prickar(UPPDRAG.length);bygg2();inledning();}
+const FRI={namn:"Fri sjö",tips:"Släpp ut och fånga djur och titta på kurvorna. Prova att ta bort en art och se vad som händer med de andra. Med Näring kan du ge sjön mer eller mindre mat.",start:()=>jamvikt().slice()};
+let nar=1;
+function startNiva4(){G_l=4;jamvikt();G.fri=true;G.m=0;PMR=PM;nar=1;$("dots").innerHTML="";bygg2();laddaUppdrag(true);S2.ov=false;S2.paus=false;$("bPaus").textContent="⏸";$("bal").style.visibility="hidden";
+  const r=document.createElement("div");r.className="rad2";r.innerHTML=`<b style="font-size:.85rem">Näring i vattnet</b><div class="grp"><button id="bNm" aria-label="Mindre näring">−</button><button id="bNv" style="min-width:56px" aria-live="polite">×1</button><button id="bNp" aria-label="Mer näring">+</button></div>`;$("bPaus").closest(".rad2").after(r);
+  const sattNar=f=>{nar=Math.max(.4,Math.min(2.2,f));PMR=Object.assign({},PM,{KA:PM.KA*nar});$("bNv").textContent="×"+(Math.round(nar*10)/10).toString().replace(".",",");ljud("pip");};
+  $("bNm").onclick=()=>sattNar(nar/1.25);$("bNp").onclick=()=>sattNar(nar*1.25);$("bNv").onclick=()=>sattNar(1);}
+function startNiva2(){G_l=2;PMR=PM;jamvikt();G.m=0;G.ing=0;prickar(UPPDRAG.length);bygg2();inledning();}
 function bygg2(){
   const kontroller=ART.map(a=>`<div class="art" style="--c:${a.c}" data-a="${a.id}">${ico(a.id)}<b>${a.namn}</b><div class="mat"><i></i><u></u></div><span class="stat"></span><div class="pm"><button data-d="-1" data-a="${a.id}" aria-label="Fånga ${a.namn.toLowerCase()}">−</button><button class="plus" data-d="1" data-a="${a.id}" aria-label="Släpp ut ${a.namn.toLowerCase()}">+</button></div></div>`).join("");
   $("yta").innerHTML=`<div class="lv2"><div class="v1"><div class="scen" id="scen"><svg viewBox="0 0 360 250" id="sjo" role="img" aria-label="Sjön">${sjoSvg()}</svg><div class="mhud"><span id="mNamn"></span><span id="mTid"></span></div><div class="toast" id="toast"></div></div></div>
@@ -362,7 +371,7 @@ function bygg2(){
   $("kontroll").onclick=e=>{const b=e.target.closest("[data-d]");if(b)ingrepp(IDX[b.dataset.a],+b.dataset.d);};
   $("bPaus").onclick=()=>{S2.paus=!S2.paus;$("bPaus").textContent=S2.paus?"▶":"⏸";$("bPaus").setAttribute("aria-label",S2.paus?"Fortsätt":"Pausa");};
   [["bF1",1],["bF2",2],["bF4",4]].forEach(([id,f])=>$(id).onclick=()=>{S2.fart=f;["bF1","bF2","bF4"].forEach(k=>$(k).setAttribute("aria-pressed",String($(k)===$(id))));});
-  $("bTips").onclick=()=>{const t=$("tips");t.hidden=!t.hidden;t.textContent=UPPDRAG[G.m].tips;};
+  $("bTips").onclick=()=>{const t=$("tips");t.hidden=!t.hidden;t.textContent=(G.fri?FRI:UPPDRAG[G.m]).tips;};
   $("bOm").onclick=()=>laddaUppdrag();
   S2={x:[0,0,0,0,0],t:0,hold:0,paus:true,fart:1,ing:0,hist:[[],[],[],[],[]],sp:{A:[],V:[],M:[],G:[],F:[]},acc:0,sist:0,klart:false,tid:0,utd:[false,false,false,false,false]};
   sceneInit();}
@@ -382,7 +391,15 @@ function malAntal(id,x){const r=x/EQ[IDX[id]],s=SPR[id];if(x<=0)return 0;return 
 function synka(){for(const a of ART){const id=a.id,L=S2.sp[id],n=malAntal(id,S2.x[IDX[id]]);
   while(L.length<n)L.push(nySprite(id));
   while(L.length>n){const o=L.pop();o.g.classList.add("ut");const g=o.g;setTimeout(()=>g.remove(),480);}}}
-function ror(dt){if(reduced())return;for(const id in S2.sp)for(const o of S2.sp[id]){const s=SPR[id];o.t-=dt;
+/* Fiskgjusen dyker då och då mot en fisk, plaskar vid ytan och flyger iväg med den. Bara utseende, påverkar inte modellen. */
+function dyk(o,dt){let D=o.dyk;
+  if(!D){o.nd=(o.nd==null?R(4,9):o.nd)-dt;if(o.nd>0)return false;o.nd=R(8,15);const fisk=S2.sp.M.concat(S2.sp.G).filter(f=>f.g.isConnected&&!f.g.classList.contains("ut"));if(!fisk.length)return false;o.dyk=D={ph:0,tx:pick(fisk).x};}
+  if(D.ph===0){const dx=D.tx-o.x;o.x+=Math.sign(dx)*Math.min(Math.abs(dx),95*dt);if(Math.abs(dx)>2)o.fl=dx<0?-1:1;o.y+=(26-o.y)*Math.min(1,dt*3);if(Math.abs(dx)<6)D.ph=1;}
+  else if(D.ph===1){o.y+=120*dt;if(o.y>=58){o.y=58;D.ph=2;ljud("splash");const c=document.createElementNS("http://www.w3.org/2000/svg","circle");c.setAttribute("class","plask");c.setAttribute("cx",o.x.toFixed(1));c.setAttribute("cy","52");c.setAttribute("r","3");S2.lager.appendChild(c);setTimeout(()=>c.remove(),900);
+    const u=document.createElementNS("http://www.w3.org/2000/svg","use");u.setAttribute("href","#sp-M");u.setAttribute("x","-15");u.setAttribute("y","12");u.setAttribute("width","30");u.setAttribute("height","18");u.setAttribute("class","bytte");o.g.appendChild(u);}}
+  else{o.y-=75*dt;o.x+=o.fl*30*dt;if(o.y<=24){o.y=24;const u=o.g.querySelector(".bytte");if(u)u.remove();o.dyk=null;o.tx=R(14,346);o.t=R(1,3);}}
+  vis(o);return true;}
+function ror(dt){if(reduced())return;for(const id in S2.sp)for(const o of S2.sp[id]){const s=SPR[id];if(id==="F"&&dt>0&&dyk(o,dt))continue;o.t-=dt;
   if(o.t<=0||Math.hypot(o.tx-o.x,o.ty-o.y)<3){o.tx=R(14,346);o.ty=R(s.y[0],s.y[1]);if(id==="V")o.t=R(.3,1.1);else o.t=R(1.5,5);}
   const dx=o.tx-o.x,dy=o.ty-o.y,d=Math.hypot(dx,dy)||1,v=s.v*(id==="G"&&Math.random()<.004?4:1)*dt;o.x+=dx/d*Math.min(v,d);o.y+=dy/d*Math.min(v,d);if(Math.abs(dx)>2)o.fl=dx<0?-1:1;
   if(id==="F")o.y=s.y[0]+(Math.sin(performance.now()/500+o.tx)+1)*(s.y[1]-s.y[0])/4;vis(o);}}
@@ -402,9 +419,9 @@ function ingrepp(i,d){if(!S2||S2.klart||S2.ov)return;const nu=S2.x[i];
   if(i>1&&S2.x[i]<UT*EQ[i])S2.x[i]=0;
   S2.ing++;G.ing++;if(S2.paus&&!S2.ov){S2.paus=false;$("bPaus").textContent="⏸";$("bPaus").setAttribute("aria-label","Pausa");}synka();uppdateraUi();}
 function inledning(){const u=UPPDRAG[G.m];laddaUppdrag(true);S2.ov=true;S2.paus=true;
-  const ov=document.createElement("div");ov.className="ov";ov.id="ov";ov.innerHTML=`<div class="k"><div class="em">${u.em}</div><h3>Uppdrag ${G.m+1}: ${u.namn}</h3><p>${u.intro}</p><button id="bGo">Börja</button></div>`;$("scen").appendChild(ov);$("bGo").onclick=()=>{ov.remove();S2.ov=false;S2.paus=false;$("bPaus").textContent="⏸";};$("bGo").focus({preventScroll:true});}
-function laddaUppdrag(tyst){const u=UPPDRAG[G.m];S2.x=u.start().slice();S2.t=0;S2.hold=0;S2.ing=0;S2.klart=false;S2.hist=[[],[],[],[],[]];S2.acc=0;S2.sist=0;S2.utd=[false,false,false,false,false];
-  for(const id in S2.sp){S2.sp[id].forEach(o=>o.g.remove());S2.sp[id]=[];}$("mNamn").textContent=`${G.m+1}. ${u.namn}`;$("tips").hidden=true;
+  const ov=document.createElement("div");ov.className="ov";ov.id="ov";ov.innerHTML=`<div class="k"><div class="em">${u.em}</div><h3>Utmaning ${G.m+1}: ${u.namn}</h3><p>${u.intro}</p><button id="bGo">Börja</button></div>`;$("scen").appendChild(ov);$("bGo").onclick=()=>{ov.remove();S2.ov=false;S2.paus=false;$("bPaus").textContent="⏸";};$("bGo").focus({preventScroll:true});}
+function laddaUppdrag(tyst){const u=G.fri?FRI:UPPDRAG[G.m];if(G.fri){PMR=PM;nar=1;const v=$("bNv");if(v)v.textContent="×1";}S2.x=u.start().slice();S2.t=0;S2.hold=0;S2.ing=0;S2.klart=false;S2.hist=[[],[],[],[],[]];S2.acc=0;S2.sist=0;S2.utd=[false,false,false,false,false];
+  for(const id in S2.sp){S2.sp[id].forEach(o=>o.g.remove());S2.sp[id]=[];}$("mNamn").textContent=G.fri?u.namn:`${G.m+1}. ${u.namn}`;$("tips").hidden=true;
   if(G.ingStart==null)G.ingStart=0;G.mIng=0;for(let i=0;i<5;i++){S2.hist[i].push(S2.x[i]);}
   synka();uppdateraUi();ritaDiagram();if(!tyst){const ov=$("ov");if(ov)ov.remove();S2.ov=false;S2.paus=false;$("bPaus").textContent="⏸";}
   if(!raf)raf=requestAnimationFrame(loop);}
@@ -415,7 +432,7 @@ function loop(ts){if(!G||G.lvl<2||!S2){raf=0;return;}const dt=Math.min(.1,(ts-(s
 function steg(){const x=S2.x;rk4(PMR,x,H);S2.t+=H;
   for(let i=2;i<5;i++)if(x[i]>0&&x[i]<UT*EQ[i]){x[i]=0;if(!S2.utd[i]){S2.utd[i]=true;toast(`${ART[i].namn==="Fiskgjuse"?"Fiskgjusen":ART[i].namn==="Gädda"?"Gäddorna":"Mörten"} dog ut!`);ljud("bad");}}
   if(S2.t-S2.sist>=1){S2.sist=S2.t;for(let i=0;i<5;i++){const h=S2.hist[i];h.push(x[i]);if(h.length>(G.lvl===3?S3.T+2:150))h.shift();}
-    const ok=x.every((v,i)=>v>=.5*EQ[i]&&v<=1.8*EQ[i]);S2.hold=ok?S2.hold+1:0;synka();if(G.lvl===2)uppdateraUi();ritaDiagram();if(G.lvl===2&&S2.hold>=15)klartUppdrag();}
+    const ok=x.every((v,i)=>v>=.5*EQ[i]&&v<=1.8*EQ[i]);S2.hold=ok?S2.hold+1:0;synka();if(G.lvl===2||G.lvl===4)uppdateraUi();ritaDiagram();if(G.lvl===2&&S2.hold>=15)klartUppdrag();}
   if(G.lvl===3&&S3&&S3.kor&&S2.t>=S3.T)slutKorning();}
 function klartUppdrag(){S2.klart=true;ljud("ok");const u=UPPDRAG[G.m];G.i=G.m+1;G.res[G.m]=true;prickar(UPPDRAG.length);
   G.tot=(G.tot||0)+S2.ing;const sista=G.m>=UPPDRAG.length-1;

@@ -30,8 +30,11 @@ Fel: första felet markerar fel och ger en ledtråd, andra felet visar svaret.
 - Stjärnor: högst 2 fel = 3, högst 5 = 2, annars 1. Nivå 3 är sista nivån, `stars[3]`.
 - Fiskgjusen som "oförändrad" när gäddorna fångas är en medveten överraskning (den äter mört i stället).
 
-## Lärarens synpunkt på nivå 2 (väntar)
-Uppdragen löses av att trycka + på den art som saknas, och statusorden ("utdöd", "för få", "lagom") pekar ut den. Det är för lätt och lär ut för lite. Läraren sa att nivå 3 är viktigare att få på plats än att fixa nivå 2. Förslag när det är dags: ta bort statusorden i uppdrag 3–4, och gör minst ett uppdrag där minus är svaret (algblomning: fånga bort mört så att vattenlopporna kan beta alger; testa mot modellen först).
+## Nivå 2 och Fri sjö (klart 12 nov 2026)
+- Nivå 2 heter **Laborera i sjön** och uppdragen heter **utmaningar**. Läraren tycker att nivå 2 är bra som laboratorium; **statusorden (utdöd, för få, lagom) ska stanna** (hans ord).
+- Läraren undrade om en utmaning där minus är svaret. **Modellen stöder det inte:** vid algblomning (A 3×, V 0,1×, M 2,2×) löser sig sjön på ~36 enheter av sig själv, att släppa ut vattenloppor är snabbast (~21) och att fånga mört är långsammast (~33). Bygg inte en sådan utmaning utan ny modell.
+- **Fri sjö** (nivå 4, inga stjärnor, ingen introruta): samma sjö utan mål, plus reglaget *Näring i vattnet* (×0,4–×2,2, ändrar `KA`) och ↺ som återställer. Samma sak som experimenten i nivå 3, men fritt.
+- **Fiskgjusen dyker:** med några sekunders mellanrum flyger den mot en fisk, plaskar vid ytan och flyger iväg med en liten fisk (`dyk()` i skriptet). Bara utseende. Ingen dykning vid `prefers-reduced-motion`.
 
 ## Tekniska regler
 - En enda `sjon/index.html`, inga bibliotek. localStorage `mattespel-sjon-v1` = {stars:{1,2}}.
