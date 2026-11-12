@@ -144,6 +144,12 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
 .jarin{display:flex;flex-wrap:wrap-reverse;gap:1px;justify-content:center;font-size:1.15rem;line-height:1}
 .jarin span{animation:drop .35s ease-in}
 @keyframes drop{from{transform:translateY(-30px);opacity:0}}
+/* Öva: frivillig hjälp före svaret. Uppgiften räknas då inte som "kan". */
+.aggk{display:block;margin:6px auto 0;background:var(--info-bg,#EEF1FF);color:var(--accent);border-radius:999px;padding:5px 16px;font-weight:800;font-size:1rem}
+.aggk:active{transform:translateY(2px)}
+#qFrame{margin-bottom:6px;animation:drop .3s ease-out}
+#qFrame i{width:clamp(24px,7.5vw,32px)}
+@media (prefers-reduced-motion:reduce){#qFrame{animation:none}}
 /* Öva: äggkartongen fylls med ett ägg för varje uppgift man klarat (visar aldrig svaret) */
 .prog{display:flex;gap:4px;justify-content:center;border-radius:14px;padding:7px 9px;margin:10px auto 0;width:fit-content;max-width:100%}
 .prog i{flex:none;width:min(20px,calc((100vw - 64px)/var(--n,15) - 4px));aspect-ratio:1;border-radius:50%}
@@ -202,7 +208,9 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
   <div class="jar" id="jar" hidden><span class="jarlbl">Äggkorgen</span><div class="jarin" id="jarIn"></div></div>
   <div class="prog" id="prog" hidden role="img" aria-label="Äggkartongen: ett ägg för varje uppgift du klarat"></div>
   <div class="qbox" id="qbox">
+    <div class="frame carton" id="qFrame" hidden role="img"></div>
     <div class="question"><span id="question"></span><span class="ans" id="answer">?</span></div>
+    <button class="aggk" id="visaAgg" hidden>🥚 Visa med ägg</button>
     <div class="tf" id="tf" hidden><button data-tf="1">Stämmer</button><button data-tf="0">Stämmer inte</button></div>
     <div class="feedback" id="feedback" aria-live="polite"></div>
   </div>
@@ -362,7 +370,7 @@ function updateInfo(){
   if(G.mode==='race')$('#info').textContent=`${G.correct} / ${RACE_LEN}`;
 }
 function nextQ(){
-  if(!G||G.over)return;G.retry=false;
+  if(!G||G.over)return;G.retry=false;G.agg=false;
   if(G.mode==='blitz'){G.cur=pick(G.pool,G.recent);G.recent.push(fkey(G.cur));if(G.recent.length>4)G.recent.shift();}
   else{if(!G.queue.length)return finish();G.cur=G.queue.shift();}
   /* I Öva blandas ibland andra sorters uppgifter in: __ + 4 = 9, 3 + __ = 7 och "Stämmer det?" */
@@ -379,14 +387,18 @@ function showQ(){
   $('#tf').hidden=k!=='tf';$('#answers').hidden=k==='tf'||!$('#help').hidden;
   $('#feedback').textContent='';$('#qbox').className='qbox';G.busy=false;updateInfo();
   if(G.mode==='practice'){const c=$('#prog').children[G.correct];if(c&&!c.className)c.className='nu';}
+  /* 🥚 Visa med ägg: bara i Öva, inte på "Stämmer det?" och inte efter att hjälprutan redan visat äggen */
+  $('#visaAgg').hidden=!(G.mode==='practice'&&k!=='tf'&&!G.retry&&!G.agg);$('#qFrame').hidden=!G.agg;
 }
+$('#visaAgg').onclick=()=>{if(!G||G.busy||G.over||G.mode!=='practice')return;G.agg=true;const f=G.cur,fr=$('#qFrame');fyllKartong(fr,f);
+  fr.setAttribute('aria-label',f.s==='+'?`${f.a} vita och ${f.b} bruna ägg`:`${f.a} ägg, ${f.b} kläcks`);fr.hidden=false;$('#visaAgg').hidden=true;};
 const PRAISE=['Rätt!','Snyggt!','Bra!','Toppen!','Rätt igen!','Klockrent!'];
 function answer(v,tfYes){
   if(!G||G.busy||G.over)return;
   const f=G.cur,kind=G.kind||'q',right=ans(f),ms=performance.now()-G.qStart,k=fkey(f);
   const ok=kind==='n'?v===f.a:kind==='m'?v===f.b:kind==='tf'?tfYes===(G.tfv===right):v===right;
   /* bara vanliga uppgifter räknas till "kan"; de inblandade sorterna är extra träning */
-  if(!G.retry){if(kind==='q'){record(f,ok,ms);save();const w=ok?ms:ms+6000;if(!G.slow[k]||w>G.slow[k].w)G.slow[k]={f,w};}if(!ok){G.missed.add(k);G.missCount=(G.missCount||0)+1;}}
+  if(!G.retry){if(kind==='q'&&!G.agg){record(f,ok,ms);save();const w=ok?ms:ms+6000;if(!G.slow[k]||w>G.slow[k].w)G.slow[k]={f,w};}if(!ok){G.missed.add(k);G.missCount=(G.missCount||0)+1;}}
   G.busy=true;petFx(ok?'hop':'hmm');
   if(kind==='q')$('#answer').textContent=v;else if(kind!=='tf')$('#question').innerHTML=qText(kind,f,v);
   if(ok){
@@ -421,15 +433,17 @@ function tipFor(f){
   if(b<=3)return `Börja på ${a} och räkna ${b} steg bakåt: ${range(a-b,a-1).reverse().join(', ')}.`;
   return `Tänk addition: ${b} + ? = ${a}. Svaret är ${a-b}.`;
 }
+/* Äggkartongen för en uppgift: vita och bruna ägg vid addition, ägg som kläcks vid subtraktion */
+function fyllKartong(fr,f){fr.innerHTML='';fr.className='frame carton';
+  for(let i=0;i<10;i++){const d=document.createElement('i');
+    if(f.s==='+'){if(i<f.a)d.className='b';else if(i<f.a+f.b)d.className='o';}
+    else{if(i<f.a-f.b)d.className='b';else if(i<f.a)d.className='x';}
+    fr.appendChild(d);}}
 function showHelp(f,v){
   $('#answers').hidden=true;$('#qbox').hidden=true;
   $('#helpSaid').textContent=`Du svarade ${v}. Så här blir det:`;
   $('#helpFact').textContent=`${ftext(f)} = ${ans(f)}`;
-  const fr=$('#frame');fr.innerHTML='';fr.className='frame carton';
-  for(let i=0;i<10;i++){const d=document.createElement('i');
-    if(f.s==='+'){if(i<f.a)d.className='b';else if(i<f.a+f.b)d.className='o';}
-    else{if(i<f.a-f.b)d.className='b';else if(i<f.a)d.className='x';}
-    fr.appendChild(d);}
+  fyllKartong($('#frame'),f);
   $('#helpCap').textContent=f.s==='+'
     ?`${f.a} vita och ${f.b} bruna ägg blir ${f.a+f.b} ägg.`
     :`${f.a} ägg. ${f.b} kläcks och blir kycklingar, då är ${f.a-f.b} ägg kvar.`;
