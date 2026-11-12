@@ -83,17 +83,20 @@ h2.amne,h2.grp{font-family:"Baloo 2","Trebuchet MS",system-ui,sans-serif}
 .rlhero{position:relative;display:block;overflow:hidden;margin:8px 0 26px;border-radius:26px;padding:16px 18px 18px;color:#fff;text-decoration:none;
   background:radial-gradient(1.2px 1.2px at 12% 22%,#fff,transparent),radial-gradient(1px 1px at 28% 78%,#fff,transparent),radial-gradient(1.4px 1.4px at 46% 14%,#fff,transparent),radial-gradient(1px 1px at 63% 64%,#cfe0ff,transparent),radial-gradient(1.6px 1.6px at 82% 28%,#fff,transparent),radial-gradient(1px 1px at 92% 84%,#fff,transparent),radial-gradient(1.2px 1.2px at 74% 92%,#ffe9b0,transparent),radial-gradient(ellipse 60% 80% at 90% 10%,rgba(123,97,255,.45),transparent 70%),radial-gradient(ellipse 50% 70% at 0% 100%,rgba(30,158,94,.35),transparent 70%),linear-gradient(135deg,#0B1640,#1A2560 55%,#2A1D5E);
   box-shadow:0 6px 0 #070D2A;transition:transform .15s,box-shadow .15s}
-.rlhero:active{transform:translateY(4px);box-shadow:0 2px 0 #070D2A}
-@media(hover:hover){.rlhero:hover{transform:translateY(-2px);box-shadow:0 8px 0 #070D2A}}
 .rlhero .rl-ov{display:inline-block;font-size:.78rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#FFD86B;background:rgba(255,216,107,.14);border-radius:999px;padding:2px 10px}
-.rlhero .rl-in{display:flex;align-items:center;gap:16px;margin-top:10px}
+.rlhero .rl-in{display:flex;align-items:center;gap:16px;margin-top:10px;color:#fff;text-decoration:none;border-radius:20px}
+.rlhero a:focus-visible{outline:3px solid #FFD86B;outline-offset:3px}
+.rlhero .rl-hopp{display:block;margin-top:14px;font-size:.82rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#9FB0E0}
 .rlhero .tile.a{width:96px;height:96px;border-radius:26px}
 .rlhero .tile.a svg{width:66px;height:66px}
 .rlhero b{display:block;font-size:clamp(1.6rem,6vw,2.1rem);line-height:1.05}
 .rlhero small{display:block;color:#C9D4F5;font-weight:600;font-size:1rem;line-height:1.35;margin-top:4px}
-.rlhero .rl-lag{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
-.rlhero .rl-lag span{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:3px 10px;font-weight:700;font-size:.88rem;white-space:nowrap}
-.rlhero .rl-go{display:inline-block;margin-top:14px;background:#FFD86B;color:#2A1D00;border-radius:999px;padding:7px 18px;font-weight:800;font-size:1.05rem;box-shadow:0 3px 0 #C89A1E}
+.rlhero .rl-lag{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.rlhero .rl-lag a{display:inline-flex;align-items:center;gap:6px;min-height:42px;padding:0 14px;border-radius:14px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);box-shadow:0 3px 0 rgba(0,0,0,.35);color:#fff;text-decoration:none;font-weight:800;font-size:.95rem;white-space:nowrap;transition:transform .12s,background .12s}
+.rlhero .rl-lag a::after{content:"›";opacity:.6;margin-left:2px}
+.rlhero .rl-lag a:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.35)}
+@media(hover:hover){.rlhero .rl-lag a:hover{background:rgba(255,255,255,.24)}.rlhero .rl-in:hover b{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}}
+.rlhero .rl-go{display:inline-block;margin-top:16px;text-decoration:none;background:#FFD86B;color:#2A1D00;border-radius:999px;padding:7px 18px;font-weight:800;font-size:1.05rem;box-shadow:0 3px 0 #C89A1E}
 @media(max-width:420px){.rlhero .tile.a{width:78px;height:78px;border-radius:22px}.rlhero .tile.a svg{width:54px;height:54px}.rlhero .rl-in{gap:12px}}
 /* Rymdlabbets animerade kort: samma ikon och animation som förut på startsidan */
 [class~=rl]{--c:#1E9E5E;--d:3.4s}
@@ -125,13 +128,14 @@ h2.amne,h2.grp{font-family:"Baloo 2","Trebuchet MS",system-ui,sans-serif}
 <header class="sb"><div class="sb-in"><span class="ik" style="--c:#1E9E5E"><img src="amnen/no.svg" alt=""></span><div><h1>NO</h1><p>Rymden, kroppen, naturen och tekniken</p></div></div></header>
 <main class="wrap" style="max-width:980px;margin:14px auto 0;padding:0 16px 40px">
 <a class="tillhub" href="./">← Alla ämnen</a>
-  <a class="rlhero rl" href="ovriga/rymdlabbet/">
+  <div class="rlhero rl">
     <span class="rl-ov">Utvalt · Rymdlabbet</span>
-    <span class="rl-in"><span class="tile a"><svg viewBox="0 0 48 48" aria-hidden="true"><g class="tw tw1 b" transform="translate(9 10)"><path class="f" d="M0-4 1.1-1.1 4 0 1.1 1.1 0 4-1.1 1.1-4 0-1.1-1.1z"/></g><g class="tw tw2 b" transform="translate(40 11)"><path class="f" d="M0-4 1.1-1.1 4 0 1.1 1.1 0 4-1.1 1.1-4 0-1.1-1.1z"/></g><g class="tw tw3 b" transform="translate(38 39)"><path class="f" d="M0-4 1.1-1.1 4 0 1.1 1.1 0 4-1.1 1.1-4 0-1.1-1.1z"/></g><circle class="s" cx="24" cy="24" r="9"/><ellipse class="ring vb" cx="24" cy="24" rx="19" ry="6"/><g class="orb vb"><circle class="f" cx="24" cy="3.5" r="2.8"/></g></svg></span>
-      <span class="rl-t"><b>Rymdlabbet</b><small>Res genom solsystemet, se varför det blir natt och vinter, väg dig på månen och titta in i ett svart hål.</small></span></span>
-    <span class="rl-lag"><span>🌍 Dag och natt</span><span>🍂 Årstiderna</span><span>🌑 Förmörkelser</span><span>⚖️ Väg dig</span><span>🪐 Jättarna</span><span>🕳️ Svarta hål</span></span>
-    <span class="rl-go">Starta resan ›</span>
-  </a>
+    <a class="rl-in" href="ovriga/rymdlabbet/"><span class="tile a"><svg viewBox="0 0 48 48" aria-hidden="true"><g class="tw tw1 b" transform="translate(9 10)"><path class="f" d="M0-4 1.1-1.1 4 0 1.1 1.1 0 4-1.1 1.1-4 0-1.1-1.1z"/></g><g class="tw tw2 b" transform="translate(40 11)"><path class="f" d="M0-4 1.1-1.1 4 0 1.1 1.1 0 4-1.1 1.1-4 0-1.1-1.1z"/></g><g class="tw tw3 b" transform="translate(38 39)"><path class="f" d="M0-4 1.1-1.1 4 0 1.1 1.1 0 4-1.1 1.1-4 0-1.1-1.1z"/></g><circle class="s" cx="24" cy="24" r="9"/><ellipse class="ring vb" cx="24" cy="24" rx="19" ry="6"/><g class="orb vb"><circle class="f" cx="24" cy="3.5" r="2.8"/></g></svg></span>
+      <span class="rl-t"><b>Rymdlabbet</b><small>Res genom solsystemet, se varför det blir natt och vinter, väg dig på månen och titta in i ett svart hål.</small></span></a>
+    <span class="rl-hopp">Hoppa direkt till</span>
+    <nav class="rl-lag" aria-label="Lägen i Rymdlabbet"><a href="ovriga/rymdlabbet/#dag"><span aria-hidden="true">🌍</span> Dag och natt</a><a href="ovriga/rymdlabbet/#arstid"><span aria-hidden="true">🍂</span> Årstiderna</a><a href="ovriga/rymdlabbet/#morker"><span aria-hidden="true">🌑</span> Förmörkelser</a><a href="ovriga/rymdlabbet/#vikt"><span aria-hidden="true">⚖️</span> Väg dig</a><a href="ovriga/rymdlabbet/#jattar"><span aria-hidden="true">🪐</span> Jättarna</a><a href="ovriga/rymdlabbet/#hal"><span aria-hidden="true">🕳️</span> Svarta hål</a></nav>
+    <a class="rl-go" href="ovriga/rymdlabbet/">Alla lägen i Rymdlabbet ›</a>
+  </div>
   <h2 class="amne">Jorden</h2>
   <nav class="cards" aria-label="Jorden">
     <a class="card" href="kontinentdrift/"><span class="tile" style="background:none;box-shadow:none;padding:0"><svg viewBox="0 0 72 72" width="72" height="72" aria-hidden="true" style="display:block;border-radius:18px;box-shadow:0 3px 0 rgba(29,43,83,.2)"><rect width="72" height="72" fill="#050B1C"/><g fill="#fff" opacity=".7"><circle cx="9" cy="10" r=".9"/><circle cx="62" cy="14" r=".8"/><circle cx="14" cy="60" r=".8"/><circle cx="64" cy="58" r=".9"/></g><circle cx="36" cy="36" r="27" fill="#1B6BB5"/><circle cx="36" cy="36" r="30" fill="none" stroke="#5CA8FF" stroke-opacity=".35" stroke-width="4"/><clipPath id="kdc"><circle cx="36" cy="36" r="27"/></clipPath><g clip-path="url(#kdc)" fill="#6DBE5A" stroke="#2F7A3A" stroke-width="1"><path d="M18 24c6-5 14-4 17 2s-3 11-1 17-6 11-11 6-9-12-8-19 0-5 3-6z"/><path d="M42 20c5-3 12-1 17 4s1 10-3 11-5 8-9 6-8-10-6-16 0-3 1-5z"/><path d="M44 50c5-2 11 2 11 7s-5 8-9 6-5-11-2-13z"/></g><ellipse cx="28" cy="25" rx="10" ry="7" fill="#fff" opacity=".16"/></svg></span><span class="txt"><b>Kontinentaldrift</b><small>Res 250 miljoner år tillbaka på en 3D-glob och se hur Pangaea bröts upp.</small></span><span class="chev">›</span></a>
