@@ -24,6 +24,15 @@ Fel: första felet markerar fel och ger en ledtråd, andra felet visar svaret.
 - Syn: sjö i SVG (himmel, vatten, botten, vass), en figur per ~enhet art som rör sig, vattnet blir grönare när algerna blommar, kurvor per art (Många / Lagom / Få), fart ×1 ×2 ×4 och paus.
 - `prefers-reduced-motion`: figurerna står stilla, kurvorna går som vanligt.
 
+## Nivå 3: Gissa först (byggd 12 nov 2026, lärarens prioritet)
+- Fem experiment i slumpad ordning (`EXP` i skriptet), 14 gissningar. Eleven väljer ▲ Fler / ▬ Lika / ▼ Färre för 2–3 arter, trycker Kör, och sjön körs i 80 tidsenheter (fart ×5, ⏩ hoppar fram). Sedan visas rätt/fel per art och en förklaring av orsakskedjan.
+- Klasser mot start: fler ≥ 1,25 ×, färre ≤ 0,75 ×, annars ungefär lika. **Arterna är valda för att svaret är robust** (samma klass efter 50, 80 och 110 enheter och långt från gränsen). Verifierat i `t-sjon5`-testet: Gäddorna fångas (V▼ M▲ F=), Fiskgjusen flyttar (M▼ V=), Mörten försvinner (A▼ G▼ F▼), Mer näring KA×1,8 (A▲ V▲ F▲), Mindre näring KA×0,5 (A▼ M▼ F▼). Ändras modellen måste detta köras om (`node gissa.js`-liknande sökning) innan frågorna ändras.
+- Stjärnor: högst 2 fel = 3, högst 5 = 2, annars 1. Nivå 3 är sista nivån, `stars[3]`.
+- Fiskgjusen som "oförändrad" när gäddorna fångas är en medveten överraskning (den äter mört i stället).
+
+## Lärarens synpunkt på nivå 2 (väntar)
+Uppdragen löses av att trycka + på den art som saknas, och statusorden ("utdöd", "för få", "lagom") pekar ut den. Det är för lätt och lär ut för lite. Läraren sa att nivå 3 är viktigare att få på plats än att fixa nivå 2. Förslag när det är dags: ta bort statusorden i uppdrag 3–4, och gör minst ett uppdrag där minus är svaret (algblomning: fånga bort mört så att vattenlopporna kan beta alger; testa mot modellen först).
+
 ## Tekniska regler
 - En enda `sjon/index.html`, inga bibliotek. localStorage `mattespel-sjon-v1` = {stars:{1,2}}.
 - Inkopplingar (kryssa av): kort i `fler/index.html`, `sok.js`, `sitemap.xml`, `konto.js` (`PKEYS`), startsidans stjärnor + `snap` i `index.html`, `STJ` i `huvud.js`, portal i `varlden/index.html`, rad i `docs/`-tabellen i `CLAUDE.md`.
@@ -45,5 +54,6 @@ Provat med bot (tid till klart, alla 0,5–1,8 × jämvikt i 15 enheter): uppdra
 - [x] Nivå 1 (kedjan, väven, kretsloppet), testad
 - [x] Nivå 2 (uppdragen), botten löser alla fyra uppdrag i tre skärmstorlekar (par 1,1,1,3)
 - [x] Inkopplingar: kort i `fler/index.html` (NO), `sok.js`, `sitemap.xml`, `PKEYS`, `STJ`, stjärnor och `snap` på startsidan, rad i `CLAUDE.md`
-- [ ] Inte gjort med flit: portal i `varlden/index.html` (kroppens park är ritad hörn för hörn; läraren får välja plats), nivå 3 (gissa först)
+- [x] Nivå 3 (gissa först) byggd och testad i tre skärmstorlekar (375 × 667 skrollar ca 160 px, godtaget: NO får prioritera dator)
+- [ ] Inte gjort med flit: portal i `varlden/index.html` (kroppens park är ritad hörn för hörn; läraren får välja plats)
 - Inte provat: pekskärm, riktig telefon, lärarens åsikt om texterna. Texterna är inte granskade av en biolog.

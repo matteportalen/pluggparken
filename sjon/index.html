@@ -143,7 +143,28 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 .ov .k .em{font-size:2.2rem;line-height:1}
 .ov .k button{background:var(--good);color:#fff;border-radius:16px;padding:9px 26px;font-weight:800;font-size:1.15rem;box-shadow:0 4px 0 var(--good-dark)}
 @media (min-width:820px){.wrap{max-width:1000px}.n1{max-width:620px;margin:0 auto}.lv2{grid-template-columns:1.35fr 1fr;align-items:start}.lv2 .v1{grid-column:1}.lv2 .v2{grid-column:2;grid-row:1/span 3}.scen>svg{max-height:60vh}.diag svg{max-height:22vh}.kontroll{grid-template-columns:repeat(5,1fr)}}
-@media (max-height:700px){.wrap{padding-bottom:12px}.scen>svg{max-height:30vh}.diag svg{max-height:11vh}.art svg{height:26px}.pm button{height:34px}.fraga{min-height:40px;margin-bottom:5px}.kort svg{height:38px}.hylla{margin-top:8px}}
+@media (max-height:700px){.exp p small{display:none}.gv button{height:34px}.grad{padding:3px 8px}.wrap{padding-bottom:12px}.scen>svg{max-height:27vh}.diag svg{max-height:11vh}.art svg{height:26px}.pm button{height:34px}.fraga{min-height:40px;margin-bottom:5px}.kort svg{height:38px}.hylla{margin-top:8px}}
+/* nivå 3 */
+.exp{background:var(--card,#fff);border-radius:16px;box-shadow:0 4px 0 var(--line);padding:8px 12px}
+.exp b{display:block;font-size:.8rem;color:var(--muted);line-height:1.1}
+.exp p{margin:2px 0 0;font-weight:800;font-size:1.02rem;line-height:1.2}
+.exp p small{display:block;font-weight:700;font-size:.8rem;color:var(--muted);margin-top:2px}
+.grad{display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:6px;align-items:center;background:var(--card,#fff);border-radius:14px;box-shadow:0 3px 0 var(--line);padding:5px 8px;border-left:6px solid var(--c)}
+.grad svg{width:30px;height:24px;display:block}
+.grad b{font-size:.78rem;line-height:1.05;font-weight:800;overflow-wrap:anywhere}
+.grad b small{display:block;font-size:.66rem;color:var(--muted)}
+.gv{display:flex;gap:4px}
+.gv button{width:52px;height:38px;border-radius:11px;background:#F1F6FF;box-shadow:0 3px 0 var(--line);font-weight:800;font-size:.72rem;line-height:1.05;padding:0}
+.gv button i{display:block;font-style:normal;font-size:1rem;line-height:1}
+.gv button.v{background:var(--accent);color:#fff;box-shadow:0 3px 0 #2A3FB8}
+.gv button.rk{background:#DDF5E7;color:var(--good-dark);box-shadow:0 0 0 3px var(--good)}
+.gv button.rf{background:#FFE9EC;color:#B4232A;opacity:.8}
+.gv.last button{pointer-events:none}
+.expl{background:#FFF4D6;border-radius:14px;padding:8px 12px;font-weight:700;font-size:.92rem;line-height:1.3;text-align:center}
+.expl.ok{background:#DDF5E7}
+.kor{height:44px;border-radius:14px;background:var(--good);color:#fff;font-weight:800;font-size:1.1rem;box-shadow:0 4px 0 var(--good-dark);padding:0 18px;flex:1}
+.kor:disabled{background:#E6ECF8;color:#56668F;box-shadow:0 4px 0 var(--line);pointer-events:none}
+.kor.nasta2{background:var(--accent);box-shadow:0 4px 0 #2A3FB8}
 /* resultat */
 .res{text-align:center}
 .res .stj{font-size:3rem;letter-spacing:6px;color:var(--gold);margin:8px 0}
@@ -213,7 +234,8 @@ const reduced=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
 const ljud=n=>{window.Ljud&&Ljud[n]&&Ljud[n]();};
 const NIV=[null,
   {namn:"Bygg",txt:"Näringskedjan, näringsväven och kretsloppet.",col:"#2BB673"},
-  {namn:"Rädda sjön",txt:"Fyra uppdrag. Något har gått fel i sjön.",col:"#1E9ED8"}];
+  {namn:"Rädda sjön",txt:"Fyra uppdrag. Något har gått fel i sjön.",col:"#1E9ED8"},
+  {namn:"Gissa först",txt:"Vad händer i sjön? Gissa, och se sedan om du hade rätt.",col:"#7B61FF"}];
 
 /* ---------- Arterna ---------- */
 const ART=[
@@ -228,14 +250,14 @@ const VB={A:"0 0 100 60",V:"0 0 100 60",M:"0 0 100 60",G:"0 0 160 60",F:"0 0 140
 const ico=id=>`<svg viewBox="${VB[id]}" aria-hidden="true"><use href="#${SYM[id]}"/></svg>`;
 const stjHtml=n=>[1,2,3].map(i=>i<=n?"★":'<span class="off">★</span>').join("");
 function show(id){document.querySelectorAll(".screen").forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
-function hem(){stoppa();$("niv").innerHTML=[1,2].map(l=>`<button data-l="${l}"><span class="nr" style="background:${NIV[l].col}">${l}</span><span><b>${NIV[l].namn}</b><small>${NIV[l].txt}</small></span><span class="st">${stjHtml(data.stars[l]||0)}</span></button>`).join("");show("home");}
+function hem(){stoppa();$("niv").innerHTML=[1,2,3].map(l=>`<button data-l="${l}"><span class="nr" style="background:${NIV[l].col}">${l}</span><span><b>${NIV[l].namn}</b><small>${NIV[l].txt}</small></span><span class="st">${stjHtml(data.stars[l]||0)}</span></button>`).join("");show("home");}
 $("niv").onclick=e=>{const b=e.target.closest("[data-l]");if(b)starta(+b.dataset.l);};
 
 /* ---------- Gemensamt för spelen ---------- */
 let G=null,tim=[],raf=0;
 const rensa=()=>{tim.forEach(clearTimeout);tim=[];};
 function stoppa(){rensa();cancelAnimationFrame(raf);raf=0;G=null;}
-function starta(l){stoppa();G={lvl:l,fel:0,res:[],i:0};$("nivT").textContent=NIV[l].namn;$("yta").className=l===1?"n1":"";show("game");l===1?startNiva1():startNiva2();}
+function starta(l){stoppa();G={lvl:l,fel:0,res:[],i:0};$("nivT").textContent=NIV[l].namn;$("yta").className=l===1?"n1":"";show("game");l===1?startNiva1():l===2?startNiva2():startNiva3();}
 function prickar(n){$("dots").innerHTML=Array.from({length:n},(_,j)=>`<i class="${j<G.i?(G.res[j]?"ok":"f"):j===G.i?"nu":""}"></i>`).join("");}
 function fb(t,c){const f=$("forkl");if(f){f.textContent=t||"";f.className="forkl"+(c?" "+c:"");}}
 function skaka(el){if(!el)return;el.classList.remove("skaka");void el.offsetWidth;el.classList.add("skaka");}
@@ -319,7 +341,7 @@ function rk4(P,x,h){const k1=[0,0,0,0,0],k2=[0,0,0,0,0],k3=[0,0,0,0,0],k4=[0,0,0
   deriv(P,x,k1);for(let i=0;i<5;i++)t[i]=x[i]+h/2*k1[i];deriv(P,t,k2);for(let i=0;i<5;i++)t[i]=x[i]+h/2*k2[i];deriv(P,t,k3);for(let i=0;i<5;i++)t[i]=x[i]+h*k3[i];deriv(P,t,k4);
   for(let i=0;i<5;i++){x[i]+=h/6*(k1[i]+2*k2[i]+2*k3[i]+k4[i]);if(x[i]<0)x[i]=0;}}
 const H=.05,UT=.03;
-let EQ=null;
+let EQ=null,PMR=PM;
 function jamvikt(){if(EQ)return EQ;const x=[9.4,3.9,1.9,.37,.14];for(let t=0;t<1500;t+=H)rk4(PM,x,H);EQ=x.slice();return EQ;}
 function utan(i,T){const x=jamvikt().slice();x[i]=0;for(let t=0;t<T;t+=H){rk4(PM,x,H);if(x[i]!==0)x[i]=0;if(i>1)for(let j=2;j<5;j++)if(j!==i&&x[j]<UT*EQ[j])x[j]=0;}return x;}
 const UPPDRAG=[
@@ -370,8 +392,8 @@ function uppdateraUi(){const x=S2.x;
     if(x[i]<=0){st.textContent="✖ utdöd";st.className="stat dod";}else if(r<.5){st.textContent="▼ för få";st.className="stat vart";}else if(r>1.8){st.textContent="▲ för många";st.className="stat vart";}else{st.textContent="✓ lagom";st.className="stat ok";}});
   const grona=Math.max(0,Math.min(.55,(x[0]/EQ[0]-1)*.32));S2.tint.setAttribute("opacity",grona.toFixed(2));
   $("bal").querySelector("b").style.width=Math.min(100,S2.hold/15*100)+"%";$("mTid").textContent=`Ingrepp: ${S2.ing}`;}
-function ritaDiagram(){const W=360,Hh=80,L=26,x0=L,x1=W-4,yv=r=>Hh-8-(Math.min(r,2.4)/2.4)*(Hh-14);let g=`<rect class="band" x="${x0}" y="${yv(1.8)}" width="${x1-x0}" height="${yv(.5)-yv(1.8)}"/><line class="gl" x1="${x0}" y1="${yv(.5)}" x2="${x1}" y2="${yv(.5)}"/><line class="gl" x1="${x0}" y1="${yv(1.8)}" x2="${x1}" y2="${yv(1.8)}"/><text x="2" y="${yv(1.8)+3}">Många</text><text x="2" y="${yv(1)+3}">Lagom</text><text x="2" y="${yv(.5)+3}">Få</text>`;
-  ART.forEach((a,i)=>{const h=S2.hist[i];if(h.length<2)return;const pts=h.map((v,k)=>`${(x0+(x1-x0)*k/149).toFixed(1)},${yv(v/EQ[i]).toFixed(1)}`).join(" ");g+=`<polyline points="${pts}" fill="none" stroke="${a.c}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>`;});
+function ritaDiagram(){const NH=G.lvl===3?S3.T:150,W=360,Hh=80,L=26,x0=L,x1=W-4,yv=r=>Hh-8-(Math.min(r,2.4)/2.4)*(Hh-14);let g=`<rect class="band" x="${x0}" y="${yv(1.8)}" width="${x1-x0}" height="${yv(.5)-yv(1.8)}"/><line class="gl" x1="${x0}" y1="${yv(.5)}" x2="${x1}" y2="${yv(.5)}"/><line class="gl" x1="${x0}" y1="${yv(1.8)}" x2="${x1}" y2="${yv(1.8)}"/><text x="2" y="${yv(1.8)+3}">Många</text><text x="2" y="${yv(1)+3}">Lagom</text><text x="2" y="${yv(.5)+3}">Få</text>`;
+  ART.forEach((a,i)=>{const h=S2.hist[i];if(h.length<2)return;const pts=h.map((v,k)=>`${(x0+(x1-x0)*k/(NH-1)).toFixed(1)},${yv(v/EQ[i]).toFixed(1)}`).join(" ");g+=`<polyline points="${pts}" fill="none" stroke="${a.c}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>`;});
   $("diag").innerHTML=g;}
 function toast(t){const d=document.createElement("div");d.textContent=t;$("toast").appendChild(d);setTimeout(()=>d.remove(),3200);while($("toast").children.length>2)$("toast").firstChild.remove();}
 function ingrepp(i,d){if(!S2||S2.klart||S2.ov)return;const nu=S2.x[i];
@@ -387,18 +409,59 @@ function laddaUppdrag(tyst){const u=UPPDRAG[G.m];S2.x=u.start().slice();S2.t=0;S
   synka();uppdateraUi();ritaDiagram();if(!tyst){const ov=$("ov");if(ov)ov.remove();S2.ov=false;S2.paus=false;$("bPaus").textContent="⏸";}
   if(!raf)raf=requestAnimationFrame(loop);}
 let sistT=0;
-function loop(ts){if(!G||G.lvl!==2||!S2){raf=0;return;}const dt=Math.min(.1,(ts-(sistT||ts))/1000);sistT=ts;
+function loop(ts){if(!G||G.lvl<2||!S2){raf=0;return;}const dt=Math.min(.1,(ts-(sistT||ts))/1000);sistT=ts;
   if(!S2.paus&&!S2.klart&&!S2.ov){S2.acc+=dt*S2.fart;let n=0;while(S2.acc>=H&&n++<80){S2.acc-=H;steg();}}
   ror(S2.paus?0:dt*Math.min(S2.fart,2));raf=requestAnimationFrame(loop);}
-function steg(){const x=S2.x;rk4(PM,x,H);S2.t+=H;
+function steg(){const x=S2.x;rk4(PMR,x,H);S2.t+=H;
   for(let i=2;i<5;i++)if(x[i]>0&&x[i]<UT*EQ[i]){x[i]=0;if(!S2.utd[i]){S2.utd[i]=true;toast(`${ART[i].namn==="Fiskgjuse"?"Fiskgjusen":ART[i].namn==="Gädda"?"Gäddorna":"Mörten"} dog ut!`);ljud("bad");}}
-  if(S2.t-S2.sist>=1){S2.sist=S2.t;for(let i=0;i<5;i++){const h=S2.hist[i];h.push(x[i]);if(h.length>150)h.shift();}
-    const ok=x.every((v,i)=>v>=.5*EQ[i]&&v<=1.8*EQ[i]);S2.hold=ok?S2.hold+1:0;synka();uppdateraUi();ritaDiagram();if(S2.hold>=15)klartUppdrag();}}
+  if(S2.t-S2.sist>=1){S2.sist=S2.t;for(let i=0;i<5;i++){const h=S2.hist[i];h.push(x[i]);if(h.length>(G.lvl===3?S3.T+2:150))h.shift();}
+    const ok=x.every((v,i)=>v>=.5*EQ[i]&&v<=1.8*EQ[i]);S2.hold=ok?S2.hold+1:0;synka();if(G.lvl===2)uppdateraUi();ritaDiagram();if(G.lvl===2&&S2.hold>=15)klartUppdrag();}
+  if(G.lvl===3&&S3&&S3.kor&&S2.t>=S3.T)slutKorning();}
 function klartUppdrag(){S2.klart=true;ljud("ok");const u=UPPDRAG[G.m];G.i=G.m+1;G.res[G.m]=true;prickar(UPPDRAG.length);
   G.tot=(G.tot||0)+S2.ing;const sista=G.m>=UPPDRAG.length-1;
   const ov=document.createElement("div");ov.className="ov";ov.id="ov";ov.innerHTML=`<div class="k"><div class="em">✅</div><h3>Sjön är i balans!</h3><p>${u.fakta}</p><p style="font-size:.85rem;color:#56668F">Du använde ${S2.ing} ${S2.ing===1?"ingrepp":"ingrepp"}.</p><button id="bGo">${sista?"Se resultat":"Nästa uppdrag"}</button></div>`;$("scen").appendChild(ov);
   $("bGo").onclick=()=>{if(sista){const extra=Math.max(0,G.tot-PAR_TOT),st=extra<=1?3:extra<=4?2:1;slut(st,`Du räddade sjön fyra gånger med ${G.tot} ingrepp. Det minsta som behövs är ${PAR_TOT}.${st<3?" Spela igen och försök med färre ingrepp.":""}`);}else{ov.remove();G.m++;inledning();}};$("bGo").focus({preventScroll:true});}
-window.__sjon={get G(){return G},get S(){return S2},UPPDRAG,PM,jamvikt,ingrepp,steg:n=>{for(let i=0;i<n;i++)steg();}};
+/* ======================= NIVÅ 3: GISSA FÖRST ======================= */
+/* Experiment: ändringen görs när eleven trycker Kör. Frågorna väljs ur dem som är robusta i modellen (docs/sjon.md). Klassen: fler ≥ 1,25 × start, färre ≤ 0,75, annars ungefär lika. */
+const EXP=[
+ {namn:"Gäddorna fångas",text:"Fiskare fångar alla gäddor i sjön.",k:"Fiskare fångar alla gäddor!",x:x=>{x[3]=0},fr:["V","M","F"],
+  fakta:"Utan gäddor åt ingen mörten, så mörten blev fler. Många mörtar åt upp vattenlopporna. Fiskgjusen åt mört i stället för gäddor och klarade sig."},
+ {namn:"Fiskgjusen flyttar",text:"Fiskgjusen flyttar från sjön.",k:"Fiskgjusen flyttar!",x:x=>{x[4]=0},fr:["M","V"],
+  fakta:"Fiskgjusen åt både gäddor och mört. När den försvann fick gäddorna det lättare och åt mer mört, så mörten blev färre. Vattenlopporna påverkades knappt."},
+ {namn:"Mörten försvinner",text:"Ett utsläpp dödar all mört i sjön.",k:"All mört dör!",x:x=>{x[2]=0},fr:["A","G","F"],
+  fakta:"Gäddorna och fiskgjusen äter mört. När den saknades svalt de och dog ut. Utan mört blev det fler vattenloppor, som åt alger, så algerna blev färre."},
+ {namn:"Mer näring",text:"Gödsel från åkrarna rinner ut i sjön. Det blir mer näring i vattnet.",k:"Mer näring i vattnet!",P:{KA:PM.KA*1.8},x:x=>{},fr:["A","V","F"],
+  fakta:"Mer näring gav fler alger. Algerna är början på kedjan, så alla efter dem fick mer mat och blev fler. Mycket alger kan göra vattnet grönt."},
+ {namn:"Mindre näring",text:"Sjön renas och får mindre näring.",k:"Mindre näring i vattnet!",P:{KA:PM.KA*.5},x:x=>{},fr:["A","M","F"],
+  fakta:"Mindre näring gav färre alger. Då fick alla efter dem mindre mat, och det blev färre av dem också."}];
+let S3=null;
+const KLASS=r=>r>=1.25?1:r<=.75?-1:0;
+function startNiva3(){G_l=3;jamvikt();S3={i:0,order:shuffle([0,1,2,3,4]),T:80,kor:false,gissat:{},klar:false};G.i=0;G.fel=0;G.res=[];G.antal=0;nyttExperiment();}
+function nyttExperiment(){const e=EXP[S3.order[S3.i]];S3.e=e;S3.gissat={};S3.kor=false;S3.klar=false;PMR=PM;prickar(EXP.length);bygg3(e);}
+function bygg3(e){
+  const rader=e.fr.map(id=>{const a=ART.find(x=>x.id===id);return `<div class="grad" style="--c:${a.c}" data-a="${id}">${ico(id)}<b>${a.namn}</b><div class="gv"><button data-v="1" aria-label="Fler ${a.namn.toLowerCase()}"><i>▲</i>Fler</button><button data-v="0" aria-label="Ungefär lika många ${a.namn.toLowerCase()}"><i>▬</i>Lika</button><button data-v="-1" aria-label="Färre ${a.namn.toLowerCase()}"><i>▼</i>Färre</button></div></div>`;}).join("");
+  $("yta").innerHTML=`<div class="lv2"><div class="v1"><div class="scen" id="scen"><svg viewBox="0 0 360 250" id="sjo" role="img" aria-label="Sjön">${sjoSvg()}</svg><div class="mhud"><span id="mNamn"></span><span id="mTid"></span></div><div class="toast" id="toast"></div></div></div>
+  <div class="v1 diag"><svg viewBox="0 0 360 80" id="diag" role="img" aria-label="Kurvor för antal djur över tid"></svg></div>
+  <div class="v2" style="display:grid;gap:8px"><div class="exp"><b>Experiment ${S3.i+1} av ${EXP.length}</b><p>${e.text}<small>Gissa först: hur blir det med de här djuren om en stund? Ungefär lika betyder inom en fjärdedel.</small></p></div><div style="display:grid;gap:6px" id="gissa">${rader}</div>
+  <div class="rad2"><button class="kor" id="bKor" disabled>Gissa alla först</button><button id="bHopp" hidden aria-label="Hoppa fram till slutet">⏩</button></div><div class="expl" id="expl" hidden></div><div class="rad2"><button class="kor nasta2" id="bNasta3" hidden>Nästa ▶</button></div></div></div>`;
+  S2={x:jamvikt().slice(),t:0,hold:0,paus:true,fart:5,ing:0,hist:[[],[],[],[],[]],sp:{A:[],V:[],M:[],G:[],F:[]},acc:0,sist:0,klart:false,tid:0,utd:[false,false,false,false,false],ov:false};
+  sceneInit();for(let i=0;i<5;i++)S2.hist[i].push(S2.x[i]);$("mNamn").textContent="Sjön i balans";$("mTid").textContent="";synka();ritaDiagram();
+  $("gissa").onclick=ev=>{const b=ev.target.closest("[data-v]");if(!b||S3.kor||S3.klar)return;const id=b.closest(".grad").dataset.a;S3.gissat[id]=+b.dataset.v;ljud("pip");
+    b.parentNode.querySelectorAll("button").forEach(x=>x.classList.toggle("v",x===b));const klara=!e.fr.some(f=>S3.gissat[f]==null);$("bKor").disabled=!klara;$("bKor").textContent=klara?"▶ Kör experimentet":"Gissa alla först";};
+  $("bKor").onclick=korExperiment;$("bHopp").onclick=()=>{if(S3.kor&&!S3.klar){let n=0;while(S2.t<S3.T&&n++<4000)steg();}};$("bNasta3").onclick=nastaExperiment;
+  if(!raf)raf=requestAnimationFrame(loop);}
+function korExperiment(){const e=S3.e;if(S3.kor)return;S3.kor=true;PMR=e.P?Object.assign({},PM,e.P):PM;e.x(S2.x);S2.t=0;S2.sist=0;S2.acc=0;S2.paus=false;S2.fart=5;toast(e.k);ljud("splash");synka();
+  $("bKor").disabled=true;$("bKor").textContent="Experimentet pågår …";$("bHopp").hidden=false;$("mNamn").textContent=e.namn;}
+function slutKorning(){if(S3.klar)return;S3.klar=true;S2.paus=true;$("bHopp").hidden=true;const e=S3.e;let fel=0;
+  const rad=[];e.fr.forEach(id=>{const i=IDX[id],r=S2.x[i]/EQ[i],k=KLASS(r),g=S3.gissat[id],ok=g===k;if(!ok)fel++;
+    const row=$("gissa").querySelector(`[data-a="${id}"]`);row.querySelector(".gv").classList.add("last");
+    row.querySelectorAll("button").forEach(b=>{const v=+b.dataset.v;b.classList.remove("v");if(v===k)b.classList.add("rk");else if(v===g)b.classList.add("rf");});
+    row.querySelector("b").innerHTML=`${ART[i].namn}<small>${ok?"✓ Rätt gissat":"✗ Det blev "+(k===1?"fler":k===-1?"färre":"ungefär lika")}</small>`;});
+  G.res[S3.i]=fel===0;G.fel+=fel;G.antal+=e.fr.length;G.i=S3.i+1;prickar(EXP.length);
+  ljud(fel===0?"ok":"bad");const x=$("expl");x.hidden=false;x.className="expl"+(fel===0?" ok":"");x.textContent=(fel===0?"Alla rätt! ":fel===e.fr.length?"Ingen rätt den här gången. ":"")+e.fakta;
+  x.scrollIntoView({block:"nearest",behavior:reduced()?"auto":"smooth"});const nb=$("bNasta3");nb.hidden=false;nb.textContent=S3.i>=EXP.length-1?"Se resultat ▶":"Nästa ▶";nb.focus({preventScroll:true});}
+function nastaExperiment(){if(S3.i>=EXP.length-1){const st=G.fel<=2?3:G.fel<=5?2:1;slut(st,`Du gissade rätt på ${G.antal-G.fel} av ${G.antal}.${st<3?" Spela igen: sjön ger nya svar när du förstår hur arterna hänger ihop.":" Du förstår hur sjön hänger ihop."}`);return;}S3.i++;nyttExperiment();}
+window.__sjon={get G(){return G},get S(){return S2},get S3(){return S3},EXP,KLASS,gissaRatt:id=>KLASS(S2.x[IDX[id]]/EQ[IDX[id]]),slutNu:()=>{let n=0;while(S2.t<S3.T&&n++<4000)steg();},UPPDRAG,PM,jamvikt,ingrepp,steg:n=>{for(let i=0;i<n;i++)steg();}};
 
 function confetti(){if(reduced())return;const cols=["#3D8BFD","#FF9F43","#2BB673","#FFC93C","#7B61FF","#FF6B6B"];
   const c=$("fx"),x=c.getContext("2d"),dpr=window.devicePixelRatio||1,W=innerWidth,Hh=innerHeight;c.width=W*dpr;c.height=Hh*dpr;x.setTransform(dpr,0,0,dpr,0,0);c.hidden=false;
