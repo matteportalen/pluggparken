@@ -29,3 +29,4 @@ NO åk 4–6 delas: Biologi *Natur och miljö*, *Kropp och hälsa*, *Systematisk
 
 ## Status (12 nov 2026)
 - Provpaketen för Vattnets kretslopp och Rymdlabbet ligger på `lararpaket/index.html` (adress pluggparken.se/lararpaket/, `noindex`, inte länkad, utskriftsvänlig). Rymdlabbet-paketets uppdrag är inte kontrollerade mot lägena (Dag och natt, Årstiderna, Väg dig och hoppa) och måste granskas. Väntar på lärarens prov med klassen innan fler paket eller länkar från övningarna.
+- **Pausat av läraren (12 nov 2026):** var paketen ska ligga är inte bestämt. Förslaget (samlingssida `lararpaket/` med Lgr22-filter + liten länk "För läraren" längst ner på varje övnings startskärm + post i ☰-menyn) väntar. Bygg inget förrän läraren säger till.
