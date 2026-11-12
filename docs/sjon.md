@@ -41,7 +41,7 @@ Provat med bot (tid till klart, alla 0,5–1,8 × jämvikt i 15 enheter): uppdra
 
 ## Status
 - [x] Modellparametrar hittade och verifierade
-- [ ] SVG-figurer och sjöscen (`sjon/index.html`)
-- [ ] Nivå 1 (kedjan, väven, kretsloppet)
-- [ ] Nivå 2 (uppdragen)
+- [x] SVG-figurer och sjöscen (`sjon/index.html`)
+- [x] Nivå 1 (kedjan, väven, kretsloppet), testad
+- [x] Nivå 2 (uppdragen), botten löser alla fyra uppdrag i tre skärmstorlekar (par 1,1,1,3)
 - [ ] Test, inkopplingar, docs, push
