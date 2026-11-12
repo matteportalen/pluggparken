@@ -361,11 +361,15 @@ function labelPos(path){if(LBL[path.id])return LBL[path.id];const b=path.getBBox
 /* bildens form följer rutan: Sverige i mitten och grannländerna runt om, i stället för tomma kanter */
 function fitBox(svg,b){const r=svg.getBoundingClientRect();if(!r.width||!r.height)return b;const asp=r.width/r.height,N=NORDEN.img;let{x,y,w,h}=b;
   if(w/h<asp){const nw=h*asp;x-=(nw-w)/2;w=nw;}else{const nh=w/asp;y-=(nh-h)/2;h=nh;}
-  // håll bilden inom naturkartan
-  if(w>N.w){const k=N.w/w;w=N.w;h*=k;x=N.x;}if(h>N.h){const k=N.h/h;h=N.h;w*=k;y=N.y;}
-  x=Math.max(N.x,Math.min(x,N.x+N.w-w));y=Math.max(N.y,Math.min(y,N.y+N.h-h));return{x,y,w,h};}
+  /* Håll vyn inom naturkartan. Blir vyn bredare eller högre än bilden (bred skärm) krymps den aldrig, för då klipps landet av
+     (Skåne försvann på pc). I stället ligger bildens kant kvar mot kanten och överskottet läggs på hav, men vyn ska alltid rymma b. */
+  const inom=(v,lo,sz,bl,bs,bildLo,bildSz)=>{if(sz>bildSz){let n=bildLo+bildSz-sz;if(n>bl)n=bl;if(n+sz<bl+bs)n=bl+bs-sz;return n;}return Math.max(bildLo,Math.min(v,bildLo+bildSz-sz));};
+  x=inom(x,0,w,b.x,b.w,N.x,N.w);y=inom(y,0,h,b.y,b.h,N.y,N.h);return{x,y,w,h};}
 function drawMap(svg,o={}){
-  svg.innerHTML='';const N=NORDEN.img;svg.append(el('image',{href:'bilder/norden.jpg',x:N.x,y:N.y,width:N.w,height:N.h,preserveAspectRatio:'none'}));
+  svg.innerHTML='';const N=NORDEN.img;
+  /* På bred skärm blir vyn bredare än bilden. Havet till vänster förlängs med en spegling av bildens kant, så att det inte blir ett platt band. */
+  svg.append(el('image',{href:'bilder/norden.jpg',x:N.x,y:N.y,width:N.w,height:N.h,preserveAspectRatio:'none',transform:`translate(${2*N.x} 0) scale(-1 1)`}));
+  svg.append(el('image',{href:'bilder/norden.jpg',x:N.x,y:N.y,width:N.w,height:N.h,preserveAspectRatio:'none'}));
   const nb=el('g',{});NORDEN.land.forEach(c=>nb.append(el('path',{d:c.d,class:'nb'})));svg.append(nb);
   const g=el('g',{});svg.append(g);const paths={};
   L.forEach(L1=>{const p=el('path',{d:SHAPES[L1.id],id:L1.id,'fill-rule':'evenodd'});p.classList.add('ls',L1.d);

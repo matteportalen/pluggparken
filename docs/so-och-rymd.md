@@ -48,7 +48,7 @@ Röst till resorna: `ljud/resa/` (manus `manus/resa-manus.txt`) och `ljud/jattar
 - **Sätt nålen:** inom 80 km är bra (lärarens gräns).
 - Proven: alla landskap eller alla städer en gång, stjärna vid minst 90 %.
 - Ett landskap färgas efter två rätt i rad och kan blekna igen vid fel.
-- Frågan står stor överst och sitter kvar när man skrollar. Kartan till vänster, panelen till höger. Hela Sverige ska synas utan att skrolla på mobil.
+- Frågan står stor överst och sitter kvar när man skrollar. Kartan till vänster, panelen till höger. Hela Sverige ska synas utan att skrolla på mobil. **Hela Sverige ska också synas på bred pc-skärm** (nov 2026: i Hitta landskapet klipptes Skåne av vid 1200 × 760, eftersom `fitBox` krympte vyn när den blev bredare än naturkartan). Vyn krymps aldrig; bildens högerkant ligger kvar mot kanten och havet till vänster förlängs med en spegling av bilden i `drawMap`. Kontrollerat i 130 kombinationer av skärmstorlek, landsdel och spelläge.
 - Uppläsning bara med 🔊.
 
 ## Ordgömman
