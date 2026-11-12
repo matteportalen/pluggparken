@@ -82,6 +82,7 @@ const IDX=[
  ['ovriga/lasflyt/','Läsflyt','Läs en kort text flera gånger med en vuxen','📖','läsa text flyt upprepad läsning','Svenska'],
  ['ovriga/rita/','Draw it!','Rita ordet på engelska så gissar datorn','🎨','engelska rita gissa quick draw glosor','Engelska'],
  ['ovriga/rymdlabbet/','Rymdlabbet','Solsystemet, dag och natt, månens faser och mer','🔭','rymden planeter måne stjärnor svarta hål årstider förmörkelse universum galax jättar','NO'],
+ ['kontinentdrift/','Kontinentaldrift','Res 250 miljoner år tillbaka på en 3D-glob och se hur Pangaea bröts upp.','🌍','kontinentaldrift plattektonik pangaea kontinenter jordskorpan wegener indien himalaya atlanten geografi NO SO','NO'],
  ['elkrets/','Elkretsen','Bygg kretsar med lampor och brytare, se strömmen och gissa vad som händer.','💡','el elektricitet krets ström lampa batteri brytare serie parallell kortslutning motstånd natur fysik NO','NO'],
  ['sjon/','Sjön','Bygg en näringskedja och rädda en sjö där något har gått fel.','🌊','sjö näringskedja näringsväv ekosystem alger vattenloppor mört gädda fiskgjuse kretslopp nedbrytare natur biologi simulering','NO'],
  ['anatomi/','Människokroppen i 3D','Skelett, muskler, organ, blodkärl och nerver','🫀','kroppen anatomi skelett muskler hjärta lungor tarmar hjärnan nerver blodkärl ben organ njurar ögon','NO'],

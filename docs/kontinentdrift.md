@@ -15,8 +15,16 @@ _Under bygge (nov 2026). Den som tar över läser bara den här filen och `konti
 ## Inkopplingar (kryssa av)
 Kort i `fler/index.html` (NO), `sok.js`, `sitemap.xml`, `konto.js` (`PKEYS`), `STJ` i `huvud.js`, stjärnor och `snap` i `index.html`, rad i `CLAUDE.md`.
 
+## Hur plattornas rörelser togs fram (viktigt, byt inte utan ny passning)
+- Land per platta klassas ur jordtexturen med `plateOf(lon,lat)` (polygoner för Arabien och Indien, lat/lon-regler för resten; finns i sidans skript). Hav: `b>r+12 && b>=g-8 && r<120`.
+- **Pangaea (250 Mya) relativt Afrika** (Afrika och Eurasien sitter fast): varje platta har en 3×3-rotationsmatris `ROT` som minimerar kvadratavståndet mellan ankarpunkter (t.ex. Sydamerikas kust mot Afrikas kust, Newfoundland mot Irland, Australiens södra kust mot Antarktis) plus ett straff för överlapp. Fri slumpsökning på enbart kustkontakt gav fel resultat (kontinenter hamnade intill fel kust); ankarpunkterna behövdes. Passningen har några graders fel.
+- **Tiden:** rörelsen interpoleras (slerp) från Pangaea till nu med en tidslinje per platta (`TL`: andel kvar av rörelsen vid tiden t): Nordatlanten öppnas ca 200–150, Sydatlanten ca 150–110, Indien lossnar ca 130 och krockar ca 50, Australien lossnar ca 100–50. Banorna är raka bågar, inte riktiga rekonstruktioner.
+- Plattor som inte är med: Pacifiska, Nazca och mindre. Nya Zeeland följer Australien, Arabien följer Afrika, Grönland följer Nordamerika.
+- Verktyg som användes (finns inte kvar i repot): Node-skript som sökte rotationerna mot en landmask på 720 × 360.
+
 ## Status
-- [ ] Plattmasker och rotationer (Pangaea-passning)
-- [ ] Globen och tidsreglaget
-- [ ] Nivå 2 Bevisen
-- [ ] Test, inkoppling, push
+- [x] Plattmasker och rotationer (Pangaea-passning mot ankarpunkter)
+- [x] Globen (three.js, texturer per platta, atmosfär, stjärnbakgrund) och tidsreglaget, eror, spökkuster, tryck på platta för fakta
+- [x] Nivå 2 Bevisen: fem frågor (fossil, bergskedja, växt, Indiens tid med reglage, fart); stjärnor
+- [x] Testat i 390 × 844, 375 × 667 (skrollar ca 60 px) och 1200 × 760, inkopplat i Fler ämnen (NO), sök, sitemap, konto, stjärnor
+- Inte provat: pekskärm, gammal iPad/Chromebook (3D). Inte gjort: portal i världen, framtiden (Pangaea Proxima), fler plattor. Texterna är inte granskade av en geolog.

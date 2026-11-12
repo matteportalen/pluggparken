@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<script src="../tema.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kontinentaldrift – Pluggparken</title>
+<meta name="description" content="Kontinentaldrift: res 250 miljoner år tillbaka i tiden på en 3D-glob och se hur Pangaea bröts upp. Gissa först och se bevisen: fossil, bergskedjor och Indiens krasch in i Asien.">
+<link rel="canonical" href="https://pluggparken.se/kontinentdrift/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Pluggparken">
+<meta property="og:locale" content="sv_SE">
+<meta property="og:title" content="Kontinentaldrift – Pluggparken">
+<meta property="og:description" content="Res 250 miljoner år tillbaka i tiden på en 3D-glob och se hur Pangaea bröts upp. Gissa först och se bevisen.">
+<meta property="og:url" content="https://pluggparken.se/kontinentdrift/">
+<meta property="og:image" content="https://pluggparken.se/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#1F3A35">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/apple-touch-icon.png" sizes="180x180">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/fonts/fonts.css">
+<script type="importmap">{"imports":{"three":"/lib/three/build/three.module.min.js","three/addons/":"/lib/three/examples/jsm/"}}</script>
+<style>
+:root{
+  --bg:#EAF3FF; --ink:#1D2B53; --muted:#56668F; --card:#FFFFFF; --line:#C6D6F2;
+  --good:#1E9E5E; --good-dark:#157548; --bad:#E5484D; --accent:#3D5AFE; --gold:#F2B707;
+  --font:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:760px;margin:0 auto;padding:12px 16px 32px}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;border:0;background:none}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+[hidden]{display:none!important}
+.hero{display:flex;gap:16px;align-items:center;background:linear-gradient(135deg,#0B1E3F,#1E6FA9);color:#fff;border-radius:24px;padding:18px;box-shadow:0 5px 0 #08142B;margin:6px 0 16px}
+.hero .hk{flex:none;width:96px;height:96px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#3FA7E8,#0D4A85 62%,#06274A);box-shadow:0 0 0 3px rgba(255,255,255,.18),0 0 24px rgba(80,170,255,.55);position:relative;overflow:hidden}
+.hero .hk svg{position:absolute;inset:0;width:100%;height:100%}
+.hero h1{margin:0;font-size:clamp(1.7rem,6vw,2.3rem);line-height:1.05}
+.hero p{margin:6px 0 0;font-weight:600;opacity:.95}
+.niv{display:grid;gap:10px}
+.niv button{display:flex;align-items:center;gap:14px;background:var(--card,#fff);border-radius:18px;padding:12px 14px;box-shadow:0 4px 0 var(--line);text-align:left;width:100%}
+.niv button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.niv .nr{flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-weight:800;font-size:1.4rem;color:#fff}
+.niv b{display:block;font-size:1.12rem;line-height:1.15}
+.niv small{display:block;color:var(--muted);font-weight:600;font-size:.88rem;line-height:1.25}
+.niv .st{margin-left:auto;flex:none;color:var(--gold);font-size:1.15rem;letter-spacing:1px}
+.niv .st .off{color:var(--line)}
+.not{color:var(--muted);font-size:.85rem;font-weight:600;margin:14px 2px 0;line-height:1.3}
+.topp{display:flex;align-items:center;gap:10px;margin:4px 0 6px;min-height:24px}
+.dots{display:flex;gap:6px;flex:1;flex-wrap:wrap}
+.dots i{width:12px;height:12px;border-radius:50%;background:var(--line)}
+.dots i.ok{background:var(--good)}.dots i.f{background:var(--bad)}.dots i.nu{background:var(--gold)}
+.niva-t{font-weight:800;color:var(--muted);font-size:.9rem}
+/* globen */
+.glob{position:relative;border-radius:22px;overflow:hidden;background:#02050f;box-shadow:0 4px 0 #0B1630;height:min(62vw,46vh);min-height:260px;touch-action:none}
+.glob canvas{display:block;width:100%;height:100%}
+.era{position:absolute;left:10px;top:10px;right:10px;display:flex;flex-direction:column;gap:2px;pointer-events:none;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.7)}
+.era b{font-size:clamp(1.2rem,4.6vw,1.6rem);line-height:1.05}
+.era span{font-weight:700;font-size:.86rem;opacity:.92}
+.hint{position:absolute;left:10px;bottom:8px;color:rgba(255,255,255,.7);font-weight:700;font-size:.78rem;pointer-events:none}
+.laddar{position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-weight:800;background:#02050f}
+.panel{display:grid;gap:8px;margin-top:8px}
+.tid{display:flex;align-items:center;gap:8px;background:var(--card,#fff);border-radius:16px;box-shadow:0 4px 0 var(--line);padding:6px 10px}
+.tid button{flex:none;width:44px;height:44px;border-radius:50%;background:var(--accent);color:#fff;font-size:1.2rem;box-shadow:0 3px 0 #2A3FB8}
+.tid button:active{transform:translateY(2px);box-shadow:0 1px 0 #2A3FB8}
+.tid input[type=range]{flex:1;min-width:0;height:34px;accent-color:var(--accent)}
+.tid .lbl{flex:none;min-width:76px;text-align:right;font-weight:800;font-size:.9rem;line-height:1.05}
+.chips{display:grid;grid-template-columns:repeat(6,1fr);gap:5px}
+.chips button{background:var(--card,#fff);border-radius:12px;box-shadow:0 3px 0 var(--line);padding:4px 2px 5px;font-weight:800;font-size:.7rem;line-height:1.05;text-align:center}
+.chips button b{display:block;font-size:.95rem}
+.chips button.v{background:var(--accent);color:#fff;box-shadow:0 3px 0 #2A3FB8}
+.rad2{display:flex;gap:6px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.rad2 button{min-height:38px;border-radius:12px;background:var(--card,#fff);box-shadow:0 3px 0 var(--line);font-weight:800;font-size:.9rem;padding:0 12px}
+.rad2 button.v{background:var(--accent);color:#fff;box-shadow:0 3px 0 #2A3FB8}
+.rad2 button:active{transform:translateY(2px)}
+.info{background:var(--card,#fff);border-radius:16px;box-shadow:0 4px 0 var(--line);padding:8px 12px;font-weight:700;font-size:.95rem;line-height:1.3}
+.info b{display:block;font-size:1.02rem}
+.q{background:var(--card,#fff);border-radius:16px;box-shadow:0 4px 0 var(--line);padding:8px 12px}
+.q b{display:block;font-size:.8rem;color:var(--muted);line-height:1.1}
+.q p{margin:2px 0 0;font-weight:800;font-size:1.02rem;line-height:1.25}
+.val3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.val3 button{min-height:54px;border-radius:14px;background:var(--card,#fff);box-shadow:0 4px 0 var(--line);font-weight:800;font-size:.92rem;line-height:1.1;padding:4px 6px}
+.val3 button.v{background:var(--accent);color:#fff;box-shadow:0 4px 0 #2A3FB8}
+.val3 button.rk{background:#DDF5E7;color:var(--good-dark);box-shadow:0 0 0 3px var(--good)}
+.val3 button.rf{background:#FFE9EC;color:#B4232A;opacity:.85}
+.val3.last button{pointer-events:none}
+.expl{background:#FFF4D6;border-radius:14px;padding:8px 12px;font-weight:700;font-size:.92rem;line-height:1.3;text-align:center}
+.expl.ok{background:#DDF5E7}.expl.fel{background:#FFE9EC}
+.knapprad{display:flex;justify-content:center;gap:10px}
+.stor{background:var(--good);color:#fff;border-radius:18px;padding:10px 30px;font-weight:800;font-size:1.2rem;box-shadow:0 5px 0 var(--good-dark)}
+.stor:disabled{background:#E6ECF8;color:#56668F;box-shadow:0 4px 0 var(--line);pointer-events:none}
+.stor.bla{background:var(--accent);box-shadow:0 5px 0 #2A3FB8}
+@media (min-width:820px){.wrap{max-width:1100px}.sp{display:grid;grid-template-columns:1.5fr 1fr;gap:12px;align-items:start}.glob{height:min(70vh,640px)}.panel{margin-top:0}}
+@media (max-height:700px){.glob{height:38vh;min-height:200px}.chips button{font-size:.62rem}}
+.res{text-align:center}
+.res .stj{font-size:3rem;letter-spacing:6px;color:var(--gold);margin:8px 0}
+.res .stj .off{color:var(--line)}
+.knapp{display:inline-block;background:var(--good);color:#fff;border-radius:16px;padding:12px 26px;font-weight:800;font-size:1.15rem;box-shadow:0 5px 0 var(--good-dark);margin:6px}
+.knapp.vit{background:var(--card,#fff);color:var(--ink);box-shadow:0 5px 0 var(--line)}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:50}
+@media(max-width:420px){.hero .hk{width:76px;height:76px}.hero{gap:12px;padding:14px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<script src="../ljud.js"></script>
+<script src="../huvud.js" data-titel="Kontinentaldrift" data-ikon="🌍"></script>
+<main class="wrap">
+<section class="screen" id="home">
+  <div class="hero">
+    <div class="hk" aria-hidden="true"><svg viewBox="0 0 96 96"><g fill="#6DBE5A" stroke="#2F7A3A" stroke-width="1.4"><path d="M20 30c8-6 18-6 22 2s-4 14-2 22-8 14-14 8-12-16-10-24 0-6 4-8z"/><path d="M52 24c6-4 16-2 22 4s2 12-4 14-6 10-12 8-10-12-8-20 0-4 2-6z"/><path d="M56 60c6-2 14 2 14 8s-6 10-12 8-6-14-2-16z"/></g></svg></div>
+    <div><h1>Kontinentaldrift</h1><p>Res 250 miljoner år tillbaka och se hur jorden såg ut när alla länder satt ihop.</p></div>
+  </div>
+  <div class="niv" id="niv"></div>
+  <p class="not">Kontinenternas rörelser är starkt förenklade och approximativa. Riktiga rekonstruktioner är mycket mer detaljerade.</p>
+</section>
+<section class="screen" id="game" hidden>
+  <button type="button" data-home hidden tabindex="-1" aria-hidden="true" onclick="hem()"></button>
+  <div class="topp"><div class="dots" id="dots"></div><span class="niva-t" id="nivT"></span></div>
+  <div class="sp">
+    <div class="glob" id="glob"><div class="laddar" id="laddar">Laddar jorden …</div><div class="era" id="era"></div><div class="hint" id="hint">Dra för att vrida. Nyp eller scrolla för att zooma.</div></div>
+    <div class="panel" id="panel"></div>
+  </div>
+</section>
+<section class="screen res" id="result" hidden>
+  <h2 id="rRub" style="margin:10px 0 0">Bra jobbat!</h2>
+  <div class="stj" id="rStj"></div>
+  <p id="rTxt" style="font-weight:700;margin:0 0 14px"></p>
+  <button class="knapp" id="rIgen">Spela igen</button>
+  <button class="knapp vit" id="rHome">Välj nivå</button>
+</section>
+</main>
+<canvas id="fx" hidden></canvas>
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+const $=id=>document.getElementById(id);
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const KEY="mattespel-kontinentdrift-v1";
+const data=(()=>{try{return Object.assign({stars:{}},JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){return{stars:{}}}})();
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}};
+const reduced=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
+const ljud=n=>{window.Ljud&&Ljud[n]&&Ljud[n]();};
+const D=Math.PI/180;
+const NIV=[null,
+ {namn:"Tidsresan",txt:"Res 250 miljoner år tillbaka och se kontinenterna röra sig.",col:"#1E9ED8"},
+ {namn:"Bevisen",txt:"Hur vet vi det? Gissa först, och se sedan beviset på globen.",col:"#7B61FF"}];
+const stjHtml=n=>[1,2,3].map(i=>i<=n?"★":'<span class="off">★</span>').join("");
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
+window.hem=function(){stoppa();$("niv").innerHTML=[1,2].map(l=>`<button data-l="${l}"><span class="nr" style="background:${NIV[l].col}">${l}</span><span><b>${NIV[l].namn}</b><small>${NIV[l].txt}</small></span><span class="st">${l===1?"":stjHtml(data.stars[l]||0)}</span></button>`).join("");show("home");};
+$("niv").onclick=e=>{const b=e.target.closest("[data-l]");if(b)starta(+b.dataset.l);};
+
+/* ---------- Plattorna ---------- */
+const NAMN=["Nordamerika","Sydamerika","Afrika","Eurasien","Indien","Australien","Antarktis"];
+const FAKTA=[
+ "Nordamerika flyttade västerut när Atlanten öppnades. Atlanten blir fortfarande ungefär 2–3 centimeter bredare varje år.",
+ "Sydamerika bröt loss från Afrika för ungefär 130 miljoner år sedan. Därför är Sydatlanten yngre än Nordatlanten.",
+ "Afrika rör sig mycket lite. Många av de andra kontinenterna har drivit iväg från den.",
+ "Eurasien är en stor platta som består av Europa och Asien. Den tryckte på när Indien kom emot.",
+ "Indien sprang norrut som ett snabbt tåg, och krockade med Asien för ungefär 50 miljoner år sedan. Då pressades Himalaya upp.",
+ "Australien lossnade från Antarktis för omkring 85 miljoner år sedan och drev norrut, ungefär 7 centimeter om året.",
+ "Antarktis låg en gång mycket varmare och närmare Afrika. Det drev söderut och frös till is."];
+/* rotationsmatriser (Pangaea 250 Mya relativt Afrika), anpassade mot geologiska ankarpunkter, se docs/kontinentdrift.md */
+const ROT={0:[0.4244,0.0776,0.9021,0.1403,0.9787,-0.1501,-0.8945,0.1903,0.4045],1:[0.7193,-0.0861,0.6893,0.5196,0.7254,-0.4516,-0.4611,0.683,0.5665],4:[0.877,-0.1421,-0.459,0.4164,0.7013,0.5785,0.2398,-0.6985,0.6742],5:[0.6721,-0.7357,-0.0833,0.6899,0.6631,-0.2903,0.2688,0.1377,0.9533],6:[0.8803,-0.4459,0.162,0.4537,0.6915,-0.5621,0.1386,0.5684,0.811]};
+/* hur stor del av rörelsen som återstår vid tiden t (miljoner år sedan): [t, andel] */
+const TL={0:[[0,0],[20,.08],[60,.28],[100,.5],[140,.72],[180,.93],[200,1],[250,1]],
+ 1:[[0,0],[40,.18],[80,.4],[110,.65],[135,.92],[150,1],[250,1]],
+ 4:[[0,0],[50,.08],[70,.2],[90,.45],[110,.75],[130,.96],[160,1],[250,1]],
+ 5:[[0,0],[30,.07],[50,.15],[70,.35],[90,.65],[110,.9],[140,1],[250,1]],
+ 6:[[0,0],[40,.03],[100,.12],[130,.35],[160,.8],[180,1],[250,1]]};
+const frac=(p,t)=>{const L=TL[p];if(!L)return 0;for(let i=1;i<L.length;i++)if(t<=L[i][0]){const a=L[i-1],b=L[i],u=(t-a[0])/(b[0]-a[0]);return a[1]+(b[1]-a[1])*(u*u*(3-2*u)*.5+u*.5);}return L[L.length-1][1];};
+const ERA=[{t:250,namn:"Perm",rub:"Pangaea",text:"Alla kontinenter sitter ihop i en enda jättekontinent, Pangaea. Runt den ligger ett jättelikt hav."},
+ {t:220,namn:"Trias",rub:"Pangaea spricker",text:"Pangaea börjar spricka. Mellan Nordamerika och Afrika öppnas de första smala haven."},
+ {t:170,namn:"Jura",rub:"Atlanten öppnas",text:"Nordatlanten öppnas och Nordamerika drar sig västerut. Syd och Nord skiljs åt."},
+ {t:100,namn:"Krita",rub:"Sydatlanten finns",text:"Sydamerika har lossnat från Afrika. Indien är på väg norrut över havet."},
+ {t:50,namn:"Paleogen",rub:"Indien krockar",text:"Indien kraschar in i Asien och Himalaya börjar pressas upp. Australien lossnar från Antarktis."},
+ {t:0,namn:"Nu",rub:"Jorden idag",text:"Så ser jorden ut idag. Kontinenterna rör sig fortfarande, några centimeter om året."}];
+const eraAt=t=>ERA.reduce((b,e)=>Math.abs(e.t-t)<Math.abs(b.t-t)?e:b,ERA[0]);
+
+/* klassificering av land per platta (samma regler som docs/kontinentdrift.md) */
+const pip=(x,y,P)=>{let c=false;for(let i=0,j=P.length-1;i<P.length;j=i++){const a=P[i],b=P[j];if((a[1]>y)!==(b[1]>y)&&x<(b[0]-a[0])*(y-a[1])/(b[1]-a[1])+a[0])c=!c;}return c;};
+const ARABIEN=[[34.4,29.6],[35,33],[38,36.5],[42,37.3],[44,37.1],[45.5,35],[47.5,32],[48.5,30],[48.2,28.9],[50.2,26.7],[51.5,25],[56,26.3],[56.5,24],[59.8,22.6],[58.5,19.5],[55,16.5],[52,15.5],[47,13.5],[43,12.5],[42.5,15],[40,19.5],[37,24.5],[35.2,28]];
+const INDIEN=[[66.5,23.5],[68,30],[74,34],[78,33.5],[80,30.5],[84,28.2],[89,27.2],[92.5,26.5],[92.5,21],[93,15],[90,10],[80,5.5],[66.5,5.5]];
+function plateOf(lon,lat){
+  if(lat>83.6)return -1;if(lat<-60)return 6;if(pip(lon,lat,INDIEN))return 4;
+  if((lon>=129&&lat<=-0.5&&lat>-12)||(lat<=-10.5&&lon>=112&&lat>-48))return 5;
+  if(lon>=-25&&lon<=36&&lat<31.7&&lat>-40)return 2;if(lon>36&&lon<=52&&lat<=12.8&&lat>-40)return 2;if(pip(lon,lat,ARABIEN))return 2;
+  if(lon<-34&&lon>-92&&lat<8.8&&lat>-60)return 1;if(lon>=-25&&lon<=-13&&lat>=63&&lat<=67)return 3;
+  if(lon>=-168&&lon<=-10&&lat>=8.8)return 0;if(((lon>=-12&&lon<=180)||lon<-168)&&lat>-12)return 3;return -1;}
+const vec=(lon,lat,r=1)=>new THREE.Vector3(r*Math.cos(lat*D)*Math.cos(lon*D),r*Math.sin(lat*D),-r*Math.cos(lat*D)*Math.sin(lon*D));
+
+/* ---------- three.js ---------- */
+let R3=null,T=250,anim=null,plates=[],ghost=null,idMap=null;
+const MW=1024,MH=512;
+function sfar(r){const nu=128,nv=64,pos=[],uv=[],idx=[];for(let j=0;j<=nv;j++){const v=j/nv,lat=90-v*180;for(let i=0;i<=nu;i++){const u=i/nu,lon=u*360-180;const p=vec(lon,lat,r);pos.push(p.x,p.y,p.z);uv.push(u,1-v);}}
+  for(let j=0;j<nv;j++)for(let i=0;i<nu;i++){const a=j*(nu+1)+i,b=a+1,c=a+nu+1,d=c+1;idx.push(a,c,b,b,c,d);}
+  const g=new THREE.BufferGeometry();g.setAttribute("position",new THREE.Float32BufferAttribute(pos,3));g.setAttribute("uv",new THREE.Float32BufferAttribute(uv,2));g.setIndex(idx);g.computeVertexNormals();return g;}
+async function bygg3d(){const host=$("glob");const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false});renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));host.prepend(renderer.domElement);
+  const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(40,1,.05,50);camera.position.set(.2,.9,3.3);
+  const controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.enablePan=false;controls.minDistance=1.6;controls.maxDistance=5;controls.rotateSpeed=.7;controls.autoRotate=true;controls.autoRotateSpeed=.6;
+  const ld=new THREE.TextureLoader();
+  ld.load("/ovriga/solsystemet/bilder/2k_stars_milky_way.jpg",t=>{t.mapping=THREE.EquirectangularReflectionMapping;t.colorSpace=THREE.SRGBColorSpace;scene.background=t;});
+  scene.add(new THREE.AmbientLight(0xffffff,1.1));const sun=new THREE.DirectionalLight(0xffffff,1.9);sun.position.set(3,2,4);scene.add(sun);
+  const geo=sfar(1);
+  const hav=new THREE.Mesh(geo,new THREE.MeshPhongMaterial({color:0x0e5a9e,specular:0x16324a,shininess:14}));scene.add(hav);
+  const atm=new THREE.Mesh(new THREE.SphereGeometry(1.14,64,48),new THREE.ShaderMaterial({transparent:true,side:THREE.BackSide,blending:THREE.AdditiveBlending,depthWrite:false,
+    vertexShader:"varying vec3 n;void main(){n=normalize(normalMatrix*normal);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}",
+    fragmentShader:"varying vec3 n;void main(){float i=pow(.74-dot(n,vec3(0.,0.,1.)),3.);gl_FragColor=vec4(.35,.65,1.,1.)*i;}"}));scene.add(atm);
+  /* landtexturer per platta ur jordens dagkarta */
+  const img=new Image();img.src="/ovriga/solsystemet/bilder/2k_earth_daymap.jpg";await img.decode();
+  const sc=document.createElement("canvas");sc.width=2048;sc.height=1024;const sg=sc.getContext("2d",{willReadFrequently:true});sg.drawImage(img,0,0,2048,1024);const sd=sg.getImageData(0,0,2048,1024).data;
+  idMap=new Uint8Array(MW*MH);const cv=Array.from({length:7},()=>{const c=document.createElement("canvas");c.width=MW;c.height=MH;const g=c.getContext("2d");return{c,g,im:g.createImageData(MW,MH)};});
+  const gh=document.createElement("canvas");gh.width=MW;gh.height=MH;const ggx=gh.getContext("2d"),gim=ggx.createImageData(MW,MH);
+  for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const s=((y*2+1)*2048+(x*2+1))*4,r=sd[s],g=sd[s+1],b=sd[s+2];if(b>r+12&&b>=g-8&&r<120)continue;
+    const lon=(x+.5)/MW*360-180,lat=90-(y+.5)/MH*180,p=plateOf(lon,lat);if(p<0)continue;idMap[y*MW+x]=p+1;const o=(y*MW+x)*4,im=cv[p].im.data;im[o]=r;im[o+1]=g;im[o+2]=b;im[o+3]=255;const q=gim.data;q[o]=q[o+1]=q[o+2]=255;q[o+3]=255;}
+  plates=cv.map((o,p)=>{o.g.putImageData(o.im,0,0);const tex=new THREE.CanvasTexture(o.c);tex.colorSpace=THREE.SRGBColorSpace;tex.anisotropy=4;
+    const m=new THREE.Mesh(geo,new THREE.MeshLambertMaterial({map:tex,transparent:true,alphaTest:.5}));m.scale.setScalar(1.004+p*.0003);m.userData.p=p;scene.add(m);
+    const q=new THREE.Quaternion();if(ROT[p]){const M=ROT[p];q.setFromRotationMatrix(new THREE.Matrix4().set(M[0],M[1],M[2],0,M[3],M[4],M[5],0,M[6],M[7],M[8],0,0,0,0,1));}return{m,q250:q};});
+  ggx.putImageData(gim,0,0);const gtex=new THREE.CanvasTexture(gh);ghost=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({map:gtex,transparent:true,opacity:.3,depthWrite:false,color:0xfff2b0}));ghost.scale.setScalar(1.001);ghost.visible=false;scene.add(ghost);
+  const ray=new THREE.Raycaster(),mus=new THREE.Vector2();
+  const resize=()=>{const w=host.clientWidth,h=host.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();};
+  addEventListener("resize",resize);new ResizeObserver(resize).observe(host);
+  let nere=null;renderer.domElement.addEventListener("pointerdown",e=>{nere=[e.clientX,e.clientY];controls.autoRotate=false;});
+  renderer.domElement.addEventListener("pointerup",e=>{if(nere&&Math.hypot(e.clientX-nere[0],e.clientY-nere[1])<6)tryckGlob(e);nere=null;});
+  R3={renderer,scene,camera,controls,ray,mus,resize,hav};
+  const sist={t:0};(function loop(ts){if(anim){const u=Math.min(1,(ts-anim.t0)/anim.dur),e=u<.5?2*u*u:1-Math.pow(-2*u+2,2)/2;settT(anim.a+(anim.b-anim.a)*e);if(u>=1){const f=anim.klar;anim=null;f&&f();}}
+    controls.update();renderer.render(scene,camera);requestAnimationFrame(loop);})(0);
+  resize();$("laddar").hidden=true;settT(T);}
+const qI=new THREE.Quaternion();
+window.kam=(lon,lat,d)=>{if(!R3)return;R3.camera.position.copy(vec(lon,lat,d||3.5));R3.controls.update();};
+function settT(t){T=Math.max(0,Math.min(250,t));plates.forEach((o,p)=>{o.m.quaternion.copy(qI).slerp(o.q250,frac(p,T));});uiT();}
+window.gaTill=(t,dur,klar)=>{if(reduced()||dur<=0){settT(t);klar&&klar();return;}anim={a:T,b:t,t0:performance.now(),dur,klar};};
+function platta(e){const r=R3.renderer.domElement.getBoundingClientRect();R3.mus.set(((e.clientX-r.left)/r.width)*2-1,-((e.clientY-r.top)/r.height)*2+1);R3.ray.setFromCamera(R3.mus,R3.camera);const hit=R3.ray.intersectObject(R3.hav)[0];if(!hit)return-1;
+  for(let p=0;p<7;p++){const q=plates[p].m.quaternion.clone().invert(),v=hit.point.clone().applyQuaternion(q).normalize(),lat=Math.asin(Math.max(-1,Math.min(1,v.y)))/D,lon=Math.atan2(-v.z,v.x)/D,x=Math.min(MW-1,Math.max(0,Math.floor((lon+180)/360*MW))),y=Math.min(MH-1,Math.max(0,Math.floor((90-lat)/180*MH)));if(idMap[y*MW+x]===p+1)return p;}return-1;}
+function tryckGlob(e){if(G&&G.lvl===1){const p=platta(e);const f=$("fakta");if(f){f.hidden=p<0;if(p>=0){f.innerHTML=`<b>${NAMN[p]}</b>${FAKTA[p]}`;ljud("pip");}}}}
+
+/* ---------- Spelet ---------- */
+let G=null,tim=[];
+const rensa=()=>{tim.forEach(clearTimeout);tim=[];};
+function stoppa(){rensa();anim=null;if(R3)R3.controls.autoRotate=true;if(ghost)ghost.visible=false;rensaMark();G=null;}
+const lbl=t=>t<=0?"Nu":t>=250?"250 milj. år sedan":`${Math.round(t)} milj. år sedan`;
+function uiT(){const e=eraAt(T);const era=$("era");if(era)era.innerHTML=`<b>${T<1?"Jorden idag":T>249?"Pangaea":e.rub}</b><span>${lbl(T)} · ${T<1?"nutid":e.namn}</span>`;
+  const s=$("sl");if(s&&+s.value!==Math.round(250-T))s.value=250-T;const l=$("tl");if(l)l.textContent=lbl(T);
+  document.querySelectorAll("#chips button").forEach(b=>b.classList.toggle("v",Math.abs(+b.dataset.t-T)<8));const i=$("einfo");if(i&&G&&G.lvl===1)i.innerHTML=`<b>${e.namn}: ${e.rub}</b>${e.text}`;}
+async function starta(l){stoppa();G={lvl:l,i:0,res:[],fel:0};$("nivT").textContent=NIV[l].namn;show("game");$("dots").innerHTML="";
+  if(!R3){try{await bygg3d();}catch(e){$("laddar").textContent="Din webbläsare kan inte visa 3D-globen.";console.error(e);return;}}
+  $("laddar").hidden=true;R3.resize();l===1?nivå1():nivå2();}
+window.starta=starta;
+function slut(st,txt){const old=data.stars[2]||0;data.stars[2]=Math.max(old,st);save();$("rStj").innerHTML=stjHtml(st);$("rRub").textContent=st===3?"Perfekt! 🎉":st===2?"Bra jobbat!":"Bra kämpat!";$("rTxt").textContent=txt;stoppa();show("result");if(st===3){ljud("fanfare");confetti();}else ljud("chime");}
+$("rIgen").onclick=()=>starta(2);$("rHome").onclick=()=>window.hem();
+
+/* ---------- Nivå 1: Tidsresan ---------- */
+function nivå1(){settT(250);window.kam(-25,18,3.6);R3.controls.autoRotate=true;
+  $("panel").innerHTML=`<div class="tid"><button id="spela" aria-label="Spela upp">▶</button><input type="range" id="sl" min="0" max="250" step="1" value="0" aria-label="Tid, från 250 miljoner år sedan till nu"><span class="lbl" id="tl"></span></div>
+  <div class="chips" id="chips">${ERA.map(e=>`<button data-t="${e.t}"><b>${e.t||"Nu"}</b>${e.namn}</button>`).join("")}</div>
+  <div class="info" id="einfo"></div><div class="info" id="fakta" hidden></div>
+  <div class="rad2"><button id="bGhost" aria-pressed="false">👻 Dagens kuster</button><button id="bStart">⏮ Pangaea</button></div>`;
+  $("sl").oninput=e=>{anim=null;settT(250-+e.target.value);};
+  $("spela").onclick=()=>{if(anim){anim=null;$("spela").textContent="▶";return;}const t0=T<=1?250:T;if(T<=1)settT(250);$("spela").textContent="⏸";window.gaTill(0,Math.max(1500,T*70),()=>{$("spela").textContent="▶";});};
+  $("chips").onclick=e=>{const b=e.target.closest("[data-t]");if(b){ljud("pip");$("spela").textContent="▶";window.gaTill(+b.dataset.t,1400);}};
+  $("bStart").onclick=()=>{$("spela").textContent="▶";window.gaTill(250,1200);};
+  $("bGhost").onclick=()=>{ghost.visible=!ghost.visible;$("bGhost").classList.toggle("v",ghost.visible);$("bGhost").setAttribute("aria-pressed",String(ghost.visible));};
+  uiT();}
+
+/* ---------- Nivå 2: Bevisen ---------- */
+let marks=[];
+function rensaMark(){marks.forEach(m=>m.parent&&m.parent.remove(m));marks=[];}
+function markor(lista){rensaMark();const sp=(c)=>{const k=document.createElement("canvas");k.width=k.height=64;const g=k.getContext("2d"),r=g.createRadialGradient(32,32,2,32,32,30);r.addColorStop(0,"#fff");r.addColorStop(.25,c);r.addColorStop(1,"rgba(0,0,0,0)");g.fillStyle=r;g.beginPath();g.arc(32,32,30,0,7);g.fill();const t=new THREE.CanvasTexture(k);return new THREE.Sprite(new THREE.SpriteMaterial({map:t,depthTest:false,transparent:true}));};
+  lista.forEach(([p,lon,lat,col])=>{const s=sp(col||"#FFD84D");s.position.copy(vec(lon,lat,1.012)).multiplyScalar(1/ (1.004+p*.0003));s.scale.setScalar(.2);s.renderOrder=10;plates[p].m.add(s);marks.push(s);});}
+const Q=[
+ {namn:"Fossil",fraga:"Fossil av reptilen Mesosaurus hittas i Brasilien. Den levde i sötvatten och kunde inte simma över hav. Var mer hittas samma fossil?",alt:["Sydafrika","Australien","Nordamerika"],rätt:0,mark:[[1,-52,-30,"#FFD84D"],[2,17,-28,"#FFD84D"]],t:250,kam:[-15,-5],
+  forkl:"I Sydafrika! Eftersom reptilen inte kunde simma över hav måste Sydamerika och Afrika ha suttit ihop. Det var ett av Wegeners bevis."},
+ {namn:"Bergskedja",fraga:"Bergskedjan Appalacherna i östra Nordamerika har samma sorts bergarter och samma ålder som bergen i en annan del av världen. Var?",alt:["Skottland och Norge","Kina","Sydafrika"],rätt:0,mark:[[0,-56,49,"#FF9F43"],[3,-9,53,"#FF9F43"]],t:250,kam:[-30,40],
+  forkl:"I Skottland och Norge! Bergskedjan fortsatte på andra sidan Atlanten när kontinenterna satt ihop. Atlanten öppnades senare och delade den."},
+ {namn:"Växt",fraga:"Frövaxten Glossopteris hittas som fossil i Sydamerika, Afrika, Indien, Australien och Antarktis. Fröna kan inte flyga över hav. Hur kan det komma sig?",alt:["Kontinenterna låg ihop","Vinden bar fröna","Människor planterade dem"],rätt:0,mark:[[1,-52,-27,"#5DE06A"],[2,24,-28,"#5DE06A"],[4,78,18,"#5DE06A"],[5,140,-28,"#5DE06A"],[6,120,-75,"#5DE06A"]],t:250,kam:[40,-40],
+  forkl:"De låg ihop! Alla fem kontinenterna satt ihop i det stora sydliga landet Gondwana, där växten fanns. Sedan drev de isär."},
+ {namn:"Indien",fraga:"Indien rör sig norrut och krockade med Asien. När tror du det hände? Dra reglaget till din gissning och tryck Klar.",slider:true,rätt:50,mark:[[4,78,18,"#FF5A5A"]],kam:[80,10],
+  forkl:"För ungefär 50 miljoner år sedan! Indien rörde sig ovanligt fort, ungefär 15 centimeter om året, och när det krockade pressades Himalaya upp. Bergen växer fortfarande."},
+ {namn:"Fart",fraga:"Hur snabbt rör sig kontinenterna i genomsnitt?",alt:["Ungefär som naglar växer","Som en gående människa","Som en bil"],rätt:0,t:null,
+  forkl:"De rör sig ungefär 2–5 centimeter om året, ungefär så fort som dina naglar växer. Det låter lite, men på 100 miljoner år blir det flera tusen kilometer."}];
+function nivå2(){G.fr=Q;G.i=0;G.fel=0;G.res=[];fraga(0);}
+function prick(){$("dots").innerHTML=Q.map((_,j)=>`<i class="${j<G.i?(G.res[j]?"ok":"f"):j===G.i?"nu":""}"></i>`).join("");}
+function fraga(i){anim=null;G.i=i;const q=Q[i];G.val=null;G.klar=false;prick();rensa();R3.controls.autoRotate=true;ghost.visible=false;
+  if(q.slider)settT(150);else settT(0);if(q.mark)markor(q.mark);else rensaMark();window.kam(...(q.kam||[-20,15]));
+  $("panel").innerHTML=`<div class="q"><b>Fråga ${i+1} av ${Q.length}: ${q.namn}</b><p>${q.fraga}</p></div>${q.slider?`<div class="tid"><input type="range" id="sl" min="0" max="250" step="1" value="100" aria-label="Gissa hur länge sedan"><span class="lbl" id="tl"></span></div>`:`<div class="val3" id="val">${q.alt.map((t,k)=>`<button data-k="${k}">${t}</button>`).join("")}</div>`}<div class="expl" id="expl" hidden></div><div class="knapprad"><button class="stor" id="bKlar" disabled>${q.slider?"Klar":"Gissa först"}</button><button class="stor bla" id="bNasta" hidden>Nästa ▶</button></div>`;
+  if(q.slider){$("sl").oninput=e=>{anim=null;settT(250-+e.target.value);G.val=250-+e.target.value;$("bKlar").disabled=false;};$("bKlar").disabled=false;G.val=150;}
+  else $("val").onclick=e=>{const b=e.target.closest("[data-k]");if(!b||G.klar)return;G.val=+b.dataset.k;ljud("pip");$("val").querySelectorAll("button").forEach(x=>x.classList.toggle("v",x===b));$("bKlar").disabled=false;$("bKlar").textContent="▶ Visa beviset";};
+  $("bKlar").onclick=()=>{if(G.klar)return;G.klar=true;const ok=q.slider?Math.abs(G.val-q.rätt)<=15:G.val===q.rätt;G.res[i]=ok;if(!ok)G.fel++;prick();$("bKlar").hidden=true;
+    if(q.slider){$("sl").disabled=true;window.gaTill(q.rätt,reduced()?0:1800);}else{$("val").classList.add("last");$("val").querySelectorAll("button").forEach((x,k)=>{x.classList.remove("v");if(k===q.rätt)x.classList.add("rk");else if(k===G.val)x.classList.add("rf");});if(q.t!=null){R3.controls.autoRotate=false;window.gaTill(q.t,2600);}}
+    ljud(ok?"ok":"bad");const x=$("expl");x.hidden=false;x.className="expl "+(ok?"ok":"fel");x.textContent=(ok?"Rätt! ✓ ":q.slider?`Inte riktigt, du gissade ${Math.round(G.val)} miljoner år sedan. `:"Inte riktigt. ")+q.forkl;
+    const nb=$("bNasta");nb.hidden=false;nb.textContent=i>=Q.length-1?"Se resultat ▶":"Nästa ▶";nb.focus({preventScroll:true});x.scrollIntoView({block:"nearest",behavior:reduced()?"auto":"smooth"});};
+  $("bNasta").onclick=()=>{if(i>=Q.length-1){const st=G.fel<=1?3:G.fel<=2?2:1;slut(st,`Du gissade rätt på ${Q.length-G.fel} av ${Q.length}.${st<3?" Spela igen och se beviset på globen.":" Du kan förklara varför kontinenterna rör sig."}`);}else fraga(i+1);};}
+window.__kd={get G(){return G},get R3(){return R3},plates:()=>plates,settT,frac,Q,vec,THREE:THREE};
+function confetti(){if(reduced())return;const cols=["#3D8BFD","#FF9F43","#2BB673","#FFC93C","#7B61FF","#FF6B6B"];
+  const c=$("fx"),x=c.getContext("2d"),dpr=devicePixelRatio||1,Wd=innerWidth,Hh=innerHeight;c.width=Wd*dpr;c.height=Hh*dpr;x.setTransform(dpr,0,0,dpr,0,0);c.hidden=false;
+  const P=Array.from({length:150},()=>({x:Wd/2+(Math.random()-.5)*120,y:Hh*.3,vx:(Math.random()-.5)*16,vy:-Math.random()*15-4,r:Math.random()*7+5,c:pick(cols),a:Math.random()*6,va:(Math.random()-.5)*.4}));
+  let t=0;(function f(){x.clearRect(0,0,Wd,Hh);P.forEach(p=>{p.vy+=.45;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore();});
+    if(++t<150)requestAnimationFrame(f);else c.hidden=true;})();}
+window.hem();
+</script>
+</body>
+</html>
