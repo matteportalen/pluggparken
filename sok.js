@@ -55,6 +55,7 @@ const IDX=[
  ['matte/','Matematik','Alla matteövningar, spel och verktyg','🔢','matte matematik räkna tal ämne','Ämnen'],
  ['svenska/','Svenska','Ord, stavning, läsning och sagor','📖','svenska ord stavning läsa skriva ämne','Ämnen'],
  ['ovriga/rymdlabbet/','Rymdlabbet','Planeterna, stjärnorna, årstiderna och svarta hål','🔭','rymd rymden planeter stjärnor solen månen svarta hål ämne','Ämnen'],
+ ['no/','NO','Rymden, kroppen, naturen och tekniken','🔬','no naturorienterande ämnen fysik biologi kemi natur teknik rymden kroppen vatten el','Ämnen'],
  ['so/','SO','Kartor, länder och platser','🗺️','so samhälle kartor länder geografi ämne','Ämnen'],
  ['specialare/','Specialare','Minilektioner om spännande ämnen','🎁','specialare minilektioner filmer mysterier','Ämnen'],
  ['fler/','Fler ämnen','Engelska, logik, kod och pengar','🧩','ämnen andra ämnen engelska logik digitalt pengar','Ämnen'],

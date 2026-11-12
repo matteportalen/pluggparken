@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<base href="../">
+<meta name="description" content="Naturorienterande ämnen: rymden, kroppen, naturen och tekniken. Utforska, bygg och gissa först.">
+<link rel="canonical" href="https://pluggparken.se/no/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Pluggparken">
+<meta property="og:locale" content="sv_SE">
+<meta property="og:title" content="NO – Pluggparken">
+<meta property="og:description" content="Rymden, kroppen, naturen och tekniken: utforska, bygg och gissa först.">
+<meta property="og:url" content="https://pluggparken.se/no/">
+<meta property="og:image" content="https://pluggparken.se/og.jpg">
+
+<script src="../tema.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NO – Pluggparken</title>
+<meta name="theme-color" content="#1F3A35">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/apple-touch-icon.png" sizes="180x180">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+:root{
+  --bg:#EAF3FF; --ink:#1D2B53; --muted:#56668F; --card:#FFFFFF; --line:#C6D6F2;
+  --good:#1E9E5E; --good-dark:#157548; --accent:#3D5AFE; --gold:#F2B707;
+  --font:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+.hero{position:relative;overflow:hidden;color:#fff;background:radial-gradient(ellipse 40% 70% at 20% 40%,rgba(255,255,255,.05),transparent 70%),radial-gradient(ellipse 45% 50% at 72% 90%,rgba(255,255,255,.035),transparent 70%),#1F3A35;padding:14px 16px 24px}
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:10px;background:#7E5129;border-top:3px solid #5E3B1C}
+.hero-in{max-width:1040px;margin:0 auto;position:relative;z-index:1}
+.hero h1{margin:0;color:#F3F0E4;font-size:clamp(2.2rem,8vw,3rem);line-height:1;letter-spacing:-1px}
+.hero h1 span{color:#F4D35E}
+.hero p{margin:8px 0 0;color:#C9DCD5;font-weight:700;font-size:clamp(.95rem,3.4vw,1.1rem)}
+.wrap{max-width:1040px;margin:0 auto;padding:6px 16px 48px}
+a:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.cards{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:620px){.cards{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}}
+.card{display:flex;align-items:center;gap:14px;background:var(--card);border-radius:20px;padding:12px 14px 12px 12px;text-decoration:none;color:inherit;box-shadow:0 5px 0 var(--line);transition:transform .08s,box-shadow .08s}
+.card:active{transform:translateY(3px);box-shadow:0 2px 0 var(--line)}
+@media(hover:hover){.card:hover{transform:translateY(-2px);box-shadow:0 7px 0 var(--line)}}
+.tile{flex:none;width:72px;height:72px;border-radius:18px;background:var(--c);display:grid;place-items:center;font-size:2.4rem;transform:rotate(-4deg);box-shadow:inset 0 -5px 0 rgba(0,0,0,.18)}
+.card .txt{flex:1;min-width:0}
+.card b{display:block;font-size:1.3rem;line-height:1.15}
+.card small{display:block;color:var(--muted);font-size:.95rem;line-height:1.3;margin-top:2px}
+.new{display:inline-block;background:var(--gold);color:var(--ink);border-radius:999px;padding:0 8px;font-size:.75rem;font-weight:800;margin-left:6px;vertical-align:middle;transform:rotate(-3deg)}
+.chev{flex:none;color:#A9B9D8;font-size:1.6rem;font-weight:800}
+.amne{font-size:1.35rem;margin:22px 0 10px;line-height:1.2}
+.amne:first-of-type{margin-top:4px}
+@media (prefers-reduced-motion:reduce){.card{transition:none}}
+.under{font-size:1rem;margin:16px 0 8px;line-height:1.2;color:var(--muted);font-weight:800}
+.vanner{position:relative;display:flex;align-items:center;gap:18px;overflow:hidden;text-decoration:none;color:#3B2500;border-radius:26px;padding:20px 22px;background:linear-gradient(120deg,#FFD84D 0%,#FFB84D 55%,#FF9E6B 100%);box-shadow:0 6px 0 #D98A1F;transition:transform .08s,box-shadow .08s}
+.vanner:active{transform:translateY(4px);box-shadow:0 2px 0 #D98A1F}
+@media(hover:hover){.vanner:hover{transform:translateY(-2px);box-shadow:0 8px 0 #D98A1F}}
+.vanner .lek{flex:none;display:grid;grid-template-columns:repeat(2,auto);gap:2px 6px;font-size:2.3rem;line-height:1.05;filter:drop-shadow(0 3px 0 rgba(120,60,0,.25))}
+.vanner .lek span{display:block;animation:vguppa 2.8s ease-in-out infinite}
+.vanner .lek span:nth-child(2){animation-delay:.35s}.vanner .lek span:nth-child(3){animation-delay:.7s}.vanner .lek span:nth-child(4){animation-delay:1.05s}
+@keyframes vguppa{50%{transform:translateY(-5px) rotate(6deg)}}
+.vanner .vt{flex:1;min-width:0}
+.vanner .ov{display:block;font-size:.85rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;opacity:.75}
+.vanner b{display:block;font-size:clamp(1.35rem,5vw,1.9rem);line-height:1.1;margin:2px 0 4px}
+.vanner small{display:block;font-size:1rem;line-height:1.3;font-weight:600;opacity:.9}
+.vanner .kn{display:inline-block;margin-top:10px;background:#3B2500;color:#FFE9A8;border-radius:999px;padding:6px 16px;font-weight:800;font-size:1.05rem}
+@media(max-width:480px){.vanner{flex-direction:column;align-items:flex-start;gap:8px}.vanner .lek{grid-template-columns:repeat(4,auto);font-size:2rem}}
+@media (prefers-reduced-motion:reduce){.vanner,.vanner .lek span{transition:none;animation:none}}
+
+/* ämnesbandet: samma griffeltavla som resten av sajten */
+.sb{position:relative;color:#fff;background:linear-gradient(110deg,#1A302C 0%,#1F3A35 50%,#2B4F47 100%);padding:6px 16px 20px;margin:0}
+.sb::after{content:"";position:absolute;left:0;right:0;bottom:0;height:10px;background:#7E5129;border-top:3px solid #5E3B1C}
+.sb-in{position:relative;max-width:1040px;margin:0 auto;display:flex;align-items:center;gap:16px}
+.sb .ik{flex:none;width:84px;height:84px;border-radius:24px;background:var(--c,#3D5AFE);display:grid;place-items:center;box-shadow:0 5px 0 rgba(0,0,0,.28)}
+.sb .ik img{width:58px;height:58px}
+.sb h1{margin:0;font-size:clamp(2rem,6vw,2.8rem);line-height:1.05;font-weight:800;font-family:"Baloo 2","Trebuchet MS",system-ui,sans-serif}
+.sb p{margin:4px 0 0;font-size:1.08rem;opacity:.92;font-weight:600}
+.tillhub{display:inline-block;margin:12px 0 0;background:#fff;color:#1D2B53;border-radius:999px;padding:6px 16px;font-weight:800;box-shadow:0 3px 0 rgba(0,0,0,.2);text-decoration:none}
+h2.amne,h2.grp{font-family:"Baloo 2","Trebuchet MS",system-ui,sans-serif}
+
+</style>
+</head>
+<body>
+<header class="sb"><div class="sb-in"><span class="ik" style="--c:#1E9E5E"><img src="amnen/no.svg" alt=""></span><div><h1>NO</h1><p>Rymden, kroppen, naturen och tekniken</p></div></div></header>
+<main class="wrap" style="max-width:980px;margin:14px auto 0;padding:0 16px 40px">
+<a class="tillhub" href="./">← Alla ämnen</a>
+  <h2 class="amne">Rymden och jorden</h2>
+  <nav class="cards" aria-label="Rymden och jorden">
+    <a class="card" href="ovriga/rymdlabbet/"><span class="tile" style="background:none;box-shadow:none;padding:0"><svg viewBox="0 0 72 72" width="72" height="72" aria-hidden="true" style="display:block;border-radius:16px"><defs><radialGradient id="rg" cx=".35" cy=".3" r=".9"><stop offset="0" stop-color="#FFD9A0"/><stop offset="1" stop-color="#E0803A"/></radialGradient></defs><rect width="72" height="72" fill="#14204A"/><circle cx="12" cy="14" r="1.6" fill="#fff"/><circle cx="58" cy="12" r="1.2" fill="#fff"/><circle cx="62" cy="58" r="1.6" fill="#fff"/><circle cx="14" cy="60" r="1.1" fill="#fff"/><circle cx="36" cy="36" r="15" fill="url(#rg)"/><ellipse cx="36" cy="38" rx="28" ry="7" fill="none" stroke="#F4D9A0" stroke-width="3" transform="rotate(-18 36 38)"/><path d="M12 44a28 7 0 0 0 48-12" fill="none" stroke="#14204A" stroke-width="0"/></svg></span><span class="txt"><b>Rymdlabbet</b><small>Planeterna, stjärnorna, årstiderna och svarta hål</small></span><span class="chev">›</span></a>
+    <a class="card" href="kontinentdrift/"><span class="tile" style="background:none;box-shadow:none;padding:0"><svg viewBox="0 0 72 72" width="72" height="72" aria-hidden="true" style="display:block;border-radius:18px;box-shadow:0 3px 0 rgba(29,43,83,.2)"><rect width="72" height="72" fill="#050B1C"/><g fill="#fff" opacity=".7"><circle cx="9" cy="10" r=".9"/><circle cx="62" cy="14" r=".8"/><circle cx="14" cy="60" r=".8"/><circle cx="64" cy="58" r=".9"/></g><circle cx="36" cy="36" r="27" fill="#1B6BB5"/><circle cx="36" cy="36" r="30" fill="none" stroke="#5CA8FF" stroke-opacity=".35" stroke-width="4"/><clipPath id="kdc"><circle cx="36" cy="36" r="27"/></clipPath><g clip-path="url(#kdc)" fill="#6DBE5A" stroke="#2F7A3A" stroke-width="1"><path d="M18 24c6-5 14-4 17 2s-3 11-1 17-6 11-11 6-9-12-8-19 0-5 3-6z"/><path d="M42 20c5-3 12-1 17 4s1 10-3 11-5 8-9 6-8-10-6-16 0-3 1-5z"/><path d="M44 50c5-2 11 2 11 7s-5 8-9 6-5-11-2-13z"/></g><ellipse cx="28" cy="25" rx="10" ry="7" fill="#fff" opacity=".16"/></svg></span><span class="txt"><b>Kontinentaldrift</b><small>Res 250 miljoner år tillbaka på en 3D-glob och se hur Pangaea bröts upp.</small></span><span class="chev">›</span></a>
+  </nav>
+  <h2 class="amne">Kroppen</h2>
+  <nav class="cards" aria-label="Kroppen">
+    <a class="card" href="anatomi/"><span class="tile" style="background:none;box-shadow:none;padding:0"><svg viewBox="0 0 72 72" width="72" height="72" aria-hidden="true" style="display:block;border-radius:18px;box-shadow:0 3px 0 rgba(29,43,83,.2)"><rect width="72" height="72" fill="#f4f7fb"/><circle cx="36" cy="16" r="8" fill="#dcd3bd"/><rect x="34.5" y="24" width="3" height="30" rx="1.5" fill="#d5cbb2"/><g fill="none" stroke="#dcd3bd" stroke-width="2.4" stroke-linecap="round"><path d="M34 28q-12 2-13 10M34 34q-11 2-12 9M34 40q-9 2-10 8"/><path d="M38 28q12 2 13 10M38 34q11 2 12 9M38 40q9 2 10 8"/></g><path d="M31 54q5 8 10 0z" fill="#e1b46b"/><ellipse cx="29" cy="40" rx="3" ry="5" fill="#c0392b" opacity=".85"/></svg></span><span class="txt"><b>Människokroppen i 3D</b><small>Vrid och utforska skelettet, musklerna, organen, blodkärlen och nerverna. Tryck på en del för att lära dig vad den heter.</small></span><span class="chev">›</span></a>
+  </nav>
+  <h2 class="amne">Natur och teknik</h2>
+  <nav class="cards" aria-label="Natur och teknik">
+    <a class="card" href="vattenkretslopp/"><span class="tile" style="background:none;box-shadow:none;padding:0"><svg viewBox="0 0 72 72" width="72" height="72" aria-hidden="true" style="display:block;border-radius:16px"><rect width="72" height="72" fill="#BFE6FA"/><circle cx="16" cy="16" r="8" fill="#FFD84D"/><path d="M0 50h26v22H0z" fill="#2F8FD8"/><path d="M26 72V54l30-26 16 20v24z" fill="#7F9A8A"/><ellipse cx="50" cy="14" rx="13" ry="6" fill="#fff"/><path d="M50 22c2 3 3 4 3 6a3 3 0 0 1-6 0c0-2 1-3 3-6z" fill="#2A8EE0"/></svg></span><span class="txt"><b>Vattnets kretslopp</b><small>Följ en vattendroppe från hav till moln och tillbaka</small></span><span class="chev">›</span></a>
+    <a class="card" href="sjon/"><span class="tile" style="background:none;box-shadow:none;padding:0"><svg viewBox="0 0 72 72" width="72" height="72" aria-hidden="true" style="display:block;border-radius:18px;box-shadow:0 3px 0 rgba(29,43,83,.2)"><rect width="72" height="72" fill="#CFEFFF"/><rect y="22" width="72" height="50" fill="#3C9FD6"/><rect y="52" width="72" height="20" fill="#1F6FA9"/><svg x="34" y="2" width="32" height="18" viewBox="0 0 140 80"><g stroke="#1D2B53" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"><path d="M70 44 C56 12 30 4 6 10 C28 18 40 32 50 52 Z" fill="#8A6642"/><path d="M42 50 L14 62 L14 44 Z" fill="#7B5A3A"/><ellipse cx="74" cy="50" rx="32" ry="11" fill="#fff"/><path d="M82 46 C84 14 108 -2 134 4 C112 14 102 30 98 52 Z" fill="#7B5A3A"/><circle cx="108" cy="46" r="11" fill="#fff"/><path d="M116 50 Q128 49 124 62 Q121 55 115 56 Z" fill="#2B2B2B"/></g><path d="M100 44 L116 44" stroke="#2B2B2B" stroke-width="5" stroke-linecap="round"/><circle cx="109" cy="44" r="2" fill="#FFC93C"/></svg><svg x="2" y="24" width="26" height="15" viewBox="0 0 100 60"><g stroke="#1D2B53" stroke-width="2.4" stroke-linejoin="round"><circle cx="30" cy="36" r="16" fill="#5DBB63"/><circle cx="54" cy="28" r="20" fill="#4CAF50"/><circle cx="74" cy="39" r="14" fill="#6CC871"/></g><g fill="#A9E4AD"><circle cx="24" cy="31" r="4"/><circle cx="50" cy="20" r="5"/><circle cx="70" cy="34" r="3.4"/></g><g fill="none" stroke="#2F8A3B" stroke-width="2" stroke-linecap="round"><path d="M42 40 q6 5 12 0"/><path d="M64 44 q5 3 9 0"/></g></svg><svg x="8" y="40" width="34" height="20" viewBox="0 0 100 60"><g stroke="#1D2B53" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"><path d="M24 30 L4 12 Q10 30 4 48 Z" fill="#FF7A59"/><path d="M22 30 C34 8 66 6 88 28 C66 54 36 52 22 30 Z" fill="#C9DDF4"/><path d="M44 13 L54 2 L64 15 Z" fill="#FF7A59"/><path d="M46 46 L52 57 L62 44 Z" fill="#FF7A59"/><path d="M66 22 Q61 30 66 40" fill="none"/></g><path d="M30 30 C42 18 60 17 78 28 C60 36 42 38 30 30 Z" fill="#E8F1FB" opacity=".75"/><circle cx="76" cy="27" r="5" fill="#FFB347" stroke="#1D2B53" stroke-width="2"/><circle cx="77" cy="27" r="2.3" fill="#1D2B53"/></svg><svg x="44" y="38" width="22" height="13" viewBox="0 0 100 60"><g stroke="#1D2B53" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"><path d="M30 36 L12 44 L22 30 Z" fill="#FFC9A8"/><ellipse cx="46" cy="32" rx="24" ry="19" fill="#FFD8BE"/><path d="M62 24 q14 -14 30 -8 M78 17 l4 -10 M85 20 l10 -6" fill="none"/><path d="M40 48 q4 7 9 4 M52 49 q4 7 9 4" fill="none"/></g><ellipse cx="42" cy="34" rx="12" ry="9" fill="#FFB085" opacity=".7"/><circle cx="60" cy="27" r="6" fill="#fff" stroke="#1D2B53" stroke-width="2"/><circle cx="62" cy="27" r="2.8" fill="#1D2B53"/></svg></svg></span><span class="txt"><b>Sjön</b><small>Bygg en näringskedja och rädda en sjö där något har gått fel.</small></span><span class="chev">›</span></a>
+    <a class="card" href="flytasjunka/"><span class="tile" style="background:none;box-shadow:none;padding:0"><svg viewBox="0 0 72 72" width="72" height="72" aria-hidden="true" style="display:block;border-radius:16px"><rect width="72" height="72" fill="#DDEEFA"/><path d="M0 34q9-4 18 0t18 0 18 0 18 0v38H0z" fill="#2F8FD8"/><path d="M20 30h32l-5 9H25z" fill="#C47A4A"/><circle cx="31" cy="24" r="4.5" fill="#E5484D"/><circle cx="41" cy="24" r="4.5" fill="#F2B707"/><circle cx="52" cy="58" r="4" fill="#9AA6B8"/></svg></span><span class="txt"><b>Flyta eller sjunka</b><small>Testa vad som flyter och bygg en båt av lera</small></span><span class="chev">›</span></a>
+    <a class="card" href="elkrets/"><span class="tile" style="background:none;box-shadow:none;padding:0"><svg viewBox="0 0 72 72" width="72" height="72" aria-hidden="true" style="display:block;border-radius:18px;box-shadow:0 3px 0 rgba(29,43,83,.2)"><rect width="72" height="72" fill="#14213D"/><path d="M14 52V22H58V52H14" fill="none" stroke="#9FB6E8" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="36" cy="22" r="15" fill="rgba(255,216,77,.38)"/><circle cx="36" cy="22" r="9" fill="#FFF3C0" stroke="#FFE27A" stroke-width="2.5"/><path d="M31 26L34 17L38 25L41 16" fill="none" stroke="#F2780C" stroke-width="2" stroke-linecap="round"/><path d="M8 36h12M11 32h6" stroke="#14213D" stroke-width="9"/><path d="M9 36H19M12 31.5H16" stroke="#CFE0FF" stroke-width="3.2" stroke-linecap="round" transform="translate(0 0)"/><g fill="#FFD84D"><circle cx="24" cy="22" r="2.2"/><circle cx="50" cy="22" r="2.2"/><circle cx="58" cy="38" r="2.2"/><circle cx="36" cy="52" r="2.2"/></g></svg></span><span class="txt"><b>Elkretsen</b><small>Bygg kretsar med lampor och brytare, se strömmen och gissa vad som händer.</small></span><span class="chev">›</span></a>
+  </nav>
+  </main>
+<script src="ljud.js"></script>
+<script src="djur.js"></script>
+<script src="huvud.js" data-hem="../" data-nav="av" data-titel="NO" data-ikon="🔬"></script>
+</body>
+</html>

@@ -33,7 +33,7 @@ Efter varje ändring: är det en **ny regel eller ett nytt beslut**, skriv en ko
 
 | Fil | Innehåll |
 | --- | --- |
-| `docs/plattform.md` | Plattformen: startsidan, sidhuvud, profiler, konton, mynt, sök, tema. Startsidan och ämnessidorna, `huvud.js` (sidhuvud, ←, menyn), profiler och inloggning, molnkonton (Supabase), mynt och Garderoben, sökning, ljust/mörkt läge, första sidans tavla och kort. |
+| `docs/plattform.md` | Plattformen (även NO som eget ämne): startsidan, sidhuvud, profiler, konton, mynt, sök, tema. Startsidan och ämnessidorna, `huvud.js` (sidhuvud, ←, menyn), profiler och inloggning, molnkonton (Supabase), mynt och Garderoben, sökning, ljust/mörkt läge, första sidans tavla och kort. |
 | `docs/design.md` | Gemensam design. Färger, kort, kortbilder, instruktionsfilmer, djuret och Garderoben (de korta grundreglerna står också i `CLAUDE.md`). |
 | `docs/matematik.md` | Matematik: övningar, verktyg och Nationella prov. Lilla plus, Tiotalsövergång, Hundrarutan, Verktygslådan, Uppställning, Multiplikation, Division, Klockan, Geometri, Bråk, Mätning, Vågen, Gömda tal, Tiobas m.fl. |
 | `docs/spel.md` | Spel: Spelhörnan, Slungan, Trädgårdsvakten, Schack, Sudoku m.fl.. Spelhörnan och alla spel (Bubbelskjutaren, Tornbygget, Skattjakten, Kulbanan, Sagoriket, Sifferslottet, Affären, Rutjakten, Slungan, Trädgårdsvakten) samt brädspel och gissa-spel. |

@@ -81,3 +81,8 @@ Sajten loggar inget och har ingen analys eller kakor. Inga externa typsnitt elle
 
 - Egna 3D-modeller (Blender, `.glb`), riktiga organmodeller i Kroppen-ön.
 - Bildkort-rader på första sidan (Fortsätt där du var, Prova något nytt).
+
+## NO som eget ämne (12 nov 2026, lärarens beslut)
+- Startsidan har ett kort **NO** (`no/`) i stället för Rymdlabbet-kortet. `no/index.html` samlar allt NO i tre grupper: *Rymden och jorden* (Rymdlabbet, Kontinentaldrift), *Kroppen* (Människokroppen i 3D), *Natur och teknik* (Vattnets kretslopp, Sjön, Flyta eller sjunka, Elkretsen). 🔬 NO-sektionen i `fler/` är borttagen. Ny NO-övning: lägg kortet i `no/index.html` (inte i `fler/`) och sökvägen i NO-regexen i `amneAv()` i `huvud.js`.
+- Rymdlabbets adress `ovriga/rymdlabbet/` är oförändrad (länkar, portalen i världen och sök bryts inte). I menyn och brödsmulan hör Rymdlabbet, Solsystemet, Vintergatan, Människokroppen och NO-övningarna till ämnet `no`.
+- Startkortet använder fortfarande CSS-klassen `ry` (animerad planet med ring) och färgen `#1E9E5E`.
