@@ -86,7 +86,7 @@ const IDX=[
  ['varlden/','Pluggparken-världen','Gå runt på en ö i 3D med ditt djur, hoppa in i portaler, ta uppdrag och besök Matte-parken','🏝️','värld ö 3d portal hoppa spel öppen värld djur utforska uppdrag park matte-parken prydnader stjärnor','Utforska'],
  ['vikingatiden/','Vikingatiden','Skepp, runor och gudar. Vad vet du om vikingarna?','⚓','vikingar vikingatiden skepp långskepp runor tor odin historia sverige','SO'],
  ['spegelbilder/','Spegelbilder','Välj den bild som är spegelbilden. Träna symmetri.','🪞','spegel spegelbild symmetri geometri former spegling','Matte'],
- ['rutnat/','Rutnät och koordinater','Hitta skatten i rutnätet. Läs av bokstav och siffra.','🗺️','rutnät koordinater karta bokstav siffra skattkarta geometri','Matte'],
+ ['rutnat/','Rutnät och koordinater','Gräv efter skatten på kartan. Tryck på rätt ruta, läs av och gå rätt väg.','🗺️','rutnät koordinater karta bokstav siffra skattkarta geometri','Matte'],
  ['stavningsjakten/','Stavningsjakten','Hur stavas ordet på bilden? Hitta rätt stavning.','🔎','stavning stava rättstavning ord bild svenska','Svenska'],
  ['demokrati/','Demokrati','Hur bestämmer vi tillsammans? Röstning, riksdag och rättigheter.','🗳️','demokrati rösta val riksdag regeringen lag rättigheter samhälle','SO'],
  ['engelskaord/','Engelska ord','Vad heter det på engelska? Ord, färger och artighet.','🇬🇧','engelska ord english hello thank you färger djur','Engelska'],

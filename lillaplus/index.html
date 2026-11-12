@@ -144,6 +144,15 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
 .jarin{display:flex;flex-wrap:wrap-reverse;gap:1px;justify-content:center;font-size:1.15rem;line-height:1}
 .jarin span{animation:drop .35s ease-in}
 @keyframes drop{from{transform:translateY(-30px);opacity:0}}
+/* Öva: äggkartongen fylls med ett ägg för varje uppgift man klarat (visar aldrig svaret) */
+.prog{display:flex;gap:4px;justify-content:center;border-radius:14px;padding:7px 9px;margin:10px auto 0;width:fit-content;max-width:100%}
+.prog i{flex:none;width:min(20px,calc((100vw - 64px)/var(--n,15) - 4px));aspect-ratio:1;border-radius:50%}
+.prog i.nu{outline:3px solid var(--gold,#F2B707);outline-offset:1px}
+.prog i.e{animation:drop .35s ease-in}
+@media (prefers-reduced-motion:reduce){.prog i.e{animation:none}}
+.prog{background:#E8DCC8;box-shadow:inset 0 -4px 0 #CDBB9F,0 3px 0 #B8A584}
+.prog i{background:radial-gradient(circle at 50% 40%,#D6C6AA,#C2AF8E);box-shadow:inset 0 2px 3px rgba(0,0,0,.18)}
+.prog i.e{border-radius:50% 50% 50% 50%/58% 58% 42% 42%;background:radial-gradient(circle at 35% 30%,#fff,#FBF3E4 60%,#EADBC0);box-shadow:inset -2px -3px 0 rgba(0,0,0,.08),0 1px 0 rgba(0,0,0,.14)}
 .car svg{height:42px;width:auto;display:block}
 .car.ghost svg{filter:grayscale(1)}
 /* tioramen som äggkartong */
@@ -191,6 +200,7 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
   </div>
   <div class="tbar" id="blitzBar" hidden><i id="blitzFill"></i></div>
   <div class="jar" id="jar" hidden><span class="jarlbl">Äggkorgen</span><div class="jarin" id="jarIn"></div></div>
+  <div class="prog" id="prog" hidden role="img" aria-label="Äggkartongen: ett ägg för varje uppgift du klarat"></div>
   <div class="qbox" id="qbox">
     <div class="question"><span id="question"></span><span class="ans" id="answer">?</span></div>
     <div class="tf" id="tf" hidden><button data-tf="1">Stämmer</button><button data-tf="0">Stämmer inte</button></div>
@@ -324,6 +334,7 @@ function startGame(mode,custom){
   }
   if(mode==='blitz')$('#blitzFill').style.width='100%';
   $('#jar').hidden=mode!=='blitz';$('#jarIn').innerHTML='';
+  $('#prog').hidden=mode!=='practice';$('#prog').innerHTML=mode==='practice'?'<i></i>'.repeat(G.total):'';$('#prog').style.setProperty('--n',G.total||15);
   $('#question').textContent='';$('#answer').textContent='?';$('#feedback').textContent='';$('#qbox').className='qbox';$('#info').textContent='';
   if(document.activeElement)document.activeElement.blur();
   show('game');
@@ -367,6 +378,7 @@ function showQ(){
   $('#question').innerHTML=qText(k,G.cur);$('#answer').textContent='?';$('#answer').hidden=k!=='q';
   $('#tf').hidden=k!=='tf';$('#answers').hidden=k==='tf'||!$('#help').hidden;
   $('#feedback').textContent='';$('#qbox').className='qbox';G.busy=false;updateInfo();
+  if(G.mode==='practice'){const c=$('#prog').children[G.correct];if(c&&!c.className)c.className='nu';}
 }
 const PRAISE=['Rätt!','Snyggt!','Bra!','Toppen!','Rätt igen!','Klockrent!'];
 function answer(v,tfYes){
@@ -382,6 +394,7 @@ function answer(v,tfYes){
     $('#feedback').textContent=G.streak>=5?`${G.streak} rätt i rad!`:PRAISE[Math.floor(Math.random()*PRAISE.length)];
     if(G.mode==='race'){G.times.push(elapsed());setPos($('#carMe'),G.correct/RACE_LEN);updateInfo();if(G.correct>=RACE_LEN){setTimeout(finish,500);return;}}
     if(G.mode==='blitz'&&G.correct<=90)$('#jarIn').insertAdjacentHTML('beforeend','<span>🥚</span>');
+    if(G.mode==='practice'){const c=$('#prog').children[G.correct-1];if(c)c.className='e';}
     setTimeout(nextQ,G.mode==='blitz'?200:380);
   }else{
     G.streak=0;$('#qbox').classList.add('bad');window.Ljud&&Ljud.bad();
