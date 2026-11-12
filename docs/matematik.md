@@ -25,7 +25,7 @@ _Det som gäller nu för matteövningarna, verktygen och Nationella prov. De ped
 | `klockan/` | Klockan, Stationen | `mattespel-klockan-v1` |
 | `matning/` | Mätning: längd, vikt, volym | `mattespel-matning-v1` |
 | `geometri/` | Geometri, Tangram, Spegelmåla (galleri i `matteportalen-galleri`) | `mattespel-geometri-v1` |
-| `spegelbilder/`, `rutnat/` | Spegelbilder, Rutnät och koordinater | `mattespel-<namn>-v1` |
+| `rutnat/` | Rutnät och koordinater (skattkartan) | `mattespel-rutnat-v1` |
 | `verktyg/` | Verktygslådan: Klockan, Kulramen, Bråkväggen, Tallinjen, länkar till Hundrarutan, Tiobas och Spegelmåla. Inga stjärnor, sparar inget. | – |
 | `tiobas/` | Tiobas (nås bara via Verktygslådan) | – |
 | `taluppfattning/` | Bedömningsstöd åk 1 och 2 | `mattespel-taluppfattning-v1` |
@@ -74,7 +74,7 @@ Delade ritningar i roten, inga kopior i sidorna: `klocka.js`, `vag.js`, `brak.js
 
 ## Borttaget med flit (bygg inte igen)
 
-Bygg bilden i Geometri, Lätt-nivån i Tangram, mönsterbitar och fritt tangram i Verktygslådan, "Rita ovanpå", nivå 3 i Dela upp och dela, knappen "＋ Ny del", Lär-steget i Multiplikation, den stora Spegelmåla-bannern, kortet för Tiobas på startsidan, 100 överst i Hundrarutan. Se även listan i `CLAUDE.md`.
+**Spegelbilder** (välj rätt bild av fyra; Symmetri och Spegelmåla i Geometri gör samma sak bättre; `spegelbilder/` är bara en omdirigering till Geometri och nyckeln `mattespel-spegelbilder-v1` ligger kvar i stjärnräkningen och `PKEYS`), Bygg bilden i Geometri, Lätt-nivån i Tangram, mönsterbitar och fritt tangram i Verktygslådan, "Rita ovanpå", nivå 3 i Dela upp och dela, knappen "＋ Ny del", Lär-steget i Multiplikation, den stora Spegelmåla-bannern, kortet för Tiobas på startsidan, 100 överst i Hundrarutan. Se även listan i `CLAUDE.md`.
 
 ## Väntar
 
