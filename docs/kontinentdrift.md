@@ -28,3 +28,9 @@ Kort i `fler/index.html` (NO), `sok.js`, `sitemap.xml`, `konto.js` (`PKEYS`), `S
 - [x] Nivå 2 Bevisen: fem frågor (fossil, bergskedja, växt, Indiens tid med reglage, fart); stjärnor
 - [x] Testat i 390 × 844, 375 × 667 (skrollar ca 60 px) och 1200 × 760, inkopplat i Fler ämnen (NO), sök, sitemap, konto, stjärnor
 - Inte provat: pekskärm, gammal iPad/Chromebook (3D). Inte gjort: portal i världen, framtiden (Pangaea Proxima), fler plattor. Texterna är inte granskade av en geolog.
+
+## Putsning av Pangaea (12 nov 2026, lärarens "känns billig")
+- **Ny passning:** efter ankarpassningen finslipades varje platta mot grannarna med en kontaktkostnad (avståndet från plattans kust till närmaste redan placerade land, plus straff för överlapp). Nordamerika ligger nu intill Afrika och Europa, Sydamerika i Afrikas utbuktning, Indien vid Madagaskar, Antarktis och Australien samlade. `ROT` i skriptet är utbytt för plattorna 0, 1, 4, 5, 6 (Afrika och Eurasien står stilla). Mexikanska golfen är ett innanhav, som i verkligheten.
+- **Kustkanter:** plattornas texturer görs nu av 2×2 delpunkter per texel (mjuk täckning, ingen hackig kant) som `DataTexture` med färg utspridd över genomskinliga kantpixlar (ingen mörk söm).
+- **Sömmen över Afrika:** Nordafrikas kust (Maghreb, Libyen) tillhörde fel platta; reglerna i `plateOf` är rättade.
+- Inte löst: tidslinjens banor är fortfarande raka bågar (slerp), så plattor kan glida genom varandra mellan 250 och 150 Mya. Passningen har några graders fel.

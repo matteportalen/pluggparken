@@ -166,7 +166,7 @@ const FAKTA=[
  "Australien lossnade från Antarktis för omkring 85 miljoner år sedan och drev norrut, ungefär 7 centimeter om året.",
  "Antarktis låg en gång mycket varmare och närmare Afrika. Det drev söderut och frös till is."];
 /* rotationsmatriser (Pangaea 250 Mya relativt Afrika), anpassade mot geologiska ankarpunkter, se docs/kontinentdrift.md */
-const ROT={0:[0.4244,0.0776,0.9021,0.1403,0.9787,-0.1501,-0.8945,0.1903,0.4045],1:[0.7193,-0.0861,0.6893,0.5196,0.7254,-0.4516,-0.4611,0.683,0.5665],4:[0.877,-0.1421,-0.459,0.4164,0.7013,0.5785,0.2398,-0.6985,0.6742],5:[0.6721,-0.7357,-0.0833,0.6899,0.6631,-0.2903,0.2688,0.1377,0.9533],6:[0.8803,-0.4459,0.162,0.4537,0.6915,-0.5621,0.1386,0.5684,0.811]};
+const ROT={0:[0.387,0.1288,0.913,0.0494,0.9859,-0.1601,-0.9208,0.1071,0.3751],1:[0.7165,-0.1019,0.6901,0.5596,0.6746,-0.4814,-0.4165,0.7311,0.5403],4:[0.8662,0.3577,-0.349,-0.1645,0.8636,0.4767,0.4719,-0.3555,0.8068],5:[0.5744,-0.8175,-0.0416,0.8061,0.5738,-0.1448,0.1422,0.0496,0.9886],6:[0.8112,-0.4996,0.3037,0.5845,0.7068,-0.3985,-0.0156,0.5008,0.8654]};
 /* hur stor del av rörelsen som återstår vid tiden t (miljoner år sedan): [t, andel] */
 const TL={0:[[0,0],[20,.08],[60,.28],[100,.5],[140,.72],[180,.93],[200,1],[250,1]],
  1:[[0,0],[40,.18],[80,.4],[110,.65],[135,.92],[150,1],[250,1]],
@@ -189,6 +189,7 @@ const INDIEN=[[66.5,23.5],[68,30],[74,34],[78,33.5],[80,30.5],[84,28.2],[89,27.2
 function plateOf(lon,lat){
   if(lat>83.6)return -1;if(lat<-60)return 6;if(pip(lon,lat,INDIEN))return 4;
   if((lon>=129&&lat<=-0.5&&lat>-12)||(lat<=-10.5&&lon>=112&&lat>-48))return 5;
+  if(lon>=-13&&lon<.5&&lat<35.95&&lat>=31.7)return 2;if(lon>=.5&&lon<=11.5&&lat<37.4&&lat>=31.7)return 2;if(lon>11.5&&lon<=30&&lat<33.3&&lat>=31.7)return 2;
   if(lon>=-25&&lon<=36&&lat<31.7&&lat>-40)return 2;if(lon>36&&lon<=52&&lat<=12.8&&lat>-40)return 2;if(pip(lon,lat,ARABIEN))return 2;
   if(lon<-34&&lon>-92&&lat<8.8&&lat>-60)return 1;if(lon>=-25&&lon<=-13&&lat>=63&&lat<=67)return 3;
   if(lon>=-168&&lon<=-10&&lat>=8.8)return 0;if(((lon>=-12&&lon<=180)||lon<-168)&&lat>-12)return 3;return -1;}
@@ -216,9 +217,17 @@ async function bygg3d(){const host=$("glob");const renderer=new THREE.WebGLRende
   const sc=document.createElement("canvas");sc.width=2048;sc.height=1024;const sg=sc.getContext("2d",{willReadFrequently:true});sg.drawImage(img,0,0,2048,1024);const sd=sg.getImageData(0,0,2048,1024).data;
   idMap=new Uint8Array(MW*MH);const cv=Array.from({length:7},()=>{const c=document.createElement("canvas");c.width=MW;c.height=MH;const g=c.getContext("2d");return{c,g,im:g.createImageData(MW,MH)};});
   const gh=document.createElement("canvas");gh.width=MW;gh.height=MH;const ggx=gh.getContext("2d"),gim=ggx.createImageData(MW,MH);
-  for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const s=((y*2+1)*2048+(x*2+1))*4,r=sd[s],g=sd[s+1],b=sd[s+2];if(b>r+12&&b>=g-8&&r<120)continue;
-    const lon=(x+.5)/MW*360-180,lat=90-(y+.5)/MH*180,p=plateOf(lon,lat);if(p<0)continue;idMap[y*MW+x]=p+1;const o=(y*MW+x)*4,im=cv[p].im.data;im[o]=r;im[o+1]=g;im[o+2]=b;im[o+3]=255;const q=gim.data;q[o]=q[o+1]=q[o+2]=255;q[o+3]=255;}
-  plates=cv.map((o,p)=>{o.g.putImageData(o.im,0,0);const tex=new THREE.CanvasTexture(o.c);tex.colorSpace=THREE.SRGBColorSpace;tex.anisotropy=4;
+  /* 2×2 delpunkter per texel: mjuk kustkant (täckning) och färg bara från landpunkter */
+  for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const cnt=[0,0,0,0,0,0,0],sr=[0,0,0,0,0,0,0],sg2=[0,0,0,0,0,0,0],sb=[0,0,0,0,0,0,0];
+    for(let k=0;k<4;k++){const px=x*2+(k&1),py=y*2+(k>>1),s=(py*2048+px)*4,r=sd[s],g=sd[s+1],b=sd[s+2];if(b>r+12&&b>=g-8&&r<120)continue;
+      const lo=(px+.5)/2048*360-180,la=90-(py+.5)/1024*180;if(la>31.7&&la<37.5&&lo>-13&&lo<30&&b>=r-10&&b>=g-10)continue;
+      const p=plateOf(lo,la);if(p<0)continue;cnt[p]++;sr[p]+=r;sg2[p]+=g;sb[p]+=b;}
+    let best=-1,bn=0;for(let p=0;p<7;p++)if(cnt[p]>bn){bn=cnt[p];best=p;}if(best<0)continue;
+    for(let p=0;p<7;p++){if(!cnt[p])continue;const o=(y*MW+x)*4,im=cv[p].im.data;im[o]=sr[p]/cnt[p];im[o+1]=sg2[p]/cnt[p];im[o+2]=sb[p]/cnt[p];im[o+3]=cnt[p]*64-1;}
+    idMap[y*MW+x]=best+1;const o=(y*MW+x)*4,q=gim.data;q[o]=q[o+1]=q[o+2]=255;q[o+3]=255;}
+  /* färgen sprids ut över genomskinliga kantpixlar så att ingen mörk söm blandas in */
+  cv.forEach(o=>{const d=o.im.data;for(let pass=0;pass<2;pass++){const c=d.slice();for(let y=1;y<MH-1;y++)for(let x=0;x<MW;x++){const i=(y*MW+x)*4;if(c[i+3]>0)continue;for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const j=((y+dy)*MW+(x+dx+MW)%MW)*4;if(c[j+3]>0){d[i]=c[j];d[i+1]=c[j+1];d[i+2]=c[j+2];break;}}}}});
+  plates=cv.map((o,p)=>{const fl=new Uint8Array(MW*MH*4),sd0=o.im.data;for(let y=0;y<MH;y++)fl.set(sd0.subarray(y*MW*4,(y+1)*MW*4),(MH-1-y)*MW*4);const tex=new THREE.DataTexture(fl,MW,MH,THREE.RGBAFormat);tex.colorSpace=THREE.SRGBColorSpace;tex.magFilter=THREE.LinearFilter;tex.minFilter=THREE.LinearMipmapLinearFilter;tex.generateMipmaps=true;tex.anisotropy=4;tex.needsUpdate=true;
     const m=new THREE.Mesh(geo,new THREE.MeshLambertMaterial({map:tex,transparent:true,alphaTest:.5}));m.scale.setScalar(1.004+p*.0003);m.userData.p=p;scene.add(m);
     const q=new THREE.Quaternion();if(ROT[p]){const M=ROT[p];q.setFromRotationMatrix(new THREE.Matrix4().set(M[0],M[1],M[2],0,M[3],M[4],M[5],0,M[6],M[7],M[8],0,0,0,0,1));}return{m,q250:q};});
   ggx.putImageData(gim,0,0);const gtex=new THREE.CanvasTexture(gh);ghost=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({map:gtex,transparent:true,opacity:.3,depthWrite:false,color:0xfff2b0}));ghost.scale.setScalar(1.001);ghost.visible=false;scene.add(ghost);
