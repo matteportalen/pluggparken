@@ -21,3 +21,9 @@ Kort i `fler/index.html` (NO), `sok.js`, `sitemap.xml`, `konto.js` (`PKEYS`), `S
 - [x] Sidan byggd (simulering, nivå 1–3). Värmeberoende `varme(T)` justerat så att "mycket varmare" ger tydligt mer regn; kör om facit (12 körningar per fråga) om simuleringen ändras
 - [x] Testad i tre storlekar (375 × 667 skrollar ca 60 px i Laborera, godtaget)
 - [x] Inkopplad, pushad. Inte provat: pekskärm, biolog/lärare har inte läst texterna
+
+## Ny scen (12 nov 2026, lärarens "känns inte flaggskepp")
+- Hela ritningen är omgjord (`scen`, `moln`, `nederbord`, `ritaPart`); simuleringen, nivåerna och facit är orörda (facit omkört: 12 av 12 på alla fem frågor).
+- Lager: himmel (dag, frost, släckt sol med stjärnor), sol med sken, fjärran kust, berg med klippa, skuggsida, snötäcke som växer med snömängden, granskog, flod som mjuk kurva (`FLOD` = Catmull-Rom genom `FLOD0`, smal överst, rinnande ljusstreck, torr bädd utan vatten), hav med tre våglager, solglitter och isflak, förgrundskulle.
+- `VIS` = utjämnade värden ur simuleringen (snö, moln, flod, frost, natt, havsnivå) så att bilden inte flimrar. Havets partiklar och snöpartiklarna ritas inte längre som prickar: havsnivån, snötäcket och flodens bredd visar mängden. Ånga = mjuka slöjor, regn = stråk, snö = flingor. `nederbord` är dekor under molnet med täthet efter molnmängden.
+- Geometrin som inte får flyttas: hav x < 126, molnet vid (250, 50), toppen (290, 66), markörerna i nivå 1 (`MARK`).
