@@ -5,13 +5,13 @@
 <script src="../tema.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Demokrati – Pluggparken</title>
-<meta name="description" content="Demokrati: hur man bestämmer tillsammans. Röstning, riksdag och rättigheter.">
+<meta name="description" content="Demokrati: led klassrådet, räkna rösterna och se vad som fick majoritet. Gå igenom en valdag, fördela platserna i riksdagen och sortera rättigheter.">
 <link rel="canonical" href="https://pluggparken.se/demokrati/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Pluggparken">
 <meta property="og:locale" content="sv_SE">
 <meta property="og:title" content="Demokrati – Pluggparken">
-<meta property="og:description" content="Demokrati: hur man bestämmer tillsammans. Röstning, riksdag och rättigheter.">
+<meta property="og:description" content="Demokrati: led klassrådet, räkna rösterna och se vad som fick majoritet. Gå igenom en valdag och fördela platserna i riksdagen.">
 <meta property="og:url" content="https://pluggparken.se/demokrati/">
 <meta property="og:image" content="https://pluggparken.se/og.jpg">
 <meta property="og:image:width" content="1200">
@@ -24,91 +24,135 @@
 <link rel="stylesheet" href="/fonts/fonts.css">
 <style>
 :root{
-  --bg:#EAF3FF; --ink:#1D2B53; --muted:#56668F; --card:#FFFFFF; --line:#C6D6F2; --soft:#F1F6FF;
-  --good:#1E9E5E; --good-dark:#157548; --bad:#E5484D; --accent:#3D5AFE; --gold:#F2B707; --hero1:#FF9F43; --hero2:#F2780C; --heroS:#B85A06;
-  --font:"Baloo 2","Trebuchet MS",system-ui,sans-serif; --ord:"Andika","Baloo 2",system-ui,sans-serif;
+  --bg:#EAF3FF; --ink:#1D2B53; --muted:#56668F; --card:#FFFFFF; --line:#C6D6F2;
+  --good:#1E9E5E; --good-dark:#157548; --bad:#E5484D; --accent:#3D5AFE; --gold:#F2B707;
+  --font:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
 }
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%}
 body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
-.wrap{max-width:680px;margin:0 auto;padding:12px 16px 48px}
+.wrap{max-width:560px;margin:0 auto;padding:12px 16px 40px}
 button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;border:0;background:none}
-button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 [hidden]{display:none!important}
-.hero{display:flex;gap:16px;align-items:center;background:linear-gradient(135deg,var(--hero1),var(--hero2));color:#fff;border-radius:24px;padding:18px;box-shadow:0 5px 0 var(--heroS);margin:6px 0 16px}
-.hero svg{flex:none;width:130px;height:auto;filter:drop-shadow(0 3px 0 rgba(0,0,0,.15))}
+/* startskärmen */
+.hero{display:flex;gap:16px;align-items:center;background:linear-gradient(135deg,#3D5AFE,#1E9E5E);color:#fff;border-radius:24px;padding:18px;box-shadow:0 5px 0 #2A3FB8;margin:6px 0 16px}
+.hero svg{flex:none;width:104px;height:auto;filter:drop-shadow(0 3px 0 rgba(0,0,0,.15))}
 .hero h1{margin:0;font-size:clamp(1.7rem,6vw,2.3rem);line-height:1.05}
-.hero p{margin:6px 0 0;font-weight:600;opacity:.95}
+.hero p{margin:6px 0 0;font-weight:600;opacity:.97}
 .niv{display:grid;gap:10px}
-.niv button{display:flex;align-items:center;gap:14px;background:var(--card);border-radius:18px;padding:12px 14px;box-shadow:0 4px 0 var(--line);text-align:left;width:100%}
+.niv button{display:flex;align-items:center;gap:14px;background:var(--card,#fff);border-radius:18px;padding:12px 14px;box-shadow:0 4px 0 var(--line);text-align:left;width:100%}
 .niv button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
 .niv .nr{flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-weight:800;font-size:1.4rem;color:#fff}
 .niv b{display:block;font-size:1.12rem;line-height:1.15}
 .niv small{display:block;color:var(--muted);font-weight:600;font-size:.88rem;line-height:1.25}
 .niv .st{margin-left:auto;flex:none;color:var(--gold);font-size:1.15rem;letter-spacing:1px}
 .niv .st .off{color:var(--line)}
-.info{color:var(--muted);font-size:.9rem;margin:14px 2px 0}
-.topp{display:flex;align-items:center;gap:10px;margin:4px 0 10px}
+/* spelet */
+.topp{display:flex;align-items:center;gap:10px;margin:4px 0 6px;min-height:24px}
 .dots{display:flex;gap:6px;flex:1;flex-wrap:wrap}
 .dots i{width:12px;height:12px;border-radius:50%;background:var(--line)}
 .dots i.ok{background:var(--good)}.dots i.f{background:var(--bad)}.dots i.nu{background:var(--gold)}
 .niva-t{font-weight:800;color:var(--muted);font-size:.9rem}
-.pet{flex:none;width:48px;height:52px;pointer-events:none}.pet svg{width:100%;height:100%}
-.pet.hopp{animation:hopp .55s ease}
-@keyframes hopp{40%{transform:translateY(-18px)}}
-.kort{background:var(--card);border-radius:22px;box-shadow:0 4px 0 var(--line);padding:16px}
-.fb{text-align:center;font-weight:700;margin:12px 0 0;min-height:2.6em;font-size:1.05rem}
-.fb.ratt{color:var(--good-dark)}.fb.fel{color:#B4232A}
-.knapp{display:inline-block;background:var(--good);color:#fff;border-radius:16px;padding:12px 26px;font-weight:800;font-size:1.15rem;box-shadow:0 5px 0 var(--good-dark);margin:6px}
-.knapp.vit{background:var(--card);color:var(--ink);box-shadow:0 5px 0 var(--line)}
-.knapp.bla{background:var(--accent);box-shadow:0 5px 0 #2A3FB8}
-.knapp:disabled{opacity:.4;pointer-events:none}
-.knapp:active{transform:translateY(3px)}
-.lyssna{display:inline-flex;align-items:center;gap:6px;background:var(--soft);border-radius:999px;padding:6px 14px;font-weight:700;font-size:.95rem;box-shadow:0 2px 0 var(--line)}
+.fraga{display:flex;align-items:center;justify-content:center;gap:10px;margin:2px 0 8px;min-height:56px}
+.fraga .q{text-align:center;font-weight:800;font-size:clamp(1.1rem,4.7vw,1.32rem);line-height:1.2}
+.fraga .q small{display:block;font-weight:700;font-size:.82em;color:var(--muted);margin-top:2px}
+.hor{flex:none;width:44px;height:44px;border-radius:50%;background:var(--card,#fff);box-shadow:0 3px 0 var(--line);font-size:1.25rem}
+.hor:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
+/* klassen */
+.klass{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;background:var(--card,#fff);border-radius:20px;box-shadow:0 4px 0 var(--line);padding:10px}
+.barn{aspect-ratio:.86;border-radius:12px;background:#F7FAFF;box-shadow:inset 0 0 0 2.5px var(--c,#C6D6F2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;line-height:1;overflow:hidden}
+.barn .an{font-size:clamp(.8rem,3.6vw,1.05rem);opacity:.9}
+.barn .an svg{width:1.5em;height:auto;display:block}
+.barn .lapp{font-size:clamp(1.15rem,5.6vw,1.6rem)}
+.barn.jag{background:#FFF4D6}
+.barn.ny{animation:pop .35s cubic-bezier(.3,1.7,.5,1) both}
+@keyframes pop{from{transform:scale(.3);opacity:0}}
+/* förslagen */
+.forslag{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.forslag>button,.forslag .fs{display:flex;flex-direction:column;align-items:center;gap:2px;background:var(--card,#fff);border-radius:16px;box-shadow:0 4px 0 var(--line);padding:8px 4px;font-weight:800;font-size:.98rem;line-height:1.1;text-align:center;border-top:6px solid var(--c)}
+.forslag>button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.forslag .em{font-size:1.9rem;line-height:1.1}
+.forslag .ratt{box-shadow:0 0 0 4px var(--good),0 4px 0 var(--line)}
+.forslag>button.fel{background:#FFE9EC;opacity:.6;pointer-events:none}
+.stegare{display:flex;align-items:center;justify-content:center;gap:3px;margin-top:4px}
+.forslag>*,.partier>*{min-width:0}
+.stegare button{flex:none;width:clamp(30px,8.6vw,40px);height:40px;border-radius:12px;background:#F1F6FF;color:#1D2B53;box-shadow:0 3px 0 var(--line);font-weight:800;font-size:1.4rem;line-height:1}
+.stegare button:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
+.stegare b{min-width:1.35em;font-size:1.5rem;color:var(--accent);text-align:center}
+.fs.fel{background:#FFF0F1}.fs.fel .stegare b{color:#B4232A}
+.fs.ok .stegare b{color:var(--good-dark)}
+/* majoritet */
+.rad-prickar{position:relative;display:flex;flex-wrap:wrap;gap:4px;justify-content:center;background:var(--card,#fff);border-radius:18px;box-shadow:0 4px 0 var(--line);padding:14px 10px;margin-top:10px}
+.rad-prickar i{width:clamp(13px,4.4vw,19px);aspect-ratio:1;border-radius:50%;background:#D7DEEE}
+.rad-prickar i.v{background:var(--c)}
+.rad-prickar i.halv{margin-right:10px;position:relative}
+.rad-prickar i.halv::after{content:"";position:absolute;right:-8px;top:-9px;bottom:-9px;width:3px;border-radius:2px;background:#E5484D}
+.janej{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+.janej button{min-height:60px;border-radius:18px;color:#fff;font-weight:800;font-size:1.35rem;box-shadow:0 5px 0 rgba(0,0,0,.22);line-height:1.1}
+.janej button:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(0,0,0,.22)}
+.janej button small{display:block;font-size:.62em;font-weight:700;opacity:.95}
+.janej .a{background:linear-gradient(180deg,#34C77F,#1E9E5E)}.janej .b{background:linear-gradient(180deg,#7C8DFF,#4A5BE0)}
+.janej button.ratt{box-shadow:0 0 0 4px var(--gold),0 5px 0 rgba(0,0,0,.22)}
+.janej button.dim{opacity:.4}
+.janej.last button{pointer-events:none}
+/* kort att sortera */
+.sortkort{background:var(--card,#fff);border-radius:22px;box-shadow:0 4px 0 var(--line);padding:16px 14px;text-align:center;font-weight:800;font-size:clamp(1.15rem,5vw,1.4rem);line-height:1.2;min-height:120px;display:grid;place-items:center;transition:box-shadow .2s}
+.sortkort .em{display:block;font-size:2.3rem;line-height:1.1;margin-bottom:4px}
+.sortkort.ratt{box-shadow:0 0 0 4px var(--good),0 4px 0 var(--line)}
+.sortkort.fel{box-shadow:0 0 0 4px #F7A3A6,0 4px 0 var(--line)}
+/* ordna stegen */
+.steg{display:grid;gap:8px}
+.steg button{display:flex;align-items:center;gap:12px;background:var(--card,#fff);border-radius:16px;box-shadow:0 4px 0 var(--line);padding:10px 12px;text-align:left;font-weight:800;font-size:1.06rem;line-height:1.15;min-height:56px}
+.steg button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.steg .nr{flex:none;width:34px;height:34px;border-radius:50%;border:3px dashed #AFC0E8;display:grid;place-items:center;font-size:1.15rem;color:#fff}
+.steg button.vald .nr{border:0;background:var(--accent)}
+.steg button.fel{background:#FFF0F1}.steg button.fel .nr{background:#E8747A}
+.steg button.ratt .nr{background:var(--good)}
+.steg .em{font-size:1.5rem;flex:none}
+/* platser i riksdagen */
+.sal{background:var(--card,#fff);border-radius:20px;box-shadow:0 4px 0 var(--line);padding:10px}
+.sal svg{display:block;width:100%;height:auto;max-height:22vh}
+.partier{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.partier .fs{display:flex;flex-direction:column;align-items:center;gap:1px;background:var(--card,#fff);border-radius:16px;box-shadow:0 4px 0 var(--line);padding:8px 4px;font-weight:800;font-size:.95rem;line-height:1.1;text-align:center;border-top:6px solid var(--c)}
+.partier .em{font-size:1.6rem;line-height:1.1}
+.partier small{color:var(--muted);font-weight:700;font-size:.82rem}
+/* tidslinje */
+.ar{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ar button{min-height:54px;border-radius:16px;background:var(--card,#fff);box-shadow:0 4px 0 var(--line);font-weight:800;font-size:1.3rem}
+.ar button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.ar button.val{background:var(--accent);color:#fff;box-shadow:0 4px 0 #2A3FB8;pointer-events:none}
+.ar button.ratt{box-shadow:0 0 0 4px var(--good),0 4px 0 var(--line)}
+.ar button.fel{background:#FFE9EC;opacity:.6;pointer-events:none}
+.ar.last button{pointer-events:none}
+/* para ihop */
+.par{display:grid;grid-template-columns:1fr 1.25fr;gap:8px 12px}
+.par button{min-height:58px;border-radius:16px;background:var(--card,#fff);box-shadow:0 4px 0 var(--line);font-weight:800;font-size:1rem;line-height:1.15;padding:6px 10px}
+.par button.v{color:var(--accent);font-size:1.08rem}
+.par button.vald{background:var(--accent);color:#fff;box-shadow:0 4px 0 #2A3FB8}
+.par button.parad{background:#DDF5E7;color:var(--good-dark);box-shadow:0 0 0 3px var(--good);pointer-events:none}
+.par button.fel{background:#FFE9EC}
+.skaka{animation:skaka .4s}
+@keyframes skaka{25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.forkl{text-align:center;font-weight:700;margin:10px 0 0;min-height:2.7em;font-size:1.04rem;line-height:1.3}
+.forkl.ratt{color:var(--good-dark)}.forkl.fel{color:#B4232A}
+.knapprad{display:flex;justify-content:center;gap:10px;margin-top:6px}
+.klar,.nasta{background:var(--good);color:#fff;border-radius:18px;padding:10px 30px;font-weight:800;font-size:1.25rem;box-shadow:0 5px 0 var(--good-dark)}
+.klar:active{transform:translateY(4px);box-shadow:0 1px 0 var(--good-dark)}
+.klar:disabled{opacity:.4;pointer-events:none}
+.nasta{background:var(--accent);box-shadow:0 5px 0 #2A3FB8}
+.nasta:active{transform:translateY(4px);box-shadow:0 1px 0 #2A3FB8}
+@media (max-height:700px){.wrap{padding-bottom:12px}.fraga{min-height:46px;margin-bottom:5px}.klass{gap:4px;padding:7px;grid-template-columns:repeat(9,1fr)}.barn{border-radius:9px}.barn .lapp{font-size:1.1rem}.barn .an{font-size:.72rem}.forslag{margin-top:7px}.forslag .em{font-size:1.5rem}.forkl{min-height:1.4em;margin-top:6px}.steg button{min-height:48px;padding:7px 10px}.par button{min-height:48px}.sortkort{min-height:96px;padding:10px}.janej button{min-height:52px}.stegare button{width:34px;height:34px}}
+@media (min-width:700px){.klass{grid-template-columns:repeat(9,1fr)}}
+/* resultat */
 .res{text-align:center}
 .res .stj{font-size:3rem;letter-spacing:6px;color:var(--gold);margin:8px 0}
 .res .stj .off{color:var(--line)}
+.knapp{display:inline-block;background:var(--good);color:#fff;border-radius:16px;padding:12px 26px;font-weight:800;font-size:1.15rem;box-shadow:0 5px 0 var(--good-dark);margin:6px}
+.knapp.vit{background:var(--card,#fff);color:var(--ink);box-shadow:0 5px 0 var(--line)}
 #fx{position:fixed;inset:0;pointer-events:none;z-index:50}
-@media(max-width:420px){.hero svg{width:96px}}
+@media(max-width:420px){.hero svg{width:86px}.hero{gap:12px;padding:14px}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-
-.fraga{text-align:center;font-weight:800;color:var(--muted);margin:0 0 8px;font-size:1rem}
-.svar{display:flex;flex-wrap:wrap;gap:8px;min-height:68px;padding:10px 4px;border-bottom:3px dashed var(--line);margin-bottom:12px;align-content:flex-start}
-.svar.tom::before{content:"Tryck på orden i rätt ordning";color:var(--muted);font-weight:600;align-self:center;margin:0 auto}
-.pool{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;min-height:52px}
-.chip{font-family:var(--ord);font-size:1.3rem;font-weight:700;background:#fff;border:2px solid var(--line);border-radius:14px;padding:8px 14px;box-shadow:0 3px 0 var(--line);color:var(--ink)}
-.chip:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
-.svar .chip{background:#FFF3E0;border-color:#F2A455;box-shadow:0 3px 0 #F2A455}
-.chip.kod{background:#E6F7EE;border-color:var(--good);box-shadow:0 3px 0 var(--good)}
-.chip.rosa{background:#FDE7E8;border-color:#F0A3A6;box-shadow:0 3px 0 #F0A3A6}
-.marks{display:flex;gap:10px;justify-content:center;margin:0 0 12px}
-.marks button{width:60px;height:56px;border-radius:14px;background:#fff;border:2px solid var(--line);box-shadow:0 3px 0 var(--line);font-family:var(--ord);font-weight:700;font-size:1.8rem}
-.marks button.v{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 3px 0 #2A3FB8}
-.fix{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:6px 0 4px}
-.fix .chip{padding:8px 12px}
-.fix .chip.pa{background:#E3EAFF;border-color:var(--accent);box-shadow:0 3px 0 var(--accent)}
-.fix .mk{font-family:var(--ord);font-size:1.6rem;font-weight:700;align-self:center;padding:0 2px}
-.svar .mk{font-family:var(--ord);font-size:1.5rem;font-weight:700;align-self:center;color:var(--accent)}
-.rad{display:flex;gap:6px;justify-content:center;margin-top:10px;flex-wrap:wrap}
-
-
-.fraga{color:var(--ink);font-size:1.45rem;line-height:1.2;font-weight:800;margin:0 0 8px;padding:12px 12px;border-radius:16px;background:var(--soft);text-align:center}
-.stor{text-align:center;font-size:4.2rem;line-height:1.1;margin:4px 0 10px;min-height:20px}
-.stor svg{max-width:100%;height:auto}
-.alt{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:6px 0 10px}
-.alt.en{grid-template-columns:1fr}
-.val{font:inherit;font-weight:800;font-size:1.2rem;min-height:64px;padding:10px 12px;border-radius:16px;border:3px solid var(--line);background:#fff;color:var(--ink);box-shadow:0 4px 0 var(--line);cursor:pointer;touch-action:manipulation;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.15}
-.val:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
-.val.ratt{background:#DDF4E6;border-color:#1E9E5E;box-shadow:0 4px 0 #1E9E5E}
-.val.fel{background:#FDE7E8;border-color:#F0A3A6;box-shadow:0 4px 0 #F0A3A6}
-.val[disabled]{cursor:default}
-.val svg{max-width:100%;height:auto;display:block}
-.forkl{margin:8px 0;padding:10px 12px;border-radius:14px;background:#FFF7DD;font-weight:700;line-height:1.4}
-.fb{font-size:1.3rem;font-weight:800;text-align:center}
-.skaka{animation:skaka .45s}
-@keyframes skaka{20%{transform:translateX(-9px)}40%{transform:translateX(9px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
-:root{--hero1:#A8C0FF;--hero2:#3D5AFE;--heroS:#2A3FB8}
-
 </style>
 </head>
 <body>
@@ -119,23 +163,19 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 
 <section class="screen" id="home">
   <div class="hero">
-    <svg viewBox="0 0 120 64" aria-hidden="true"><rect x="2" y="2" width="116" height="60" rx="10" fill="#fff"/><text x="60" y="48" font-size="42" text-anchor="middle">🗳️</text></svg>
-    <div><h1>Demokrati</h1><p>Hur bestämmer vi tillsammans?</p></div>
+    <svg viewBox="0 0 100 80" aria-hidden="true"><rect x="2" y="2" width="96" height="76" rx="12" fill="#fff"/><rect x="24" y="38" width="52" height="32" rx="5" fill="#3D5AFE"/><rect x="20" y="33" width="60" height="9" rx="4" fill="#2A3FB8"/><rect x="38" y="35.5" width="24" height="3.4" rx="1.7" fill="#101B4A"/><g transform="rotate(-8 50 22)"><rect x="39" y="9" width="22" height="28" rx="3" fill="#FFF4D6" stroke="#1D2B53" stroke-width="2"/><path d="M44 19l4 5 8-9" fill="none" stroke="#1E9E5E" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></g><rect x="24" y="38" width="52" height="6" fill="#3D5AFE"/></svg>
+    <div><h1>Demokrati</h1><p>Led klassrådet, räkna rösterna och bestäm tillsammans.</p></div>
   </div>
   <div class="niv" id="niv"></div>
-  
 </section>
 
 <section class="screen" id="game" hidden>
-  <div class="topp"><div class="dots" id="dots"></div><span class="niva-t" id="nivT"></span><span class="pet" id="pet"></span></div>
-  <div class="kort">
-    <div class="fraga" id="fraga"></div>
-    <div class="stor" id="stor"></div>
-    <div class="alt" id="alt"></div>
-    <div class="forkl" id="forkl" hidden></div>
-  </div>
-  <div class="fb" id="fb" aria-live="polite"></div>
-  <div class="rad"><button class="knapp bla" id="bNasta" hidden>Nästa ▶</button></div>
+  <button type="button" data-home hidden tabindex="-1" aria-hidden="true" onclick="hem()"></button>
+  <div class="topp"><div class="dots" id="dots"></div><span class="niva-t" id="nivT"></span></div>
+  <div class="fraga"><button class="hor" id="hor" aria-label="Läs upp">🔊</button><span class="q" id="q" aria-live="polite"></span></div>
+  <div id="yta"></div>
+  <div class="forkl" id="forkl" aria-live="polite"></div>
+  <div class="knapprad"><button class="klar" id="klar" hidden>Klar ✓</button><button class="nasta" id="nasta" hidden>Nästa ▶</button></div>
 </section>
 
 <section class="screen res" id="result" hidden>
@@ -157,53 +197,201 @@ const KEY="mattespel-demokrati-v1";
 const data=(()=>{try{return Object.assign({stars:{}},JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){return{stars:{}}}})();
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}};
 const reduced=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
-const NIV_UNUSED=[null].concat([{"namn": "Nivå 1: Ordning", "txt": "Sätt orden i rätt ordning. Stor bokstav och punkt är med.", "col": "#2BB673"}, {"namn": "Nivå 2: Skiljetecken", "txt": "Ordning och rätt tecken på slutet: punkt, frågetecken eller utropstecken.", "col": "#FF9F43"}, {"namn": "Nivå 3: Stor bokstav", "txt": "Ordning, tecken och stor bokstav i början och på namn.", "col": "#7B61FF"}]);
+const FARG=["#3D8BFD","#FF9F43","#2BB673"];
+const NIV=[null,
+  {namn:"Klassrådet",txt:"Rösta, räkna rösterna och se vad som fick majoritet.",col:"#2BB673"},
+  {namn:"Valet",txt:"Så går ett val till. Vem får rösta, och vem bestämmer vad?",col:"#FF9F43"},
+  {namn:"Rättigheter",txt:"Vad har alla barn rätt till? Vad är demokrati?",col:"#7B61FF"}];
+
+/* ---------- Innehållet ---------- */
+/* Nivå 1: frågor som klassen röstar om, tre förslag var */
+const FRAGOR=[
+  ["Vart ska klassen åka på utflykt?",[["🌲","skogen"],["🏛️","museet"],["🏊","badhuset"]]],
+  ["Vad ska vi göra på roliga timmen?",[["🎬","se film"],["🎲","spela spel"],["🏃","leka ute"]]],
+  ["Vilken bok ska vi läsa högt?",[["🐉","drakboken"],["🕵️","deckaren"],["🚀","rymdboken"]]],
+  ["Vad ska klassen spara pengar till?",[["🏀","nya bollar"],["📚","fler böcker"],["🎨","färger"]]],
+  ["Vilket djur ska bli klassens maskot?",[["🦊","räven"],["🐼","pandan"],["🐢","sköldpaddan"]]]];
+const BARN=["🧒","👧","👦","🧒🏽","👧🏽","👦🏽","🧒🏻","👧🏻","👦🏻","🧒🏾","👧🏾","👦🏾","🧒🏼","👧🏼","👦🏼","🧒🏿","👧🏿","👦🏿"];
+/* Nivå 2 */
+const VALSTEG=[["📄","Ta valsedlar"],["🚪","Gå bakom skärmen, så att ingen ser"],["✉️","Lägg en valsedel i kuvertet"],["🗳️","Lämna kuvertet. Det läggs i valurnan"]];
+const VALJARE=[
+  ["👩","Maja har fyllt 18 år.",true,"Man får rösta när man har fyllt 18 år."],
+  ["👵","Karin är 80 år.",true,"Ingen är för gammal för att rösta."],
+  ["🧑","Omar fyller 18 år på valdagen.",true,"Det räcker att fylla 18 år på själva valdagen."],
+  ["👨","Hugo är 45 år.",true,"Alla vuxna medborgare får rösta."],
+  ["👧","Elsa är 17 år.",false,"Elsa är för ung. Hon får rösta i nästa val."],
+  ["🧒","Ali är 12 år.",false,"Man måste ha fyllt 18 år för att få rösta."],
+  ["👦","Lo är 9 år.",false,"Man måste ha fyllt 18 år för att få rösta."],
+  ["👩‍🦰","Sara fyller 18 år dagen efter valet.",false,"En dag för sent. Sara får vänta till nästa val."]];
+const PARTIER=[["🍎","Äppelpartiet"],["⚽","Bollpartiet"],["⭐","Stjärnpartiet"]];
+const ROSTTAL=[[50,30,20],[40,40,20],[60,30,10],[40,30,30],[70,20,10],[50,40,10],[60,20,20]];
+const STYRE=[["Riksdagen","bestämmer lagarna"],["Regeringen","styr landet"],["Statsministern","leder regeringen"],["Kungen","är statschef men bestämmer inte"],["Kommunen","sköter skolor och bibliotek"],["Folket","röstar i valet"]];
+/* Nivå 3 */
+const RATT=[
+  ["🏫","Att få gå i skolan",true,"Alla barn har rätt att gå i skolan."],
+  ["🚰","Rent vatten och mat",true,"Alla barn har rätt till mat och rent vatten."],
+  ["🗣️","Att få säga vad man tycker",true,"Barn har rätt att säga sin åsikt och bli lyssnade på."],
+  ["🛝","Att få leka och vila",true,"Barn har rätt till lek, vila och fritid."],
+  ["🩺","Att få vård när man är sjuk",true,"Alla barn har rätt till vård."],
+  ["🛡️","Att vara trygg och inte bli slagen",true,"Ingen får göra ett barn illa."],
+  ["🪪","Att ha ett eget namn",true,"Alla barn har rätt till ett namn."],
+  ["📱","En egen mobil",false,"En mobil kan vara bra att ha, men det är ingen rättighet."],
+  ["🍬","Godis varje dag",false,"Godis är gott, men det är en önskan."],
+  ["🎮","Det nyaste tv-spelet",false,"Det är något man kan önska sig, ingen rättighet."],
+  ["👟","Dyra märkesskor",false,"Alla barn har rätt till kläder, men inte till ett visst märke."],
+  ["🛴","En egen sparkcykel",false,"Det är en önskan, ingen rättighet."]];
+const DEMO=[
+  ["🙋","Alla i klassen får rösta.",true,"I en demokrati får alla vara med och bestämma."],
+  ["⚖️","Alla röster är värda lika mycket.",true,"En person, en röst."],
+  ["🤫","Ingen behöver berätta vad den röstade på.",true,"Rösten är hemlig, så att ingen kan tvinga någon."],
+  ["💬","Man får säga vad man tycker, även om man tycker annorlunda.",true,"Det kallas yttrandefrihet."],
+  ["🔄","Den som bestämmer kan bytas ut i nästa val.",true,"Folket väljer, och kan välja någon annan nästa gång."],
+  ["🚫","Bara pojkarna får rösta.",false,"I en demokrati får alla rösta, inte bara några."],
+  ["💰","De som är rika får två röster var.",false,"Alla röster ska vara värda lika mycket."],
+  ["👑","Samma person bestämmer allt, alltid.",false,"I en demokrati bestämmer folket tillsammans."],
+  ["📰","Tidningarna får bara skriva det ledaren vill.",false,"I en demokrati får man skriva och säga vad man tycker."],
+  ["😠","Den som röstar fel blir straffad.",false,"Man får rösta som man vill utan att bli straffad."]];
+const BEGREPP=[["Majoritet","mer än hälften"],["Val","när folket röstar"],["Lag","en regel för hela landet"],["Klassråd","ett möte där klassen bestämmer"],["Barnkonventionen","regler om barns rättigheter"],["Yttrandefrihet","att få säga vad man tycker"]];
+
+/* ---------- Rundan: en lista med moment ---------- */
+function gorRosta(i){const [fraga,forslag]=FRAGOR[i],n=rnd(11,16),vill=Math.random()<.5;let v,forsok=0;
+  /* vinnaren leder alltid med minst två röster, så att elevens egen röst aldrig ger oavgjort */
+  do{const a=vill?rnd(Math.floor(n/2)+1,n-3):rnd(Math.ceil(n/3)+1,Math.floor(n/2)),b=rnd(1,n-a-1),c=n-a-b;v=[a,b,c];}while((v[2]<1||v[0]-Math.max(v[1],v[2])<2)&&forsok++<200);
+  if(v[2]<1||v[0]-Math.max(v[1],v[2])<2)v=[7,3,2];
+  const ordn=shuffle([0,1,2]),roster=[0,0,0];ordn.forEach((k,j)=>roster[k]=v[j]);
+  return{fraga,forslag,roster,barn:shuffle(roster.flatMap((r,k)=>Array(r).fill(k))).map((k,j)=>({k,e:BARN[j%BARN.length]}))};}
+function gorRunda(lvl){
+  if(lvl===1)return shuffle([0,1,2,3,4]).slice(0,3).flatMap(i=>{const R=gorRosta(i);return[{typ:"rosta",R,fri:true},{typ:"rakna",R},{typ:"vinnare",R},{typ:"majoritet",R}];});
+  if(lvl===2){const pers=shuffle(VALJARE.slice());const p=[pers.find(x=>x[2]),pers.find(x=>!x[2])];p.push(pers.find(x=>!p.includes(x)));
+    const tal=shuffle(ROSTTAL.slice()).slice(0,2),ar=pick([2014,2018,2022,2026]);
+    return[{typ:"ordna"}].concat(shuffle(p).map(k=>({typ:"sortera",k,fr:"Får personen rösta i riksdagsvalet?",sm:"Man ska ha fyllt 18 år senast på valdagen.",ja:["Får rösta",""],nej:["Får inte","rösta än"]})),
+      tal.map(t=>({typ:"platser",tal:shuffle(t.slice())})),[{typ:"ar",ar},{typ:"para",par:shuffle(STYRE.slice()).slice(0,4),fr:"Vem gör vad?"}]);}
+  const r=shuffle(RATT.slice()),rk=[r.find(x=>x[2]),r.find(x=>!x[2])];rk.push(r.find(x=>!rk.includes(x)));
+  const d=shuffle(DEMO.slice()),dk=[d.find(x=>x[2]),d.find(x=>!x[2])];dk.push(...d.filter(x=>!dk.includes(x)).slice(0,2));
+  return shuffle(rk).map(k=>({typ:"sortera",k,fr:"Rättighet eller önskan?",sm:"En rättighet är något alla barn ska ha.",ja:["Rättighet","alla barn ska ha det"],nej:["Önskan","bra, men inget måste"]}))
+    .concat(shuffle(dk).map(k=>({typ:"sortera",k,fr:"Är det demokrati?",sm:"",ja:["Demokrati",""],nej:["Inte","demokrati"]})),[{typ:"para",par:shuffle(BEGREPP.slice()).slice(0,4),fr:"Vad betyder ordet?"}]);}
+
+/* ---------- Skärmar ---------- */
 const stjHtml=n=>[1,2,3].map(i=>i<=n?"★":'<span class="off">★</span>').join("");
 function show(id){document.querySelectorAll(".screen").forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
-function hem(){
+function hem(){rensa();tyst();
   $("niv").innerHTML=[1,2,3].map(l=>`<button data-l="${l}"><span class="nr" style="background:${NIV[l].col}">${l}</span><span><b>${NIV[l].namn}</b><small>${NIV[l].txt}</small></span><span class="st">${stjHtml(data.stars[l]||0)}</span></button>`).join("");
-  if(window.speechSynthesis)speechSynthesis.cancel();show("home");}
-$("niv").onclick=e=>{const b=e.target.closest("[data-l]");if(b)begin(+b.dataset.l);};
-// uppläsning bara när man trycker (svensk röst)
+  show("home");}
+$("niv").onclick=e=>{const b=e.target.closest("[data-l]");if(b)starta(+b.dataset.l);};
+/* uppläsning bara när man trycker på 🔊 */
 let svVoice=null;function laddaRoster(){try{svVoice=speechSynthesis.getVoices().find(v=>/^sv/i.test(v.lang))||null}catch(e){}}
 if("speechSynthesis" in window){laddaRoster();speechSynthesis.onvoiceschanged=laddaRoster;}
-function lasUpp(t){if(!("speechSynthesis" in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="sv-SE";if(svVoice)u.voice=svVoice;u.rate=.9;speechSynthesis.speak(u);}
-function prickar(n,i,res){$("dots").innerHTML=Array.from({length:n},(_,j)=>`<i class="${j<i?(res[j]?"ok":"f"):j===i?"nu":""}"></i>`).join("");}
-function haj(){const p=$("pet");if(!p)return;p.classList.remove("hopp");void p.offsetWidth;p.classList.add("hopp");}
-function resultat(st,txt){const old=data.stars[G.lvl]||0;data.stars[G.lvl]=Math.max(old,st);save();
-  $("rStj").innerHTML=stjHtml(st);$("rRub").textContent=st===3?"Perfekt! 🎉":st===2?"Bra jobbat!":"Bra kämpat!";$("rTxt").textContent=txt;
-  show("result");if(st===3){window.Ljud&&Ljud.fanfare&&Ljud.fanfare();confetti();}else window.Ljud&&Ljud.chime&&Ljud.chime();}
-$("rIgen").onclick=()=>begin(G.lvl);$("rHome").onclick=hem;
+function tyst(){try{window.speechSynthesis&&speechSynthesis.cancel()}catch(e){}}
+function lasUpp(t){if(!("speechSynthesis" in window))return;tyst();const u=new SpeechSynthesisUtterance(t);u.lang="sv-SE";if(svVoice)u.voice=svVoice;u.rate=.9;speechSynthesis.speak(u);}
+$("hor").onclick=()=>{if(G&&G.tal)lasUpp(G.tal);};
+
+/* ---------- Spelet ---------- */
+let G=null,tim=[];
+const rensa=()=>{tim.forEach(clearTimeout);tim=[];};
+const ljud=n=>{window.Ljud&&Ljud[n]&&Ljud[n]();};
+const djurNamn=()=>((typeof PETNAME!=="undefined"&&PETNAME[lasDjur().animal])||"Djuret").toLowerCase();
+function starta(lvl){G={lvl,fel:0,res:[],kv:gorRunda(lvl),mi:-1,i:0,retries:0};G.tot=G.kv.filter(m=>!m.fri).length;$("nivT").textContent=NIV[lvl].namn;show("game");nasta();}
+function prickar(){let k=0;$("dots").innerHTML=G.kv.filter(m=>!m.fri).map(()=>{const j=k++;return `<i class="${j<G.i?(G.res[j]?"ok":"f"):j===G.i&&!G.M.fri?"nu":""}"></i>`;}).join("");}
+function fraga(huvud,liten,tal){$("q").innerHTML=huvud+(liten?`<small>${liten}</small>`:"");G.tal=tal||(huvud+". "+(liten||"")).replace(/<[^>]+>/g,"");}
+function fb(t,c){$("forkl").textContent=t||"";$("forkl").className="forkl"+(c?" "+c:"");}
+function skaka(el){el.classList.remove("skaka");void el.offsetWidth;el.classList.add("skaka");}
+const halvt=n=>n%2?String(n/2).replace(".",","):String(n/2);
+function klassHtml(R,sorterad,ny){let b=R.barn.slice();if(R.min!=null)b=b.concat([{k:R.min,jag:true}]);if(sorterad)b=b.slice().sort((x,y)=>x.k-y.k);
+  return `<div class="klass">${b.map(x=>`<div class="barn${x.jag?" jag"+(ny?" ny":""):""}" style="--c:${FARG[x.k]}"><span class="an">${x.jag?owlSVG(lasDjur()):x.e}</span><span class="lapp">${R.forslag[x.k][0]}</span></div>`).join("")}</div>`;}
+const summa=R=>R.roster.map((r,k)=>r+(R.min===k?1:0));
+function nasta(){rensa();tyst();G.mi++;if(G.mi>=G.kv.length){slut();return;}
+  const M=G.M=G.kv[G.mi];G.forsok=0;G.felNu=false;G.last=false;prickar();fb("");$("nasta").hidden=true;$("klar").hidden=true;$("klar").disabled=true;
+  const y=$("yta"),R=M.R;
+  if(M.typ==="rosta"){fraga(R.fraga,`Du och ${djurNamn()} är med i klassen. Vad röstar ni på?`);
+    y.innerHTML=`<div class="forslag" style="margin-top:0">${R.forslag.map((f,k)=>`<button data-rost="${k}" style="--c:${FARG[k]}"><span class="em">${f[0]}</span>${f[1]}</button>`).join("")}</div>`;}
+  else if(M.typ==="rakna"){G.tal_=[0,0,0];fraga("Räkna rösterna","Hur många röstade på varje förslag?");$("klar").hidden=false;$("klar").disabled=false;
+    y.innerHTML=`<div id="klassBox">${klassHtml(R,false,true)}</div><div class="forslag" id="rk">${R.forslag.map((f,k)=>`<div class="fs" data-k="${k}" style="--c:${FARG[k]}"><span class="em">${f[0]}</span>${f[1]}<div class="stegare"><button data-d="-1" aria-label="En mindre">−</button><b>0</b><button data-d="1" aria-label="En till">+</button></div></div>`).join("")}</div>`;}
+  else if(M.typ==="vinnare"){const s=summa(R);fraga("Vilket förslag vann?","Tryck på det som fick flest röster.");
+    y.innerHTML=`<div class="forslag" style="margin-top:0">${R.forslag.map((f,k)=>`<button data-vin="${k}" style="--c:${FARG[k]}"><span class="em">${f[0]}</span>${f[1]}<b style="font-size:1.5rem;color:var(--accent)">${s[k]}</b></button>`).join("")}</div>`;}
+  else if(M.typ==="majoritet"){const s=summa(R),v=s.indexOf(Math.max(...s)),n=s[0]+s[1]+s[2];M.v=v;M.n=n;M.svar=s[v]*2>n;
+    fraga(`Fick ${R.forslag[v][0]} ${R.forslag[v][1]} majoritet?`,"Majoritet är mer än hälften av alla röster.");
+    y.innerHTML=`<div class="rad-prickar" id="prickrad" style="--c:${FARG[v]}">${Array.from({length:n},(_,j)=>`<i class="${j<s[v]?"v":""}"></i>`).join("")}</div>
+      <div class="forkl" style="min-height:0;margin:8px 0 0;color:var(--muted)">${s[v]} av ${n} röster</div>
+      <div class="janej" id="jn"><button class="a" data-jn="1">Ja<small>mer än hälften</small></button><button class="b" data-jn="0">Nej<small>inte mer än hälften</small></button></div>`;}
+  else if(M.typ==="ordna"){G.ordn=[];M.kort=shuffle([0,1,2,3]);fraga("Så röstar man i ett val","Tryck på stegen i rätt ordning.");$("klar").hidden=false;ritaOrdna();}
+  else if(M.typ==="sortera"){const k=M.k;fraga(M.fr,M.sm,M.fr+" "+k[1]);
+    y.innerHTML=`<div class="sortkort" id="sk"><span><span class="em">${k[0]}</span>${k[1]}</span></div><div class="janej" id="jn"><button class="a" data-jn="1">${M.ja[0]}<small>${M.ja[1]}</small></button><button class="b" data-jn="0">${M.nej[0]}<small>${M.nej[1]}</small></button></div>`;}
+  else if(M.typ==="platser"){G.pl=[0,0,0];fraga("Dela ut platserna i riksdagen","100 personer röstade. Det finns 10 platser.");$("klar").hidden=false;$("klar").disabled=false;
+    y.innerHTML=`<div class="sal" id="sal"></div><div class="partier" id="pt">${PARTIER.map((p,k)=>`<div class="fs" data-k="${k}" style="--c:${FARG[k]}"><span class="em">${p[0]}</span>${p[1]}<small>${M.tal[k]} röster</small><div class="stegare"><button data-d="-1" aria-label="En plats mindre">−</button><b>0</b><button data-d="1" aria-label="En plats till">+</button></div></div>`).join("")}</div>`;ritaSal();}
+  else if(M.typ==="ar"){fraga(`Det var val till riksdagen ${M.ar}`,"Tryck på året då nästa val är.");
+    y.innerHTML=`<div class="ar" id="ar">${Array.from({length:9},(_,j)=>M.ar+j).map(a=>`<button data-ar="${a}" class="${a===M.ar?"val":""}">${a}${a===M.ar?" 🗳️":""}</button>`).join("")}</div>`;}
+  else{G.par={v:null,h:null,klara:0,miss:0};M.vs=shuffle(M.par.map(p=>p[0]));M.hs=shuffle(M.par.map(p=>p[1]));fraga(M.fr,"Para ihop två och två.");
+    y.innerHTML=`<div class="par" id="par">${M.vs.map((v,i)=>`<button class="v" data-v="${i}">${v}</button><button data-h="${i}">${M.hs[i]}</button>`).join("")}</div>`;}}
+function ritaOrdna(){const M=G.M;$("yta").innerHTML=`<div class="steg" id="steg">${M.kort.map(k=>{const p=G.ordn.indexOf(k);return `<button data-steg="${k}" class="${p>=0?"vald":""}"><span class="nr">${p>=0?p+1:""}</span><span class="em">${VALSTEG[k][0]}</span><span>${VALSTEG[k][1]}</span></button>`;}).join("")}</div>`;$("klar").disabled=G.ordn.length<4;}
+function ritaSal(){const pl=G.pl,stol=[];pl.forEach((n,k)=>{for(let i=0;i<n;i++)stol.push(FARG[k]);});let g="";
+  for(let i=0;i<10;i++){const a=Math.PI*(1-(i+.5)/10),x=150+Math.cos(a)*105,yy=118-Math.sin(a)*92;g+=`<circle cx="${x}" cy="${yy}" r="15" fill="${stol[i]||"#fff"}" stroke="${stol[i]?"rgba(29,43,83,.25)":"#AFC0E8"}" stroke-width="2.5" ${stol[i]?"":'stroke-dasharray="5 4"'}/>`;}
+  const s=pl[0]+pl[1]+pl[2];g+=`<rect x="118" y="92" width="64" height="30" rx="8" fill="#1D2B53"/><text x="150" y="113" text-anchor="middle" font-family="Baloo 2, Trebuchet MS, sans-serif" font-weight="800" font-size="17" fill="#fff">${s} av 10</text>`;
+  $("sal").innerHTML=`<svg viewBox="0 0 300 132" role="img" aria-label="${s} av 10 platser utdelade">${g}</svg>`;}
+function avsluta(){const M=G.M;if(!M.fri){if(G.felNu&&!M.igen)G.fel++;G.res[G.i]=!G.felNu;G.i++;}G.last=true;prickar();
+  $("klar").hidden=true;$("nasta").hidden=false;$("nasta").focus({preventScroll:true});
+  if(!G.felNu)tim.push(setTimeout(nasta,M.typ==="sortera"?3000:2400));}
+function igenSist(){if(G.retries<3){G.retries++;const M=G.M;G.kv.push(Object.assign({},M,{igen:true}));}}
+
+$("yta").onclick=e=>{if(!G||G.last)return;const M=G.M,R=M.R,b=e.target.closest("button");if(!b)return;
+  if(M.typ==="rosta"){if(b.dataset.rost==null)return;R.min=+b.dataset.rost;ljud("pip");b.classList.add("ratt");fb(`Du röstade på ${R.forslag[R.min][1]}. Din röst räknas lika mycket som alla andras.`,"ratt");G.last=true;tim.push(setTimeout(nasta,1700));$("nasta").hidden=false;return;}
+  if(M.typ==="rakna"||M.typ==="platser"){const fs=b.closest(".fs");if(!fs||b.dataset.d==null)return;const k=+fs.dataset.k,arr=M.typ==="rakna"?G.tal_:G.pl,max=M.typ==="rakna"?30:10;
+    arr[k]=Math.min(max,Math.max(0,arr[k]+ +b.dataset.d));fs.querySelector("b").textContent=arr[k];fs.classList.remove("fel");window.Ljud&&Ljud.glod&&Ljud.glod("tick");if(M.typ==="platser")ritaSal();return;}
+  if(M.typ==="vinnare"){if(b.dataset.vin==null)return;const s=summa(R),v=s.indexOf(Math.max(...s)),k=+b.dataset.vin;
+    if(k===v){b.classList.add("ratt");ljud("ok");fb(`Rätt! ✓ ${R.forslag[v][1]} fick flest röster: ${s[v]}.`,"ratt");avsluta();return;}
+    G.felNu=true;ljud("bad");b.classList.add("fel");skaka(b);
+    if(G.forsok===0){G.forsok=1;fb("Inte riktigt. Leta efter det största talet.","fel");return;}
+    b.parentNode.querySelector(`[data-vin="${v}"]`).classList.add("ratt");fb(`${R.forslag[v][1]} vann med ${s[v]} röster.`,"fel");igenSist();avsluta();return;}
+  if(M.typ==="majoritet"||M.typ==="sortera"){if(b.dataset.jn==null)return;const ja=b.dataset.jn==="1",ratt=M.typ==="sortera"?M.k[2]:M.svar,box=$("jn");
+    const text=M.typ==="sortera"?M.k[3]:(()=>{const s=summa(R)[M.v];return `${M.n} röster. Hälften är ${halvt(M.n)}. ${s} är ${ratt?"mer än hälften: majoritet":s*2===M.n?"precis hälften, inte mer. Ingen majoritet":"inte mer än hälften. Flest röster, men ingen majoritet"}.`;})();
+    if(ja===ratt){b.classList.add("ratt");box.classList.add("last");[...box.children].forEach(x=>x!==b&&x.classList.add("dim"));if($("sk"))$("sk").classList.add("ratt");ljud("ok");fb("Rätt! ✓ "+text,"ratt");avsluta();return;}
+    G.felNu=true;ljud("bad");
+    if(M.typ==="majoritet"&&G.forsok===0){G.forsok=1;skaka(b);const pr=$("prickrad").children,h=Math.floor(M.n/2);if(pr[h-1])pr[h-1].classList.add("halv");
+      fb(`Inte riktigt. Det röda strecket visar hälften (${halvt(M.n)}). Går de färgade prickarna förbi strecket?`,"fel");return;}
+    box.classList.add("last");[...box.children].forEach(x=>x.classList.add(x===b?"dim":"ratt"));if($("sk"))$("sk").classList.add("fel");fb(text,"fel");igenSist();avsluta();return;}
+  if(M.typ==="ordna"){if(b.dataset.steg==null)return;const k=+b.dataset.steg,p=G.ordn.indexOf(k);if(p>=0)G.ordn.splice(p,1);else G.ordn.push(k);window.Ljud&&Ljud.glod&&Ljud.glod("tick");ritaOrdna();return;}
+  if(M.typ==="ar"){if(b.dataset.ar==null)return;const a=+b.dataset.ar,ratt=M.ar+4,box=$("ar");
+    if(a===ratt){b.classList.add("ratt");box.classList.add("last");ljud("ok");fb(`Rätt! ✓ Det är val vart fjärde år: ${M.ar} + 4 = ${ratt}.`,"ratt");avsluta();return;}
+    G.felNu=true;ljud("bad");b.classList.add("fel");skaka(b);
+    if(G.forsok===0){G.forsok=1;fb("Inte riktigt. Det är val till riksdagen vart fjärde år.","fel");return;}
+    box.querySelector(`[data-ar="${ratt}"]`).classList.add("ratt");box.classList.add("last");fb(`Val vart fjärde år: ${M.ar} + 4 = ${ratt}.`,"fel");igenSist();avsluta();return;}
+  if(M.typ==="para"){const P=G.par,sida=b.dataset.v!=null?"v":b.dataset.h!=null?"h":null;if(!sida||b.classList.contains("parad"))return;
+    P[sida]=+b.dataset[sida];[...$("par").children].forEach(x=>x.classList.remove("fel"));
+    if(P.v==null||P.h==null){[...$("par").querySelectorAll(`[data-${sida}]`)].forEach(x=>x.classList.toggle("vald",x===b));return;}
+    const vb=$("par").querySelector(`[data-v="${P.v}"]`),hb=$("par").querySelector(`[data-h="${P.h}"]`),v=M.vs[P.v],h=M.hs[P.h],par=M.par.find(p=>p[0]===v);
+    vb.classList.remove("vald");hb.classList.remove("vald");P.v=P.h=null;
+    if(par[1]===h){vb.classList.add("parad");hb.classList.add("parad");ljud("ok");P.klara++;fb(`${v} ${h}.`,"ratt");if(P.klara===M.par.length){fb(G.felNu?"Alla par klara!":"Rätt! ✓ Alla par klara.","ratt");avsluta();}return;}
+    G.felNu=true;P.miss++;ljud("bad");vb.classList.add("fel");hb.classList.add("fel");skaka(vb);skaka(hb);fb(P.miss>1?`Inte ett par. ${v}: ${par[1]}.`:"Inte ett par. Prova igen!","fel");}};
+function klar(){if(!G||G.last)return;const M=G.M,R=M.R;
+  if(M.typ==="rakna"){const s=summa(R),fel=s.map((v,k)=>G.tal_[k]!==v),rutor=[...$("rk").children];
+    if(!fel.some(Boolean)){rutor.forEach(x=>x.classList.add("ok"));ljud("ok");fb(`Rätt! ✓ ${s[0]} + ${s[1]} + ${s[2]} = ${s[0]+s[1]+s[2]} röster.`,"ratt");avsluta();return;}
+    G.felNu=true;ljud("bad");rutor.forEach((x,k)=>x.classList.toggle("fel",fel[k]));
+    if(G.forsok===0){G.forsok=1;$("klassBox").innerHTML=klassHtml(R,true);fb("Inte riktigt. Nu står barnen i grupper. Räkna de röda en gång till. Glöm inte din egen röst!","fel");return;}
+    G.tal_=s.slice();rutor.forEach((x,k)=>{x.classList.remove("fel");x.querySelector("b").textContent=s[k];});$("klassBox").innerHTML=klassHtml(R,true);fb(`Så här blev det: ${s[0]} + ${s[1]} + ${s[2]} = ${s[0]+s[1]+s[2]} röster.`,"fel");igenSist();avsluta();return;}
+  if(M.typ==="ordna"){if(G.ordn.length<4)return;const fel=G.ordn.map((k,i)=>k!==i),kn=k=>$("steg").querySelector(`[data-steg="${k}"]`);
+    if(!fel.some(Boolean)){G.ordn.forEach(k=>kn(k).classList.add("ratt"));ljud("ok");fb("Rätt! ✓ Bakom skärmen ser ingen vad du väljer. Rösten är hemlig.","ratt");avsluta();return;}
+    G.felNu=true;ljud("bad");
+    if(G.forsok===0){G.forsok=1;G.ordn.forEach((k,i)=>kn(k).classList.toggle("fel",fel[i]));fb("Inte riktigt. De röda står på fel plats. Tryck på dem och välj om. Man går bakom skärmen innan man lägger valsedeln i kuvertet.","fel");return;}
+    G.ordn=[0,1,2,3];M.kort=[0,1,2,3];ritaOrdna();[0,1,2,3].forEach(k=>kn(k).classList.add("ratt"));fb("Så här går det till. Rösten är hemlig, därför väljer man bakom skärmen.","fel");igenSist();avsluta();return;}
+  if(M.typ==="platser"){const ratt=M.tal.map(t=>t/10),fel=ratt.map((v,k)=>G.pl[k]!==v),rutor=[...$("pt").children];
+    if(!fel.some(Boolean)){rutor.forEach(x=>x.classList.add("ok"));ljud("ok");fb("Rätt! ✓ Fler röster ger fler platser. 10 röster ger en plats.","ratt");avsluta();return;}
+    G.felNu=true;ljud("bad");rutor.forEach((x,k)=>x.classList.toggle("fel",fel[k]));
+    if(G.forsok===0){G.forsok=1;fb("Inte riktigt. 100 röster och 10 platser: var tionde röst ger en plats.","fel");return;}
+    G.pl=ratt.slice();rutor.forEach((x,k)=>{x.classList.remove("fel");x.querySelector("b").textContent=ratt[k];});ritaSal();fb(`${M.tal.map((t,k)=>`${t} röster ger ${ratt[k]} platser`).join(", ")}.`,"fel");igenSist();avsluta();}}
+$("klar").onclick=klar;$("nasta").onclick=nasta;
+document.addEventListener("keydown",e=>{if(!G||$("game").hidden||e.key!=="Enter")return;e.preventDefault();if(!$("nasta").hidden)nasta();else if(!$("klar").hidden)klar();});
+
+function slut(){rensa();const st=G.fel===0?3:G.fel<=2?2:1,old=data.stars[G.lvl]||0;data.stars[G.lvl]=Math.max(old,st);save();
+  $("rStj").innerHTML=stjHtml(st);$("rRub").textContent=st===3?"Perfekt! 🎉":st===2?"Bra jobbat!":"Bra kämpat!";
+  $("rTxt").textContent=`${G.tot-G.fel} av ${G.tot} rätt på ${NIV[G.lvl].namn}.${st<3?" Spela igen och se om du kan få alla rätt!":""}`;
+  show("result");if(st===3){ljud("fanfare");confetti();}}
+$("rIgen").onclick=()=>starta(G.lvl);$("rHome").onclick=hem;
+
 function confetti(){if(reduced())return;const cols=["#3D8BFD","#FF9F43","#2BB673","#FFC93C","#7B61FF","#FF6B6B"];
   const c=$("fx"),x=c.getContext("2d"),dpr=window.devicePixelRatio||1,W=innerWidth,H=innerHeight;c.width=W*dpr;c.height=H*dpr;x.setTransform(dpr,0,0,dpr,0,0);c.hidden=false;
   const P=Array.from({length:150},()=>({x:W/2+(Math.random()-.5)*120,y:H*.3,vx:(Math.random()-.5)*16,vy:-Math.random()*15-4,r:Math.random()*7+5,c:pick(cols),a:Math.random()*6,va:(Math.random()-.5)*.4}));
   let t=0;(function f(){x.clearRect(0,0,W,H);P.forEach(p=>{p.vy+=.45;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore();});
     if(++t<150)requestAnimationFrame(f);else c.hidden=true;})();}
-const NIV=[null].concat([{"namn": "Nivå 1: Att bestämma tillsammans", "txt": "Röstning och regler i klassen.", "col": "#2BB673"}, {"namn": "Nivå 2: Riksdag och val", "txt": "Hur Sverige styrs.", "col": "#FF9F43"}, {"namn": "Nivå 3: Rättigheter", "txt": "Mänskliga rättigheter och mer.", "col": "#7B61FF"}]);
-let G=null;
-
-const RUND=8;
-const BANK={"1": [{"q": "Hur bestämmer man i en demokrati?", "a": ["Man röstar", "Den starkaste bestämmer", "Man singlar slant alltid", "Man frågar bara en person"], "r": 0, "f": "I en demokrati får många vara med och bestämma."}, {"q": "Vad är en röst?", "a": ["Ett val man gör när man röstar", "Ett ljud från munnen bara", "Ett papper utan betydelse", "En sorts mat"], "r": 0, "f": "Din röst är ditt val, till exempel när klassen bestämmer något."}, {"q": "Vad betyder majoritet?", "a": ["Fler än hälften", "Alla tillsammans", "Ingen alls", "En enda person"], "r": 0, "f": "Om 14 av 25 väljer samma sak är det en majoritet."}, {"q": "Vad är en regel?", "a": ["Något man kommit överens om", "Något man får göra hur man vill", "Ett skämt", "En lek"], "r": 0, "f": "Regler hjälper alla att komma överens."}, {"q": "Varför är det bra att alla får säga sin åsikt?", "a": ["Då hör man olika tankar", "Då blir det mest tyst", "Då blir det aldrig bestämt något", "Då vinner alltid den högsta rösten"], "r": 0, "f": "Olika åsikter gör besluten bättre."}, {"q": "Vad gör man om man inte håller med de flesta?", "a": ["Visar respekt och säger sin åsikt snällt", "Blir arg och skriker", "Går sin väg", "Bestämmer själv ändå"], "r": 0, "f": "I en demokrati får man tycka olika, men man respekterar beslutet."}, {"q": "Vad är ett klassråd?", "a": ["Ett möte där klassen bestämmer saker", "En lektion i matte", "En rast", "Ett bord"], "r": 0, "f": "På klassrådet får alla vara med."}, {"q": "Vad är rättvist?", "a": ["Att alla får samma chans", "Att den starkaste vinner", "Att ingen får vara med", "Att någon bestämmer allt"], "r": 0, "f": "Rättvisa betyder att alla räknas."}, {"q": "Vad betyder 'demokrati'?", "a": ["Folkstyre", "Kungastyre", "Ett slags djur", "Ett slags spel"], "r": 0, "f": "Demokrati betyder att folket styr."}], "2": [{"q": "Vad heter Sveriges riksdag?", "a": ["Riksdagen", "Rådhuset", "Slottet", "Stadshuset"], "r": 0, "f": "Riksdagen ligger i Stockholm."}, {"q": "Vilka får rösta i val i Sverige?", "a": ["Medborgare som är 18 år eller äldre", "Alla barn", "Bara kungen", "Bara lärare"], "r": 0, "f": "För att rösta i riksdagsvalet måste man vara svensk medborgare och fylla 18."}, {"q": "Hur ofta är det val till riksdagen?", "a": ["Vart fjärde år", "Varje dag", "Vartannat år", "Vart tionde år"], "r": 0, "f": "Riksdagsval hålls vart fjärde år."}, {"q": "Vad kallas den som leder regeringen?", "a": ["Statsminister", "Rektor", "Kung", "Domare"], "r": 0, "f": "Statsministern leder Sveriges regering."}, {"q": "Vad är en lag?", "a": ["Regler som gäller i hela landet", "Ett förslag på rast", "Ett kort tåg", "En bra idé"], "r": 0, "f": "Lagar gäller för alla i landet."}, {"q": "Vem bestämmer lagarna i Sverige?", "a": ["Riksdagen", "Skolan", "Polisen", "Lärarna"], "r": 0, "f": "Riksdagen stiftar lagar."}, {"q": "Vad är ett parti?", "a": ["En grupp som tycker likadant i politik", "En fest", "En sorts bil", "Ett djur"], "r": 0, "f": "Partierna har olika idéer om hur landet ska styras."}, {"q": "Vad kallas när man får säga vad man tycker?", "a": ["Yttrandefrihet", "Tystnadsplikt", "Regelbrott", "Hemligstämpel"], "r": 0, "f": "I Sverige får man säga vad man tycker, om man inte skadar någon."}, {"q": "Vad kallas en folkvald i riksdagen?", "a": ["Ledamot", "Elev", "Kock", "Pilot"], "r": 0, "f": "Ledamöterna är valda av folket."}], "3": [{"q": "Hur många ledamöter har riksdagen?", "a": ["349", "10", "100", "1 000"], "r": 0, "f": "Det finns 349 platser i riksdagen."}, {"q": "Vem är Sveriges statschef?", "a": ["Kungen", "Statsministern", "Rektorn", "Borgmästaren"], "r": 0, "f": "Kungen är statschef, men statsministern leder regeringen."}, {"q": "Vad är mänskliga rättigheter?", "a": ["Rättigheter som alla människor har", "Regler bara för vuxna", "Lekar", "Skolämnen"], "r": 0, "f": "Till exempel rätten att få säga sin mening och att vara trygg."}, {"q": "Vad är barnkonventionen?", "a": ["Regler om barns rättigheter", "Ett spel", "En tidning", "En skola"], "r": 0, "f": "Barnkonventionen är svensk lag sedan år 2020."}, {"q": "Varför är röstningen i val hemlig?", "a": ["Så att ingen kan tvinga dig", "För att det är roligt", "För att kungen vill", "För att slippa räkna"], "r": 0, "f": "Ingen ska behöva säga hur man röstat."}, {"q": "Vad lägger man i kuvertet när man röstar?", "a": ["En valsedel", "Ett ritblock", "Ett brev", "En karta"], "r": 0, "f": "På valsedeln står partiets namn."}, {"q": "Vad är en kommun?", "a": ["Ett område som bestämmer över bland annat skolor", "Ett land", "Ett parti", "Ett hav"], "r": 0, "f": "Kommunen ansvarar för skolor, äldreomsorg och mycket mer."}, {"q": "Vad kallas det när alla får lika möjligheter?", "a": ["Jämlikhet", "Konkurrens", "Tävling", "Rädsla"], "r": 0, "f": "Jämlikhet betyder att alla har samma värde."}, {"q": "Vad är ett val?", "a": ["När folket väljer vilka som ska bestämma", "En lek", "En rast", "En bok"], "r": 0, "f": "I val röstar man på partier och personer."}]};
-
-function begin(lvl){G={lvl,i:0,fel:0,res:[],felNu:0,gjort:false};$("nivT").textContent="Nivå "+lvl;$("pet").innerHTML=owlSVG(lasDjur());
-  G.set=(typeof skapa==="function"?skapa(lvl):shuffle(BANK[lvl].slice())).slice(0,RUND);show("game");nasta();}
-function nasta(){if(G.i>=RUND){slut();return;}
-  G.q=G.set[G.i];G.felNu=0;G.gjort=false;prickar(RUND,G.i,G.res);const q=G.q;G.ord=shuffle(q.a.map((_,i)=>i));
-  $("fraga").innerHTML=q.q;$("stor").innerHTML=q.e||"";const al=$("alt");al.className="alt"+(q.en?" en":"");
-  al.innerHTML=G.ord.map(i=>`<button class="val" data-i="${i}">${q.a[i]}</button>`).join("");
-  $("fb").textContent="";$("fb").className="fb";$("forkl").hidden=true;$("bNasta").hidden=true;}
-function markera(){document.querySelectorAll("#alt .val").forEach(b=>{b.disabled=true;if(+b.dataset.i===G.q.r)b.classList.add("ratt");});}
-$("alt").onclick=e=>{const b=e.target.closest(".val");if(!b||G.gjort||b.disabled)return;const i=+b.dataset.i,f=$("fb");
-  if(i===G.q.r){G.gjort=true;G.res[G.i]=!G.felNu;G.i++;prickar(RUND,G.i,G.res);markera();f.className="fb ratt";f.textContent="✔ Rätt!";haj();window.Ljud&&Ljud.ok&&Ljud.ok();
-    if(G.q.f){$("forkl").innerHTML=G.q.f;$("forkl").hidden=false;}$("bNasta").hidden=false;$("bNasta").focus({preventScroll:true});return;}
-  G.felNu++;if(G.felNu===1)G.fel++;window.Ljud&&Ljud.bad&&Ljud.bad();b.classList.add("fel");b.disabled=true;
-  if(G.felNu<2){const a=$("alt");a.classList.remove("skaka");void a.offsetWidth;a.classList.add("skaka");f.className="fb fel";f.textContent="Nästan! Prova igen.";return;}
-  G.gjort=true;G.res[G.i]=false;G.i++;prickar(RUND,G.i,G.res);markera();f.className="fb fel";f.textContent="Så här var det:";
-  $("forkl").innerHTML=G.q.f||"";$("forkl").hidden=!G.q.f;$("bNasta").hidden=false;};
-$("bNasta").onclick=nasta;
-function slut(){const st=G.fel===0?3:G.fel<=2?2:1;resultat(st,`${RUND-G.fel} av ${RUND} rätt på första försöket på nivå ${G.lvl}.${st<3?" Spela igen och se om du kan få alla rätt!":""}`);}
-document.addEventListener("keydown",e=>{if($("game").hidden||e.key!=="Enter")return;if(!$("bNasta").hidden)$("bNasta").click();});
-
+window.__dem={NIV,gorRunda,gorRosta,summa,starta,klar,get G(){return G}};
 hem();
 </script>
 </body>

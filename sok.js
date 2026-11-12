@@ -86,7 +86,7 @@ const IDX=[
  ['varlden/','Pluggparken-världen','Gå runt på en ö i 3D med ditt djur, hoppa in i portaler, ta uppdrag och besök Matte-parken','🏝️','värld ö 3d portal hoppa spel öppen värld djur utforska uppdrag park matte-parken prydnader stjärnor','Utforska'],
  ['vikingatiden/','Vikingatiden','Skepp, runor och gudar. Vad vet du om vikingarna?','⚓','vikingar vikingatiden skepp långskepp runor tor odin historia sverige','SO'],
  ['rutnat/','Rutnät och koordinater','Gräv efter skatten på kartan. Tryck på rätt ruta, läs av och gå rätt väg.','🗺️','rutnät koordinater karta bokstav siffra skattkarta geometri','Matte'],
- ['demokrati/','Demokrati','Hur bestämmer vi tillsammans? Röstning, riksdag och rättigheter.','🗳️','demokrati rösta val riksdag regeringen lag rättigheter samhälle','SO'],
+ ['demokrati/','Demokrati','Led klassrådet, räkna rösterna och se vad som fick majoritet. Val och rättigheter.','🗳️','demokrati rösta röstning klassråd majoritet val riksdag regeringen lag rättigheter barnkonventionen samhälle','SO'],
  ['engelskaord/','Engelska ord','Lyssna och tryck på rätt bild, bygg ordet och para ihop.','🇬🇧','engelska english ord glosor lyssna stava djur färger tal kroppen hello thank you fraser','Engelska'],
  ['klockanengelska/','Klockan på engelska','Ställ klockan på half past three och bygg klockslaget av engelska ord.','⏰','klockan engelska time clock oclock half past quarter','Engelska'],
  ['ovriga/solsystemet/','Solsystemet i 3D','Res bland planeterna och ut i universum','🪐','planeter solen jorden månen vintergatan resa stockholm','NO'],

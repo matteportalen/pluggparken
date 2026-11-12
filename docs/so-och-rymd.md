@@ -12,7 +12,7 @@ _Det som gäller nu för Rymdlabbet, Solsystemet i 3D med resan ut i universum o
 | `ovriga/sverigekartan/` | Sverigekartan: landskap, städer, älvar, Sätt nålen, två prov | `mattespel-sverigekartan-v1` |
 | `ovriga/ordgomma/` | Ordgömman (hör till Svenska) | `mattespel-ordgomma-v1` |
 | `vikingatiden/` | Vikingatiden: Myt eller sant och Runskrivaren | `mattespel-vikingatiden-v1` |
-| `demokrati/` | Demokrati (frågeövning, behålls tills vidare) | `mattespel-demokrati-v1` |
+| `demokrati/` | Demokrati: Klassrådet, Valet, Rättigheter | `mattespel-demokrati-v1` |
 | `so/index.html` | Ämnessidan SO. Europa, Världen och Tidslinjen står i `docs/ovriga-amnen.md`. | – |
 
 Röst till resorna: `ljud/resa/` (manus `manus/resa-manus.txt`) och `ljud/jattar/` (manus `manus/jattar-manus.txt`), rösten Paul Axel. Filmerna står i `docs/specialare-filmer.md`.
@@ -60,7 +60,10 @@ Röst till resorna: `ljud/resa/` (manus `manus/resa-manus.txt`) och `ljud/jattar
 ## Vikingatiden och Demokrati
 
 - **Vikingatiden** har Myt eller sant och Runskrivaren (skriv ett namn i runor, rista, skriv ut). Runskrivaren ger inga stjärnor. Utforska med bilder är borttaget; i stället en länk till vikingafilmen i Specialare. Bildkällorna står i historikfilen och under varje bild.
-- **Demokrati** är en frågeövning från den gemensamma frågemotorn och behålls tills vidare. Fler sådana byggs inte.
+- **Demokrati** (omgjord nov 2026, lärarens krav: bättre men fortfarande individuell, man ska kunna jobba själv). Frågeövningen är borta. Tre nivåer: **Klassrådet** (eleven röstar själv med sitt djur, räknar klassens röster, pekar ut vinnaren och avgör om det blev majoritet), **Valet** (stegen i vallokalen i rätt ordning, vem som får rösta, dela ut tio platser efter rösterna, nästa valår, vem gör vad) och **Rättigheter** (rättighet eller önskan, demokrati eller inte, para ihop begrepp).
+- Vinnaren i klassrådet leder alltid med minst två röster, så att elevens egen röst aldrig ger oavgjort. Majoritet räknas efter elevens röst; "precis hälften" är inte majoritet och förklaras så.
+- Partierna är påhittade (Äppelpartiet, Bollpartiet, Stjärnpartiet). **Inga riktiga partier eller politiker.** Fakta som används: rösträtt vid 18 år senast på valdagen, val vart fjärde år, riksdagen bestämmer lagarna, regeringen styr landet, statsministern leder regeringen, kungen är statschef.
+- Fler frågeövningar ur den gamla frågemotorn byggs inte.
 
 ## Borttaget med flit (bygg inte igen)
 
