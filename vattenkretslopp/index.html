@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<script src="../tema.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vattnets kretslopp – Pluggparken</title>
+<meta name="description" content="Vattnets kretslopp: följ en vattendroppe från havet upp till molnet, ner som regn och tillbaka i floden. Laborera med sol och temperatur och gissa vad som händer.">
+<link rel="canonical" href="https://pluggparken.se/vattenkretslopp/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Pluggparken">
+<meta property="og:locale" content="sv_SE">
+<meta property="og:title" content="Vattnets kretslopp – Pluggparken">
+<meta property="og:description" content="Följ en vattendroppe genom kretsloppet, laborera med sol och temperatur och gissa vad som händer.">
+<meta property="og:url" content="https://pluggparken.se/vattenkretslopp/">
+<meta property="og:image" content="https://pluggparken.se/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#1F3A35">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/apple-touch-icon.png" sizes="180x180">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+:root{
+  --bg:#EAF3FF; --ink:#1D2B53; --muted:#56668F; --card:#FFFFFF; --line:#C6D6F2;
+  --good:#1E9E5E; --good-dark:#157548; --bad:#E5484D; --accent:#3D5AFE; --gold:#F2B707;
+  --font:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:760px;margin:0 auto;padding:12px 16px 32px}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;border:0;background:none}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+[hidden]{display:none!important}
+.hero{display:flex;gap:16px;align-items:center;background:linear-gradient(135deg,#2BA8E8,#1E6FD0);color:#fff;border-radius:24px;padding:18px;box-shadow:0 5px 0 #144A96;margin:6px 0 16px}
+.hero .hk{flex:none;width:110px;height:74px;border-radius:14px;overflow:hidden;box-shadow:0 3px 0 rgba(0,0,0,.18)}
+.hero .hk svg{display:block;width:100%;height:100%}
+.hero h1{margin:0;font-size:clamp(1.7rem,6vw,2.3rem);line-height:1.05}
+.hero p{margin:6px 0 0;font-weight:600;opacity:.97}
+.niv{display:grid;gap:10px}
+.niv button{display:flex;align-items:center;gap:14px;background:var(--card,#fff);border-radius:18px;padding:12px 14px;box-shadow:0 4px 0 var(--line);text-align:left;width:100%}
+.niv button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.niv .nr{flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-weight:800;font-size:1.4rem;color:#fff}
+.niv b{display:block;font-size:1.12rem;line-height:1.15}
+.niv small{display:block;color:var(--muted);font-weight:600;font-size:.88rem;line-height:1.25}
+.niv .st{margin-left:auto;flex:none;color:var(--gold);font-size:1.15rem;letter-spacing:1px}
+.niv .st .off{color:var(--line)}
+.not{color:var(--muted);font-size:.85rem;font-weight:600;margin:14px 2px 0;line-height:1.3}
+.topp{display:flex;align-items:center;gap:10px;margin:4px 0 6px;min-height:24px}
+.dots{display:flex;gap:6px;flex:1;flex-wrap:wrap}
+.dots i{width:12px;height:12px;border-radius:50%;background:var(--line)}
+.dots i.ok{background:var(--good)}.dots i.f{background:var(--bad)}.dots i.nu{background:var(--gold)}
+.niva-t{font-weight:800;color:var(--muted);font-size:.9rem}
+.scen{position:relative;border-radius:22px;overflow:hidden;box-shadow:0 4px 0 #0B1630;background:#8FD3F5;touch-action:manipulation}
+.scen canvas{display:block;width:100%;aspect-ratio:3/2;max-height:46vh}
+.mk{position:absolute;transform:translate(-50%,-50%);min-width:34px;height:34px;border-radius:17px;background:#fff;border:3px solid #F2780C;font-weight:800;font-size:.8rem;padding:0 8px;box-shadow:0 3px 0 rgba(0,0,0,.2);color:var(--ink)}
+.mk.ok{border-color:var(--good);background:#DDF5E7}.mk.fel{border-color:var(--bad);background:#FFE9EC}.mk.v{box-shadow:0 0 0 4px rgba(61,90,254,.4)}
+.puls{position:absolute;transform:translate(-50%,-50%);width:54px;height:54px;border-radius:50%;border:4px solid #fff;pointer-events:none;animation:puls 1.2s ease-out infinite}
+@keyframes puls{from{transform:translate(-50%,-50%) scale(.6);opacity:1}to{transform:translate(-50%,-50%) scale(1.5);opacity:0}}
+.panel{display:grid;gap:8px;margin-top:8px}
+.q{background:var(--card,#fff);border-radius:16px;box-shadow:0 4px 0 var(--line);padding:8px 12px}
+.q b{display:block;font-size:.8rem;color:var(--muted);line-height:1.1}
+.q p{margin:2px 0 0;font-weight:800;font-size:1.05rem;line-height:1.25}
+.ord{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.ord button{background:var(--card,#fff);border-radius:12px;box-shadow:0 3px 0 var(--line);min-height:44px;font-weight:800;font-size:.82rem;line-height:1.05;padding:3px}
+.ord button.v{background:var(--accent);color:#fff;box-shadow:0 3px 0 #2A3FB8}
+.ord button:disabled{opacity:.35}
+.sl{display:grid;grid-template-columns:30px 1fr 64px;gap:6px;align-items:center;background:var(--card,#fff);border-radius:14px;box-shadow:0 3px 0 var(--line);padding:4px 10px}
+.sl span{font-size:1.4rem;line-height:1}.sl input{width:100%;height:34px;accent-color:var(--accent)}.sl b{font-size:.85rem;text-align:right}
+.mat{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.mat div{background:var(--card,#fff);border-radius:12px;box-shadow:0 3px 0 var(--line);padding:4px 6px;font-weight:800;font-size:.78rem;line-height:1.1;text-align:center}
+.mat i{display:block;height:7px;border-radius:4px;background:#E6ECF8;margin-top:3px;overflow:hidden}.mat i u{display:block;height:100%;background:var(--c);border-radius:4px;transition:width .3s}
+.rad2{display:flex;gap:6px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.rad2 button{min-height:38px;border-radius:12px;background:var(--card,#fff);box-shadow:0 3px 0 var(--line);font-weight:800;font-size:.9rem;padding:0 12px}
+.rad2 button.v{background:var(--accent);color:#fff;box-shadow:0 3px 0 #2A3FB8}
+.rad2 button:active{transform:translateY(2px)}
+.val3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.val3 button{min-height:54px;border-radius:14px;background:var(--card,#fff);box-shadow:0 4px 0 var(--line);font-weight:800;font-size:.92rem;line-height:1.1;padding:4px 6px}
+.val3 button.v{background:var(--accent);color:#fff;box-shadow:0 4px 0 #2A3FB8}
+.val3 button.rk{background:#DDF5E7;color:var(--good-dark);box-shadow:0 0 0 3px var(--good)}
+.val3 button.rf{background:#FFE9EC;color:#B4232A;opacity:.85}
+.val3.last button{pointer-events:none}
+.expl{background:#FFF4D6;border-radius:14px;padding:8px 12px;font-weight:700;font-size:.92rem;line-height:1.3;text-align:center}
+.expl.ok{background:#DDF5E7}.expl.fel{background:#FFE9EC}
+.knapprad{display:flex;justify-content:center;gap:10px}
+.stor{background:var(--good);color:#fff;border-radius:18px;padding:10px 30px;font-weight:800;font-size:1.2rem;box-shadow:0 5px 0 var(--good-dark)}
+.stor:disabled{background:#E6ECF8;color:#56668F;box-shadow:0 4px 0 var(--line);pointer-events:none}
+.stor.bla{background:var(--accent);box-shadow:0 5px 0 #2A3FB8}
+@media (min-width:820px){.wrap{max-width:1000px}.sp{display:grid;grid-template-columns:1.5fr 1fr;gap:12px;align-items:start}.scen canvas{max-height:60vh}.panel{margin-top:0}}
+@media (max-height:700px){.scen canvas{max-height:32vh}.ord button{min-height:38px}}
+.res{text-align:center}
+.res .stj{font-size:3rem;letter-spacing:6px;color:var(--gold);margin:8px 0}
+.res .stj .off{color:var(--line)}
+.knapp{display:inline-block;background:var(--good);color:#fff;border-radius:16px;padding:12px 26px;font-weight:800;font-size:1.15rem;box-shadow:0 5px 0 var(--good-dark);margin:6px}
+.knapp.vit{background:var(--card,#fff);color:var(--ink);box-shadow:0 5px 0 var(--line)}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:50}
+@media(max-width:420px){.hero .hk{width:88px;height:64px}.hero{gap:12px;padding:14px}}
+@media(prefers-reduced-motion:reduce){.puls{animation:none}}
+</style>
+</head>
+<body>
+<script src="../ljud.js"></script>
+<script src="../huvud.js" data-titel="Vattnets kretslopp" data-ikon="💧"></script>
+<main class="wrap">
+<section class="screen" id="home">
+  <div class="hero">
+    <div class="hk" aria-hidden="true"><svg viewBox="0 0 220 148"><defs><linearGradient id="hs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8FD3F5"/><stop offset="1" stop-color="#D9F1FF"/></linearGradient></defs><rect width="220" height="148" fill="url(#hs)"/><circle cx="36" cy="28" r="14" fill="#FFD84D"/><path d="M0 100h80v48H0z" fill="#2F8FD8"/><path d="M80 148V100l60-50 50 40 30 58z" fill="#7F9A8A"/><path d="M118 70l22-20 18 16-14-4-10 6z" fill="#fff"/><g fill="#fff"><ellipse cx="140" cy="26" rx="26" ry="10"/><ellipse cx="158" cy="20" rx="18" ry="9"/></g><g fill="#4FB6F0"><path d="M150 40c3 6 6 9 6 12a6 6 0 0 1-12 0c0-3 3-6 6-12z"/><path d="M164 46c3 6 6 9 6 12a6 6 0 0 1-12 0c0-3 3-6 6-12z"/></g></svg></div>
+    <div><h1>Vattnets kretslopp</h1><p>Följ en vattendroppe på dess resa runt och runt.</p></div>
+  </div>
+  <div class="niv" id="niv"></div>
+  <p class="not">Kretsloppet är förenklat. I verkligheten finns också grundvatten, is och växter som tar upp vatten.</p>
+</section>
+<section class="screen" id="game" hidden>
+  <button type="button" data-home hidden tabindex="-1" aria-hidden="true" onclick="hem()"></button>
+  <div class="topp"><div class="dots" id="dots"></div><span class="niva-t" id="nivT"></span></div>
+  <div class="sp">
+    <div class="scen" id="scen"><canvas id="cv" aria-label="Landskap med hav, sol, moln och berg"></canvas></div>
+    <div class="panel" id="panel"></div>
+  </div>
+</section>
+<section class="screen res" id="result" hidden>
+  <h2 id="rRub" style="margin:10px 0 0">Bra jobbat!</h2>
+  <div class="stj" id="rStj"></div>
+  <p id="rTxt" style="font-weight:700;margin:0 0 14px"></p>
+  <button class="knapp" id="rIgen">Spela igen</button>
+  <button class="knapp vit" id="rHome">Välj nivå</button>
+</section>
+</main>
+<canvas id="fx" hidden></canvas>
+<script>
+const $=id=>document.getElementById(id);
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const R=(a,b)=>a+Math.random()*(b-a);
+const lerp=(a,b,t)=>a+(b-a)*t;
+const KEY="mattespel-vattenkretslopp-v1";
+const data=(()=>{try{return Object.assign({stars:{}},JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){return{stars:{}}}})();
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}};
+const reduced=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
+const ljud=n=>{window.Ljud&&Ljud[n]&&Ljud[n]();};
+const NIV=[null,
+ {namn:"Följ droppen",txt:"Följ en vattendroppe från havet runt hela kretsloppet.",col:"#2BA8E8"},
+ {namn:"Laborera",txt:"Ändra solen och temperaturen och se vad som händer.",col:"#2BB673"},
+ {namn:"Gissa först",txt:"Vad händer med molnen, regnet och floden? Gissa först.",col:"#7B61FF"}];
+const stjHtml=n=>[1,2,3].map(i=>i<=n?"★":'<span class="off">★</span>').join("");
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
+function hem(){stoppa();$("niv").innerHTML=[1,2,3].map(l=>`<button data-l="${l}"><span class="nr" style="background:${NIV[l].col}">${l}</span><span><b>${NIV[l].namn}</b><small>${NIV[l].txt}</small></span><span class="st">${l===2?"":stjHtml(data.stars[l]||0)}</span></button>`).join("");show("home");}
+$("niv").onclick=e=>{const b=e.target.closest("[data-l]");if(b)starta(+b.dataset.l);};
+
+/* ======================= SIMULERINGEN (se docs/vattenkretslopp.md) ======================= */
+const W=360,H=240,N=300;
+const FLOD=[[235,98],[215,118],[195,132],[175,146],[150,155],[118,156]];
+const slopY=x=>x<=290?160-(x-140)*.6:70+(x-290)*1.14;
+const flodPos=u=>{const n=FLOD.length-1,f=Math.min(.9999,Math.max(0,u))*n,i=Math.floor(f),t=f-i;return[lerp(FLOD[i][0],FLOD[i+1][0],t),lerp(FLOD[i][1],FLOD[i+1][1],t)];};
+const varme=T=>T<=0?.12:.05+.95*Math.min(1,T/35);
+let P={sun:.7,temp:15},parts=[],klock=0,haendelser=0;
+function nytt(opt){opt=opt||{};parts=[];const mk=(st,n)=>{for(let i=0;i<n;i++)parts.push(ny(st));};mk("H",N-26-14-10-(opt.snö||0));mk("M",26);mk("F",14);mk("V",10);mk("L",opt.snö||0);klock=0;haendelser=0;}
+function ny(st){const p={st,t:R(0,3),d:R(3.5,5.5),x:R(8,112),ph:R(0,6.28),cx:R(205,295),cy:R(36,62),tx:R(215,285),ty:0,y:R(2,60),o:R(-3,3)};p.ty=slopY(p.tx)-R(0,3);if(st==="F")p.d=R(5,8);if(st==="L")p.ty=slopY(p.tx)-R(1,4);return p;}
+function steg(dt){klock+=dt;const w=varme(P.temp),pE=.018*P.sun*w,pR=.07,pM=P.temp>0?.06*Math.min(1,.3+P.temp/10):0;
+  for(const p of parts){switch(p.st){
+    case"H":if(Math.random()<pE*dt){p.st="V";p.t=0;p.d=R(3.5,5.5);p.x=R(8,112);p.cx=R(205,295);p.cy=R(36,62);}break;
+    case"V":p.t+=dt;if(p.t>=p.d){p.st="M";p.t=0;}break;
+    case"M":if(Math.random()<pR*dt){p.st=P.temp<=0?"S":"R";p.t=0;p.d=R(.9,1.6);p.cx=R(215,285);p.tx=p.cx+R(-8,8);p.ty=slopY(p.tx)-R(0,3);p.cy=R(60,70);haendelser++;}break;
+    case"R":p.t+=dt;if(p.t>=p.d){p.st="F";p.t=0;p.d=R(5,8);}break;
+    case"S":p.t+=dt;if(p.t>=p.d){p.st="L";p.ty=slopY(p.tx)-R(1,4);}break;
+    case"L":if(pM&&Math.random()<pM*dt){p.st="F";p.t=0;p.d=R(5,8);}break;
+    case"F":p.t+=dt;if(p.t>=p.d){p.st="H";p.t=0;p.x=R(8,112);p.y=R(2,60);}break;}}}
+const antal=()=>{const c={H:0,V:0,M:0,R:0,S:0,L:0,F:0};for(const p of parts)c[p.st]++;return c;};
+/* kör utan ritning: returnerar medelvärden och haendelser */
+function kor(pp,T,opt){opt=opt||{};const old=P;P=Object.assign({},pp);if(opt.snö!=null)nytt({snö:opt.snö});else nytt();const hist=[];let t=0;if(opt.fore){P=Object.assign({},opt.fore.P);for(;t<opt.fore.T;t+=.1)steg(.1);P=Object.assign({},pp);t=0;}haendelser=0;for(;t<T;t+=.1){steg(.1);if(Math.round(t*10)%10===0)hist.push(antal());}const r={hist,hae:haendelser,slut:antal()};P=old;return r;}
+const medel=(h,a,b,k)=>{const s=h.slice(a,b);return s.reduce((x,c)=>x+c[k],0)/Math.max(1,s.length);};
+
+/* ======================= RITNING ======================= */
+const cv=$("cv"),ctx=cv.getContext("2d");let DPR=1;
+function storlek(){const r=cv.getBoundingClientRect();DPR=Math.min(2,devicePixelRatio||1);cv.width=Math.max(10,Math.round(r.width*DPR));cv.height=Math.max(10,Math.round(r.width*DPR*2/3));}
+new ResizeObserver(storlek).observe(cv);
+function bakgrund(c,tsek){const T=P.temp,kallt=T<=0,sun=P.sun,L=antal(),snow=L.L/N;
+  const g=c.createLinearGradient(0,0,0,150);g.addColorStop(0,kallt?"#B7CBE6":sun<.15?"#6E86AE":"#7CCBF2");g.addColorStop(1,kallt?"#E3EDF8":sun<.15?"#A9B9D2":"#CFEFFF");c.fillStyle=g;c.fillRect(0,0,W,H);
+  if(sun>.02){const sx=60,sy=42,r=11+8*sun,gl=c.createRadialGradient(sx,sy,0,sx,sy,r*3.6);gl.addColorStop(0,`rgba(255,235,150,${.9*sun})`);gl.addColorStop(1,"rgba(255,220,100,0)");c.fillStyle=gl;c.fillRect(0,0,160,120);c.fillStyle=`rgba(255,216,77,${.35+.65*sun})`;c.beginPath();c.arc(sx,sy,r,0,7);c.fill();
+    if(!reduced())for(let i=0;i<10;i++){const a=i*.628+tsek*.2;c.strokeStyle=`rgba(255,216,77,${.6*sun})`;c.lineWidth=2.4;c.beginPath();c.moveTo(sx+Math.cos(a)*(r+4),sy+Math.sin(a)*(r+4));c.lineTo(sx+Math.cos(a)*(r+4+8*sun),sy+Math.sin(a)*(r+4+8*sun));c.stroke();}}
+  else{c.fillStyle="#C9D3E6";c.beginPath();c.arc(60,42,11,0,7);c.fill();}
+  // berg
+  c.fillStyle="#7E9A88";c.beginPath();c.moveTo(118,158);c.lineTo(140,160);c.lineTo(290,70);c.lineTo(360,150);c.lineTo(360,240);c.lineTo(118,240);c.closePath();c.fill();
+  c.fillStyle="#6B8A76";c.beginPath();c.moveTo(290,70);c.lineTo(360,150);c.lineTo(360,240);c.lineTo(300,240);c.closePath();c.fill();
+  const cap=Math.min(1,snow*3);if(cap>.02){c.fillStyle=`rgba(255,255,255,${.9*cap})`;c.beginPath();c.moveTo(256,92-cap*6);c.lineTo(290,70);c.lineTo(318,100);c.lineTo(306,96);c.lineTo(290,104);c.lineTo(276,96);c.lineTo(262,106);c.closePath();c.fill();}
+  // flodbädd
+  c.strokeStyle="rgba(120,190,235,.45)";c.lineWidth=6;c.lineCap="round";c.lineJoin="round";c.beginPath();FLOD.forEach((p,i)=>i?c.lineTo(p[0],p[1]):c.moveTo(p[0],p[1]));c.stroke();
+  // hav
+  const lvl=150+22*(1-L.H/(N*.8));c.fillStyle=kallt?"#9FC9EA":"#2F8FD8";c.fillRect(0,lvl,122,H-lvl);c.fillStyle=kallt?"#B7D9F2":"#58AEEA";c.beginPath();c.moveTo(0,lvl);for(let x=0;x<=122;x+=6)c.lineTo(x,lvl+Math.sin(x*.12+tsek*(reduced()?0:1.6))*1.8);c.lineTo(122,lvl+6);c.lineTo(0,lvl+6);c.closePath();c.fill();
+  if(kallt){c.fillStyle="rgba(255,255,255,.8)";c.fillRect(0,lvl-1,122,4);}
+  // marken till höger om havet
+  c.fillStyle="#5E7F6A";c.fillRect(118,158,10,82);
+  // moln
+  const m=Math.min(1,L.M/26),ys=44;if(m>.03){c.fillStyle=`rgba(255,255,255,${Math.min(1,.25+.75*m)})`;const s=.55+.7*m;[[0,0,24],[-22,5,17],[22,4,19],[-8,-9,17],[12,-8,16]].forEach(([dx,dy,r])=>{c.beginPath();c.arc(250+dx*s,ys+dy*s,r*s,0,7);c.fill();});}
+  return lvl;}
+const FARG={H:"#3AA0E8",V:"rgba(255,255,255,.75)",M:"rgba(235,242,255,.95)",R:"#6CC4FF",S:"#FFFFFF",L:"#FFFFFF",F:"#4FB6F0"};
+function ritaPart(c,lvl,tsek){for(const p of parts){let x,y,r=2;switch(p.st){
+  case"H":x=p.x;y=lvl+4+p.y+Math.sin(tsek*1.5+p.ph)*1.2;r=2.1;break;
+  case"V":{const u=Math.min(1,p.t/p.d);x=p.x+(p.cx-p.x)*Math.pow(u,1.25)+Math.sin(u*7+p.ph)*3;y=150-(150-p.cy)*u;r=2;break;}
+  case"M":x=p.cx+Math.sin(tsek*.7+p.ph)*3;y=p.cy+Math.cos(tsek*.6+p.ph)*2;r=3;break;
+  case"R":case"S":{const u=Math.min(1,p.t/p.d);x=lerp(p.cx,p.tx,u);y=lerp(p.cy,p.ty,u*u);r=p.st==="S"?2.4:1.8;break;}
+  case"L":x=p.tx;y=p.ty;r=2.4;break;
+  case"F":{const u=Math.min(1,p.t/p.d),q=flodPos(u);x=q[0]+p.o*.4;y=q[1]+(p.o>0?1:-1);r=2;break;}}
+  c.fillStyle=FARG[p.st];c.beginPath();c.arc(x,y,r,0,7);c.fill();}}
+let dr=null,tid0=0,raf=0,fart=1;
+function ritaDroppe(c,tsek){if(!dr)return;let x,y;const ph=dr.ph,u=dr.u;
+  if(ph===0){x=62;y=164+Math.sin(tsek*2)*1.5;}else if(ph===1){x=lerp(62,250,Math.pow(u,1.25))+Math.sin(u*7)*4;y=lerp(160,52,u);}else if(ph===2){x=250;y=52+Math.sin(tsek*2)*2;}
+  else if(ph===3){x=lerp(250,248,u);y=lerp(60,slopY(248)-3,u*u);}else if(ph===4){const q=flodPos(u);x=q[0];y=q[1]-2;}else{x=62;y=164;}
+  c.save();c.translate(x,y);const s=ph===0||ph===5?1.3:1.5;c.scale(s,s);c.fillStyle="#2A8EE0";c.strokeStyle="#fff";c.lineWidth=1.6;c.beginPath();c.moveTo(0,-9);c.bezierCurveTo(5,-3,7,1,7,3.5);c.arc(0,3.5,7,0,Math.PI,false);c.bezierCurveTo(-7,1,-5,-3,0,-9);c.fill();c.stroke();
+  c.fillStyle="#fff";c.beginPath();c.arc(-2.6,2,1.7,0,7);c.arc(2.6,2,1.7,0,7);c.fill();c.fillStyle="#1D2B53";c.beginPath();c.arc(-2.4,2.2,.8,0,7);c.arc(2.8,2.2,.8,0,7);c.fill();c.strokeStyle="#fff";c.lineWidth=1;c.beginPath();c.arc(0,5,2,.2,Math.PI-.2);c.stroke();c.restore();}
+function ram(ts){const tsek=ts/1000,dt=Math.min(.05,(ts-(tid0||ts))/1000);tid0=ts;
+  if(G&&!G.paus){const n=Math.min(40,Math.max(1,Math.round(fart*dt/.016)));for(let i=0;i<n;i++)steg(dt*fart/n);if(G.tick)G.tick(dt*fart);}
+  if(dr&&dr.rorlig){dr.u+=dt/dr.dur;if(dr.u>=1){dr.u=1;dr.rorlig=false;const f=dr.klar;dr.klar=null;f&&f();}}
+  ctx.setTransform(cv.width/W,0,0,cv.width/W,0,0);const lvl=bakgrund(ctx,tsek);ritaPart(ctx,lvl,tsek);ritaDroppe(ctx,tsek);
+  if(G&&G.matar&&(ts-(G.mt||0)>250)){G.mt=ts;G.matar();}raf=requestAnimationFrame(ram);}
+
+/* ======================= SPELET ======================= */
+let G=null;
+function stoppa(){cancelAnimationFrame(raf);raf=0;G=null;dr=null;}
+function starta(l){stoppa();G={lvl:l,paus:false,fel:0,res:[],i:0};$("nivT").textContent=NIV[l].namn;$("dots").innerHTML="";show("game");P={sun:.7,temp:15};nytt();fart=1;storlek();tid0=0;raf=requestAnimationFrame(ram);l===1?nivå1():l===2?nivå2():nivå3();}
+function slut(st,txt){const old=data.stars[G.lvl]||0;const l=G.lvl;data.stars[l]=Math.max(old,st);save();stoppa();$("rStj").innerHTML=stjHtml(st);$("rRub").textContent=st===3?"Perfekt! 🎉":st===2?"Bra jobbat!":"Bra kämpat!";$("rTxt").textContent=txt;window.__sist=l;show("result");if(st===3){ljud("fanfare");confetti();}else ljud("chime");}
+$("rIgen").onclick=()=>starta(window.__sist||1);$("rHome").onclick=hem;
+const pulsPa=(x,y)=>{const e=document.createElement("div");e.className="puls";e.style.left=(x/W*100)+"%";e.style.top=(y/H*100)+"%";e.id="puls";$("scen").appendChild(e);};
+const pulsAv=()=>{const e=$("puls");e&&e.remove();};
+const klickXY=e=>{const r=cv.getBoundingClientRect();return[(e.clientX-r.left)/r.width*W,(e.clientY-r.top)/r.height*H];};
+
+/* ---------- Nivå 1: Följ droppen ---------- */
+function nivå1(){P={sun:.6,temp:15};nytt();dr={ph:0,u:0,dur:1,rorlig:false};G.steg=0;G.fel=0;
+  $("panel").innerHTML=`<div class="q"><b id="qb">Steg 1 av 4</b><p id="qt"></p></div><div class="ord" id="ord" hidden></div><div class="expl" id="expl" hidden></div><div class="knapprad"><button class="stor" id="bKlar" hidden disabled>Klar</button><button class="stor bla" id="bNasta" hidden>Nästa ▶</button></div>`;
+  steg1(0);$("scen").onclick=e=>{if(!G||G.lvl!==1||G.lås)return;const [x,y]=klickXY(e);
+    if(G.steg===0&&Math.hypot(x-60,y-42)<34){pulsAv();G.lås=true;dr.ph=1;dr.u=0;dr.dur=3.2;dr.rorlig=true;ljud("pip");$("qt").textContent="Solen värmer vattnet. Det blir ånga som stiger uppåt. Det kallas avdunstning.";dr.klar=()=>{dr.ph=2;G.lås=false;G.steg=1;ljud("ok");steg1(1);};}
+    else if(G.steg===1&&Math.hypot((x-250)/50,(y-52)/26)<1.2){pulsAv();G.lås=true;dr.ph=3;dr.u=0;dr.dur=1.6;dr.rorlig=true;ljud("pip");$("qt").textContent="Molnet blir tungt och det regnar! Droppen faller ner på berget.";dr.klar=()=>{dr.ph=4;dr.u=0;dr.dur=6;dr.rorlig=true;$("qt").textContent="Droppen rinner nerför berget i en flod, hela vägen ner mot havet.";dr.klar=()=>{dr.ph=5;G.lås=false;G.steg=2;ljud("ok");steg1(2);};};}};}
+function steg1(s){const q=$("qt"),b=$("qb");G.steg=s;
+  if(s===0){b.textContent="Steg 1 av 3";q.textContent="Det här är droppen Pling. Den är i havet. Tryck på solen så att den värmer Pling!";pulsPa(60,42);}
+  else if(s===1){b.textContent="Steg 2 av 3";q.textContent="Pling har blivit till ånga och sitter nu i ett moln. Tryck på molnet så att det börjar regna!";pulsPa(250,52);}
+  else{b.textContent="Steg 3 av 3";q.textContent="Pling är tillbaka i havet och är redo att resa igen. Det här kallas vattnets kretslopp, för det går runt och runt!";const x=$("expl");x.hidden=false;x.className="expl ok";x.textContent="Nu ska du sätta ord på kretsloppet. Tryck på ett ord och sedan på rätt nummer i bilden.";ordsteg();}}
+const ORD=[["Avdunstning",1],["Moln",2],["Regn",3],["Flod",4]],MARK=[[19,54],[69,21],[75,39],[53,57]];
+function ordsteg(){G.ord=[null,null,null,null];G.val=null;G.forsok=0;const o=$("ord");o.hidden=false;o.innerHTML=ORD.map(([n],i)=>`<button data-o="${i}">${n}</button>`).join("");
+  document.querySelectorAll(".mk").forEach(m=>m.remove());MARK.forEach(([x,y],i)=>{const m=document.createElement("button");m.className="mk";m.dataset.m=i;m.style.left=x+"%";m.style.top=y+"%";m.textContent=i+1;$("scen").appendChild(m);});
+  $("bKlar").hidden=false;$("bKlar").disabled=true;
+  o.onclick=e=>{const b=e.target.closest("[data-o]");if(!b||b.disabled)return;G.val=+b.dataset.o;o.querySelectorAll("button").forEach(x=>x.classList.toggle("v",x===b));};
+  $("scen").addEventListener("click",markKlick);
+  $("bKlar").onclick=kollaOrd;$("bNasta").onclick=()=>{const fel=G.fel;const st=fel===0?3:fel<=2?2:1;slut(st,fel===0?"Du satte rätt ord på alla fyra!":`Du fick till kretsloppet. ${4-Math.min(4,fel)} av 4 ord satt rätt på första försöket.`);};}
+function markKlick(e){const m=e.target.closest(".mk");if(!m||!G||G.lvl!==1||m.classList.contains("ok")&&$("bNasta").hidden===false)return;const i=+m.dataset.m;
+  const uppd=()=>{document.querySelectorAll("#ord button").forEach((b,k)=>{b.disabled=G.ord.includes(k);b.classList.toggle("v",G.val===k);});document.querySelectorAll(".mk").forEach((mm,k)=>{mm.textContent=G.ord[k]==null?k+1:ORD[G.ord[k]][0];mm.className="mk";});$("bKlar").disabled=G.ord.some(x=>x==null);};
+  if(G.val==null){if(G.ord[i]!=null){G.ord[i]=null;ljud("pip");uppd();}return;}
+  G.ord[i]=G.val;G.val=null;ljud("pip");uppd();}
+function kollaOrd(){const fel=G.ord.map((o,i)=>o!==i);const x=$("expl");
+  if(!fel.some(Boolean)){document.querySelectorAll(".mk").forEach(m=>m.className="mk ok");ljud("ok");x.className="expl ok";x.textContent="Rätt! ✓ Solen värmer havet (avdunstning), ångan blir moln, molnet ger regn och regnet rinner i floden tillbaka till havet.";$("bKlar").hidden=true;$("bNasta").hidden=false;$("bNasta").focus({preventScroll:true});return;}
+  G.forsok++;G.fel+=fel.filter(Boolean).length>0?1:0;ljud("bad");
+  if(G.forsok===1){document.querySelectorAll(".mk").forEach((m,i)=>{m.className="mk"+(fel[i]?" fel":" ok");});x.className="expl fel";x.textContent="Inte riktigt. De röda är fel. Tryck på dem och välj om. Tänk: vad händer först med vattnet i havet?";
+    return;}
+  G.ord=[0,1,2,3];document.querySelectorAll(".mk").forEach((m,i)=>{m.textContent=ORD[i][0];m.className="mk ok";});document.querySelectorAll("#ord button").forEach(b=>b.disabled=true);x.className="expl fel";x.textContent="Så här är det: 1 Avdunstning (solen värmer havet), 2 Moln, 3 Regn och 4 Flod som rinner tillbaka till havet.";$("bKlar").hidden=true;$("bNasta").hidden=false;}
+let tim=0;
+
+/* ---------- Nivå 2: Laborera ---------- */
+function nivå2(){P={sun:.7,temp:15};nytt();
+  $("panel").innerHTML=`<div class="q"><b>Laborera</b><p>Ändra solen och temperaturen och titta på vattnet.</p></div>
+  <div class="sl"><span>☀️</span><input type="range" id="rS" min="0" max="100" value="70" aria-label="Solens styrka"><b id="vS">70 %</b></div>
+  <div class="sl"><span>🌡️</span><input type="range" id="rT" min="-10" max="35" value="15" aria-label="Temperatur"><b id="vT">15 °C</b></div>
+  <div class="rad2" id="prs"><button data-s="70" data-t="15">Vanlig dag</button><button data-s="0" data-t="15">Ingen sol</button><button data-s="60" data-t="-8">Vinter</button><button data-s="100" data-t="32">Hett</button></div>
+  <div class="mat" id="mat"></div><div class="rad2"><button id="bFart">⏩ Snabbare</button><button id="bOm">↺ Börja om</button></div><div class="expl" id="expl">Titta på molnen, regnet och floden.</div>`;
+  const tillamp=()=>{P.sun=+$("rS").value/100;P.temp=+$("rT").value;$("vS").textContent=$("rS").value+" %";$("vT").textContent=$("rT").value+" °C";};
+  $("rS").oninput=tillamp;$("rT").oninput=tillamp;
+  $("prs").onclick=e=>{const b=e.target.closest("[data-s]");if(!b)return;$("rS").value=b.dataset.s;$("rT").value=b.dataset.t;tillamp();ljud("pip");};
+  $("bFart").onclick=()=>{fart=fart===1?4:1;$("bFart").classList.toggle("v",fart===4);$("bFart").textContent=fart===4?"⏩ Snabbare (på)":"⏩ Snabbare";};$("bOm").onclick=()=>{nytt();};
+  G.matar=()=>{const c=antal(),mf=[["🌊 Hav",c.H,"#2F8FD8"],["☁️ Moln",c.M+c.V,"#8FA3C8"],["🏞️ Flod",c.F+c.R,"#4FB6F0"],["❄️ Snö",c.L,"#9CC4E8"]];$("mat").innerHTML=mf.map(([n,v,col])=>`<div style="--c:${col}">${n}<i><u style="width:${Math.min(100,v/N*100*(n.includes("Hav")?1.1:3.2))}%"></u></i></div>`).join("");
+    const x=$("expl");x.textContent=P.temp<=0?(c.L>10?"Det är kallt! Regnet blir snö som ligger kvar på berget, och floden torkar.":"Det är kallt. Det blir snö i stället för regn."):P.sun<.1?"Utan sol avdunstar inget vatten, så molnen försvinner och regnet tar slut.":c.M+c.V>40?"Många moln! Då blir det mycket regn.":"Solen värmer havet och det bildas moln, regn och flod.";};}
+
+/* ---------- Nivå 3: Gissa först ---------- */
+const Q=[
+ {namn:"Solen släcks",fraga:"Solen släcks helt. Vad händer med molnen?",alt:["Det blir fler moln","Lika många moln","Molnen försvinner"],rätt:2,sc:{P:{sun:0,temp:15},T:60},
+  sant:r=>medel(r.hist,50,60,"M")+medel(r.hist,50,60,"V")<.15*BAS.moln?2:medel(r.hist,50,60,"M")>1.3*BAS.moln?0:1,
+  forkl:"Utan sol avdunstar inget vatten. Molnet regnar ut och försvinner, och inget nytt moln kommer. Solen är kretsloppets motor."},
+ {namn:"Mycket varmare",fraga:"Det blir mycket varmare. Hur blir det med regnet?",alt:["Mer regn","Lika mycket regn","Mindre regn"],rätt:0,sc:{P:{sun:.7,temp:32},T:60},
+  sant:r=>r.hae/BAS.regn>1.3?0:r.hae/BAS.regn<.75?2:1,
+  forkl:"Varmare luft och varmare hav ger mer avdunstning. Då bildas fler moln och det regnar mer."},
+ {namn:"Minusgrader",fraga:"Det blir minusgrader. Vad händer med floden?",alt:["Mer vatten i floden","Lika mycket vatten","Floden torkar ut"],rätt:2,sc:{P:{sun:.7,temp:-8},T:60},
+  sant:r=>medel(r.hist,45,60,"F")+medel(r.hist,45,60,"R")<.2*BAS.flod?2:medel(r.hist,45,60,"F")>1.3*BAS.flod?0:1,
+  forkl:"När det är minusgrader blir regnet till snö som ligger kvar på berget. Då kommer inget vatten ner till floden, så den torkar ut."},
+ {namn:"Vart tar vattnet vägen?",fraga:"Solen släcks och står släckt länge. Var hamnar vattnet till slut?",alt:["Nästan allt i havet","I molnen","I floden"],rätt:0,sc:{P:{sun:0,temp:15},T:90},
+  sant:r=>{const c=r.slut,tot=N;return c.H/tot>.9?0:(c.M+c.V)/tot>.5?1:2;},
+  forkl:"Molnen regnar ut, floden rinner ner och till slut ligger nästan allt vatten i havet. Utan sol kommer det inte upp igen."},
+ {namn:"Snön smälter",fraga:"Det ligger mycket snö på berget. Sedan blir det varmt. Vad händer med floden?",alt:["Mer vatten i floden","Mindre vatten i floden","Samma som vanligt"],rätt:0,sc:{P:{sun:.7,temp:15},T:30,snö:80,fore:{P:{sun:.7,temp:-8},T:5}},
+  sant:r=>{const m=medel(r.hist,0,25,"F")+medel(r.hist,0,25,"R");return m>1.35*BAS.flod?0:m<.7*BAS.flod?1:2;},
+  forkl:"När snön smälter rinner mycket vatten ner i floden samtidigt. Då kan floden bli stor och svämma över. Det kallas vårflod."}];
+let BAS=null;
+function baslinje(){if(BAS)return BAS;const rs=[0,1,2].map(()=>kor({sun:.7,temp:15},60));BAS={moln:rs.reduce((s,r)=>s+medel(r.hist,30,60,"M")+medel(r.hist,30,60,"V"),0)/3,flod:rs.reduce((s,r)=>s+medel(r.hist,30,60,"F")+medel(r.hist,30,60,"R"),0)/3,regn:rs.reduce((s,r)=>s+r.hae,0)/3};return BAS;}
+function nivå3(){baslinje();G.fr=Q.slice();G.i=0;G.fel=0;G.res=[];fraga(0);}
+function prick(){$("dots").innerHTML=Q.map((_,j)=>`<i class="${j<G.i?(G.res[j]?"ok":"f"):j===G.i?"nu":""}"></i>`).join("");}
+function fraga(i){G.i=i;const q=Q[i];G.val=null;G.kor=false;prick();P={sun:.7,temp:15};nytt();fart=1;G.paus=false;G.tick=null;G.matar=null;
+  if(q.sc.fore){nytt({snö:80});P={sun:.7,temp:-8};}
+  $("panel").innerHTML=`<div class="q"><b>Fråga ${i+1} av ${Q.length}: ${q.namn}</b><p>${q.fraga}</p></div><div class="val3" id="val">${q.alt.map((t,k)=>`<button data-k="${k}">${t}</button>`).join("")}</div><div class="expl" id="expl" hidden></div><div class="knapprad"><button class="stor" id="bKor" disabled>Gissa först</button><button class="stor bla" id="bNasta" hidden>Nästa ▶</button></div>`;
+  $("val").onclick=e=>{const b=e.target.closest("[data-k]");if(!b||G.kor)return;G.val=+b.dataset.k;ljud("pip");$("val").querySelectorAll("button").forEach(x=>x.classList.toggle("v",x===b));$("bKor").disabled=false;$("bKor").textContent="▶ Kör och se";};
+  $("bKor").onclick=()=>{if(G.kor||G.val==null)return;G.kor=true;$("bKor").disabled=true;$("bKor").textContent="Vattnet rör sig …";$("val").classList.add("last");
+    const sc=q.sc;P=Object.assign({},sc.P);if(!sc.fore)nytt();fart=8;G.t=0;G.T=sc.T;const spar=[];
+    G.tick=(dt)=>{G.t+=dt;if(G.t>=G.T){G.tick=null;fart=1;G.paus=true;klar();}};
+    const klar=()=>{const r=kor(sc.P,sc.T,{snö:sc.snö,fore:sc.fore}),sant=q.sant(r),ok=G.val===sant;G.res[i]=ok;if(!ok)G.fel++;prick();
+      $("val").querySelectorAll("button").forEach((x,k)=>{x.classList.remove("v");if(k===q.rätt)x.classList.add("rk");else if(k===G.val)x.classList.add("rf");});
+      ljud(ok?"ok":"bad");const x=$("expl");x.hidden=false;x.className="expl "+(ok?"ok":"fel");x.textContent=(ok?"Rätt! ✓ ":"Inte riktigt. ")+q.forkl;G.paus=false;fart=1;$("bKor").hidden=true;const nb=$("bNasta");nb.hidden=false;nb.textContent=i>=Q.length-1?"Se resultat ▶":"Nästa ▶";nb.focus({preventScroll:true});x.scrollIntoView({block:"nearest",behavior:reduced()?"auto":"smooth"});};
+    if(sc.fore){/* snön ligger redan där */}};
+  $("bNasta").onclick=()=>{if(i>=Q.length-1){const st=G.fel<=1?3:G.fel<=2?2:1;slut(st,`Du gissade rätt på ${Q.length-G.fel} av ${Q.length}.${st<3?" Spela igen och titta noga på vad som händer med vattnet.":" Du förstår hur vattnet går runt."}`);}else fraga(i+1);};}
+window.__vk={sim:{kor,steg,nytt,antal,get P(){return P},set P(v){P=v}},Q,baslinje,get G(){return G}};
+function confetti(){if(reduced())return;const cols=["#3D8BFD","#FF9F43","#2BB673","#FFC93C","#7B61FF","#FF6B6B"];
+  const c=$("fx"),x=c.getContext("2d"),dpr=devicePixelRatio||1,Wd=innerWidth,Hh=innerHeight;c.width=Wd*dpr;c.height=Hh*dpr;x.setTransform(dpr,0,0,dpr,0,0);c.hidden=false;
+  const PP=Array.from({length:150},()=>({x:Wd/2+(Math.random()-.5)*120,y:Hh*.3,vx:(Math.random()-.5)*16,vy:-Math.random()*15-4,r:Math.random()*7+5,c:pick(cols),a:Math.random()*6,va:(Math.random()-.5)*.4}));
+  let t=0;(function f(){x.clearRect(0,0,Wd,Hh);PP.forEach(p=>{p.vy+=.45;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore();});
+    if(++t<150)requestAnimationFrame(f);else c.hidden=true;})();}
+hem();
+</script>
+</body>
+</html>

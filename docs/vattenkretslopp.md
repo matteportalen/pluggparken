@@ -18,6 +18,6 @@ _Under bygge (nov 2026). Den som tar över läser bara den här filen och `vatte
 Kort i `fler/index.html` (NO), `sok.js`, `sitemap.xml`, `konto.js` (`PKEYS`), `STJ` i `huvud.js`, stjärnor och `snap` i `index.html`, rad i `CLAUDE.md`.
 
 ## Status
-- [ ] Sidan byggd (simulering, nivå 1–3)
-- [ ] Testad i tre storlekar
-- [ ] Inkopplad, pushad
+- [x] Sidan byggd (simulering, nivå 1–3). Värmeberoende `varme(T)` justerat så att "mycket varmare" ger tydligt mer regn; kör om facit (12 körningar per fråga) om simuleringen ändras
+- [x] Testad i tre storlekar (375 × 667 skrollar ca 60 px i Laborera, godtaget)
+- [x] Inkopplad, pushad. Inte provat: pekskärm, biolog/lärare har inte läst texterna
