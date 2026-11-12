@@ -26,3 +26,6 @@ NO åk 4–6 delas: Biologi *Natur och miljö*, *Kropp och hälsa*, *Systematisk
 
 ## Nästa steg
 1. Provpaket: Vattnets kretslopp och Solsystemet. Läraren provar. 2. Lägg ett fält `lgr22` per övning i `IDX` i `sok.js` (rubrik, ämne, årskurs) och ett filter. 3. Inventera SO, matematik och svenska på samma sätt (hämta rubrikerna från Skolverket först).
+
+## Status (12 nov 2026)
+- Provpaketen för Vattnets kretslopp och Rymdlabbet ligger på `lararpaket/index.html` (adress pluggparken.se/lararpaket/, `noindex`, inte länkad, utskriftsvänlig). Rymdlabbet-paketets uppdrag är inte kontrollerade mot lägena (Dag och natt, Årstiderna, Väg dig och hoppa) och måste granskas. Väntar på lärarens prov med klassen innan fler paket eller länkar från övningarna.
