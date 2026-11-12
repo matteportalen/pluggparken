@@ -306,6 +306,8 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 @keyframes am-l2{0%,16%{opacity:0;transform:translateY(0) scale(.4)}34%{opacity:1;transform:translateY(-15px) scale(1.15)}52%{opacity:1;transform:translateY(-21px) scale(1)}66%,100%{opacity:0;transform:translateY(-27px) scale(.9)}}
 @keyframes am-l3{0%,28%{opacity:0;transform:translateY(0) scale(.4)}46%{opacity:1;transform:translateY(-14px) scale(1.15)}64%{opacity:1;transform:translateY(-20px) scale(1)}78%,100%{opacity:0;transform:translateY(-26px) scale(.9)}}
 @keyframes am-ring{0%,100%{transform:rotate(-22deg)}50%{transform:rotate(22deg)}}
+@keyframes am-at{0%,100%{transform:rotate(0)}50%{transform:rotate(28deg)}}
+@keyframes am-nk{0%,50%,100%{transform:scale(1)}25%,75%{transform:scale(1.22)}}
 @keyframes am-orb{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
 @keyframes am-tw1{0%,100%{transform:scale(1);opacity:1}30%{transform:scale(1.9) rotate(45deg);opacity:.55}}
 @keyframes am-tw2{0%,100%{transform:scale(1);opacity:1}55%{transform:scale(1.9) rotate(45deg);opacity:.55}}
@@ -332,7 +334,8 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 .amnek.run.sv .l1{animation:am-l1 var(--d) ease-out var(--n)}
 .amnek.run.sv .l2{animation:am-l2 var(--d) ease-out var(--n)}
 .amnek.run.sv .l3{animation:am-l3 var(--d) ease-out var(--n)}
-.amnek.run.no .at{animation:am-orb var(--d) ease-in-out var(--n)}
+.amnek.run.no .at{animation:am-at var(--d) ease-in-out var(--n)}
+.amnek.run.no .nk{animation:am-nk var(--d) ease-in-out var(--n)}
 .amnek.run.ry .ring{animation:am-ring var(--d) ease-in-out var(--n)}
 .amnek.run.ry .orb{animation:am-orb var(--d) ease-in-out var(--n)}
 .amnek.run.ry .tw1 path{animation:am-tw1 var(--d) ease-in-out var(--n)}
@@ -438,7 +441,7 @@ html[data-tema="mork"] .herosok{background:#1A2748;color:#A3B0D6}
   <nav class="amnen" aria-label="Ämnen">
     <a class="amnek matte" data-a style="--c:#3D5AFE" href="matte/"><span class="ik a"><svg viewBox="0 0 48 48" aria-hidden="true"><g class="rot vb"><path d="M8 24h32"/><path class="v vb" d="M24 8v32"/></g><circle class="dot f vb" cx="24" cy="10" r="4.2"/><circle class="dot f vb" cx="24" cy="38" r="4.2"/></svg></span><span class="txt"><b>Matematik</b><small>Räkna, mäta, spela och upptäck tal</small></span><span class="chev" aria-hidden="true">›</span></a>
     <a class="amnek sv" data-a style="--c:#E5484D" href="svenska/"><span class="ik a"><svg viewBox="0 0 48 48" aria-hidden="true"><g class="bk b"><path class="s" d="M24 16C19 13 12 13 8 15V38C12 36 19 36 24 39Z"/><path class="s" d="M24 16C29 13 36 13 40 15V38C36 36 29 36 24 39Z"/><path d="M12 22h8M12 27h8M28 22h8M28 27h8" style="stroke-width:2;opacity:.75"/></g><text class="lt l1" x="14" y="24">Å</text><text class="lt l2" x="24" y="24">A</text><text class="lt l3" x="34" y="24">Ö</text></svg></span><span class="txt"><b>Svenska</b><small>Ord, stavning, läsning och sagor</small></span><span class="chev" aria-hidden="true">›</span></a>
-    <a class="amnek no" data-a style="--c:#1E9E5E" href="no/"><span class="ik a"><svg viewBox="0 0 48 48" aria-hidden="true"><g class="at vb"><ellipse cx="24" cy="24" rx="19" ry="7.5"/><ellipse cx="24" cy="24" rx="19" ry="7.5" transform="rotate(60 24 24)"/><ellipse cx="24" cy="24" rx="19" ry="7.5" transform="rotate(120 24 24)"/><circle class="f" cx="43" cy="24" r="2.6"/><circle class="f" cx="14.5" cy="40.5" r="2.6" transform="rotate(0)"/><circle class="f" cx="14.5" cy="7.5" r="2.6"/></g><circle class="f" cx="24" cy="24" r="4.4"/></svg></span><span class="txt"><b>NO</b><small>Rymden, kroppen, naturen och tekniken</small></span><span class="chev" aria-hidden="true">›</span></a>
+    <a class="amnek no" data-a style="--c:#1E9E5E" href="no/"><span class="ik a"><svg viewBox="0 0 48 48" aria-hidden="true"><g class="at vb"><g transform="rotate(0 24 24)"><ellipse cx="24" cy="24" rx="19" ry="7.2" style="stroke-width:2.4;opacity:.9"/><g class="el"><circle class="f" r="4.2" style="opacity:.28"/><circle class="f" r="2.5"/><animateMotion begin="0s;indefinite" dur="1.7s" repeatCount="2" fill="freeze" path="M43 24A19 7.2 0 1 1 5 24A19 7.2 0 1 1 43 24"/></g></g><g transform="rotate(60 24 24)"><ellipse cx="24" cy="24" rx="19" ry="7.2" style="stroke-width:2.4;opacity:.9"/><g class="el"><circle class="f" r="4.2" style="opacity:.28"/><circle class="f" r="2.5"/><animateMotion begin="0s;indefinite" dur="3.4s" repeatCount="1" fill="freeze" path="M43 24A19 7.2 0 1 1 5 24A19 7.2 0 1 1 43 24"/></g></g><g transform="rotate(120 24 24)"><ellipse cx="24" cy="24" rx="19" ry="7.2" style="stroke-width:2.4;opacity:.9"/><g class="el"><circle class="f" r="4.2" style="opacity:.28"/><circle class="f" r="2.5"/><animateMotion begin="0s;indefinite" dur="1.1333s" repeatCount="3" fill="freeze" path="M43 24A19 7.2 0 1 1 5 24A19 7.2 0 1 1 43 24"/></g></g></g><g class="nk b"><circle class="f" cx="22.2" cy="22.9" r="2.7"/><circle class="f" cx="25.8" cy="22.9" r="2.7" style="opacity:.82"/><circle class="f" cx="24" cy="26" r="2.7" style="opacity:.92"/></g></svg></span><span class="txt"><b>NO</b><small>Rymden, kroppen, naturen och tekniken</small></span><span class="chev" aria-hidden="true">›</span></a>
     <a class="amnek so" data-a style="--c:#F2780C" href="so/"><span class="ik a"><svg viewBox="0 0 48 48" aria-hidden="true"><circle class="s" cx="22" cy="29" r="14"/><ellipse class="mer1 b" cx="22" cy="29" rx="7" ry="14"/><ellipse class="mer2 b" cx="22" cy="29" rx="11" ry="14" style="opacity:.55"/><path d="M8 29h28" style="stroke-width:2.4"/><ellipse class="rg b" cx="30" cy="22" rx="4" ry="1.7" style="stroke-width:2"/><g class="pin b"><path class="f" d="M30 22C30 22 24 16.5 24 12.5a6 6 0 0 1 12 0C36 16.5 30 22 30 22z"/><circle cx="30" cy="12.5" r="2.3" style="fill:var(--c);stroke:none"/></g></svg></span><span class="txt"><b>SO</b><small>Kartor, länder och platser</small></span><span class="chev" aria-hidden="true">›</span></a>
     <a class="amnek sp" data-a style="--c:#7B61FF" href="specialare/"><span class="ik a"><svg viewBox="0 0 48 48" aria-hidden="true"><g class="spk spA b" transform="translate(8 14)"><path class="f" d="M0-4 1.1-1.1 4 0 1.1 1.1 0 4-1.1 1.1-4 0-1.1-1.1z"/></g><g class="spk spB b" transform="translate(24 9)"><path class="f" d="M0-4 1.1-1.1 4 0 1.1 1.1 0 4-1.1 1.1-4 0-1.1-1.1z"/></g><g class="spk spC b" transform="translate(40 14)"><path class="f" d="M0-4 1.1-1.1 4 0 1.1 1.1 0 4-1.1 1.1-4 0-1.1-1.1z"/></g><rect class="s" x="10" y="24" width="28" height="16" rx="2.5"/><path d="M24 24v16"/><g class="lid"><rect class="s" x="8" y="17" width="32" height="7" rx="2.5"/><path d="M24 17v7"/><path d="M24 17C21 11 15 11 16 14.5S22 17 24 17zM24 17C27 11 33 11 32 14.5S26 17 24 17z"/></g></svg></span><span class="txt"><b>Specialare</b><small>Minilektioner om spännande ämnen</small></span><span class="chev" aria-hidden="true">›</span></a>
     <a class="amnek fl" data-a style="--c:#0E9AA7" href="fler/"><span class="ik a"><svg viewBox="0 0 48 48" aria-hidden="true"><g class="pcA b"><path class="s" d="M6 15H20V20A4 4 0 0 1 20 28V33H6Z"/></g><g class="pcB b"><path class="f" d="M26 15H42V33H26V28A4 4 0 0 0 26 20Z" style="stroke:#fff;stroke-width:3.4;stroke-linejoin:round"/></g><g class="spk spC b" transform="translate(24 10)"><path class="f" d="M0-4 1.1-1.1 4 0 1.1 1.1 0 4-1.1 1.1-4 0-1.1-1.1z"/></g></svg></span><span class="txt"><b>Fler ämnen</b><small>Engelska, logik, kod och pengar</small></span><span class="chev" aria-hidden="true">›</span></a>
@@ -1216,12 +1219,14 @@ else if(act&&act!==owner()){switchTo(act);}  // en annan flik har bytt profil
 /* animerade ämneskort (egen skriptblock så att fel någon annanstans inte stoppar den) */
 (function(){try{
   var K=document.querySelectorAll(".amnek[data-a]");
-  if(!K.length||(window.matchMedia&&matchMedia("(prefers-reduced-motion:reduce)").matches))return;
+  if(window.matchMedia&&matchMedia("(prefers-reduced-motion:reduce)").matches){Array.prototype.forEach.call(document.querySelectorAll(".amnek svg"),function(v){try{v.pauseAnimations();v.setCurrentTime(0)}catch(e){}});return;}
+  if(!K.length)return;
   var hov=matchMedia("(hover:hover)").matches;
-  function kor(k,en){if(k.classList.contains("run"))return;if(en)k.classList.add("once");k.classList.add("run");}
+  function smil(k){Array.prototype.forEach.call(k.querySelectorAll("animateMotion"),function(m){try{m.beginElement()}catch(e){}});}
+  function kor(k,en){if(k.classList.contains("run"))return;if(en)k.classList.add("once");k.classList.add("run");smil(k);}
   Array.prototype.forEach.call(K,function(k){
-    if(hov){var p=function(){k.classList.remove("once");k.classList.add("run")};k.addEventListener("mouseenter",p);k.addEventListener("focusin",p);}
-    k.addEventListener("animationiteration",function(){if(!k.matches(":hover,:focus-within"))k.classList.remove("run");});
+    if(hov){var p=function(){var was=k.classList.contains("run");k.classList.remove("once");k.classList.add("run");if(!was)smil(k);};k.addEventListener("mouseenter",p);k.addEventListener("focusin",p);}
+    k.addEventListener("animationiteration",function(e){if(!k.matches(":hover,:focus-within"))k.classList.remove("run");else if(e.target===k.querySelector(".ik"))smil(k);});
     k.addEventListener("animationend",function(){k.classList.remove("run","once");});
   });
   if(!hov){
