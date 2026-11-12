@@ -16,6 +16,8 @@ _Det som gäller nu för matteövningarna, verktygen och Nationella prov. De ped
 | `kortdivision/` | Kort division | `mattespel-kortdivision-v1` |
 | `hundraruta/` | Hundrarutan: verktyget (`#verktyg`), Tio hopp, Trasig hundraruta | `mattespel-hundraruta-v1` |
 | `talfoljd/` | Talföljder, grodan | `mattespel-talfoljd-v1` |
+| `prickatalet/` | Pricka talet (placera tal på tallinjen, uppskatta) | `mattespel-prickatalet-v1` |
+| `diagram/` | Diagramverkstan (sortera, bygg och läs av stapeldiagram) | `mattespel-diagram-v1` |
 | `vagen/` | Vågen (likhetstecknets betydelse) | `mattespel-vagen-v1` |
 | `gomda/` | Gömda tal | `mattespel-gomda-v1` |
 | `brak/` | Bråk med pizza, chokladkaka och rulltårta | `mattespel-brak-v1` |
@@ -51,6 +53,8 @@ Delade ritningar i roten, inga kopior i sidorna: `klocka.js`, `vag.js`, `brak.js
 - **Tiotalsövergång:** följer bokens steg, inga blandade uppgifter. 💯 Hundrarutan finns alltid som hjälp, visar aldrig svaret och påverkar inte stjärnorna.
 - **Hundrarutan:** alltid 1 överst. Styrkors för hoppen, gröna pilar för plus och röda för minus.
 - **Tallinjen:** 0–10, 0–20 eller 0–100, inte 1000 och ingen tom tallinje. Alla bågar ovanför linjen.
+- **Pricka talet** (nov 2026): eleven ställer sitt djur på tallinjen och trycker Klar. Talet där djuret står visas aldrig medan man drar. Sex nivåer: 0–10 och 0–20 (alla streck, exakt), 0–100 (tiotalsstreck, ±3), Vilket tal? (tvärtom, knappsats), Tom tallinje 0–100 (±6) och 0–1000 (±30). Första felet visar var man hamnade och åt vilket håll talet ligger, andra felet visar svaret med tiotalen utskrivna. Heter inte Tallinjen, eftersom verktyget heter så. Verktygets regel "ingen tom tallinje" gäller verktyget, inte den här övningen.
+- **Diagramverkstan** (nov 2026): en runda är tre undersökningar med tre moment var (bygg + två frågor, eller tre frågor på Läs av). Blev något fel kommer en fjärde undersökning "för att öva" som inte räknas. Staplarnas värden är alltid olika, så att flest och minst har ett svar. Talen står aldrig på staplarna förrän i förklaringen. Varje tema har egna frågemeningar (`TEMAN`), så att svenskan blir rätt.
 - **Kulramen:** noll = alla kulor till vänster, de röda flyttas först (lärarens val, tvärtom mot vanliga kulramar).
 - **Uppställning:** se `CLAUDE.md`. Subtraktion med växling visar en liten bildruta om att man trycker på siffran till vänster.
 - **Multiplikation:** överst en stor "▶ Fortsätt" som startar Öva direkt, i den föreslagna ordningen 2, 5, 10, 3, 4, 9, 6, 7, 8, 1 (inget låses). Tabellkorten öppnar Öva direkt. **Inga knep per tabell** i filmen.

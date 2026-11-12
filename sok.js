@@ -14,6 +14,8 @@ const IDX=[
  ['delaupp/','Dela upp och dela','Dela upp täljaren i delar som är lätta att dela','🧱','division uppdelning täljare nämnare klossar','Matte'],
  ['kortdivision/','Kort division','Dela siffra för siffra med rest','➗','liggande stolen trappan division siffra för siffra rest decimaler','Matte'],
  ['hundraruta/','Hundrarutan','Steg åt sidan är ett, steg upp och ner är tio','💯','hundra ruta 100 tal hoppa tiohopp trasig hundrarutan','Matte'],
+ ['prickatalet/','Pricka talet','Var på tallinjen ligger talet? Ställ ditt djur på rätt plats.','📍','tallinje tallinjen taluppfattning uppskatta placera tal storleksordning hundra tusen tom tallinje','Matte'],
+ ['diagram/','Diagramverkstan','Bygg dina egna stapeldiagram och läs av dem','📊','diagram stapeldiagram statistik tabell avprickning streck sortera läsa av staplar','Matte'],
  ['talfoljd/','Talföljder','Hitta mönstret och hjälp grodan över bäcken','🐸','mönster tal grodan regel ökar minskar','Matte'],
  ['vagen/','Vågen','Likhetstecknet: lika mycket på båda sidor','⚖️','likhetstecken balans lika mycket ekvation våg','Matte'],
  ['gomda/','Gömda tal','Djuren har gömt tal. Lista ut vilka','🎁','ekvation okänt tal djur gåta lista ut','Matte'],

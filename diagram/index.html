@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<script src="../tema.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Diagramverkstan – Pluggparken</title>
+<meta name="description" content="Diagramverkstan: sortera, bygg dina egna stapeldiagram av streck och tabeller och läs av dem. Statistik för åk 1–3.">
+<link rel="canonical" href="https://pluggparken.se/diagram/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Pluggparken">
+<meta property="og:locale" content="sv_SE">
+<meta property="og:title" content="Diagramverkstan – Pluggparken">
+<meta property="og:description" content="Diagramverkstan: sortera, bygg dina egna stapeldiagram av streck och tabeller och läs av dem. Statistik för åk 1–3.">
+<meta property="og:url" content="https://pluggparken.se/diagram/">
+<meta property="og:image" content="https://pluggparken.se/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#1F3A35">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/apple-touch-icon.png" sizes="180x180">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+:root{
+  --bg:#EAF3FF; --ink:#1D2B53; --muted:#56668F; --card:#FFFFFF; --line:#C6D6F2;
+  --good:#1E9E5E; --good-dark:#157548; --bad:#E5484D; --accent:#3D5AFE; --gold:#F2B707;
+  --font:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:640px;margin:0 auto;padding:12px 16px 48px}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;border:0;background:none}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+[hidden]{display:none!important}
+/* startskärmen */
+.hero{display:flex;gap:16px;align-items:center;background:linear-gradient(135deg,#7B61FF,#3D5AFE);color:#fff;border-radius:24px;padding:18px;box-shadow:0 5px 0 #2A3FB8;margin:6px 0 16px}
+.hero svg{flex:none;width:118px;height:auto;filter:drop-shadow(0 3px 0 rgba(0,0,0,.15))}
+.hero h1{margin:0;font-size:clamp(1.6rem,6vw,2.3rem);line-height:1.05}
+.hero p{margin:6px 0 0;font-weight:600;opacity:.95}
+.niv{display:grid;gap:10px}
+.niv button{display:flex;align-items:center;gap:14px;background:var(--card,#fff);border-radius:18px;padding:12px 14px;box-shadow:0 4px 0 var(--line);text-align:left;width:100%}
+.niv button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.niv .nr{flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-weight:800;font-size:1.4rem;color:#fff}
+.niv b{display:block;font-size:1.12rem;line-height:1.15}
+.niv small{display:block;color:var(--muted);font-weight:600;font-size:.88rem;line-height:1.25}
+.niv .st{margin-left:auto;flex:none;color:var(--gold);font-size:1.15rem;letter-spacing:1px}
+.niv .st .off{color:var(--line)}
+/* spelet */
+.topp{display:flex;align-items:center;gap:10px;margin:4px 0 8px;min-height:24px}
+.dots{display:flex;gap:6px;flex:1;flex-wrap:wrap}
+.dots i{width:12px;height:12px;border-radius:50%;background:var(--line)}
+.dots i.ok{background:var(--good)}.dots i.f{background:var(--bad)}.dots i.nu{background:var(--gold)}
+.dots i.gap{margin-left:6px}
+.niva-t{font-weight:800;color:var(--muted);font-size:.9rem}
+.rub{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin:0 2px 8px}
+.rub b{font-size:1.25rem;line-height:1.1}
+.rub span{color:var(--muted);font-weight:600;font-size:.95rem}
+/* tabellen med streck eller tal */
+.tab{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
+.tab div{display:flex;align-items:center;gap:8px;background:var(--card,#fff);border-radius:14px;padding:5px 10px;box-shadow:0 3px 0 var(--line);min-height:44px;font-weight:700;font-size:.98rem;line-height:1.1}
+.tab .em{font-size:1.5rem;line-height:1;flex:none}
+.tab .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.tab svg{flex:none;height:24px;width:auto;color:var(--ink)}
+.tab .tal{flex:none;font-weight:800;font-size:1.45rem;color:var(--accent)}
+/* rännan: sakerna som ska sorteras */
+.ranna{display:flex;align-items:center;gap:12px;background:var(--card,#fff);border-radius:18px;padding:6px 14px;box-shadow:0 3px 0 var(--line);margin-bottom:8px;min-height:68px}
+.ranna .nu{flex:none;width:58px;height:58px;border-radius:16px;background:#FFF4D6;border:3px solid var(--gold);display:grid;place-items:center;font-size:2.1rem;line-height:1}
+.ranna .nu.in{animation:studs .35s cubic-bezier(.3,1.6,.5,1)}
+.ranna .nu.skaka{animation:skaka .4s}
+.ranna .ko{flex:1;display:flex;gap:4px;flex-wrap:wrap;font-size:1.05rem;opacity:.55;line-height:1.1}
+.ranna .txt{flex:1;font-weight:700;line-height:1.2}
+@keyframes studs{from{transform:translateY(-26px) scale(.6);opacity:0}}
+@keyframes skaka{25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+/* diagrammet */
+.dia{position:relative;background:var(--card,#fff);border-radius:22px;box-shadow:0 4px 0 var(--line);padding:6px 4px 2px;transition:box-shadow .2s;user-select:none;-webkit-user-select:none}
+.dia.drag{touch-action:none;cursor:ns-resize}
+.dia.klick{cursor:pointer}
+.dia.ratt{box-shadow:0 0 0 4px var(--good),0 4px 0 var(--line)}
+.dia.fel{box-shadow:0 0 0 4px #F7A3A6,0 4px 0 var(--line)}
+.dia svg{display:block;width:100%;height:auto;max-height:44vh;color:var(--ink)}
+.gl{stroke:var(--line);stroke-width:1.2}
+.gl.bas{stroke:currentColor;stroke-width:2.6;stroke-linecap:round}
+.yt{font-family:var(--font);font-weight:700;font-size:11.5px;fill:var(--muted);text-anchor:end}
+.xt{font-family:var(--font);font-weight:700;font-size:11.5px;fill:currentColor;text-anchor:middle}
+.xe{font-size:21px;text-anchor:middle}
+.be{font-size:15px;text-anchor:middle}
+.vt{font-family:var(--font);font-weight:800;font-size:15px;fill:currentColor;text-anchor:middle}
+.kolbg{fill:transparent}
+.kolbg.hl{fill:#FFF4D6}
+.kolbg.pink{fill:#FFE9EC}
+.ny{animation:in .3s ease both}
+.pop{animation:pop .3s cubic-bezier(.3,1.7,.5,1) both;transform-box:fill-box;transform-origin:center}
+@keyframes in{from{opacity:0}}
+@keyframes pop{from{transform:scale(.3);opacity:0}}
+.guide{stroke:#E5484D;stroke-width:2;stroke-dasharray:5 4;stroke-linecap:round}
+/* frågan */
+.fraga{display:flex;align-items:center;justify-content:center;gap:10px;margin:10px 0 6px;min-height:54px}
+.fraga .q{min-width:0;flex:0 1 auto;overflow-wrap:anywhere;font-weight:800;font-size:clamp(1.08rem,4.6vw,1.3rem);line-height:1.2;text-align:center}
+.fraga .q .kn{white-space:nowrap;color:var(--accent)}
+.hor{flex:none;width:44px;height:44px;border-radius:50%;background:var(--card,#fff);box-shadow:0 3px 0 var(--line);font-size:1.25rem}
+.hor:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
+.ruta{flex:none;min-width:78px;height:52px;border-radius:14px;border:3px dashed #AFC0E8;background:var(--card,#fff);display:grid;place-items:center;font-weight:800;font-size:1.8rem;color:var(--accent);padding:0 12px}
+.ruta.fel{border-color:#F7A3A6;background:#FFF0F1;color:#B4232A}
+.ruta.ratt{border:3px solid var(--good);color:var(--good-dark)}
+.forkl{text-align:center;font-weight:700;margin:6px 0 0;min-height:2.7em;font-size:1.04rem;line-height:1.3}
+.forkl.ratt{color:var(--good-dark)}.forkl.fel{color:#B4232A}
+.knapprad{display:flex;justify-content:center;gap:10px;margin-top:6px}
+.klar,.nasta{background:var(--good);color:#fff;border-radius:18px;padding:10px 34px;font-weight:800;font-size:1.25rem;box-shadow:0 5px 0 var(--good-dark)}
+.klar:active{transform:translateY(4px);box-shadow:0 1px 0 var(--good-dark)}
+.nasta{background:var(--accent);box-shadow:0 5px 0 #2A3FB8}
+.nasta:active{transform:translateY(4px);box-shadow:0 1px 0 #2A3FB8}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:330px;margin:0 auto}
+.pad button{height:48px;border-radius:16px;background:var(--card,#fff);font-size:1.55rem;font-weight:800;box-shadow:0 4px 0 var(--line)}
+.pad button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.pad .okbtn{background:var(--good);color:#fff;box-shadow:0 4px 0 var(--good-dark);font-size:1.25rem}
+@media (max-height:760px){.wrap{padding-bottom:18px}.pad button{height:42px}.dia svg{max-height:38vh}.fraga{min-height:48px;margin:6px 0 4px}.forkl{min-height:2.4em}}
+@media (max-height:700px){.wrap{padding-bottom:14px}.dia svg{max-height:31vh}.pad button{height:40px}.pad{gap:6px}.forkl{min-height:1.4em}.tab div{min-height:38px}}
+/* resultat */
+.res{text-align:center}
+.res .stj{font-size:3rem;letter-spacing:6px;color:var(--gold);margin:8px 0}
+.res .stj .off{color:var(--line)}
+.knapp{display:inline-block;background:var(--good);color:#fff;border-radius:16px;padding:12px 26px;font-weight:800;font-size:1.15rem;box-shadow:0 5px 0 var(--good-dark);margin:6px}
+.knapp.vit{background:var(--card,#fff);color:var(--ink);box-shadow:0 5px 0 var(--line)}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:50}
+@media(max-width:420px){.hero svg{width:92px}.hero{gap:12px;padding:14px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<script src="../ljud.js"></script>
+<script src="../huvud.js" data-titel="Diagramverkstan" data-ikon="📊"></script>
+<main class="wrap">
+
+<section class="screen" id="home">
+  <div class="hero">
+    <svg viewBox="0 0 110 80" aria-hidden="true"><rect x="2" y="2" width="106" height="76" rx="10" fill="#fff"/><g stroke="#C6D6F2" stroke-width="1"><path d="M18 20H100M18 34H100M18 48H100"/></g><rect x="24" y="34" width="15" height="28" rx="3" fill="#3D8BFD"/><rect x="45" y="16" width="15" height="46" rx="3" fill="#FF9F43"/><rect x="66" y="43" width="15" height="19" rx="3" fill="#2BB673"/><rect x="87" y="26" width="11" height="36" rx="3" fill="#7B61FF"/><path d="M18 12V62H102" fill="none" stroke="#1D2B53" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><g font-size="9" text-anchor="middle"><text x="31.5" y="74">🐶</text><text x="52.5" y="74">🐱</text><text x="73.5" y="74">🐰</text><text x="92.5" y="74">🐴</text></g></svg>
+    <div><h1>Diagramverkstan</h1><p>Bygg dina egna diagram och läs av dem.</p></div>
+  </div>
+  <div class="niv" id="niv"></div>
+</section>
+
+<section class="screen" id="game" hidden>
+  <button type="button" data-home hidden tabindex="-1" aria-hidden="true" onclick="hem()"></button>
+  <div class="topp"><div class="dots" id="dots"></div><span class="niva-t" id="nivT"></span></div>
+  <div class="rub"><b id="rubT"></b><span id="rubI"></span></div>
+  <div class="ranna" id="ranna" hidden></div>
+  <div class="tab" id="tab" hidden></div>
+  <div class="dia" id="dia" tabindex="0"></div>
+  <div class="fraga" id="fraga"><button class="hor" id="hor" aria-label="Läs upp frågan">🔊</button><span class="q" id="q" aria-live="polite"></span><span class="ruta" id="ruta" hidden>?</span></div>
+  <div class="forkl" id="forkl" aria-live="polite"></div>
+  <div class="knapprad"><button class="klar" id="klar" hidden>Klar ✓</button><button class="nasta" id="nasta" hidden>Nästa ▶</button></div>
+  <div class="pad" id="pad" hidden>
+    <button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button>
+    <button data-k="4">4</button><button data-k="5">5</button><button data-k="6">6</button>
+    <button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button>
+    <button data-k="del" aria-label="Sudda">⌫</button><button data-k="0">0</button><button data-k="ok" class="okbtn">OK</button>
+  </div>
+</section>
+
+<section class="screen res" id="result" hidden>
+  <h2 id="rRub" style="margin:10px 0 0">Bra jobbat!</h2>
+  <div class="stj" id="rStj"></div>
+  <p id="rTxt" style="font-weight:700;margin:0 0 14px"></p>
+  <button class="knapp" id="rIgen">Spela igen</button>
+  <button class="knapp vit" id="rHome">Välj nivå</button>
+</section>
+
+</main>
+<canvas id="fx" hidden></canvas>
+<script>
+const $=id=>document.getElementById(id);
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const KEY="mattespel-diagram-v1";
+const data=(()=>{try{return Object.assign({stars:{}},JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){return{stars:{}}}})();
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}};
+const reduced=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
+const FARG=["#3D8BFD","#FF9F43","#2BB673","#7B61FF"],MORK=["#2A6FD6","#DB7F26","#1E8F58","#5B43D6"];
+
+/* ---------- Nivåer ----------
+   bygg: "sortera" (en sak i taget till rätt stapel), "streck" (avprickning → staplar), "tal" (tabell med tal → staplar) eller inget (färdigt diagram).
+   M = högsta talet på axeln, linje = avstånd mellan linjerna, snap = vad stapeln snäpper till. */
+const NIV=[null,
+  {namn:"Sortera och bygg",txt:"En sak i taget. Lägg den i rätt stapel.",col:"#2BB673",bygg:"sortera",n:3,linje:1,snap:1},
+  {namn:"Från streck till staplar",txt:"Räkna strecken och dra upp staplarna.",col:"#3D8BFD",bygg:"streck",n:4,M:10,linje:1,snap:1},
+  {namn:"Läs av diagrammet",txt:"Linjerna visar vartannat tal. Titta noga!",col:"#FF9F43",bygg:"",n:4,linje:2,snap:1},
+  {namn:"Stora tal",txt:"Linjerna visar tiotal. Staplarna kan sluta mitt emellan.",col:"#7B61FF",bygg:"tal",n:4,M:50,linje:10,snap:5}];
+
+/* ---------- Undersökningarna ----------
+   Varje tema har sina egna frågor, så att svenskan blir rätt ("röstade på katt", "dagar var det sol"). x, a och b är namnet på en stapel. */
+const TEMAN=[
+  {rub:"Favoritdjur",intro:"Klassen röstade på sitt favoritdjur.",
+   kat:[["🐶","hund"],["🐱","katt"],["🐰","kanin"],["🐴","häst"],["🐹","hamster"]],
+   hur:x=>`Hur många röstade på ${x}?`,flest:"Vilket djur fick flest röster?",minst:"Vilket djur fick minst antal röster?",
+   fler:(a,b)=>`Hur många fler röstade på ${a} än på ${b}?`,sum:(a,b)=>`Hur många röstade på ${a} eller ${b}?`,alla:"Hur många röstade?"},
+  {rub:"Fruktskålen",intro:"Vi räknade frukten i matsalen.",
+   kat:[["🍎","äpplen"],["🍌","bananer"],["🍐","päron"],["🍊","apelsiner"],["🍑","persikor"]],
+   hur:x=>`Hur många ${x} finns det?`,flest:"Vilken frukt finns det flest av?",minst:"Vilken frukt finns det minst antal av?",
+   fler:(a,b)=>`Hur många fler ${a} än ${b} finns det?`,sum:(a,b)=>`Hur många ${a} och ${b} finns det tillsammans?`,alla:"Hur många frukter finns det?"},
+  {rub:"Vädret",intro:"Vi skrev upp vädret varje dag.",litet:true,
+   kat:[["☀️","sol"],["☁️","moln"],["🌧️","regn"],["❄️","snö"]],
+   hur:x=>`Hur många dagar var det ${x}?`,flest:"Vilket väder var det flest dagar?",minst:"Vilket väder var det minst antal dagar?",
+   fler:(a,b)=>`Hur många fler dagar var det ${a} än ${b}?`,sum:(a,b)=>`Hur många dagar var det ${a} eller ${b}?`,alla:"Hur många dagar skrev vi upp?"},
+  {rub:"Trafiken",intro:"Vi räknade fordon utanför skolan.",
+   kat:[["🚗","bilar"],["🚌","bussar"],["🚲","cyklar"],["🚚","lastbilar"],["🚜","traktorer"]],
+   hur:x=>`Hur många ${x} åkte förbi?`,flest:"Vilket fordon såg vi flest av?",minst:"Vilket fordon såg vi minst antal av?",
+   fler:(a,b)=>`Hur många fler ${a} än ${b} åkte förbi?`,sum:(a,b)=>`Hur många ${a} och ${b} åkte förbi tillsammans?`,alla:"Hur många fordon åkte förbi?"},
+  {rub:"Godaste glassen",intro:"Barnen valde sin favoritglass.",
+   kat:[["🍓","jordgubb"],["🍫","choklad"],["🍦","vanilj"],["🍋","citron"],["🍐","päron"]],
+   hur:x=>`Hur många valde ${x}?`,flest:"Vilken smak valde flest barn?",minst:"Vilken smak valde minst antal barn?",
+   fler:(a,b)=>`Hur många fler valde ${a} än ${b}?`,sum:(a,b)=>`Hur många valde ${a} eller ${b}?`,alla:"Hur många barn valde glass?"},
+  {rub:"På rasten",intro:"Vi frågade vad barnen gör på rasten.",
+   kat:[["⚽","fotboll"],["🏀","basket"],["🏓","pingis"],["🛹","skateboard"],["♟️","schack"]],
+   hur:x=>`Hur många valde ${x}?`,flest:"Vad valde flest barn?",minst:"Vad valde minst antal barn?",
+   fler:(a,b)=>`Hur många fler valde ${a} än ${b}?`,sum:(a,b)=>`Hur många valde ${a} eller ${b}?`,alla:"Hur många barn svarade?"}];
+const FRAGOR={1:[["flest","minst"],["hur"]],2:[["flest","minst","hur"],["fler","sum"]],3:[["hur"],["fler"],["sum","alla","minst"]],4:[["fler"],["sum","alla","hur"]]};
+
+/* n olika tal mellan lo och hi */
+function olika(n,lo,hi){const s=new Set();while(s.size<n)s.add(rnd(lo,hi));return shuffle([...s]);}
+function gorUnd(lvl,tema){const N=NIV[lvl],kat=shuffle(tema.kat.slice()).slice(0,N.n);let val,M=N.M;
+  if(lvl===1){do{val=olika(3,1,5);}while(val.reduce((a,b)=>a+b)<7||val.reduce((a,b)=>a+b)>10);M=6;}
+  else if(lvl===2)val=olika(4,1,10);
+  else if(lvl===3){do{val=olika(4,1,13);}while(val.filter(v=>v%2).length<2);M=Math.max(10,Math.ceil(Math.max(...val)/2)*2);}
+  else{do{val=olika(4,1,10).map(v=>v*5);}while(val.filter(v=>v%10).length<2);}
+  const U={lvl,tema,kat,val,M,N};
+  U.moment=(N.bygg?[{typ:"bygg"}]:[]).concat(FRAGOR[lvl].map(p=>gorFraga(pick(p),U)));
+  // samma fråga ska inte komma två gånger i samma undersökning
+  return U;}
+function gorFraga(typ,U){const v=U.val,n=v.length,ix=shuffle([...Array(n).keys()]);
+  if(typ==="flest")return{typ,mode:"stapel",svar:v.indexOf(Math.max(...v))};
+  if(typ==="minst")return{typ,mode:"stapel",svar:v.indexOf(Math.min(...v))};
+  if(typ==="hur")return{typ,mode:"tal",i:ix[0],svar:v[ix[0]]};
+  if(typ==="alla")return{typ,mode:"tal",svar:v.reduce((a,b)=>a+b)};
+  let [i,j]=ix;if(typ==="fler"){if(v[i]<v[j])[i,j]=[j,i];return{typ,mode:"tal",i,j,svar:v[i]-v[j]};}
+  return{typ:"sum",mode:"tal",i,j,svar:v[i]+v[j]};}
+function fragaText(q,U,html){const t=U.tema,N=i=>html?`<span class="kn">${U.kat[i][0]} ${U.kat[i][1]}</span>`:U.kat[i][1];
+  return q.typ==="hur"?t.hur(N(q.i)):q.typ==="fler"?t.fler(N(q.i),N(q.j)):q.typ==="sum"?t.sum(N(q.i),N(q.j)):t[q.typ];}
+function mellan(v,U){const l=U.N.linje;if(v%l===0)return `Stapeln når upp till ${v}.`;const lo=Math.floor(v/l)*l;return `Stapeln slutar mitt emellan ${lo} och ${lo+l}. Det är ${v}.`;}
+function forklara(q,U){const v=U.val,k=U.kat;
+  if(q.typ==="flest")return `${k[q.svar][0]} har den högsta stapeln: ${v[q.svar]}.`;
+  if(q.typ==="minst")return `${k[q.svar][0]} har den lägsta stapeln: ${v[q.svar]}.`;
+  if(q.typ==="hur")return mellan(q.svar,U);
+  if(q.typ==="fler")return `${v[q.i]} − ${v[q.j]} = ${q.svar}`;
+  if(q.typ==="sum")return `${v[q.i]} + ${v[q.j]} = ${q.svar}`;
+  return `${v.join(" + ")} = ${q.svar}`;}
+function ledtrad(q,U){
+  if(q.typ==="flest")return "Leta efter den högsta stapeln.";
+  if(q.typ==="minst")return "Leta efter den lägsta stapeln.";
+  if(q.typ==="hur")return U.N.linje>1?"Följ den röda linjen till talen. Stapeln kan sluta mellan två linjer.":"Följ den röda linjen från stapeln till talen.";
+  if(q.typ==="fler")return "Läs av båda staplarna. Hur stor är skillnaden?";
+  if(q.typ==="sum")return "Läs av båda staplarna och lägg ihop dem.";
+  return "Läs av alla staplarna och lägg ihop dem.";}
+const kolAv=q=>q.typ==="hur"?[q.i]:q.typ==="fler"||q.typ==="sum"?[q.i,q.j]:q.typ==="alla"?"alla":[];
+
+/* ---------- Diagrammet (SVG 360 × 250) ---------- */
+const PX0=40,PX1=352,PY0=20,PY1=190,VW=360,VH=256;
+function ritaDiagram(U,o){o=o||{};const n=U.kat.length,cw=(PX1-PX0)/n,unit=(PY1-PY0)/U.M,bw=Math.min(54,cw*.64),vals=o.vals||U.val;
+  const yv=v=>PY1-v*unit,cx=i=>PX0+cw*(i+.5),har=(a,i)=>a==="alla"||(a||[]).includes(i);
+  let g="";
+  for(let i=0;i<n;i++)g+=`<rect class="kolbg${har(o.pink,i)?" pink":har(o.hl,i)?" hl":""}" x="${PX0+cw*i+2}" y="${PY0-12}" width="${cw-4}" height="${VH-PY0+8}" rx="10"/>`;
+  for(let v=U.N.linje;v<=U.M;v+=U.N.linje)g+=`<line class="gl" x1="${PX0}" y1="${yv(v)}" x2="${PX1}" y2="${yv(v)}"/><text class="yt" x="${PX0-7}" y="${yv(v)+4}">${v}</text>`;
+  g+=`<text class="yt" x="${PX0-7}" y="${PY1+4}">0</text>`;
+  for(let i=0;i<n;i++){const v=vals[i],x=cx(i)-bw/2;
+    if(o.block){for(let b=0;b<v;b++)g+=`<g${o.nyBlock&&o.nyBlock[0]===i&&b===v-1?' class="pop"':""}><rect x="${x}" y="${yv(b+1)+1.5}" width="${bw}" height="${unit-3}" rx="6" fill="${FARG[i]}"/><text class="be" x="${cx(i)}" y="${yv(b+.5)+5.5}">${U.kat[i][0]}</text></g>`;}
+    else{if(v>0)g+=`<path d="M${x} ${PY1}V${yv(v)+6}a6 6 0 0 1 6-6h${bw-12}a6 6 0 0 1 6 6V${PY1}z" fill="${FARG[i]}"/>`;
+      if(o.handtag){const y=yv(v);g+=`<g>${v===0?`<rect x="${x}" y="${PY1-30}" width="${bw}" height="30" rx="6" fill="none" stroke="${FARG[i]}" stroke-width="2" stroke-dasharray="5 4" opacity=".7"/>`:""}<rect x="${cx(i)-17}" y="${y-8}" width="34" height="16" rx="8" fill="#fff" stroke="${MORK[i]}" stroke-width="2.5"/><path d="M${cx(i)-5} ${y-2.5}l5-3.5 5 3.5M${cx(i)-5} ${y+2.5}l5 3.5 5-3.5" fill="none" stroke="${MORK[i]}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>`;}}
+    if(har(o.visa,i))g+=`<text class="vt ny" x="${cx(i)}" y="${yv(v)-6}">${v}</text>`;
+    if(har(o.guide,i))g+=`<line class="guide ny" x1="${PX0}" y1="${yv(v)}" x2="${x}" y2="${yv(v)}"/>`;
+    g+=`<text class="xe" x="${cx(i)}" y="${PY1+32}">${U.kat[i][0]}</text><text class="xt" x="${cx(i)}" y="${PY1+50}">${U.kat[i][1]}</text>`;}
+  g+=`<path class="gl bas" d="M${PX0} ${PY0-8}V${PY1}H${PX1}" fill="none"/>`;
+  $("dia").innerHTML=`<svg viewBox="0 0 ${VW} ${VH}" role="img" aria-label="Stapeldiagram: ${U.tema.rub}">${g}</svg>`;}
+/* Var i diagrammet pekar man? Ger stapelns nummer och talet på axeln. */
+function traff(e,U){const svg=$("dia").querySelector("svg");if(!svg)return null;const p=new DOMPoint(e.clientX,e.clientY).matrixTransform(svg.getScreenCTM().inverse());
+  const n=U.kat.length,cw=(PX1-PX0)/n,unit=(PY1-PY0)/U.M;if(p.x<PX0-6||p.x>PX1+6)return null;
+  return{i:Math.min(n-1,Math.max(0,Math.floor((p.x-PX0)/cw))),v:(PY1-p.y)/unit};}
+/* Avprickning: streck i grupper om fem */
+function streckSVG(n){let g="",x=3;const grp=[];for(let k=n;k>0;k-=5)grp.push(Math.min(5,k));
+  grp.forEach(k=>{for(let i=0;i<Math.min(4,k);i++)g+=`<line x1="${x+i*6}" y1="3" x2="${x+i*6}" y2="21"/>`;if(k===5)g+=`<line x1="${x-3}" y1="18" x2="${x+21}" y2="6"/>`;x+=32;});
+  return `<svg viewBox="0 0 ${Math.max(28,grp.length*32-6)} 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-label="${n} streck">${g}</svg>`;}
+
+/* ---------- Skärmar ---------- */
+const stjHtml=n=>[1,2,3].map(i=>i<=n?"★":'<span class="off">★</span>').join("");
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
+function hem(){rensa();tyst();
+  $("niv").innerHTML=NIV.slice(1).map((n,i)=>`<button data-l="${i+1}"><span class="nr" style="background:${n.col}">${i+1}</span><span><b>${n.namn}</b><small>${n.txt}</small></span><span class="st">${stjHtml(data.stars[i+1]||0)}</span></button>`).join("");
+  show("home");}
+$("niv").onclick=e=>{const b=e.target.closest("[data-l]");if(b)starta(+b.dataset.l);};
+/* uppläsning bara när man trycker på 🔊 */
+let svVoice=null;function laddaRoster(){try{svVoice=speechSynthesis.getVoices().find(v=>/^sv/i.test(v.lang))||null}catch(e){}}
+if("speechSynthesis" in window){laddaRoster();speechSynthesis.onvoiceschanged=laddaRoster;}
+function tyst(){try{window.speechSynthesis&&speechSynthesis.cancel()}catch(e){}}
+function lasUpp(t){if(!("speechSynthesis" in window))return;tyst();const u=new SpeechSynthesisUtterance(t);u.lang="sv-SE";if(svVoice)u.voice=svVoice;u.rate=.9;speechSynthesis.speak(u);}
+$("hor").onclick=()=>{if(G&&G.tal)lasUpp(G.tal);};
+
+/* ---------- Spelet ---------- */
+let G=null,tim=[];
+const RUNDA=3;
+const rensa=()=>{tim.forEach(clearTimeout);tim=[];};
+function starta(lvl){const teman=shuffle(TEMAN.filter(t=>!(lvl===4&&t.litet))).slice(0,RUNDA+1);
+  G={lvl,fel:0,res:[],und:teman.slice(0,RUNDA).map(t=>gorUnd(lvl,t)),reserv:teman[RUNDA],si:0,mi:-1,i:0,extra:false};
+  $("nivT").textContent=NIV[lvl].namn;show("game");nytt();}
+function prickar(){let h="",k=0;G.und.forEach((U,s)=>U.moment.forEach((_,m)=>{h+=`<i class="${k<G.i?(G.res[k]?"ok":"f"):k===G.i?"nu":""}${m===0&&s>0?" gap":""}"></i>`;k++;}));$("dots").innerHTML=h;}
+function fraga(html,tal){$("q").innerHTML=html;G.tal=tal;}
+function fb(t,c){$("forkl").textContent=t||"";$("forkl").className="forkl"+(c?" "+c:"");}
+/* nästa moment: bygget eller en fråga. Efter sista undersökningen kommer en extra om något blev fel. */
+function nytt(){rensa();tyst();G.mi++;
+  if(G.mi>=G.und[G.si].moment.length){G.si++;G.mi=0;
+    if(G.si>=G.und.length){if(G.fel>0&&!G.extra){G.extra=true;G.und.push(gorUnd(G.lvl,G.reserv));}else{slut();return;}}}
+  const U=G.U=G.und[G.si],m=G.m=U.moment[G.mi];G.felNu=false;G.forsok=0;G.last=false;G.inp="";prickar();
+  $("rubT").textContent=U.tema.rub;$("rubI").textContent=G.extra&&G.si===G.und.length-1&&G.mi===0?"En till, för att öva.":U.tema.intro;
+  const d=$("dia");d.className="dia";fb("");$("nasta").hidden=true;$("klar").hidden=true;$("pad").hidden=true;$("ruta").hidden=true;$("ruta").className="ruta";$("ruta").textContent="?";
+  $("ranna").hidden=true;$("tab").hidden=true;
+  if(m.typ==="bygg"){const b=U.N.bygg;G.cur=U.val.map(()=>0);
+    if(b==="sortera"){G.ko=shuffle(U.val.flatMap((v,i)=>Array(v).fill(i)));d.classList.add("klick");fraga("Var ska den ligga? Tryck på rätt stapel.","Var ska den ligga? Tryck på rätt stapel.");ritaRanna(true);ritaDiagram(U,{vals:G.cur,block:true});}
+    else{d.classList.add("drag");$("klar").hidden=false;$("tab").hidden=false;
+      $("tab").innerHTML=U.kat.map((k,i)=>`<div><span class="em">${k[0]}</span><span class="nm">${k[1]}</span>${b==="streck"?streckSVG(U.val[i]):`<span class="tal">${U.val[i]}</span>`}</div>`).join("");
+      const t=b==="streck"?"Räkna strecken. Dra upp varje stapel till rätt höjd.":"Dra upp varje stapel till rätt höjd.";fraga(t,t);ritaDiagram(U,{vals:G.cur,handtag:true});}
+    return;}
+  ritaDiagram(U,{block:U.N.bygg==="sortera"});
+  fraga(fragaText(m,U,true),fragaText(m,U,false));
+  if(m.mode==="stapel")d.classList.add("klick");else{$("pad").hidden=false;$("ruta").hidden=false;}}
+function ritaRanna(ny){const U=G.U,r=$("ranna");r.hidden=false;
+  if(!G.ko.length){r.innerHTML=`<span class="nu">✅</span><span class="txt">Alla ligger på plats!</span>`;return;}
+  r.innerHTML=`<span class="nu${ny?" in":""}" id="nuSak">${U.kat[G.ko[0]][0]}</span><span class="ko" aria-label="${G.ko.length-1} kvar">${G.ko.slice(1).map(i=>`<span>${U.kat[i][0]}</span>`).join("")}</span>`;}
+function klarMoment(){if(G.felNu&&!(G.extra&&G.si===G.und.length-1))G.fel++;G.res[G.i]=!G.felNu;G.i++;G.last=true;prickar();
+  $("klar").hidden=true;$("pad").hidden=true;$("nasta").hidden=false;$("nasta").focus({preventScroll:true});
+  $("dia").classList.remove("klick","drag");
+  if(!G.felNu)tim.push(setTimeout(nytt,2300));}
+const ljud=n=>{window.Ljud&&Ljud[n]&&Ljud[n]();};
+
+/* Sortera: tryck på stapeln där saken hör hemma */
+function lagg(i){const U=G.U;if(G.last||!G.ko.length)return;
+  if(i!==G.ko[0]){G.felNu=true;ljud("bad");const s=$("nuSak");s.classList.remove("in","skaka");void s.offsetWidth;s.classList.add("skaka");
+    ritaDiagram(U,{vals:G.cur,block:true,pink:[i]});fb(`Titta på bilden. Den ska ligga hos ${U.kat[G.ko[0]][0]}.`,"fel");
+    tim.push(setTimeout(()=>{if(!G.last&&G.m.typ==="bygg")ritaDiagram(U,{vals:G.cur,block:true});},500));return;}
+  G.ko.shift();G.cur[i]++;ljud("pip");fb("");ritaDiagram(U,{vals:G.cur,block:true,nyBlock:[i]});ritaRanna(true);
+  if(!G.ko.length){$("dia").classList.add("ratt");ljud("ok");fraga("Diagrammet är klart!","Diagrammet är klart!");fb("En ruta för varje sak. Nu kan du se vilken stapel som är högst.","ratt");klarMoment();}}
+/* Bygg staplar: Klar jämför med tabellen */
+function kollaBygge(){const U=G.U;if(G.last)return;const fel=U.val.map((v,i)=>G.cur[i]!==v?i:-1).filter(i=>i>=0);
+  if(!fel.length){$("dia").className="dia ratt";ljud("ok");ritaDiagram(U,{vals:G.cur,visa:"alla"});fb("Rätt! ✓ Diagrammet visar samma sak som tabellen.","ratt");klarMoment();return;}
+  G.felNu=true;ljud("bad");
+  if(G.forsok===0){G.forsok=1;$("dia").classList.add("fel");ritaDiagram(U,{vals:G.cur,handtag:true,pink:fel});
+    fb(`Inte riktigt. Titta på ${fel.map(i=>U.kat[i][0]).join(" och ")} en gång till.`,"fel");return;}
+  G.cur=U.val.slice();$("dia").className="dia fel";ritaDiagram(U,{vals:G.cur,visa:"alla",hl:fel});fb("Så här ska staplarna se ut. Jämför med tabellen.","fel");klarMoment();}
+/* Fråga där man trycker på en stapel */
+function svaraStapel(i){const U=G.U,m=G.m;if(G.last)return;
+  if(i===m.svar){$("dia").className="dia ratt";ljud("ok");ritaDiagram(U,{block:U.N.bygg==="sortera",hl:[i],visa:[i]});fb("Rätt! ✓ "+forklara(m,U),"ratt");klarMoment();return;}
+  G.felNu=true;ljud("bad");
+  if(G.forsok===0){G.forsok=1;$("dia").classList.add("fel");ritaDiagram(U,{block:U.N.bygg==="sortera",pink:[i]});fb("Inte riktigt. "+ledtrad(m,U),"fel");return;}
+  $("dia").className="dia fel";ritaDiagram(U,{block:U.N.bygg==="sortera",hl:[m.svar],visa:"alla"});fb(forklara(m,U),"fel");klarMoment();}
+/* Fråga med knappsatsen */
+function tangent(k){if(!G||G.last||G.m.mode!=="tal")return;const r=$("ruta");
+  if(k==="del")G.inp=G.inp.slice(0,-1);else if(k==="ok"){if(G.inp)svaraTal(+G.inp);return;}else if(G.inp.length<3)G.inp=(G.inp==="0"?"":G.inp)+k;
+  r.className="ruta";r.textContent=G.inp||"?";}
+function svaraTal(n){const U=G.U,m=G.m,r=$("ruta"),kol=kolAv(m),block=U.N.bygg==="sortera";
+  if(n===m.svar){r.className="ruta ratt";$("dia").className="dia ratt";ljud("ok");ritaDiagram(U,{block,hl:kol,visa:kol});fb("Rätt! ✓ "+forklara(m,U),"ratt");klarMoment();return;}
+  G.felNu=true;ljud("bad");r.className="ruta fel";
+  if(G.forsok===0){G.forsok=1;G.inp="";$("dia").classList.add("fel");ritaDiagram(U,{block,hl:kol,guide:kol==="alla"?[]:kol});fb("Inte riktigt. "+ledtrad(m,U),"fel");return;}
+  r.textContent=m.svar;r.className="ruta ratt";$("dia").className="dia fel";ritaDiagram(U,{block,hl:kol,visa:kol,guide:kol==="alla"?[]:kol});fb(`Svaret är ${m.svar}. ${forklara(m,U)}`,"fel");klarMoment();}
+$("pad").onclick=e=>{const b=e.target.closest("[data-k]");if(b)tangent(b.dataset.k);};
+$("klar").onclick=kollaBygge;$("nasta").onclick=nytt;
+
+/* Pekare i diagrammet: tryck på en stapel, eller dra stapelns topp upp och ner */
+(()=>{const d=$("dia");let drar=-1;
+  const dra=(e)=>{const U=G.U,t=traff(e,U);if(!t)return;const s=U.N.snap,v=Math.min(U.M,Math.max(0,Math.round(t.v/s)*s));
+    if(v!==G.cur[drar]){G.cur[drar]=v;ritaDiagram(U,{vals:G.cur,handtag:true});window.Ljud&&Ljud.glod&&Ljud.glod("tick");}};
+  d.addEventListener("pointerdown",e=>{if(!G||G.last)return;const U=G.U,m=G.m,t=traff(e,U);if(!t)return;
+    if(m.typ==="bygg"&&U.N.bygg==="sortera"){lagg(t.i);return;}
+    if(m.typ==="bygg"){drar=t.i;G.vald=t.i;try{d.setPointerCapture(e.pointerId)}catch(_){}$("dia").classList.remove("fel");fb("");dra(e);e.preventDefault();return;}
+    if(m.mode==="stapel")svaraStapel(t.i);});
+  d.addEventListener("pointermove",e=>{if(drar>=0&&G&&!G.last)dra(e);});
+  const upp=()=>{drar=-1;};d.addEventListener("pointerup",upp);d.addEventListener("pointercancel",upp);})();
+document.addEventListener("keydown",e=>{if(!G||$("game").hidden)return;
+  if(!$("nasta").hidden){if(e.key==="Enter"||e.key===" "){e.preventDefault();nytt();}return;}
+  const U=G.U,m=G.m,n=U.kat.length;
+  if(m.mode==="tal"){if(/^[0-9]$/.test(e.key))tangent(e.key);else if(e.key==="Backspace")tangent("del");else if(e.key==="Enter")tangent("ok");return;}
+  if(/^[1-4]$/.test(e.key)&&+e.key<=n){const i=+e.key-1;if(m.typ==="bygg"&&U.N.bygg==="sortera")lagg(i);else if(m.mode==="stapel")svaraStapel(i);else G.vald=i;return;}
+  if(m.typ==="bygg"&&U.N.bygg!=="sortera"){G.vald=G.vald||0;
+    if(e.key==="ArrowLeft"||e.key==="ArrowRight"){e.preventDefault();G.vald=(G.vald+(e.key==="ArrowRight"?1:n-1))%n;ritaDiagram(U,{vals:G.cur,handtag:true,hl:[G.vald]});}
+    else if(e.key==="ArrowUp"||e.key==="ArrowDown"){e.preventDefault();G.cur[G.vald]=Math.min(U.M,Math.max(0,G.cur[G.vald]+(e.key==="ArrowUp"?1:-1)*U.N.snap));ritaDiagram(U,{vals:G.cur,handtag:true,hl:[G.vald]});}
+    else if(e.key==="Enter"){e.preventDefault();kollaBygge();}}});
+
+function slut(){rensa();const tot=G.und.slice(0,RUNDA).reduce((a,U)=>a+U.moment.length,0),st=G.fel===0?3:G.fel<=2?2:1,old=data.stars[G.lvl]||0;data.stars[G.lvl]=Math.max(old,st);save();
+  $("rStj").innerHTML=stjHtml(st);$("rRub").textContent=st===3?"Perfekt! 🎉":st===2?"Bra jobbat!":"Bra kämpat!";
+  $("rTxt").textContent=`${tot-G.fel} av ${tot} rätt på ${NIV[G.lvl].namn}.${st<3?" Spela igen och se om du kan få alla rätt!":""}`;
+  show("result");if(st===3){ljud("fanfare");confetti();}}
+$("rIgen").onclick=()=>starta(G.lvl);$("rHome").onclick=hem;
+
+function confetti(){if(reduced())return;const cols=["#3D8BFD","#FF9F43","#2BB673","#FFC93C","#7B61FF","#FF6B6B"];
+  const c=$("fx"),x=c.getContext("2d"),dpr=window.devicePixelRatio||1,W=innerWidth,H=innerHeight;c.width=W*dpr;c.height=H*dpr;x.setTransform(dpr,0,0,dpr,0,0);c.hidden=false;
+  const P=Array.from({length:150},()=>({x:W/2+(Math.random()-.5)*120,y:H*.3,vx:(Math.random()-.5)*16,vy:-Math.random()*15-4,r:Math.random()*7+5,c:pick(cols),a:Math.random()*6,va:(Math.random()-.5)*.4}));
+  let t=0;(function f(){x.clearRect(0,0,W,H);P.forEach(p=>{p.vy+=.45;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore();});
+    if(++t<150)requestAnimationFrame(f);else c.hidden=true;})();}
+window.__dia={NIV,TEMAN,gorUnd,fragaText,forklara,ledtrad,starta,lagg,kollaBygge,svaraStapel,tangent,get G(){return G}};
+hem();
+</script>
+</body>
+</html>
