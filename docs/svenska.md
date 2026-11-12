@@ -18,7 +18,6 @@ _Det som gäller nu för svenskaövningarna (kort på `svenska/index.html`). Hur
 | `ordgissning/` | Ordgissning | `mattespel-ordgissning-v1` |
 | `dubbelteckning/` | Dubbelteckning | `mattespel-dubbelteckning-v1` |
 | `knepigaljud/` | Knepiga ljud (ng, tj, sj, ck). Bilder: Noto Emoji (Apache 2.0). | `mattespel-knepigaljud-v1` |
-| `stavningsjakten/` | Stavningsjakten | `mattespel-stavningsjakten-v1` |
 
 Typsnittet för ord som eleven ska läsa är **Andika** (`var(--ord)`).
 
@@ -61,7 +60,7 @@ Typsnittet för ord som eleven ska läsa är **Andika** (`var(--ord)`).
 
 ## Borttaget med flit (bygg inte igen)
 
-Rimmaskinen och andra snabba frågeövningar ur en gemensam mall. Testsidorna Läsfelslabbet och Mikrofonlabbet. Markeringen 👂 "låter som" i Högfrekventa ord. Tid, ord per minut och felmarkeringar i Läsflyt. De rena ck-, ng- och nk-orden i Dubbelteckning. Raden med en bild per sida i Sagobyggarens bok.
+Rimmaskinen och andra snabba frågeövningar ur en gemensam mall. **Stavningsjakten** (välj rätt stavning av fyra, påhittade felstavningar; `stavningsjakten/` är bara en omdirigering till Svenska-sidan, nyckeln `mattespel-stavningsjakten-v1` ligger kvar i stjärnräkningen och `PKEYS`). Testsidorna Läsfelslabbet och Mikrofonlabbet. Markeringen 👂 "låter som" i Högfrekventa ord. Tid, ord per minut och felmarkeringar i Läsflyt. De rena ck-, ng- och nk-orden i Dubbelteckning. Raden med en bild per sida i Sagobyggarens bok.
 
 ## Väntar
 

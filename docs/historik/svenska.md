@@ -164,3 +164,6 @@ Läraren rapporterade att Se-animationen var bra på Mac men extremt snabb på P
 - **Rimmaskinen togs bort** (nov 2026, lärarens ord: för basic). Den var: frågor om rim i tre nivåer (vilket ord rimmar, vilket rimmar inte, klurigare rim). Byggd med den gemensamma frågemotorn (`scratchpad/gen/quiz.py`, inte i repot): 8 frågor per omgång, rätt = grönt, fel = rosa med ett nytt försök, förklaring, stjärnor efter antal fel. Kort i Svenska-sidans första lista, portal i Svenska-parken (Berätta & skriva).
 
 - **Stavningsjakten** (`stavningsjakten/`, nov 2026): en bild (emoji) visar ett ord och eleven väljer rätt stavning bland fyra; tre nivåer (vanliga ord, dubbla bokstäver och sj-ljud, svåra ord). Kort i Svenska-sidan, portal i Svenska-parken (Ord & stavning).
+
+- **Stavningsjakten borttagen** (12 nov 2026, lärarens beslut): kortet på Svenska-sidan, portalen i världen (Ord & stavning), raden i `sok.js` och i sitemap är borta. `stavningsjakten/index.html` är en omdirigering till `svenska/`. Stjärnorna räknas vidare på startsidan. `huvud.js` har kvar namnet i sin lista över svenskasidor (ofarligt).
+
