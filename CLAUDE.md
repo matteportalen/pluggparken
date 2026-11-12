@@ -48,6 +48,7 @@ Efter varje ändring: är det en **ny regel eller ett nytt beslut**, skriv en ko
 | `docs/elkrets.md` | Elkretsen (NO). `elkrets/`: byggbräda med batteri, lampor, brytare och motstånd, kretssimulator (nodanalys), fem utmaningar, laboratorium och gissa-först. Figurerna ritade i SVG. |
 | `docs/sjon.md` | Sjön (NO). `sjon/`: näringskedja, näringsväv, kretslopp och simulerad sjö med fyra uppdrag. Modellens parametrar, uppdragens par, regler. Figurerna är ritade i SVG (lärarens ok för just den övningen). |
 | `docs/klasstavlan.md` | Klasstavlan (lärarsidan). `larare/`: whiteboard för projektorn. |
+| `docs/lgr22.md` | Lgr22-koppling och lärarpaket (idé). Mall för paket, hur övningarna märks (bara Skolverkets rubriker), inventering av NO och luckor. |
 | `docs/ideer.md` | Idéer som väntar. Sparade idéer och diskussioner som inte är byggda. |
 | `docs/instagram.md` | Instagram. Lokal mapp `instagram/` med klipp, bildtexter och plan. |
 
