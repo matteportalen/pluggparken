@@ -76,6 +76,13 @@ Kartorna är gjorda ur Natural Earth (public domain). Europakartan, Världskarta
 - Rätt kräver förstahandsgissning, minst 35 %, två kontroller i rad och minst 2 sekunders ritande. Trösklarna är justerade tre gånger mot riktiga teckningar: ändra dem inte utan att mäta. Inga gissningar på ett ensamt streck.
 - 20 sekunder per ord, 6 ord per runda. Teckningarna skickas ingenstans.
 
+## Engelska ord
+
+- Omgjord nov 2026: inga "välj rätt ord av fyra". Uppgifter: **lyssna** (🔊 säger ordet, tryck på rätt bild av sex), **läs** (ordet står, tryck på bilden), **bygg** (stava ordet med bokstavsbrickor) och på nivå 3 **para ihop** (fyra engelska och fyra svenska fraser), **hör** (lyssna, välj betydelsen) och bygg frasen av ordbrickor.
+- **Bilderna byts i listan `ORD`** överst i skriptet: `[engelska, svenska, bild]`. Bilden är en emoji, `färg:#hex`, `tal:7` eller en bildfil (`bilder/cat.webp`). Läraren gör om bilderna själv; byt bara tredje värdet.
+- Efter första felet i en lyssna-uppgift visas ordet i text, så att ingen fastnar utan ljud. Finns ingen röst i enheten visas ordet direkt.
+- Bilden får bara kunna betyda ordet.
+
 ## Klockan på engelska
 
 - Omgjord nov 2026: inga svarsalternativ. Två sorters uppgifter: **ställ klockan** efter frasen ("Set the clock to half past three", visarna dras med `klocka.js`) och **bygg klockslaget** av ordbrickor efter en klocka.

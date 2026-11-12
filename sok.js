@@ -87,7 +87,7 @@ const IDX=[
  ['vikingatiden/','Vikingatiden','Skepp, runor och gudar. Vad vet du om vikingarna?','⚓','vikingar vikingatiden skepp långskepp runor tor odin historia sverige','SO'],
  ['rutnat/','Rutnät och koordinater','Gräv efter skatten på kartan. Tryck på rätt ruta, läs av och gå rätt väg.','🗺️','rutnät koordinater karta bokstav siffra skattkarta geometri','Matte'],
  ['demokrati/','Demokrati','Hur bestämmer vi tillsammans? Röstning, riksdag och rättigheter.','🗳️','demokrati rösta val riksdag regeringen lag rättigheter samhälle','SO'],
- ['engelskaord/','Engelska ord','Vad heter det på engelska? Ord, färger och artighet.','🇬🇧','engelska ord english hello thank you färger djur','Engelska'],
+ ['engelskaord/','Engelska ord','Lyssna och tryck på rätt bild, bygg ordet och para ihop.','🇬🇧','engelska english ord glosor lyssna stava djur färger tal kroppen hello thank you fraser','Engelska'],
  ['klockanengelska/','Klockan på engelska','Ställ klockan på half past three och bygg klockslaget av engelska ord.','⏰','klockan engelska time clock oclock half past quarter','Engelska'],
  ['ovriga/solsystemet/','Solsystemet i 3D','Res bland planeterna och ut i universum','🪐','planeter solen jorden månen vintergatan resa stockholm','NO'],
  ['larare/','Klasstavlan','Interaktiv whiteboard för klassrummet: Du behöver, timer, lyckohjul, post-it, ljudnivå och video','🍎','klasstavlan lärare lärarsida tavla whiteboard projektor timer lyckohjul post-it ljudnivå instruktioner lektion klassrum','Lärare'],

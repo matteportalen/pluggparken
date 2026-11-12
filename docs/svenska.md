@@ -68,4 +68,4 @@ Rimmaskinen och andra snabba frågeövningar ur en gemensam mall. **Stavningsjak
 - Sagobyggaren: trollkarl och häxa (ingen fri figur i samma stil hittad).
 - Ordklasser: fyll i luckan med rätt sort, hitta det som inte passar, bygg ut meningen med adjektiv.
 - Handstil: diktamen, tre rutor på samma sida.
-- Engelska ord: läraren gör om bilderna själv.
+- Engelska ord: läraren gör om bilderna själv (byts i listan `ORD`, se `docs/ovriga-amnen.md`).
