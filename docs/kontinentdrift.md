@@ -34,3 +34,4 @@ Kort i `fler/index.html` (NO), `sok.js`, `sitemap.xml`, `konto.js` (`PKEYS`), `S
 - **Kustkanter:** plattornas texturer görs nu av 2×2 delpunkter per texel (mjuk täckning, ingen hackig kant) som `DataTexture` med färg utspridd över genomskinliga kantpixlar (ingen mörk söm).
 - **Sömmen över Afrika:** Nordafrikas kust (Maghreb, Libyen) tillhörde fel platta; reglerna i `plateOf` är rättade.
 - Inte löst: tidslinjens banor är fortfarande raka bågar (slerp), så plattor kan glida genom varandra mellan 250 och 150 Mya. Passningen har några graders fel.
+- **Kompaktare Pangaea (samma dag):** passningen kördes om med längre räckvidd och mjukare överlappsstraff (`CAP` 40, `OW` 14), så att kontinenterna ligger tätt (kustöverlapp mot Europa är kvar, som en sockel). Hero-cirkeln på sidans startvy är nu jordens riktiga dagkarta (CSS-bakgrund som snurrar långsamt, stillastående vid `prefers-reduced-motion`) i stället för tre gröna fläckar.
