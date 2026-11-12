@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<script src="../tema.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Flyta eller sjunka – Pluggparken</title>
+<meta name="description" content="Flyta eller sjunka: testa vad som flyter, bygg en båt av lera som bär så många kulor som möjligt och gissa först hur vatten och föremål beter sig.">
+<link rel="canonical" href="https://pluggparken.se/flytasjunka/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Pluggparken">
+<meta property="og:locale" content="sv_SE">
+<meta property="og:title" content="Flyta eller sjunka – Pluggparken">
+<meta property="og:description" content="Vad flyter och vad sjunker? Testa föremål, bygg en båt av lera och gissa först.">
+<meta property="og:url" content="https://pluggparken.se/flytasjunka/">
+<meta property="og:image" content="https://pluggparken.se/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#1F3A35">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/apple-touch-icon.png" sizes="180x180">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+:root{
+  --bg:#EAF3FF; --ink:#1D2B53; --muted:#56668F; --card:#FFFFFF; --line:#C6D6F2;
+  --good:#1E9E5E; --good-dark:#157548; --bad:#E5484D; --accent:#3D5AFE; --gold:#F2B707;
+  --font:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:760px;margin:0 auto;padding:12px 16px 32px}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;border:0;background:none}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+[hidden]{display:none!important}
+.hero{display:flex;gap:16px;align-items:center;background:linear-gradient(135deg,#2BA8E8,#1E6FD0);color:#fff;border-radius:24px;padding:18px;box-shadow:0 5px 0 #144A96;margin:6px 0 16px}
+.hero .hk{flex:none;width:110px;height:74px;border-radius:14px;overflow:hidden;box-shadow:0 3px 0 rgba(0,0,0,.18)}
+.hero .hk svg{display:block;width:100%;height:100%}
+.hero h1{margin:0;font-size:clamp(1.7rem,6vw,2.3rem);line-height:1.05}
+.hero p{margin:6px 0 0;font-weight:600;opacity:.97}
+.niv{display:grid;gap:10px}
+.niv button{display:flex;align-items:center;gap:14px;background:var(--card,#fff);border-radius:18px;padding:12px 14px;box-shadow:0 4px 0 var(--line);text-align:left;width:100%}
+.niv button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.niv .nr{flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-weight:800;font-size:1.4rem;color:#fff}
+.niv b{display:block;font-size:1.12rem;line-height:1.15}
+.niv small{display:block;color:var(--muted);font-weight:600;font-size:.88rem;line-height:1.25}
+.niv .st{margin-left:auto;flex:none;color:var(--gold);font-size:1.15rem;letter-spacing:1px}
+.niv .st .off{color:var(--line)}
+.not{color:var(--muted);font-size:.85rem;font-weight:600;margin:14px 2px 0;line-height:1.3}
+.topp{display:flex;align-items:center;gap:10px;margin:4px 0 6px;min-height:24px}
+.dots{display:flex;gap:6px;flex:1;flex-wrap:wrap}
+.dots i{width:12px;height:12px;border-radius:50%;background:var(--line)}
+.dots i.ok{background:var(--good)}.dots i.f{background:var(--bad)}.dots i.nu{background:var(--gold)}
+.niva-t{font-weight:800;color:var(--muted);font-size:.9rem}
+.scen{position:relative;border-radius:22px;overflow:hidden;box-shadow:0 4px 0 #0B1630;background:#8FD3F5;touch-action:manipulation}
+.scen canvas{display:block;width:100%;aspect-ratio:3/2;max-height:46vh}
+.mk{position:absolute;transform:translate(-50%,-50%);min-width:34px;height:34px;border-radius:17px;background:#fff;border:3px solid #F2780C;font-weight:800;font-size:.8rem;padding:0 8px;box-shadow:0 3px 0 rgba(0,0,0,.2);color:var(--ink)}
+.mk.ok{border-color:var(--good);background:#DDF5E7}.mk.fel{border-color:var(--bad);background:#FFE9EC}.mk.v{box-shadow:0 0 0 4px rgba(61,90,254,.4)}
+.puls{position:absolute;transform:translate(-50%,-50%);width:54px;height:54px;border-radius:50%;border:4px solid #fff;pointer-events:none;animation:puls 1.2s ease-out infinite}
+@keyframes puls{from{transform:translate(-50%,-50%) scale(.6);opacity:1}to{transform:translate(-50%,-50%) scale(1.5);opacity:0}}
+.panel{display:grid;gap:8px;margin-top:8px}
+.q{background:var(--card,#fff);border-radius:16px;box-shadow:0 4px 0 var(--line);padding:8px 12px}
+.q b{display:block;font-size:.8rem;color:var(--muted);line-height:1.1}
+.q p{margin:2px 0 0;font-weight:800;font-size:1.05rem;line-height:1.25}
+.ord{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.ord button{background:var(--card,#fff);border-radius:12px;box-shadow:0 3px 0 var(--line);min-height:44px;font-weight:800;font-size:.82rem;line-height:1.05;padding:3px}
+.ord button.v{background:var(--accent);color:#fff;box-shadow:0 3px 0 #2A3FB8}
+.ord button:disabled{opacity:.35}
+.sl{display:grid;grid-template-columns:30px 1fr 64px;gap:6px;align-items:center;background:var(--card,#fff);border-radius:14px;box-shadow:0 3px 0 var(--line);padding:4px 10px}
+.sl span{font-size:1.4rem;line-height:1}.sl input{width:100%;height:34px;accent-color:var(--accent)}.sl b{font-size:.85rem;text-align:right}
+.mat{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.mat div{background:var(--card,#fff);border-radius:12px;box-shadow:0 3px 0 var(--line);padding:4px 6px;font-weight:800;font-size:.78rem;line-height:1.1;text-align:center}
+.mat i{display:block;height:7px;border-radius:4px;background:#E6ECF8;margin-top:3px;overflow:hidden}.mat i u{display:block;height:100%;background:var(--c);border-radius:4px;transition:width .3s}
+.rad2{display:flex;gap:6px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.rad2 button{min-height:38px;border-radius:12px;background:var(--card,#fff);box-shadow:0 3px 0 var(--line);font-weight:800;font-size:.9rem;padding:0 12px}
+.rad2 button.v{background:var(--accent);color:#fff;box-shadow:0 3px 0 #2A3FB8}
+.rad2 button:active{transform:translateY(2px)}
+.val3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.val3 button{min-height:54px;border-radius:14px;background:var(--card,#fff);box-shadow:0 4px 0 var(--line);font-weight:800;font-size:.92rem;line-height:1.1;padding:4px 6px}
+.val3 button.v{background:var(--accent);color:#fff;box-shadow:0 4px 0 #2A3FB8}
+.val3 button.rk{background:#DDF5E7;color:var(--good-dark);box-shadow:0 0 0 3px var(--good)}
+.val3 button.rf{background:#FFE9EC;color:#B4232A;opacity:.85}
+.val3.last button{pointer-events:none}
+.val3.tva{grid-template-columns:1fr 1fr}
+.expl{background:#FFF4D6;border-radius:14px;padding:8px 12px;font-weight:700;font-size:.92rem;line-height:1.3;text-align:center}
+.expl.ok{background:#DDF5E7}.expl.fel{background:#FFE9EC}
+.knapprad{display:flex;justify-content:center;gap:10px}
+.stor{background:var(--good);color:#fff;border-radius:18px;padding:10px 30px;font-weight:800;font-size:1.2rem;box-shadow:0 5px 0 var(--good-dark)}
+.stor:disabled{background:#E6ECF8;color:#56668F;box-shadow:0 4px 0 var(--line);pointer-events:none}
+.stor.bla{background:var(--accent);box-shadow:0 5px 0 #2A3FB8}
+@media (min-width:820px){.wrap{max-width:1000px}.sp{display:grid;grid-template-columns:1.5fr 1fr;gap:12px;align-items:start}.scen canvas{max-height:60vh}.panel{margin-top:0}}
+@media (max-height:700px){.scen canvas{max-height:32vh}.ord button{min-height:38px}}
+.res{text-align:center}
+.res .stj{font-size:3rem;letter-spacing:6px;color:var(--gold);margin:8px 0}
+.res .stj .off{color:var(--line)}
+.knapp{display:inline-block;background:var(--good);color:#fff;border-radius:16px;padding:12px 26px;font-weight:800;font-size:1.15rem;box-shadow:0 5px 0 var(--good-dark);margin:6px}
+.knapp.vit{background:var(--card,#fff);color:var(--ink);box-shadow:0 5px 0 var(--line)}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:50}
+@media(max-width:420px){.hero .hk{width:88px;height:64px}.hero{gap:12px;padding:14px}}
+@media(prefers-reduced-motion:reduce){.puls{animation:none}}
+</style>
+</head>
+<body>
+<script src="../ljud.js"></script>
+<script src="../huvud.js" data-titel="Flyta eller sjunka" data-ikon="🛟"></script>
+<main class="wrap">
+<section class="screen" id="home">
+  <div class="hero">
+    <div class="hk" aria-hidden="true"><svg viewBox="0 0 220 148"><defs><linearGradient id="hs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#CFEFFF"/><stop offset="1" stop-color="#8FD3F5"/></linearGradient></defs><rect width="220" height="148" fill="url(#hs)"/><path d="M0 84q27-10 55 0t55 0 55 0 55 0v64H0z" fill="#2F8FD8"/><path d="M62 78h96l-14 24H76z" fill="#C47A4A"/><circle cx="92" cy="66" r="9" fill="#E5484D"/><circle cx="112" cy="66" r="9" fill="#F2B707"/><circle cx="132" cy="66" r="9" fill="#2BB673"/><circle cx="160" cy="124" r="8" fill="#9AA6B8"/><path d="M0 100q27-10 55 0t55 0 55 0 55 0" stroke="#fff" stroke-width="3" fill="none" opacity=".5"/></svg></div>
+    <div><h1>Flyta eller sjunka</h1><p>Vad flyter, vad sjunker och varför? Testa, bygg och gissa.</p></div>
+  </div>
+  <div class="niv" id="niv"></div>
+  <p class="not">Siffrorna för tyngd är avrundade och vattnet är rent och stilla. I verkligheten spelar också form och ytspänning in.</p>
+</section>
+<section class="screen" id="game" hidden>
+  <button type="button" data-home hidden tabindex="-1" aria-hidden="true" onclick="hem()"></button>
+  <div class="topp"><div class="dots" id="dots"></div><span class="niva-t" id="nivT"></span></div>
+  <div class="sp">
+    <div class="scen" id="scen"><canvas id="cv" aria-label="Vattenbassäng"></canvas></div>
+    <div class="panel" id="panel"></div>
+  </div>
+</section>
+<section class="screen res" id="result" hidden>
+  <h2 id="rRub" style="margin:10px 0 0">Bra jobbat!</h2>
+  <div class="stj" id="rStj"></div>
+  <p id="rTxt" style="font-weight:700;margin:0 0 14px"></p>
+  <button class="knapp" id="rIgen">Spela igen</button>
+  <button class="knapp vit" id="rHome">Välj nivå</button>
+</section>
+</main>
+<canvas id="fx" hidden></canvas>
+<script>
+
+const $=id=>document.getElementById(id);
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const lerp=(a,b,t)=>a+(b-a)*t;
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const KEY="mattespel-flytasjunka-v1";
+const data=(()=>{try{return Object.assign({stars:{}},JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){return{stars:{}}}})();
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}};
+const reduced=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
+const ljud=n=>{window.Ljud&&Ljud[n]&&Ljud[n]();};
+const NIV=[null,
+ {namn:"Flyter eller sjunker?",txt:"Gissa om föremålet flyter eller sjunker. Sedan släpper vi det.",col:"#2BA8E8"},
+ {namn:"Bygg en båt",txt:"Forma lera till en båt som bär så många kulor som möjligt.",col:"#2BB673"},
+ {namn:"Gissa först",txt:"Salt, is och trä: vad händer? Gissa först.",col:"#7B61FF"}];
+const stjHtml=n=>[1,2,3].map(i=>i<=n?"★":'<span class="off">★</span>').join("");
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
+function hem(){stoppa();$("niv").innerHTML=[1,2,3].map(l=>`<button data-l="${l}"><span class="nr" style="background:${NIV[l].col}">${l}</span><span><b>${NIV[l].namn}</b><small>${NIV[l].txt}</small></span><span class="st">${stjHtml(data.stars[l]||0)}</span></button>`).join("");show("home");}
+$("niv").onclick=e=>{const b=e.target.closest("[data-l]");if(b)starta(+b.dataset.l);};
+
+/* ======================= FYSIKEN (se docs/flytasjunka.md) ======================= */
+const W=360,H=240,WY=104,FLOOR=222,TL=12,TR=348,SC=4;
+let objs=[],rhoW=1,rhoTarget=1,bubb=[],t0=0,raf=0,G=null;
+const mk=o=>Object.assign({x:180,y:46,vy:0,rho:1,s:34,w:34,e:"",hull:null,bob:0},o);
+const subOf=o=>clamp((o.y+o.s/2-WY)/o.s,0,1);
+function stepObj(o,dt){const sub=subOf(o);let net=1-rhoW*sub/o.rho;if(net>0&&sub>.999)net=Math.max(net,.25);
+  o.vy+=(2400*net-(sub>0?10:.3)*o.vy)*dt;o.vy=clamp(o.vy,-400,400);o.y+=o.vy*dt;
+  const bot=FLOOR-o.s/2;if(o.y>bot){o.y=bot;if(o.vy>60&&!reduced())splash(o.x);o.vy=0;}
+  if(o.y<20){o.y=20;o.vy=0;}
+  if(sub>0&&o.vy>30&&!o.dipped){o.dipped=true;splash(o.x);}
+  if(Math.abs(o.vy)>25&&sub>.3&&Math.random()<.25&&!reduced())bubb.push({x:o.x+(Math.random()-.5)*o.w*.6,y:o.y,r:1+Math.random()*1.6,v:-24-Math.random()*20});}
+let spl=[];
+function splash(x){if(reduced())return;for(let i=0;i<7;i++)spl.push({x,y:WY,vx:(Math.random()-.5)*90,vy:-70-Math.random()*70,l:.6});}
+const eq=(rho,rw)=>rho>=rw?{sink:true,above:0}:{sink:false,above:1-rho/rw}; // stabil jämvikt, används av facit
+const settled=()=>objs.every(o=>Math.abs(o.vy)<4&&(subOf(o)>0));
+function skrov(w,h){const A=30,b=w+2*h,t=(-b+Math.sqrt(b*b+8*A))/4,Wd=w+2*t,Ht=t+h;return{w,h,t,W:Wd,H:Ht,fit:Math.floor(w/2.4)*Math.floor(h/2.4),kap:Wd*Ht-60};}
+function bat(w,h,n,x,y){const k=skrov(w,h),M=60+20*n;return mk({kind:"hull",hull:{...k,n},x:x==null?180:x,y:y==null?46:y,s:k.H*SC,w:k.W*SC,rho:M/(k.W*k.H)});}
+
+/* ======================= RITNING ======================= */
+const cv=$("cv"),ctx=cv.getContext("2d");
+function storlek(){const r=cv.getBoundingClientRect();const d=Math.min(2,devicePixelRatio||1);cv.width=Math.max(10,Math.round(r.width*d));cv.height=Math.max(10,Math.round(r.width*d*2/3));}
+new ResizeObserver(storlek).observe(cv);
+function vatten(c,ts){const salt=clamp((rhoW-1)/.25,0,1);
+  c.fillStyle="#DDEEFA";c.fillRect(0,0,W,H);
+  const g=c.createLinearGradient(0,WY,0,FLOOR);g.addColorStop(0,`rgb(${lerp(110,150,salt)|0},${lerp(190,215,salt)|0},${lerp(240,246,salt)|0})`);g.addColorStop(1,`rgb(${lerp(36,90,salt)|0},${lerp(130,170,salt)|0},${lerp(200,215,salt)|0})`);
+  c.fillStyle=g;c.beginPath();c.moveTo(TL,WY);for(let x=TL;x<=TR;x+=6)c.lineTo(x,WY+Math.sin(x*.09+(reduced()?0:ts*2.2))*1.4);c.lineTo(TR,FLOOR);c.lineTo(TL,FLOOR);c.closePath();c.fill();
+  c.strokeStyle="rgba(255,255,255,.6)";c.lineWidth=1.6;c.setLineDash([5,4]);c.beginPath();c.moveTo(TL,WY);c.lineTo(TR,WY);c.stroke();c.setLineDash([]);
+  c.fillStyle="#B8985F";c.fillRect(TL-6,FLOOR,TR-TL+12,10);
+  c.strokeStyle="rgba(60,90,130,.55)";c.lineWidth=3;c.beginPath();c.moveTo(TL,40);c.lineTo(TL,FLOOR);c.lineTo(TR,FLOOR);c.lineTo(TR,40);c.stroke();
+  if(salt>.05){c.fillStyle=`rgba(255,255,255,${.8*salt})`;for(let i=0;i<14;i++){const x=TL+14+((i*47+(reduced()?0:ts*6))%(TR-TL-28)),y=WY+10+((i*29)%(FLOOR-WY-20));c.fillRect(x,y,1.6,1.6);}}}
+function ritaObj(c,o){c.save();c.translate(o.x,o.y);
+  if(o.hull){const h=o.hull,Wp=h.W*SC,Hp=h.H*SC,tp=Math.max(2.5,h.t*SC),wp=h.w*SC;c.fillStyle="#C47A4A";c.strokeStyle="#7A4A25";c.lineWidth=1.4;
+    c.beginPath();c.rect(-Wp/2,Hp/2-tp,Wp,tp);c.fill();c.stroke();
+    if(h.h>0.05){c.beginPath();c.rect(-Wp/2,-Hp/2,tp,Hp-tp);c.rect(Wp/2-tp,-Hp/2,tp,Hp-tp);c.fill();c.stroke();}
+    const cols=Math.max(1,Math.floor(h.w/2.4)),CO=["#E5484D","#F2B707","#2BB673","#3D5AFE"];
+    for(let i=0;i<h.n;i++){const cx=-((cols-1)*2.4*SC)/2+(i%cols)*2.4*SC,cy=Hp/2-tp-1.2*SC-Math.floor(i/cols)*2.4*SC;c.fillStyle=CO[i%4];c.beginPath();c.arc(cx,cy,1.15*SC,0,7);c.fill();c.strokeStyle="rgba(0,0,0,.25)";c.lineWidth=.8;c.stroke();}}
+  else{c.font=`${Math.round(o.s*.92)}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;c.textAlign="center";c.textBaseline="middle";c.fillText(o.e,0,1);}
+  c.restore();}
+function ram(ts){const dt=Math.min(.033,(ts-(t0||ts))/1000);t0=ts;const tsek=ts/1000;
+  rhoW+=(rhoTarget-rhoW)*Math.min(1,dt*2.2);if(Math.abs(rhoTarget-rhoW)<.002)rhoW=rhoTarget;
+  if(!(G&&G.paus)){for(const o of objs)if(o.fall!==false)stepObj(o,dt);bubb.forEach(b=>{b.y+=b.v*dt;});bubb=bubb.filter(b=>b.y>WY);spl.forEach(s=>{s.x+=s.vx*dt;s.y+=s.vy*dt;s.vy+=300*dt;s.l-=dt;});spl=spl.filter(s=>s.l>0);}
+  ctx.setTransform(cv.width/W,0,0,cv.width/W,0,0);vatten(ctx,tsek);objs.forEach(o=>ritaObj(ctx,o));
+  ctx.fillStyle="rgba(255,255,255,.7)";bubb.forEach(b=>{ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,7);ctx.fill();});ctx.fillStyle="rgba(200,235,255,.9)";spl.forEach(s=>{ctx.beginPath();ctx.arc(s.x,s.y,1.6,0,7);ctx.fill();});
+  if(G&&G.tick)G.tick(dt);raf=requestAnimationFrame(ram);}
+
+/* ======================= SPELET ======================= */
+function stoppa(){cancelAnimationFrame(raf);raf=0;G=null;objs=[];bubb=[];spl=[];}
+function starta(l){stoppa();G={lvl:l,fel:0,res:[],i:0};$("nivT").textContent=NIV[l].namn;$("dots").innerHTML="";show("game");rhoW=rhoTarget=1;storlek();t0=0;raf=requestAnimationFrame(ram);l===1?nivå1():l===2?nivå2():nivå3();}
+function slut(st,txt){const old=data.stars[G.lvl]||0,l=G.lvl;data.stars[l]=Math.max(old,st);save();stoppa();$("rStj").innerHTML=stjHtml(st);$("rRub").textContent=st===3?"Perfekt! 🎉":st===2?"Bra jobbat!":"Bra kämpat!";$("rTxt").textContent=txt;window.__sist=l;show("result");if(st===3){ljud("fanfare");confetti();}else ljud("chime");}
+$("rIgen").onclick=()=>starta(window.__sist||1);$("rHome").onclick=hem;
+const vänta=(f)=>{G.vt=0;G.tick=dt=>{G.vt+=dt;if(G.vt>5||(G.vt>1.2&&settled())){G.tick=null;f();}};};
+const prick=()=>{const n=G.tot||0;$("dots").innerHTML=Array.from({length:n},(_,j)=>`<i class="${j<G.i?(G.res[j]?"ok":"f"):j===G.i?"nu":""}"></i>`).join("");};
+
+/* ---------- Nivå 1 ---------- */
+const FOREM=[
+ {e:"🍎",n:"äpplet",rho:.8,f:"Äpplet flyter. Det är lättare än lika mycket vatten, för det finns luft inuti."},
+ {e:"🪙",n:"myntet",rho:8,f:"Myntet sjunker. Metall är mycket tyngre än lika mycket vatten."},
+ {e:"🧊",n:"isbiten",rho:.92,f:"Isbiten flyter, men nästan hela ligger under ytan. Is är bara lite lättare än vatten."},
+ {e:"🥚",n:"ägget",rho:1.03,f:"Ägget sjunker, fast långsamt. Det är bara lite tyngre än lika mycket vatten."},
+ {e:"🍃",n:"lövet",rho:.5,f:"Lövet flyter. Det är mycket lättare än lika mycket vatten."},
+ {e:"🔑",n:"nyckeln",rho:7.8,f:"Nyckeln sjunker. Den är gjord av metall, som är tung."},
+ {e:"🥔",n:"potatisen",rho:1.08,f:"Potatisen sjunker. Den är lite tyngre än lika mycket vatten, fast den är stor."},
+ {e:"🍌",n:"bananen",rho:.94,f:"Bananen flyter, fast den är stor. Storleken avgör inte, bara hur tung den är jämfört med vatten."}];
+function nivå1(){G.q=FOREM.slice().sort(()=>Math.random()-.5);G.tot=G.q.length;G.i=0;G.fel=0;fråga1();}
+function fråga1(){const f=G.q[G.i];prick();objs=[mk({e:f.e,rho:f.rho,x:180,y:46,fall:false})];
+  $("panel").innerHTML=`<div class="q"><b>Föremål ${G.i+1} av ${G.tot}</b><p>Flyter ${f.n} eller sjunker det?</p></div><div class="val3 tva"><button data-g="flyter">🛟 Flyter</button><button data-g="sjunker">⚓ Sjunker</button></div><div class="expl" id="expl" hidden></div><div class="knapprad"><button class="stor bla" id="bNasta" hidden>Nästa ▶</button></div>`;
+  $("panel").onclick=e=>{const b=e.target.closest("[data-g]");if(!b||G.låst)return;G.låst=true;const gissa=b.dataset.g,rätt=f.rho<1?"flyter":"sjunker",ok=gissa===rätt;ljud("pip");
+    $("panel").querySelectorAll("[data-g]").forEach(x=>{if(x.dataset.g===rätt)x.classList.add("rk");else if(x===b)x.classList.add("rf");});objs[0].fall=true;
+    vänta(()=>{G.res[G.i]=ok;if(!ok)G.fel++;prick();ljud(ok?"ok":"bad");const x=$("expl");x.hidden=false;x.className="expl "+(ok?"ok":"fel");x.textContent=(ok?"Rätt! ✓ ":"Inte riktigt. ")+f.f;const nb=$("bNasta");nb.hidden=false;nb.textContent=G.i>=G.tot-1?"Se resultat ▶":"Nästa ▶";nb.focus({preventScroll:true});});};
+  G.låst=false;$("bNasta").onclick=()=>{if(G.i>=G.tot-1){const st=G.fel<=1?3:G.fel<=3?2:1;slut(st,`Du gissade rätt på ${G.tot-G.fel} av ${G.tot}. ${st===3?"Du vet vad som flyter: det som är lättare än lika mycket vatten.":"Tänk på: flyter det är det lättare än lika mycket vatten, inte bara litet eller stort."}`);}else{G.i++;fråga1();}};}
+
+/* ---------- Nivå 2: Bygg en båt ---------- */
+const UPPD=[4,10,20];
+function nivå2(){G.tot=UPPD.length;G.i=0;G.sl=0;G.w=14;G.h=4;G.n=0;uppd();}
+function uppd(){prick();G.släppt=false;G.n=0;const m=UPPD[G.i];
+  $("panel").innerHTML=`<div class="q"><b>Uppdrag ${G.i+1} av ${UPPD.length}</b><p>Forma lerbåten så att den bär ${m} kulor utan att sjunka.</p></div>
+  <div class="sl"><span>↔️</span><input type="range" id="rW" min="4" max="30" value="${G.w}" aria-label="Bottenbredd"><b id="vW"></b></div>
+  <div class="sl"><span>↕️</span><input type="range" id="rH" min="0" max="20" value="${G.h}" aria-label="Kanthöjd"><b id="vH"></b></div>
+  <div class="rad2"><button id="bM">− kula</button><b id="kN" style="font-size:1.05rem"></b><button id="bP">+ kula</button></div>
+  <div class="expl" id="expl">Lerklumpen väger alltid 60 g. Bara formen ändras.</div>
+  <div class="knapprad"><button class="stor" id="bSlapp">Släpp i vattnet</button><button class="stor bla" id="bNasta" hidden>Nästa ▶</button></div>`;
+  const rita=()=>{G.w=+$("rW").value;G.h=+$("rH").value;if(!G.släppt){objs=[bat(G.w,G.h,G.n,180,52)];objs[0].fall=false;}const k=skrov(G.w,G.h);$("vW").textContent=G.w+" cm";$("vH").textContent=G.h+" cm";$("kN").textContent=`${G.n} kulor (${60+20*G.n} g totalt)`;};
+  G.rita=rita;$("rW").oninput=$("rH").oninput=()=>{if(G.släppt)återställ();rita();};
+  $("bM").onclick=()=>{if(G.släppt)återställ();G.n=Math.max(0,G.n-1);rita();};$("bP").onclick=()=>{if(G.släppt)återställ();G.n=Math.min(30,G.n+1);rita();};
+  $("bSlapp").onclick=släpp2;$("bNasta").onclick=()=>{G.i++;if(G.i>=UPPD.length){const st=G.sl<=5?3:G.sl<=9?2:1;slut(st,`Du klarade alla tre uppdragen på ${G.sl} släpp. Båtar flyter när de trycker undan lika mycket vatten som de väger. Därför bär en bred skål med höga kanter mer.`);}else uppd();};
+  rita();}
+function återställ(){G.släppt=false;G.tick=null;const x=$("expl");x.className="expl";x.textContent="Lerklumpen väger alltid 60 g. Bara formen ändras.";$("bSlapp").hidden=false;$("bNasta").hidden=true;}
+function släpp2(){if(G.släppt)return;const m=UPPD[G.i],k=skrov(G.w,G.h),x=$("expl");
+  if(G.n<m){x.className="expl fel";x.textContent=`Lägg i minst ${m} kulor först. Tryck på + kula.`;return;}
+  if(G.n>k.fit){x.className="expl fel";x.textContent=`${G.n} kulor får inte plats i båten. Gör den bredare eller högre.`;ljud("bad");return;}
+  G.släppt=true;G.sl++;const b=bat(G.w,G.h,G.n,180,52);b.fall=true;objs=[b];
+  vänta(()=>{const flyter=b.rho<=1,ok=flyter&&b.y+b.s/2<FLOOR-1;
+    if(flyter){ljud("ok");x.className="expl ok";x.textContent=`Rätt! ✓ Båten flyter med ${G.n} kulor. Den trycker undan ${Math.round(k.W*k.H*Math.min(1,b.rho))} g vatten och väger ${60+20*G.n} g.`;$("bSlapp").hidden=true;$("bNasta").hidden=false;$("bNasta").textContent=G.i>=UPPD.length-1?"Se resultat ▶":"Nästa uppdrag ▶";$("bNasta").focus({preventScroll:true});G.res[G.i]=true;prick();}
+    else{ljud("bad");x.className="expl fel";x.textContent=`Båten sjönk. Den väger ${60+20*G.n} g men kan bara trycka undan ${Math.round(k.W*k.H)} g vatten. Gör den bredare eller med högre kanter, eller lägg färre kulor.`;G.släppt=false;}});}
+
+/* ---------- Nivå 3: Gissa först ---------- */
+const Q=[
+ {namn:"Ägget i saltvatten",fråga:"Ägget sjunker i vanligt vatten. Du rör ner mycket salt i vattnet. Vad händer med ägget?",alt:["Det sjunker kvar","Det flyter upp","Det hamnar mitt i vattnet"],
+  sc:()=>({objs:[mk({e:"🥚",rho:1.03,x:180,y:FLOOR-17,fall:true})],rw0:1,rw1:1.2}),svar:()=>{const r=eq(1.03,1.2);return r.sink?0:1;},
+  förkl:"Saltvatten är tyngre än vanligt vatten. Då blir ägget lättare än lika mycket saltvatten, och det flyter upp."},
+ {namn:"Isbiten",fråga:"Du släpper en isbit i vatten. Hur mycket av isbiten sticker upp ovanför vattnet?",alt:["Nästan hela","Ungefär hälften","Bara en liten del"],
+  sc:()=>({objs:[mk({e:"🧊",rho:.92,x:180,y:46,s:44,w:44})],rw0:1,rw1:1}),svar:()=>{const a=eq(.92,1).above;return a>.7?0:a>.3?1:2;},
+  förkl:"Is är bara lite lättare än vatten. Därför ligger det mesta under ytan: bara ungefär en tiondel sticker upp."},
+ {namn:"Lerskålen",fråga:"En lerkula sjunker. Du formar samma lera till en bred skål med kanter. Vad händer?",alt:["Skålen sjunker också","Skålen flyter","Den flyter bara om du trycker"],
+  sc:()=>({objs:[bat(22,10,0,180,46)],rw0:1,rw1:1}),svar:()=>{const k=skrov(22,10);return 60/(k.W*k.H)<=1?1:0;},
+  förkl:"Skålen har luft inuti, så den trycker undan mycket mer vatten än kulan gör. Samma lera, men mer vatten som trängs undan, så den flyter."},
+ {namn:"Flisan",fråga:"En stor träbit flyter. Du sågar loss en liten flis och släpper i den. Vad händer med flisen?",alt:["Den sjunker","Den flyter lika djupt","Den flyter högre upp"],
+  sc:()=>({objs:[mk({e:"🪵",rho:.6,x:130,y:46,s:56,w:56}),mk({e:"🪵",rho:.6,x:250,y:46,s:18,w:18})],rw0:1,rw1:1}),svar:()=>{const a=eq(.6,1).above,b=eq(.6,1).above;return Math.abs(a-b)<.05?1:0;},
+  förkl:"Det som avgör är hur tungt träet är jämfört med lika mycket vatten, inte hur stor biten är. Både stora och lilla biten flyter lika djupt."},
+ {namn:"Döda havet",fråga:"I vanligt vatten flyter du nästan helt under ytan. Döda havet är mycket saltare. Hur flyter du där?",alt:["Högre upp, mer av kroppen syns","Lika som vanligt","Lägre ner"],
+  sc:()=>({objs:[mk({e:"🏊",rho:.98,x:180,y:46,s:50,w:50})],rw0:1,rw1:1.24}),svar:()=>{const d=eq(.98,1.24).above-eq(.98,1).above;return d>.08?0:d<-.08?2:1;},
+  förkl:"Saltvatten är tyngre, så det kan bära upp mer. I Döda havet flyter man så högt att man kan sitta och läsa tidningen."}];
+function nivå3(){G.tot=Q.length;G.i=0;G.fel=0;fråga3();}
+function fråga3(){const q=Q[G.i];prick();G.kör=false;G.val=null;const sc=q.sc();objs=sc.objs;rhoW=rhoTarget=sc.rw0;objs.forEach(o=>{o.fall=false;});G.sc=sc;
+  $("panel").innerHTML=`<div class="q"><b>Fråga ${G.i+1} av ${G.tot}: ${q.namn}</b><p>${q.fråga}</p></div><div class="val3" id="val">${q.alt.map((t,k)=>`<button data-k="${k}">${t}</button>`).join("")}</div><div class="expl" id="expl" hidden></div><div class="knapprad"><button class="stor" id="bKor" disabled>Gissa först</button><button class="stor bla" id="bNasta" hidden>Nästa ▶</button></div>`;
+  $("val").onclick=e=>{const b=e.target.closest("[data-k]");if(!b||G.kör)return;G.val=+b.dataset.k;ljud("pip");$("val").querySelectorAll("button").forEach(x=>x.classList.toggle("v",x===b));$("bKor").disabled=false;$("bKor").textContent="▶ Kör och se";};
+  $("bKor").onclick=()=>{if(G.kör||G.val==null)return;G.kör=true;$("bKor").disabled=true;$("bKor").textContent="Vi tittar …";$("val").classList.add("last");
+    objs.forEach(o=>{o.fall=true;});rhoTarget=sc.rw1;vänta(()=>{const rätt=q.svar(),ok=G.val===rätt;G.res[G.i]=ok;if(!ok)G.fel++;prick();
+      $("val").querySelectorAll("button").forEach((x,k)=>{x.classList.remove("v");if(k===rätt)x.classList.add("rk");else if(k===G.val)x.classList.add("rf");});
+      ljud(ok?"ok":"bad");const x=$("expl");x.hidden=false;x.className="expl "+(ok?"ok":"fel");x.textContent=(ok?"Rätt! ✓ ":"Inte riktigt. ")+q.förkl;$("bKor").hidden=true;const nb=$("bNasta");nb.hidden=false;nb.textContent=G.i>=G.tot-1?"Se resultat ▶":"Nästa ▶";nb.focus({preventScroll:true});});};
+  $("bNasta").onclick=()=>{if(G.i>=G.tot-1){const st=G.fel<=1?3:G.fel<=2?2:1;slut(st,`Du gissade rätt på ${G.tot-G.fel} av ${G.tot}.${st<3?" Spela igen och titta på vad som trycks undan.":" Du förstår varför saker flyter."}`);}else{G.i++;fråga3();}};}
+window.__fs={Q,FOREM,skrov,bat,eq,get G(){return G},get objs(){return objs},UPPD};
+function confetti(){if(reduced())return;const cols=["#3D8BFD","#FF9F43","#2BB673","#FFC93C","#7B61FF","#FF6B6B"];
+  const c=$("fx"),x=c.getContext("2d"),dpr=devicePixelRatio||1,Wd=innerWidth,Hh=innerHeight;c.width=Wd*dpr;c.height=Hh*dpr;x.setTransform(dpr,0,0,dpr,0,0);c.hidden=false;
+  const PP=Array.from({length:150},()=>({x:Wd/2+(Math.random()-.5)*120,y:Hh*.3,vx:(Math.random()-.5)*16,vy:-Math.random()*15-4,r:Math.random()*7+5,c:pick(cols),a:Math.random()*6,va:(Math.random()-.5)*.4}));
+  let t=0;(function f(){x.clearRect(0,0,Wd,Hh);PP.forEach(p=>{p.vy+=.45;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore();});
+    if(++t<150)requestAnimationFrame(f);else c.hidden=true;})();}
+hem();
+</script>
+</body>
+</html>

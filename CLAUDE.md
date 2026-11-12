@@ -43,6 +43,7 @@ Efter varje ändring: är det en **ny regel eller ett nytt beslut**, skriv en ko
 | `docs/specialare-filmer.md` | Specialare och filmerna. Specialare (minilektioner, quiz, interaktiva grejer) och alla animerade filmer med röst (motorn `svarthal.js`, `filmlib.js`, `filmfx.js`). |
 | `docs/kroppen.md` | Människokroppen i 3D och Resor. `anatomi/`: modellen, lager, områden, infokort samt resorna (Matens resa, Syrets resa, Hjärnan och nerverna). |
 | `docs/musiklabbet.md` | Musiklabbet. `extra/trummaskin/`: trummaskin, melodi, ackord, pads, loopstation, effekter, låtläge och export. |
+| `docs/flytasjunka.md` | Flyta eller sjunka (NO). `flytasjunka/`: flytkraft, lerbåt med kulor, gissa först (salt, is, trä). |
 | `docs/vattenkretslopp.md` | Vattnets kretslopp (NO). `vattenkretslopp/`: partikelsimulering av hav, moln, regn, snö och flod; Följ droppen, Laborera, Gissa först. |
 | `docs/kontinentdrift.md` | Kontinentaldrift (NO/SO). `kontinentdrift/`: three.js-glob där plattorna rör sig 250 miljoner år, plattornas Pangaea-passning (rotationsmatriser anpassade mot geologiska ankarpunkter), tidsresa och bevisfrågor. |
 | `docs/elkrets.md` | Elkretsen (NO). `elkrets/`: byggbräda med batteri, lampor, brytare och motstånd, kretssimulator (nodanalys), fem utmaningar, laboratorium och gissa-först. Figurerna ritade i SVG. |
