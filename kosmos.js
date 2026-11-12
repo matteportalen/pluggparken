@@ -93,6 +93,8 @@ const KOS={kvalitet:1,scener:{},ok(){return!gl().fel;},
     g.drawArrays(g.POINTS,0,S.n);return R.c;},
   /* skärmposition i [-1,1] för en 3D-punkt, efter senaste render; z<=0 betyder bakom kameran */
   proj(typ,p){const S=KOS.scener[typ];if(!S||!S.mvp)return null;const q=apply(S.mvp,p);return{x:q[0],y:q[1],w:q[2]};},
-  ank(typ){const S=KOS.scen(typ);return S?S.ank:null;}};
+  ank(typ){const S=KOS.scen(typ);return S?S.ank:null;},
+  /* rådata (utan WebGL) för andra ritare, till exempel three.js i 3D-modellen: {p,c,s,n,ank}, enhetsrymd (ungefär −1..1) */
+  data(typ){const k=KONF[typ].bygg();return{p:k.B.p.subarray(0,k.B.n*3),c:k.B.c.subarray(0,k.B.n*3),s:k.B.s.subarray(0,k.B.n*2),n:k.B.n,ank:k.ank};}};
 window.MPKosmos=KOS;
 })();

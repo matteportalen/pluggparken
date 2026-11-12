@@ -57,7 +57,9 @@ Lärarens önskan: "flaggskepp" av **filmen Zooma ut** (scenerna 6–9: Vinterga
 - **Rör inte** undertexternas tider, scenernas längd (17 s) eller texterna: röstfilerna i `ljud/zoom/` hör ihop med dem.
 - Allt efter Vintergatan är **beräknade modeller, inte foton**. Det ska synas.
 - Testa med `__seek(scen, sekund)` på filmens rot (`svarthal.js`) och skärmbilder i 390 × 844 och 1200 × 760. Håll punktantalet nere (skol-Chromebooks): det finns en `kvalitet`-nivå i `kosmos.js`.
-- Status: se längst ner i den här sektionen.
+- **Status (12 nov 2026): gjort.** Filmens scener 6–9 ritas ur `kosmos.js` (WebGL, 120 000–170 000 punkter per scen, spiralgalaxer med rosa stjärnbildningsområden, Andromeda och grannar, Laniakea med strömlinjer och ljuspulser mot Den stora attraktorn, nätet med böjda trådar). Zoomövergångarna är kamerarörelser, inte uppskalade sprites; etiketter visas först när kameran är framme. Utan WebGL används de gamla 2D-ritningarna (`LVold`). 3D-modellens Laniakea och kosmiska nät (`buildGalaxy` i `ovriga/solsystemet/index.html`) använder samma generatorer via `MPKosmos.data()`; äldre enkla versionen ligger kvar som reserv om `kosmos.js` saknas. `kosmos.kvalitet = .5` på svaga enheter (`low`).
+- **Inte gjort / inte provat:** Vintergatan, Lokala gruppen och universums kant i 3D-modellen är orörda (de var redan bra). Inte provat på gammal iPad eller Chromebook (punktantal och tid per bildruta), inte lyssnat på rösten mot de nya bilderna. Strömlinjerna i 3D-modellen syns svagt; pulsstyrkan i shadern (`PULS`) kan höjas.
+- Skärmbildstest: `__seek(scen, sekund)` på filmens rot, `#gZoom` (0–1000) i 3D-modellen.
 
 ## Ordgömman
 

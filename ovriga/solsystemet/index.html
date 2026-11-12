@@ -195,6 +195,7 @@ dialog small{color:var(--muted)}
 </dialog>
 
 <script src="../../ljud.js"></script>
+<script src="../../kosmos.js?v=1"></script>
 <script src="../../djur.js"></script>
 <script src="../../huvud.js" data-titel="Solsystemet" data-ikon="🪐" data-hem="../../" data-portal="ovriga" data-liggande="ja"></script>
 <script>
@@ -454,15 +455,20 @@ const dOf=z=>GD0*Math.exp(z*GL),zOf=d=>Math.log(d/GD0)/GL,sst=(a,b,v)=>{const q=
 const lq=(d0,d1,d)=>sst(Math.log(d0),Math.log(d1),Math.log(d));      // mjuk övergång i logaritmisk skala
 const P31=new THREE.Vector3(.6,.3,-.75).normalize().multiplyScalar(582000);   // Andromeda: ca 2,5 miljoner ljusår bort i modellen
 const GDIR=new THREE.Vector3(0,.5,.866).normalize(),GDES=new THREE.Vector3(0,.88,.48).normalize();
+const LANA=new THREE.Vector3(-1.2e7,.4e7,.6e7);
 let galaxy=null,LAY=null,zC=0,zT=0,gAuto=null,galPtr=0,gStep=-1;
-const GPX={value:700};
+const GPX={value:700},GT={value:0};
 let gseed=12345;const grnd=()=>{gseed=(gseed*16807)%2147483647;return(gseed-1)/2147483646;};const ggauss=()=>{let u=0;for(let i=0;i<4;i++)u+=grnd();return(u-2)/.58;};
 const glerp=(a,b,t)=>a+(b-a)*t,TAU2=Math.PI*2;
-function gMat(blend,op){return new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:blend,uniforms:{pxScale:GPX,op:{value:op}},
-  vertexShader:`attribute float size;attribute vec3 color;varying vec3 vC;uniform float pxScale;void main(){vC=color;vec4 mv=modelViewMatrix*vec4(position,1.);gl_PointSize=clamp(size*pxScale/max(1.,-mv.z),1.1,34.);gl_Position=projectionMatrix*mv;}`,
+function gMat(blend,op,puls){return new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:blend,uniforms:{pxScale:GPX,op:{value:op},tt:GT},defines:puls?{PULS:1}:{},
+  vertexShader:`attribute float size;attribute vec3 color;attribute float ph;uniform float tt;varying vec3 vC;uniform float pxScale;void main(){vC=color;
+#ifdef PULS
+if(ph>=0.){float d=fract(ph-tt);vC*=.4+2.4*exp(-d*12.);}
+#endif
+vec4 mv=modelViewMatrix*vec4(position,1.);gl_PointSize=clamp(size*pxScale/max(1.,-mv.z),1.1,34.);gl_Position=projectionMatrix*mv;}`,
   fragmentShader:`varying vec3 vC;uniform float op;void main(){vec2 p=gl_PointCoord-.5;float d=length(p)*2.;if(d>1.)discard;float a=pow(1.-d,2.2)*op;gl_FragColor=vec4(vC,a);}`});}
 function gResize(){GPX.value=innerHeight*renderer.getPixelRatio()/(2*Math.tan(camera.fov*DEG/2));}
-function gPts(pos,col,siz,blend,op,order){const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(pos,3));g.setAttribute('color',new THREE.BufferAttribute(col,3));g.setAttribute('size',new THREE.BufferAttribute(siz,1));const p=new THREE.Points(g,gMat(blend,op));p.frustumCulled=false;p.renderOrder=order||0;p.userData.op=op;return p;}
+function gPts(pos,col,siz,blend,op,order,ph){const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(pos,3));g.setAttribute('color',new THREE.BufferAttribute(col,3));g.setAttribute('size',new THREE.BufferAttribute(siz,1));if(ph)g.setAttribute('ph',new THREE.BufferAttribute(ph,1));const p=new THREE.Points(g,gMat(blend,op,!!ph));p.frustumCulled=false;p.renderOrder=order||0;p.userData.op=op;return p;}
 /* en spiralgalax: 4 logaritmiska armar, utbuktning, dammband och dis (full = med allt) */
 function mkGalaxy(R,N,full){const grp=new THREE.Group(),SZ=R/6000,pos=new Float32Array(N*3),col=new Float32Array(N*3),siz=new Float32Array(N),k=1/Math.tan(12*DEG),r0=R*.06,h=R*.32;
   for(let i=0;i<N;i++){let x,y,z,c,s;const u=grnd();
@@ -502,7 +508,15 @@ function buildGalaxy(){
    [m31,tri].forEach(G=>G.children.forEach(ch=>{const A=ch.geometry.attributes.size;for(let i=0;i<A.array.length;i++)A.array[i]*=2.6;A.needsUpdate=true;}));
    const N=70,p=new Float32Array(N*3),c=new Float32Array(N*3),s=new Float32Array(N);for(let i=0;i<N;i++){const o=i<N/2?new THREE.Vector3(GX,0,0):P31.clone(),r=GR*(2+grnd()*5),a=grnd()*TAU2,b=Math.acos(2*grnd()-1);p[i*3]=o.x+r*Math.sin(b)*Math.cos(a);p[i*3+1]=o.y+r*Math.cos(b);p[i*3+2]=o.z+r*Math.sin(b)*Math.sin(a);c.set([.85,.88,1],i*3);s[i]=2500+grnd()*5000;}
    LAY.lg.add(gPts(p,c,s,THREE.AdditiveBlending,.9,2));}
-  // Laniakea: galaxer som flödar längs trådar mot Den stora attraktorn
+  // Laniakea och det kosmiska nätet ur kosmos.js (samma generatorer som i filmen: strömlinjer med ljuspulser mot Den stora attraktorn, nät av böjda trådar). Faller tillbaka på de gamla enkla om kosmos.js saknas.
+  const KO=window.MPKosmos;
+  if(KO){KO.kvalitet=low?.5:1;
+    const mk=(typ,R,sz,flip,op,ord)=>{const d=KO.data(typ),N=d.n,p=new Float32Array(N*3),c=new Float32Array(N*3),sc=new Float32Array(N),ph=new Float32Array(N);let har=false;
+      for(let i=0;i<N;i++){p[i*3]=(flip?-1:1)*d.p[i*3]*R;p[i*3+1]=d.p[i*3+1]*R;p[i*3+2]=d.p[i*3+2]*R;c[i*3]=d.c[i*3];c[i*3+1]=d.c[i*3+1];c[i*3+2]=d.c[i*3+2];sc[i]=d.s[i*2]*sz;ph[i]=d.s[i*2+1];if(ph[i]>=0)har=true;}
+      return{pts:gPts(p,c,sc,THREE.AdditiveBlending,op,ord,har?ph:null),ank:d.ank};};
+    const L=mk('laniakea',2.2e7,1.1e5,true,.8,2);LAY.lan=L.pts;scene.add(LAY.lan);LANA.set(-L.ank.A[0]*2.2e7,L.ank.A[1]*2.2e7,L.ank.A[2]*2.2e7);
+    const W=mk('nat',2.7e8,8e5,false,.75,2);LAY.web=W.pts;scene.add(LAY.web);
+  }else{
   {const N=low?4000:9000,p=new Float32Array(N*3),c=new Float32Array(N*3),s=new Float32Array(N),R2=3.1e7,att=new THREE.Vector3(-1.2e7,.4e7,.6e7),fil=[];
    for(let f=0;f<14;f++){const a=grnd()*TAU2,b=Math.acos(2*grnd()-1);fil.push(new THREE.Vector3(Math.sin(b)*Math.cos(a),Math.cos(b),Math.sin(b)*Math.sin(a)).multiplyScalar(R2*(.8+.4*grnd())));}
    for(let i=0;i<N;i++){let X;if(grnd()<.18){X=new THREE.Vector3(ggauss(),ggauss(),ggauss()).multiplyScalar(R2*.45);}else{const f=fil[Math.floor(grnd()*14)],t=Math.pow(grnd(),.7);X=f.clone().lerp(att,t).add(new THREE.Vector3(ggauss(),ggauss(),ggauss()).multiplyScalar(R2*.035*(1-t*.5)));}
@@ -515,6 +529,7 @@ function buildGalaxy(){
    edges.forEach(([i,j])=>{for(let k=0;k<per;k++){const t=grnd(),X=nodes[i].clone().lerp(nodes[j],t).add(new THREE.Vector3(ggauss(),ggauss(),ggauss()).multiplyScalar(7e6));p[n*3]=X.x;p[n*3+1]=X.y;p[n*3+2]=X.z;const w=grnd();c.set([.55+.3*w,.65+.2*w,1],n*3);s[n]=(2+grnd()*2.5)*1e6;n++;}});
    nodes.forEach(a=>{for(let k=0;k<350;k++){const X=a.clone().add(new THREE.Vector3(ggauss(),ggauss(),ggauss()).multiplyScalar(1.6e7));p[n*3]=X.x;p[n*3+1]=X.y;p[n*3+2]=X.z;c.set([1,.82,.6],n*3);s[n]=(3+grnd()*4)*1e6;n++;}});
    LAY.web=gPts(p.slice(0,n*3),c.slice(0,n*3),s.slice(0,n),THREE.AdditiveBlending,.85,2);scene.add(LAY.web);}
+  }
   // det observerbara universums kant: ett skal av bakgrundsstrålning (det äldsta ljuset)
   {const N=low?25000:45000,p=new Float32Array(N*3),c=new Float32Array(N*3),s=new Float32Array(N),RU=1.08e10;
    for(let i=0;i<N;i++){const a=grnd()*TAU2,b=Math.acos(2*grnd()-1),x=Math.sin(b)*Math.cos(a),y=Math.cos(b),z=Math.sin(b)*Math.sin(a);p[i*3]=x*RU;p[i*3+1]=y*RU;p[i*3+2]=z*RU;
@@ -665,7 +680,7 @@ function gDist(){const l=Math.log(dOf(zC));let i=0;while(i<GSTEG.length-2&&l>Mat
 // namnlappar
 const GLB=[['☀️ Du är här','here',()=>new THREE.Vector3(0,0,0),d=>d>700,0,-34],['Oortmolnet','',()=>new THREE.Vector3(0,215,0),d=>d>250&&d<3500,0,-6],['Orionarmen','',()=>new THREE.Vector3(0,0,0),d=>d>4500&&d<60000,70,10],['Mitten: ett jättelikt svart hål','',()=>new THREE.Vector3(GX,0,0),d=>d>14000&&d<150000,0,-8],
   ['Vintergatan','',()=>new THREE.Vector3(GX,0,0),d=>d>400000&&d<9e6,0,-14],['Andromeda','',()=>P31.clone(),d=>d>600000&&d<2.5e7,0,-14],['Triangulum','',()=>P31.clone().add(new THREE.Vector3(150000,90000,-120000)),d=>d>1e6&&d<6e6,0,-10],
-  ['Vintergatan (och vi)','',()=>new THREE.Vector3(0,0,0),d=>d>2e7&&d<3e9,0,-14],['Den stora attraktorn','',()=>new THREE.Vector3(-1.2e7,.4e7,.6e7),d=>d>2e7&&d<4e8,0,-10],['Laniakea','',()=>new THREE.Vector3(0,3.2e7,0),d=>d>3e7&&d<9e8,0,0],
+  ['Vintergatan (och vi)','',()=>new THREE.Vector3(0,0,0),d=>d>2e7&&d<3e9,0,-14],['Den stora attraktorn','',()=>LANA.clone(),d=>d>2e7&&d<4e8,0,-10],['Laniakea','',()=>new THREE.Vector3(0,3.2e7,0),d=>d>3e7&&d<9e8,0,0],
   ['Det kosmiska nätet','',()=>new THREE.Vector3(0,3e8,0),d=>d>2e8&&d<5e9,0,0],['Det observerbara universums kant','',()=>new THREE.Vector3(1.08e10*.7,1.08e10*.7,0),d=>d>8e9,0,0]].map(([t,c,fn,vis,ox,oy])=>{const e=document.createElement('div');e.className='lbl g '+c;e.textContent=t;$('labels').appendChild(e);return{e,fn,vis,ox,oy};});
 const hereRing=document.createElement('div');hereRing.className='rw';hereRing.innerHTML='<div class="ring"></div>';$('labels').appendChild(hereRing);
 function gLabels(inG,d){const W=innerWidth,H=innerHeight;let hx=0,hy=0,hv=false;
@@ -799,7 +814,7 @@ function frame(now){
     moonOrbit.visible=false;rays.visible=false;renderer.render(scene,moonCam);moonOrbit.visible=true;rays.visible=true;renderer.setScissorTest(false);
     if(now-uiT>120){uiT=now;updatePhase();}
   }else if(now-uiT>250){uiT=now;$('date').textContent=dateTxt(false);}
-  renderLabels();
+  GT.value=(now*.00018)%1;renderLabels();
   requestAnimationFrame(frame);
 }
 show('home');controls.minDistance=8;place(0);controls.update();setPlayBtns();
