@@ -51,6 +51,14 @@ Röst till resorna: `ljud/resa/` (manus `manus/resa-manus.txt`) och `ljud/jattar
 - Frågan står stor överst och sitter kvar när man skrollar. Kartan till vänster, panelen till höger. Hela Sverige ska synas utan att skrolla på mobil. **Hela Sverige ska också synas på bred pc-skärm** (nov 2026: i Hitta landskapet klipptes Skåne av vid 1200 × 760, eftersom `fitBox` krympte vyn när den blev bredare än naturkartan). Vyn krymps aldrig; bildens högerkant ligger kvar mot kanten och havet till vänster förlängs med en spegling av bilden i `drawMap`. Kontrollerat i 130 kombinationer av skärmstorlek, landsdel och spelläge.
 - Uppläsning bara med 🔊.
 
+## Rymdlyftet (pågår, nov 2026): filmen och 3D-modellen efter Vintergatan
+Lärarens önskan: "flaggskepp" av **filmen Zooma ut** (scenerna 6–9: Vintergatan, Andromeda, Laniakea, det kosmiska nätet) och av **3D-modellens yttre del** (Vintergatan → Lokala gruppen → Laniakea → nätet → universums kant). Förut: 2D-canvas med några hundra prickar och streck.
+- **Plan:** en gemensam fil `kosmos.js` (`MPKosmos`) med generatorer (spiralgalax med 3D-skiva och spiralarmar, kosmiskt nät av noder och trådar, Laniakea med strömlinjer mot den stora attraktorn) och en liten WebGL-motor (punktsprites med additiv blandning, pulser som rör sig längs trådar och strömlinjer i shadern). Filmens scener 6–9 ritar ur den och lägger sina etiketter ovanpå (`proj()` ger skärmpositioner). 3D-modellen (three.js) återanvänder generatorerna för sina yttre nivåer.
+- **Rör inte** undertexternas tider, scenernas längd (17 s) eller texterna: röstfilerna i `ljud/zoom/` hör ihop med dem.
+- Allt efter Vintergatan är **beräknade modeller, inte foton**. Det ska synas.
+- Testa med `__seek(scen, sekund)` på filmens rot (`svarthal.js`) och skärmbilder i 390 × 844 och 1200 × 760. Håll punktantalet nere (skol-Chromebooks): det finns en `kvalitet`-nivå i `kosmos.js`.
+- Status: se längst ner i den här sektionen.
+
 ## Ordgömman
 
 - Varje ordgömma genereras, aldrig samma. **Inga ord baklänges**, ingen nivåväljare.

@@ -5,6 +5,7 @@
    MPZoomFilm.start(host,{overlay,onClose}). */
 (function(){
 const ROOT=(()=>{try{return new URL("./",document.currentScript.src).href;}catch(e){return "/";}})();
+if(!window.MPKosmos){const sc=document.createElement("script");sc.src=ROOT+"kosmos.js?v=1";document.head.appendChild(sc);}
 const TEX=ROOT+"ovriga/solsystemet/bilder/";
 const TAU=Math.PI*2;
 
@@ -146,6 +147,33 @@ function scenes(E){
     tg("Tomrum",cx+R*.55,cy-R*.62,"rgba(255,255,255,.4)","center");tg("Tomrum",cx-R*.6,cy+R*.5,"rgba(255,255,255,.4)","center");
     if(a>.6)dim(cx-R,cy+R*.82+20,cx+R,"miljarder ljusår","#7fd6ff");x.globalAlpha=1;}
   ];
+  /* ---- Scenerna 6–9 ritas ur kosmos.js (WebGL-partiklar: spiralgalaxer, Laniakea, det kosmiska nätet). Utan WebGL används de gamla 2D-ritningarna ovan. ---- */
+  const LVold=LV.slice();
+  const KO=()=>window.MPKosmos&&window.MPKosmos.ok()?window.MPKosmos:null;
+  const glRita=(typ,cx,cy,S,t,a,v)=>{const K=KO();if(!K)return false;const base=S/(S>0?1:1),n=Math.max(480,Math.min(1100,Math.round(Math.min(E.A().w,E.A().h)*1.15*Math.min(1.5,window.devicePixelRatio||1))));
+    const B=Math.min(E.A().w,E.A().h),zz=S/B,cv=K.render(typ,t,n,zz>1.02?Object.assign({zm:zz},v||{}):v);if(!cv)return false;const q=Math.min(S,B)*.6,x=E.x;x.save();x.globalCompositeOperation="lighter";x.globalAlpha=a;x.drawImage(cv,cx-q,cy-q,q*2,q*2);x.restore();return true;};
+  const pj=(typ,p,cx,cy,S)=>{S=Math.min(S,Math.min(E.A().w,E.A().h));const q=window.MPKosmos.proj(typ,p);return q&&q.w>0?[cx+q.x*S*.6,cy-q.y*S*.6]:null;};
+  const lbl=(typ,p,cx,cy,S,txt,dx,dy,col,al,sz)=>{const o=pj(typ,p,cx,cy,S);if(!o)return null;tx(txt,o[0]+(dx||0),o[1]+(dy||0),col||"#fff",al||"center",sz||13,700);return o;};
+  LV[6]=(cx,cy,S0,t,a)=>{let S=S0;if(!glRita("mv",cx,cy,S,t,a))return LVold[6](cx,cy,S,t,a);S=Math.min(S,Math.min(E.A().w,E.A().h));S=Math.min(S,Math.min(E.A().w,E.A().h));S=Math.min(S,Math.min(E.A().w,E.A().h));S=Math.min(S,Math.min(E.A().w,E.A().h));const x=E.x,K=window.MPKosmos,an=K.ank("mv");x.globalAlpha=a;
+    if(a>.6&&S0<=Math.min(E.A().w,E.A().h)*1.04){const sol=pj("mv",an.sol,cx,cy,S),l=pj("mv",[-1,0,0],cx,cy,S),r=pj("mv",[1,0,0],cx,cy,S),m=pj("mv",an.mitt,cx,cy,S);
+      if(sol){line(sol[0],sol[1],sol[0]+S*.1,sol[1]-S*.1,"#ffd86b",1.3);glowDot(sol[0],sol[1],3,"rgba(255,236,170,1)");tx("Du är här",sol[0]+S*.1+6,sol[1]-S*.1-3,"#ffd86b","left",14,700);}
+      if(l&&r)dim(l[0],cy+S*.46,r[0],"ca 100 000 ljusår","#7fd6ff");if(m)tg("Mitten: ett jättelikt svart hål",m[0],m[1]+S*.24,"rgba(255,200,140,.9)","center");}x.globalAlpha=1;};
+  LV[7]=(cx,cy,S0,t,a)=>{let S=S0;if(!glRita("andromeda",cx,cy,S,t,a))return LVold[7](cx,cy,S,t,a);S=Math.min(S,Math.min(E.A().w,E.A().h));const x=E.x,K=window.MPKosmos,an=K.ank("andromeda");x.globalAlpha=a;
+    if(a>.6&&S0<=Math.min(E.A().w,E.A().h)*1.04){const mv=pj("andromeda",an.mv,cx,cy,S),ad=pj("andromeda",an.and,cx,cy,S);
+      lbl("andromeda",an.mv,cx,cy,S,"Vintergatan",0,S*.2,"#fff");lbl("andromeda",an.and,cx,cy,S,"Andromeda",0,S*.3,"#fff");
+      lbl("andromeda",an.lmc,cx,cy,S,"Magellanska molnen",8,18,"rgba(255,255,255,.75)","left",11);lbl("andromeda",an.tri,cx,cy,S,"Triangelgalaxen",-10,0,"rgba(255,255,255,.75)","right",11);lbl("andromeda",an.m32,cx,cy,S,"M32",6,18,"rgba(255,255,255,.7)","left",11);
+      if(mv&&ad){line(mv[0],mv[1],ad[0],ad[1],"#ffd86b",1.3,[5,6]);tx("2,5 miljoner ljusår",(mv[0]+ad[0])/2,(mv[1]+ad[1])/2-12,"#ffd86b","center",14,700);}
+      tg("Lokala gruppen · avstånden är hopklämda",cx,E.A().y+E.A().h*.07,"#7fd6ff","center");}x.globalAlpha=1;};
+  LV[8]=(cx,cy,S0,t,a)=>{let S=S0;if(!glRita("laniakea",cx,cy,S,t,a))return LVold[8](cx,cy,S,t,a);S=Math.min(S,Math.min(E.A().w,E.A().h));const x=E.x,K=window.MPKosmos,an=K.ank("laniakea");x.globalAlpha=a;
+    if(a>.6&&S0<=Math.min(E.A().w,E.A().h)*1.04){const m=lbl("laniakea",an.mw,cx,cy,S,"Vintergatan",8,16,"#ffd86b","left");if(m)glowDot(m[0],m[1],3,"rgba(255,236,170,1)");
+      lbl("laniakea",an.A,cx,cy,S,"Stora attraktorn",0,-S*.14,"#ffb070");lbl("laniakea",an.V,cx,cy,S,"Virgohopen",0,-S*.08,"rgba(255,255,255,.8)","center",12);lbl("laniakea",an.PP,cx,cy,S,"Perseus–Fiskarna",0,-S*.1,"rgba(255,255,255,.7)","center",12);lbl("laniakea",an.SH,cx,cy,S,"Shapley",0,-S*.08,"rgba(255,255,255,.6)","center",12);
+      dim(cx-S*.5,cy+S*.46,cx+S*.5,"ca 520 miljoner ljusår","#7fd6ff");}x.globalAlpha=1;};
+  let TOM=null;
+  LV[9]=(cx,cy,S0,t,a)=>{let S=S0;if(!glRita("nat",cx,cy,S,t,a))return LVold[9](cx,cy,S,t,a);S=Math.min(S,Math.min(E.A().w,E.A().h));const x=E.x,K=window.MPKosmos,an=K.ank("nat");x.globalAlpha=a;
+    if(!TOM){const nod=an.nod;let best=[];for(let g=0;g<400;g++){const p=[(Math.random()*2-1)*.8,(Math.random()*2-1)*.5,(Math.random()*2-1)*.8],d=Math.min(...nod.map(q=>Math.hypot(q[0]-p[0],q[1]-p[1],q[2]-p[2])));best.push([d,p]);}best.sort((u,v)=>v[0]-u[0]);TOM=[];for(const [d,p] of best){if(TOM.every(q=>Math.hypot(q[0]-p[0],q[1]-p[1],q[2]-p[2])>.5))TOM.push(p);if(TOM.length>=2)break;}
+      TOM.lan=an.nod.slice().sort((u,v)=>(Math.hypot(u[0],u[1],u[2])-u[3]*.1)-(Math.hypot(v[0],v[1],v[2])-v[3]*.1))[0];}
+    if(a>.6&&S0<=Math.min(E.A().w,E.A().h)*1.04){const lp=pj("nat",TOM.lan,cx,cy,S);if(lp){const lr=S*.05;x.strokeStyle="#ffd86b";x.lineWidth=1.4;x.strokeRect(lp[0]-lr,lp[1]-lr*.82,lr*2,lr*1.64);line(lp[0]+lr,lp[1]-lr*.82,lp[0]+lr*2.6,lp[1]-lr*1.7,"#ffd86b",1.2);tx("Laniakea",lp[0]+lr*2.6+6,lp[1]-lr*1.7,"#ffd86b","left",14,700);}
+      TOM.forEach(p=>lbl("nat",p,cx,cy,S,"TOMRUM",0,0,"rgba(255,255,255,.45)","center",11));dim(cx-S*.5,cy+S*.46,cx+S*.5,"miljarder ljusår","#7fd6ff");}x.globalAlpha=1;};
   /* kameran: scen k visar nivå k; de första sekunderna zoomar den förra nivån ut till en prick medan den nya kommer in */
   const T=3.4;
   const scene=k=>(t,kk)=>{const{s,cx,cy}=S();
