@@ -20,7 +20,7 @@ _Under bygge (nov 2026). Den som tar över läser bara den här filen och `elkre
 Kort i `fler/index.html` (NO), `sok.js`, `sitemap.xml`, `konto.js` (`PKEYS`), `STJ` i `huvud.js` (+ sidnamnet i regexen för "fler"), stjärnor och `snap` i `index.html`, rad i `CLAUDE.md`.
 
 ## Status
-- [ ] Simulator verifierad i Node
-- [ ] Sidan byggd
-- [ ] Testad i tre storlekar
-- [ ] Inkopplad, pushad
+- [x] Simulator verifierad i Node (en lampa 92 %, två i serie 24 %, två parallellt 85–87 %, kortslutning flaggas över 3 A)
+- [x] Sidan byggd och testad i 390 × 844, 375 × 667 och 1200 × 760 (alla fem utmaningar, laboratorium, gissa-först med facit ur simuleringen)
+- [x] Inkopplad i Fler ämnen (NO), sök, sitemap, konto, stjärnor
+- Inte provat: pekskärm, riktig telefon. Inte gjort: portal i världen, fler komponenter (motor, summer, kondensator), amperemeter. Texterna är inte granskade av en fysiklärare.
