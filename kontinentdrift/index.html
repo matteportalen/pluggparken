@@ -242,9 +242,9 @@ async function bygg3d(){const host=$("glob");const renderer=new THREE.WebGLRende
   const sist={t:0};(function loop(ts){if(anim){const u=Math.min(1,(ts-anim.t0)/anim.dur),e=u<.5?2*u*u:1-Math.pow(-2*u+2,2)/2;settT(anim.a+(anim.b-anim.a)*e);if(u>=1){const f=anim.klar;anim=null;f&&f();}}
     controls.update();renderer.render(scene,camera);requestAnimationFrame(loop);})(0);
   resize();$("laddar").hidden=true;settT(T);}
-const qI=new THREE.Quaternion();
+const qI=new THREE.Quaternion(),QG=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,0,-1),15*Math.PI/180),qg=new THREE.Quaternion();
 window.kam=(lon,lat,d)=>{if(!R3)return;R3.camera.position.copy(vec(lon,lat,d||3.5));R3.controls.update();};
-function settT(t){T=Math.max(0,Math.min(250,t));plates.forEach((o,p)=>{o.m.quaternion.copy(qI).slerp(o.q250,frac(p,T));});uiT();}
+function settT(t){T=Math.max(0,Math.min(250,t));qg.copy(qI).slerp(QG,T/250);plates.forEach((o,p)=>{o.m.quaternion.copy(qI).slerp(o.q250,frac(p,T)).premultiply(qg);});uiT();}
 window.gaTill=(t,dur,klar)=>{if(reduced()||dur<=0){settT(t);klar&&klar();return;}anim={a:T,b:t,t0:performance.now(),dur,klar};};
 function platta(e){const r=R3.renderer.domElement.getBoundingClientRect();R3.mus.set(((e.clientX-r.left)/r.width)*2-1,-((e.clientY-r.top)/r.height)*2+1);R3.ray.setFromCamera(R3.mus,R3.camera);const hit=R3.ray.intersectObject(R3.hav)[0];if(!hit)return-1;
   for(let p=0;p<7;p++){const q=plates[p].m.quaternion.clone().invert(),v=hit.point.clone().applyQuaternion(q).normalize(),lat=Math.asin(Math.max(-1,Math.min(1,v.y)))/D,lon=Math.atan2(-v.z,v.x)/D,x=Math.min(MW-1,Math.max(0,Math.floor((lon+180)/360*MW))),y=Math.min(MH-1,Math.max(0,Math.floor((90-lat)/180*MH)));if(idMap[y*MW+x]===p+1)return p;}return-1;}
