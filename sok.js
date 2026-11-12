@@ -89,7 +89,7 @@ const IDX=[
  ['stavningsjakten/','Stavningsjakten','Hur stavas ordet på bilden? Hitta rätt stavning.','🔎','stavning stava rättstavning ord bild svenska','Svenska'],
  ['demokrati/','Demokrati','Hur bestämmer vi tillsammans? Röstning, riksdag och rättigheter.','🗳️','demokrati rösta val riksdag regeringen lag rättigheter samhälle','SO'],
  ['engelskaord/','Engelska ord','Vad heter det på engelska? Ord, färger och artighet.','🇬🇧','engelska ord english hello thank you färger djur','Engelska'],
- ['klockanengelska/','Klockan på engelska','Hur säger man klockslaget? Half past och quarter to.','⏰','klockan engelska time clock oclock half past quarter','Engelska'],
+ ['klockanengelska/','Klockan på engelska','Ställ klockan på half past three och bygg klockslaget av engelska ord.','⏰','klockan engelska time clock oclock half past quarter','Engelska'],
  ['ovriga/solsystemet/','Solsystemet i 3D','Res bland planeterna och ut i universum','🪐','planeter solen jorden månen vintergatan resa stockholm','NO'],
  ['larare/','Klasstavlan','Interaktiv whiteboard för klassrummet: Du behöver, timer, lyckohjul, post-it, ljudnivå och video','🍎','klasstavlan lärare lärarsida tavla whiteboard projektor timer lyckohjul post-it ljudnivå instruktioner lektion klassrum','Lärare'],
  ['tidslinjen/','Tidslinjen','Sätt bilder i rätt tid, känn hur länge sedan det var och lös ledtrådar','⏳','historia tid tidslinje stenåldern vikingatiden medeltiden vasa årtal förr ledtrådar detektiv släkt släktträd mitt liv generation','SO'],

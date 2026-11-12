@@ -76,6 +76,13 @@ Kartorna är gjorda ur Natural Earth (public domain). Europakartan, Världskarta
 - Rätt kräver förstahandsgissning, minst 35 %, två kontroller i rad och minst 2 sekunders ritande. Trösklarna är justerade tre gånger mot riktiga teckningar: ändra dem inte utan att mäta. Inga gissningar på ett ensamt streck.
 - 20 sekunder per ord, 6 ord per runda. Teckningarna skickas ingenstans.
 
+## Klockan på engelska
+
+- Omgjord nov 2026: inga svarsalternativ. Två sorters uppgifter: **ställ klockan** efter frasen ("Set the clock to half past three", visarna dras med `klocka.js`) och **bygg klockslaget** av ordbrickor efter en klocka.
+- 🔊 läser frasen på engelska (en-GB), bara vid tryck. I bygg-uppgifter finns 🔊 först efter svaret, annars avslöjas det.
+- Förklaringen visar alltid det svenska klockslaget ("half past three = halv fyra"), eftersom det är just där svenskan och engelskan skiljer sig.
+- Ett klockslag där samma ord behövs två gånger (five past five) kommer aldrig.
+
 ## Extra
 
 - **Extra är för sådant man skapar, skriver ut och bygger.** Specialare är minilektioner.
