@@ -82,6 +82,7 @@ const IDX=[
  ['ovriga/lasflyt/','Läsflyt','Läs en kort text flera gånger med en vuxen','📖','läsa text flyt upprepad läsning','Svenska'],
  ['ovriga/rita/','Draw it!','Rita ordet på engelska så gissar datorn','🎨','engelska rita gissa quick draw glosor','Engelska'],
  ['ovriga/rymdlabbet/','Rymdlabbet','Solsystemet, dag och natt, månens faser och mer','🔭','rymden planeter måne stjärnor svarta hål årstider förmörkelse universum galax jättar','NO'],
+ ['sjon/','Sjön','Bygg en näringskedja och rädda en sjö där något har gått fel.','🌊','sjö näringskedja näringsväv ekosystem alger vattenloppor mört gädda fiskgjuse kretslopp nedbrytare natur biologi simulering','NO'],
  ['anatomi/','Människokroppen i 3D','Skelett, muskler, organ, blodkärl och nerver','🫀','kroppen anatomi skelett muskler hjärta lungor tarmar hjärnan nerver blodkärl ben organ njurar ögon','NO'],
  ['varlden/','Pluggparken-världen','Gå runt på en ö i 3D med ditt djur, hoppa in i portaler, ta uppdrag och besök Matte-parken','🏝️','värld ö 3d portal hoppa spel öppen värld djur utforska uppdrag park matte-parken prydnader stjärnor','Utforska'],
  ['vikingatiden/','Vikingatiden','Skepp, runor och gudar. Vad vet du om vikingarna?','⚓','vikingar vikingatiden skepp långskepp runor tor odin historia sverige','SO'],

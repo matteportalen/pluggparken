@@ -44,4 +44,6 @@ Provat med bot (tid till klart, alla 0,5–1,8 × jämvikt i 15 enheter): uppdra
 - [x] SVG-figurer och sjöscen (`sjon/index.html`)
 - [x] Nivå 1 (kedjan, väven, kretsloppet), testad
 - [x] Nivå 2 (uppdragen), botten löser alla fyra uppdrag i tre skärmstorlekar (par 1,1,1,3)
-- [ ] Test, inkopplingar, docs, push
+- [x] Inkopplingar: kort i `fler/index.html` (NO), `sok.js`, `sitemap.xml`, `PKEYS`, `STJ`, stjärnor och `snap` på startsidan, rad i `CLAUDE.md`
+- [ ] Inte gjort med flit: portal i `varlden/index.html` (kroppens park är ritad hörn för hörn; läraren får välja plats), nivå 3 (gissa först)
+- Inte provat: pekskärm, riktig telefon, lärarens åsikt om texterna. Texterna är inte granskade av en biolog.

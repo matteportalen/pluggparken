@@ -109,7 +109,7 @@ body.mph-mini #quit{display:none}
     if(top==='anatomi')return'fler';
     if(/^(stavningsjakten|meningsbyggaren|vemgorvad|delameningar|verb|substantiv|adjektiv|ordfargaren|sorteraord|ordregn|ordkedjan|ordgissning|dubbelteckning|knepigaljud|sagobyggaren|handstil)$/.test(top))return'svenska';
     if(top==='tidslinjen'||top==='vikingatiden'||top==='demokrati')return'so';
-    if(/^(engelskaord|klockanengelska|schack|trerirad|sudoku|trafikstockning|gissastorlek|fylltillstrecket)$/.test(top))return'fler';
+    if(/^(sjon|engelskaord|klockanengelska|schack|trerirad|sudoku|trafikstockning|gissastorlek|fylltillstrecket)$/.test(top))return'fler';
     if(top==='specialare')return'special';
     if(/^(mittrum|flytta)$/.test(top))return'hem';
     return'matte';}
@@ -128,7 +128,7 @@ body.mph-mini #quit{display:none}
     return T10.map(T=>{if(T10.every(n=>lv(n,T)===3))return 3;if(T10.every(n=>lv(n,T)>=2))return 2;if(T10.every(n=>h(n,T).some(x=>x[0])))return 1;return 0});
   }
   // stjärnor per övning (samma regler som startsidan); k = mappens namn, "spel:<spel>" för spelen i Spelhörnan, "spelhornan" för alla där
-  const STJ=['prickatalet','diagram','vikingatiden','glodvaktaren','tradgard','gissastorlek','fylltillstrecket','tidslinjen','knepigaljud','sagobyggaren','meningsbyggaren','vemgorvad','delameningar','verb','substantiv','adjektiv','ordfargaren','sorteraord','ordregn','handstil','tiointe','klockan','geometri','brak','uppstallning','hundraruta','tiotal','taluppfattning','sverigekartan','ordgomma','europa','varlden','talfoljd','rutjakten','brakbitar','kortdivision','vagen','gomda','kulbanan','slungan','tradgard','affaren','hogfrekventa','rita','ordgatan','tangentbord','kodverkstan','delaupp','matning','pengar','lasflyt','sagoriket','sifferslottet','schack','trerirad','sudoku','trafikstockning'];
+  const STJ=['sjon','prickatalet','diagram','vikingatiden','glodvaktaren','tradgard','gissastorlek','fylltillstrecket','tidslinjen','knepigaljud','sagobyggaren','meningsbyggaren','vemgorvad','delameningar','verb','substantiv','adjektiv','ordfargaren','sorteraord','ordregn','handstil','tiointe','klockan','geometri','brak','uppstallning','hundraruta','tiotal','taluppfattning','sverigekartan','ordgomma','europa','varlden','talfoljd','rutjakten','brakbitar','kortdivision','vagen','gomda','kulbanan','slungan','tradgard','affaren','hogfrekventa','rita','ordgatan','tangentbord','kodverkstan','delaupp','matning','pengar','lasflyt','sagoriket','sifferslottet','schack','trerirad','sudoku','trafikstockning'];
   const SPELSUB=['fly','mem','car','space','frog','tower','skatt','kiosk','bubbel','tug'];
   const SPELHORNAN=['glodvaktaren','skattjakten','kulbanan','slungan','tradgard','sagoriket','sifferslottet','affaren','rutjakten'];
   function stjFor(k){
