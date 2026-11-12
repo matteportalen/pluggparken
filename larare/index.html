@@ -56,6 +56,8 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 #bar button,#bar a{width:50px;height:50px;border-radius:14px;background:rgba(255,255,255,.12);color:#fff;font-size:1.5rem;line-height:1;display:grid;place-items:center;text-decoration:none;position:relative}
 #bar button:hover,#bar a:hover{background:rgba(255,255,255,.24)}
 #bar button.v{background:#F4D35E;color:#1F3A35}
+#bar button#bRitLas.las{background:#E5484D;color:#fff}#bar button#bRitLas.haller{background:#F4A3A6;transition:background 1s linear}
+#bar.ritlas #bPenna,#bar.ritlas #bSudd,#bar.ritlas #bAngra,#bar.ritlas #bRensa{opacity:.35}
 #bar small{position:absolute;bottom:2px;font-size:.6rem;font-weight:800;opacity:.85}
 #bar hr{width:100%;border:0;border-top:1px solid rgba(255,255,255,.18);margin:2px 0}
 #bar.mini{padding:0;background:none;box-shadow:none}
@@ -303,6 +305,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
   <button id="bMin" title="Visa eller dölj verktygen" aria-label="Visa eller dölj verktygen">🍎</button>
   <a href="../" title="Tillbaka till Pluggparken" aria-label="Tillbaka till Pluggparken">←</a>
   <hr>
+  <button id="bRitLas" title="Lås ritningen så att ingen kan rita eller sudda. Håll in en sekund för att låsa upp." aria-label="Lås ritningen" aria-pressed="false">🔓</button>
   <button id="bPenna" class="v" title="Penna (P)" aria-label="Penna">✏️</button>
   <button id="bSudd" title="Sudd (E)" aria-label="Sudd">🧽</button>
   <button id="bHand" title="Flytta tavlan (H, eller håll ner mellanslag)" aria-label="Flytta tavlan">🖐️</button>
@@ -474,6 +477,7 @@ cv.addEventListener("pointerdown",e=>{if(e.button===2)return;try{cv.setPointerCa
   if(ptrs.size>2)return;
   if(e.button===1||S.pen.v==="hand"||rymd){pan={x:e.clientX,y:e.clientY};cv.classList.add("tag");e.preventDefault();return;}
   if(e.button>0)return;
+  if(ritLas){hjalpText("Ritningen är låst. Håll in 🔒 en sekund för att låsa upp.");return;}
   const lg=lagerVal();if(!lg.v||lg.l||lg.o===0){hjalpText(!lg.v?"Lagret är dolt. Visa det i 📑 först.":lg.l?"Lagret är låst. Lås upp det i 📑.":"Lagret är helt genomskinligt (0 %). Höj genomskinligheten i 📑 först.");return;}
   const e_=S.pen.v==="sudd",bb=e_?"penna":bNu(),px=e_?44:S.pen.w*((e.pointerType==="pen"&&bb==="penna")?(.4+e.pressure*1.2):1),w0=tillVarld(e.clientX,e.clientY);
   cur={c:S.pen.c,w:px/kz(),e:e_,ly:lg.id,b:bb,sd:(Math.random()*1e9)|0,p:[w0],p0:w0.slice(),fv:1,form:e_?"fri":fNu(),sh:false,lpx:e.clientX,lpy:e.clientY,lpt:e.timeStamp};strokes.push(cur);if(direkt()&&(S.lager.length===1||(!e_&&bb==="penna")))linje(cur);else ritaNu();e.preventDefault();});
@@ -499,7 +503,9 @@ cv.addEventListener("pointerup",slutPtr);cv.addEventListener("pointercancel",slu
 cv.addEventListener("wheel",e=>{e.preventDefault();const pad=e.deltaMode===0&&!e.ctrlKey&&(e.deltaX!==0||Math.abs(e.deltaY)<40);
   if(e.ctrlKey)zoomVid(e.clientX,e.clientY,Math.exp(-e.deltaY*.01));else if(pad){V.x+=e.deltaX/kz();V.y+=e.deltaY/kz();vyUppd();}else zoomVid(e.clientX,e.clientY,e.deltaY<0?1.2:1/1.2);},{passive:false});
 /* ritningen sparas i webbläsaren (bara på den här enheten) i världskoordinater: {v:2,s:[…]}; äldre format (en lista, koordinater delade med fönsterbredden) läses också */
-const RKEY=KEY+"-ritning";let ritT=0;
+const RKEY=KEY+"-ritning";
+/* Ritlås: ingen kan rita, sudda, ångra eller sudda allt. Ett tryck låser, man måste hålla in knappen en sekund för att låsa upp (så att barnen inte råkar låsa upp). Sparas i webbläsaren så att en omladdning inte tar bort låset. */
+const LKEY=KEY+"-ritlas";let ritLas=false;try{ritLas=localStorage.getItem(LKEY)==="1"}catch(e){}let ritT=0;
 function ritData(){return{v:2,s:strokes.map(t=>{const dp=Math.pow(10,Math.max(0,Math.min(5,Math.ceil(-Math.log10(Math.max(1e-6,t.w/40)))))),r=q=>Math.round(q*dp)/dp,min=Math.max(.05,t.w*.25);
   return{c:t.c,w:Math.round(t.w*dp*100)/(dp*100),e:t.e?1:0,y:t.ly,b:t.b&&t.b!=="penna"?t.b:undefined,sd:t.b&&t.b!=="penna"?(t.sd|0):undefined,p:t.p.filter((q,i,a)=>i===0||i===a.length-1||Math.abs(q[0]-a[i-1][0])+Math.abs(q[1]-a[i-1][1])>=min).map(q=>q.length>2?[r(q[0]),r(q[1]),Math.round(q[2]*100)/100]:[r(q[0]),r(q[1])])};})};}
 function ritFran(d){const gammal=Array.isArray(d),lista=gammal?d:(d&&d.v===2&&Array.isArray(d.s)?d.s:null);if(!lista)return[];
@@ -509,8 +515,8 @@ function ritFran(d){const gammal=Array.isArray(d),lista=gammal?d:(d&&d.v===2&&Ar
 function sparaRitning(){clearTimeout(ritT);ritT=setTimeout(()=>{try{if(!strokes.length){localStorage.removeItem(RKEY);return;}
   const j=JSON.stringify(ritData());if(j.length>2.5e6){hjalpText("Ritningen är för stor för att sparas. Sudda något.");return;}localStorage.setItem(RKEY,j);}catch(e){}},400);}
 function laddaRitning(){try{strokes=ritFran(JSON.parse(localStorage.getItem(RKEY)||"null"));}catch(e){strokes=[];}fixaLager();}
-function angra(){if(strokes.length){strokes.pop();omrita();sparaRitning();}}
-function rensaRitning(){if(!strokes.length)return;const rits=JSON.stringify(strokes),snap=JSON.stringify(S.widgets);strokes=[];omrita();sparaRitning();angraRuta("Ritningen är struken",snap,rits);}
+function angra(){if(ritLas)return;if(strokes.length){strokes.pop();omrita();sparaRitning();}}
+function rensaRitning(){if(ritLas||!strokes.length)return;const rits=JSON.stringify(strokes),snap=JSON.stringify(S.widgets);strokes=[];omrita();sparaRitning();angraRuta("Ritningen är struken",snap,rits);}
 addEventListener("resize",storlek);
 
 /* ---------- verktygsfält ---------- */
@@ -530,6 +536,14 @@ $("bPenna").addEventListener("pointerdown",()=>{langt=false;clearTimeout(langT);
 $("bPenna").onclick=()=>{if(langt){langt=false;return;}if(S.pen.v==="penna"){if(pop&&pop.dataset.t==="pens")stangPop();else visaPensler();}else verktyg("penna");};$("bSudd").onclick=()=>verktyg("sudd");$("bHand").onclick=()=>verktyg("hand");
 $("zMinus").onclick=()=>zoomVid(innerWidth/2,innerHeight/2,1/1.25);$("zPlus").onclick=()=>zoomVid(innerWidth/2,innerHeight/2,1.25);$("zProc").onclick=visaHem;$("zAlla").onclick=visaAllt;
 $("bAngra").onclick=angra;$("bRensa").onclick=rensaRitning;
+function visaRitLas(){const b=$("bRitLas");b.textContent=ritLas?"🔒":"🔓";b.classList.toggle("las",ritLas);b.setAttribute("aria-pressed",String(ritLas));b.setAttribute("aria-label",ritLas?"Ritningen är låst. Håll in för att låsa upp.":"Lås ritningen");$("bar").classList.toggle("ritlas",ritLas);}
+function sattRitLas(v){ritLas=v;try{localStorage.setItem(LKEY,v?"1":"0")}catch(e){}visaRitLas();if(v){if(cur){const i=strokes.indexOf(cur);if(i>=0&&cur.p.length<=2)strokes.splice(i,1);cur=null;omrita();}stangPop();}}
+(()=>{const b=$("bRitLas");let t=0,klart=false;
+  const stopp=()=>{clearTimeout(t);b.classList.remove("haller");};
+  b.addEventListener("pointerdown",()=>{klart=false;if(!ritLas)return;b.classList.add("haller");t=setTimeout(()=>{klart=true;b.classList.remove("haller");sattRitLas(false);hjalpText("Ritningen är upplåst.");},1000);});
+  ["pointerup","pointerleave","pointercancel"].forEach(n=>b.addEventListener(n,stopp));
+  b.addEventListener("click",()=>{if(klart){klart=false;return;}if(!ritLas){sattRitLas(true);hjalpText("Ritningen är låst. Håll in 🔒 en sekund för att låsa upp.");}else hjalpText("Håll in 🔒 en sekund för att låsa upp.");});
+  visaRitLas();})();
 $("bMin").onclick=()=>{$("bar").classList.toggle("mini");$("widgets").classList.toggle("pres",$("bar").classList.contains("mini"));stangPop();};
 $("bOrd").onclick=()=>{ordna(true);hjalpText("Rutorna är ordnade");};
 $("bFyll").onclick=fyllTavlan;

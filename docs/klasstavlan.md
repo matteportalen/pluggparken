@@ -26,6 +26,7 @@ localStorage: `pluggparken-larare-v1` (rutor, tavlor, lager, favoriter) och `plu
 - **Inget får hamna utanför bilden:** menyer rullar inom fönstret, rutor hålls helt inom tavlan (utom textrutor).
 - **Inga varningsrutor för sådant som går att ångra.** Ny lektion, mallar, byte av tavla och Sudda hela ritningen visar i stället "↩ Ångra" i nio sekunder. Fråga bara vid Ladda från fil och Grundlistan.
 - **Låsta rutor och post-it med text ligger kvar** vid Ny lektion, mallar och byte av tavla.
+- **Ritlås 🔓/🔒** överst bland ritknapparna (nov 2026, lärarens önskan: barnen ska inte kunna rita när läraren inte vill). Ett tryck låser: pennan, suddet, ångra och sudda allt slutar fungera (knapparna tonas ned, även Ctrl+Z). **Upplåsning kräver att man håller in knappen en sekund**, så att barnen inte råkar låsa upp. Låset sparas i webbläsaren (`pluggparken-larare-v1-ritlas`) och överlever omladdning. Zoom, flytt och rutorna (timer, post-it, textrutor) påverkas inte.
 - **Verktygsfältet får inte hoppa:** knappar som inte gäller tonas ned, de göms inte. Grupper öppnas som små paneler med text.
 - Storlek ändras med handtaget i hörnet (+ och − togs bort: lätta att trycka på av misstag).
 - Rutor snappar mot varandra och mot marginalerna. Alt slår av snappningen. En ny ruta hamnar på första lediga plats uppifrån.
