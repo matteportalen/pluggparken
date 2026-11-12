@@ -70,7 +70,7 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 .las{stroke:#F2B707}
 .skaka{animation:skaka .4s}
 @keyframes skaka{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
-.verk{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:8px}
+.verk{display:grid;grid-template-columns:repeat(8,1fr);gap:5px;margin-top:8px}
 .verk button{background:var(--card,#fff);border-radius:12px;box-shadow:0 3px 0 var(--line);padding:3px 1px 4px;display:flex;flex-direction:column;align-items:center;gap:0;font-weight:800;font-size:.62rem;line-height:1.05;min-width:0}
 .verk button svg{width:100%;height:30px;display:block}
 .verk button.v{background:var(--accent);color:#fff;box-shadow:0 3px 0 #2A3FB8}
@@ -141,7 +141,7 @@ const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}};
 const reduced=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
 const ljud=n=>{window.Ljud&&Ljud[n]&&Ljud[n]();};
 const NIV=[null,
- {namn:"Bygg",txt:"Fem utmaningar: tänd lampan, brytare, serie, parallell och kortslutning.",col:"#F2780C"},
+ {namn:"Bygg",txt:"Sex utmaningar: lampa, brytare, serie, parallell, kortslutning och motor.",col:"#F2780C"},
  {namn:"Laborera",txt:"Bygg vad du vill och se strömmen. Ingen uppgift.",col:"#1E9ED8"},
  {namn:"Gissa först",txt:"Vad händer med lampan? Gissa, och se sedan om du hade rätt.",col:"#7B61FF"}];
 const stjHtml=n=>[1,2,3].map(i=>i<=n?"★":'<span class="off">★</span>').join("");
@@ -150,34 +150,35 @@ function hem(){stoppa();$("niv").innerHTML=[1,2,3].map(l=>`<button data-l="${l}"
 $("niv").onclick=e=>{const b=e.target.closest("[data-l]");if(b)starta(+b.dataset.l);};
 
 /* ======================= SIMULATORN (se docs/elkrets.md) ======================= */
-const COLS=7,ROWS=5,R_LAMP=10,R_RES=20,R_W=.02,V_BAT=3,R_BAT=.2,P0=.9;
+const COLS=7,ROWS=5,R_LAMP=10,R_MOT=12,R_RES=20,R_W=.02,V_BAT=3,R_BAT=.2,P0=.9;
 const ends=k=>{const p=k.split(","),d=p[0],c=+p[1],r=+p[2];return d==="h"?[[c,r],[c+1,r]]:[[c,r],[c,r+1]];};
 const nid=(c,r)=>r*COLS+c;
 function sim(circ,opt){const n=COLS*ROWS,G=Array.from({length:n},()=>new Float64Array(n)),I=new Float64Array(n),els=[];
   for(const key in circ){const e=circ[key],E=ends(key),a=nid(E[0][0],E[0][1]),b=nid(E[1][0],E[1][1]);let on=e.on;if(opt&&opt.sw!=null&&e.t==="s")on=opt.sw;
     if(e.t==="s"&&!on)continue;
-    if(e.t==="w"||e.t==="s")els.push({key,a,b,R:R_W,t:e.t});else if(e.t==="l")els.push({key,a,b,R:R_LAMP,t:"l"});else if(e.t==="r")els.push({key,a,b,R:R_RES,t:"r"});
+    if(e.t==="w"||e.t==="s")els.push({key,a,b,R:R_W,t:e.t});else if(e.t==="l")els.push({key,a,b,R:R_LAMP,t:"l"});else if(e.t==="r")els.push({key,a,b,R:R_RES,t:"r"});else if(e.t==="m")els.push({key,a,b,R:R_MOT,t:"m"});
     else if(e.t==="b"){const m=e.o>0?a:b,p=e.o>0?b:a;els.push({key,a:m,b:p,R:R_BAT,t:"b",src:V_BAT/R_BAT,o:e.o});}}
   for(const e of els){const g=1/e.R;G[e.a][e.a]+=g;G[e.b][e.b]+=g;G[e.a][e.b]-=g;G[e.b][e.a]-=g;if(e.src){I[e.b]+=e.src;I[e.a]-=e.src;}}
   for(let i=0;i<n;i++)G[i][i]+=1e-9;
   const M=G.map((row,i)=>{const r=Array.from(row);r.push(I[i]);return r;});
   for(let i=0;i<n;i++){let p=i;for(let j=i+1;j<n;j++)if(Math.abs(M[j][i])>Math.abs(M[p][i]))p=j;[M[i],M[p]]=[M[p],M[i]];const d=M[i][i];for(let j=i;j<=n;j++)M[i][j]/=d;
     for(let k=0;k<n;k++)if(k!==i){const f=M[k][i];if(f)for(let j=i;j<=n;j++)M[k][j]-=f*M[i][j];}}
-  const v=M.map(r=>r[n]),cur={},lamps=[];let ibat=0;
-  for(const e of els){let i=(v[e.a]-v[e.b])/e.R;if(e.t==="b"){i+=e.src;ibat=Math.max(ibat,Math.abs(i));cur[e.key]=i*(e.o>0?1:-1);}else{cur[e.key]=i;if(e.t==="l"){const P=i*i*R_LAMP;lamps.push({key:e.key,b:Math.min(1,P/P0),I:Math.abs(i)});}}}
-  for(const key in circ)if(circ[key].t==="l"&&!lamps.find(l=>l.key===key))lamps.push({key,b:0,I:0});
-  return{v,cur,lamps,ibat,short:ibat>3};}
+  const v=M.map(r=>r[n]),cur={},lamps=[],motors=[];let ibat=0;
+  for(const e of els){let i=(v[e.a]-v[e.b])/e.R;if(e.t==="b"){i+=e.src;ibat=Math.max(ibat,Math.abs(i));cur[e.key]=i*(e.o>0?1:-1);}else{cur[e.key]=i;if(e.t==="m")motors.push({key:e.key,I:Math.abs(i),dir:i});if(e.t==="l"){const P=i*i*R_LAMP;lamps.push({key:e.key,b:Math.min(1,P/P0),I:Math.abs(i)});}}}
+  for(const key in circ){if(circ[key].t==="l"&&!lamps.find(l=>l.key===key))lamps.push({key,b:0,I:0});if(circ[key].t==="m"&&!motors.find(m=>m.key===key))motors.push({key,I:0,dir:0});}
+  return{v,cur,lamps,motors,ibat,short:ibat>3};}
 
 /* ======================= RITBRÄDAN ======================= */
 const SP=50,PX=25,PY=25,VW=350,VH=250;
 const pos=(c,r)=>[PX+c*SP,PY+r*SP];
 const ALLA=[];for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){if(c<COLS-1)ALLA.push(`h,${c},${r}`);if(r<ROWS-1)ALLA.push(`v,${c},${r}`);}
-const VERK=[["hand","Använd"],["w","Ledning"],["b","Batteri"],["l","Lampa"],["s","Brytare"],["r","Motstånd"],["x","Sudd"]];
-function glyf(t,o){const s=(x)=>x;
+const VERK=[["hand","Använd"],["w","Ledning"],["b","Batteri"],["l","Lampa"],["s","Brytare"],["r","Motstånd"],["m","Motor"],["x","Sudd"]];
+function glyf(t,o,key,w,ang){const s=(x)=>x;
   if(t==="w")return `<line class="led" x1="-25" y1="0" x2="25" y2="0"/>`;
   if(t==="b")return `<line class="led" x1="-25" y1="0" x2="-5" y2="0"/><line class="led" x1="5" y1="0" x2="25" y2="0"/><line x1="-5" y1="-7" x2="-5" y2="7" stroke="#CFE0FF" stroke-width="4" stroke-linecap="round"/><line x1="5" y1="-13" x2="5" y2="13" stroke="#CFE0FF" stroke-width="3" stroke-linecap="round"/><text x="14" y="-9" font-size="12">+</text><text x="-14" y="-9" font-size="12">−</text>`;
   if(t==="l")return `<line class="led" x1="-25" y1="0" x2="-12" y2="0"/><line class="led" x1="12" y1="0" x2="25" y2="0"/><circle cx="0" cy="0" r="12" fill="#1B2C52" stroke="#9FB6E8" stroke-width="3"/><path d="M-6 6L-3 -5L1 5L5 -6" fill="none" stroke="#9FB6E8" stroke-width="2.2" stroke-linecap="round"/>`;
   if(t==="s")return `<line class="led" x1="-25" y1="0" x2="-13" y2="0"/><line class="led" x1="13" y1="0" x2="25" y2="0"/><circle class="dd" cx="-13" cy="0" r="3.5"/><circle class="dd" cx="13" cy="0" r="3.5"/>`;
+  if(t==="m")return `<line class="led" x1="-25" y1="0" x2="-13" y2="0"/><line class="led" x1="13" y1="0" x2="25" y2="0"/><circle cx="0" cy="0" r="13" fill="#1B2C52" stroke="#9FB6E8" stroke-width="3"/><g class="blad"${key?` data-b="${key}" data-w="${w||0}" transform="rotate(${ang||0})"`:""} stroke="#FF9F43" stroke-width="3" stroke-linecap="round"><path d="M0 0L0 -9M0 0L7.8 4.5M0 0L-7.8 4.5"/></g><circle cx="0" cy="0" r="2.2" fill="#CFE0FF"/>`;
   if(t==="r")return `<line class="led" x1="-25" y1="0" x2="-14" y2="0"/><line class="led" x1="14" y1="0" x2="25" y2="0"/><path d="M-14 0L-11 -7L-5 7L1 -7L7 7L11 -7L14 0" fill="none" stroke="#9FB6E8" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>`;
   return "";}
 function ikon(t){const inn=t==="hand"?'<path d="M-6 12V-6a2.5 2.5 0 0 1 5 0V3M-1 3V-9a2.5 2.5 0 0 1 5 0V3M4 3V-7a2.5 2.5 0 0 1 5 0V7c0 7-4 10-9 10S-8 14-8 8V4" fill="none" stroke="#1D2B53" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>':t==="x"?'<path d="M-9 -9L9 9M9 -9L-9 9" stroke="#1D2B53" stroke-width="4" stroke-linecap="round"/>':glyf(t).replace(/#9FB6E8|#CFE0FF/g,"#1D2B53").replace(/class="led"/g,'stroke="#1D2B53" stroke-width="3.5" stroke-linecap="round"').replace(/class="dd"/g,'fill="#fff" stroke="#1D2B53" stroke-width="2"').replace(/<text[^>]*>[^<]*<\/text>/g,"").replace(/fill="#1B2C52"/g,'fill="#FFF3C0"');
@@ -188,7 +189,7 @@ function ritaBord(host,B,res){const rad=[];
   const nod=[];for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){const [x,y]=pos(c,r);nod.push(`<circle class="dd" cx="${x}" cy="${y}" r="3.2"/>`);}
   const gl=[];
   for(const key in B.circ){const e=B.circ[key],E=ends(key),[x1,y1]=pos(...E[0]),[x2,y2]=pos(...E[1]),mx=(x1+x2)/2,my=(y1+y2)/2,vert=key[0]==="v",rot=vert?90:0;
-    let inre=glyf(e.t);if(e.t==="b"&&e.o<0)inre=`<g transform="scale(-1 1)">${inre}</g>`;
+    let inre=e.t==="m"?glyf("m",0,key,(res&&res.cur[key]||0)*900,angM[key]||0):glyf(e.t);if(e.t==="b"&&e.o<0)inre=`<g transform="scale(-1 1)">${inre}</g>`;
     if(e.t==="l"){const L=res&&res.lamps.find(l=>l.key===key),b=L?L.b:0;if(b>.02){const gl=Math.pow(b,.6);inre=`<circle r="${16+14*gl}" fill="rgba(255,214,80,${.45*gl})"/><circle r="12" fill="rgba(255,243,170,${.35+.65*gl})" stroke="#FFE27A" stroke-width="3"/>`+glyf("l").replace(/<circle[^>]*\/>/,"").replace(/stroke="#9FB6E8" stroke-width="2.2"/,'stroke="#F2780C" stroke-width="2.4"');}}
     if(e.t==="s"){inre+=e.on?`<line x1="-13" y1="0" x2="13" y2="0" stroke="#CFE0FF" stroke-width="4" stroke-linecap="round"/>`:`<line x1="-13" y1="0" x2="10" y2="-12" stroke="#CFE0FF" stroke-width="4" stroke-linecap="round"/>`;}
     const lock=B.las&&B.las.has(key)?`<circle class="las" r="3" cx="0" cy="${e.t==="w"?-8:-22}" fill="#F2B707" stroke="none"/>`:"";
@@ -196,8 +197,8 @@ function ritaBord(host,B,res){const rad=[];
     if(res&&res.cur[key]!=null&&Math.abs(res.cur[key])>.004)gl.push(`<line class="flode" data-f="${key}" data-i="${res.cur[key].toFixed(4)}" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/>`);}
   const hit=ALLA.map(key=>{const E=ends(key),[x1,y1]=pos(...E[0]),[x2,y2]=pos(...E[1]);return `<line class="kant" data-e="${key}" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/>`;}).join("");
   host.innerHTML=`<svg viewBox="0 0 ${VW} ${VH}" role="img" aria-label="Kretsbräda">${rad.join("")}${gl.join("")}${nod.join("")}${hit}</svg>`;}
-let fas={};let rafE=0,tE=0;
-function animE(ts){const dt=Math.min(.05,(ts-(tE||ts))/1000);tE=ts;if(!reduced())document.querySelectorAll(".flode").forEach(l=>{const k=l.dataset.f,i=+l.dataset.i;fas[k]=(fas[k]||0)+i*dt*90;l.style.strokeDashoffset=(-fas[k]%14).toFixed(2);});rafE=requestAnimationFrame(animE);}
+let fas={},angM={};let rafE=0,tE=0;
+function animE(ts){const dt=Math.min(.05,(ts-(tE||ts))/1000);tE=ts;if(!reduced())document.querySelectorAll(".blad[data-b]").forEach(g=>{const k=g.dataset.b;angM[k]=((angM[k]||0)+(+g.dataset.w)*dt)%360;g.setAttribute("transform","rotate("+angM[k].toFixed(1)+")");});if(!reduced())document.querySelectorAll(".flode").forEach(l=>{const k=l.dataset.f,i=+l.dataset.i;fas[k]=(fas[k]||0)+i*dt*90;l.style.strokeDashoffset=(-fas[k]%14).toFixed(2);});rafE=requestAnimationFrame(animE);}
 function verktygsrad(host,val,onVal){host.innerHTML=VERK.map(([id,namn])=>`<button data-t="${id}" class="${val===id?"v":""}" aria-label="${namn}">${ikon(id)}<span>${namn}</span></button>`).join("");host.onclick=e=>{const b=e.target.closest("[data-t]");if(b){onVal(b.dataset.t);verktygsrad(host,b.dataset.t,onVal);}};}
 /* ändra en kant med valt verktyg; returnerar true om något ändrades */
 function satt(B,key,tool){const e=B.circ[key];if(B.las&&B.las.has(key))return"las";
@@ -217,7 +218,7 @@ function slut(st,txt){const old=data.stars[G_l]||0;data.stars[G_l]=Math.max(old,
 $("rIgen").onclick=()=>starta(G_l);$("rHome").onclick=hem;
 const W={t:"w"},Lm={t:"l"},Bt=(o)=>({t:"b",o:o||1}),Sw=(on)=>({t:"s",on:!!on}),Rs={t:"r"};
 const K=(c,r,d)=>`${d||"h"},${c},${r}`;
-const mat=res=>{if(!res)return"";const lamps=res.lamps;return res.short?"⚠️ Kortslutning! Strömmen tar en genväg och batteriet blir varmt.":`Ström ur batteriet: ${res.ibat.toFixed(2).replace(".",",")} A${lamps.length?" · "+lamps.map((l,i)=>`lampa ${i+1}: ${Math.round(l.b*100)} %`).join(", "):""}`;};
+const mat=res=>{if(!res)return"";const lamps=res.lamps;const mo=res.motors||[];return res.short?"⚠️ Kortslutning! Strömmen tar en genväg och batteriet blir varmt.":`Ström ur batteriet: ${res.ibat.toFixed(2).replace(".",",")} A${lamps.length?" · "+lamps.map((l,i)=>`lampa ${i+1}: ${Math.round(l.b*100)} %`).join(", "):""}${mo.length?" · "+mo.map((m,i)=>m.I<.01?`motor ${i+1}: står still`:`motor ${i+1}: ${Math.round(Math.min(1,m.I/.3)*100)} % fart, ${m.dir>0?"medurs":"moturs"}`).join(", "):""}`;};
 
 /* ---------- Nivå 1: Bygg ---------- */
 const BAS={ // slinga (1,1)–(5,3)
@@ -237,9 +238,12 @@ const UTM=[
   fakta:"I en parallellkoppling har varje lampa en egen väg från batteriet. Båda får full spänning och lyser lika starkt."},
  {namn:"Kortslutning",text:"Den här kretsen är farlig: ledningen går förbi lampan. Gör den säker så att lampan lyser.",tips:"Välj Sudd och ta bort ledningen som går förbi lampan, de tre kanterna runt den.",
   start:()=>{const c=BAS.loop();c[K(2,1)]=Lm;Object.assign(c,{[K(2,1,"v")]:W,[K(2,2)]:W,[K(3,1,"v")]:W});return c;},mal:r=>!r.short&&r.lamps.length>0&&r.lamps[0].b>.5,
-  fakta:"Strömmen väljer den lättaste vägen. En ledning förbi lampan kortsluter den, och då går nästan all ström där och batteriet kan bli varmt."}];
+  fakta:"Strömmen väljer den lättaste vägen. En ledning förbi lampan kortsluter den, och då går nästan all ström där och batteriet kan bli varmt."},
+ {namn:"Motorn åt andra hållet",text:"Motorn snurrar åt ett håll. Få den att snurra åt andra hållet utan att ta bort något.",tips:"Strömmen går åt andra hållet om du vänder på batteriet. Välj Batteri och tryck på batteriet.",
+  start:()=>{const c=BAS.loop();c[K(2,1)]={t:"m"};return c;},mal:(r)=>r.motors.length>0&&r.motors[0].I>.05&&Math.sign(r.motors[0].dir)===-G.s0,
+  fakta:"En motor snurrar åt det håll strömmen går. Vänder man batteriet går strömmen åt andra hållet, och motorn snurrar åt andra hållet."}];
 function nivå1(){G.i=0;uppdrag(0);}
-function uppdrag(i){G.i=i;G.pu=UTM[i];G.klar=false;const u=UTM[i],c=u.start();const las=new Set(Object.keys(c));if(i===4)["v,2,1","h,2,2","v,3,1"].forEach(k=>las.delete(k));
+function uppdrag(i){G.i=i;G.pu=UTM[i];G.klar=false;const u=UTM[i],c=u.start();const las=new Set(Object.keys(c));if(i===4)["v,2,1","h,2,2","v,3,1"].forEach(k=>las.delete(k));if(i===5){las.delete("v,1,1");G.s0=Math.sign(sim(c).motors[0].dir);}
   G.B={circ:c,las,verktyg:"hand"};prickar(UTM.length);
   $("yta").innerHTML=`<div class="uppg"><b>Utmaning ${i+1} av ${UTM.length}</b><p>${u.namn}: ${u.text}</p></div><div class="bord" id="bord"></div><div class="verk" id="verk"></div><div class="rad2"><div class="mat" id="mat"></div><button id="bTips">💡 Tips</button><button id="bOm">↺ Börja om</button></div><div class="expl" id="expl" hidden></div><div class="knapprad"><button class="stor bla" id="bNasta" hidden>Nästa ▶</button></div>`;
   verktygsrad($("verk"),"hand",t=>G.B.verktyg=t);$("bord").onclick=e=>{const k=e.target.closest("[data-e]");if(!k||G.klar)return;tryck(k.dataset.e);};
@@ -250,9 +254,9 @@ function uppd(){const B=G.B,res=sim(B.circ);ritaBord($("bord"),B,res);$("mat").t
   if(G.lvl===1&&G.pu&&!G.klar&&G.pu.mal(res,B.circ)){G.klar=true;G.res[G.i]=true;prickar(UTM.length);$("bord").classList.add("ratt");ljud("ok");const x=$("expl");x.hidden=false;x.className="expl ok";x.textContent="Rätt! ✓ "+G.pu.fakta;$("bNasta").hidden=false;$("bNasta").textContent=G.i>=UTM.length-1?"Se resultat ▶":"Nästa ▶";$("bNasta").focus({preventScroll:true});}}
 
 /* ---------- Nivå 2: Laborera ---------- */
-const EXEMPEL=[["Enkel krets",()=>{const c=BAS.loop();c[K(2,1)]=Lm;return c;}],["Serie",()=>{const c=BAS.loop();c[K(2,1)]=Lm;c[K(3,1)]=Lm;return c;}],["Parallell",()=>stege({})],["Tom",()=>({[K(1,1,"v")]:Bt(1)})]];
+const EXEMPEL=[["Enkel krets",()=>{const c=BAS.loop();c[K(2,1)]=Lm;return c;}],["Serie",()=>{const c=BAS.loop();c[K(2,1)]=Lm;c[K(3,1)]=Lm;return c;}],["Parallell",()=>stege({})],["Motor",()=>{const c=BAS.loop();c[K(2,1)]={t:"m"};return c;}],["Tom",()=>({[K(1,1,"v")]:Bt(1)})]];
 const stege=(ex)=>Object.assign({[K(1,0,"v")]:W,[K(1,1,"v")]:Bt(1),[K(1,2,"v")]:W,[K(1,3,"v")]:W,[K(1,0)]:W,[K(2,0)]:W,[K(3,0)]:W,[K(4,0)]:W,[K(1,4)]:W,[K(2,4)]:W,[K(3,4)]:W,[K(4,4)]:W,[K(3,0,"v")]:W,[K(3,1,"v")]:Lm,[K(3,2,"v")]:W,[K(3,3,"v")]:W,[K(5,0,"v")]:W,[K(5,1,"v")]:Lm,[K(5,2,"v")]:W,[K(5,3,"v")]:W},ex);
-function nivå2(){G.B={circ:EXEMPEL[3][1](),las:new Set(),verktyg:"hand"};G.i=0;$("dots").innerHTML="";
+function nivå2(){G.B={circ:EXEMPEL[4][1](),las:new Set(),verktyg:"hand"};G.i=0;$("dots").innerHTML="";
   $("yta").innerHTML=`<div class="uppg"><b>Laborera</b><p>Bygg vad du vill.<small>Välj ett verktyg och tryck på en linje. Gula pulser visar strömmen. Börja med ett exempel om du vill.</small></p></div><div class="bord" id="bord"></div><div class="verk" id="verk"></div><div class="rad2" id="ex">${EXEMPEL.map(([n],i)=>`<button data-x="${i}">${n}</button>`).join("")}</div><div class="rad2"><div class="mat" id="mat"></div></div>`;
   verktygsrad($("verk"),"hand",t=>G.B.verktyg=t);$("bord").onclick=e=>{const k=e.target.closest("[data-e]");if(k)tryck(k.dataset.e);};$("ex").onclick=e=>{const b=e.target.closest("[data-x]");if(b){G.B.circ=EXEMPEL[+b.dataset.x][1]();ljud("pip");uppd();}};uppd();}
 
@@ -276,6 +280,12 @@ const FR=[
  {namn:"Motstånd",fraga:"Vi sätter in ett motstånd i kretsen. Hur lyser lampan?",alt:[["Starkare","u"],["Lika starkt","l"],["Svagare","n"]],rätt:"n",
   före:()=>{const c=BAS.loop();c[K(2,1)]=Lm;return c;},efter:c=>{c[K(3,1)]=Rs;},forkl:"Ett motstånd gör det svårare för strömmen. Då går det mindre ström genom lampan och den lyser svagare.",
   sant:(a,b)=>{const f=a.lamps[0].b,e=b.lamps[0].b;return e>f*1.15?"u":e<f*.85?"n":"l";}}];
+FR.push({namn:"Vänd batteriet",fraga:"Motorn snurrar. Vi vänder på batteriet. Vad händer med motorn?",alt:[["Snurrar åt andra hållet","o"],["Snurrar åt samma håll","l"],["Stannar","n"]],rätt:"o",
+  före:()=>{const c=BAS.loop();c[K(2,1)]={t:"m"};return c;},efter:c=>{c[K(1,1,"v")]={t:"b",o:-1};},forkl:"Vänder man batteriet går strömmen åt andra hållet, och då snurrar motorn åt andra hållet.",
+  sant:(a,b)=>{const x=a.motors[0],y=b.motors[0];return y.I<.01?"n":Math.sign(x.dir)!==Math.sign(y.dir)?"o":"l";}});
+FR.push({namn:"Motor och lampa i serie",fraga:"Lampan lyser fullt. Vi sätter in en motor i serie med den. Hur lyser lampan?",alt:[["Starkare","u"],["Lika starkt","l"],["Svagare","n"]],rätt:"n",
+  före:()=>{const c=BAS.loop();c[K(2,1)]=Lm;return c;},efter:c=>{c[K(3,1)]={t:"m"};},forkl:"Motorn och lampan delar på batteriets spänning. Lampan får mindre ström och lyser svagare, och motorn snurrar också långsammare än om den var ensam.",
+  sant:(a,b)=>{const f=a.lamps[0].b,e=b.lamps[0].b;return e>f*1.15?"u":e<f*.85?"n":"l";}});
 function nivå3(){G.fr=shuffle(FR.slice()).slice(0,5);G.i=0;G.fel=0;gissa(0);}
 function gissa(i){G.i=i;const q=G.q=G.fr[i];G.val=null;G.kor=false;G.B={circ:q.före(),las:new Set(Object.keys(q.före())),verktyg:"hand"};G.res0=sim(G.B.circ);prickar(G.fr.length);
   $("yta").innerHTML=`<div class="uppg"><b>Fråga ${i+1} av ${G.fr.length}</b><p>${q.fraga}<small>Titta på kretsen och gissa först.</small></p></div><div class="bord" id="bord"></div><div class="val3" id="val">${q.alt.map(([t,k])=>`<button data-k="${k}">${t}</button>`).join("")}</div><div class="rad2"><div class="mat" id="mat"></div></div><div class="expl" id="expl" hidden></div><div class="knapprad"><button class="stor" id="bKor" disabled>Gissa först</button><button class="stor bla" id="bNasta" hidden>Nästa ▶</button></div>`;
