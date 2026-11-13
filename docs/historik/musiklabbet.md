@@ -324,3 +324,7 @@ Lärarens önskan: samma redigering som i vanliga loopstationen. Raden `.sy-rl-e
 - **FLYTTA** är `klfx.flytt` (0–15 sextondelar, `rostloop.js`): vyn roterar ljudet efter tonhöjd och röst, utan kopia och utan minne. Följer med i delningskod och projektfil. NOLLSTÄLL EFFEKTER rör inte flytten. RADERA/BESKÄR bakar in en flytt (markeringen avser det man ser) och nollställer den.
 - Efter BESKÄR och vid ändrade antal delar delas loopen jämnt; egna gränser från JUSTERA KLIPP går förlorade, RADERA behåller dem.
 - Testat (`test-synt-rostloop.cjs`): markering snäpper till 0,40–0,80 s, RADERA ger tystnad där och orört ljud utanför, originalet orört, ångra; BESKÄR av första halvan ger halva längden, 8 delar, 0,5 takt; FLYTTA fyra steg = en kvart, samma längd; BESKÄR efter FLYTTA bakar in flytten; mobil utan sidledsscroll. Inte lyssnat på. Dragmarkering med riktig touch på iPad är inte provad.
+
+### Röstloop: fri markering (13 nov 2026)
+
+Lärarens önskan: markera själv på vågen, valfri längd, inte bara hela 16-delar. Markeringen är nu bråkdelar av loopen utan rundning (`put` i `synt.js`); en magnet drar till närmaste 16-delslinje inom 7 px så att start och slut går att träffa exakt. Kanterna har grepp (hörn uppe och nere) och kan dras om; ett tryck utan drag (under 1 % av loopen) avmarkerar. Texten under vågen visar start, slut och längd i sekunder. Radera och beskär använder samma sampelgenauhet som förut (4 ms kanter). Testet drar 26 % till 46 % och förväntar 0,4x–0,7x s. Inte provat med riktig touch.

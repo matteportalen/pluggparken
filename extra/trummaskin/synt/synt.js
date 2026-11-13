@@ -45,7 +45,7 @@ function drawLoop(){if(!root||!view)return;const canvas=root.querySelector('#sy-
   for(let i=0;i<c.length-1;i++){const a=Math.round(c[i]*W),b=Math.round(c[i+1]*W);g.fillStyle=held.has(i)?'#86dce055':i%2?'#86dce012':'#86dce006';g.fillRect(a,0,b-a,H)}
   g.strokeStyle=wait?'#4f7479':'#86dce0';g.lineWidth=1;g.beginPath();for(let px=0;px<W;px++){const a=Math.floor(px*x.length/W),b=Math.max(a+1,Math.floor((px+1)*x.length/W)),step=Math.max(1,Math.floor((b-a)/60));let pk=0;for(let j=a;j<b;j+=step){const s=Math.abs(x[j]);if(s>pk)pk=s}const h=Math.max(1,pk*H*.46);g.moveTo(px+.5,H/2-h);g.lineTo(px+.5,H/2+h)}g.stroke();
   const lw=Math.max(1,Math.round(1.5*dpr)),small=c.length>9&&W/dpr<500;g.font='700 '+Math.round((small?9:12)*dpr)+'px ui-monospace,monospace';for(let i=0;i<c.length-1;i++){const a=Math.round(c[i]*W);if(i){g.fillStyle='#ffab32';g.fillRect(a-(lw>>1),0,lw,H)}g.fillStyle=held.has(i)?'#fff':'#9fc4c9';g.fillText(String(i+1),a+5*dpr,15*dpr)}
-  g.fillStyle='#ffffff30';for(let i=1;i<16;i++)g.fillRect(Math.round(i*W/16),H-6*dpr,1,6*dpr);const sl=selNow();if(sl){g.fillStyle='#ffffff26';g.fillRect(Math.round(sl.a*W),0,Math.round((sl.b-sl.a)*W),H);g.fillStyle='#fff';g.fillRect(Math.round(sl.a*W),0,lw+1,H);g.fillRect(Math.round(sl.b*W)-lw-1,0,lw+1,H)}}
+  g.fillStyle='#ffffff30';for(let i=1;i<16;i++)g.fillRect(Math.round(i*W/16),H-6*dpr,1,6*dpr);const sl=selNow();if(sl){g.fillStyle='#ffffff26';g.fillRect(Math.round(sl.a*W),0,Math.round((sl.b-sl.a)*W),H);g.fillStyle='#fff';g.fillRect(Math.round(sl.a*W),0,lw+1,H);g.fillRect(Math.round(sl.b*W)-lw-1,0,lw+1,H);for(const x of [sl.a*W,sl.b*W]){g.fillRect(Math.round(x)-5*dpr,0,10*dpr,9*dpr);g.fillRect(Math.round(x)-5*dpr,H-9*dpr,10*dpr,9*dpr)}}}
 /* räkna om rösten strax efter en ändring, så att första padtrycket inte hackar */
 function prepare(){clearTimeout(prepTimer);prepTimer=0;const asset=curAsset(),t=state().tracks[selected];if(!asset||R.ready(asset,t.klfx,env()))return;prepTimer=setTimeout(()=>{prepTimer=0;const a=curAsset();if(a)try{R.view(a,state().tracks[selected].klfx,env())}catch{host.toast('Effekten kunde inte räknas ut.');return}drawLoop()},40);drawLoop()}
 function setFx(k,v){change(()=>{const t=state().tracks[selected];t.klfx={...R.clean(t.klfx),[k]:v}});prepare()}
@@ -71,7 +71,7 @@ function layInBar(){const a=curAsset();if(!a)return;const s=host.state(),step=60
 let sel=null,selDrag=null;
 const selNow=()=>{const t=state().tracks[selected];return sel&&sel.id===t.clipId?sel:null};
 const sek=v=>v.toFixed(2).replace('.',',');
-function selText(asset,f){if(!asset)return'';const s=selNow(),d=asset.buffer.duration;let txt=s?'Markerat '+sek(s.a*d)+'–'+sek(s.b*d)+' s. RADERA tystar biten, BESKÄR behåller bara den.':'Dra över vågen för att markera en bit.';if(f.flytt)txt+=' Flyttad '+f.flytt+'/16 av loopen.';return txt}
+function selText(asset,f){if(!asset)return'';const s=selNow(),d=asset.buffer.duration;let txt=s?'Markerat '+sek(s.a*d)+'–'+sek(s.b*d)+' s ('+sek((s.b-s.a)*d)+' s lång). RADERA tystar biten, BESKÄR behåller bara den.':'Dra över vågen för att markera en bit.';if(f.flytt)txt+=' Flyttad '+f.flytt+'/16 av loopen.';return txt}
 function refreshEd(){const t=state().tracks[selected];loopUI(t,curAsset())}
 function setSel(a,b){const t=state().tracks[selected];sel=a===null?null:{id:t.clipId,a,b};refreshEd()}
 function shiftBy(dir){const t=state().tracks[selected];if(!curAsset())return;change(()=>{const f=R.clean(t.klfx);t.klfx={...f,flytt:(f.flytt+dir+16)%16}});prepare()}
@@ -184,11 +184,11 @@ root.querySelector('#sy-preset').onchange=e=>change(()=>{const t=state().tracks[
 root.querySelector('[data-sound]').oninput=e=>selectSound(+e.target.value);root.querySelector('#sy-sound-list').onchange=e=>selectSound(+e.target.value);root.querySelector('#sy-sound-prev').onclick=()=>selectSound(+root.querySelector('[data-sound]').value-1);root.querySelector('#sy-sound-next').onclick=()=>selectSound(+root.querySelector('[data-sound]').value+1);
 root.querySelector('#sy-clear-all').onclick=clearAll;
 root.querySelectorAll('[data-rled]').forEach(b=>b.onclick=()=>edAct(b.dataset.rled));
-{const cv=root.querySelector('#sy-rl-canvas'),fr=e=>{const r=cv.getBoundingClientRect();return Math.max(0,Math.min(1,(e.clientX-r.left)/Math.max(1,r.width)))};
-const put=(anchor,cur)=>{const lo=Math.min(anchor,cur),hi=Math.max(anchor,cur),a=Math.floor(lo*16+1e-9)/16;setSel(a,Math.min(1,Math.max(a+1/16,Math.ceil(hi*16-1e-9)/16)))};
+{const cv=root.querySelector('#sy-rl-canvas'),fr=e=>{const r=cv.getBoundingClientRect(),W=Math.max(1,r.width),v=Math.max(0,Math.min(1,(e.clientX-r.left)/W)),g=Math.round(v*16)/16;return Math.abs(g-v)*W<7?g:v};   // fri markering, med en liten magnet mot 16-delslinjerna
+const put=(anchor,cur)=>{const lo=Math.min(anchor,cur,.996);setSel(lo,Math.max(Math.max(anchor,cur),lo+.004))};
 cv.addEventListener('pointerdown',e=>{if(recBusy||!curAsset())return;e.preventDefault();cv.setPointerCapture(e.pointerId);const v=fr(e),s=selNow(),near=18/Math.max(1,cv.getBoundingClientRect().width);let anchor=v;if(s&&Math.abs(v-s.a)<near&&Math.abs(v-s.a)<=Math.abs(v-s.b))anchor=s.b;else if(s&&Math.abs(v-s.b)<near)anchor=s.a;selDrag={id:e.pointerId,anchor};put(anchor,v)});
 cv.addEventListener('pointermove',e=>{if(selDrag&&selDrag.id===e.pointerId)put(selDrag.anchor,fr(e))});
-const end=e=>{if(selDrag&&selDrag.id===e.pointerId)selDrag=null};cv.addEventListener('pointerup',end);cv.addEventListener('pointercancel',end)}
+const end=e=>{if(selDrag&&selDrag.id===e.pointerId){selDrag=null;const s=selNow();if(s&&s.b-s.a<.01)setSel(null)}};cv.addEventListener('pointerup',end);cv.addEventListener('pointercancel',end)}
 root.querySelector('#sy-rl-rec').onclick=recLoop;if(window.ResizeObserver)new ResizeObserver(()=>{if(state().tracks[selected].module==='rostklipp')drawLoop()}).observe(root.querySelector('#sy-rl-canvas'));root.querySelector('#sy-rl-lay').onclick=layInBar;root.querySelector('#sy-rl-reset').onclick=()=>{change(()=>{const t=state().tracks[selected];t.klfx={...R.fresh(),flytt:R.clean(t.klfx).flytt}});prepare()};
 root.querySelectorAll('[data-rlbars]').forEach(b=>b.onclick=()=>{recBars=+b.dataset.rlbars;render()});root.querySelectorAll('[data-rlparts]').forEach(b=>b.onclick=()=>setParts(+b.dataset.rlparts));
 root.querySelectorAll('[data-rlk] [data-rlv]').forEach(b=>b.onclick=()=>setFx(b.closest('[data-rlk]').dataset.rlk,+b.dataset.rlv));
