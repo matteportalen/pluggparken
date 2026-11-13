@@ -28,10 +28,10 @@ function pitch(x,st,sr=44100){const n=x.length;if(!st||n<64)return x;const r=2**
 
 /* ---------- Effekter per del ---------- */
 const HALL=['LOOP','HACK 1/8','HACK 1/16','HACK 1/32','FRYS'],GRIND=['AV','1/8','1/16','1/32'];
-const fresh=()=>({ton:0,rost:0,tune:0,rev:0,hall:0,grind:0});
-function clean(o){const f=fresh();if(!o||typeof o!=='object')return f;const int=(k,a,b)=>{if(Number.isFinite(o[k]))f[k]=Math.round(clamp(o[k],a,b))};int('ton',-12,12);int('rost',0,6);int('tune',0,3);int('rev',0,1);int('hall',0,4);int('grind',0,3);return f}
-const sig=(f,env)=>[f.ton,f.rost,f.tune,f.rev,f.hall,f.grind,env.bpm,f.tune?env.key+'/'+env.scale:''].join(',');
-const neutral=f=>!f||!(f.ton||f.rost||f.tune||f.rev||f.hall||f.grind);
+const fresh=()=>({ton:0,rost:0,tune:0,rev:0,hall:0,grind:0,flytt:0});
+function clean(o){const f=fresh();if(!o||typeof o!=='object')return f;const int=(k,a,b)=>{if(Number.isFinite(o[k]))f[k]=Math.round(clamp(o[k],a,b))};int('ton',-12,12);int('rost',0,6);int('tune',0,3);int('rev',0,1);int('hall',0,4);int('grind',0,3);int('flytt',0,15);return f}
+const sig=(f,env)=>[f.ton,f.rost,f.tune,f.rev,f.hall,f.grind,f.flytt,env.bpm,f.tune?env.key+'/'+env.scale:''].join(',');
+const neutral=f=>!f||!(f.ton||f.rost||f.tune||f.rev||f.hall||f.grind||f.flytt);
 function slump(seed){let s=seed>>>0||1;return()=>{s^=s<<13;s>>>=0;s^=s>>>17;s^=s<<5;s>>>=0;return s/4294967296}}
 /* FRYS: korta korn runt delens starkaste ögonblick läggs om lott, så att rösten står still som en ton */
 function frys(ch,sr){const n=ch[0].length,g=Math.round(sr*.07);if(n<g*2)return ch;const W=Math.round(sr*.05);let best=0,bi=0,e=0;const x=ch[0];
@@ -53,7 +53,7 @@ function view(asset,f,env){if(!asset)return null;f=clean(f);if(neutral(f))return
   if(!ch){ch=[];for(let c=0;c<b.numberOfChannels;c++){let x=b.getChannelData(c);if(f.tune&&env.autoTune)x=env.autoTune(x,sr,f.tune);if(f.ton)x=pitch(x,f.ton,sr);if(f.rost&&env.rost)x=env.rost(x,f.rost,sr);ch.push(x)}
     let pk=0;ch.forEach(x=>{for(let i=0;i<x.length;i++){const a=Math.abs(x[i]);if(a>pk)pk=a}});if(pk>.98)ch=ch.map(x=>x.map(s=>s*.98/pk));
     asset.hela.set(hel,ch);while(asset.hela.size>3)asset.hela.delete(asset.hela.keys().next().value)}
-  const data=ch;v={id:asset.id,name:asset.name,cuts:asset.cuts,cache:new Map(),buffer:{length:b.length,sampleRate:sr,numberOfChannels:data.length,duration:b.duration,getChannelData:c=>data[c]},post:(parts,rate)=>post(parts,rate,f,env.bpm)};
+  const k=Math.round(b.length*f.flytt/16),data=k?ch.map(x=>{const y=new Float32Array(x.length);y.set(x.subarray(x.length-k),0);y.set(x.subarray(0,x.length-k),k);return y}):ch;v={id:asset.id,name:asset.name,cuts:asset.cuts,cache:new Map(),buffer:{length:b.length,sampleRate:sr,numberOfChannels:data.length,duration:b.duration,getChannelData:c=>data[c]},post:(parts,rate)=>post(parts,rate,f,env.bpm)};
   asset.views.set(key,v);while(asset.views.size>4)asset.views.delete(asset.views.keys().next().value);return v}
 const ready=(asset,f,env)=>!asset||neutral(clean(f))||!!asset.views?.has(sig(clean(f),env));
 

@@ -315,3 +315,12 @@ Lärarens önskan: snabbt spela in en loop i synten, göra rösten mörk eller l
 ### Röstloopen utan nedräkning (13 nov 2026)
 
 Lärarens önskan: Röstloopens 🎤 SPELA IN ska börja spela in direkt när knappen trycks, utan fyra räkningar. `syntMikRec` i `index.html` startar nu inspelningen 20 ms efter knapptryck, inga klick och ingen väntan på taktgräns, även när sekvenseraren spelar (då kan inspelningen hamna mitt i en takt). Vågrutan visar SPELAR IN direkt; räkningssiffrorna är borta. Hjälptexten i SÅ SPELAR DU är ändrad. Loopstationens fyra räkningar är oförändrade. Testat i `skript/test-synt-rostloop.cjs` med påhittad mikrofon: inspelningen startar inom 1,5 s, ingen siffra visas.
+
+### Röstloop: markera, radera, beskär och flytta (13 nov 2026)
+
+Lärarens önskan: samma redigering som i vanliga loopstationen. Raden `.sy-rl-edit` mellan vågen och reglagen: MARKERA (ALLT, 1:A HALVAN, 2:A HALVAN, AVMARKERA), REDIGERA (RADERA, BESKÄR), FLYTTA (◀ ▶) och ↶ ÅNGRA (klickar sidans ↶). Dra över vågen markerar; markeringen snäpper utåt till 16-delar (ett tryck markerar en 16-del, kanterna kan dras om). Markeringen hör till `clipId` och försvinner när klippet byts.
+
+- **RADERA** och **BESKÄR** (`editClip` i `synt.js`) skapar en ny tillgång med `PPSyntKlipp.add`; originalet ligger kvar i minnet så ↶ återställer det. 4 ms kanter (RADERA ramp in i det tystade, BESKÄR in/ut). BESKÄR delar om i lika många delar som förut, räknar `bars` (kvart till 8 takter, annars 0 och en varning om otakt) och kräver minst 0,2 s. Bygger på det råa ljudet; TON, RÖST, autotune och övriga effekter ligger kvar som inställningar och räknas om.
+- **FLYTTA** är `klfx.flytt` (0–15 sextondelar, `rostloop.js`): vyn roterar ljudet efter tonhöjd och röst, utan kopia och utan minne. Följer med i delningskod och projektfil. NOLLSTÄLL EFFEKTER rör inte flytten. RADERA/BESKÄR bakar in en flytt (markeringen avser det man ser) och nollställer den.
+- Efter BESKÄR och vid ändrade antal delar delas loopen jämnt; egna gränser från JUSTERA KLIPP går förlorade, RADERA behåller dem.
+- Testat (`test-synt-rostloop.cjs`): markering snäpper till 0,40–0,80 s, RADERA ger tystnad där och orört ljud utanför, originalet orört, ångra; BESKÄR av första halvan ger halva längden, 8 delar, 0,5 takt; FLYTTA fyra steg = en kvart, samma längd; BESKÄR efter FLYTTA bakar in flytten; mobil utan sidledsscroll. Inte lyssnat på. Dragmarkering med riktig touch på iPad är inte provad.
