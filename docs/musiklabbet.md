@@ -27,7 +27,7 @@ localStorage: `pluggparken-trummaskin` (sparade rytmer), `-mic`, `-fav`, `-vik`.
 - **Tre nivåer av sparande:** delningslänken och 💾 Spara rytm bär rytm, mönster, låt, melodi, ackord, synt och pedalrader. Projektfilen bär dessutom loopar, egna ljud, röstklipp, rattrörelser och mixer. Säg i texten vad som inte följer med.
 - **Allt som hörs live ska låta likadant i mp3-exporten.** Exporten bygger om ljudkedjan i en `OfflineAudioContext`, så nya ljudkällor och effekter måste gå att skapa i valfri kontext. Undantag som är bara live: TAPE STOP och BUILD-UP-knappen (🚀-raden i låten exporteras).
 - **Ekokansling är alltid avstängd** för mikrofonen (den får webbläsaren att gå över till samtalsläge och förstöra ljudet i hörlurarna).
-- **Alltid fyra räkningar före inspelning.** REC väcker inte stoppade loopar.
+- **Alltid fyra räkningar före inspelning.** REC väcker inte stoppade loopar. Undantag: Röstloopen i synten startar direkt utan räkningar (lärarens beslut 13 nov 2026).
 - **Tempot låses medan det finns loopar.**
 - **Ljud start kräver ett tryck**, och allt tystnar vid stopp, paus och när fliken göms.
 - **Sidan är högst 1 240 px bred** (full bredd prövades och valdes bort).
@@ -54,7 +54,7 @@ Ljuden är bara mätta (nivå, tonhöjd, inga NaN), aldrig avlyssnade. Skriv all
 - **Effekter:** pedalraderna öppnas som en panel från sidan (från höger på dator, nedifrån på mobil), fyra platser per källa. Den ligger inte i sidans flöde.
 - **Synt SM-4:** fyra spår A–D, stor LJUD-ratt, fyra huvudreglage (KLANG, FILTER, RÖRELSE, RYMD), resten under Fler inställningar. En ton per steg. Padsen är tonpads, de sexton stegen ligger på en egen rad under klaviaturen. Bara synten ser ut som ett hårdvaruinstrument, inte hela Musiklabbet. Samplepaketen ligger i synten; den gamla samplepanelen är borttagen.
 - **Röstklipp:** en kopia av loopen, originalet ändras inte. Klippet loopar medan paden hålls och tystnar vid släpp.
-- **Röstloop** (nov 2026, syntens egen loopstation; panelen visas när spåret har ljudet Röstklipp): 🎤 SPELA IN direkt i synten (1, 2 eller 4 takter, fyra räkningar, stannar själv), delarna hamnar genast på padsen. TON (mörk/ljus ±12, samma fart), RÖST, AUTOTUNE, NÄR PADEN HÅLLS (LOOP, HACK 1/8–1/32, FRYS), GRIND, BAKLÄNGES, DELAR 4/8/16 och LÄGG I TAKT (delarna på stegraden). Tangenterna spelar delarna i tur och ordning, som förut. Effekterna ligger i spårets `klfx` och räknas ovanpå originalet, som aldrig ändras; de följer med i delningslänk och projektfil, ljudet bara i projektfilen. Vägen från loopstationen (✂) finns kvar och nollställer effekterna.
+- **Röstloop** (nov 2026, syntens egen loopstation; panelen visas när spåret har ljudet Röstklipp): 🎤 SPELA IN direkt i synten (1, 2 eller 4 takter, ingen nedräkning: startar direkt och stannar själv), delarna hamnar genast på padsen. TON (mörk/ljus ±12, samma fart), RÖST, AUTOTUNE, NÄR PADEN HÅLLS (LOOP, HACK 1/8–1/32, FRYS), GRIND, BAKLÄNGES, DELAR 4/8/16 och LÄGG I TAKT (delarna på stegraden). Tangenterna spelar delarna i tur och ordning, som förut. Effekterna ligger i spårets `klfx` och räknas ovanpå originalet, som aldrig ändras; de följer med i delningslänk och projektfil, ljudet bara i projektfilen. Vägen från loopstationen (✂) finns kvar och nollställer effekterna.
 - **Tonhöjd utan tempoändring** görs med egen kod (WSOLA) i `rostloop.js`. Inget bibliotek: de bra som finns har licenser som inte passar. Att behålla röstkaraktären (formant) är fortfarande bortvalt.
 - **Minimera-knappen** sitter uppe i högra hörnet på varje panel, gul och orange. Mixern har ingen.
 

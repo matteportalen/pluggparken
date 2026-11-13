@@ -1012,9 +1012,7 @@ function syntRecData(inp,cap){const r=SREC;if(!r)return;const sr=ctx.sampleRate,
   const take=Math.min(n-from,r.len-r.w);r.buf.set(inp.subarray(from,from+take),r.w);r.w+=take;if(r.w>=r.len){SREC=null;r.klar(r.buf)}}
 function syntRecAv(){const r=SREC;SREC=null;if(r)r.klar(null)}
 async function syntMikRec(takter){if(SREC){syntRecAv();return null}if(!(await micStart()))return null;if(SREC)return null;
-  const bt=60/S.bpm,sr=ctx.sampleRate,need=4*bt+.1,bd=barDur();let t=ctx.currentTime+4*bt+.15;
-  if(spelar){const b0=lastBar||ctx.currentTime;t=b0+Math.ceil((ctx.currentTime+need-b0)/bd)*bd}
-  for(let q=0;q<4;q++)klick(t-(4-q)*bt,q===0);const len=Math.round(takter*bd*sr);
+  const bt=60/S.bpm,sr=ctx.sampleRate,bd=barDur(),t=ctx.currentTime+.02,len=Math.round(takter*bd*sr);   // ingen nedräkning: inspelningen startar direkt
   return new Promise(klar=>{SREC={t,bt,len,w:0,go:false,buf:new Float32Array(len),klar}})}
 function mikData(inp,cap){padRecData(inp,cap);syntRecData(inp,cap);const n=inp.length,sr=ctx.sampleRate;
   LP.forEach(l=>{const r=l.rec;if(!r)return;let from=0;

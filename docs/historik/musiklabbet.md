@@ -311,3 +311,7 @@ Lärarens önskan: snabbt spela in en loop i synten, göra rösten mörk eller l
 - **Inte testat**: riktig mikrofon, hörlurar, Bluetooth, iPad, Chromebook. Hur det låter har ingen lyssnat på. Byts tonart eller skala med AUTOTUNE på räknas rösten om vid nästa ton, vilket kan ge ett kort hack.
 - **Inte byggt, möjligt senare**: dela vid ljudstarter i stället för lika delar, tangenterna som sampler (en del i olika tonhöjd), längre loopar i LÄGG I TAKT över flera mönster.
 
+
+### Röstloopen utan nedräkning (13 nov 2026)
+
+Lärarens önskan: Röstloopens 🎤 SPELA IN ska börja spela in direkt när knappen trycks, utan fyra räkningar. `syntMikRec` i `index.html` startar nu inspelningen 20 ms efter knapptryck, inga klick och ingen väntan på taktgräns, även när sekvenseraren spelar (då kan inspelningen hamna mitt i en takt). Vågrutan visar SPELAR IN direkt; räkningssiffrorna är borta. Hjälptexten i SÅ SPELAR DU är ändrad. Loopstationens fyra räkningar är oförändrade. Testat i `skript/test-synt-rostloop.cjs` med påhittad mikrofon: inspelningen startar inom 1,5 s, ingen siffra visas.
