@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<script src="../tema.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Brobygget – Pluggparken</title>
+<meta name="description" content="Brobygget: bygg en bro av väg, trä, stål och rep och testa hur tunga fordon den tål. Se var kraften blir störst och varför trianglar är starka.">
+<link rel="canonical" href="https://pluggparken.se/brobygget/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Pluggparken">
+<meta property="og:locale" content="sv_SE">
+<meta property="og:title" content="Brobygget – Pluggparken">
+<meta property="og:description" content="Bygg en bro och testa hur mycket den tål: cykel, bil, lastbil och till sist en dinosaurie.">
+<meta property="og:url" content="https://pluggparken.se/brobygget/">
+<meta property="og:image" content="https://pluggparken.se/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#1F3A35">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/apple-touch-icon.png" sizes="180x180">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+:root{
+  --bg:#EAF3FF; --ink:#1D2B53; --muted:#56668F; --card:#FFFFFF; --line:#C6D6F2;
+  --good:#1E9E5E; --good-dark:#157548; --bad:#E5484D; --accent:#3D5AFE; --gold:#F2B707;
+  --font:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:1040px;margin:0 auto;padding:12px 16px 32px}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;border:0;background:none}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+[hidden]{display:none!important}
+#home{max-width:760px;margin:0 auto}
+.hero{display:flex;gap:16px;align-items:center;background:linear-gradient(135deg,#F2932F,#D9601A);color:#fff;border-radius:24px;padding:18px;box-shadow:0 5px 0 #9C3F0C;margin:6px 0 14px}
+.hero .hk{flex:none;width:118px;height:78px;border-radius:14px;overflow:hidden;box-shadow:0 3px 0 rgba(0,0,0,.18)}
+.hero .hk svg{display:block;width:100%;height:100%}
+.hero h1{margin:0;font-size:clamp(1.7rem,6vw,2.3rem);line-height:1.05}
+.hero p{margin:6px 0 0;font-weight:600;opacity:.97;line-height:1.25}
+.sa{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.sa div{background:var(--card,#fff);border-radius:16px;box-shadow:0 4px 0 var(--line);padding:10px 8px;text-align:center;font-weight:700;font-size:.86rem;line-height:1.2}
+.sa span{display:block;font-size:1.7rem;line-height:1.1;margin-bottom:2px}
+.niv{display:grid;gap:10px}
+.niv button{display:flex;align-items:center;gap:14px;background:var(--card,#fff);border-radius:18px;padding:12px 14px;box-shadow:0 4px 0 var(--line);text-align:left;width:100%}
+.niv button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.niv .nr{flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-weight:800;font-size:1.4rem;color:#fff}
+.niv b{display:block;font-size:1.12rem;line-height:1.15}
+.niv small{display:block;color:var(--muted);font-weight:600;font-size:.88rem;line-height:1.25}
+.niv .hoger{margin-left:auto;flex:none;text-align:right}
+.niv .st{color:var(--gold);font-size:1.15rem;letter-spacing:1px;display:block;line-height:1.1}
+.niv .st .off{color:var(--line)}
+.niv .rek{display:block;font-size:.76rem;font-weight:800;color:var(--muted);white-space:nowrap}
+.not{color:var(--muted);font-size:.85rem;font-weight:600;margin:14px 2px 0;line-height:1.3}
+.topp{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:2px 0 8px}
+.topp .upp{flex:1 1 260px;background:var(--card,#fff);border-radius:16px;box-shadow:0 4px 0 var(--line);padding:8px 12px}
+.topp .upp b{display:block;font-size:.78rem;color:var(--muted);line-height:1.1}
+.topp .upp p{margin:2px 0 0;font-weight:800;font-size:1.02rem;line-height:1.22}
+.kassa{flex:0 0 auto;min-width:150px;background:var(--card,#fff);border-radius:16px;box-shadow:0 4px 0 var(--line);padding:8px 12px;font-weight:800;font-size:.95rem;line-height:1.15}
+.kassa i{display:block;height:8px;border-radius:5px;background:#E6ECF8;margin-top:5px;overflow:hidden}
+.kassa u{display:block;height:100%;background:var(--good);border-radius:5px;transition:width .2s}
+.kassa.slut u{background:var(--bad)}.kassa.skak{animation:skak .35s}
+@keyframes skak{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.scen{position:relative;border-radius:22px;overflow:hidden;box-shadow:0 4px 0 #0B1630;background:#BFE6FF;line-height:0}
+.scen canvas{display:block;width:100%;touch-action:none;cursor:crosshair}
+.scen.prov canvas{cursor:default}
+.skylt{position:absolute;left:50%;top:10px;transform:translateX(-50%);background:rgba(255,255,255,.94);border-radius:14px;padding:6px 14px;font-weight:800;font-size:.98rem;line-height:1.25;box-shadow:0 3px 0 rgba(29,43,83,.18);white-space:nowrap;max-width:94%;overflow:hidden;text-overflow:ellipsis;pointer-events:none}
+.verk{display:grid;grid-template-columns:repeat(auto-fit,minmax(74px,1fr));gap:8px;margin-top:10px}
+.verk button{background:var(--card,#fff);border-radius:14px;box-shadow:0 4px 0 var(--line);min-height:58px;padding:6px 4px;font-weight:800;font-size:.9rem;line-height:1.1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
+.verk button small{font-size:.7rem;color:var(--muted);font-weight:700}
+.verk button i{display:block;width:44px;height:8px;border-radius:4px;background:var(--c);box-shadow:inset 0 -2px 0 rgba(0,0,0,.22)}
+.verk button .em{font-size:1.25rem;line-height:1}
+.verk button.v{background:var(--accent);color:#fff;box-shadow:0 4px 0 #2A3FB8}.verk button.v small{color:#DCE3FF}
+.verk button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.verk button:disabled{opacity:.4;pointer-events:none}
+.rad{display:flex;gap:10px;align-items:stretch;margin-top:10px;flex-wrap:wrap}
+.expl{flex:1 1 260px;background:#FFF4D6;border-radius:14px;padding:9px 12px;font-weight:700;font-size:.95rem;line-height:1.3}
+.expl.ok{background:#DDF5E7}.expl.fel{background:#FFE9EC}
+.expl .stj{display:block;font-size:1.7rem;letter-spacing:4px;color:var(--gold);line-height:1.1}.expl .stj .off{color:#E3D9B5}
+.stor{flex:0 0 auto;background:var(--good);color:#fff;border-radius:18px;padding:10px 26px;font-weight:800;font-size:1.2rem;box-shadow:0 5px 0 var(--good-dark);min-height:54px}
+.stor:active{transform:translateY(3px);box-shadow:0 2px 0 var(--good-dark)}
+.stor.bla{background:var(--accent);box-shadow:0 5px 0 #2A3FB8}
+.stor.vit{background:var(--card,#fff);color:var(--ink);box-shadow:0 5px 0 var(--line)}
+.konvoj{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.konvoj div{flex:1 1 64px;background:var(--card,#fff);border-radius:12px;box-shadow:0 3px 0 var(--line);padding:4px 2px;text-align:center;font-weight:800;font-size:.72rem;line-height:1.15;opacity:.55}
+.konvoj span{display:block;font-size:1.35rem;line-height:1.15}
+.konvoj .nu{opacity:1;box-shadow:0 0 0 3px var(--gold)}.konvoj .ok{opacity:1;background:#DDF5E7;color:var(--good-dark)}.konvoj .fel{opacity:1;background:#FFE9EC;color:#B4232A}
+.konvoj .mal{border-bottom:4px solid var(--accent)}
+.legend{display:flex;align-items:center;gap:8px;font-weight:700;font-size:.8rem;color:var(--muted);margin-top:8px}
+.legend i{flex:0 0 120px;height:10px;border-radius:5px;background:linear-gradient(90deg,#2BB673,#F2B707,#E5484D)}
+.vand{display:none;margin:8px 2px 0;font-weight:700;font-size:.85rem;color:var(--muted)}
+@media(max-width:560px) and (orientation:portrait){.vand{display:block}}
+.verk button i{margin-bottom:3px}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:50}
+@media(max-width:560px){.hero .hk{width:88px;height:64px}.hero{gap:12px;padding:14px}.sa div{font-size:.76rem;padding:8px 4px}.skylt{font-size:.82rem;top:6px}.stor{flex:1 1 auto;padding:10px 14px;font-size:1.1rem}.kassa{flex:1 1 auto}.verk{grid-template-columns:repeat(auto-fit,minmax(62px,1fr));gap:6px}.verk button{font-size:.8rem;min-height:54px}.verk button i{width:34px}}
+@media(prefers-reduced-motion:reduce){.kassa.skak{animation:none}}
+</style>
+</head>
+<body>
+<script src="../ljud.js"></script>
+<script src="../huvud.js" data-titel="Brobygget" data-ikon="🌉"></script>
+<main class="wrap">
+<section class="screen" id="home">
+  <div class="hero">
+    <div class="hk" aria-hidden="true"><svg viewBox="0 0 236 156"><rect width="236" height="156" fill="#CFEBFF"/><path d="M0 118q30-8 59 0t59 0 59 0 59 0v38H0z" fill="#2F8FD8"/><path d="M0 70h44v86H0zM192 70h44v86h-44z" fill="#9A6B43"/><path d="M0 64h46v10H0zM190 64h46v10h-46z" fill="#4CAF6A"/><g fill="none" stroke="#C98B4E" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"><path d="M44 70l25-36 25 36 24-36 24 36 25-36 25 36M69 34h98"/></g><path d="M40 70h156" stroke="#4A5263" stroke-width="10" stroke-linecap="round"/><g fill="#2B2F3A"><circle cx="69" cy="34" r="5"/><circle cx="118" cy="34" r="5"/><circle cx="167" cy="34" r="5"/><circle cx="94" cy="70" r="5"/><circle cx="142" cy="70" r="5"/></g></svg></div>
+    <div><h1>Brobygget</h1><p>Bygg en bro. Hur tungt kan den bära innan den brister?</p></div>
+  </div>
+  <div class="sa" aria-label="Så gör du"><div><span>👆</span>Dra balkar mellan punkterna</div><div><span>🔺</span>Bygg trianglar, de är starka</div><div><span>🚚</span>Testa: tyngre och tyngre fordon</div></div>
+  <div class="niv" id="niv"></div>
+  <p class="not">Krafterna räknas ut på riktigt, men bron är förenklad: balkarna kan dras ut och tryckas ihop, inte böjas. Riktiga broar räknas av ingenjörer.</p>
+</section>
+<section class="screen" id="game" hidden>
+  <button type="button" data-home hidden tabindex="-1" aria-hidden="true" onclick="hem()"></button>
+  <div class="topp"><div class="upp"><b id="uRub"></b><p id="uTxt"></p></div><div class="kassa" id="kassa"><span id="kTxt"></span><i><u id="kBar"></u></i></div></div>
+  <div class="scen" id="scen"><canvas id="cv" aria-label="Ravinen där du bygger din bro. Dra mellan punkterna för att lägga balkar."></canvas><div class="skylt" id="skylt" hidden></div></div>
+  <p class="vand" id="vand" hidden>📱 Vänd mobilen på bredden, så blir bron större.</p>
+  <div id="byggUI">
+    <div class="verk" id="verk"></div>
+    <div class="rad"><div class="expl" id="expl"></div><button class="stor" id="bTesta">▶ Testa bron</button></div>
+  </div>
+  <div id="provUI" hidden>
+    <div class="konvoj" id="konvoj"></div>
+    <div class="legend"><span>Kraft i balkarna:</span><span>lugn</span><i></i><span>nära att brista</span></div>
+    <div class="rad"><div class="expl" id="pExpl"></div><button class="stor vit" id="bFort">⏩ Snabbare</button><button class="stor bla" id="bBygg">🔨 Bygg vidare</button><button class="stor" id="bNasta" hidden>Nästa bro ▶</button></div>
+  </div>
+</section>
+</main>
+<canvas id="fx" hidden></canvas>
+<script>
+const $=id=>document.getElementById(id);
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const KEY="mattespel-brobygget-v1";
+const data=(()=>{try{return Object.assign({stars:{},rek:{},bro:{}},JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){return{stars:{},rek:{},bro:{}}}})();
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}if(window.MPStjarnor)MPStjarnor()};
+const reduced=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
+const ljud=(n,a)=>{window.Ljud&&Ljud[n]&&Ljud[n](a)};
+/* ======================= MOTORN (se docs/brobygget.md) =======================
+   Leder är punkter med massa, balkar håller avståndet mellan två leder (XPBD med små tidssteg).
+   Kraften i varje balk läses ur lösaren och jämförs med materialets styrka: går den över brister balken.
+   Enheter: meter, kilo, newton, sekunder. y pekar nedåt. Inget i motorn rör sidan, så den går att köra i node. */
+const MAT={
+  vag:{namn:"Väg",pris:20,kg:60,styrka:150e3,ea:1e8,max:3.2,farg:"#4A5263"},
+  tra:{namn:"Trä",pris:10,kg:20,styrka:100e3,ea:6e6,max:3.2,farg:"#C98B4E"},
+  stal:{namn:"Stål",pris:30,kg:45,styrka:420e3,ea:2.4e7,max:3.2,farg:"#8FA3B8"},
+  rep:{namn:"Rep",pris:8,kg:4,styrka:260e3,ea:8e6,max:5.2,farg:"#E9D8A6",rep:true}};
+const FORDON=[
+  {e:"🚲",namn:"cykeln",en:"En cykel",m:100,ax:.9,r:.22,st:1.25},
+  {e:"🛵",namn:"mopeden",en:"En moped",m:300,ax:1,r:.22,st:1.35},
+  {e:"🚗",namn:"bilen",en:"En bil",m:1500,ax:1.5,r:.24,st:1.9},
+  {e:"🚐",namn:"minibussen",en:"En minibuss",m:3000,ax:1.7,r:.25,st:2.1},
+  {e:"🐘",namn:"elefanten",en:"En elefant",m:5000,ax:1.4,r:.25,st:2.2,djur:true},
+  {e:"🚚",namn:"lastbilen",en:"En lastbil",m:9000,ax:1.9,r:.27,st:2.4},
+  {e:"🚌",namn:"bussen",en:"En buss",m:14000,ax:2.2,r:.27,st:2.7},
+  {e:"🚛",namn:"långtradaren",en:"En långtradare",m:25000,ax:2.5,r:.28,st:3},
+  {e:"🦕",namn:"dinosaurien",en:"En dinosaurie",m:40000,ax:2.2,r:.3,st:3.2,djur:true}];
+const GRAV=9.81,DT=1/60,SUB=16,FART=2.4;
+const vikt=m=>m>=1000?(m/1000).toString().replace(".",",")+" ton":m+" kg";
+const kostnad=bal=>bal.reduce((s,b)=>s+Math.round(Math.hypot(b[2]-b[0],b[3]-b[1])*MAT[b[4]].pris),0);
+/* balkar: [[x1,y1,x2,y2,material], ...]; nivå: {gap,djup,ank:[[x,y],...]} */
+function nyVarld(niv,bal){const W={niv,p:[],b:[],seg:[],ford:null,t:0,brott:[],idx:new Map()};
+  const led=(x,y)=>{const k=x+","+y;if(!W.idx.has(k)){W.idx.set(k,W.p.length);W.p.push({x,y,px:x,py:y,vx:0,vy:0,m:4,w:0,fast:false,x0:x,y0:y})}return W.idx.get(k)};
+  niv.ank.forEach(a=>{W.p[led(a[0],a[1])].fast=true});
+  bal.forEach((q,n)=>{const M=MAT[q[4]],i=led(q[0],q[1]),j=led(q[2],q[3]),L=Math.hypot(q[2]-q[0],q[3]-q[1]);if(L<1e-6)return;
+    W.p[i].m+=M.kg*L/2;W.p[j].m+=M.kg*L/2;W.b.push({i,j,L,mat:q[4],al:L/M.ea,styrka:M.styrka,rep:!!M.rep,vag:q[4]==="vag",hel:true,T:0,acc:0,max:0,n})});
+  W.p.forEach(p=>{p.w=p.fast?0:1/p.m});
+  W.seg=[{ax:-9,ay:0,bx:0,by:0},{ax:niv.gap,ay:0,bx:niv.gap+9,by:0}];return W}
+function nyttFordon(W,F){const x=-1.2,mk=dx=>({x:x+dx,y:-F.r,px:x+dx,py:-F.r,vx:0,vy:0,m:F.m/2,w:2/F.m,r:F.r,kont:false,tx:1,ty:0});
+  W.ford={F,a:mk(-F.ax),b:mk(0),t0:W.t,klar:false,plums:false}}
+function narmast(px,py,ax,ay,bx,by){const dx=bx-ax,dy=by-ay,l2=dx*dx+dy*dy;let t=l2>0?((px-ax)*dx+(py-ay)*dy)/l2:0;t=t<0?0:t>1?1:t;return{t,x:ax+dx*t,y:ay+dy*t}}
+function steg(W,damp){const h=DT/SUB,P=W.p,f=W.ford,hj=f?[f.a,f.b]:[],d=1-(damp||.6)*h;
+  for(const b of W.b)b.acc=0;
+  for(let s=0;s<SUB;s++){
+    for(const p of P){if(!p.w)continue;p.vy+=GRAV*h;p.vx*=d;p.vy*=d;p.px=p.x;p.py=p.y;p.x+=p.vx*h;p.y+=p.vy*h}
+    for(const q of hj){q.vy+=GRAV*h;q.px=q.x;q.py=q.y;q.x+=q.vx*h;q.y+=q.vy*h;q.kont=false}
+    for(const b of W.b){if(!b.hel)continue;const A=P[b.i],B=P[b.j],dx=B.x-A.x,dy=B.y-A.y,l=Math.hypot(dx,dy)||1e-9,C=l-b.L;if(b.rep&&C<0)continue;const ws=A.w+B.w;if(!ws)continue;
+      const lam=-C/(ws+b.al/(h*h)),nx=dx/l,ny=dy/l;A.x-=A.w*lam*nx;A.y-=A.w*lam*ny;B.x+=B.w*lam*nx;B.y+=B.w*lam*ny;b.acc-=lam/(h*h)}
+    if(f){const A=f.a,B=f.b,dx=B.x-A.x,dy=B.y-A.y,l=Math.hypot(dx,dy)||1e-9,lam=-(l-f.F.ax)/(A.w+B.w),nx=dx/l,ny=dy/l;A.x-=A.w*lam*nx;A.y-=A.w*lam*ny;B.x+=B.w*lam*nx;B.y+=B.w*lam*ny;
+      for(const q of hj){
+        for(const g of W.seg){const c=narmast(q.x,q.y,g.ax,g.ay,g.bx,g.by),ex=q.x-c.x,ey=q.y-c.y,di=Math.hypot(ex,ey);if(di<q.r&&ey<=0.02){const nx2=di>1e-6?ex/di:0,ny2=di>1e-6?ey/di:-1;q.x+=nx2*(q.r-di);q.y+=ny2*(q.r-di);q.kont=true;q.tx=1;q.ty=0}}
+        for(const b of W.b){if(!b.hel||!b.vag)continue;const A2=P[b.i],B2=P[b.j],c=narmast(q.x,q.y,A2.x,A2.y,B2.x,B2.y),ex=q.x-c.x,ey=q.y-c.y,di=Math.hypot(ex,ey);if(di>=q.r)continue;
+          const nx2=di>1e-6?ex/di:0,ny2=di>1e-6?ey/di:-1,wa=(1-c.t),wb=c.t,ws=q.w+wa*wa*A2.w+wb*wb*B2.w,lm=(q.r-di)/ws;
+          q.x+=q.w*lm*nx2;q.y+=q.w*lm*ny2;A2.x-=A2.w*wa*lm*nx2;A2.y-=A2.w*wa*lm*ny2;B2.x-=B2.w*wb*lm*nx2;B2.y-=B2.w*wb*lm*ny2;
+          q.kont=true;let tx=B2.x-A2.x,ty=B2.y-A2.y;const tl=Math.hypot(tx,ty)||1;tx/=tl;ty/=tl;if(tx<0){tx=-tx;ty=-ty}q.tx=tx;q.ty=ty}}}
+    for(const p of P){if(!p.w)continue;p.vx=(p.x-p.px)/h;p.vy=(p.y-p.py)/h}
+    for(const q of hj){q.vx=(q.x-q.px)/h;q.vy=(q.y-q.py)/h;if(q.kont){const vt=q.vx*q.tx+q.vy*q.ty,dv=Math.max(-8*h,Math.min(8*h,FART-vt));q.vx+=dv*q.tx;q.vy+=dv*q.ty}}}
+  let varst=null;for(const b of W.b){if(!b.hel)continue;b.T+=(b.acc/SUB-b.T)*.35;const r=Math.abs(b.T)/b.styrka;if(r>b.max)b.max=r;if(r>1&&(!varst||r>varst.r))varst={b,r}}
+  if(varst){varst.b.hel=false;W.brott.push({n:varst.b.n,t:W.t,T:varst.b.T,x:(P[varst.b.i].x+P[varst.b.j].x)/2,y:(P[varst.b.i].y+P[varst.b.j].y)/2})}
+  if(f&&!f.klar&&!f.plums){if(f.a.x>W.niv.gap+.6&&f.a.kont)f.klar=true;else if(Math.max(f.a.y,f.b.y)>W.niv.djup-.1)f.plums=true}
+  W.t+=DT}
+/* Kör ett prov utan att rita: bron får först sätta sig, sedan kör fordonen i tur och ordning, tyngre och tyngre. */
+function prov(niv,bal,fran,max){const W=nyVarld(niv,bal);for(let i=0;i<90;i++)steg(W,6);if(W.brott.length)return{klarade:-1,sjalv:true,W};
+  let klarade=-1;for(let k=fran;k<FORDON.length&&k<=(max==null?99:max);k++){nyttFordon(W,FORDON[k]);let n=0;while(!W.ford.klar&&!W.ford.plums&&n++<60*40)steg(W);if(!W.ford.klar)return{klarade,stopp:k,fast:!W.ford.plums,W};klarade=k;for(let i=0;i<30;i++)steg(W)}
+  return{klarade,W}}
+
+/* ======================= NIVÅER ======================= */
+const NIV=[null,
+ {namn:"Bäcken",gap:4,djup:3.2,ank:[[0,0],[4,0],[0,2],[4,2]],mat:["vag","tra"],kr:200,mal:1,col:"#2BA8E8",txt:"En liten bäck. Dra väg från kant till kant.",tips:"Dra från en grå fästpunkt till nästa punkt. Bygg väg hela vägen över."},
+ {namn:"Bussbron",gap:6,djup:3.2,ank:[[0,0],[6,0],[0,2],[6,2]],mat:["vag","tra"],kr:320,mal:3,col:"#2BB673",txt:"Minibussen är tung. Vägen behöver stöttor.",tips:"Bara väg räcker inte nu. Dra trä från fästpunkterna i bergväggen snett upp till vägen, så att det blir trianglar."},
+ {namn:"Stenen",gap:8,djup:3.2,ank:[[0,0],[8,0],[4,2]],mat:["vag","tra"],kr:500,mal:4,col:"#F2932F",txt:"En sten mitt i ån kan bära bron. Elefanten ska över.",tips:"Stenen i mitten har en fästpunkt. Bygg stöttor från den, som en solfjäder upp mot vägen."},
+ {namn:"Ravinen",gap:8,djup:3.2,ank:[[0,0],[8,0],[0,2],[8,2]],mat:["vag","tra"],kr:650,mal:4,col:"#7B61FF",txt:"Djupt och brett. Nu behövs många trianglar.",tips:"Bygg en rad trianglar över eller under vägen. Varje led ska sitta ihop med minst två balkar."},
+ {namn:"Stålbron",gap:10,djup:3.2,ank:[[0,0],[10,0],[0,2],[10,2]],mat:["vag","tra","stal"],kr:1150,mal:5,col:"#5B6B7E",txt:"Stål är starkt men dyrt. Lastbilen ska över.",tips:"Använd stål där kraften är störst. Testa först, och byt sedan ut de balkar som blev röda."},
+ {namn:"Hängbron",gap:12,djup:3.2,ank:[[0,0],[12,0],[0,-3],[12,-3]],mat:["vag","tra","stal","rep"],kr:800,mal:3,col:"#D9601A",txt:"Häng vägen i rep från de höga tornen.",tips:"Rep kan vara långa, men de håller bara när de dras. Dra rep från tornens toppar ner till vägen."},
+ {namn:"Rekordbron",gap:10,djup:3.2,ank:[[0,0],[10,0],[0,2],[10,2],[0,-3],[10,-3]],mat:["vag","tra","stal","rep"],kr:1500,mal:6,col:"#E5484D",txt:"Fritt fram. Klarar din bro dinosaurien?",tips:"Här finns allt. Bygg din starkaste bro och se hur långt den bär."}];
+const ANT=NIV.length-1,YT=-4.4,YMIN=-4;
+const stjHtml=n=>[1,2,3].map(i=>i<=n?"★":'<span class="off">★</span>').join("");
+const stor=s=>s.charAt(0).toUpperCase()+s.slice(1);
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id)}
+function hem(){stoppa();$("niv").innerHTML=NIV.slice(1).map((n,i)=>{const l=i+1,r=data.rek[l];return `<button data-l="${l}"><span class="nr" style="background:${n.col}">${l}</span><span><b>${n.namn}</b><small>${n.txt}</small></span><span class="hoger"><span class="st">${stjHtml(data.stars[l]||0)}</span>${r!=null&&FORDON[r]?`<span class="rek">Bar ${FORDON[r].e} ${vikt(FORDON[r].m)}</span>`:""}</span></button>`}).join("");show("home")}
+$("niv").onclick=e=>{const b=e.target.closest("[data-l]");if(b)starta(+b.dataset.l)};
+
+/* ======================= SPELET ======================= */
+let G=null,raf=0,V={s:40,ox:0,oy:0,d:1},part=[];
+const cv=$("cv"),ctx=cv.getContext("2d");
+const X=x=>V.ox+x*V.s,Y=y=>V.oy+y*V.s;
+function storlek(){if(!G)return;const r=cv.getBoundingClientRect(),d=Math.min(2,devicePixelRatio||1),w=Math.max(200,r.width),WW=G.niv.gap+(w<560?3:5),WH=G.niv.djup+.9-YT,h=Math.round(Math.min(w*WH/WW,Math.max(250,innerHeight*.56)));
+  cv.style.height=h+"px";cv.width=Math.round(w*d);cv.height=Math.round(h*d);V.d=d;V.s=Math.min(cv.width/WW,cv.height/WH);V.ox=(cv.width-G.niv.gap*V.s)/2;V.oy=cv.height-(G.niv.djup+.9)*V.s}
+new ResizeObserver(()=>storlek()).observe($("scen"));addEventListener("resize",storlek);
+function stoppa(){cancelAnimationFrame(raf);raf=0;G=null;part=[]}
+function starta(l){stoppa();const niv=NIV[l],sparad=(data.bro[l]||[]).filter(b=>Array.isArray(b)&&b.length===5&&niv.mat.includes(b[4]));
+  G={l,niv,bal:sparad.map(b=>b.slice()),hist:[],verk:"vag",lage:"bygg",W:null,drag:null,mark:null,pr:null,t:0,rensa:0};
+  $("uRub").textContent=`Bro ${l} av ${ANT}: ${niv.namn}`;const F=FORDON[niv.mal];$("uTxt").innerHTML=`Få ${F.e} ${F.namn} (${vikt(F.m)}) över. Sedan testar vi tyngre och tyngre.`;
+  $("vand").hidden=!(niv.gap>=8);show("game");verkRit();tillBygg();storlek();raf=requestAnimationFrame(ram)}
+const kost=()=>kostnad(G.bal);
+function spara(){data.bro[G.l]=G.bal;save()}
+function verkRit(){const n=G.niv;$("verk").innerHTML=n.mat.map(k=>`<button data-v="${k}" style="--c:${MAT[k].farg}" aria-pressed="false"><i></i>${MAT[k].namn}<small>${MAT[k].pris} kr per meter</small></button>`).join("")+`<button data-v="sudda" aria-pressed="false"><span class="em">🧽</span>Sudda<small>tryck på en balk</small></button><button data-a="angra"><span class="em">↶</span>Ångra</button><button data-a="rensa"><span class="em">🗑</span><span id="rensaT">Rensa allt</span></button>`}
+$("verk").onclick=e=>{const b=e.target.closest("button");if(!b||!G||G.lage!=="bygg")return;if(b.dataset.v){G.verk=b.dataset.v;ljud("pip")}else if(b.dataset.a==="angra"){if(G.hist.length){G.bal=JSON.parse(G.hist.pop());G.mark=null;spara();ljud("pip")}}
+  else if(b.dataset.a==="rensa"){if(!G.bal.length)return;if(G.rensa&&performance.now()-G.rensa<3000){G.hist.push(JSON.stringify(G.bal));G.bal=[];G.mark=null;G.rensa=0;spara()}else{G.rensa=performance.now();setTimeout(()=>{if(G&&G.rensa&&performance.now()-G.rensa>=2900){G.rensa=0;uppd()}},3000)}}uppd()};
+function uppd(){if(!G)return;const k=kost(),kr=G.niv.kr;$("kTxt").textContent=`💰 ${k} av ${kr} kr`;$("kBar").style.width=Math.min(100,k/kr*100)+"%";$("kassa").classList.toggle("slut",k>kr*.92);
+  $("verk").querySelectorAll("[data-v]").forEach(b=>{const v=b.dataset.v===G.verk;b.classList.toggle("v",v);b.setAttribute("aria-pressed",v)});const u=$("verk").querySelector('[data-a="angra"]');if(u)u.disabled=!G.hist.length;const rt=$("rensaT");if(rt)rt.textContent=G.rensa?"Säkert?":"Rensa allt"}
+function sag(t,kl){const x=$("expl");x.className="expl"+(kl?" "+kl:"");x.innerHTML=t}
+function tillBygg(){G.lage="bygg";G.W=null;G.pr=null;part=[];$("scen").classList.remove("prov");$("byggUI").hidden=false;$("provUI").hidden=true;$("skylt").hidden=true;
+  sag(G.mark&&G.mark.forst!=null?"Den röda balken brast först. Stötta den med fler balkar, eller byt till ett starkare material.":G.niv.tips);uppd()}
+
+/* ---------- Bygga ---------- */
+const arAnk=(x,y)=>G.niv.ank.some(a=>a[0]===x&&a[1]===y);
+function tillaten(x,y){if(arAnk(x,y))return true;const n=G.niv;if(x<0||x>n.gap||y<YMIN||y>n.djup-1)return false;if((x===0||x===n.gap)&&y>=0)return false;return true}
+function leder(){const m=new Map();G.niv.ank.forEach(a=>m.set(a[0]+","+a[1],[a[0],a[1]]));G.bal.forEach(b=>{m.set(b[0]+","+b[1],[b[0],b[1]]);m.set(b[2]+","+b[3],[b[2],b[3]])});return[...m.values()]}
+function varld(e){const r=cv.getBoundingClientRect();return{x:((e.clientX-r.left)*V.d-V.ox)/V.s,y:((e.clientY-r.top)*V.d-V.oy)/V.s}}
+const tol=px=>Math.max(.42,px*V.d/V.s);
+function narmLed(p,t){let b=null,bd=t;for(const n of leder()){const d=Math.hypot(n[0]-p.x,n[1]-p.y);if(d<bd){bd=d;b=n}}return b}
+function malPunkt(f,p,mat){const mx=MAT[mat].max,R=Math.ceil(mx);let b=null,bd=1e9;for(let x=f[0]-R;x<=f[0]+R;x++)for(let y=f[1]-R;y<=f[1]+R;y++){const L=Math.hypot(x-f[0],y-f[1]);if(L<.5||L>mx+1e-6||!tillaten(x,y))continue;const d=Math.hypot(x-p.x,y-p.y);if(d<bd){bd=d;b=[x,y]}}return b}
+const finns=(a,b)=>G.bal.some(q=>(q[0]===a[0]&&q[1]===a[1]&&q[2]===b[0]&&q[3]===b[1])||(q[0]===b[0]&&q[1]===b[1]&&q[2]===a[0]&&q[3]===a[1]));
+function narmBalk(p,t){let b=-1,bd=t;G.bal.forEach((q,i)=>{const c=narmast(p.x,p.y,q[0],q[1],q[2],q[3]),d=Math.hypot(p.x-c.x,p.y-c.y);if(d<bd){bd=d;b=i}});return b}
+function laggBalk(a,b,mat){if(finns(a,b))return false;const pris=Math.round(Math.hypot(b[0]-a[0],b[1]-a[1])*MAT[mat].pris);
+  if(kost()+pris>G.niv.kr){const k=$("kassa");k.classList.remove("skak");void k.offsetWidth;k.classList.add("skak");sag("Pengarna räcker inte till den balken. Sudda något du inte behöver, eller välj ett billigare material.","fel");ljud("bad");return false}
+  G.hist.push(JSON.stringify(G.bal));if(G.hist.length>60)G.hist.shift();G.bal.push([a[0],a[1],b[0],b[1],mat]);G.mark=null;spara();ljud("clonk");sag(G.niv.tips);uppd();return true}
+function suddaVid(p){const i=narmBalk(p,tol(16));if(i<0)return;G.hist.push(JSON.stringify(G.bal));G.bal.splice(i,1);G.mark=null;spara();ljud("pip");uppd()}
+cv.addEventListener("pointerdown",e=>{if(!G||G.lage!=="bygg"||e.button>0)return;e.preventDefault();const p=varld(e);
+  if(G.verk==="sudda"){cv.setPointerCapture(e.pointerId);G.drag={sudda:true,id:e.pointerId};suddaVid(p);return}
+  const f=narmLed(p,tol(e.pointerType==="touch"?30:20));if(!f){sag("Börja vid en grå fästpunkt eller vid en led som redan finns.");return}
+  cv.setPointerCapture(e.pointerId);G.drag={f,p,mal:null,id:e.pointerId}});
+cv.addEventListener("pointermove",e=>{if(!G||G.lage!=="bygg")return;const p=varld(e);G.pek=p;const d=G.drag;if(!d||d.id!==e.pointerId)return;if(d.sudda){suddaVid(p);return}d.p=p;d.mal=Math.hypot(p.x-d.f[0],p.y-d.f[1])>.35?malPunkt(d.f,p,G.verk):null});
+function slapp(e){const d=G&&G.drag;if(!d||d.id!==e.pointerId)return;G.drag=null;if(d.sudda||!d.mal)return;laggBalk(d.f,d.mal,G.verk)}
+cv.addEventListener("pointerup",slapp);cv.addEventListener("pointercancel",e=>{if(G&&G.drag&&G.drag.id===e.pointerId)G.drag=null});
+cv.addEventListener("pointerleave",()=>{if(G)G.pek=null});
+
+/* ---------- Testa ---------- */
+function startProv(){if(!G||G.lage!=="bygg")return;if(!G.bal.length){sag("Bygg något först. Dra väg från den grå punkten på kanten.","fel");return}
+  G.lage="prov";G.drag=null;G.W=nyVarld(G.niv,G.bal);G.pr={fas:"satt",n:0,k:G.niv.mal,klarade:-1,paus:0,snabb:1,sett:0,stopp:null,orsak:""};part=[];
+  $("scen").classList.add("prov");$("byggUI").hidden=true;$("provUI").hidden=false;$("bNasta").hidden=true;$("bFort").hidden=false;$("bFort").textContent="⏩ Snabbare";
+  $("konvoj").innerHTML=FORDON.map((F,i)=>i<G.niv.mal?"":`<div data-k="${i}" class="${i===G.niv.mal?"mal":""}"><span>${F.e}</span>${vikt(F.m)}</div>`).join("");
+  const x=$("pExpl");x.className="expl";x.textContent="Bron sätter sig …";$("skylt").hidden=true;$("scen").scrollIntoView({block:"nearest"})}
+$("bTesta").onclick=startProv;$("bBygg").onclick=()=>{if(G)tillBygg()};$("bFort").onclick=()=>{if(!G||!G.pr)return;G.pr.snabb=G.pr.snabb===1?4:1;$("bFort").textContent=G.pr.snabb===1?"⏩ Snabbare":"▶ Vanlig fart"};
+$("bNasta").onclick=()=>{if(G&&G.l<ANT)starta(G.l+1);else hem()};
+const chip=(k,kl)=>{const c=$("konvoj").querySelector(`[data-k="${k}"]`);if(c){c.classList.remove("nu");if(kl)c.classList.add(kl)}};
+function nasta(){const pr=G.pr,F=FORDON[pr.k];nyttFordon(G.W,F);pr.fas="kor";chip(pr.k,"nu");const s=$("skylt");s.hidden=false;s.textContent=`${F.e} ${stor(F.namn)} · ${vikt(F.m)}`;$("pExpl").className="expl";$("pExpl").textContent=`Nu kör ${F.namn} ut på bron …`}
+function provSteg(){const pr=G.pr,W=G.W;
+  if(pr.fas==="satt"){steg(W,6);if(W.brott.length){pr.orsak="sjalv";slutProv();return}if(++pr.n>=90)nasta()}
+  else if(pr.fas==="kor"){steg(W);const f=W.ford;
+    if(f.klar){pr.klarade=pr.k;chip(pr.k,"ok");ljud("ok");pr.fas="paus";pr.paus=45}
+    else if(f.plums){chip(pr.k,"fel");plums((f.a.x+f.b.x)/2);pr.stopp=pr.k;pr.orsak=W.brott.length?"brast":"hal";pr.fas="sjunk";pr.paus=70}
+    else if(W.t-f.t0>40){chip(pr.k,"fel");pr.stopp=pr.k;pr.orsak="fast";slutProv()}}
+  else if(pr.fas==="paus"){steg(W);if(--pr.paus<=0){pr.k++;if(pr.k>=FORDON.length)slutProv();else nasta()}}
+  else if(pr.fas==="sjunk"){steg(W);if(--pr.paus<=0)slutProv()}
+  else if(pr.fas==="slut"&&pr.n++<600)steg(W);
+  while(pr.sett<W.brott.length){const b=W.brott[pr.sett++],q=G.bal[b.n];if(!reduced())for(let i=0;i<8;i++)part.push({x:b.x+(Math.random()-.5)*.6,y:b.y+(Math.random()-.5)*.3,vx:(Math.random()-.5)*3,vy:-Math.random()*3,l:1.4,c:MAT[q[4]].farg,r:Math.random()*6,vr:(Math.random()-.5)*12,typ:1});ljud("race","bump")}}
+function plums(x){ljud("splash");if(reduced())return;for(let i=0;i<22;i++)part.push({x:x+(Math.random()-.5)*1.2,y:G.niv.djup,vx:(Math.random()-.5)*4,vy:-2-Math.random()*5,l:1.1,c:"#DDF2FF",typ:0})}
+function slutProv(){const pr=G.pr,W=G.W,niv=G.niv,x=$("pExpl");pr.fas="slut";pr.n=0;$("bFort").hidden=true;$("skylt").hidden=true;
+  G.mark={max:W.b.map(b=>b.max),forst:W.brott.length?W.brott[0].n:null};const Fm=FORDON[niv.mal],Fs=pr.stopp!=null?FORDON[pr.stopp]:null;
+  if(pr.klarade>=niv.mal){const st=clamp(1+pr.klarade-niv.mal,1,3),Fk=FORDON[pr.klarade];data.stars[G.l]=Math.max(data.stars[G.l]||0,st);data.rek[G.l]=Math.max(data.rek[G.l]==null?-1:data.rek[G.l],pr.klarade);save();
+    x.className="expl ok";x.innerHTML=`<span class="stj">${stjHtml(st)}</span>Din bro bar ${Fk.en.toLowerCase()} på ${vikt(Fk.m)}! `+(Fs?(pr.orsak==="fast"?`${stor(Fs.namn)} fastnade.`:`Den brast för ${Fs.namn} (${vikt(Fs.m)}).`):"Den höll för allt, till och med dinosaurien!")+(st<3?` För ${st+1} stjärnor ska även ${FORDON[niv.mal+st].namn} komma över.`:"");
+    $("bNasta").hidden=false;$("bNasta").textContent=G.l<ANT?"Nästa bro ▶":"Alla broar ▶";if(st===3){ljud("fanfare");confetti()}else ljud("chime")}
+  else{x.className="expl fel";ljud("bad");x.textContent=pr.orsak==="sjalv"?"Bron rasade av sin egen vikt. Bygg kortare spann och fler stöttor.":pr.orsak==="brast"?`Bron brast när ${Fs.namn} körde ut. Titta var det blev rött: där blev kraften för stor. Bygg vidare och stötta just där med trianglar.`:pr.orsak==="fast"?`${stor(Fs.namn)} fastnade. Vägen är för brant eller har ett hack.`:`${stor(Fs.namn)} föll i vattnet. Vägen måste gå hela vägen över, från kant till kant.`}}
+
+/* ======================= RITNING ======================= */
+const blanda=(a,b,t)=>{const p=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)),A=p(a),B=p(b);return`rgb(${A.map((v,i)=>Math.round(v+(B[i]-v)*t)).join(",")})`};
+const kraftFarg=r=>r<.5?blanda("#2BB673","#F2B707",r*2):blanda("#F2B707","#E5484D",Math.min(1,(r-.5)*2));
+function bakgrund(c,t){const w=cv.width,h=cv.height,s=V.s,n=G.niv,vy=Y(n.djup);
+  let g=c.createLinearGradient(0,0,0,h);g.addColorStop(0,"#9FD8FF");g.addColorStop(.7,"#E3F4FF");c.fillStyle=g;c.fillRect(0,0,w,h);
+  c.fillStyle="#FFF3B8";c.beginPath();c.arc(w*.7,h*.13,s*.5,0,7);c.fill();
+  for(const [col,amp,off,yy] of [["#C9E6CF",.55,.6,-.75],["#A9D6B4",.4,2.1,-.3]]){c.fillStyle=col;c.beginPath();c.moveTo(0,h);for(let x=0;x<=w+8;x+=8)c.lineTo(x,Y(yy)-Math.sin(x/s*.42+off)*s*amp-Math.sin(x/s*1.1+off*2)*s*amp*.25);c.lineTo(w,h);c.fill()}
+  c.fillStyle="#6FB7E8";c.fillRect(0,vy,w,h-vy)}
+function berg(c){const w=cv.width,h=cv.height,s=V.s,n=G.niv;
+  for(const [x0,x1,dir] of [[-20,0,1],[n.gap,n.gap+20,-1]]){const a=X(x0),b=X(x1),kant=dir>0?b:a;c.fillStyle="#A8744A";c.fillRect(a,Y(0),b-a,h-Y(0));
+    c.fillStyle="#8E5F3B";for(let k=0;k<7;k++){const yy=Y(.55+k*.62);c.fillRect(a,yy,b-a,s*.06)}c.fillStyle="rgba(60,35,15,.28)";c.fillRect(dir>0?kant-s*.16:kant,Y(0),s*.16,h-Y(0));
+    c.fillStyle="#57B36A";c.fillRect(a,Y(0)-s*.02,b-a,s*.24);c.fillStyle="#3F9654";c.fillRect(a,Y(0)+s*.17,b-a,s*.05)}
+  for(const q of n.ank){if(q[1]>0&&q[0]>0&&q[0]<n.gap){c.fillStyle="#8E97A6";c.beginPath();c.moveTo(X(q[0]-.5),Y(q[1]-.12));c.lineTo(X(q[0]+.5),Y(q[1]-.12));c.lineTo(X(q[0]+.95),h);c.lineTo(X(q[0]-.95),h);c.fill();c.fillStyle="#A9B1BF";c.beginPath();c.moveTo(X(q[0]-.5),Y(q[1]-.12));c.lineTo(X(q[0]+.1),Y(q[1]-.12));c.lineTo(X(q[0]-.2),h);c.lineTo(X(q[0]-.95),h);c.fill()}
+    if(q[1]<0&&(q[0]===0||q[0]===n.gap)){const x0=q[0]===0?X(-.62):X(n.gap+.06),bw=s*.56;c.fillStyle="#B9C0CC";c.fillRect(x0,Y(q[1]-.2),bw,Y(0)-Y(q[1]-.2));c.fillStyle="#9AA3B2";for(let yy=q[1]+.25;yy<0;yy+=.5)c.fillRect(x0,Y(yy),bw,s*.035);c.fillStyle="#7C8696";c.fillRect(x0-s*.07,Y(q[1]-.32),bw+s*.14,s*.16)}}}
+function vattenFram(c,t){const w=cv.width,h=cv.height,s=V.s,vy=Y(G.niv.djup);
+  const g=c.createLinearGradient(0,vy,0,h);g.addColorStop(0,"rgba(70,160,225,.72)");g.addColorStop(1,"rgba(28,96,170,.9)");c.fillStyle=g;c.beginPath();c.moveTo(0,h);for(let x=0;x<=w+6;x+=6)c.lineTo(x,vy+Math.sin(x/s*2.2+(reduced()?0:t*1.6))*s*.035);c.lineTo(w,h);c.fill();
+  c.strokeStyle="rgba(255,255,255,.55)";c.lineWidth=Math.max(1,s*.03);c.beginPath();for(let x=0;x<=w+6;x+=6){const yy=vy+Math.sin(x/s*2.2+(reduced()?0:t*1.6))*s*.035;x?c.lineTo(x,yy):c.moveTo(x,yy)}c.stroke()}
+function balk(c,x1,y1,x2,y2,mat,kraft,alfa){const s=V.s,a=X(x1),b=Y(y1),d=X(x2),e=Y(y2),L=(w,col,dash)=>{c.lineWidth=w*s;c.strokeStyle=col;c.setLineDash(dash?dash.map(v=>v*s):[]);c.beginPath();c.moveTo(a,b);c.lineTo(d,e);c.stroke()};
+  c.save();c.globalAlpha=alfa==null?1:alfa;c.lineCap="round";
+  if(mat==="vag"){L(.3,"#333A48");L(.22,"#4A5263");c.lineCap="butt";L(.035,"#F4F6FA",[.2,.2])}
+  else if(mat==="tra"){L(.2,"#7A4E24");L(.13,"#C98B4E");L(.03,"#E0AB73")}
+  else if(mat==="stal"){L(.17,"#4E5D70");L(.1,"#A9BACB");L(.025,"#DCE6F0")}
+  else{L(.085,"#8F7436");c.lineCap="butt";L(.05,"#F1E3B8",[.09,.07])}
+  if(kraft!=null&&kraft>.1){c.lineCap="round";c.globalAlpha=.92;L(mat==="rep"?.06:.075,kraftFarg(Math.min(1,kraft)))}
+  c.setLineDash([]);c.restore()}
+function led(c,x,y,ank){const s=V.s;c.beginPath();c.arc(X(x),Y(y),s*(ank?.17:.1),0,7);c.fillStyle=ank?"#6B7587":"#2B2F3A";c.fill();if(ank){c.lineWidth=s*.045;c.strokeStyle="#2B2F3A";c.stroke()}c.beginPath();c.arc(X(x),Y(y),s*(ank?.06:.04),0,7);c.fillStyle=ank?"#DDE3EC":"#9AA3B5";c.fill()}
+function fordonRit(c,f,t){const F=f.F,s=V.s,mx=(f.a.x+f.b.x)/2,my=(f.a.y+f.b.y)/2,v=Math.atan2(f.b.y-f.a.y,f.b.x-f.a.x),px=F.st*s,gung=F.djur&&!reduced()?Math.sin(t*9)*.035:0;
+  c.save();c.translate(X(mx),Y(my+F.r));c.rotate(v+(F.djur?gung*.6:0));c.scale(-1,1);c.font=`${Math.round(px)}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;c.textAlign="center";c.textBaseline="alphabetic";c.fillText(F.e,0,px*.12-Math.abs(gung)*s);c.restore()}
+function ram(ts){if(!G){raf=0;return}const t=ts/1000,c=ctx,s=V.s;G.t=t;
+  if(G.lage==="prov"){const n=G.pr.fas==="slut"?1:G.pr.snabb;for(let i=0;i<n&&G.lage==="prov";i++)provSteg()}
+  c.setTransform(1,0,0,1,0,0);bakgrund(c,t);
+  if(G.lage==="bygg"){const n=G.niv;
+    G.bal.forEach((q,i)=>{const m=G.mark,r=m&&m.max[i]!=null?m.max[i]:null;balk(c,q[0],q[1],q[2],q[3],q[4],r!=null&&r>.6?r:null)});berg(c);
+    c.fillStyle="rgba(29,43,83,.3)";for(let x=0;x<=n.gap;x++)for(let y=YMIN;y<=n.djup-1;y++)if(tillaten(x,y)&&!arAnk(x,y)){c.beginPath();c.arc(X(x),Y(y),Math.max(1.2,s*.05),0,7);c.fill()}
+    G.bal.forEach((q,i)=>{const m=G.mark;
+      if(m&&m.forst===i){const mx=X((q[0]+q[2])/2),my=Y((q[1]+q[3])/2),pu=reduced()?1:1+.12*Math.sin(t*6);c.lineWidth=s*.07;c.strokeStyle="#E5484D";c.beginPath();c.arc(mx,my,s*.34*pu,0,7);c.stroke();c.beginPath();c.moveTo(mx-s*.15,my-s*.15);c.lineTo(mx+s*.15,my+s*.15);c.moveTo(mx+s*.15,my-s*.15);c.lineTo(mx-s*.15,my+s*.15);c.stroke()}});
+    const L=leder();L.forEach(p=>led(c,p[0],p[1],arAnk(p[0],p[1])));
+    const d=G.drag;
+    if(d&&d.f){c.beginPath();c.arc(X(d.f[0]),Y(d.f[1]),s*.3,0,7);c.strokeStyle="#3D5AFE";c.lineWidth=s*.06;c.stroke();
+      if(d.mal){const dyr=kost()+Math.round(Math.hypot(d.mal[0]-d.f[0],d.mal[1]-d.f[1])*MAT[G.verk].pris)>n.kr,dub=finns(d.f,d.mal);balk(c,d.f[0],d.f[1],d.mal[0],d.mal[1],G.verk,null,dub?.25:.75);c.beginPath();c.arc(X(d.mal[0]),Y(d.mal[1]),s*.26,0,7);c.fillStyle=dyr?"rgba(229,72,77,.35)":"rgba(61,90,254,.28)";c.fill();c.strokeStyle=dyr?"#E5484D":"#3D5AFE";c.lineWidth=s*.06;c.stroke()}}
+    else if(G.pek&&G.verk!=="sudda"){const f=narmLed(G.pek,tol(20));if(f){c.beginPath();c.arc(X(f[0]),Y(f[1]),s*.27,0,7);c.strokeStyle="rgba(61,90,254,.8)";c.lineWidth=s*.05;c.stroke()}}
+    else if(G.pek&&G.verk==="sudda"){const i=narmBalk(G.pek,tol(16));if(i>=0){const q=G.bal[i];c.lineCap="round";c.lineWidth=s*.4;c.strokeStyle="rgba(229,72,77,.4)";c.beginPath();c.moveTo(X(q[0]),Y(q[1]));c.lineTo(X(q[2]),Y(q[3]));c.stroke()}}
+    if(!G.bal.length&&!d){const u=reduced()?.6:(t*.55)%1.4,k=Math.min(1,u),hx=k*2;c.save();c.setLineDash([s*.16,s*.14]);c.lineWidth=s*.12;c.strokeStyle="rgba(61,90,254,.75)";c.lineCap="round";c.beginPath();c.moveTo(X(0),Y(0));c.lineTo(X(hx),Y(0));c.stroke();c.restore();c.font=`${Math.round(s*.9)}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;c.textAlign="center";c.textBaseline="top";c.fillText("👆",X(hx)+s*.1,Y(0)+s*.05)}}
+  else{const W=G.W;W.b.forEach(b=>{if(!b.hel)return;const A=W.p[b.i],B=W.p[b.j];balk(c,A.x,A.y,B.x,B.y,b.mat,Math.abs(b.T)/b.styrka)});berg(c);
+    W.p.forEach(p=>{if(p.fast||(p.x>-.05&&p.x<G.niv.gap+.05))led(c,p.x,p.y,p.fast)});if(W.ford)fordonRit(c,W.ford,t)}
+  if(part.length){const dt=1/60;part.forEach(p=>{p.vy+=9.8*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.l-=dt;if(p.typ){p.r+=p.vr*dt;c.save();c.translate(X(p.x),Y(p.y));c.rotate(p.r);c.globalAlpha=Math.min(1,p.l*2);c.fillStyle=p.c;c.fillRect(-s*.11,-s*.035,s*.22,s*.07);c.restore()}else{c.globalAlpha=Math.min(1,p.l*2);c.fillStyle=p.c;c.beginPath();c.arc(X(p.x),Y(p.y),s*.06,0,7);c.fill();c.globalAlpha=1}});part=part.filter(p=>p.l>0&&p.y<G.niv.djup+1.2)}
+  vattenFram(c,t);raf=requestAnimationFrame(ram)}
+function confetti(){if(reduced())return;const cols=["#3D8BFD","#FF9F43","#2BB673","#FFC93C","#7B61FF","#FF6B6B"],c=$("fx"),x=c.getContext("2d"),dpr=devicePixelRatio||1,Wd=innerWidth,Hh=innerHeight;c.width=Wd*dpr;c.height=Hh*dpr;x.setTransform(dpr,0,0,dpr,0,0);c.hidden=false;
+  const PP=Array.from({length:150},()=>({x:Wd/2+(Math.random()-.5)*120,y:Hh*.3,vx:(Math.random()-.5)*16,vy:-Math.random()*15-4,r:Math.random()*7+5,c:cols[Math.floor(Math.random()*6)],a:Math.random()*6,va:(Math.random()-.5)*.4}));
+  let t=0;(function f(){x.clearRect(0,0,Wd,Hh);PP.forEach(p=>{p.vy+=.45;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore()});if(++t<150)requestAnimationFrame(f);else c.hidden=true})()}
+window.__bro={NIV,FORDON,MAT,prov,kostnad,starta,startProv,tillBygg,get G(){return G},get V(){return V},satt(bal){G.hist.push(JSON.stringify(G.bal));G.bal=bal.map(b=>b.slice());G.mark=null;spara();uppd()},X,Y};
+hem();
+</script>
+</body>
+</html>

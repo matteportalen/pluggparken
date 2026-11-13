@@ -83,6 +83,7 @@ const IDX=[
  ['ovriga/lasflyt/','Läsflyt','Läs en kort text flera gånger med en vuxen','📖','läsa text flyt upprepad läsning','Svenska'],
  ['ovriga/rita/','Draw it!','Rita ordet på engelska så gissar datorn','🎨','engelska rita gissa quick draw glosor','Engelska'],
  ['ovriga/rymdlabbet/','Rymdlabbet','Solsystemet, dag och natt, månens faser och mer','🔭','rymden planeter måne stjärnor svarta hål årstider förmörkelse universum galax jättar','NO'],
+ ['brobygget/','Brobygget','Bygg en bro av väg, trä, stål och rep och testa hur tunga fordon den bär.','🌉','bro broar bygga brobygge kraft krafter tyngd balans triangel fackverk hängbro konstruktion teknik hållfasthet lastbil','NO'],
  ['flytasjunka/','Flyta eller sjunka','Testa vad som flyter, bygg en lerbåt som bär kulor och gissa först.','🛟','flyta sjunka flyter sjunker båt vatten densitet arkimedes salt is lera krafter material','NO'],
  ['vattenkretslopp/','Vattnets kretslopp','Följ en vattendroppe genom kretsloppet och laborera med sol och temperatur.','💧','vattnets kretslopp avdunstning moln regn flod hav snö vatten sol nederbörd','NO'],
  ['kontinentdrift/','Kontinentaldrift','Res 250 miljoner år tillbaka på en 3D-glob och se hur Pangaea bröts upp.','🌍','kontinentaldrift plattektonik pangaea kontinenter jordskorpan wegener indien himalaya atlanten geografi NO SO','NO'],
