@@ -1009,11 +1009,15 @@ function mikBlock(e){const inp=e.inputBuffer.getChannelData(0);mikData(inp,(e.pl
 /* syntens röstloop: fyra räkningar, sedan ett bestämt antal takter från mikrofonen (bara i minnet) */
 let SREC=null;
 function syntRecData(inp,cap){const r=SREC;if(!r)return;const sr=ctx.sampleRate,n=inp.length;let from=0;if(!r.go){const skip=Math.round((r.t-cap)*sr);if(skip>=n)return;r.go=true;from=Math.max(0,skip)}
-  const take=Math.min(n-from,r.len-r.w);r.buf.set(inp.subarray(from,from+take),r.w);r.w+=take;if(r.w>=r.len){SREC=null;r.klar(r.buf)}}
+  const take=Math.min(n-from,r.buf.length-r.w);r.buf.set(inp.subarray(from,from+take),r.w);r.w+=take;
+  /* START VID LJUD: loopen börjar vid första ljudet, så mikrofonens fördröjning (Bluetooth) och tiden det tar att börja prata inte ger tystnad först */
+  if(r.on<0){const W=Math.max(32,Math.round(sr*.004));while(r.sc+W<=r.w){let pk=0;for(let i=r.sc;i<r.sc+W;i++){const a=Math.abs(r.buf[i]);if(a>pk)pk=a}if(pk<r.lo)r.lo=pk;if(pk>Math.min(.15,Math.max(.02,4*r.lo))){r.on=Math.max(0,r.sc-Math.round(sr*.06));break}r.sc+=W}}
+  if(r.on>=0&&r.w>=r.on+r.len){SREC=null;r.klar(r.buf.slice(r.on,r.on+r.len))}
+  else if(r.on<0&&(r.sc>r.maxOn||r.w>=r.buf.length)){SREC=null;r.klar(r.buf.slice(0,r.len))}}
 function syntRecAv(){const r=SREC;SREC=null;if(r)r.klar(null)}
-async function syntMikRec(takter){if(SREC){syntRecAv();return null}if(!(await micStart()))return null;if(SREC)return null;
+async function syntMikRec(takter,trig){if(SREC){syntRecAv();return null}if(!(await micStart()))return null;if(SREC)return null;
   const bt=60/S.bpm,sr=ctx.sampleRate,bd=barDur(),t=ctx.currentTime+.02,len=Math.round(takter*bd*sr);   // ingen nedräkning: inspelningen startar direkt
-  return new Promise(klar=>{SREC={t,bt,len,w:0,go:false,buf:new Float32Array(len),klar}})}
+  return new Promise(klar=>{SREC={t,bt,len,w:0,go:false,buf:new Float32Array(len+(trig?Math.round(3*sr):0)),trig:!!trig,on:trig?-1:0,sc:0,lo:1,maxOn:Math.round(3*sr),klar}})}
 function mikData(inp,cap){padRecData(inp,cap);syntRecData(inp,cap);const n=inp.length,sr=ctx.sampleRate;
   LP.forEach(l=>{const r=l.rec;if(!r)return;let from=0;
     if(!r.go){const skip=Math.round((r.t-cap)*sr);if(skip>=n)return;r.go=true;from=Math.max(0,skip)}
