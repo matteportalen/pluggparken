@@ -454,6 +454,7 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
 </details>
 </main>
 <script src="synt/ljud.js"></script>
+<script src="synt/rostloop.js"></script>
 <script src="synt/klipp.js"></script>
 <script src="synt/synt.js"></script>
 <script>
@@ -1001,11 +1002,21 @@ async function ljudOm(){liveStopp(true);const spelade=spelar,micVar=!!mic;stopp(
   LP.forEach(l=>{l.gain=l.gate=l.fxn=null;l.srcs=[];l.gv=undefined});
   try{gammal&&await Promise.race([gammal.close(),new Promise(r=>setTimeout(r,800))])}catch(e){}
   startaLjud();if(micVar)await micStart();if(spelade)start();lpVisa();toast("Ljudet är återställt")}
-function micStopp(){if(!mic)return;try{mic.getTracks().forEach(t=>t.stop())}catch(e){}try{proc&&proc.disconnect();micSrc.disconnect();mikNod&&mikNod.disconnect()}catch(e){}mikNod=null;mic=null;PREC=null;PREC=null;proc=null;micSrc=null;$("#bMic").classList.remove("on");$("#bMic").setAttribute("aria-pressed","false");$("#meterI").style.width="0"}
+function micStopp(){if(!mic)return;try{mic.getTracks().forEach(t=>t.stop())}catch(e){}try{proc&&proc.disconnect();micSrc.disconnect();mikNod&&mikNod.disconnect()}catch(e){}mikNod=null;mic=null;PREC=null;syntRecAv();proc=null;micSrc=null;$("#bMic").classList.remove("on");$("#bMic").setAttribute("aria-pressed","false");$("#meterI").style.width="0"}
 const mbuf=new Float32Array(1024);
 function micMat(){if(!mic)return;anMic.getFloatTimeDomainData(mbuf);let m=0;for(let i=0;i<mbuf.length;i++){const a=Math.abs(mbuf[i]);if(a>m)m=a}$("#meterI").style.width=Math.min(100,m*140)+"%";requestAnimationFrame(micMat)}
 function mikBlock(e){const inp=e.inputBuffer.getChannelData(0);mikData(inp,(e.playbackTime||ctx.currentTime)-2*(inp.length/ctx.sampleRate)-.02-LJUST/1000)}
-function mikData(inp,cap){padRecData(inp,cap);const n=inp.length,sr=ctx.sampleRate;
+/* syntens röstloop: fyra räkningar, sedan ett bestämt antal takter från mikrofonen (bara i minnet) */
+let SREC=null;
+function syntRecData(inp,cap){const r=SREC;if(!r)return;const sr=ctx.sampleRate,n=inp.length;let from=0;if(!r.go){const skip=Math.round((r.t-cap)*sr);if(skip>=n)return;r.go=true;from=Math.max(0,skip)}
+  const take=Math.min(n-from,r.len-r.w);r.buf.set(inp.subarray(from,from+take),r.w);r.w+=take;if(r.w>=r.len){SREC=null;r.klar(r.buf)}}
+function syntRecAv(){const r=SREC;SREC=null;if(r)r.klar(null)}
+async function syntMikRec(takter){if(SREC){syntRecAv();return null}if(!(await micStart()))return null;if(SREC)return null;
+  const bt=60/S.bpm,sr=ctx.sampleRate,need=4*bt+.1,bd=barDur();let t=ctx.currentTime+4*bt+.15;
+  if(spelar){const b0=lastBar||ctx.currentTime;t=b0+Math.ceil((ctx.currentTime+need-b0)/bd)*bd}
+  for(let q=0;q<4;q++)klick(t-(4-q)*bt,q===0);const len=Math.round(takter*bd*sr);
+  return new Promise(klar=>{SREC={t,bt,len,w:0,go:false,buf:new Float32Array(len),klar}})}
+function mikData(inp,cap){padRecData(inp,cap);syntRecData(inp,cap);const n=inp.length,sr=ctx.sampleRate;
   LP.forEach(l=>{const r=l.rec;if(!r)return;let from=0;
     if(!r.go){const skip=Math.round((r.t-cap)*sr);if(skip>=n)return;r.go=true;from=Math.max(0,skip)}
     const take=Math.min(n-from,r.len-r.w);r.buf.set(inp.subarray(from,from+take),r.w);r.w+=take;if(r.w>=r.len)klarRec(l)})}
@@ -1231,9 +1242,7 @@ function autoTune(x,sr,key,sc,str,tgt,glid){const N=x.length,det=tuneDet(x,sr),F
         for(let k=0;k<L;k++){const w=Math.min(1,k/fd,(L-1-k)/fd);y[sa+k]=x[sa+k]*(1-w)+out[k]*w}}}
     i=i1+1}
   return y}
-function pitchShift(x,st){const n=x.length,r=Math.pow(2,st/12),G=2048,H=G/4,y=new Float32Array(n),w=new Float32Array(G);for(let i=0;i<G;i++)w[i]=.5-.5*Math.cos(2*Math.PI*i/G);
-  for(let p=0;p<n;p+=H){for(let j=0;j<G;j++){const o=(p+j)%n,sp=p+G/2+(j-G/2)*r,i0=Math.floor(sp),f=sp-i0,a=x[((i0%n)+n)%n],b=x[(((i0+1)%n)+n)%n];y[o]+=w[j]*(a+(b-a)*f)}}
-  for(let i=0;i<n;i++)y[i]*=.5;return y}
+function pitchShift(x,st){return PPRostloop.pitch(x,st,ctx?ctx.sampleRate:44100)}   // samma längd, se synt/rostloop.js
 let fxT=0;function lpNyDeb(l){clearTimeout(fxT);fxT=setTimeout(()=>lpNy(l),160)}
 function lpGate(l){if(!l.gate){l.gate=ctx.createGain();l.fxn=fxBygg(l,ctx,lpGain(l));l.gate.connect(l.fxn.inn)}return l.gate}
 function lpBarGate(ix,t){LP.forEach(l=>{if(!l.gate)return;const row=S.lsong[l.i],v=(ix>=0&&row.includes("x"))?(row[ix]==="x"?1:0):1;if(l.gv!==v){l.gate.gain.cancelScheduledValues(t);l.gate.gain.setTargetAtTime(v,t,.006);l.gv=v}})}
@@ -1658,7 +1667,7 @@ document.addEventListener("keydown",e=>{if(PPSyntKlipp.isOpen()||RKOPEN)return;i
   const i=TK[e.key.toLowerCase()];if(i!=null&&!e.repeat){const sl=suddLage;if(e.shiftKey&&recLive)suddLage=true;slag(i);suddLage=sl}});
 document.addEventListener("visibilitychange",()=>{if(document.hidden)stopp()});
 init();
-PPSynt.mount({sampleBanks:syntBanker,sample:syntSample,loadBank:syntLaddaBank,state:()=>S,context:()=>ctx,output:()=>synBus,startAudio:startaLjud,capture:syntSpelaIn,finishCapture:syntAvslutaKlipp,stepDuration:stegTid,toggleRecord:()=>sattRec(!recLive),recordState:()=>({on:recLive,waiting:!!ctx&&recFran>ctx.currentTime}),changed:visa,commit:()=>{lastPush=-Infinity;visa()},busy:()=>renderar,toast,synthView:()=>valjVy('synt')});
+PPSynt.mount({sampleBanks:syntBanker,sample:syntSample,loadBank:syntLaddaBank,state:()=>S,context:()=>ctx,output:()=>synBus,startAudio:startaLjud,capture:syntSpelaIn,finishCapture:syntAvslutaKlipp,stepDuration:stegTid,toggleRecord:()=>sattRec(!recLive),recordState:()=>({on:recLive,waiting:!!ctx&&recFran>ctx.currentTime}),changed:visa,commit:()=>{lastPush=-Infinity;visa()},busy:()=>renderar,toast,synthView:()=>valjVy('synt'),micRecord:syntMikRec,micInfo:()=>SREC,dsp:{autoTune:(x,sr,niva)=>autoTune(x,sr,S.key,S.scale,TUNEST[niva],null,0),rost:rostByte,roster:RNAMN,tune:TUNEN}});
 vyVisa();
 PPSyntKlipp.mount({stopPlayback:stopp,loops:()=>LP.map(l=>({i:l.i,ready:!!l.mix&&!l.rec})),getLoop:loopTillSynt,selectedTrack:PPSynt.selectedTrack,startAudio:startaLjud,context:()=>ctx,output:()=>master,commit:PPSynt.importClips});
 window.MPTrummaskin={tuneDet:tuneDet,autoTune:autoTune,voice:(k,len)=>{startaLjud();const sr=44100,off=new OfflineAudioContext(1,Math.ceil(sr*(len||1.6)),sr),oc=ctx;ctx=off;try{const g=off.createGain();g.connect(off.destination);SYN[k](.01,g);return off.startRendering()}finally{ctx=oc}},SPAR:SPAR,kod:()=>kod(),avkod:k=>avkod(k),ljudOm:()=>ljudOm(),renderaLat:()=>renderaLat(),mp3Av:b=>mp3Av(b),lameLadda:()=>lameLadda(),LP:LP,lpKlick:lpKlick,lpRadera:lpRadera,lpAngra:lpAngra,micStart:micStart,fakeMic:null,slag:slag,get ctx(){return ctx},get master(){return master},get S(){return S},roster:roster,kitSatt:kitSatt,visa:visa,PED:PED,PEDB:PEDB,rackRena:rackRena,rackKod:rackKod,rackAvkod:rackAvkod,rackSyncAll:rackSyncAll,rackNod:rackNod,get RK(){return RK},crushLaddaMod:crushLaddaMod,snapAdj:snapAdj,ackLas:ackLas,ackAt:ackAt,melForslag:melForslag,melHl:melHl,semi:semi,ACKI:ACKI,ackNm:ackNm};

@@ -10,6 +10,7 @@ _Det som gäller nu för `extra/trummaskin/` (visas som **Musiklabbet**; mappen 
 | `synt/ljud.js` | Syntens ljudmotorer och ljudbank (`PPSyntLjud`). Kan skapas i både `AudioContext` och `OfflineAudioContext`. |
 | `synt/synt.js`, `synt/synt.css` | Syntmaskin SM-4: vy, klaviatur, pads, stegrad. Stilar börjar med `.sy-`. |
 | `synt/klipp.js` | Röstklipp: en loop delas i 4, 8 eller 16 delar och läggs på syntens pads (`PPSyntKlipp`). |
+| `synt/rostloop.js` | Röstloopens ljudbehandling (`PPRostloop`): tonhöjd med samma längd (`pitch`, används även av loopstationens TONHÖJD och RÖST), HACK, FRYS, GRIND, baklänges. Panelen ligger i `synt.js`. |
 | `pad.wav`, `pad2.wav`, `samples.wav` med `.json` | Samplingarna. Källor och licens i `LICENS-pad.txt` (alla CC0 eller fria). Hämtas med `?v=N`: höj siffran när en fil byts. |
 | `lib/lamejs/` | Mp3-kodaren (lokal). |
 
@@ -38,7 +39,7 @@ Ljuden är bara mätta (nivå, tonhöjd, inga NaN), aldrig avlyssnade. Skriv all
 
 ## Testning
 
-- Starta lokal server på port 8765 och kör ett skript i taget: `NODE_PATH=/opt/homebrew/lib/node_modules node skript/test-synt.cjs` (även `test-synt-inspelning`, `-ljudbank`, `-arp-slagverk`, `-klipp`, `-effekter`, `-samplepaket`, `-kortkommandon` och `test-musiklabbet-flikar`).
+- Starta lokal server på port 8765 och kör ett skript i taget: `NODE_PATH=/opt/homebrew/lib/node_modules node skript/test-synt.cjs` (även `test-synt-rostloop`, `test-synt-inspelning`, `-ljudbank`, `-arp-slagverk`, `-klipp`, `-effekter`, `-samplepaket`, `-kortkommandon` och `test-musiklabbet-flikar`).
 - Mikrofon testas med en påhittad mikrofon (`MPTrummaskin.fakeMic`). `MPTrummaskin` har även `kod`, `avkod` och `voice` för tester.
 - Förhandsfönstret döljer sidan och då stoppar `visibilitychange` maskinen. Stäng av den händelsen vid test.
 - Attributnamn som `data-m` och `data-mode` har fångats av fel klickhanterare förut. Ge nya attribut egna namn.
@@ -53,6 +54,8 @@ Ljuden är bara mätta (nivå, tonhöjd, inga NaN), aldrig avlyssnade. Skriv all
 - **Effekter:** pedalraderna öppnas som en panel från sidan (från höger på dator, nedifrån på mobil), fyra platser per källa. Den ligger inte i sidans flöde.
 - **Synt SM-4:** fyra spår A–D, stor LJUD-ratt, fyra huvudreglage (KLANG, FILTER, RÖRELSE, RYMD), resten under Fler inställningar. En ton per steg. Padsen är tonpads, de sexton stegen ligger på en egen rad under klaviaturen. Bara synten ser ut som ett hårdvaruinstrument, inte hela Musiklabbet. Samplepaketen ligger i synten; den gamla samplepanelen är borttagen.
 - **Röstklipp:** en kopia av loopen, originalet ändras inte. Klippet loopar medan paden hålls och tystnar vid släpp.
+- **Röstloop** (nov 2026, syntens egen loopstation; panelen visas när spåret har ljudet Röstklipp): 🎤 SPELA IN direkt i synten (1, 2 eller 4 takter, fyra räkningar, stannar själv), delarna hamnar genast på padsen. TON (mörk/ljus ±12, samma fart), RÖST, AUTOTUNE, NÄR PADEN HÅLLS (LOOP, HACK 1/8–1/32, FRYS), GRIND, BAKLÄNGES, DELAR 4/8/16 och LÄGG I TAKT (delarna på stegraden). Tangenterna spelar delarna i tur och ordning, som förut. Effekterna ligger i spårets `klfx` och räknas ovanpå originalet, som aldrig ändras; de följer med i delningslänk och projektfil, ljudet bara i projektfilen. Vägen från loopstationen (✂) finns kvar och nollställer effekterna.
+- **Tonhöjd utan tempoändring** görs med egen kod (WSOLA) i `rostloop.js`. Inget bibliotek: de bra som finns har licenser som inte passar. Att behålla röstkaraktären (formant) är fortfarande bortvalt.
 - **Minimera-knappen** sitter uppe i högra hörnet på varje panel, gul och orange. Mixern har ingen.
 
 ## Väntar
