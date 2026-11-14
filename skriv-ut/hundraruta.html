@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<script src="../tema.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hundrarutan med hål – Pluggparken</title>
+<meta name="description" content="Skriv ut en ny hundraruta med slumpade hål varje gång. Välj svårighet och antal blad, med facit sist.">
+<meta name="theme-color" content="#1F3A35">
+<link rel="canonical" href="https://pluggparken.se/skriv-ut/hundraruta.html">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../fonts/fonts.css">
+<style>
+:root{
+  --bg:#EAF3FF; --ink:#1D2B53; --muted:#56668F; --card:#FFFFFF; --line:#C6D6F2; --soft:#F1F6FF;
+  --good:#1E9E5E; --good-dark:#157548; --accent:#3D5AFE; --gold:#F2B707;
+  --font:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:900px;margin:0 auto;padding:12px 16px 40px}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer;touch-action:manipulation;border:0;background:none}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+h1{margin:8px 0 2px;font-size:2rem}
+.lead{margin:0 0 12px;color:var(--muted)}
+.panel{background:var(--card);border-radius:20px;padding:12px 14px;box-shadow:0 5px 0 var(--line);margin-bottom:12px}
+.panel h2{margin:0 0 6px;font-size:1.05rem}
+.seg{display:flex;flex-wrap:wrap;gap:8px}
+.seg button{min-height:48px;padding:8px 16px;border-radius:14px;background:var(--soft);box-shadow:0 3px 0 var(--line);font-weight:800}
+.seg button small{display:block;font-weight:600;color:var(--muted);font-size:.8rem;line-height:1.1}
+.seg button[aria-pressed=true]{background:var(--ink);color:#fff;box-shadow:0 3px 0 #0E1735}
+.seg button[aria-pressed=true] small{color:#C9D3F2}
+.seg button:active{transform:translateY(2px)}
+.opts{display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px}
+.ck{display:flex;align-items:center;gap:8px;font-weight:700;cursor:pointer}
+.ck input{width:22px;height:22px;accent-color:var(--good)}
+.go{min-height:52px;padding:10px 22px;border-radius:16px;background:var(--good);color:#fff;font-weight:800;box-shadow:0 4px 0 var(--good-dark)}
+.go:active{transform:translateY(3px);box-shadow:0 1px 0 var(--good-dark)}
+.sek{min-height:48px;padding:8px 16px;border-radius:14px;background:#fff;border:2px solid var(--line);font-weight:800;box-shadow:0 3px 0 var(--line)}
+.nr{width:7.5em;min-height:44px;padding:6px 10px;border-radius:12px;border:2px solid var(--line);background:var(--soft);font-weight:700}
+.hint{margin:6px 0 0;color:var(--muted);font-size:.92rem}
+.tillbaka{display:inline-block;margin:6px 0 0;color:var(--ink);font-weight:800}
+.stage{margin-top:12px;overflow:hidden}
+.pages{width:210mm;transform-origin:0 0}
+[hidden]{display:none!important}
+
+/* ---- själva bladen (A4, svartvita) ---- */
+.sida{width:210mm;height:297mm;background:#fff;color:#000;padding:13mm 20mm 0;position:relative;overflow:hidden;margin:0 0 6mm;box-shadow:0 2px 14px rgba(29,43,83,.25);break-after:page;page-break-after:always}
+.sida:last-child{break-after:auto;page-break-after:auto}
+.hd{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:.9mm solid #000;padding-bottom:2mm}
+.hd h2{margin:0;font-size:8.6mm;font-weight:800;line-height:1}
+.hd .nm{font-size:5mm;font-weight:700;white-space:nowrap}
+.hd .nm span{display:inline-block;width:52mm;border-bottom:.5mm solid #000;margin-left:2mm}
+.intro{margin:3mm 0 4mm;font-size:5mm;font-weight:600}
+.hr{display:grid;grid-template-columns:repeat(10,1fr);border:.9mm solid #000;width:170mm}
+.hr div{height:17mm;border:.35mm solid #000;display:grid;place-items:center;font-size:8mm;font-weight:800}
+.hr div.h{background:#e4e4e4}
+.tips{margin:4mm 0 0;font-size:4.4mm;font-weight:600}
+.ft{position:absolute;left:20mm;right:20mm;bottom:9mm;display:flex;justify-content:space-between;font-size:3.6mm;font-weight:700;color:#444}
+/* facit */
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:9mm 8mm;margin-top:5mm}
+.fb h3{margin:0 0 1.5mm;font-size:4.4mm;font-weight:800}
+.fb .hr{width:100%;border-width:.5mm}
+.fb .hr div{height:7.7mm;font-size:3.1mm;font-weight:600;color:#777;border-width:.2mm}
+.fb .hr div.h{background:#fff;color:#000;font-weight:800;font-size:3.6mm;box-shadow:inset 0 0 0 .45mm #000}
+@page{size:A4;margin:0}
+@media print{
+  body{background:#fff}.noprint{display:none!important}.wrap{max-width:none;padding:0;margin:0;display:block}
+  .stage{margin:0;overflow:visible;height:auto!important}
+  .pages{transform:none!important;width:210mm}
+  .sida{box-shadow:none;margin:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<script src="../ljud.js"></script>
+<script src="../djur.js"></script>
+<script src="../huvud.js" data-titel="Hundraruta" data-ikon="🖨️"></script>
+<main class="wrap">
+<div class="noprint">
+  <h1>Hundrarutan med hål</h1>
+  <p class="lead">Varje gång du trycker på 🎲 får du en ny hundraruta med slumpade hål som eleverna fyller i. Skriv ut flera blad i en omgång, alla olika, med facit sist.</p>
+
+  <div class="panel"><h2>1. Hur svår?</h2>
+    <div class="seg" id="sSvar" role="group" aria-label="Svårighet">
+      <button data-v="latt" aria-pressed="true">🌱 Lätt<small>15 hål, aldrig två intill varandra</small></button>
+      <button data-v="medel" aria-pressed="false">🌿 Medel<small>30 hål, ibland intill varandra</small></button>
+      <button data-v="svar" aria-pressed="false">🌳 Svår<small>50 hål, hela rader kan saknas</small></button>
+    </div></div>
+
+  <div class="panel"><h2>2. Hur många blad?</h2>
+    <div class="seg" id="sAntal" role="group" aria-label="Antal blad">
+      <button data-v="1" aria-pressed="true">1</button><button data-v="2" aria-pressed="false">2</button><button data-v="5" aria-pressed="false">5</button><button data-v="10" aria-pressed="false">10</button>
+    </div>
+    <p class="hint">Alla blad får olika hål, så att kompisarna inte kan titta av varandra.</p></div>
+
+  <div class="panel"><div class="opts">
+    <label class="ck"><input type="checkbox" id="facit" checked> Facit sist (att vika fram och rätta själv)</label>
+    <button class="sek" id="nya">🎲 Nya hål</button>
+    <button class="go" id="print">🖨️ Skriv ut</button>
+    <a class="tillbaka" href="./">← Alla blad</a>
+  </div>
+  <div class="opts" style="margin-top:10px"><label class="hint" for="nr" style="margin:0">Vill du ha ett bestämt blad igen? Skriv bladets nummer (står längst ner på bladet) och välj samma svårighet:</label><input class="nr" id="nr" inputmode="numeric" maxlength="6" placeholder="t.ex. 48213" autocomplete="off"></div>
+  <p class="hint" id="info"></p></div>
+</div>
+<div class="stage" id="stage"><div class="pages" id="pages"></div></div>
+</main>
+<script>
+const $=s=>document.querySelector(s);
+const SV={latt:{n:15,nar:false,namn:'Lätt'},medel:{n:30,nar:true,namn:'Medel'},svar:{n:50,nar:true,namn:'Svår'}};
+let st={svar:'latt',antal:1,bas:nyBas()};
+function nyBas(){return 10000+Math.floor(Math.random()*89000);} // bladnummer, fem siffror
+function prng(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+/* ett blad ur ett nummer och en svårighet: samma nummer ger alltid samma blad */
+function blad(nr,svar){
+  const r=prng(nr*7919+svar.n),hal=new Set(),n=svar.n;let f=0;
+  const granne=t=>[t-10,t+10,(t%10!==1?t-1:-1),(t%10!==0?t+1:-1)].some(x=>hal.has(x));
+  while(hal.size<n&&f++<5000){const t=1+Math.floor(r()*100);if(hal.has(t))continue;if(!svar.nar&&granne(t))continue;hal.add(t);}
+  return hal;}
+const cell=(t,h,facit)=>`<div${h.has(t)?' class="h"':''}>${h.has(t)&&!facit?'':t}</div>`;
+const grid=(h,facit)=>Array.from({length:100},(_,i)=>cell(i+1,h,facit)).join('');
+function render(){
+  const sv=SV[st.svar],lista=Array.from({length:st.antal},(_,i)=>({nr:st.bas+i,h:blad(st.bas+i,sv)}));
+  let html=lista.map(b=>`<section class="sida"><div class="hd"><h2>Hundrarutan med hål</h2><div class="nm">Namn:<span></span></div></div>
+    <p class="intro">Några tal har försvunnit. Skriv dit de som saknas i de grå rutorna.</p>
+    <div class="hr">${grid(b.h,false)}</div>
+    <p class="tips">Tips: titta på talet bredvid och på talet ovanför. Vad händer med siffrorna när du går ett steg nedåt?</p>
+    <div class="ft"><span>Pluggparken.se</span><span>Blad nr ${b.nr} · ${sv.namn}</span></div></section>`).join('');
+  if($('#facit').checked){
+    for(let i=0;i<lista.length;i+=4){const del=lista.slice(i,i+4);
+      html+=`<section class="sida"><div class="hd"><h2>Facit</h2><div class="nm">Rätta själv</div></div>
+      <p class="intro">De tal som saknades står i ruta. Jämför med ditt blad.</p>
+      <div class="fg">${del.map(b=>`<div class="fb"><h3>Blad nr ${b.nr}</h3><div class="hr">${grid(b.h,true)}</div></div>`).join('')}</div>
+      <div class="ft"><span>Pluggparken.se</span><span>Facit · ${sv.namn}</span></div></section>`;}}
+  $('#pages').innerHTML=html;
+  const s=lista.length,fs=$('#facit').checked?Math.ceil(s/4):0;
+  $('#info').textContent=`${s+fs} ${s+fs===1?'sida':'sidor'} (A4)${fs?', varav '+fs+(fs===1?' facitsida':' facitsidor')+' sist':''}. Blad nr ${st.bas}${s>1?'–'+(st.bas+s-1):''}. Välj Skriv ut och skala "100 %" i skrivardialogen.`;
+  fit();}
+function fit(){const sg=$('#stage'),pg=$('#pages');if(!pg.firstElementChild)return;
+  const mm=96/25.4,w=210*mm,s=Math.min(1,(sg.clientWidth||w)/w);pg.style.transform=`scale(${s})`;sg.style.height=(pg.scrollHeight*s)+'px';}
+addEventListener('resize',fit);
+function seg(id,fn){$(id).onclick=e=>{const b=e.target.closest('[data-v]');if(!b)return;[...$(id).children].forEach(x=>x.setAttribute('aria-pressed',String(x===b)));fn(b.dataset.v);};}
+seg('#sSvar',v=>{st.svar=v;render();});
+seg('#sAntal',v=>{st.antal=+v;render();});
+$('#facit').onchange=render;
+$('#nya').onclick=()=>{st.bas=nyBas();$('#nr').value='';render();};
+$('#nr').oninput=e=>{const v=e.target.value.replace(/\D/g,'').slice(0,6);e.target.value=v;if(v.length>=5){st.bas=+v;render();}};
+$('#print').onclick=()=>window.print();
+render();
+</script>
+</body>
+</html>

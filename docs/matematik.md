@@ -82,3 +82,8 @@ Delade ritningar i roten, inga kopior i sidorna: `klocka.js`, `vag.js`, `brak.js
 - En uppgift om hur mönsterbitarna hänger ihop, kanske i Bråk.
 - Rest i Dela upp och dela, bara efter lärarens ok.
 - Bredare layout på dator för matteövningarna, en i taget om det behövs.
+
+## Utskrivbara blad som genereras (Skriv ut)
+
+- **Hundrarutan med hål** (`skriv-ut/hundraruta.html`, lärarens önskan 14 nov 2026): en ny hundraruta med slumpade hål varje gång. Svårighet Lätt (15 hål, aldrig två intill varandra), Medel (30), Svår (50). 1, 2, 5 eller 10 blad, alla olika. **Facit sist** (4 blad per facitsida, de saknade talen i ruta). Varje blad har ett **bladnummer** (femsiffrigt) längst ner; samma nummer och svårighet ger samma blad igen (`blad(nr,svar)`, seedad slump). Svartvitt, A4, grå rutor att skriva i. Mönstret (stage + `fit()` + print-CSS) är lånat från `handstil/blad.html`: nya generatorer ska följa det.
+
