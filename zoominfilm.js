@@ -102,23 +102,44 @@ function scenes(E){
 
   /* nivåer: ritas runt (cx,cy) med storlek S och tid t. Det man zoomar in mot ligger alltid i mitten. d = om detaljer (etiketter) ska med */
   const LV=[null,
-  // 1 · Handen (handryggen, fingrarna rör sig lite)
-  (cx,cy,S,t,d)=>{const x=E.x,u=S*.0039;x.save();x.translate(cx,cy-u*45);x.scale(u,u);
-    x.fillStyle="rgba(0,0,0,.3)";x.beginPath();x.ellipse(5,62,50,62,0,0,TAU);x.fill();
-    const hud=x.createLinearGradient(-48,0,48,0);hud.addColorStop(0,"#f1c6a4");hud.addColorStop(.55,"#e6b08c");hud.addColorStop(1,"#c98e6c");
-    const finger=(x0,y0,len,w,ang,boj)=>{x.save();x.translate(x0,y0);x.rotate(ang+boj);x.fillStyle=hud;x.strokeStyle="rgba(140,85,60,.55)";x.lineWidth=1.1;x.beginPath();x.roundRect(-w/2,-len,w,len+w*.6,w/2);x.fill();x.stroke();
-      x.fillStyle="#f8dfd0";x.strokeStyle="rgba(170,110,95,.6)";x.beginPath();x.roundRect(-w*.33,-len+w*.14,w*.66,w*.78,w*.26);x.fill();x.stroke();
-      x.strokeStyle="rgba(140,85,60,.4)";x.lineWidth=1;[-len*.52,-len*.5+2.4,-len*.1,-len*.1+2.4].forEach(yy=>{x.beginPath();x.moveTo(-w*.3,yy);x.quadraticCurveTo(0,yy+1.6,w*.3,yy);x.stroke();});x.restore();};
-    // handled och handrygg
-    x.fillStyle=hud;x.strokeStyle="rgba(140,85,60,.55)";x.lineWidth=1.1;x.beginPath();x.moveTo(-27,150);x.lineTo(-25,80);x.quadraticCurveTo(-40,52,-36,22);x.quadraticCurveTo(-34,-6,-2,-8);x.quadraticCurveTo(34,-6,36,22);x.quadraticCurveTo(40,54,27,82);x.lineTo(29,150);x.closePath();x.fill();x.stroke();
-    const v=i=>Math.sin(t*1.1+i*1.3)*.035;
-    finger(-36,38,34,16,-.95,v(0));finger(-25,-2,43,14,-.13,v(1));finger(-8,-6,52,14.5,-.03,v(2));finger(9,-5,48,14,.06,v(3));finger(25,0,36,12.5,.17,v(4));
-    // knogar och senor
-    x.strokeStyle="rgba(150,95,70,.3)";x.lineWidth=1.3;[[-25,2],[-8,-2],[9,-1],[25,3]].forEach(([kx,ky])=>{x.beginPath();x.arc(kx,ky+4,5.5,Math.PI*1.1,Math.PI*1.9);x.stroke();});
+  // 1 · Handen (handryggen): fingrar som smalnar av, med leder, naglar och mjuk skuggning. Fingrarna rör sig lite.
+  (cx,cy,S,t,d)=>{const x=E.x,u=S*.0039;x.save();x.translate(cx,cy-u*38);x.scale(u,u);x.rotate(-.05);
+    const KANT="rgba(120,68,48,.62)";
+    // skugga under handen
+    x.fillStyle="rgba(0,0,0,.28)";x.beginPath();x.ellipse(8,60,52,66,0,0,TAU);x.fill();
+    // ett finger: halva bredden på olika höjd (bas, mellan, led, mellan, led, topp), ritat som en mjuk form
+    const HW=[[.06,.5],[-.2,.455],[-.42,.495],[-.57,.43],[-.72,.46],[-.88,.4],[-.975,.27]];
+    const finger=(x0,y0,len,w,ang,boj,nagel)=>{x.save();x.translate(x0,y0);x.rotate(ang+boj);
+      const L=HW.map(([yy,hw])=>[-hw*w,yy*len]),R=HW.map(([yy,hw])=>[hw*w,yy*len]).reverse(),P=[...L,[0,-len*1.01],...R];
+      x.beginPath();x.moveTo(P[0][0],P[0][1]+w*.5);x.lineTo(P[0][0],P[0][1]);for(let k=1;k<P.length-1;k++){const mx=(P[k][0]+P[k+1][0])/2,my=(P[k][1]+P[k+1][1])/2;x.quadraticCurveTo(P[k][0],P[k][1],mx,my);}x.lineTo(P[P.length-1][0],P[P.length-1][1]);x.lineTo(P[P.length-1][0],P[P.length-1][1]+w*.5);x.closePath();
+      const g=x.createLinearGradient(-w*.5,0,w*.5,0);g.addColorStop(0,"#d39a79");g.addColorStop(.22,"#eec3a3");g.addColorStop(.55,"#f5d0b3");g.addColorStop(.85,"#e2ad8b");g.addColorStop(1,"#c68a68");x.fillStyle=g;x.fill();x.strokeStyle=KANT;x.lineWidth=.9;x.stroke();
+      // ledernas veck
+      x.strokeStyle="rgba(130,75,55,.42)";x.lineWidth=.8;[[-.42,.33],[-.4,.24],[-.44,.2],[-.72,.3],[-.7,.2]].forEach(([yy,b],k)=>{x.beginPath();x.moveTo(-w*b,yy*len);x.quadraticCurveTo(0,yy*len+(k%2?1.2:1.8),w*b,yy*len);x.stroke();});
+      // nageln
+      if(nagel!==false){const ny=-len*.985,nh=len*.17,nw=w*.29;x.beginPath();x.moveTo(-nw,ny+nh);x.quadraticCurveTo(-nw*1.08,ny+nh*.3,-nw*.7,ny+nh*.06);x.quadraticCurveTo(0,ny-nh*.12,nw*.7,ny+nh*.06);x.quadraticCurveTo(nw*1.08,ny+nh*.3,nw,ny+nh);x.quadraticCurveTo(0,ny+nh*1.18,-nw,ny+nh);x.closePath();
+        const ng=x.createLinearGradient(-nw,0,nw,0);ng.addColorStop(0,"#f3cfc2");ng.addColorStop(.45,"#fdeee6");ng.addColorStop(1,"#eec2b4");x.fillStyle=ng;x.fill();x.strokeStyle="rgba(150,90,80,.55)";x.lineWidth=.7;x.stroke();
+        x.strokeStyle="rgba(255,255,255,.75)";x.lineWidth=.9;x.beginPath();x.moveTo(-nw*.35,ny+nh*.28);x.lineTo(-nw*.3,ny+nh*.78);x.stroke();
+        x.fillStyle="rgba(255,255,255,.5)";x.beginPath();x.ellipse(0,ny+nh*.98,nw*.55,nh*.16,0,Math.PI,TAU);x.fill();}
+      x.restore();};
+    const v=i=>Math.sin(t*1.1+i*1.3)*.03;
+    // tummen först (ligger delvis bakom handen), sedan fingrarna
+    finger(-30,56,58,20,-.8,v(0)*1.4);
+    finger(-25,3,55,16.6,-.15,v(1));finger(-8.3,-3.5,64,17.2,-.045,v(2));finger(8.8,-2.5,59,16.6,.05,v(3));finger(25,4.5,46,14.4,.16,v(4));
+    // handryggen: täcker fingrarnas rötter, kanten ritas bara på sidorna
+    const rygg=()=>{x.beginPath();x.moveTo(-23,122);x.bezierCurveTo(-25,100,-33,88,-38,70);x.bezierCurveTo(-43,52,-38,22,-32,9);x.quadraticCurveTo(-28,-3,-20,-3);x.quadraticCurveTo(-8,-10,6,-8);x.quadraticCurveTo(20,-6,29,1);x.quadraticCurveTo(35,8,35,22);x.bezierCurveTo(37,50,33,78,26,96);x.bezierCurveTo(24,106,24,114,24,122);x.closePath();};
+    rygg();const pg=x.createRadialGradient(-10,30,6,0,55,84);pg.addColorStop(0,"#f6d3b6");pg.addColorStop(.55,"#ecbe9d");pg.addColorStop(1,"#cd9270");x.fillStyle=pg;x.fill();
+    x.strokeStyle=KANT;x.lineWidth=.9;x.beginPath();x.moveTo(-23,122);x.bezierCurveTo(-25,100,-33,88,-38,70);x.bezierCurveTo(-43,52,-38,22,-32,9);x.stroke();x.beginPath();x.moveTo(35,22);x.bezierCurveTo(37,50,33,78,26,96);x.bezierCurveTo(24,106,24,114,24,122);x.stroke();
+    // knogar: en ljus bula med ett litet veck under
+    [[-24,4,6.6],[-8,-1.5,7],[9,-.5,6.8],[24,5.5,6]].forEach(([kx,ky,r])=>{const kg=x.createRadialGradient(kx-1,ky+1,.5,kx,ky+2,r*1.25);kg.addColorStop(0,"rgba(255,232,214,.85)");kg.addColorStop(1,"rgba(255,232,214,0)");x.fillStyle=kg;x.beginPath();x.arc(kx,ky+2,r*1.25,0,TAU);x.fill();
+      x.strokeStyle="rgba(130,75,55,.34)";x.lineWidth=.8;x.beginPath();x.arc(kx,ky+1.5,r*.72,Math.PI*.12,Math.PI*.88);x.stroke();x.beginPath();x.arc(kx,ky+4,r*.5,Math.PI*.18,Math.PI*.82);x.stroke();});
+    // skuggor mellan fingrarna och vid tumgreppet
+    x.strokeStyle="rgba(120,68,48,.3)";x.lineWidth=1;[[-16,-1],[1,-4.5],[17,-1]].forEach(([sx,sy])=>{x.beginPath();x.moveTo(sx,sy);x.quadraticCurveTo(sx+.6,sy+6,sx-.4,sy+11);x.stroke();});
+    x.beginPath();x.moveTo(-35,34);x.quadraticCurveTo(-27,44,-29,58);x.stroke();
     // ärmen
-    const arm=x.createLinearGradient(-34,0,34,0);arm.addColorStop(0,"#5b78ff");arm.addColorStop(1,"#2f47c9");x.fillStyle=arm;x.strokeStyle="#1d2f96";x.lineWidth=1.2;x.beginPath();x.roundRect(-34,118,68,46,10);x.fill();x.stroke();x.strokeStyle="rgba(255,255,255,.35)";x.beginPath();x.moveTo(-30,128);x.lineTo(30,128);x.stroke();
+    const arm=x.createLinearGradient(-34,0,34,0);arm.addColorStop(0,"#6d88ff");arm.addColorStop(.5,"#4a65ee");arm.addColorStop(1,"#2c43c0");x.fillStyle=arm;x.strokeStyle="#1d2f96";x.lineWidth=1.1;x.beginPath();x.roundRect(-33,113,67,50,11);x.fill();x.stroke();
+    x.strokeStyle="rgba(255,255,255,.4)";x.lineWidth=1;x.beginPath();x.moveTo(-28,122);x.quadraticCurveTo(0,125,29,122);x.stroke();x.strokeStyle="rgba(20,30,110,.35)";x.beginPath();x.moveTo(-10,128);x.quadraticCurveTo(-8,145,-12,160);x.moveTo(12,130);x.quadraticCurveTo(15,146,11,160);x.stroke();
     x.restore();
-    if(d){dim(cx-u*56,cy-u*45-u*74,cx+u*37,"ungefär 10 cm");}},
+    if(d){dim(cx-u*66,cy-u*45-u*84,cx+u*37,"ungefär 10 cm");}},
   // 2 · Huden i genomskärning
   (cx,cy,S,t,d)=>{const x=E.x,h=bakaHud(),k=S*1.2/HW,w=HW*k,hh=HH*k,x0=cx-w/2,y0=cy-(YT+118)*k;
     x.save();x.beginPath();x.roundRect(x0,y0-40*k,w,hh+40*k,16*k);x.clip();x.drawImage(h,x0,y0,w,hh);x.restore();
