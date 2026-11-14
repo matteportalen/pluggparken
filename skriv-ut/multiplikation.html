@@ -69,7 +69,8 @@ h1{margin:8px 0 2px;font-size:2rem}
 .ft{position:absolute;left:18mm;right:18mm;bottom:9mm;display:flex;justify-content:space-between;font-size:3.6mm;font-weight:700;color:#444}
 /* baksidan */
 .rum{margin-top:5mm;border:.4mm dashed #999;border-radius:3mm;display:grid;place-items:start center;padding-top:4mm;font-size:4.4mm;font-weight:700;color:#777}
-.fold{position:absolute;left:18mm;right:18mm;border-top:.5mm dashed #000;padding-top:1.2mm}
+.fold{position:absolute;left:18mm;right:18mm;bottom:10mm;border-top:.5mm dashed #000;padding-top:3mm}
+.vand{transform:rotate(180deg)}
 .fold b{font-size:4mm;display:block;margin-bottom:1.5mm}
 .fk{display:grid;grid-template-columns:repeat(3,1fr);column-gap:7mm;font-size:3.6mm;font-weight:600;line-height:4.5mm}
 .fk div{white-space:nowrap}.fk b{display:inline;font-size:inherit;margin:0;font-weight:800}
@@ -115,7 +116,7 @@ h1{margin:8px 0 2px;font-size:2rem}
     <p class="hint" id="hBlad">Alla blad får olika uppgifter, så att kompisarna inte kan titta av varandra.</p></div>
 
   <div class="panel"><div class="opts">
-    <label class="ck"><input type="checkbox" id="facit" checked> Facit på baksidan (att vika fram och rätta själv)</label>
+    <label class="ck"><input type="checkbox" id="facit" checked> Facit på baksidan (upp och ner, att vika upp och rätta själv)</label>
     <button class="sek" id="nya">🎲 Nya uppgifter</button>
     <button class="go" id="print">🖨️ Skriv ut</button>
     <a class="tillbaka" href="./">← Alla blad</a>
@@ -152,13 +153,10 @@ function front(b){
    <div class="tid"><span>Start<span class="l"></span></span><span>Slut<span class="l"></span></span><span>Tid<span class="l" style="width:17mm"></span> min</span><span class="sp">Rätt<span class="l" style="width:13mm"></span> / ${n}</span></div>
    <div class="tg">${ord.map(i=>i<0?'<div></div>':`<div class="t" style="height:${h}mm"><small>${i+1}</small>${b.u[i][0]} · ${b.u[i][1]} =<i></i></div>`).join('')}</div>
    <div class="ft"><span>Pluggparken.se · Tabell ${sv(b.tab)}</span><span>Blad nr ${b.nr}</span></div></section>`;}
-function back(b){
-  const n=b.u.length,rader=Math.ceil(n/3),hojd=rader*4.5+8; // mm: facitremsa längst ner
+function back(b){ // baksidan: bara facit, upp och ner längst ner, så att det blir rättvänt när man viker upp remsan
+  const n=b.u.length,rader=Math.ceil(n/3);
   const kol=[];for(let r=0;r<rader;r++)for(let c=0;c<3;c++){const i=c*rader+r;kol.push(i<n?`<div>${i+1}. ${b.u[i][0]} · ${b.u[i][1]} = <b>${b.u[i][0]*b.u[i][1]}</b></div>`:'<div></div>');}
-  return `<section class="sida"><div class="hd"><h2>Baksidan</h2><div class="nm">${b.titel}</div></div>
-   <div class="rum" style="height:${297-13-14-hojd-22}mm">Plats för uträkningar</div>
-   <div class="fold" style="bottom:16mm"><b>✂ Vik upp här. Facit när du är klar:</b><div class="fk">${kol.join('')}</div></div>
-   <div class="ft"><span>Pluggparken.se</span><span>Blad nr ${b.nr}</span></div></section>`;}
+  return `<section class="sida"><div class="fold"><div class="vand"><b>Facit · ${b.titel} · blad nr ${b.nr}</b><div class="fk">${kol.join('')}</div></div></div></section>`;}
 function render(){
   const l=sidor();
   $('#pages').innerHTML=l.map(b=>front(b)+($('#facit').checked?back(b):'')).join('');
