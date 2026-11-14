@@ -414,3 +414,10 @@ Lärarens fynd: eleverna tycker spelet är svårt att förstå och ta sig igenom
 - **`index.html`**: stilen (`.depth-map`, `.dm-…`), och journalen öppnas nu överst (förut hamnade man längst ner vid knappen).
 - Test: `skript/test-glodvaktaren-djupen-karta.cjs` (dator och 390 × 844: antal rum och gångar, lås, dörrlista, namnen ryms i rutorna). Fem äldre Djupen-sviter och vägvisartestet går igenom.
 - **Inte gjort:** på mobil är rumsnamnen små (cirka 8 px). Inte provat med elever eller på riktig pekskärm.
+
+### Glödväktaren: Djupen enklare och med vägledning (nov 2026)
+- **`djupen.js`** (`?v=5`): `depthProblem(mode,id)` omskriven. Tabell 2–5: motvikten 3 · □ = 12, pumpen 3 · 4, tavlorna 2 · 5 / 4 · 4 / 3 · 4, förrådet 30 delat på 5, bron 3 · 4 = 2 · 6, cisternen 4 · 5, sigillet 3 · □ = 12, hjärtat A = 4 · 5 och B = 3 · 5. Addition till 20: 6 + □ = 15, 18 − 9, tre summor, 12 delat på två hushåll, 8 + 7 = 9 + 6, 19 − 8, □ + 5 = 13, 6 + 5 och 9 + 4. Motsvarande i de två andra lägena. `DEPTH_STAGE_COUNTS` är 1 för alla (sparade delsteg ignoreras). `solved()` markerar alla tre kedjor när ett sigill löses (gamla sparningar med en eller två kedjor lösta fungerar). Fel ordning på tavlorna lägger tillbaka dem.
+- Vägledning: `mal()` ger nästa mål (slussvakten först, sedan `DEPTH_STEPS`; är man i fel rum söks kortaste öppna väg med `vagTill`, så den pekar rätt även från Bostäderna), ritas med `GlodGuide.draw` i `draw()`. `hud()` skriver måltexten och visar skylten. Slussvakten nämner glödljuset och kartan i journalen. Testkrokar: `MPGlod.depthGuide()`, `MPGlod.depthOpen(id)`.
+- Test: nytt `skript/test-glodvaktaren-djupen-vagledning.cjs` (tabell-läget, dator och 390 × 844). Anpassade: `-djupen.cjs`, `-djupen-final.cjs`, `-djupen-data.mjs`. Nio sviter går igenom.
+- **Känt sedan tidigare, inte åtgärdat:** `test-glodvaktaren-pratbubblor.cjs` fallerar på 1280 px (knappen Använd ligger utanför scenens kant); det gör den även på versionen före vägvisaren. Striderna i spelet skriver fortfarande × och inte ·.
+- **Inte gjort:** inte provat med elever eller på riktig pekskärm.
