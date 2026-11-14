@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<script src="../tema.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Multiplikationsprov och tabellhäfte – Pluggparken</title>
+<meta name="description" content="Skriv ut veckans prov i multiplikation på tid, eller ett tabellhäfte för mängdträning. Välj tabeller och antal uppgifter. Facit på baksidan.">
+<meta name="theme-color" content="#1F3A35">
+<link rel="canonical" href="https://pluggparken.se/skriv-ut/multiplikation.html">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../fonts/fonts.css">
+<style>
+:root{
+  --bg:#EAF3FF; --ink:#1D2B53; --muted:#56668F; --card:#FFFFFF; --line:#C6D6F2; --soft:#F1F6FF;
+  --good:#1E9E5E; --good-dark:#157548; --accent:#3D5AFE;
+  --font:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:900px;margin:0 auto;padding:12px 16px 40px}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer;touch-action:manipulation;border:0;background:none}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+h1{margin:8px 0 2px;font-size:2rem}
+.lead{margin:0 0 12px;color:var(--muted)}
+.panel{background:var(--card);border-radius:20px;padding:12px 14px;box-shadow:0 5px 0 var(--line);margin-bottom:12px}
+.panel h2{margin:0 0 6px;font-size:1.05rem}
+.seg{display:flex;flex-wrap:wrap;gap:8px}
+.seg button{min-height:48px;padding:8px 16px;border-radius:14px;background:var(--soft);box-shadow:0 3px 0 var(--line);font-weight:800}
+.seg button small{display:block;font-weight:600;color:var(--muted);font-size:.8rem;line-height:1.1}
+.seg button[aria-pressed=true]{background:var(--ink);color:#fff;box-shadow:0 3px 0 #0E1735}
+.seg button[aria-pressed=true] small{color:#C9D3F2}
+.seg button:active{transform:translateY(2px)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{min-width:52px;min-height:48px;padding:6px 10px;border-radius:14px;background:#fff;border:2px solid var(--line);font-weight:800;font-size:1.1rem}
+.chips button[aria-pressed=true]{background:#E4F7EC;border-color:var(--good);color:var(--ink)}
+.chips button[aria-pressed=true]::before{content:"✓ ";color:var(--good)}
+.mini{min-height:44px;padding:6px 14px;border-radius:12px;background:var(--soft);box-shadow:0 2px 0 var(--line);font-weight:800}
+.opts{display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px}
+.ck{display:flex;align-items:center;gap:8px;font-weight:700;cursor:pointer}
+.ck input{width:22px;height:22px;accent-color:var(--good)}
+.go{min-height:52px;padding:10px 22px;border-radius:16px;background:var(--good);color:#fff;font-weight:800;box-shadow:0 4px 0 var(--good-dark)}
+.go:active{transform:translateY(3px);box-shadow:0 1px 0 var(--good-dark)}
+.sek{min-height:48px;padding:8px 16px;border-radius:14px;background:#fff;border:2px solid var(--line);font-weight:800;box-shadow:0 3px 0 var(--line)}
+.nr{width:7.5em;min-height:44px;padding:6px 10px;border-radius:12px;border:2px solid var(--line);background:var(--soft);font-weight:700}
+.eget{width:5em;min-height:48px;padding:6px 10px;border-radius:14px;border:2px solid var(--line);background:var(--soft);font-weight:800;text-align:center}
+.hint{margin:6px 0 0;color:var(--muted);font-size:.92rem}
+.tillbaka{display:inline-block;color:var(--ink);font-weight:800}
+.stage{margin-top:12px;overflow:hidden}
+.pages{width:210mm;transform-origin:0 0}
+[hidden]{display:none!important}
+
+/* ---- bladen (A4, svartvita) ---- */
+.sida{width:210mm;height:297mm;background:#fff;color:#000;padding:13mm 18mm 0;position:relative;overflow:hidden;margin:0 0 6mm;box-shadow:0 2px 14px rgba(29,43,83,.25);break-after:page;page-break-after:always}
+.sida:last-child{break-after:auto;page-break-after:auto}
+.hd{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:.9mm solid #000;padding-bottom:2mm;gap:6mm}
+.hd h2{margin:0;font-size:8.6mm;font-weight:800;line-height:1}
+.nm{font-size:5mm;font-weight:700;white-space:nowrap}
+.nm span{display:inline-block;width:50mm;border-bottom:.5mm solid #000;margin-left:2mm}
+.tid{display:flex;gap:5mm;align-items:center;margin:4mm 0 3mm;font-size:5mm;font-weight:700;border:.5mm solid #000;border-radius:3mm;padding:2.5mm 4mm}
+.tid span.l{display:inline-block;width:23mm;border-bottom:.45mm solid #000;margin-left:1.5mm}
+.tid .sp{margin-left:auto}
+.tg{display:grid;grid-template-columns:repeat(3,1fr);column-gap:7mm;margin-top:2mm}
+.t{display:flex;align-items:center;gap:2.5mm;border-bottom:.3mm dotted #888;font-size:6.6mm;font-weight:800;white-space:nowrap}
+.t small{font-size:3.4mm;font-weight:700;color:#666;width:6.5mm;text-align:right;flex:none}
+.t i{font-style:normal;display:inline-block;width:17mm;border-bottom:.5mm solid #000;height:7mm;margin-left:1mm}
+.ft{position:absolute;left:18mm;right:18mm;bottom:9mm;display:flex;justify-content:space-between;font-size:3.6mm;font-weight:700;color:#444}
+/* baksidan */
+.rum{margin-top:5mm;border:.4mm dashed #999;border-radius:3mm;display:grid;place-items:start center;padding-top:4mm;font-size:4.4mm;font-weight:700;color:#777}
+.fold{position:absolute;left:18mm;right:18mm;border-top:.5mm dashed #000;padding-top:1.2mm}
+.fold b{font-size:4mm;display:block;margin-bottom:1.5mm}
+.fk{display:grid;grid-template-columns:repeat(3,1fr);column-gap:7mm;font-size:3.6mm;font-weight:600;line-height:4.5mm}
+.fk div{white-space:nowrap}.fk b{display:inline;font-size:inherit;margin:0;font-weight:800}
+@page{size:A4;margin:0}
+@media print{
+  body{background:#fff}.noprint{display:none!important}.wrap{max-width:none;padding:0;margin:0;display:block}
+  .stage{margin:0;overflow:visible;height:auto!important}
+  .pages{transform:none!important;width:210mm}
+  .sida{box-shadow:none;margin:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<script src="../ljud.js"></script>
+<script src="../djur.js"></script>
+<script src="../huvud.js" data-titel="Multiplikation" data-ikon="🖨️"></script>
+<main class="wrap">
+<div class="noprint">
+  <h1>Multiplikationsprov och tabellhäfte</h1>
+  <p class="lead">Slumpade uppgifter att räkna på tid, med plats för start, slut och antal rätt. Facit står längst ner på baksidan, så att eleven kan vika fram det efteråt och rätta själv.</p>
+
+  <div class="panel"><h2>1. Vad vill du skriva ut?</h2>
+    <div class="seg" id="sTyp" role="group" aria-label="Typ av blad">
+      <button data-v="prov" aria-pressed="true">📝 Veckans prov<small>blandade uppgifter ur tabellerna du väljer</small></button>
+      <button data-v="haft" aria-pressed="false">📘 Tabellhäfte<small>en sida för varje tabell, för mängdträning</small></button>
+    </div></div>
+
+  <div class="panel"><h2>2. Vilka tabeller?</h2>
+    <div class="chips" id="cTab" role="group" aria-label="Tabeller"></div>
+    <div class="seg" style="margin-top:10px" id="sSnabb"><button class="mini" data-s="alla">Alla</button><button class="mini" data-s="inga">Inga</button><button class="mini" data-s="lagt">2 3 4 5</button><button class="mini" data-s="mitt">6 7 8 9</button></div></div>
+
+  <div class="panel"><h2>3. Hur många uppgifter på varje blad?</h2>
+    <div class="seg" id="sAntal" role="group" aria-label="Antal uppgifter">
+      <button data-v="20" aria-pressed="false">20</button><button data-v="30" aria-pressed="true">30</button><button data-v="36" aria-pressed="false">36</button>
+      <label class="ck" style="margin-left:6px">eller eget antal <input class="eget" id="eget" type="number" inputmode="numeric" min="6" max="36" placeholder="6–36"></label>
+    </div>
+    <p class="hint">Uppgifterna står i tre kolumner. Högst 36 får plats på ett blad.</p></div>
+
+  <div class="panel"><h2>4. Hur många blad?</h2>
+    <div class="seg" id="sBlad" role="group" aria-label="Antal blad">
+      <button data-v="1" aria-pressed="true">1</button><button data-v="2" aria-pressed="false">2</button><button data-v="5" aria-pressed="false">5</button><button data-v="10" aria-pressed="false">10</button>
+    </div>
+    <p class="hint" id="hBlad">Alla blad får olika uppgifter, så att kompisarna inte kan titta av varandra.</p></div>
+
+  <div class="panel"><div class="opts">
+    <label class="ck"><input type="checkbox" id="facit" checked> Facit på baksidan (att vika fram och rätta själv)</label>
+    <button class="sek" id="nya">🎲 Nya uppgifter</button>
+    <button class="go" id="print">🖨️ Skriv ut</button>
+    <a class="tillbaka" href="./">← Alla blad</a>
+  </div>
+  <div class="opts" style="margin-top:10px"><label class="hint" for="nr" style="margin:0">Vill du ha ett bestämt blad igen? Skriv bladets nummer (står längst ner på bladet) och välj samma tabeller och antal:</label><input class="nr" id="nr" inputmode="numeric" maxlength="6" placeholder="t.ex. 48213" autocomplete="off"></div>
+  <p class="hint" id="info"></p></div>
+</div>
+<div class="stage" id="stage"><div class="pages" id="pages"></div></div>
+</main>
+<script>
+const $=s=>document.querySelector(s);
+let st={typ:'prov',tab:new Set([2,3,4,5]),antal:30,blad:1,bas:nyBas()};
+function nyBas(){return 10000+Math.floor(Math.random()*89000);}
+function prng(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function blanda(l,r){for(let i=l.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[l[i],l[j]]=[l[j],l[i]];}return l;}
+/* uppgifter [a,b] ur tabeller; varje (tabell,faktor) en gång per omgång, sedan en ny omgång; slumpad ordning på faktorerna */
+function uppgifter(nr,tabeller,n,bada){
+  const r=prng(nr*7919+tabeller.reduce((s,t)=>s*13+t,n)),ut=[];
+  while(ut.length<n){const omg=[],sett=new Set();tabeller.forEach(t=>{for(let b=1;b<=10;b++){if(bada){omg.push([t,b]);if(b!==t)omg.push([b,t]);continue;} // häfte: båda ordningarna, 7 · 6 och 6 · 7
+      const k=Math.min(t,b)+'x'+Math.max(t,b);if(sett.has(k))continue;sett.add(k);omg.push(r()<.5?[t,b]:[b,t]);}});blanda(omg,r); // 3·2 och 2·3 räknas som samma uppgift
+    omg.forEach(u=>{if(ut.length<n)ut.push(u);});}
+  return ut;}
+function antal(){return st.antal;}
+function sidor(){
+  const tabs=[...st.tab].sort((a,b)=>a-b);if(!tabs.length)return[];
+  if(st.typ==='haft'){const l=[];tabs.forEach((t,k)=>{for(let i=0;i<st.blad;i++)l.push({nr:st.bas+k*st.blad+i,titel:t+':ans tabell',tab:[t],u:uppgifter(st.bas+k*st.blad+i,[t],antal(),true)});});return l;}
+  return Array.from({length:st.blad},(_,i)=>({nr:st.bas+i,titel:'Multiplikationsprov',tab:tabs,u:uppgifter(st.bas+i,tabs,antal())}));}
+const sv=t=>t.join(', ').replace(/, ([^,]*)$/,' och $1');
+function front(b){
+  const n=b.u.length,rader=Math.ceil(n/3),h=Math.min(23,Math.floor(212/rader));
+  // kolumnvis: 1–10 i första kolumnen, 11–20 i andra osv, så att man läser nedåt
+  const ord=[];for(let r=0;r<rader;r++)for(let c=0;c<3;c++){const i=c*rader+r;ord.push(i<n?i:-1);}
+  return `<section class="sida"><div class="hd"><h2>${b.titel}</h2><div class="nm">Namn:<span></span></div></div>
+   <div class="tid"><span>Start<span class="l"></span></span><span>Slut<span class="l"></span></span><span>Tid<span class="l" style="width:17mm"></span> min</span><span class="sp">Rätt<span class="l" style="width:13mm"></span> / ${n}</span></div>
+   <div class="tg">${ord.map(i=>i<0?'<div></div>':`<div class="t" style="height:${h}mm"><small>${i+1}</small>${b.u[i][0]} · ${b.u[i][1]} =<i></i></div>`).join('')}</div>
+   <div class="ft"><span>Pluggparken.se · Tabell ${sv(b.tab)}</span><span>Blad nr ${b.nr}</span></div></section>`;}
+function back(b){
+  const n=b.u.length,rader=Math.ceil(n/3),hojd=rader*4.5+8; // mm: facitremsa längst ner
+  const kol=[];for(let r=0;r<rader;r++)for(let c=0;c<3;c++){const i=c*rader+r;kol.push(i<n?`<div>${i+1}. ${b.u[i][0]} · ${b.u[i][1]} = <b>${b.u[i][0]*b.u[i][1]}</b></div>`:'<div></div>');}
+  return `<section class="sida"><div class="hd"><h2>Baksidan</h2><div class="nm">${b.titel}</div></div>
+   <div class="rum" style="height:${297-13-14-hojd-22}mm">Plats för uträkningar</div>
+   <div class="fold" style="bottom:16mm"><b>✂ Vik upp här. Facit när du är klar:</b><div class="fk">${kol.join('')}</div></div>
+   <div class="ft"><span>Pluggparken.se</span><span>Blad nr ${b.nr}</span></div></section>`;}
+function render(){
+  const l=sidor();
+  $('#pages').innerHTML=l.map(b=>front(b)+($('#facit').checked?back(b):'')).join('');
+  const per=$('#facit').checked?2:1;
+  $('#info').textContent=l.length?`${l.length*per} ${l.length*per===1?'sida':'sidor'} (A4)${per===2?', varje blad med facit på baksidan. Skriv ut dubbelsidigt, vänd på långsidan':''}. Blad nr ${l[0].nr}${l.length>1?'–'+l[l.length-1].nr:''}. Välj Skriv ut och skala "100 %" i skrivardialogen.`:'Välj minst en tabell.';
+  $('#hBlad').textContent=st.typ==='haft'?'Så många blad får varje vald tabell. Alla blad får olika uppgifter.':'Alla blad får olika uppgifter, så att kompisarna inte kan titta av varandra.';
+  fit();}
+function fit(){const sg=$('#stage'),pg=$('#pages');if(!pg.firstElementChild){sg.style.height='0';return;}
+  const mm=96/25.4,w=210*mm,s=Math.min(1,(sg.clientWidth||w)/w);pg.style.transform=`scale(${s})`;sg.style.height=(pg.scrollHeight*s)+'px';}
+addEventListener('resize',fit);
+function seg(id,fn){$(id).onclick=e=>{const b=e.target.closest('[data-v]');if(!b)return;[...$(id).querySelectorAll('[data-v]')].forEach(x=>x.setAttribute('aria-pressed',String(x===b)));fn(b.dataset.v);};}
+function chips(){const c=$('#cTab');c.innerHTML='';for(let t=2;t<=12;t++){const b=document.createElement('button');b.textContent=t+':an';b.setAttribute('aria-pressed',String(st.tab.has(t)));b.onclick=()=>{st.tab.has(t)?st.tab.delete(t):st.tab.add(t);b.setAttribute('aria-pressed',String(st.tab.has(t)));render();};c.appendChild(b);}}
+$('#sSnabb').onclick=e=>{const b=e.target.closest('[data-s]');if(!b)return;const s=b.dataset.s;st.tab=new Set(s==='alla'?[2,3,4,5,6,7,8,9,10,11,12].filter(t=>t<=10):s==='lagt'?[2,3,4,5]:s==='mitt'?[6,7,8,9]:[]);chips();render();};
+seg('#sTyp',v=>{st.typ=v;render();});
+seg('#sAntal',v=>{st.antal=+v;$('#eget').value='';render();});
+$('#eget').oninput=e=>{const v=Math.max(6,Math.min(36,+e.target.value||0));if(+e.target.value>=6){st.antal=v;[...$('#sAntal').querySelectorAll('[data-v]')].forEach(x=>x.setAttribute('aria-pressed','false'));render();}};
+$('#eget').onchange=e=>{if(e.target.value!==''){e.target.value=Math.max(6,Math.min(36,+e.target.value||30));}};
+seg('#sBlad',v=>{st.blad=+v;render();});
+$('#facit').onchange=render;
+$('#nya').onclick=()=>{st.bas=nyBas();$('#nr').value='';render();};
+$('#nr').oninput=e=>{const v=e.target.value.replace(/\D/g,'').slice(0,6);e.target.value=v;if(v.length>=5){st.bas=+v;render();}};
+$('#print').onclick=()=>window.print();
+chips();render();
+</script>
+</body>
+</html>

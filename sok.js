@@ -61,6 +61,7 @@ const IDX=[
  ['fler/','Fler ämnen','Engelska, logik, kod och pengar','🧩','ämnen andra ämnen engelska logik digitalt pengar','Ämnen'],
  ['extra/','Extra','Saker att göra själv: optiska illusioner, pyssel och mer','✨','extra pyssel illusion skriva ut göra själv bonus','Ämnen'],
  ['ovriga/ordgomma/','Ordgömman','Hitta de gömda orden i tio teman','🔤','ordsök ord gömda bokstäver tema','Svenska'],
+ ['skriv-ut/multiplikation.html','Multiplikationsprov och tabellhäfte (utskrift)','Skriv ut veckans prov på tid eller ett tabellhäfte med facit','🖨️','multiplikation prov veckans prov tabeller tabellhäfte gångertabellen multiplikationstabellen skriva ut utskrift facit på tid mängdträning','Matte'],
  ['skriv-ut/hundraruta.html','Hundrarutan med hål (utskrift)','Skriv ut en ny hundraruta med slumpade hål, med facit','🖨️','hundraruta hål skriva ut utskrift blad arbetsblad facit slumpa tal 100 saknade tal','Matte'],
  ['handstil/blad.html','Övningsblad för handstil','Skriv ut blad med bokstäver, siffror, ord och namn att öva handstil','🖨️','handstil övningsblad skriva ut utskrift blad skrivövning bokstäver namn siffror skrivstil tryckbokstäver','Svenska'],
  ['handstil/','Handstil','Öva att skriva bokstäver med fingret eller pennan: tryckbokstäver och skrivstil','✏️','handstil skriva skrivstil tryckbokstäver bokstäver alfabetet penna spåra följa stigen skrivövning svenska','Svenska'],
