@@ -14,6 +14,7 @@ _Det som gäller nu för Specialare (minilektioner, quiz, prova själv) och alla
 | `specialare/grejer.js` | `GREJER`: de interaktiva sakerna (`#g/<id>`). |
 | `specialare/klippl.js` | `KLIPPL`: kuriosaklipp som läraren själv valt. |
 | `specialare/<namn>film.js` | En film per lektion (`MP<Namn>Film.start`). |
+| `specialare/filmreg.js` | `MPFilmReg`: lektionens `film` → [fil, global]. Används av Biografen i 3D-världen, som bara laddar den valda filmen. |
 | `specialare/filmlib.js`, `filmfx.js`, `klot.js` | Delade ritverktyg för filmerna: foton, paneler, kamerarörelse, glöd, klot. |
 | `svarthal.js` (roten) | **Filmmotorn** för alla filmer med röst (`MPSvartHal.start(host,{def,extra,onClose})`), och filmen Inuti ett svart hål. |
 | `zoomfilm.js`, `stjarnfilm.js` (roten) | Zooma ut i universum, En stjärnas liv (Rymdlabbet). |
@@ -35,7 +36,7 @@ Specialare sparar ingenting: inga stjärnor, mynt eller `PKEYS`. Sidan är mörk
 - **Bara klipp som läraren själv valt.** YouTube-länkar i `lank` spelas alltid inbäddade, aldrig i ny flik. Klippsamlingen (`klipp.js`) är pausad.
 - **Känsliga ämnen görs sakligt och varsamt:** inga upprörande bilder (11 september, Digerdöden, Tjernobyl, orkaner), inga dödstal där uppgifterna går isär.
 - Stilen är mörk och museal: serifrubriker, glasknappar, glöd i lektionens färg. Allt stilla vid `prefers-reduced-motion`.
-- Minilektionerna länkas inte från ämnessidorna. De visas även i Biografen i 3D-världen.
+- Minilektionerna länkas inte från ämnessidorna. De visas även i Biografen i 3D-världen, där filmen och quizet spelas direkt på bioduken (se `docs/plattform.md`).
 
 ## Regler för filmer med röst
 
@@ -51,6 +52,7 @@ Specialare sparar ingenting: inga stjärnor, mynt eller `PKEYS`. Sidan är mörk
 - Texterna tajmas efter rösten (mät med `afinfo`). Filmen väntar in rösten och har en reservutgång så att den aldrig hänger. Saknas en fil visas bara texten.
 - **Ljudmatta** väljs med `meta.mat`: `rymd` (standard), `vagor`, `havet`, `vulkan`, `djungel`, `tradgarden`, `klockor`, `slott`. Den sänks medan rösten talar.
 - Hastighetsknappen (1× till 2×) delar sparat val med resorna i Människokroppen.
+- **Ny film ska in på två ställen:** registret och skriptlistan i `specialare/index.html`, och en rad i `specialare/filmreg.js` (annars länkar Biografen ut i stället för att visa filmen på duken).
 - Ny film laddar `filmlib.js` (och `filmfx.js`) före sin egen fil. Testkrokar: `root.__seek(scen,tid)`, `root.__slut()`.
 
 ## Instruktionsfilmer utan röst
