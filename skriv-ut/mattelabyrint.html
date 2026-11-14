@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<script src="../tema.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mattelabyrint – Pluggparken</title>
+<meta name="description" content="Skriv ut en ny mattelabyrint varje gång: hitta vägen genom rutor med tal i en tabell. Välj tabell, storlek och svårighet. Facit sist.">
+<meta name="theme-color" content="#1F3A35">
+<link rel="canonical" href="https://pluggparken.se/skriv-ut/mattelabyrint.html">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../fonts/fonts.css">
+<style>
+:root{
+  --bg:#EAF3FF; --ink:#1D2B53; --muted:#56668F; --card:#FFFFFF; --line:#C6D6F2; --soft:#F1F6FF;
+  --good:#1E9E5E; --good-dark:#157548; --accent:#3D5AFE;
+  --font:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:900px;margin:0 auto;padding:12px 16px 40px}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer;touch-action:manipulation;border:0;background:none}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+h1{margin:8px 0 2px;font-size:2rem}
+.lead{margin:0 0 12px;color:var(--muted)}
+.panel{background:var(--card);border-radius:20px;padding:12px 14px;box-shadow:0 5px 0 var(--line);margin-bottom:12px}
+.panel h2{margin:0 0 6px;font-size:1.05rem}
+.seg{display:flex;flex-wrap:wrap;gap:8px}
+.seg button{min-height:48px;padding:8px 16px;border-radius:14px;background:var(--soft);box-shadow:0 3px 0 var(--line);font-weight:800}
+.seg button small{display:block;font-weight:600;color:var(--muted);font-size:.8rem;line-height:1.1}
+.seg button[aria-pressed=true]{background:var(--ink);color:#fff;box-shadow:0 3px 0 #0E1735}
+.seg button[aria-pressed=true] small{color:#C9D3F2}
+.seg button:active{transform:translateY(2px)}
+.opts{display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px}
+.ck{display:flex;align-items:center;gap:8px;font-weight:700;cursor:pointer}
+.ck input{width:22px;height:22px;accent-color:var(--good)}
+.go{min-height:52px;padding:10px 22px;border-radius:16px;background:var(--good);color:#fff;font-weight:800;box-shadow:0 4px 0 var(--good-dark)}
+.go:active{transform:translateY(3px);box-shadow:0 1px 0 var(--good-dark)}
+.sek{min-height:48px;padding:8px 16px;border-radius:14px;background:#fff;border:2px solid var(--line);font-weight:800;box-shadow:0 3px 0 var(--line)}
+.nr{width:7.5em;min-height:44px;padding:6px 10px;border-radius:12px;border:2px solid var(--line);background:var(--soft);font-weight:700}
+.hint{margin:6px 0 0;color:var(--muted);font-size:.92rem}
+.tillbaka{display:inline-block;color:var(--ink);font-weight:800}
+.stage{margin-top:12px;overflow:hidden}
+.pages{width:210mm;transform-origin:0 0}
+[hidden]{display:none!important}
+
+/* ---- bladen (A4, svartvita) ---- */
+.sida{width:210mm;height:297mm;background:#fff;color:#000;padding:13mm 18mm 0;position:relative;overflow:hidden;margin:0 0 6mm;box-shadow:0 2px 14px rgba(29,43,83,.25);break-after:page;page-break-after:always}
+.sida:last-child{break-after:auto;page-break-after:auto}
+.hd{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:.9mm solid #000;padding-bottom:2mm;gap:6mm}
+.hd h2{margin:0;font-size:8.6mm;font-weight:800;line-height:1}
+.nm{font-size:5mm;font-weight:700;white-space:nowrap}
+.nm span{display:inline-block;width:50mm;border-bottom:.5mm solid #000;margin-left:2mm}
+.intro{margin:3mm 0 4mm;font-size:4.5mm;font-weight:600;line-height:1.3}
+.lg{display:grid;border:.9mm solid #000;margin:0 auto;width:fit-content}
+.lg div{border:.3mm solid #000;display:grid;place-items:center;font-weight:800;position:relative;line-height:1}
+.lg div small{position:absolute;top:.8mm;left:0;right:0;text-align:center;font-size:2.8mm;font-weight:800;letter-spacing:.2mm}
+.lg .s,.lg .m{background:#000;color:#fff}
+.lg .v{background:#000;color:#fff}
+.mini .lg{border-width:.5mm;margin:0}
+.mini .lg div{border-width:.2mm;font-weight:700;color:#999}
+.mini .lg .v,.mini .lg .s,.mini .lg .m{color:#fff}
+.mini .lg div small{font-size:1.8mm;top:.3mm}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:8mm 8mm;margin-top:5mm}
+.fb h3{margin:0 0 1.5mm;font-size:4.4mm;font-weight:800}
+.ft{position:absolute;left:18mm;right:18mm;bottom:9mm;display:flex;justify-content:space-between;font-size:3.6mm;font-weight:700;color:#444}
+@page{size:A4;margin:0}
+@media print{
+  body{background:#fff}.noprint{display:none!important}.wrap{max-width:none;padding:0;margin:0;display:block}
+  .stage{margin:0;overflow:visible;height:auto!important}
+  .pages{transform:none!important;width:210mm}
+  .sida{box-shadow:none;margin:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<script src="../ljud.js"></script>
+<script src="../djur.js"></script>
+<script src="../huvud.js" data-titel="Mattelabyrint" data-ikon="🖨️"></script>
+<main class="wrap">
+<div class="noprint">
+  <h1>Mattelabyrint</h1>
+  <p class="lead">Eleven hittar vägen från START till MÅL genom att bara gå på tal i en vald tabell. Varje gång du trycker på 🎲 får du en ny labyrint, och det finns alltid bara en rätt väg.</p>
+
+  <div class="panel"><h2>1. Vilken tabell?</h2>
+    <div class="seg" id="sTab" role="group" aria-label="Tabell"></div></div>
+
+  <div class="panel"><h2>2. Hur stor och hur svår?</h2>
+    <div class="seg" id="sStor" role="group" aria-label="Storlek">
+      <button data-v="liten" aria-pressed="false">Liten<small>6 × 8 rutor</small></button>
+      <button data-v="medel" aria-pressed="true">Medel<small>7 × 10 rutor</small></button>
+      <button data-v="stor" aria-pressed="false">Stor<small>8 × 12 rutor</small></button>
+    </div>
+    <div class="seg" id="sSvar" role="group" aria-label="Svårighet" style="margin-top:8px">
+      <button data-v="latt" aria-pressed="false">🌱 Lätt<small>raka vägen, slumpade tal</small></button>
+      <button data-v="medel" aria-pressed="true">🌿 Medel<small>slingrig väg</small></button>
+      <button data-v="svar" aria-pressed="false">🌳 Svår<small>slingrig väg, återvändsgränder och nästan-rätt tal</small></button>
+    </div></div>
+
+  <div class="panel"><h2>3. Hur många blad?</h2>
+    <div class="seg" id="sBlad" role="group" aria-label="Antal blad">
+      <button data-v="1" aria-pressed="true">1</button><button data-v="2" aria-pressed="false">2</button><button data-v="5" aria-pressed="false">5</button><button data-v="10" aria-pressed="false">10</button>
+    </div>
+    <p class="hint">Alla blad får olika labyrinter.</p></div>
+
+  <div class="panel"><div class="opts">
+    <label class="ck"><input type="checkbox" id="facit" checked> Facit sist</label>
+    <button class="sek" id="nya">🎲 Ny labyrint</button>
+    <button class="go" id="print">🖨️ Skriv ut</button>
+    <a class="tillbaka" href="./">← Alla blad</a>
+  </div>
+  <div class="opts" style="margin-top:10px"><label class="hint" for="nr" style="margin:0">Vill du ha ett bestämt blad igen? Skriv bladets nummer (står längst ner på bladet) och välj samma tabell, storlek och svårighet:</label><input class="nr" id="nr" inputmode="numeric" maxlength="6" placeholder="t.ex. 48213" autocomplete="off"></div>
+  <p class="hint" id="info"></p></div>
+</div>
+<div class="stage" id="stage"><div class="pages" id="pages"></div></div>
+</main>
+<script>
+const $=s=>document.querySelector(s);
+const STOR={liten:{c:6,r:8,n:'Liten'},medel:{c:7,r:10,n:'Medel'},stor:{c:8,r:12,n:'Stor'}};
+const SV={latt:{n:'Lätt',ned:4,min:0,stub:0},medel:{n:'Medel',ned:2,min:.9,stub:0},svar:{n:'Svår',ned:1.2,min:1.1,stub:4}};
+let st={tab:4,stor:'medel',svar:'medel',blad:1,bas:nyBas()};
+function nyBas(){return 10000+Math.floor(Math.random()*89000);}
+function prng(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+const key=(y,x)=>y+','+x;
+/* en labyrint ur ett nummer: stigen är en självundvikande vandring från översta till understa raden som aldrig rör vid sig själv */
+function labyrint(nr){
+  const S=STOR[st.stor],V=SV[st.svar],R=S.r,C=S.c,t=st.tab,r=prng(nr*7919+t*131+R*17+Object.keys(SV).indexOf(st.svar)),mult=new Set();
+  let sti=null;
+  for(let f=0;f<3000&&!sti;f++){
+    const kra=f>1500?4:V.ned; // om det är svårt att hitta en slingrig väg: släpp efter
+    const s=[[0,Math.floor(r()*C)]],seen=new Set([key(...s[0])]);let dod=false;
+    while(s[s.length-1][0]<R-1&&!dod){
+      const [y,x]=s[s.length-1];
+      const alt=[[y+1,x,kra],[y,x-1,1.4],[y,x+1,1.4],[y-1,x,.6]].filter(([a,b])=>a>=0&&a<R&&b>=0&&b<C&&!seen.has(key(a,b))&&
+        ![[a-1,b],[a+1,b],[a,b-1],[a,b+1]].some(([p,q])=>seen.has(key(p,q))&&!(p===y&&q===x)));
+      if(!alt.length){dod=true;break;}
+      let tot=alt.reduce((a,q)=>a+q[2],0),w=r()*tot,val=alt[0];for(const q of alt){w-=q[2];if(w<=0){val=q;break;}}
+      s.push([val[0],val[1]]);seen.add(key(val[0],val[1]));
+    }
+    if(!dod&&s.length>=R*(1+V.min))sti=s;
+  }
+  if(!sti){sti=[];const x=Math.floor(C/2);for(let y=0;y<R;y++)sti.push([y,x]);}
+  const sv=new Set(sti.map(p=>key(...p)));sv.forEach(k=>mult.add(k));
+  // återvändsgränder (svår): celler som bara rör vid en tabellcell, så att vägen fortfarande är unik
+  const nb=(y,x)=>[[y-1,x],[y+1,x],[y,x-1],[y,x+1]].filter(([a,b])=>a>=0&&a<R&&b>=0&&b<C);
+  for(let n=0,f=0;n<V.stub&&f<200;f++){
+    const y=Math.floor(r()*R),x=Math.floor(r()*C);if(mult.has(key(y,x)))continue;
+    const gr=nb(y,x).filter(([a,b])=>mult.has(key(a,b)));if(gr.length!==1)continue;
+    // grannens övriga grannar får inte vara en annan tabellcell som den här skulle kunna förena med
+    mult.add(key(y,x));n++;
+    if(r()<.5){const [a,b]=nb(y,x).filter(([p,q])=>!mult.has(key(p,q))&&nb(p,q).filter(([u,v])=>mult.has(key(u,v))).length===1)[0]||[];if(a!=null&&n<V.stub){mult.add(key(a,b));n++;}}
+  }
+  // tal
+  const ntab=()=>t*(1+Math.floor(r()*10));
+  const nara=()=>{const k=1+Math.floor(r()*10),d=[-2,-1,1,2][Math.floor(r()*4)];let n=t*k+d;if(n<1||n%t===0)n=t*k+(d>0?1:-1);return n%t===0||n<1?t*k+1:n;};
+  const lik=()=>{let n;do{n=1+Math.floor(r()*t*10);}while(n%t===0);return n;};
+  const tal=[];for(let y=0;y<R;y++){tal.push([]);for(let x=0;x<C;x++){tal[y].push(mult.has(key(y,x))?ntab():(st.svar==='svar'&&r()<.65?nara():lik()));}}
+  return{nr,R,C,sti,sv,tal};}
+function cellStr(L,mini,facit){
+  const cs=mini?(80/L.C):Math.min(174/L.C,186/L.R),fs=cs*(mini?.4:.36);
+  return `<div class="lg" style="grid-template-columns:repeat(${L.C},${cs}mm);grid-auto-rows:${cs}mm;font-size:${fs}mm">`+
+   L.tal.map((rad,y)=>rad.map((n,x)=>{const k=key(y,x),on=facit&&L.sv.has(k),s=y===L.sti[0][0]&&x===L.sti[0][1],m=y===L.sti[L.sti.length-1][0]&&x===L.sti[L.sti.length-1][1];
+     return `<div class="${s?'s':m?'m':on?'v':''}">${s?'<small>START</small>':m?'<small>MÅL</small>':''}${n}</div>`;}).join('')).join('')+'</div>';}
+function front(L){
+  return `<section class="sida"><div class="hd"><h2>Mattelabyrint</h2><div class="nm">Namn:<span></span></div></div>
+   <p class="intro">Hitta vägen från START till MÅL. Gå bara genom rutor med tal i ${st.tab}:ans tabell (${st.tab}, ${st.tab*2}, ${st.tab*3} och så vidare). Du får gå uppåt, nedåt och åt sidan, inte snett. Rita vägen med en penna.</p>
+   ${cellStr(L,false,false)}
+   <div class="ft"><span>Pluggparken.se</span><span>Blad nr ${L.nr} · ${STOR[st.stor].n}, ${SV[st.svar].n}</span></div></section>`;}
+function facitSida(ls){
+  return `<section class="sida"><div class="hd"><h2>Facit</h2><div class="nm">Rätta själv</div></div><p class="intro">Den rätta vägen är svart.</p>
+   <div class="fg">${ls.map(L=>`<div class="fb mini"><h3>Blad nr ${L.nr}</h3>${cellStr(L,true,true)}</div>`).join('')}</div>
+   <div class="ft"><span>Pluggparken.se</span><span>Facit · ${st.tab}:ans tabell</span></div></section>`;}
+function render(){
+  const l=Array.from({length:st.blad},(_,i)=>labyrint(st.bas+i));
+  let html=l.map(front).join('');
+  if($('#facit').checked)for(let i=0;i<l.length;i+=4)html+=facitSida(l.slice(i,i+4));
+  $('#pages').innerHTML=html;
+  const fs=$('#facit').checked?Math.ceil(l.length/4):0,tot=l.length+fs;
+  $('#info').textContent=`${tot} ${tot===1?'sida':'sidor'} (A4)${fs?', varav '+fs+(fs===1?' facitsida':' facitsidor')+' sist':''}. Blad nr ${l[0].nr}${l.length>1?'–'+l[l.length-1].nr:''}. Välj Skriv ut och skala "100 %" i skrivardialogen.`;
+  fit();}
+function fit(){const sg=$('#stage'),pg=$('#pages');if(!pg.firstElementChild)return;
+  const mm=96/25.4,w=210*mm,s=Math.min(1,(sg.clientWidth||w)/w);pg.style.transform=`scale(${s})`;sg.style.height=(pg.scrollHeight*s)+'px';}
+addEventListener('resize',fit);
+function seg(id,fn){$(id).onclick=e=>{const b=e.target.closest('[data-v]');if(!b)return;[...$(id).children].forEach(x=>x.setAttribute('aria-pressed',String(x===b)));fn(b.dataset.v);};}
+$('#sTab').innerHTML=[2,3,4,5,6,7,8,9,10,11,12].map(t=>`<button data-v="${t}" aria-pressed="${t===st.tab}">${t}:an</button>`).join('');
+seg('#sTab',v=>{st.tab=+v;render();});
+seg('#sStor',v=>{st.stor=v;render();});
+seg('#sSvar',v=>{st.svar=v;render();});
+seg('#sBlad',v=>{st.blad=+v;render();});
+$('#facit').onchange=render;
+$('#nya').onclick=()=>{st.bas=nyBas();$('#nr').value='';render();};
+$('#nr').oninput=e=>{const v=e.target.value.replace(/\D/g,'').slice(0,6);e.target.value=v;if(v.length>=5){st.bas=+v;render();}};
+$('#print').onclick=()=>window.print();
+render();
+</script>
+</body>
+</html>

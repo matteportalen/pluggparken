@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<script src="../tema.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ordjakt med egna ord – Pluggparken</title>
+<meta name="description" content="Skriv in veckans ord och skriv ut en ordjakt med dem. Ny ruta varje gång. Välj storlek och riktningar. Facit sist.">
+<meta name="theme-color" content="#1F3A35">
+<link rel="canonical" href="https://pluggparken.se/skriv-ut/ordjakt.html">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../fonts/fonts.css">
+<style>
+:root{
+  --bg:#EAF3FF; --ink:#1D2B53; --muted:#56668F; --card:#FFFFFF; --line:#C6D6F2; --soft:#F1F6FF;
+  --good:#1E9E5E; --good-dark:#157548; --accent:#3D5AFE; --bad:#E5484D;
+  --font:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:900px;margin:0 auto;padding:12px 16px 40px}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer;touch-action:manipulation;border:0;background:none}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+h1{margin:8px 0 2px;font-size:2rem}
+.lead{margin:0 0 12px;color:var(--muted)}
+.panel{background:var(--card);border-radius:20px;padding:12px 14px;box-shadow:0 5px 0 var(--line);margin-bottom:12px}
+.panel h2{margin:0 0 6px;font-size:1.05rem}
+.seg{display:flex;flex-wrap:wrap;gap:8px}
+.seg button{min-height:48px;padding:8px 16px;border-radius:14px;background:var(--soft);box-shadow:0 3px 0 var(--line);font-weight:800}
+.seg button small{display:block;font-weight:600;color:var(--muted);font-size:.8rem;line-height:1.1}
+.seg button[aria-pressed=true]{background:var(--ink);color:#fff;box-shadow:0 3px 0 #0E1735}
+.seg button[aria-pressed=true] small{color:#C9D3F2}
+.seg button:active{transform:translateY(2px)}
+.mini{min-height:44px;padding:6px 14px;border-radius:12px;background:var(--soft);box-shadow:0 2px 0 var(--line);font-weight:800}
+textarea{width:100%;min-height:150px;padding:10px 12px;border-radius:14px;border:2px solid var(--line);background:var(--soft);font-weight:700;font-size:1.1rem;resize:vertical;text-transform:uppercase}
+.opts{display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px}
+.ck{display:flex;align-items:center;gap:8px;font-weight:700;cursor:pointer}
+.ck input{width:22px;height:22px;accent-color:var(--good)}
+.go{min-height:52px;padding:10px 22px;border-radius:16px;background:var(--good);color:#fff;font-weight:800;box-shadow:0 4px 0 var(--good-dark)}
+.go:active{transform:translateY(3px);box-shadow:0 1px 0 var(--good-dark)}
+.sek{min-height:48px;padding:8px 16px;border-radius:14px;background:#fff;border:2px solid var(--line);font-weight:800;box-shadow:0 3px 0 var(--line)}
+.nr{width:7.5em;min-height:44px;padding:6px 10px;border-radius:12px;border:2px solid var(--line);background:var(--soft);font-weight:700}
+.hint{margin:6px 0 0;color:var(--muted);font-size:.92rem}
+.varn{margin:8px 0 0;padding:8px 12px;border-radius:12px;background:#FFE9EB;color:#8A1F26;font-weight:700;font-size:.95rem}
+.tillbaka{display:inline-block;color:var(--ink);font-weight:800}
+.stage{margin-top:12px;overflow:hidden}
+.pages{width:210mm;transform-origin:0 0}
+[hidden]{display:none!important}
+
+/* ---- bladen (A4, svartvita) ---- */
+.sida{width:210mm;height:297mm;background:#fff;color:#000;padding:13mm 18mm 0;position:relative;overflow:hidden;margin:0 0 6mm;box-shadow:0 2px 14px rgba(29,43,83,.25);break-after:page;page-break-after:always}
+.sida:last-child{break-after:auto;page-break-after:auto}
+.hd{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:.9mm solid #000;padding-bottom:2mm;gap:6mm}
+.hd h2{margin:0;font-size:8.6mm;font-weight:800;line-height:1}
+.nm{font-size:5mm;font-weight:700;white-space:nowrap}
+.nm span{display:inline-block;width:50mm;border-bottom:.5mm solid #000;margin-left:2mm}
+.intro{margin:3mm 0 4mm;font-size:4.5mm;font-weight:600;line-height:1.3}
+.og{display:grid;border:.9mm solid #000;margin:0 auto;width:fit-content;font-family:"Andika","Baloo 2",sans-serif}
+.og div{display:grid;place-items:center;font-weight:700;line-height:1}
+.ol{display:flex;flex-wrap:wrap;gap:2.5mm 8mm;margin-top:7mm;font-size:5.4mm;font-weight:800}
+.ol span::before{content:"☐ ";font-weight:400}
+.ft{position:absolute;left:18mm;right:18mm;bottom:9mm;display:flex;justify-content:space-between;font-size:3.6mm;font-weight:700;color:#444}
+.mf .og{border-width:.5mm;margin:0}
+.mf .og div{color:#aaa;font-weight:600}
+.mf .og div.i{color:#fff;background:#000;font-weight:800}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:8mm 8mm;margin-top:5mm}
+.fb h3{margin:0 0 1.5mm;font-size:4.4mm;font-weight:800}
+@page{size:A4;margin:0}
+@media print{
+  body{background:#fff}.noprint{display:none!important}.wrap{max-width:none;padding:0;margin:0;display:block}
+  .stage{margin:0;overflow:visible;height:auto!important}
+  .pages{transform:none!important;width:210mm}
+  .sida{box-shadow:none;margin:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<script src="../ljud.js"></script>
+<script src="../djur.js"></script>
+<script src="../huvud.js" data-titel="Ordjakt" data-ikon="🖨️"></script>
+<main class="wrap">
+<div class="noprint">
+  <h1>Ordjakt med egna ord</h1>
+  <p class="lead">Skriv in veckans ord, så får du en ordjakt med dem i en ruta med slumpade bokstäver. Varje gång du trycker på 🎲 får du en ny ruta, och alla blad kan få olika placering.</p>
+
+  <div class="panel"><h2>1. Vilka ord?</h2>
+    <textarea id="ord" rows="7" spellcheck="false" autocapitalize="characters" aria-label="Orden, ett per rad" placeholder="Skriv ett ord per rad, till exempel&#10;KATT&#10;SKOLA&#10;VÄNNER"></textarea>
+    <p class="hint">Högst 16 ord, 3–14 bokstäver i varje. Du kan skriva dem med mellanslag, komma eller på nya rader. Inget sparas.</p>
+    <div class="seg" style="margin-top:8px" id="sFor"><button class="mini" data-f="djur">Exempel: djur</button><button class="mini" data-f="skola">Exempel: skolan</button><button class="mini" data-f="host">Exempel: hösten</button><button class="mini" data-f="rensa">Rensa</button></div>
+    <div class="varn" id="varn" hidden></div></div>
+
+  <div class="panel"><h2>2. Hur stor ruta?</h2>
+    <div class="seg" id="sStor" role="group" aria-label="Storlek">
+      <button data-v="10" aria-pressed="false">10 × 10<small>få ord</small></button>
+      <button data-v="12" aria-pressed="true">12 × 12</button>
+      <button data-v="14" aria-pressed="false">14 × 14<small>många ord</small></button>
+    </div></div>
+
+  <div class="panel"><h2>3. Åt vilka håll får orden stå?</h2>
+    <div class="opts">
+      <label class="ck"><input type="checkbox" id="dH" checked> Åt höger →</label>
+      <label class="ck"><input type="checkbox" id="dN" checked> Nedåt ↓</label>
+      <label class="ck"><input type="checkbox" id="dD"> Snett ↘</label>
+      <label class="ck"><input type="checkbox" id="dB"> Baklänges (även ← ↑ ↖)</label>
+    </div>
+    <p class="hint">Bara åt höger och nedåt är lättast. Lägg till snett och baklänges för svårare blad.</p></div>
+
+  <div class="panel"><h2>4. Hur många blad?</h2>
+    <div class="seg" id="sBlad" role="group" aria-label="Antal blad">
+      <button data-v="1" aria-pressed="true">1</button><button data-v="2" aria-pressed="false">2</button><button data-v="5" aria-pressed="false">5</button><button data-v="10" aria-pressed="false">10</button>
+    </div>
+    <p class="hint">Alla blad har samma ord men olika placering, så att kompisarna inte kan titta av varandra.</p></div>
+
+  <div class="panel"><div class="opts">
+    <label class="ck"><input type="checkbox" id="facit" checked> Facit sist</label>
+    <button class="sek" id="nya">🎲 Ny ruta</button>
+    <button class="go" id="print">🖨️ Skriv ut</button>
+    <a class="tillbaka" href="./">← Alla blad</a>
+  </div>
+  <div class="opts" style="margin-top:10px"><label class="hint" for="nr" style="margin:0">Vill du ha ett bestämt blad igen? Skriv bladets nummer (står längst ner på bladet) och skriv in samma ord och inställningar:</label><input class="nr" id="nr" inputmode="numeric" maxlength="6" placeholder="t.ex. 48213" autocomplete="off"></div>
+  <p class="hint" id="info"></p></div>
+</div>
+<div class="stage" id="stage"><div class="pages" id="pages"></div></div>
+</main>
+<script>
+const $=s=>document.querySelector(s);
+const FOR={djur:'KATT\nHUND\nHÄST\nKOR\nGRIS\nFÅR\nHÖNA\nUGGLA\nKANIN\nÄLG',skola:'SKOLA\nBOK\nPENNA\nLÄRARE\nKLASS\nRAST\nBÄNK\nTAVLA\nLÄSA\nRITA',host:'HÖST\nLÖV\nSVAMP\nREGN\nSTORM\nGRYTA\nÄPPLE\nKASTANJ\nVIND\nTRÖJA'};
+let st={ord:'',stor:12,blad:1,bas:nyBas()};
+function nyBas(){return 10000+Math.floor(Math.random()*89000);}
+function prng(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+const FYLL='AAAAAAEEEEEENNNNNRRRRTTTTSSSSLLLLIIIIDDDOOOOGGGKKKMMMHHVVUUFFPPBBCJYÅÅÄÄÖÖXZ';
+function ordlista(){const dubbla=[],ok=[],for_lang=[];
+  const raw=st.ord.toUpperCase().split(/[\s,;]+/).map(w=>w.replace(/[^A-ZÅÄÖ]/g,'')).filter(Boolean);
+  const set=new Set();raw.forEach(w=>{if(set.has(w)){dubbla.push(w);return;}set.add(w);if(w.length<3||w.length>Math.min(14,st.stor))for_lang.push(w);else ok.push(w);});
+  const extra=ok.splice(16);return{ok,for_lang,dubbla,extra};}
+function dirs(){const d=[];if($('#dH').checked)d.push([0,1]);if($('#dN').checked)d.push([1,0]);if($('#dD').checked)d.push([1,1]);
+  if($('#dB').checked){[...d].forEach(([a,b])=>d.push([-a,-b]));if($('#dD').checked)d.push([1,-1],[-1,1]);}return d.length?d:[[0,1]];}
+/* ett blad: lägg orden (längst först) på slumpade platser som inte krockar, fyll resten med bokstäver */
+function blad(nr,ord){
+  const N=st.stor,r=prng(nr*7919+N*31+ord.join('').length),G=Array.from({length:N},()=>Array(N).fill('')),M=Array.from({length:N},()=>Array(N).fill(0)),D=dirs(),ej=[];
+  [...ord].sort((a,b)=>b.length-a.length).forEach(w=>{let lagt=false;
+    for(let f=0;f<600&&!lagt;f++){const [dy,dx]=D[Math.floor(r()*D.length)],y=Math.floor(r()*N),x=Math.floor(r()*N),ey=y+dy*(w.length-1),ex=x+dx*(w.length-1);
+      if(ey<0||ey>=N||ex<0||ex>=N)continue;let ok=true,delad=0;
+      for(let i=0;i<w.length;i++){const c=G[y+dy*i][x+dx*i];if(c&&c!==w[i])ok=false;if(c)delad++;}
+      if(!ok||delad>=w.length-1)continue;
+      for(let i=0;i<w.length;i++){G[y+dy*i][x+dx*i]=w[i];M[y+dy*i][x+dx*i]=1;}lagt=true;}
+    if(!lagt)ej.push(w);});
+  for(let y=0;y<N;y++)for(let x=0;x<N;x++)if(!G[y][x])G[y][x]=FYLL[Math.floor(r()*FYLL.length)];
+  return{nr,N,G,M,ej};}
+function grid(B,mini,facit){const cs=mini?80/B.N:Math.min(150/B.N,15),fs=cs*(mini?.6:.58);
+  return `<div class="og" style="grid-template-columns:repeat(${B.N},${cs}mm);grid-auto-rows:${cs}mm;font-size:${fs}mm">`+B.G.map((rad,y)=>rad.map((c,x)=>`<div${facit&&B.M[y][x]?' class="i"':''}>${c}</div>`).join('')).join('')+'</div>';}
+function front(B,ord){
+  return `<section class="sida"><div class="hd"><h2>Ordjakt</h2><div class="nm">Namn:<span></span></div></div>
+   <p class="intro">Hitta orden i rutan. De kan stå ${[$('#dH').checked?'åt höger':'',$('#dN').checked?'nedåt':'',$('#dD').checked?'snett':''].filter(Boolean).join(', ').replace(/, ([^,]*)$/,' och $1')||'åt höger'}${$('#dB').checked?', även baklänges':''}. Sätt en ring runt varje ord och kryssa i listan.</p>
+   ${grid(B,false,false)}
+   <div class="ol">${[...ord].sort((a,b)=>a.localeCompare(b,'sv')).map(w=>`<span>${w}</span>`).join('')}</div>
+   <div class="ft"><span>Pluggparken.se</span><span>Blad nr ${B.nr} · ${B.N} × ${B.N}</span></div></section>`;}
+function facitSida(bs){
+  return `<section class="sida"><div class="hd"><h2>Facit</h2><div class="nm">Rätta själv</div></div><p class="intro">Orden är markerade i svart.</p>
+   <div class="fg">${bs.map(B=>`<div class="fb mf"><h3>Blad nr ${B.nr}</h3>${grid(B,true,true)}</div>`).join('')}</div>
+   <div class="ft"><span>Pluggparken.se</span><span>Facit</span></div></section>`;}
+function render(){
+  st.ord=$('#ord').value;const L=ordlista(),v=[];
+  if(L.for_lang.length)v.push(`Orden ${L.for_lang.join(', ')} är för korta eller långa (3–${Math.min(14,st.stor)} bokstäver) och tas inte med.`);
+  if(L.extra.length)v.push(`Bara de första 16 orden tas med. ${L.extra.join(', ')} hoppas över.`);
+  if(L.dubbla.length)v.push(`${[...new Set(L.dubbla)].join(', ')} står flera gånger och räknas en gång.`);
+  if(!L.ok.length){$('#pages').innerHTML='';$('#stage').style.height='0';$('#info').textContent='Skriv minst ett ord (3 bokstäver eller fler) för att få en ordjakt.';$('#varn').hidden=!v.length;$('#varn').textContent=v.join(' ');return;}
+  const bs=Array.from({length:st.blad},(_,i)=>blad(st.bas+i,L.ok)),ej=[...new Set(bs.flatMap(b=>b.ej))];
+  if(ej.length)v.push(`Orden ${ej.join(', ')} fick inte plats ibland. Välj en större ruta eller färre ord.`);
+  $('#varn').hidden=!v.length;$('#varn').textContent=v.join(' ');
+  let html=bs.map(b=>front(b,L.ok.filter(w=>!b.ej.includes(w)))).join('');
+  if($('#facit').checked)for(let i=0;i<bs.length;i+=4)html+=facitSida(bs.slice(i,i+4));
+  $('#pages').innerHTML=html;
+  const fs=$('#facit').checked?Math.ceil(bs.length/4):0,tot=bs.length+fs;
+  $('#info').textContent=`${L.ok.length} ord, ${tot} ${tot===1?'sida':'sidor'} (A4)${fs?', varav '+fs+(fs===1?' facitsida':' facitsidor')+' sist':''}. Blad nr ${bs[0].nr}${bs.length>1?'–'+bs[bs.length-1].nr:''}. Välj Skriv ut och skala "100 %" i skrivardialogen.`;
+  fit();}
+function fit(){const sg=$('#stage'),pg=$('#pages');if(!pg.firstElementChild)return;
+  const mm=96/25.4,w=210*mm,s=Math.min(1,(sg.clientWidth||w)/w);pg.style.transform=`scale(${s})`;sg.style.height=(pg.scrollHeight*s)+'px';}
+addEventListener('resize',fit);
+function seg(id,fn){$(id).onclick=e=>{const b=e.target.closest('[data-v]');if(!b)return;[...$(id).children].forEach(x=>x.setAttribute('aria-pressed',String(x===b)));fn(b.dataset.v);};}
+seg('#sStor',v=>{st.stor=+v;render();});
+seg('#sBlad',v=>{st.blad=+v;render();});
+$('#sFor').onclick=e=>{const b=e.target.closest('[data-f]');if(!b)return;$('#ord').value=b.dataset.f==='rensa'?'':FOR[b.dataset.f];render();};
+$('#ord').oninput=render;
+['#dH','#dN','#dD','#dB','#facit'].forEach(s=>$(s).onchange=render);
+$('#nya').onclick=()=>{st.bas=nyBas();$('#nr').value='';render();};
+$('#nr').oninput=e=>{const v=e.target.value.replace(/\D/g,'').slice(0,6);e.target.value=v;if(v.length>=5){st.bas=+v;render();}};
+$('#print').onclick=()=>window.print();
+$('#ord').value=FOR.skola;render();
+</script>
+</body>
+</html>

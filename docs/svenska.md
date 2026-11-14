@@ -69,3 +69,8 @@ Rimmaskinen och andra snabba frågeövningar ur en gemensam mall. **Stavningsjak
 - Ordklasser: fyll i luckan med rätt sort, hitta det som inte passar, bygg ut meningen med adjektiv.
 - Handstil: diktamen, tre rutor på samma sida.
 - Engelska ord: läraren gör om bilderna själv (byts i listan `ORD`, se `docs/ovriga-amnen.md`).
+
+## Utskrivbart (Skriv ut)
+
+- **Ordjakt med egna ord** (`skriv-ut/ordjakt.html`, lärarens önskan 14 nov 2026): läraren skriver veckans ord (högst 16, 3–14 bokstäver, ett per rad eller med mellanslag/komma), väljer ruta 10, 12 eller 14 och åt vilka håll orden får stå (höger, nedåt, snett, baklänges). Ny ruta varje gång, 1/2/5/10 blad med samma ord men olika placering, bladnummer som på hundrarutan. Orden som skrivs in sparas inte. Facit sist (fyra mini-rutor per sida, orden i svart). Ord som inte får plats visas som en varning.
+
