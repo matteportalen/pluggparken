@@ -164,13 +164,17 @@ function dirs(){const d=[];if($('#dH').checked)d.push([0,1]);if($('#dN').checked
 /* ett blad: lägg orden (längst först) på slumpade platser som inte krockar, fyll resten med bokstäver */
 function blad(nr,ord){
   const N=st.stor,r=prng(nr*7919+N*31+ord.join('').length),G=Array.from({length:N},()=>Array(N).fill('')),M=Array.from({length:N},()=>Array(N).fill(0)),D=dirs(),ej=[];
-  [...ord].sort((a,b)=>b.length-a.length).forEach(w=>{let lagt=false;
-    for(let f=0;f<600&&!lagt;f++){const [dy,dx]=D[Math.floor(r()*D.length)],y=Math.floor(r()*N),x=Math.floor(r()*N),ey=y+dy*(w.length-1),ex=x+dx*(w.length-1);
+  const Dd=Array.from({length:N},()=>Array(N).fill(null));
+  // orden läggs längst först; ett nytt ord korsar helst ett som redan ligger (delar en bokstav), men aldrig i samma riktning (då skulle de smälta ihop)
+  [...ord].sort((a,b)=>b.length-a.length).forEach(w=>{const val=[];
+    for(let f=0;f<600&&val.length<40;f++){const [dy,dx]=D[Math.floor(r()*D.length)],y=Math.floor(r()*N),x=Math.floor(r()*N),ey=y+dy*(w.length-1),ex=x+dx*(w.length-1);
       if(ey<0||ey>=N||ex<0||ex>=N)continue;let ok=true,delad=0;
-      for(let i=0;i<w.length;i++){const c=G[y+dy*i][x+dx*i];if(c&&c!==w[i])ok=false;if(c)delad++;}
-      if(!ok||delad>=w.length-1)continue;
-      for(let i=0;i<w.length;i++){G[y+dy*i][x+dx*i]=w[i];M[y+dy*i][x+dx*i]=1;}lagt=true;}
-    if(!lagt)ej.push(w);});
+      for(let i=0;i<w.length&&ok;i++){const yy=y+dy*i,xx=x+dx*i,c=G[yy][xx];
+        if(c){if(c!==w[i]){ok=false;break;}const d=Dd[yy][xx];if(d&&d[0]===dy&&d[1]===dx||d&&d[0]===-dy&&d[1]===-dx){ok=false;break;}delad++;}}
+      if(!ok||delad>=w.length-1||delad>3)continue;val.push({y,x,dy,dx,delad});}
+    if(!val.length){ej.push(w);return;}
+    const kors=val.filter(v=>v.delad>0),v=kors.length&&r()<.85?kors[Math.floor(r()*kors.length)]:val[Math.floor(r()*val.length)];
+    for(let i=0;i<w.length;i++){const yy=v.y+v.dy*i,xx=v.x+v.dx*i;G[yy][xx]=w[i];M[yy][xx]=1;if(!Dd[yy][xx])Dd[yy][xx]=[v.dy,v.dx];}});
   for(let y=0;y<N;y++)for(let x=0;x<N;x++)if(!G[y][x])G[y][x]=FYLL[Math.floor(r()*FYLL.length)];
   return{nr,N,G,M,ej};}
 function grid(B,mini,facit){const cs=mini?80/B.N:B.N>=16?138/B.N:Math.min(150/B.N,15),fs=cs*(mini?.6:.58);
@@ -182,7 +186,7 @@ function front(B,ord){
    <div class="ol">${[...ord].sort((a,b)=>a.localeCompare(b,'sv')).map(w=>`<span>${w}</span>`).join('')}<span class="brap">⭐ Jag hittade ___ av ${ord.length} ord</span></div>
    <div class="ft"><span>Pluggparken.se</span><span>Blad nr ${B.nr} · ${B.N} × ${B.N}</span></div></section>`;}
 function facitSida(bs){
-  return `<section class="sida"><div class="hd"><h2>Facit</h2><div class="nm">Rätta själv</div></div><p class="intro">Orden är markerade.</p>
+  return `<section class="sida bw"><div class="hd"><h2>Facit</h2><div class="nm">Rätta själv</div></div><p class="intro">Orden är markerade.</p>
    <div class="fg">${bs.map(B=>`<div class="fb mf"><h3>Blad nr ${B.nr}</h3>${grid(B,true,true)}</div>`).join('')}</div>
    <div class="ft"><span>Pluggparken.se</span><span>Facit</span></div></section>`;}
 function render(){

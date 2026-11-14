@@ -149,7 +149,7 @@ function render(){
     <div class="ft"><span>Pluggparken.se</span><span>Blad nr ${b.nr} · ${sv.namn}</span></div></section>`).join('');
   if($('#facit').checked){
     for(let i=0;i<lista.length;i+=4){const del=lista.slice(i,i+4);
-      html+=`<section class="sida"><div class="hd"><h2>Facit</h2><div class="nm">Rätta själv</div></div>
+      html+=`<section class="sida bw"><div class="hd"><h2>Facit</h2><div class="nm">Rätta själv</div></div>
       <p class="intro">De tal som saknades står i ruta. Jämför med ditt blad.</p>
       <div class="fg">${del.map(b=>`<div class="fb"><h3>Blad nr ${b.nr}</h3><div class="hr">${grid(b.h,true)}</div></div>`).join('')}</div>
       <div class="ft"><span>Pluggparken.se</span><span>Facit · ${sv.namn}</span></div></section>`;}}

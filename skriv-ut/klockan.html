@@ -189,7 +189,7 @@ function front(b){
    ${QR?`<div class="qr"><img src="${QR}" alt="QR-kod till den interaktiva klockan"><div><b>Behöver du öva med en riktig klocka?</b><br>Skanna koden och prova den interaktiva klockan på Pluggparken, där du kan flytta visarna själv. pluggparken.se/klockan/</div></div>`:''}
    <div class="ft"><span>Pluggparken.se</span><span>Blad nr ${b.nr} · ${NIV[st.niva].n}</span></div></section>`;}
 function facit(bl){ // två blad per facitsida
-  return `<section class="sida"><div class="hd"><h2>Facit</h2><div class="nm">Rätta själv</div></div>${bl.map(b=>`<div class="fb" style="margin-top:4mm"><h3>Blad nr ${b.nr}</h3><div class="fg">${b.u.map((q,i)=>`<div class="f">${klocka(q.h,q.m,true)}<div><b>${i+1}.</b> ${K.cap(ord(q.h,q.m))}<br>${dig(q.h,q.m)} ${dygn(q.h)}</div></div>`).join('')}</div></div>`).join('')}
+  return `<section class="sida bw"><div class="hd"><h2>Facit</h2><div class="nm">Rätta själv</div></div>${bl.map(b=>`<div class="fb" style="margin-top:4mm"><h3>Blad nr ${b.nr}</h3><div class="fg">${b.u.map((q,i)=>`<div class="f">${klocka(q.h,q.m,true)}<div><b>${i+1}.</b> ${K.cap(ord(q.h,q.m))}<br>${dig(q.h,q.m)} ${dygn(q.h)}</div></div>`).join('')}</div></div>`).join('')}
    <div class="ft"><span>Pluggparken.se</span><span>Facit · ${NIV[st.niva].n}</span></div></section>`;}
 function render(){
   const l=Array.from({length:st.blad},(_,i)=>({nr:st.bas+i,u:uppg(st.bas+i)}));
