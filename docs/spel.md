@@ -12,7 +12,7 @@ _Det som gäller nu för Spelhörnan och alla spel. Hur varje spel byggdes, alla
 | `spel/skattjakten/` | Skattjakten: slumpad labyrint, affär och nyckel, tre delmål och final. | `mattespel-skattjakten-v1` |
 | `rutjakten/` | Rutjakten: Korset, Femhörningarna, Rutnätet. | `mattespel-rutjakten-v1` |
 | `spel/kulbanan/` | Kulbanan: åtta banor i två världar. | `mattespel-kulbanan-v1` |
-| `spel/sagoriket/` | Sagoriket: plattformsspel, fyra världar med boss. | `mattespel-sagoriket-v1` |
+| `spel/sagoriket/` | Sagoriket: plattformsspel, fem världar med boss (Sagoskogen, Ökenriket, Isriket, Havsriket, Molnriket). | `mattespel-sagoriket-v1` |
 | `spel/sifferslottet/` | Sifferslottet: 24 rum på fyra våningar, ett rum i taget. | `mattespel-sifferslottet-v1` |
 | `spel/affaren/` | Affären: kassa, kundärenden, Min affär. | `mattespel-affaren-v1` |
 | `spel/slungan/` | Slungan: 36 banor i sex världar. | `mattespel-slungan-v1` |
@@ -59,6 +59,7 @@ Delad kod: `spel/plattform.js` (`MPPlatt`: fysik, styrning, musik, djuret) anvä
 - **Rutjakten:** Korset har ingen klocka och inget slut. På tid (Femhörningarna, Rutnätet) syns klockan alltid och varje fel ger 3 s straff. Inga rullistor.
 - **Kulbanan:** ormen har svaren, skjutkulan uttrycket. På pekskärm: fingret ner siktar, lyft skjuter.
 - **Sagoriket:** en ny sak per bana. 3–4 svarsportar per bana, fel svar ger ny uppgift utan att banan spelas om. Mellanslag är trollstaven.
+- **Sagoriket, nya världar** (nov 2026, lärarens val: Molnriket och Vulkanriket): varje ny värld ska ha ett **eget sätt att spela**, inte bara ny färg. Bilderna hålls i bildpaketets platta stil (Kenney, CC0); det som saknas i paketet ritas i kod. **Inga AI-målade bilder i Sagoriket** (läraren: det ger inte samma känsla). **Molnriket är byggt:** ingen mark (holmar av moln över en avgrund), lila moln som löses upp, rosa studsmoln, vindbyar (medvind och motvind), åskbanor med blixtar som varnar ett gult streck först, och svarsportar utan mur där rätt svar tänder en **regnbågsbro** över en avgrund som är för bred att hoppa. Boss: Åskmolnet (blixtar, och vind när det är svagt). **Vulkanriket väntar** (banor på höjden, lava som stiger, bossen Draken): byggs efter att läraren provat Molnriket med klassen. Testet `skript/test-sagoriket-moln.cjs` spelar igenom alla banor med en robot; kör det efter varje ändring i Sagoriket.
 - **Sifferslottet:** inga rum med en enda uppgift och ett tal. Talplatserna slumpas, nyckelkista i varje rum, rummet är suddigt tills man rör sig, alltid klocka. Fel tal startar om rummet med samma ekvationer. Ändras rum måste en planerare visa att alla ordningar går att klara.
 - **Affären:** uppgifterna var bra, det läraren ville ha var liv runt dem (stamkunder, kundärenden, inredning). Pengarna har egen design, inte kopior av riktiga. Allt köpt ska ta ungefär 15 speldagar. Inredningen är målade bilder i `bilder/inredning/` (Kenneys möbler valdes bort). Knappsats 1 2 3 överst.
 - **Slungan:** skylten visar avståndet, aldrig faktorerna. Division passar inte i spelet: Vulkanön har enheter i stället. Banor från 13 ska inte gå att "dundra igenom" med ett platt skott. Flera mål per bana (läraren: en sak att träffa per bana känns tomt).
