@@ -66,6 +66,21 @@ h1{margin:8px 0 2px;font-size:2rem}
 .fg{display:grid;grid-template-columns:1fr 1fr;gap:8mm 8mm;margin-top:5mm}
 .fb h3{margin:0 0 1.5mm;font-size:4.4mm;font-weight:800}
 .ft{position:absolute;left:18mm;right:18mm;bottom:9mm;display:flex;justify-content:space-between;font-size:3.6mm;font-weight:700;color:#444}
+.sida{--c:#7B61FF;--c2:#9C86FF;--cd:#5A41D6}
+.sida,.sida *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.hd{border-bottom:0;background:linear-gradient(110deg,var(--c),var(--c2));color:#fff;border-radius:5mm;padding:3.2mm 5mm;align-items:center;box-shadow:0 1.2mm 0 var(--cd);margin-top:-2mm}
+.hd .nm{color:#fff}.hd .nm span{border-bottom-color:#fff;width:34mm}.hd h2{font-size:7.8mm}
+.pet{width:20mm;height:20mm;flex:none;margin:-5mm 0 -5mm 1mm;filter:drop-shadow(0 .6mm 0 rgba(0,0,0,.2))}.pet svg{width:100%;height:100%;display:block}
+.bra{position:absolute;left:18mm;right:18mm;bottom:16mm;border:.7mm dashed #1E9E5E;border-radius:5mm;padding:2.4mm 5mm;font-size:5.2mm;font-weight:800;color:#157548;background:#EAF8F0}
+.bw .hd{background:none;color:#000;border-radius:0;padding:0 0 2mm;border-bottom:.9mm solid #000;box-shadow:none;margin-top:0;align-items:flex-end}
+.bw .hd .nm{color:#000}.bw .hd .nm span{border-bottom-color:#000}
+.bw .pet{filter:grayscale(1)}
+.bw .bra{border-color:#000;color:#000;background:#fff}
+.lg{border-color:var(--c);border-radius:4mm;overflow:hidden}
+.lg div{border-color:#CFC7F7}
+.lg .s{background:#1E9E5E}.lg .m{background:#E5484D}.lg .v{background:var(--c)}
+.mini .lg{border-radius:3mm}
+.bw .lg{border-color:#000}.bw .lg div{border-color:#000}.bw .lg .s,.bw .lg .m,.bw .lg .v{background:#000}
 @page{size:A4;margin:0}
 @media print{
   body{background:#fff}.noprint{display:none!important}.wrap{max-width:none;padding:0;margin:0;display:block}
@@ -107,6 +122,8 @@ h1{margin:8px 0 2px;font-size:2rem}
 
   <div class="panel"><div class="opts">
     <label class="ck"><input type="checkbox" id="facit" checked> Facit sist</label>
+    <label class="ck"><input type="checkbox" id="bw"> Svartvitt (för svartvit skrivare)</label>
+    <label class="ck"><input type="checkbox" id="pet" checked> Mitt djur på bladet</label>
     <button class="sek" id="nya">🎲 Ny labyrint</button>
     <button class="go" id="print">🖨️ Skriv ut</button>
     <a class="tillbaka" href="./">← Alla blad</a>
@@ -118,6 +135,7 @@ h1{margin:8px 0 2px;font-size:2rem}
 </main>
 <script>
 const $=s=>document.querySelector(s);
+const pet=()=>$('#pet').checked&&window.owlSVG&&window.lasDjur?`<div class="pet">${owlSVG(lasDjur())}</div>`:'';
 const STOR={liten:{c:6,r:8,n:'Liten'},medel:{c:7,r:10,n:'Medel'},stor:{c:8,r:12,n:'Stor'}};
 const SV={latt:{n:'Lätt',ned:4,min:0,stub:0},medel:{n:'Medel',ned:2,min:.9,stub:0},svar:{n:'Svår',ned:1.2,min:1.1,stub:4}};
 let st={tab:4,stor:'medel',svar:'medel',blad:1,bas:nyBas()};
@@ -164,18 +182,20 @@ function cellStr(L,mini,facit){
    L.tal.map((rad,y)=>rad.map((n,x)=>{const k=key(y,x),on=facit&&L.sv.has(k),s=y===L.sti[0][0]&&x===L.sti[0][1],m=y===L.sti[L.sti.length-1][0]&&x===L.sti[L.sti.length-1][1];
      return `<div class="${s?'s':m?'m':on?'v':''}">${s?'<small>START</small>':m?'<small>MÅL</small>':''}${n}</div>`;}).join('')).join('')+'</div>';}
 function front(L){
-  return `<section class="sida"><div class="hd"><h2>Mattelabyrint</h2><div class="nm">Namn:<span></span></div></div>
+  return `<section class="sida"><div class="hd"><h2>Mattelabyrint</h2><div class="nm">Namn:<span></span></div>${pet()}</div>
    <p class="intro">Hitta vägen från START till MÅL. Gå bara genom rutor med tal i ${st.tab}:ans tabell (${st.tab}, ${st.tab*2}, ${st.tab*3} och så vidare). Du får gå uppåt, nedåt och åt sidan, inte snett. Rita vägen med en penna.</p>
    ${cellStr(L,false,false)}
+   <div class="bra">⭐ Bra jobbat! Jag hittade vägen ☐</div>
    <div class="ft"><span>Pluggparken.se</span><span>Blad nr ${L.nr} · ${STOR[st.stor].n}, ${SV[st.svar].n}</span></div></section>`;}
 function facitSida(ls){
-  return `<section class="sida"><div class="hd"><h2>Facit</h2><div class="nm">Rätta själv</div></div><p class="intro">Den rätta vägen är svart.</p>
+  return `<section class="sida"><div class="hd"><h2>Facit</h2><div class="nm">Rätta själv</div></div><p class="intro">Den rätta vägen är markerad.</p>
    <div class="fg">${ls.map(L=>`<div class="fb mini"><h3>Blad nr ${L.nr}</h3>${cellStr(L,true,true)}</div>`).join('')}</div>
    <div class="ft"><span>Pluggparken.se</span><span>Facit · ${st.tab}:ans tabell</span></div></section>`;}
 function render(){
   const l=Array.from({length:st.blad},(_,i)=>labyrint(st.bas+i));
   let html=l.map(front).join('');
   if($('#facit').checked)for(let i=0;i<l.length;i+=4)html+=facitSida(l.slice(i,i+4));
+  $('#pages').className='pages'+($('#bw').checked?' bw':'');
   $('#pages').innerHTML=html;
   const fs=$('#facit').checked?Math.ceil(l.length/4):0,tot=l.length+fs;
   $('#info').textContent=`${tot} ${tot===1?'sida':'sidor'} (A4)${fs?', varav '+fs+(fs===1?' facitsida':' facitsidor')+' sist':''}. Blad nr ${l[0].nr}${l.length>1?'–'+l[l.length-1].nr:''}. Välj Skriv ut och skala "100 %" i skrivardialogen.`;
@@ -189,7 +209,7 @@ seg('#sTab',v=>{st.tab=+v;render();});
 seg('#sStor',v=>{st.stor=v;render();});
 seg('#sSvar',v=>{st.svar=v;render();});
 seg('#sBlad',v=>{st.blad=+v;render();});
-$('#facit').onchange=render;
+['#facit','#bw','#pet'].forEach(q=>$(q).onchange=render);
 $('#nya').onclick=()=>{st.bas=nyBas();$('#nr').value='';render();};
 $('#nr').oninput=e=>{const v=e.target.value.replace(/\D/g,'').slice(0,6);e.target.value=v;if(v.length>=5){st.bas=+v;render();}};
 $('#print').onclick=()=>window.print();

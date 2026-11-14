@@ -71,6 +71,21 @@ h1{margin:8px 0 2px;font-size:2rem}
 .f{display:flex;align-items:center;gap:3mm;border-bottom:.3mm dotted #888;padding-bottom:1mm;font-size:4mm;font-weight:700;line-height:1.2;height:26mm}
 .f svg{flex:none;width:22mm;height:22mm}
 .f b{font-size:4.2mm}
+.sida{--c:#F2780C;--c2:#FFA24C;--cd:#B85A06}
+.sida,.sida *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.hd{border-bottom:0;background:linear-gradient(110deg,var(--c),var(--c2));color:#fff;border-radius:5mm;padding:3.2mm 5mm;align-items:center;box-shadow:0 1.2mm 0 var(--cd);margin-top:-2mm}
+.hd .nm{color:#fff}.hd .nm span{border-bottom-color:#fff;width:34mm}.hd h2{font-size:7.8mm}
+.pet{width:20mm;height:20mm;flex:none;margin:-5mm 0 -5mm 1mm;filter:drop-shadow(0 .6mm 0 rgba(0,0,0,.2))}.pet svg{width:100%;height:100%;display:block}
+.bra{position:absolute;left:18mm;right:18mm;bottom:16mm;border:.7mm dashed #1E9E5E;border-radius:5mm;padding:2.4mm 5mm;font-size:5.2mm;font-weight:800;color:#157548;background:#EAF8F0}
+.bw .hd{background:none;color:#000;border-radius:0;padding:0 0 2mm;border-bottom:.9mm solid #000;box-shadow:none;margin-top:0;align-items:flex-end}
+.bw .hd .nm{color:#000}.bw .hd .nm span{border-bottom-color:#000}
+.bw .pet{filter:grayscale(1)}
+.bw .bra{border-color:#000;color:#000;background:#fff}
+.k{height:42.5mm;border-color:var(--c);border-radius:5mm}
+.k svg{width:32mm;height:32mm}
+.kl{background:#FFF4E8}.kr{background:#EEF1FF}
+.bw .k{border-color:#000}.bw .kl,.bw .kr{background:none}
+.bra.kl2{bottom:42mm}
 @page{size:A4;margin:0}
 @media print{
   body{background:#fff}.noprint{display:none!important}.wrap{max-width:none;padding:0;margin:0;display:block}
@@ -121,6 +136,8 @@ h1{margin:8px 0 2px;font-size:2rem}
 
   <div class="panel"><div class="opts">
     <label class="ck"><input type="checkbox" id="facit" checked> Facit sist</label>
+    <label class="ck"><input type="checkbox" id="bw"> Svartvitt (för svartvit skrivare)</label>
+    <label class="ck"><input type="checkbox" id="pet" checked> Mitt djur på bladet</label>
     <button class="sek" id="nya">🎲 Nya klockor</button>
     <button class="go" id="print">🖨️ Skriv ut</button>
     <a class="tillbaka" href="./">← Alla blad</a>
@@ -132,6 +149,7 @@ h1{margin:8px 0 2px;font-size:2rem}
 </main>
 <script>
 const $=s=>document.querySelector(s);
+const pet=()=>$('#pet').checked&&window.owlSVG&&window.lasDjur?`<div class="pet">${owlSVG(lasDjur())}</div>`:'';
 const K=window.MPKlocka;
 const NIV={hel:{n:'Hela timmar',m:[0]},halv:{n:'Hel och halv',m:[0,30]},kvart:{n:'Hel, halv och kvart',m:[0,15,30,45]},fem:{n:'Femminuterstider',m:[0,5,10,15,20,25,30,35,40,45,50,55]},alla:{n:'Alla minuter',m:null}};
 let st={niva:'kvart',typ:'bla',rita:'dig',blad:1,bas:nyBas()};
@@ -161,12 +179,13 @@ function uppg(nr){
     return{h,m,las,vis};});}
 const dig=(h,m)=>p2(h)+'.'+p2(m);
 function front(b){
-  return `<section class="sida"><div class="hd"><h2>Klockan: skriv och rita</h2><div class="nm">Namn:<span></span></div></div>
+  return `<section class="sida"><div class="hd"><h2>Klockan: skriv och rita</h2><div class="nm">Namn:<span></span></div>${pet()}</div>
    <p class="intro">Skriv tiden med ord och som digital tid (24 timmar, till exempel 15.30). Där klockan är tom: rita visarna.</p>
    <div class="kg">${b.u.map((q,i)=>{const dd=dygn(q.h);
-     if(q.las)return `<div class="k">${klocka(q.h,q.m,true)}<div class="r">${i+1}. Vad är klockan ${dd}?<span class="l" style="margin-top:3mm"></span><span class="e">Digital tid:</span><span class="l" style="width:30mm"></span></div></div>`;
+     if(q.las)return `<div class="k kl">${klocka(q.h,q.m,true)}<div class="r">${i+1}. Vad är klockan ${dd}?<span class="l" style="margin-top:3mm"></span><span class="e">Digital tid:</span><span class="l" style="width:30mm"></span></div></div>`;
      const text=q.vis==='dig'?`<div class="dig">${dig(q.h,q.m)}</div>`:`<div class="dt" style="font-size:5.6mm;font-weight:800;line-height:1.2">${K.cap(ord(q.h,q.m))}</div>`;
-     return `<div class="k">${klocka(q.h,q.m,false)}<div class="r">${i+1}. Rita visarna${text}<span class="e">${dd}</span></div></div>`;}).join('')}</div>
+     return `<div class="k kr">${klocka(q.h,q.m,false)}<div class="r">${i+1}. Rita visarna${text}<span class="e">${dd}</span></div></div>`;}).join('')}</div>
+   <div class="bra kl2">⭐ Bra jobbat! Jag klarade ___ av 8</div>
    ${QR?`<div class="qr"><img src="${QR}" alt="QR-kod till den interaktiva klockan"><div><b>Behöver du öva med en riktig klocka?</b><br>Skanna koden och prova den interaktiva klockan på Pluggparken, där du kan flytta visarna själv. pluggparken.se/klockan/</div></div>`:''}
    <div class="ft"><span>Pluggparken.se</span><span>Blad nr ${b.nr} · ${NIV[st.niva].n}</span></div></section>`;}
 function facit(bl){ // två blad per facitsida
@@ -176,6 +195,7 @@ function render(){
   const l=Array.from({length:st.blad},(_,i)=>({nr:st.bas+i,u:uppg(st.bas+i)}));
   let html=l.map(front).join('');
   if($('#facit').checked)for(let i=0;i<l.length;i+=2)html+=facit(l.slice(i,i+2));
+  $('#pages').className='pages'+($('#bw').checked?' bw':'');
   $('#pages').innerHTML=html;
   $('#rVal').hidden=st.typ==='las';
   const fs=$('#facit').checked?Math.ceil(l.length/2):0,tot=l.length+fs;
@@ -189,7 +209,7 @@ seg('#sNiva',v=>{st.niva=v;render();});
 seg('#sTyp',v=>{st.typ=v;render();});
 seg('#sRita',v=>{st.rita=v;render();});
 seg('#sBlad',v=>{st.blad=+v;render();});
-$('#facit').onchange=render;
+['#facit','#bw','#pet'].forEach(q=>$(q).onchange=render);
 $('#nya').onclick=()=>{st.bas=nyBas();$('#nr').value='';render();};
 $('#nr').oninput=e=>{const v=e.target.value.replace(/\D/g,'').slice(0,6);e.target.value=v;if(v.length>=5){st.bas=+v;render();}};
 $('#print').onclick=()=>window.print();

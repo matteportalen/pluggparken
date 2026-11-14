@@ -67,6 +67,24 @@ textarea{width:100%;min-height:150px;padding:10px 12px;border-radius:14px;border
 .mf .og div.i{color:#fff;background:#000;font-weight:800}
 .fg{display:grid;grid-template-columns:1fr 1fr;gap:8mm 8mm;margin-top:5mm}
 .fb h3{margin:0 0 1.5mm;font-size:4.4mm;font-weight:800}
+.sida{--c:#E5484D;--c2:#F27075;--cd:#B5282D}
+.sida,.sida *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.hd{border-bottom:0;background:linear-gradient(110deg,var(--c),var(--c2));color:#fff;border-radius:5mm;padding:3.2mm 5mm;align-items:center;box-shadow:0 1.2mm 0 var(--cd);margin-top:-2mm}
+.hd .nm{color:#fff}.hd .nm span{border-bottom-color:#fff;width:34mm}.hd h2{font-size:7.8mm}
+.pet{width:20mm;height:20mm;flex:none;margin:-5mm 0 -5mm 1mm;filter:drop-shadow(0 .6mm 0 rgba(0,0,0,.2))}.pet svg{width:100%;height:100%;display:block}
+.bra{position:absolute;left:18mm;right:18mm;bottom:16mm;border:.7mm dashed #1E9E5E;border-radius:5mm;padding:2.4mm 5mm;font-size:5.2mm;font-weight:800;color:#157548;background:#EAF8F0}
+.bw .hd{background:none;color:#000;border-radius:0;padding:0 0 2mm;border-bottom:.9mm solid #000;box-shadow:none;margin-top:0;align-items:flex-end}
+.bw .hd .nm{color:#000}.bw .hd .nm span{border-bottom-color:#000}
+.bw .pet{filter:grayscale(1)}
+.bw .bra{border-color:#000;color:#000;background:#fff}
+.og{border-color:var(--c)}
+.ol{gap:2mm 4.5mm;margin-top:6mm}
+.ol span{background:#FFF0F0;border-radius:3mm;padding:.6mm 2.4mm}
+.ol span::before{color:var(--c)}
+.ol .brap{background:#EAF8F0;border:.7mm dashed #1E9E5E;color:#157548;font-size:5mm}
+.ol .brap::before{content:""}
+.mf .og div.i{background:var(--c)}
+.bw .og{border-color:#000}.bw .ol span{background:none}.bw .ol span::before{color:#000}.bw .ol .brap{background:#fff;border-color:#000;color:#000}.bw .mf .og div.i{background:#000}
 @page{size:A4;margin:0}
 @media print{
   body{background:#fff}.noprint{display:none!important}.wrap{max-width:none;padding:0;margin:0;display:block}
@@ -117,6 +135,8 @@ textarea{width:100%;min-height:150px;padding:10px 12px;border-radius:14px;border
 
   <div class="panel"><div class="opts">
     <label class="ck"><input type="checkbox" id="facit" checked> Facit sist</label>
+    <label class="ck"><input type="checkbox" id="bw"> Svartvitt (för svartvit skrivare)</label>
+    <label class="ck"><input type="checkbox" id="pet" checked> Mitt djur på bladet</label>
     <button class="sek" id="nya">🎲 Ny ruta</button>
     <button class="go" id="print">🖨️ Skriv ut</button>
     <a class="tillbaka" href="./">← Alla blad</a>
@@ -128,6 +148,7 @@ textarea{width:100%;min-height:150px;padding:10px 12px;border-radius:14px;border
 </main>
 <script>
 const $=s=>document.querySelector(s);
+const pet=()=>$('#pet').checked&&window.owlSVG&&window.lasDjur?`<div class="pet">${owlSVG(lasDjur())}</div>`:'';
 const FOR={djur:'KATT\nHUND\nHÄST\nKOR\nGRIS\nFÅR\nHÖNA\nUGGLA\nKANIN\nÄLG',skola:'SKOLA\nBOK\nPENNA\nLÄRARE\nKLASS\nRAST\nBÄNK\nTAVLA\nLÄSA\nRITA',host:'HÖST\nLÖV\nSVAMP\nREGN\nSTORM\nGRYTA\nÄPPLE\nKASTANJ\nVIND\nTRÖJA'};
 let st={ord:'',stor:12,auto:true,blad:1,bas:nyBas()};
 const MAXORD={10:16,12:22,14:28,16:36}; // så många ord får plats i rutan på alla blad (mätt med 20 slumpade blad per storlek)
@@ -152,16 +173,16 @@ function blad(nr,ord){
     if(!lagt)ej.push(w);});
   for(let y=0;y<N;y++)for(let x=0;x<N;x++)if(!G[y][x])G[y][x]=FYLL[Math.floor(r()*FYLL.length)];
   return{nr,N,G,M,ej};}
-function grid(B,mini,facit){const cs=mini?80/B.N:Math.min(160/B.N,15),fs=cs*(mini?.6:.58);
+function grid(B,mini,facit){const cs=mini?80/B.N:B.N>=16?138/B.N:Math.min(150/B.N,15),fs=cs*(mini?.6:.58);
   return `<div class="og" style="grid-template-columns:repeat(${B.N},${cs}mm);grid-auto-rows:${cs}mm;font-size:${fs}mm">`+B.G.map((rad,y)=>rad.map((c,x)=>`<div${facit&&B.M[y][x]?' class="i"':''}>${c}</div>`).join('')).join('')+'</div>';}
 function front(B,ord){
-  return `<section class="sida"><div class="hd"><h2>Ordjakt</h2><div class="nm">Namn:<span></span></div></div>
+  return `<section class="sida"><div class="hd"><h2>Ordjakt</h2><div class="nm">Namn:<span></span></div>${pet()}</div>
    <p class="intro">Hitta orden i rutan. De kan stå ${[$('#dH').checked?'åt höger':'',$('#dN').checked?'nedåt':'',$('#dD').checked?'snett':''].filter(Boolean).join(', ').replace(/, ([^,]*)$/,' och $1')||'åt höger'}${$('#dB').checked?', även baklänges':''}. Sätt en ring runt varje ord och kryssa i listan.</p>
    ${grid(B,false,false)}
-   <div class="ol">${[...ord].sort((a,b)=>a.localeCompare(b,'sv')).map(w=>`<span>${w}</span>`).join('')}</div>
+   <div class="ol">${[...ord].sort((a,b)=>a.localeCompare(b,'sv')).map(w=>`<span>${w}</span>`).join('')}<span class="brap">⭐ Jag hittade ___ av ${ord.length} ord</span></div>
    <div class="ft"><span>Pluggparken.se</span><span>Blad nr ${B.nr} · ${B.N} × ${B.N}</span></div></section>`;}
 function facitSida(bs){
-  return `<section class="sida"><div class="hd"><h2>Facit</h2><div class="nm">Rätta själv</div></div><p class="intro">Orden är markerade i svart.</p>
+  return `<section class="sida"><div class="hd"><h2>Facit</h2><div class="nm">Rätta själv</div></div><p class="intro">Orden är markerade.</p>
    <div class="fg">${bs.map(B=>`<div class="fb mf"><h3>Blad nr ${B.nr}</h3>${grid(B,true,true)}</div>`).join('')}</div>
    <div class="ft"><span>Pluggparken.se</span><span>Facit</span></div></section>`;}
 function render(){
@@ -181,6 +202,7 @@ function render(){
   $('#varn').hidden=!v.length;$('#varn').textContent=v.join(' ');
   let html=bs.map(b=>front(b,L.ok.filter(w=>!b.ej.includes(w)))).join('');
   if($('#facit').checked)for(let i=0;i<bs.length;i+=4)html+=facitSida(bs.slice(i,i+4));
+  $('#pages').className='pages'+($('#bw').checked?' bw':'');
   $('#pages').innerHTML=html;
   const fs=$('#facit').checked?Math.ceil(bs.length/4):0,tot=bs.length+fs;
   $('#info').textContent=`${L.ok.length} ord, ${tot} ${tot===1?'sida':'sidor'} (A4)${fs?', varav '+fs+(fs===1?' facitsida':' facitsidor')+' sist':''}. Blad nr ${bs[0].nr}${bs.length>1?'–'+bs[bs.length-1].nr:''}. Välj Skriv ut och skala "100 %" i skrivardialogen.`;
@@ -193,7 +215,7 @@ seg('#sStor',v=>{st.auto=v==='auto';if(!st.auto)st.stor=+v;render();});
 seg('#sBlad',v=>{st.blad=+v;render();});
 $('#sFor').onclick=e=>{const b=e.target.closest('[data-f]');if(!b)return;$('#ord').value=b.dataset.f==='rensa'?'':FOR[b.dataset.f];render();};
 $('#ord').oninput=render;
-['#dH','#dN','#dD','#dB','#facit'].forEach(s=>$(s).onchange=render);
+['#dH','#dN','#dD','#dB','#facit','#bw','#pet'].forEach(s=>$(s).onchange=render);
 $('#nya').onclick=()=>{st.bas=nyBas();$('#nr').value='';render();};
 $('#nr').oninput=e=>{const v=e.target.value.replace(/\D/g,'').slice(0,6);e.target.value=v;if(v.length>=5){st.bas=+v;render();}};
 $('#print').onclick=()=>window.print();
