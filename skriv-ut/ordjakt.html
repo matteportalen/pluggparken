@@ -93,8 +93,9 @@ textarea{width:100%;min-height:150px;padding:10px 12px;border-radius:14px;border
 
   <div class="panel"><h2>2. Hur stor ruta?</h2>
     <div class="seg" id="sStor" role="group" aria-label="Storlek">
+      <button data-v="auto" id="bAuto" aria-pressed="true">✨ Automatiskt<small id="aStor">väljs efter orden</small></button>
       <button data-v="10" aria-pressed="false">10 × 10<small>högst 16 ord</small></button>
-      <button data-v="12" aria-pressed="true">12 × 12<small>högst 22 ord</small></button>
+      <button data-v="12" aria-pressed="false">12 × 12<small>högst 22 ord</small></button>
       <button data-v="14" aria-pressed="false">14 × 14<small>högst 28 ord</small></button>
       <button data-v="16" aria-pressed="false">16 × 16<small>högst 36 ord</small></button>
     </div></div>
@@ -128,7 +129,7 @@ textarea{width:100%;min-height:150px;padding:10px 12px;border-radius:14px;border
 <script>
 const $=s=>document.querySelector(s);
 const FOR={djur:'KATT\nHUND\nHÄST\nKOR\nGRIS\nFÅR\nHÖNA\nUGGLA\nKANIN\nÄLG',skola:'SKOLA\nBOK\nPENNA\nLÄRARE\nKLASS\nRAST\nBÄNK\nTAVLA\nLÄSA\nRITA',host:'HÖST\nLÖV\nSVAMP\nREGN\nSTORM\nGRYTA\nÄPPLE\nKASTANJ\nVIND\nTRÖJA'};
-let st={ord:'',stor:12,blad:1,bas:nyBas()};
+let st={ord:'',stor:12,auto:true,blad:1,bas:nyBas()};
 const MAXORD={10:16,12:22,14:28,16:36}; // så många ord får plats i rutan på alla blad (mätt med 20 slumpade blad per storlek)
 function nyBas(){return 10000+Math.floor(Math.random()*89000);}
 function prng(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
@@ -164,7 +165,12 @@ function facitSida(bs){
    <div class="fg">${bs.map(B=>`<div class="fb mf"><h3>Blad nr ${B.nr}</h3>${grid(B,true,true)}</div>`).join('')}</div>
    <div class="ft"><span>Pluggparken.se</span><span>Facit</span></div></section>`;}
 function render(){
-  st.ord=$('#ord').value;const L=ordlista(),v=[];
+  st.ord=$('#ord').value;
+  if(st.auto){ // minsta ruta där orden ryms och längsta ordet får plats
+    const o=[...new Set(st.ord.toUpperCase().split(/[\s,;]+/).map(w=>w.replace(/[^A-ZÅÄÖ]/g,'')).filter(w=>w.length>=3&&w.length<=14))];
+    const lang=o.reduce((m,w)=>Math.max(m,w.length),0);st.stor=[10,12,14,16].find(n=>MAXORD[n]>=o.length&&n>=lang)||16;if(!o.length)st.stor=12;
+    $('#aStor').textContent=o.length?`${st.stor} × ${st.stor} för ${o.length} ord`:'väljs efter orden';}
+  const L=ordlista(),v=[];
   $('#rakn').textContent=`${Math.min(L.antal,99)} av högst ${MAXORD[st.stor]} ord i rutan ${st.stor} × ${st.stor}. Skriv ett ord per rad, eller med mellanslag eller komma. 3–${Math.min(14,st.stor)} bokstäver i varje. Inget sparas.`;
   if(L.for_lang.length)v.push(`Orden ${L.for_lang.join(', ')} är för korta eller långa (3–${Math.min(14,st.stor)} bokstäver) och tas inte med.`);
   if(L.extra.length){const st2=[10,12,14,16].find(n=>MAXORD[n]>=L.antal);v.push(`Rutan ${st.stor} × ${st.stor} rymmer högst ${MAXORD[st.stor]} ord, så ${L.extra.join(', ')} hoppas över.${st2?' Välj ruta '+st2+' × '+st2+' för att få med alla.':' Ta bort några ord.'}`);}
@@ -183,7 +189,7 @@ function fit(){const sg=$('#stage'),pg=$('#pages');if(!pg.firstElementChild)retu
   const mm=96/25.4,w=210*mm,s=Math.min(1,(sg.clientWidth||w)/w);pg.style.transform=`scale(${s})`;sg.style.height=(pg.scrollHeight*s)+'px';}
 addEventListener('resize',fit);
 function seg(id,fn){$(id).onclick=e=>{const b=e.target.closest('[data-v]');if(!b)return;[...$(id).children].forEach(x=>x.setAttribute('aria-pressed',String(x===b)));fn(b.dataset.v);};}
-seg('#sStor',v=>{st.stor=+v;render();});
+seg('#sStor',v=>{st.auto=v==='auto';if(!st.auto)st.stor=+v;render();});
 seg('#sBlad',v=>{st.blad=+v;render();});
 $('#sFor').onclick=e=>{const b=e.target.closest('[data-f]');if(!b)return;$('#ord').value=b.dataset.f==='rensa'?'':FOR[b.dataset.f];render();};
 $('#ord').oninput=render;
