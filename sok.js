@@ -35,7 +35,7 @@ const IDX=[
  ['spel/kulbanan/','Kulbanan','Skjut svaret dit där tre kulor blir samma tal','🔺','kulor pyramid skjuta tabeller zuma','Spelhörnan'],
  ['spel/tradgard/','Trädgårdsvakten','Placera djur i trädgården och stoppa slemmen: räkna ut skada, hälsa och omgångar','🌻','plants vs zombies försvar strategi multiplikation division uttryck skada tabeller','Spelhörnan'],
  ['spel/slungan/','Slungan','Slunga ditt djur mot slemmen: räkna ut hur många steg','🎯','slunga katapult slangbella fysik steg multiplikation tabeller faktorer uttryck murar','Spelhörnan'],
- ['spel/sagoriket/','Sagoriket','Spring och hoppa med ditt djur och svara vid portarna','🏰','plattformsspel hoppa trollstav boss världar sagoskogen ökenriket isriket havsriket molnriket','Spelhörnan'],
+ ['spel/sagoriket/','Sagoriket','Spring och hoppa med ditt djur och svara vid portarna','🏰','plattformsspel hoppa trollstav boss världar sagoskogen ökenriket isriket havsriket molnriket vulkanriket drake lava','Spelhörnan'],
  ['spel/glodvaktaren/','Glödväktaren','Ett riddaräventyr där rätt mattesvar bryter fiendens runsköld','⚔️','riddare rpg matte plus minus multiplikation runor boss lägereld glödväktaren','Spelhörnan'],
  ['spel/sifferslottet/','Sifferslottet','Hämta talen i rätt ordning innan tiden tar slut','🏰','slott rum tal ordning ekvation tid nyckel','Spelhörnan'],
  ['spel/affaren/','Affären','Stå i kassan, räkna ihop och ge växel','🏪','butik kiosk kassa växel pengar handla priser','Spelhörnan'],
