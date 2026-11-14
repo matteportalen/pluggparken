@@ -150,7 +150,7 @@ function front(b){
   // kolumnvis: 1–10 i första kolumnen, 11–20 i andra osv, så att man läser nedåt
   const ord=[];for(let r=0;r<rader;r++)for(let c=0;c<3;c++){const i=c*rader+r;ord.push(i<n?i:-1);}
   return `<section class="sida"><div class="hd"><h2>${b.titel}</h2><div class="nm">Namn:<span></span></div></div>
-   <div class="tid"><span>Start<span class="l"></span></span><span>Slut<span class="l"></span></span><span>Tid<span class="l" style="width:17mm"></span> min</span><span class="sp">Rätt<span class="l" style="width:13mm"></span> / ${n}</span></div>
+   <div class="tid"><span>Tid<span class="l" style="width:24mm"></span> min</span><span class="sp">Rätt<span class="l" style="width:16mm"></span> / ${n}</span></div>
    <div class="tg">${ord.map(i=>i<0?'<div></div>':`<div class="t" style="height:${h}mm"><small>${i+1}</small>${b.u[i][0]} · ${b.u[i][1]} =<i></i></div>`).join('')}</div>
    <div class="ft"><span>Pluggparken.se · Tabell ${sv(b.tab)}</span><span>Blad nr ${b.nr}</span></div></section>`;}
 function back(b){ // baksidan: bara facit, upp och ner längst ner, så att det blir rättvänt när man viker upp remsan
