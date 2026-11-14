@@ -83,3 +83,12 @@ Sveriges landskap (frågeövning), Raketbygget och Månbasen. Det gamla Zooma ut
 
 - SO: Hur styrs Sverige? och fler interaktiva övningar.
 - Inte testat: mobil och äldre Chromebooks för universumresan och Jättarna i 3D, riktig röst i resorna.
+
+## Zooma in och skalresan (14 nov 2026, lärarens önskan)
+
+- **Filmen Zooma in** (`zoominfilm.js`, `MPZoomInFilm`): åtta steg från handen till kvarkarna (hand, hud, cell, cellkärna, DNA, atom, atomkärna, kvarkar) och en nionde scen där kameran backar ut till jorden. **Helt animerad som en modell, inga foton** (lärarens beslut för just den här filmen; kvarkscenen märks "Modell · ingen har sett en kvark"). Samma nivå, röst och motor som Zooma ut. Manus: `manus/zoomin-manus.txt` (med faktalista), röst i `ljud/zoomin/` (19 filer; **inte inspelade än**, filmen visar bara undertexter tills de finns).
+- **Skalresan** (`skalresa.js`, `MPSkalresa.start("in"|"ut")`): kopplar ihop Zooma in och Zooma ut. En linjal överst i filmen visar alla 17 stegen (kvark till vänster, kosmiska nätet till höger) och är samtidigt reglaget: tryck eller dra för att hoppa till ett steg, även över till den andra filmen. Slutrutan har "🚀 Fortsätt ut i universum" respektive "🔬 Zooma in till atomen". **Zooma ut är inte ändrad**: linjalen läser scenen ur filmens egna prickar (`.sh-dot.done`) och byter scen genom att trycka på dem.
+- Reglaget är **stegvist, inte en obruten zoom** (annars måste Zooma ut byggas om, och den får inte röras). En egen reglagesida valdes bort: linjalen i filmen gör samma sak.
+- Rymdlabbet startar båda filmerna genom `MPSkalresa` (kort "Zooma in" med egen bild `ovriga/rymdlabbet/zoomin-kort.jpg`, gjord ur filmen). Djuplänkar: `#film-zoomin`, `#film-zoom`. Genväg på NO-sidan och två rader i `sok.js`.
+- **Väntar:** röstfilerna (läraren), Zooma in i Biografen i 3D-världen (kräver en rad för rymdfilmerna där), prov på riktig iPad/Chromebook.
+

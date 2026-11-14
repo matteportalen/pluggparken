@@ -18,6 +18,7 @@ _Det som gäller nu för Specialare (minilektioner, quiz, prova själv) och alla
 | `specialare/filmlib.js`, `filmfx.js`, `klot.js` | Delade ritverktyg för filmerna: foton, paneler, kamerarörelse, glöd, klot. |
 | `svarthal.js` (roten) | **Filmmotorn** för alla filmer med röst (`MPSvartHal.start(host,{def,extra,onClose})`), och filmen Inuti ett svart hål. |
 | `zoomfilm.js`, `stjarnfilm.js` (roten) | Zooma ut i universum, En stjärnas liv (Rymdlabbet). |
+| `zoominfilm.js`, `skalresa.js` (roten) | Zooma in (hand till kvarkar, helt animerad) och linjalen som kopplar ihop den med Zooma ut. Se `docs/so-och-rymd.md`. |
 | `manus/<film>-manus.txt` | Rösttexten per replik. Raden `VOICE: <id>` överst väljer röst. |
 | `ljud/<film>/s<scen>-<replik>.mp3` | Röstfilerna. |
 | `skript/elevenlabs.js` | Skapar röstfiler ur ett manus. |

@@ -261,6 +261,7 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;bac
   <h3 class="grp">Stjärnor och universum</h3>
   <div class="modes">
     <button class="mode" data-go="jattar" style="--c:#FF6E3C;--bi:url(../../specialare/bilder/storlek-11.jpg)"><span class="kk">STJÄRNOR</span><b>Jättarna i rymden</b><small>Solen bredvid de största stjärnorna vi känner till.</small></button>
+    <button class="mode" data-film="zoomin" style="--c:#1E9E5E;--bi:url(zoomin-kort.jpg)"><span class="kk">FILM</span><b>Zooma in</b><small>En animerad film i åtta steg: från din hand in i huden, cellen, DNA och atomen, ända till kvarkarna. Fortsätter sedan ut i universum.</small></button>
     <button class="mode" data-film="zoom" style="--c:#7B61FF;--bi:url(../../specialare/bilder/storlek-14.jpg)"><span class="kk">FILM</span><b>Zooma ut i universum</b><small>En film i nio steg med berättarröst: från jorden ut till Vintergatan, galaxerna och det kosmiska nätet. Vad är ett ljusår?</small></button>
     <button class="mode" data-film="svarthal" style="--c:#FF7A2F;--bi:url(../../specialare/bilder/svartahal-2.jpg)"><span class="kk">FILM</span><b>Inuti ett svart hål</b><small>En film i sju steg: varför inte ens ljus kommer ut, och vad som händer med den som faller in.</small></button>
     <button class="mode" data-go="hal" style="--c:#FF7A2F;--bi:url(../../specialare/bilder/svartahal-1.jpg)"><span class="kk">FYSIK</span><b>Svarta hål</b><small>Rulla kulor på rymdens gummiduk. Vad händer om man trycker ihop jorden?</small></button>
@@ -467,6 +468,8 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;bac
 <script src="../../djur.js"></script>
 <script src="../../svarthal.js"></script>
 <script src="../../zoomfilm.js"></script>
+<script src="../../zoominfilm.js"></script>
+<script src="../../skalresa.js"></script>
 <script src="../../stjarnfilm.js"></script>
 <script src="../../huvud.js" data-titel="Rymdlabbet" data-ikon="🔭" data-hem="../../" data-portal="ovriga" data-liggande="ja"></script>
 <script type="module">
@@ -515,7 +518,10 @@ function show(id){if('speechSynthesis' in window)speechSynthesis.cancel();docume
   if(id==='zoom')openZoom();if(id==='jattar')openGiants();if(id==='hal')openHole();if(id==='himmel')openNight();if(id==='liv')openLife();try{rotChk()}catch(e){}}
 document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>show(b.dataset.go));
 // filmen Inuti ett svart hål (svarthal.js) öppnas över hela fönstret
-document.querySelectorAll('[data-film]').forEach(b=>b.onclick=()=>{const F={zoom:window.MPZoomFilm,stjarna:window.MPStjarnFilm}[b.dataset.film]||window.MPSvartHal;if(F){const prev=document.body.style.overflow;document.body.style.overflow='hidden';F.start(document.body,{overlay:true,onClose:()=>{document.body.style.overflow=prev;b.focus();}});}});
+document.querySelectorAll('[data-film]').forEach(b=>b.onclick=()=>{
+  // Zooma in och Zooma ut hör ihop (skalresa.js): linjalen överst leder mellan dem
+  if((b.dataset.film==='zoom'||b.dataset.film==='zoomin')&&window.MPSkalresa&&MPSkalresa.start(b.dataset.film==='zoom'?'ut':'in',{onClose:()=>b.focus()}))return;
+  const F={zoom:window.MPZoomFilm,stjarna:window.MPStjarnFilm}[b.dataset.film]||window.MPSvartHal;if(F){const prev=document.body.style.overflow;document.body.style.overflow='hidden';F.start(document.body,{overlay:true,onClose:()=>{document.body.style.overflow=prev;b.focus();}});}});
 document.querySelectorAll('[data-home]').forEach(b=>b.onclick=()=>show('home'));
 function redraw(){if(cur==='storlek')drawSize();if(cur==='avstand')drawDist();if(cur==='vikt')drawWeight();if(cur==='zoom')drawZoom();if(cur==='jattar'){drawGiants();if(gSel)gText();}if(cur==='hal'&&!$('kTxt').textContent.includes('blir'))kDraw(null,0);}
 addEventListener('resize',()=>{if(cur==='storlek')openSize(true);if(cur==='avstand')drawDist();if(cur==='morker')drawEcl();if(cur==='dag'||cur==='arstid')size3D();if(cur==='jattar')drawGiants();});

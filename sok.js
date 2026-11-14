@@ -87,6 +87,8 @@ const IDX=[
  ['ovriga/bokstaver/','Bokstäver','Kolla av vilka bokstäver man kan','🔤','bokstäver ljud abc läsinlärning','Svenska'],
  ['ovriga/lasflyt/','Läsflyt','Läs en kort text flera gånger med en vuxen','📖','läsa text flyt upprepad läsning','Svenska'],
  ['ovriga/rita/','Draw it!','Rita ordet på engelska så gissar datorn','🎨','engelska rita gissa quick draw glosor','Engelska'],
+ ['ovriga/rymdlabbet/#film-zoomin','Zooma in (film)','Animerad film från handen in till cellen, DNA, atomen och kvarkarna','🔬','zooma in film cell hud dna atom atomkärna proton neutron kvark kvarkar storlek skala liten mikroskop kropp','NO'],
+ ['ovriga/rymdlabbet/#film-zoom','Zooma ut i universum (film)','Film från jorden ut till Vintergatan, galaxerna och det kosmiska nätet','🔭','zooma ut film universum jorden månen solsystemet vintergatan galax laniakea kosmiska nätet ljusår storlek skala','NO'],
  ['ovriga/rymdlabbet/','Rymdlabbet','Solsystemet, dag och natt, månens faser och mer','🔭','rymden planeter måne stjärnor svarta hål årstider förmörkelse universum galax jättar','NO'],
  ['brobygget/','Brobygget','Bygg en bro av väg, trä, stål och rep och testa hur tunga fordon den bär.','🌉','bro broar bygga brobygge kraft krafter tyngd balans triangel fackverk hängbro konstruktion teknik hållfasthet lastbil','NO'],
  ['flytasjunka/','Flyta eller sjunka','Testa vad som flyter, bygg en lerbåt som bär kulor och gissa först.','🛟','flyta sjunka flyter sjunker båt vatten densitet arkimedes salt is lera krafter material','NO'],
