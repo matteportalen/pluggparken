@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<script src="../tema.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Skriv ut – Pluggparken</title>
+<meta name="description" content="Utskrivbara arbetsblad från Pluggparken. Följ pilkoden och rita hemliga bilder.">
+<meta name="theme-color" content="#1F3A35">
+<link rel="canonical" href="https://pluggparken.se/skriv-ut/">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../fonts/fonts.css">
+<style>
+:root{
+  --bg:#EAF3FF; --ink:#1D2B53; --muted:#56668F; --card:#FFFFFF; --line:#C6D6F2;
+  --good:#1E9E5E; --good-dark:#157548; --accent:#3D5AFE; --gold:#F2B707;
+  --font:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:980px;margin:14px auto 0;padding:0 16px 40px}
+a:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.cards{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:620px){.cards{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}}
+.card{display:flex;align-items:center;gap:14px;background:var(--card);border-radius:20px;padding:12px 14px 12px 12px;text-decoration:none;color:inherit;box-shadow:0 5px 0 var(--line);transition:transform .08s,box-shadow .08s}
+.card:active{transform:translateY(3px);box-shadow:0 2px 0 var(--line)}
+@media(hover:hover){.card:hover{transform:translateY(-2px);box-shadow:0 7px 0 var(--line)}}
+.card .txt{flex:1;min-width:0}
+.card b{display:block;font-size:1.3rem;line-height:1.15}
+.card small{display:block;color:var(--muted);font-size:.95rem;line-height:1.3;margin-top:2px}
+.chev{flex:none;color:#A9B9D8;font-size:1.6rem;font-weight:800}
+.amne{font-size:1.35rem;margin:22px 0 10px;line-height:1.2}
+.amne:first-of-type{margin-top:4px}
+@media (prefers-reduced-motion:reduce){.card{transition:none}}
+.sb{position:relative;color:#fff;background:linear-gradient(110deg,#1A302C 0%,#1F3A35 50%,#2B4F47 100%);padding:6px 16px 20px;margin:0}
+.sb::after{content:"";position:absolute;left:0;right:0;bottom:0;height:10px;background:#7E5129;border-top:3px solid #5E3B1C}
+.sb-in{position:relative;max-width:1040px;margin:0 auto;display:flex;align-items:center;gap:16px}
+.sb .ik{flex:none;width:84px;height:84px;border-radius:24px;background:var(--c,#3D5AFE);display:grid;place-items:center;box-shadow:0 5px 0 rgba(0,0,0,.28)}
+.sb h1{margin:0;font-size:clamp(2rem,6vw,2.8rem);line-height:1.05;font-weight:800;font-family:"Baloo 2","Trebuchet MS",system-ui,sans-serif}
+.sb p{margin:4px 0 0;font-size:1.08rem;opacity:.92;font-weight:600}
+.tillhub{display:inline-block;margin:12px 0 0;background:#fff;color:#1D2B53;border-radius:999px;padding:6px 16px;font-weight:800;box-shadow:0 3px 0 rgba(0,0,0,.2);text-decoration:none}
+.sb .ik{font-size:2.3rem}
+.preview{display:block;width:76px;height:auto;flex:none;border:1px solid #c6d6f2;border-radius:6px;box-shadow:0 3px 0 var(--line)}
+.card .oppna{display:block;color:var(--accent);font-weight:800;margin-top:5px}
+.card .tile{flex:none;width:76px;height:76px;border-radius:18px;background:#FFF0BF;display:grid;place-items:center;font-size:2.4rem;box-shadow:0 3px 0 var(--line)}
+</style>
+</head>
+<body>
+<header class="sb">
+  <div class="sb-in">
+    <span class="ik" style="--c:#3D5AFE" aria-hidden="true">🖨️</span>
+    <div><h1>Skriv ut</h1><p>Arbetsblad att göra med papper och penna.</p></div>
+  </div>
+</header>
+<main class="wrap">
+  <a class="tillhub" href="../">← Alla ämnen</a>
+  <section aria-labelledby="kodning">
+    <h2 class="amne" id="kodning">Kodning</h2>
+    <div class="cards">
+      <a class="card" href="hemliga-bilder-med-pilkod.pdf">
+        <img class="preview" src="pilkod.png" width="397" height="562" alt="">
+        <span class="txt">
+          <b>Hemliga bilder med pilkod</b>
+          <small>Följ pilarna i rutnätet och rita fram bilden.</small>
+          <small>10 arbetsblad i A4. Facit på sista sidan.</small>
+          <span class="oppna">Öppna PDF</span>
+        </span>
+        <span class="chev" aria-hidden="true">›</span>
+      </a>
+    </div>
+  </section>
+  <section aria-labelledby="handstil">
+    <h2 class="amne" id="handstil">Handstil</h2>
+    <div class="cards">
+      <a class="card" href="../handstil/blad.html">
+        <span class="tile" aria-hidden="true">✏️</span>
+        <span class="txt">
+          <b>Övningsblad för handstil</b>
+          <small>Välj vad du vill öva på och skriv ut ditt eget A4-blad.</small>
+          <span class="oppna">Öppna övningsblad</span>
+        </span>
+        <span class="chev" aria-hidden="true">›</span>
+      </a>
+    </div>
+  </section>
+</main>
+<script src="../ljud.js"></script>
+<script src="../djur.js"></script>
+<script src="../huvud.js" data-hem="../" data-nav="av" data-titel="Skriv ut" data-ikon="🖨️"></script>
+</body>
+</html>
