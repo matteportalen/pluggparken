@@ -14,7 +14,7 @@ const SC=[
 ];
 const META={hud:"PLUGGPARKEN · SPECIALARE · FILM",titel:"Så blir en regnbåge",under:"En film i sju steg · ca 1 minut",
   slutRubrik:"Tack för att du har följt med",slutText:"Nästa gång det regnar och solen skiner vet du var du ska titta. Filmen bygger på riktiga foton ur Wikimedia Commons. Källor står under bilderna.",igen:"↻ Se filmen igen"};
-const KR={1:"Foto: B. Navez · CC BY-SA 3.0 · Wikimedia Commons",2:"Foto: Tomasz Baranowski · CC BY 2.0 · Wikimedia Commons",3:"Foto: D-Kuru · CC BY-SA 3.0 AT · Wikimedia Commons",4:"Foto: Artaxerxes · CC BY-SA 4.0 · Wikimedia Commons",5:"Foto: Barbara Sciascia (gloria sedd från flygplan) · CC BY 4.0 · Wikimedia Commons",6:"Foto: Nkpelawuni · CC BY-SA 4.0 · Wikimedia Commons"};
+const KR={1:"Foto: B. Navez · CC BY-SA 3.0 · Wikimedia Commons",2:"Foto: Tomasz Baranowski · CC BY 2.0 · Wikimedia Commons",3:"Foto: D-Kuru · CC BY-SA 3.0 AT · Wikimedia Commons",4:"Foto: Artaxerxes · CC BY-SA 4.0 · Wikimedia Commons",5:"Foto: Steve Kaufman · CC BY-SA 3.0 · Wikimedia Commons",6:"Foto: Nkpelawuni · CC BY-SA 4.0 · Wikimedia Commons"};
 const FARG=["#ff4d4d","#ff9a3c","#ffe14d","#5ad66b","#4da6ff","#5a63e0","#a05ae0"];
 const NAMN=["röd","orange","gul","grön","blå","indigo","violett"];
 

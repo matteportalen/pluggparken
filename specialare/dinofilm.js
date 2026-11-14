@@ -15,7 +15,7 @@ const SC=[
 ];
 const META={mat:"djungel",hud:"PLUGGPARKEN · SPECIALARE · FILM",titel:"Dinosaurierna",under:"En film i sex steg · ca 1,5 minut",
   slutRubrik:"Tack för att du har följt med",slutText:"Dinosaurierna är borta, men du kan se dem om du tittar på en fågel. Filmen bygger på riktiga foton ur Wikimedia Commons. Källor står under bilderna.",igen:"↻ Se filmen igen"};
-const KR={1:"Foto: Robosorne · CC BY-SA 3.0 · Wikimedia Commons",2:"Foto: Dosseman · CC BY-SA 4.0 · Wikimedia Commons",3:"Foto: Gary Todd · CC0 · Wikimedia Commons",4:"Konstnärens bild av en asteroidkrock: ESO/M. Kornmesser · CC BY 4.0 · Wikimedia Commons",5:"Foto: Thegreenj · CC BY-SA 3.0 · Wikimedia Commons",6:"Foto: Stuart Plotkin · CC BY-SA 3.0 · Wikimedia Commons"};
+const KR={1:"Foto: Robosorne · CC BY-SA 3.0 · Wikimedia Commons",2:"Foto: Dosseman · CC BY-SA 4.0 · Wikimedia Commons",3:"Foto: Gary Todd · CC0 · Wikimedia Commons",4:"Illustration: Donald E. Davis / NASA · Public domain",5:"Foto: Thegreenj · CC BY-SA 3.0 · Wikimedia Commons",6:"Foto: Stuart Plotkin · CC BY-SA 3.0 · Wikimedia Commons"};
 const IMG={};function img(n){const u=ROOT+"bilder/dinosaurier-"+n+".jpg";if(!IMG[u]){const i=new Image();i.src=u;IMG[u]=i;}return IMG[u];}
 [1,2,3,4,5,6].forEach(img);
 const ok=i=>i&&i.complete&&i.naturalWidth;
