@@ -157,7 +157,7 @@ function nyBas(){return 10000+Math.floor(Math.random()*89000);}
 function prng(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
 const p2=n=>String(n).padStart(2,'0');
 /* QR-kod till den interaktiva klockan, som bild så att den följer med i utskriften */
-const QR=(()=>{try{const d=document.createElement('div');new QRCode(d,{text:'https://pluggparken.se/klockan/',width:256,height:256,correctLevel:QRCode.CorrectLevel.M});const c=d.querySelector('canvas');return c?c.toDataURL('image/png'):(d.querySelector('img')||{}).src||'';}catch(e){return'';}})();
+const QR=(()=>{try{const d=document.createElement('div');new QRCode(d,{text:'https://pluggparken.se/verktyg/klockan/',width:256,height:256,correctLevel:QRCode.CorrectLevel.M});const c=d.querySelector('canvas');return c?c.toDataURL('image/png'):(d.querySelector('img')||{}).src||'';}catch(e){return'';}})();
 const dygn=h=>h<6?'på natten':h<9?'på morgonen':h<12?'på förmiddagen':h<18?'på eftermiddagen':'på kvällen';
 /* klockbild, svartvit; visa=false ger en tom urtavla */
 function klocka(h,m,visa){const c=70,P=(a,l)=>[c+Math.sin(a)*l,c-Math.cos(a)*l];
@@ -186,7 +186,7 @@ function front(b){
      const text=q.vis==='dig'?`<div class="dig">${dig(q.h,q.m)}</div>`:`<div class="dt" style="font-size:5.6mm;font-weight:800;line-height:1.2">${K.cap(ord(q.h,q.m))}</div>`;
      return `<div class="k kr">${klocka(q.h,q.m,false)}<div class="r">${i+1}. Rita visarna${text}<span class="e">${dd}</span></div></div>`;}).join('')}</div>
    <div class="bra kl2">⭐ Bra jobbat! Jag klarade ___ av 8</div>
-   ${QR?`<div class="qr"><img src="${QR}" alt="QR-kod till den interaktiva klockan"><div><b>Behöver du öva med en riktig klocka?</b><br>Skanna koden och prova den interaktiva klockan på Pluggparken, där du kan flytta visarna själv. pluggparken.se/klockan/</div></div>`:''}
+   ${QR?`<div class="qr"><img src="${QR}" alt="QR-kod till den interaktiva klockan"><div><b>Behöver du öva med en riktig klocka?</b><br>Skanna koden och prova den interaktiva klockan på Pluggparken, där du kan flytta visarna själv. pluggparken.se/verktyg/klockan/</div></div>`:''}
    <div class="ft"><span>Pluggparken.se</span><span>Blad nr ${b.nr} · ${NIV[st.niva].n}</span></div></section>`;}
 function facit(bl){ // två blad per facitsida
   return `<section class="sida bw"><div class="hd"><h2>Facit</h2><div class="nm">Rätta själv</div></div>${bl.map(b=>`<div class="fb" style="margin-top:4mm"><h3>Blad nr ${b.nr}</h3><div class="fg">${b.u.map((q,i)=>`<div class="f">${klocka(q.h,q.m,true)}<div><b>${i+1}.</b> ${K.cap(ord(q.h,q.m))}<br>${dig(q.h,q.m)} ${dygn(q.h)}</div></div>`).join('')}</div></div>`).join('')}
