@@ -120,6 +120,17 @@ dialog small{color:var(--muted)}
 @media (orientation:landscape) and (max-height:520px){.top{top:calc(8px + env(safe-area-inset-top,0px))}.bottom{bottom:calc(6px + env(safe-area-inset-bottom,0px));gap:4px}.back{padding:4px 12px;font-size:.85rem}.chip{font-size:.8rem;padding:2px 10px}.b{min-height:34px;font-size:.82rem;padding:2px 10px}.hint{display:none}.steps{display:none}.slider{padding:2px 10px;width:min(480px,70%)}#gCard{top:calc(52px + env(safe-area-inset-top,0px));right:10px;width:min(280px,36vw)}.card{max-height:42vh;overflow:auto}.card h2{font-size:1.2rem}.card li{font-size:.88rem}.lmb{font-size:.8rem}.scl{display:none}}
 @media (max-width:600px){.b{font-size:.9rem;padding:4px 9px}#galaxy .hint{display:none}#gCard{top:calc(232px + env(safe-area-inset-top,0px));right:auto;left:10px}#gCard.min{width:fit-content}.lmb{font-size:.8rem;padding:4px 12px}.hint{font-size:.8rem}.card h2{font-size:1.35rem}.card li{font-size:.95rem}}
 @media (prefers-reduced-motion:reduce){*{transition:none !important}}
+#resaVal{position:fixed;inset:0;z-index:400;display:grid;place-items:center;background:rgba(3,6,18,.72);backdrop-filter:blur(4px);padding:16px}
+#resaVal .rv{width:min(430px,100%);background:#0f1836;border:1px solid rgba(150,170,255,.35);border-radius:22px;padding:18px 18px 14px;color:#fff;font-family:'Baloo 2','Trebuchet MS',system-ui,sans-serif;box-shadow:0 18px 60px rgba(0,0,0,.6);text-align:center}
+#resaVal h2{margin:0 0 2px;font-size:1.45rem}#resaVal p{margin:0 0 12px;color:#CBD5F5;font-size:1rem}
+#resaVal .rvb{display:block;width:100%;min-height:64px;margin:0 0 10px;padding:10px 14px;border:0;border-radius:16px;color:#fff;font-family:inherit;cursor:pointer;text-align:left;box-shadow:0 4px 0 rgba(0,0,0,.35)}
+#resaVal .rvb.in{background:linear-gradient(135deg,#1E9E5E,#157548)}#resaVal .rvb.ut{background:linear-gradient(135deg,#7A5CFF,#3D5AFE)}
+#resaVal .rvb:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.35)}
+#resaVal .rvb b{display:block;font-size:1.25rem;line-height:1.15}#resaVal .rvb small{display:block;font-size:.92rem;opacity:.92}
+#resaVal .rvb:focus-visible,#resaVal .rvx:focus-visible{outline:3px solid #ffd86b;outline-offset:2px}
+#resaVal .rvx{min-height:44px;padding:6px 18px;border:0;background:none;color:#CBD5F5;font:700 1rem 'Baloo 2',system-ui,sans-serif;cursor:pointer}
+#mpsOv.zi .top,#mpsOv.zi .bot,#mpsOv.zi #mpsCard{opacity:0!important;transition:opacity .5s}
+@keyframes ziIn{from{opacity:0}}
 </style>
 <script type="importmap">{"imports":{"three":"/lib/three/build/three.module.min.js","three/addons/":"/lib/three/examples/jsm/"}}</script>
 </head>
@@ -591,7 +602,7 @@ function tourNext(){if(!tour)return;tour.i++;if(tour.i>=STOP.length){tourVoice(S
   const to=STOP[tour.i].z,i=tour.i;gAuto=to===zT?null:{from:zT,to,t0:performance.now(),dur:Math.max(3200,Math.min(7500,Math.abs(to-zT)*38000))/rSpd};
   clearInterval(tour.tm);tour.tm=setInterval(()=>{if(!tour)return;if(!gAuto&&Math.abs(zC-to)<.004){clearInterval(tour.tm);tourVoice(i,()=>{tour.to=setTimeout(tourNext,650/rSpd);});}},120);}
 function tourStartAt(n){if(tour)tourEnd();tour={i:n-1};$('gSkip').hidden=false;$('gTour').textContent='⏹ Stoppa resan';$('gTour').setAttribute('aria-pressed','true');$('gCard').hidden=false;tourNext();}
-function tourStart(){if(tour){tourEnd();return;}startStory();return;tour={i:-1};$('gTour').textContent='⏹ Stoppa resan';$('gTour').setAttribute('aria-pressed','true');$('gCard').hidden=false;tourNext();}
+function tourStart(){if(tour){tourEnd();return;}valjResa();return;tour={i:-1};$('gTour').textContent='⏹ Stoppa resan';$('gTour').setAttribute('aria-pressed','true');$('gCard').hidden=false;tourNext();}
 $('gTour').onclick=tourStart;
 $('gSkip').onclick=()=>{if(!tour)return;clearInterval(tour.tm);clearTimeout(tour.to);if(tour.aud){tour.aud.onended=null;tour.aud.pause();tour.aud=null;}tour.hl=null;tourNext();};
 
@@ -756,7 +767,34 @@ function startStory(){const go=()=>{openGalaxy(false);tourStartAt(0);};
   const goMap=()=>{const v=(window.MPStockholm.view&&window.MPStockholm.view())||{z:1.1,lng:16,lat:38};if(matchMedia('(prefers-reduced-motion:reduce)').matches||!earth){go();return;}window.MPStockholm.slowClose=true;openGalaxy(false);earthPullback(v);tourStartAt(0);};
   if(!stLoad)stLoad=new Promise((res,rej)=>{const sc=document.createElement('script');sc.src='stockholm.js?v=15';sc.onload=res;sc.onerror=rej;document.head.appendChild(sc);});
   stLoad.then(()=>window.MPStockholm.tour(goMap)).then(ok=>{if(ok===false)go();},()=>{stLoad=null;go();});}
-$('hTour').onclick=startStory;window.MPStory={start:startStory};
+/* Guidad resa: välj riktning. Zooma ut = berättelsen från skolgården till universums kant (startStory).
+   Zooma in = kartan dyker ner mot skolgården och går över i filmen Zooma in (zoominfilm.js), från handen till kvarkarna. */
+let ziLoad=null;
+function zoomaIn(){
+  const las=src=>new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s);});
+  ziLoad=ziLoad||(async()=>{if(!window.MPSvartHal)await las('../../svarthal.js?v=2');if(!window.MPZoomInFilm)await las('../../zoominfilm.js');if(!window.MPSkalresa)await las('../../skalresa.js');})();
+  const film=()=>{tourEnd();return MPSkalresa.start('in',{auto:true,hem:'skola',ut:()=>startStory()});};
+  if(!stLoad)stLoad=new Promise((res,rej)=>{const sc=document.createElement('script');sc.src='stockholm.js?v=15';sc.onload=res;sc.onerror=rej;document.head.appendChild(sc);});
+  const karta=stLoad.then(()=>window.MPStockholm.open(null,true)).catch(()=>{stLoad=null;});
+  Promise.all([ziLoad,karta]).then(()=>{
+    const ov=document.getElementById('mpsOv'),m=ov&&ov.querySelector('#mpsMap'),ok=!!(ov&&!ov.hidden&&m&&window.MPStockholm&&MPStockholm.view&&MPStockholm.view());
+    if(!ok||matchMedia('(prefers-reduced-motion:reduce)').matches){film();if(ov&&!ov.hidden)MPStockholm.close();return;}
+    ov.classList.add('zi');
+    setTimeout(()=>{m.style.transformOrigin='50% 50%';m.style.transition='transform 2.3s cubic-bezier(.55,0,.9,.35),filter 2.3s ease-in';m.style.transform='scale(16)';m.style.filter='blur(2px) brightness(.5)';
+      setTimeout(()=>{film();const r=document.querySelector('.sh.ov');if(r)r.style.animation='ziIn 1.2s ease both';
+        setTimeout(()=>{m.style.transition='';m.style.filter='';MPStockholm.close();setTimeout(()=>ov.classList.remove('zi'),900);},1300);},1700);},1500);
+  }).catch(()=>{ziLoad=null;});}
+function valjResa(){
+  let d=document.getElementById('resaVal');if(d){d.remove();return;}
+  d=document.createElement('div');d.id='resaVal';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');d.setAttribute('aria-label','Välj guidad resa');
+  d.innerHTML=`<div class="rv"><h2>🎬 Guidad resa</h2><p>Båda börjar på skolgården. Åt vilket håll vill du resa?</p>
+    <button class="rvb in" data-r="in"><b>🔬 Zooma in</b><small>Från handen in till cellen, atomen och kvarkarna</small></button>
+    <button class="rvb ut" data-r="ut"><b>🚀 Zooma ut</b><small>Från skolgården ut till universums kant</small></button>
+    <button class="rvx" data-r="x">Avbryt</button></div>`;
+  const stang=()=>{d.remove();removeEventListener('keydown',esc,true);},esc=e=>{if(e.key==='Escape'){e.stopPropagation();stang();}};
+  d.onclick=e=>{const b=e.target.closest('[data-r]');if(!b&&e.target!==d)return;const r=b?b.dataset.r:'x';stang();if(r==='in')zoomaIn();else if(r==='ut')startStory();};
+  addEventListener('keydown',esc,true);document.body.appendChild(d);d.querySelector('.rvb').focus();}
+$('hTour').onclick=valjResa;window.MPStory={start:valjResa,ut:startStory,in:zoomaIn};
 $('gSpd').onclick=()=>{const n=FARTER[(FARTER.indexOf(rSpd)+1)%FARTER.length];try{localStorage.setItem('pluggparken-resa-fart',n);}catch(e){}window.dispatchEvent(new Event('mpfart'));};
 fartUI();
 /* sömlöst mellan solsystemet och universum: att zooma ut förbi sista avståndet fortsätter in i universumresan, och att zooma in igen går tillbaka */

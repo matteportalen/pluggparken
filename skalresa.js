@@ -1,5 +1,5 @@
 /* Skalresan: kopplar ihop filmerna Zooma in (zoominfilm.js) och Zooma ut (zoomfilm.js) till en resa från kvark till kosmiskt nät.
-   MPSkalresa.start("in"|"ut",{scen,onClose}) öppnar filmen över hela fönstret och lägger en linjal överst med alla 17 stegen.
+   MPSkalresa.start("in"|"ut",{scen,onClose,auto,hem,ut}) (ut = egen funktion för resan ut, hem = "skola" ger slut på skolgården) öppnar filmen över hela fönstret och lägger en linjal överst med alla 17 stegen.
    Linjalen visar var man är och är samtidigt ett reglage: tryck eller dra för att hoppa till ett steg, även i den andra filmen
    (inzoomat till vänster, utzoomat till höger, som alla reglage på sajten). Slutrutan får en knapp som fortsätter i den andra filmen.
    Filmerna ändras inte: linjalen läser vilken scen som visas ur filmens egna scenprickar (.sh-dot.done) och byter scen genom att trycka på dem. */
@@ -41,7 +41,7 @@ const CSS=`
 @media(prefers-reduced-motion:reduce){.skr-m,.skr-p{transition:none}}`;
 let nu=null; // {vilken,root,stang,obs,prev,onClose}
 const FILM=v=>v==="in"?window.MPZoomInFilm:window.MPZoomFilm;
-function stegAv(vilken,si){if(vilken==="in")return si<=0?7:si>=9?8:8-si;return si<=0?8:7+Math.min(9,si);}
+function stegAv(vilken,si,hem){if(vilken==="in")return si<=0?7:si>=9?(hem==="skola"?7:8):8-si;return si<=0?8:7+Math.min(9,si);}
 function linjal(root,vilken){
   if(!document.getElementById("skr-css")){const st=document.createElement("style");st.id="skr-css";st.textContent=CSS;document.head.appendChild(st);}
   const el=document.createElement("div");el.className="skr";
@@ -54,7 +54,7 @@ function linjal(root,vilken){
   let aktiv=-1,drar=false;
   const visa=(i,forhand)=>{const s=STEG[i];m.style.left=pos(i);txt.innerHTML=`<b>${s.n}</b> <small>· ${s.m}</small>`;sp.setAttribute("aria-valuenow",i+1);sp.setAttribute("aria-valuetext",s.n+", "+s.m);
     [...sp.querySelectorAll(".skr-p:not(.h)")].forEach((p,k)=>p.classList.toggle("g",forhand?k===i:k<=i));};
-  const las=()=>{if(drar)return;const i=stegAv(vilken,root.querySelectorAll(".sh-dot.done").length);if(i!==aktiv){aktiv=i;visa(i);}};
+  const las=()=>{if(drar)return;const i=stegAv(vilken,root.querySelectorAll(".sh-dot.done").length,nu&&nu.hem);if(i!==aktiv){aktiv=i;visa(i);}};
   const vid=e=>{const r=sp.getBoundingClientRect();return Math.max(0,Math.min(STEG.length-1,Math.round((e.clientX-r.left)/r.width*(STEG.length-1))));};
   sp.addEventListener("pointerdown",e=>{drar=true;try{sp.setPointerCapture(e.pointerId);}catch(_){}visa(vid(e),true);e.preventDefault();});
   sp.addEventListener("pointermove",e=>{if(drar)visa(vid(e),true);});
@@ -65,15 +65,15 @@ function linjal(root,vilken){
   root.appendChild(el);
   const obs=new MutationObserver(las);obs.observe(root.querySelector(".sh-dots"),{subtree:true,attributes:true,attributeFilter:["class"]});las();
   return obs;}
-function ga(i){const s=STEG[i];if(!nu)return;if(s.f===nu.vilken){const d=nu.root.querySelector('.sh-dot[data-i="'+s.s+'"]');if(d)d.click();}else start(s.f,{scen:s.s,onClose:nu.onClose,_byte:true});}
+function ga(i){const s=STEG[i];if(!nu)return;if(s.f==="ut"&&nu.ut){const f=nu.ut;stang(true);f();return;}if(s.f===nu.vilken){const d=nu.root.querySelector('.sh-dot[data-i="'+s.s+'"]');if(d)d.click();}else start(s.f,{scen:s.s,onClose:nu.onClose,_byte:true});}
 function stang(tyst){if(!nu)return;const n=nu;nu=null;try{n.obs.disconnect();}catch(e){}if(tyst){try{n.stang();}catch(e){}}document.body.style.overflow=n.prev;return n;}
 function start(vilken,o){
   o=o||{};const F=FILM(vilken);if(!F||!window.MPSvartHal)return false;
   let prev=document.body.style.overflow;if(nu){prev=nu.prev;stang(true);}
   document.body.style.overflow="hidden";
-  const extra=vilken==="in"?[{t:"🚀 Fortsätt ut i universum",guld:true,go:()=>start("ut",{onClose:o.onClose,_byte:true,auto:true})}]:(window.MPZoomInFilm?[{t:"🔬 Zooma in till atomen",guld:true,go:()=>start("in",{onClose:o.onClose,_byte:true,auto:true})}]:[]);
-  const jag={vilken,prev,onClose:o.onClose,root:null,stang:null,obs:null};
-  jag.stang=F.start(document.body,{overlay:true,extra,onClose:()=>{if(nu===jag){stang(false);if(o.onClose)o.onClose();}}});
+  const extra=vilken==="in"?[{t:"🚀 Fortsätt ut i universum",guld:true,go:()=>o.ut?o.ut():start("ut",{onClose:o.onClose,_byte:true,auto:true})}]:(window.MPZoomInFilm?[{t:"🔬 Zooma in till atomen",guld:true,go:()=>start("in",{onClose:o.onClose,_byte:true,auto:true})}]:[]);
+  const jag={vilken,prev,hem:o.hem,onClose:o.onClose,ut:vilken==="in"?o.ut:null,root:null,stang:null,obs:null};
+  jag.stang=F.start(document.body,{overlay:true,extra,hem:o.hem,onClose:()=>{if(nu===jag){stang(false);if(o.onClose)o.onClose();}}});
   jag.root=document.body.lastElementChild;nu=jag;jag.obs=linjal(jag.root,vilken);
   if(o.scen!=null){const d=jag.root.querySelector('.sh-dot[data-i="'+o.scen+'"]');if(d)d.click();}
   else if(o.auto){const b=jag.root.querySelector('.sh-start [data-a="go"]');if(b)b.click();}

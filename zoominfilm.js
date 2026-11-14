@@ -19,7 +19,7 @@ const SC=[
  {k:"06 · En atom",d:17,cap:[[0.8,"Allt är byggt av atomer. Det här är en kolatom. Tio miljoner atomer i rad blir bara en millimeter."],[8.5,"Runt atomen far sex elektroner i ett moln. Nästan allt det andra är tomrum. Längst in finns atomkärnan."]]},
  {k:"07 · Atomkärnan",d:17,cap:[[0.8,"Atomkärnan är tiotusentals gånger mindre än atomen. Om atomen vore en fotbollsarena skulle kärnan vara en ärta på mittpunkten."],[8.5,"Ändå finns nästan all vikt här. Kolets kärna är byggd av sex protoner och sex neutroner."]]},
  {k:"08 · Kvarkarna",d:17,cap:[[0.8,"Varje proton är byggd av tre kvarkar, som hålls ihop av gluoner. Gluonerna är naturens starkaste lim."],[8.5,"Ingen har sett en kvark. Bilden är en modell som forskarna har räknat fram. Mindre än så här känner vi inte till något."]]},
- {k:"Tillbaka ut",d:11,cap:[[0.5,"Nu vänder vi. Förbi atomen, cellen och handen, hela vägen ut till jorden. Därifrån fortsätter resan ut i universum."]]}
+ {k:"Tillbaka ut",d:11,cap:[[0.5,"Nu vänder vi. Förbi atomen, cellen och handen, hela vägen ut igen. Härifrån fortsätter resan ut i universum."]]}
 ];
 const META={hud:"PLUGGPARKEN · RYMDARKIVET · FILM 04",titel:"Zooma in",under:"En film i åtta steg · ca 2,5 minuter",mat:"rymd",
   slutRubrik:"Tack för att du har följt med",slutText:"Allt du har sett finns i din egen hand, miljarder gånger om. Bilderna är modeller, inte foton. Storlekarna är ungefärliga och hämtade från vanliga läroböcker i biologi och fysik.",igen:"↻ Se filmen igen"};
@@ -86,7 +86,7 @@ const RIBO=(()=>{const r=frand(12),ut=[];for(let i=0;i<90;i++){const a=r()*TAU,d
 const rot=(p,ay,ax)=>{const cy=Math.cos(ay),sy=Math.sin(ay),cx=Math.cos(ax),sx=Math.sin(ax),x1=p[0]*cy+p[2]*sy,z1=-p[0]*sy+p[2]*cy,y1=p[1]*cx-z1*sx,z2=p[1]*sx+z1*cx;return[x1,y1,z2];};
 
 /* ---------- Scenerna ---------- */
-function scenes(E){
+function scenes(E,hem){
   const {A,eo,cl,lerp,seg,font,glowDot}=E;
   const tx=(t,px,py,col,al,sz,w)=>{const x=E.x;x.font=font(w||600,sz||12);x.textAlign=al||"left";x.lineJoin="round";x.lineWidth=3.5;x.strokeStyle="rgba(3,6,14,.72)";x.strokeText(t,px,py);x.fillStyle=col||"rgba(255,255,255,.85)";x.fillText(t,px,py);};
   const tg=(t,px,py,col,al)=>tx(t.toUpperCase(),px,py,col||"#7fd6ff",al,11,700);
@@ -219,6 +219,17 @@ function scenes(E){
   ];
   const jorden=(cx,cy,R,a)=>{const x=E.x,cv=jordCv();x.save();x.globalAlpha*=a;const g=x.createRadialGradient(cx,cy,R*.98,cx,cy,R*1.28);g.addColorStop(0,"rgba(110,190,255,.55)");g.addColorStop(1,"rgba(60,130,255,0)");x.fillStyle=g;x.beginPath();x.arc(cx,cy,R*1.28,0,TAU);x.fill();
     if(cv)x.drawImage(cv,cx-R,cy-R,R*2,R*2);else{x.fillStyle="#2f7fd0";x.beginPath();x.arc(cx,cy,R,0,TAU);x.fill();}x.restore();};
+  // skolgården uppifrån (när filmen startats från kartan vid skolan): en enkel ritad karta med en nål
+  const skolgard=(cx,cy,R,a)=>{const x=E.x;x.save();x.globalAlpha*=a;x.beginPath();x.roundRect(cx-R,cy-R,R*2,R*2,R*.12);x.clip();
+    x.fillStyle="#24483c";x.fillRect(cx-R,cy-R,R*2,R*2);
+    const ruta=(px,py,w,h,col,r)=>{x.fillStyle=col;x.beginPath();x.roundRect(cx+px*R,cy+py*R,w*R,h*R,(r||.03)*R);x.fill();};
+    ruta(-.62,-.5,1.3,1.02,"#5b6272",.06);ruta(-.95,-.95,.5,.6,"#2f6a4c");ruta(.55,.62,.5,.45,"#2f6a4c");ruta(-.98,.62,.7,.4,"#2c5f47");
+    x.strokeStyle="rgba(235,235,225,.85)";x.lineWidth=R*.07;x.lineCap="round";x.beginPath();x.moveTo(cx-R*1.1,cy+R*.58);x.lineTo(cx+R*1.1,cy+R*.5);x.moveTo(cx+R*.78,cy-R*1.1);x.lineTo(cx+R*.7,cy+R*1.1);x.stroke();
+    ruta(-.5,-.42,.72,.2,"#c0694b");ruta(-.5,-.42,.2,.62,"#c0694b");ruta(.2,.05,.34,.3,"#b55f43");
+    x.strokeStyle="rgba(255,255,255,.5)";x.lineWidth=R*.012;x.beginPath();x.arc(cx-R*.02,cy+R*.2,R*.13,0,TAU);x.stroke();
+    x.fillStyle="#3f8f5f";[[-.8,-.2],[-.75,.1],[.45,-.7],[.3,-.82],[-.2,.42],[.5,.4],[.1,-.62]].forEach(([px,py])=>{x.beginPath();x.arc(cx+px*R,cy+py*R,R*.06,0,TAU);x.fill();});
+    x.restore();
+    if(a>.5){x.save();x.globalAlpha*=a;x.fillStyle="#e5484d";x.beginPath();x.arc(cx,cy-R*.1,R*.07,Math.PI,0);x.lineTo(cx,cy+R*.06);x.closePath();x.fill();x.fillStyle="#fff";x.beginPath();x.arc(cx,cy-R*.1,R*.028,0,TAU);x.fill();x.restore();}};
   const niva=(i,cx,cy,S,t,a,d)=>{if(a<=.003)return;const x=E.x;x.save();x.globalAlpha=a;LV[i](cx,cy,S,t,d);x.restore();};
 
   // en vanlig scen: den förra nivån växer och tonar bort, den nya växer fram ur mitten
@@ -234,12 +245,14 @@ function scenes(E){
    (t,k)=>{const g=G(),S=g.s*(g.port?.92:1),T=6.6,steg=T/7,x=E.x;
      if(t<T){const f=t/steg,i=Math.min(6,Math.floor(f)),u=eo(f-i),inre=8-i,yttre=7-i;
        niva(inre,g.cx,g.cy,S*lerp(1,.1,u),t,1-seg(u,.25,.88),false);niva(yttre,g.cx,g.cy,S*lerp(10,1,u*(2-u)),t,seg(u,.2,.85),false);}
+     else if(hem==="skola"){const u=eo(seg(t,T,T+3.2)),R=S*.36;skolgard(g.cx,g.cy,R*lerp(8,1,u),seg(u,.1,.7));niva(1,g.cx,g.cy,S*lerp(1,.03,u),t,1-seg(u,.2,.75),false);
+       if(u>.8){x.save();x.globalAlpha=seg(u,.8,1);tg("Skolgården · härifrån fortsätter resan ut",g.cx,g.cy-R*1.12,"#7fd6ff","center");x.restore();}}
      else{const u=eo(seg(t,T,T+3.2)),R=S*.3;jorden(g.cx,g.cy,R*lerp(9,1,u),seg(u,.1,.7));niva(1,g.cx,g.cy,S*lerp(1,.03,u),t,1-seg(u,.2,.75),false);
        if(u>.8){x.save();x.globalAlpha=seg(u,.8,1);dim(g.cx-R,g.cy+R*1.28,g.cx+R,"12 742 km");tg("Jorden · här börjar resan ut",g.cx,g.cy-R*1.34,"#7fd6ff","center");x.restore();}}}
   ];
 }
 
 window.MPZoomInFilm={SC,start(host,o){
-  return MPSvartHal.start(host,Object.assign({},o||{},{def:{SC,meta:META,ljud:"zoomin",scenes:E=>scenes(E)}}));
+  return MPSvartHal.start(host,Object.assign({},o||{},{def:{SC,meta:META,ljud:"zoomin",scenes:E=>scenes(E,o&&o.hem)}}));
 }};
 })();
