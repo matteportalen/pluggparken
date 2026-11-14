@@ -369,6 +369,8 @@ function bygg(vid,nr){const V=VARLDAR.find(v=>v.id===vid),lista=BANOR[vid][nr];
   // mynt, stjärnor, nycklar och frukter som hamnat inne i marken lyfts upp till närmaste fria ruta ovanför
   [obj.mynt,obj.stjarnor,obj.nycklar,obj.frukter].forEach(l=>l.forEach(m=>{while(m.y>0&&grid[m.y]&&grid[m.y][m.x]&&grid[m.y][m.x]!==".")m.y--;}));
   obj.mynt.forEach(m=>m.tagen=false);obj.fiender.forEach(f=>{f.trollad=0;f.dx=f.x;});obj.nycklarMax=obj.nycklar.length;
+  // stenen och flodvågen jagar bara en bit (lärarens val: hela banan var för svårt): de ramlar ner i första avgrunden efter första svarsporten
+  if(obj.jagare&&obj.portar.length){for(let c=obj.portar[0].x+1;c<cols-1;c++)if(grid[ROWS-1][c]!=="#"&&grid[ROWS-1][c+1]!=="#"){obj.jagare.slut=c*T;break;}}
   return Object.assign({V,vid,nr,grid,cols,w:cols*T,h:ROWS*T},obj);}
 function byggTorn(vid,nr){const V=VARLDAR.find(v=>v.id===vid),lista=BANOR[vid][nr].filter(b=>b!=="lava"),rader=[];
   lista.slice().reverse().forEach(n=>VANING[n].forEach(r=>rader.push(r)));
@@ -417,8 +419,8 @@ function start(vid,nr){musikCtx();ROWS=12;LV=nr==="boss"?byggBoss(vid):VARLDAR.f
   E=[];PAR=[];FLOJ=[];cam=0;if(LV.hog){P.x=LV.startX;P.y=LV.startY;P.check=P.x;P.checkY=P.y;}$("slutRuta").hidden=true;$("pausRuta").hidden=true;pausad=false;
   show("game");resize();igang=true;musikKnapp();last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop);
   tips(LV.boss?`${LV.boss.namn}! Hoppa med huvudet i rätt svar, så förtrollar trollstaven bossen.`:nr===0&&vid==="skog"?(pek?"Tryck ▶ för att springa åt höger och ⤒ för att hoppa!":"Spring åt höger med → och hoppa med ↑!"):`${LV.V.namn}, bana ${nr+1}`);
-  if(LV.jagare){LV.jagare.x=-4*T;LV.jagare.t=0;LV.jagare.vantan=2.5;LV.jagare.rot=0;LV.jagare.tips=0;}
-  if(LV.jagare)tips(LV.jagare.typ==="sten"?"En stor sten rullar efter dig! Spring framåt, men stanna och svara vid portarna.":"En flodvåg kommer efter dig! Spring framåt, men stanna och svara vid portarna.",4200);
+  if(LV.jagare){LV.jagare.x=-4*T;LV.jagare.t=0;LV.jagare.vantan=4;LV.jagare.rot=0;LV.jagare.tips=0;}
+  if(LV.jagare)tips(LV.jagare.typ==="sten"?"En stor sten rullar efter dig! Spring framåt, men stanna och svara vid porten. Stenen ramlar ner i första avgrunden.":"En flodvåg kommer efter dig! Spring framåt, men stanna och svara vid porten. Vågen rinner ner i första avgrunden.",4200);
   else if(LV.hog&&LV.lava)tips("Lavan stiger när du börjar klättra! Skynda uppåt. Den väntar medan du räknar vid luckorna.",5200);
   else if(LV.hog)tips("Klättra uppåt inne i berget! Du kan hoppa upp genom stenhällarna underifrån.",5000);
   else if(LV.aska)tips("Åskväder! Ett gult streck visar var blixten slår ner. Flytta dig därifrån!",4600);
@@ -666,9 +668,12 @@ function uppdatera(dt){if(!igang)return;const tnu=performance.now()/1000;
   // nycklar: dörren öppnas först när man har alla
   (LV.nycklar||[]).forEach(k=>{if(!k.tagen&&nara(k.x*T+T/2,k.y*T+T/2,24)){k.tagen=true;P.nycklar++;P.poang+=50;L().chime&&L().chime();gnistor(k.x*T+T/2,k.y*T+T/2,"#FFE680",16);tips(P.nycklar>=LV.nycklarMax?"Alla nycklar! Gå till dörren.":`Nyckel ${P.nycklar} av ${LV.nycklarMax}!`,1800);}});
   // jagande sten eller flodvåg: väntar medan man svarar vid en svarsport, träffar den djuret kostar det ett hjärta och den backar
-  if(LV.jagare){const J=LV.jagare;J.t+=dt;J.rot+=dt*4;
+  if(LV.jagare&&LV.jagare.faller){const J=LV.jagare;J.rot+=dt*6;J.vy+=2400*dt;J.dy+=J.vy*dt;J.x+=(J.typ==="sten"?150:60)*dt;if(J.dy>7*T)LV.jagare=null;}
+  else if(LV.jagare&&LV.jagare.slut&&LV.jagare.x>=LV.jagare.slut+(LV.jagare.typ==="sten"?.5:1.3)*T){const J=LV.jagare;J.faller=1;J.vy=0;J.dy=0;J.y0=ytaVid(J.slut-T*.5);gnistor(J.x,J.y0,J.typ==="sten"?"#C9B79A":"#BEE9FF",24);L().chime&&L().chime();
+    tips(J.typ==="sten"?"Stenen ramlade ner i avgrunden! Nu kan du ta det lugnt.":"Flodvågen rann ner i avgrunden! Nu kan du ta det lugnt.",3200);}
+  else if(LV.jagare){const J=LV.jagare;J.t+=dt;J.rot+=dt*4;
     // gummiband: den släpar aldrig långt efter (ca 8 rutor bakom när man springer för fullt), så man ser och känner den
-    if(J.t>J.vantan){const bas=J.typ==="sten"?240:225,v=Math.min(bas*1.7,bas*(1+Math.max(0,P.x-J.x-6*T)/(5*T))),pz=LV.portar.some(p=>!p.open&&P.x>(p.block[0].x-3.6)*T&&P.x<(p.x+1)*T),nx=J.x+v*dt;
+    if(J.t>J.vantan){const bas=J.typ==="sten"?240:225,v=Math.min(310,bas*(1+Math.max(0,P.x-J.x-6*T)/(5*T))),pz=LV.portar.some(p=>!p.open&&P.x>(p.block[0].x-3.6)*T&&P.x<(p.x+1)*T),nx=J.x+v*dt;
       J.x=pz?Math.max(J.x,Math.min(nx,P.x-3.6*T)):nx;
       if(J.x>P.x-.95*T){skadad();J.x=P.x-6.5*T;}
       if(!J.tips&&P.x-J.x<4.5*T){J.tips=1;tips(J.typ==="sten"?"Stenen är nära! Spring!":"Vågen är nära! Spring!",1600);}}}
@@ -735,7 +740,7 @@ function rita(){if(!LV)return;const W=cv.width,H=cv.height,s=skala,vw=W/s,vh=H/s
     ctx.globalAlpha=.9;for(let x=off-bw;x<W+bw;x+=bw){ctx.drawImage(bg,2,bg.naturalHeight*.16,bg.naturalWidth-4,bg.naturalHeight*.84,x-1,bot-bh,bw+2,bh);
       // bildens nedersta rad dras ut till skärmens nederkant, så att groparna inte blir vita
       if(H>bot)ctx.drawImage(bg,2,bg.naturalHeight-3,bg.naturalWidth-4,2,x-1,bot-1,bw+2,H-bot+1);}ctx.globalAlpha=1;}
-  const skak=LV.jagare&&LV.jagare.t>LV.jagare.vantan&&P.x-LV.jagare.x<5*T?(Math.random()-.5)*6*(1-(P.x-LV.jagare.x)/(5*T)+.3):0; // marken darrar när den är nära
+  const skak=LV.jagare&&!LV.jagare.faller&&LV.jagare.t>LV.jagare.vantan&&P.x-LV.jagare.x<5*T?(Math.random()-.5)*6*(1-(P.x-LV.jagare.x)/(5*T)+.3):0; // marken darrar när den är nära
   ctx.setTransform(s,0,0,s,-cam*s+skak*s,oy*s);
   const c0=Math.max(0,Math.floor(cam/T)-1),c1=Math.min(LV.cols-1,Math.ceil((cam+vw)/T)+1);
   // dekor
@@ -1084,11 +1089,11 @@ function fruktRita(typ,x,y,t){ctx.save();ctx.translate(x,y+Math.sin(t*3+x)*5);co
 function nyckelRita(x,y,t){ctx.save();ctx.translate(x,y+Math.sin(t*3+x)*4);ctx.fillStyle="rgba(255,230,128,.38)";ctx.beginPath();ctx.arc(0,0,25,0,7);ctx.fill();
   ctx.strokeStyle="#B8860B";ctx.lineWidth=3;ctx.fillStyle="#F2C230";ctx.beginPath();ctx.arc(-9,-5,10,0,7);ctx.fill();ctx.stroke();ctx.fillStyle="#FFF6D0";ctx.beginPath();ctx.arc(-9,-5,3.4,0,7);ctx.fill();
   ctx.fillStyle="#F2C230";ctx.fillRect(-1,-9,22,7);ctx.strokeRect(-1,-9,22,7);ctx.fillRect(13,-2,6,9);ctx.fillRect(6,-2,5,7);ctx.restore();}
-function jagareRita(J,tt){const y=ytaVid(J.x);
+function jagareRita(J,tt){const y=J.faller?J.y0+J.dy:ytaVid(J.x);
   if(J.typ==="sten"){const R=1.15*T,cy=y-R*.95;ctx.save();ctx.translate(J.x,cy);ctx.rotate(J.rot);
     const g=ctx.createRadialGradient(-R*.3,-R*.35,R*.1,0,0,R);g.addColorStop(0,"#C9CDD6");g.addColorStop(1,"#6D7385");ctx.fillStyle=g;ctx.strokeStyle="#3C4256";ctx.lineWidth=5;ctx.beginPath();ctx.arc(0,0,R,0,7);ctx.fill();ctx.stroke();
     ctx.strokeStyle="#4E566B";ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(-R*.6,-R*.1);ctx.lineTo(-R*.15,R*.1);ctx.lineTo(-R*.2,R*.55);ctx.moveTo(R*.2,-R*.6);ctx.lineTo(R*.45,-R*.15);ctx.lineTo(R*.1,R*.2);ctx.stroke();ctx.restore();
-    if(J.t>J.vantan&&Math.random()<.5)PAR.push({x:J.x+R*.3,y:y-4,vx:80,vy:-60,t:0,liv:.5,f:"#C9B79A"});}
+    if(!J.faller&&J.t>J.vantan&&Math.random()<.5)PAR.push({x:J.x+R*.3,y:y-4,vx:80,vy:-60,t:0,liv:.5,f:"#C9B79A"});}
   else{const top=y-2.5*T;ctx.fillStyle="rgba(70,160,230,.88)";ctx.beginPath();ctx.moveTo(J.x-9*T,y+2*T);ctx.lineTo(J.x-9*T,top+10);ctx.lineTo(J.x-1.4*T,top+Math.sin(tt*6)*6);ctx.quadraticCurveTo(J.x+.5*T,top+.2*T,J.x+.25*T,y-.5*T);ctx.lineTo(J.x-.1*T,y+2*T);ctx.closePath();ctx.fill();
     ctx.fillStyle="rgba(255,255,255,.85)";for(let i=0;i<7;i++){const a=Math.sin(tt*5+i*1.7);ctx.beginPath();ctx.arc(J.x-.2*T-(i%3)*.35*T+a*5,y-(.4+i*.33)*T,9+((i*5)%4),0,7);ctx.fill();}}}
 function stjarna(x,y,r,rot){ctx.beginPath();for(let i=0;i<10;i++){const a=rot+i*Math.PI/5,rr=i%2?r*.45:r;ctx.lineTo(x+Math.cos(a)*rr,y+Math.sin(a)*rr);}ctx.closePath();ctx.fill();}

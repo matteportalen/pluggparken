@@ -441,3 +441,7 @@ Lärarens fynd: eleverna tycker spelet är svårt att förstå och ta sig igenom
 - Två fel som roboten hittade och som rättades: man svarade av misstag när man hoppade upp i svarsrummet rakt under ett block (golvet är nu fast där), och en häll rakt under fast berg gick inte att hoppa från (svarsrummet fick en egen häll under öppningen).
 - **Test:** `skript/test-sagoriket-vulkan.cjs`: roboten klarar alla åtta banor (0–2 tappade hjärtan per bana) och Draken (9 tappade hjärtan, tre omstarter: roboten är dålig på att undvika, men bossen kan vara svår), en bana i var och en av de fem andra världarna startar utan fel, och en bana ritas i 390 × 844.
 - **Inte gjort / inte provat:** ingen människa har spelat banorna, pekskärm är inte provad, ljudet är inte avlyssnat. Stenarna träffade aldrig roboten, så de kan vara för snälla.
+
+### Sagoriket: stenen och flodvågen jagar bara en bit (nov 2026)
+- `bygg()` sätter `jagare.slut` = första avgrunden (minst två rutor bred) efter första svarsporten (skog 7: kolumn 63, is 2: kolumn 43). När jagaren når kanten faller den (`faller`, `dy`) och tas bort; tips "… ramlade ner i avgrunden! Nu kan du ta det lugnt." Farten är högst 310 (förut upp till 408, fortare än djuret), försprånget 4 s (förut 2,5).
+- Kontrollerat med ett skript i webbläsaren: båda faller och försvinner, inga fel. **Inte provat:** ingen har spelat banorna efter ändringen, och hur fallet ser ut är inte granskat på bild. Robottesterna för Molnriket och Vulkanriket är inte körda om efter den här ändringen.
