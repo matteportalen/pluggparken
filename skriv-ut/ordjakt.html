@@ -135,7 +135,6 @@ textarea{width:100%;min-height:150px;padding:10px 12px;border-radius:14px;border
 
   <div class="panel"><div class="opts">
     <label class="ck"><input type="checkbox" id="facit" checked> Facit sist</label>
-    <label class="ck"><input type="checkbox" id="bw"> Svartvitt (för svartvit skrivare)</label>
     <label class="ck"><input type="checkbox" id="pet" checked> Mitt djur på bladet</label>
     <button class="sek" id="nya">🎲 Ny ruta</button>
     <button class="go" id="print">🖨️ Skriv ut</button>
@@ -206,7 +205,7 @@ function render(){
   $('#varn').hidden=!v.length;$('#varn').textContent=v.join(' ');
   let html=bs.map(b=>front(b,L.ok.filter(w=>!b.ej.includes(w)))).join('');
   if($('#facit').checked)for(let i=0;i<bs.length;i+=4)html+=facitSida(bs.slice(i,i+4));
-  $('#pages').className='pages'+($('#bw').checked?' bw':'');
+  $('#pages').className='pages bw';
   $('#pages').innerHTML=html;
   const fs=$('#facit').checked?Math.ceil(bs.length/4):0,tot=bs.length+fs;
   $('#info').textContent=`${L.ok.length} ord, ${tot} ${tot===1?'sida':'sidor'} (A4)${fs?', varav '+fs+(fs===1?' facitsida':' facitsidor')+' sist':''}. Blad nr ${bs[0].nr}${bs.length>1?'–'+bs[bs.length-1].nr:''}. Välj Skriv ut och skala "100 %" i skrivardialogen.`;
@@ -219,7 +218,7 @@ seg('#sStor',v=>{st.auto=v==='auto';if(!st.auto)st.stor=+v;render();});
 seg('#sBlad',v=>{st.blad=+v;render();});
 $('#sFor').onclick=e=>{const b=e.target.closest('[data-f]');if(!b)return;$('#ord').value=b.dataset.f==='rensa'?'':FOR[b.dataset.f];render();};
 $('#ord').oninput=render;
-['#dH','#dN','#dD','#dB','#facit','#bw','#pet'].forEach(s=>$(s).onchange=render);
+['#dH','#dN','#dD','#dB','#facit','#pet'].forEach(s=>$(s).onchange=render);
 $('#nya').onclick=()=>{st.bas=nyBas();$('#nr').value='';render();};
 $('#nr').oninput=e=>{const v=e.target.value.replace(/\D/g,'').slice(0,6);e.target.value=v;if(v.length>=5){st.bas=+v;render();}};
 $('#print').onclick=()=>window.print();

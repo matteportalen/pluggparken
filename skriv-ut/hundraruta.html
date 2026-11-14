@@ -113,7 +113,6 @@ h1{margin:8px 0 2px;font-size:2rem}
 
   <div class="panel"><div class="opts">
     <label class="ck"><input type="checkbox" id="facit" checked> Facit sist (att vika fram och rätta själv)</label>
-    <label class="ck"><input type="checkbox" id="bw"> Svartvitt (för svartvit skrivare)</label>
     <label class="ck"><input type="checkbox" id="pet" checked> Mitt djur på bladet</label>
     <button class="sek" id="nya">🎲 Nya hål</button>
     <button class="go" id="print">🖨️ Skriv ut</button>
@@ -153,7 +152,7 @@ function render(){
       <p class="intro">De tal som saknades står i ruta. Jämför med ditt blad.</p>
       <div class="fg">${del.map(b=>`<div class="fb"><h3>Blad nr ${b.nr}</h3><div class="hr">${grid(b.h,true)}</div></div>`).join('')}</div>
       <div class="ft"><span>Pluggparken.se</span><span>Facit · ${sv.namn}</span></div></section>`;}}
-  $('#pages').className='pages'+($('#bw').checked?' bw':'');
+  $('#pages').className='pages bw';
   $('#pages').innerHTML=html;
   const s=lista.length,fs=$('#facit').checked?Math.ceil(s/4):0;
   $('#info').textContent=`${s+fs} ${s+fs===1?'sida':'sidor'} (A4)${fs?', varav '+fs+(fs===1?' facitsida':' facitsidor')+' sist':''}. Blad nr ${st.bas}${s>1?'–'+(st.bas+s-1):''}. Välj Skriv ut och skala "100 %" i skrivardialogen.`;
@@ -164,7 +163,7 @@ addEventListener('resize',fit);
 function seg(id,fn){$(id).onclick=e=>{const b=e.target.closest('[data-v]');if(!b)return;[...$(id).children].forEach(x=>x.setAttribute('aria-pressed',String(x===b)));fn(b.dataset.v);};}
 seg('#sSvar',v=>{st.svar=v;render();});
 seg('#sAntal',v=>{st.antal=+v;render();});
-['#facit','#bw','#pet'].forEach(q=>$(q).onchange=render);
+['#facit','#pet'].forEach(q=>$(q).onchange=render);
 $('#nya').onclick=()=>{st.bas=nyBas();$('#nr').value='';render();};
 $('#nr').oninput=e=>{const v=e.target.value.replace(/\D/g,'').slice(0,6);e.target.value=v;if(v.length>=5){st.bas=+v;render();}};
 $('#print').onclick=()=>window.print();

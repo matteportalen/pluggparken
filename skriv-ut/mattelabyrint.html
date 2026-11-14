@@ -122,7 +122,6 @@ h1{margin:8px 0 2px;font-size:2rem}
 
   <div class="panel"><div class="opts">
     <label class="ck"><input type="checkbox" id="facit" checked> Facit sist</label>
-    <label class="ck"><input type="checkbox" id="bw"> Svartvitt (för svartvit skrivare)</label>
     <label class="ck"><input type="checkbox" id="pet" checked> Mitt djur på bladet</label>
     <button class="sek" id="nya">🎲 Ny labyrint</button>
     <button class="go" id="print">🖨️ Skriv ut</button>
@@ -195,7 +194,7 @@ function render(){
   const l=Array.from({length:st.blad},(_,i)=>labyrint(st.bas+i));
   let html=l.map(front).join('');
   if($('#facit').checked)for(let i=0;i<l.length;i+=4)html+=facitSida(l.slice(i,i+4));
-  $('#pages').className='pages'+($('#bw').checked?' bw':'');
+  $('#pages').className='pages bw';
   $('#pages').innerHTML=html;
   const fs=$('#facit').checked?Math.ceil(l.length/4):0,tot=l.length+fs;
   $('#info').textContent=`${tot} ${tot===1?'sida':'sidor'} (A4)${fs?', varav '+fs+(fs===1?' facitsida':' facitsidor')+' sist':''}. Blad nr ${l[0].nr}${l.length>1?'–'+l[l.length-1].nr:''}. Välj Skriv ut och skala "100 %" i skrivardialogen.`;
@@ -209,7 +208,7 @@ seg('#sTab',v=>{st.tab=+v;render();});
 seg('#sStor',v=>{st.stor=v;render();});
 seg('#sSvar',v=>{st.svar=v;render();});
 seg('#sBlad',v=>{st.blad=+v;render();});
-['#facit','#bw','#pet'].forEach(q=>$(q).onchange=render);
+['#facit','#pet'].forEach(q=>$(q).onchange=render);
 $('#nya').onclick=()=>{st.bas=nyBas();$('#nr').value='';render();};
 $('#nr').oninput=e=>{const v=e.target.value.replace(/\D/g,'').slice(0,6);e.target.value=v;if(v.length>=5){st.bas=+v;render();}};
 $('#print').onclick=()=>window.print();

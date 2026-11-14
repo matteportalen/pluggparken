@@ -136,7 +136,6 @@ h1{margin:8px 0 2px;font-size:2rem}
 
   <div class="panel"><div class="opts">
     <label class="ck"><input type="checkbox" id="facit" checked> Facit sist</label>
-    <label class="ck"><input type="checkbox" id="bw"> Svartvitt (för svartvit skrivare)</label>
     <label class="ck"><input type="checkbox" id="pet" checked> Mitt djur på bladet</label>
     <button class="sek" id="nya">🎲 Nya klockor</button>
     <button class="go" id="print">🖨️ Skriv ut</button>
@@ -195,7 +194,7 @@ function render(){
   const l=Array.from({length:st.blad},(_,i)=>({nr:st.bas+i,u:uppg(st.bas+i)}));
   let html=l.map(front).join('');
   if($('#facit').checked)for(let i=0;i<l.length;i+=2)html+=facit(l.slice(i,i+2));
-  $('#pages').className='pages'+($('#bw').checked?' bw':'');
+  $('#pages').className='pages bw';
   $('#pages').innerHTML=html;
   $('#rVal').hidden=st.typ==='las';
   const fs=$('#facit').checked?Math.ceil(l.length/2):0,tot=l.length+fs;
@@ -209,7 +208,7 @@ seg('#sNiva',v=>{st.niva=v;render();});
 seg('#sTyp',v=>{st.typ=v;render();});
 seg('#sRita',v=>{st.rita=v;render();});
 seg('#sBlad',v=>{st.blad=+v;render();});
-['#facit','#bw','#pet'].forEach(q=>$(q).onchange=render);
+['#facit','#pet'].forEach(q=>$(q).onchange=render);
 $('#nya').onclick=()=>{st.bas=nyBas();$('#nr').value='';render();};
 $('#nr').oninput=e=>{const v=e.target.value.replace(/\D/g,'').slice(0,6);e.target.value=v;if(v.length>=5){st.bas=+v;render();}};
 $('#print').onclick=()=>window.print();
