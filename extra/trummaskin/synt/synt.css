@@ -226,3 +226,20 @@
 .sy-padlage .sy-help{display:none}
 @media(max-width:620px){.sy-padlage .sy-rl-edit .sy-rl-cell{flex:1 1 100%}}
 .sy-tracks [hidden]{display:none!important}.sy-plus{border:1px dashed #5a5e66!important;background:none!important;color:#b8bcc4!important}
+/* INSTRUMENT (nov 2026): spårknapparna i huvudet (LEAD först), inga tonpads, synten i två kolumner */
+.sy-head .sy-tracks{display:flex;gap:6px;flex:1;min-width:0;margin:0}
+.sy-head .sy-tracks button{flex:1;min-width:0;min-height:38px;padding:0 8px;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sy-head .sy-tracks .sy-plus{flex:0 0 auto}
+.sy-panel:not(.sy-padlage) .sy-tracks [data-track="1"]{order:-1}
+.sy-panel:not(.sy-padlage) .sy-head>small{display:none}
+.sy-padbay{display:none!important}
+.sy-panel:not(.sy-padlage) .sy-deck{grid-template-columns:minmax(0,1fr) minmax(0,1.25fr)}
+.sy-kbpilar{display:none}
+@media(max-width:1050px){.sy-panel:not(.sy-padlage) .sy-deck{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:620px){
+  .sy-head .sy-tracks{flex-basis:100%;order:5}.sy-head .sy-tracks button{font-size:10px;padding:0 4px}
+  .sy-keywell{scroll-snap-type:x mandatory}.sy-keyboard{min-width:200%;height:220px}.sy-key.white{height:210px}.sy-key.white.pressed{height:214px}
+  .sy-key.white[data-note="48"],.sy-key.white[data-note="60"]{scroll-snap-align:start}
+  .sy-kbpilar{display:flex;justify-content:space-between;position:sticky;left:0;margin-bottom:8px}
+  .sy-kbpilar button{min-height:36px;padding:0 12px;border:1px solid #3d4047;border-radius:8px;background:#2a2d33;color:#e3e5ea;font:800 11px/1 ui-monospace,monospace}
+}

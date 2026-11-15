@@ -415,3 +415,12 @@ Steg 2 av lärarens plan (steg 1 var PADS). Läraren: synten var nästan överfl
 - `rulle.js` bantad till rutnätet och hjälpfunktionerna; `rulle.css` utan BAS/LEAD-panelens stilar.
 - Tester: `test-musiklabbet-flikar` (fem flikar, INSTRUMENT och PADS delar panel), `test-synt` (gamla länkar: spår 0–3 instrumentljud), `test-synt-ljudbank` (startar på ljud 1 före ratten), `test-synt-arp-slagverk` och `-kortkommandon` (sätter oktav 0 eftersom BAS har −1). Alla tio gröna. Egen kontroll dator och 390 px: ordningen tonart → synt → ackord, BAS och LEAD synliga, + SPÅR, förslag på BAS (C3 med oktav −1 = C2), tonart C → D flyttar tonerna två halvtoner, SLUMPA ger bas och lead, PADS-M tystar bara pads och effektknappen pekar på `pa`, export med bas och lead (RMS 0,012), delningslänk, synten återställs efter PADS, inga JS-fel, ingen sidledsscroll. Inte lyssnat på.
 
+### INSTRUMENT: öppnar på LEAD, inga tonpads, oktavpilar på mobil (15 nov 2026)
+
+Läraren: tonpadsen i INSTRUMENT såg ut som PADS-flikens pads, och starten på en låg bas var lurig. Namnen BAS/LEAD behålls.
+- `selected` och `valt.ton` börjar på 1 (LEAD). Spårknapparna flyttas en gång till panelens huvud (även i instrumentläget, som i PADS); `.sy-padbay` är dold i båda lägena, synten har två kolumner (skärm + ljudpanel). LEAD visas först med CSS `order:-1` på `[data-track="1"]` i instrumentläget.
+- Tonpadsen och PAD-LÄGE/PIANO-LÄGE syns inte i instrumentläget (padsen finns bara i padläget, där `padLayout` flyttar dem); `keyboardMode` är 'piano' i instrumentläget och 'pads' i padläget.
+- Mobil (≤620 px): klaviaturen är 200 % bred i en rullbar ruta med fästpunkter på C3 och C4, och knapparna ◀ C3 / C4 ▶ (`[data-kbsk]`) rullar dit.
+- Texter: "Spela på tangenterna eller datorns tangentbord", REC-status "REC SPELAR IN TANGENTERNA".
+- Tester: tonpad-klick bytta mot tangentklick (`test-synt`, `-inspelning`, `-ljudbank`, `-arp-slagverk`); `test-synt` och `-arp-slagverk` väljer spår 0 först; `test-synt-kortkommandon` provar de 16 pad-tangenterna i PADS (spår 2, samplepaket) och inspelningen dit. Alla tio gröna; egen kontroll: LEAD vald och först, inga synliga tonpads, mobilens ▶ rullar till C4, inga JS-fel, ingen sidledsscroll.
+
