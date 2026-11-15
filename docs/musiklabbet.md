@@ -66,6 +66,7 @@ Ljuden är bara mätta (nivå, tonhöjd, inga NaN), aldrig avlyssnade. Skriv all
 
 ## Väntar
 
+- **Nästa (beslutat 15 nov 2026, görs nästa gång): effekter i PADS för samplepaketen.** (1) Samma flikar som röstloopen, LJUD och SPELSÄTT (ton, röst, baklänges, hack, frys, grind), på samplepaketens klipp, i den tomma rutan under ljudvalet; samma kod som röstloopen (`rostloop.js`), låter lika i exporten. (2) Sedan en **effektplatta** att spela live: dra med fingret (åt sidan filter, uppåt eko), knappar som STAMMA och BAKLÄNGES medan man håller; rörelserna spelas in som rattrörelser så att de hörs i inspelning och mp3. Läraren: "effektplatta låter super super".
 - Effekter på mikrofoningången avråddes (rundgång utan hörlurar).
 - Synten: fler röster eller lättläge, MIDI, fler motorer. Egna moduler som fil bara bakom en "Utvecklare"-flik.
 - Namn på låtens delar när man själv ändrar takterna.
