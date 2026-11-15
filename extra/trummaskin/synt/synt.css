@@ -243,3 +243,33 @@
   .sy-kbpilar{display:flex;justify-content:space-between;position:sticky;left:0;margin-bottom:8px}
   .sy-kbpilar button{min-height:36px;padding:0 12px;border:1px solid #3d4047;border-radius:8px;background:#2a2d33;color:#e3e5ea;font:800 11px/1 ui-monospace,monospace}
 }
+/* INSTRUMENT kompakt (nov 2026): liten skärm, ratten och reglagen på en rad, så att klaviaturen syns i samma vy */
+.sy-panel:not(.sy-padlage) .sy-simple-toolbar{padding:6px 10px;margin-bottom:12px}
+.sy-panel:not(.sy-padlage) .sy-simple-toolbar>span{display:none}
+.sy-panel:not(.sy-padlage) .sy-simple-toolbar .lilla{min-height:32px;font-size:10px}
+.sy-panel:not(.sy-padlage) .sy-deck{grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:16px;align-items:center}
+.sy-panel:not(.sy-padlage) .sy-display{min-height:0;padding:8px 12px 0;border-width:4px}
+.sy-panel:not(.sy-padlage) .sy-display canvas,.sy-panel:not(.sy-padlage) #sy-desc,.sy-panel:not(.sy-padlage) .sy-screenlegend,.sy-panel:not(.sy-padlage) .sy-engraving{display:none}
+.sy-panel:not(.sy-padlage) .sy-screenbar{padding-bottom:6px;margin-bottom:6px}
+.sy-panel:not(.sy-padlage) #sy-title{font-size:26px;margin:4px 0 8px}
+.sy-panel:not(.sy-padlage) .sy-screenfoot{padding:6px 12px}
+.sy-panel:not(.sy-padlage) .sy-main-controls{display:flex;align-items:center;gap:18px;padding:0 0 8px}
+.sy-panel:not(.sy-padlage) .sy-sound-picker{flex:0 0 auto;flex-direction:row;gap:10px}
+.sy-panel:not(.sy-padlage) .sy-sound-dial{width:auto}
+.sy-panel:not(.sy-padlage) .sy-sound-dial .sy-dial-face{width:76px;height:76px}
+.sy-panel:not(.sy-padlage) .sy-sound-dial input{height:78px}
+.sy-panel:not(.sy-padlage) .sy-sound-dial .sy-dial-name{margin-top:6px;font-size:9px}
+.sy-panel:not(.sy-padlage) .sy-sound-dial output{margin-top:3px;font-size:10px}
+.sy-panel:not(.sy-padlage) .sy-sound-arrows{flex-direction:column}
+.sy-panel:not(.sy-padlage) .sy-macros{flex:1;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding-top:0}
+.sy-panel:not(.sy-padlage) .sy-macros .sy-dial-face{width:52px;height:52px}
+.sy-panel:not(.sy-padlage) .sy-macros .sy-dial input{height:54px}
+.sy-panel:not(.sy-padlage) .sy-macros .sy-dial-name{margin-top:6px}
+.sy-panel:not(.sy-padlage) .sy-advanced{margin-top:10px}
+.sy-panel:not(.sy-padlage) .sy-lower{margin-top:12px}
+@media(max-width:1050px){.sy-panel:not(.sy-padlage) .sy-deck{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:620px){.sy-panel:not(.sy-padlage) .sy-main-controls{flex-wrap:wrap;gap:12px}.sy-panel:not(.sy-padlage) .sy-macros{flex-basis:100%}.sy-panel:not(.sy-padlage) .sy-macros .sy-dial-face{width:46px;height:46px}}
+.sy-panel:not(.sy-padlage) .sy-sound-arrows{margin-top:0;gap:6px}
+.sy-panel:not(.sy-padlage) .sy-simple-toolbar{display:none}
+.sy-head #sy-mute,.sy-head #sy-clear-all{min-height:38px;font-size:10px}
+@media(min-width:621px){.sy-panel:not(.sy-padlage) .sy-keyboard{height:200px}.sy-panel:not(.sy-padlage) .sy-key.white{height:192px}.sy-panel:not(.sy-padlage) .sy-key.white.pressed{height:196px}.sy-panel:not(.sy-padlage) .sy-key.black{height:122px}.sy-panel:not(.sy-padlage) .sy-key.black.pressed{height:126px}}

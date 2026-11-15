@@ -424,3 +424,7 @@ Läraren: tonpadsen i INSTRUMENT såg ut som PADS-flikens pads, och starten på 
 - Texter: "Spela på tangenterna eller datorns tangentbord", REC-status "REC SPELAR IN TANGENTERNA".
 - Tester: tonpad-klick bytta mot tangentklick (`test-synt`, `-inspelning`, `-ljudbank`, `-arp-slagverk`); `test-synt` och `-arp-slagverk` väljer spår 0 först; `test-synt-kortkommandon` provar de 16 pad-tangenterna i PADS (spår 2, samplepaket) och inspelningen dit. Alla tio gröna; egen kontroll: LEAD vald och först, inga synliga tonpads, mobilens ▶ rullar till C4, inga JS-fel, ingen sidledsscroll.
 
+### INSTRUMENT kompakt: skärm, rattar och klaviatur i samma bild (15 nov 2026)
+
+Läraren: displayen var onödigt stor och rattarna utspridda. Bara CSS i instrumentläget plus att #sy-mute och #sy-clear-all flyttas till huvudet en gång (som spårknapparna; de är inte längre med i `padLayout`). Skärmen visar bara ljudets namn (vågen, beskrivningen, förklaringsraden och "26 LJUDLÄGEN" dolda), LJUD-ratten 76 px med pilarna bredvid, de fyra reglagen på en rad, verktygsraden borta, klaviaturen 200 px hög på dator. Från panelens topp till klaviaturens botten: 643 → 542 px (synlig höjd under raden högst upp 622 px vid 900 px fönster). Mobilen oförändrad i stort (1 165 px). `test-synt-arp-slagverk` håller tangenten 1,4 s i stället för 1,1 (sex arpeggiotoner vid 88 bpm låg på gränsen). Alla tio gröna; PADS oförändrad (672 px).
+
