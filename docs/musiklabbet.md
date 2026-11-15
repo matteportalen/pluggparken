@@ -65,5 +65,5 @@ Ljuden är bara mätta (nivå, tonhöjd, inga NaN), aldrig avlyssnade. Skriv all
 ## Väntar
 
 - Effekter på mikrofoningången avråddes (rundgång utan hörlurar).
-- Synten: längre toner och ackord per steg, fler röster eller lättläge, MIDI, fler motorer. Egna moduler som fil bara bakom en "Utvecklare"-flik.
+- Synten: **REC ska spela in hur länge tangenten hålls** (lärarens önskan 15 nov 2026, "till senare"), så att det låter som man spelar; i dag blir varje ton ett steg med fast längd. Längre toner och ackord per steg, fler röster eller lättläge, MIDI, fler motorer. Egna moduler som fil bara bakom en "Utvecklare"-flik.
 - Namn på låtens delar när man själv ändrar takterna.

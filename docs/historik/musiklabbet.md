@@ -362,5 +362,5 @@ Lärarens beslut: bas och lead blir pianorullar med syntens ljud, rullen ersätt
 - **Delning:** melodin ligger i JSON-delen (`X.rl`, och `harExt()` blir sant när det finns toner); fält 6 skrivs som `-,-,-,-`. Projektfilen bär samma kod.
 - Bugg under arbetet: spårets `data-m` fångades av trummornas klickhanterare (precis som förut), heter nu `data-rlspar`.
 - Testat: alla tio testskript; egen kontroll dator och 390 px: lägga, dra längd, flytta, ta bort, ackord, 2 takter, förslag, byta ljud, uppspelning (anrop räknade), delningslänk tur och retur, skalbyte med lås, ångra, mp3-export med ljud (RMS 0,013, inga NaN), låtgeneratorn, gammal länk utan krasch, 25 rader utan lås och 11 med. **Inte lyssnat på av mig:** ljudval, balans mot trummorna och nivåerna måste du bedöma.
-- Gammalt beteende som finns kvar: i låtläge (efter LÅT eller "Gör en låt åt mig") är melodipanelen dold även i MELODI-fliken tills man varit i TRUMMASKIN eller SYNT.
+- Rättat samma dag (lärarens ok): melodipanelen var dold i låtläge (`melRita` satte `hidden=S.songOn`), så efter LÅT eller "Gör en låt åt mig" såg MELODI-fliken tom ut. Nu syns den alltid i MELODI.
 

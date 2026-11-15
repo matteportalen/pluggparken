@@ -904,7 +904,7 @@ const rlHost={S:()=>S,cur:()=>S.cur,change:()=>visa(),knob:(el,o)=>knob(el,o),to
   namn:(m,n)=>{const mi=PPRulle.BASE[m]+S.key+n;return TONER[mi%12]+(Math.floor(mi/12)-1)},rot:n=>n%12===0,
   roll:(m,n)=>{if(!rlCh)return"";const q=rlCh.pcs.indexOf(n%12);return q>=0?rlCh.ro[q]:""},
   preview:(m,n,d)=>{startaLjud();if(ctx)nota(m,n,ctx.currentTime+.01,d||.3)},forslag:m=>{startaLjud();melForslag(m);visa()}};
-function melRita(){const h=$("#melod");if(!h||!h.firstChild)return;h.hidden=!!S.songOn;
+function melRita(){const h=$("#melod");if(!h||!h.firstChild)return;h.hidden=false;
   $("#selTon").value=S.key;h.querySelectorAll("#kitSkala button").forEach(b=>b.classList.toggle("on",+b.dataset.s===S.scale));h.querySelectorAll("#kitSnap button").forEach(b=>b.classList.toggle("on",+b.dataset.sn===(S.snap|0)));
   h.querySelectorAll("#kitLas button").forEach(b=>b.classList.toggle("on",+b.dataset.las===(S.rl.lock?1:0)));
   hlSig="";melHl(hlBar,hlK,true);rlSpar.forEach(r=>r.rita())}
