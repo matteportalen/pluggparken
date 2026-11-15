@@ -88,7 +88,7 @@ let sel=null,selDrag=null;
 const selNow=()=>{const t=state().tracks[selected];return sel&&sel.id===t.clipId?sel:null};
 const sek=v=>v.toFixed(2).replace('.',',');
 let rlFlik='red',rlVerk='flytta',flyttDrag=null;
-function selText(asset,f){if(!asset)return'';if(rlVerk==='flytta'&&!selNow())return'Dra i vågen åt sidan för att flytta loopen, en sextondel i taget.'+(f.flytt?' Nu flyttad '+f.flytt+'/16.':'');const s=selNow(),d=asset.buffer.duration;let txt=s?'Markerat '+sek(s.a*d)+'–'+sek(s.b*d)+' s ('+sek((s.b-s.a)*d)+' s lång). RADERA tystar biten, BESKÄR behåller bara den.':'Dra över vågen för att markera en bit.';if(f.flytt)txt+=' Flyttad '+f.flytt+'/16 av loopen.';return txt}
+function selText(asset,f){if(!asset)return'';if(rlVerk==='flytta'&&!selNow())return'Dra i vågen åt sidan för att flytta loopen, en sextondel i taget.'+(f.flytt?' Nu flyttad '+f.flytt+'/16.':'');const s=selNow(),d=asset.buffer.duration;let txt=s?'Markerat '+sek(s.a*d)+'–'+sek(s.b*d)+' s ('+sek((s.b-s.a)*d)+' s lång). RADERA tystar biten, BESKÄR behåller bara den.':'Dra över vågen för att markera en bit. Tryck utan att dra för att ta bort markeringen.';if(f.flytt)txt+=' Flyttad '+f.flytt+'/16 av loopen.';return txt}
 function refreshEd(){const t=state().tracks[selected];loopUI(t,curAsset())}
 function setSel(a,b){const t=state().tracks[selected];sel=a===null?null:{id:t.clipId,a,b};refreshEd()}
 function shiftBy(dir){const t=state().tracks[selected];if(!curAsset())return;change(()=>{const f=R.clean(t.klfx);t.klfx={...f,flytt:(f.flytt+dir+16)%16}});prepare()}
@@ -183,9 +183,10 @@ function mount(h){host=h;const b=document.createElement('button');b.type='button
 <div class="sy-rl-tabs" role="tablist" aria-label="Verktyg för röstloopen"><button type="button" role="tab" data-rlflik="red">REDIGERA</button><button type="button" role="tab" data-rlflik="ljud">LJUD</button><button type="button" role="tab" data-rlflik="spel">SPELSÄTT</button></div>
 <div class="sy-rl-edit" data-flik="red" role="group" aria-label="Redigera loopen">
 <div class="sy-rl-cell"><span>DRA I VÅGEN FÖR ATT</span><div class="sy-rl-seg" role="group" aria-label="Vad som händer när du drar i vågen"><button type="button" data-rlverk="flytta">✋ FLYTTA</button><button type="button" data-rlverk="markera">▭ MARKERA</button></div></div>
-<div class="sy-rl-cell"><span>MARKERA</span><div class="sy-rl-seg"><button type="button" data-rled="all">ALLT</button><button type="button" data-rled="h1">1:A HALVAN</button><button type="button" data-rled="h2">2:A HALVAN</button><button type="button" data-rled="none" aria-label="Avmarkera">✕</button></div></div>
 <div class="sy-rl-cell"><span>MED DET MARKERADE</span><div class="sy-rl-seg"><button type="button" data-rled="del">RADERA</button><button type="button" data-rled="crop">BESKÄR</button></div></div>
 <div class="sy-rl-cell"><span>&nbsp;</span><button type="button" class="lilla" data-rled="undo">↶ ÅNGRA</button></div>
+<div class="sy-rl-cell"><span>DELAR PÅ PADSEN</span><div class="sy-rl-seg" id="sy-rl-parts" role="group" aria-label="Antal delar på padsen">${[4,8,16].map(n=>`<button type="button" data-rlparts="${n}" aria-pressed="false">${n}</button>`).join('')}</div></div>
+<div class="sy-rl-cell"><span>&nbsp;</span><button type="button" class="lilla" id="sy-edit-clips" title="Välj antal delar och dra i gränserna för var varje del börjar och slutar">✂ JUSTERA DELAR</button></div>
 <small id="sy-rl-hint" role="status"></small>
 </div>
 <div class="sy-rl-grid" data-flik="ljud">
@@ -198,8 +199,7 @@ function mount(h){host=h;const b=document.createElement('button');b.type='button
 <div class="sy-rl-grid" data-flik="spel">
 <div class="sy-rl-cell sy-rl-wide"><span>NÄR PADEN HÅLLS</span><div class="sy-rl-seg" data-rlk="hall" role="group" aria-label="När paden hålls">${R.HALL.map((n,i)=>`<button type="button" data-rlv="${i}">${n}</button>`).join('')}</div></div>
 <div class="sy-rl-cell"><span>GRIND · HACKAR I TAKT</span><div class="sy-rl-seg" data-rlk="grind" role="group" aria-label="Grind som hackar rösten i takt">${R.GRIND.map((n,i)=>`<button type="button" data-rlv="${i}">${n}</button>`).join('')}</div></div>
-<div class="sy-rl-cell"><span>DELAR PÅ PADSEN</span><div class="sy-rl-seg" id="sy-rl-parts" role="group" aria-label="Antal delar på padsen">${[4,8,16].map(n=>`<button type="button" data-rlparts="${n}" aria-pressed="false">${n}</button>`).join('')}</div></div>
-<div class="sy-rl-cell"><span>&nbsp;</span><div class="sy-rl-knappar"><button type="button" class="lilla" id="sy-rl-lay" title="Lägger delarna i ordning på stegraden, så att loopen spelas i takt och går att bygga om">LÄGG I TAKT</button><button type="button" class="lilla" id="sy-edit-clips">JUSTERA KLIPP</button></div></div>
+<div class="sy-rl-cell"><span>&nbsp;</span><div class="sy-rl-knappar"><button type="button" class="lilla" id="sy-rl-lay" title="Lägger delarna i ordning på stegraden, så att loopen spelas i takt och går att bygga om">LÄGG I TAKT</button></div></div>
 </div>
 <small class="sy-rl-note">Rösten sparas inte i webbläsaren. Spara projektet (⋯ MER → 📁 SPARA) för att behålla den.</small>
 </section>
