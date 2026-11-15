@@ -370,6 +370,48 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
   .steg button{aspect-ratio:1/1}
 }
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* smal överdel (nov 2026): transportrad och flikar som följer med, Mixer och Mer som paneler */
+html{scroll-padding-top:calc(var(--hh,52px) + var(--sh,120px) + 8px)}
+.maskin>.topp{margin:4px 0 10px}
+.styr{position:sticky;top:var(--hh,52px);z-index:40;margin:0 -22px;padding:10px 22px 10px;background:#2b2d32;box-shadow:0 1px 0 rgba(255,255,255,.06)}
+.styr.fast{box-shadow:0 10px 18px -8px rgba(0,0,0,.7),0 1px 0 rgba(255,255,255,.06)}
+.trans{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.trans .stor{height:48px;min-width:96px;font-size:1rem}
+.trans .lilla{height:42px}
+.trans .fyll{flex:1}
+.tempog{display:flex;align-items:center;gap:6px}
+.tempog .lcd{min-height:42px;padding:4px 10px;gap:8px}.tempog .lcd .sv{height:30px}.tempog .lcd .etikett{font-size:.58rem}
+.lilla.tysta.p{background:linear-gradient(180deg,#ff8a86,#e5484d);color:#fff;box-shadow:0 2px 0 rgba(0,0,0,.55),0 0 18px rgba(229,72,77,.75)}
+#bMixer[aria-expanded=true],#bMer[aria-expanded=true]{background:linear-gradient(180deg,#ffc94d,#f2a707);color:#241a00}
+#bMer{position:relative}#bMer .prick{position:absolute;top:-4px;right:-4px;width:14px;height:14px;border-radius:50%;background:#e5484d;box-shadow:0 0 0 2px #2b2d32,0 0 10px rgba(229,72,77,.9)}#bMer .prick[hidden]{display:none}
+.styr .kit.vy{margin-top:10px;width:max-content;max-width:100%}
+.styr .loop-rec-status{margin-top:8px}
+#monsterrad{margin:12px 0 14px}#monsterrad[hidden]{display:none}
+.ldraw .ldsek{padding:12px 0;border-bottom:1px solid #2b2d33}.ldraw .ldsek:last-child{border-bottom:0}.ldraw .ldsek:empty{display:none}
+.ldraw h3{margin:0 0 10px;font-size:.7rem;letter-spacing:.2em;color:var(--dim);font-weight:800}
+.ldraw .ldknapp{display:flex;flex-wrap:wrap;gap:8px}.ldraw .ldknapp .projg{flex-wrap:wrap}
+.ldraw .ldrad{display:flex;flex-wrap:wrap;gap:16px 22px;align-items:flex-start}
+.ldraw .mixrad{display:grid;grid-template-columns:repeat(4,1fr);gap:16px 8px;margin:0;padding:12px 8px}
+.ldraw .mixrad .fx{flex-direction:column;gap:6px}
+@media(max-width:700px){
+  .styr{margin:0 -12px;padding:8px 12px}
+  .trans{gap:6px;flex-wrap:nowrap}
+  .trans .tx{display:none}
+  .trans .stor{min-width:0;width:46px;height:44px;font-size:1.1rem;padding:0;letter-spacing:0}
+  .trans .lilla{min-width:0;width:40px;height:40px;padding:0;font-size:1rem}
+  .trans .fyll{display:none}
+  .trans .rec::before{margin-right:0;width:14px;height:14px}
+  .tempog{gap:3px}.tempog .lcd{padding:3px 6px;min-height:40px}.tempog .lcd .sv{height:24px}.tempog .lcd .etikett{display:none}
+  .tempog .pm{flex-direction:column;gap:2px}.tempog .pm button{width:26px;height:19px;font-size:.8rem;line-height:1}
+  #bAutoTom{width:auto!important;font-size:.66rem!important;padding:0 6px!important}
+  .styr .kit.vy{width:100%;display:grid;grid-template-columns:repeat(5,1fr)}
+  .styr .kit.vy button{padding:6px 2px;font-size:.62rem;letter-spacing:.04em;display:flex;flex-direction:column;align-items:center;gap:1px;line-height:1.1}
+  .styr .kit.vy button .vyt{display:none}
+  .styr .kit.vy button .vyi{font-size:1.05rem}
+  .styr .kit.vy button::after{content:attr(data-kort)}
+}
+@media(max-width:370px){.trans .stor{width:40px}.trans .lilla{width:36px}}
 </style>
 </head>
 <body>
@@ -381,38 +423,44 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
 <div class="maskin" id="maskin">
   <div class="topp">
     <div class="logga"><b>MUSIK<i>LABBET</i></b><small>PLUGGPARKEN · DIN MUSIKSTUDIO</small></div>
-    <div class="lcd" id="lcdBpm" aria-live="off"><span class="etikett">TEMPO</span><svg class="sv" id="sevBpm" viewBox="0 0 144 64" aria-label="Tempo"></svg><span class="etikett">BPM</span></div>
-    <div class="lcd"><span class="etikett">RYTM</span><span class="namn" id="namnLcd">Tomt</span></div>
-    <div style="flex:1"></div>
-    <div class="grupp" id="gFull" hidden><button class="lilla" id="bFull" type="button" aria-pressed="false" title="Visa hela sidan i helskärm (Esc avslutar)">⛶ HELSKÄRM</button><span class="l">Visa</span></div>
-    <div class="grupp"><div class="projg"><button class="lilla" id="bProjS" type="button" title="Spara hela projektet som en fil: rytmer, låt, melodier, loopar, egna ljud och rattrörelser">📁 SPARA</button><button class="lilla" id="bProjL" type="button" title="Öppna ett sparat projekt">📂 ÖPPNA</button><input type="file" id="projFil" accept=".json,application/json" hidden><button class="lilla" id="bLive" type="button" aria-pressed="false" title="Spela in allt du hör, live, och spara som mp3 när du trycker igen">⏺ SPELA IN LIVE</button><button class="lilla" id="bExp" type="button" title="Spara låten som en mp3-fil på din dator">⬇ MP3</button></div><span class="l">Projekt och export</span></div>
-    <div class="grupp"><div class="knob" id="kMaster" role="slider" tabindex="0" aria-label="Huvudvolym"><div class="kap"></div></div><label>Volym</label></div>
+    <span class="namn" id="namnLcd" hidden>Tomt</span>
   </div>
-  <div class="rad1">
-    <button class="stor start" id="bStart" type="button">▶ START</button>
-    <button class="stor stopp" id="bStopp" type="button">■ STOPP</button>
-    <button class="stor rec" id="bRec" type="button" aria-pressed="false" title="Spela in med padsen (tangent R)">● REC</button>
-    <button class="lilla" id="bUndo" type="button" title="Ångra (Ctrl/Cmd + Z). Gäller rytm, mönster, melodi, låt och sample-spår, inte inspelade loopar" disabled>↶ ÅNGRA</button><button class="lilla" id="bRedo" type="button" title="Gör om (Skift + Ctrl/Cmd + Z)" disabled>↷ GÖR OM</button>
-    <button class="lilla" id="bAutoTom" type="button" title="Ta bort inspelade rattrörelser (ECHO, FILTER, PUMP)" hidden>🎛 TÖM RATTAR</button>
-    <button class="lilla" id="bBuild" type="button" title="Bygg upp spänningen och släpp loss: filter som öppnas, virvlande virveltrumma, en tyst takt och sedan smäll">🚀 BUILD-UP</button><select class="sel" id="selBuild" aria-label="Längd på build-up"><option value="2">2 takter</option><option value="4" selected>4 takter</option><option value="8">8 takter</option></select>
-    <button class="stor mute" id="bMuteAll" type="button" aria-pressed="false" title="Tysta allt (Skift + M)">🔇 TYSTA ALLT</button>
-    <div class="grupp"><div class="pm"><button type="button" id="bMin" aria-label="Långsammare">−</button><button type="button" id="bPlus" aria-label="Snabbare">+</button></div><span class="l">Tempo</span></div>
-    <div class="grupp"><div class="knob" id="kTempo" role="slider" tabindex="0" aria-label="Tempo"><div class="kap"></div></div><label>Tempo</label></div>
-    <div class="grupp"><div class="knob" id="kSwing" role="slider" tabindex="0" aria-label="Swing"><div class="kap"></div></div><label>Swing</label></div>
-    <div class="grupp"><div class="knob" id="kPump" role="slider" tabindex="0" aria-label="Pump (sidechain)"><div class="kap"></div></div><label>Pump</label></div>
-    <div class="grupp"><div class="pm"><button type="button" id="bSudd" aria-pressed="false" title="Sudda med padsen (håll Skift)">⌫</button></div><span class="l">Sudda</span></div>
-    <div class="grupp"><div class="knob" id="kPadtid" role="slider" tabindex="0" aria-label="Pad-timing"><div class="kap"></div></div><label id="padT">Pad-tid 0 ms</label></div>
+  <div class="styr" id="styr">
+    <div class="trans">
+      <button class="stor start" id="bStart" type="button" aria-label="Start">▶<span class="tx"> START</span></button>
+    <button class="stor stopp" id="bStopp" type="button" aria-label="Stopp">■<span class="tx"> STOPP</span></button>
+    <button class="stor rec" id="bRec" type="button" aria-pressed="false" aria-label="Spela in" title="Spela in med padsen och synten (tangent R)"><span class="tx">REC</span></button>
+      <div class="tempog"><div class="lcd" id="lcdBpm" aria-live="off"><svg class="sv" id="sevBpm" viewBox="0 0 144 64" aria-label="Tempo"></svg><span class="etikett">BPM</span></div><div class="pm"><button type="button" id="bMin" aria-label="Långsammare">−</button><button type="button" id="bPlus" aria-label="Snabbare">+</button></div></div>
+      <button class="lilla" id="bUndo" type="button" aria-label="Ångra" title="Ångra (Ctrl/Cmd + Z). Gäller rytm, mönster, melodi, låt och sample-spår, inte inspelade loopar" disabled>↶<span class="tx"> ÅNGRA</span></button><button class="lilla" id="bRedo" type="button" aria-label="Gör om" title="Gör om (Skift + Ctrl/Cmd + Z)" disabled>↷<span class="tx"> GÖR OM</span></button>
+      <button class="lilla" id="bAutoTom" type="button" title="Ta bort inspelade rattrörelser (ECHO, FILTER, PUMP)" hidden>🎛 TÖM RATTAR</button>
+      <span class="fyll"></span>
+      <button class="lilla tysta" id="bMuteAll" type="button" aria-pressed="false" aria-label="Tysta allt" title="Tysta allt (Skift + M)">🔇<span class="tx"> TYSTA ALLT</span></button>
+      <button class="lilla" id="bMixer" type="button" aria-expanded="false" aria-controls="mixpan" aria-label="Mixer och volym" title="Mixer och volym">🎚️<span class="tx"> MIXER</span></button>
+      <button class="lilla" id="bMer" type="button" aria-expanded="false" aria-controls="merpan" aria-label="Mer: spara, mp3, swing, build-up" title="Spara, öppna, mp3, spela in live, build-up, swing och pump">⋯<span class="tx"> MER</span><i class="prick" hidden></i></button>
+    </div>
+    <div class="kit vy" role="tablist" aria-label="Vy"><button type="button" id="vyT" role="tab" class="on" aria-selected="true" data-kort="TRUMMOR"><span class="vyi">▦</span> <span class="vyt">TRUMMASKIN</span></button><button type="button" id="vyMel" role="tab" aria-selected="false" aria-controls="melodi-vy" data-kort="MELODI"><span class="vyi">♫</span> <span class="vyt">MELODI &amp; ACKORD</span></button><button type="button" id="vyLoop" role="tab" aria-selected="false" aria-controls="loopmaskin" data-kort="LOOP"><span class="vyi">🎤</span> <span class="vyt">LOOPSTATION</span></button><button type="button" id="vyL" role="tab" aria-selected="false" data-kort="LÅT"><span class="vyi">♫</span> <span class="vyt">LÅT</span></button></div>
+    <button type="button" class="lilla loop-rec-status" id="bLoopStatus" hidden>🔴 LOOPINSPELNING PÅGÅR · VISA LOOPSTATIONEN</button>
   </div>
-  <div class="mixrad" id="mixrad"><span class="l">MIXER</span>
-    <span class="fx"><div class="knob liten" id="kMdr" role="slider" tabindex="0" aria-label="Volym trummor"><div class="kap"></div></div><small>TRUMMOR</small></span>
+  <div class="vyrad" id="monsterrad"><div class="monsterg"><span class="l">MÖNSTER</span><div class="monster" id="monster"></div><button type="button" class="lilla" id="bKop" title="Kopiera det här mönstret till ett annat">⧉ KOPIERA</button></div></div>
+  <aside class="rackdraw ldraw" id="mixpan" hidden role="dialog" aria-label="Mixer"><div class="rackhead"><b>🎚️ MIXER</b><button type="button" class="rkx" data-ldx aria-label="Stäng mixern" title="Stäng (Esc)">✕</button></div>
+    <div class="rkscroll"><div class="ldsek"><h3>VOLYM</h3><div class="ldrad"><div class="grupp"><div class="knob" id="kMaster" role="slider" tabindex="0" aria-label="Huvudvolym"><div class="kap"></div></div><label>Volym</label></div></div></div>
+    <div class="ldsek"><h3>DELARNA</h3><div class="mixrad" id="mixrad"><span class="fx"><div class="knob liten" id="kMdr" role="slider" tabindex="0" aria-label="Volym trummor"><div class="kap"></div></div><small>TRUMMOR</small></span>
     <span class="fx"><div class="knob liten" id="kMme" role="slider" tabindex="0" aria-label="Volym melodi"><div class="kap"></div></div><small>MELODI</small></span>
     <span class="fx"><div class="knob liten" id="kMlo" role="slider" tabindex="0" aria-label="Volym loopar"><div class="kap"></div></div><small>LOOPAR</small></span>
     <span class="fx"><div class="knob liten" id="kMpd" role="slider" tabindex="0" aria-label="Volym sample-pads"><div class="kap"></div></div><small>PADS</small></span>
     <span class="fx"><div class="knob liten" id="kMsy" role="slider" tabindex="0" aria-label="Volym syntmaskin"><div class="kap"></div></div><small>SYNT</small></span>
     <span class="fx"><div class="knob liten" id="kMeb" role="slider" tabindex="0" aria-label="Bastoner (hela mixen)"><div class="kap"></div></div><small>BASTONER</small></span>
-    <span class="fx"><div class="knob liten" id="kMeh" role="slider" tabindex="0" aria-label="Diskant (hela mixen)"><div class="kap"></div></div><small>DISKANT</small></span></div>
-  <div class="vyrad"><div class="kit vy" role="tablist" aria-label="Vy"><button type="button" id="vyT" role="tab" class="on" aria-selected="true">▦ TRUMMASKIN</button><button type="button" id="vyMel" role="tab" aria-selected="false" aria-controls="melodi-vy">♫ MELODI &amp; ACKORD</button><button type="button" id="vyLoop" role="tab" aria-selected="false" aria-controls="loopmaskin">🎤 LOOPSTATION</button><button type="button" id="vyL" role="tab" aria-selected="false">♫ LÅT</button></div><div class="monsterg"><span class="l">MÖNSTER</span><div class="monster" id="monster"></div><button type="button" class="lilla" id="bKop" title="Kopiera det här mönstret till ett annat">⧉ KOPIERA</button></div></div>
-  <button type="button" class="lilla loop-rec-status" id="bLoopStatus" hidden>🔴 LOOPINSPELNING PÅGÅR · VISA LOOPSTATIONEN</button>
+    <span class="fx"><div class="knob liten" id="kMeh" role="slider" tabindex="0" aria-label="Diskant (hela mixen)"><div class="kap"></div></div><small>DISKANT</small></span></div></div></div>
+    <small class="rkhelp">Vrid uppåt för starkare. Dubbeltryck på en ratt för att återställa den.</small></aside>
+  <aside class="rackdraw ldraw" id="merpan" hidden role="dialog" aria-label="Mer"><div class="rackhead"><b>⋯ MER</b><button type="button" class="rkx" data-ldx aria-label="Stäng" title="Stäng (Esc)">✕</button></div>
+    <div class="rkscroll">
+      <div class="ldsek"><h3>PROJEKT OCH EXPORT</h3><div class="ldknapp"><button class="lilla" id="bProjS" type="button" title="Spara hela projektet som en fil: rytmer, låt, melodier, loopar, egna ljud och rattrörelser">📁 SPARA</button><button class="lilla" id="bProjL" type="button" title="Öppna ett sparat projekt">📂 ÖPPNA</button><input type="file" id="projFil" accept=".json,application/json" hidden><button class="lilla" id="bLive" type="button" aria-pressed="false" title="Spela in allt du hör, live, och spara som mp3 när du trycker igen">⏺ SPELA IN LIVE</button><button class="lilla" id="bExp" type="button" title="Spara låten som en mp3-fil på din dator">⬇ MP3</button></div></div>
+      <div class="ldsek"><h3>BYGG UPP</h3><div class="ldknapp"><button class="lilla" id="bBuild" type="button" title="Bygg upp spänningen och släpp loss: filter som öppnas, virvlande virveltrumma, en tyst takt och sedan smäll">🚀 BUILD-UP</button><select class="sel" id="selBuild" aria-label="Längd på build-up"><option value="2">2 takter</option><option value="4" selected>4 takter</option><option value="8">8 takter</option></select></div></div>
+      <div class="ldsek"><h3>TAKT OCH KÄNSLA</h3><div class="ldrad"><div class="grupp"><div class="knob" id="kTempo" role="slider" tabindex="0" aria-label="Tempo"><div class="kap"></div></div><label>Tempo</label></div><div class="grupp"><div class="knob" id="kSwing" role="slider" tabindex="0" aria-label="Swing"><div class="kap"></div></div><label>Swing</label></div><div class="grupp"><div class="knob" id="kPump" role="slider" tabindex="0" aria-label="Pump (sidechain)"><div class="kap"></div></div><label>Pump</label></div></div></div>
+      <div class="ldsek"><h3>TRUMPADS</h3><div class="ldrad"><div class="grupp"><div class="pm"><button type="button" id="bSudd" aria-pressed="false" title="Sudda med padsen (håll Skift)">⌫</button></div><span class="l">Sudda</span></div><div class="grupp"><div class="knob" id="kPadtid" role="slider" tabindex="0" aria-label="Pad-timing"><div class="kap"></div></div><label id="padT">Pad-tid 0 ms</label></div></div></div>
+      <div class="ldsek" id="ldVisa"><div class="grupp" id="gFull" hidden><button class="lilla" id="bFull" type="button" aria-pressed="false" title="Visa hela sidan i helskärm (Esc avslutar)">⛶ HELSKÄRM</button><span class="l">Visa</span></div></div>
+    </div></aside>
+  <div class="rackbd" id="ldbd" hidden></div>
   <div class="rytmrad" id="rytmrad"><span class="l">RYTM</span><select class="sel" id="selMall" aria-label="Färdig rytm"></select><button class="lilla" id="bSlump" type="button" title="Slumpa en ny rytm och melodi">🎲 SLUMPA</button><button class="lilla" id="bRensa" type="button" title="Töm det här mönstret: stegen, melodin och sample-spåret">🧹 TÖM MÖNSTRET</button></div>
   <div class="lat" id="lat" hidden><div class="tl" id="tl"><span class="tn">MÖNSTER</span><div class="lcells" id="lcells"></div></div><div class="latgor"><select class="sel" id="selLatStil" aria-label="Stil"><option value="slump">🎲 Slumpa stil</option></select><button type="button" class="lilla gor" id="bGorLat">✨ GÖR EN LÅT ÅT MIG</button><small>Skapar en hel låt: intro, vers, refräng, brygga med build-up och refräng. Ångra med ↶ om du ville behålla din.</small></div><div class="latdel" id="latDel"></div><div class="latrad"><button class="lilla on" id="bSlinga" type="button" aria-pressed="true">🔁 SLINGA</button><button class="lilla" id="bDubbla" type="button" title="Kopiera hela låten (takter, loopar, build-up och rattrörelser) en gång till direkt efter">⧉ DUBBLA LÅTEN</button><button class="lilla" id="bTomLat" type="button">TÖM LÅT</button><span class="latinfo" id="latInfo"></span></div><div class="krok" style="margin-top:0">Välj ett mönster (A–H) ovanför och tryck på en ruta för att lägga det i låten. Tryck på samma ruta igen för att ta bort det. Ett mönster är trummor, synt och melodi tillsammans: ändra det i de andra flikarna och kom tillbaka hit för att spela låten. Raden 🚀 lägger en build-up i takten. START spelar låten. Raderna L1–L4 bestämmer i vilka takter dina inspelade loopar hörs: tryck på rutorna. En rad utan markerade rutor spelar hela låten.</div></div>
   <div class="spar" id="spar">
@@ -427,12 +475,12 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
   <div class="topp" style="margin-bottom:12px"><div class="logga"><b>LOOPSTATION <i>LS-4</i></b><small>PLUGGPARKEN · 4 SPÅR · MIKROFON</small></div><div style="flex:1"></div><button type="button" class="micb" id="bPaus" aria-pressed="false" title="Pausa och fortsätt (loopar, trummor och melodi)">⏸ PAUSA</button><button type="button" class="micb" id="bMic" aria-pressed="false">🎤 MIKROFON</button><select class="sel" id="selMic" hidden aria-label="Välj mikrofon"></select><button type="button" class="micb" id="bLjudOm" title="Tryck om ljudet har blivit tyst eller låter dåligt efter att du bytt mikrofon eller hörlurar">🔄 ÅTERSTÄLL LJUD</button><button type="button" class="micb on" id="bFix" aria-pressed="true" title="Slår på mikrofonens automatiska volym och brusfilter. Bra för röst. Stäng av för instrument.">✨ FÖRBÄTTRA RÖST</button><span class="meter" aria-hidden="true"><i id="meterI"></i></span><div class="grupp" style="flex-direction:row;gap:8px"><div class="knob liten" id="kJust" role="slider" tabindex="0" aria-label="Justera inspelningens timing"><div class="kap"></div></div><span class="l" id="justT">Timing 0 ms</span></div></div>
   <div class="lstat" id="lstatus" aria-live="polite"></div>
   <div class="lgrid" id="lgrid"></div>
-  <div class="krok" style="margin-top:14px">Använd hörlurar, annars hör mikrofonen trummorna. Tryck på den runda knappen för att spela in, och tryck igen för att lägga på mer ljud. När loopen finns kan du markera en bit av vågen och radera eller beskära den, flytta loopen så den hamnar på rätt slag, ändra tonen och lägga på effekter. ¼ och ½ ger riktigt korta loopar. Ljudet sparas inte i webbläsaren: ladda ner loopen med ⬇ eller spara hela projektet med 📁 SPARA.</div>
+  <div class="krok" style="margin-top:14px">Använd hörlurar, annars hör mikrofonen trummorna. Tryck på den runda knappen för att spela in, och tryck igen för att lägga på mer ljud. När loopen finns kan du markera en bit av vågen och radera eller beskära den, flytta loopen så den hamnar på rätt slag, ändra tonen och lägga på effekter. ¼ och ½ ger riktigt korta loopar. Ljudet sparas inte i webbläsaren: ladda ner loopen med ⬇ eller spara hela projektet under ⋯ MER → 📁 SPARA.</div>
 </div>
   <div class="under">
     <div class="knapprad">
       <button class="lilla" id="bDela" type="button">🔗 DELA</button>
-      <button class="lilla" id="bSpara" type="button" title="Spara i listan här nedanför (finns kvar i webbläsaren): trummor, mönster, låt, melodi, ackord och synt. Loopar och röster sparas bara i projektfilen (📁 SPARA uppe till vänster).">💾 SPARA I LISTAN</button>
+      <button class="lilla" id="bSpara" type="button" title="Spara i listan här nedanför (finns kvar i webbläsaren): trummor, mönster, låt, melodi, ackord och synt. Loopar och röster sparas bara i projektfilen (⋯ MER → 📁 SPARA).">💾 SPARA I LISTAN</button>
     </div>
     <div class="knapprad" id="minnen" aria-label="Sparade rytmer"></div>
   </div>
@@ -826,7 +874,7 @@ function visa0(){mixSatt();mixUpd.forEach(u=>u());document.querySelectorAll(".ra
   $("#selMall").value=MALLAR.findIndex(m=>m[0]===S.namn);kn.tempo&&kn.tempo();kn.swing&&kn.swing();kn.master&&kn.master();kn.pump&&kn.pump();latRita();melRita();ackRita();padRita();rackRita();rackSyncAll();PPSynt.render();vyVisa()}
 let aktuellVy='trummor';
 const vyer={trummor:'vyT',synt:'vyS',melodi:'vyMel',loop:'vyLoop',lat:'vyL'};
-function vyVisa(){const mode=aktuellVy;$('#spar').hidden=mode!=='trummor';$('#rytmrad').hidden=mode!=='trummor';$('#padwrap').hidden=mode!=='trummor';$('#krok').hidden=mode!=='trummor';$('#melodi-vy').hidden=mode!=='melodi';$('#loopmaskin').hidden=mode!=='loop';$('#lat').hidden=mode!=='lat';PPSynt.setVisible(mode==='synt');for(const [key,id] of Object.entries(vyer)){const b=document.getElementById(id);if(!b)continue;const on=key===mode;b.classList.toggle('on',on);b.setAttribute('aria-selected',on);b.tabIndex=on?0:-1}}
+function vyVisa(){const mode=aktuellVy;$('#spar').hidden=mode!=='trummor';$('#rytmrad').hidden=mode!=='trummor';$('#padwrap').hidden=mode!=='trummor';$('#krok').hidden=mode!=='trummor';$('#melodi-vy').hidden=mode!=='melodi';$('#loopmaskin').hidden=mode!=='loop';$('#lat').hidden=mode!=='lat';$('#monsterrad').hidden=mode==='loop';PPSynt.setVisible(mode==='synt');for(const [key,id] of Object.entries(vyer)){const b=document.getElementById(id);if(!b)continue;const on=key===mode;b.classList.toggle('on',on);b.setAttribute('aria-selected',on);b.tabIndex=on?0:-1}}
 function valjVy(mode){if(!(mode in vyer))return;aktuellVy=mode;if(mode==='lat')S.songOn=true;else if(mode==='trummor'||mode==='synt')S.songOn=false;visa()}
 const kn={};
 function krok(t){$("#krok").innerHTML=t}
@@ -1169,7 +1217,7 @@ function rackBygg(){let h=$("#rackpan");if(h)return;
     else if(d.on!==undefined){a[sl].on=a[sl].on?0:1;visa()}
     else if(d.mv!==undefined){const j=sl+(+d.mv);if(j>=0&&j<4){[a[sl],a[j]]=[a[j],a[sl]];visa()}}
     else if(d.tape!==undefined){startaLjud();const n=rackNod(RKV,sl);if(n&&n.trig){n.trig();setTimeout(()=>{b.textContent=n.stoppad?"▶ STARTA BANDET":"⏹ STOPPA BANDET"},30)}}})}
-function rkOppna(k,opener){if(RKOPEN&&RKV===k){rkStang();return}
+function rkOppna(k,opener){if(RKOPEN&&RKV===k){rkStang();return}if(typeof ldStang==="function")ldStang(true);
   const h=$("#rackpan"),bd=$("#rackbd");RKFOK=opener||null;RKV=k;RKPICK=-1;RKOPEN=true;h.hidden=false;bd.hidden=false;rackRita();rackTal();
   requestAnimationFrame(()=>requestAnimationFrame(()=>h.classList.add("open")));setTimeout(()=>{const x=$("#rkx");x&&x.focus({preventScroll:true})},60)}
 function rkStang(){if(!RKOPEN)return;RKOPEN=false;const h=$("#rackpan"),bd=$("#rackbd");h.classList.remove("open");bd.hidden=true;rackTal();
@@ -1303,7 +1351,7 @@ function lpVisa(){LP.forEach(l=>{const m=document.querySelector(`.lm[data-i="${l
     const f=l.vol/100,kn2=m.querySelector("[data-lvol]");kn2.style.setProperty("--p",(f*270)+"deg");kn2.querySelector(".kap").style.transform="rotate("+(-135+f*270)+"deg)";
     l.fxu.forEach(u=>u());m.querySelector("[data-fxpv]").textContent=(l.fx.pitch>0?"+":"")+l.fx.pitch;m.querySelector("[data-fxr]").textContent="🎭 "+RNAMN[l.fx.rost];m.querySelector("[data-fxt]").textContent="🎯 "+TUNEN[l.fx.tune|0];m.querySelector("[data-fxtm]").textContent="🎯 "+(["SKALA","MELODIN","ACKORD"][l.fx.tmod|0]);m.querySelector("[data-fxt]").setAttribute("aria-pressed",(l.fx.tune|0)>0);m.querySelector("[data-fxr]").setAttribute("aria-pressed",l.fx.rost>0);m.querySelectorAll("[data-sl]").forEach(b=>b.classList.toggle("p",l.sl[+b.dataset.sl]==="x"));m.querySelector("[data-fxrev]").setAttribute("aria-pressed",l.fx.rev);m.querySelector("[data-fxet]").textContent=ETXT[l.fx.et]});
   $("#bLoopStatus").hidden=!LP.some(l=>l.rec);
-  const las=harLoopar();["#bMin","#bPlus","#kTempo"].forEach(q=>$(q)&&$(q).closest(".grupp")&&$(q).closest(".grupp").classList.toggle("las",las))}
+  const las=harLoopar();["#bMin","#bPlus","#kTempo"].forEach(q=>$(q)&&$(q).closest(".grupp,.tempog")&&$(q).closest(".grupp,.tempog").classList.toggle("las",las))}
 /* ---- vågformen ---- */
 function hatch(c,x,w,H,dpr){if(w<=0)return;c.save();c.beginPath();c.rect(x,0,w,H);c.clip();c.fillStyle="rgba(6,5,3,.78)";c.fillRect(x,0,w,H);c.strokeStyle="rgba(255,255,255,.12)";c.lineWidth=dpr;c.beginPath();for(let k=-H;k<w+H;k+=9*dpr){c.moveTo(x+k,H);c.lineTo(x+k+H,0)}c.stroke();c.restore()}
 function vagRita(c,pk,W,H,dx,col,alpha,sc){const cols=pk.length/2,mid=H/2,amp=H*.44;c.globalAlpha=alpha;c.fillStyle=col;
@@ -1593,6 +1641,20 @@ async function liveToggle(){const b=$("#bLive");
   const t0=performance.now(),L={mr,dest,timer:setInterval(()=>{const q=Math.floor((performance.now()-t0)/1000);b.textContent="⏹ STOPPA · "+Math.floor(q/60)+":"+String(q%60).padStart(2,"0");if(q>=1800)liveToggle()},500)};
   liveR=L;mr.start(1000);b.classList.add("on");b.setAttribute("aria-pressed","true");b.textContent="⏹ STOPPA · 0:00"}
 $("#bLive").onclick=liveToggle;
+let ldNu=null,ldFok=null;
+const ldPan={mix:$("#mixpan"),mer:$("#merpan")},ldKnapp={mix:$("#bMixer"),mer:$("#bMer")};
+function ldStang(snabb){if(!ldNu)return;const k=ldNu,h=ldPan[k];ldNu=null;h.classList.remove("open");$("#ldbd").hidden=true;ldKnapp[k].setAttribute("aria-expanded","false");
+  if(snabb)h.hidden=true;else setTimeout(()=>{if(ldNu!==k)h.hidden=true},300);if(!snabb&&ldFok&&document.contains(ldFok)){try{ldFok.focus({preventScroll:true})}catch(e){}}ldFok=null}
+function ldOppna(k){if(ldNu===k){ldStang();return}ldStang(true);if(RKOPEN)rkStang();ldNu=k;ldFok=ldKnapp[k];const h=ldPan[k];h.hidden=false;$("#ldbd").hidden=false;ldKnapp[k].setAttribute("aria-expanded","true");
+  requestAnimationFrame(()=>requestAnimationFrame(()=>h.classList.add("open")));setTimeout(()=>{const x=h.querySelector("[data-ldx]");x&&x.focus({preventScroll:true})},60)}
+$("#bMixer").onclick=()=>ldOppna("mix");$("#bMer").onclick=()=>ldOppna("mer");$("#ldbd").onclick=()=>ldStang();
+document.querySelectorAll("[data-ldx]").forEach(b=>b.onclick=()=>ldStang());
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&ldNu){e.preventDefault();ldStang()}});
+{const prick=$("#bMer .prick"),bl=$("#bLive"),bb=$("#bBuild"),upd=()=>{const p=bl.classList.contains("on")||bb.classList.contains("p");prick.hidden=!p};
+  const mo=new MutationObserver(upd);mo.observe(bl,{attributes:true});mo.observe(bb,{attributes:true});upd()}
+{const styr=$("#styr"),hh=()=>{const h=document.querySelector(".mph");const R=document.documentElement.style;R.setProperty("--hh",(h&&getComputedStyle(h).position==="sticky"?h.getBoundingClientRect().height:0)+"px");R.setProperty("--sh",styr.getBoundingClientRect().height+"px")};
+  hh();addEventListener("resize",hh);setTimeout(hh,400);
+  const fast=()=>{const t=parseFloat(getComputedStyle(styr).top)||0;styr.classList.toggle("fast",styr.getBoundingClientRect().top<=t+1&&scrollY>0)};addEventListener("scroll",fast,{passive:true});fast()}
 const b64=u8=>{let t="";for(let i=0;i<u8.length;i+=32768)t+=String.fromCharCode.apply(null,u8.subarray(i,i+32768));return btoa(t)};
 const unb64=t=>{const q=atob(t),u=new Uint8Array(q.length);for(let i=0;i<q.length;i++)u[i]=q.charCodeAt(i);return u};
 function bufTill(buf){const d=buf.getChannelData(0),n=d.length,v=new Int16Array(n);for(let i=0;i<n;i++)v[i]=Math.max(-32768,Math.min(32767,Math.round(d[i]*32767)));return{sr:buf.sampleRate,d:b64(new Uint8Array(v.buffer))}}
