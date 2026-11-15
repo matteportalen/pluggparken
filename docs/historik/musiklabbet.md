@@ -364,3 +364,11 @@ Lärarens beslut: bas och lead blir pianorullar med syntens ljud, rullen ersätt
 - Testat: alla tio testskript; egen kontroll dator och 390 px: lägga, dra längd, flytta, ta bort, ackord, 2 takter, förslag, byta ljud, uppspelning (anrop räknade), delningslänk tur och retur, skalbyte med lås, ångra, mp3-export med ljud (RMS 0,013, inga NaN), låtgeneratorn, gammal länk utan krasch, 25 rader utan lås och 11 med. **Inte lyssnat på av mig:** ljudval, balans mot trummorna och nivåerna måste du bedöma.
 - Rättat samma dag (lärarens ok): melodipanelen var dold i låtläge (`melRita` satte `hidden=S.songOn`), så efter LÅT eller "Gör en låt åt mig" såg MELODI-fliken tom ut. Nu syns den alltid i MELODI.
 
+### Trumkiten flyttad från synten till trummaskinen (15 nov 2026)
+
+Lärarens beslut efter diskussion: trummor ska inte finnas i synten (dubblerade trummaskinen och var det enda som hindrade att syntens alla instrumentljud kan skrivas i en pianorulle).
+- `ljud.js`: modulen `slagverk` ligger inte längre i `modules` och de tre ljuden `trumkit-*` är borta ur `sounds` (28 ljud kvar). Själva ljudkoden finns kvar i `create()`, och `PPSyntLjud.trumkit` ger de tre kitens parametrar. `synt.js`: alla `slagverk`-grenar borttagna (padetiketter, arp/oktav-spärr, `sy-drums`).
+- `index.html`: `KITSP` lägger kitens ljud sist i spårens `syn`-listor efter `SPAR` (bas: bastrumma; snärt: virvel, rim; klapp; hatt: stängd hatt, skaka; öppen: öppen hatt, crash; tom: låg/mellan/hög tom, bongo; slag: claves, tamburin, triangel, bongo, skaka; effekt: zap), tre kit vardera, namn som "STUDIO VIRVEL", "ELKIT TOM HÖG", "LO-FI RIM". `spela()` känner igen `kit:K:IX` och kör `kitSpela`: en motor per kontext och kit (WeakMap), utgång `rkIn("tr")||drumBus`, så trummornas effekter, mixer och mp3-export gäller. Inga färdiga rytmer pekade på samplingar, så att listorna blev längre flyttade inget.
+- Nivå: mätt i topp mot trummaskinens egna (kitens virvel 0,46 mot 0,89, hatt 0,17 mot 0,56, bas 0,21 mot 808:ans 1,49), `KITTRIM` = 2,2. Inte lyssnat på.
+- Testat: alla tio testskript (`test-synt-arp-slagverk` provar nu att kiten inte finns bland syntens ljud och att alla 48 kitljud via `PPSyntLjud.trumkit` hörs och är ändliga), kitljud valt med ◀ ▶ i dator och mobil (namnet ryms), delningslänk tur och retur, mp3-export med kitljud (RMS 0,044, inga NaN).
+

@@ -11,7 +11,8 @@ const modules=[
 {id:'katedral',name:'Katedral',tag:'ADDITIV ORGEL',color:'#f39fbd',desc:'Sex harmoniska register bildar en orgel med rörelse i filtret.',presets:[['Valv',{attack:12,color:58,sustain:90,release:50,space:62}],['Ljus orgel',{attack:0,color:85,sustain:85,release:15,cut:88}],['Djup andning',{attack:40,color:15,sustain:90,release:65,cut:45}]]},
 {id:'korn',name:'Korn',tag:'SYNTETISKA LJUDKORN',color:'#96d47b',desc:'Små överlappande ljudkorn med spridd tonhöjd och stereoplacering.',presets:[['Stjärnstoft',{attack:25,color:65,decay:55,release:65,space:65,motion:55}],['Frusna vågor',{attack:52,color:32,release:72,motion:28,space:50}],['Pulver',{attack:0,color:90,decay:22,sustain:20,release:22,motion:70}]]}
 ];
-modules.push({id:'slagverk',name:'Slagverk',tag:'TRUMKIT · 16 SLAGLJUD',color:'#ffba71',desc:'Varje pad spelar ett eget slagljud: bastrumma, virvel, hi-hats, klapp och slagverk.',presets:[['Studio',{kit:0,cut:100,attack:0,sustain:100,release:0,echo:0,space:8,motion:0}],['Elektrisk',{kit:1,cut:100,attack:0,sustain:100,release:0,echo:0,space:5,motion:0}],['Lo-fi',{kit:2,cut:94,attack:0,sustain:100,release:0,echo:5,space:15,motion:0}]]});
+/* Trumkitens ljud: inte längre ett syntljud (nov 2026) utan valbara ljud i trummaskinens spår (PPSyntLjud.trumkit). */
+const trumkitModul={id:'slagverk',name:'Slagverk',tag:'TRUMKIT · 16 SLAGLJUD',color:'#ffba71',desc:'Varje pad spelar ett eget slagljud: bastrumma, virvel, hi-hats, klapp och slagverk.',presets:[['Studio',{kit:0,cut:100,attack:0,sustain:100,release:0,echo:0,space:8,motion:0}],['Elektrisk',{kit:1,cut:100,attack:0,sustain:100,release:0,echo:0,space:5,motion:0}],['Lo-fi',{kit:2,cut:94,attack:0,sustain:100,release:0,echo:5,space:15,motion:0}]]};
 modules.push({id:'samplepaket',name:'Samplepaket',tag:'16 LJUD PÅ PADS',color:'#7fe08a',desc:'Välj ett av Musiklabbets samplepaket. Varje pad och tangent spelar ett klipp en gång, även när du släpper.',presets:[['Samplepaket',{cut:100,attack:0,sustain:100,release:0,color:50,motion:0,echo:0,space:0}]]});
 modules.push({id:'rostklipp',name:'Röstklipp',tag:'EGNA LOOPKLIPP',color:'#86dce0',desc:'Spela in rösten i RÖSTLOOP eller hämta en loop från loopstationen. Håll nere en pad för att loopa delen, släpp för att stoppa.',presets:[['Egna loopklipp',{cut:100,attack:0,release:0,sustain:100,color:50,motion:0,echo:0,space:0}]]});
 const drumNames=['Bastrumma','Virvel','Stängd hat','Öppen hat','Klapp','Låg tom','Mellan-tom','Hög tom','Rim','Claves','Shaker','Tamburin','Crash','Triangel','Bongo','Zap'];
@@ -50,9 +51,6 @@ const soundTrim={'varm-puls':42,djupbas:35,massing:48,ufo:26,glasdroppar:36,elpi
 sounds.forEach(s=>s.params.trim=soundTrim[s.id]);
 add('studsboll','Studsboll','ARPEGGIO','prisma',null,{cut:90,color:24,attack:0,decay:22,sustain:20,release:12,motion:8,echo:20,space:15,trim:50},'Håll en tangent: tonerna studsar upp och ner i takt med tempot.');sounds[sounds.length-1].arp=4;
 add('studseko','Studseko','STEREO-EKO','prisma',null,{cut:88,color:25,attack:0,decay:32,sustain:20,release:18,ping:1,echo:65,space:0,trim:48},'Ett tempobundet eko som växlar mellan vänster och höger. Hörs tydligast i hörlurar.');
-add('trumkit-studio','Trumkit · Studio','TRUMMOR','slagverk',0,{trim:50});
-add('trumkit-elektrisk','Trumkit · Elektrisk','TRUMMOR','slagverk',1,{trim:50});
-add('trumkit-lofi','Trumkit · Lo-fi','TRUMMOR','slagverk',2,{trim:50});
 add('samplepaket','Samplepaket','LJUDKLIPP','samplepaket',0,{trim:90,vol:80});
 add('rostklipp','Röstklipp','EGNA LJUD','rostklipp',0,{trim:90,vol:80});
 function soundFor(track){return sounds.find(s=>s.id===track.soundId&&s.module===track.module)||sounds.find(s=>s.module===track.module&&s.preset===track.preset)||sounds[0]}
@@ -110,5 +108,6 @@ return voice;
 }
 return {noteOn,noteOff(midi,t=c.currentTime){voices.filter(v=>v.midi===midi).forEach(v=>v.release(t))},setParam(k,v){if(k in defaults)p[k]=clamp(v,0,k==='trim'?200:100);sync()},allOff(){voices.forEach(v=>v.kill(c.currentTime));voices.length=0},hamta:()=>({...p}),satt(v){p={...defaults,...v};sync()},stang(){this.allOff();input.disconnect();dry.disconnect();delay.disconnect();feedback.disconnect();wet.disconnect();pan.disconnect();hall.disconnect();rightDelay.disconnect();crossL.disconnect();crossR.disconnect();rightWet.disconnect();rightPan.disconnect();roomNodes.forEach(n=>n.disconnect())}};
 }
-window.PPSyntLjud={modules,sounds,soundFor,defaults,create,clamp,drumNames,drumShort,drumIndex,arpNotes};
+const trumkit=trumkitModul.presets.map(p=>({...defaults,...p[1],trim:50}));
+window.PPSyntLjud={modules,sounds,soundFor,defaults,create,clamp,drumNames,drumShort,drumIndex,arpNotes,trumkit};
 })();

@@ -585,10 +585,17 @@ const SPAR=[
  {id:"perc",n:"Slag",syn:[["CLAVES","claves"],["CONGA","conga"],["SKAKA","shaker"],["ELEK PERC","eperc"],["RIDE","ride"],["HÖG CLAVES","claves2"],["TAMBURIN","tamb"],["TRIANGEL","tria"],["WOODBLOCK","wblock"],["AGOGO","agogo"]],grp:["perc"]},
  {id:"fx",n:"Effekt",syn:[["LASER","zap"],["BLIPP","blip"],["RISER","riser"],["IMPACT","impact"],["SVEP UPP","svup"],["SVEP NER","svne"],["STAB","stab"],["ZAP 2","zap2"],["KLICK","klick2"]],grp:["stab","ljud"]}
 ];
+/* trumkitens ljud (förr i synten, nov 2026): sist i varje spårs lista, spelas med syntens ljudmotor */
+const KITN=["STUDIO","ELKIT","LO-FI"],KITL=["BAS","VIRVEL","HATT","ÖPPEN","KLAPP","TOM LÅG","TOM MELLAN","TOM HÖG","RIM","CLAVES","SKAKA","TAMBURIN","CRASH","TRIANGEL","BONGO","ZAP"],KITSP={bas:[0],snart:[1,8],klapp:[4],hatc:[2,10],hato:[3,12],tom:[5,6,7,14],perc:[9,11,13,14,10],fx:[15]};
+SPAR.forEach(sp=>[0,1,2].forEach(k=>(KITSP[sp.id]||[]).forEach(ix=>sp.syn.push([KITN[k]+" "+KITL[ix],"kit:"+k+":"+ix]))));
+const KITM=new WeakMap(),KITTRIM=2.2;   // mätt nov 2026: kitens virvel ca 0,46 i topp mot trummaskinens 0,89, inte lyssnat på
+function kitSpela(kit,ix,t,vol){const ut=rkIn("tr")||drumBus||master;let m=KITM.get(ctx);if(!m){m=[];KITM.set(ctx,m)}let e=m[kit];
+  if(!e||e.ut!==ut){if(e)try{e.a.stang()}catch(_){}e={ut,a:PPSyntLjud.create(ctx,{ut,module:"slagverk",params:{...PPSyntLjud.trumkit[kit],vol:100},bpm:S.bpm,limit:16})};m[kit]=e}
+  e.a.noteOn(48+ix,Math.max(0,Math.min(1.5,vol))*KITTRIM,t,.3)}
 function roster(i){const sp=SPAR[i],r=sp.syn.map(([n,f])=>({n,f,s:null}));if(SAMP)SAMPMETA.forEach((m,k)=>{if(sp.grp.includes(m.k))r.push({n:"♪ "+m.n.toUpperCase(),f:null,s:k})});return r}
 function spela(i,t,vel){if(!ctx)return;const tr=S.t[i];if(tr.mute&&!vel)return;const v=roster(i),r=v[tr.v%v.length]||v[0];
   const g=ctx.createGain();g.gain.value=(tr.vol/100)*(vel||1)*(TRIM[r.f]||1);g.connect(rkIn("tr")||drumBus||master);
-  if(r.s!=null&&SAMP){const b=ctx.createBufferSource();b.buffer=SAMP[r.s];b.connect(g);b.start(t)}else{SYN[r.f](t,g)}}
+  if(r.s!=null&&SAMP){const b=ctx.createBufferSource();b.buffer=SAMP[r.s];b.connect(g);b.start(t)}else if(r.f&&r.f.startsWith("kit:")){g.disconnect();const q=r.f.split(":");kitSpela(+q[1],+q[2],t,g.gain.value)}else{SYN[r.f](t,g)}}
 /* ---------- melodispår: bas och lead i låsta skalor ---------- */
 const SCALER=[["GLAD",[0,2,4,7,9,12,14,16]],["LUGN",[0,3,5,7,10,12,15,17]],["MYSTISK",[0,2,3,7,8,12,14,15]]];
 const TONER=["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
