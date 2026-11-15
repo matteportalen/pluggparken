@@ -174,6 +174,54 @@
 .sy-len button{padding:7px 10px;font-size:9px;letter-spacing:.06em}
 /* PADS (nov 2026): samma panel i padläge, spår 1–4 med röstloop eller samplepaket, ingen klaviatur */
 .sy-padlage .sy-keywell,.sy-padlage .sy-keymode,.sy-padlage .sy-play-settings,.sy-padlage .sy-demo-group,.sy-padlage #sy-advanced,.sy-padlage .sy-macros{display:none!important}
-.sy-padlage .sy-lower{grid-template-columns:minmax(0,1fr)}
-.sy-padlage .sy-play{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
 .sy-engraving b{font-weight:inherit}
+
+/* PADS, ny layout (nov 2026): spåren i huvudet, ljudval och röstloop till vänster, padsen till höger, smal stegrad */
+.sy-padyta{display:none}
+.sy-padlage .sy-padyta{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);gap:16px;align-items:start;margin-bottom:16px}
+.sy-padlage .sy-deck,.sy-padlage .sy-simple-toolbar,.sy-padlage .sy-lower,.sy-padlage .sy-head>small{display:none!important}
+.sy-padlage .sy-head{flex-wrap:wrap;gap:10px}
+.sy-padlage .sy-head .sy-tracks{display:flex;gap:6px;flex:1;min-width:0;margin:0}
+.sy-padlage .sy-head .sy-tracks button{flex:1;min-width:0;min-height:38px;padding:0 8px;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sy-padlage .sy-head #sy-mute,.sy-padlage .sy-head #sy-clear-all{min-height:38px;font-size:10px}
+.sy-padval{display:flex;align-items:center;gap:6px;margin-bottom:10px}
+.sy-padval-l{font:800 9px/1 "Inter",Arial,sans-serif;letter-spacing:.14em;color:var(--sy);min-width:40px}
+.sy-padval select{flex:1;min-width:0;min-height:38px}
+.sy-padval button{min-width:38px;min-height:38px}
+.sy-padh .sy-padlabel{margin:0 0 8px}
+.sy-padh .sy-pads{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.sy-padh .sy-tonepad{min-height:0;aspect-ratio:1.25;padding:5px}
+.sy-padlage .sy-sequence{margin-top:8px;padding-top:12px}
+.sy-padlage .sy-steps{min-width:0;gap:4px}
+.sy-padlage .sy-steps button{min-height:40px;min-width:0;padding:4px 2px}
+.sy-padlage .sy-steps b{margin-top:4px}
+.sy-padlage .sy-steps button.active{background:color-mix(in srgb,var(--sy) 38%,#2f3238);border-color:var(--sy);color:#fff}
+/* röstloopen i samma stil som resten: mörkgrå, spårets färg som accent */
+.sy-rl{margin:0;padding:12px;background:#1d1f23;border-color:#34373d;color:#c9ccd3}
+.sy-rl-head{margin-bottom:8px;gap:10px}
+.sy-rl-name strong{color:var(--sy)}.sy-rl-name span{color:#9a9ea7}
+.sy-rl-cell>span:first-child{color:#8c9099}.sy-rl-cell output{color:var(--sy)}
+.sy-rl-seg button{min-height:36px;background:#2a2d33;border-color:#3d4047;color:#c9ccd3}
+.sy-rl-seg button[aria-pressed="true"]{border-color:var(--sy);background:color-mix(in srgb,var(--sy) 26%,#2a2d33);color:#fff;box-shadow:none}
+.sy-rl-rec{min-height:36px}
+.sy-rl-wave{background:#141518;border-color:#2f3237}
+.sy-rl-wave canvas{height:88px}
+.sy-rl-wave canvas.flytt{cursor:grab}.sy-rl-wave canvas.flytt.drar{cursor:grabbing}
+.sy-rl select,.sy-rl-slide{min-height:36px;background:#2a2d33;border-color:#3d4047;color:#e3e5ea}
+.sy-rl-slide input{accent-color:var(--sy)}
+.sy-rl-tabs{display:flex;gap:2px;margin-top:10px;border-bottom:1px solid #34373d}
+.sy-rl-tabs button{padding:8px 14px;border:0;border-bottom:2px solid transparent;background:none;color:#8c9099;font:800 10px/1 "Inter",Arial,sans-serif;letter-spacing:.12em;cursor:pointer;margin-bottom:-1px}
+.sy-rl-tabs button[aria-selected="true"]{color:#fff;border-bottom-color:var(--sy)}
+.sy-rl:not([data-visa="red"]) [data-flik="red"],.sy-rl:not([data-visa="ljud"]) [data-flik="ljud"],.sy-rl:not([data-visa="spel"]) [data-flik="spel"]{display:none!important}
+.sy-rl-edit{margin-top:10px;gap:10px 14px}.sy-rl-edit .lilla{min-height:36px}
+.sy-rl .sy-rl-grid,.sy-rl .sy-rl-grid>*{display:flex}.sy-rl .sy-rl-grid{flex-wrap:wrap;gap:10px 14px;margin-top:10px}
+.sy-rl .sy-rl-grid>.sy-rl-cell{flex-direction:column;flex:1 1 auto;grid-column:auto}
+.sy-rl .sy-rl-grid>.sy-rl-ton{flex:2 1 240px}
+.sy-rl-knappar{display:flex;gap:6px;flex-wrap:wrap}.sy-rl .sy-rl-grid .lilla{min-height:36px}
+.sy-rl-note{display:block;margin-top:10px;font-size:9px;line-height:1.5;color:#7d818a}
+#sy-rl-hint{color:#9a9ea7}
+@media(max-width:980px){.sy-padlage .sy-padyta{grid-template-columns:minmax(0,1fr)}.sy-padh .sy-tonepad{aspect-ratio:1.6}}
+@media(max-width:620px){.sy-padlage .sy-head .sy-tracks{flex-basis:100%;order:5}.sy-padlage .sy-head .sy-tracks button{font-size:10px;padding:0 4px}.sy-padlage .sy-steps{grid-template-columns:repeat(8,minmax(0,1fr))}.sy-padlage .sy-seqscroll{overflow:visible}.sy-rl-tabs button{flex:1;padding:8px 4px}.sy-padh .sy-tonepad{aspect-ratio:1.15}}
+.sy-padlage .sy-rl-edit .sy-rl-cell{flex:0 0 auto}.sy-padlage .sy-rl-edit .sy-rl-seg button{padding:0 8px}
+.sy-padlage .sy-help{display:none}
+@media(max-width:620px){.sy-padlage .sy-rl-edit .sy-rl-cell{flex:1 1 100%}}
