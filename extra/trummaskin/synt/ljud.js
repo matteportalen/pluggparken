@@ -12,8 +12,8 @@ const modules=[
 {id:'korn',name:'Korn',tag:'SYNTETISKA LJUDKORN',color:'#96d47b',desc:'Små överlappande ljudkorn med spridd tonhöjd och stereoplacering.',presets:[['Stjärnstoft',{attack:25,color:65,decay:55,release:65,space:65,motion:55}],['Frusna vågor',{attack:52,color:32,release:72,motion:28,space:50}],['Pulver',{attack:0,color:90,decay:22,sustain:20,release:22,motion:70}]]}
 ];
 modules.push({id:'slagverk',name:'Slagverk',tag:'TRUMKIT · 16 SLAGLJUD',color:'#ffba71',desc:'Varje pad spelar ett eget slagljud: bastrumma, virvel, hi-hats, klapp och slagverk.',presets:[['Studio',{kit:0,cut:100,attack:0,sustain:100,release:0,echo:0,space:8,motion:0}],['Elektrisk',{kit:1,cut:100,attack:0,sustain:100,release:0,echo:0,space:5,motion:0}],['Lo-fi',{kit:2,cut:94,attack:0,sustain:100,release:0,echo:5,space:15,motion:0}]]});
-modules.push({id:'rostklipp',name:'Röstklipp',tag:'EGNA LOOPKLIPP',color:'#86dce0',desc:'Spela in rösten i RÖSTLOOP eller hämta en loop från loopstationen. Håll nere en pad för att loopa delen, släpp för att stoppa.',presets:[['Egna loopklipp',{cut:100,attack:0,release:0,sustain:100,color:50,motion:0,echo:0,space:0}]]});
 modules.push({id:'samplepaket',name:'Samplepaket',tag:'16 LJUD PÅ PADS',color:'#7fe08a',desc:'Välj ett av Musiklabbets samplepaket. Varje pad och tangent spelar ett klipp en gång, även när du släpper.',presets:[['Samplepaket',{cut:100,attack:0,sustain:100,release:0,color:50,motion:0,echo:0,space:0}]]});
+modules.push({id:'rostklipp',name:'Röstklipp',tag:'EGNA LOOPKLIPP',color:'#86dce0',desc:'Spela in rösten i RÖSTLOOP eller hämta en loop från loopstationen. Håll nere en pad för att loopa delen, släpp för att stoppa.',presets:[['Egna loopklipp',{cut:100,attack:0,release:0,sustain:100,color:50,motion:0,echo:0,space:0}]]});
 const drumNames=['Bastrumma','Virvel','Stängd hat','Öppen hat','Klapp','Låg tom','Mellan-tom','Hög tom','Rim','Claves','Shaker','Tamburin','Crash','Triangel','Bongo','Zap'];
 const drumShort=['Bas','Virvel','Hat st','Hat öp','Klapp','Tom L','Tom M','Tom H','Rim','Claves','Shaker','Tamb','Crash','Triang','Bongo','Zap'];
 const drumIndex=midi=>((Math.round(midi)-48)%16+16)%16;
@@ -53,8 +53,8 @@ add('studseko','Studseko','STEREO-EKO','prisma',null,{cut:88,color:25,attack:0,d
 add('trumkit-studio','Trumkit · Studio','TRUMMOR','slagverk',0,{trim:50});
 add('trumkit-elektrisk','Trumkit · Elektrisk','TRUMMOR','slagverk',1,{trim:50});
 add('trumkit-lofi','Trumkit · Lo-fi','TRUMMOR','slagverk',2,{trim:50});
-add('rostklipp','Röstklipp','EGNA LJUD','rostklipp',0,{trim:90,vol:80});
 add('samplepaket','Samplepaket','LJUDKLIPP','samplepaket',0,{trim:90,vol:80});
+add('rostklipp','Röstklipp','EGNA LJUD','rostklipp',0,{trim:90,vol:80});
 function soundFor(track){return sounds.find(s=>s.id===track.soundId&&s.module===track.module)||sounds.find(s=>s.module===track.module&&s.preset===track.preset)||sounds[0]}
 const buffers=new WeakMap();
 function stringBuffer(c,midi,p){let cache=buffers.get(c);if(!cache){cache=new Map();buffers.set(c,cache)}const key=[midi,p.color,p.decay].join(':');if(cache.has(key))return cache.get(key);const hz=440*2**((midi-69)/12),n=Math.max(2,Math.round(c.sampleRate/hz)),len=Math.ceil(c.sampleRate*(.3+p.decay/25)),b=c.createBuffer(1,len,c.sampleRate),out=b.getChannelData(0),ring=new Float32Array(n);let seed=931+midi*313;const rand=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296*2-1};for(let i=0;i<n;i++)ring[i]=rand()*.7;const bright=.12+p.color/140,damp=.97+p.decay/3500;for(let i=0;i<len;i++){const j=i%n,next=(j+1)%n;out[i]=ring[j];ring[j]=damp*(ring[j]*bright+ring[next]*(1-bright))}if(cache.size>96)cache.clear();cache.set(key,b);return b}

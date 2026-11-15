@@ -395,7 +395,7 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
     <button class="lilla" id="bUndo" type="button" title="Ångra (Ctrl/Cmd + Z). Gäller rytm, mönster, melodi, låt och sample-spår, inte inspelade loopar" disabled>↶ ÅNGRA</button><button class="lilla" id="bRedo" type="button" title="Gör om (Skift + Ctrl/Cmd + Z)" disabled>↷ GÖR OM</button>
     <button class="lilla" id="bAutoTom" type="button" title="Ta bort inspelade rattrörelser (ECHO, FILTER, PUMP)" hidden>🎛 TÖM RATTAR</button>
     <button class="lilla" id="bBuild" type="button" title="Bygg upp spänningen och släpp loss: filter som öppnas, virvlande virveltrumma, en tyst takt och sedan smäll">🚀 BUILD-UP</button><select class="sel" id="selBuild" aria-label="Längd på build-up"><option value="2">2 takter</option><option value="4" selected>4 takter</option><option value="8">8 takter</option></select>
-    <button class="stor mute" id="bMuteAll" type="button" aria-pressed="false" title="Tysta allt (tangent M)">🔇 MUTE ALL</button>
+    <button class="stor mute" id="bMuteAll" type="button" aria-pressed="false" title="Tysta allt (Skift + M)">🔇 TYSTA ALLT</button>
     <div class="grupp"><div class="pm"><button type="button" id="bMin" aria-label="Långsammare">−</button><button type="button" id="bPlus" aria-label="Snabbare">+</button></div><span class="l">Tempo</span></div>
     <div class="grupp"><div class="knob" id="kTempo" role="slider" tabindex="0" aria-label="Tempo"><div class="kap"></div></div><label>Tempo</label></div>
     <div class="grupp"><div class="knob" id="kSwing" role="slider" tabindex="0" aria-label="Swing"><div class="kap"></div></div><label>Swing</label></div>
@@ -409,30 +409,30 @@ select.sel{font:inherit;font-weight:800;color:var(--lcd);background:#0c0a06;bord
     <span class="fx"><div class="knob liten" id="kMlo" role="slider" tabindex="0" aria-label="Volym loopar"><div class="kap"></div></div><small>LOOPAR</small></span>
     <span class="fx"><div class="knob liten" id="kMpd" role="slider" tabindex="0" aria-label="Volym sample-pads"><div class="kap"></div></div><small>PADS</small></span>
     <span class="fx"><div class="knob liten" id="kMsy" role="slider" tabindex="0" aria-label="Volym syntmaskin"><div class="kap"></div></div><small>SYNT</small></span>
-    <span class="fx"><div class="knob liten" id="kMeb" role="slider" tabindex="0" aria-label="Bas (EQ)"><div class="kap"></div></div><small>BAS EQ</small></span>
-    <span class="fx"><div class="knob liten" id="kMeh" role="slider" tabindex="0" aria-label="Diskant (EQ)"><div class="kap"></div></div><small>DISKANT EQ</small></span></div>
+    <span class="fx"><div class="knob liten" id="kMeb" role="slider" tabindex="0" aria-label="Bastoner (hela mixen)"><div class="kap"></div></div><small>BASTONER</small></span>
+    <span class="fx"><div class="knob liten" id="kMeh" role="slider" tabindex="0" aria-label="Diskant (hela mixen)"><div class="kap"></div></div><small>DISKANT</small></span></div>
   <div class="vyrad"><div class="kit vy" role="tablist" aria-label="Vy"><button type="button" id="vyT" role="tab" class="on" aria-selected="true">▦ TRUMMASKIN</button><button type="button" id="vyMel" role="tab" aria-selected="false" aria-controls="melodi-vy">♫ MELODI &amp; ACKORD</button><button type="button" id="vyLoop" role="tab" aria-selected="false" aria-controls="loopmaskin">🎤 LOOPSTATION</button><button type="button" id="vyL" role="tab" aria-selected="false">♫ LÅT</button></div><div class="monsterg"><span class="l">MÖNSTER</span><div class="monster" id="monster"></div><button type="button" class="lilla" id="bKop" title="Kopiera det här mönstret till ett annat">⧉ KOPIERA</button></div></div>
   <button type="button" class="lilla loop-rec-status" id="bLoopStatus" hidden>🔴 LOOPINSPELNING PÅGÅR · VISA LOOPSTATIONEN</button>
   <div class="rytmrad" id="rytmrad"><span class="l">RYTM</span><select class="sel" id="selMall" aria-label="Färdig rytm"></select><button class="lilla" id="bSlump" type="button" title="Slumpa en ny rytm och melodi">🎲 SLUMPA</button><button class="lilla" id="bRensa" type="button" title="Töm det här mönstret: stegen, melodin och sample-spåret">🧹 TÖM MÖNSTRET</button></div>
-  <div class="lat" id="lat" hidden><div class="tl" id="tl"><span class="tn">MÖNSTER</span><div class="lcells" id="lcells"></div></div><div class="latgor"><select class="sel" id="selLatStil" aria-label="Stil"><option value="slump">🎲 Slumpa stil</option></select><button type="button" class="lilla gor" id="bGorLat">✨ GÖR EN LÅT ÅT MIG</button><small>Skapar en hel låt: intro, vers, refräng, brygga med build-up och refräng. Ångra med ↶ om du ville behålla din.</small></div><div class="latdel" id="latDel"></div><div class="latrad"><button class="lilla on" id="bSlinga" type="button" aria-pressed="true">🔁 SLINGA</button><button class="lilla" id="bDubbla" type="button" title="Kopiera hela låten (takter, loopar, build-up och rattrörelser) en gång till direkt efter">⧉ DUBBLA LÅTEN</button><button class="lilla" id="bTomLat" type="button">TÖM LÅT</button><span class="latinfo" id="latInfo"></span></div><div class="krok" style="margin-top:0">Välj ett mönster (A–D) uppe till höger och tryck på en ruta för att lägga det i låten. Tryck på samma ruta igen för att ta bort det. Byt till ▦ TRUMMASKIN för att ändra mönstren, och tillbaka hit för att spela låten. START spelar låten. Raderna L1–L4 bestämmer i vilka takter dina inspelade loopar hörs: tryck på rutorna. En rad utan markerade rutor spelar hela låten.</div></div>
+  <div class="lat" id="lat" hidden><div class="tl" id="tl"><span class="tn">MÖNSTER</span><div class="lcells" id="lcells"></div></div><div class="latgor"><select class="sel" id="selLatStil" aria-label="Stil"><option value="slump">🎲 Slumpa stil</option></select><button type="button" class="lilla gor" id="bGorLat">✨ GÖR EN LÅT ÅT MIG</button><small>Skapar en hel låt: intro, vers, refräng, brygga med build-up och refräng. Ångra med ↶ om du ville behålla din.</small></div><div class="latdel" id="latDel"></div><div class="latrad"><button class="lilla on" id="bSlinga" type="button" aria-pressed="true">🔁 SLINGA</button><button class="lilla" id="bDubbla" type="button" title="Kopiera hela låten (takter, loopar, build-up och rattrörelser) en gång till direkt efter">⧉ DUBBLA LÅTEN</button><button class="lilla" id="bTomLat" type="button">TÖM LÅT</button><span class="latinfo" id="latInfo"></span></div><div class="krok" style="margin-top:0">Välj ett mönster (A–H) ovanför och tryck på en ruta för att lägga det i låten. Tryck på samma ruta igen för att ta bort det. Ett mönster är trummor, synt och melodi tillsammans: ändra det i de andra flikarna och kom tillbaka hit för att spela låten. Raden 🚀 lägger en build-up i takten. START spelar låten. Raderna L1–L4 bestämmer i vilka takter dina inspelade loopar hörs: tryck på rutorna. En rad utan markerade rutor spelar hela låten.</div></div>
   <div class="spar" id="spar">
     <div class="ledrad"><div class="fyll"></div><div class="leds" id="leds"></div></div>
   </div>
   <section id="melodi-vy" role="tabpanel" aria-labelledby="vyMel" hidden><div class="melod" id="melod"></div>
   <div class="ackpan" id="ackpan"></div></section>
-  <div class="padwrap" id="padwrap"><div class="padlab"><b>TRUMPADS</b><span>Spela trummorna med A S D F G H J K. Samplepaketen finns i syntmaskinen.</span></div>
+  <div class="padwrap" id="padwrap"><div class="padlab"><b>TRUMPADS</b><span>Spela trummorna med A S D F G H J K.</span></div>
     <div class="pads" id="pads" aria-label="Trumpads: spela själv"></div>
     </div>
 <div class="loopmaskin" id="loopmaskin" hidden role="tabpanel" aria-labelledby="vyLoop">
   <div class="topp" style="margin-bottom:12px"><div class="logga"><b>LOOPSTATION <i>LS-4</i></b><small>PLUGGPARKEN · 4 SPÅR · MIKROFON</small></div><div style="flex:1"></div><button type="button" class="micb" id="bPaus" aria-pressed="false" title="Pausa och fortsätt (loopar, trummor och melodi)">⏸ PAUSA</button><button type="button" class="micb" id="bMic" aria-pressed="false">🎤 MIKROFON</button><select class="sel" id="selMic" hidden aria-label="Välj mikrofon"></select><button type="button" class="micb" id="bLjudOm" title="Tryck om ljudet har blivit tyst eller låter dåligt efter att du bytt mikrofon eller hörlurar">🔄 ÅTERSTÄLL LJUD</button><button type="button" class="micb on" id="bFix" aria-pressed="true" title="Slår på mikrofonens automatiska volym och brusfilter. Bra för röst. Stäng av för instrument.">✨ FÖRBÄTTRA RÖST</button><span class="meter" aria-hidden="true"><i id="meterI"></i></span><div class="grupp" style="flex-direction:row;gap:8px"><div class="knob liten" id="kJust" role="slider" tabindex="0" aria-label="Justera inspelningens timing"><div class="kap"></div></div><span class="l" id="justT">Timing 0 ms</span></div></div>
   <div class="lstat" id="lstatus" aria-live="polite"></div>
   <div class="lgrid" id="lgrid"></div>
-  <div class="krok" style="margin-top:14px">Använd hörlurar, annars hör mikrofonen trummorna. Tryck på den runda knappen för att spela in, och tryck igen för att lägga på mer ljud. Dra över vågen för att markera en bit, och välj sedan Radera eller Spela bara. Med Flytta drar du hela vågen så den hamnar på rätt slag. ¼ och ½ ger riktigt korta loopar. Ljudet sparas inte.</div>
+  <div class="krok" style="margin-top:14px">Använd hörlurar, annars hör mikrofonen trummorna. Tryck på den runda knappen för att spela in, och tryck igen för att lägga på mer ljud. När loopen finns kan du markera en bit av vågen och radera eller beskära den, flytta loopen så den hamnar på rätt slag, ändra tonen och lägga på effekter. ¼ och ½ ger riktigt korta loopar. Ljudet sparas inte i webbläsaren: ladda ner loopen med ⬇ eller spara hela projektet med 📁 SPARA.</div>
 </div>
   <div class="under">
     <div class="knapprad">
       <button class="lilla" id="bDela" type="button">🔗 DELA</button>
-      <button class="lilla" id="bSpara" type="button" title="Spara den här rytmen i listan nedanför (finns kvar i webbläsaren)">💾 SPARA RYTM</button>
+      <button class="lilla" id="bSpara" type="button" title="Spara i listan här nedanför (finns kvar i webbläsaren): trummor, mönster, låt, melodi, ackord och synt. Loopar och röster sparas bara i projektfilen (📁 SPARA uppe till vänster).">💾 SPARA I LISTAN</button>
     </div>
     <div class="knapprad" id="minnen" aria-label="Sparade rytmer"></div>
   </div>
@@ -560,16 +560,16 @@ function spela(i,t,vel){if(!ctx)return;const tr=S.t[i];if(tr.mute&&!vel)return;c
   const g=ctx.createGain();g.gain.value=(tr.vol/100)*(vel||1)*(TRIM[r.f]||1);g.connect(rkIn("tr")||drumBus||master);
   if(r.s!=null&&SAMP){const b=ctx.createBufferSource();b.buffer=SAMP[r.s];b.connect(g);b.start(t)}else{SYN[r.f](t,g)}}
 /* ---------- melodispår: bas och lead i låsta skalor ---------- */
-const MROSTER=[[["RUND BAS","sub"],["GNÄLLBAS","saw"],["ACID","acid"],["ELBAS","elbas"]],[["LEAD","lead"],["KEYS","keys"],["KLOCKA","bell"],["PAD","pad"],["SUPERSAW","ssaw"],["MELODICA","melodica"],["STRÄNGAR","gitarr"],["KALIMBA","kalimba"],["UKULELE","ukulele"]]];
+const MROSTER=[[["RUND BAS","sub"],["GNÄLLBAS","saw"],["ACID","acid"]],[["LEAD","lead"],["KEYS","keys"],["KLOCKA","bell"],["PAD","pad"],["SUPERSAW","ssaw"],["STRÄNGAR","gitarr"]]];
 const SCALER=[["GLAD",[0,2,4,7,9,12,14,16]],["LUGN",[0,3,5,7,10,12,15,17]],["MYSTISK",[0,2,3,7,8,12,14,15]]];
-const TONER=["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"],HALL={sub:1,saw:1,lead:1,pad:1,acid:1,ssaw:1,melodica:1,gitarr:1,kalimba:1,ukulele:1,elbas:1};
+const TONER=["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"],HALL={sub:1,saw:1,lead:1,pad:1,acid:1,ssaw:1,gitarr:1};
 function eg(g,t,a,pk,d){const e=ctx.createGain();e.gain.setValueAtTime(.0001,t);e.gain.exponentialRampToValueAtTime(pk,t+a);e.gain.exponentialRampToValueAtTime(.0001,Math.max(t+a+.02,d));e.connect(g);return e}
 function oc(type,f,t,end,dest,det){const o=ctx.createOscillator();o.type=type;o.frequency.setValueAtTime(f,t);if(det)o.detune.value=det;o.connect(dest);o.start(t);o.stop(end+.03);return o}
 function lpf(f,q,dest,t,f1,t1){const b=ctx.createBiquadFilter();b.type="lowpass";b.frequency.setValueAtTime(f,t);if(f1)b.frequency.exponentialRampToValueAtTime(f1,t1);b.Q.value=q;b.connect(dest);return b}
 const ACKP=[["Pop: I–V–vi–IV",[[0,0],[7,0],[9,1],[5,0]],0],["Klassisk pop: vi–IV–I–V",[[9,1],[5,0],[0,0],[7,0]],0],["50-tal: I–vi–IV–V",[[0,0],[9,1],[5,0],[7,0]],0],["Hoppfull: I–IV–V–IV",[[0,0],[5,0],[7,0],[5,0]],0],["Lugn: I–IV–vi–V",[[0,0],[5,0],[9,1],[7,0]],0],["Sorgsen: i–VI–III–VII",[[0,1],[8,0],[3,0],[10,0]],1],["Filmisk: i–VII–VI–VII",[[0,1],[10,0],[8,0],[10,0]],1]];
 const ACKI=[[0,4,7],[0,3,7],[0,4,7,11],[0,3,7,10],[0,4,7,10],[0,5,7]],ACKQN=["","m","maj7","m7","7","sus4"],ACKQT=["dur","moll","maj7","moll 7","dominant 7","sus4"],ACKEG=ACKP.length;
 const ackPr=a=>a.p===ACKEG?["Egna ackord",a.c||ACKP[0][1],0]:ACKP[a.p],ackNm=c=>TONER[(S.key+c[0])%12]+ACKQN[c[1]];let ackSel=-1;
-const ACKV=[["KEYS","keys"],["PAD","pad"],["SUPERSAW","ssaw"],["KLOCKA","bell"],["EL-PIANO","epiano"],["ORGEL","organ"],["STRÄNGAR","strings"],["PLUCK","gitarr"],["KALIMBA","kalimba"],["UKULELE","ukulele"],["MELODICA","melodica"]];
+const ACKV=[["KEYS","keys"],["PAD","pad"],["SUPERSAW","ssaw"],["KLOCKA","bell"],["EL-PIANO","epiano"],["ORGEL","organ"],["STRÄNGAR","strings"],["PLUCK","gitarr"]];
 const ACKK=[["HÅLLNA",[0],15,0,[0]],["POP",[0,3,6,10,12],2.4,0,[0,6,10]],["SKANK",[2,6,10,14],1.4,0,[0,10]],["HARPA",[0,2,4,6,8,10,12,14],2,2,[0,4,8,12]],["ÅTTONDELAR",[0,2,4,6,8,10,12,14],1.6,0,[0,4,8,12]],["SYNKOP",[0,3,6,8,11,14],1.8,0,[0,3,8,11]],["BACKBEAT",[4,12],2.4,0,[0,8]],["ONE DROP",[8],3,0,[0,10]],["ARP NER",[0,2,4,6,8,10,12,14],2,3,[0,8]],["ARP 16",[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],1.3,4,[0,6,8,14]]];
 const arpI=(m,j,n)=>{if(m===2)return Math.min(n-1,[0,1,2,1][j%4]);if(m===3)return Math.min(n-1,[2,1,0,1][j%4]);const q=[];for(let i=0;i<n;i++)q.push(i);for(let i=n-2;i>0;i--)q.push(i);return q[j%q.length]};
 const ackNy=()=>({p:-1,v:1,k:1,b:true,vol:70,mute:false,bm:0,h:1});
@@ -580,7 +580,7 @@ const ACKROLL=[["R","3","5","7"],["R","3","5","7"],["R","3","5","7"],["R","3","5
 const BASSTIL=["ROT","ROT+KVINT","OKTAV","GÅENDE"];
 const ackLab=(i,h)=>h===2?"TAKT "+((i>>1)+1)+(i%2?"b":"a"):"TAKT "+(i+1);
 let ackBar=0;
-const ACKT={pad:1.7,ssaw:.8,epiano:.8,organ:.42,strings:.65,gitarr:.65,kalimba:.7,ukulele:.7,melodica:.65};
+const ACKT={pad:1.7,ssaw:.8,epiano:.8,organ:.42,strings:.65,gitarr:.65};
 function ackNota(v,midi,t,dur,gm){if(!ctx||!master)return;const g=ctx.createGain();g.gain.value=Math.pow((S.ack.vol==null?70:S.ack.vol)/100,1.4)*.9*gm*(ACKT[v]||1);g.connect(rkIn("ak")||melBus||pg||master);MV[v](440*Math.pow(2,(midi-69)/12),t,Math.max(.06,dur),g)}
 function ackTick(k,t,bar){const a=S.ack;if(!a||a.p<0||a.mute||bar<0)return;const pr=ackPr(a);if(!pr)return;const ch=ackAt(a,bar,k),pc=(S.key+ch[0])%12,iv=ACKI[ch[1]],kk=ACKK[a.k%ACKK.length],sl=stegTid(k);
   if(a.b){const bm=a.bm|0,bn=c=>36+((S.key+c[0])%12);
@@ -600,16 +600,11 @@ const MV={
  bell:(f,t,d,g)=>{const dd=1.5;oc("sine",f,t,t+dd,eg(g,t,.003,.5,t+dd));oc("sine",f*2.76,t,t+dd,eg(g,t,.003,.2,t+dd*.5));oc("sine",f*5.4,t,t+dd,eg(g,t,.003,.08,t+dd*.25))},
  acid:(f,t,d,g)=>{const b=lpf(f*9,14,eg(g,t,.004,.5,t+d),t,f*1.4,t+Math.min(d,.22));oc("sawtooth",f,t,t+d,b)},
  ssaw:(f,t,d,g)=>{const b=lpf(f*5,1.2,eg(g,t,.015,.4,t+d+.08),t);[-24,-12,0,12,24].forEach(c=>oc("sawtooth",f,t,t+d+.08,b,c))},
- melodica:(f,t,d,g)=>sampInstr("melodica",f,t,d,g,()=>{const b=lpf(f*4,1.5,eg(g,t,.03,.5,t+d),t),v=ctx.createOscillator(),vg=ctx.createGain();v.frequency.value=5;vg.gain.value=f*.006;v.connect(vg);const o=oc("sawtooth",f,t,t+d,b);vg.connect(o.frequency);v.start(t);v.stop(t+d+.05);oc("square",f,t,t+d,b,3)}),
  gitarr:(f,t,d,g)=>ksNote(f,t,d,g,{drive:2.4,decay:.9972,bright:.55,cab:3600,pick:.18}),
- kalimba:(f,t,d,g)=>sampInstr("kalimba",f,t,d,g,()=>MV.bell(f,t,d,g)),
- ukulele:(f,t,d,g)=>sampInstr("ukulele",f,t,d,g,()=>MV.keys(f,t,d,g)),
- elbas:(f,t,d,g)=>sampInstr("elbas",f,t,d,g,()=>MV.sub(f,t,d,g)),
  pad:(f,t,d,g)=>{const e=eg(g,t,.12,.32,t+d+.25),b=lpf(f*3,1,e,t);oc("sawtooth",f,t,t+d+.25,b,-10);oc("sawtooth",f,t,t+d+.25,b,10);oc("triangle",f/2,t,t+d+.25,b)}
 };
 const semi=r=>SCALER[S.scale][1][r%5]+12*Math.floor(r/5);
 const nv=c=>parseInt(c,16);
-const INSTR={melodica:{b:"reggae",n:"MELODICA C",loop:1},kalimba:{b:"instr",n:"KALIMBA"},ukulele:{b:"instr",n:"UKULELE"},elbas:{b:"instr",n:"ELBAS"}},INSTRK={};
 const KSC=new Map();
 function ksBuf(f,len,o){const sr=ctx.sampleRate,key=Math.round(f*2)+"_"+Math.ceil(len*4)+"_"+o.drive+"_"+o.decay;let b=KSC.get(key);if(b&&b.sampleRate===sr)return b;
   const N=Math.max(2,Math.round(sr/f)),n=Math.ceil(sr*len),buf=new Float32Array(N),out=new Float32Array(n);let lp=0;
@@ -621,18 +616,6 @@ function ksBuf(f,len,o){const sr=ctx.sampleRate,key=Math.round(f*2)+"_"+Math.cei
   const ab=ctx.createBuffer(1,n,sr);ab.getChannelData(0).set(out);ab.f0=sr/N;if(KSC.size>80)KSC.clear();KSC.set(key,ab);return ab}
 function ksNote(f,t,d,g,o){const dur=Math.max(.15,d),s=ctx.createBufferSource(),e=ctx.createGain();s.buffer=ksBuf(f,Math.min(3,dur+.9),o);s.playbackRate.value=f/s.buffer.f0;
   e.gain.setValueAtTime(1,t);e.gain.setValueAtTime(1,t+dur);e.gain.exponentialRampToValueAtTime(.0001,t+dur+.18);s.connect(e);e.connect(g);s.start(t);s.stop(t+dur+.2)}
-function instrKlipp(k){if(INSTRK[k])return INSTRK[k];const I=INSTR[k];if(!PADS||!PADS[I.b])return null;const res=[];
-  for(const nm of [].concat(I.n)){const c=PADS[I.b].find(x=>x.n===nm);if(!c)continue;
-    const d=c.buf.getChannelData(0),sr=c.buf.sampleRate,a=Math.round(sr*.1),n=Math.min(d.length-a-1,Math.round(sr*.4)),lo=Math.round(sr/1500),hi=Math.round(sr/40),cs=[];let best=0;
-    for(let l=lo;l<=hi&&a+n+l<d.length;l++){let sx=0,e1=0,e2=0;for(let i=0;i<n;i++){const u=d[a+i],v=d[a+i+l];sx+=u*v;e1+=u*u;e2+=v*v}const r=sx/Math.sqrt(e1*e2+1e-9);cs.push([l,r]);if(r>best)best=r}
-    const hit=cs.find(x=>x[1]>best*.97);if(hit){let f0=sr/hit[0];const nn=Math.min(8192,d.length-a-1);let bm=0,bf=f0;
-      for(let fr=f0*.94;fr<=f0*1.06;fr*=1.002){let re=0,im=0;const w=2*Math.PI*fr/sr;for(let i=0;i<nn;i++){const v=d[a+i]*(.5-.5*Math.cos(2*Math.PI*i/nn));re+=v*Math.cos(w*i);im+=v*Math.sin(w*i)}const m=re*re+im*im;if(m>bm){bm=m;bf=fr}}
-      res.push({buf:c.buf,f0:bf,loop:!!I.loop})}}
-  if(!res.length)return null;INSTRK[k]=res;return res}
-function sampInstr(k,f,t,d,g,fallback){const qs=instrKlipp(k);if(!qs){fallback();return}let q=qs[0];for(const c of qs)if(Math.abs(Math.log(f/c.f0))<Math.abs(Math.log(f/q.f0)))q=c;
-  const s=ctx.createBufferSource(),e=ctx.createGain(),dd=Math.max(.12,d),L=q.buf.duration;s.buffer=q.buf;s.playbackRate.value=Math.max(.25,Math.min(4,f/q.f0));
-  if(q.loop){s.loop=true;s.loopStart=L*.3;s.loopEnd=L*.85}
-  e.gain.setValueAtTime(.0001,t);e.gain.linearRampToValueAtTime(.9,t+.01);e.gain.setValueAtTime(.9,t+dd);e.gain.exponentialRampToValueAtTime(.0001,t+dd+(q.loop?.14:.35));s.connect(e);e.connect(g);s.start(t);s.stop(t+dd+(q.loop?.16:.4))}
 const mFreq=(m,r,adj)=>{const sm=semi(r)+(adj||0);return 440*Math.pow(2,((m===0?36:60)+S.key+sm-69)/12)};
 const autoTouch={};
 const mixV=v=>Math.pow(Math.max(0,v)/80,1.3);
@@ -686,7 +669,7 @@ async function padLadda(){if(PADS||padLaddar||!ctx)return;padLaddar=true;
     m.forEach(x=>{const a=Math.round(x.a*sr),l=Math.round(x.l*sr),o=ctx.createBuffer(1,l,sr);o.getChannelData(0).set(buf.getChannelData(0).subarray(a,a+l));(P[x.b]=P[x.b]||[]).push({n:x.n,buf:o,c:x.c})});PADS=P;padGamla();padRita();pad2Behov()}
   catch(e){padLaddar=false}}
 let pad2L=0;
-function pad2Behov(force){if(pad2L||!PADS||!ctx)return;if(!force&&!(padBank>=10||S.synth?.tracks.some(t=>t.module==='samplepaket'&&['dub','reggae','skrik'].includes(t.bank))||(S.ack&&S.ack.p>=0&&INSTR[ACKV[S.ack.v%ACKV.length][1]])||INSTR[MROSTER[1][S.mv[1]%MROSTER[1].length][1]]||INSTR[MROSTER[0][S.mv[0]%MROSTER[0].length][1]]||S.smp.some(x=>x&&x.i>=160)||S.spat.some(d=>d.some(x=>x&&x.i>=160))))return;pad2L=1;
+function pad2Behov(force){if(pad2L||!PADS||!ctx)return;if(!force&&!(padBank>=10||S.synth?.tracks.some(t=>t.module==='samplepaket'&&['dub','reggae','skrik'].includes(t.bank))||S.smp.some(x=>x&&x.i>=160)||S.spat.some(d=>d.some(x=>x&&x.i>=160))))return;pad2L=1;
   Promise.all([fetch("pad2.json?v=8").then(r=>r.json()),fetch("pad2.wav?v=8").then(r=>r.arrayBuffer())]).then(([m,b])=>ctx.decodeAudioData(b).then(buf=>{const sr=buf.sampleRate;m.forEach(x=>{const a=Math.round(x.a*sr),l=Math.round(x.l*sr),o=ctx.createBuffer(1,l,sr);o.getChannelData(0).set(buf.getChannelData(0).subarray(a,a+l));(PADS[x.b]=PADS[x.b]||[]).push({n:x.n,buf:o,c:x.c})});padRita()})).catch(()=>{pad2L=0})}
 function padGamla(){if(!PADS||!SAMP)return;const by=k=>SAMPMETA.map((m,i)=>[m,i]).filter(q=>q[0].k===k).map(q=>q[1]),mk=ids=>ids.slice(0,16).map(i=>({n:SAMPMETA[i].n.toUpperCase(),buf:SAMP[i],c:"Library of Congress, Citizen DJ: "+SAMPMETA[i].c}));
   PADS.g1=mk(by("perc").concat(by("ljud")));PADS.g2=mk(by("stab").concat(by("snart")));PADS.g3=mk(by("bas").concat(by("tick")))}
@@ -900,7 +883,7 @@ function ackBygg(){const h=$("#ackpan");
   h.innerHTML=`<div class="ackhead"><b>ACKORD</b><div class="grupp"><select class="sel" id="selAck" aria-label="Ackordgång"><option value="-1">Av</option>${ACKP.map((q,i)=>`<option value="${i}">${q[0]}</option>`).join("")}<option value="${ACKEG}">✏️ Egna ackord</option></select><span class="l">Ackordgång</span></div><div class="grupp"><select class="sel" id="selAckK" aria-label="Komp">${ACKK.map((q,i)=>`<option value="${i}">${q[0]}</option>`).join("")}</select><span class="l">Komp</span></div><div class="grupp"><select class="sel" id="selAckV" aria-label="Klang">${ACKV.map((q,i)=>`<option value="${i}">${q[0]}</option>`).join("")}</select><span class="l">Klang</span></div><div class="grupp"><div class="kit"><button type="button" id="bAckB">BAS</button></div><span class="l">Bas</span></div><div class="grupp"><div style="display:flex;align-items:center;gap:10px"><div class="knob liten" id="kAck" role="slider" tabindex="0" aria-label="Volym ackord"><div class="kap"></div></div><div class="kit"><button type="button" id="bAckM" title="Tysta ackorden" aria-label="Tysta ackorden">M</button></div></div><span class="l">Volym</span></div><small>Välj en ackordgång, så spelar en bas och ett komp ett ackord per takt. Melodin ligger kvar. GLAD passar durgångarna och LUGN mollgångarna.</small></div><div class="ackrow2"><div class="grupp"><div class="ackn"><button type="button" id="bAckMin" aria-label="Ett ackord färre">−</button><b id="ackN">4</b><button type="button" id="bAckPlus" aria-label="Ett ackord till">＋</button></div><span class="l">Antal ackord</span></div><div class="grupp"><div class="kit" id="kitAckH" role="group" aria-label="Ackord per takt"><button type="button" data-h="1">1</button><button type="button" data-h="2">2</button></div><span class="l">Ackord per takt</span></div><div class="grupp"><div class="acktxt"><input id="ackTxt" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="C G Am F" aria-label="Skriv ackord, till exempel C G Am F"><button type="button" class="lilla" id="bAckTxt">LÄGG IN</button></div><span class="l">Skriv ackord</span></div><div class="grupp"><div class="kit" id="kitBm" role="group" aria-label="Basstil">${BASSTIL.map((n,i)=>`<button type="button" data-bm="${i}">${n}</button>`).join("")}</div><span class="l">Basstil</span></div></div><div class="ackrad" id="ackrad"></div><div class="ackedit" id="ackedit" hidden><b id="ackedT">TAKT 1</b><select class="sel" id="selAckRot" aria-label="Grundton">${TONER.map((n,i)=>`<option value="${i}">${n}</option>`).join("")}</select><select class="sel" id="selAckKv" aria-label="Sort">${ACKQT.map((n,i)=>`<option value="${i}">${n}</option>`).join("")}</select><button type="button" class="lilla" id="bAckKlar">KLAR</button></div>`;
   kn.ack=knob($("#kAck"),{min:0,max:100,reset:70,val:()=>S.ack.vol,set:v=>{S.ack.vol=v}})}
 function ackRita(){const h=$("#ackpan");if(!h||!h.firstChild)return;const a=S.ack;$("#selAck").value=a.p;
-  $("#selAckK").value=a.k;$("#selAckV").value=a.v;if(a.p>=0&&INSTR[ACKV[a.v%ACKV.length][1]])pad2Behov(true);$("#bAckB").classList.toggle("on",!!a.b);$("#bAckM").classList.toggle("on",!!a.mute);
+  $("#selAckK").value=a.k;$("#selAckV").value=a.v;$("#bAckB").classList.toggle("on",!!a.b);$("#bAckM").classList.toggle("on",!!a.mute);
   const r=$("#ackrad"),pr=a.p>=0?ackPr(a):null;r.style.opacity=pr?1:.6;
   const hh=ackH(a);r.innerHTML=pr?pr[1].map((c,i)=>`<button type="button" data-i="${i}" class="${i===ackSel?"val":""}" title="Tryck för att byta ackord"><small>${ackLab(i,hh)}</small>${ackNm(c)}</button>`).join(""):[0,1,2,3].map(i=>`<button type="button" data-i="${i}" title="Tryck för att välja ackord"><small>TAKT ${i+1}</small>–</button>`).join("");
   const ed=$("#ackedit");ed.hidden=ackSel<0;if(ackSel>=0){const c=pr?pr[1][ackSel]:[0,0];$("#ackedT").textContent="TAKT "+(ackSel+1);$("#selAckRot").value=(S.key+c[0])%12;$("#selAckKv").value=c[1]}
@@ -1505,7 +1488,7 @@ const langLage=[false,false];
 $("#melod").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
   if(b.dataset.k!=null)return;
   if(b.dataset.s!=null){S.scale=+b.dataset.s;tuneOm();startaLjud();nota(1,2,ctx.currentTime+.01,.3);visa();return}
-  if(b.dataset.mb){const m=+b.closest(".mel").dataset.mi,n=MROSTER[m].length;S.mv[m]=(S.mv[m]+ +b.dataset.mb+n)%n;if(INSTR[MROSTER[m][S.mv[m]%MROSTER[m].length][1]])pad2Behov(true);startaLjud();nota(m,m?2:0,ctx.currentTime+.01,.4);visa();return}
+  if(b.dataset.mb){const m=+b.closest(".mel").dataset.mi,n=MROSTER[m].length;S.mv[m]=(S.mv[m]+ +b.dataset.mb+n)%n;startaLjud();nota(m,m?2:0,ctx.currentTime+.01,.4);visa();return}
   if(b.dataset.lang!=null){const m=+b.closest(".mel").dataset.mi;langLage[m]=!langLage[m];b.classList.toggle("on",langLage[m]);b.setAttribute("aria-pressed",langLage[m]);toast(langLage[m]?"Längd: tryck på en ruta till höger om en ton i samma rad":"Längd av");return}
   if(b.dataset.ack!=null){const m=+b.closest(".mel").dataset.mi;S.chord[m]=!S.chord[m];startaLjud();nota(m,m?2:0,ctx.currentTime+.01,.5,.55);if(S.chord[m]){nota(m,m?4:2,ctx.currentTime+.01,.5,.55);nota(m,m?6:4,ctx.currentTime+.01,.5,.55)}visa();return}
   if(b.dataset.mm!=null){const m=+b.closest(".mel").dataset.mi;S.mmute[m]=!S.mmute[m];visa()}});
@@ -1662,7 +1645,7 @@ $("#bAutoTom").onclick=()=>{S.auto=autoNy();S.autoS=autoSNy();$("#bAutoTom").hid
 $("#bRec").onclick=()=>sattRec(!recLive);
 $("#bSudd").onclick=()=>{suddLage=!suddLage;$("#bSudd").setAttribute("aria-pressed",suddLage)};
 knob($("#kPadtid"),{min:-100,max:100,reset:0,val:()=>PADOFF,set:v=>{PADOFF=v;$("#padT").textContent="Pad-tid "+(v>0?"+":"")+v+" ms"}});
-document.addEventListener("keydown",e=>{if(PPSyntKlipp.isOpen()||RKOPEN)return;if(e.target.closest&&e.target.closest("input,select,textarea,[contenteditable=\"true\"]"))return;if((e.metaKey||e.ctrlKey)&&!e.altKey&&(e.key==="z"||e.key==="Z")){e.preventDefault();e.shiftKey?gorOm():angra();return}if(e.metaKey||e.ctrlKey||e.altKey)return;
+document.addEventListener("keydown",e=>{if(e.target.closest&&e.target.closest("input,select,textarea,[contenteditable=\"true\"]"))return;if(e.shiftKey&&!e.metaKey&&!e.ctrlKey&&!e.altKey&&(e.key==="m"||e.key==="M")){e.preventDefault();if(!e.repeat)mutaAlla(!muteAll);return}if(PPSyntKlipp.isOpen()||RKOPEN)return;if((e.metaKey||e.ctrlKey)&&!e.altKey&&(e.key==="z"||e.key==="Z")){e.preventDefault();e.shiftKey?gorOm():angra();return}if(e.metaKey||e.ctrlKey||e.altKey)return;
   if(e.key===" "&&!e.target.closest("button")){e.preventDefault();spelar?stopp():start();return}
   if((e.key==="r"||e.key==="R")&&!e.repeat){sattRec(!recLive);return}
   if((e.key==="m"||e.key==="M")&&!e.repeat){mutaAlla(!muteAll);return}
