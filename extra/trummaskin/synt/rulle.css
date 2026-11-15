@@ -1,0 +1,41 @@
+/* Pianorullen (BAS och LEAD). Klasser börjar med .rl- */
+.rl-spar{--sk:#4cc3ff;min-width:0;margin-top:12px;padding:10px;border-radius:10px;background:#202226;box-shadow:inset 0 2px 8px rgba(0,0,0,.45)}
+.rl-spar[data-rlspar="1"]{--sk:#c58bff}
+.rl-ctrl{display:flex;align-items:center;gap:10px 16px;flex-wrap:wrap;margin-bottom:10px}
+.rl-nam{font-weight:800;letter-spacing:.14em;color:var(--sk);min-width:52px;text-shadow:0 0 8px var(--sk)}
+.rl-ljud{display:flex;align-items:center;gap:4px}
+.rl-ljud .sel{min-width:150px;max-width:190px}
+.rl-pil{width:30px;height:34px;border-radius:8px;font-weight:800;color:var(--lcd,#ffb000);background:#0c0a06;box-shadow:inset 0 2px 4px #000}
+.rl-mak{display:flex;align-items:flex-end;gap:12px}
+.rl-fx{display:flex;flex-direction:column;align-items:center;gap:4px}
+.rl-fx small{font-size:.56rem;letter-spacing:.1em;color:var(--dim);font-weight:800}
+.rl-knappar{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rl-knappar .sm{width:34px;height:32px;border-radius:8px;font-weight:800;background:linear-gradient(180deg,#555862,#3a3c43);box-shadow:0 3px 0 rgba(0,0,0,.55);color:var(--ink)}
+.rl-knappar .sm.on{background:linear-gradient(180deg,#ff8a86,#e5484d)}
+.rl-len button{padding:7px 11px;min-width:34px}
+.rl-lenl{font-size:.58rem;letter-spacing:.14em;color:var(--dim);font-weight:800;margin-left:-4px}
+.rl-knappar .lilla{height:34px;font-size:.74rem}
+.rl-wrap{overflow-x:auto;overflow-y:hidden;border-radius:8px;background:#18191d;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+.rl-grid{position:relative;min-width:100%;user-select:none;-webkit-user-select:none;touch-action:pan-x pan-y;
+  background-image:linear-gradient(90deg,rgba(255,255,255,.16) 0 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.07) 0 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 0 1px,transparent 1px);
+  background-size:calc(var(--cw) * 16) 100%,calc(var(--cw) * 4) 100%,var(--cw) 100%;background-position:var(--lw) 0,var(--lw) 0,var(--lw) 0;background-repeat:repeat-x}
+.rl-rad{position:absolute;left:0;right:0;height:var(--rh);border-bottom:1px solid rgba(255,255,255,.04)}
+.rl-rad.rot{background:rgba(255,255,255,.035)}
+.rl-rad.ct{background:rgba(255,201,77,.09)}
+.rl-rad span{position:sticky;left:0;z-index:2;display:flex;align-items:center;justify-content:flex-end;gap:1px;width:var(--lw);height:100%;padding-right:6px;box-sizing:border-box;font-size:.6rem;font-weight:800;color:var(--dim);background:#18191d;border-right:1px solid #2b2d33}
+.rl-rad.rot span{color:#cfd2da}
+.rl-rad.ct span{color:var(--lcd,#ffb000)}
+.rl-rad span i{font-style:normal;font-size:.5rem;vertical-align:super;opacity:.85}
+.rl-noter{position:absolute;inset:0;pointer-events:none}
+.rl-not{position:absolute;pointer-events:auto;touch-action:none;cursor:grab;border-radius:5px;background:var(--sk);box-shadow:0 0 10px color-mix(in srgb,var(--sk) 55%,transparent),inset 0 1px 0 rgba(255,255,255,.4)}
+.rl-not:active{cursor:grabbing}
+.rl-h{position:absolute;top:0;right:0;bottom:0;width:10px;cursor:ew-resize;border-radius:0 5px 5px 0;background:rgba(0,0,0,.22)}
+.rl-h::after{content:"";position:absolute;top:30%;bottom:30%;left:4px;width:2px;border-radius:1px;background:rgba(0,0,0,.45)}
+.rl-ph{position:absolute;top:0;bottom:0;display:none;pointer-events:none;background:rgba(255,255,255,.1);box-shadow:inset 1px 0 0 rgba(255,255,255,.45)}
+@media(pointer:coarse){.rl-h{width:min(14px,40%)}}
+@media(max-width:700px){
+  .rl-ctrl{gap:8px 12px}
+  .rl-ljud{flex:1;min-width:0}.rl-ljud .sel{flex:1;min-width:0;max-width:none}
+  .rl-mak{gap:10px;width:100%;justify-content:space-between}
+  .rl-knappar{gap:6px;flex-wrap:nowrap;width:100%}.rl-knappar .lilla{padding:0 9px;font-size:.68rem}.rl-len button{padding:7px 9px;min-width:30px}.rl-lenl{display:none}
+}

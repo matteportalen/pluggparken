@@ -10,6 +10,7 @@ _Det som gäller nu för `extra/trummaskin/` (visas som **Musiklabbet**; mappen 
 | `synt/ljud.js` | Syntens ljudmotorer och ljudbank (`PPSyntLjud`). Kan skapas i både `AudioContext` och `OfflineAudioContext`. |
 | `synt/synt.js`, `synt/synt.css` | Syntmaskin SM-4: vy, klaviatur, pads, stegrad. Stilar börjar med `.sy-`. |
 | `synt/klipp.js` | Röstklipp: en loop delas i 4, 8 eller 16 delar och läggs på syntens pads (`PPSyntKlipp`). |
+| `synt/rulle.js`, `synt/rulle.css` | Pianorullen för BAS och LEAD (`PPRulle`): datamodell (`fresh`, `clean`, `franStrang`, `bytSkala`), uppspelning med syntens ljud och redigeraren (`spar`). Stilar börjar med `.rl-`. |
 | `synt/rostloop.js` | Röstloopens ljudbehandling (`PPRostloop`): tonhöjd med samma längd (`pitch`, används även av loopstationens TONHÖJD och RÖST), HACK, FRYS, GRIND, baklänges. Panelen ligger i `synt.js`. |
 | `pad.wav`, `pad2.wav`, `samples.wav` med `.json` | Samplingarna. Källor och licens i `LICENS-pad.txt` (alla CC0 eller fria). Hämtas med `?v=N`: höj siffran när en fil byts. |
 | `lib/lamejs/` | Mp3-kodaren (lokal). |
@@ -47,7 +48,7 @@ Ljuden är bara mätta (nivå, tonhöjd, inga NaN), aldrig avlyssnade. Skriv all
 ## Beslut per del
 
 - **Trummaskin:** 16 steg, åtta spår, åtta mönster A–H. Koklockan är borta (plats 0 på Slag är claves). Boom bap ska använda standardljuden. SYNT/GAMLA-växeln är borta.
-- **Melodi:** skalorna GLAD, LUGN och MYSTISK kan inte låta fel. 12 rader, två toner samtidigt som mest. Ett tryck på en ton tar alltid bort hela tonen; längd ändras med drag på dator och ↔ på pekskärm.
+- **Melodi (pianorulle, nov 2026):** BAS och LEAD är pianorullar som spelar med syntens ljud (◀ ▶ eller lista, KLANG, FILTER, RÖRELSE, RYMD, volym). Noter `[start, längd, ton]` i `S.rl.pat[mönster][spår]`, tonen i halvtoner över grundtonen (bas C2, lead C4) plus tonarten. 1, 2 eller 4 takter per spår, flera toner samtidigt (ackord), dra för längd, dra en ton för att flytta, tryck på en ton tar bort den. **Bara skalan** (förval PÅ) visar bara GLAD/LUGN/MYSTISK-skalans toner; byter man skala med låset på följer tonerna med. Snappa till ackord, ackordtoner som lyser och 💡 FÖRESLÅ finns kvar. ACKORD-knappen per spår och ↔ är borttagna (rullen gör ackord och längd själv). Melodin sparas i delningslänken som JSON (`X.rl`); gamla melodilänkar läses som tomma (lärarens besked).
 - **Ackord:** färdiga gångar plus egna ackord, upp till åtta och två per takt. Ackorden är relativa tonarten.
 - **Instrument:** gitarr går inte att göra bra och är borttagen. Samplade instrument väljer det klipp som ligger närmast tonen. **De samplade instrumenten (melodica, kalimba, ukulele, elbas) är borttagna** (15 nov 2026, lärarens val inför pianorullen).
 - **Loopstation:** fyra loopar, allt är icke-destruktivt (rådata ändras aldrig, ↶ ångrar). Knapparna ligger i grupperna REDIGERA, TON, EFFEKTER, SLICER. RÖST är färdiga rösteffekter (formant valdes bort: lät som "burk"). Raden med Spela-zoner är borttagen.
@@ -66,4 +67,3 @@ Ljuden är bara mätta (nivå, tonhöjd, inga NaN), aldrig avlyssnade. Skriv all
 - Effekter på mikrofoningången avråddes (rundgång utan hörlurar).
 - Synten: längre toner och ackord per steg, fler röster eller lättläge, MIDI, fler motorer. Egna moduler som fil bara bakom en "Utvecklare"-flik.
 - Namn på låtens delar när man själv ändrar takterna.
-- **Pianorulle (beslutad 15 nov 2026, inte byggd):** Bas och Lead blir pianorullar som spelar med syntens ljud (LJUD-ratten och de fyra reglagen), flera toner samtidigt, fri längd, dra och flytta, 1/2/4 takter. GLAD/LUGN/MYSTISK finns kvar som förvalt skal-lås. Rullen **ersätter** 12-raders-rutnätet. ACKORD ligger kvar som egen del. Egen fil `synt/rulle.js`; senare även för syntens spår A–D.
