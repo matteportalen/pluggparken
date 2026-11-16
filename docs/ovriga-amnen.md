@@ -43,6 +43,7 @@ Kartorna är gjorda ur Natural Earth (public domain). Europakartan, Världskarta
 ## Tangentbordet
 
 - Kräver ett riktigt tangentbord. En färg per finger, nästa tangent blinkar.
+- **🌠 Ordregnet** (16 nov 2026, lärarens önskan efter ett klipp med ett skriv-och-skjut-spel; egen svensk version med eget namn, tema och kod): femte läget. Ord faller som stjärnfall mot en stad, man börjar skriva ett ord (det lyser guld, rätt bokstäver blir gröna) och trollstaven 🪄 skjuter ner det när det är klart; når ett ord den röda linjen tappar man ett hjärta (tre hjärtan). Nivån stiger var åttonde ord (fortare, tätare). Fem ordpaket i stigande svårighet: Hemraden (åk 1), Korta ord (åk 1–2), Vanliga ord (åk 2–3), Långa ord (åk 3–4), Svåra ord (åk 5–6). Stjärnor per paket (`regn1`–`regn5`): 10, 20, 35 nerskjutna ord; rekord i poäng. Backsteg släpper valt ord. Paus, och paus när fliken göms.
 - Texten som ska skrivas sitter fast överst på pekskärm.
 - Inte åtgärdat: en elev fastnade på iPad efter några bokstäver (troligen engelskt tangentbord eller fält som töms).
 

@@ -119,7 +119,7 @@ const IDX=[
  ['extra/hornillusion/','Hörnillusioner','Skriv ut tre blad, tejpa dem i ett hörn och se en kub sväva ut ur väggen. Bara rätt från en plats','👁️','optisk illusion hörn kub 3d perspektiv anamorfos skriva ut tejpa vägg tak golv pdf','Extra · Optiska illusioner'],
  ['sudoku/','Sudoku','Fyll rutnätet så att varje siffra eller djur finns en gång i varje rad, kolumn och ruta','🔢','sudoku siffror djur rutnät logik pussel 4x4 6x6 9x9','Logik och strategi'],
  ['trafikstockning/','Trafikstockning','Skjut bilarna ur vägen och släpp ut den röda bilen: 40 pussel','🚗','rush hour bilar parkering skjutpussel logik trafik väg','Logik och strategi'],
- ['ovriga/tangentbord/','Tangentbordet','Lär dig skriva med rätt fingrar','⌨️','skriva tangenter tiofingersystemet alfabetet','Digitalt'],
+ ['ovriga/tangentbord/','Tangentbordet','Lär dig skriva med rätt fingrar','⌨️','skriva tangenter tiofingersystemet alfabetet ordregnet spel skjuta ord','Digitalt'],
  ['ovriga/kodverkstan/','Kodverkstan','Bygg program med block och styr ditt djur','🧩','kodning kod programmera programmering scratch block algoritm spel klon kloner kostym exempel remixa film bilder egen bild','Digitalt'],
  ['specialare/','Specialare','Minilektioner om coola saker','🎁','lektioner filmer fakta mysterium ledtrådar','Utforska']
 ];

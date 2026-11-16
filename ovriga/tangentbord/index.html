@@ -123,6 +123,29 @@ h2{margin:6px 0 10px}
 #mjuk{position:absolute;left:0;top:0;width:1px;height:1px;opacity:0;border:0;padding:0;font-size:16px}
 @media (pointer:coarse){#gYta{position:sticky;top:6px;z-index:6}}
 #fx{position:fixed;inset:0;pointer-events:none;z-index:50}
+/* ---------- Ordregnet (nov 2026): ord faller som stjärnfall, skriv dem innan de når marken ---------- */
+.regnhud{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.regnhud .sp{flex:1}
+#regnYta{position:relative;height:clamp(360px,62vh,640px);border-radius:22px;overflow:hidden;touch-action:manipulation;user-select:none;-webkit-user-select:none;
+  background:radial-gradient(ellipse at 20% 10%,#2c3d7a 0,transparent 55%),radial-gradient(ellipse at 85% 0,#3b2a6e 0,transparent 50%),linear-gradient(180deg,#0f1838 0,#1b2a5c 70%,#2b2f63 100%);box-shadow:0 5px 0 var(--line)}
+#regnYta::before{content:"";position:absolute;inset:0;background-image:radial-gradient(1.5px 1.5px at 12% 18%,#fff8 50%,transparent 51%),radial-gradient(1.5px 1.5px at 36% 9%,#fff6 50%,transparent 51%),radial-gradient(1px 1px at 58% 22%,#fff9 50%,transparent 51%),radial-gradient(1.5px 1.5px at 77% 14%,#fff7 50%,transparent 51%),radial-gradient(1px 1px at 90% 31%,#fff8 50%,transparent 51%),radial-gradient(1px 1px at 24% 38%,#fff6 50%,transparent 51%),radial-gradient(1.5px 1.5px at 66% 44%,#fff5 50%,transparent 51%);pointer-events:none}
+.regnstad{position:absolute;left:0;right:0;bottom:0;height:46px;background:linear-gradient(180deg,#141a3a,#0c1029);clip-path:polygon(0 60%,6% 60%,6% 25%,12% 25%,12% 50%,18% 50%,18% 10%,24% 10%,24% 45%,31% 45%,31% 30%,37% 30%,37% 55%,44% 55%,44% 20%,50% 20%,50% 40%,56% 40%,56% 5%,62% 5%,62% 48%,69% 48%,69% 28%,75% 28%,75% 52%,82% 52%,82% 18%,88% 18%,88% 42%,94% 42%,94% 30%,100% 30%,100% 100%,0 100%)}
+.regnlinje{position:absolute;left:0;right:0;bottom:52px;border-top:2px dashed #ff6b7a;opacity:.75}
+.regnstav{position:absolute;left:50%;bottom:6px;transform:translateX(-50%);font-size:2rem;filter:drop-shadow(0 0 8px #ffd56a)}
+.rord{position:absolute;left:0;top:0;padding:5px 11px;border-radius:12px;font-weight:800;font-size:1.15rem;letter-spacing:.03em;color:#1D2B53;background:#EAF3FF;box-shadow:0 0 0 2px #ffffff33,0 0 14px #9cc3ff88;white-space:nowrap;will-change:transform}
+.rord i{font-style:normal}.rord i.ok{color:#1E9E5E}
+.rord.mal{background:#FFF4C2;box-shadow:0 0 0 3px var(--gold),0 0 22px #ffd56a}
+.rord.nara{box-shadow:0 0 0 2px #ff9aa5,0 0 16px #ff6b7a}
+.rord.skak{animation:rskak .25s}
+@keyframes rskak{25%{margin-left:-5px}75%{margin-left:5px}}
+#regnFx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.regnskylt{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);padding:14px 22px;border-radius:20px;background:#ffffffee;color:var(--ink);font-weight:800;font-size:1.4rem;text-align:center;box-shadow:0 6px 0 #0004;pointer-events:none;max-width:86%}
+.regnskylt small{display:block;font-size:.9rem;color:var(--muted);margin-top:4px}
+.regnskylt[hidden]{display:none}
+.regnskriv{margin:10px auto 0;max-width:420px;text-align:center;padding:8px 14px;border-radius:14px;background:var(--card);box-shadow:0 3px 0 var(--line);font-weight:800;font-size:1.2rem;min-height:1.6em;letter-spacing:.04em}
+.paket .ic{font-size:1.3rem}
+@media (prefers-reduced-motion:reduce){.rord.skak{animation:none}}
+@media (max-width:620px){.regnhud{gap:6px}.regnhud .pill{padding:4px 9px;font-size:.85rem}#regnPaketNamn,.regnhud .sp{display:none}#regnYta{height:clamp(320px,56vh,560px)}.rord{font-size:1rem;padding:4px 9px}}
 @media (prefers-reduced-motion:reduce){.k.mal{animation:none;box-shadow:0 0 0 3px #fff,0 0 0 6px var(--accent)}.stor.fel{animation:none}}
 </style>
 </head>
@@ -167,6 +190,29 @@ h2{margin:6px 0 10px}
   <p class="fingertext" id="fingertext"></p>
   <div class="hander" id="hander" aria-hidden="true"></div>
   <div class="dold-kb"><button class="pill" id="kbVisa">🙈 Dölj tangentbordet på skärmen</button></div>
+</section>
+
+<section id="regnval" class="screen" hidden>
+  <div class="gtop"><button class="pill" data-home>← Tillbaka</button></div>
+  <h2>🌠 Ordregnet</h2>
+  <p class="lead">Ord faller som stjärnfall mot staden. Skriv ett ord så skjuter trollstaven ner det. Når ett ord den röda linjen tappar du ett hjärta. Välj ett ordpaket:</p>
+  <div class="lagen" id="regnpaket"></div>
+</section>
+
+<section id="regn" class="screen" hidden>
+  <div class="regnhud">
+    <button class="pill" id="regnQuit">← Tillbaka</button>
+    <span class="pill" id="regnPaketNamn"></span>
+    <span class="sp"></span>
+    <span class="pill" id="regnNiva">Nivå 1</span>
+    <span class="pill" id="regnPoang">⭐ 0</span>
+    <span class="pill" id="regnWpm">0 ord/min</span>
+    <span class="pill" id="regnLiv">❤️❤️❤️</span>
+    <button class="pill" id="regnPaus" aria-pressed="false">⏸ Paus</button>
+  </div>
+  <div id="regnYta" aria-label="Ordregnet: ord faller mot staden"><div class="regnstad"></div><div class="regnlinje"></div><div class="regnstav" aria-hidden="true">🪄</div><canvas id="regnFx"></canvas><div class="regnskylt" id="regnSkylt" hidden></div></div>
+  <div class="regnskriv" id="regnSkriv" aria-live="polite"></div>
+  <p class="hjalp" style="text-align:center">Börja skriva ett ord. Backsteg släpper ordet du har valt.</p>
 </section>
 
 <section id="result" class="screen" hidden>
@@ -219,11 +265,11 @@ function blinka(k,cls){const el=KEYS[k];if(!el)return;el.classList.add("ner",cls
 
 /* ---------- Tangenttryck ---------- */
 let H=null;// hanteraren för det spel som pågår: H.tecken(ch)
-const iGang=()=>!$("game").hidden&&H;
+const iGang=()=>(!$("game").hidden||!$("regn").hidden)&&H;
 window.addEventListener("keydown",e=>{
   // tangenten lyser även när den inte räknas (skift, backsteg …)
   const kod={ShiftLeft:"ShiftLeft",ShiftRight:"ShiftRight",Backspace:"Backspace",Enter:"Enter",Tab:"Tab",CapsLock:"CapsLock"}[e.code];
-  if(kod&&iGang()){blinka(kod);if(kod==="Tab"||kod==="Backspace")e.preventDefault();return;}
+  if(kod&&iGang()){blinka(kod);if(H.kod)H.kod(kod);if(kod==="Tab"||kod==="Backspace")e.preventDefault();return;}
   if(e.ctrlKey||e.metaKey||e.altKey)return;
   if(e.key&&e.key.length===1&&iGang()){e.preventDefault();H.tecken(e.key);}},true);
 // skärmens tangentbord (iPad utan tangentbord, mobil): tecknen kommer som text
@@ -246,17 +292,19 @@ const LAGEN=[
   {id:"lek",ic:"🏠",c:"#FFE39A",namn:"Lektioner",txt:"Lär dig tangentbordet steg för steg, från hemraden till hela meningar"},
   {id:"alfa",ic:"⏱️",c:"#C6F0CF",namn:"Alfabetet på tid",txt:"Skriv a till ö så fort du kan. Slå ditt rekord!"},
   {id:"hitta",ic:"🎯",c:"#BFDBFF",namn:"Hitta tangenten",txt:"Tryck på bokstaven som dyker upp, utan att titta ner"},
-  {id:"ord",ic:"✍️",c:"#D9C8FF",namn:"Skriv orden",txt:"Hur många ord hinner du skriva på en minut?"}];
+  {id:"ord",ic:"✍️",c:"#D9C8FF",namn:"Skriv orden",txt:"Hur många ord hinner du skriva på en minut?"},
+  {id:"regn",ic:"🌠",c:"#FFD0B8",namn:"Ordregnet",txt:"Ord faller från himlen. Skriv dem innan de når marken!"}];
 function openHome(){stopp();H=null;$("pekTips").hidden=!PEK||mjukt;
   const lk=LEKTIONER.filter(l=>(data.stars["l"+l.n]||0)>0).length;
   const info={lek:`<span class="rek">${lk} av ${LEKTIONER.length} lektioner klara</span>`,
     alfa:`<span class="st">${starHtml(data.stars.alfa||0)}</span>${data.rekord.alfa?` <span class="rek">Rekord ${sek(data.rekord.alfa)}</span>`:""}`,
     hitta:`<span class="st">${starHtml(Math.max(data.stars["hitta-hem"]||0,data.stars["hitta-alla"]||0))}</span>`,
-    ord:`<span class="st">${starHtml(data.stars.ord||0)}</span>${data.rekord.ord?` <span class="rek">Rekord ${data.rekord.ord} ord/min</span>`:""}`};
+    ord:`<span class="st">${starHtml(data.stars.ord||0)}</span>${data.rekord.ord?` <span class="rek">Rekord ${data.rekord.ord} ord/min</span>`:""}`,
+    regn:`<span class="rek">${REGNPAKET.filter(p=>(data.stars["regn"+p.n]||0)>0).length} av ${REGNPAKET.length} ordpaket med stjärnor</span>`};
   $("lagen").innerHTML=LAGEN.map(l=>`<button class="lage" data-l="${l.id}"><span class="ic" style="background:${l.c}">${l.ic}</span><span class="txt"><b>${l.namn}</b><small>${l.txt}</small>${info[l.id]}</span></button>`).join("");
   show("home");}
 $("lagen").onclick=e=>{const b=e.target.closest("[data-l]");if(!b)return;const l=b.dataset.l;
-  if(l==="lek")visaLektioner();else if(l==="alfa")startAlfa();else if(l==="hitta")visaHitta();else startOrd();};
+  if(l==="lek")visaLektioner();else if(l==="alfa")startAlfa();else if(l==="hitta")visaHitta();else if(l==="regn")visaRegnval();else startOrd();};
 document.querySelectorAll("[data-home]").forEach(b=>b.onclick=openHome);
 
 /* ---------- Lektionerna ---------- */
@@ -389,6 +437,88 @@ function klarOrd(){visaMal(null);const n=T.klaraOrd,old=data.rekord.ord||0,nytt=
   resultat({id:"ord",st,rubrik:`${n} ord på en minut!`,siffror:[[n,"ord/min"],[T.fel,"fel"],[data.rekord.ord,"rekord"]],nyttRek:nytt&&old>0,
     mal:st<1?"Minst 5 ord ger en stjärna.":st<2?"Minst 10 ord ger två stjärnor.":st<3?"Minst 15 ord ger tre stjärnor.":"Fingrarna flyger!",igen:startOrd,tillbaka:openHome});}
 
+/* ---------- Ordregnet (nov 2026): egen svensk version av ett ord-faller-spel ---------- */
+const REGNPAKET=[
+  {n:1,ic:"🏠",c:"#FFE39A",namn:"Hemraden",ak:"åk 1",txt:"Korta ord med bara hemradens bokstäver",ord:"all alla dal dag dagg fall falla glad hall hals häl häll kall sal ska skal sjal sjö öga fjäll hälsa själ fälla jag lag ladda hög skaka kaka saga flagga skägg skäl gås".split(" ").filter(w=>/^[asdfghjklöä]+$/.test(w))},
+  {n:2,ic:"🐣",c:"#C6F0CF",namn:"Korta ord",ak:"åk 1–2",txt:"Vanliga ord med två till fyra bokstäver",ord:"och jag det att en ett är på som med han hon vi du men nu sen hus bil sol hund katt mat bok boll båt ord år dag natt is äta gå se bra stor mus ko får gris häst fisk mjölk saft bröd ost ägg kul lek hej tack rum dörr säng stol bord sko mössa".split(" ").filter(w=>w.length<=5)},
+  {n:3,ic:"🌳",c:"#BFDBFF",namn:"Vanliga ord",ak:"åk 2–3",txt:"Ord från skolan, maten, vädret och djuren",ord:"skola glass sommar vinter våren hösten regn snö kompis läsa skriva hoppa springa cykel djur träd blomma fågel äpple banan pizza buss tåg flyga sjunga rolig snabb mjuk varm fröken rast lektion penna sudd papper väska jacka byxor tröja skog sjön havet stranden kanin hamster tiger lejon apa björn räv"},
+  {n:4,ic:"🚀",c:"#D9C8FF",namn:"Långa ord",ak:"åk 3–4",txt:"Längre ord med å, ä och ö",ord:"fotboll jordgubbe choklad dinosaurie tandborste frukost middag raket planet vulkan regnbåge äventyr hemlighet kamrat bibliotek matematik ryggsäck skridsko snögubbe trollkarl sjörövare elefant krokodil pingvin sköldpadda fjäril nyckelpiga glasögon paraply kylskåp tvättmaskin brandbil polisbil ambulans flygplan helikopter ubåt vattenfall"},
+  {n:5,ic:"🏆",c:"#FFD0B8",namn:"Svåra ord",ak:"åk 5–6",txt:"Långa och kluriga ord från alla ämnen",ord:"sjuksköterska kyrkogård ansvarsfull självständig demokrati fotosyntes temperatur kontinent ekosystem upptäckt medeltiden rättighet skyldighet källkritik väderkvarn journalist experiment mikroskop påstående förklaring sammanfattning skjorta stjärnhimmel äventyrlig kompassros vikingaskepp tyngdlagen solsystemet vattenånga kretslopp näringskedja befolkning riksdagen omkrets diagonal multiplikation"}];
+REGNPAKET.forEach(p=>{if(typeof p.ord==="string")p.ord=p.ord.split(" ");});
+let R=null;// pågående ordregn
+function visaRegnval(){stopp();H=null;
+  $("regnpaket").innerHTML=REGNPAKET.map(p=>{const st=data.stars["regn"+p.n]||0,rek=data.rekord["regn"+p.n];
+    return `<button class="lage paket" data-rp="${p.n}"><span class="ic" style="background:${p.c}">${p.ic}</span><span class="txt"><b>${p.namn} <small style="display:inline">· ${p.ak}</small></b><small>${p.txt}</small><span class="st">${starHtml(st)}</span>${rek?` <span class="rek">Rekord ${rek} poäng</span>`:""}</span></button>`;}).join("");
+  show("regnval");}
+$("regnpaket").onclick=e=>{const b=e.target.closest("[data-rp]");if(b)startRegn(+b.dataset.rp);};
+const RMIN=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
+function regnSkylt(t,ms){const el=$("regnSkylt");el.innerHTML=t;el.hidden=false;clearTimeout(regnSkylt.t);if(ms)regnSkylt.t=setTimeout(()=>el.hidden=true,ms);}
+function startRegn(n){const P=REGNPAKET.find(p=>p.n===n);if(!P)return;stopp();regnStopp();
+  const yta=$("regnYta");yta.querySelectorAll(".rord").forEach(e=>e.remove());
+  R={P,ord:[],mal:null,niva:1,poang:0,liv:3,klara:0,ratt:0,fel:0,t0:0,spel:0,sedan:0,senast:-1,paus:false,slut:false,raf:0,fx:[],kvar:[]};
+  $("regnPaketNamn").textContent=`${P.ic} ${P.namn}`;regnHud();show("regn");if(PEK||mjukt)fokusMjuk();
+  H={tecken:ch=>regnTecken(ch),kod:k=>{if(k==="Backspace")regnSlapp();}};
+  regnSkylt(`Nivå 1<small>Skriv orden innan de når den röda linjen</small>`,1600);
+  R.sedan=performance.now();R.raf=requestAnimationFrame(regnLoop);}
+function regnStopp(){if(R){cancelAnimationFrame(R.raf);R.slut=true;}}
+// fart (pixlar per sekund), tid mellan nya ord och hur många ord som får falla samtidigt växer med nivån
+const regnFart=()=>{const h=$("regnYta").clientHeight;return h*(0.055+0.012*(R.niva-1))*(R.P.n>=4?0.9:1);};
+const regnMellan=()=>Math.max(900,2600-R.niva*170);
+const regnMax=()=>Math.min(7,2+Math.floor((R.niva+1)/2));
+function regnNyttOrd(){const yta=$("regnYta"),W=yta.clientWidth,bokst=new Set(R.ord.map(o=>o.w[0]));
+  if(!R.kvar.length)R.kvar=R.P.ord.slice().sort(()=>Math.random()-.5);
+  let i=R.kvar.findIndex(w=>!bokst.has(w[0])&&!R.ord.some(o=>o.w===w));if(i<0)i=0;const w=R.kvar.splice(i,1)[0];
+  const el=document.createElement("div");el.className="rord";el.innerHTML=[...w].map(c=>`<i>${esc(c)}</i>`).join("");yta.appendChild(el);
+  const bw=el.offsetWidth,x=12+Math.random()*Math.max(1,W-bw-24);
+  const o={w,el,x,y:-40,ci:0,v:regnFart()*(0.85+Math.random()*.3)};el.style.transform=`translate(${x}px,${o.y}px)`;R.ord.push(o);}
+function regnLoop(now){if(!R||R.slut)return;R.raf=requestAnimationFrame(regnLoop);const dt=Math.min(.05,(now-R.sedan)/1000);R.sedan=now;if(R.paus)return;
+  R.spel+=dt;if(!R.t0&&R.ratt)R.t0=now;
+  const yta=$("regnYta"),grans=yta.clientHeight-52;
+  if((R.senast<0||R.spel-R.senast>regnMellan()/1000)&&R.ord.length<regnMax()&&R.spel>1.2){regnNyttOrd();R.senast=R.spel;}
+  for(const o of R.ord.slice()){o.y+=o.v*dt;const h=o.el.offsetHeight;o.el.style.transform=`translate(${o.x}px,${o.y}px)`;o.el.classList.toggle("nara",o!==R.mal&&o.y+h>grans-70);
+    if(o.y+h>=grans){regnTraff(o);if(!R||R.slut)return;}}
+  regnRitaFx(dt);if(R.spel%0.5<dt)regnHud();}
+function regnTraff(o){// ordet nådde marken
+  if(!R||R.slut)return;regnTaBort(o);R.liv--;window.Ljud&&Ljud.bad&&Ljud.bad();regnSmall(o,"#ff6b7a",o.y+o.el.offsetHeight);regnHud();
+  if(R.liv<=0)regnSlut();}
+function regnTaBort(o){o.el.remove();R.ord=R.ord.filter(x=>x!==o);if(R.mal===o){R.mal=null;regnSkriv();}}
+function regnTecken(ch){if(!R||R.paus||R.slut)return;ch=ch.toLowerCase();if(ch===" ")return;
+  if(!R.mal){const kand=R.ord.filter(o=>o.w[0]===ch).sort((a,b)=>b.y-a.y);if(!kand.length){R.fel++;window.Ljud&&Ljud.bad&&Ljud.bad();$("regnYta").classList.remove("skak");return;}
+    R.mal=kand[0];R.mal.el.classList.add("mal");}
+  const o=R.mal;if(o.w[o.ci]===ch){o.el.children[o.ci].classList.add("ok");o.ci++;R.ratt++;
+    if(o.ci>=o.w.length)regnSkjut(o);else regnSkriv();}
+  else{R.fel++;o.el.classList.remove("skak");void o.el.offsetWidth;o.el.classList.add("skak");}}
+function regnSlapp(){if(!R||!R.mal)return;const o=R.mal;o.ci=0;[...o.el.children].forEach(c=>c.classList.remove("ok"));o.el.classList.remove("mal");R.mal=null;regnSkriv();}
+function regnSkriv(){$("regnSkriv").innerHTML=R&&R.mal?`${esc(R.mal.w.slice(0,R.mal.ci))}<span style="color:var(--muted)">${esc(R.mal.w.slice(R.mal.ci))}</span>`:"";}
+function regnSkjut(o){const yta=$("regnYta"),cx=o.x+o.el.offsetWidth/2,cy=o.y+o.el.offsetHeight/2;
+  R.fx.push({typ:"str",x1:yta.clientWidth/2,y1:yta.clientHeight-38,x2:cx,y2:cy,t:.22});regnSmall(o,"#ffd56a",cy);
+  R.poang+=o.w.length*10*R.niva;R.klara++;regnTaBort(o);window.Ljud&&(Ljud.shoot||Ljud.ok).call(Ljud);
+  if(R.klara%8===0){R.niva++;window.Ljud&&Ljud.magic&&Ljud.magic();regnSkylt(`Nivå ${R.niva}!<small>Orden faller lite fortare</small>`,1300);}
+  regnHud();}
+function regnSmall(o,farg,cy){if(RMIN())return;const cx=o.x+o.el.offsetWidth/2;for(let i=0;i<18;i++){const a=Math.random()*Math.PI*2,v=60+Math.random()*160;R.fx.push({typ:"p",x:cx,y:cy,vx:Math.cos(a)*v,vy:Math.sin(a)*v,t:.6,farg})}}
+function regnRitaFx(dt){const c=$("regnFx"),yta=$("regnYta"),dpr=devicePixelRatio||1,W=yta.clientWidth,Hh=yta.clientHeight;
+  if(c.width!==Math.round(W*dpr)||c.height!==Math.round(Hh*dpr)){c.width=Math.round(W*dpr);c.height=Math.round(Hh*dpr);}
+  const g=c.getContext("2d");g.setTransform(dpr,0,0,dpr,0,0);g.clearRect(0,0,W,Hh);
+  R.fx=R.fx.filter(f=>{f.t-=dt;if(f.t<=0)return false;
+    if(f.typ==="str"){g.globalAlpha=Math.min(1,f.t*5);g.strokeStyle="#ffe58a";g.lineWidth=4;g.shadowColor="#ffd56a";g.shadowBlur=14;g.beginPath();g.moveTo(f.x1,f.y1);g.lineTo(f.x2,f.y2);g.stroke();g.shadowBlur=0}
+    else{f.x+=f.vx*dt;f.y+=f.vy*dt;f.vy+=220*dt;g.globalAlpha=Math.min(1,f.t*2);g.fillStyle=f.farg;g.beginPath();g.arc(f.x,f.y,3,0,Math.PI*2);g.fill()}
+    return true});g.globalAlpha=1;}
+const regnWpm=()=>{const min=R&&R.t0?(performance.now()-R.t0)/60000:0;return min>.05?Math.round(R.ratt/5/min):0;};
+function regnHud(){if(!R)return;$("regnNiva").textContent="Nivå "+R.niva;$("regnPoang").textContent="⭐ "+R.poang;$("regnWpm").textContent=regnWpm()+" ord/min";
+  $("regnLiv").textContent="❤️".repeat(Math.max(0,R.liv))+"🤍".repeat(Math.max(0,3-R.liv));}
+function regnPaus(v){if(!R||R.slut)return;R.paus=v===undefined?!R.paus:v;$("regnPaus").textContent=R.paus?"▶ Fortsätt":"⏸ Paus";$("regnPaus").setAttribute("aria-pressed",R.paus);
+  if(R.paus)regnSkylt("Paus<small>Tryck på Fortsätt när du är redo</small>");else{$("regnSkylt").hidden=true;R.sedan=performance.now();if(PEK||mjukt)fokusMjuk();}}
+$("regnPaus").onclick=()=>regnPaus();
+$("regnQuit").onclick=()=>{regnStopp();H=null;R=null;visaRegnval();};
+document.addEventListener("visibilitychange",()=>{if(document.hidden&&R&&!R.slut&&!$("regn").hidden)regnPaus(true);});
+function regnSlut(){const r=R,P=r.P,wpm=regnWpm();regnStopp();H=null;
+  const id="regn"+P.n,old=data.rekord[id]||0,nytt=r.poang>old;if(nytt)data.rekord[id]=r.poang;
+  // ⭐ 10 ord, ⭐⭐ 20 ord, ⭐⭐⭐ 35 ord innan hjärtana tar slut
+  const st=r.klara>=35?3:r.klara>=20?2:r.klara>=10?1:0,trf=r.ratt+r.fel?Math.round(100*r.ratt/(r.ratt+r.fel)):100;
+  resultat({id,st,rubrik:`${r.klara} ord nerskjutna!`,siffror:[[r.poang,"poäng"],[r.niva,"nivå"],[wpm,"ord/min"],[trf+" %","träffsäkerhet"]],nyttRek:nytt&&old>0,
+    mal:st<1?"10 ord ger en stjärna.":st<2?"20 ord ger två stjärnor.":st<3?"35 ord ger tre stjärnor.":"Trollstaven glöder!",igen:()=>startRegn(P.n),tillbaka:visaRegnval});
+  R=null;}
+
 /* ---------- Resultat ---------- */
 function resultat(r){clearInterval(tidT);H=null;const old=data.stars[r.id]||0;if(r.st>old)data.stars[r.id]=r.st;save();
   const pet=window.owlSVG&&window.lasDjur?owlSVG(lasDjur(),"owl"):"";
@@ -407,7 +537,7 @@ function confetti(){window.Ljud&&Ljud.fanfare&&Ljud.fanfare();if(matchMedia("(pr
   const t0=performance.now();(function f(now){x.clearRect(0,0,W,H2);P.forEach(p=>{p.vy+=.45;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore();});
     if(now-t0<2600)requestAnimationFrame(f);else{x.clearRect(0,0,W,H2);c.hidden=true;}})(t0);}
 openHome();
-window.TB={T:()=>T,data:()=>data,LEKTIONER,lektionText,ORDBANK,tillat};
+window.TB={T:()=>T,data:()=>data,LEKTIONER,lektionText,ORDBANK,tillat,REGNPAKET,R:()=>R,regnSlut:()=>regnSlut()};
 </script>
 </body>
 </html>
