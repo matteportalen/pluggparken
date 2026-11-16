@@ -302,3 +302,15 @@
 @media(max-width:620px){.sy-miniplatta{flex-basis:100%}.sy-miniplatta .sy-platta-yta{flex:1;width:auto}}
 /* mobil (nov 2026): lodräta drag scrollar sidan; tangenter, pads och vågor tar bara sidledes drag och tryck; rattarna vrids i sidled */
 @media (pointer:coarse){.sy-key,.sy-tonepad,.sy-dial input,.sy-rl-wave canvas{touch-action:pan-y}}
+/* INSTRUMENT (nov 2026): effektplattan i SPELA-rutan bredvid/ovanför klaviaturen, rutan kompakt; på mobil bara arpeggio, oktav och plattan */
+.sy-play h4{margin-bottom:10px}
+.sy-play #sy-playtext{display:none}
+.sy-play .sy-miniplatta{display:flex;margin:10px 0 0;padding:0;border:0;background:none}
+.sy-play .sy-miniplatta .sy-platta-yta{flex:1;width:auto;height:92px}
+.sy-play .sy-local-transport{float:none;width:auto;margin-top:10px;grid-template-columns:repeat(3,minmax(0,1fr))}
+.sy-play .sy-local-transport button{height:36px;font-size:12px}
+.sy-play .sy-transport-label{margin-top:8px;padding-top:0}
+@media(max-width:620px){.sy-play{padding:10px}.sy-play h4{display:none}.sy-play .sy-local-transport,.sy-play .sy-transport-label{display:none}.sy-play .sy-miniplatta{margin-top:8px}.sy-play .sy-miniplatta .sy-platta-yta{height:84px}.sy-panel:not(.sy-padlage) .sy-lower{gap:10px;margin-top:10px}}
+/* INSTRUMENT på mobil (nov 2026): ljudlistan, SPELA-rutan och klaviaturen ryms i en vy; FLER INSTÄLLNINGAR ligger under klaviaturen, tangentbordstipsen döljs */
+.sy-panel:not(.sy-padlage) .sy-lower+.sy-advanced{margin-top:12px}
+@media(max-width:620px){.sy-keylegend,.sy-shortcuts{display:none}.sy-keywell{padding-bottom:8px}.sy-parambay #sy-sound-list{margin-top:14px}}
