@@ -53,7 +53,7 @@ Delad kod: `spel/plattform.js` (`MPPlatt`: fysik, styrning, musik, djuret) anvä
 ## Beslut per spel
 
 - **Spelhörnan:** ordningen på korten är lärarens val. På dator vita kort i rutnät, på mobil breda färgglada kort. Memory och Dragkampen är vanliga breda kort (inte halva).
-- **Bubbelskjutaren:** en ny värld per bana, ingen väljare. Siktlinjen visar bara ca 60 % av vägen (det ska vara lite svårt att sikta). Bara fel kostar "missar kvar".
+- **Bubbelskjutaren:** en ny värld per bana, ingen väljare. Siktlinjen visar bara ca 60 % av vägen (det ska vara lite svårt att sikta). Bara fel kostar "missar kvar". Grafikputsen ligger i `spel/bubbelgrafik.js` och `spel/bubbelutseende.css` (bara `#bub`). Menyn, räknevalen, spelmåtten och reglerna ska vara oförändrade. Skjutbubblan och nästa uppgift är fortsatt vita. `skript/test-bubbel-grafik.cjs` jämför spelregler, skottbanor och poäng mot versionen före grafikputsen.
 - **Tornbygget:** ska vara svårt (läraren tyckte första versionen var "sjukt lätt"): gungning i världsenheter, smalnande balkar, vind från våning 10. Stjärnor bara vid månen.
 - **Skattjakten:** utgången är låst, nyckeln köps i affären, eleven räknar själv när hen säljer och köper. Mynten sparas inte mellan rundorna. Utgången kräver nyckel och alla tre delar.
 - **Rutjakten:** Korset har ingen klocka och inget slut. På tid (Femhörningarna, Rutnätet) syns klockan alltid och varje fel ger 3 s straff. Inga rullistor.
