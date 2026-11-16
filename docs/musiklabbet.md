@@ -35,6 +35,7 @@ localStorage: `pluggparken-trummaskin` (sparade rytmer), `-mic`, `-fav`, `-vik`.
 - **Ljud start kräver ett tryck**, och allt tystnar vid stopp, paus och när fliken göms.
 - **Sidan är högst 1 240 px bred** (full bredd prövades och valdes bort).
 - **Ingen sidledsscroll vid 375 px.** Rutnät som inte ryms scrollar inuti sin egen panel.
+- **Mobil: lodräta drag scrollar alltid sidan** (16 nov 2026). På pekskärm har tangenter, pads, vågor, låtrutor och rattar `touch-action: pan-y` (bara i `@media (pointer:coarse)`); sidledes drag och tryck spelar som förut, och **rattarna vrids i sidled** på pekskärm (upp/ner på dator). Bara effektplattorna och pianorullens toner tar fingret åt alla håll. Nya delar ska följa samma regel.
 
 ## Jag kan inte lyssna
 

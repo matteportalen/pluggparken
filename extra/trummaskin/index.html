@@ -393,6 +393,8 @@ html{scroll-padding-top:calc(var(--hh,52px) + var(--sh,120px) + 8px)}
   .styr .kit.vy button::after{content:attr(data-kort)}
 }
 @media(max-width:370px){.trans .stor{width:40px}.trans .lilla{width:36px}}
+/* mobil (nov 2026): lodräta drag scrollar sidan, sidledes drag och tryck spelar; rattarna vrids i sidled på pekskärm */
+@media (pointer:coarse){.knob,.lv,.lcells{touch-action:pan-y}}
 </style>
 </head>
 <body>
@@ -817,9 +819,9 @@ function sev(el,tal){const t=String(Math.round(tal)).padStart(3," ");const P={a:
 /* ---------- rattar ---------- */
 function knob(el,opt){let v=opt.val();const upd=()=>{v=opt.val();const f=(v-opt.min)/(opt.max-opt.min);el.style.setProperty("--p",(f*270)+"deg");el.querySelector(".kap").style.transform="rotate("+(-135+f*270)+"deg)";el.setAttribute("aria-valuenow",Math.round(v));el.setAttribute("aria-valuemin",opt.min);el.setAttribute("aria-valuemax",opt.max)};
   const sat=nv=>{nv=Math.max(opt.min,Math.min(opt.max,Math.round(nv)));if(nv!==opt.val()){opt.set(nv)}upd()};
-  let y0=0,v0=0,dr=false;
-  el.addEventListener("pointerdown",e=>{dr=true;y0=e.clientY;v0=opt.val();el.setPointerCapture(e.pointerId);e.preventDefault()});
-  el.addEventListener("pointermove",e=>{if(!dr)return;sat(v0+(y0-e.clientY)*(opt.max-opt.min)/150)});
+  let y0=0,x0=0,v0=0,dr=false,pek=false;
+  el.addEventListener("pointerdown",e=>{dr=true;pek=e.pointerType==="touch";y0=e.clientY;x0=e.clientX;v0=opt.val();el.setPointerCapture(e.pointerId);e.preventDefault()});
+  el.addEventListener("pointermove",e=>{if(!dr)return;sat(v0+(pek?e.clientX-x0:y0-e.clientY)*(opt.max-opt.min)/150)});
   const slut=()=>{dr=false};el.addEventListener("pointerup",slut);el.addEventListener("pointercancel",slut);
   el.addEventListener("wheel",e=>{e.preventDefault();sat(opt.val()+(e.deltaY<0?1:-1)*Math.max(1,(opt.max-opt.min)/40))},{passive:false});
   el.addEventListener("keydown",e=>{const d=e.key==="ArrowUp"||e.key==="ArrowRight"?1:e.key==="ArrowDown"||e.key==="ArrowLeft"?-1:0;if(d){e.preventDefault();sat(opt.val()+d*Math.max(1,(opt.max-opt.min)/40))}});
