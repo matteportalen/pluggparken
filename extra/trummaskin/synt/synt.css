@@ -273,3 +273,21 @@
 .sy-panel:not(.sy-padlage) .sy-simple-toolbar{display:none}
 .sy-head #sy-mute,.sy-head #sy-clear-all{min-height:38px;font-size:10px}
 @media(min-width:621px){.sy-panel:not(.sy-padlage) .sy-keyboard{height:200px}.sy-panel:not(.sy-padlage) .sy-key.white{height:192px}.sy-panel:not(.sy-padlage) .sy-key.white.pressed{height:196px}.sy-panel:not(.sy-padlage) .sy-key.black{height:122px}.sy-panel:not(.sy-padlage) .sy-key.black.pressed{height:126px}}
+/* PADS: samplepaketen får röstloopens LJUD och SPELSÄTT (nov 2026) */
+.sy-rl.paket .sy-rl-head>.sy-rl-cell,.sy-rl.paket #sy-rl-rec,.sy-rl.paket .sy-rl-wave,.sy-rl.paket [data-rlflik="red"],.sy-rl.paket .sy-rl-knappar,.sy-rl.paket .sy-rl-note{display:none!important}
+/* effektplattan (nov 2026) */
+.sy-platta{margin-top:12px;padding:10px;border:1px solid #34373d;border-radius:12px;background:#1d1f23}
+.sy-platta-rad{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.sy-platta-rad b{font:800 10px/1 "Inter",Arial,sans-serif;letter-spacing:.16em;color:var(--sy)}
+.sy-platta-rad small{font-size:9px;color:#8c9099}
+.sy-platta-yta{position:relative;aspect-ratio:2/1;border-radius:10px;border:1px solid #3d4047;touch-action:none;cursor:crosshair;overflow:hidden;
+  background:radial-gradient(circle at 100% 0,color-mix(in srgb,var(--sy) 26%,transparent),transparent 60%),linear-gradient(90deg,#0f1013,#24262b),repeating-linear-gradient(90deg,#ffffff08 0 1px,transparent 1px 12.5%),#141518}
+.sy-platta-yta.aktiv{border-color:var(--sy);box-shadow:0 0 0 1px var(--sy),0 0 22px color-mix(in srgb,var(--sy) 40%,transparent)}
+.sy-platta-prick{position:absolute;width:30px;height:30px;margin:-15px 0 0 -15px;border-radius:50%;background:var(--sy);box-shadow:0 0 18px var(--sy),0 0 0 6px color-mix(in srgb,var(--sy) 30%,transparent);pointer-events:none}
+.sy-platta-prick[hidden]{display:none}
+.sy-platta-x,.sy-platta-y{position:absolute;font:800 9px/1 ui-monospace,monospace;letter-spacing:.1em;color:#8c9099;pointer-events:none}
+.sy-platta-x{left:50%;bottom:8px;transform:translateX(-50%)}.sy-platta-y{left:10px;top:10px}
+.sy-platta-knappar{display:flex;gap:8px;margin-top:8px}
+.sy-platta-knappar button{flex:1;min-height:42px;border:1px solid #3d4047;border-radius:8px;background:#2a2d33;color:#e3e5ea;font:800 11px/1 ui-monospace,monospace;letter-spacing:.06em;touch-action:none;user-select:none;-webkit-user-select:none;cursor:pointer}
+.sy-platta-knappar button.on{border-color:var(--sy);background:color-mix(in srgb,var(--sy) 35%,#2a2d33);color:#fff}
+.sy-padv .sy-platta-yta{aspect-ratio:auto;height:170px}@media(max-width:620px){.sy-padv .sy-platta-yta{height:150px}}
