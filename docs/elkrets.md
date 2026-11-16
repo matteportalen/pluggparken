@@ -25,4 +25,5 @@ Kort i `fler/index.html` (NO), `sok.js`, `sitemap.xml`, `konto.js` (`PKEYS`), `S
 - [x] Simulator verifierad i Node (en lampa 92 %, två i serie 24 %, två parallellt 85–87 %, kortslutning flaggas över 3 A)
 - [x] Sidan byggd och testad i 390 × 844, 375 × 667 och 1200 × 760 (alla fem utmaningar, laboratorium, gissa-först med facit ur simuleringen)
 - [x] Inkopplad i Fler ämnen (NO), sök, sitemap, konto, stjärnor
-- Inte provat: pekskärm, riktig telefon. Inte gjort: portal i världen, fler komponenter (summer, kondensator), amperemeter. Texterna är inte granskade av en fysiklärare.
+- [x] Portal i världen: hörnet Teknik ⚡ i NO-parken (16 nov 2026)
+- Inte provat: pekskärm, riktig telefon. Inte gjort: fler komponenter (summer, kondensator), amperemeter. Texterna är inte granskade av en fysiklärare.

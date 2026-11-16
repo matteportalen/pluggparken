@@ -58,5 +58,5 @@ Provat med bot (tid till klart, alla 0,5–1,8 × jämvikt i 15 enheter): uppdra
 - [x] Nivå 2 (uppdragen), botten löser alla fyra uppdrag i tre skärmstorlekar (par 1,1,1,3)
 - [x] Inkopplingar: kort i `fler/index.html` (NO), `sok.js`, `sitemap.xml`, `PKEYS`, `STJ`, stjärnor och `snap` på startsidan, rad i `CLAUDE.md`
 - [x] Nivå 3 (gissa först) byggd och testad i tre skärmstorlekar (375 × 667 skrollar ca 160 px, godtaget: NO får prioritera dator)
-- [ ] Inte gjort med flit: portal i `varlden/index.html` (kroppens park är ritad hörn för hörn; läraren får välja plats)
+- [x] Portal i världen: hörnet Vattnet 💧 i NO-parken (lärarens val 16 nov 2026: NO fick en egen ö)
 - Inte provat: pekskärm, riktig telefon, lärarens åsikt om texterna. Texterna är inte granskade av en biolog.

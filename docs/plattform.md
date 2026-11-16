@@ -67,7 +67,9 @@ Sajten loggar inget och har ingen analys eller kakor. Inga externa typsnitt elle
 
 ## Pluggparken-världen (`varlden/`)
 
-- **Bonusläge, inte en ersättning för startsidan.** Huvudön är en platt hub; varje ämne har en egen ö (`PARKER`): Matte, Svenska, Rymdlabbet (ett klot med högre hopp), SO, Spel, Kroppen, Fler ämnen, Extra och Biografen (Specialare).
+- **Bonusläge, inte en ersättning för startsidan.** Huvudön är en platt hub; varje ämne har en egen ö (`PARKER`): Matte, Svenska, Spel, SO, Rymdlabbet (ett klot med högre hopp), NO-parken, Kroppen, Biografen (Specialare), Fler ämnen och Musikön.
+- **Varje övning och verktyg på ämnessidorna har en portal** (lärarens beslut 16 nov 2026). Ny övning: lägg portalen på rätt ö. NO-övningar står i **NO-parken** (`PARKER.no`: Vattnet, Teknik, Jorden); Rymdlabbet och Kroppen har kvar egna öar.
+- **Musikön** är den gamla Extra-ön (scen-id `extra` är kvar, så sparad data följer med) och har bara Musiklabbet. Extra-sidans övningar (Hörnillusioner, Ansiktsloppan) står på Fler ämnen-öns sjätte arm **Extra ✨**. Musiklabbet ligger på Fler ämnen-sidan men har sin portal på Musikön (lärarens val).
 - **Varje ö ska ha en egen form eller byggnad, en egen sak man gör och egen natur och egna uppdrag.** Öarna får inte likna varandra eller huvudön. Sakerna man samlar ser ut som ämnet, inte bara bollar.
 - **Belöningar stannar i världen** (prydnader på huvudön). Mynt och riktiga stjärnor rörs inte. Biljetter som krav för åkturer valdes bort.
 - Epoker och platser som inte är övningar är skyltar, inte portaler.
@@ -75,7 +77,7 @@ Sajten loggar inget och har ingen analys eller kakor. Inga externa typsnitt elle
 - "🐢 Lågt läge" slås på av sig självt på svaga enheter. Inga skuggor.
 - **Stjärnor på portalerna:** varje portal till en övning som ger stjärnor visar elevens stjärnor ("⭐ 5", grå "☆ 0"), och portalerna till öarna visar öns summa. Världen laddar `huvud.js` med `data-bara="stjarnor"` (bara räkningen, inget sidhuvud, inga mynt) och frågar `MPStjarnorFor`; höj `?v=` på den raden om stjärnreglerna ändras.
 - **Liv på öarna** (`byggLiv`, `LIVD` per ö): fjärilar, fåglar som lyfter när man kommer nära, smådjur som skuttar undan och en fisk som hoppar i havet. Djuret lämnar fotspår och damm, plaskar i dammar och snurrar när det hittar något. Allt är avstängt vid `prefers-reduced-motion`, färre i Lågt läge, och finns inte på månen (Rymdlabbet). Ny ö: lägg en post i `LIVD`.
-- **Inget får stå på en stig eller framför en portal.** Huvudöns hopptrappa (`TRAPPA` i `byggHub`) står i gluggen mellan stigarna till Kroppen och Biografen och går utåt mot kusten. Läggs en portal till i `HUB` flyttas alla portaler: kontrollera trappan och ljusbrädet igen.
+- **Inget får stå på en stig eller framför en portal.** På huvudön står allt som inte är portaler i gluggarna mellan stigarna (`glugg(k,r)` i `byggHub`): hopptrappan mellan Kroppen och Biografen, ljusbrädet mellan Biografen och Fler ämnen (rakt mot −z, rutorna är axelriktade), klossarna mellan Fler ämnen och Musikön. Läggs en ö till i `HUB` flyttas alla portaler: kontrollera trappan, klossarna och ljusbrädet igen. `S.stigPkt` (stigarnas punkter) finns för att kunna testa det.
 - **Biografen: filmerna och quizet visas på bioduken, man lämnar inte världen** (lärarens önskan nov 2026). OK på en film ställer kameran rakt framför duken och lägger filmmotorn i rutan `#bioFilm` exakt över duken (`bfRuta`); på smal skärm fyller rutan hela fönstret. Inga ledtrådar före filmen i bion. Quizet (`bioQuiz`, `specialare/quiz.js`) nås från filmens slutruta och från knappen 🧠 Quiz. Bara den valda filmens fil laddas (`specialare/filmreg.js`). Prova själv-sakerna och "Alla specialare" länkar fortfarande ut.
 - Test: `__varlden` och `window.__oversikt=true` ger översiktskamera. Kontrollera att portaler och föremål ligger innanför kusten.
 
