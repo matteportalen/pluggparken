@@ -17,7 +17,9 @@ _Det som gäller nu för Kodverkstan, Tangentbordet, Pengar och sparande, Tidsli
 | `extra/index.html` | Ämnet Extra: saker man skapar, skriver ut och bygger | – |
 | `ovriga/ansiktsloppan/` | Ansiktsloppan (ligger under Extra, adressen är kvar) | – (sparar inget) |
 | `extra/hornillusion/` | Hörnillusioner | – (sparar inget) |
-| `extra/trummaskin/` | Musiklabbet, se `docs/musiklabbet.md` | – |
+| `extra/trummaskin/` | Musiklabbet (kortet ligger i Fler ämnen under 🎵 Musik sedan 16 nov 2026, adressen är kvar), se `docs/musiklabbet.md` | – |
+
+**Extra** är bara för udda pyssel och sådant som inte är ett ämne (nu Hörnillusioner och Ansiktsloppan). Allt som hör till ett ämne, som musik, ligger i Fler ämnen (lärarens beslut 16 nov 2026).
 
 Kartorna är gjorda ur Natural Earth (public domain). Europakartan, Världskartan och Sverigekartan delar samma spelskärm.
 

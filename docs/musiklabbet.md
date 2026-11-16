@@ -2,6 +2,8 @@
 
 _Det som gäller nu för `extra/trummaskin/` (visas som **Musiklabbet**; mappen och nycklarna heter kvar trummaskin). Hur varje del byggdes, mätvärden och funktionsnamn står i `docs/historik/musiklabbet.md` (sök där med `grep -n "ord" docs/historik/musiklabbet.md`, läs inte hela)._
 
+Kortet ligger i **Fler ämnen under 🎵 Musik** (flyttat från Extra 16 nov 2026; adressen `extra/trummaskin/` är kvar så att länkar och framsteg fungerar).
+
 ## Var ligger vad
 
 | Fil | Innehåll |
