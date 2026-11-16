@@ -67,19 +67,24 @@ Sajten loggar inget och har ingen analys eller kakor. Inga externa typsnitt elle
 
 ## Pluggparken-världen (`varlden/`)
 
-- **Bonusläge, inte en ersättning för startsidan.** Huvudön är en platt hub; varje ämne har en egen ö (`PARKER`): Matte, Svenska, Spel, SO, Rymdlabbet (ett klot med högre hopp), NO-parken, Kroppen, Biografen (Specialare), Fler ämnen och Musikön.
+- **Bonusläge, inte en ersättning för startsidan.** Huvudön är en hub med fontäntorg, lundar, fyr och utsiktsbrygga; varje ämne har en egen ö (`PARKER`): Matte, Svenska, Spel, SO, Rymdlabbet (ett klot med högre hopp), NO-parken, Kroppen, Biografen (Specialare), Fler ämnen och Musikön.
 - **Varje övning och verktyg på ämnessidorna har en portal** (lärarens beslut 16 nov 2026). Ny övning: lägg portalen på rätt ö. NO-övningar står i **NO-parken** (`PARKER.no`: Vattnet, Teknik, Jorden); Rymdlabbet och Kroppen har kvar egna öar.
 - **Musikön** är den gamla Extra-ön (scen-id `extra` är kvar, så sparad data följer med) och har bara Musiklabbet. Extra-sidans övningar (Hörnillusioner, Ansiktsloppan) står på Fler ämnen-öns sjätte arm **Extra ✨**. Musiklabbet ligger på Fler ämnen-sidan men har sin portal på Musikön (lärarens val).
 - **Varje ö ska ha en egen form eller byggnad, en egen sak man gör och egen natur och egna uppdrag.** Öarna får inte likna varandra eller huvudön. Sakerna man samlar ser ut som ämnet, inte bara bollar.
 - **Belöningar stannar i världen** (prydnader på huvudön). Mynt och riktiga stjärnor rörs inte. Biljetter som krav för åkturer valdes bort.
 - Epoker och platser som inte är övningar är skyltar, inte portaler.
 - Platsen sparas vid varje portal (`mp-varlden-pos`), så man kommer tillbaka framför samma portal. Sidhuvudet visar 🏝️ Världen när man kommit därifrån.
-- "🐢 Lågt läge" slås på av sig självt på svaga enheter. Inga skuggor.
+- "🐢 Lågt läge" slås på av sig självt på svaga enheter. Inga realtidsskuggor; billiga instansierade kontaktskuggor används under fasta föremål.
 - **Stjärnor på portalerna:** varje portal till en övning som ger stjärnor visar elevens stjärnor ("⭐ 5", grå "☆ 0"), och portalerna till öarna visar öns summa. Världen laddar `huvud.js` med `data-bara="stjarnor"` (bara räkningen, inget sidhuvud, inga mynt) och frågar `MPStjarnorFor`; höj `?v=` på den raden om stjärnreglerna ändras.
 - **Liv på öarna** (`byggLiv`, `LIVD` per ö): fjärilar, fåglar som lyfter när man kommer nära, smådjur som skuttar undan och en fisk som hoppar i havet. Djuret lämnar fotspår och damm, plaskar i dammar och snurrar när det hittar något. Allt är avstängt vid `prefers-reduced-motion`, färre i Lågt läge, och finns inte på månen (Rymdlabbet). Ny ö: lägg en post i `LIVD`.
 - **Inget får stå på en stig eller framför en portal.** På huvudön står allt som inte är portaler i gluggarna mellan stigarna (`glugg(k,r)` i `byggHub`): hopptrappan mellan Kroppen och Biografen, ljusbrädet mellan Biografen och Fler ämnen (rakt mot −z, rutorna är axelriktade), klossarna mellan Fler ämnen och Musikön. Läggs en ö till i `HUB` flyttas alla portaler: kontrollera trappan, klossarna och ljusbrädet igen. `S.stigPkt` (stigarnas punkter) finns för att kunna testa det.
 - **Biografen: filmerna och quizet visas på bioduken, man lämnar inte världen** (lärarens önskan nov 2026). OK på en film ställer kameran rakt framför duken och lägger filmmotorn i rutan `#bioFilm` exakt över duken (`bfRuta`); på smal skärm fyller rutan hela fönstret. Inga ledtrådar före filmen i bion. Quizet (`bioQuiz`, `specialare/quiz.js`) nås från filmens slutruta och från knappen 🧠 Quiz. Bara den valda filmens fil laddas (`specialare/filmreg.js`). Prova själv-sakerna och "Alla specialare" länkar fortfarande ut.
 - Test: `__varlden` och `window.__oversikt=true` ger översiktskamera. Kontrollera att portaler och föremål ligger innanför kusten.
+
+- **Upptäckter och miljöputs:** `varlden/upptackter.js` är en lokal ES-modul. Återspelbara aktiviteter: bråkbro (Matte), ordros och studssvampar (Svenska), kulkedja och studssvampar (Spel), ljusspegel (SO), vattenhjul/hiss/rutschkana (NO), puls (Kroppen), låda/tryckplatta (Fler ämnen) och tonminne (Musikön). Uppdrag visar vägen med en gul pil. De tidigare små experimenten med halvor och additiv ljusblandning finns kvar.
+- **Egen glänta:** bänk, blomma och två prydnadssocklar på huvudön. Valen sparas som `SV.glanta` i befintliga `mattespel-pluggvarlden-v1`. Fynd har id `lek-…` i `SV.seen` och belönas högst en gång med världens vanliga prydnader.
+- **Placering:** nya lekplatser väljs på plana, lediga ytor innanför kusten; hela åkbanan reserveras mot växtlighet. Trädkronor, portaler, gångvägar och samlarföremål ska ha marginal. Huvudöns större entréer har färgkodade skyltar och ämnessymboler.
+- **Test:** `skript/test-varlden-upptackter.cjs` kör Playwright mot lokal server (`WORLD_URL`, normalt port 8765; `PLAYWRIGHT_PATH` vid en separat installation). Kontrollerar öar, placering, aktiviteter, pek/tangentbord, åkavbrott, sparning och reducerad rörelse/lågt läge.
 
 ## Väntar
 
