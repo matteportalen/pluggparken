@@ -261,7 +261,7 @@ function visaMal(ch){document.querySelectorAll(".k.mal,.fi.aktiv").forEach(x=>x.
   const t=tangenter(ch);t.forEach(k=>KEYS[k]&&KEYS[k].classList.add("mal"));
   const f=fingerAv(ch.toLowerCase())||(ch===" "?"t":null);if(f){const el=document.querySelector(`.fi[data-f="${f}"]`);if(el)el.classList.add("aktiv");}
   $("fingertext").textContent=f?`Tryck ${ch===" "?"mellanslag":`på ${ch.toUpperCase()}`} med ${FINGER[f]}${t.length>1?" och håll inne skift med andra handen":""}`:"";}
-function blinka(k,cls){const el=KEYS[k];if(!el)return;el.classList.add("ner",cls||"");setTimeout(()=>el.classList.remove("ner","ratt","fel"),160);}
+function blinka(k,cls){const el=KEYS[k];if(!el)return;el.classList.add("ner");if(cls)el.classList.add(cls);setTimeout(()=>el.classList.remove("ner","ratt","fel"),160);}
 
 /* ---------- Tangenttryck ---------- */
 let H=null;// hanteraren för det spel som pågår: H.tecken(ch)
@@ -269,7 +269,7 @@ const iGang=()=>(!$("game").hidden||!$("regn").hidden)&&H;
 window.addEventListener("keydown",e=>{
   // tangenten lyser även när den inte räknas (skift, backsteg …)
   const kod={ShiftLeft:"ShiftLeft",ShiftRight:"ShiftRight",Backspace:"Backspace",Enter:"Enter",Tab:"Tab",CapsLock:"CapsLock"}[e.code];
-  if(kod&&iGang()){blinka(kod);if(H.kod)H.kod(kod);if(kod==="Tab"||kod==="Backspace")e.preventDefault();return;}
+  if(kod&&iGang()){if(H.kod)H.kod(kod);blinka(kod);if(kod==="Tab"||kod==="Backspace")e.preventDefault();return;}
   if(e.ctrlKey||e.metaKey||e.altKey)return;
   if(e.key&&e.key.length===1&&iGang()){e.preventDefault();H.tecken(e.key);}},true);
 // skärmens tangentbord (iPad utan tangentbord, mobil): tecknen kommer som text
