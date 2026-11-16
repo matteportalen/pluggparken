@@ -291,3 +291,12 @@
 .sy-platta-knappar button{flex:1;min-height:42px;border:1px solid #3d4047;border-radius:8px;background:#2a2d33;color:#e3e5ea;font:800 11px/1 ui-monospace,monospace;letter-spacing:.06em;touch-action:none;user-select:none;-webkit-user-select:none;cursor:pointer}
 .sy-platta-knappar button.on{border-color:var(--sy);background:color-mix(in srgb,var(--sy) 35%,#2a2d33);color:#fff}
 .sy-padv .sy-platta-yta{aspect-ratio:auto;height:170px}@media(max-width:620px){.sy-padv .sy-platta-yta{height:150px}}
+/* liten effektplatta bredvid synthens reglage (INSTRUMENT, nov 2026) */
+.sy-miniplatta{display:flex;align-items:stretch;gap:6px;margin:0;padding:6px;flex:0 0 auto}
+.sy-miniplatta .sy-platta-yta{width:130px;height:76px;aspect-ratio:auto}
+.sy-miniplatta .sy-platta-prick{width:18px;height:18px;margin:-9px 0 0 -9px}
+.sy-miniplatta .sy-platta-knappar{flex-direction:column;margin:0;gap:4px}
+.sy-miniplatta .sy-platta-knappar button{min-height:0;flex:1;padding:0 8px;font-size:10px}
+.sy-miniplatta .sy-platta-y{top:6px;left:7px;font-size:8px}.sy-miniplatta .sy-platta-x{bottom:5px;font-size:8px}
+.sy-padlage .sy-miniplatta{display:none}
+@media(max-width:620px){.sy-miniplatta{flex-basis:100%}.sy-miniplatta .sy-platta-yta{flex:1;width:auto}}
