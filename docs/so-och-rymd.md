@@ -15,7 +15,7 @@ _Det som gäller nu för Rymdlabbet, Solsystemet i 3D med resan ut i universum o
 | `demokrati/` | Demokrati: Klassrådet, Valet, Rättigheter | `mattespel-demokrati-v1` |
 | `so/index.html` | Ämnessidan SO. Europa, Världen och Tidslinjen står i `docs/ovriga-amnen.md`. | – |
 
-Röst till resorna: `ljud/resa/` (manus `manus/resa-manus.txt`) och `ljud/jattar/` (manus `manus/jattar-manus.txt`), rösten Paul Axel. Filmerna står i `docs/specialare-filmer.md`.
+Röst till resorna: `ljud/resa/` (manus `manus/resa-manus.txt`) och `ljud/jattar/` (manus `manus/jattar-manus.txt`), rösten Paul Axel (omgjord 17 nov 2026 med piggare inställningar, se `docs/specialare-filmer.md`). Filmerna står i `docs/specialare-filmer.md`.
 
 ## Rymdlabbet
 
