@@ -30,7 +30,7 @@ function menu(){
 }
 function sound(){const on=!window.Ljud||Ljud.on;$('sound').textContent=on?'🔊':'🔇';$('sound').setAttribute('aria-pressed',String(!on));}
 function start(world,n){
- token++;busy=false;selected=null;focusCell=0;currentWorld=world;currentLevel=n;
+ token++;drag=null;busy=false;selected=null;focusCell=0;currentWorld=world;currentLevel=n;
  const config=level(world,n),seed=0x711+WORLDS.findIndex(w=>w.id===world)*10000+n*91;
  game=new Game(config,seed);screen('game');$('levelName').textContent=config.icon+' '+config.name+' · '+n+'/4';
  $('goalLabel').textContent=config.type==='sum'?'BYGG SUMMAN':'MATCHA';$('goal').textContent=config.type==='sum'?config.target:'=';
@@ -63,14 +63,17 @@ const wait=ms=>new Promise(r=>setTimeout(r,reduce?60:ms));
 async function play(a,b){
  if(busy||!game||game.won)return;
  const result=game.swap(a,b);selected=null;
- if(!result.ok){render(game.board);say(result.reason==='neighbor'?'Välj två brickor som ligger intill varandra.':'Det bytet ger ingen matchning. '+game.config.note+' Draget räknas inte.');return;}
+ if(!result.ok){
+  say(result.reason==='neighbor'?'Välj två brickor som ligger intill varandra.':'Det bytet ger ingen matchning. '+game.config.note+' Draget räknas inte.');
+  if(adjacent(a,b)){busy=true;const run=++token;hud();swapVisual(a,b);await wait(180);if(run!==token)return;await springHome(run);}
+  else render(game.board);
+  return;
+ }
  busy=true;const run=++token;hud();
  for(const event of result.events){
   if(run!==token)return;
   if(event.kind==='swap'){
-   const step=buttons[0].getBoundingClientRect().width+parseFloat(getComputedStyle($('board')).gap||6);
-   const dx=(b%SIZE-a%SIZE)*step,dy=(Math.floor(b/SIZE)-Math.floor(a/SIZE))*step;
-   buttons[a].style.transform='translate('+dx+'px,'+dy+'px)';buttons[b].style.transform='translate('+(-dx)+'px,'+(-dy)+'px)';
+   swapVisual(a,b);
    window.Ljud?.slurp();await wait(180);if(run!==token)return;render(event.board);
   }else if(event.kind==='clear'){
    event.cells.forEach(i=>buttons[i].classList.add('matched'));
@@ -101,14 +104,44 @@ function choose(i){
  play(selected,i);
 }
 $('board').addEventListener('click',e=>{if(suppressClick){suppressClick=false;return;}const b=e.target.closest('.tile');if(b)choose(Number(b.dataset.index));});
-$('board').addEventListener('pointerdown',e=>{const b=e.target.closest('.tile');if(!b||busy)return;suppressClick=false;drag={i:Number(b.dataset.index),x:e.clientX,y:e.clientY,id:e.pointerId};b.setPointerCapture(e.pointerId);});
-$('board').addEventListener('pointerup',e=>{
- if(!drag||drag.id!==e.pointerId)return;const d=drag;drag=null;const dx=e.clientX-d.x,dy=e.clientY-d.y;
- if(Math.hypot(dx,dy)<18)return;suppressClick=true;
+function swapVisual(a,b){
+ const step=buttons[0].offsetWidth+parseFloat(getComputedStyle($('board')).gap||6);
+ const dx=(b%SIZE-a%SIZE)*step,dy=(Math.floor(b/SIZE)-Math.floor(a/SIZE))*step;
+ buttons.forEach(t=>t.classList.remove('dragging','drag-neighbor','selected','hinted'));
+ buttons[a].style.transform=`translate(${dx}px,${dy}px)`;buttons[b].style.transform=`translate(${-dx}px,${-dy}px)`;
+}
+async function springHome(run=++token){
+ busy=true;hud();
+ buttons.forEach(b=>{b.classList.remove('dragging','drag-neighbor','selected');b.classList.add('returning');b.style.transform='translate(0px,0px)';});
+ await wait(380);if(run!==token)return;
+ busy=false;selected=null;render(game.board);hud();
+}
+function moveDrag(e){
+ if(!drag||drag.id!==e.pointerId)return;
+ const d=drag,dx=e.clientX-d.x,dy=e.clientY-d.y;
+ if(!d.moved&&Math.hypot(dx,dy)<6)return;
+ d.moved=true;
+ const step=buttons[0].offsetWidth+parseFloat(getComputedStyle($('board')).gap||6);
+ const x=Math.max(-step,Math.min(step,dx)),y=Math.max(-step,Math.min(step,dy));
  const next=d.i+(Math.abs(dx)>Math.abs(dy)?Math.sign(dx):Math.sign(dy)*SIZE);
- if(adjacent(d.i,next))play(d.i,next);else say('Dra till en bricka precis bredvid.');
+ d.next=adjacent(d.i,next)?next:null;d.distance=Math.max(Math.abs(dx),Math.abs(dy));
+ buttons.forEach(b=>{b.classList.remove('selected','hinted','drag-neighbor');b.style.transform='';});
+ const tile=buttons[d.i];tile.classList.add('dragging');tile.style.transform=`translate(${x}px,${y}px)`;
+ if(d.next!=null){const neighbor=buttons[d.next];neighbor.classList.add('drag-neighbor');neighbor.style.transform=Math.abs(dx)>Math.abs(dy)?`translate(${-x}px,0px)`:`translate(0px,${-y}px)`;}
+}
+$('board').addEventListener('pointerdown',e=>{
+ const b=e.target.closest('.tile');if(!b||busy||drag||e.button!==0||!game||game.won)return;
+ suppressClick=false;drag={i:Number(b.dataset.index),x:e.clientX,y:e.clientY,id:e.pointerId,moved:false,next:null,distance:0};b.setPointerCapture(e.pointerId);
 });
-$('board').addEventListener('pointercancel',()=>{drag=null;});
+$('board').addEventListener('pointermove',moveDrag);
+$('board').addEventListener('pointerup',e=>{
+ if(!drag||drag.id!==e.pointerId)return;moveDrag(e);const d=drag;drag=null;
+ if(!d.moved)return;suppressClick=true;selected=null;
+ if(d.next!=null&&d.distance>=18)play(d.i,d.next);else springHome();
+});
+function cancelDrag(e){if(!drag||drag.id!==e.pointerId)return;const moved=drag.moved;drag=null;if(moved){suppressClick=true;springHome();}}
+$('board').addEventListener('pointercancel',cancelDrag);
+$('board').addEventListener('lostpointercapture',cancelDrag);
 $('board').addEventListener('keydown',e=>{
  const b=e.target.closest('.tile');if(!b||busy)return;const i=Number(b.dataset.index);
  const shifts={ArrowLeft:-1,ArrowRight:1,ArrowUp:-SIZE,ArrowDown:SIZE};
@@ -118,7 +151,7 @@ $('board').addEventListener('keydown',e=>{
 $('undo').onclick=()=>{if(busy||!game.undo())return;selected=null;render(game.board);hud();say('Draget och hela kedjan är ångrade. Prova en annan väg!');};
 $('hint').onclick=()=>{if(busy)return;const h=game.hint();if(!h)return;selected=null;render(game.board);buttons[h.a].classList.add('hinted');buttons[h.b].classList.add('hinted');say('De två markerade brickorna kan byta plats. Räkna på vad raden blir!');};
 $('restart').onclick=()=>start(currentWorld,currentLevel);
-function back(){token++;busy=false;selected=null;screen('choose');menu();$('chooseTitle').tabIndex=-1;$('chooseTitle').focus({preventScroll:true});}
+function back(){token++;drag=null;busy=false;selected=null;screen('choose');menu();$('chooseTitle').tabIndex=-1;$('chooseTitle').focus({preventScroll:true});}
 $('back').onclick=back;$('return').onclick=back;
 $('sound').onclick=()=>{if(window.Ljud){Ljud.set(!Ljud.on);sound();document.dispatchEvent(new Event('mp-ljud-andrat'));}};
 function finish(){
