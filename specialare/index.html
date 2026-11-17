@@ -241,7 +241,10 @@ function rut(){
 }
 function gaTill(d){if(!cur||qAktiv())return;const n=idx+d,tot=cur.rutor.length+(ledtLista(cur)?1:0);if(n<0||n>=tot)return;idx=n;visaBild()}
 $("#vyN").onclick=()=>gaTill(1);$("#vyP").onclick=()=>gaTill(-1);
-$("#vyX").onclick=()=>{location.hash=""};
+$("#vyX").onclick=()=>{
+  // öppnades lektionen från en bok i huset i Pluggparken-världen går ✕ tillbaka dit (varlden/hus.js sätter flaggan)
+  try{if(sessionStorage.getItem("mp-tillbaka-varlden")==="1"){sessionStorage.removeItem("mp-tillbaka-varlden");location.href="../varlden/";return;}}catch(e){}
+  location.hash=""};
 $("#gvX").onclick=()=>{const t=gvTill;gvTill=null;location.hash=t||""};
 $("#kvX").onclick=()=>{const t=kvTill;kvTill=null;location.hash=t||""};
 $("#vyF").onclick=()=>{const e=document.documentElement;if(document.fullscreenElement)document.exitFullscreen();else if(e.requestFullscreen)e.requestFullscreen().catch(()=>{})};

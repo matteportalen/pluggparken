@@ -150,7 +150,7 @@ body.bio #stick,body.bio #jump,body.bio #prompt,body.bio #hint{display:none!impo
    Spelarens plats (scen, x, z) sparas i localStorage (mp-varlden-pos) så att man kommer tillbaka till samma portal.
    Uppdrag, hittade stjärnor och prydnader sparas i mattespel-pluggvarlden-v1 (följer profilen, ligger i PKEYS i konto.js). */
 import {byggUpptackter,putsaMiljo,huvudonsPortaler,huvudonsMiljo} from "./upptackter.js";
-import {husPlats,byggHusUte,byggHusInne,husButik} from "./hus.js";
+import {husPlats,dorrPlats,byggHusUte,byggHusInne,husButik} from "./hus.js";
 const felvisa=m=>{const f=document.getElementById('fel');if(m)document.getElementById('felTxt').textContent=m;f.style.display='grid';};
 let THREE;
 try{THREE=await import('three');}catch(e){felvisa('Världen behöver ladda sina filer. Kontrollera uppkopplingen och ladda om sidan.');throw e;}
@@ -1656,25 +1656,30 @@ function tillHuben(){
   if(gaar||S.id==='hub')return;slutBio(true);gaar=true;stangDlg();rida=null;prompt.hidden=true;$('fade').classList.add('pa');
   setTimeout(()=>{laddaScen('hub',{x:0,z:7,ang:Math.PI/2});gaar=false;sparaPlats();$('fade').classList.remove('pa');},REDUCE?60:420);
 }
-function byggHusScen(){ // inuti Mitt hus: ett rum att inreda (varlden/hus.js)
-  nyScen('hus',9.8);S.box=true;stallLjus();himmel(['#F7D9E8','#FCEFF6','#FFF8FB']);scene.fog.color.set(0xFCEFF6);
-  byggHusInne({THREE,S,portalBygg,etikett,cam,canvas,reduce:REDUCE});
+function byggHusScen(rum){ // inuti Mitt hus: vardagsrummet (scen "hus") och lekrummet (scen "lekrum"), varlden/hus.js
+  nyScen(rum==='lek'?'lekrum':'hus',9.8);S.box=true;stallLjus();himmel(rum==='lek'?['#FFE7A8','#FFF4D6','#FFFBEF']:['#F7D9E8','#FCEFF6','#FFF8FB']);scene.fog.color.set(rum==='lek'?0xFFF4D6:0xFCEFF6);
+  byggHusInne({THREE,S,portalBygg,etikett,cam,canvas,reduce:REDUCE,lagt,rum,P,toast,lamna:lamnaTill,
+    oar:()=>{const ids=Object.keys(PARKER);return{besokta:ids.filter(id=>SV.seen.includes('besokt-'+id)).length,totalt:ids.length};}});
   S.start={x:0,z:5.4,ang:Math.PI};
 }
+const iHuset=()=>S&&(S.id==='hus'||S.id==='lekrum');
+/* Lämna världen till en sida (böckerna i huset öppnar minilektioner); platsen sparas så att man kommer tillbaka hit. */
+function lamnaTill(url){if(gaar)return;gaar=true;sparaPlats({scen:S.id,x:P.x,z:P.z,yaw:P.ang,cam:camYaw});try{sessionStorage.setItem('mp-fran-varlden','1');}catch(e){}
+  $('fade').classList.add('pa');setTimeout(()=>{location.href=new URL(url,location.href).href;},REDUCE?60:420);}
 let camUte=null;
 function laddaScen(id,plats){
   S?.upptackter?.cancel();narmaste=null;narNpc=false;narRide=null;
-  rensaScen();$('pil').hidden=true;if(id==='hub')byggHub();else if(id==='hus')byggHusScen();else if(PARKER[id]&&PARKER[id].klot)byggKlot(id);else byggPark(PARKER[id]?id:'matte');
+  rensaScen();$('pil').hidden=true;if(id==='hub')byggHub();else if(id==='hus')byggHusScen('hus');else if(id==='lekrum')byggHusScen('lek');else if(PARKER[id]&&PARKER[id].klot)byggKlot(id);else byggPark(PARKER[id]?id:'matte');
   if(S.klot){const st=plats&&plats.pv?plats:S.start;djur.rotation.set(0,0,0);placeraK(st.pv,st.hd);}
   else{const st=plats||S.start;cam.up.set(0,1,0);camUpK.set(0,1,0);djur.quaternion.identity();skugga.rotation.set(-Math.PI/2,0,0);placera(st.x,st.z,st.ang,st.cam!=null?st.cam:st.ang);}
-  if(S.id!=='hus')putsaMiljo({THREE,S,reduce:REDUCE,low:lagt});
+  if(!iHuset())putsaMiljo({THREE,S,reduce:REDUCE,low:lagt});
   // inne i huset står kameran närmare och lite högre; ute återställs den
-  if(S.id==='hus'){if(!camUte)camUte={d:camDist,p:camPitch};camDist=8.2;camPitch=.68;}else if(camUte){camDist=camUte.d;camPitch=camUte.p;camUte=null;}
-  BUTIK&&BUTIK.visa(S.id==='hus');
-  stjarnaText();$('stj').style.display=S.id==='hus'?'none':'';uppdateraArende();dimma();$('hem2').hidden=S.id==='hub';
+  if(iHuset()){if(!camUte)camUte={d:camDist,p:camPitch};camDist=8.2;camPitch=.68;}else if(camUte){camDist=camUte.d;camPitch=camUte.p;camUte=null;}
+  BUTIK&&BUTIK.visa(iHuset());
+  stjarnaText();$('stj').style.display=iHuset()?'none':'';uppdateraArende();dimma();$('hem2').hidden=S.id==='hub';
 }
 function startVarlden(){
-  const s=lasPlats();let id=s&&(s.scen==='hub'||s.scen==='hus'||PARKER[s.scen])?s.scen:'hub';
+  const s=lasPlats();let id=s&&(s.scen==='hub'||s.scen==='hus'||s.scen==='lekrum'||PARKER[s.scen])?s.scen:'hub';
   laddaScen(id,null);
   const O=S.O;
   if(S.klot){if(s&&s.scen===id&&isFinite(s.x)&&isFinite(s.y)&&isFinite(s.z)&&isFinite(s.hx)){const v=new V3(s.x,s.y,s.z);if(v.length()>S.R*.7&&v.length()<S.R*1.6)placeraK(v,new V3(s.hx,s.hy,s.hz));}}
@@ -2261,7 +2266,8 @@ function gaIn(po){
     $('fade').classList.add('pa');
     setTimeout(()=>{
       let plats=null;
-      if(mal==='hub'&&S.id==='hus'){const h=husPlats(HUB.length);plats={x:h.ut.x,z:h.ut.z,ang:h.ut.ang};}
+      if(mal==='hus'&&S.id==='lekrum')plats=dorrPlats('hus','lekrum');
+      else if(mal==='hub'&&S.id==='hus'){const h=husPlats(HUB.length);plats={x:h.ut.x,z:h.ut.z,ang:h.ut.ang};}
       else if(mal==='hub'){const i=HUB.findIndex(h=>h.scen===S.id);const a=i/HUB.length*Math.PI*2;plats={x:Math.cos(a)*(RING-5.2),z:Math.sin(a)*(RING-5.2),ang:Math.atan2(Math.cos(a),Math.sin(a))};}
       laddaScen(mal,plats);gaar=false;sparaPlats();$('fade').classList.remove('pa');
       if(mal!=='hub'&&!SV.seen.includes('besokt-'+mal)){SV.seen.push('besokt-'+mal);sparaSV();}

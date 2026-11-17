@@ -1,6 +1,6 @@
 /* Mitt rum och Mitt hus: gemensam katalog (MPRum). Används av mittrum/ (2D, SVG) och varlden/hus.js (huset i Pluggparken-världen).
    Köp sparas som "rum:plats:id" i matteportalen-mynt (MPMynt.kop i huvud.js), valen i matteportalen-rum {val,t,fx,pos}. pos = egna platser för möbler i huset {plats:[x,z,vridning]} (tid i t["pos:plats"]).
-   Ett köp gäller alltså både i 2D-rummet och i huset. Platser med d3:true finns bara i huset (2D-rummet visar dem inte).
+   Ett köp gäller alltså både i 2D-rummet och i huset. Platser med d3:true finns bara i huset (2D-rummet visar dem inte); rum:"lek" = i lekrummet, annars vardagsrummet.
    Varje sak: [id, namn, emoji, pris, säsong (frivillig, se SASONGER i djur.js)]. */
 window.MPRum=(function(){
 const KEY="matteportalen-rum";
@@ -22,8 +22,11 @@ const RUM={
  spis:{n:"Spis",d3:true,items:[["ingen","Ingen","➖",0],["spis","Spis","🍳",80],["pizza","Pizzaugn","🍕",150]]},
  tvatt:{n:"Tvättmaskin",d3:true,items:[["ingen","Ingen","➖",0],["tvatt","Tvättmaskin","🫧",90]]},
  tv:{n:"Tv",d3:true,items:[["ingen","Ingen","➖",0],["tv","Tv","📺",120],["spel","Tv-spel","🎮",200]]},
- kompis:{n:"Kompis",d3:true,items:[["ingen","Ingen","➖",0],["katt","Katt","🐱",150],["hund","Hund","🐶",150],["kanin","Kanin","🐰",120],["skoldpadda","Sköldpadda","🐢",100],["pingvin","Pingvin","🐧",200]]}};
-const START={tapet:"slat",golv:"tra",fonster:"dag",sang:"enkel",tak:"inget",matta:"ingen",hylla:"ingen",tavla:"ingen",vaxt:"ingen",husdjur:"ingen",gardin:"rod",soffa:"ingen",bord:"ingen",kyl:"ingen",spis:"ingen",tvatt:"ingen",tv:"ingen",kompis:"ingen"};
+ kompis:{n:"Kompis",d3:true,items:[["ingen","Ingen","➖",0],["katt","Katt","🐱",150],["hund","Hund","🐶",150],["kanin","Kanin","🐰",120],["skoldpadda","Sköldpadda","🐢",100],["pingvin","Pingvin","🐧",200]]},
+ musik:{n:"Musik",d3:true,rum:"lek",items:[["ingen","Inget","➖",0],["piano","Piano","🎹",150],["trummor","Trumset","🥁",150],["xylofon","Xylofon","🎶",90]]},
+ lek:{n:"Lek",d3:true,rum:"lek",items:[["ingen","Inget","➖",0],["studsmatta","Studsmatta","🤸",120],["bollhav","Bollhav","🔴",150]]},
+ teleskop:{n:"Teleskop",d3:true,rum:"lek",items:[["ingen","Inget","➖",0],["teleskop","Teleskop","🔭",120]]}};
+const START={tapet:"slat",golv:"tra",fonster:"dag",sang:"enkel",tak:"inget",matta:"ingen",hylla:"ingen",tavla:"ingen",vaxt:"ingen",husdjur:"ingen",gardin:"rod",soffa:"ingen",bord:"ingen",kyl:"ingen",spis:"ingen",tvatt:"ingen",tv:"ingen",kompis:"ingen",musik:"ingen",lek:"ingen",teleskop:"ingen"};
 function las(){try{const d=JSON.parse(localStorage.getItem(KEY)||"{}");return{val:Object.assign({},START,d.val||{}),t:d.t||{},fx:Object.assign({lampa:true,gardin:false},d.fx||{}),pos:d.pos||{}};}catch(e){return{val:Object.assign({},START),t:{},fx:{lampa:true,gardin:false}};}}
 function spara(d){try{localStorage.setItem(KEY,JSON.stringify(d));}catch(e){}}
 const item=(slot,id)=>RUM[slot]&&RUM[slot].items.find(x=>x[0]===id);
