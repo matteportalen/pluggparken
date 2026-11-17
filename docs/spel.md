@@ -94,4 +94,4 @@ Nyckel `mattespel-talkross-v1` ({stars, betyg, best}) är registrerad i gemensam
 
 Talkross: brickan följer pekaren under dragning och grannen flyttar undan. Ogiltiga byten studsar tillbaka utan att påverka drag eller poäng; avbrutna drag återställs också.
 
-Matchningar visas markerade i 650 ms före ploppet så talen hinner läsas. Därefter ploppar brickorna bort, luckorna syns kort och brickorna ovanför faller ner med landningsstuds. Reducerad rörelse behåller läspausen men tar bort rörelseeffekterna.
+Första matchningen visas i 1,6 sekunder, följande kedjematchningar i 1 sekund. Hela träffraden ramas in och övriga brickor tonas ner. Ovanför brädet visas uträkningen och om den dragna brickan eller grannbrickan skapade raden. Därefter ploppar brickorna bort, luckorna syns kort och brickorna ovanför faller ner med landningsstuds. Reducerad rörelse behåller läspausen men tar bort rörelseeffekterna.

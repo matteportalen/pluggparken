@@ -41,6 +41,7 @@ function start(world,n){
  render(game.board);hud();sound();say(config.note+' Välj två grannar.');buttons[0].focus({preventScroll:true});
 }
 function render(board,from){
+ $('board').classList.remove('show-match');
  const size=buttons[0].offsetHeight+parseFloat(getComputedStyle($('board')).gap||6);
  board.forEach((tile,i)=>{
   const b=buttons[i];b.className='tile'+(tile.text.length>2?' expression':'');b.removeAttribute('style');
@@ -52,6 +53,16 @@ function render(board,from){
   if(from&&from[i]!==Math.floor(i/SIZE)){b.style.setProperty('--drop',(from[i]-Math.floor(i/SIZE))*size+'px');b.classList.add('falling');}
  });
  if(selected!=null)buttons[selected].classList.add('selected');
+}
+function showMatchRows(groups){
+ const host=$('burst'),base=host.getBoundingClientRect();
+ host.querySelectorAll('.match-row').forEach(e=>e.remove());
+ for(const g of groups){
+  const rects=g.cells.map(i=>buttons[i].getBoundingClientRect());
+  const left=Math.min(...rects.map(r=>r.left)),top=Math.min(...rects.map(r=>r.top));
+  const row=document.createElement('i');row.className='match-row';
+  Object.assign(row.style,{left:left-base.left-3+'px',top:top-base.top-3+'px',width:Math.max(...rects.map(r=>r.right))-left+6+'px',height:Math.max(...rects.map(r=>r.bottom))-top+6+'px'});host.append(row);
+ }
 }
 function popRings(cells){
  if(reduce)return;
@@ -88,7 +99,11 @@ async function play(a,b){
   }else if(event.kind==='clear'){
    event.cells.forEach(i=>buttons[i].classList.add('match-ready'));
    const msg=$('message');msg.replaceChildren();
-   if(event.chain>1)msg.append('Kedja '+event.chain+'! ');
+   showMatchRows(event.groups);
+   $('board').classList.add('show-match');
+   const reason=document.createElement('strong');reason.className='match-reason';
+   reason.textContent=event.chain>1?'Kedja! De fallande brickorna skapade en ny rad.':event.cells.includes(b)?'Brickan du flyttade bildar den markerade raden.':'Grannbrickan bildar den markerade raden när ni byter plats.';
+   msg.append(reason);
    event.groups.slice(0,2).forEach((g,j)=>{
      if(j)msg.append(' · ');
      g.parts.forEach((part,i)=>{if(i)msg.append(game.config.type==='sum'?' + ':' = ');
@@ -98,7 +113,8 @@ async function play(a,b){
      if(game.config.type==='sum')msg.append(' = '+game.config.target);
    });
    if(event.groups.length>2)msg.append(' · fler matchningar!');
-   await new Promise(r=>setTimeout(r,650));if(run!==token)return;
+   await new Promise(r=>setTimeout(r,event.chain===1?1600:1000));if(run!==token)return;
+   $('board').classList.remove('show-match');$('burst').querySelectorAll('.match-row').forEach(e=>e.remove());
    event.cells.forEach(i=>{buttons[i].classList.remove('match-ready');buttons[i].classList.add('matched');});
    popRings(event.cells);window.Ljud?.pop(Math.min(6,event.chain-1));await wait(440);
    if(run!==token)return;await wait(90);
@@ -106,7 +122,7 @@ async function play(a,b){
   else{render(event.board);say('Inga byten kvar — nya tal kommer in. Dina framsteg finns kvar.');await wait(450);}
  }
  if(run!==token)return;busy=false;render(game.board);hud();
- if(game.won)finish();else{say('Snyggt! '+Math.max(0,game.config.goal-game.lines)+' rader kvar. '+game.config.note);}
+ if(game.won)finish();else{say('Bytet gav en giltig rad. '+Math.max(0,game.config.goal-game.lines)+' rader kvar. Båda brickorna flyttas — det räcker att en av dem skapar en rad.');}
 }
 function choose(i){
  if(busy||!game)return;
