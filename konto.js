@@ -47,6 +47,8 @@ function merge(a,b){const out=Object.assign({},a);
     if(k==="matteportalen-rum"){try{const x=JSON.parse(a[k]),y=JSON.parse(b[k]),def={tapet:"slat",golv:"tra",fonster:"dag",sang:"enkel"},o={val:{},t:{},fx:Object.assign({},y.fx||{},x.fx||{})};
       new Set([...Object.keys(x.val||{}),...Object.keys(y.val||{})]).forEach(s=>{const xv=(x.val||{})[s],yv=(y.val||{})[s],xt=(x.t||{})[s]||0,yt=(y.t||{})[s]||0,isDef=v=>v==null||v==="ingen"||v==="inget"||v===def[s];
         const wy=(xt||yt)?yt>xt:(isDef(xv)&&!isDef(yv));o.val[s]=wy?yv:xv;if(xt||yt)o.t[s]=Math.max(xt,yt);});
+      new Set([...Object.keys(x.pos||{}),...Object.keys(y.pos||{})]).forEach(s=>{const xt=(x.t||{})["pos:"+s]||0,yt=(y.t||{})["pos:"+s]||0,xp=(x.pos||{})[s],yp=(y.pos||{})[s],v=yt>xt?yp:xt>yt?xp:(xp!==undefined?xp:yp);   // egna möbelplatser i huset: senast flyttad vinner
+        if(v!==undefined){(o.pos=o.pos||{})[s]=v;}if(xt||yt)o.t["pos:"+s]=Math.max(xt,yt);});
       out[k]=JSON.stringify(o);}catch(e){}return;}
     if(k==="matteportalen-mynt"){try{const x=JSON.parse(a[k]),y=JSON.parse(b[k]),o=(y.tj||0)>(x.tj||0)?y:x;
       o.kopt=[...new Set([...(x.kopt||[]),...(y.kopt||[])])];o.hi=Math.max(x.hi||0,x.sedd||0,y.hi||0,y.sedd||0);out[k]=JSON.stringify(o);}catch(e){}return;}

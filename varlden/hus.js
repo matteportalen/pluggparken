@@ -105,7 +105,8 @@ export function byggHusInne(ctx){
   mtxt.rotation.x=-Math.PI/2;mtxt.position.set(0,.05,7.9);S.W.add(mtxt);
   S.ref.basKoll=S.kollider.slice();
   S.ref.husLiv=[];S.liv.push(t=>{for(const f of S.ref.husLiv)f(t);});
-  S.ref.inred=prov=>inred(ctx,V,prov);
+  S.ref.prov={};S.ref.inred=prov=>{S.ref.prov=prov||{};inred(ctx,V,S.ref.prov);FL&&FL.ring();};
+  flyttLage(ctx,V);
   inred(ctx,V,{});
   // väggar mellan kameran och rummet göms, så att man alltid ser in (som i ett dockskåp); portalbågen göms med framväggen
   S.liv.push(()=>{for(const w of S.ref.vaggar||[]){const u=(cam.position.x-w.cx)*w.nx+(cam.position.z-w.cz)*w.nz;w.g.visible=u<.3;}
@@ -151,7 +152,8 @@ function inred(ctx,V,prov){
     for(const w of[bak,vanster]){const f=paVagg(w,0,VH-.35);for(let i=0;i<16;i++){const x=-8.4+i*1.12,y=-Math.abs(Math.sin(i*.9))*.3;const k=K(f,.12,ljus(cols[i%cols.length]),x,y,.12);kulor.push(k);}}
     if(!reduce)liv.push(t=>kulor.forEach((k,i)=>k.visible=Math.sin(t*3+i)>-.6));}
   // möbler och saker
-  const plats=(id,bygg)=>{const p=PLATS[id];const q=new T.Group();q.position.set(p[0],0,p[1]);q.rotation.y=p[2];g.add(q);bygg(q);return q;};
+  S.ref.grupper={};
+  const plats=(id,bygg)=>{const p=(d.pos&&Array.isArray(d.pos[id])&&d.pos[id].length===3)?d.pos[id]:PLATS[id];const q=new T.Group();q.position.set(p[0],0,p[1]);q.rotation.y=p[2];g.add(q);bygg(q);S.ref.grupper[id]=q;return q;};
   const varld=(q,lx,lz)=>{const c=Math.cos(q.rotation.y),s=Math.sin(q.rotation.y);return[q.position.x+c*lx+s*lz,q.position.z-s*lx+c*lz];};
   // säng
   plats('sang',q=>{const id=v.sang;
@@ -282,6 +284,39 @@ function kompis(T,V,g,id,liv,reduce){
     else ben.forEach((b,i)=>{b.position.y=(b.userData.y0??(b.userData.y0=b.position.y))+Math.max(0,Math.sin(t*10+i*Math.PI/2))*.08;});});
 }
 
+/* ---------- Flytta möbler: tryck på en möbel i rummet och dra den (fönster, tavla, gardiner och taket sitter fast) ---------- */
+const RAD={sang:2.2,hylla:1.3,matta:3,vaxt:.7,husdjur:.9,soffa:1.9,tv:1.2,bord:2.3,kyl:.9,spis:.9,tvatt:.9};
+let FL=null,lyssnar=false;
+function flyttLage({THREE:T,S,cam,canvas},V){
+  const ray=new T.Raycaster(),ndc=new T.Vector2(),plan=new T.Plane(new T.Vector3(0,1,0),0),pt=new T.Vector3();
+  const ring=new T.Mesh(new T.RingGeometry(.92,1,48),new T.MeshBasicMaterial({color:0xFFC93C,transparent:true,opacity:.95,depthWrite:false}));ring.rotation.x=-Math.PI/2;ring.position.y=.07;ring.visible=false;S.W.add(ring);
+  const st={pa:false,vald:null,drag:null,cb:null};
+  const pek=e=>{const r=canvas.getBoundingClientRect();ndc.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);ray.setFromCamera(ndc,cam);};
+  const traff=()=>{let b=null;for(const[sl,gr]of Object.entries(S.ref.grupper||{})){const h=ray.intersectObject(gr,true)[0];if(h&&(!b||h.distance<b.d))b={sl,d:h.distance};}return b&&b.sl;};
+  // möbeln stannar i rummet och aldrig framför dörren (annars kommer man inte ut)
+  const begr=(sl,x,z)=>{const r=RAD[sl]||1,m=R-.35-(sl==='matta'?0:r);x=Math.max(-m,Math.min(m,x));z=Math.max(-m,Math.min(m,z));
+    if(sl!=='matta'&&Math.abs(x)<1.9+r&&z>6.4-r)z=6.4-r;return[Math.round(x*4)/4,Math.round(z*4)/4];};
+  const ringVisa=()=>{const gr=st.vald&&S.ref.grupper[st.vald];ring.visible=!!(st.pa&&gr);if(!gr)return;ring.position.x=gr.position.x;ring.position.z=gr.position.z;const r=RAD[st.vald]||1;ring.scale.set(r+.3,r+.3,1);};
+  const spara=sl=>{const gr=S.ref.grupper[sl];if(!gr)return;const d=MPRum.las();d.pos=d.pos||{};d.pos[sl]=[gr.position.x,gr.position.z,Math.round(gr.rotation.y*1000)/1000];d.t['pos:'+sl]=Date.now();MPRum.spara(d);
+    window.MPKonto&&MPKonto.puffa&&MPKonto.puffa();S.ref.inred(S.ref.prov);};   // byggs om så att man krockar med möbeln där den står nu
+  FL={
+    ring:ringVisa,
+    satt(pa,cb){st.pa=pa;st.cb=cb||null;if(!pa){st.vald=null;st.drag=null;}ringVisa();},
+    vald:()=>st.vald,
+    vrid(){const gr=st.vald&&S.ref.grupper[st.vald];if(!gr)return;gr.rotation.y+=Math.PI/4;spara(st.vald);},
+    tillbaka(){const sl=st.vald;if(!sl)return;const d=MPRum.las();d.pos=d.pos||{};d.pos[sl]=null;   /* null = standardplatsen (sparas, så att en annan enhet inte lägger tillbaka den gamla) */d.t['pos:'+sl]=Date.now();MPRum.spara(d);S.ref.inred(S.ref.prov);},
+    knuffa(dx,dz){const gr=st.vald&&S.ref.grupper[st.vald];if(!gr)return;const[x,z]=begr(st.vald,gr.position.x+dx,gr.position.z+dz);gr.position.x=x;gr.position.z=z;spara(st.vald);},
+    ned(e){if(!st.pa||S.id!==FL.id)return;pek(e);const sl=traff();if(!sl)return;e.stopPropagation();e.preventDefault();
+      st.vald=sl;const gr=S.ref.grupper[sl];if(ray.ray.intersectPlane(plan,pt))st.drag={id:e.pointerId,dx:gr.position.x-pt.x,dz:gr.position.z-pt.z,flytt:false};ringVisa();st.cb&&st.cb(sl);},
+    drag(e){if(!st.drag||e.pointerId!==st.drag.id)return;e.stopPropagation();pek(e);if(!ray.ray.intersectPlane(plan,pt))return;const gr=S.ref.grupper[st.vald];if(!gr)return;
+      const[x,z]=begr(st.vald,pt.x+st.drag.dx,pt.z+st.drag.dz);if(x!==gr.position.x||z!==gr.position.z){gr.position.x=x;gr.position.z=z;st.drag.flytt=true;ringVisa();}},
+    upp(e){if(!st.drag||e.pointerId!==st.drag.id)return;e.stopPropagation();const f=st.drag.flytt;st.drag=null;if(f)spara(st.vald);},
+    id:S.id};
+  // lyssnarna läggs bara en gång och går till det rum som är aktivt nu (fångas före världens egna, så att kameran inte vrids medan man drar)
+  if(!lyssnar){lyssnar=true;addEventListener('pointerdown',e=>FL&&FL.ned(e),true);addEventListener('pointermove',e=>FL&&FL.drag(e),true);
+    addEventListener('pointerup',e=>FL&&FL.upp(e),true);addEventListener('pointercancel',e=>FL&&FL.upp(e),true);}
+}
+
 /* ---------- Butiken: "🛒 Inred" ---------- */
 const CSS=`#husKnapp[hidden],#husP[hidden]{display:none}
 #husP{position:fixed;left:50%;bottom:calc(10px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:11;width:min(760px,calc(100vw - 20px));max-height:min(58vh,520px);display:flex;flex-direction:column;background:#fff;border-radius:24px;box-shadow:0 6px 0 #C6D6F2,0 10px 30px rgba(29,43,83,.18);font-family:"Baloo 2","Trebuchet MS",system-ui,sans-serif;color:#1D2B53}
@@ -304,6 +339,12 @@ const CSS=`#husKnapp[hidden],#husP[hidden]{display:none}
 #husP .hp-b.kop{background:#FFC93C;box-shadow:0 4px 0 #C99A0A}
 #husP .hp-b:disabled{opacity:.55;cursor:default}
 #husP .hp-b[hidden]{display:none}
+#husF{position:fixed;left:50%;bottom:calc(10px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:11;width:min(640px,calc(100vw - 20px));display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:12px 14px;background:#fff;border-radius:22px;box-shadow:0 6px 0 #C6D6F2,0 10px 30px rgba(29,43,83,.18);font-family:"Baloo 2","Trebuchet MS",system-ui,sans-serif;color:#1D2B53}
+#husF[hidden]{display:none}
+#husF .hf-t{flex:1 1 220px;font-weight:800;font-size:1rem;line-height:1.25}
+#husF .hp-b{min-height:48px;padding:0 16px;border-radius:999px;border:0;font:800 1rem inherit;font-family:inherit;cursor:pointer;background:#EAF3FF;color:#1D2B53;box-shadow:0 4px 0 #C6D6F2}
+#husF .hp-b.ok{background:#1E9E5E;color:#fff;box-shadow:0 4px 0 #157548}
+#husF .hp-b:disabled{opacity:.45;cursor:default}
 @media (max-width:560px){#husP{max-height:62vh;border-radius:20px}#husP .hp-items{grid-template-columns:repeat(3,1fr)}}`;
 
 export function husButik({S:getS,toast,pling,stoppaRorelse}){
@@ -313,8 +354,11 @@ export function husButik({S:getS,toast,pling,stoppaRorelse}){
   const topR=document.getElementById('topR');topR&&topR.prepend(knapp);
   const p=document.createElement('div');p.id='husP';p.hidden=true;p.setAttribute('role','dialog');p.setAttribute('aria-label','Inred ditt hus');
   p.innerHTML=`<div class="hp-top"><h2>🛒 Inred ditt hus</h2><span class="hp-mynt" id="hpMynt"></span></div><div class="hp-tabs" id="hpTabs"></div><div class="hp-items" id="hpItems"></div>
-    <div class="hp-fot"><span class="hp-msg" id="hpMsg" aria-live="polite"></span><button class="hp-b" id="hpRens" type="button" hidden>Ångra provet</button><button class="hp-b kop" id="hpKop" type="button" hidden></button><button class="hp-b" id="hpKlar" type="button">✓ Klar</button></div>`;
+    <div class="hp-fot"><span class="hp-msg" id="hpMsg" aria-live="polite"></span><button class="hp-b" id="hpRens" type="button" hidden>Ångra provet</button><button class="hp-b kop" id="hpKop" type="button" hidden></button><button class="hp-b" id="hpFlytt" type="button">✋ Flytta möbler</button><button class="hp-b" id="hpKlar" type="button">✓ Klar</button></div>`;
   document.body.appendChild(p);
+  const fb=document.createElement('div');fb.id='husF';fb.hidden=true;fb.setAttribute('role','dialog');fb.setAttribute('aria-label','Flytta möbler');
+  fb.innerHTML=`<span class="hf-t" id="hfT" aria-live="polite"></span><button class="hp-b" id="hfVrid" type="button" disabled>↻ Vrid</button><button class="hp-b" id="hfTb" type="button" disabled>↺ Tillbaka</button><button class="hp-b ok" id="hfKlar" type="button">✓ Klar</button>`;
+  document.body.appendChild(fb);
   const $=id=>document.getElementById(id);
   const ORDNING=['soffa','bord','sang','tv','kyl','spis','tvatt','kompis','husdjur','matta','vaxt','hylla','tavla','tak','gardin','fonster','tapet','golv'];
   let flik='soffa',prov={};
@@ -336,8 +380,21 @@ export function husButik({S:getS,toast,pling,stoppaRorelse}){
     else $('hpKop').hidden=true;
   }
   const oppna=()=>{prov={};p.hidden=false;knapp.setAttribute('aria-pressed','true');stoppaRorelse&&stoppaRorelse();$('hpMsg').textContent='Tryck på en sak för att prova den i huset.';rita();};
-  const stang=()=>{p.hidden=true;knapp.setAttribute('aria-pressed','false');if(Object.keys(prov).length){prov={};bygg();}};
-  knapp.onclick=()=>p.hidden?oppna():stang();
+  const stang=()=>{p.hidden=true;knapp.setAttribute('aria-pressed','false');if(Object.keys(prov).length){prov={};bygg();}flyttAv();};
+  // flyttläget: butiken göms, en liten rad visar vad man gör
+  const NAMN=sl=>{const it=MPRum.item(sl,MPRum.las().val[sl]);return it?it[1]:(RUM()[sl]||{}).n||sl;};
+  const flyttText=sl=>{$('hfT').textContent=sl?`${NAMN(sl)}: dra den dit du vill.`:'Tryck på en möbel och dra den dit du vill.';$('hfVrid').disabled=$('hfTb').disabled=!sl;};
+  function flyttPa(){if(Object.keys(prov).length){prov={};bygg();}p.hidden=true;fb.hidden=false;knapp.setAttribute('aria-pressed','true');stoppaRorelse&&stoppaRorelse();flyttText(null);
+    FL&&FL.satt(true,sl=>{flyttText(sl);pling(520,700);});}
+  function flyttAv(){if(fb.hidden)return;fb.hidden=true;knapp.setAttribute('aria-pressed','false');FL&&FL.satt(false);}
+  $('hpFlytt').onclick=flyttPa;
+  $('hfKlar').onclick=()=>{flyttAv();pling(660,990);};
+  $('hfVrid').onclick=()=>{FL&&FL.vrid();pling(600,760);};
+  $('hfTb').onclick=()=>{FL&&FL.tillbaka();pling(500,420);flyttText(FL&&FL.vald());};
+  // piltangenterna knuffar den valda möbeln (i stället för att gå) medan man flyttar
+  addEventListener('keydown',e=>{if(fb.hidden||!FL||!FL.vald())return;const k={ArrowLeft:[-.5,0],ArrowRight:[.5,0],ArrowUp:[0,-.5],ArrowDown:[0,.5]}[e.key];
+    if(k){e.preventDefault();e.stopPropagation();FL.knuffa(k[0],k[1]);}else if(e.key==='r'||e.key==='R'){e.stopPropagation();FL.vrid();}},true);
+  knapp.onclick=()=>(p.hidden&&fb.hidden)?oppna():stang();
   $('hpKlar').onclick=stang;
   $('hpTabs').onclick=e=>{const b=e.target.closest('[data-tab]');if(!b)return;flik=b.dataset.tab;rita();};
   $('hpItems').onclick=e=>{const b=e.target.closest('[data-id]');if(!b)return;const id=b.dataset.id,it=MPRum.item(flik,id);
@@ -349,6 +406,6 @@ export function husButik({S:getS,toast,pling,stoppaRorelse}){
     if(n){MPRum.spara(d);window.MPKonto&&MPKonto.puffa&&MPKonto.puffa();$('hpMsg').textContent=n===1?`Köpt! ${pv[0][2][1]} är din. 🎉`:`Köpt! ${n} saker är dina. 🎉`;pling(784,1046);setTimeout(()=>pling(1046,1318),150);bygg();rita();}};
   $('hpRens').onclick=()=>{prov={};$('hpMsg').textContent='';bygg();rita();};
   // Escape stänger butiken
-  addEventListener('keydown',e=>{if(e.key==='Escape'&&!p.hidden){stang();e.stopPropagation();}},true);
-  return{visa(paa){knapp.hidden=!paa;if(!paa)stang();},oppen:()=>!p.hidden};
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&(!p.hidden||!fb.hidden)){stang();e.stopPropagation();}},true);
+  return{visa(paa){knapp.hidden=!paa;if(!paa)stang();},oppen:()=>!p.hidden||!fb.hidden};
 }
