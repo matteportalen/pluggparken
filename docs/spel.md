@@ -93,3 +93,5 @@ Asteroidstormen, Ugglans flygtur, Skattkartan och Kiosken (ersatt av Affären). 
 Nyckel `mattespel-talkross-v1` ({stars, betyg, best}) är registrerad i gemensamma stjärnor, profiler och startsidans sparning. Spelet nås genom sökningen och portalen på Spelön. Den befintliga spelmenyn lämnas enligt användarens önskemål.
 
 Talkross: brickan följer pekaren under dragning och grannen flyttar undan. Ogiltiga byten studsar tillbaka utan att påverka drag eller poäng; avbrutna drag återställs också.
+
+Matchningar visas markerade i 650 ms före ploppet så talen hinner läsas. Därefter ploppar brickorna bort, luckorna syns kort och brickorna ovanför faller ner med landningsstuds. Reducerad rörelse behåller läspausen men tar bort rörelseeffekterna.

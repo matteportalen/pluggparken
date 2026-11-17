@@ -30,7 +30,7 @@ function menu(){
 }
 function sound(){const on=!window.Ljud||Ljud.on;$('sound').textContent=on?'🔊':'🔇';$('sound').setAttribute('aria-pressed',String(!on));}
 function start(world,n){
- token++;drag=null;busy=false;selected=null;focusCell=0;currentWorld=world;currentLevel=n;
+ token++;drag=null;$('burst').replaceChildren();busy=false;selected=null;focusCell=0;currentWorld=world;currentLevel=n;
  const config=level(world,n),seed=0x711+WORLDS.findIndex(w=>w.id===world)*10000+n*91;
  game=new Game(config,seed);screen('game');$('levelName').textContent=config.icon+' '+config.name+' · '+n+'/4';
  $('goalLabel').textContent=config.type==='sum'?'BYGG SUMMAN':'MATCHA';$('goal').textContent=config.type==='sum'?config.target:'=';
@@ -41,7 +41,7 @@ function start(world,n){
  render(game.board);hud();sound();say(config.note+' Välj två grannar.');buttons[0].focus({preventScroll:true});
 }
 function render(board,from){
- const size=buttons[0].getBoundingClientRect().height+parseFloat(getComputedStyle($('board')).gap||6);
+ const size=buttons[0].offsetHeight+parseFloat(getComputedStyle($('board')).gap||6);
  board.forEach((tile,i)=>{
   const b=buttons[i];b.className='tile'+(tile.text.length>2?' expression':'');b.removeAttribute('style');
   b.replaceChildren();
@@ -52,6 +52,16 @@ function render(board,from){
   if(from&&from[i]!==Math.floor(i/SIZE)){b.style.setProperty('--drop',(from[i]-Math.floor(i/SIZE))*size+'px');b.classList.add('falling');}
  });
  if(selected!=null)buttons[selected].classList.add('selected');
+}
+function popRings(cells){
+ if(reduce)return;
+ const host=$('burst'),rect=host.getBoundingClientRect();
+ for(const i of cells){
+  const tile=buttons[i].getBoundingClientRect(),ring=document.createElement('i');ring.className='pop-ring';
+  ring.style.left=tile.x-rect.x+tile.width/2+'px';ring.style.top=tile.y-rect.y+tile.height/2+'px';
+  ring.style.width=tile.width*.8+'px';ring.style.height=tile.height*.8+'px';host.append(ring);
+  ring.addEventListener('animationend',()=>ring.remove(),{once:true});
+ }
 }
 function hud(){
  const c=game.config;$('turns').textContent=game.turns;$('score').textContent=game.points;$('chain').textContent=game.maxChain?game.maxChain+' i följd':'—';
@@ -76,7 +86,7 @@ async function play(a,b){
    swapVisual(a,b);
    window.Ljud?.slurp();await wait(180);if(run!==token)return;render(event.board);
   }else if(event.kind==='clear'){
-   event.cells.forEach(i=>buttons[i].classList.add('matched'));
+   event.cells.forEach(i=>buttons[i].classList.add('match-ready'));
    const msg=$('message');msg.replaceChildren();
    if(event.chain>1)msg.append('Kedja '+event.chain+'! ');
    event.groups.slice(0,2).forEach((g,j)=>{
@@ -88,8 +98,11 @@ async function play(a,b){
      if(game.config.type==='sum')msg.append(' = '+game.config.target);
    });
    if(event.groups.length>2)msg.append(' · fler matchningar!');
-   window.Ljud?.pop(Math.min(6,event.chain-1));await wait(400);
-  }else if(event.kind==='fall'){render(event.board,event.from);await wait(360);}
+   await new Promise(r=>setTimeout(r,650));if(run!==token)return;
+   event.cells.forEach(i=>{buttons[i].classList.remove('match-ready');buttons[i].classList.add('matched');});
+   popRings(event.cells);window.Ljud?.pop(Math.min(6,event.chain-1));await wait(440);
+   if(run!==token)return;await wait(90);
+  }else if(event.kind==='fall'){render(event.board,event.from);await wait(600);}
   else{render(event.board);say('Inga byten kvar — nya tal kommer in. Dina framsteg finns kvar.');await wait(450);}
  }
  if(run!==token)return;busy=false;render(game.board);hud();
@@ -151,7 +164,7 @@ $('board').addEventListener('keydown',e=>{
 $('undo').onclick=()=>{if(busy||!game.undo())return;selected=null;render(game.board);hud();say('Draget och hela kedjan är ångrade. Prova en annan väg!');};
 $('hint').onclick=()=>{if(busy)return;const h=game.hint();if(!h)return;selected=null;render(game.board);buttons[h.a].classList.add('hinted');buttons[h.b].classList.add('hinted');say('De två markerade brickorna kan byta plats. Räkna på vad raden blir!');};
 $('restart').onclick=()=>start(currentWorld,currentLevel);
-function back(){token++;drag=null;busy=false;selected=null;screen('choose');menu();$('chooseTitle').tabIndex=-1;$('chooseTitle').focus({preventScroll:true});}
+function back(){token++;drag=null;$('burst').replaceChildren();busy=false;selected=null;screen('choose');menu();$('chooseTitle').tabIndex=-1;$('chooseTitle').focus({preventScroll:true});}
 $('back').onclick=back;$('return').onclick=back;
 $('sound').onclick=()=>{if(window.Ljud){Ljud.set(!Ljud.on);sound();document.dispatchEvent(new Event('mp-ljud-andrat'));}};
 function finish(){
