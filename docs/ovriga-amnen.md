@@ -86,6 +86,8 @@ Kartorna är gjorda ur Natural Earth (public domain). Europakartan, Världskarta
 - Efter första felet i en lyssna-uppgift visas ordet i text, så att ingen fastnar utan ljud. Finns ingen röst i enheten visas ordet direkt.
 - Bilden får bara kunna betyda ordet.
 
+- **Riktig röst (17 nov 2026):** 🔊 spelar mp3-filer med rösten Philippa (ElevenLabs, brittisk) ur `ljud/engelska/` via `engelska.js` (`MPEngelska.tala(text, reserv)`); `karta.json` kopplar text (gemener) till filnamn. Saknas filen används webbläsarens röst. 202 uttryck: alla ord och fraser i `ORD`/`FRASER` samt alla klockfraser (12 timmar × femminuterstider). **Lägger du till ord eller fraser: kör `node skript/bygg-engelska-ljud.js <mapp>` (skriver `<mapp>/en-manus.txt` och `ljud/engelska/karta.json`), sedan `ELEVEN_SETTINGS='{"stability":0.5,"similarity_boost":0.75,"speed":0.9}' node skript/elevenlabs.js <mapp>/en-manus.txt ljud/engelska`** (hoppar över filer som finns). Gäller även Klockan på engelska. Draw it! har kvar datorrösten.
+
 ## Klockan på engelska
 
 - Omgjord nov 2026: inga svarsalternativ. Två sorters uppgifter: **ställ klockan** efter frasen ("Set the clock to half past three", visarna dras med `klocka.js`) och **bygg klockslaget** av ordbrickor efter en klocka.

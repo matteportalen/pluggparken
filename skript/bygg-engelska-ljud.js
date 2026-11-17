@@ -1,0 +1,10 @@
+const fs=require("fs");const h=fs.readFileSync("engelskaord/index.html","utf8");
+const m={};new Function("m",h.slice(h.indexOf("const ORD={"),h.indexOf("const NIV="))+";m.ORD=ORD;m.FRASER=FRASER;")(m);
+const NAMN=["twelve","one","two","three","four","five","six","seven","eight","nine","ten","eleven"],nm=x=>NAMN[((x%12)+12)%12],MIN={5:"five",10:"ten",20:"twenty",25:"twenty-five"};
+const fras=(h,m)=>m===0?nm(h)+" o'clock":m===30?"half past "+nm(h):m===15?"quarter past "+nm(h):m===45?"quarter to "+nm(h+1):m<30?MIN[m]+" past "+nm(h):MIN[60-m]+" to "+nm(h+1);
+const set=new Set();for(const k in m.ORD)m.ORD[k].forEach(o=>set.add(o[0].toLowerCase()));m.FRASER.forEach(f=>set.add(f[0].toLowerCase()));
+for(let x=0;x<12;x++)for(let mi=0;mi<60;mi+=5)set.add(fras(x,mi));
+const lista=[...set];const karta={};let man="VOICE: IbXTsH7MlHi5GQco8zZH\n";
+lista.forEach((t,i)=>{karta[t]="s"+(i+1)+"-1";man+=`s${i+1}-1   ${t}\n`;});
+fs.writeFileSync(process.argv[2]+"/en-manus.txt",man);fs.mkdirSync("ljud/engelska",{recursive:true});fs.writeFileSync("ljud/engelska/karta.json",JSON.stringify(karta));
+console.log(lista.length,"uttryck,",lista.join("").length,"tecken");

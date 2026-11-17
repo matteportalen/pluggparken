@@ -105,6 +105,7 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 </head>
 <body>
 <script src="../ljud.js"></script>
+<script src="../engelska.js"></script>
 <script src="../klocka.js"></script>
 <script src="../huvud.js" data-titel="Klockan på engelska" data-ikon="⏰"></script>
 <main class="wrap">
@@ -210,8 +211,8 @@ $("niv").onclick=e=>{const b=e.target.closest("[data-l]");if(b)starta(+b.dataset
 /* engelsk uppläsning, bara när man trycker på 🔊 */
 let enVoice=null;function laddaRoster(){try{const v=speechSynthesis.getVoices();enVoice=v.find(x=>/^en[-_]GB/i.test(x.lang))||v.find(x=>/^en/i.test(x.lang))||null}catch(e){}}
 if("speechSynthesis" in window){laddaRoster();speechSynthesis.onvoiceschanged=laddaRoster;}
-function tyst(){try{window.speechSynthesis&&speechSynthesis.cancel()}catch(e){}}
-function lasUpp(t){if(!("speechSynthesis" in window))return;tyst();const u=new SpeechSynthesisUtterance(t);u.lang="en-GB";if(enVoice)u.voice=enVoice;u.rate=.85;speechSynthesis.speak(u);}
+function tyst(){try{window.MPEngelska&&MPEngelska.tyst();window.speechSynthesis&&speechSynthesis.cancel()}catch(e){}}
+function lasUpp(t){tyst();const reserv=()=>{if(!("speechSynthesis" in window))return;const u=new SpeechSynthesisUtterance(t);u.lang="en-GB";if(enVoice)u.voice=enVoice;u.rate=.85;speechSynthesis.speak(u);};window.MPEngelska?MPEngelska.tala(t,reserv):reserv();}
 $("hor").onclick=()=>{if(G&&G.tal)lasUpp(G.tal);};
 
 /* ---------- Spelet ---------- */

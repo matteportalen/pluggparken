@@ -126,6 +126,7 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 </head>
 <body>
 <script src="../ljud.js"></script>
+<script src="../engelska.js"></script>
 <script src="../huvud.js" data-titel="Engelska ord" data-ikon="🇬🇧"></script>
 <main class="wrap">
 
@@ -213,11 +214,11 @@ function hem(){rensa();tyst();
   show("home");}
 $("niv").onclick=e=>{const b=e.target.closest("[data-l]");if(b)starta(+b.dataset.l);};
 /* engelsk röst, bara när man trycker på 🔊. Finns ingen röst i enheten visas ordet i text i stället. */
-let enVoice=null;const kanTala="speechSynthesis" in window;
+let enVoice=null;const kanTala=("speechSynthesis" in window)||!!window.MPEngelska;
 function laddaRoster(){try{const v=speechSynthesis.getVoices();enVoice=v.find(x=>/^en[-_]GB/i.test(x.lang))||v.find(x=>/^en/i.test(x.lang))||null}catch(e){}}
 if(kanTala){laddaRoster();speechSynthesis.onvoiceschanged=laddaRoster;}
-function tyst(){try{kanTala&&speechSynthesis.cancel()}catch(e){}}
-function lasUpp(t){if(!kanTala)return;tyst();const u=new SpeechSynthesisUtterance(t);u.lang="en-GB";if(enVoice)u.voice=enVoice;u.rate=.8;speechSynthesis.speak(u);}
+function tyst(){try{window.MPEngelska&&MPEngelska.tyst();kanTala&&speechSynthesis.cancel()}catch(e){}}
+function lasUpp(t){tyst();const reserv=()=>{if(!kanTala)return;const u=new SpeechSynthesisUtterance(t);u.lang="en-GB";if(enVoice)u.voice=enVoice;u.rate=.8;speechSynthesis.speak(u);};window.MPEngelska?MPEngelska.tala(t,reserv):reserv();}
 $("hor").onclick=()=>{if(!G||!G.tal)return;lasUpp(G.tal);if(G.U&&!G.last&&(G.U.typ==="lyssna"||G.U.typ==="hor")){G.lyssnat=true;$("hor").classList.remove("stor");ritaFraga();}};
 
 /* ---------- Spelet ---------- */
