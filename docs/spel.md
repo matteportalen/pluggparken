@@ -88,7 +88,7 @@ Asteroidstormen, Ugglans flygtur, Skattkartan och Kiosken (ersatt av Affären). 
 
 ## Talkross
 
-`spel/talkross/`: matematiskt matchspel med fem världar och fyra banor per värld. Byt två grannar; tre tal på rad ska ge 10, 20 eller 100, eller tre uttryck ha samma värde (addition/subtraktion respektive multiplikation/division). Division visas som staplade bråk. Färgerna är dekorativa och avslöjar inte svaret. Kedjor, tips, exakt ångra och automatiskt nytt spelbart bräde när dragen tar slut. Ingen tidsgräns eller liv; färre drag ger fler stjärnor. Världsstjärnor är lägsta betyget över världens fyra banor, först när alla är klara.
+`spel/talkross/`: matematiskt matchspel med sex världar och fyra banor per värld. Först kommer Tiokompisarna: 4×4-bräde, välj två tal var som helst som tillsammans blir 10. Fyra korta banor med 4/6/8/10 par; tre stjärnor för att bli klar, inga straff för fel. Därefter finns de fem tidigare bytesvärldarna kvar. Byt två grannar; tre tal på rad ska ge 10, 20 eller 100, eller tre uttryck ha samma värde (addition/subtraktion respektive multiplikation/division). Division visas som staplade bråk. Färgerna är dekorativa och avslöjar inte svaret. Kedjor, tips, exakt ångra och automatiskt nytt spelbart bräde när dragen tar slut. Ingen tidsgräns eller liv; färre drag ger fler stjärnor. Världsstjärnor är lägsta betyget över världens fyra banor, först när alla är klara.
 
 Nyckel `mattespel-talkross-v1` ({stars, betyg, best}) är registrerad i gemensamma stjärnor, profiler och startsidans sparning. Spelet nås genom sökningen och portalen på Spelön. Den befintliga spelmenyn lämnas enligt användarens önskemål.
 

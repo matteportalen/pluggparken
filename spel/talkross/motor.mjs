@@ -1,6 +1,7 @@
 // Pure deterministic board rules. Presentation never consumes this RNG.
 export const SIZE=6;
 export const WORLDS=[
+ {id:'kompis',name:'Tiokompisarna',short:'Börja här · två tal blir 10',type:'pair',target:10,icon:'🌱',note:'Dra ett tal till dess tiokompis. Till exempel 3 till 7. De behöver inte ligga bredvid varandra.'},
  {id:'tio',name:'Tioträdgården',short:'Bygg 10',type:'sum',target:10,icon:'🌸',color:'#C76095',note:'Tre tal på rad ska tillsammans bli 10.'},
  {id:'tjugo',name:'Tjugoviken',short:'Bygg 20',type:'sum',target:20,icon:'🐚',color:'#328E9C',note:'Tre tal på rad ska tillsammans bli 20.'},
  {id:'hundra',name:'Hundratoppen',short:'Bygg 100',type:'sum',target:100,icon:'🏔️',color:'#6D6ABA',note:'Tre tiotal på rad ska tillsammans bli 100.'},
@@ -21,6 +22,7 @@ export function matches(board,config){
  return groups;
 }
 export function moves(board,config){
+ if(config.type==='pair'){const out=[];for(let a=0;a<board.length;a++)for(let b=a+1;b<board.length;b++)if(board[a].v+board[b].v===10)out.push({a,b,groups:[]});return out;}
  const out=[];
  for(let a=0;a<board.length;a++)for(const b of [a+1,a+SIZE]){
   if(!adjacent(a,b)||board[a].v===board[b].v)continue;
@@ -30,7 +32,7 @@ export function moves(board,config){
  return out;
 }
 export class Game{
- constructor(config,seed=1){this.config=config;this.rng=seed>>>0||1;this.turns=0;this.lines=0;this.points=0;this.maxChain=0;this.history=[];this.board=this.generate();}
+ constructor(config,seed=1){if(config.type==='pair')return new PairGame(config,seed);this.config=config;this.rng=seed>>>0||1;this.turns=0;this.lines=0;this.points=0;this.maxChain=0;this.history=[];this.board=this.generate();}
  random(){this.rng=(Math.imul(this.rng,1664525)+1013904223)>>>0;return this.rng/4294967296;}
  pick(a){return a[Math.floor(this.random()*a.length)];}
  tile(){
@@ -89,4 +91,25 @@ export class Game{
  get won(){return this.lines>=this.config.goal;}
  get stars(){return this.won?(this.turns<=this.config.par?3:this.turns<=this.config.par+4?2:1):0;}
  hint(){return moves(this.board,this.config).sort((a,b)=>b.groups.length-a.groups.length)[0];}
+}
+
+class PairGame extends Game{
+ constructor(config,seed){super({...config,type:'sum'},seed);this.config={...config,goal:[4,6,8,10][config.level-1],par:20};this.board=this.generate();}
+ generate(){
+  if(this.config.type!=='pair')return super.generate();
+  const board=[];for(let i=0;i<8;i++){const v=1+Math.floor(this.random()*9);board.push({v,text:String(v)},{v:10-v,text:String(10-v)});}
+  for(let i=board.length-1;i>0;i--){const j=Math.floor(this.random()*(i+1));[board[i],board[j]]=[board[j],board[i]];}return board;
+ }
+ swap(a,b){
+  if(this.won||!Number.isInteger(a)||!Number.isInteger(b)||a===b||!this.board[a]||!this.board[b])return {ok:false,reason:'neighbor'};
+  if(this.board[a].v+this.board[b].v!==10)return {ok:false,reason:'match'};
+  this.history.push(this.snapshot());this.turns++;this.lines++;this.points+=20;this.maxChain=1;
+  const tiles=[this.board[a],this.board[b]],cells=[a,b],group={cells,parts:tiles.map(t=>({text:t.text})),values:tiles.map(t=>t.v)};
+  const events=[{kind:'swap',a,b,board:copy(this.board)},{kind:'clear',groups:[group],cells,chain:1}];
+  cells.forEach(i=>this.board[i]=null);const from=[];
+  for(let c=0;c<4;c++){const keep=[];for(let r=3;r>=0;r--)if(this.board[r*4+c])keep.push({tile:this.board[r*4+c],r});for(let r=3;r>=0;r--){const k=3-r;if(k<keep.length){this.board[r*4+c]=keep[k].tile;from[r*4+c]=keep[k].r;}else{this.board[r*4+c]=this.tile();from[r*4+c]=-(k-keep.length)-1;}}}
+  events.push({kind:'fall',board:copy(this.board),from});if(!moves(this.board,this.config).length){this.board=this.generate();events.push({kind:'shuffle',board:copy(this.board)});}return {ok:true,events};
+ }
+ tile(){if(this.config.type!=='pair')return super.tile();const v=1+Math.floor(this.random()*9);return {v,text:String(v)};}
+ get stars(){return this.won?3:0;}
 }

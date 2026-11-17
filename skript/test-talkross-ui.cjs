@@ -4,8 +4,8 @@ const {chromium}=require(process.env.PLAYWRIGHT_PATH||'playwright');
 for(const width of [1440,390]){
  const context=await b.newContext({viewport:{width,height:width===390?844:1000},hasTouch:width===390,isMobile:width===390,reducedMotion:'reduce'}),p=await context.newPage(),errors=[];
  p.on('pageerror',e=>errors.push(e.message));await p.goto('http://127.0.0.1:8765/spel/talkross/');await p.waitForFunction(()=>window.__talkross);
- assert.equal(await p.locator('.level').count(),20);assert.equal(await p.locator('.level:not(:disabled)').count(),5);
- await p.locator('.level:not(:disabled)').first().click();assert(await p.locator('#game').isVisible());
+ assert.equal(await p.locator('.level').count(),24);assert.equal(await p.locator('.level:not(:disabled)').count(),6);
+ await p.evaluate(()=>__talkross.start('tio',1));assert(await p.locator('#game').isVisible());
  const state=()=>p.evaluate(()=>__talkross.game.snapshot());
  const before=await state(),hint=await p.evaluate(()=>__talkross.game.hint());
  if(width===390){

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {Game,WORLDS,level,matches,moves} from '../spel/talkross/motor.mjs';
-for(const world of WORLDS){
+for(const world of WORLDS.filter(w=>w.type!=='pair')){
  for(let seed=1;seed<=80;seed++){
   const g=new Game(level(world.id,1+(seed%4)),seed);
   assert.equal(matches(g.board,g.config).length,0);assert(moves(g.board,g.config).length);
@@ -22,3 +22,10 @@ for(const world of WORLDS){
 const board=Array.from({length:36},()=>({v:9,text:'9'}));[2,3,5,2].forEach((v,i)=>board[i]={v,text:String(v)});
 const overlap=matches(board,level('tio'));assert.equal(overlap.length,2);assert.equal(new Set(overlap.flatMap(g=>g.cells)).size,4);
 console.log('overlapping triples counted and cleared as a union');
+
+for(let seed=1;seed<=100;seed++)for(let n=1;n<=4;n++){
+ const g=new Game(level('kompis',n),seed);assert.equal(g.board.length,16);
+ while(!g.won){const before=g.snapshot(),h=g.hint();assert(h);assert.equal(g.board[h.a].v+g.board[h.b].v,10);assert(g.swap(h.a,h.b).ok);const after=g.snapshot();assert(g.undo());assert.deepEqual(g.snapshot(),before);g.swap(h.a,h.b);assert.deepEqual(g.snapshot(),after);assert.equal(g.board.length,16);}
+ assert.equal(g.stars,3);assert.equal(g.turns,g.config.goal);
+}
+console.log('400 beginner games: pairs, refills, exact undo and completion passed');
