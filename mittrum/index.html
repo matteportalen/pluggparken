@@ -99,28 +99,16 @@ h1{font-size:1.9rem;margin:8px 0 2px;display:flex;align-items:center;gap:10px}
 <script src="../ljud.js"></script>
 <script src="../djur.js"></script>
 <script src="../huvud.js" data-titel="Mitt rum" data-ikon="🏠"></script>
+<script src="../rum.js"></script>
 <script>
 /* Mitt rum: ett rum att inreda för mynt (MPMynt i huvud.js, köp sparas som "rum:plats:id" i matteportalen-mynt).
    Valen och lägena (lampan, gardinen …) sparas i matteportalen-rum. Allt ritas i SVG i samma platta stil som Affärens inredning. */
 const $=id=>document.getElementById(id);
-const KEY="matteportalen-rum";
-const RUM={
- tapet:{n:"Tapet",items:[["slat","Slät","🟦",0],["prickar","Prickig","🔵",40],["rander","Randig","〰️",40],["rutor","Rutig","🔲",60],["stjarnor","Stjärnor","⭐",120],["regnbage","Regnbåge","🌈",200]]},
- golv:{n:"Golv",items:[["tra","Trägolv","🪵",0],["rutigt","Rutigt golv","🏁",40],["blatt","Blått golv","🟦",50],["gras","Gräsmatta","🌱",120]]},
- fonster:{n:"Fönster",items:[["dag","Dagsljus","☀️",0],["kvall","Solnedgång","🌇",60],["natt","Stjärnnatt","🌙",100],["hav","Havsutsikt","🌊",120],["rymd","Rymden","🪐",250],["sno","Snöig kväll","❄️",100,"jul"]]},
- sang:{n:"Säng",items:[["enkel","Säng","🛏️",0],["hangmatta","Hängmatta","🏝️",120],["himmel","Himmelssäng","👑",150],["raket","Raketsäng","🚀",300]]},
- tak:{n:"I taket",items:[["inget","Inget","➖",0],["lampa","Taklampa","💡",40],["slinga","Ljusslinga","✨",80],["disco","Discokula","🪩",200],["hjartslinga","Hjärtslinga","💕",80,"hjarta"]]},
- matta:{n:"Matta",items:[["ingen","Ingen","➖",0],["rund","Rund matta","🟠",30],["fluffig","Fluffig matta","☁️",50],["regnbage","Regnbågsmatta","🌈",80],["handduk","Badlakan","🏖️",50,"sommar"]]},
- hylla:{n:"Hylla",items:[["ingen","Ingen","➖",0],["bok","Bokhylla","📚",60],["leksak","Leksakshylla","🧸",90],["akvarium","Akvarium","🐠",180],["pumpor","Pumpalyktor","🎃",90,"halloween"]]},
- tavla:{n:"Tavla",items:[["ingen","Ingen","➖",0],["sol","Soltavla","🌞",30],["karta","Världskarta","🗺️",50],["portratt","Porträtt","🖼️",80],["hjarta","Hjärttavla","💖",40,"hjarta"]]},
- vaxt:{n:"Växt",items:[["ingen","Ingen","➖",0],["kaktus","Kaktus","🌵",30],["kruk","Krukväxt","🪴",40],["palm","Palm","🌴",90],["julgran","Julgran","🎄",120,"jul"],["paskris","Påskris","🪶",80,"pask"],["solros","Solros","🌻",60,"sommar"]]},
- husdjur:{n:"Husdjur",items:[["ingen","Inget","➖",0],["hamster","Hamster","🐹",100],["fagel","Fågel i bur","🐦",120],["robot","Liten robot","🤖",150],["spoke","Litet spöke","👻",120,"halloween"],["kyckling","Kyckling","🐥",100,"pask"]]}};
-const START={tapet:"slat",golv:"tra",fonster:"dag",sang:"enkel",tak:"inget",matta:"ingen",hylla:"ingen",tavla:"ingen",vaxt:"ingen",husdjur:"ingen"};
-const data=(()=>{try{const d=JSON.parse(localStorage.getItem(KEY)||"{}");return{val:Object.assign({},START,d.val||{}),t:d.t||{},fx:Object.assign({lampa:true,gardin:false},d.fx||{})};}catch(e){return{val:Object.assign({},START),t:{},fx:{lampa:true,gardin:false}};}})();
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){}};
-const item=(slot,id)=>RUM[slot].items.find(x=>x[0]===id);
-const SN=window.sasongNu?sasongNu():null,kanKopa=it=>!it[4]||(SN&&SN.id===it[4]);
-const owned=(slot,id)=>{const it=item(slot,id);return !it||!it[3]||(MPMynt.get().kopt||[]).includes("rum:"+slot+":"+id);};
+const {KEY,RUM:RUMALLA,START,item}=MPRum;
+const RUM=Object.fromEntries(Object.entries(RUMALLA).filter(([k,v])=>!v.d3));   // platser med d3 finns bara i huset i världen
+const data=MPRum.las();
+const save=()=>MPRum.spara(data);
+const SN=MPRum.sasong(),kanKopa=MPRum.kanKopa,owned=MPRum.owned;
 // det som visas: valen, eller en sak man provar
 let prov={};const vis=()=>Object.assign({},data.val,prov);   // man kan prova flera saker samtidigt (en per plats), de ligger kvar när man byter flik
 

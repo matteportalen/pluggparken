@@ -141,7 +141,8 @@ body.bio #stick,body.bio #jump,body.bio #prompt,body.bio #hint{display:none!impo
 <div id="fel"><div><p style="font-size:3rem;margin:0">🌍</p><p id="felTxt">Världen kunde inte startas. Din webbläsare kanske inte klarar 3D. Prova en annan webbläsare, eller gå tillbaka till startsidan.</p><a class="btn" href="/">← Startsidan</a></div></div>
 
 <script src="../djur.js"></script>
-<script src="../huvud.js?v=varld1" data-bara="stjarnor"></script>
+<script src="../huvud.js?v=varld2" data-bara="stjarnor"></script>
+<script src="../rum.js"></script>
 <script type="module">
 /* Pluggparken-världen: en liten ö i 3D (three.js, lib/) och en egen park för varje ämne (hittills Matte).
    Elevens djur går runt och hoppar och går genom portaler till ämnessidorna och övningarna.
@@ -149,6 +150,7 @@ body.bio #stick,body.bio #jump,body.bio #prompt,body.bio #hint{display:none!impo
    Spelarens plats (scen, x, z) sparas i localStorage (mp-varlden-pos) så att man kommer tillbaka till samma portal.
    Uppdrag, hittade stjärnor och prydnader sparas i mattespel-pluggvarlden-v1 (följer profilen, ligger i PKEYS i konto.js). */
 import {byggUpptackter,putsaMiljo,huvudonsPortaler,huvudonsMiljo} from "./upptackter.js";
+import {husPlats,byggHusUte,byggHusInne,husButik} from "./hus.js";
 const felvisa=m=>{const f=document.getElementById('fel');if(m)document.getElementById('felTxt').textContent=m;f.style.display='grid';};
 let THREE;
 try{THREE=await import('three');}catch(e){felvisa('Världen behöver ladda sina filer. Kontrollera uppkopplingen och ladda om sidan.');throw e;}
@@ -1106,6 +1108,7 @@ function byggHub(){
   const sk=etikett('Pluggparken','',9,'#FFC93C');sk.position.set(0,6.6,0);sk.scale.set(9,2.25,1);add(sk);
   HUB.forEach((p,i)=>{const a=i/HUB.length*Math.PI*2;portalBygg(p,Math.cos(a)*RING,Math.sin(a)*RING,0,0,1.12);});
   huvudonsPortaler({THREE,S,cam,reduce:REDUCE,low:lagt});
+  byggHusUte({THREE,S,portalBygg,reduce:REDUCE,antalPortaler:HUB.length}); // Mitt hus (varlden/hus.js): dörren är en portal till scenen "hus"
   // prydnaderna man fått (platser mellan portalerna)
   const slot=k=>{const a=(k+.5)/HUB.length*Math.PI*2;return[Math.cos(a)*16,Math.sin(a)*16];};
   DEKO.forEach((d,k)=>{const[x,z]=slot(k);S.fria.push({x,z,r:2.6});});
@@ -1653,16 +1656,25 @@ function tillHuben(){
   if(gaar||S.id==='hub')return;slutBio(true);gaar=true;stangDlg();rida=null;prompt.hidden=true;$('fade').classList.add('pa');
   setTimeout(()=>{laddaScen('hub',{x:0,z:7,ang:Math.PI/2});gaar=false;sparaPlats();$('fade').classList.remove('pa');},REDUCE?60:420);
 }
+function byggHusScen(){ // inuti Mitt hus: ett rum att inreda (varlden/hus.js)
+  nyScen('hus',9.8);S.box=true;stallLjus();himmel(['#F7D9E8','#FCEFF6','#FFF8FB']);scene.fog.color.set(0xFCEFF6);
+  byggHusInne({THREE,S,portalBygg,etikett,cam,reduce:REDUCE});
+  S.start={x:0,z:5.4,ang:Math.PI};
+}
+let camUte=null;
 function laddaScen(id,plats){
   S?.upptackter?.cancel();narmaste=null;narNpc=false;narRide=null;
-  rensaScen();$('pil').hidden=true;if(id==='hub')byggHub();else if(PARKER[id]&&PARKER[id].klot)byggKlot(id);else byggPark(PARKER[id]?id:'matte');
+  rensaScen();$('pil').hidden=true;if(id==='hub')byggHub();else if(id==='hus')byggHusScen();else if(PARKER[id]&&PARKER[id].klot)byggKlot(id);else byggPark(PARKER[id]?id:'matte');
   if(S.klot){const st=plats&&plats.pv?plats:S.start;djur.rotation.set(0,0,0);placeraK(st.pv,st.hd);}
   else{const st=plats||S.start;cam.up.set(0,1,0);camUpK.set(0,1,0);djur.quaternion.identity();skugga.rotation.set(-Math.PI/2,0,0);placera(st.x,st.z,st.ang,st.cam!=null?st.cam:st.ang);}
-  putsaMiljo({THREE,S,reduce:REDUCE,low:lagt});
-  stjarnaText();uppdateraArende();dimma();$('hem2').hidden=S.id==='hub';
+  if(S.id!=='hus')putsaMiljo({THREE,S,reduce:REDUCE,low:lagt});
+  // inne i huset står kameran närmare och lite högre; ute återställs den
+  if(S.id==='hus'){if(!camUte)camUte={d:camDist,p:camPitch};camDist=8.2;camPitch=.68;}else if(camUte){camDist=camUte.d;camPitch=camUte.p;camUte=null;}
+  BUTIK&&BUTIK.visa(S.id==='hus');
+  stjarnaText();$('stj').style.display=S.id==='hus'?'none':'';uppdateraArende();dimma();$('hem2').hidden=S.id==='hub';
 }
 function startVarlden(){
-  const s=lasPlats();let id=s&&(s.scen==='hub'||PARKER[s.scen])?s.scen:'hub';
+  const s=lasPlats();let id=s&&(s.scen==='hub'||s.scen==='hus'||PARKER[s.scen])?s.scen:'hub';
   laddaScen(id,null);
   const O=S.O;
   if(S.klot){if(s&&s.scen===id&&isFinite(s.x)&&isFinite(s.y)&&isFinite(s.z)&&isFinite(s.hx)){const v=new V3(s.x,s.y,s.z);if(v.length()>S.R*.7&&v.length()<S.R*1.6)placeraK(v,new V3(s.hx,s.hy,s.hz));}}
@@ -2236,7 +2248,7 @@ function stoppa(){
     if(d<min&&P.y<k.top-.55){const n=d||1;P.x=k.x+dx/n*min;P.z=k.z+dz/n*min;}}
   if(S.randR){const rr=Math.hypot(P.x,P.z),mxr=S.randR(Math.atan2(P.z,P.x))-1.8;if(rr>mxr){P.x*=mxr/rr;P.z*=mxr/rr;}}else{const mx=S.O-1.2;if(S.oval&&S.oval!==1){const nx=P.x/S.oval,rr=Math.hypot(nx,P.z);if(rr>mx){P.x=nx*mx/rr*S.oval;P.z*=mx/rr;}}else if(S.box){P.x=Math.max(-mx,Math.min(mx,P.x));P.z=Math.max(-mx,Math.min(mx,P.z));}else{const rr=Math.hypot(P.x,P.z);if(rr>mx){P.x*=mx/rr;P.z*=mx/rr;}}}
 }
-let narmaste=null,narNpc=false,gaar=false;
+let narmaste=null,narNpc=false,gaar=false,BUTIK=null;
 const prompt=$('prompt');
 function platsFor(po){return{x:po.g.position.x+po.zx*5.2*Math.max(.75,po.sk),z:po.g.position.z+po.zz*5.2*Math.max(.75,po.sk),yaw:Math.atan2(-po.zx,-po.zz)};}
 function platsForK(po){const zv=new V3(0,0,1).applyQuaternion(po.g.quaternion),p=po.g.position.clone().addScaledVector(zv,5.2*Math.max(.75,po.sk));p.setLength(S.Rs(p.clone().normalize()));const h=tangTill(p.clone().normalize(),zv.clone().negate());return{x:p.x,y:p.y,z:p.z,hx:h.x,hy:h.y,hz:h.z};}
@@ -2249,7 +2261,8 @@ function gaIn(po){
     $('fade').classList.add('pa');
     setTimeout(()=>{
       let plats=null;
-      if(mal==='hub'){const i=HUB.findIndex(h=>h.scen===S.id);const a=i/HUB.length*Math.PI*2;plats={x:Math.cos(a)*(RING-5.2),z:Math.sin(a)*(RING-5.2),ang:Math.atan2(Math.cos(a),Math.sin(a))};}
+      if(mal==='hub'&&S.id==='hus'){const h=husPlats(HUB.length);plats={x:h.ut.x,z:h.ut.z,ang:h.ut.ang};}
+      else if(mal==='hub'){const i=HUB.findIndex(h=>h.scen===S.id);const a=i/HUB.length*Math.PI*2;plats={x:Math.cos(a)*(RING-5.2),z:Math.sin(a)*(RING-5.2),ang:Math.atan2(Math.cos(a),Math.sin(a))};}
       laddaScen(mal,plats);gaar=false;sparaPlats();$('fade').classList.remove('pa');
       if(mal!=='hub'&&!SV.seen.includes('besokt-'+mal)){SV.seen.push('besokt-'+mal);sparaSV();}
     },REDUCE?60:420);
@@ -2555,6 +2568,7 @@ function rita(dt){
   if(!REDUCE)for(const g of S.moln){g.position.x+=g.userData.v*dt;if(g.position.x>110)g.position.x=-110;}
 }
 dimma();stallLagt(lagt,false);
+BUTIK=husButik({S:()=>S,toast,pling,stoppaRorelse:()=>{P.fartX=P.fartZ=0;}});
 startVarlden();dimma();
 let sistaFas=0;
 renderer.setAnimationLoop(()=>{

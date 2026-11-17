@@ -144,8 +144,7 @@ body.mph-mini #quit{display:none}
   window.MPStjarnor=function(){
     return stjFor('multiplikation')+stjFor('division')+SPELSUB.reduce((a,x)=>a+stjFor('spel:'+x),0)+STJ.reduce((a,x)=>a+stjFor(x),0)+stjFor('skattjakten');
   };
-  // Pluggparken-världen laddar filen bara för stjärnräkningen (data-bara="stjarnor"): inget sidhuvud, inga mynt
-  if(ds.bara==='stjarnor')return;
+  // Pluggparken-världen laddar filen bara för stjärnräkningen och myntkassan (data-bara="stjarnor"): inget sidhuvud (MPMynt behövs för huset i världen)
 
   /* ---------- Mynt (matteportalen-mynt) ----------
      Stjärnorna visar vad man kan och samlas för alltid; mynten tjänas på att träna och används i Garderoben.
@@ -178,6 +177,7 @@ body.mph-mini #quit{display:none}
     kop(id,pris){const m=myntLas();if((m.kopt||[]).includes(id))return true;   // redan köpt: dra aldrig mynt två gånger
       if(m.m<pris)return false;m.m-=pris;m.kopt=[...new Set([...(m.kopt||[]),id])];myntSpara(m);const el=document.querySelector('.mph-m');if(el)el.textContent=m.m;return true;},
     spara:myntSpara};
+  if(ds.bara==='stjarnor')return;
   function profilnamn(){try{const a=sessionStorage.getItem('mp-active');if(!a||a==='gast')return'';const p=(JSON.parse(localStorage.getItem('mp-profiles')||'[]')||[]).find(x=>x.id===a);return p?p.name:'';}catch(e){return''}}
   const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 

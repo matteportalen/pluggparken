@@ -13,6 +13,8 @@ _Det som gäller nu för startsidan, ämnessidorna, sidhuvudet, profiler och kon
 | `sok.js` | Sökningen (`IDX`). Specialares lektioner läggs in av `node skript/bygg-sok.js`. |
 | `tema.js` | Ljust och mörkt läge (`MPTema`). Första skriptet i `<head>`. |
 | `mittrum/` | Mitt rum (köp i `matteportalen-mynt`, val i `matteportalen-rum`). |
+| `rum.js` | Katalogen för Mitt rum och Mitt hus (`MPRum`): platser, saker, priser, säsong, `las/spara/owned/kanKopa`. Platser med `d3:true` finns bara i huset. |
+| `varlden/hus.js` | Mitt hus i världen: huset på huvudön (`byggHusUte`, `husPlats`), rummet inuti (scen `hus`, `byggHusInne`) och butiken 🛒 Inred (`husButik`). |
 | `varlden/` | Pluggparken-världen i 3D (three.js ur `lib/three/`). Data i `mattespel-pluggvarlden-v1`. |
 | `integritet/` | Integritetspolicyn. |
 | `supabase/konton.sql` | Databasen för konton. |
@@ -85,6 +87,8 @@ Sajten loggar inget och har ingen analys eller kakor. Inga externa typsnitt elle
 - **Egen glänta:** bänk, blomma och två prydnadssocklar på huvudön. Valen sparas som `SV.glanta` i befintliga `mattespel-pluggvarlden-v1`. Fynd har id `lek-…` i `SV.seen` och belönas högst en gång med världens vanliga prydnader.
 - **Placering:** nya lekplatser väljs på plana, lediga ytor innanför kusten; hela åkbanan reserveras mot växtlighet. Trädkronor, portaler, gångvägar och samlarföremål ska ha marginal. Huvudöns större entréer har färgkodade skyltar och ämnessymboler.
 - **Test:** `skript/test-varlden-upptackter.cjs` kör Playwright mot lokal server (`WORLD_URL`, normalt port 8765; `PLAYWRIGHT_PATH` vid en separat installation). Kontrollerar öar, placering, aktiviteter, pek/tangentbord, åkavbrott, sparning och reducerad rörelse/lågt läge.
+
+- **Mitt hus (17 nov 2026):** ett hus på huvudön (gluggen mellan SO-parken och Rymdlabbet, r 40) där dörren är en portal till scenen `hus`. Inuti ett rum utan tak (väggar mellan kameran och rummet göms, som i ett dockskåp) där man inreder för mynt med 🛒 Inred: prova först, köp sedan. **Köp och val delas med Mitt rum (2D)** (lärarens krav: aldrig köpa två gånger): samma `rum:plats:id` i myntkassan och samma `matteportalen-rum`. Nya saker bara i 3D (`d3:true` i `rum.js`): gardiner, soffa, bord, kylskåp, spis, tvättmaskin, tv och en kompis (katt, hund, kanin, sköldpadda, pingvin) som går runt på mattan. Fasta platser för allt (enklast och går att testa). Världen laddar `huvud.js` med `data-bara="stjarnor"` men får nu `MPMynt` också. Stjärnräknaren göms i huset. Sakerna är enkla former i kod som resten av världen.
 
 ## Väntar
 
