@@ -86,12 +86,6 @@ Asteroidstormen, Ugglans flygtur, Skattkartan och Kiosken (ersatt av Affären). 
 - Slungan om det känns tomt: fler material och former, sprängkistor, djurens olika krafter.
 - Bredare sidor på dator är inte gjort för matteövningarna, Hundrarutan, Tallinjen och Tidslinjen.
 
-## Talkross
+## Borttaget
 
-`spel/talkross/`: matematiskt matchspel med sex världar och fyra banor per värld. Först kommer Tiokompisarna: 4×4-bräde, välj två tal var som helst som tillsammans blir 10. Fyra korta banor med 4/6/8/10 par; tre stjärnor för att bli klar, inga straff för fel. Därefter finns de fem tidigare bytesvärldarna kvar. Byt två grannar; tre tal på rad ska ge 10, 20 eller 100, eller tre uttryck ha samma värde (addition/subtraktion respektive multiplikation/division). Division visas som staplade bråk. Färgerna är dekorativa och avslöjar inte svaret. Kedjor, tips, exakt ångra och automatiskt nytt spelbart bräde när dragen tar slut. Ingen tidsgräns eller liv; färre drag ger fler stjärnor. Världsstjärnor är lägsta betyget över världens fyra banor, först när alla är klara.
-
-Nyckel `mattespel-talkross-v1` ({stars, betyg, best}) är registrerad i gemensamma stjärnor, profiler och startsidans sparning. Spelet nås genom sökningen och portalen på Spelön. Den befintliga spelmenyn lämnas enligt användarens önskemål.
-
-Talkross: brickan följer pekaren under dragning och grannen flyttar undan. Ogiltiga byten studsar tillbaka utan att påverka drag eller poäng; avbrutna drag återställs också.
-
-Första matchningen visas i 1,6 sekunder, följande kedjematchningar i 1 sekund. Hela träffraden ramas in och övriga brickor tonas ner. Ovanför brädet visas uträkningen och om den dragna brickan eller grannbrickan skapade raden. Därefter ploppar brickorna bort, luckorna syns kort och brickorna ovanför faller ner med landningsstuds. Reducerad rörelse behåller läspausen men tar bort rörelseeffekterna.
+Talkross togs bort på användarens begäran 17 november 2026. Att leta efter tal som hör ihop blev för svårt och matchningsidén passade inte den önskade spelkänslan.

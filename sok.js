@@ -5,7 +5,6 @@
 "use strict";
 const ROT=new URL('.',document.currentScript.src).href;
 const IDX=[
- ['spel/talkross/','Talkross','Byt talbrickor, bygg summor och matcha lika värden','💎','tiokross matcha tre pussel kedjor tio tjugo hundra addition subtraktion multiplikation division uttryck candy','Spelhörnan'],
  ['tiointe/','10 eller inte 10?','En bild blinkar fram. Var det tio?','🔟','tio tiokompisar subitisering snabbseende tärning tioram fingrar prickar blink','Matte'],
  ['lillaplus/','Lilla plus & minus','Huvudräkning med tal upp till 10','🐔','addition subtraktion plus minus hönsgård ägg räkna','Matte'],
  ['tiotal/','Tiotalsövergång','Räkna via tiotalet med tioruta och tallinje','🚌','tiotalsövergång 10 addition subtraktion plus minus över tio tiokompisar buss tioruta hundraruta','Matte'],
