@@ -85,3 +85,9 @@ Asteroidstormen, Ugglans flygtur, Skattkartan och Kiosken (ersatt av Affären). 
 - Glödväktaren: gruvan och ruinerna har inga extra rum, balansen är inte provad med elever.
 - Slungan om det känns tomt: fler material och former, sprängkistor, djurens olika krafter.
 - Bredare sidor på dator är inte gjort för matteövningarna, Hundrarutan, Tallinjen och Tidslinjen.
+
+## Talkross
+
+`spel/talkross/`: matematiskt matchspel med fem världar och fyra banor per värld. Byt två grannar; tre tal på rad ska ge 10, 20 eller 100, eller tre uttryck ha samma värde (addition/subtraktion respektive multiplikation/division). Division visas som staplade bråk. Färgerna är dekorativa och avslöjar inte svaret. Kedjor, tips, exakt ångra och automatiskt nytt spelbart bräde när dragen tar slut. Ingen tidsgräns eller liv; färre drag ger fler stjärnor. Världsstjärnor är lägsta betyget över världens fyra banor, först när alla är klara.
+
+Nyckel `mattespel-talkross-v1` ({stars, betyg, best}) är registrerad i gemensamma stjärnor, profiler och startsidans sparning. Spelet nås genom sökningen och portalen på Spelön. Den befintliga spelmenyn lämnas enligt användarens önskemål.

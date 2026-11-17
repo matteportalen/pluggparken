@@ -448,3 +448,10 @@ Lärarens fynd: eleverna tycker spelet är svårt att förstå och ta sig igenom
 
 ### 2026-11-16 – Bubbelskjutaren, enbart grafik
 Läraren ville ha hetare grafik men samma spel och uttryckligen orörd meny. Nya lokala presentationsfiler: `bubbelgrafik.js` (cachade glasbubblor med reflektioner, diskret vinjett, världsanpassad glasram, skjutbas, neutralt skottspår och poppringar) och `bubbelutseende.css` (enbart #bub: poängrad, banner och banans slutruta). Inga nya slumpanrop eller ändringar i regler, mått, inmatning, uppgifter, färgkopplingar, siktlängd eller belöningar. Test mot tidigare HTML: identiska regler, layout, sex skottvinklar och rättskottsutfall för 18 banor i tre räknesätt, i både 1440×900 och 390×844, plus skjuta/avsluta. Emulerad pekskärm, inte provat på fysisk iPad eller med elever.
+
+
+### Talkross – 17 november 2026
+
+Eget matematiskt matchspel, utvecklat från tiokompisidén till fem världar: Tioträdgården, Tjugoviken, Hundratoppen, Likhetslunden och Tabellskatten. 20 banor på 6×6-bräden, intilliggande byten, överlappande trior, fallande brickor, kedjepoäng och stjärnor efter antal drag. Ren deterministisk motor i motor.mjs, separat presentation och CSS. Ångra återställer även slumpgeneratorn. Tips visar ett giltigt byte; bräden utan drag ersätts utan poängförlust. Sparning i befintliga profil- och stjärnsystem, sökpost, sitemap och 3D-portal. Ingen ändring av befintliga spelmenyn.
+
+Verifiering: 400 seedade spel genom alla fem världar, uttryckens värden, stabila bräden, fullständiga spel, överlappande matchningar och exakt ångra/återspelning. Webbläsartest för tangentbord, emulerad mobil svepstyrning, fyra banor i följd, världsstjärnor, omladdning och sparning, samtliga världar, bråk och tips. Dator- och mobillayout visuellt granskade; ingen fysisk mobil eller elevgrupp testad.
