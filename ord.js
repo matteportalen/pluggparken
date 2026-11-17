@@ -2,7 +2,7 @@
    Saknas filen (t.ex. egna ord) anropas reserv (webbläsarens röst). Används av Högfrekventa ord. Nya ord: node skript/bygg-ord-ljud.js (se docs/svenska.md). */
 (function(){
   const bas=document.currentScript.src.replace(/[^\/]*$/,"")+"ljud/ord/";let karta=null,a=null;
-  fetch(bas+"karta.json").then(r=>r.json()).then(k=>{karta=k;}).catch(()=>{});
+  fetch(bas+"karta.json",{cache:"no-cache"}).then(r=>r.json()).then(k=>{karta=k;}).catch(()=>{});
   function tyst(){try{if(a){a.pause();a=null;}}catch(e){}}
   function tala(t,reserv){tyst();const f=karta&&karta[String(t).toLowerCase().trim()];
     if(!f){return reserv?reserv():false;}

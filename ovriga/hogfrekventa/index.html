@@ -316,7 +316,7 @@ if(data.lista!==2){PAKET.forEach((_,p)=>{data.stars[p]=pkStars(p);});data.lista=
 let svVoice=null;function loadVoices(){try{svVoice=speechSynthesis.getVoices().find(v=>/^sv/i.test(v.lang))||null}catch(e){}}
 if("speechSynthesis" in window){loadVoices();speechSynthesis.onvoiceschanged=loadVoices;}
 let toastT;function toast(m){const t=$("toast");t.textContent=m;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,2800);}
-function speak(text){if(window.MPOrd&&MPOrd.tala(text,null))return true;return speakDator(text);}
+function speak(text){if(window.MPOrd)return MPOrd.tala(text,()=>speakDator(text));return speakDator(text);}
 function speakDator(text){if(!("speechSynthesis" in window)){toast("Uppläsning fungerar inte i den här webbläsaren.");return false;}loadVoices();
   if(!svVoice&&speechSynthesis.getVoices().length){if(!speak.varnad){speak.varnad=true;toast("Den här datorn har ingen svensk röst för uppläsning.");}return false;}
   speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="sv-SE";if(svVoice)u.voice=svVoice;u.rate=.85;speechSynthesis.speak(u);return true;}
