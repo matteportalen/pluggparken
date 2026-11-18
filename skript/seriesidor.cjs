@@ -8,6 +8,7 @@ const TOP=24; // under namnraden
 
 /* rad: {h: relativ höjd, c:[relativa bredder]} ; titel: true = titelruta överst */
 const SIDOR=[
+ {namn:'Omslag',omslag:true,rader:[{h:1,c:[1]}]},
  {namn:'Titel och tolv rutor',titel:true,rader:[{h:1,c:[1,1,1,1]},{h:1,c:[1,1,1,1]},{h:1,c:[1,1,1,1]}]},
  {namn:'Sju rutor med bubblor',rader:[{h:1,c:[1,1]},{h:1,c:[1]},{h:1,c:[1.75,1]},{h:1,c:[1,1.55]}],
   bubblor:[{t:'text',r:0,k:0,x:.62,y:.02,w:.35,h:.24,sx:.52,sy:.33},{t:'tanke',r:1,k:0,x:.55,y:-.12,w:.24,h:.38,sx:.66,sy:.42},
@@ -38,7 +39,6 @@ const SIDOR=[
   bubblor:[{t:'tal',r:0,k:0,x:.05,y:.05,w:.75,h:.3,sx:.45,sy:.55},{t:'tal',r:0,k:2,x:.2,y:.05,w:.75,h:.3,sx:.6,sy:.55},
            {t:'tanke',r:1,k:1,x:.15,y:.04,w:.7,h:.4,sx:.4,sy:.68},{t:'text',r:2,k:0,x:0,y:0,w:.85,h:.16,sx:.5,sy:.28},
            {t:'tal',r:3,k:1,x:.2,y:.05,w:.75,h:.3,sx:.5,sy:.55}]},
- {namn:'Omslag',omslag:true,rader:[{h:1,c:[1]}]},
  {namn:'Två stora rutor',rader:[{h:1,c:[1]},{h:1,c:[1]}],
   bubblor:[{t:'tal',r:0,k:0,x:.04,y:.05,w:.36,h:.24,sx:.32,sy:.48},{t:'tanke',r:1,k:0,x:.66,y:.05,w:.28,h:.3,sx:.6,sy:.55}]},
  {namn:'Actionsida',band:[{top:[0,0],bot:[82,-.0815],cut:[[112,96]]},{top:[87,-.0815],bot:[150,.09],cut:[]},{top:[155,.09],bot:[260,0],cut:[[62,50],[124,134]]}],
@@ -106,7 +106,7 @@ const fs=require('fs'),os=require('os'),tmp=path.join(os.tmpdir(),'seriesidor.ht
   await p.pdf({path:path.join(UT,'seriesidor.pdf'),format:'A4',printBackground:true,margin:{top:0,bottom:0,left:0,right:0}});
   // förhandsbild: sida 2 (med bubblor), samma storlek som de andra förhandsbilderna
   const q=await b.newPage({viewport:{width:351,height:497},deviceScaleFactor:2});
-  await q.setContent(`<!doctype html><style>${FONT}html,body{margin:0}svg{display:block;width:351px;height:497px}</style>`+sida(SIDOR[1]).replace(/width="210mm" height="297mm"/,''));await q.evaluate(()=>document.fonts.load('700 10px "Baloo 2"'));
+  await q.setContent(`<!doctype html><style>${FONT}html,body{margin:0}svg{display:block;width:351px;height:497px}</style>`+sida(SIDOR[2]).replace(/width="210mm" height="297mm"/,''));await q.evaluate(()=>document.fonts.load('700 10px "Baloo 2"'));
   await q.screenshot({path:path.join(UT,'seriesidor.png')});
   if(process.argv[2]){for(let i=0;i<SIDOR.length;i++){await q.setContent(`<!doctype html><style>${FONT}html,body{margin:0}svg{display:block;width:351px;height:497px}</style>`+sida(SIDOR[i]).replace(/width="210mm" height="297mm"/,''));await q.evaluate(()=>document.fonts.load('700 10px "Baloo 2"'));await q.screenshot({path:path.join(process.argv[2],`serie-${i+1}.png`)});}}
   await b.close();console.log(SIDOR.length,'sidor');})();
