@@ -100,3 +100,7 @@ _Historik för `docs/matematik.md`: hur allt byggdes, med detaljer, mått och ti
 - Testat i Playwright 390 × 844 och 1280 × 900 i båda övningarna: rullning, paus, hela rundan, sparat val, och att läget med svar fungerar som förut.
 - Rull-läget (Visa svaret av) hoppar över Titta!: kortet kommer direkt, 3,5 s per kort med 1 s (lärarens val 18 nov 2026).
 - Rull-läget ändrat samma dag: talet ligger framme hela den valda tiden och byts direkt mot nästa (inget "?", ingen vila); pausen behåller talet. Ny tid 5 s (fyra knappar). Testat: alltid ett tal synligt, paus, hel runda, 5 s med svar.
+
+## Diagramverkstan: Räkna och måla ersätter Från streck till staplar (18 nov 2026)
+- `NIV[2]` = {bygg:"tal",rakna:true,rutor:true,M:12}; moment: `rakna` (bildfält `#falt`, 7 kolumner, celler upp till 62 px, bilderna slumpas med lite förskjutning och vridning; tabellen `#tab` med valbar rad och ruta; första felet på en rad bockar ur den sortens bilder och ber eleven räkna igen, andra felet visar talet och låter bilderna lysa), `bygg` (rutdiagram, `geo(U)` ger högre SVG 360 × 366 för rutor, linjer bara vid 5 och 10), en fråga (`FRAGOR[2]` = flest/minst/fler). `streckSVG` borttagen. Nya teman Vinterförrådet och Leksakslådan.
+- Testat i Playwright 390 × 844 och 1280 × 900: 500 genererade undersökningar (olika värden, summa ≤ 30), hela rundor med fel och extra undersökning, sudda en ruta, ingen sidscroll, inga JS-fel.
