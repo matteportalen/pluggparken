@@ -225,7 +225,7 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
   <div class="egrader" id="egRader"></div>
   <button class="eglagg" id="egLagg">＋ Lägg till en rad</button>
   <div class="egval">
-    <div class="seg" role="group" aria-label="Sort"><button data-typ="stapel">Staplar</button><button data-typ="rutor">Rutor</button></div>
+    <div class="seg" role="group" aria-label="Sort"><button data-typ="stapel">Staplar</button><button data-typ="rutor">Rutor</button><button data-typ="cirkel">Cirkel</button></div>
     <div class="seg" role="group" aria-label="Riktning"><button data-rikt="v">Stående</button><button data-rikt="h">Liggande</button></div>
     <label class="egcheck"><input type="checkbox" id="egTal"> Visa talen</label>
   </div>
@@ -525,9 +525,28 @@ function egSpara(){data.egen=EG;save();}
 function egSkala(max,rutor){if(rutor)return{M:Math.max(10,max),steg:max>12?2:1,linje:5};
   if(max<=10)return{M:10,steg:1,linje:1};if(max<=12)return{M:12,steg:1,linje:1};if(max<=20)return{M:20,steg:2,linje:2};
   for(const st of [5,10,20,25,50,100,200,250,500]){const M=Math.ceil(max/st)*st;if(M/st<=10)return{M,steg:st,linje:st};}return{M:Math.ceil(max/1000)*1000,steg:1000,linje:1000};}
+/* Cirkeldiagram: en tårtbit per rad, medurs från toppen. Talen (om de visas) står i tårtbitarna och i förklaringen under. */
+function egCirkel(rub,T){const R=EG.rader,tot=R.reduce((a,r)=>a+r.v,0),cx=180,cy=146,rad=104;let g="",a0=-Math.PI/2;
+  const pt=(a,q)=>[cx+Math.cos(a)*(q||rad),cy+Math.sin(a)*(q||rad)];
+  if(!tot)g+=`<circle cx="${cx}" cy="${cy}" r="${rad}" fill="#F2F6FF" stroke="#C6D6F2" stroke-width="2" stroke-dasharray="6 5"/>`+T(cx,cy+5,"Skriv antal så ritas cirkeln",{fs:12});
+  else{const nz=R.filter(r=>r.v>0).length;
+    R.forEach((r,i)=>{if(!r.v)return;const fr=r.v/tot,a1=a0+fr*2*Math.PI,am=(a0+a1)/2;
+      if(nz===1)g+=`<circle cx="${cx}" cy="${cy}" r="${rad}" fill="${EFARG[i]}" stroke="#fff" stroke-width="2.5"/>`;
+      else{const [x0,y0]=pt(a0),[x1,y1]=pt(a1);g+=`<path d="M${cx} ${cy}L${f2(x0)} ${f2(y0)}A${rad} ${rad} 0 ${fr>.5?1:0} 1 ${f2(x1)} ${f2(y1)}Z" fill="${EFARG[i]}" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/>`;}
+      const [mx,my]=nz===1?[cx,cy]:pt(am,rad*.62);
+      if(fr>=.07||nz===1){g+=bildSVG(r.e,mx-13,my-(EG.tal?22:13),26);if(EG.tal)g+=T(mx,my+20,r.v,{w:800,fs:16,f:"#fff",halo:0}).replace('fill="#fff"','fill="#fff" stroke="'+EMORK[i]+'" stroke-width="3.5" stroke-linejoin="round" paint-order="stroke"');}
+      else if(EG.tal){g+=T(mx,my+5,r.v,{w:800,fs:13,f:"#fff"}).replace('fill="#fff"','fill="#fff" stroke="'+EMORK[i]+'" stroke-width="3" stroke-linejoin="round" paint-order="stroke"');}
+      a0=a1;});}
+  const ly=cy+rad+24;
+  R.forEach((r,i)=>{const col=i%2,row=Math.floor(i/2),x=col?188:12,y=ly+row*28;
+    g+=`<rect x="${x}" y="${y-10}" width="12" height="12" rx="3" fill="${EFARG[i]}"/>`+bildSVG(r.e,x+17,y-14,20)+T(x+40,y+3,esc(r.n.length>13?r.n.slice(0,12)+"…":r.n)+(EG.tal?`  ${r.v}`:""),{a:"start",f:"#1D2B53",fs:(r.n.length>10?12:14)});});
+  const VH=ly+Math.ceil(R.length/2)*28+4;
+  return{svg:`<svg viewBox="0 0 360 ${VH}" role="img" aria-label="Cirkeldiagram: ${esc(EG.rub||"")}">${rub}${g}</svg>`,rutorGar:true};}
+const f2=n=>+n.toFixed(2);
 function egSVG(){const R=EG.rader,n=R.length,max=Math.max(1,...R.map(r=>r.v)),rutor=EG.typ==="rutor"&&max<=20,S=egSkala(max,rutor),h=EG.rikt==="h";
   const rub=`<text x="180" y="24" text-anchor="middle" font-family="'Baloo 2','Trebuchet MS',sans-serif" font-weight="800" font-size="19" fill="#1D2B53">${esc(EG.rub||"")}</text>`;
   const T=(x,y,t,o)=>`<text x="${x}" y="${y}" font-family="'Baloo 2','Trebuchet MS',sans-serif" font-weight="${o&&o.w||700}" font-size="${o&&o.fs||11.5}" fill="${o&&o.f||"#56668F"}" text-anchor="${o&&o.a||"middle"}"${o&&o.halo?' stroke="#fff" stroke-width="4" stroke-linejoin="round" paint-order="stroke"':""}>${t}</text>`;
+  if(EG.typ==="cirkel")return egCirkel(rub,T);
   let g="",VH;
   if(!h){const X0=40,X1=350,Y0=46,Y1=n?250:250;VH=Y1+58;const cw=(X1-X0)/Math.max(n,1),unit=(Y1-Y0)/S.M,bw=Math.min(56,cw*.64),yv=v=>Y1-v*unit;
     for(let v=S.steg;v<=S.M;v+=S.steg){if(v%S.linje===0)g+=`<line x1="${X0}" y1="${yv(v)}" x2="${X1}" y2="${yv(v)}" stroke="#C6D6F2" stroke-width="1.2"/>`;g+=T(X0-7,yv(v)+4,v,{a:"end"});}
@@ -549,8 +568,9 @@ function egSVG(){const R=EG.rader,n=R.length,max=Math.max(1,...R.map(r=>r.v)),ru
     g+=`<path d="M${X0} ${Y0-4}V${Y1}H${X1+6}" fill="none" stroke="#1D2B53" stroke-width="2.6" stroke-linecap="round"/>`;}
   return{svg:`<svg viewBox="0 0 360 ${VH}" role="img" aria-label="${esc(EG.rub||"Diagram")}">${rub}${g}</svg>`,rutorGar:max<=20};}
 function egRitaDia(){const d=egSVG();$("egKort").innerHTML=d.svg;
-  sek("[data-typ]").forEach(b=>{b.setAttribute("aria-pressed",b.dataset.typ===(EG.typ==="rutor"&&d.rutorGar?"rutor":"stapel"));if(b.dataset.typ==="rutor")b.disabled=!d.rutorGar;});
+  sek("[data-typ]").forEach(b=>{b.setAttribute("aria-pressed",b.dataset.typ===(EG.typ==="cirkel"?"cirkel":EG.typ==="rutor"&&d.rutorGar?"rutor":"stapel"));if(b.dataset.typ==="rutor")b.disabled=!d.rutorGar;});
   sek("[data-rikt]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.rikt===EG.rikt));$("egTal").checked=EG.tal;
+  const rg=document.querySelector('#egen [aria-label="Riktning"]');if(rg)rg.hidden=EG.typ==="cirkel";
   $("egNote").textContent=!d.rutorGar&&EG.typ==="rutor"?"Rutor går upp till 20. Med större tal blir det staplar.":"";}
 const sek=q=>document.querySelectorAll("#egen "+q);
 function egRitaRader(){$("egRader").innerHTML=EG.rader.map((r,i)=>`<div class="egrad" data-i="${i}"><span class="farg" style="background:${EFARG[i]}"></span><button class="emo" data-a="emo" aria-label="Byt bild">${bild(r.e)||"＋"}</button><input class="nm" data-a="nm" maxlength="16" value="${esc(r.n)}" placeholder="Namn" aria-label="Namn ${i+1}"><button class="pm" data-a="minus" aria-label="En mindre">−</button><input class="tal" data-a="tal" inputmode="numeric" maxlength="3" value="${r.v}" aria-label="Antal ${i+1}"><button class="pm" data-a="plus" aria-label="En till">+</button>${EG.rader.length>1?`<button class="bort" data-a="bort" aria-label="Ta bort raden">✕</button>`:""}</div>`).join("");
