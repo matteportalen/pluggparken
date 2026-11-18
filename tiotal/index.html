@@ -702,7 +702,7 @@ $('#rTrainSlow').onclick=()=>startGame(3,G.slowTasks);
 const skSenast=[];
 function skPick(){let t,g=0;do{t=genTask(3);}while(skSenast.includes(tkey(t))&&g++<60);
   skSenast.push(tkey(t));if(skSenast.length>6)skSenast.shift();return{q:ttext(t),a:tres(t)};}
-const SK=MPSnabbkort.skapa($('#snabb'),{nasta:skPick,tid:()=>data.skTid,satTid:ms=>{data.skTid=ms;save();},visa:()=>show('snabb'),avsluta:openHome,fira:confetti});
+const SK=MPSnabbkort.skapa($('#snabb'),{nasta:skPick,tid:()=>data.skTid,satTid:ms=>{data.skTid=ms;save();},svar:()=>data.skSvar!==false,satSvar:b=>{data.skSvar=b;save();},visa:()=>show('snabb'),avsluta:openHome,fira:confetti});
 $('#skOpen').onclick=()=>SK.oppna();
 
 function confetti(){window.Ljud&&Ljud.fanfare();

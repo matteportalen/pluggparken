@@ -94,3 +94,7 @@ _Historik för `docs/matematik.md`: hur allt byggdes, med detaljer, mått och ti
 - Tiotalsövergång: kortet 🃏 Snabbkort under nivåerna (`#skOpen`), uppgifter ur `genTask(3)` för valt talområde och räknesätt (inte samma som de sex senaste), visningstiden i `data.skTid` i `mattespel-tiotal-v1`.
 - Långa uppgifter krymps så att de får plats på kortet (säkerhetsnät; 88 − 9 = 79 får plats på 360 px även utan).
 - Testat i Playwright 390 × 844 och 1280 × 900 på båda sidorna: tio kort med klick och tangenter, Visa igen, subtraktion, upp till 100, sparad tid, inga JS-fel.
+
+## Snabbkort: Visa svaret av/på (18 nov 2026)
+- Kryssruta "Visa svaret" under tiderna i `snabbkort.js` (`svar`/`satSvar`, sidorna sparar `data.skSvar`). Av: läget `vila` (2,5 s "?" med grå tidsstapel) och sedan nästa kort automatiskt; `⏸ Paus` / `▶ Fortsätt` med knappen eller mellanslag, Enter, →. Fortfarande tio kort per runda.
+- Testat i Playwright 390 × 844 och 1280 × 900 i båda övningarna: rullning, paus, hela rundan, sparat val, och att läget med svar fungerar som förut.

@@ -529,7 +529,7 @@ function skPick(){const pool=allFacts(op).filter(f=>!skSenast.includes(fkey(f)))
   const w=f=>(f.a===0||f.b===0)?.15:(f.s==='−'&&f.a===f.b)?.4:1;
   let r=Math.random()*pool.reduce((t,f)=>t+w(f),0),v=pool[pool.length-1];for(const f of pool){r-=w(f);if(r<=0){v=f;break;}}
   skSenast.push(fkey(v));if(skSenast.length>6)skSenast.shift();return{q:ftext(v),a:ans(v)};}
-const SK=MPSnabbkort.skapa($('#snabb'),{nasta:skPick,tid:()=>data.skTid,satTid:ms=>{data.skTid=ms;save();},visa:()=>show('snabb'),avsluta:openHome,fira:confetti});
+const SK=MPSnabbkort.skapa($('#snabb'),{nasta:skPick,tid:()=>data.skTid,satTid:ms=>{data.skTid=ms;save();},svar:()=>data.skSvar!==false,satSvar:b=>{data.skSvar=b;save();},visa:()=>show('snabb'),avsluta:openHome,fira:confetti});
 const openSnabb=()=>SK.oppna();
 
 openHome();
