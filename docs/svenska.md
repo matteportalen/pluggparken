@@ -40,7 +40,7 @@ Typsnittet för ord som eleven ska läsa är **Andika** (`var(--ord)`).
 - **Läsflyt:** alltid med en vuxen. Ingen tid, inga ord per minut, inga felmarkeringar, bara "Läs igen tills det flyter". Bilden visas först efter elevens första egna läsning. Texterna får bara innehålla nivåns bokstäver plus högst två helord. Bilderna är ritade i kod, inga emojis. Stjärnor för att man övat, inte för fart.
 - **Bokstäver:** inga stjärnor, inga ljudfiler.
 - **Ordgåtan:** två eller tre ledtrådar per ord, ledtråden får inte innehålla svaret. Inget eget tangentbord ritas. Ett ord kommer inte igen förrän alla har kommit.
-- **Sagobyggaren:** färdiga bilder (Kenney och akylrum, CC0), inte egenritade. Den färdiga sagan är en sida med rubrik, en bild och hela texten.
+- **Sagobyggaren:** ”Tre bilder – din berättelse”. Tre färdiga bildserier, tre synliga skrivfält (början/problem/slut) och en hjälpknapp med meningsstart för aktiv bild. Befintliga CC0-bilder, Pluggparkens knappar och kortstil. Inga nivåval, förberedande temaval, ordlistor eller idéknappar. Utkast sparas automatiskt i `data.utkast`; nya sagor har `version:2` och `series`. Gamla fyrdelade sagor och stjärnor bevaras. Nya stjärnor i `stars.bilder` efter 1/3/6 färdiga sagor, utan kvalitetsbedömning av texten. Slutblad med tre bilder och barnets text, uppläsning och utskrift.
 - **Dubbelteckning:** "Tänk först, stava sen": först kort eller lång vokal, sedan stavningen. ck hör till kort vokal och finns på alla nivåer; ng och nk hör inte hit.
 - **Vem gör vad?:** frågan innehåller meningens eget ord ("Vem eller vad **äter**?").
 - **Dela upp i meningar:** man trycker på sista ordet i varje mening, orden färgas per mening.
@@ -60,12 +60,12 @@ Typsnittet för ord som eleven ska läsa är **Andika** (`var(--ord)`).
 
 ## Borttaget med flit (bygg inte igen)
 
-Rimmaskinen och andra snabba frågeövningar ur en gemensam mall. **Stavningsjakten** (välj rätt stavning av fyra, påhittade felstavningar; `stavningsjakten/` är bara en omdirigering till Svenska-sidan, nyckeln `mattespel-stavningsjakten-v1` ligger kvar i stjärnräkningen och `PKEYS`). Testsidorna Läsfelslabbet och Mikrofonlabbet. Markeringen 👂 "låter som" i Högfrekventa ord. Tid, ord per minut och felmarkeringar i Läsflyt. De rena ck-, ng- och nk-orden i Dubbelteckning. Raden med en bild per sida i Sagobyggarens bok.
+Rimmaskinen och andra snabba frågeövningar ur en gemensam mall. **Stavningsjakten** (välj rätt stavning av fyra, påhittade felstavningar; `stavningsjakten/` är bara en omdirigering till Svenska-sidan, nyckeln `mattespel-stavningsjakten-v1` ligger kvar i stjärnräkningen och `PKEYS`). Testsidorna Läsfelslabbet och Mikrofonlabbet. Markeringen 👂 "låter som" i Högfrekventa ord. Tid, ord per minut och felmarkeringar i Läsflyt. De rena ck-, ng- och nk-orden i Dubbelteckning.
 
 ## Väntar
 
 - Bokstäver: hittepåord och fonologi (lärarens beslut: vänta).
-- Sagobyggaren: trollkarl och häxa (ingen fri figur i samma stil hittad).
+
 - Ordklasser: fyll i luckan med rätt sort, hitta det som inte passar, bygg ut meningen med adjektiv.
 - Handstil: diktamen, tre rutor på samma sida.
 - Engelska ord: läraren gör om bilderna själv (byts i listan `ORD`, se `docs/ovriga-amnen.md`).
