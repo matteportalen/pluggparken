@@ -99,3 +99,4 @@ _Historik för `docs/matematik.md`: hur allt byggdes, med detaljer, mått och ti
 - Kryssruta "Visa svaret" under tiderna i `snabbkort.js` (`svar`/`satSvar`, sidorna sparar `data.skSvar`). Av: läget `vila` (2,5 s "?" med grå tidsstapel) och sedan nästa kort automatiskt; `⏸ Paus` / `▶ Fortsätt` med knappen eller mellanslag, Enter, →. Fortfarande tio kort per runda.
 - Testat i Playwright 390 × 844 och 1280 × 900 i båda övningarna: rullning, paus, hela rundan, sparat val, och att läget med svar fungerar som förut.
 - Rull-läget (Visa svaret av) hoppar över Titta!: kortet kommer direkt, 3,5 s per kort med 1 s (lärarens val 18 nov 2026).
+- Rull-läget ändrat samma dag: talet ligger framme hela den valda tiden och byts direkt mot nästa (inget "?", ingen vila); pausen behåller talet. Ny tid 5 s (fyra knappar). Testat: alltid ett tal synligt, paus, hel runda, 5 s med svar.

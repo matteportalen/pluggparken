@@ -1,5 +1,5 @@
 /* Snabbkort (MPSnabbkort), delas av Lilla plus & minus och Tiotalsövergång.
-   Uppgiften blinkar fram 1, 2 eller 3 sekunder, klassen säger tal och svar, Visa svaret, Nästa.
+   Uppgiften blinkar fram 1, 2, 3 eller 5 sekunder, klassen säger tal och svar, Visa svaret, Nästa.
    Tio kort per runda. Ingen inmatning, inga stjärnor. Helskärm och mellanslag/Enter/→/PageDown för helklass.
    Sidan har klasserna .gtop, .back, .gright, .info och .go, och färgvariablerna --card, --line, --good, --accent, --sun, --muted, --bg.
 
@@ -23,7 +23,7 @@
   '.skigen{flex:none;padding:0 16px;border-radius:18px;background:var(--card);box-shadow:0 5px 0 var(--line);font-weight:800;font-size:1.05rem}'+
   '.skigen:active,.sktid button:active,.skfull:active{transform:translateY(3px)}'+
   '.sklbl{margin:12px 0 6px;font-weight:700;color:var(--muted)}'+
-  '.sktid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}'+
+  '.sktid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}'+
   '.sktid button{min-height:48px;border-radius:14px;background:var(--card);box-shadow:0 4px 0 var(--line);font-weight:800;font-size:1.2rem}'+
   '.sktid button[aria-pressed="true"]{background:var(--accent);color:#fff;box-shadow:0 4px 0 #2A3FC0}'+
   '.skfull{width:44px;height:44px;border-radius:12px;background:var(--card);box-shadow:0 3px 0 var(--line);font-size:1.3rem;margin-left:10px}'+
@@ -39,7 +39,7 @@
   '.sksek:fullscreen .skset,.sksek:fullscreen .skknappar,.sksek:fullscreen .skhint{width:100%;max-width:760px;margin-inline:auto}'+
   '.sksek:fullscreen .go{font-size:1.8rem;padding:18px}';
   var HTML='<div class="gtop"><button class="back" data-sk="quit">← Avsluta</button><span class="gright"><span class="info" data-sk="info"></span><button class="skfull" data-sk="full" aria-label="Helskärm" title="Helskärm">⛶</button></span></div>'+
-  '<div class="skset" data-sk="set"><p class="sklbl">Så länge syns kortet</p><div class="sktid" role="group" aria-label="Så länge syns kortet"><button data-sktid="1000">1 s</button><button data-sktid="2000">2 s</button><button data-sktid="3000">3 s</button></div>'+
+  '<div class="skset" data-sk="set"><p class="sklbl">Så länge syns kortet</p><div class="sktid" role="group" aria-label="Så länge syns kortet"><button data-sktid="1000">1 s</button><button data-sktid="2000">2 s</button><button data-sktid="3000">3 s</button><button data-sktid="5000">5 s</button></div>'+
   '<label class="sksvar"><input type="checkbox" data-sk="svar"><span>Visa svaret<small data-sk="svarinfo"></small></span></label></div>'+
   '<div class="skort" data-sk="kort"><div class="sktxt" data-sk="txt" aria-live="polite"></div><i class="sktimer" data-sk="timer"></i></div>'+
   '<div class="skknappar"><button class="skigen" data-sk="igen" hidden>👀 Visa igen</button><button class="go" data-sk="go">Starta</button></div>'+
@@ -50,22 +50,22 @@
     sek.classList.add('sksek');sek.innerHTML=HTML;
     var el=function(k){return sek.querySelector('[data-sk="'+k+'"]');};
     var K=null;
-    var tid=function(){var t=o.tid();return [1000,2000,3000].indexOf(t)>=0?t:2000;};
+    var tid=function(){var t=o.tid();return [1000,2000,3000,5000].indexOf(t)>=0?t:2000;};
     /* Visa svaret av: korten rullar på av sig själva och klassen ropar svaret under pausen */
-    var VILA=2500,visaSvar=function(){return !o.svar||o.svar()!==false;};
+    var visaSvar=function(){return !o.svar||o.svar()!==false;};
     /* långa uppgifter (56 − 9 = 47) krymps så att de får plats på kortet */
     var txt=function(h){var t=el('txt'),k=el('kort');t.innerHTML=h;t.style.fontSize='';
       var w=k.clientWidth-28;if(t.scrollWidth>w){var f=parseFloat(getComputedStyle(t).fontSize);t.style.fontSize=Math.floor(f*w/t.scrollWidth)+'px';}};
     var rensa=function(){if(K){K.timers.forEach(clearTimeout);K.timers=[];}};
     var sen=function(fn,ms){K.timers.push(setTimeout(fn,ms));};
-    function timer(on,ms,vila){var t=el('timer');t.style.transition='none';t.style.background=vila?'#C9D5EC':'';t.style.width=on?'100%':'0';if(on){void t.offsetWidth;t.style.transition='width '+(ms||tid())+'ms linear';t.style.width='0';}}
+    function timer(on){var t=el('timer');t.style.transition='none';t.style.width=on?'100%':'0';if(on){void t.offsetWidth;t.style.transition='width '+tid()+'ms linear';t.style.width='0';}}
     function ui(){
       var s=K.st,go=el('go');
       el('set').hidden=!(s==='start'||s==='klar');
       el('igen').hidden=s!=='dold';
       el('kort').classList.toggle('svar',s==='svar');
       el('info').textContent=s==='start'?'':'Kort '+Math.min(K.n,N)+' av '+N;
-      var rullar=K.rull&&(s==='titta'||s==='visar'||s==='vila');
+      var rullar=K.rull&&(s==='titta'||s==='visar');
       go.textContent=rullar?'⏸ Paus':{start:'Starta',titta:'Titta!',visar:'Titta!',dold:'Visa svaret',svar:K.n>=N?'Klart':'Nästa ›',klar:'Tio kort till',paus:'▶ Fortsätt'}[s];
       go.disabled=!rullar&&(s==='titta'||s==='visar');
       el('svar').checked=visaSvar();
@@ -74,12 +74,12 @@
       el('svar').onchange=function(e){if(o.satSvar)o.satSvar(e.currentTarget.checked);if(K&&(K.st==='start'||K.st==='klar'))startText();if(K)ui();};
     sek.querySelectorAll('[data-sktid]').forEach(function(b){b.setAttribute('aria-pressed',+b.dataset.sktid===tid());});
     }
-    function startText(){var s=tid()/1000;txt('<span class="skic">🃏</span><small>Kortet syns i '+s+' '+(s===1?'sekund':'sekunder')+'. '+(visaSvar()?'Säg vad det blev, sedan visar du svaret.':'Ropa svaret! Nästa kort kommer av sig själv.')+'</small>');}
+    function startText(){var s=tid()/1000;txt('<span class="skic">🃏</span><small>Kortet syns i '+s+' '+(s===1?'sekund':'sekunder')+'. '+(visaSvar()?'Säg vad det blev, sedan visar du svaret.':'Ropa svaret! Sedan kommer nästa kort av sig själv.')+'</small>');}
     function blinka(igen){
       var visa=function(){K.st='visar';ui();txt(K.u.q);timer(true);
-        sen(function(){txt('<span class="skq">?</span>');
-          if(K.rull){K.st='vila';timer(true,VILA,true);ui();sen(function(){if(K.n<N)nasta();else klar();},VILA);return;}
-          K.st='dold';timer(false);ui();},tid());};
+        /* när korten rullar på ligger talet kvar tills nästa kort kommer, inget frågetecken */
+        if(K.rull)return sen(function(){if(K.n<N)nasta();else klar();},tid());
+        sen(function(){txt('<span class="skq">?</span>');K.st='dold';timer(false);ui();},tid());};
       if(igen||K.rull)return visa(); /* när korten rullar på blir det inget Titta! */
       K.st='titta';ui();txt('<span class="skti">Titta!</span>');sen(visa,650);
     }
@@ -87,7 +87,7 @@
     function klar(){K.st='klar';timer(false);txt('<span class="skic">🎉</span><small>Bra jobbat! '+N+' snabbkort klara.</small>');ui();if(o.fira)o.fira();}
     function fram(){if(!K)return;
       if(K.st==='start'||K.st==='klar'){K.n=0;K.rull=!visaSvar();return nasta();}
-      if(K.rull&&(K.st==='titta'||K.st==='visar'||K.st==='vila')){rensa();timer(false);K.st='paus';txt('<span class="skic">⏸</span><small>Paus</small>');ui();return;}
+      if(K.rull&&(K.st==='titta'||K.st==='visar')){rensa();timer(false);K.st='paus';ui();return;} /* talet ligger kvar under pausen */
       if(K.st==='paus'){return K.n<N?nasta():klar();}
       if(K.st==='dold'){K.st='svar';txt(K.u.q+' = <b>'+K.u.a+'</b>');ui();return;}
       if(K.st==='svar'){if(K.n<N)return nasta();klar();}
