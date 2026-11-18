@@ -450,3 +450,6 @@ Läraren: svårt att scrolla på mobil när sidan är full av knappar. Mätt med
 - Mobil (≤620 px): SPELA utan rubrik, lokal REC/■/▶ och statusrad (raden högst upp har dem); SPELA 173 px. `.sy-keylegend` och `.sy-shortcuts` dolda.
 - `#sy-advanced` (FLER INSTÄLLNINGAR) ligger nu efter `.sy-lower` i markupen.
 - Mätt med ljudlistan precis under `#styr`: klaviaturens botten 686 px av 839 (Pixel 7) och 844 (390 × 844), iPad 505 av 1024, dator 453 av 900. Ingen sidledes scroll, inga JS-fel; alla test-synt*-skript och test-musiklabbet-flikar gröna.
+
+## PADS: effektplattan flyttad under padsen (18 nov 2026)
+- Sektionen flyttad ur `.sy-padv` (vänsterspalten under röstloopen) till `#sy-padyta` efter `#sy-padh`; CSS i `synt/synt.css` (`grid-template-areas`, höjdberoende `aspect-ratio` på `.sy-tonepad`, platta `clamp(84px,17vh,170px)`). Testat i Playwright: pads + platta ryms under den fasta raden (124 + 56 px) vid 1280 × 600 och uppåt, ingen sidscroll, inga JS-fel. Inte provat på riktig jobb-PC eller med pekskärm.
