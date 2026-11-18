@@ -26,17 +26,46 @@ const SIDOR=[
   bubblor:[{t:'tanke',r:0,k:1,x:.3,y:.05,w:.6,h:.55,sx:.3,sy:.86},{t:'tal',r:3,k:0,x:.62,y:.06,w:.33,h:.32,sx:.7,sy:.66}]},
  {namn:'Titel och fem rutor',titel:true,rader:[{h:1,c:[1.4,1]},{h:1.15,c:[1]},{h:1,c:[1,1.4]}],
   bubblor:[{t:'tal',r:0,k:0,x:.05,y:.06,w:.45,h:.3,sx:.4,sy:.55},{t:'tanke',r:1,k:0,x:.62,y:.05,w:.3,h:.36,sx:.55,sy:.6},{t:'tal',r:2,k:1,x:.5,y:.06,w:.45,h:.3,sx:.65,sy:.55}]}
+,
+ // ---- fler sidor (18 nov 2026, lärarens önskan "Fler") ----
+ {namn:'Fyra rutor med bubblor',rader:[{h:1,c:[1,1]},{h:1,c:[1,1]}],
+  bubblor:[{t:'tal',r:0,k:0,x:.05,y:.05,w:.6,h:.24,sx:.45,sy:.45},{t:'tanke',r:0,k:1,x:.42,y:.04,w:.52,h:.3,sx:.4,sy:.55},
+           {t:'text',r:1,k:0,x:0,y:0,w:.62,h:.12,sx:.4,sy:.2},{t:'tal',r:1,k:1,x:.36,y:.05,w:.6,h:.24,sx:.55,sy:.45}]},
+ {namn:'Nio rutor',rader:[{h:1,c:[1,1,1]},{h:1,c:[1,1,1]},{h:1,c:[1,1,1]}]},
+ {namn:'Rita och skriv, sex rutor',rader:[{h:1,c:[1,1]},{h:1,c:[1,1]},{h:1,c:[1,1]}],skriv:3},
+ {namn:'Rita och skriv, fyra rutor',titel:true,rader:[{h:1,c:[1,1]},{h:1,c:[1,1]}],skriv:4},
+ {namn:'Seriestrippar med bubblor',strippar:true,rader:[{h:1,c:[1,1,1]},{h:1,c:[1,1,1]},{h:1,c:[1,1,1]},{h:1,c:[1,1,1]}],
+  bubblor:[{t:'tal',r:0,k:0,x:.05,y:.05,w:.75,h:.3,sx:.45,sy:.55},{t:'tal',r:0,k:2,x:.2,y:.05,w:.75,h:.3,sx:.6,sy:.55},
+           {t:'tanke',r:1,k:1,x:.15,y:.04,w:.7,h:.4,sx:.4,sy:.68},{t:'text',r:2,k:0,x:0,y:0,w:.85,h:.16,sx:.5,sy:.28},
+           {t:'tal',r:3,k:1,x:.2,y:.05,w:.75,h:.3,sx:.5,sy:.55}]},
+ {namn:'Omslag',omslag:true,rader:[{h:1,c:[1]}]},
+ {namn:'Två stora rutor',rader:[{h:1,c:[1]},{h:1,c:[1]}],
+  bubblor:[{t:'tal',r:0,k:0,x:.04,y:.05,w:.36,h:.24,sx:.32,sy:.48},{t:'tanke',r:1,k:0,x:.66,y:.05,w:.28,h:.3,sx:.6,sy:.55}]},
+ {namn:'Actionsida',band:[{top:[0,0],bot:[82,-.0815],cut:[[112,96]]},{top:[87,-.0815],bot:[150,.09],cut:[]},{top:[155,.09],bot:[260,0],cut:[[62,50],[124,134]]}],
+  bubblor:[{t:'tal',r:0,k:1,x:.3,y:.06,w:.62,h:.3,sx:.45,sy:.6},{t:'tanke',r:2,k:1,x:.2,y:.09,w:.62,h:.3,sx:.4,sy:.5}]},
+ {namn:'Blandade rutor',rader:[{h:1,c:[1,1.8]},{h:1,c:[1.8,1]},{h:1,c:[1,1,1]},{h:1,c:[1]}],
+  bubblor:[{t:'tal',r:0,k:1,x:.55,y:.06,w:.4,h:.3,sx:.6,sy:.58},{t:'tanke',r:1,k:0,x:.04,y:.05,w:.32,h:.4,sx:.4,sy:.7},{t:'tal',r:3,k:0,x:.04,y:.06,w:.3,h:.3,sx:.3,sy:.6}]},
+ {namn:'Hög ruta till höger',hog:'h',rader:[{h:1,c:[1,1.15]},{h:1,c:[1,1.15]},{h:1,c:[1,1.15]},{h:1.2,c:[1]}],
+  bubblor:[{t:'tal',r:0,k:0,x:.08,y:.06,w:.84,h:.34,sx:.5,sy:.7},{t:'tanke',r:0,k:1,x:.45,y:.03,w:.5,h:.22,sx:.4,sy:.38},{t:'text',r:3,k:0,x:0,y:0,w:.4,h:.17,sx:.3,sy:.3}]}
 ];
 
 const f=n=>+n.toFixed(2);
 function rutor(S){
   let y=TOP;const bot=H-M,bredd=W-2*M,R=[];
+  if(S.band){// actionsida: band med sneda kanter, x och y i mm inne i marginalen; linjer a+b*x
+    const L=(l,x)=>l[0]+l[1]*x;
+    return S.band.map(B=>{const ks=[[-G/2,-G/2],...B.cut,[bredd+G/2,bredd+G/2]];const out=[];
+      for(let i=0;i<ks.length-1;i++){const lt=ks[i][0]+G/2,lb=ks[i][1]+G/2,rt=ks[i+1][0]-G/2,rb=ks[i+1][1]-G/2;
+        const pts=[[lt,L(B.top,lt)],[rt,L(B.top,rt)],[rb,L(B.bot,rb)],[lb,L(B.bot,lb)]].map(([x,yy])=>[x+M,yy+TOP]);
+        const xs=pts.map(q=>q[0]),ys=pts.map(q=>q[1]);out.push({pts,x:Math.min(...xs),y:Math.min(...ys),w:Math.max(...xs)-Math.min(...xs),h:Math.max(...ys)-Math.min(...ys)});}
+      return out;});}
+  if(S.omslag){R.titel={x:M,y,w:bredd,h:40};R.av=y+40+12;y+=40+20;}
   if(S.titel){R.titel={x:M,y,w:bredd,h:24};y+=24+G;}
   const hs=S.rader.reduce((s,r)=>s+r.h,0),tot=bot-y-G*(S.rader.length-1)-(S.strippar?G*.6*(S.rader.length-1):0);
   S.rader.forEach((r,i)=>{const rh=tot*r.h/hs,cs=r.c.reduce((a,b)=>a+b,0),cw=bredd-G*(r.c.length-1);let x=M;
     R[i]=r.c.map(c=>{const w=cw*c/cs,p={x,y,w,h:rh};x+=w+G;return p;});y+=rh+G+(S.strippar?G*.6:0);});
-  if(S.hog){// första kolumnens tre översta rutor slås ihop till en hög ruta
-    const a=R[0][0],c=R[2][0];R[0][0]={x:a.x,y:a.y,w:a.w,h:c.y+c.h-a.y};R[1].shift();R[2].shift();R[1].unshift(null);R[2].unshift(null);}
+  if(S.hog){// en kolumns tre översta rutor slås ihop till en hög ruta (vänster, eller höger med hog:'h')
+    const k=S.hog==='h'?1:0,a=R[0][k],c=R[2][k];R[0][k]={x:a.x,y:a.y,w:a.w,h:c.y+c.h-a.y};R[1][k]=null;R[2][k]=null;}
   return R;
 }
 function ellips(cx,cy,rx,ry){return `<ellipse cx="${f(cx)}" cy="${f(cy)}" rx="${f(rx)}" ry="${f(ry)}"/>`;}
@@ -61,7 +90,11 @@ function sida(S){
   s+=`<text x="${M}" y="15.5" font-size="4.6" fill="#555" font-family="'Baloo 2', sans-serif" font-weight="700">Namn</text><line x1="${M+14}" y1="16" x2="${W/2+12}" y2="16" stroke="#999" stroke-width=".3"/>`;
   s+=`<g fill="#fff" stroke="#111" stroke-width="${LW}">`;
   if(R.titel)s+=rect(R.titel);
-  R.forEach(r=>r.forEach(p=>{if(p)s+=rect(p);}));s+='</g>';
+  R.forEach(r=>r.forEach(p=>{if(p)s+=p.pts?`<path d="M${p.pts.map(q=>f(q[0])+' '+f(q[1])).join(' L')}Z" stroke-linejoin="miter"/>`:rect(p);}));s+='</g>';
+  if(R.av)s+=`<text x="${M}" y="${f(R.av)}" font-size="5.5" fill="#555" font-family="'Baloo 2', sans-serif" font-weight="700">av</text><line x1="${M+9}" y1="${f(R.av+.5)}" x2="${W-M}" y2="${f(R.av+.5)}" stroke="#999" stroke-width=".3"/>`;
+  if(S.skriv){const RAD=8.5;// skrivrader längst ner i varje ruta
+    R.forEach(r=>r.forEach(p=>{if(!p)return;const y0=p.y+p.h-S.skriv*RAD-1.5;s+=`<line x1="${f(p.x)}" y1="${f(y0)}" x2="${f(p.x+p.w)}" y2="${f(y0)}" stroke="#111" stroke-width="${LW}"/>`;
+      for(let i=1;i<=S.skriv;i++)s+=`<line x1="${f(p.x+4)}" y1="${f(y0+i*RAD)}" x2="${f(p.x+p.w-4)}" y2="${f(y0+i*RAD)}" stroke="#aaa" stroke-width=".3"/>`;}));}
   (S.bubblor||[]).forEach(b=>{const p=R[b.r][b.k];if(p)s+=bubbla(b,p);});
   return `<section><svg viewBox="0 0 ${W} ${H}" width="210mm" height="297mm" xmlns="http://www.w3.org/2000/svg">${s}</svg></section>`;
 }
@@ -73,7 +106,7 @@ const fs=require('fs'),os=require('os'),tmp=path.join(os.tmpdir(),'seriesidor.ht
   await p.pdf({path:path.join(UT,'seriesidor.pdf'),format:'A4',printBackground:true,margin:{top:0,bottom:0,left:0,right:0}});
   // förhandsbild: sida 2 (med bubblor), samma storlek som de andra förhandsbilderna
   const q=await b.newPage({viewport:{width:351,height:497},deviceScaleFactor:2});
-  await q.setContent(`<!doctype html><style>${FONT}html,body{margin:0}svg{display:block;width:351px;height:497px}</style>`+sida(SIDOR[1]).replace(/width="210mm" height="297mm"/,''));
+  await q.setContent(`<!doctype html><style>${FONT}html,body{margin:0}svg{display:block;width:351px;height:497px}</style>`+sida(SIDOR[1]).replace(/width="210mm" height="297mm"/,''));await q.evaluate(()=>document.fonts.load('700 10px "Baloo 2"'));
   await q.screenshot({path:path.join(UT,'seriesidor.png')});
   if(process.argv[2]){for(let i=0;i<SIDOR.length;i++){await q.setContent(`<!doctype html><style>${FONT}html,body{margin:0}svg{display:block;width:351px;height:497px}</style>`+sida(SIDOR[i]).replace(/width="210mm" height="297mm"/,''));await q.evaluate(()=>document.fonts.load('700 10px "Baloo 2"'));await q.screenshot({path:path.join(process.argv[2],`serie-${i+1}.png`)});}}
   await b.close();console.log(SIDOR.length,'sidor');})();
