@@ -660,6 +660,7 @@ const ti=get("mattespel-tiotal-v1");S.ti=(ti&&ti.stars)||{};
 const ta=get("mattespel-taluppfattning-v1");S.ta=(ta&&ta.stars)||{};S.taDiag=Object.values((ta&&ta.diag)||{});
 {const s=sum(S.ta);S.stars+=s;if(s)show("bTal",`⭐ ${s} stjärnor`)}
 const lp=get("mattespel-lillaplus-v1");
+S.stars+=sum((lp&&lp.stars)||{}); // Lilla plus & minus: upp till tre per räknesätt
 S.lpBlitz=lp?Math.max(0,...Object.values(lp.blitz||{})):0;S.lpRace=lp?Object.values(lp.race||{}).map(r=>r.time):[];
 if(S.lpBlitz)show("bLilla",`⚡ Rekord: ${S.lpBlitz} rätt på 60 s`);else if(S.lpRace.length)show("bLilla",`🏁 Rekord: ${fmt(Math.min(...S.lpRace))}`);
 const np=get("np3-resultat");S.np=Object.values(np||{});
