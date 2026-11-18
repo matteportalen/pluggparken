@@ -73,6 +73,14 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 .falt button.b::after{content:"✓";position:absolute;inset:0;display:grid;place-items:center;color:var(--good-dark);font-weight:800;font-size:.8em;opacity:1}
 .falt button.lys{background:#FFE7A3;opacity:1}
 .falt button.lys.b{opacity:.75}
+/* Räkna och måla: bildfältet bredvid diagrammet på dator, ovanför på mobil */
+.rm{display:block}
+@media(min-width:900px){body.bred .wrap{max-width:1040px}
+  body.bred .rm{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+  body.bred .rm .falt{margin-bottom:0;grid-template-columns:repeat(7,minmax(0,1fr))}
+  body.bred .rm .dia svg{max-height:54vh}
+  body.bred .fraga,body.bred .forkl,body.bred .knapprad{max-width:640px;margin-left:auto;margin-right:auto}}
+@media(max-width:899px){body.bred .falt{padding:6px}body.bred .falt button{font-size:clamp(1.3rem,6.4vw,1.8rem)}}
 .tab div[data-r]{cursor:pointer}
 .tab div.sel{box-shadow:0 0 0 3px var(--accent),0 3px 0 var(--line)}
 .tab div.okr{background:#DDF5E7}
@@ -232,9 +240,8 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
   <div class="topp"><div class="dots" id="dots"></div><span class="niva-t" id="nivT"></span></div>
   <div class="rub"><b id="rubT"></b><span id="rubI"></span></div>
   <div class="ranna" id="ranna" hidden></div>
-  <div class="falt" id="falt" hidden></div>
   <div class="tab" id="tab" hidden></div>
-  <div class="dia" id="dia" tabindex="0"></div>
+  <div class="rm" id="rm"><div class="falt" id="falt" hidden></div><div class="dia" id="dia" tabindex="0"></div></div>
   <div class="fraga" id="fraga"><button class="hor" id="hor" aria-label="Läs upp frågan">🔊</button><span class="q" id="q" aria-live="polite"></span><span class="ruta" id="ruta" hidden>?</span></div>
   <div class="forkl" id="forkl" aria-live="polite"></div>
   <div class="knapprad"><button class="klar" id="klar" hidden>Klar ✓</button><button class="nasta" id="nasta" hidden>Nästa ▶</button></div>
@@ -273,7 +280,7 @@ const FARG=["#3D8BFD","#FF9F43","#2BB673","#7B61FF"],MORK=["#2A6FD6","#DB7F26","
    M = högsta talet på axeln, linje = avstånd mellan linjerna, snap = vad stapeln snäpper till. */
 const NIV=[null,
   {namn:"Sortera och bygg",txt:"En sak i taget. Lägg den i rätt stapel.",col:"#2BB673",bygg:"sortera",n:3,linje:1,snap:1},
-  {namn:"Räkna och måla",txt:"Räkna bilderna, skriv talet och måla rutorna.",col:"#3D8BFD",bygg:"tal",rakna:true,rutor:true,n:4,M:12,linje:1,snap:1},
+  {namn:"Räkna och måla",txt:"Räkna bilderna och måla lika många rutor.",col:"#3D8BFD",bygg:"tal",rakna:true,rutor:true,n:4,M:12,linje:1,snap:1},
   {namn:"Läs av diagrammet",txt:"Linjerna visar vartannat tal. Titta noga!",col:"#FF9F43",bygg:"",n:4,linje:2,snap:1},
   {namn:"Stora tal",txt:"Linjerna visar tiotal. Staplarna kan sluta mitt emellan.",col:"#7B61FF",bygg:"tal",n:4,M:50,linje:10,snap:5}];
 
@@ -325,7 +332,7 @@ function gorUnd(lvl,tema){const N=NIV[lvl],kat=shuffle(tema.kat.slice()).slice(0
   else if(lvl===3){do{val=olika(4,1,13);}while(val.filter(v=>v%2).length<2);M=Math.max(10,Math.ceil(Math.max(...val)/2)*2);}
   else{do{val=olika(4,1,10).map(v=>v*5);}while(val.filter(v=>v%10).length<2);}
   const U={lvl,tema,kat,val,M,N};
-  U.moment=(N.rakna?[{typ:"rakna"}]:[]).concat(N.bygg?[{typ:"bygg"}]:[]).concat(FRAGOR[lvl].map(p=>gorFraga(pick(p),U)));
+  U.moment=(N.bygg?[{typ:"bygg"}]:[]).concat(FRAGOR[lvl].map(p=>gorFraga(pick(p),U)));
   // samma fråga ska inte komma två gånger i samma undersökning
   return U;}
 function gorFraga(typ,U){const v=U.val,n=v.length,ix=shuffle([...Array(n).keys()]);
@@ -381,7 +388,7 @@ function traff(e,U){const {PY0,PY1}=geo(U),svg=$("dia").querySelector("svg");if(
 /* ---------- Skärmar ---------- */
 const stjHtml=n=>[1,2,3].map(i=>i<=n?"★":'<span class="off">★</span>').join("");
 function show(id){document.querySelectorAll(".screen").forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
-function hem(){rensa();tyst();
+function hem(){rensa();tyst();document.body.classList.remove("bred");
   $("niv").innerHTML=NIV.slice(1).map((n,i)=>`<button data-l="${i+1}"><span class="nr" style="background:${n.col}">${i+1}</span><span><b>${n.namn}</b><small>${n.txt}</small></span><span class="st">${stjHtml(data.stars[i+1]||0)}</span></button>`).join("");
   show("home");}
 $("niv").onclick=e=>{const b=e.target.closest("[data-l]");if(b)starta(+b.dataset.l);};
@@ -409,13 +416,12 @@ function nytt(){rensa();tyst();G.mi++;
   const U=G.U=G.und[G.si],m=G.m=U.moment[G.mi];G.felNu=false;G.forsok=0;G.last=false;G.inp="";prickar();
   $("rubT").textContent=U.tema.rub;$("rubI").textContent=G.extra&&G.si===G.und.length-1&&G.mi===0?"En till, för att öva.":U.tema.intro;
   const d=$("dia");d.className="dia";fb("");$("nasta").hidden=true;$("klar").hidden=true;$("pad").hidden=true;$("ruta").hidden=true;$("ruta").className="ruta";$("ruta").textContent="?";
-  $("ranna").hidden=true;$("tab").hidden=true;$("falt").hidden=true;d.hidden=false;
-  if(m.typ==="rakna"){raknaStart(U);return;}
+  $("ranna").hidden=true;$("tab").hidden=true;$("falt").hidden=true;d.hidden=false;document.body.classList.toggle("bred",!!(m.typ==="bygg"&&U.N.rakna));
   if(m.typ==="bygg"){const b=U.N.bygg;G.cur=U.val.map(()=>0);
     if(b==="sortera"){G.ko=shuffle(U.val.flatMap((v,i)=>Array(v).fill(i)));d.classList.add("klick");fraga("Var ska den ligga? Tryck på rätt stapel.","Var ska den ligga? Tryck på rätt stapel.");ritaRanna(true);ritaDiagram(U,{vals:G.cur,block:true});}
-    else{d.classList.add("drag");$("klar").hidden=false;$("tab").hidden=false;
-      $("tab").innerHTML=U.kat.map((k,i)=>`<div><span class="em">${bild(k[0])}</span><span class="nm">${k[1]}</span><span class="tal">${U.val[i]}</span></div>`).join("");
-      const t=U.N.rutor?"Måla lika många rutor som du räknade. Tryck på rutan där stapeln ska sluta.":"Dra upp varje stapel till rätt höjd.";fraga(t,t);ritaDiagram(U,{vals:G.cur,handtag:true});}
+    else{d.classList.add("drag");$("klar").hidden=false;
+      if(U.N.rakna)faltGor(U);else{$("tab").hidden=false;$("tab").innerHTML=U.kat.map((k,i)=>`<div><span class="em">${bild(k[0])}</span><span class="nm">${k[1]}</span><span class="tal">${U.val[i]}</span></div>`).join("");}
+      const t=U.N.rakna?"Räkna bilderna och måla lika många rutor i diagrammet. Tryck på rutan där stapeln ska sluta.":"Dra upp varje stapel till rätt höjd.";fraga(t,t);ritaDiagram(U,{vals:G.cur,handtag:true});}
     return;}
   ritaDiagram(U,{block:U.N.bygg==="sortera"});
   fraga(fragaText(m,U,true),fragaText(m,U,false));
@@ -430,31 +436,14 @@ function klarMoment(){if(G.felNu&&!(G.extra&&G.si===G.und.length-1))G.fel++;G.re
 const ljud=n=>{window.Ljud&&Ljud[n]&&Ljud[n]();};
 
 /* Räkna: bilderna huller om buller, bocka av med ett tryck, skriv antalet av varje sort i tabellen */
-function raknaStart(U){const tot=U.val.reduce((a,b)=>a+b),cols=7,celler=cols*Math.ceil((tot+3)/cols);
+/* Räkna och måla (nivå 2) på samma bild: bilderna huller om buller bredvid diagrammet. Man räknar i huvudet (bocka av med ett tryck om man vill) och målar rutorna. */
+function faltGor(U){const tot=U.val.reduce((a,b)=>a+b),cols=7,celler=cols*Math.ceil((tot+3)/cols);
   const saker=shuffle(U.val.flatMap((v,i)=>Array(v).fill(i))),plats=shuffle([...Array(celler).keys()]).slice(0,tot);
   G.falt=Array(celler).fill(null);plats.forEach((c,k)=>{G.falt[c]={i:saker[k],b:false,lys:false,dx:rnd(-6,6),dy:rnd(-6,6),rot:rnd(-14,14)};});
-  G.rk={sel:0,inp:"",ok:U.val.map(()=>false),forsok:U.val.map(()=>0),fel:-1};
-  $("dia").hidden=true;$("falt").hidden=false;$("tab").hidden=false;$("pad").hidden=false;
-  const t="Räkna varje sort och skriv antalet. Tryck på en bild för att bocka av den.";fraga(t,t);ritaFalt();ritaRakna();}
+  $("falt").hidden=false;ritaFalt();}
 function ritaFalt(){$("falt").innerHTML=G.falt.map((f,c)=>f?`<button data-c="${c}" class="${f.b?"b":""}${f.lys?" lys":""}" style="transform:translate(${f.dx}px,${f.dy}px) rotate(${f.rot}deg)" aria-label="${G.U.kat[f.i][1]}${f.b?", avbockad":""}">${bild(G.U.kat[f.i][0])}</button>`:"<span></span>").join("");}
-function ritaRakna(){const U=G.U,k=G.rk;
-  $("tab").innerHTML=U.kat.map((x,i)=>`<div data-r="${i}" class="${k.ok[i]?"okr":k.fel===i?"felr":""}${!k.ok[i]&&k.sel===i?" sel":""}"><span class="em">${bild(x[0])}</span><span class="nm">${x[1]}</span><span class="in">${k.ok[i]?U.val[i]:k.sel===i&&k.inp?k.inp:"?"}</span></div>`).join("");}
-function raknaVal(i){const k=G.rk;if(G.last||k.ok[i])return;if(k.sel!==i){k.sel=i;k.inp="";}ritaRakna();}
-function raknaTangent(t){const U=G.U,k=G.rk,s=k.sel;if(G.last||s<0||k.ok[s])return;
-  if(t==="del")k.inp=k.inp.slice(0,-1);
-  else if(t==="ok"){if(!k.inp)return;const n=+k.inp,v=U.val[s],x=U.kat[s];
-    if(n===v){k.ok[s]=true;if(k.fel===s)k.fel=-1;ljud("pip");fb(`Rätt! ✓ ${v} ${x[1]}.`,"ratt");}
-    else{G.felNu=true;ljud("bad");k.forsok[s]++;k.inp="";
-      if(k.forsok[s]===1){k.fel=s;G.falt.forEach(f=>{if(f&&f.i===s)f.b=false;});ritaFalt();fb(`Inte riktigt. Räkna ${x[1]} en gång till och bocka av dem en i taget.`,"fel");ritaRakna();return;}
-      k.ok[s]=true;k.fel=-1;G.falt.forEach(f=>{if(f&&f.i===s)f.lys=true;});ritaFalt();fb(`Det är ${v} ${x[1]}. Titta, de lyser.`,"fel");}
-    const nasta=U.val.map((_,i)=>(s+1+i)%U.val.length).find(i=>!k.ok[i]);k.sel=nasta===undefined?-1:nasta;k.inp="";ritaRakna();
-    if(k.sel<0){$("pad").hidden=true;if(!G.felNu)fb("Rätt! ✓ Du har räknat allt. Nu ska du måla diagrammet.","ratt");else fb("Nu vet du hur många det finns av varje. Nu ska du måla diagrammet.","fel");klarMoment();}
-    return;}
-  else if(k.inp.length<2)k.inp=(k.inp==="0"?"":k.inp)+t;
-  ritaRakna();}
 $("falt").onclick=e=>{const b=e.target.closest("[data-c]");if(!b||!G||G.last)return;const f=G.falt[+b.dataset.c];f.b=!f.b;
-  b.classList.toggle("b",f.b);ljud("pip");if(!G.rk.ok[f.i]&&G.rk.sel!==f.i)raknaVal(f.i);};
-$("tab").onclick=e=>{const d=e.target.closest("[data-r]");if(d&&G&&G.m.typ==="rakna")raknaVal(+d.dataset.r);};
+  b.classList.toggle("b",f.b);ljud("pip");};
 /* Sortera: tryck på stapeln där saken hör hemma */
 function lagg(i){const U=G.U;if(G.last||!G.ko.length)return;
   if(i!==G.ko[0]){G.felNu=true;ljud("bad");const s=$("nuSak");s.classList.remove("in","skaka");void s.offsetWidth;s.classList.add("skaka");
@@ -464,11 +453,13 @@ function lagg(i){const U=G.U;if(G.last||!G.ko.length)return;
   if(!G.ko.length){$("dia").classList.add("ratt");ljud("ok");fraga("Diagrammet är klart!","Diagrammet är klart!");fb("En ruta för varje sak. Nu kan du se vilken stapel som är högst.","ratt");klarMoment();}}
 /* Bygg staplar: Klar jämför med tabellen */
 function kollaBygge(){const U=G.U;if(G.last)return;const fel=U.val.map((v,i)=>G.cur[i]!==v?i:-1).filter(i=>i>=0);
-  if(!fel.length){$("dia").className="dia ratt";ljud("ok");ritaDiagram(U,{vals:G.cur,visa:"alla"});fb("Rätt! ✓ Diagrammet visar samma sak som tabellen.","ratt");klarMoment();return;}
+  if(!fel.length){$("dia").className="dia ratt";ljud("ok");ritaDiagram(U,{vals:G.cur,visa:"alla"});fb(U.N.rakna?"Rätt! ✓ Du räknade och målade rätt.":"Rätt! ✓ Diagrammet visar samma sak som tabellen.","ratt");klarMoment();return;}
   G.felNu=true;ljud("bad");
   if(G.forsok===0){G.forsok=1;$("dia").classList.add("fel");ritaDiagram(U,{vals:G.cur,handtag:true,pink:fel});
-    fb(`Inte riktigt. Titta på ${fel.map(i=>U.kat[i][1]).join(" och ")} en gång till.`,"fel");return;}
-  G.cur=U.val.slice();$("dia").className="dia fel";ritaDiagram(U,{vals:G.cur,visa:"alla",hl:fel});fb("Så här ska staplarna se ut. Jämför med tabellen.","fel");klarMoment();}
+    if(U.N.rakna){G.falt.forEach(f=>{if(f&&fel.includes(f.i))f.b=false;});ritaFalt();}
+    fb(U.N.rakna?`Inte riktigt. Räkna ${fel.map(i=>U.kat[i][1]).join(" och ")} en gång till.`:`Inte riktigt. Titta på ${fel.map(i=>U.kat[i][1]).join(" och ")} en gång till.`,"fel");return;}
+  G.cur=U.val.slice();$("dia").className="dia fel";ritaDiagram(U,{vals:G.cur,visa:"alla",hl:fel});if(U.N.rakna){G.falt.forEach(f=>{if(f&&fel.includes(f.i))f.lys=true;});ritaFalt();}
+  fb(U.N.rakna?"Så här ska staplarna se ut. Titta på bilderna som lyser och räkna dem.":"Så här ska staplarna se ut. Jämför med tabellen.","fel");klarMoment();}
 /* Fråga där man trycker på en stapel */
 function svaraStapel(i){const U=G.U,m=G.m;if(G.last)return;
   if(i===m.svar){$("dia").className="dia ratt";ljud("ok");ritaDiagram(U,{block:U.N.bygg==="sortera",hl:[i],visa:[i]});fb("Rätt! ✓ "+forklara(m,U),"ratt");klarMoment();return;}
@@ -476,7 +467,7 @@ function svaraStapel(i){const U=G.U,m=G.m;if(G.last)return;
   if(G.forsok===0){G.forsok=1;$("dia").classList.add("fel");ritaDiagram(U,{block:U.N.bygg==="sortera",pink:[i]});fb("Inte riktigt. "+ledtrad(m,U),"fel");return;}
   $("dia").className="dia fel";ritaDiagram(U,{block:U.N.bygg==="sortera",hl:[m.svar],visa:"alla"});fb(forklara(m,U),"fel");klarMoment();}
 /* Fråga med knappsatsen */
-function tangent(k){if(G&&G.m.typ==="rakna")return raknaTangent(k);if(!G||G.last||G.m.mode!=="tal")return;const r=$("ruta");
+function tangent(k){if(!G||G.last||G.m.mode!=="tal")return;const r=$("ruta");
   if(k==="del")G.inp=G.inp.slice(0,-1);else if(k==="ok"){if(G.inp)svaraTal(+G.inp);return;}else if(G.inp.length<3)G.inp=(G.inp==="0"?"":G.inp)+k;
   r.className="ruta";r.textContent=G.inp||"?";}
 function svaraTal(n){const U=G.U,m=G.m,r=$("ruta"),kol=kolAv(m),block=U.N.bygg==="sortera";
@@ -504,8 +495,6 @@ $("klar").onclick=kollaBygge;$("nasta").onclick=nytt;
 document.addEventListener("keydown",e=>{if(!G||$("game").hidden)return;
   if(!$("nasta").hidden){if(e.key==="Enter"||e.key===" "){e.preventDefault();nytt();}return;}
   const U=G.U,m=G.m,n=U.kat.length;
-  if(m.typ==="rakna"){if(/^[0-9]$/.test(e.key))tangent(e.key);else if(e.key==="Backspace")tangent("del");else if(e.key==="Enter")tangent("ok");
-    else if(e.key==="ArrowDown"||e.key==="ArrowUp"){e.preventDefault();const k=G.rk,d=e.key==="ArrowDown"?1:n-1;for(let j=1,i=k.sel;j<=n;j++){i=(i+d)%n;if(!k.ok[i]){raknaVal(i);break;}}}return;}
   if(m.mode==="tal"){if(/^[0-9]$/.test(e.key))tangent(e.key);else if(e.key==="Backspace")tangent("del");else if(e.key==="Enter")tangent("ok");return;}
   if(/^[1-4]$/.test(e.key)&&+e.key<=n){const i=+e.key-1;if(m.typ==="bygg"&&U.N.bygg==="sortera")lagg(i);else if(m.mode==="stapel")svaraStapel(i);else G.vald=i;return;}
   if(m.typ==="bygg"&&U.N.bygg!=="sortera"){G.vald=G.vald||0;
