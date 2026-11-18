@@ -98,3 +98,4 @@ _Historik för `docs/matematik.md`: hur allt byggdes, med detaljer, mått och ti
 ## Snabbkort: Visa svaret av/på (18 nov 2026)
 - Kryssruta "Visa svaret" under tiderna i `snabbkort.js` (`svar`/`satSvar`, sidorna sparar `data.skSvar`). Av: läget `vila` (2,5 s "?" med grå tidsstapel) och sedan nästa kort automatiskt; `⏸ Paus` / `▶ Fortsätt` med knappen eller mellanslag, Enter, →. Fortfarande tio kort per runda.
 - Testat i Playwright 390 × 844 och 1280 × 900 i båda övningarna: rullning, paus, hela rundan, sparat val, och att läget med svar fungerar som förut.
+- Rull-läget (Visa svaret av) hoppar över Titta!: kortet kommer direkt, 3,5 s per kort med 1 s (lärarens val 18 nov 2026).

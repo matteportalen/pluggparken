@@ -80,7 +80,7 @@
         sen(function(){txt('<span class="skq">?</span>');
           if(K.rull){K.st='vila';timer(true,VILA,true);ui();sen(function(){if(K.n<N)nasta();else klar();},VILA);return;}
           K.st='dold';timer(false);ui();},tid());};
-      if(igen)return visa();
+      if(igen||K.rull)return visa(); /* när korten rullar på blir det inget Titta! */
       K.st='titta';ui();txt('<span class="skti">Titta!</span>');sen(visa,650);
     }
     function nasta(){K.n++;K.u=o.nasta();blinka(false);}
