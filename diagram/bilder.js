@@ -60,16 +60,37 @@ add('❄️','snö',Array.from({length:6},(_,i)=>`<g transform="rotate(${i*60} 3
 add('🌈','regnbåge',p('M6 51A26 26 0 0 1 58 51','none',`stroke="${red}" stroke-width="7"`)+p('M13 51A19 19 0 0 1 51 51','none',`stroke="${gold}" stroke-width="7"`)+p('M20 51A12 12 0 0 1 44 51','none',`stroke="${blue}" stroke-width="7"`));
 add('⭐','stjärna',p('M32 5L40 23L59 25L45 39L49 58L32 48L15 58L19 39L5 25L24 23Z',gold));
 add('📚','böcker',r(9,43,46,13,blue,2)+r(14,28,42,13,red,2)+r(7,12,45,14,green,2)+p('M18 48H51M23 33H52M17 17H48','none','stroke="#FFF4DC" stroke-width="3"'));
-for(const [key,name,col] of [['🔴','röd',red],['🟠','orange','#EFA566'],['🟡','gul',gold],['🟢','grön',green],['🔵','blå',blue],['🟣','lila',purple]])add(key,name,c(32,32,23,col)+p('M18 26Q20 19 27 17','none','stroke="#FFFFFF90" stroke-width="4"'));
+for(const [key,name,col] of [['🔴','röd','#FF6B6B'],['🟠','orange','#FF9F43'],['🟡','gul',gold],['🟢','grön','#2BB673'],['🔵','blå','#3D8BFD'],['🟣','lila','#7B61FF']])add(key,name,c(32,32,23,col)+p('M18 26Q20 19 27 17','none','stroke="#FFFFFF90" stroke-width="4"'));
 add('🍕','pizza',p('M9 15Q32 3 56 16L33 58Z','#F1D181')+p('M9 15Q32 3 56 16L53 24Q32 12 13 24Z','#CA985B')+c(24,29,5,red)+c(40,29,5,red)+c(33,43,5,red));
 add('🧸','nalle',c(17,14,9,'#BD8B65')+c(47,14,9,'#BD8B65')+e(32,42,16,17,'#BD8B65')+e(13,38,7,11,'#BD8B65')+e(51,38,7,11,'#BD8B65')+e(21,55,9,6,'#DDBA92')+e(43,55,9,6,'#DDBA92')+c(32,24,17,'#BD8B65')+e(32,30,9,7,cream)+c(25,22,1.5,ink)+c(39,22,1.5,ink)+c(32,28,2,ink)+p('M27 41L32 45L37 41L36 49L32 45L28 49Z',red));
-add('🛷','pulka',p('M11 19Q9 12 18 12H46Q55 12 53 21L49 45Q47 52 39 52H22Q12 51 12 43Z',red)+r(19,20,27,24,'#F3B2A2',7)+p('M16 14Q4 3 6 35M24 25V38M32 25V38M40 25V38'));
+add('🛷','pulka',p('M47 12Q41 3 51 3Q58 3 61 7','none','stroke="#AD8055" stroke-width="2"')+p('M6 39Q9 28 34 13Q51 3 56 15L59 25Q58 34 29 54Q14 64 8 53Z','#C95158')+p('M6 39Q9 28 34 13Q51 3 56 15Q58 23 32 43Q12 59 6 46Z','#EE7770')+p('M13 38Q24 26 39 18Q49 12 51 17Q50 24 29 40Q17 49 13 44Z','#F7B299')+p('M19 38L40 22M24 42L46 24','none','stroke="#D67868" stroke-width="2.5"')+p('M12 49Q17 53 30 44M11 36Q24 23 35 17','none','stroke="#FFD0B7" stroke-width="2"')+p('M13 56Q20 58 31 50M35 47L53 33','none','stroke="#A64450" stroke-width="2"'));
 add('⛸️','skridsko',p('M17 8H35L37 30L51 35Q59 37 54 45H13V34L17 25Z',cream)+p('M18 46V53M47 46V53M8 54H49Q58 54 58 48','none','stroke="#8197AC" stroke-width="3"')+p('M25 17H35M25 23H35M25 29L37 30'));
 add('🧤','vante',p('M18 49L13 33Q4 24 11 21Q15 19 20 29V13Q19 3 28 5Q33 5 33 13V10Q37 3 43 9L48 29Q51 40 43 49Z',red)+r(18,46,26,12,'#EAB694',2)+p('M25 50V55M32 50V55M39 50V55'));
 add('🧣','halsduk',p('M16 8H44V22H35L44 56H29L23 32L16 51H5L18 20Z',purple)+p('M15 15H44M27 37L39 34M30 48L42 45M7 44H18','none','stroke="#E7D9EF" stroke-width="4"')+p('M29 56V61M35 56V61M42 56V61'));
 add('🥾','känga',p('M14 9H35L38 32L53 37Q60 40 56 49H9V34L14 27Z','#B78D63')+r(8,47,49,9,ink,2)+p('M22 17H34M22 24H35M24 31L38 33','none','stroke="#F8E5BB" stroke-width="3"'));
 add('🎈','ballong',e(32,24,19,22,red)+p('M32 46L28 51H36Z',red)+p('M32 51Q43 57 31 62')+p('M21 16Q23 10 28 9','none','stroke="#FFE2D6" stroke-width="4"'));
 add('🎲','tärning',r(9,9,46,46,cream,9)+[[20,20],[44,20],[32,32],[20,44],[44,44]].map(([x,y])=>c(x,y,3.5,ink)).join(''));
+add('🦊','räv',p('M11 29L7 7L27 19H37L57 7L53 29Q54 49 32 57Q10 49 11 29Z','#E9A05B')+p('M12 31L29 40L32 54L35 40L52 31Q50 48 32 55Q14 48 12 31Z',cream)+c(23,30,2,ink)+c(41,30,2,ink)+p('M27 44H37L32 49Z',ink));
+add('🐸','groda',c(18,20,11,green)+c(46,20,11,green)+e(32,38,26,19,green)+c(18,20,6,cream)+c(46,20,6,cream)+c(18,21,2,ink)+c(46,21,2,ink)+p('M17 39Q32 53 47 39')+c(14,36,3,'#B5D68F')+c(50,36,3,'#B5D68F'));
+add('🦋','fjäril',e(18,22,13,17,purple)+e(46,22,13,17,purple)+e(20,46,11,12,'#EBA1B4')+e(44,46,11,12,'#EBA1B4')+e(32,34,4,20,ink)+p('M31 16L24 7M34 16L41 7')+c(17,21,5,cream)+c(47,21,5,cream));
+add('🐞','nyckelpiga',c(32,14,10,ink)+e(32,37,23,23,red)+p('M32 15V60')+[[20,29],[44,29],[17,42],[47,42],[24,51],[40,51]].map(([x,y])=>c(x,y,3,ink)).join('')+p('M26 8L22 3M38 8L42 3'));
+add('🐝','bi',e(21,18,11,14,'#DCEEF2')+e(43,18,11,14,'#DCEEF2')+e(32,37,21,17,gold)+p('M24 22V52M36 21V53','none','stroke="#34445B" stroke-width="7"')+c(49,34,9,gold)+c(52,31,1.6,ink)+p('M11 36L4 39L12 42Z',ink));
+add('🐧','pingvin',e(32,33,21,27,ink)+e(32,40,15,19,cream)+c(24,23,4,cream)+c(40,23,4,cream)+c(25,24,1.5,ink)+c(39,24,1.5,ink)+p('M26 31H38L32 38Z',gold)+e(20,58,10,4,gold)+e(44,58,10,4,gold));
+add('🌳','träd',p('M27 29H38L40 59H24Z','#B58A64')+c(19,26,14,green)+c(43,26,15,green)+c(32,14,13,'#94C18C')+p('M32 47V31M32 40L23 33'));
+add('🌻','solros',p('M32 32V60','none','stroke="#5B986A" stroke-width="4"')+p('M31 50Q14 52 13 39Q29 37 31 50M33 56Q48 56 52 43Q37 41 33 56',green)+Array.from({length:8},(_,i)=>`<g transform="rotate(${i*45} 32 25)">${e(32,10,6,9,gold)}</g>`).join('')+c(32,25,12,'#A97D56'));
+add('🍄','svamp',p('M25 27H39L43 56Q32 62 21 56Z',cream)+p('M6 31Q10 5 32 5Q54 5 58 31Q33 42 6 31Z',red)+c(23,17,5,cream)+c(40,13,4,cream)+c(47,27,4,cream)+c(16,28,3,cream));
+add('🍅','tomat',e(32,36,25,22,red)+p('M31 20L19 15L29 14L32 5L36 14L47 12L42 21L32 26Z',green)+p('M14 31Q12 38 17 43','none','stroke="#FFD2C0" stroke-width="3"'));
+add('🥒','gurka',p('M10 51C0 38 29 6 43 5C60 3 65 15 54 28L25 56Q16 62 10 51Z',green)+p('M15 45L42 15M24 48L47 24','none','stroke="#C2DB95" stroke-width="3"'));
+add('🥦','broccoli',p('M28 26H39L45 58H21Z','#A5C58B')+c(17,25,13,green)+c(45,25,14,green)+c(31,14,14,'#639E73')+p('M32 49V31M32 41L23 33M34 39L43 32'));
+add('✏️','penna',p('M7 57L11 39L43 7Q47 3 51 7L57 13Q61 17 57 21L25 53Z',gold)+p('M11 39L25 53L7 57Z',cream)+p('M7 57L10 48L16 54Z',ink)+p('M43 7L57 21L51 27L37 13Z',red)+p('M17 42L42 17M23 48L48 23'));
+add('✂️','sax',p('M25 38L49 7Q55 4 53 12L34 43M36 37L13 7Q7 3 10 13L27 43','#CEDDE5')+c(21,47,11,red)+c(43,47,11,blue)+c(21,47,5,cream)+c(43,47,5,cream)+c(32,34,3,ink));
+add('🎒','ryggsäck',p('M23 13V8Q32 0 41 8V13','none','stroke="#34445B" stroke-width="4"')+r(10,12,44,47,blue,12)+r(17,35,30,19,'#B7DAE4',5)+p('M17 30H47M19 42H45')+r(27,18,10,7,cream,2));
+add('🏠','hus',r(12,27,40,32,cream,2)+p('M5 28L32 5L59 28Z',red)+r(27,38,12,21,'#AD8768',1)+r(17,34,8,10,blue,1)+r(42,34,7,10,blue,1));
+add('🚀','raket',p('M22 31L10 43L9 56L24 48M42 31L54 43L55 56L40 48Z',red)+p('M25 48Q21 57 32 63Q42 57 39 48Z',gold)+p('M32 3Q14 19 23 48H41Q50 19 32 3Z',cream)+c(32,25,8,blue)+p('M22 41H42'));
+add('🪁','drake',p('M32 5L55 26L32 49L9 26Z',gold)+p('M32 5V49L9 26Z',blue)+p('M9 26H55M32 49Q48 56 34 62')+p('M37 52L44 50L43 57Z',red));
+add('🥁','trumma',p('M9 22V49Q32 64 55 49V22Z',red)+e(32,22,23,10,cream)+p('M10 31L19 48L28 32L38 50L49 31M9 49Q32 61 55 49','none','stroke="#F4D98C"')+p('M17 7L38 21M47 6L28 23','none','stroke="#A58260" stroke-width="4"'));
+add('turkos','turkos',c(32,32,23,'#17A2B8')+p('M18 26Q20 19 27 17','none','stroke="#FFFFFF90" stroke-width="4"'));
+
 function content(key){const a=A[key];return a?`<g stroke="${ink}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${a.body}</g>`:'';}
 function html(key){return A[key]?`<svg class="diagram-bild" viewBox="0 0 64 64" aria-hidden="true" focusable="false">${content(key)}</svg>`:'';}
 function svg(key,x,y,size){return A[key]?`<g class="diagram-symbol" transform="translate(${x} ${y}) scale(${size/64})" aria-hidden="true">${content(key)}</g>`:'';}

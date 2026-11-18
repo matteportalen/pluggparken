@@ -176,11 +176,14 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 .egknappar button{min-height:48px;padding:0 18px;border-radius:16px;background:var(--card,#fff);box-shadow:0 4px 0 var(--line);font-weight:800}
 .egknappar button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
 .emopop{position:fixed;inset:0;z-index:40;background:rgba(29,43,83,.45);display:grid;place-items:center;padding:16px}
-.emopop>div{background:#fff;border-radius:22px;padding:14px;max-width:420px;width:100%;box-shadow:0 8px 30px rgba(0,0,0,.25)}
-.emopop p{margin:0 0 8px;font-weight:800;text-align:center}
-.emogrid{display:grid;grid-template-columns:repeat(8,1fr);gap:4px}
-.emogrid button{aspect-ratio:1;font-size:1.55rem;border-radius:10px;background:#F2F6FF}
-.emogrid button:active{transform:scale(.92)}
+.emopop>div{box-sizing:border-box;background:#fff;border-radius:22px;padding:20px;width:min(600px,100%);max-height:calc(100dvh - 32px);min-height:0;display:flex;flex-direction:column;gap:14px;box-shadow:0 8px 30px rgba(0,0,0,.25);overflow:hidden}
+.emohead{display:flex;align-items:center;justify-content:space-between;gap:12px}.emohead h2{margin:0;font-size:1.3rem}.emohead button{width:40px;height:40px;border-radius:50%;background:#F2F6FF;font-size:1.4rem}
+.emocats{display:flex;flex-wrap:wrap;gap:6px}.emocats button{padding:7px 11px;min-height:38px;border-radius:12px;background:#F2F6FF;font-size:.9rem;font-weight:700}.emocats button[aria-pressed="true"]{background:var(--accent);color:white}
+.emogrid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;min-height:0;overflow-y:auto;overflow-x:hidden;align-content:start;padding:3px;overscroll-behavior:contain}
+.emogrid button{box-sizing:border-box;min-width:0;width:100%;height:82px;padding:6px 2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:2px solid transparent;border-radius:13px;background:#F2F6FF;color:#1D2B53}
+.emogrid button span{max-width:100%;font-size:.72rem;line-height:1.1;overflow-wrap:anywhere}.emogrid button[aria-pressed="true"]{border-color:var(--accent);background:#E5EAFF}.emogrid button:hover{background:#E5EAFF}.emogrid button:focus-visible{outline:2px solid var(--accent);outline-offset:0}.emogrid button:active{transform:scale(.95)}
+body.bildval-open{overflow:hidden}
+@media(max-width:480px){.emopop{padding:10px}.emopop>div{padding:14px;max-height:calc(100dvh - 20px);gap:10px}.emogrid{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.emocats{gap:4px}.emocats button{padding:6px 8px;font-size:.82rem}.emogrid button{height:76px}}
 @media(max-width:400px){.egrad{gap:4px;padding:6px}.egrad .pm{width:32px}.egrad .tal{width:50px}.egrad .emo{width:40px}.seg button{padding:0 9px;font-size:.92rem}}
 @media print{body *{visibility:hidden!important}#egKort,#egKort *{visibility:visible!important}#egKort{position:absolute;left:0;top:0;width:100%;box-shadow:none;border-radius:0}#egKort svg{max-height:none}}
 /* resultat */
@@ -205,7 +208,7 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 </head>
 <body>
 <script src="../ljud.js"></script>
-<script src="bilder.js?v=1"></script>
+<script src="bilder.js?v=2"></script>
 <script src="../huvud.js" data-titel="Diagramverkstan" data-ikon="📊"></script>
 <main class="wrap">
 
@@ -233,7 +236,7 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
   <p class="egnote" id="egNote"></p>
   <div class="egknappar"><button id="egFull">⛶ Helskärm</button><button id="egPrint">🖨️ Skriv ut</button><button id="egNy">↺ Börja om</button></div>
 </section>
-<div class="emopop" id="emoPop" hidden><div><p>Välj en bild</p><div class="emogrid" id="emoGrid"></div></div></div>
+<div class="emopop" id="emoPop" hidden><div role="dialog" aria-modal="true" aria-labelledby="emoTitle"><div class="emohead"><h2 id="emoTitle">Välj en bild</h2><button id="emoClose" aria-label="Stäng bildväljaren">×</button></div><div class="emocats" id="emoCats" aria-label="Bildkategorier"></div><div class="emogrid" id="emoGrid"></div></div></div>
 
 <section class="screen" id="game" hidden>
   <button type="button" data-home hidden tabindex="-1" aria-hidden="true" onclick="hem()"></button>
@@ -516,8 +519,8 @@ function confetti(){if(reduced())return;const cols=["#3D8BFD","#FF9F43","#2BB673
 
 /* ---------- Gör ditt eget diagram: läraren eller eleven skriver rubrik, saker och antal (sparas i data.egen) ---------- */
 const EFARG=["#3D8BFD","#FF9F43","#2BB673","#7B61FF","#FF6B6B","#17A2B8"],EMORK=["#2A6FD6","#DB7F26","#1E8F58","#5B43D6","#D64545","#0F7F91"];
-const EMOJI="🐶 🐱 🐰 🐴 🐹 🐟 🐦 🐢 🍎 🍌 🍐 🍊 🍓 🍇 🍉 🥕 🚗 🚌 🚲 🚚 🚂 ✈️ ⛵ 🛴 ⚽ 🏀 🏓 🎾 🛹 ♟️ 🎨 🎵 ☀️ ☁️ 🌧️ ❄️ 🌈 ⭐ 📚 🍦 🔴 🟠 🟡 🟢 🔵 🟣 🍕 🧸".split(" ");
-const EGNY=()=>({rub:"Våra husdjur",typ:"stapel",rikt:"v",tal:false,rader:[{e:"🐶",n:"hund",v:5},{e:"🐱",n:"katt",v:7},{e:"🐰",n:"kanin",v:3}]});
+const EMOJI=DiagramBilder.keys;
+const EGNY=()=>({rub:"Färger",typ:"stapel",rikt:"v",tal:false,rader:[{e:"🔵",n:"blå",v:5},{e:"🟠",n:"orange",v:7},{e:"🟢",n:"grön",v:3}]});
 let EG=null;
 const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 function egSpara(){data.egen=EG;save();}
@@ -586,23 +589,44 @@ $("egRader").addEventListener("focusout",e=>{if(e.target.dataset.a==="tal")e.tar
 $("egRader").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const i=+b.closest(".egrad").dataset.i,r=EG.rader[i],a=b.dataset.a;
   if(a==="plus"||a==="minus"){r.v=Math.max(0,Math.min(999,r.v+(a==="plus"?1:-1)));b.parentNode.querySelector(".tal").value=r.v;ljud("pip");}
   else if(a==="bort"){EG.rader.splice(i,1);egRitaRader();}
-  else if(a==="emo"){egEmoRad=i;$("emoPop").hidden=false;$("emoGrid").querySelector("button").focus();return;}
+  else if(a==="emo"){egEmoRad=i;emoKategori="Alla";ritaBildval();$("emoPop").hidden=false;document.body.classList.add("bildval-open");$("emoClose").focus();return;}
   egRitaDia();egSpara();});
-let egEmoRad=-1;
-$("emoGrid").innerHTML=EMOJI.map(e=>`<button data-e="${e}" aria-label="${DiagramBilder.namn(e)}">${bild(e)}</button>`).join("")+`<button data-e="" aria-label="Ingen bild" style="font-size:1rem;font-weight:800;color:var(--muted)">ingen</button>`;
-$("emoPop").onclick=e=>{const b=e.target.closest("[data-e]");if(b&&egEmoRad>=0){EG.rader[egEmoRad].e=b.dataset.e;egRitaRader();egRitaDia();egSpara();}
-  if(b||e.target===$("emoPop")){$("emoPop").hidden=true;const f=document.querySelector(`#egRader [data-i="${egEmoRad}"] .emo`);if(f)f.focus();}};
-$("egLagg").onclick=()=>{if(EG.rader.length>=6)return;const ledig=EMOJI.find(e=>!EG.rader.some(r=>r.e===e))||"";EG.rader.push({e:ledig,n:"",v:0});egRitaRader();egRitaDia();egSpara();
+let egEmoRad=-1,emoKategori="Alla";
+const BILDKAT={
+ "Alla":EMOJI,
+ "Djur":"🐶 🐱 🐰 🐴 🐹 🐟 🐦 🐢 🦊 🐸 🦋 🐞 🐝 🐧".split(" "),
+ "Mat":"🍎 🍌 🍐 🍊 🍑 🍓 🍇 🍉 🍋 🥕 🍫 🍦 🍕 🍅 🥒 🥦".split(" "),
+ "Fordon":"🚗 🚌 🚲 🚚 🚜 🚂 ✈️ ⛵ 🛴 🚀".split(" "),
+ "Natur":"☀️ ☁️ 🌧️ ❄️ 🌈 ⭐ 🌳 🌻 🍄".split(" "),
+ "Saker":"⚽ 🏀 🏓 🎾 🛹 ♟️ 🎨 🎵 📚 🧸 🛷 ⛸️ 🧤 🧣 🥾 🎈 🎲 ✏️ ✂️ 🎒 🏠 🪁 🥁".split(" "),
+ "Färger":"🔴 🟠 🟡 🟢 🔵 🟣 turkos".split(" ")
+};
+function ritaBildval(){
+ $("emoCats").innerHTML=Object.keys(BILDKAT).map(k=>`<button data-kat="${k}" aria-pressed="${k===emoKategori}">${k}</button>`).join("");
+ const selected=EG?.rader[egEmoRad]?.e||"";
+ $("emoGrid").innerHTML=BILDKAT[emoKategori].map(e=>`<button data-e="${e}" aria-label="${DiagramBilder.namn(e)}" aria-pressed="${selected===e}">${bild(e)}<span>${DiagramBilder.namn(e)}</span></button>`).join("")+`<button data-e="" aria-label="Ingen bild" aria-pressed="${!selected}"><span>Ingen bild</span></button>`;
+ $("emoGrid").scrollTop=0;
+}
+function stangBildval(){
+ $("emoPop").hidden=true;document.body.classList.remove("bildval-open");
+ document.querySelector(`#egRader [data-i="${egEmoRad}"] .emo`)?.focus();
+}
+$("emoCats").onclick=e=>{const b=e.target.closest('[data-kat]');if(b){emoKategori=b.dataset.kat;ritaBildval();$("emoCats").querySelector('[aria-pressed="true"]').focus();}};
+$("emoClose").onclick=stangBildval;
+$("emoPop").onclick=e=>{const b=e.target.closest("[data-e]");if(b&&egEmoRad>=0){EG.rader[egEmoRad].e=b.dataset.e;egRitaRader();egRitaDia();egSpara();stangBildval();}
+ else if(e.target===$("emoPop"))stangBildval();};
+$("emoPop").addEventListener('keydown',e=>{if(e.key!=='Tab')return;const all=[...$("emoPop").querySelectorAll('button')],first=all[0],last=all.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}});
+$("egLagg").onclick=()=>{if(EG.rader.length>=6)return;const ledig=["🔵","🟠","🟢","🟣","🔴","turkos"][EG.rader.length];EG.rader.push({e:ledig,n:DiagramBilder.namn(ledig),v:0});egRitaRader();egRitaDia();egSpara();
   const in_=document.querySelector(`#egRader [data-i="${EG.rader.length-1}"] .nm`);if(in_)in_.focus();};
 sek("[data-typ]").forEach(b=>b.onclick=()=>{EG.typ=b.dataset.typ;egRitaDia();egSpara();});
 sek("[data-rikt]").forEach(b=>b.onclick=()=>{EG.rikt=b.dataset.rikt;egRitaDia();egSpara();});
 $("egTal").onchange=e=>{EG.tal=e.target.checked;egRitaDia();egSpara();};
-$("egNy").onclick=()=>{if(!confirm("Börja om med ett nytt diagram?"))return;EG=EGNY();EG.rub="";EG.rader=[{e:"",n:"",v:0},{e:"",n:"",v:0},{e:"",n:"",v:0}];$("egRub").value="";egRitaRader();egRitaDia();egSpara();$("egRub").focus();};
+$("egNy").onclick=()=>{if(!confirm("Börja om med ett nytt diagram?"))return;EG=EGNY();EG.rader.forEach(r=>r.v=0);$("egRub").value=EG.rub;egRitaRader();egRitaDia();egSpara();$("egRub").focus();};
 $("egPrint").onclick=()=>window.print();
 (()=>{const k=$("egKort");if(!(k.requestFullscreen||k.webkitRequestFullscreen)){$("egFull").hidden=true;return;}
   $("egFull").onclick=()=>{if(document.fullscreenElement||document.webkitFullscreenElement){(document.exitFullscreen||document.webkitExitFullscreen).call(document);return;}
     const p=(k.requestFullscreen||k.webkitRequestFullscreen).call(k);if(p&&p.catch)p.catch(()=>{});};})();
-document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("emoPop").hidden){$("emoPop").hidden=true;}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("emoPop").hidden){stangBildval();}});
 window.__dia={NIV,TEMAN,gorUnd,fragaText,forklara,ledtrad,starta,lagg,kollaBygge,svaraStapel,tangent,get G(){return G},egOppna,get EG(){return EG}};
 hem();
 </script>
