@@ -52,9 +52,12 @@
     var K=null;
     var tid=function(){var t=o.tid();return [1000,2000,3000,5000].indexOf(t)>=0?t:2000;};
     /* Visa svaret av: korten rullar på av sig själva och klassen ropar svaret under pausen */
-    var visaSvar=function(){return !o.svar||o.svar()!==false;};
+    var PAUS=300,visaSvar=function(){return !o.svar||o.svar()!==false;};
     /* långa uppgifter (56 − 9 = 47) krymps så att de får plats på kortet */
-    var txt=function(h){var t=el('txt'),k=el('kort');t.innerHTML=h;t.style.fontSize='';
+    /* varje uppgift får sin egen färg, samma palett och samma sätt som orden i Högfrekventa ord (summan av tecknen), men aldrig samma färg två kort i rad */
+    var PAL=['#E5484D','#3D8BFD','#1E9E5E','#7B61FF','#FF5FA2','#D9772A','#17AFC4','#9C4DCC'];
+    var farg=function(q){var i=Array.prototype.reduce.call(q,function(a,c){return a+c.charCodeAt(0);},0)%PAL.length;if(K.fi===i)i=(i+1)%PAL.length;return PAL[i];};
+    var txt=function(h,c){var t=el('txt'),k=el('kort');t.innerHTML=h;t.style.fontSize='';t.style.color=c||'';
       var w=k.clientWidth-28;if(t.scrollWidth>w){var f=parseFloat(getComputedStyle(t).fontSize);t.style.fontSize=Math.floor(f*w/t.scrollWidth)+'px';}};
     var rensa=function(){if(K){K.timers.forEach(clearTimeout);K.timers=[];}};
     var sen=function(fn,ms){K.timers.push(setTimeout(fn,ms));};
@@ -76,9 +79,9 @@
     }
     function startText(){var s=tid()/1000;txt('<span class="skic">🃏</span><small>Kortet syns i '+s+' '+(s===1?'sekund':'sekunder')+'. '+(visaSvar()?'Säg vad det blev, sedan visar du svaret.':'Ropa svaret! Sedan kommer nästa kort av sig själv.')+'</small>');}
     function blinka(igen){
-      var visa=function(){K.st='visar';ui();txt(K.u.q);timer(true);
+      var visa=function(){K.st='visar';ui();if(!igen){K.fc=farg(K.u.q);K.fi=PAL.indexOf(K.fc);}txt(K.u.q,K.fc);timer(true);
         /* när korten rullar på ligger talet kvar tills nästa kort kommer, inget frågetecken */
-        if(K.rull)return sen(function(){if(K.n<N)nasta();else klar();},tid());
+        if(K.rull)return sen(function(){if(K.n>=N)return klar();txt('');timer(false);sen(nasta,PAUS);},tid()); /* kortet försvinner en kort stund innan nästa kommer */
         sen(function(){txt('<span class="skq">?</span>');K.st='dold';timer(false);ui();},tid());};
       if(igen||K.rull)return visa(); /* när korten rullar på blir det inget Titta! */
       K.st='titta';ui();txt('<span class="skti">Titta!</span>');sen(visa,650);
@@ -87,9 +90,9 @@
     function klar(){K.st='klar';timer(false);txt('<span class="skic">🎉</span><small>Bra jobbat! '+N+' snabbkort klara.</small>');ui();if(o.fira)o.fira();}
     function fram(){if(!K)return;
       if(K.st==='start'||K.st==='klar'){K.n=0;K.rull=!visaSvar();return nasta();}
-      if(K.rull&&(K.st==='titta'||K.st==='visar')){rensa();timer(false);K.st='paus';ui();return;} /* talet ligger kvar under pausen */
+      if(K.rull&&(K.st==='titta'||K.st==='visar')){rensa();timer(false);K.st='paus';txt(K.u.q,K.fc);ui();return;} /* talet ligger kvar under pausen */
       if(K.st==='paus'){return K.n<N?nasta():klar();}
-      if(K.st==='dold'){K.st='svar';txt(K.u.q+' = <b>'+K.u.a+'</b>');ui();return;}
+      if(K.st==='dold'){K.st='svar';txt(K.u.q+' = <b>'+K.u.a+'</b>',K.fc);ui();return;}
       if(K.st==='svar'){if(K.n<N)return nasta();klar();}
     }
     var fs=function(){return document.fullscreenElement||document.webkitFullscreenElement;};
@@ -104,7 +107,7 @@
       if(sek.hidden||!K||e.altKey||e.ctrlKey||e.metaKey)return;
       if([' ','Enter','ArrowRight','PageDown'].indexOf(e.key)>=0){e.preventDefault();fram();}
     });
-    return{oppna:function(){rensa();K={st:'start',n:0,u:null,timers:[],rull:false};startText();timer(false);ui();o.visa();}};
+    return{oppna:function(){rensa();K={st:'start',n:0,u:null,timers:[],rull:false,fc:'',fi:-1};startText();timer(false);ui();o.visa();}};
   }
   window.MPSnabbkort={skapa:skapa};
 })();

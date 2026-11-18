@@ -108,3 +108,5 @@ _Historik för `docs/matematik.md`: hur allt byggdes, med detaljer, mått och ti
 ## Diagramverkstan: Gör ditt eget diagram (18 nov 2026)
 - Sektion `#egen` (`egOppna`, `egSVG`, `egSkala`): rader `{e,n,v}`, sex färger (`EFARG`/`EMORK`), bildväljare `#emoPop` med 48 emojis och "ingen". Stående: SVG 360 × 308, liggande: höjd efter antal rader, axeln 104–326. Talen har vit kant (`paint-order`) så att de syns över rutorna. `@media print` visar bara `#egKort`. "Börja om" frågar först.
 - Testat i Playwright 390 × 844 och 1280 × 900: rubrik, plus/minus, skriva antal och namn, byta bild, sex rader (knappen försvinner), rutor, liggande, stora tal (rutor stängs av, axeln till 90), ta bort rad, sparat efter omladdning, helskärm, utskriftsvy, ingen sidscroll, inga JS-fel.
+
+- Snabbkort: färg per uppgift (`farg(q)`, `PAL` som i `ovriga/hogfrekventa`) och 0,3 s tomt kort mellan korten i rull-läget (`PAUS`). Pausen visar uppgiften i dess färg. Testat i Playwright i båda övningarna, mobil och dator: ny färg varje kort, tomt avsnitt på ca 0,3 s, svaret i samma färg.
