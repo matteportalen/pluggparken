@@ -133,6 +133,48 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 .pad .okbtn{background:var(--good);color:#fff;box-shadow:0 4px 0 var(--good-dark);font-size:1.25rem}
 @media (max-height:760px){.wrap{padding-bottom:18px}.pad button{height:42px}.dia svg{max-height:38vh}.fraga{min-height:48px;margin:6px 0 4px}.forkl{min-height:2.4em}}
 @media (max-height:700px){.wrap{padding-bottom:14px}.dia svg{max-height:31vh}.pad button{height:40px}.pad{gap:6px}.forkl{min-height:1.4em}.tab div{min-height:38px}}
+/* Gör ditt eget diagram (diagrammaskinen) */
+.egenbtn{display:flex;align-items:center;gap:14px;width:100%;margin-top:14px;background:var(--card,#fff);border-radius:18px;padding:12px 14px;box-shadow:0 4px 0 var(--line);text-align:left}
+.egenbtn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.egenbtn .nr{flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-size:1.6rem;background:#FFF0BF}
+.egenbtn b{display:block;font-size:1.12rem;line-height:1.15}.egenbtn small{display:block;color:var(--muted);font-weight:600;font-size:.88rem;line-height:1.25}
+.eg h2{margin:4px 2px 10px;font-size:1.35rem}
+.egrub{width:100%;font:inherit;font-weight:800;font-size:1.15rem;color:var(--ink);background:var(--card,#fff);border:2px solid var(--line);border-radius:14px;padding:8px 12px;margin-bottom:10px}
+.egrub:focus,.egrad input:focus{outline:3px solid var(--accent);outline-offset:1px}
+.egrader{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+.egrad{display:flex;align-items:center;gap:6px;background:var(--card,#fff);border-radius:16px;padding:6px 8px;box-shadow:0 3px 0 var(--line)}
+.egrad .emo{flex:none;width:44px;height:44px;border-radius:12px;background:#F2F6FF;font-size:1.6rem;display:grid;place-items:center;border:2px solid transparent}
+.egrad .farg{flex:none;width:8px;height:36px;border-radius:4px}
+.egrad input{font:inherit;font-weight:700;color:var(--ink);border:2px solid var(--line);border-radius:12px;background:#fff;height:44px;padding:0 8px;min-width:0}
+.egrad .nm{flex:1;width:0}
+.egrad .tal{flex:none;width:58px;text-align:center;font-weight:800;font-size:1.2rem;padding:0 2px}
+.egrad .pm{flex:none;width:36px;height:44px;border-radius:12px;background:#F2F6FF;font-weight:800;font-size:1.3rem}
+.egrad .pm:active,.egrad .emo:active{transform:translateY(2px)}
+.egrad .bort{flex:none;width:30px;height:44px;color:var(--muted);font-size:1.1rem}
+.eglagg{margin-top:8px;width:100%;min-height:48px;border-radius:14px;border:2px dashed #AFC0E8;font-weight:800;color:var(--accent)}
+.egval{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 10px}
+.seg{display:flex;background:var(--card,#fff);border-radius:14px;box-shadow:0 3px 0 var(--line);padding:3px}
+.seg button{min-height:42px;padding:0 12px;border-radius:11px;font-weight:800;font-size:.98rem}
+.seg button[aria-pressed="true"]{background:var(--accent);color:#fff}
+.seg button:disabled{opacity:.4;cursor:default}
+.egcheck{display:flex;align-items:center;gap:8px;background:var(--card,#fff);border-radius:14px;box-shadow:0 3px 0 var(--line);padding:0 12px;min-height:48px;font-weight:800;font-size:.98rem;cursor:pointer}
+.egcheck input{width:22px;height:22px;accent-color:var(--accent);margin:0}
+.egkort{background:#fff;border-radius:22px;box-shadow:0 4px 0 var(--line);padding:8px 6px 4px;color:#1D2B53}
+.egkort svg{display:block;width:100%;height:auto;max-height:70vh}
+.egkort:fullscreen{border-radius:0;box-shadow:none;display:flex;align-items:center;justify-content:center;padding:3vh 3vw}
+.egkort:fullscreen svg{width:100%;height:100%;max-height:none}
+.egnote{color:var(--muted);font-weight:700;font-size:.9rem;margin:6px 2px 0;min-height:1.2em}
+.egknappar{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:12px}
+.egknappar button{min-height:48px;padding:0 18px;border-radius:16px;background:var(--card,#fff);box-shadow:0 4px 0 var(--line);font-weight:800}
+.egknappar button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.emopop{position:fixed;inset:0;z-index:40;background:rgba(29,43,83,.45);display:grid;place-items:center;padding:16px}
+.emopop>div{background:#fff;border-radius:22px;padding:14px;max-width:420px;width:100%;box-shadow:0 8px 30px rgba(0,0,0,.25)}
+.emopop p{margin:0 0 8px;font-weight:800;text-align:center}
+.emogrid{display:grid;grid-template-columns:repeat(8,1fr);gap:4px}
+.emogrid button{aspect-ratio:1;font-size:1.55rem;border-radius:10px;background:#F2F6FF}
+.emogrid button:active{transform:scale(.92)}
+@media(max-width:400px){.egrad{gap:4px;padding:6px}.egrad .pm{width:32px}.egrad .tal{width:50px}.egrad .emo{width:40px}.seg button{padding:0 9px;font-size:.92rem}}
+@media print{body *{visibility:hidden!important}#egKort,#egKort *{visibility:visible!important}#egKort{position:absolute;left:0;top:0;width:100%;box-shadow:none;border-radius:0}#egKort svg{max-height:none}}
 /* resultat */
 .res{text-align:center}
 .res .stj{font-size:3rem;letter-spacing:6px;color:var(--gold);margin:8px 0}
@@ -155,7 +197,25 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
     <div><h1>Diagramverkstan</h1><p>Bygg dina egna diagram och läs av dem.</p></div>
   </div>
   <div class="niv" id="niv"></div>
+  <button class="egenbtn" id="egenBtn"><span class="nr">🛠️</span><span><b>Gör ditt eget diagram</b><small>Skriv rubrik, saker och antal. Bra på tavlan och att skriva ut.</small></span></button>
 </section>
+
+<section class="screen eg" id="egen" hidden>
+  <button type="button" data-home hidden tabindex="-1" aria-hidden="true" onclick="hem()"></button>
+  <h2>🛠️ Gör ditt eget diagram</h2>
+  <input class="egrub" id="egRub" maxlength="40" placeholder="Rubrik, till exempel Våra husdjur" aria-label="Rubrik">
+  <div class="egrader" id="egRader"></div>
+  <button class="eglagg" id="egLagg">＋ Lägg till en rad</button>
+  <div class="egval">
+    <div class="seg" role="group" aria-label="Sort"><button data-typ="stapel">Staplar</button><button data-typ="rutor">Rutor</button></div>
+    <div class="seg" role="group" aria-label="Riktning"><button data-rikt="v">Stående</button><button data-rikt="h">Liggande</button></div>
+    <label class="egcheck"><input type="checkbox" id="egTal"> Visa talen</label>
+  </div>
+  <div class="egkort" id="egKort"></div>
+  <p class="egnote" id="egNote"></p>
+  <div class="egknappar"><button id="egFull">⛶ Helskärm</button><button id="egPrint">🖨️ Skriv ut</button><button id="egNy">↺ Börja om</button></div>
+</section>
+<div class="emopop" id="emoPop" hidden><div><p>Välj en bild</p><div class="emogrid" id="emoGrid"></div></div></div>
 
 <section class="screen" id="game" hidden>
   <button type="button" data-home hidden tabindex="-1" aria-hidden="true" onclick="hem()"></button>
@@ -452,7 +512,77 @@ function confetti(){if(reduced())return;const cols=["#3D8BFD","#FF9F43","#2BB673
   const P=Array.from({length:150},()=>({x:W/2+(Math.random()-.5)*120,y:H*.3,vx:(Math.random()-.5)*16,vy:-Math.random()*15-4,r:Math.random()*7+5,c:pick(cols),a:Math.random()*6,va:(Math.random()-.5)*.4}));
   let t=0;(function f(){x.clearRect(0,0,W,H);P.forEach(p=>{p.vy+=.45;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore();});
     if(++t<150)requestAnimationFrame(f);else c.hidden=true;})();}
-window.__dia={NIV,TEMAN,gorUnd,fragaText,forklara,ledtrad,starta,lagg,kollaBygge,svaraStapel,tangent,get G(){return G}};
+
+/* ---------- Gör ditt eget diagram: läraren eller eleven skriver rubrik, saker och antal (sparas i data.egen) ---------- */
+const EFARG=["#3D8BFD","#FF9F43","#2BB673","#7B61FF","#FF6B6B","#17A2B8"],EMORK=["#2A6FD6","#DB7F26","#1E8F58","#5B43D6","#D64545","#0F7F91"];
+const EMOJI="🐶 🐱 🐰 🐴 🐹 🐟 🐦 🐢 🍎 🍌 🍐 🍊 🍓 🍇 🍉 🥕 🚗 🚌 🚲 🚚 🚂 ✈️ ⛵ 🛴 ⚽ 🏀 🏓 🎾 🛹 ♟️ 🎨 🎵 ☀️ ☁️ 🌧️ ❄️ 🌈 ⭐ 📚 🍦 🔴 🟠 🟡 🟢 🔵 🟣 🍕 🧸".split(" ");
+const EGNY=()=>({rub:"Våra husdjur",typ:"stapel",rikt:"v",tal:false,rader:[{e:"🐶",n:"hund",v:5},{e:"🐱",n:"katt",v:7},{e:"🐰",n:"kanin",v:3}]});
+let EG=null;
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function egSpara(){data.egen=EG;save();}
+/* axeln: högsta talet och steget mellan talen */
+function egSkala(max,rutor){if(rutor)return{M:Math.max(10,max),steg:max>12?2:1,linje:5};
+  if(max<=10)return{M:10,steg:1,linje:1};if(max<=12)return{M:12,steg:1,linje:1};if(max<=20)return{M:20,steg:2,linje:2};
+  for(const st of [5,10,20,25,50,100,200,250,500]){const M=Math.ceil(max/st)*st;if(M/st<=10)return{M,steg:st,linje:st};}return{M:Math.ceil(max/1000)*1000,steg:1000,linje:1000};}
+function egSVG(){const R=EG.rader,n=R.length,max=Math.max(1,...R.map(r=>r.v)),rutor=EG.typ==="rutor"&&max<=20,S=egSkala(max,rutor),h=EG.rikt==="h";
+  const rub=`<text x="180" y="24" text-anchor="middle" font-family="'Baloo 2','Trebuchet MS',sans-serif" font-weight="800" font-size="19" fill="#1D2B53">${esc(EG.rub||"")}</text>`;
+  const T=(x,y,t,o)=>`<text x="${x}" y="${y}" font-family="'Baloo 2','Trebuchet MS',sans-serif" font-weight="${o&&o.w||700}" font-size="${o&&o.fs||11.5}" fill="${o&&o.f||"#56668F"}" text-anchor="${o&&o.a||"middle"}"${o&&o.halo?' stroke="#fff" stroke-width="4" stroke-linejoin="round" paint-order="stroke"':""}>${t}</text>`;
+  let g="",VH;
+  if(!h){const X0=40,X1=350,Y0=46,Y1=n?250:250;VH=Y1+58;const cw=(X1-X0)/Math.max(n,1),unit=(Y1-Y0)/S.M,bw=Math.min(56,cw*.64),yv=v=>Y1-v*unit;
+    for(let v=S.steg;v<=S.M;v+=S.steg){if(v%S.linje===0)g+=`<line x1="${X0}" y1="${yv(v)}" x2="${X1}" y2="${yv(v)}" stroke="#C6D6F2" stroke-width="1.2"/>`;g+=T(X0-7,yv(v)+4,v,{a:"end"});}
+    g+=T(X0-7,Y1+4,0,{a:"end"});
+    R.forEach((r,i)=>{const cx=X0+cw*(i+.5),v=Math.min(r.v,S.M);
+      if(rutor){const sw=Math.min(bw,unit*1.45);for(let b=0;b<S.M;b++){const f=b<v;g+=`<rect x="${cx-sw/2}" y="${yv(b+1)}" width="${sw}" height="${unit}" fill="${f?EFARG[i]:"#fff"}" stroke="${f?EMORK[i]:"#9DB1D8"}" stroke-width="1.2"/>`;}}
+      else if(v>0){const r6=Math.min(6,v*unit/2);g+=`<path d="M${cx-bw/2} ${Y1}V${yv(v)+r6}a${r6} ${r6} 0 0 1 ${r6}-${r6}h${bw-2*r6}a${r6} ${r6} 0 0 1 ${r6} ${r6}V${Y1}z" fill="${EFARG[i]}"/>`;}
+      if(EG.tal)g+=T(cx,yv(v)-6,r.v,{w:800,fs:15,f:"#1D2B53",halo:1});
+      g+=`<text x="${cx}" y="${Y1+30}" font-size="21" text-anchor="middle">${r.e||""}</text>`+T(cx,Y1+48,esc(r.n),{f:"#1D2B53",fs:r.n.length>11?9.5:11.5});});
+    g+=`<path d="M${X0} ${Y0-8}V${Y1}H${X1}" fill="none" stroke="#1D2B53" stroke-width="2.6" stroke-linecap="round"/>`;}
+  else{const X0=104,X1=326,Y0=44,rh=Math.min(46,250/Math.max(n,1)),Y1=Y0+rh*n;VH=Y1+30;const unit=(X1-X0)/S.M,bh=Math.min(30,rh*.66),xv=v=>X0+v*unit;
+    for(let v=S.steg;v<=S.M;v+=S.steg){if(v%S.linje===0)g+=`<line x1="${xv(v)}" y1="${Y0}" x2="${xv(v)}" y2="${Y1}" stroke="#C6D6F2" stroke-width="1.2"/>`;g+=T(xv(v),Y1+17,v);}
+    g+=T(X0,Y1+17,0);
+    R.forEach((r,i)=>{const cy=Y0+rh*(i+.5),v=Math.min(r.v,S.M);
+      if(rutor){const sh=Math.min(bh,unit*1.45);for(let b=0;b<S.M;b++){const f=b<v;g+=`<rect x="${xv(b)}" y="${cy-sh/2}" width="${unit}" height="${sh}" fill="${f?EFARG[i]:"#fff"}" stroke="${f?EMORK[i]:"#9DB1D8"}" stroke-width="1.2"/>`;}}
+      else if(v>0){const r6=Math.min(6,v*unit/2);g+=`<path d="M${X0} ${cy-bh/2}H${xv(v)-r6}a${r6} ${r6} 0 0 1 ${r6} ${r6}v${bh-2*r6}a${r6} ${r6} 0 0 1 -${r6} ${r6}H${X0}z" fill="${EFARG[i]}"/>`;}
+      if(EG.tal)g+=T(xv(v)+6,cy+5,r.v,{w:800,fs:15,f:"#1D2B53",a:"start",halo:1});
+      g+=`<text x="8" y="${cy+7}" font-size="20">${r.e||""}</text>`+T(34,cy+4,esc(r.n),{f:"#1D2B53",a:"start",fs:r.n.length>9?9.5:11.5});});
+    g+=`<path d="M${X0} ${Y0-4}V${Y1}H${X1+6}" fill="none" stroke="#1D2B53" stroke-width="2.6" stroke-linecap="round"/>`;}
+  return{svg:`<svg viewBox="0 0 360 ${VH}" role="img" aria-label="${esc(EG.rub||"Diagram")}">${rub}${g}</svg>`,rutorGar:max<=20};}
+function egRitaDia(){const d=egSVG();$("egKort").innerHTML=d.svg;
+  sek("[data-typ]").forEach(b=>{b.setAttribute("aria-pressed",b.dataset.typ===(EG.typ==="rutor"&&d.rutorGar?"rutor":"stapel"));if(b.dataset.typ==="rutor")b.disabled=!d.rutorGar;});
+  sek("[data-rikt]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.rikt===EG.rikt));$("egTal").checked=EG.tal;
+  $("egNote").textContent=!d.rutorGar&&EG.typ==="rutor"?"Rutor går upp till 20. Med större tal blir det staplar.":"";}
+const sek=q=>document.querySelectorAll("#egen "+q);
+function egRitaRader(){$("egRader").innerHTML=EG.rader.map((r,i)=>`<div class="egrad" data-i="${i}"><span class="farg" style="background:${EFARG[i]}"></span><button class="emo" data-a="emo" aria-label="Byt bild">${r.e||"＋"}</button><input class="nm" data-a="nm" maxlength="16" value="${esc(r.n)}" placeholder="Namn" aria-label="Namn ${i+1}"><button class="pm" data-a="minus" aria-label="En mindre">−</button><input class="tal" data-a="tal" inputmode="numeric" maxlength="3" value="${r.v}" aria-label="Antal ${i+1}"><button class="pm" data-a="plus" aria-label="En till">+</button>${EG.rader.length>1?`<button class="bort" data-a="bort" aria-label="Ta bort raden">✕</button>`:""}</div>`).join("");
+  $("egLagg").hidden=EG.rader.length>=6;}
+function egOppna(){rensa();tyst();EG=data.egen&&data.egen.rader?data.egen:EGNY();$("egRub").value=EG.rub;egRitaRader();egRitaDia();show("egen");}
+$("egenBtn").onclick=egOppna;
+$("egRub").oninput=e=>{EG.rub=e.target.value;egRitaDia();egSpara();};
+$("egRader").addEventListener("input",e=>{const t=e.target,i=+t.closest(".egrad").dataset.i,r=EG.rader[i];
+  if(t.dataset.a==="nm")r.n=t.value;
+  if(t.dataset.a==="tal"){const d=t.value.replace(/\D/g,"").slice(0,3);if(d!==t.value)t.value=d;r.v=+d||0;}
+  egRitaDia();egSpara();});
+$("egRader").addEventListener("focusout",e=>{if(e.target.dataset.a==="tal")e.target.value=EG.rader[+e.target.closest(".egrad").dataset.i].v;});
+$("egRader").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const i=+b.closest(".egrad").dataset.i,r=EG.rader[i],a=b.dataset.a;
+  if(a==="plus"||a==="minus"){r.v=Math.max(0,Math.min(999,r.v+(a==="plus"?1:-1)));b.parentNode.querySelector(".tal").value=r.v;ljud("pip");}
+  else if(a==="bort"){EG.rader.splice(i,1);egRitaRader();}
+  else if(a==="emo"){egEmoRad=i;$("emoPop").hidden=false;$("emoGrid").querySelector("button").focus();return;}
+  egRitaDia();egSpara();});
+let egEmoRad=-1;
+$("emoGrid").innerHTML=EMOJI.map(e=>`<button data-e="${e}">${e}</button>`).join("")+`<button data-e="" aria-label="Ingen bild" style="font-size:1rem;font-weight:800;color:var(--muted)">ingen</button>`;
+$("emoPop").onclick=e=>{const b=e.target.closest("[data-e]");if(b&&egEmoRad>=0){EG.rader[egEmoRad].e=b.dataset.e;egRitaRader();egRitaDia();egSpara();}
+  if(b||e.target===$("emoPop")){$("emoPop").hidden=true;const f=document.querySelector(`#egRader [data-i="${egEmoRad}"] .emo`);if(f)f.focus();}};
+$("egLagg").onclick=()=>{if(EG.rader.length>=6)return;const ledig=EMOJI.find(e=>!EG.rader.some(r=>r.e===e))||"";EG.rader.push({e:ledig,n:"",v:0});egRitaRader();egRitaDia();egSpara();
+  const in_=document.querySelector(`#egRader [data-i="${EG.rader.length-1}"] .nm`);if(in_)in_.focus();};
+sek("[data-typ]").forEach(b=>b.onclick=()=>{EG.typ=b.dataset.typ;egRitaDia();egSpara();});
+sek("[data-rikt]").forEach(b=>b.onclick=()=>{EG.rikt=b.dataset.rikt;egRitaDia();egSpara();});
+$("egTal").onchange=e=>{EG.tal=e.target.checked;egRitaDia();egSpara();};
+$("egNy").onclick=()=>{if(!confirm("Börja om med ett nytt diagram?"))return;EG=EGNY();EG.rub="";EG.rader=[{e:"",n:"",v:0},{e:"",n:"",v:0},{e:"",n:"",v:0}];$("egRub").value="";egRitaRader();egRitaDia();egSpara();$("egRub").focus();};
+$("egPrint").onclick=()=>window.print();
+(()=>{const k=$("egKort");if(!(k.requestFullscreen||k.webkitRequestFullscreen)){$("egFull").hidden=true;return;}
+  $("egFull").onclick=()=>{if(document.fullscreenElement||document.webkitFullscreenElement){(document.exitFullscreen||document.webkitExitFullscreen).call(document);return;}
+    const p=(k.requestFullscreen||k.webkitRequestFullscreen).call(k);if(p&&p.catch)p.catch(()=>{});};})();
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("emoPop").hidden){$("emoPop").hidden=true;}});
+window.__dia={NIV,TEMAN,gorUnd,fragaText,forklara,ledtrad,starta,lagg,kollaBygge,svaraStapel,tangent,get G(){return G},egOppna,get EG(){return EG}};
 hem();
 </script>
 </body>
