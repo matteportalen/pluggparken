@@ -1152,7 +1152,7 @@ $("rNasta").onclick=()=>{const n=nastaBana();if(n)start(...n);};$("rIgen").oncli
 
 /* ---------- Menyn ---------- */
 // nästa värld öppnas efter förra världens bana 6 (så att den som redan spelat inte låses ute när banor läggs till)
-const upplast=(vid,nr)=>{if(nr===0&&vid==="skog")return true;if(nr===0){const fv=VARLDAR[VARLDAR.findIndex(v=>v.id===vid)-1];return !!data.betyg[`${fv.id}-6`]||BANOR[vid].some((_,i)=>data.betyg[`${vid}-${i+1}`]);}return !!data.betyg[`${vid}-${nr}`];};
+const upplast=(vid,nr)=>nr===0||!!data.betyg[`${vid}-${nr}`]; // första banan i varje värld är öppen från början (lärarens val nov 2026)
 function meny(){laddaDjur();
   $("cats").innerHTML=CATS.map(c=>`<button data-c="${c.id}" aria-pressed="${c.id===data.cat}">${c.name}</button>`).join("");
   const tc=CATS.find(c=>c.id===data.cat);$("tabs").hidden=!tc.tables;

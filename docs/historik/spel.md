@@ -465,3 +465,6 @@ Verifiering: 400 seedade spel genom alla fem världar, uttryckens värden, stabi
 - **Lättare start i Talkross (17 november 2026):** ny första värld Tiokompisarna med 4×4-bräde. Dra till eller tryck på två valfria tal som blir 10, utan bytespussel eller grannkrav. Fyra banor med 4, 6, 8 och 10 par, tre stjärnor vid avklarad bana. Plopp, fall, tips, ångra och felstuds används även här. De tidigare världarna och sparade framstegen behålls; nu totalt 24 banor. 400 seedade nybörjarspel testade med exakt ångra, påfyllning och avslut, samt dragstyrning och sparning på dator- och mobilbredd.
 
 - **Talkross borttaget (17 november 2026):** användaren valde att ta bort spelet. Spelfiler, egna tester, sökpost, 3D-portal, sitemap och registrering i stjärn-/profilsystem borttagna. Ingen radering av befintliga webbläsardata utförs.
+
+## Sagoriket: första banan i varje värld öppen (18 nov 2026)
+- `upplast(vid,nr)` = `nr===0` eller föregående bana klar. Tidigare krävdes förra världens bana 6 för bana 1. Testat i Playwright mobil och dator: alla sex bana 1 öppna och startar.
