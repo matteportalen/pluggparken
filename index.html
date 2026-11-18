@@ -607,7 +607,7 @@ html[data-tema="mork"] .herosok{background:#1A2748;color:#A3B0D6}
 
 <script src="ljud.js"></script>
 <script src="djur.js"></script>
-<script src="konto.js?v=2"></script>
+<script src="konto.js?v=3"></script>
 <script src="huvud.js" data-hem="./" data-nav="av"></script>
 <script>
 const $=id=>document.getElementById(id);
@@ -753,7 +753,7 @@ const M=()=>MPMynt.get();
 const owned=(k,it)=>!it.pris||(M().kopt||[]).includes(k+":"+it.id);
 // säsongssaker (djur.js): köps bara under säsongen, syns annars bara om man redan har dem
 const SN=sasongNu(),kanKopa=it=>!it.s||(SN&&SN.id===it.s),synlig=(k,it)=>owned(k,it)||kanKopa(it);
-const sasongItems=()=>SN?Object.entries(WARD).flatMap(([k,v])=>v.items.filter(it=>it.s===SN.id).map(it=>[k,it])):[];
+const sasongItems=()=>SN?Object.entries(WARD).flatMap(([k,v])=>v.items.filter(it=>it.s===SN.id).map(it=>[k,it])):[,"mattespel-rutnat-v1","mattespel-dubbelteckning-v1","mattespel-ordgissning-v1","mattespel-ordkedjan-v1","mattespel-engelskaord-v1","mattespel-klockanengelska-v1","mattespel-demokrati-v1"];
 const unlockedItem=it=>{const k=Object.keys(WARD).find(k=>WARD[k].items.includes(it));return owned(k,it);};
 Object.keys(WARD).forEach(k=>{if(!owned(k,itemOf(k,owlCfg[k])))owlCfg[k]=WARD[k].items[0].id});
 // titlar efter stjärnorna, som aldrig tar slut

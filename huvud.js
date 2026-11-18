@@ -129,7 +129,7 @@ body.mph-mini #quit{display:none}
     return T10.map(T=>{if(T10.every(n=>lv(n,T)===3))return 3;if(T10.every(n=>lv(n,T)>=2))return 2;if(T10.every(n=>h(n,T).some(x=>x[0])))return 1;return 0});
   }
   // stjärnor per övning (samma regler som startsidan); k = mappens namn, "spel:<spel>" för spelen i Spelhörnan, "spelhornan" för alla där
-  const STJ=['brobygget','flytasjunka','vattenkretslopp','kontinentdrift','elkrets','sjon','prickatalet','diagram','vikingatiden','glodvaktaren','tradgard','gissastorlek','fylltillstrecket','tidslinjen','knepigaljud','sagobyggaren','meningsbyggaren','vemgorvad','delameningar','verb','substantiv','adjektiv','ordfargaren','sorteraord','ordregn','handstil','tiointe','klockan','geometri','brak','uppstallning','hundraruta','tiotal','taluppfattning','sverigekartan','ordgomma','europa','varlden','talfoljd','rutjakten','brakbitar','kortdivision','vagen','gomda','kulbanan','slungan','tradgard','affaren','hogfrekventa','rita','ordgatan','tangentbord','kodverkstan','delaupp','matning','pengar','lasflyt','sagoriket','sifferslottet','schack','trerirad','sudoku','trafikstockning'];
+  const STJ=['brobygget','flytasjunka','vattenkretslopp','kontinentdrift','elkrets','sjon','prickatalet','diagram','vikingatiden','glodvaktaren','tradgard','gissastorlek','fylltillstrecket','tidslinjen','knepigaljud','sagobyggaren','meningsbyggaren','vemgorvad','delameningar','verb','substantiv','adjektiv','ordfargaren','sorteraord','ordregn','handstil','tiointe','klockan','geometri','brak','uppstallning','hundraruta','tiotal','taluppfattning','sverigekartan','ordgomma','europa','varlden','talfoljd','rutjakten','brakbitar','kortdivision','vagen','gomda','kulbanan','slungan','tradgard','affaren','hogfrekventa','rita','ordgatan','tangentbord','kodverkstan','delaupp','matning','pengar','lasflyt','sagoriket','sifferslottet','schack','trerirad','sudoku','trafikstockning','rutnat','dubbelteckning','ordgissning','ordkedjan','engelskaord','klockanengelska','demokrati'];
   const SPELSUB=['fly','mem','car','space','frog','tower','skatt','kiosk','bubbel','tug'];
   const SPELHORNAN=['glodvaktaren','skattjakten','kulbanan','slungan','tradgard','sagoriket','sifferslottet','affaren','rutjakten'];
   function stjFor(k){
@@ -215,7 +215,7 @@ body.mph-mini #quit{display:none}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',stjLappar);else setTimeout(stjLappar,0);
   // konton i molnet: konto.js laddas bara om profilen på enheten har ett konto
   try{const ow=localStorage.getItem('mp-owner'),ps=JSON.parse(localStorage.getItem('mp-profiles')||'[]'),p=ow&&ps.find(x=>x.id===ow);
-    if(p&&p.konto&&!window.MPKonto){const k=document.createElement('script');k.src=rotUrl+'konto.js?v=2';document.head.appendChild(k);}}catch(e){}
+    if(p&&p.konto&&!window.MPKonto){const k=document.createElement('script');k.src=rotUrl+'konto.js?v=3';document.head.appendChild(k);}}catch(e){}
   window.MPSokOpen=function(){
     if(window.MPSok)return MPSok.open();
     const sc=document.createElement('script');sc.src=rotUrl+'sok.js?v=1';sc.onload=()=>MPSok.open();document.head.appendChild(sc);};
