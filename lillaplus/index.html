@@ -171,6 +171,34 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
 .frame.carton i.x::after{content:"🐣";font-size:clamp(20px,7vw,30px);color:inherit}
 @media (prefers-reduced-motion:reduce){.pet svg,.jarin span{animation:none !important}}
 
+
+/* Snabbkort (nov 2026): uppgiften blinkar fram, klassen säger svaret, sedan Visa svaret. Själv eller i helklass */
+.skort{position:relative;background:var(--card);border-radius:28px;box-shadow:0 6px 0 var(--line);min-height:clamp(240px,48vh,440px);display:grid;place-items:center;margin:14px 0 16px;overflow:hidden;text-align:center;padding:18px 14px;transition:background .2s}
+.skort.svar{background:var(--ok-bg,#DDF5E7)}
+.sktxt{font-size:clamp(3.6rem,17vw,7.5rem);font-weight:800;line-height:1;white-space:nowrap}
+.sktxt b{color:var(--good)}
+.sktxt .skq{color:#C9D5EC}
+.sktxt .skti{font-size:.6em;color:var(--accent)}
+.sktxt .skic{font-size:.8em}
+.sktxt small{display:block;font-size:1.15rem;font-weight:700;color:var(--muted);white-space:normal;line-height:1.35;margin-top:14px}
+.sktimer{position:absolute;left:0;bottom:0;height:8px;width:0;background:var(--sun)}
+.skknappar{display:flex;gap:10px}
+.skknappar .go{flex:1}
+.skigen{flex:none;padding:0 16px;border-radius:18px;background:var(--card);box-shadow:0 5px 0 var(--line);font-weight:800;font-size:1.05rem}
+.skigen:active,.sktid button:active,.skfull:active{transform:translateY(3px)}
+.sklbl{margin:12px 0 6px;font-weight:700;color:var(--muted)}
+.sktid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.sktid button{min-height:48px;border-radius:14px;background:var(--card);box-shadow:0 4px 0 var(--line);font-weight:800;font-size:1.2rem}
+.sktid button[aria-pressed="true"]{background:var(--accent);color:#fff;box-shadow:0 4px 0 #2A3FC0}
+.skfull{width:44px;height:44px;border-radius:12px;background:var(--card);box-shadow:0 3px 0 var(--line);font-size:1.3rem;margin-left:10px}
+.skhint{text-align:center;color:var(--muted);font-size:.9rem;margin:14px 0 0}
+@media (pointer:coarse){.skhint{display:none}}
+#snabb:fullscreen{background:var(--bg);padding:2vh 4vw 3vh;display:flex;flex-direction:column;overflow:auto}
+#snabb:fullscreen .skort{flex:1;min-height:0}
+#snabb:fullscreen .sktxt{font-size:min(19vw,30vh)}
+#snabb:fullscreen .sktxt small{font-size:min(3vw,4vh)}
+#snabb:fullscreen .skset,#snabb:fullscreen .skknappar,#snabb:fullscreen .skhint{width:100%;max-width:760px;margin-inline:auto}
+#snabb:fullscreen .go{font-size:1.8rem;padding:18px}
 </style>
 </head>
 <body>
@@ -190,6 +218,7 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
     <button class="big" data-mode="race"><span class="ic">🏁</span><span><b>Racet</b><small>30 uppgifter. Kör mot ditt spöke.</small></span><span class="best" id="bestRace"></span></button>
     <button class="big" data-mode="blitz"><span class="ic">⚡</span><span><b>Blixtrunda</b><small>Så många rätt du hinner på 60 sekunder.</small></span><span class="best" id="bestBlitz"></span></button>
     <button class="big" data-mode="hard"><span class="ic">🎯</span><span><b>Mina svåra</b><small>Tränar de uppgifter du oftast svarar fel på.</small></span></button>
+    <button class="big" data-mode="snabb"><span class="ic">🃏</span><span><b>Snabbkort</b><small>Uppgiften syns en kort stund. Säg svaret och titta sedan. Bra i helklass.</small></span></button>
   </div>
   <div class="bowl" id="bowl"></div>
 </section>
@@ -234,6 +263,19 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
     <button class="go" id="rTrainSlow">Träna på dessa</button></div>
   <button class="big" id="rAgain">Spela igen</button>
   <button class="big" id="rHome">Välj ett annat läge</button>
+</section>
+
+
+<!-- Snabbkort -->
+<section id="snabb" class="screen" hidden>
+  <div class="gtop"><button class="back" id="skQuit">← Avsluta</button><span class="gright"><span class="info" id="skInfo"></span><button class="skfull" id="skFull" aria-label="Helskärm" title="Helskärm">⛶</button></span></div>
+  <div class="skset" id="skSet">
+    <p class="sklbl">Så länge syns kortet</p>
+    <div class="sktid" role="group" aria-label="Så länge syns kortet"><button data-sktid="1000">1 s</button><button data-sktid="2000">2 s</button><button data-sktid="3000">3 s</button></div>
+  </div>
+  <div class="skort" id="skKort"><div class="sktxt" id="skTxt" aria-live="polite"></div><i class="sktimer" id="skTimer"></i></div>
+  <div class="skknappar"><button class="skigen" id="skIgen" hidden>👀 Visa igen</button><button class="go" id="skGo">Starta</button></div>
+  <p class="skhint">Mellanslag, Enter eller → går vidare.</p>
 </section>
 
 </div>
@@ -311,6 +353,7 @@ function openHome(){
 }
 $$('.op').forEach(b=>b.onclick=()=>{op=b.dataset.op;data.op=op;save();openHome();});
 $$('[data-mode]').forEach(b=>b.onclick=()=>{
+  if(b.dataset.mode==='snabb')return openSnabb();
   if(b.dataset.mode!=='hard')return startGame(b.dataset.mode);
   const tried=allFacts(op).filter(f=>hist(f).length);
   if(!tried.length)return toast('Spela några rundor först, så hittar jag dina svåra uppgifter.');
@@ -514,6 +557,55 @@ function confetti(){window.Ljud&&Ljud.fanfare();
     x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore();});
     if(now-t0<2800)requestAnimationFrame(f);else{x.clearRect(0,0,W,H);c.hidden=true;}})(t0);
 }
+
+/* ---------- Snabbkort: uppgiften blinkar fram, klassen säger svaret, sedan Visa svaret ---------- */
+const SK_N=10;let K=null;
+const skTid=()=>[1000,2000,3000].includes(data.skTid)?data.skTid:2000;
+function skPick(){const pool=allFacts(op).filter(f=>!K.recent.includes(fkey(f)));
+  const w=f=>(f.a===0||f.b===0)?.15:(f.s==='−'&&f.a===f.b)?.4:1;
+  let r=Math.random()*pool.reduce((t,f)=>t+w(f),0);for(const f of pool){r-=w(f);if(r<=0)return f;}return pool[pool.length-1];}
+function skClear(){if(K){K.timers.forEach(clearTimeout);K.timers=[];}}
+function skLater(fn,ms){K.timers.push(setTimeout(fn,ms));}
+function skTxt(h){$('#skTxt').innerHTML=h;}
+function skTimer(on){const t=$('#skTimer');t.style.transition='none';t.style.width=on?'100%':'0';if(on){void t.offsetWidth;t.style.transition=`width ${skTid()}ms linear`;t.style.width='0';}}
+function skUI(){
+  const st=K.st,go=$('#skGo');
+  $('#skSet').hidden=!(st==='start'||st==='klar');
+  $('#skIgen').hidden=st!=='dold';
+  $('#skKort').classList.toggle('svar',st==='svar');
+  $('#skInfo').textContent=st==='start'?'':`Kort ${Math.min(K.n,SK_N)} av ${SK_N}`;
+  go.textContent={start:'Starta',titta:'Titta!',visar:'Titta!',dold:'Visa svaret',svar:K.n>=SK_N?'Klart':'Nästa ›',klar:'Tio kort till'}[st];
+  go.disabled=st==='titta'||st==='visar';go.style.opacity=go.disabled?.55:'';
+  $$('[data-sktid]').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.sktid===skTid()));
+}
+function skStartText(){const s=skTid()/1000;skTxt(`<span class="skic">🃏</span><small>Kortet syns i ${s} ${s===1?'sekund':'sekunder'}. Säg vad det blev, sedan visar du svaret.</small>`);}
+function openSnabb(){skClear();K={st:'start',n:0,f:null,recent:[],timers:[]};skStartText();skTimer(false);skUI();show('snabb');}
+function skBlink(again){
+  const visa=()=>{K.st='visar';skUI();skTxt(ftext(K.f));skTimer(true);
+    skLater(()=>{K.st='dold';skTimer(false);skTxt('<span class="skq">?</span>');skUI();},skTid());};
+  if(again)return visa();
+  K.st='titta';skUI();skTxt('<span class="skti">Titta!</span>');skLater(visa,650);
+}
+function skNext(){K.n++;K.f=skPick();K.recent.push(fkey(K.f));if(K.recent.length>6)K.recent.shift();skBlink(false);}
+function skGo(){if(!K)return;
+  if(K.st==='start'||K.st==='klar'){K.n=0;K.recent=[];return skNext();}
+  if(K.st==='dold'){K.st='svar';skTxt(`${ftext(K.f)} = <b>${ans(K.f)}</b>`);skUI();return;}
+  if(K.st==='svar'){if(K.n<SK_N)return skNext();
+    K.st='klar';skTxt(`<span class="skic">🎉</span><small>Bra jobbat! ${SK_N} snabbkort klara.</small>`);skUI();confetti();}
+}
+$('#skGo').onclick=e=>{e.currentTarget.blur();skGo();};
+$('#skIgen').onclick=e=>{e.currentTarget.blur();if(K&&K.st==='dold')skBlink(true);};
+$$('[data-sktid]').forEach(b=>b.onclick=()=>{data.skTid=+b.dataset.sktid;save();if(K&&K.st==='start')skStartText();if(K)skUI();});
+const skSec=$('#snabb');
+const skFs=()=>document.fullscreenElement||document.webkitFullscreenElement;
+const skUt=()=>{if(skFs())(document.exitFullscreen||document.webkitExitFullscreen).call(document);};
+if(!(skSec.requestFullscreen||skSec.webkitRequestFullscreen))$('#skFull').hidden=true;
+$('#skFull').onclick=e=>{e.currentTarget.blur();if(skFs())return skUt();const r=skSec.requestFullscreen||skSec.webkitRequestFullscreen;const p=r.call(skSec);if(p&&p.catch)p.catch(()=>{});};
+$('#skQuit').onclick=()=>{skClear();K=null;skUt();openHome();};
+document.addEventListener('keydown',e=>{
+  if($('#snabb').hidden||!K||e.altKey||e.ctrlKey||e.metaKey)return;
+  if([' ','Enter','ArrowRight','PageDown'].includes(e.key)){e.preventDefault();skGo();}
+});
 
 openHome();
 </script>
