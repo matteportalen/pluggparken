@@ -453,3 +453,5 @@ Läraren: svårt att scrolla på mobil när sidan är full av knappar. Mätt med
 
 ## PADS: effektplattan flyttad under padsen (18 nov 2026)
 - Sektionen flyttad ur `.sy-padv` (vänsterspalten under röstloopen) till `#sy-padyta` efter `#sy-padh`; CSS i `synt/synt.css` (`grid-template-areas`, höjdberoende `aspect-ratio` på `.sy-tonepad`, platta `clamp(84px,17vh,170px)`). Testat i Playwright: pads + platta ryms under den fasta raden (124 + 56 px) vid 1280 × 600 och uppåt, ingen sidscroll, inga JS-fel. Inte provat på riktig jobb-PC eller med pekskärm.
+
+- Tangenter döda efter val i ljudlistan: orsaken var fokus kvar i `select` (`#sy-sound-list`). Lagat med blur efter `change`. Testat i Playwright i INSTRUMENT (c v g b h n j) och PADS (1 q c v): tangenterna spelar direkt efter valet. Inte hittat något annat som tystar tangenterna; ändringen av plattans plats påverkade inte tangenterna (kontrollerat före och efter).
