@@ -88,3 +88,9 @@ _Historik för `docs/matematik.md`: hur allt byggdes, med detaljer, mått och ti
 - Flöde: Starta → "Titta!" 650 ms → uppgiften i vald tid med gul tidsremsa → "?" och knapparna 👀 Visa igen / Visa svaret → "6 + 3 = 9" på grön bakgrund → Nästa. Efter tio: konfetti och "Tio kort till". Knappen är spärrad medan kortet syns.
 - Helskärm på sektionen (dold om webbläsaren saknar stöd, t.ex. iPhone); siffrorna min(19vw, 30vh), 243 px på 1280 × 900. Avsluta mitt i rensar timers och lämnar helskärm.
 - Testat i Playwright 390 × 844 och 1280 × 900: klick och tangenter genom tio kort, Visa igen, minus-läget, sparad tid, ingen sidledes scroll, inga JS-fel. sok.js: sökorden snabbkort, flash cards, helklass.
+
+## Snabbkort även i Tiotalsövergång, delad fil (18 nov 2026)
+- Koden flyttad ur Lilla plus till `snabbkort.js` i roten (`MPSnabbkort.skapa(sektion,{nasta,tid,satTid,visa,avsluta,fira})` → `{oppna()}`; lägger in sin CSS en gång, använder sidans .gtop, .back, .gright, .info och .go). Lilla plus har bara kvar `skPick` och anropet.
+- Tiotalsövergång: kortet 🃏 Snabbkort under nivåerna (`#skOpen`), uppgifter ur `genTask(3)` för valt talområde och räknesätt (inte samma som de sex senaste), visningstiden i `data.skTid` i `mattespel-tiotal-v1`.
+- Långa uppgifter krymps så att de får plats på kortet (säkerhetsnät; 88 − 9 = 79 får plats på 360 px även utan).
+- Testat i Playwright 390 × 844 och 1280 × 900 på båda sidorna: tio kort med klick och tangenter, Visa igen, subtraktion, upp till 100, sparad tid, inga JS-fel.
