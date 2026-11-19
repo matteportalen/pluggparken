@@ -83,3 +83,9 @@ Utökade samma övning från tio till tjugo bildserier. Nya gruppen Vardag och f
 Tio nya målade JPG-atlaser med fyra bilder vardera, 2×2 rutor och konsekventa huvudpersoner inom varje berättelse. Original genererade med inbyggda bildverktyget, promptuppsättning och proveniens i bildmappen. Sam-bilden korrigerades så att bollen spelas med fötterna. Två stora skrivkort per rad på dator, ett på mobil. Panelposition, antal skrivfält och hjälptext följer bildserien, vilket bevarar äldre trebildssagor. Alla fyra fält måste vara ifyllda innan fyrbildssagan kan avslutas. Samma knappar, automatisk sparning, stjärnor, redigering, uppläsning och utskrift.
 
 Verifierat med node --check och skript/test-sagobyggaren.cjs i Chrome vid 1440×844 och 390×844: alla 20 val, samtliga bildfiler och panelpositioner, tre/fyra skrivfält, tomma fält, hjälp för aktiv bild, utkast efter omladdning, färdigställande, redigering utan dubblett, sparad saga efter omladdning, utskriftsknapp och utskriftslayout, ingen horisontell överströmning. Äldre fyrdelad saga, CC0-utkast och befintliga stjärnor bevaras. Bilderna och skriv-/utskriftsvyerna granskade visuellt.
+
+### Skrivblad samma dag
+
+Alla bildserier kan skrivas ut som tomma arbetsblad direkt från skrivsidan. Fyra bilder lodrätt till vänster för vardag/fabler, tre för fantasi; 44 mm stora rundade bildramar, fem linjer à 10 mm per bild till höger, titel samt namn/datum. Läraren betonade att raderna inte får bli för smala; fem rymliga rader fick plats på ett stående A4 med 14 mm marginal. Separat utskriftsläge för arbetsblad, återställs efter utskrift; den färdiga elevsagans utskrift behålls.
+
+Verifierat med `skript/test-sagobyggaren-skrivblad.cjs` på 1440 och 390 px: tomma skrivfält tillåtna, rätt bild-/radantal, 10 mm radavstånd, återgång till övningen. Riktiga A4-PDF:er för Guldringen, Haren och sköldpaddan samt Månen kontrollerade med pdfinfo (en sida vardera); Guldringens PDF rasteriserad och visuellt granskad.

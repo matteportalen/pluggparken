@@ -158,6 +158,20 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 @media print{.story-art .story-painting{max-width:none!important}.story-book-page{grid-template-columns:150px 1fr}.story-art{break-inside:avoid}}
 .hero-art{width:130px;aspect-ratio:1;position:relative;overflow:hidden;border-radius:17px;flex:none}.hero-art img{height:100%;width:300%;max-width:none;position:absolute;left:0;top:0}@media(max-width:720px){.hero-art{width:80px}}
 .series-heading{grid-column:1/-1;margin:12px 0 0;font-size:1.5rem}.story-pages.four-pages{grid-template-columns:repeat(2,minmax(0,1fr))}@media(max-width:720px){.story-pages.four-pages{grid-template-columns:1fr}}
+#worksheet{display:none}
+@media print{
+ @page{size:A4 portrait;margin:14mm}
+ body.worksheet-print{margin:0!important;padding:0!important;background:#fff!important;color:#18284b!important}
+ body.worksheet-print>*{display:none!important}
+ body.worksheet-print>#worksheet{display:block!important;position:static!important;width:100%;visibility:visible}
+ #worksheet,#worksheet *{visibility:visible!important}
+ #worksheet h1{font:700 21pt/1.15 var(--font);margin:0 0 4mm;color:#18284b}
+ .worksheet-name{font:11pt var(--ord);margin:0 0 4mm;color:#39455b}
+ .worksheet-row{display:grid;grid-template-columns:44mm minmax(0,1fr);gap:7mm;align-items:center;height:56mm;break-inside:avoid}
+ .worksheet-row .picture{width:44mm;height:44mm;aspect-ratio:1;border:1.5pt solid #8896ad;border-radius:4mm;box-sizing:border-box;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+ .worksheet-lines{height:50mm;display:grid;grid-template-rows:repeat(5,1fr)}
+ .worksheet-lines span{display:block;border-bottom:.6pt solid #8b96a8}
+}
 </style>
 </head>
 <body>
@@ -175,7 +189,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 </section>
 <section class="screen" id="game" hidden>
 <button type="button" data-home hidden tabindex="-1" aria-hidden="true" onclick="hem()"></button>
-<div class="nav story-top"><button class="knapp vit" id="back">◀ Bildserier</button><span id="saveState" role="status"></span></div>
+<div class="nav story-top"><button class="knapp vit" id="back">◀ Bildserier</button><button class="knapp vit" id="worksheetPrint">Skriv ut skrivblad</button><span id="saveState" role="status"></span></div>
 <h1 id="storyTitle" class="story-title"></h1>
 <p class="info">Berätta med hjälp av bilderna. Vad händer, och hur känner sig de som är med? En mening per bild räcker, men du får gärna skriva mer.</p>
 <div class="story-pages" id="pages"></div>
@@ -189,6 +203,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 </section>
 <section class="screen" id="saved" hidden><h1>Mina sagor</h1><div id="stories" class="mina"></div><div class="nav"><button class="knapp vit" id="homeButton">◀ Bildserier</button></div></section>
 </main>
-<script src="sagor.js?v=3"></script>
+<section id="worksheet" aria-hidden="true"></section>
+<script src="sagor.js?v=4"></script>
 </body>
 </html>

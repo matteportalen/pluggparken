@@ -421,7 +421,15 @@ function renderBook(){
 }
 $('title').oninput=e=>{if(book){book.r=e.target.value.trim();save();renderBook()}};
 $('edit').onclick=()=>{draft={id:book.id,series:book.series,t:book.t.slice(),r:book.r||''};active=0;editor()};
-$('print').onclick=async()=>{await Promise.all([...$('bok').querySelectorAll('img')].map(img=>{img.loading='eager';return img.decode().catch(()=>{})}));window.print()};
+$('worksheetPrint').onclick=async()=>{
+ const s=ALL_SERIES.find(s=>s.id===draft?.series);if(!s)return;
+ $('worksheet').innerHTML=`<h1>${esc(s.name)}</h1><p class="worksheet-name">Namn: ____________________________________ &nbsp; Datum: ______________</p>`+s.alts.map((_,i)=>`<div class="worksheet-row">${picture(s.id,i)}<div class="worksheet-lines">${'<span></span>'.repeat(5)}</div></div>`).join('');
+ await Promise.all([...$('worksheet').querySelectorAll('img')].map(img=>{img.loading='eager';return img.decode()}));
+ document.body.classList.add('worksheet-print');
+ window.print();
+};
+window.addEventListener('afterprint',()=>document.body.classList.remove('worksheet-print'));
+$('print').onclick=async()=>{document.body.classList.remove('worksheet-print');await Promise.all([...$('bok').querySelectorAll('img')].map(img=>{img.loading='eager';return img.decode().catch(()=>{})}));window.print()};
 $('read').onclick=()=>{if(!book||!window.speechSynthesis)return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(bookName(book)+'. '+book.t.join(' '));u.lang='sv-SE';u.rate=.9;const voice=speechSynthesis.getVoices().find(v=>v.lang.startsWith('sv'));if(voice)u.voice=voice;speechSynthesis.speak(u)};
 function library(){show('saved');$('stories').innerHTML=data.sagor.length?data.sagor.map((s,i)=>`<div class="saved-story"><button data-open="${i}">${esc(bookName(s))}<small>${new Date(s.d).toLocaleDateString('sv-SE')}</small></button><button class="knapp vit" data-delete="${i}" aria-label="Ta bort ${esc(bookName(s))}">✕</button></div>`).join(''):'<p>Här hamnar dina färdiga sagor.</p>';}
 $('stories').onclick=e=>{const open=e.target.closest('[data-open]'),del=e.target.closest('[data-delete]');if(open)openBook(data.sagor[+open.dataset.open]);if(del&&confirm('Ta bort den här sagan?')){data.sagor.splice(+del.dataset.delete,1);save();library()}};
