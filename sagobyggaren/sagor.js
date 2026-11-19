@@ -376,6 +376,13 @@ const EVERYDAY_SERIES=[
 ];
 const SERIES=[...EVERYDAY_SERIES,...FANTASY_SERIES];
 const ALL_SERIES=[...SERIES,...LEGACY_SERIES];
+/* Fyra kategorier (19 nov 2026, lärarens indelning). Serierna ligger kvar i sina listor; här bestäms bara var de visas. */
+const KATEGORIER=[
+ ['Vardag',['guldringen','passatillsam','bollenochrutan','platsvidbordet','trasigamodellen','vemfarvaramed','borttappadehunden']],
+ ['Fabler',['harenochskoldpaddan','ravenochmusen','sistanoten']],
+ ['Fantasi',['drakhissen','himmelsvalen','robotensfro','monstretsryt','bokhavet']],
+ ['Mysterier',['manen','skuggan','pennfodralet','regnmolnet','skorna']]
+];
 let draft=null,book=null,active=0;
 function picture(series,i){
  const s=ALL_SERIES.find(x=>x.id===series)||SERIES[0];
@@ -388,7 +395,7 @@ function picture(series,i){
  return `<div class="picture" role="img" aria-label="${esc(s.alts[i])}"><img class="backdrop" src="bilder/bg_${s.bg}.jpg" alt="">${figures}</div>`;
 }
 function show(id){if(window.speechSynthesis)speechSynthesis.cancel();document.querySelectorAll('.screen').forEach(e=>e.hidden=e.id!==id);window.MPS?.visa(id);window.scrollTo(0,0)}
-function hem(){show('home');$('resumeOld').hidden=!(data.utkast&&LEGACY_SERIES.some(s=>s.id===data.utkast.series));$('series').innerHTML=[["Vardag och fabler",EVERYDAY_SERIES],["Fantasi och mysterier",FANTASY_SERIES]].map(([name,list])=>`<h2 class="series-heading">${name}</h2>`+list.map(s=>`<button class="story-choice" data-series="${s.id}"><span class="story-cover">${picture(s.id,0)}</span><b>${s.name}</b><small>${data.utkast?.series===s.id?'Fortsätt din berättelse →':s.desc}</small></button>`).join('')).join('');$('mine').hidden=!data.sagor.length;}
+function hem(){show('home');$('resumeOld').hidden=!(data.utkast&&LEGACY_SERIES.some(s=>s.id===data.utkast.series));$('series').innerHTML=KATEGORIER.map(([name,ids])=>[name,ids.map(id=>SERIES.find(s=>s.id===id))]).map(([name,list])=>`<h2 class="series-heading">${name}</h2>`+list.map(s=>`<button class="story-choice" data-series="${s.id}"><span class="story-cover">${picture(s.id,0)}</span><b>${s.name}</b><small>${data.utkast?.series===s.id?'Fortsätt din berättelse →':s.desc}</small></button>`).join('')).join('');$('mine').hidden=!data.sagor.length;}
 function openSeries(id){
  const old=data.utkast;
  if(old&&old.series!==id&&old.t?.some(t=>t.trim())&&!confirm('Du har en påbörjad berättelse. Börja på en annan bildserie?'))return;
