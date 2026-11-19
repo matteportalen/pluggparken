@@ -376,12 +376,11 @@ const EVERYDAY_SERIES=[
 ];
 const SERIES=[...EVERYDAY_SERIES,...FANTASY_SERIES];
 const ALL_SERIES=[...SERIES,...LEGACY_SERIES];
-/* Fyra kategorier (19 nov 2026, lärarens indelning). Serierna ligger kvar i sina listor; här bestäms bara var de visas. */
+/* Tre kategorier (19 nov 2026, lärarens indelning). Serierna ligger kvar i sina listor; här bestäms bara var de visas. */
 const KATEGORIER=[
  ['Vardag',['guldringen','passatillsam','bollenochrutan','platsvidbordet','trasigamodellen','vemfarvaramed','borttappadehunden']],
  ['Fabler',['harenochskoldpaddan','ravenochmusen','sistanoten']],
- ['Fantasi',['drakhissen','himmelsvalen','robotensfro','monstretsryt','bokhavet']],
- ['Mysterier',['manen','skuggan','pennfodralet','regnmolnet','skorna']]
+ ['Fantasi och mysterier',['drakhissen','himmelsvalen','robotensfro','monstretsryt','bokhavet','manen','skuggan','pennfodralet','regnmolnet','skorna']]
 ];
 let draft=null,book=null,active=0;
 function picture(series,i){

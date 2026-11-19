@@ -81,7 +81,7 @@ const IDX=[
  ['ordkedjan/','Ordkedjan','Skriv ett ord som börjar på sista bokstaven i förra ordet','⛓️','ordkedja ord bokstav kedja katt tak kaka ordlek svenska stava','Svenska'],
  ['ordgissning/','Ordgissning','Gissa det hemliga ordet, grönt gult grått, som Wordle','🔤','wordle gissa ord bokstäver ordlek ledtråd svenska stava','Svenska'],
  ['dubbelteckning/','Dubbelteckning','Kamma eller kama? Stavning med två konsonanter','✍️','dubbelteckning stavning dubbla konsonanter kamma kama ck stava svenska kort vokal lång vokal','Svenska'],
- ['sagobyggaren/','Sagobyggaren','tre bilder – skriv början, problem och slut','📖','saga berättelse skriva hjälte bok slott drake prinsessa riddare troll sagobok fantasi','Svenska'],
+ ['sagobyggaren/','Sagobyggaren','tjugo bildserier om vardag, fabler och fantasi – skriv din egen saga','📖','saga berättelse skriva bok bildserie vardag fabler fantasi mysterier kompisar vänskap sagobok','Svenska'],
  ['knepigaljud/','Knepiga ljud','ng, tj, sj och ck: välj rätt bokstäver till bilden','🔊','stavning ljud ng tj sj ck kiwi kyss skjorta stjärna nyckel stava','Svenska'],
  ['ovriga/ordgatan/','Ordgåtan','Läs ledtråden och gissa ordet','❓','ordgåta ledtråd gissa ord krysslösning','Svenska'],
  ['ovriga/hogfrekventa/','Högfrekventa ord','De 200 vanligaste orden, blixtläs och hitta ordet','📖','läsa ord blixtläsning helordsläsning ord på en minut läsfel mikrofon','Svenska'],
