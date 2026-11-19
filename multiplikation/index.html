@@ -259,6 +259,7 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
   <div class="bowl" id="bowl"></div>
   <div class="actions">
     <button class="big" id="btnMix"><span class="ic">🎨</span><span><b>Blanda egen tabell</b><small>Välj flera tabeller och träna dem tillsammans.</small></span></button>
+    <button class="big" id="btnSnabb"><span class="ic">🃏</span><span><b>Snabbkort</b><small>Uppgiften syns en kort stund. Säg svaret och titta sedan. Bra i helklass.</small></span></button>
     <button class="big" id="btnHard"><span class="ic">🎯</span><span><b>Mina svåra</b><small>Tränar de uppgifter du oftast svarar fel på.</small></span></button>
     <button class="big" id="btnBoard"><span class="ic">🏆</span><span><b>Mästartavlan</b><small>Se vilka uppgifter du redan kan.</small></span></button>
   </div>
@@ -285,6 +286,7 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
     <button class="big" data-mode="order" id="modeOrder"><span class="ic">🔢</span><span><b>I ordning</b><small>Från 1 till 10, så att du ser mönstret.</small></span></button>
     <button class="big" data-mode="race"><span class="ic">🏁</span><span><b>Racet</b><small>20 uppgifter. Kör mot ditt spöke.</small></span><span class="best" id="bestRace"></span></button>
     <button class="big" data-mode="blitz"><span class="ic">⚡</span><span><b>Blixtrunda</b><small>Så många rätt du hinner på 60 sekunder.</small></span><span class="best" id="bestBlitz"></span></button>
+    <button class="big" id="modeSnabb"><span class="ic">🃏</span><span><b>Snabbkort</b><small>Uppgiften syns en kort stund. Säg svaret och titta sedan. Bra i helklass.</small></span></button>
   </div>
   <button class="small share" id="shareBtn">Kopiera länk till de här tabellerna</button>
 </section>
@@ -344,6 +346,9 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
 <!-- Filmen -->
 <section id="film" class="screen" hidden></section>
 
+<!-- Snabbkort -->
+<section id="snabb" class="screen" hidden></section>
+
 <!-- Mästartavlan -->
 <section id="boardScreen" class="screen" hidden>
   <button class="back" data-home>← Tillbaka</button>
@@ -366,6 +371,7 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
 
 <script src="../ljud.js"></script>
 <script src="../djur.js"></script>
+<script src="../snabbkort.js"></script>
 <script src="../huvud.js" data-titel="Multiplikation" data-ikon="✖️"></script>
 <script src="../film.js"></script>
 <script>
@@ -463,18 +469,20 @@ $('#btnDay').onclick=()=>{
 
 /* Blanda egen */
 let mixSet=new Set();
-$('#btnMix').onclick=()=>{renderChips();show('mix');};
+let mixSnabb=false;
+$('#btnMix').onclick=()=>{mixSnabb=false;renderChips();show('mix');};
+$('#btnSnabb').onclick=()=>{mixSnabb=true;renderChips();show('mix');};
 function renderChips(){
   const c=$('#chips');c.innerHTML='';
   range(1,10).forEach(T=>{const b=document.createElement('button');b.className='chip'+(T===3?' dark':'');b.textContent=T;
     b.style.setProperty('--c',tcolor(T));b.setAttribute('aria-pressed',mixSet.has(T));
     b.onclick=()=>{mixSet.has(T)?mixSet.delete(T):mixSet.add(T);renderChips();};c.appendChild(b);});
   $('#mixGo').disabled=mixSet.size===0;
-  $('#mixGo').textContent=mixSet.size?`Fortsätt med ${joinSv([...mixSet].sort((a,b)=>a-b))}`:'Välj minst en tabell';
+  $('#mixGo').textContent=mixSet.size?`${mixSnabb?'Snabbkort med':'Fortsätt med'} ${joinSv([...mixSet].sort((a,b)=>a-b))}`:'Välj minst en tabell';
 }
 $('#mixAll').onclick=()=>{mixSet=new Set(range(1,10));renderChips();};
 $('#mixNone').onclick=()=>{mixSet.clear();renderChips();};
-$('#mixGo').onclick=()=>{sel={tables:[...mixSet].sort((a,b)=>a-b),facts:null};openModes();};
+$('#mixGo').onclick=()=>{sel={tables:[...mixSet].sort((a,b)=>a-b),facts:null};mixSnabb?openSnabb():openModes();};
 
 /* Mina svåra */
 $('#btnHard').onclick=()=>{
@@ -485,6 +493,18 @@ $('#btnHard').onclick=()=>{
   if(!out.length)return toast('Allt du har övat sitter redan snabbt. Prova en ny tabell!');
   sel={tables:[],facts:out.sort((x,y)=>y.s-x.s).slice(0,10).map(x=>x.f),label:'Mina svåra'};openModes();
 };
+
+/* ---------- Snabbkort (snabbkort.js): uppgiften blinkar fram, klassen säger svaret ---------- */
+const skSenast=[];
+function skPick(){
+  const pool=getPool(sel.facts),fri=pool.filter(f=>!skSenast.includes(fk(...f))),p=fri.length?fri:pool;
+  const f=p[Math.floor(Math.random()*p.length)],single=!sel.facts&&sel.tables.length===1;
+  skSenast.push(fk(...f));if(skSenast.length>Math.min(6,pool.length-1))skSenast.shift();
+  const [a,b]=single||Math.random()<.5?f:[f[1],f[0]];
+  return{q:`${a} · ${b}`,a:a*b};}
+const SK=MPSnabbkort.skapa($('#snabb'),{nasta:skPick,tid:()=>data.skTid,satTid:ms=>{data.skTid=ms;save();},svar:()=>data.skSvar!==false,satSvar:b=>{data.skSvar=b;save();},visa:()=>show('snabb'),avsluta:goHome,fira:confetti});
+function openSnabb(){skSenast.length=0;SK.oppna();}
+$('#modeSnabb').onclick=openSnabb;
 
 /* Lägen */
 const setKey=()=>(G&&G.custom)||sel.facts?null:sel.tables.join(',');

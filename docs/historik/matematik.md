@@ -122,3 +122,5 @@ _Historik för `docs/matematik.md`: hur allt byggdes, med detaljer, mått och ti
 - **Pulka ersatt med släde (18 november 2026):** på användarens begäran ersattes pulkan av en klassisk träsläde med träribbor och uppböjda medar. Bildväljaren säger släde och vinterövningen slädar. Bildnyckeln behålls så sparade diagram visar den nya illustrationen.
 
 - Stjärnor i Lilla plus & minus (18 nov 2026): `STAR_OPS`, `starGoal`, `knownIn`, `giveStars` i `lillaplus/index.html`; anropas i `openHome()` och `finish()`. `lillaplus` tillagd i `STJ` (huvud.js) och startsidans stjärnsumma. Testat i Playwright (dator och mobil): mål visas, 25 kända additioner ger ⭐, 66 ger ⭐⭐⭐ (och ⭐ i Blandat), stjärnor försvinner inte när man svarar fel, slutskärmen fungerar, stjärnlapp "⭐ 4 stjärnor" på kortet, inga JS-fel.
+
+- **19 nov 2026, Snabbkort i Multiplikation:** `multiplikation/index.html` laddar `snabbkort.js`, ny sektion `#snabb`, `skPick()` (undviker de sex senaste, `getPool`), knapp `#btnSnabb` (startsidan, via `mixSnabb` till tabellvalet) och `#modeSnabb` (Välj läge). Testat med Playwright, dator och mobil, inga fel.
