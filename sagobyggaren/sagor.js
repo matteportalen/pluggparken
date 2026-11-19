@@ -10,7 +10,7 @@ const LEGACY_SERIES=[
  {id:'stjarnan',name:'Stjärnan som föll',bg:'snow',hero:'penguin_1',object:'star_1',desc:'En stjärna på fel plats. Vem kan hjälpa?',alts:['En pingvin ser en stjärna falla från himlen.','Stjärnan ligger på marken framför pingvinen.','En uggla flyger med stjärnan medan pingvinen tittar upp.'],starts:['En kväll såg pingvinen …','Stjärnan kunde inte …','Då hjälpte ugglan …']},
  {id:'draken',name:'Vem bor vid slottet?',bg:'slott',hero:'prinsessa',object:'drake_v',desc:'Någon väntar utanför slottet.',alts:['En prinsessa upptäcker en drake utanför slottet.','Draken står framför slottsporten och prinsessan stannar en bit bort.','Prinsessan och draken står nära varandra. Ett hjärta syns ovanför dem.'],starts:['Utanför slottet stod …','Men draken ville …','Till slut …']}
 ];
-const SERIES=[
+const FANTASY_SERIES=[
  {
   "id": "manen",
   "art": "moon",
@@ -172,11 +172,214 @@ const SERIES=[
   ]
  }
 ];
+const EVERYDAY_SERIES=[
+ {
+  "id": "guldringen",
+  "art": "ring",
+  "name": "Guldringen",
+  "desc": "Två vänner hittar något värdefullt på vägen hem.",
+  "cols": 2,
+  "rows": 2,
+  "alts": [
+   "Två barn går hem från skolan längs en trädkantad gångväg.",
+   "En flicka hittar en guldring vid en bänk. Hennes vän tittar nyfiket på den.",
+   "En äldre kvinna letar bekymrat på marken. Barnen ser henne.",
+   "Flickan räcker fram ringen till den lättade kvinnan."
+  ],
+  "starts": [
+   "På vägen hem från skolan …",
+   "Plötsligt glimmade något …",
+   "Vid bänken stod …",
+   "När kvinnan såg ringen …"
+  ]
+ },
+ {
+  "id": "passatillsam",
+  "art": "sam",
+  "name": "Ingen passar till Sam",
+  "desc": "En ny lagkamrat väntar på sin chans.",
+  "cols": 2,
+  "rows": 2,
+  "alts": [
+   "Sam står vid kanten av fotbollsplanen medan de andra spelar.",
+   "Sam sträcker upp handen men de andra är upptagna med bollen.",
+   "En lagkamrat är trängd och ser att Sam står fri.",
+   "Lagkamraten passar bollen till Sam, som gör sig redo att ta emot den."
+  ],
+  "starts": [
+   "Sam var ny …",
+   "Ingen verkade märka …",
+   "Då fick en lagkamrat syn på …",
+   "När bollen kom mot Sam …"
+  ]
+ },
+ {
+  "id": "bollenochrutan",
+  "art": "window",
+  "name": "Bollen genom rutan",
+  "desc": "En olycka händer. Vem vågar stanna kvar?",
+  "cols": 2,
+  "rows": 2,
+  "alts": [
+   "Tre vänner spelar fotboll på gården nära ett hus.",
+   "Bollen träffar en fönsterruta så att den spricker. Barnen blir förskräckta.",
+   "Två vänner springer därifrån, men en flicka stannar kvar.",
+   "Flickan står med bollen vid grannens stängda dörr och ska knacka."
+  ],
+  "starts": [
+   "Efter skolan brukade vännerna …",
+   "Plötsligt hördes …",
+   "De andra sprang, men …",
+   "När dörren öppnades …"
+  ]
+ },
+ {
+  "id": "platsvidbordet",
+  "art": "lunch",
+  "name": "Platsen vid bordet",
+  "desc": "En ledig stol kan göra stor skillnad.",
+  "cols": 2,
+  "rows": 2,
+  "alts": [
+   "En pojke med matbricka letar efter en plats i matsalen.",
+   "Väskor ligger på stolarna vid ett bord. Pojken står kvar med sin bricka.",
+   "En flicka flyttar sin väska och drar fram en stol åt honom.",
+   "Barnen sitter tillsammans och pratar medan de äter."
+  ],
+  "starts": [
+   "I matsalen stod …",
+   "Vid bordet …",
+   "Då flyttade …",
+   "Under lunchen upptäckte de …"
+  ]
+ },
+ {
+  "id": "trasigamodellen",
+  "art": "model",
+  "name": "Den trasiga modellen",
+  "desc": "Vännernas gemensamma bygge går sönder.",
+  "cols": 2,
+  "rows": 2,
+  "alts": [
+   "Två vänner bygger en kartongstad till en utställning.",
+   "När en vän är borta råkar den andra slå ner stadens torn.",
+   "Barnet står ensamt med det trasiga tornet och ser oroligt mot dörren.",
+   "Vännen kommer tillbaka. Barnet håller fram delarna av tornet."
+  ],
+  "starts": [
+   "De hade arbetat länge med …",
+   "Just när …",
+   "Nu visste ingen annan …",
+   "När vännen kom tillbaka …"
+  ]
+ },
+ {
+  "id": "vemfarvaramed",
+  "art": "hut",
+  "name": "Vem får vara med?",
+  "desc": "De stora bygger en koja. Den lilla har en idé.",
+  "cols": 2,
+  "rows": 2,
+  "alts": [
+   "Två äldre barn bygger en koja av grenar i en trädgård. Ett yngre barn kommer med en liten vagn.",
+   "Det yngre barnet får inte komma in och står utanför kojan.",
+   "Regnet börjar falla genom kojans tak. De äldre barnen försöker skydda sig.",
+   "Det yngre barnet kommer med en presenning i vagnen. De äldre barnen tittar upp."
+  ],
+  "starts": [
+   "De stora barnen byggde …",
+   "När den lilla frågade …",
+   "Men snart började …",
+   "Då kom den lilla tillbaka med …"
+  ]
+ },
+ {
+  "id": "harenochskoldpaddan",
+  "art": "hare",
+  "name": "Haren och sköldpaddan",
+  "desc": "Den snabbaste är inte alltid först i mål.",
+  "cols": 2,
+  "rows": 2,
+  "alts": [
+   "En självsäker hare och en lugn sköldpadda gör sig redo att tävla längs en stig.",
+   "Haren har sprungit långt före och vilar under ett träd. Sköldpaddan fortsätter längre bort på stigen.",
+   "Haren sover medan sköldpaddan går förbi mot målet.",
+   "Sköldpaddan går i mål medan djuren hejar. Haren kommer efter och ser förvånad ut."
+  ],
+  "starts": [
+   "Haren var säker på att …",
+   "Efter en stund tänkte haren …",
+   "Medan haren sov …",
+   "När haren kom fram …"
+  ]
+ },
+ {
+  "id": "borttappadehunden",
+  "art": "dog",
+  "name": "Den borttappade hunden",
+  "desc": "En rädd hund behöver hitta hem.",
+  "cols": 2,
+  "rows": 2,
+  "alts": [
+   "Två barn ser en liten hund som gömmer sig under en parkbänk.",
+   "Barnen sitter lugnt en bit bort och hunden vågar sig fram.",
+   "De tittar på hundens halsband medan en vuxen hjälper dem att ringa.",
+   "Hunden springer glatt fram till sin ägare som knäböjer med öppna armar."
+  ],
+  "starts": [
+   "Under bänken hördes …",
+   "För att inte skrämma hunden …",
+   "På halsbandet …",
+   "När ägaren kom …"
+  ]
+ },
+ {
+  "id": "ravenochmusen",
+  "art": "foxmouse",
+  "name": "Räven och den lilla musen",
+  "desc": "Ibland är det bra att vara minst.",
+  "cols": 2,
+  "rows": 2,
+  "alts": [
+   "En räv med ryggsäck skrattar åt en liten mus på skogsstigen.",
+   "Rävens ryggsäck fastnar mellan två stora stenar.",
+   "Musen kryper in i den smala springan och lossar remmen.",
+   "Räven är fri och böjer sig tacksamt mot musen."
+  ],
+  "starts": [
+   "Räven tyckte att musen …",
+   "Längre fram på stigen …",
+   "Den lilla musen kunde …",
+   "Efter den dagen …"
+  ]
+ },
+ {
+  "id": "sistanoten",
+  "art": "squirrels",
+  "name": "Två ekorrar och sista nöten",
+  "desc": "Vintern närmar sig och båda vill ha nöten.",
+  "cols": 2,
+  "rows": 2,
+  "alts": [
+   "Två ekorrar hittar en nöt på marken en kylig höstdag.",
+   "Båda håller i nöten och drar åt varsitt håll.",
+   "Nöten rullar ner i en smal hålighet mellan trädrötterna.",
+   "En ekorre håller en kvist medan den andra hjälper till vid håligheten."
+  ],
+  "starts": [
+   "Vintern var på väg och …",
+   "Båda ville …",
+   "Mitt i grälet …",
+   "Om de hjälptes åt …"
+  ]
+ }
+];
+const SERIES=[...EVERYDAY_SERIES,...FANTASY_SERIES];
 const ALL_SERIES=[...SERIES,...LEGACY_SERIES];
 let draft=null,book=null,active=0;
 function picture(series,i){
  const s=ALL_SERIES.find(x=>x.id===series)||SERIES[0];
- if(s.art)return `<div class="picture story-art" role="img" aria-label="${esc(s.alts[i])}"><img class="story-painting" src="bilder/sagor/${s.art}.jpg" alt="" loading="lazy" decoding="async" style="left:${-100*i}%"></div>`;
+ if(s.art)return `<div class="picture story-art" role="img" aria-label="${esc(s.alts[i])}"><img class="story-painting" src="bilder/sagor/${s.art}.jpg" alt="" loading="lazy" decoding="async" style="width:${(s.cols||3)*100}%;height:${(s.rows||1)*100}%;left:${-100*(i%(s.cols||3))}%;top:${-100*Math.floor(i/(s.cols||3))}%"></div>`;
  const img=(name,x,y,h,extra='')=>`<img class="figure" src="bilder/${name}.webp" alt="" style="left:${x}%;bottom:${y}%;height:${h}%;${extra}">`;
  let figures='';
  if(s.id==='nyckeln')figures=img(s.hero,i===2?38:12,9,44)+img(s.object,i===0?55:40,12,i===0?33:24)+(i>0?`<span class="story-door${i===2?' open':''}"></span>`:'');
@@ -185,22 +388,24 @@ function picture(series,i){
  return `<div class="picture" role="img" aria-label="${esc(s.alts[i])}"><img class="backdrop" src="bilder/bg_${s.bg}.jpg" alt="">${figures}</div>`;
 }
 function show(id){if(window.speechSynthesis)speechSynthesis.cancel();document.querySelectorAll('.screen').forEach(e=>e.hidden=e.id!==id);window.MPS?.visa(id);window.scrollTo(0,0)}
-function hem(){show('home');$('resumeOld').hidden=!(data.utkast&&LEGACY_SERIES.some(s=>s.id===data.utkast.series));$('series').innerHTML=SERIES.map(s=>`<button class="story-choice" data-series="${s.id}"><span class="story-cover">${picture(s.id,0)}</span><b>${s.name}</b><small>${data.utkast?.series===s.id?'Fortsätt din berättelse →':s.desc}</small></button>`).join('');$('mine').hidden=!data.sagor.length;}
+function hem(){show('home');$('resumeOld').hidden=!(data.utkast&&LEGACY_SERIES.some(s=>s.id===data.utkast.series));$('series').innerHTML=[["Vardag och fabler",EVERYDAY_SERIES],["Fantasi och mysterier",FANTASY_SERIES]].map(([name,list])=>`<h2 class="series-heading">${name}</h2>`+list.map(s=>`<button class="story-choice" data-series="${s.id}"><span class="story-cover">${picture(s.id,0)}</span><b>${s.name}</b><small>${data.utkast?.series===s.id?'Fortsätt din berättelse →':s.desc}</small></button>`).join('')).join('');$('mine').hidden=!data.sagor.length;}
 function openSeries(id){
  const old=data.utkast;
  if(old&&old.series!==id&&old.t?.some(t=>t.trim())&&!confirm('Du har en påbörjad berättelse. Börja på en annan bildserie?'))return;
- draft=old?.series===id?JSON.parse(JSON.stringify(old)):{series:id,t:['','',''],r:''};active=0;editor();
+ draft=old?.series===id?JSON.parse(JSON.stringify(old)):{series:id,t:Array((ALL_SERIES.find(s=>s.id===id)||SERIES[0]).alts.length).fill(''),r:''};active=0;editor();
 }
+function pageNames(s){return s.alts.length===4?['Början','Något händer','Vad gör de?','Slutet']:['Början','Problem','Ditt slut']}
 function editor(){
  const s=ALL_SERIES.find(s=>s.id===draft.series)||SERIES[0];show('game');$('storyTitle').textContent=s.name;
- $('pages').innerHTML=['Början','Problem','Ditt slut'].map((name,i)=>`<article class="story-page"><h2>${i+1}. ${name}</h2>${picture(s.id,i)}<label for="text-${i}">${['Vem är här?','Vad händer?','Vad händer sedan? Hur slutar det?'][i]}</label><textarea id="text-${i}" data-page="${i}" maxlength="1000" placeholder="Berätta …">${esc(draft.t[i]||'')}</textarea></article>`).join('');$('helpText').hidden=true;update();
+ $('pages').classList.toggle('four-pages',s.alts.length===4);
+ $('pages').innerHTML=pageNames(s).map((name,i)=>`<article class="story-page"><h2>${i+1}. ${name}</h2>${picture(s.id,i)}<label for="text-${i}">${(s.alts.length===4?['Vilka är här?','Vad händer?','Vad tänker och gör de?','Hur slutar berättelsen?']:['Vem är här?','Vad händer?','Vad händer sedan? Hur slutar det?'])[i]}</label><textarea id="text-${i}" data-page="${i}" maxlength="1000" placeholder="Berätta …">${esc(draft.t[i]||'')}</textarea></article>`).join('');$('helpText').hidden=true;update();
 }
 function update(){data.utkast=draft;$('saveState').textContent=save()?'Sparas på den här enheten':'Kunde inte spara på enheten';$('finish').disabled=!draft.t.every(t=>t.trim());}
 $('resumeOld').onclick=()=>openSeries(data.utkast.series);
 $('series').onclick=e=>{const b=e.target.closest('[data-series]');if(b)openSeries(b.dataset.series)};
 $('pages').addEventListener('focusin',e=>{if(e.target.matches('textarea'))active=+e.target.dataset.page});
 $('pages').oninput=e=>{if(!e.target.matches('textarea'))return;draft.t[+e.target.dataset.page]=e.target.value;update()};
-$('help').onclick=()=>{const s=ALL_SERIES.find(s=>s.id===draft.series);$('helpText').textContent=['Början','Problem','Slut'][active]+': Du kan börja med ”'+s.starts[active]+'”. Fortsätt med dina egna ord.';$('helpText').hidden=false;};
+$('help').onclick=()=>{const s=ALL_SERIES.find(s=>s.id===draft.series);$('helpText').textContent=pageNames(s)[active]+': Du kan börja med ”'+s.starts[active]+'”. Fortsätt med dina egna ord.';$('helpText').hidden=false;};
 $('back').onclick=hem;
 $('finish').onclick=()=>{
  if(!draft?.t.every(t=>t.trim()))return;

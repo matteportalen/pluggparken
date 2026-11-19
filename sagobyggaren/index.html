@@ -5,13 +5,13 @@
 <script src="../tema.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Sagobyggaren – Pluggparken</title>
-<meta name="description" content="Tre bilder – din berättelse. Välj en bildserie, skriv början, problem och slut. Spara, lyssna och skriv ut din saga.">
+<meta name="description" content="Bilder – din berättelse. Välj en bildserie, skriv början, problem och slut. Spara, lyssna och skriv ut din saga.">
 <link rel="canonical" href="https://pluggparken.se/sagobyggaren/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Pluggparken">
 <meta property="og:locale" content="sv_SE">
 <meta property="og:title" content="Sagobyggaren – Pluggparken">
-<meta property="og:description" content="Tre bilder – din berättelse. Välj en bildserie, skriv början, problem och slut. Spara, lyssna och skriv ut din saga.">
+<meta property="og:description" content="Bilder – din berättelse. Välj en bildserie, skriv början, problem och slut. Spara, lyssna och skriv ut din saga.">
 <meta property="og:url" content="https://pluggparken.se/sagobyggaren/">
 <meta property="og:image" content="https://pluggparken.se/og.jpg">
 <meta property="og:image:width" content="1200">
@@ -142,7 +142,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 @media print{@page{margin:14mm}.bok h2{font-size:26pt}.bok .sidk{box-shadow:none;padding:0}.bok .sidk p{font-size:17pt;line-height:1.6}.insp,.guide{display:none}body *{visibility:hidden}.bok,.bok *{visibility:visible}.bok{position:absolute;left:0;top:0;width:100%}.nav{display:none}.scen .sp,.scen .dek{animation:none}}
 
 
-/* Tre bilder: befintliga färger, knappar och hårda kortskuggor. */
+/* Bilder: befintliga färger, knappar och hårda kortskuggor. */
 .wrap{max-width:1080px}.story-choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:24px}
 .story-choice{background:var(--card);border-radius:22px;box-shadow:0 4px 0 var(--line);padding:12px;text-align:left}.story-choice:active{transform:translateY(3px);box-shadow:0 1px var(--line)}.story-choice b{display:block;font-size:1.15rem;margin:10px 3px 3px}.story-choice small{display:block;color:var(--muted);margin:0 3px 5px}.story-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}.story-strip .picture{border-radius:8px}
 .picture{aspect-ratio:4/3;position:relative;overflow:hidden;border-radius:15px;background:#D4E9F2;isolation:isolate}.picture .backdrop{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}.picture .figure{position:absolute;object-fit:contain;max-width:55%;filter:drop-shadow(0 3px 1px #22334430)}
@@ -157,6 +157,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 @media(max-width:720px){.story-choice{grid-template-columns:38% 1fr}.story-cover{grid-row:span 2}.story-choice b{margin-top:0}.story-page{display:block}.story-page .picture{max-width:400px;margin:auto}.story-page label{margin-top:12px}.story-page textarea{min-height:120px}}
 @media print{.story-art .story-painting{max-width:none!important}.story-book-page{grid-template-columns:150px 1fr}.story-art{break-inside:avoid}}
 .hero-art{width:130px;aspect-ratio:1;position:relative;overflow:hidden;border-radius:17px;flex:none}.hero-art img{height:100%;width:300%;max-width:none;position:absolute;left:0;top:0}@media(max-width:720px){.hero-art{width:80px}}
+.series-heading{grid-column:1/-1;margin:12px 0 0;font-size:1.5rem}.story-pages.four-pages{grid-template-columns:repeat(2,minmax(0,1fr))}@media(max-width:720px){.story-pages.four-pages{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -167,7 +168,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 <section class="screen" id="home">
   <div class="hero">
     <div class="hero-art" aria-hidden="true"><img src="bilder/sagor/moon.jpg" alt=""></div>
-    <div><h1>Sagobyggaren</h1><p>Tio världar att upptäcka. Välj en bildserie och skriv din egen saga.</p></div>
+    <div><h1>Sagobyggaren</h1><p>Vardag, vänskap och fantasi. Välj bland tjugo bildserier och skriv din egen berättelse.</p></div>
   </div>
 <div class="nav"><button class="knapp vit" id="resumeOld" hidden>Fortsätt din påbörjade saga</button></div><div class="story-choices" id="series"></div>
 <div class="nav"><button class="knapp vit" id="mine">📖 Mina sagor</button></div>
@@ -176,7 +177,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 <button type="button" data-home hidden tabindex="-1" aria-hidden="true" onclick="hem()"></button>
 <div class="nav story-top"><button class="knapp vit" id="back">◀ Bildserier</button><span id="saveState" role="status"></span></div>
 <h1 id="storyTitle" class="story-title"></h1>
-<p class="info">Bilderna ger dig början. Skriv vad som händer – och hitta på ditt eget slut. En mening per bild räcker, men du får gärna skriva mer.</p>
+<p class="info">Berätta med hjälp av bilderna. Vad händer, och hur känner sig de som är med? En mening per bild räcker, men du får gärna skriva mer.</p>
 <div class="story-pages" id="pages"></div>
 <div class="nav"><button class="knapp vit" id="help">💡 Hjälp mig börja</button><button class="knapp bla" id="finish" disabled>Visa min saga ▶</button></div>
 <p id="helpText" class="info" role="status" hidden></p>
@@ -188,6 +189,6 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 </section>
 <section class="screen" id="saved" hidden><h1>Mina sagor</h1><div id="stories" class="mina"></div><div class="nav"><button class="knapp vit" id="homeButton">◀ Bildserier</button></div></section>
 </main>
-<script src="sagor.js?v=2"></script>
+<script src="sagor.js?v=3"></script>
 </body>
 </html>
