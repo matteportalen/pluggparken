@@ -1,0 +1,7 @@
+MediaPipe Tasks Vision 1.2.2 (npm @mediapipe/tasks-vision), Apache-2.0, Google LLC.
+hand_landmarker.task (float16/1) från storage.googleapis.com/mediapipe-models, Apache-2.0.
+Används av Musiklabbets "Styr med handen" (extra/trummaskin/synt/hand.js). Allt körs i webbläsaren.
+
+Ändring i vision_bundle.js (IIFE, global Vision) (20 nov 2026): användningsloggen som annars skickas till
+odml.pa.googleapis.com varje minut är avstängd (flush() tömmer bara kön). Inget lämnar enheten.
+Sourcemap-raden är borttagen. Bara vision_wasm_internal.js/.wasm behövs (FilesetResolver väljer dem).
