@@ -273,7 +273,7 @@ root.querySelectorAll('[data-note],[data-pad-note]').forEach(b=>{
 });
 root.querySelectorAll('[data-keymode]').forEach(b=>b.onclick=()=>{allOff();keyboardMode=b.dataset.keymode;keyboardUI()});
 root.querySelector('#sy-clear').onclick=()=>change(()=>{const t=state().tracks[selected],p=host.state().cur;t.patterns[p].fill(null);if(t.notes)t.notes[p]=[];if(t.gates)t.gates[p].fill(0);if(t.plain)t.plain[p]='.'.repeat(16)});root.querySelector('#sy-demo').onclick=demo;
-root.querySelectorAll('.sy-platta').forEach(sek=>{const vilk=sek.dataset.vilk,yta=sek.querySelector('.sy-platta-yta'),prick=yta.querySelector('.sy-platta-prick');let id=null;window.PPSyntHand?.koppla(sek,vilk,host);
+root.querySelectorAll('.sy-platta').forEach(sek=>{const vilk=sek.dataset.vilk,yta=sek.querySelector('.sy-platta-yta'),prick=yta.querySelector('.sy-platta-prick');let id=null;window.PPSyntHand?.koppla(sek,vilk,host,vilk==='i'?{spela:n=>preview(n,'hand'),slapp:()=>release('hand'),namn:n=>names[((n%12)+12)%12]}:null);
   const xy=e=>{const r=yta.getBoundingClientRect(),x=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width)),y=Math.max(0,Math.min(1,1-(e.clientY-r.top)/r.height));prick.hidden=false;prick.style.left=x*100+'%';prick.style.top=(1-y)*100+'%';host.platta?.xy(x,y,false,vilk)};
   yta.addEventListener('pointerdown',e=>{if(e.button>0)return;e.preventDefault();id=e.pointerId;yta.setPointerCapture(id);yta.classList.add('aktiv');host.platta?.hall(true,vilk);xy(e)});
   yta.addEventListener('pointermove',e=>{if(e.pointerId===id)xy(e)});
