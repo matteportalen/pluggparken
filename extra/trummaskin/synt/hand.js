@@ -12,7 +12,10 @@
 (function(){
   const LIB='/lib/mediapipe';
   const NYP_PA=.33,NYP_AV=.48,MJUK=.45,TAPP_MS=350,BILDER_IN=2;
-  let lm=null,laddar=null,strom=null,video=null,aktiv=null,raf=0,senast=-1,senHand=0;
+  let lm=null,laddar=null,strom=null,video=null,aktiv=null,raf=0,senast=-1,senHand=0,delegat='',felN=0,tvingaCPU=false;
+  /* På telefoner och surfplattor körs modellen på processorn: GPU-läget kan starta utan fel men sedan inte hitta
+     några händer (sett på Samsung S25 Ultra, nov 2026). Datorn kör GPU med CPU som reserv. */
+  const MOBIL=/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)||navigator.maxTouchPoints>1&&/Macintosh/.test(navigator.userAgent);
 
   const css=`.sy-handknapp[aria-pressed="true"],.sy-thereminknapp[aria-pressed="true"]{border-color:var(--sy)!important;background:color-mix(in srgb,var(--sy) 35%,#2a2d33)!important;color:#fff!important}
 .sy-handknapp[data-laddar],.sy-thereminknapp[data-laddar]{opacity:.7;cursor:progress}
@@ -40,9 +43,9 @@
       const fil=await v.FilesetResolver.forVisionTasks(LIB+'/wasm');
       const opt=d=>({baseOptions:{modelAssetPath:LIB+'/hand_landmarker.task',delegate:d},runningMode:'VIDEO',numHands:1,
         minHandDetectionConfidence:.6,minHandPresenceConfidence:.5,minTrackingConfidence:.5});
-      try{lm=await v.HandLandmarker.createFromOptions(fil,opt('GPU'))}
-      catch(e){lm=await v.HandLandmarker.createFromOptions(fil,opt('CPU'))}
-      return lm;
+      const ordning=MOBIL||tvingaCPU?['CPU']:['GPU','CPU'];let fel;
+      for(const d of ordning){try{lm=await v.HandLandmarker.createFromOptions(fil,opt(d));delegat=d;felN=0;return lm}catch(e){fel=e}}
+      throw fel;
     })();
     laddar.catch(()=>{laddar=null});
     return laddar;
@@ -54,12 +57,31 @@
     return strom;
   }
 
-  /* var i den spegelvända, beskurna bilden (object-fit:cover) hamnar en punkt från kameran */
+  /* Vilken del av kamerabilden som fyller plattan. Liggande kamera (dator): samma form som plattan (som object-fit:cover).
+     Stående kamera (telefon) mot en bred platta: med cover räknades bara en smal rand i mitten, så handen gick knappt
+     att styra uppåt och nedåt. Där tas en högre bit (formen mitt emellan kamerans och plattans) och dras ut lite. */
+  function utsnitt(r){
+    const vw=video.videoWidth||640,vh=video.videoHeight||480,ap=r.width/(r.height||1),ac=vw/vh;
+    const ar=vh>vw&&ap>ac?Math.sqrt(ap*ac):ap;
+    const rw=ar>ac?vw:vh*ar,rh=ar>ac?vw/ar:vh;
+    return{vw,vh,rw,rh,rx:(vw-rw)/2,ry:(vh-rh)/2};
+  }
+  /* kamerabilden läggs så att utsnittet täcker plattan precis (spegelvänd) */
+  function placeraBild(A){
+    const r=A.yta.getBoundingClientRect(),u=utsnitt(r),sx=r.width/u.rw,sy=r.height/u.rh;
+    const k=[r.width,r.height,u.vw,u.vh].join();if(A.bildK===k)return;A.bildK=k;
+    Object.assign(A.bild.style,{inset:'auto',left:-u.rx*sx+'px',top:-u.ry*sy+'px',width:u.vw*sx+'px',height:u.vh*sy+'px',objectFit:'fill'});
+  }
+  /* var i plattan en punkt från kameran hamnar */
   function tillPlatta(p,yta){
-    const r=yta.getBoundingClientRect(),vw=video.videoWidth||640,vh=video.videoHeight||480;
-    const s=Math.max(r.width/vw,r.height/vh),bw=vw*s,bh=vh*s,ox=(bw-r.width)/2,oy=(bh-r.height)/2;
-    const px=(1-p.x)*bw-ox,py=p.y*bh-oy;
+    const r=yta.getBoundingClientRect(),u=utsnitt(r);
+    const px=((1-p.x)*u.vw-u.rx)/u.rw*r.width,py=(p.y*u.vh-u.ry)/u.rh*r.height;
     return{x:px/r.width,y:py/r.height,px,py};
+  }
+  /* GPU-läget felar under spelet: byt till processorn i stället för att tiga */
+  function tillCPU(){
+    const g=lm;lm=null;laddar=null;tvingaCPU=true;felN=0;try{g&&g.close()}catch(e){}
+    ladda().catch(()=>{const A=aktiv;if(A){A.host.toast?.('Handstyrningen fungerar inte på den här enheten. Dra med fingret som vanligt.');stang(false)}});
   }
   const avst=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
 
@@ -125,7 +147,9 @@
   function loop(){
     raf=requestAnimationFrame(loop);const A=aktiv;if(!A||!lm||!video||video.readyState<2)return;
     if(video.currentTime===senast)return;senast=video.currentTime;
-    let res;try{res=lm.detectForVideo(video,performance.now())}catch(e){return}
+    placeraBild(A);
+    let res;try{res=lm.detectForVideo(video,performance.now());felN=0}
+    catch(e){if(++felN>=5){if(delegat==='GPU')tillCPU();else{A.host.toast?.('Handstyrningen fungerar inte på den här enheten. Dra med fingret som vanligt.');stang(false)}}return}
     const h=res&&res.landmarks&&res.landmarks[0],nu=performance.now();
     if(!h){if(nu-senHand>TAPP_MS&&(A.g!=='ingen'||!A.prick.hidden)){bytGest(A,'ingen');A.yta.classList.remove('sikte');A.tips.textContent=TIPS[A.lage].oppen;A.prick.hidden=true;A.pos=null;A.idx=-1;rita(A,null)}return}
     senHand=nu;
@@ -154,7 +178,7 @@
   function stang(meddela){
     const A=aktiv;aktiv=null;cancelAnimationFrame(raf);raf=0;
     if(A){bytGest(A,'ingen');const kn=A.lage==='theremin'?A.tknapp:A.knapp;kn.setAttribute('aria-pressed','false');
-      A.yta.classList.remove('hand','sikte','theremin');A.prick.hidden=true;
+      A.yta.classList.remove('hand','sikte','theremin');A.prick.hidden=true;A.bildK='';A.bild.removeAttribute('style');
       A.bild.remove();A.rit.remove();A.tips.remove();A.ton.remove();}
     if(strom){strom.getTracks().forEach(t=>t.stop());strom=null}
     if(video){video.srcObject=null}
@@ -213,5 +237,5 @@
   document.addEventListener('visibilitychange',()=>{if(document.hidden&&aktiv)stang(false)});
   setInterval(()=>{if(aktiv&&!aktiv.yta.offsetParent)stang(false)},1000);
 
-  window.PPSyntHand={koppla,stang,_test:{tillPlatta,gest,get aktiv(){return aktiv}}};
+  window.PPSyntHand={koppla,stang,_test:{tillPlatta,utsnitt,gest,get aktiv(){return aktiv},get delegat(){return delegat},get lm(){return lm}}};
 })();
