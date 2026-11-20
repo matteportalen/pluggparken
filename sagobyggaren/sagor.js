@@ -496,7 +496,9 @@ function picture(series,i){
  return `<div class="picture" role="img" aria-label="${esc(s.alts[i])}"><img class="backdrop" src="bilder/bg_${s.bg}.jpg" alt="">${figures}</div>`;
 }
 function show(id){if(window.speechSynthesis)speechSynthesis.cancel();document.querySelectorAll('.screen').forEach(e=>e.hidden=e.id!==id);window.MPS?.visa(id);window.scrollTo(0,0)}
-function hem(){show('home');$('resumeOld').hidden=!(data.utkast&&LEGACY_SERIES.some(s=>s.id===data.utkast.series));$('series').innerHTML=KATEGORIER.map(([name,ids])=>[name,ids.map(id=>SERIES.find(s=>s.id===id))]).map(([name,list])=>`<h2 class="series-heading">${name}</h2>`+list.map(s=>`<button class="story-choice" data-series="${s.id}"><span class="story-cover">${picture(s.id,0)}</span><b>${s.name}</b><small>${data.utkast?.series===s.id?'Fortsätt din berättelse →':s.desc}</small></button>`).join('')).join('');$('mine').hidden=!data.sagor.length;}
+// Skrivbladsläge (#skrivblad, från Skriv ut-sidan): ett tryck på en bildserie skriver ut skrivbladet direkt.
+let skrivlage=location.hash==='#skrivblad';
+function hem(){show('home');document.body.classList.toggle('skrivlage',skrivlage);$('skrivInfo').hidden=!skrivlage;$('resumeOld').hidden=!(data.utkast&&LEGACY_SERIES.some(s=>s.id===data.utkast.series));$('series').innerHTML=KATEGORIER.map(([name,ids])=>[name,ids.map(id=>SERIES.find(s=>s.id===id))]).map(([name,list])=>`<h2 class="series-heading">${name}</h2>`+list.map(s=>`<button class="story-choice" data-series="${s.id}"><span class="story-cover">${picture(s.id,0)}</span><b>${s.name}</b><small>${skrivlage?'🖨️ Skriv ut skrivblad':data.utkast?.series===s.id?'Fortsätt din berättelse →':s.desc}</small></button>`).join('')).join('');$('mine').hidden=!data.sagor.length;}
 function openSeries(id){
  const old=data.utkast;
  if(old&&old.series!==id&&old.t?.some(t=>t.trim())&&!confirm('Du har en påbörjad berättelse. Börja på en annan bildserie?'))return;
@@ -510,7 +512,8 @@ function editor(){
 }
 function update(){data.utkast=draft;$('saveState').textContent=save()?'Sparas på den här enheten':'Kunde inte spara på enheten';$('finish').disabled=!draft.t.every(t=>t.trim());}
 $('resumeOld').onclick=()=>openSeries(data.utkast.series);
-$('series').onclick=e=>{const b=e.target.closest('[data-series]');if(b)openSeries(b.dataset.series)};
+$('series').onclick=e=>{const b=e.target.closest('[data-series]');if(b)(skrivlage?printWorksheet:openSeries)(b.dataset.series)};
+$('skrivAv').onclick=()=>{skrivlage=false;history.replaceState(null,'',location.pathname+location.search);hem()};
 $('pages').addEventListener('focusin',e=>{if(e.target.matches('textarea'))active=+e.target.dataset.page});
 $('pages').oninput=e=>{if(!e.target.matches('textarea'))return;draft.t[+e.target.dataset.page]=e.target.value;update()};
 $('help').onclick=()=>{const s=ALL_SERIES.find(s=>s.id===draft.series);$('helpText').textContent=pageNames(s)[active]+': Du kan börja med ”'+s.starts[active]+'”. Fortsätt med dina egna ord.';$('helpText').hidden=false;};
@@ -529,13 +532,14 @@ function renderBook(){
 }
 $('title').oninput=e=>{if(book){book.r=e.target.value.trim();save();renderBook()}};
 $('edit').onclick=()=>{draft={id:book.id,series:book.series,t:book.t.slice(),r:book.r||''};active=0;editor()};
-$('worksheetPrint').onclick=async()=>{
- const s=ALL_SERIES.find(s=>s.id===draft?.series);if(!s)return;
+async function printWorksheet(id){
+ const s=ALL_SERIES.find(s=>s.id===id);if(!s)return;
  $('worksheet').innerHTML=`<h1>${esc(s.name)}</h1><p class="worksheet-name">Namn: ____________________________________ &nbsp; Datum: ______________</p>`+s.alts.map((_,i)=>`<div class="worksheet-row">${picture(s.id,i)}<div class="worksheet-lines">${'<span></span>'.repeat(5)}</div></div>`).join('');
  await Promise.all([...$('worksheet').querySelectorAll('img')].map(img=>{img.loading='eager';return img.decode()}));
  document.body.classList.add('worksheet-print');
  window.print();
-};
+}
+$('worksheetPrint').onclick=()=>printWorksheet(draft?.series);
 window.addEventListener('afterprint',()=>document.body.classList.remove('worksheet-print'));
 $('print').onclick=async()=>{document.body.classList.remove('worksheet-print');await Promise.all([...$('bok').querySelectorAll('img')].map(img=>{img.loading='eager';return img.decode().catch(()=>{})}));window.print()};
 $('read').onclick=()=>{if(!book||!window.speechSynthesis)return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(bookName(book)+'. '+book.t.join(' '));u.lang='sv-SE';u.rate=.9;const voice=speechSynthesis.getVoices().find(v=>v.lang.startsWith('sv'));if(voice)u.voice=voice;speechSynthesis.speak(u)};
@@ -547,5 +551,5 @@ const PL=[{"id":"skog","bg":"trees"},{"id":"orken","bg":"desert"},{"id":"snoberg
 const EV=[{"id":"nyckel","img":"key_1"},{"id":"edelsten","img":"gem_1"},{"id":"mynt","img":"coin_1"},{"id":"morot","img":"carrot_1"},{"id":"stjarna","img":"star_1"},{"id":"fisk","img":"fish_1"},{"id":"spoke","img":"ghost_1"},{"id":"slem","img":"slime_1"},{"id":"orm","img":"snake_1"},{"id":"ufo","img":"ufo_1"},{"id":"skatt","img":"coin_1"},{"id":"hjarta","img":"heart_1"},{"id":"drake","img":"drake_v"},{"id":"troll","img":"troll_v"},{"id":"prinsessa","img":"prinsessa_v"},{"id":"riddare","img":"riddare_v"}];
 // Äldre fyrdelade sagor och deras bilder finns kvar att läsa och skriva ut.
 function legacyBook(s){const h=HJ.find(x=>x.id===s.v)||HJ[0],p=PL.find(x=>x.id===s.p)||PL[0],e=EV.find(x=>x.id===s.e)||EV[0];return `<div class="picture" style="max-width:360px;margin:auto"><img class="backdrop" src="bilder/bg_${p.bg}.jpg" alt=""><img class="figure" style="left:15%;bottom:8%;height:50%" src="bilder/${h.img}.webp" alt="${esc(h.def)}"><img class="figure" style="left:60%;bottom:8%;height:40%" src="bilder/${e.img}.webp" alt=""></div>`+s.t.map(t=>`<p style="white-space:pre-wrap">${esc(t)}</p>`).join('');}
-window.__sb={SERIES,ALL_SERIES,openSeries,hem,library,get data(){return data},get draft(){return draft}};
+window.__sb={SERIES,ALL_SERIES,openSeries,hem,library,printWorksheet,get data(){return data},get draft(){return draft}};
 hem();

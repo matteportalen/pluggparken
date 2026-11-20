@@ -206,7 +206,7 @@ body.mph-mini #quit{display:none}
   function kortNyckel(el){if(el.id&&KNAPP[el.id])return KNAPP[el.id];const h=el.getAttribute('href');if(!h||/^(https?:)?\/\//.test(h)&&!h.startsWith(location.origin))return null;
     let p=new URL(h,location.href).pathname;if(!p.startsWith(rotSti))return null;p=p.slice(rotSti.length).replace(/index\.html$/,'').replace(/\/$/,'');
     if(p==='spel'||p.endsWith('/spel'))return'spelhornan';return p.split('/').pop()||null;}
-  function stjLappar(){document.querySelectorAll('a.card,a.gamecard,button.gamecard').forEach(el=>{if(el.querySelector('.mph-stj'))return;
+  function stjLappar(){document.querySelectorAll('a.card,a.gamecard,button.gamecard').forEach(el=>{if(el.querySelector('.mph-stj')||el.hasAttribute('data-utan-stj'))return;
     const k=kortNyckel(el);if(!k)return;const n=stjFor(k);if(n==null)return;
     const t=el.querySelector('.txt')||el.querySelector('.tx')||[...el.children].find(c=>c.querySelector&&c.querySelector('b'));if(!t)return;
     const gammal=t.querySelector('.badge');if(gammal&&(gammal.hidden||/^⭐/.test(gammal.textContent.trim())))gammal.hidden=true;

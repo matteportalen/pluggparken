@@ -157,6 +157,8 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 @media(max-width:720px){.story-choice{grid-template-columns:38% 1fr}.story-cover{grid-row:span 2}.story-choice b{margin-top:0}.story-page{display:block}.story-page .picture{max-width:400px;margin:auto}.story-page label{margin-top:12px}.story-page textarea{min-height:120px}}
 @media print{.story-art .story-painting{max-width:none!important}.story-book-page{grid-template-columns:150px 1fr}.story-art{break-inside:avoid}}
 .hero-art{width:130px;aspect-ratio:1;position:relative;overflow:hidden;border-radius:17px;flex:none}.hero-art img{height:100%;width:300%;max-width:none;position:absolute;left:0;top:0}@media(max-width:720px){.hero-art{width:80px}}
+.skrivinfo{display:flex;align-items:center;gap:14px;background:var(--card);border:3px solid var(--gold);border-radius:22px;box-shadow:0 4px 0 var(--gold);padding:12px 14px;margin:0 0 6px}.skrivinfo .ik{font-size:2.2rem;flex:none}.skrivinfo div{flex:1;min-width:0}.skrivinfo b{display:block;font-size:1.25rem}.skrivinfo small{display:block;color:var(--muted);font-size:.95rem;line-height:1.35}.skrivinfo .knapp{flex:none}@media(max-width:620px){.skrivinfo{flex-wrap:wrap}.skrivinfo .knapp{width:100%}}
+body.skrivlage #mine,body.skrivlage #resumeOld{display:none}body.skrivlage .story-choice small{color:var(--accent);font-weight:800}
 .series-heading{grid-column:1/-1;margin:12px 0 0;font-size:1.5rem}.story-pages.four-pages{grid-template-columns:repeat(2,minmax(0,1fr))}@media(max-width:720px){.story-pages.four-pages{grid-template-columns:1fr}}
 #worksheet,.print-footer{display:none}
 @media print{
@@ -185,6 +187,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
     <div class="hero-art" aria-hidden="true"><img src="bilder/sagor/moon.jpg" alt=""></div>
     <div><h1>Sagobyggaren</h1><p>Vardag, fabler, fantasi och mysterier. Välj bland tjugofem bildserier och skriv din egen berättelse.</p></div>
   </div>
+<div class="skrivinfo" id="skrivInfo" hidden><span class="ik" aria-hidden="true">🖨️</span><div><b>Skrivblad</b><small>Tryck på en bildserie så skrivs den ut på A4: bilderna till vänster och skrivrader till höger.</small></div><button class="knapp vit" id="skrivAv">✏️ Skriv på skärmen i stället</button></div>
 <div class="nav"><button class="knapp vit" id="resumeOld" hidden>Fortsätt din påbörjade saga</button></div><div class="story-choices" id="series"></div>
 <div class="nav"><button class="knapp vit" id="mine">📖 Mina sagor</button></div>
 </section>
@@ -206,6 +209,6 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 </main>
 <section id="worksheet" aria-hidden="true"></section>
 <footer class="print-footer">Pluggparken.se</footer>
-<script src="sagor.js?v=6"></script>
+<script src="sagor.js?v=7"></script>
 </body>
 </html>

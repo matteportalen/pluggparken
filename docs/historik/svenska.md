@@ -99,3 +99,9 @@ Lade till Pluggparken.se centrerat i nedre marginalen på varje utskriftssida, b
 Lade till Kråkan och krukan, Räven och druvorna, Myran och gräshoppan, Hunden och spegelbilden samt Nordvinden och solen. Fem nya originalillustrationer som 2×2-atlaser ger tjugo nya bildrutor, med alttexter och meningsstarter. Fabler har nu åtta val och övningen totalt 25; den befintliga kategoriindelningen Vardag / Fabler / Fantasi och mysterier behålls. Myran och gräshoppan slutar med att myran delar mat, så eleven kan skriva om både förberedelser och omtanke. Bildprompter och proveniens sparade i bildmappen.
 
 Verifierat med syntaxkontroll samt båda Playwright-skripten vid 1440 och 390 px: samtliga 25 bildserier laddas, panelpositioner och fält stämmer, utkast/sparning/redigering/äldre sagor fungerar. Alla fem nya skrivblad exporterade till PDF och kontrollerade med pdfinfo: en A4-sida vardera, fem linjer med 10 mm avstånd. Nordvindens skrivblad visuellt granskat. Sidfotens position inom utskriftsytan hindrar att Chrome skapar en extra sida.
+
+### Skrivblad till Sagobyggaren på Skriv ut-sidan (nov 2026)
+- Nytt kort ”Skrivblad till Sagobyggaren” under Svenska på `skriv-ut/` (efter Seriesidor) med förhandsbild `skriv-ut/sagobyggaren-skrivblad.png` (351×497, Haren och sköldpaddan). Länkar till `../sagobyggaren/#skrivblad`.
+- `sagor.js`: `skrivlage` (från hash `#skrivblad`), gul ruta `#skrivInfo` överst, korten visar ”🖨️ Skriv ut skrivblad”, Mina sagor och Fortsätt döljs. Tryck på en serie anropar `printWorksheet(id)` (utbruten ur knappen ”Skriv ut skrivblad”) och sidan stannar kvar på listan. `#skrivAv` tar bort hashen och går till vanligt läge.
+- `huvud.js`: kort med `data-utan-stj` får ingen stjärnlapp. Rad i `sok.js`.
+- Testat med Playwright i 1366 och 390: kortet öppnar läget, utskrift av Månen ger tre rader, vanligt läge efter knappen, ingen sidscroll, inga fel.
