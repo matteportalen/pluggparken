@@ -374,12 +374,114 @@ const EVERYDAY_SERIES=[
   ]
  }
 ];
-const SERIES=[...EVERYDAY_SERIES,...FANTASY_SERIES];
+const MORE_FABLES=[
+ {
+  "id": "krakanochkrukan",
+  "art": "crow",
+  "name": "Kråkan och krukan",
+  "desc": "En törstig kråka behöver en smart idé.",
+  "cols": 2,
+  "rows": 2,
+  "alts": [
+   "En törstig kråka hittar en vattenkruka i en torr trädgård.",
+   "Det finns vatten långt ner i krukan, men kråkan når inte med näbben.",
+   "Kråkan släpper små stenar i krukan.",
+   "Vattnet har stigit och kråkan kan dricka."
+  ],
+  "starts": [
+   "Det var en varm dag och …",
+   "Kråkan försökte …",
+   "På marken låg …",
+   "Efter en stund …"
+  ]
+ },
+ {
+  "id": "ravenochdruvorna",
+  "art": "grapes",
+  "name": "Räven och druvorna",
+  "desc": "Räven vill gärna ha det som är svårt att nå.",
+  "cols": 2,
+  "rows": 2,
+  "alts": [
+   "En räv får syn på mogna druvor som hänger högt på en vinranka.",
+   "Räven hoppar och sträcker sig, men når inte druvorna.",
+   "Räven försöker igen och landar trött i gräset.",
+   "Räven går därifrån med nosen i vädret och tittar tillbaka mot druvorna."
+  ],
+  "starts": [
+   "När räven såg druvorna …",
+   "För att nå dem …",
+   "Trots alla försök …",
+   "På vägen därifrån sa räven …"
+  ]
+ },
+ {
+  "id": "myranochgrashoppan",
+  "art": "ant",
+  "name": "Myran och gräshoppan",
+  "desc": "Sommaren tar slut. Vad händer då?",
+  "cols": 2,
+  "rows": 2,
+  "alts": [
+   "På sommaren bär myran hem mat medan gräshoppan spelar fiol.",
+   "Höstlöven faller. Myran fyller sitt förråd och gräshoppan fortsätter spela.",
+   "När snön kommer står gräshoppan frusen utanför myrans dörr.",
+   "Myran delar en varm måltid med gräshoppan inne i sitt hem."
+  ],
+  "starts": [
+   "Hela sommaren …",
+   "När löven började falla …",
+   "En kall kväll …",
+   "Vid bordet pratade de om …"
+  ]
+ },
+ {
+  "id": "hundenochspegelbilden",
+  "art": "reflection",
+  "name": "Hunden och spegelbilden",
+  "desc": "Vem har det största benet?",
+  "cols": 2,
+  "rows": 2,
+  "alts": [
+   "En hund går över en träbro med ett ben i munnen.",
+   "Hunden ser sin egen spegelbild med ett ben i vattnet.",
+   "Hunden öppnar munnen för att skälla och tappar benet.",
+   "Hunden står kvar på bron och tittar ner i vattnet. Benet är borta."
+  ],
+  "starts": [
+   "Hunden var nöjd med …",
+   "Men nere i vattnet …",
+   "När hunden öppnade munnen …",
+   "Nu förstod hunden …"
+  ]
+ },
+ {
+  "id": "nordvindenochsolen",
+  "art": "wind",
+  "name": "Nordvinden och solen",
+  "desc": "Vem kan få vandraren att ta av sig rocken?",
+  "cols": 2,
+  "rows": 2,
+  "alts": [
+   "Nordvinden och solen ser en vandrare med blå rock på en landsväg.",
+   "Vinden blåser hårt. Vandraren håller rocken tätare om sig.",
+   "Solen värmer vägen och vandraren börjar öppna sin rock.",
+   "Vandraren sitter på en bänk med rocken bredvid sig. Solen lyser varmt."
+  ],
+  "starts": [
+   "En dag började vinden och solen …",
+   "Vinden tog i och …",
+   "Då var det solens tur …",
+   "Till slut …"
+  ]
+ }
+];
+const SERIES=[...EVERYDAY_SERIES,...MORE_FABLES,...FANTASY_SERIES];
 const ALL_SERIES=[...SERIES,...LEGACY_SERIES];
 /* Tre kategorier (19 nov 2026, lärarens indelning). Serierna ligger kvar i sina listor; här bestäms bara var de visas. */
 const KATEGORIER=[
  ['Vardag',['guldringen','passatillsam','bollenochrutan','platsvidbordet','trasigamodellen','vemfarvaramed','borttappadehunden']],
- ['Fabler',['harenochskoldpaddan','ravenochmusen','sistanoten']],
+ ['Fabler',['harenochskoldpaddan','ravenochmusen','sistanoten',...MORE_FABLES.map(s=>s.id)]],
  ['Fantasi och mysterier',['drakhissen','himmelsvalen','robotensfro','monstretsryt','bokhavet','manen','skuggan','pennfodralet','regnmolnet','skorna']]
 ];
 let draft=null,book=null,active=0;

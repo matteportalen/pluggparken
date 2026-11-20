@@ -4,7 +4,7 @@ const assert=require('node:assert/strict');
 for(const width of [1440,390]){
  const p=await b.newPage({viewport:{width,height:844}});await p.goto(process.env.TEST_URL||'http://127.0.0.1:8765/sagobyggaren/');await p.waitForFunction(()=>window.__sb);
  await p.evaluate(()=>{window.print=()=>window.printCount=(window.printCount||0)+1});
- for(const id of ['guldringen','harenochskoldpaddan','manen']){
+ for(const id of ['guldringen','harenochskoldpaddan','manen','krakanochkrukan','ravenochdruvorna','myranochgrashoppan','hundenochspegelbilden','nordvindenochsolen']){
   await p.locator(`[data-series="${id}"]`).click();
   assert(await p.locator('#finish').isDisabled());
   await p.locator('#worksheetPrint').click();await p.waitForFunction(()=>document.body.classList.contains('worksheet-print'));

@@ -89,3 +89,13 @@ Verifierat med node --check och skript/test-sagobyggaren.cjs i Chrome vid 1440×
 Alla bildserier kan skrivas ut som tomma arbetsblad direkt från skrivsidan. Fyra bilder lodrätt till vänster för vardag/fabler, tre för fantasi; 44 mm stora rundade bildramar, fem linjer à 10 mm per bild till höger, titel samt namn/datum. Läraren betonade att raderna inte får bli för smala; fem rymliga rader fick plats på ett stående A4 med 14 mm marginal. Separat utskriftsläge för arbetsblad, återställs efter utskrift; den färdiga elevsagans utskrift behålls.
 
 Verifierat med `skript/test-sagobyggaren-skrivblad.cjs` på 1440 och 390 px: tomma skrivfält tillåtna, rätt bild-/radantal, 10 mm radavstånd, återgång till övningen. Riktiga A4-PDF:er för Guldringen, Haren och sköldpaddan samt Månen kontrollerade med pdfinfo (en sida vardera); Guldringens PDF rasteriserad och visuellt granskad.
+
+### Sidfot på utskrifter
+
+Lade till Pluggparken.se centrerat i nedre marginalen på varje utskriftssida, både arbetsblad och färdiga elevsagor. Fast utskriftssidfot upprepas på flersidiga utskrifter och påverkar inte bildstorlek eller 10 mm radavstånd. Verifierat i renderad A4-PDF.
+
+## 2026-11-20 – Fem ytterligare fabler
+
+Lade till Kråkan och krukan, Räven och druvorna, Myran och gräshoppan, Hunden och spegelbilden samt Nordvinden och solen. Fem nya originalillustrationer som 2×2-atlaser ger tjugo nya bildrutor, med alttexter och meningsstarter. Fabler har nu åtta val och övningen totalt 25; den befintliga kategoriindelningen Vardag / Fabler / Fantasi och mysterier behålls. Myran och gräshoppan slutar med att myran delar mat, så eleven kan skriva om både förberedelser och omtanke. Bildprompter och proveniens sparade i bildmappen.
+
+Verifierat med syntaxkontroll samt båda Playwright-skripten vid 1440 och 390 px: samtliga 25 bildserier laddas, panelpositioner och fält stämmer, utkast/sparning/redigering/äldre sagor fungerar. Alla fem nya skrivblad exporterade till PDF och kontrollerade med pdfinfo: en A4-sida vardera, fem linjer med 10 mm avstånd. Nordvindens skrivblad visuellt granskat. Sidfotens position inom utskriftsytan hindrar att Chrome skapar en extra sida.

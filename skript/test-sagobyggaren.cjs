@@ -13,8 +13,8 @@ const decode = p => p.locator('#pages img, #bok img').evaluateAll(async images =
       const errors = [];
       page.on('pageerror', e => errors.push(e.message));
       await page.goto(url); await ready(page);
-      assert.equal(await page.locator('.story-choice').count(), 20);
-      assert.deepEqual(await page.locator('.series-heading').allTextContents(), ['Vardag och fabler', 'Fantasi och mysterier']);
+      assert.equal(await page.locator('.story-choice').count(), 25);
+      assert.deepEqual(await page.locator('.series-heading').allTextContents(), ['Vardag', 'Fabler', 'Fantasi och mysterier']);
       for (const [id, count] of [['guldringen', 4], ['manen', 3]]) {
         await page.locator(`[data-series="${id}"]`).click();
         assert.equal(await page.locator('textarea').count(), count);
@@ -64,7 +64,7 @@ const decode = p => p.locator('#pages img, #bok img').evaluateAll(async images =
         await page.locator('#back').click();
       }
       assert.deepEqual(errors, []);
-      console.log(`${width}px: all 20 stories, 3/4-panel drafts, help, save/reload/edit, print and layout passed`);
+      console.log(`${width}px: all 25 stories, 3/4-panel drafts, help, save/reload/edit, print and layout passed`);
       await page.close();
     }
     const page = await browser.newPage(); await page.goto(url);
