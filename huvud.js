@@ -110,7 +110,7 @@ body.mph-mini #quit{display:none}
     if(/^(brobygget|flytasjunka|vattenkretslopp|kontinentdrift|elkrets|sjon)$/.test(top))return'no';
     if(/^(stavningsjakten|meningsbyggaren|vemgorvad|delameningar|verb|substantiv|adjektiv|ordfargaren|sorteraord|ordregn|ordkedjan|ordgissning|dubbelteckning|knepigaljud|sagobyggaren|handstil)$/.test(top))return'svenska';
     if(top==='tidslinjen'||top==='vikingatiden'||top==='demokrati')return'so';
-    if(/^(engelskaord|klockanengelska|schack|trerirad|sudoku|trafikstockning|gissastorlek|fylltillstrecket)$/.test(top))return'fler';
+    if(/^(engelskaord|klockanengelska|rostlabbet|schack|trerirad|sudoku|trafikstockning|gissastorlek|fylltillstrecket)$/.test(top))return'fler';
     if(top==='specialare')return'special';
     if(/^(mittrum|flytta)$/.test(top))return'hem';
     return'matte';}

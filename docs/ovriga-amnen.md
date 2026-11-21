@@ -116,3 +116,7 @@ Kartorna är gjorda ur Natural Earth (public domain). Europakartan, Världskarta
 - Tidslinjen: paket med Sveriges kungar och USA:s presidenter (pausat).
 - Kodverkstan: dela projekt via länk, fler uppdrag, matteblock.
 - SO: fler övningar (inte minilektioner).
+
+## Röstlabbet
+
+`rostlabbet/`, under Fler ämnen → Musik. Lokal Chimera-motor (WASM/AudioWorklet) och anatomisk canvasvy: dra tunga, käke och läppar eller använd reglagen. A/I/O, vanlig röst, viskning, sång, tonhöjd och tre experiment. Ingen mikrofon, uppladdning, sparad progression eller stjärnor. Ljud kräver Starta och stoppas vid Tyst, flikbyte, fokusförlust och gemensam ljudavstängning. Utforskande ljudmodell, inte svensk uttalsbedömning eller text-till-tal. Ursprung, låst version och MIT-licens i `rostlabbet/chimera/SOURCE.md` och `LICENSE.txt`. Webbläsartest: `skript/test-rostlabbet.cjs` (PLAYWRIGHT_PATH kan anges).
