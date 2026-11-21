@@ -1,8 +1,9 @@
+import {swedishPhrases} from './svenska-ljud.js';
 import {initChimera,chimeraModule} from './chimera/wasm/chimera.js';
 const $=id=>document.getElementById(id),clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
 let model,renderer,VoiceModel,NEUTRAL,SPECS,TARGETS,artic,shown,frame,tele=null;
 let context=null,node=null,gain=null,analyser=null,starting=null,wanted=false,ready=false,mode='normal',pitch=170,volume=35;
-let utterance=null,speechVoice=null;
+let utterance=null,speechId=0,planPhrases,tokenizeIpa;
 let drag=null,hover=null,lastFrame=0,raf=0,experiment=0;
 const canvas=$('head'),ctx=canvas.getContext('2d'),wave=$('wave'),waveCtx=wave.getContext('2d');
 const samples=new Float32Array(1024),body={female:0,child:0};
@@ -17,7 +18,7 @@ function send(message){node?.port.postMessage(message)}
 function setVolume(){if(gain&&context){gain.gain.cancelScheduledValues(context.currentTime);gain.gain.setTargetAtTime(wanted ? .6*(volume/100)**2 : 0,context.currentTime,.02)}}
 function setSource(){send({type:'source',values:{f0:pitch,voiced:mode!=='whisper',breathiness:mode==='whisper'?.6:.15,vibratoDepth:mode==='sing'?.025:0,vibratoRate:5.5,roughness:.03,drift:2}});}
 function stop(message='Rösten är tyst. Tryck på Starta för att fortsätta.'){
- stopSpeech();wanted=false;send({type:'gate',level:0});setVolume();reflectPlay();status(message);
+ stopSpeech();wanted=false;send({type:'stopSpeech'});send({type:'gate',level:0});setVolume();reflectPlay();status(message);
 }
 function failAudio(error){console.error('Röstlabbet:',error);stop();node?.disconnect();node=null;const old=context;context=null;gain=null;analyser=null;void old?.close().catch(()=>{});status('Ljudet kunde inte starta. Tryck på Starta för att försöka igen.',true);}
 async function ensureAudio(){
@@ -41,7 +42,8 @@ async function ensureAudio(){
    n.onprocessorerror=()=>{clearTimeout(timer);reject(new Error('Röstmotorn stannade'));failAudio(new Error('AudioWorklet processorerror'))};
    n.port.onmessage=({data})=>{
     if(data.type==='ready'){clearTimeout(timer);resolve();}
-    if(data.type==='telemetry')tele=data;
+    if(data.type==='planned'&&utterance?.id===data.id)utterance.end=data.end;
+    if(data.type==='telemetry'){tele=data;if(utterance?.end&&data.t.clock>utterance.end+.15){stop();speechStatus('Klart! Prova ett nytt ord eller en ny mening.')}}
     if(data.type==='error'){clearTimeout(timer);reject(new Error(data.message));failAudio(new Error(data.message));}
    };
   });
@@ -61,6 +63,7 @@ async function play(){
 }
 $('play').onclick=play;$('stop').onclick=()=>stop();
 function setArtic(values,mark=true){
+ if(utterance)stop();
  for(const [key,val] of Object.entries(values)){if(SPECS[key])artic[key]=clamp(val,SPECS[key].min,SPECS[key].max)}
  send({type:'artic',values:artic,tipFree:true});tele=null;
  if(mark)document.querySelectorAll('[data-vowel]').forEach(b=>{b.classList.remove('selected');b.setAttribute('aria-pressed','false')});
@@ -114,39 +117,37 @@ async function boot(){
  try{
   await initChimera(new URL('./chimera/wasm/chimera.wasm',import.meta.url).href);
   const [engine,analysis,view]=await Promise.all([import('./chimera/wasm/engine.js'),import('./chimera/ui/analysis.js'),import('./chimera/ui/render/anatomy.js')]);
-  NEUTRAL=engine.NEUTRAL;SPECS=engine.ARTIC_SPECS;TARGETS={...engine.VOWEL_TARGETS.male};
+  planPhrases=engine.planPhrases;tokenizeIpa=engine.tokenizeIpa;NEUTRAL=engine.NEUTRAL;SPECS=engine.ARTIC_SPECS;TARGETS={...engine.VOWEL_TARGETS.male};
   // Approximate Swedish central rounded U between the calibrated Y and O postures.
   const uArtic={};for(const key of Object.keys(TARGETS.y.artic))uArtic[key]=(TARGETS.y.artic[key]+TARGETS.u.artic[key])/2;
   TARGETS['sv-u']={artic:uArtic};VoiceModel=analysis.VoiceModel;
-  model=new VoiceModel(body,48000);renderer=new view.AnatomyRenderer();artic={...NEUTRAL};vowel('ɑ');ready=true;
+  model=new VoiceModel(body,48000);renderer=new view.AnatomyRenderer();artic={...NEUTRAL};vowel('ɑ');ready=true;refreshSpeech();
   $('loading').hidden=true;canvas.parentElement.classList.add('ready');$('settings').disabled=false;$('play').disabled=false;$('reset').disabled=false;requestAnimationFrame(draw);
  }catch(error){console.error(error);$('loading').textContent='Röstlabbet kunde inte laddas. Ladda om sidan och försök igen.';status('Röstmotorn kunde inte laddas.',true)}
 }
 // Read-only diagnostic access for browser regression tests.
 window.__rost={get ready(){return ready},get playing(){return wanted},get artic(){return {...artic}},get telemetry(){return tele},get audioState(){return context?.state||'not-started'},get mode(){return mode},get handles(){return ready&&frame?renderer.handles(model,frame,shown).map(h=>({id:h.id,x:renderer.X(h.pos),y:renderer.Y(h.pos)})):[]},sample(){const s=new Float32Array(2048);analyser?.getFloatTimeDomainData(s);return Array.from(s)}};
-const synth=window.speechSynthesis;
 function speechStatus(text){$('speech-status').textContent=text}
-function refreshSpeech(){
- speechVoice=synth?.getVoices().find(v=>/^sv(?:-|_|$)/i.test(v.lang)&&v.localService)||null;
- $('read').disabled=!speechVoice||!$('sentence').value.trim();
- if(!utterance)speechStatus(speechVoice?'Svensk röst på enheten. Texten sparas inte.':'Ingen lokal svensk röst hittades. Lägg till en svensk talsyntesröst i enhetens inställningar och öppna sidan igen.');
- if(!synth)speechStatus('Den här webbläsaren stöder inte uppläsning. Prova en annan webbläsare.');
-}
+function refreshSpeech(){$('read').disabled=!ready||!$('sentence').value.trim()}
 function stopSpeech(){
  if(!utterance)return;
- const old=utterance;utterance=null;old.onend=old.onerror=null;synth.cancel();
- $('read-stop').disabled=true;$('read').textContent='▶ Läs upp';speechStatus('Uppläsningen är stoppad.');reflectPlay();
+ utterance=null;send({type:'stopSpeech'});$('read-stop').disabled=true;$('read').textContent='▶ Låt munnen prata';speechStatus('Munnen har slutat prata.');
 }
-$('sentence').oninput=()=>{$('sentence-count').textContent=`${$('sentence').value.length} / 200`;$('read').disabled=!speechVoice||!$('sentence').value.trim()};
+$('sentence').oninput=()=>{$('sentence-count').textContent=`${$('sentence').value.length} / 200`;refreshSpeech()};
 $('read-stop').onclick=()=>stop();
-$('read').onclick=()=>{
- const text=$('sentence').value.trim().slice(0,200);refreshSpeech();if(!speechVoice||!text)return;
- stop();if(window.Ljud&&!Ljud.on){Ljud.set(true);document.dispatchEvent(new Event('mp-ljud-andrat'));}
- const u=new SpeechSynthesisUtterance(text);utterance=u;u.voice=speechVoice;u.lang=speechVoice.lang;u.rate=.85;u.volume=.7;
- $('read-stop').disabled=false;$('read').textContent='↻ Läs igen';reflectPlay();speechStatus('Läser din mening …');
- const finish=message=>{if(utterance!==u)return;utterance=null;$('read-stop').disabled=true;$('read').textContent='▶ Läs upp';speechStatus(message);reflectPlay()};
- u.onend=()=>finish('Klart! Ändra meningen eller lyssna igen.');u.onerror=()=>finish('Uppläsningen kunde inte starta. Prova igen.');
- try{synth.speak(u)}catch{finish('Uppläsningen kunde inte starta. Prova igen.')}
+$('read').onclick=async()=>{
+ const text=$('sentence').value.trim().slice(0,200);if(!ready||!text)return;
+ if(/[^a-zåäö\s.!?,;:\-]/i.test(text)){speechStatus('Skriv med bokstäver. Skriv siffror som ord, till exempel tre.');return}
+ stop();const phrases=swedishPhrases(text,tokenizeIpa);if(!phrases.length)return;
+ if(window.Ljud&&!Ljud.on){Ljud.set(true);document.dispatchEvent(new Event('mp-ljud-andrat'));}
+ const id=++speechId;utterance={id,end:null};wanted=true;reflectPlay();$('read-stop').disabled=false;speechStatus('Munnen gör sig redo …');
+ try{
+  const plan=planPhrases(phrases,{body,t0:0,rate:.8,f0:pitch});
+  await ensureAudio();if(!utterance||utterance.id!==id||!wanted||document.hidden)return;
+  send({type:'gate',level:0});setSource();setVolume();
+  send({type:'schedule',id,gestures:plan.gestures,segments:plan.segments,end:plan.end,replace:true});
+  $('read').textContent='↻ Säg igen';speechStatus('Tungan och munnen formar ljuden du hör.');reflectPlay();
+ }catch(error){failAudio(error);speechStatus('Munnen kunde inte säga texten. Prova igen.');}
 };
-synth?.addEventListener('voiceschanged',refreshSpeech);refreshSpeech();
+refreshSpeech();
 void boot();

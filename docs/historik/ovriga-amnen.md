@@ -145,3 +145,5 @@ Läraren skickade ett Instagram-klipp med ett engelskt skrivspel (ord faller, ma
 - Röstlabbet placerat under Extra → Ljudexperiment på användarens önskemål. Meny, sökgrupp och tillbaka-knapp följer Extra.
 
 - **Röstlabbet utökat 2026-11-21:** Nio vokalknappar, med kalibrerade Chimera-positioner och en interpolerad U-position. Separat meningsruta (200 tecken), svensk lokal enhetsröst, dynamisk röstlista och gemensam stoppfunktion. Ingen molnröst väljs. Testat med verklig WASM på dator/mobil och simulerad Web Speech för röstlistans fördröjning, saknad/lokal röst, slut och ömsesidigt stopp. Svensk uttalskvalitet och fysisk iPad är inte verifierade.
+
+- **Rättning efter användarens förtydligande:** Web Speech-uppläsaren borttagen. Text → enkel svensk fonemtolkning → Chimeras planPhrases → worklet schedule. Både ljud och synlig artikulation kommer från samma fysiska motor; inga fejkade läpprörelser. Vanliga ord har explicita ljudföljder, övriga får stavningsregler. Experimentellt svenskt uttal, inte validerad talsyntes. Tester kör riktig WASM, förbjuder speechSynthesis, mäter ljud och varierande artikulation, avslut/stopp/fokusförlust vid 1200 och 390 px.
