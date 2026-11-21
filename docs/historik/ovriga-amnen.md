@@ -142,3 +142,4 @@ Läraren skickade ett Instagram-klipp med ett engelskt skrivspel (ord faller, ma
 
 - **Röstlabbet (2026-11-21):** Första Chimera-integrationen med lokalt byggd WASM, originalets anatomivy och ett förenklat svenskt gränssnitt i Pluggparkens stil. Tre vokalstarter, dragpunkter, tangentbordstillgängliga reglage, viskning/sång och tre experiment. Ljudstart är uttrycklig; avbruten uppstart får inte börja spela senare. Menykort, sökindex och sitemap tillagda. Motor och bildkod är MIT-licensierade, låsta till caf270abf893bdc63f6342059d4468f754edf5c6.
   Verifierat i Chrome: verklig WASM-ljudsignal, dragning, vokaler, tonhöjd, viskning/sång, volym noll, stopp/fokusförlust/gemensam mute, avbruten uppstart och laddningsfel. Ingen horisontell overflow vid 375×667 (sidhöjd 1716) eller 1200×760 (1164). Mobilstorlek testad, inte fysisk iPad.
+- Röstlabbet placerat under Extra → Ljudexperiment på användarens önskemål. Meny, sökgrupp och tillbaka-knapp följer Extra.

@@ -107,10 +107,11 @@ body.mph-mini #quit{display:none}
     if(top==='ovriga'){if(/^(ordgomma|ordgatan|hogfrekventa|lasflyt|bokstaver)$/.test(sub))return'svenska';if(/^(sverigekartan|europa|varlden)$/.test(sub))return'so';
       if(/^(rymdlabbet|solsystemet|vintergatan)$/.test(sub))return'no';if(sub==='ansiktsloppan')return'extra';return'fler';}
     if(top==='anatomi')return'no';
+    if(top==='rostlabbet')return'extra';
     if(/^(brobygget|flytasjunka|vattenkretslopp|kontinentdrift|elkrets|sjon)$/.test(top))return'no';
     if(/^(stavningsjakten|meningsbyggaren|vemgorvad|delameningar|verb|substantiv|adjektiv|ordfargaren|sorteraord|ordregn|ordkedjan|ordgissning|dubbelteckning|knepigaljud|sagobyggaren|handstil)$/.test(top))return'svenska';
     if(top==='tidslinjen'||top==='vikingatiden'||top==='demokrati')return'so';
-    if(/^(engelskaord|klockanengelska|rostlabbet|schack|trerirad|sudoku|trafikstockning|gissastorlek|fylltillstrecket)$/.test(top))return'fler';
+    if(/^(engelskaord|klockanengelska|schack|trerirad|sudoku|trafikstockning|gissastorlek|fylltillstrecket)$/.test(top))return'fler';
     if(top==='specialare')return'special';
     if(/^(mittrum|flytta)$/.test(top))return'hem';
     return'matte';}
