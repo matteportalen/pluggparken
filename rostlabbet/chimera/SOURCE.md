@@ -34,5 +34,6 @@ Pluggparkens små anpassningar:
 
 Den ursprungliga React-appen, språkdictionaries och externa typsnitt ingår inte.
 Det svenska gränssnittet och ljudets livscykel ligger i ../rostlabbet.js (utanför denna mapp).
-Vokalerna A, I, O använder motorns kalibrerade ɑ, i, u. Detta är ett experimentverktyg,
+Vokalerna A/E/I/O/Y/Å/Ä/Ö använder motorns kalibrerade ɑ/e/i/u/y/o/ɛ/ø.
+Svenskt U approximeras genom medelvärdet av Y- och O-positionerna. Detta är ett experimentverktyg,
 inte en validerad svensk uttalsmodell eller text-till-tal-tjänst.
