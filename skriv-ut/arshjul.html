@@ -362,8 +362,8 @@ function sida(){
 function delad(titel,ar){
   const P=pap(),H=st.stil==='lin'?104:99,k=(P.w-20)/(2*H),OV=12,ov=OV/k,g=st.farg!=='farg'?' gra svv':'',fs=P.w/420*5.66;
   const sv=hjul('X').replace(/(id="|href="#)([ma]\d+)/g,'$1p1$2'),sv2=hjul('X').replace(/(id="|href="#)([ma]\d+)/g,'$1p2$2');
-  const ins1=`<rect x="${-H}" y="0" width="${2*H}" height="${ov}" fill="#fff" fill-opacity=".72"/><path d="M${-H},0H${H}" stroke="#555" stroke-width="${.5/k}" stroke-dasharray="${2/k} ${1.4/k}"/><text x="0" y="${ov*.62}" font-size="${3.2/k}" font-weight="800" fill="#555" text-anchor="middle">KLISTRA HÄR · lägg del 2 ovanpå så att linjerna möts</text>`;
-  const ins2=`<rect x="${-H}" y="${-ov}" width="${2*H}" height="${ov}" fill="#fff"/><path d="M${-H},0H${H}" stroke="#222" stroke-width="${.5/k}" stroke-dasharray="${2.4/k} ${1.4/k}"/><text x="${-H+2/k}" y="${-1.4/k}" font-size="${3.4/k}" font-weight="800" fill="#444">✂ Klipp här</text><text x="${H-2/k}" y="${-1.4/k}" font-size="${3.4/k}" font-weight="800" fill="#444" text-anchor="end">Klipp här ✂</text>`;
+  const ins1=`<rect x="${-H}" y="0" width="${2*H}" height="${ov}" fill="#fff" fill-opacity=".72"/><path d="M${-H},0H${H}" stroke="#999" stroke-width="${.12/k}"/><text x="0" y="${ov*.62}" font-size="${3.2/k}" font-weight="800" fill="#555" text-anchor="middle">KLISTRA HÄR · lägg del 2 ovanpå så att linjerna möts</text>`;
+  const ins2=`<rect x="${-H}" y="${-ov}" width="${2*H}" height="${ov}" fill="#fff"/><path d="M${-H},0H${H}" stroke="#999" stroke-width="${.12/k}"/><path d="M${-H},0H${-H+5/k}M${H-5/k},0H${H}" stroke="#222" stroke-width="${.45/k}"/><text x="${-H+2/k}" y="${-1.4/k}" font-size="${3.4/k}" font-weight="800" fill="#444">✂ Klipp här</text><text x="${H-2/k}" y="${-1.4/k}" font-size="${3.4/k}" font-weight="800" fill="#444" text-anchor="end">Klipp här ✂</text>`;
   const s1=sv.replace('viewBox="X"',`viewBox="${-H} ${-H} ${2*H} ${H+ov}"`).replace(/<\/svg>$/,ins1+'</svg>'),s2=sv2.replace('viewBox="X"',`viewBox="${-H} ${-ov} ${2*H} ${H+ov}"`).replace(/<\/svg>$/,ins2+'</svg>');
   const hjH=(H+ov)*k;
   return `<section class="sida halv${g}" style="width:${P.w}mm;height:${P.h}mm;font-size:${fs}mm">
@@ -371,7 +371,7 @@ function delad(titel,ar){
     <div style="position:absolute;left:10mm;bottom:6mm;width:${P.w-20}mm;height:${hjH}mm">${s1}</div></section>
    <section class="sida halv${g}" style="width:${P.w}mm;height:${P.h}mm;font-size:${fs}mm">
     <div style="position:absolute;left:10mm;top:6mm;width:${P.w-20}mm;height:${hjH}mm">${s2}</div>
-    <div class="hf"><div class="hh2"><span>Klipp längs den streckade linjen och klistra del 2 över den grå kanten på del 1.</span><span class="del">Del 2 av 2 · Pluggparken.se · Årshjul ${ar}</span></div></div></section>`;}
+    <div class="hf"><div class="hh2"><span>Klipp del 2 längs den tunna linjen (där bilden slutar) och klistra den över den grå kanten på del 1.</span><span class="del">Del 2 av 2 · Pluggparken.se · Årshjul ${ar}</span></div></div></section>`;}
 
 /* ---------- formuläret ---------- */
 const EMO=['','🎂','⭐','🎒','🚌','⚽','🏊','🌲','🎭','📚','🎨','🎵','🍎','🏖️','❄️','🎉','📝','🏆'];
@@ -396,7 +396,7 @@ function render(lista=true){
   $('#pages').innerHTML=sida();
   if(lista)evLista();
   const ute=st.ev.filter(e=>{const [Y,M,D]=e.d.split('-').map(Number),t=U(Y,M-1,D);return t<t0||t>=t1;}).length;
-  $('#info').textContent=(pap().delad?`Två liggande ${pap().n}-blad. Välj Skriv ut, ${pap().n}, liggande och skala "100 %". Klipp del 2 längs den streckade linjen och klistra den över den grå kanten på del 1.`:`En sida (${pap().n}). Välj Skriv ut, rätt pappersstorlek och skala "100 %" eller "Anpassa till sidan".`)+`${ute?` ${ute} ${ute===1?'händelse ligger':'händelser ligger'} utanför ${st.start?'läsåret':'året'} och syns inte.`:''}`;
+  $('#info').textContent=(pap().delad?`Två liggande ${pap().n}-blad. Välj Skriv ut, ${pap().n}, liggande och skala "100 %". Klipp del 2 precis längs den tunna linjen, där bilden slutar, och klistra den över den grå kanten på del 1.`:`En sida (${pap().n}). Välj Skriv ut, rätt pappersstorlek och skala "100 %" eller "Anpassa till sidan".`)+`${ute?` ${ute} ${ute===1?'händelse ligger':'händelser ligger'} utanför ${st.start?'läsåret':'året'} och syns inte.`:''}`;
   spara();fit();}
 function fit(){const sg=$('#stage'),pg=$('#pages');if(!pg.firstElementChild)return;
   const mm=96/25.4,w=pap().w*mm,s=Math.min(1,(sg.clientWidth||w)/w);pg.style.width=w+'px';pg.style.transform=`scale(${s})`;sg.style.height=(pg.scrollHeight*s)+'px';}
