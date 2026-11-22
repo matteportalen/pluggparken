@@ -259,8 +259,7 @@ function hjulBand(vb){
   // veckor
   let w0=0,alt=0;for(let i=0;i<=N;i++){if(i===N||(i>0&&dagar[i].wd===0)){
     s+=`<path d="${sek(R.vi,R.di,A(w0),A(i))}" fill="${alt?T.v1:T.v2}"/>`;
-    const tor=dagar[w0].t+(3-dagar[w0].wd)*DAY,mid=(ix(tor)+.5);
-    if(i-w0>=3){const a=A(Math.min(Math.max(mid,w0+1.5),i-1.5)),[x,y2]=P((R.vi+R.di)/2,a),rot=a>90&&a<270?a+180:a;
+    if(i-w0>=3){const a=A((w0+i)/2),[x,y2]=P((R.vi+R.di)/2,a),rot=a>90&&a<270?a+180:a;
       s+=`<text x="${x}" y="${y2}" transform="rotate(${rot.toFixed(2)} ${x} ${y2})" font-size="2.3" font-weight="700" fill="${T.vTxt}" text-anchor="middle" dominant-baseline="central">${isoV(dagar[w0].t)}</text>`;}
     alt^=1;w0=i;}}
   // årstider
@@ -277,7 +276,7 @@ function hjulBand(vb){
   s+=mitt(T,y,st.start?(st.ars?13:16):(st.ars?16:19),4,T.namn);
   // ringar och månadslinjer
   [R.ut,R.mi,R.di,R.vi,R.si].forEach(r=>s+=`<circle r="${r}" fill="none" stroke="${r===R.ut||r===R.mi?T.mlin:T.lin}" stroke-width="${r===R.ut?.45:.25}"/>`);
-  let ml='';man.forEach(i=>{const [x1,y1]=P(rm,A(i)),[x2,y2]=P(R.ut,A(i));ml+=`M${x1},${y1}L${x2},${y2}`;});
+  let ml='';man.forEach(i=>{const a=A(i),hel=i===0||dagar[i].wd===0,seg=hel?[[rm,R.ut]]:[[rm,R.vi],[R.di,R.ut]];seg.forEach(([r0,r1])=>{const [x1,y1]=P(r0,a),[x2,y2]=P(r1,a);ml+=`M${x1},${y1}L${x2},${y2}`;});});
   s+=`<path d="${ml}" stroke="${T.mlin}" stroke-width=".35"/>`;
   s+=lappar(T,hel,ix,A,t0,t1,R.vi);
   return `<svg class="hjul" viewBox="${vb||'-99 -99 198 198'}" role="img" aria-label="Årshjul ${st.start?'för läsåret '+y+'/'+(y+1):y}"><defs>${defs}</defs>${s}</svg>`;
@@ -300,13 +299,15 @@ function hjulLin(vb){
   const farg=st.farg==='farg',helg=st.farg==='farg'?'#F1F3F8':st.farg==='sv'?'#F0F0F0':'#F4F4F4';
   // helger tonade
   dagar.forEach(g=>{if(g.wd>=5)s+=`<path d="${sek(Q.ve,Q.ut,A(g.i),A(g.i+1))}" fill="${helg}"/>`;});
+  // veckorutor: varannan vecka tonad, måndag till söndag
+  {let w0=0,alt=0;for(let i=1;i<=N;i++){if(i===N||dagar[i].wd===0){if(alt)s+=`<path d="${sek(Q.mn,Q.ve,A(w0),A(i))}" fill="${farg?'#EDF0F7':'#EEEEEE'}"/>`;alt^=1;w0=i;}}}
   // linjerna
-  let l1='',l2='';dagar.forEach(g=>{if(g.d===1)return;const a=A(g.i),[x1,y1]=P(Q.ve,a),[x2,y2]=P(Q.ut,a);if(g.wd===0)l2+=`M${x1},${y1}L${x2},${y2}`;else l1+=`M${x1},${y1}L${x2},${y2}`;});
+  let l1='',l2='';dagar.forEach(g=>{if(g.d===1)return;const a=A(g.i),[x1,y1]=P(g.wd===0?Q.mn:Q.ve,a),[x2,y2]=P(Q.ut,a);if(g.wd===0)l2+=`M${x1},${y1}L${x2},${y2}`;else l1+=`M${x1},${y1}L${x2},${y2}`;});
   s+=`<path d="${l1}" stroke="#C3C7D0" stroke-width=".11"/><path d="${l2}" stroke="#8A90A0" stroke-width=".2"/>`;
-  let ml='';man.forEach(i=>{const [x1,y1]=P(Q.as-1.4,A(i)),[x2,y2]=P(Q.ut,A(i));ml+=`M${x1},${y1}L${x2},${y2}`;});
+  let ml='';man.forEach(i=>{const a=A(i),hel=i===0||dagar[i].wd===0,seg=hel?[[Q.as-1.4,Q.ut]]:[[Q.as-1.4,Q.mn],[Q.ve,Q.ut]];seg.forEach(([r0,r1])=>{const [x1,y1]=P(r0,a),[x2,y2]=P(r1,a);ml+=`M${x1},${y1}L${x2},${y2}`;});});
   s+=`<path d="${ml}" stroke="#2A2F3A" stroke-width=".32"/>`;
   // ringar
-  s+=`<circle r="${Q.as}" fill="none" stroke="#2A2F3A" stroke-width=".4"/><circle r="${Q.ve}" fill="none" stroke="#2A2F3A" stroke-width=".25"/><circle r="${Q.dt}" fill="none" stroke="#8A90A0" stroke-width=".15"/><circle r="${Q.ut}" fill="none" stroke="#2A2F3A" stroke-width=".35"/>`;
+  s+=`<circle r="${Q.as}" fill="none" stroke="#2A2F3A" stroke-width=".4"/><circle r="${Q.mn}" fill="none" stroke="#8A90A0" stroke-width=".15"/><circle r="${Q.ve}" fill="none" stroke="#2A2F3A" stroke-width=".25"/><circle r="${Q.dt}" fill="none" stroke="#8A90A0" stroke-width=".15"/><circle r="${Q.ut}" fill="none" stroke="#2A2F3A" stroke-width=".35"/>`;
   // datum och veckodag ytterst
   const lage=datLage();
   dagar.forEach(g=>{if(lage==='man'&&g.wd!==0)return;const a=A(g.i+.5),[x,y2]=P(Q.dt+.8,a),hoger=a<180,rot=hoger?a-90:a+90,red=g.wd===6||rod.has(g.t),fs=lage==='man'?2.3:1.2;
@@ -314,9 +315,8 @@ function hjulLin(vb){
     s+=`<text x="${x}" y="${y2}" transform="rotate(${rot.toFixed(2)} ${x} ${y2})" font-size="${fs}" fill="${red?T.rod:T.ink}" text-anchor="${hoger?'start':'end'}" dominant-baseline="central" xml:space="preserve">${hoger?dd+' '+vd:vd+' '+dd}</text>`;});
   // veckonummer
   let w0=0;for(let i=0;i<=N;i++){if(i===N||(i>0&&dagar[i].wd===0)){
-    const tor=dagar[w0].t+(3-dagar[w0].wd)*DAY,mid=ix(tor)+.5;
-    if(i-w0>=3){const a=A(Math.min(Math.max(mid,w0+1.5),i-1.5)),[x,y2]=P(Q.ve-2.4,a),rot=a>90&&a<270?a+180:a;
-      s+=`<text x="${x}" y="${y2}" transform="rotate(${rot.toFixed(2)} ${x} ${y2})" font-size="1.75" font-weight="700" fill="#6A7186" text-anchor="middle" dominant-baseline="central">${isoV(dagar[w0].t)}</text>`;}
+    if(i-w0>=3){const a=A((w0+i)/2),[x,y2]=P((Q.mn+Q.ve)/2,a),rot=a>90&&a<270?a+180:a;
+      s+=`<text x="${x}" y="${y2}" transform="rotate(${rot.toFixed(2)} ${x} ${y2})" font-size="1.9" font-weight="700" fill="#5A627A" text-anchor="middle" dominant-baseline="central">${isoV(dagar[w0].t)}</text>`;}
     w0=i;}}
   // månadsnamn
   man.forEach((i0,k)=>{const i1=k+1<man.length?man[k+1]:N,m=dagar[i0].m;defs+=bage('m'+k,(Q.as+Q.mn)/2+.3,A(i0),A(i1));
