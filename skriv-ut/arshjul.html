@@ -296,11 +296,11 @@ function hjulLin(vb){
   const hel=[...helger(y),...helger(y+1)].filter(h=>h.t>=t0&&h.t<t1),rod=new Set(hel.filter(h=>h.r).map(h=>h.t));
   const ix=t=>Math.round((t-t0)/DAY);
   const man=[];for(let i=0;i<N;i++)if(dagar[i].d===1)man.push(i);
-  const farg=st.farg==='farg',helg=st.farg==='farg'?'#F1F3F8':st.farg==='sv'?'#F0F0F0':'#F4F4F4';
-  // helger tonade
-  dagar.forEach(g=>{if(g.wd>=5)s+=`<path d="${sek(Q.ve,Q.ut,A(g.i),A(g.i+1))}" fill="${helg}"/>`;});
-  // veckorutor: varannan vecka tonad, måndag till söndag
-  {let w0=0,alt=0;for(let i=1;i<=N;i++){if(i===N||dagar[i].wd===0){if(alt)s+=`<path d="${sek(Q.mn,Q.ve,A(w0),A(i))}" fill="${farg?'#EDF0F7':'#EEEEEE'}"/>`;alt^=1;w0=i;}}}
+  const farg=st.farg==='farg';
+  // veckorna: varannan vecka tonad som en hel kil från veckonumret ut till datumen (så att veckan syns tydligare än månadslinjen)
+  {let w0=0,alt=0;for(let i=1;i<=N;i++){if(i===N||dagar[i].wd===0){if(alt)s+=`<path d="${sek(Q.mn,Q.dt,A(w0),A(i))}" fill="${farg?'#F0F3F9':'#F1F1F1'}"/>`;alt^=1;w0=i;}}}
+  // helger tonade i datumringen
+  dagar.forEach(g=>{if(g.wd>=5)s+=`<path d="${sek(Q.dt,Q.ut,A(g.i),A(g.i+1))}" fill="${farg?'#E2E7F2':'#E4E4E4'}"/>`;});
   // linjerna
   let l1='',l2='';dagar.forEach(g=>{if(g.d===1)return;const a=A(g.i),[x1,y1]=P(g.wd===0?Q.mn:Q.ve,a),[x2,y2]=P(Q.ut,a);if(g.wd===0)l2+=`M${x1},${y1}L${x2},${y2}`;else l1+=`M${x1},${y1}L${x2},${y2}`;});
   s+=`<path d="${l1}" stroke="#C3C7D0" stroke-width=".11"/><path d="${l2}" stroke="#8A90A0" stroke-width=".2"/>`;
@@ -356,7 +356,7 @@ function lappar(T,hel,ix,A,t0,t1,rUt){
 
 function sida(){
   const {y}=period(),T=tema(),titel=st.titel.trim()||'Årshjulet',ar=st.start?`${y}/${String(y+1).slice(2)}`:y;
-  const lg=[`<span><i style="background:${st.stil==='lin'?(st.farg==='farg'?'#F1F3F8':'#F0F0F0'):T.helg(0)}"></i>Lördag och söndag</span>`,
+  const lg=[`<span><i style="background:${st.stil==='lin'?(st.farg==='farg'?'#E2E7F2':'#E4E4E4'):T.helg(0)}"></i>Lördag och söndag</span>`,
     `<span><b style="color:${T.rod};font-weight:800">${st.farg==='farg'?'Röd siffra':'Fet siffra'}</b> Söndag och röd dag</span>`,
     `<span><b style="color:${T.vTxt}">12</b> Veckonummer</span>`];
   if(st.man)lg.push(`<span><svg width="1em" height="1em" viewBox="-1 -1 2 2"><circle r=".8" fill="${T.ink}"/></svg>Nymåne <svg width="1em" height="1em" viewBox="-1 -1 2 2"><circle r=".75" fill="#fff" stroke="${T.ink}" stroke-width=".2"/></svg>Fullmåne</span>`);
