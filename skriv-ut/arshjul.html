@@ -73,6 +73,7 @@ h1{margin:8px 0 2px;font-size:2rem}
 .del{font-weight:800;color:#7A86A8;font-size:1em;white-space:nowrap}
 .hf{position:absolute;left:12mm;right:12mm;bottom:8mm}
 .hh2{display:flex;justify-content:space-between;gap:2em;font-size:.85em;font-weight:700;color:#56668F}
+.vm{color:#000!important;opacity:.1}
 .svv,.svv .rub{color:#000}.svv .und,.svv .ft{color:#333}
 @media print{
   body{background:#fff}.noprint{display:none!important}.wrap{max-width:none;padding:0;margin:0;display:block}
@@ -356,7 +357,7 @@ function sida(){
     <h2 class="rub">${esc(titel)}</h2>${st.under.trim()?`<p class="und">${esc(st.under.trim())}</p>`:''}
     ${hjul()}
     ${st.ant?`<div class="ant"><b>Att komma ihåg</b></div>`:''}
-    <div class="ft"><span>Pluggparken.se</span><span>Årshjul ${ar}</span></div></section>`;}
+    <div class="ft"><span class="vm">Pluggparken.se</span><span>Årshjul ${ar}</span></div></section>`;}
 
 /* två halvor: del 1 (övre halvan) har en grå klisterkant nedanför mitten, del 2 (nedre) en klipplinje ovanför */
 function delad(titel,ar){
@@ -371,7 +372,7 @@ function delad(titel,ar){
     <div style="position:absolute;left:10mm;bottom:6mm;width:${P.w-20}mm;height:${hjH}mm">${s1}</div></section>
    <section class="sida halv${g}" style="width:${P.w}mm;height:${P.h}mm;font-size:${fs}mm">
     <div style="position:absolute;left:10mm;top:6mm;width:${P.w-20}mm;height:${hjH}mm">${s2}</div>
-    <div class="hf"><div class="hh2"><span>Klipp del 2 längs den tunna linjen (där bilden slutar) och klistra den över den grå kanten på del 1.</span><span class="del">Del 2 av 2 · Pluggparken.se · Årshjul ${ar}</span></div></div></section>`;}
+    <div class="hf"><div class="hh2"><span>Klipp del 2 längs den tunna linjen (där bilden slutar) och klistra den över den grå kanten på del 1.</span><span class="del"><span class="vm">Pluggparken.se</span> · Del 2 av 2 · Årshjul ${ar}</span></div></div></section>`;}
 
 /* ---------- formuläret ---------- */
 const EMO=['','🎂','⭐','🎒','🚌','⚽','🏊','🌲','🎭','📚','🎨','🎵','🍎','🏖️','❄️','🎉','📝','🏆'];
