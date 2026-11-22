@@ -5,7 +5,7 @@
 <script src="../tema.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Årshjulet – Pluggparken</title>
-<meta name="description" content="Skriv ut ett runt årshjul: hela året i en ring med veckonummer, röda dagar, högtider, månens faser och egna händelser. Kalenderår eller läsår, A4 eller A3.">
+<meta name="description" content="Skriv ut ett runt årshjul: hela året i en ring med veckonummer, röda dagar, högtider, månens faser och egna händelser. Kalenderår eller läsår, på A4, A3 eller i två halvor.">
 <meta name="theme-color" content="#1F3A35">
 <link rel="canonical" href="https://pluggparken.se/skriv-ut/arshjul.html">
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
@@ -69,6 +69,14 @@ h1{margin:8px 0 2px;font-size:2rem}
 .ant{align-self:stretch;margin:0 6mm;border:.35mm solid #B9C4DE;border-radius:4mm;padding:.5em 1em 0;height:14%;background:repeating-linear-gradient(#fff 0 1.9em,#CBD3E6 1.9em calc(1.9em + .25mm));background-position:0 2.3em;background-repeat:repeat-y}
 .ant b{display:block;background:#fff;font-size:.95em}
 .ft{align-self:stretch;display:flex;justify-content:space-between;font-size:.8em;font-weight:700;color:#7A86A8;padding:2mm 6mm 6mm}
+.sida.halv{padding:0;display:block}
+.halv .hjul{width:100%;height:100%;margin:0}
+.hh{position:absolute;left:12mm;right:12mm;top:9mm;display:flex;justify-content:space-between;align-items:flex-start}
+.hh .rub,.hh .und{text-align:left}
+.del{font-weight:800;color:#7A86A8;font-size:1em;white-space:nowrap}
+.hf{position:absolute;left:12mm;right:12mm;bottom:8mm}
+.hf .lg{margin:0 0 .6em;justify-content:flex-start}
+.hh2{display:flex;justify-content:space-between;gap:2em;font-size:.85em;font-weight:700;color:#56668F}
 .svv,.svv .rub{color:#000}.svv .und,.svv .lg,.svv .ft{color:#333}
 @media print{
   body{background:#fff}.noprint{display:none!important}.wrap{max-width:none;padding:0;margin:0;display:block}
@@ -109,7 +117,9 @@ h1{margin:8px 0 2px;font-size:2rem}
     <h2 style="margin-top:12px">Pappersstorlek</h2>
     <div class="seg" id="sPap" role="group" aria-label="Pappersstorlek">
       <button data-v="a4" aria-pressed="true">A4</button>
-      <button data-v="a3" aria-pressed="false">A3<small>större, alla datum syns bra</small></button>
+      <button data-v="a3" aria-pressed="false">A3<small>större</small></button>
+      <button data-v="2a4" aria-pressed="false">2 × A4<small>två halvor, lika stort som A3</small></button>
+      <button data-v="2a3" aria-pressed="false">2 × A3<small>två halvor, störst</small></button>
     </div>
     <h2 style="margin-top:12px">Datum i ringen</h2>
     <div class="seg" id="sDat" role="group" aria-label="Datum">
@@ -212,10 +222,20 @@ function bage(id,r,a0,a1){const m=(a0+a1)/2,ner=m>90&&m<270,L=a1-a0>180?1:0;
   return ner?`<path id="${id}" d="M${P(r,a1)}A${r},${r} 0 ${L} 0 ${P(r,a0)}" fill="none"/>`:`<path id="${id}" d="M${P(r,a0)}A${r},${r} 0 ${L} 1 ${P(r,a1)}" fill="none"/>`;}
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function period(){const y=st.start?st.ar-1:st.ar;return{t0:U(y,st.start,1),t1:U(y+1,st.start,1),y};}
-const datLage=()=>st.dat!=='auto'?st.dat:(st.pap==='a3'?'alla':'man');
+/* papper: w,h i mm; delad = två halvor på var sitt liggande blad */
+const PAP={a4:{w:210,h:297,n:'A4'},a3:{w:297,h:420,n:'A3'},'2a4':{w:297,h:210,n:'A4',delad:1},'2a3':{w:420,h:297,n:'A3',delad:1}};
+const pap=()=>PAP[st.pap]||PAP.a4;
+const datLage=()=>st.dat!=='auto'?st.dat:(st.pap==='a4'?'man':'alla');
+/* mitten: året. Delat hjul: året helt ovanför snittet, rubriken under */
+function mitt(T,y,fs,fsL,fL){const ar=st.start?`${y}/${String(y+1).slice(2)}`:y,L=st.start?`<tspan x="0" dy="0" font-size="${fsL}" font-weight="700" fill="${fL}" letter-spacing=".6">LÄSÅRET</tspan>`:'';
+  if(!pap().delad)return st.start?`<text y="${-fs*.62}" text-anchor="middle">${L}</text><text y="${fs*.38}" font-size="${fs}" font-weight="800" fill="${T.ink}" text-anchor="middle">${ar}</text>`
+    :`<text y="${fs*.3}" font-size="${fs}" font-weight="800" fill="${T.ink}" text-anchor="middle" letter-spacing=".4">${ar}</text>`;
+  const t=(st.under.trim()||st.titel.trim()||'Årshjulet');
+  return (st.start?`<text y="${-fs*1.05-1.5}" text-anchor="middle">${L}</text>`:'')+`<text y="-2.6" font-size="${fs}" font-weight="800" fill="${T.ink}" text-anchor="middle" letter-spacing=".4">${ar}</text>`
+    +`<text y="6.5" font-size="${fsL*.95}" font-weight="700" fill="${fL}" text-anchor="middle">${esc(t.slice(0,26))}</text>`;}
 
-function hjul(){return st.stil==='lin'?hjulLin():hjulBand();}
-function hjulBand(){
+function hjul(vb){return st.stil==='lin'?hjulLin(vb):hjulBand(vb);}
+function hjulBand(vb){
   const T=tema(),{t0,t1,y}=period(),N=Math.round((t1-t0)/DAY),A=i=>i/N*360;let s='',defs='';
   const dagar=[];for(let i=0;i<N;i++){const t=t0+i*DAY,d=new Date(t);dagar.push({t,i,m:d.getUTCMonth(),d:d.getUTCDate(),wd:(d.getUTCDay()+6)%7});}
   const hel=[...helger(y),...helger(y+1)].filter(h=>h.t>=t0&&h.t<t1),rod=new Set(hel.filter(h=>h.r).map(h=>h.t));
@@ -254,14 +274,13 @@ function hjulBand(){
   s+=`<circle r="${st.ars?R.ai:R.si}" fill="${T.mid}"/>`;
   const rm=st.ars?R.ai:R.si;
   s+=`<circle r="${rm}" fill="none" stroke="${T.mlin}" stroke-width=".3"/>`;
-  if(st.start){s+=`<text y="-8" font-size="4" font-weight="700" fill="${T.namn}" text-anchor="middle" letter-spacing=".6">LÄSÅRET</text><text y="5" font-size="${st.ars?13:16}" font-weight="800" fill="${T.ink}" text-anchor="middle">${y}/${String(y+1).slice(2)}</text>`;}
-  else s+=`<text y="${st.ars?4.5:5.5}" font-size="${st.ars?16:19}" font-weight="800" fill="${T.ink}" text-anchor="middle" letter-spacing=".5">${y}</text>`;
+  s+=mitt(T,y,st.start?(st.ars?13:16):(st.ars?16:19),4,T.namn);
   // ringar och månadslinjer
   [R.ut,R.mi,R.di,R.vi,R.si].forEach(r=>s+=`<circle r="${r}" fill="none" stroke="${r===R.ut||r===R.mi?T.mlin:T.lin}" stroke-width="${r===R.ut?.45:.25}"/>`);
   let ml='';man.forEach(i=>{const [x1,y1]=P(rm,A(i)),[x2,y2]=P(R.ut,A(i));ml+=`M${x1},${y1}L${x2},${y2}`;});
   s+=`<path d="${ml}" stroke="${T.mlin}" stroke-width=".35"/>`;
   s+=lappar(T,hel,ix,A,t0,t1,R.vi);
-  return `<svg class="hjul" viewBox="-99 -99 198 198" role="img" aria-label="Årshjul ${st.start?'för läsåret '+y+'/'+(y+1):y}"><defs>${defs}</defs>${s}</svg>`;
+  return `<svg class="hjul" viewBox="${vb||'-99 -99 198 198'}" role="img" aria-label="Årshjul ${st.start?'för läsåret '+y+'/'+(y+1):y}"><defs>${defs}</defs>${s}</svg>`;
 }
 
 /* solstånd och dagjämningar (Meeus, kap. 27, medelvärden; fel under en timme) */
@@ -271,7 +290,7 @@ function solstand(y){const Y=(y-2000)/1000,f=(c)=>c[0]+c[1]*Y+c[2]*Y*Y+c[3]*Y**3
    .map(([c,n])=>{const ms=(f(c)-2440587.5)*DAY-69e3,[Yy,M,D]=SE.format(new Date(ms)).split('-').map(Number);return{t:U(Yy,M-1,D),n};});}
 const VD=['må','ti','on','to','fr','lö','sö'];
 /* linjestilen: en tunn linje per dag, datum ytterst, månader och årstider inne vid mitten */
-function hjulLin(){
+function hjulLin(vb){
   const T=tema(),{t0,t1,y}=period(),N=Math.round((t1-t0)/DAY),A=i=>i/N*360;let s='',defs='';
   const Q={ar:26,as:33,mn:41,ve:46,dt:90,ut:97};
   const dagar=[];for(let i=0;i<N;i++){const t=t0+i*DAY,d=new Date(t);dagar.push({t,i,m:d.getUTCMonth(),d:d.getUTCDate(),wd:(d.getUTCDay()+6)%7});}
@@ -310,14 +329,13 @@ function hjulLin(){
       if(a1-a0<14||x.tyst)return;defs+=bage('a'+k,Q.ar+3,a0,a1);
       s+=`<text font-size="2.5" font-weight="700" letter-spacing=".5" dominant-baseline="central" fill="${farg?'#56668F':'#333'}"><textPath href="#a${k}" startOffset="50%" text-anchor="middle">${x.a.n.toUpperCase()}</textPath></text>`;});}
   // mitten
-  if(st.start)s+=`<text y="-7" font-size="3.2" font-weight="700" fill="#56668F" text-anchor="middle" letter-spacing=".6">LÄSÅRET</text><text y="5" font-size="11.5" font-weight="800" fill="${T.ink}" text-anchor="middle">${y}/${String(y+1).slice(2)}</text>`;
-  else s+=`<text y="4.6" font-size="15" font-weight="800" fill="${T.ink}" text-anchor="middle" letter-spacing=".4">${y}</text>`;
+  s+=mitt(T,y,st.start?11.5:15,3.2,'#56668F');
   // månen och solen utanför ringen
   if(st.man)faser(t0,t1).forEach(f=>{const [x,y2]=P(Q.ut+2.4,A(ix(f.t)+.5));s+=f.full?`<circle cx="${x}" cy="${y2}" r=".95" fill="#fff" stroke="${T.ink}" stroke-width=".28"/>`:`<circle cx="${x}" cy="${y2}" r=".95" fill="${T.ink}"/>`;});
   if(st.ars)[...solstand(y),...solstand(y+1)].filter(x=>x.t>=t0&&x.t<t1).forEach(x=>{const a=A(ix(x.t)+.5),[x1,y1]=P(Q.ut,a),[x2,y2]=P(Q.ut+4,a),[tx,ty]=P(Q.ut+5.6,a),rot=a>90&&a<270?a+180:a;
     s+=`<path d="M${x1},${y1}L${x2},${y2}" stroke="#6A7186" stroke-width=".2"/><text x="${tx}" y="${ty}" transform="rotate(${rot.toFixed(2)} ${tx} ${ty})" font-size="1.7" font-weight="600" fill="#56668F" text-anchor="middle" dominant-baseline="central">${x.n}</text>`;});
   s+=lappar(T,hel,ix,A,t0,t1,Q.dt-1);
-  return `<svg class="hjul" viewBox="-104 -104 208 208" role="img" aria-label="Årshjul ${st.start?'för läsåret '+y+'/'+(y+1):y}"><defs>${defs}</defs>${s}</svg>`;
+  return `<svg class="hjul" viewBox="${vb||'-104 -104 208 208'}" role="img" aria-label="Årshjul ${st.start?'för läsåret '+y+'/'+(y+1):y}"><defs>${defs}</defs>${s}</svg>`;
 }
 
 /* texter i ringen: högtider och egna händelser, radiellt från rUt och inåt; trängs de flyttas de isär med ett litet streck */
@@ -342,12 +360,28 @@ function sida(){
     `<span><b style="color:${T.rod};font-weight:800">${st.farg==='farg'?'Röd siffra':'Fet siffra'}</b> Söndag och röd dag</span>`,
     `<span><b style="color:${T.vTxt}">12</b> Veckonummer</span>`];
   if(st.man)lg.push(`<span><svg width="1em" height="1em" viewBox="-1 -1 2 2"><circle r=".8" fill="${T.ink}"/></svg>Nymåne <svg width="1em" height="1em" viewBox="-1 -1 2 2"><circle r=".75" fill="#fff" stroke="${T.ink}" stroke-width=".2"/></svg>Fullmåne</span>`);
+  if(pap().delad)return delad(titel,ar,lg);
   return `<section class="sida ${st.pap}${st.farg!=='farg'?' gra svv':''}">
     <h2 class="rub">${esc(titel)}</h2>${st.under.trim()?`<p class="und">${esc(st.under.trim())}</p>`:''}
     ${hjul()}
     <div class="lg">${lg.join('')}</div>
     ${st.ant?`<div class="ant"><b>Att komma ihåg</b></div>`:''}
     <div class="ft"><span>Pluggparken.se</span><span>Årshjul ${ar}</span></div></section>`;}
+
+/* två halvor: del 1 (övre halvan) har en grå klisterkant nedanför mitten, del 2 (nedre) en klipplinje ovanför */
+function delad(titel,ar,lg){
+  const P=pap(),H=st.stil==='lin'?104:99,k=(P.w-20)/(2*H),OV=12,ov=OV/k,g=st.farg!=='farg'?' gra svv':'',fs=P.w/420*5.66;
+  const sv=hjul('X').replace(/(id="|href="#)([ma]\d+)/g,'$1p1$2'),sv2=hjul('X').replace(/(id="|href="#)([ma]\d+)/g,'$1p2$2');
+  const ins1=`<rect x="${-H}" y="0" width="${2*H}" height="${ov}" fill="#fff" fill-opacity=".72"/><path d="M${-H},0H${H}" stroke="#555" stroke-width="${.5/k}" stroke-dasharray="${2/k} ${1.4/k}"/><text x="0" y="${ov*.62}" font-size="${3.2/k}" font-weight="800" fill="#555" text-anchor="middle">KLISTRA HÄR · lägg del 2 ovanpå så att linjerna möts</text>`;
+  const ins2=`<rect x="${-H}" y="${-ov}" width="${2*H}" height="${ov}" fill="#fff"/><path d="M${-H},0H${H}" stroke="#222" stroke-width="${.5/k}" stroke-dasharray="${2.4/k} ${1.4/k}"/><text x="${-H+2/k}" y="${-1.4/k}" font-size="${3.4/k}" font-weight="800" fill="#444">✂ Klipp här</text><text x="${H-2/k}" y="${-1.4/k}" font-size="${3.4/k}" font-weight="800" fill="#444" text-anchor="end">Klipp här ✂</text>`;
+  const s1=sv.replace('viewBox="X"',`viewBox="${-H} ${-H} ${2*H} ${H+ov}"`).replace(/<\/svg>$/,ins1+'</svg>'),s2=sv2.replace('viewBox="X"',`viewBox="${-H} ${-ov} ${2*H} ${H+ov}"`).replace(/<\/svg>$/,ins2+'</svg>');
+  const hjH=(H+ov)*k;
+  return `<section class="sida halv${g}" style="width:${P.w}mm;height:${P.h}mm;font-size:${fs}mm">
+    <div class="hh"><div><h2 class="rub">${esc(titel)}</h2>${st.under.trim()?`<p class="und">${esc(st.under.trim())}</p>`:''}</div><div class="del">Del 1 av 2</div></div>
+    <div style="position:absolute;left:10mm;bottom:6mm;width:${P.w-20}mm;height:${hjH}mm">${s1}</div></section>
+   <section class="sida halv${g}" style="width:${P.w}mm;height:${P.h}mm;font-size:${fs}mm">
+    <div style="position:absolute;left:10mm;top:6mm;width:${P.w-20}mm;height:${hjH}mm">${s2}</div>
+    <div class="hf"><div class="lg">${lg.join('')}</div><div class="hh2"><span>Klipp längs den streckade linjen och klistra del 2 över den grå kanten på del 1.</span><span class="del">Del 2 av 2 · Pluggparken.se · Årshjul ${ar}</span></div></div></section>`;}
 
 /* ---------- formuläret ---------- */
 const EMO=['','🎂','⭐','🎒','🚌','⚽','🏊','🌲','🎭','📚','🎨','🎵','🍎','🏖️','❄️','🎉','📝','🏆'];
@@ -366,16 +400,17 @@ $('#evAdd').onclick=()=>{const {t0,t1}=period();let t=U(now.getFullYear(),now.ge
 function render(lista=true){
   const {t0,t1,y}=period();
   $('#yTxt').textContent=st.start?`${y}/${String(y+1).slice(2)}`:String(y);
-  $('#autoTxt').textContent=st.pap==='a3'?'nu: alla dagar':'nu: bara måndagar';
+  $('#autoTxt').textContent=datLage()==='alla'?'nu: alla dagar':'nu: bara måndagar';
   ['#oHog','#oMan','#oArs','#oAnt'].forEach((q,i)=>$(q).checked=st[['hog','man','ars','ant'][i]]);
-  $('#pagesize').textContent=`@page{size:${st.pap==='a3'?'A3':'A4'} portrait;margin:0}`;
+  $('#pagesize').textContent=`@page{size:${pap().n} ${pap().delad?'landscape':'portrait'};margin:0}`;
+  $('#oAnt').closest('label').hidden=!!pap().delad;
   $('#pages').innerHTML=sida();
   if(lista)evLista();
   const ute=st.ev.filter(e=>{const [Y,M,D]=e.d.split('-').map(Number),t=U(Y,M-1,D);return t<t0||t>=t1;}).length;
-  $('#info').textContent=`En sida (${st.pap.toUpperCase()}). Välj Skriv ut, rätt pappersstorlek och skala "100 %" eller "Anpassa till sidan".${ute?` ${ute} ${ute===1?'händelse ligger':'händelser ligger'} utanför ${st.start?'läsåret':'året'} och syns inte.`:''}`;
+  $('#info').textContent=(pap().delad?`Två liggande ${pap().n}-blad. Välj Skriv ut, ${pap().n}, liggande och skala "100 %". Klipp del 2 längs den streckade linjen och klistra den över den grå kanten på del 1.`:`En sida (${pap().n}). Välj Skriv ut, rätt pappersstorlek och skala "100 %" eller "Anpassa till sidan".`)+`${ute?` ${ute} ${ute===1?'händelse ligger':'händelser ligger'} utanför ${st.start?'läsåret':'året'} och syns inte.`:''}`;
   spara();fit();}
 function fit(){const sg=$('#stage'),pg=$('#pages');if(!pg.firstElementChild)return;
-  const mm=96/25.4,w=(st.pap==='a3'?297:210)*mm,s=Math.min(1,(sg.clientWidth||w)/w);pg.style.width=w+'px';pg.style.transform=`scale(${s})`;sg.style.height=(pg.scrollHeight*s)+'px';}
+  const mm=96/25.4,w=pap().w*mm,s=Math.min(1,(sg.clientWidth||w)/w);pg.style.width=w+'px';pg.style.transform=`scale(${s})`;sg.style.height=(pg.scrollHeight*s)+'px';}
 addEventListener('resize',fit);
 function seg(id,key,num){const el=$(id);[...el.children].forEach(x=>x.setAttribute('aria-pressed',String(String(st[key])===x.dataset.v)));
   el.onclick=e=>{const b=e.target.closest('[data-v]');if(!b)return;[...el.children].forEach(x=>x.setAttribute('aria-pressed',String(x===b)));st[key]=num?+b.dataset.v:b.dataset.v;render(key==='start');};}
