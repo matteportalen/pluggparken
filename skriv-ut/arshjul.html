@@ -70,9 +70,8 @@ h1{margin:8px 0 2px;font-size:2rem}
 .halv .hjul{width:100%;height:100%;margin:0}
 .hh{position:absolute;left:12mm;right:12mm;top:9mm;display:flex;justify-content:space-between;align-items:flex-start}
 .hh .rub,.hh .und{text-align:left}
-.del{font-weight:800;color:#7A86A8;font-size:1em;white-space:nowrap}
 .hf{position:absolute;left:12mm;right:12mm;bottom:8mm}
-.hh2{display:flex;justify-content:space-between;gap:2em;font-size:.85em;font-weight:700;color:#56668F}
+.hh2{display:flex;justify-content:space-between;gap:2em;font-size:.8em;font-weight:700;color:#7A86A8}
 .vm{color:#000!important;opacity:.1}
 .svv,.svv .rub{color:#000}.svv .und,.svv .ft{color:#333}
 @media print{
@@ -368,11 +367,11 @@ function delad(titel,ar){
   const s1=sv.replace('viewBox="X"',`viewBox="${-H} ${-H} ${2*H} ${H+ov}"`).replace(/<\/svg>$/,ins1+'</svg>'),s2=sv2.replace('viewBox="X"',`viewBox="${-H} ${-ov} ${2*H} ${H+ov}"`).replace(/<\/svg>$/,ins2+'</svg>');
   const hjH=(H+ov)*k;
   return `<section class="sida halv${g}" style="width:${P.w}mm;height:${P.h}mm;font-size:${fs}mm">
-    <div class="hh"><div><h2 class="rub">${esc(titel)}</h2>${st.under.trim()?`<p class="und">${esc(st.under.trim())}</p>`:''}</div><div class="del">Del 1 av 2</div></div>
+    <div class="hh"><div><h2 class="rub">${esc(titel)}</h2>${st.under.trim()?`<p class="und">${esc(st.under.trim())}</p>`:''}</div></div>
     <div style="position:absolute;left:10mm;bottom:6mm;width:${P.w-20}mm;height:${hjH}mm">${s1}</div></section>
    <section class="sida halv${g}" style="width:${P.w}mm;height:${P.h}mm;font-size:${fs}mm">
     <div style="position:absolute;left:10mm;top:6mm;width:${P.w-20}mm;height:${hjH}mm">${s2}</div>
-    <div class="hf"><div class="hh2"><span>Klipp del 2 längs den tunna linjen (där bilden slutar) och klistra den över den grå kanten på del 1.</span><span class="del"><span class="vm">Pluggparken.se</span> · Del 2 av 2 · Årshjul ${ar}</span></div></div></section>`;}
+    <div class="hf"><div class="hh2"><span class="vm">Pluggparken.se</span><span>Årshjul ${ar}</span></div></div></section>`;}
 
 /* ---------- formuläret ---------- */
 const EMO=['','🎂','⭐','🎒','🚌','⚽','🏊','🌲','🎭','📚','🎨','🎵','🍎','🏖️','❄️','🎉','📝','🏆'];
