@@ -68,8 +68,7 @@ h1{margin:8px 0 2px;font-size:2rem}
 .ft{align-self:stretch;display:flex;justify-content:space-between;font-size:.8em;font-weight:700;color:#7A86A8;padding:2mm 6mm 6mm}
 .sida.halv{padding:0;display:block}
 .halv .hjul{width:100%;height:100%;margin:0}
-.hh{position:absolute;left:12mm;right:12mm;top:9mm;display:flex;justify-content:space-between;align-items:flex-start}
-.hh .rub,.hh .und{text-align:left}
+.hh{position:absolute;left:12mm;right:12mm;top:0;display:flex;justify-content:center;align-items:center;text-align:center}
 .hf{position:absolute;left:12mm;right:12mm;bottom:8mm}
 .hh2{display:flex;justify-content:space-between;gap:2em;font-size:.8em;font-weight:700;color:#7A86A8}
 .vm{color:#000!important;opacity:.1}
@@ -367,7 +366,7 @@ function delad(titel,ar){
   const s1=sv.replace('viewBox="X"',`viewBox="${-H} ${-H} ${2*H} ${H+ov}"`).replace(/<\/svg>$/,ins1+'</svg>'),s2=sv2.replace('viewBox="X"',`viewBox="${-H} ${-ov} ${2*H} ${H+ov}"`).replace(/<\/svg>$/,ins2+'</svg>');
   const hjH=(H+ov)*k;
   return `<section class="sida halv${g}" style="width:${P.w}mm;height:${P.h}mm;font-size:${fs}mm">
-    <div class="hh"><div><h2 class="rub">${esc(titel)}</h2>${st.under.trim()?`<p class="und">${esc(st.under.trim())}</p>`:''}</div></div>
+    <div class="hh" style="height:${P.h-6-hjH}mm"><div><h2 class="rub">${esc(titel)}</h2>${st.under.trim()?`<p class="und">${esc(st.under.trim())}</p>`:''}</div></div>
     <div style="position:absolute;left:10mm;bottom:6mm;width:${P.w-20}mm;height:${hjH}mm">${s1}</div></section>
    <section class="sida halv${g}" style="width:${P.w}mm;height:${P.h}mm;font-size:${fs}mm">
     <div style="position:absolute;left:10mm;top:6mm;width:${P.w-20}mm;height:${hjH}mm">${s2}</div>
