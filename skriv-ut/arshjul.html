@@ -123,8 +123,7 @@ h1{margin:8px 0 2px;font-size:2rem}
     </div>
     <h2 style="margin-top:12px">Datum i ringen</h2>
     <div class="seg" id="sDat" role="group" aria-label="Datum">
-      <button data-v="auto" aria-pressed="true">Automatiskt<small id="autoTxt"></small></button>
-      <button data-v="alla" aria-pressed="false">Alla dagar</button>
+      <button data-v="alla" aria-pressed="true">Alla dagar<small>datum och veckodag</small></button>
       <button data-v="man" aria-pressed="false">Bara måndagar<small>större siffror</small></button>
     </div>
     <div class="opts" style="margin-top:10px">
@@ -156,11 +155,11 @@ const $=s=>document.querySelector(s);
 const KEY='pluggparken-arshjul-v1';
 const MAN=['januari','februari','mars','april','maj','juni','juli','augusti','september','oktober','november','december'];
 const now=new Date();
-let st={stil:'lin',start:0,ar:now.getFullYear()+(now.getMonth()>=9?1:0),farg:'farg',pap:'a4',dat:'auto',hog:true,man:true,ars:true,ant:false,titel:'',under:'',ev:[]};
+let st={stil:'lin',start:0,ar:now.getFullYear()+(now.getMonth()>=9?1:0),farg:'farg',pap:'a4',dat:'alla',hog:true,man:true,ars:true,ant:false,titel:'',under:'',ev:[]};
 try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&typeof s==='object'){
   for(const k of ['stil','start','ar','farg','pap','dat','hog','man','ars','ant','titel','under'])if(k in s&&typeof s[k]===typeof st[k])st[k]=s[k];
   if(Array.isArray(s.ev))st.ev=s.ev.filter(e=>e&&typeof e.d==='string'&&/^\d{4}-\d\d-\d\d$/.test(e.d)).slice(0,60).map(e=>({d:e.d,t:String(e.t||'').slice(0,24),e:String(e.e||'').slice(0,4)}));
-  if(![0,7].includes(st.start))st.start=0;if(!['lin','band'].includes(st.stil))st.stil='lin';if(st.ar<1900||st.ar>2200)st.ar=now.getFullYear();}}catch(e){}
+  if(![0,7].includes(st.start))st.start=0;if(!['lin','band'].includes(st.stil))st.stil='lin';if(st.dat!=='man')st.dat='alla';if(st.ar<1900||st.ar>2200)st.ar=now.getFullYear();}}catch(e){}
 function spara(){try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}}
 
 /* ---------- datum ---------- */
@@ -225,7 +224,7 @@ function period(){const y=st.start?st.ar-1:st.ar;return{t0:U(y,st.start,1),t1:U(
 /* papper: w,h i mm; delad = två halvor på var sitt liggande blad */
 const PAP={a4:{w:210,h:297,n:'A4'},a3:{w:297,h:420,n:'A3'},'2a4':{w:297,h:210,n:'A4',delad:1},'2a3':{w:420,h:297,n:'A3',delad:1}};
 const pap=()=>PAP[st.pap]||PAP.a4;
-const datLage=()=>st.dat!=='auto'?st.dat:(st.pap==='a4'?'man':'alla');
+const datLage=()=>st.dat==='man'?'man':'alla';
 /* mitten: året. Delat hjul: året helt ovanför snittet, rubriken under */
 function mitt(T,y,fs,fsL,fL){const ar=st.start?`${y}/${String(y+1).slice(2)}`:y,L=st.start?`<tspan x="0" dy="0" font-size="${fsL}" font-weight="700" fill="${fL}" letter-spacing=".6">LÄSÅRET</tspan>`:'';
   if(!pap().delad)return st.start?`<text y="${-fs*.62}" text-anchor="middle">${L}</text><text y="${fs*.38}" font-size="${fs}" font-weight="800" fill="${T.ink}" text-anchor="middle">${ar}</text>`
@@ -310,7 +309,7 @@ function hjulLin(vb){
   s+=`<circle r="${Q.as}" fill="none" stroke="#2A2F3A" stroke-width=".4"/><circle r="${Q.mn}" fill="none" stroke="#8A90A0" stroke-width=".15"/><circle r="${Q.ve}" fill="none" stroke="#2A2F3A" stroke-width=".25"/><circle r="${Q.dt}" fill="none" stroke="#8A90A0" stroke-width=".15"/><circle r="${Q.ut}" fill="none" stroke="#2A2F3A" stroke-width=".35"/>`;
   // datum och veckodag ytterst
   const lage=datLage();
-  dagar.forEach(g=>{if(lage==='man'&&g.wd!==0)return;const a=A(g.i+.5),[x,y2]=P(Q.dt+.8,a),hoger=a<180,rot=hoger?a-90:a+90,red=g.wd===6||rod.has(g.t),fs=lage==='man'?2.3:1.2;
+  dagar.forEach(g=>{if(lage==='man'&&g.wd!==0)return;const a=A(g.i+.5),[x,y2]=P(Q.dt+.8,a),hoger=a<180,rot=hoger?a-90:a+90,red=g.wd===6||rod.has(g.t),fs=lage==='man'?2.3:1.42;
     const dd=`<tspan font-weight="${red?800:700}">${String(g.d).padStart(2,'0')}</tspan>`,vd=`<tspan font-weight="${red?800:500}" fill-opacity=".8">${VD[g.wd]}</tspan>`;
     s+=`<text x="${x}" y="${y2}" transform="rotate(${rot.toFixed(2)} ${x} ${y2})" font-size="${fs}" fill="${red?T.rod:T.ink}" text-anchor="${hoger?'start':'end'}" dominant-baseline="central" xml:space="preserve">${hoger?dd+' '+vd:vd+' '+dd}</text>`;});
   // veckonummer
@@ -400,7 +399,6 @@ $('#evAdd').onclick=()=>{const {t0,t1}=period();let t=U(now.getFullYear(),now.ge
 function render(lista=true){
   const {t0,t1,y}=period();
   $('#yTxt').textContent=st.start?`${y}/${String(y+1).slice(2)}`:String(y);
-  $('#autoTxt').textContent=datLage()==='alla'?'nu: alla dagar':'nu: bara måndagar';
   ['#oHog','#oMan','#oArs','#oAnt'].forEach((q,i)=>$(q).checked=st[['hog','man','ars','ant'][i]]);
   $('#pagesize').textContent=`@page{size:${pap().n} ${pap().delad?'landscape':'portrait'};margin:0}`;
   $('#oAnt').closest('label').hidden=!!pap().delad;
