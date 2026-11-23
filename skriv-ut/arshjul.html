@@ -219,12 +219,12 @@ function bage(id,r,a0,a1){const m=(a0+a1)/2,ner=m>90&&m<270,L=a1-a0>180?1:0;
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function period(){const y=st.start?st.ar-1:st.ar;return{t0:U(y,st.start,1),t1:U(y+1,st.start,1),y};}
 /* papper: w,h i mm; delad = två halvor på var sitt liggande blad */
-const PAP={a4:{w:210,h:297,n:'A4'},a3:{w:297,h:420,n:'A3'},'2a4':{w:297,h:210,n:'A4',delad:1},'2a3':{w:420,h:297,n:'A3',delad:1},'4a3':{w:420,h:297,n:'A3',rut:[2,2]},'6a3':{w:420,h:297,n:'A3',rut:[2,3]}};
+const PAP={a4:{w:210,h:297,n:'A4'},a3:{w:297,h:420,n:'A3'},'2a4':{w:297,h:210,n:'A4',delad:1},'2a3':{w:420,h:297,n:'A3',delad:1},'4a3':{w:297,h:420,n:'A3',rut:[2,2],rubrik:1},'6a3':{w:420,h:297,n:'A3',rut:[2,3]}};
 const pap=()=>PAP[st.pap]||PAP.a4;
 const datLage=()=>st.dat==='man'?'man':'alla';
 /* mitten: året. Delat hjul: året helt ovanför snittet, rubriken under */
 function mitt(T,y,fs,fsL,fL){const ar=st.start?`${y}/${String(y+1).slice(2)}`:y,L=st.start?`<tspan x="0" dy="0" font-size="${fsL}" font-weight="700" fill="${fL}" letter-spacing=".6">LÄSÅRET</tspan>`:'';
-  if(!pap().delad&&!pap().rut)return st.start?`<text y="${-fs*.62}" text-anchor="middle">${L}</text><text y="${fs*.38}" font-size="${fs}" font-weight="800" fill="${T.ink}" text-anchor="middle">${ar}</text>`
+  if(!pap().delad&&(!pap().rut||pap().rubrik))return st.start?`<text y="${-fs*.62}" text-anchor="middle">${L}</text><text y="${fs*.38}" font-size="${fs}" font-weight="800" fill="${T.ink}" text-anchor="middle">${ar}</text>`
     :`<text y="${fs*.3}" font-size="${fs}" font-weight="800" fill="${T.ink}" text-anchor="middle" letter-spacing=".4">${ar}</text>`;
   const t=(st.under.trim()||st.titel.trim()||'Årshjulet');
   return (st.start?`<text y="${-fs*1.05-1.5}" text-anchor="middle">${L}</text>`:'')+`<text y="-2.6" font-size="${fs}" font-weight="800" fill="${T.ink}" text-anchor="middle" letter-spacing=".4">${ar}</text>`
@@ -353,7 +353,7 @@ function lappar(T,hel,ix,A,t0,t1,rUt){
 function sida(){
   const {y}=period(),T=tema(),titel=st.titel.trim()||'Årshjulet',ar=st.start?`${y}/${String(y+1).slice(2)}`:y;
   if(pap().delad)return delad(titel,ar);
-  if(pap().rut)return rutor(ar);
+  if(pap().rut)return rutor(titel,ar);
   return `<section class="sida ${st.pap}${st.farg!=='farg'?' gra svv':''}">
     <h2 class="rub">${esc(titel)}</h2>${st.under.trim()?`<p class="und">${esc(st.under.trim())}</p>`:''}
     ${hjul()}
@@ -377,11 +377,14 @@ function delad(titel,ar){
 
 /* affisch i bitar (4 eller 6 liggande A3): varje bit har grå klisterkant mot grannen till höger och nedanför
    och en hårfin klipplinje mot grannen till vänster och ovanför. Ytterkanterna har bara skrivarens marginal. */
-function rutor(ar){
+function rutor(titel,ar){
   const P=pap(),[C,Rn]=P.rut,H=st.stil==='lin'?104:99,pm=6,OV=12,g=st.farg!=='farg'?' gra svv':'',fs=5.66;
   const cw=[...Array(C)].map((_,c)=>P.w-2*pm-(c>0?OV:0)-(c<C-1?OV:0)),ch=[...Array(Rn)].map((_,r)=>P.h-2*pm-(r>0?OV:0)-(r<Rn-1?OV:0));
   const x0=cw.map((_,c)=>cw.slice(0,c).reduce((a,b)=>a+b,0)),y0=ch.map((_,r)=>ch.slice(0,r).reduce((a,b)=>a+b,0));
-  const GW=x0[C-1]+cw[C-1],GH=y0[Rn-1]+ch[Rn-1],k=Math.min(GW,GH)/(2*H),cx=GW/2,cy=GH/2,X=m=>(m-cx)/k,Y=m=>(m-cy)/k,ww=P.w-2*pm,wh=P.h-2*pm,lw=.12/k,N=C*Rn;
+  const GW=x0[C-1]+cw[C-1],GH=y0[Rn-1]+ch[Rn-1],Dm=Math.min(GW,GH),k=Dm/(2*H),cx=GW/2,un=st.under.trim(),fT=26,fU=10,hT=fT*.75+(un?fU*1.4:0),gap=14,top=(GH-(hT+gap+Dm))/2,cy=P.rubrik?top+hT+gap+Dm/2:GH/2,X=m=>(m-cx)/k,Y=m=>(m-cy)/k,ww=P.w-2*pm,wh=P.h-2*pm,lw=.12/k,N=C*Rn;
+  // rubrik ovanför hjulet (stående 4 × A3): ritas i varje bit, så att den går över skarven
+  let tit='';if(P.rubrik){const T=tema(),ty=top+fT*.375;
+    tit=`<text x="0" y="${Y(ty)}" font-size="${fT/k}" font-weight="800" fill="${T.ink}" text-anchor="middle" dominant-baseline="central" letter-spacing="${.5/k}">${esc(titel)}</text>`+(un?`<text x="0" y="${Y(ty+fT*.62+fU*.5)}" font-size="${fU/k}" font-weight="600" fill="#56668F" text-anchor="middle" dominant-baseline="central">${esc(un)}</text>`:'');}
   let ut='',n=0;
   for(let r=0;r<Rn;r++)for(let c=0;c<C;c++){n++;
     const wx=x0[c]-(c>0?OV:0),wy=y0[r]-(r>0?OV:0),X0=x0[c],X1=X0+cw[c],Y0=y0[r],Y1=Y0+ch[r];
@@ -395,7 +398,7 @@ function rutor(ar){
     if(r>0)etikett=`<text x="${X(X0)+4/k}" y="${Y(Y0)-OV/k/2}" font-size="${f}" font-weight="700" fill="#888" dominant-baseline="central">✂ ${t}</text>`;
     else if(c>0)etikett=`<text transform="translate(${X(X0)-OV/k/2} ${Y(Y0)+4/k}) rotate(90)" font-size="${f}" font-weight="700" fill="#888" dominant-baseline="central">✂ ${t}</text>`;
     else etikett=`<text transform="translate(${X(X1)+OV/k/2} ${Y(Y0)+4/k}) rotate(90)" font-size="${f}" font-weight="700" fill="#888" dominant-baseline="central">${t}</text>`;
-    const sv=hjul('X').replace(/(id="|href="#)([ma]\d+)/g,`$1p${n}$2`).replace('viewBox="X"',`viewBox="${vx0} ${vy0} ${vw} ${vh}"`).replace(/<\/svg>$/,o+etikett+'</svg>');
+    const sv=hjul('X').replace(/(id="|href="#)([ma]\d+)/g,`$1p${n}$2`).replace('viewBox="X"',`viewBox="${vx0} ${vy0} ${vw} ${vh}"`).replace(/<\/svg>$/,tit+o+etikett+'</svg>');
     const fot=r===Rn-1?(c===0?`<div class="hf" style="right:auto"><div class="hh2"><span class="vm">Pluggparken.se</span></div></div>`:c===C-1?`<div class="hf" style="left:auto"><div class="hh2"><span>Årshjul ${ar}</span></div></div>`:''):'';
     ut+=`<section class="sida halv${g}" style="width:${P.w}mm;height:${P.h}mm;font-size:${fs}mm"><div style="position:absolute;left:${pm}mm;top:${pm}mm;width:${ww}mm;height:${wh}mm">${sv}</div>${fot}</section>`;}
   return ut;}
@@ -418,12 +421,12 @@ function render(lista=true){
   const {t0,t1,y}=period();
   $('#yTxt').textContent=st.start?`${y}/${String(y+1).slice(2)}`:String(y);
   ['#oHog','#oMan','#oArs','#oAnt'].forEach((q,i)=>$(q).checked=st[['hog','man','ars','ant'][i]]);
-  $('#pagesize').textContent=`@page{size:${pap().n} ${pap().delad||pap().rut?'landscape':'portrait'};margin:0}`;
+  $('#pagesize').textContent=`@page{size:${pap().n} ${pap().w>pap().h?'landscape':'portrait'};margin:0}`;
   $('#oAnt').closest('label').hidden=!!(pap().delad||pap().rut);
   $('#pages').innerHTML=sida();
   if(lista)evLista();
   const ute=st.ev.filter(e=>{const [Y,M,D]=e.d.split('-').map(Number),t=U(Y,M-1,D);return t<t0||t>=t1;}).length;
-  $('#info').textContent=(pap().rut?`${pap().rut[0]*pap().rut[1]} liggande A3-blad (bitarna läses rad för rad). Välj Skriv ut, A3, liggande och skala "100 %". Lägg bitarna i ordning. Klipp varje bit precis längs den tunna linjen till vänster och upptill, där bilden slutar, och klistra den över grannens grå kant.`:pap().delad?`Två liggande ${pap().n}-blad. Välj Skriv ut, ${pap().n}, liggande och skala "100 %". Klipp del 2 precis längs den tunna linjen, där bilden slutar, och klistra den över den grå kanten på del 1.`:`En sida (${pap().n}). Välj Skriv ut, rätt pappersstorlek och skala "100 %" eller "Anpassa till sidan".`)+`${ute?` ${ute} ${ute===1?'händelse ligger':'händelser ligger'} utanför ${st.start?'läsåret':'året'} och syns inte.`:''}`;
+  $('#info').textContent=(pap().rut?`${pap().rut[0]*pap().rut[1]} ${pap().w>pap().h?'liggande':'stående'} A3-blad (bitarna läses rad för rad). Välj Skriv ut, A3, ${pap().w>pap().h?'liggande':'stående'} och skala "100 %". Lägg bitarna i ordning. Klipp varje bit precis längs den tunna linjen till vänster och upptill, där bilden slutar, och klistra den över grannens grå kant.`:pap().delad?`Två liggande ${pap().n}-blad. Välj Skriv ut, ${pap().n}, liggande och skala "100 %". Klipp del 2 precis längs den tunna linjen, där bilden slutar, och klistra den över den grå kanten på del 1.`:`En sida (${pap().n}). Välj Skriv ut, rätt pappersstorlek och skala "100 %" eller "Anpassa till sidan".`)+`${ute?` ${ute} ${ute===1?'händelse ligger':'händelser ligger'} utanför ${st.start?'läsåret':'året'} och syns inte.`:''}`;
   spara();fit();}
 function fit(){const sg=$('#stage'),pg=$('#pages');if(!pg.firstElementChild)return;
   const mm=96/25.4,w=pap().w*mm,s=Math.min(1,(sg.clientWidth||w)/w);pg.style.width=w+'px';pg.style.transform=`scale(${s})`;sg.style.height=(pg.scrollHeight*s)+'px';}
