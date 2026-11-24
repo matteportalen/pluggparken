@@ -102,9 +102,9 @@ textarea{width:100%;min-height:180px;border-radius:14px;border:2px solid var(--l
     <div class="tab" id="mTab" hidden></div></div>
 
   <div class="panel" id="pEgna" hidden><h2>2. Dina frågor</h2>
-    <textarea id="egna" spellcheck="true" placeholder="En fråga per rad. Vill du kunna visa svaret, skriv det efter ett lodstreck:
-Vad heter Sveriges huvudstad? | Stockholm
-Nämn ett djur som sover på vintern. | Igelkotten, björnen …
+    <textarea id="egna" spellcheck="true" placeholder="En fråga per rad. Vill du kunna visa svaret, skriv det efter ett kolon:
+Vad heter Sveriges huvudstad? : Stockholm
+Vilket djur sover på vintern? : Igelkotten, björnen …
 Vad kallas en plats där man gräver efter gamla saker?"></textarea>
     <p class="hint">Frågorna kommer i blandad ordning. Är eleverna fler än frågorna börjar de om. Listorna sparas bara i den här webbläsaren.</p>
     <div class="rad"><input type="text" id="listNamn" maxlength="40" placeholder="Namn på listan, t.ex. SO vecka 47"><button class="sek" id="bSpara">💾 Spara listan</button></div>
@@ -186,7 +186,11 @@ allaRit();
 
 /* ---------- på tavlan ---------- */
 let V=null;
-function egnaFragor(){return data.egna.split("\n").map(r=>r.trim()).filter(Boolean).map(r=>{const [f,...s]=r.split("|");return[f.trim(),s.join("|").trim()||null]})}
+/* Svaret skrivs efter ett kolon (läraren: många vet inte hur man skriver lodstreck). Finns ett frågetecken räknas bara kolon efter det,
+   så att "Vad är 10:30 + 1 timme? : 11:30" blir rätt. Lodstreck fungerar fortfarande. */
+function delaRad(r){if(r.includes("|")){const [f,...s]=r.split("|");return[f.trim(),s.join("|").trim()||null]}
+  const q=r.indexOf("?"),k=r.indexOf(":",q<0?0:q);if(k<0)return[r,null];return[r.slice(0,k).trim(),r.slice(k+1).trim()||null]}
+function egnaFragor(){return data.egna.split("\n").map(r=>r.trim()).filter(Boolean).map(delaRad)}
 function nyFraga(){
   if(data.sort==="alla"){if(!V.kö.length)V.kö=shuffle(allaFragor());return[V.kö.pop(),null]}
   if(data.sort==="egna"){if(!V.kö.length)V.kö=shuffle(egnaFragor());return V.kö.pop()}
