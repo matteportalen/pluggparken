@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<script src="../tema.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Talmaskinen – Pluggparken</title>
+<meta name="description" content="Skriv ut tallinjer, hundrarutor och tiorutor. Välj själv hur lång tallinjen ska vara, vilka steg och vilka tal som står ut, och hur talrutan ska se ut.">
+<meta name="theme-color" content="#1F3A35">
+<link rel="canonical" href="https://pluggparken.se/skriv-ut/talmaskin.html">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../fonts/fonts.css">
+<style id="pagesize">@page{size:A4 portrait;margin:0}</style>
+<style>
+:root{
+  --bg:#EAF3FF; --ink:#1D2B53; --muted:#56668F; --card:#FFFFFF; --line:#C6D6F2; --soft:#F1F6FF;
+  --good:#1E9E5E; --good-dark:#157548; --accent:#3D5AFE; --gold:#F2B707;
+  --font:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:900px;margin:0 auto;padding:12px 16px 40px}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer;touch-action:manipulation;border:0;background:none}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+h1{margin:8px 0 2px;font-size:2rem}
+.lead{margin:0 0 12px;color:var(--muted)}
+.panel{background:var(--card);border-radius:20px;padding:12px 14px;box-shadow:0 5px 0 var(--line);margin-bottom:12px}
+.panel h2{margin:0 0 6px;font-size:1.05rem}
+.seg{display:flex;flex-wrap:wrap;gap:8px}
+.seg button{min-height:48px;padding:8px 14px;border-radius:14px;background:var(--soft);box-shadow:0 3px 0 var(--line);font-weight:800}
+.seg button small{display:block;font-weight:600;color:var(--muted);font-size:.8rem;line-height:1.1}
+.seg button[aria-pressed=true]{background:var(--ink);color:#fff;box-shadow:0 3px 0 #0E1735}
+.seg button[aria-pressed=true] small{color:#C9D3F2}
+.seg button:active{transform:translateY(2px)}
+.rad{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px 14px;margin-top:8px}
+.rad label{display:flex;flex-direction:column;font-weight:800;font-size:.9rem;gap:2px}
+.rad input[type=number],.rad input[type=text],.rad select{min-height:44px;padding:6px 10px;border-radius:12px;border:2px solid var(--line);background:var(--soft);font-weight:700;width:7.5em}
+.rad input[type=text]{width:16em;max-width:100%}
+.ck{display:flex!important;flex-direction:row!important;align-items:center;gap:8px;font-weight:700;cursor:pointer}
+.ck input{width:22px;height:22px;accent-color:var(--good)}
+.snabb{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.snabb button{min-height:40px;padding:4px 12px;border-radius:12px;background:#fff;border:2px solid var(--line);font-weight:800;font-size:.92rem}
+.go{min-height:52px;padding:10px 22px;border-radius:16px;background:var(--good);color:#fff;font-weight:800;box-shadow:0 4px 0 var(--good-dark)}
+.go:active{transform:translateY(3px);box-shadow:0 1px 0 var(--good-dark)}
+.hint{margin:6px 0 0;color:var(--muted);font-size:.92rem}
+.varn{margin:6px 0 0;color:#B4232A;font-weight:700;font-size:.92rem}
+.tillbaka{display:inline-block;margin:6px 0 0;color:var(--ink);font-weight:800}
+.stage{margin-top:12px;overflow:hidden}
+.pages{transform-origin:0 0}
+[hidden]{display:none!important}
+
+/* ---- bladen ---- */
+.sida{background:#fff;color:#000;padding:12mm 14mm 0;position:relative;overflow:hidden;margin:0 0 6mm;box-shadow:0 2px 14px rgba(29,43,83,.25);break-after:page;page-break-after:always;display:flex;flex-direction:column}
+.sida:last-child{break-after:auto;page-break-after:auto}
+.sida,.sida *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.hd{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:.8mm solid #000;padding-bottom:1.6mm;margin-bottom:4mm;gap:6mm}
+.hd h2{margin:0;font-size:7.4mm;font-weight:800;line-height:1}
+.hd .nm{font-size:4.6mm;font-weight:700;white-space:nowrap}
+.hd .nm span{display:inline-block;width:48mm;border-bottom:.45mm solid #000;margin-left:2mm}
+.kropp{flex:1;display:flex;flex-direction:column;justify-content:space-evenly;align-items:center;padding-bottom:14mm}
+.kropp svg{display:block}
+.ft{position:absolute;left:14mm;right:14mm;bottom:7mm;display:flex;justify-content:space-between;font-size:3.4mm;font-weight:700;color:#555}
+.ft .vm{opacity:.7}
+.klipp{position:absolute;left:14mm;right:14mm;bottom:14mm;font-size:3.6mm;color:#555;font-weight:600}
+@media print{
+  body{background:#fff}.noprint{display:none!important}.wrap{max-width:none;padding:0;margin:0;display:block}
+  .stage{margin:0;overflow:visible;height:auto!important}
+  .pages{transform:none!important}
+  .sida{box-shadow:none;margin:0}
+}
+</style>
+</head>
+<body>
+<script src="../ljud.js"></script>
+<script src="../huvud.js" data-titel="Talmaskinen" data-ikon="🖨️"></script>
+<main class="wrap">
+<div class="noprint">
+  <h1>Talmaskinen</h1>
+  <p class="lead">Tallinjer, talrutor och tiorutor att skriva ut. Välj själv hur de ska se ut. Bladet syns direkt här nedanför.</p>
+
+  <div class="panel"><h2>1. Vad vill du skriva ut?</h2>
+    <div class="seg" id="sMall" role="group" aria-label="Mall">
+      <button data-v="linje" aria-pressed="true">📏 Tallinje<small>valfri längd och steg</small></button>
+      <button data-v="ruta" aria-pressed="false">💯 Talruta<small>hundraruta och fler</small></button>
+      <button data-v="tio" aria-pressed="false">🔟 Tiorutor<small>tomma eller med prickar</small></button>
+    </div></div>
+
+  <div class="panel" id="pLinje"><h2>2. Tallinjen</h2>
+    <div class="snabb" id="snabbL">
+      <button data-f="0" data-t="10" data-s="1">0–10</button><button data-f="0" data-t="20" data-s="1">0–20</button><button data-f="0" data-t="100" data-s="1">0–100</button>
+      <button data-f="0" data-t="100" data-s="10">0–100 i tiotal</button><button data-f="0" data-t="1000" data-s="100">0–1000 i hundratal</button><button data-f="-10" data-t="10" data-s="1">−10 till 10</button>
+    </div>
+    <div class="rad">
+      <label>Från<input type="number" id="lFran" value="0" step="1"></label>
+      <label>Till<input type="number" id="lTill" value="20" step="1"></label>
+      <label>Steg<select id="lSteg"><option>1</option><option>2</option><option>5</option><option>10</option><option>20</option><option>25</option><option>50</option><option>100</option><option>1000</option></select></label>
+      <label>Tal vid strecken<select id="lTal"><option value="alla">alla streck</option><option value="5">var femte</option><option value="10">var tionde</option><option value="ande">bara början och slut</option><option value="tom">inga (tom)</option></select></label>
+    </div>
+    <div class="rad">
+      <label>Tallinjer per blad<select id="lAntal"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>6</option><option>8</option></select></label>
+      <label>Blad i bredd<select id="lBredd"><option value="1">1 (vanligt)</option><option value="2">2 att tejpa ihop</option><option value="3">3 att tejpa ihop</option><option value="4">4 att tejpa ihop</option></select></label>
+      <label class="ck"><input type="checkbox" id="lFarg" checked> Tiotalen i färg</label>
+    </div>
+    <p class="varn" id="lVarn" hidden></p></div>
+
+  <div class="panel" id="pRuta" hidden><h2>2. Talrutan</h2>
+    <div class="snabb" id="snabbR">
+      <button data-s="1" data-r="10">1–100</button><button data-s="0" data-r="10">0–99</button><button data-s="101" data-r="10">101–200</button><button data-s="1" data-r="12">1–120</button><button data-s="1" data-r="5">1–50</button>
+    </div>
+    <div class="rad">
+      <label>Börjar på<input type="number" id="rStart" value="1" step="1" min="0" max="9900"></label>
+      <label>Rader<select id="rRader"><option>5</option><option selected>10</option><option>12</option><option>20</option></select></label>
+      <label>Ifyllt<select id="rFyll"><option value="alla">alla tal</option><option value="tom">tom (eleven skriver)</option><option value="tiotal">bara första kolumnen</option><option value="diag">bara diagonalen</option></select></label>
+      <label>Per blad<select id="rAntal"><option>1</option><option>2</option><option>4</option></select></label>
+    </div>
+    <div class="rad">
+      <label>Färglägg tabell (tom = ingen)<input type="number" id="rTab" min="2" max="12" placeholder="t.ex. 5"></label>
+      <label class="ck"><input type="checkbox" id="rTio" checked> Varannan rad tonad</label>
+    </div>
+    <p class="hint">Vill du ha en hundraruta med slumpade hål att fylla i finns den under <a href="hundraruta.html">Hundrarutan med hål</a>.</p></div>
+
+  <div class="panel" id="pTio" hidden><h2>2. Tiorutorna</h2>
+    <div class="rad">
+      <label>Sort<select id="tSort"><option value="en">en tioruta (10)</option><option value="tva">dubbel tioruta (20)</option></select></label>
+      <label>Prickar<select id="tPrick"><option value="tom">tomma</option><option value="slump">slumpat antal</option><option value="ord">1, 2, 3 … i ordning</option></select></label>
+      <label>Per blad<select id="tAntal"><option>2</option><option>4</option><option selected>6</option><option>8</option><option>12</option></select></label>
+      <label class="ck"><input type="checkbox" id="tSkriv" checked> Ruta att skriva talet i</label>
+    </div></div>
+
+  <div class="panel"><h2>3. Bladet</h2>
+    <div class="rad">
+      <label>Rubrik<input type="text" id="rubrik" maxlength="40"></label>
+      <label>Papper<select id="papper"><option value="st">A4 stående</option><option value="ligg">A4 liggande</option></select></label>
+      <label class="ck"><input type="checkbox" id="namn" checked> Namnrad</label>
+      <label class="ck"><input type="checkbox" id="farg" checked> Färg</label>
+    </div>
+    <div class="rad"><button class="go" id="print">🖨️ Skriv ut</button><a class="tillbaka" href="./">← Alla blad</a></div>
+    <p class="hint" id="info"></p></div>
+</div>
+<div class="stage" id="stage"><div class="pages" id="pages"></div></div>
+</main>
+<script>
+const $=s=>document.querySelector(s);
+const RUB={linje:"Tallinjen",ruta:"Talrutan",tio:"Tiorutor"};
+let mall="linje",rubrikRord=false;
+const KEY="pluggparken-talmaskin-v1";   // lärarens val sparas i webbläsaren (inga elevdata)
+const fmt=n=>(n<0?"−":"")+Math.abs(n).toLocaleString("sv-SE").replace(/ /g," ");
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const PAP={st:{w:210,h:297},ligg:{w:297,h:210}};
+const pap=()=>PAP[$("#papper").value];
+const farg=()=>$("#farg").checked;
+const C={line:"#1D2B53",tio:"#3D5AFE",fem:"#1E9E5E",ton:"#EEF3FF",tab:"#FFE38A"};
+
+/* ---------- tallinje ----------
+   Ritas i mm. Streck: långt vid varje tiotal av steget, mellanlångt vid var femte, kort annars. */
+function tallinje(o,w,h,x0,vis){   // x0/vis: för tallinjer över flera blad visas ett fönster av en längre linje
+  const {fran,till,steg,tal,fargTio}=o,n=Math.round((till-fran)/steg),L=o.L||w-16,dx=L/n,y=h*.42,col=farg()?C.line:"#000";
+  let s=`<svg width="${w}mm" height="${h}mm" viewBox="${x0||0} 0 ${w} ${h}" style="overflow:visible">`;
+  if(vis&&!vis.forsta)s+=`<path d="M${x0} 1V${h-1}" stroke="#888" stroke-width=".35" stroke-dasharray="2 1.5"/><text x="${x0+1.5}" y="4" font-size="3.4" fill="#777" font-family="Baloo 2,sans-serif">✂</text>`;
+  const s0=8;   // vänstermarginal på linjen
+  if(!vis||vis.forsta)s+=`<path d="M${s0-1} ${y}h${L+2}" stroke="${col}" stroke-width=".8" fill="none"/>`;else s+=`<path d="M${x0} ${y}h${w}" stroke="${col}" stroke-width=".8"/>`;
+  if(!vis||vis.forsta)s+=`<path d="M${s0-1+.1} ${y-1.8}l-3 1.8 3 1.8z" fill="${col}"/>`;
+  if(!vis||vis.sista)s+=`<path d="M${s0+L+1-.1} ${y-1.8}l3 1.8-3 1.8z" fill="${col}"/>`;
+  const fs=Math.min(6,Math.max(2.4,dx*(tal==="alla"?.95:4)/Math.max(1,String(Math.max(Math.abs(fran),Math.abs(till))).length)));
+  for(let i=0;i<=n;i++){const v=fran+i*steg,x=s0+i*dx;if(vis&&(x<x0-2||x>x0+w+2))continue;
+    const tio=Math.round(v/steg)%10===0,fem=Math.round(v/steg)%5===0,len=tio?9:fem?6.5:4.4,ck=farg()&&fargTio&&tio?C.tio:col;
+    s+=`<path d="M${x} ${y-len/2}v${len}" stroke="${ck}" stroke-width="${tio?.8:.5}"/>`;
+    const visa=tal==="alla"||(tal==="5"&&fem)||(tal==="10"&&tio)||(tal==="ande"&&(i===0||i===n));
+    if(visa)s+=`<text x="${x}" y="${y+len/2+fs*1.05}" font-size="${fs}" text-anchor="middle" font-weight="${tio?800:600}" fill="${ck}" font-family="Baloo 2,Trebuchet MS,sans-serif">${fmt(v)}</text>`;}
+  return s+"</svg>";}
+
+function linjeOpt(){let fran=Math.round(+$("#lFran").value||0),till=Math.round(+$("#lTill").value||0),steg=+$("#lSteg").value,varn="";
+  if(till<=fran){till=fran+10*steg;varn=`"Till" måste vara större än "Från". Jag visar ${fmt(fran)}–${fmt(till)}.`;}
+  if((till-fran)%steg){const t2=fran+Math.ceil((till-fran)/steg)*steg;varn=`Med steg ${steg} går det inte jämnt upp till ${fmt(till)}. Tallinjen slutar på ${fmt(t2)}.`;till=t2;}
+  const n=(till-fran)/steg;if(n>400){steg=[1,2,5,10,20,25,50,100,1000,10000].find(x=>(till-fran)/x<=400&&(till-fran)%x===0)||steg;varn=`Det blev för många streck. Steget är ändrat till ${steg}.`;}
+  return{fran,till,steg,tal:$("#lTal").value,fargTio:$("#lFarg").checked,varn};}
+
+/* ---------- talruta ---------- */
+function talruta(bredd,o){const {start,rader,fyll,tab,ton}=o,cell=bredd/10,h=cell*rader,fs=cell*(String(start+rader*10-1).length>3?.34:.42);
+  let s=`<svg width="${bredd}mm" height="${h}mm" viewBox="-0.5 -0.5 ${bredd+1} ${h+1}">`;
+  for(let r=0;r<rader;r++)for(let c=0;c<10;c++){const v=start+r*10+c,x=c*cell,y=r*cell,mark=tab&&v>0&&v%tab===0;
+    const bg=farg()?(mark?C.tab:ton&&r%2?C.ton:"#fff"):(mark?"#D9D9D9":ton&&r%2?"#F2F2F2":"#fff");
+    s+=`<rect x="${x}" y="${y}" width="${cell}" height="${cell}" fill="${bg}" stroke="${farg()?"#8FA6D6":"#000"}" stroke-width=".3"/>`;
+    const visa=fyll==="alla"||(fyll==="tiotal"&&c===0)||(fyll==="diag"&&c===r%10);
+    if(visa)s+=`<text x="${x+cell/2}" y="${y+cell*.5+fs*.36}" font-size="${fs}" text-anchor="middle" font-weight="800" fill="${farg()?C.line:"#000"}" font-family="Baloo 2,Trebuchet MS,sans-serif">${v}</text>`;}
+  s+=`<rect x="0" y="0" width="${bredd}" height="${h}" fill="none" stroke="${farg()?C.tio:"#000"}" stroke-width=".8"/>`;
+  return s+"</svg>";}
+
+/* ---------- tiorutor ---------- */
+function tioruta(sida,o,n,rnd){const tva=o.sort==="tva",cell=sida,b=cell*5,h=cell*(tva?4:2)+(tva?cell*.35:0),pr=o.prick,antal=pr==="slump"?1+Math.floor(rnd()*(tva?20:10)):pr==="ord"?(n%(tva?20:10))+1:0;
+  let s=`<svg width="${b+(o.skriv?cell*1.8:0)}mm" height="${h}mm" viewBox="-0.5 -0.5 ${b+(o.skriv?cell*1.8:0)+1} ${h+1}">`;
+  const ram=(yy,from)=>{let t="";for(let r=0;r<2;r++)for(let c=0;c<5;c++){const k=from+r*5+c,x=c*cell,y=yy+r*cell;t+=`<rect x="${x}" y="${y}" width="${cell}" height="${cell}" fill="#fff" stroke="${farg()?C.line:"#000"}" stroke-width=".45"/>`;
+      if(k<antal)t+=`<circle cx="${x+cell/2}" cy="${y+cell/2}" r="${cell*.32}" fill="${farg()?(k<5||(k>=10&&k<15)?"#E5484D":"#3D5AFE"):"#000"}"/>`;}
+    return t+`<rect x="0" y="${yy}" width="${b}" height="${cell*2}" fill="none" stroke="${farg()?C.line:"#000"}" stroke-width=".9"/>`;};
+  s+=ram(0,0);if(tva)s+=ram(cell*2.35,10);
+  if(o.skriv)s+=`<rect x="${b+cell*.5}" y="${h/2-cell*.65}" width="${cell*1.3}" height="${cell*1.3}" rx="${cell*.15}" fill="#fff" stroke="${farg()?C.tio:"#000"}" stroke-width=".6" stroke-dasharray="1.4 1"/>`;
+  return s+"</svg>";}
+
+/* ---------- bladen ---------- */
+function prng(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+let fro=Math.floor(Math.random()*1e6);
+function sidaHTML(inre,P,extra){const rub=esc($("#rubrik").value.trim()||RUB[mall]);
+  return`<section class="sida" style="width:${P.w}mm;height:${P.h}mm"><div class="hd"><h2>${rub}</h2>${$("#namn").checked?'<div class="nm">Namn:<span></span></div>':""}</div><div class="kropp">${inre}</div><div class="ft"><span class="vm">Pluggparken.se</span><span>${extra||""}</span></div></section>`;}
+function render(){const P=pap(),B=P.w-28,H=P.h-12-14-16;let html="",info="";
+  $("#pagesize").textContent=`@page{size:A4 ${$("#papper").value==="ligg"?"landscape":"portrait"};margin:0}`;
+  if(mall==="linje"){const o=linjeOpt(),bredd=+$("#lBredd").value,ant=bredd>1?1:+$("#lAntal").value;$("#lVarn").hidden=!o.varn;$("#lVarn").textContent=o.varn;
+    $("#lAntal").disabled=bredd>1;
+    if(bredd===1){const hh=Math.min(36,H/ant);html=sidaHTML(Array.from({length:ant},()=>tallinje(o,B,hh)).join(""),P);info="1 sida.";}
+    else{const L=bredd*B-16,hh=40;   // en lång linje som delas på flera blad
+      for(let k=0;k<bredd;k++){const x0=k*B,vis={forsta:k===0,sista:k===bredd-1};let svg=tallinje({...o,L},B,hh,x0,vis);
+        const lim=k>0?`<div class="klipp">✂ Klipp längs den streckade linjen. Lägg bladet över blad ${k} så att strecken hamnar på varandra, och tejpa.</div>`:"";
+        html+=sidaHTML(svg+lim,P,`Blad ${k+1} av ${bredd}`);}
+      info=`${bredd} sidor som tejpas ihop till en tallinje på ca ${Math.round(bredd*B/10)} cm. Välj liggande papper för längst linje.`;}}
+  else if(mall==="ruta"){const ant=+$("#rAntal").value,rader=+$("#rRader").value,start=Math.max(0,Math.round(+$("#rStart").value||0));
+    const o={start,rader,fyll:$("#rFyll").value,tab:+$("#rTab").value||0,ton:$("#rTio").checked};
+    const lig=$("#papper").value==="ligg",kol=ant===1?1:ant===2?(lig?2:1):2,rad=ant/kol,bmax=B/kol-(kol>1?8:0),hmax=H/rad-(rad>1?8:0),br=Math.min(bmax,hmax*10/rader);
+    html=sidaHTML(`<div style="display:grid;grid-template-columns:repeat(${kol},auto);gap:8mm;justify-content:center">${Array.from({length:ant},(_,i)=>talruta(br,{...o,start:start+(ant>1&&$("#rFyll").value==="tom"?0:0)})).join("")}</div>`,P);info="1 sida.";}
+  else{const ant=+$("#tAntal").value,o={sort:$("#tSort").value,prick:$("#tPrick").value,skriv:$("#tSkriv").checked},r=prng(fro);
+    const kol=ant<=2?1:2,rad=Math.ceil(ant/kol),tva=o.sort==="tva",cellB=(B/kol-10)/(5+(o.skriv?1.8:0)),cellH=(H/rad-8)/(tva?4.35:2),cell=Math.min(cellB,cellH,24);
+    html=sidaHTML(`<div style="display:grid;grid-template-columns:repeat(${kol},auto);gap:8mm 12mm;justify-content:center">${Array.from({length:ant},(_,i)=>tioruta(cell,o,i,r)).join("")}</div>`,P);info="1 sida."+(o.prick==="slump"?" Tryck på Skriv ut igen eller ändra något så får du nya prickar.":"");}
+  $("#pages").innerHTML=html;$("#info").textContent=info+' Välj skala "100 %" i skrivardialogen.';spara();fit();}
+function fit(){const sg=$("#stage"),pg=$("#pages");if(!pg.firstElementChild)return;const mm=96/25.4,w=pap().w*mm,s=Math.min(1,(sg.clientWidth||w)/w);pg.style.width=pap().w+"mm";pg.style.transform=`scale(${s})`;sg.style.height=(pg.scrollHeight*s)+"px";}
+addEventListener("resize",fit);
+/* ---------- val ---------- */
+const FALT=["lFran","lTill","lSteg","lTal","lAntal","lBredd","lFarg","rStart","rRader","rFyll","rAntal","rTab","rTio","tSort","tPrick","tAntal","tSkriv","papper","namn","farg"];
+function spara(){try{const d={mall};FALT.forEach(id=>{const e=$("#"+id);d[id]=e.type==="checkbox"?e.checked:e.value});localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}}
+function ladda(){try{const d=JSON.parse(localStorage.getItem(KEY)||"null");if(!d)return;FALT.forEach(id=>{const e=$("#"+id);if(d[id]==null)return;if(e.type==="checkbox")e.checked=!!d[id];else e.value=d[id]});if(RUB[d.mall])valjMall(d.mall,true)}catch(e){}}
+function valjMall(m,tyst){mall=m;[...$("#sMall").children].forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.v===m)));$("#pLinje").hidden=m!=="linje";$("#pRuta").hidden=m!=="ruta";$("#pTio").hidden=m!=="tio";
+  if(!rubrikRord)$("#rubrik").value=RUB[m];if(!tyst)render();}
+$("#sMall").onclick=e=>{const b=e.target.closest("[data-v]");if(b)valjMall(b.dataset.v)};
+$("#rubrik").oninput=()=>{rubrikRord=true;render()};
+document.querySelectorAll(".panel input,.panel select").forEach(e=>{if(e.id!=="rubrik")e.addEventListener(e.type==="number"||e.type==="text"?"input":"change",render)});
+$("#snabbL").onclick=e=>{const b=e.target.closest("[data-f]");if(!b)return;$("#lFran").value=b.dataset.f;$("#lTill").value=b.dataset.t;$("#lSteg").value=b.dataset.s;$("#lTal").value=(+b.dataset.t-+b.dataset.f)/+b.dataset.s>20?"10":"alla";render()};
+$("#snabbR").onclick=e=>{const b=e.target.closest("[data-s]");if(!b)return;$("#rStart").value=b.dataset.s;$("#rRader").value=b.dataset.r;render()};
+$("#print").onclick=()=>{window.print();fro=Math.floor(Math.random()*1e6);};
+window.__tm={render,valjMall,linjeOpt};
+ladda();$("#rubrik").value=RUB[mall];render();
+</script>
+</body>
+</html>
