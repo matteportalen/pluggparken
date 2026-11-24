@@ -152,6 +152,17 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 .tavlalank .tl-for{font-size:.82rem;font-weight:800;color:#C23A40;white-space:nowrap}
 .tavlalank.exit{border-color:#F5C77A;margin-top:12px}.tavlalank.exit .tl-ik{background:linear-gradient(145deg,#FFD27A,#F2932F 58%,#D9601A);font-size:2rem}.tavlalank.exit .tl-for{color:#B4560E}@media(hover:hover){.tavlalank.exit:hover{border-color:#F2932F}}
 .tavlalank.skrivut{border-color:#A9B9F5}
+.extrub{max-width:520px;margin:26px auto 0;font-size:.95rem;font-weight:800;color:#B4560E;display:flex;align-items:center;gap:8px}
+.extrub::before,.extrub::after{content:"";flex:1;border-top:2px dashed #F5C77A}
+.tavlalank.extern{margin-top:8px;border-color:#F2932F;background:#FFF4E6}
+.tavlalank.extern .tl-ik{background:none;box-shadow:none;overflow:hidden}.tavlalank.extern .tl-ik::before{display:none}
+.tavlalank.extern .tl-ik img{width:62px;height:62px;border-radius:18px;object-fit:cover;display:block;box-shadow:0 3px 0 rgba(0,0,0,.2)}
+.tavlalank.extern .tl-txt small{color:#B4560E;font-weight:700}
+.tavlalank.extern .tl-ut{flex:none;margin-left:auto;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;border:2px solid #F2932F;color:#B4560E;font-weight:800;font-size:1.15rem;background:#fff}
+@media(hover:hover){.tavlalank.extern:hover{border-color:#D9601A}}
+.utJa,.utNej{min-height:50px;padding:8px 20px;border-radius:16px;font-weight:800;font-size:1.05rem}
+.utJa{background:#F2932F;color:#fff;box-shadow:0 4px 0 #B4560E}.utNej{background:var(--card,#fff);color:var(--ink);box-shadow:0 4px 0 var(--line);border:2px solid var(--line)}
+.utJa:active,.utNej:active{transform:translateY(3px)}
 .tavlalank.skrivut .tl-ik{background:linear-gradient(145deg,#8EA5FF,#3D5AFE 58%,#3048C4);font-size:2rem}
 .tavlalank.skrivut .tl-for{color:var(--accent)}
 @media(hover:hover){.tavlalank.skrivut:hover{border-color:#3D5AFE}}
@@ -450,7 +461,6 @@ html[data-tema="mork"] .herosok{background:#1A2748;color:#A3B0D6}
     <a class="amnek sp" data-a style="--c:#7B61FF" href="specialare/"><span class="ik a"><svg viewBox="0 0 48 48" aria-hidden="true"><g class="spk spA b" transform="translate(8 14)"><path class="f" d="M0-4 1.1-1.1 4 0 1.1 1.1 0 4-1.1 1.1-4 0-1.1-1.1z"/></g><g class="spk spB b" transform="translate(24 9)"><path class="f" d="M0-4 1.1-1.1 4 0 1.1 1.1 0 4-1.1 1.1-4 0-1.1-1.1z"/></g><g class="spk spC b" transform="translate(40 14)"><path class="f" d="M0-4 1.1-1.1 4 0 1.1 1.1 0 4-1.1 1.1-4 0-1.1-1.1z"/></g><rect class="s" x="10" y="24" width="28" height="16" rx="2.5"/><path d="M24 24v16"/><g class="lid"><rect class="s" x="8" y="17" width="32" height="7" rx="2.5"/><path d="M24 17v7"/><path d="M24 17C21 11 15 11 16 14.5S22 17 24 17zM24 17C27 11 33 11 32 14.5S26 17 24 17z"/></g></svg></span><span class="txt"><b>Specialare</b><small>Minilektioner om spännande ämnen</small></span><span class="chev" aria-hidden="true">›</span></a>
     <a class="amnek fl" data-a style="--c:#0E9AA7" href="fler/"><span class="ik a"><svg viewBox="0 0 48 48" aria-hidden="true"><g class="pcA b"><path class="s" d="M6 15H20V20A4 4 0 0 1 20 28V33H6Z"/></g><g class="pcB b"><path class="f" d="M26 15H42V33H26V28A4 4 0 0 0 26 20Z" style="stroke:#fff;stroke-width:3.4;stroke-linejoin:round"/></g><g class="spk spC b" transform="translate(24 10)"><path class="f" d="M0-4 1.1-1.1 4 0 1.1 1.1 0 4-1.1 1.1-4 0-1.1-1.1z"/></g></svg></span><span class="txt"><b>Fler ämnen</b><small>Engelska, logik, kod och pengar</small></span><span class="chev" aria-hidden="true">›</span></a>
     <a class="amnek ex" data-a style="--c:#D6409F" href="extra/"><span class="ik a"><svg viewBox="0 0 48 48" aria-hidden="true"><g class="cb b"><path class="s" d="M22 20 22 38 9 31 9 17Z"/><path class="s" d="M22 20 35 17 35 31 22 38Z" style="fill:rgba(255,255,255,.12)"/><path d="M22 20 9 17 22 10 35 17Z"/><path d="M22 20V38"/></g><g class="spk spB b" transform="translate(38 10)"><path class="f" d="M0-4 1.1-1.1 4 0 1.1 1.1 0 4-1.1 1.1-4 0-1.1-1.1z"/></g><g class="spk spC b" transform="translate(40 30)"><path class="f" d="M0-3 .8-.8 3 0 .8.8 0 3-.8.8-3 0-.8-.8z"/></g></svg></span><span class="txt"><b>Extra</b><small>Saker att göra själv: skriv ut, vik och bygg</small></span><span class="chev" aria-hidden="true">›</span></a>
-    <a class="amnek fritid fr" data-a style="--c:#F2780C" href="https://fritidsparken.se" target="_blank" rel="noopener" aria-label="Fritidsparken.se (öppnas på en ny sida)"><span class="ik"><img src="fritidsparken-logo.jpg" alt="" width="64" height="64" style="border-radius:14px;width:64px;height:64px;object-fit:cover"></span><span class="txt"><b>Fritidsparken</b><small>Är skolan slut? Besök Fritidsparken.</small></span><span class="chev" aria-hidden="true">↗</span></a>
     </nav>
 
   <a class="tavlalank" href="larare/"><span class="tl-ik" aria-hidden="true"><svg viewBox="0 0 48 48"><rect class="s" x="5" y="7" width="38" height="25" rx="3.5"/><path class="sq" d="M11 22c3-7 5-7 7-1s4 6 6-1 4-6 7 0"/><path d="M13 14h10"/><path d="M12 38h20"/><g class="pn"><path d="M31 37l10-10"/><path class="f" d="M40 25.6l2.4 2.4-1.7 1.7-2.4-2.4z"/></g></svg></span><span class="tl-txt"><b>Klasstavlan</b><small>Interaktiv whiteboard för klassrummet</small></span><span class="tl-for">För lärare ›</span></a>
@@ -459,11 +469,20 @@ html[data-tema="mork"] .herosok{background:#1A2748;color:#A3B0D6}
 
   <a class="tavlalank skrivut" href="skriv-ut/"><span class="tl-ik" aria-hidden="true">🖨️</span><span class="tl-txt"><b>Skriv ut</b><small>Arbetsblad att göra med papper och penna</small></span><span class="tl-for" aria-hidden="true">›</span></a>
 
+  <h2 class="extrub">fritidsparken.se</h2>
+  <a class="tavlalank extern" id="fritidLank" href="https://fritidsparken.se" target="_blank" rel="noopener" aria-label="Fritidsparken, en annan sajt (öppnas på en ny sida)"><span class="tl-ik" aria-hidden="true"><img src="fritidsparken-logo.jpg" alt="" width="62" height="62"></span><span class="tl-txt"><b>Fritidsparken</b><small>fritidsparken.se ↗ · Är skolan slut?</small></span><span class="tl-ut" aria-hidden="true">↗</span></a>
+
   <p class="foot">Dina stjärnor och rekord sparas på den här enheten. Med ett gratis konto (☁️ Logga in) kan du ta med dem till andra enheter.<br><a class="intlank" href="integritet/">Integritet och personuppgifter</a></p>
   <section class="om" aria-labelledby="omH"><h2 id="omH">Om Pluggparken</h2><p>Pluggparken är en gratis lekpark för hjärnan med matteövningar, spel och fler ämnen för barn i åk 1–6: multiplikationstabellerna, klockan, bråk, uppställning och division, läsning, rymden, Sverige och världen. Allt fungerar i webbläsaren och utan reklam, och du behöver inget konto för att öva. Framstegen sparas på din egen enhet, och med ett gratis konto (ett påhittat användarnamn, ingen e-post) kan du ta med dem till andra enheter.</p></section>
 </main>
 
 
+<div class="modal" id="mUt" hidden><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="utRub" style="max-width:420px;text-align:center">
+  <div style="font-size:2.6rem;line-height:1">🧭</div>
+  <h2 id="utRub" style="margin:6px 0 4px">Nu lämnar du Pluggparken</h2>
+  <p style="margin:0 0 14px;font-weight:600;color:var(--muted)">Fritidsparken är en annan sajt. Den öppnas i en ny flik.</p>
+  <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><button class="utJa" id="utJa" type="button">Ja, gå dit ↗</button><button class="utNej" id="utNej" type="button">Stanna kvar</button></div>
+</div></div>
 <div class="modal" id="mWho" hidden><div class="sheet" role="dialog" aria-label="Vem tränar?">
   <h2 style="text-align:center">Vem tränar idag?</h2>
   <div class="who" id="whoGrid"></div>
@@ -1310,6 +1329,15 @@ else if(act&&act!==owner()){switchTo(act);}  // en annan flik har bytt profil
   storlek();
 }catch(e){}})();
 </script>
-<script>try{if(!localStorage.getItem("mp-flyttad"))document.getElementById("hamtaGammal").hidden=false;}catch(e){}</script>
+<script>try{if(!localStorage.getItem("mp-flyttad"))document.getElementById("hamtaGammal").hidden=false;}catch(e){}
+/* Fritidsparken är en extern sajt: fråga varje gång innan man lämnar (lärarens beslut 24 nov 2026) */
+(function(){var l=document.getElementById("fritidLank"),m=document.getElementById("mUt");if(!l||!m)return;
+  var stang=function(){m.hidden=true;l.focus();};
+  l.addEventListener("click",function(e){e.preventDefault();m.hidden=false;document.getElementById("utJa").focus();});
+  document.getElementById("utJa").onclick=function(){m.hidden=true;window.open(l.href,"_blank","noopener");};
+  document.getElementById("utNej").onclick=stang;
+  m.addEventListener("click",function(e){if(e.target===m)stang();});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!m.hidden)stang();});})();
+</script>
 </body>
 </html>
