@@ -29,3 +29,7 @@ Kalibrering (referenstorn → stjärnor, kostnad): Kikärtstornet stege 3 m → 
 ## 2026-11-24 – Balkar fogas ihop där de möts
 
 `MPFack.foga(bal, ny, ankare)` i `fackverk.js`: den nya balkens ändar delar befintliga balkar de hamnar mitt på (exakt kontroll med heltal: kryssprodukt 0 och 0 < t < 1), och den nya balken delas vid befintliga leder och fästpunkter den går över; dubbletter tas bort. Kostnaden räknas på resultatet (även den röda förhandsvisningen). Sparade bygg fogas vid start. Brobyggets test hade själv byggt fällan (trästötta till (1,0) mitt på vägbiten 0–3 m): nu delas vägen och testbron bär bussen 14 t i stället för lastbilen 9 t; testets antal balkar uppdaterades. Tornverkstans test kontrollerar att en stötta till mitten av ett ben delar benet.
+
+## 2026-11-24 – Tornverkstan: mer pengar
+
+Läraren frågade om vattentornen var lika generösa som Brobygget. Det var de inte (referenstornen tog 89–92 % av budgeten). Nya budgetar: Vattentornet 350 → 450, Höga vattentornet 900 → 1150, Blåsiga berget 500 → 650, Rekordtornet 600 → 700 kr. Ett torn helt i stål på Blåsiga berget (717 kr) ryms fortfarande inte. Testet gick igenom.
