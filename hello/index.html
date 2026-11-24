@@ -318,6 +318,160 @@ const CHATTAR=[
   {id:"sch6",q:"It's down the hall, on the right. See you in class!",qs:"Den ligger längre ner i korridoren, till höger. Vi ses på lektionen!",a:"Thank you for your help!",as:"Tack för hjälpen!",
    nara:"Thank you for you help!",varfor:"Din hjälp heter your help. You betyder du."}]}];
 
+/* ---------- fler berättelser per chatt (4 per person). En lottas fram varje gång, aldrig samma som förra gången.
+   Ljud som för de första: q-<id>.mp3 (personens röst) och a-<id>.mp3 (Philippa, bara åk 1–4). ---------- */
+const FLER={
+ leo:[
+  [{id:"leob1",q:"Hi! It's me, Leo. It's raining today.",qs:"Hej! Det är jag, Leo. Det regnar i dag.",a:"Hi Leo! Oh no, rain!",as:"Hej Leo! Åh nej, regn!"},
+   {id:"leob2",q:"Do you want to draw with me?",qs:"Vill du rita med mig?",a:"Yes, I love drawing!",as:"Ja, jag älskar att rita!"},
+   {id:"leob3",q:"What colour do you want?",qs:"Vilken färg vill du ha?",a:"I want the red pen.",as:"Jag vill ha den röda pennan."},
+   {id:"leob4",q:"Look! I drew a big dog.",qs:"Titta! Jag ritade en stor hund.",a:"Wow, it's beautiful!",as:"Wow, den är jättefin!"},
+   {id:"leob5",q:"Can I have the blue pen, please?",qs:"Får jag låna den blå pennan?",a:"Yes, here you are.",as:"Ja, varsågod."},
+   {id:"leob6",q:"Thank you! You are a good friend.",qs:"Tack! Du är en bra kompis.",a:"You're a good friend too!",as:"Du är också en bra kompis!"}],
+  [{id:"leoc1",q:"Hi! It's lunch time. I'm hungry!",qs:"Hej! Det är lunch. Jag är hungrig!",a:"Me too! Let's eat.",as:"Jag också! Vi äter."},
+   {id:"leoc2",q:"What's for lunch today?",qs:"Vad blir det till lunch i dag?",a:"It's pasta and meatballs.",as:"Det är pasta och köttbullar."},
+   {id:"leoc3",q:"Do you like meatballs?",qs:"Gillar du köttbullar?",a:"Yes, I do. They're yummy!",as:"Ja, det gör jag. De är jättegoda!"},
+   {id:"leoc4",q:"Can I sit next to you?",qs:"Får jag sitta bredvid dig?",a:"Of course! Sit here.",as:"Så klart! Sitt här."},
+   {id:"leoc5",q:"Oops! I dropped my fork.",qs:"Oj! Jag tappade min gaffel.",a:"Here's a new one.",as:"Här är en ny."},
+   {id:"leoc6",q:"Thanks! Let's play after lunch.",qs:"Tack! Vi leker efter lunchen.",a:"Okay! See you outside.",as:"Okej! Vi ses ute."}],
+  [{id:"leod1",q:"Hi! I have a new kitten!",qs:"Hej! Jag har en ny kattunge!",a:"Wow! What's her name?",as:"Wow! Vad heter hon?"},
+   {id:"leod2",q:"Her name is Luna.",qs:"Hon heter Luna.",a:"That's a nice name!",as:"Vilket fint namn!"},
+   {id:"leod3",q:"She is black and white.",qs:"Hon är svart och vit.",a:"I love black and white cats!",as:"Jag älskar svartvita katter!"},
+   {id:"leod4",q:"Do you have a pet?",qs:"Har du något husdjur?",a:"Yes, I have a rabbit.",as:"Ja, jag har en kanin."},
+   {id:"leod5",q:"Can I see your rabbit?",qs:"Får jag se din kanin?",a:"Yes! Come to my house.",as:"Ja! Kom hem till mig."},
+   {id:"leod6",q:"Great! See you after school.",qs:"Toppen! Vi ses efter skolan.",a:"See you later, Leo!",as:"Vi ses sen, Leo!"}]],
+ cafe:[
+  [{id:"cafeb1",q:"Hello! What can I get you?",qs:"Hej! Vad får det lov att vara?",a:"Can I have an ice cream, please?",as:"Kan jag få en glass, tack?"},
+   {id:"cafeb2",q:"Sure! Which flavour?",qs:"Visst! Vilken smak?",a:"Strawberry, please.",as:"Jordgubb, tack."},
+   {id:"cafeb3",q:"One scoop or two?",qs:"En kula eller två?",a:"Two scoops, please.",as:"Två kulor, tack."},
+   {id:"cafeb4",q:"In a cone or a cup?",qs:"I strut eller i bägare?",a:"In a cone, please.",as:"I strut, tack."},
+   {id:"cafeb5",q:"That's three pounds, please.",qs:"Det blir tre pund, tack.",a:"Here's five pounds.",as:"Här är fem pund."},
+   {id:"cafeb6",q:"Thank you! Here's your change.",qs:"Tack! Här är din växel.",a:"Thanks! Bye!",as:"Tack! Hej då!"}],
+  [{id:"cafec1",q:"Good morning! What would you like?",qs:"God morgon! Vad vill du ha?",a:"A cheese sandwich, please.",as:"En ostmacka, tack.",inte:["cafec3"]},
+   {id:"cafec2",q:"I'm sorry, we don't have any cheese today.",qs:"Tyvärr, vi har ingen ost i dag.",a:"Oh. Do you have ham?",as:"Åh. Har ni skinka?"},
+   {id:"cafec3",q:"Yes, we do. Would you like a drink too?",qs:"Ja, det har vi. Vill du ha något att dricka också?",a:"Yes, an orange juice, please.",as:"Ja, en apelsinjuice, tack."},
+   {id:"cafec4",q:"With ice?",qs:"Med is?",a:"No ice, thank you.",as:"Ingen is, tack.",inte:["cafec5"]},
+   {id:"cafec5",q:"Anything else?",qs:"Något mer?",a:"No, that's all.",as:"Nej, det var allt.",inte:["cafec4"]},
+   {id:"cafec6",q:"Okay! That's four pounds fifty.",qs:"Okej! Det blir fyra pund och femtio.",a:"Can I pay by card?",as:"Kan jag betala med kort?"}],
+  [{id:"cafed1",q:"Hi! Are you ready to order?",qs:"Hej! Är du redo att beställa?",a:"Yes. A pancake, please.",as:"Ja. En pannkaka, tack.",inte:["cafed6"]},
+   {id:"cafed2",q:"With jam or with chocolate?",qs:"Med sylt eller med choklad?",a:"With jam, please.",as:"Med sylt, tack."},
+   {id:"cafed3",q:"Here you are. Enjoy!",qs:"Varsågod. Smaklig måltid!",a:"Thank you! It looks great.",as:"Tack! Den ser jättegod ut.",inte:["cafed5"]},
+   {id:"cafed4",q:"Oh no! I spilled your water. I'm so sorry!",qs:"Åh nej! Jag spillde ditt vatten. Förlåt!",a:"Don't worry. It's okay.",as:"Ingen fara. Det gör inget."},
+   {id:"cafed5",q:"How is your pancake?",qs:"Hur smakar pannkakan?",a:"It's delicious!",as:"Den är jättegod!",inte:["cafed3"]},
+   {id:"cafed6",q:"Would you like the bill?",qs:"Vill du ha notan?",a:"Yes, please.",as:"Ja tack."}]],
+ doc:[
+  [{id:"docb1",q:"Hello! Come in. What happened?",qs:"Hej! Kom in. Vad har hänt?",a:"I fell off my bike.",as:"Jag ramlade av cykeln."},
+   {id:"docb2",q:"Oh no. Does it hurt?",qs:"Åh nej. Gör det ont?",a:"Yes, my arm hurts a lot.",as:"Ja, armen gör jätteont."},
+   {id:"docb3",q:"Can you move your fingers?",qs:"Kan du röra fingrarna?",a:"Yes, I can, but it hurts.",as:"Ja, men det gör ont."},
+   {id:"docb4",q:"Let's take an X-ray.",qs:"Vi tar en röntgenbild.",a:"Okay. Will it hurt?",as:"Okej. Gör det ont?"},
+   {id:"docb5",q:"No, it won't. Your arm is broken. You need a cast.",qs:"Nej, det gör det inte. Armen är bruten. Du behöver gips.",a:"What colour can it be?",as:"Vilken färg kan det vara?"},
+   {id:"docb6",q:"You can have blue or green.",qs:"Du kan få blått eller grönt.",a:"Green, please!",as:"Grönt, tack!"}],
+  [{id:"docc1",q:"Good afternoon! How can I help you?",qs:"God eftermiddag! Hur kan jag hjälpa dig?",a:"My ear hurts.",as:"Det gör ont i örat.",inte:["docc2"]},
+   {id:"docc2",q:"Which ear?",qs:"Vilket öra?",a:"My left ear.",as:"Vänster öra.",inte:["docc1"]},
+   {id:"docc3",q:"Let me have a look. Do you have a cold?",qs:"Får jag titta. Är du förkyld?",a:"Yes, I have a runny nose.",as:"Ja, jag är snorig."},
+   {id:"docc4",q:"You have an ear infection.",qs:"Du har öroninflammation.",a:"Is it bad?",as:"Är det farligt?"},
+   {id:"docc5",q:"No. Take this medicine twice a day.",qs:"Nej. Ta den här medicinen två gånger om dagen.",a:"Okay. Does it taste good?",as:"Okej. Smakar den gott?"},
+   {id:"docc6",q:"It tastes like strawberries!",qs:"Den smakar jordgubb!",a:"Yummy! Thank you, doctor.",as:"Mums! Tack, doktorn."}],
+  [{id:"docd1",q:"Hello! Today you get a vaccine.",qs:"Hej! I dag får du en vaccinspruta.",a:"Oh no. I'm scared.",as:"Åh nej. Jag är rädd."},
+   {id:"docd2",q:"Don't worry. It's very quick.",qs:"Oroa dig inte. Det går jättefort.",a:"Okay. I'll be brave.",as:"Okej. Jag ska vara modig."},
+   {id:"docd3",q:"Which arm do you want?",qs:"Vilken arm vill du ha den i?",a:"My left arm, please.",as:"Vänster arm, tack."},
+   {id:"docd4",q:"Look at the window. One, two, three. Done!",qs:"Titta på fönstret. Ett, två, tre. Klart!",a:"That was fast!",as:"Det gick fort!"},
+   {id:"docd5",q:"You were very brave. Do you want a sticker?",qs:"Du var jättemodig. Vill du ha ett klistermärke?",a:"Yes, please! A dinosaur sticker.",as:"Ja tack! Ett med en dinosaurie."},
+   {id:"docd6",q:"Here you go. Have a nice day!",qs:"Varsågod. Ha en bra dag!",a:"Thank you! Goodbye!",as:"Tack! Hej då!"}]],
+ party:[
+  [{id:"partyb1",q:"Hi! Welcome to my party!",qs:"Hej! Välkommen på mitt kalas!",a:"Happy birthday, Mia! This is for you.",as:"Grattis, Mia! Den här är till dig."},
+   {id:"partyb2",q:"Thank you! What is it?",qs:"Tack! Vad är det?",a:"Open it and see!",as:"Öppna och titta!"},
+   {id:"partyb3",q:"A teddy bear! I love it!",qs:"En nalle! Jag älskar den!",a:"I'm so happy you like it.",as:"Vad glad jag blir att du gillar den."},
+   {id:"partyb4",q:"Do you want some juice?",qs:"Vill du ha lite juice?",a:"Yes, please. Apple juice.",as:"Ja tack. Äppeljuice."},
+   {id:"partyb5",q:"Let's sing! Do you know the birthday song?",qs:"Vi sjunger! Kan du födelsedagssången?",a:"Yes! Happy birthday to you!",as:"Ja! Happy birthday to you!"},
+   {id:"partyb6",q:"Thank you for coming!",qs:"Tack för att du kom!",a:"Thank you for inviting me!",as:"Tack för att jag fick komma!"}],
+  [{id:"partyc1",q:"Hi! My birthday is on Saturday.",qs:"Hej! Jag fyller år på lördag.",a:"Cool! Are you having a party?",as:"Coolt! Ska du ha kalas?"},
+   {id:"partyc2",q:"Yes! Can you come?",qs:"Ja! Kan du komma?",a:"Yes, I'd love to!",as:"Ja, jättegärna!"},
+   {id:"partyc3",q:"The party starts at two o'clock.",qs:"Kalaset börjar klockan två.",a:"Where is it?",as:"Var är det?"},
+   {id:"partyc4",q:"It's at my house. Bring your swimsuit!",qs:"Hemma hos mig. Ta med baddräkt!",a:"A pool party? Great!",as:"Badkalas? Toppen!"},
+   {id:"partyc5",q:"What do you want to eat?",qs:"Vad vill du äta?",a:"Pizza and ice cream!",as:"Pizza och glass!"},
+   {id:"partyc6",q:"Okay! See you on Saturday.",qs:"Okej! Vi ses på lördag.",a:"See you! Bye!",as:"Vi ses! Hej då!"}],
+  [{id:"partyd1",q:"Hi! It's a costume party. What are you?",qs:"Hej! Det är maskerad. Vad är du utklädd till?",a:"I'm a pirate!",as:"Jag är en pirat!"},
+   {id:"partyd2",q:"Cool! I'm a princess. Do you like my dress?",qs:"Coolt! Jag är en prinsessa. Gillar du min klänning?",a:"Yes, it's very pretty.",as:"Ja, den är jättefin."},
+   {id:"partyd3",q:"Let's play musical chairs!",qs:"Vi leker hela havet stormar!",a:"Okay! I love that game.",as:"Okej! Jag älskar den leken."},
+   {id:"partyd4",q:"Oh no, you're out!",qs:"Åh nej, du åkte ut!",a:"That's okay. It's fun to watch.",as:"Det gör inget. Det är kul att titta."},
+   {id:"partyd5",q:"Who wants cake?",qs:"Vem vill ha tårta?",a:"Me, please!",as:"Jag, tack!"},
+   {id:"partyd6",q:"This was the best party ever!",qs:"Det här var det bästa kalaset någonsin!",a:"Yes, it was so much fun!",as:"Ja, det var jättekul!"}]],
+ lon:[
+  [{id:"lonb1",q:"Hi there! Are you waiting for the bus?",qs:"Hej! Väntar du på bussen?",a:"Yes, I am. Does this bus go to Big Ben?",as:"Ja. Går den här bussen till Big Ben?",
+    nara:"Yes, I am. Do this bus go to Big Ben?",varfor:"Bussen är en sak (it). Då blir det does: Does this bus go …?"},
+   {id:"lonb2",q:"No, you need the number eleven.",qs:"Nej, du behöver nummer elva.",a:"When does the next one come?",as:"När kommer nästa?",
+    nara:"When does the next one comes?",varfor:"Efter does kommer verbet i grundform: come, utan s."},
+   {id:"lonb3",q:"In five minutes. Where are you going?",qs:"Om fem minuter. Vart ska du?",a:"I'm going to see Big Ben with my family.",as:"Jag ska titta på Big Ben med min familj.",
+    nara:"I'm going to see Big Ben with my familys.",varfor:"Family är redan en grupp. Det heter my family, utan s."},
+   {id:"lonb4",q:"Lovely! Have you got an Oyster card?",qs:"Härligt! Har du ett Oyster-kort (busskort)?",a:"No, I haven't. Can I pay with my phone?",as:"Nej. Kan jag betala med mobilen?",
+    nara:"No, I haven't. Can I paying with my phone?",varfor:"Efter can kommer verbet i grundform: pay."},
+   {id:"lonb5",q:"Yes, you can. Here comes the bus!",qs:"Ja, det kan du. Där kommer bussen!",a:"Great! Thank you for helping me.",as:"Toppen! Tack för att du hjälpte mig.",
+    nara:"Great! Thank you for help me.",varfor:"Efter for kommer -ing: Thank you for helping me."},
+   {id:"lonb6",q:"No problem. Have a good day!",qs:"Ingen orsak. Ha en bra dag!",a:"You too. Goodbye!",as:"Du med. Hej då!",
+    nara:"You to. Goodbye!",varfor:"Också heter too, med två o. To betyder till."}],
+  [{id:"lonc1",q:"Excuse me! Is this your phone?",qs:"Ursäkta! Är det här din mobil?",a:"Oh yes! I didn't see that I dropped it.",as:"Åh ja! Jag såg inte att jag tappade den.",
+    nara:"Oh yes! I didn't saw that I dropped it.",varfor:"Efter didn't kommer verbet i grundform: see, inte saw."},
+   {id:"lonc2",q:"I found it on the bench.",qs:"Jag hittade den på bänken.",a:"Thank you so much. You're very kind.",as:"Tack så mycket. Du är väldigt snäll.",
+    nara:"Thank you so much. You're very kindly.",varfor:"Snäll heter kind. Kindly betyder vänligt, hur man gör något."},
+   {id:"lonc3",q:"You're welcome. Are you on holiday?",qs:"Varsågod. Är du på semester?",a:"Yes, we're here for a week.",as:"Ja, vi är här i en vecka.",
+    nara:"Yes, we're here since a week.",varfor:"Om hur länge något pågår säger man for: for a week (i en vecka)."},
+   {id:"lonc4",q:"What have you seen so far?",qs:"Vad har ni sett hittills?",a:"We have seen the Tower of London.",as:"Vi har sett Tower of London.",
+    nara:"We have saw the Tower of London.",varfor:"Efter have kommer seen, inte saw."},
+   {id:"lonc5",q:"Did you like it?",qs:"Gillade du det?",a:"Yes, it was amazing!",as:"Ja, det var fantastiskt!",
+    nara:"Yes, it were amazing!",varfor:"It går ihop med was, inte were."},
+   {id:"lonc6",q:"Take care of your phone!",qs:"Ta hand om mobilen!",a:"I will. Thanks again!",as:"Det ska jag. Tack igen!",
+    nara:"I will. Thank again!",varfor:"Det heter thanks (eller thank you), inte bara thank."}],
+  [{id:"lond1",q:"Hello! Welcome to Fish and Chips by the River.",qs:"Hej! Välkommen till Fish and Chips vid floden.",a:"Hi! Could I see the menu, please?",as:"Hej! Kan jag få se menyn?",
+    nara:"Hi! Could I sees the menu, please?",varfor:"Efter could kommer verbet i grundform: see."},
+   {id:"lond2",q:"Here it is. Are you hungry?",qs:"Här är den. Är du hungrig?",a:"Yes, very. I haven't eaten since breakfast.",as:"Ja, jättehungrig. Jag har inte ätit sedan frukost.",
+    nara:"Yes, very. I didn't eat since breakfast.",varfor:"Med since (sedan) använder man have: I haven't eaten since breakfast."},
+   {id:"lond3",q:"Our fish and chips are the best in London!",qs:"Vår fish and chips är bäst i London!",a:"Then I'll have fish and chips, please.",as:"Då tar jag fish and chips, tack.",
+    nara:"Then I have fish and chips, please.",varfor:"När man bestämmer sig och beställer säger man I'll have (jag tar)."},
+   {id:"lond4",q:"Would you like salt and vinegar on it?",qs:"Vill du ha salt och vinäger på?",a:"Just salt, please. I don't like vinegar.",as:"Bara salt, tack. Jag gillar inte vinäger.",
+    nara:"Just salt, please. I doesn't like vinegar.",varfor:"Efter I heter det don't, inte doesn't."},
+   {id:"lond5",q:"Here you are. Be careful, it's hot!",qs:"Varsågod. Akta, den är varm!",a:"Thanks! It smells really good.",as:"Tack! Den luktar jättegott.",
+    nara:"Thanks! It smell really good.",varfor:"Efter it får verbet ett s: it smells."},
+   {id:"lond6",q:"Enjoy your meal, and welcome back!",qs:"Smaklig måltid, och välkommen tillbaka!",a:"Thank you. I'll definitely come back.",as:"Tack. Jag kommer absolut tillbaka.",
+    nara:"Thank you. I definitely come back.",varfor:"Om framtiden säger man I'll (I will) come back."}]],
+ sch:[
+  [{id:"schb1",q:"Good morning, class. Who has done the homework?",qs:"God morgon, klassen. Vem har gjort läxan?",a:"I have! I did it yesterday.",as:"Jag! Jag gjorde den i går.",
+    nara:"I have! I done it yesterday.",varfor:"I går har redan hänt: I did it. Done används efter have: I have done it."},
+   {id:"schb2",q:"Well done! Was it difficult?",qs:"Bra jobbat! Var den svår?",a:"No, it was quite easy.",as:"Nej, den var ganska lätt.",
+    nara:"No, it was quite easily.",varfor:"Lätt heter easy. Easily betyder lätt på det viset, hur man gör något."},
+   {id:"schb3",q:"Can you read your answer to the class?",qs:"Kan du läsa upp ditt svar för klassen?",a:"Yes, but I'm a bit nervous.",as:"Ja, men jag är lite nervös.",
+    nara:"Yes, but I'm a bit nervously.",varfor:"Nervös heter nervous. Det beskriver hur du är."},
+   {id:"schb4",q:"Don't worry. Take your time.",qs:"Oroa dig inte. Ta den tid du behöver.",a:"Thank you. Here is my answer.",as:"Tack. Här är mitt svar.",
+    nara:"Thank you. Here are my answer.",varfor:"Answer är ett enda svar. Då blir det is: Here is my answer."},
+   {id:"schb5",q:"Excellent! Everyone, give a big clap.",qs:"Utmärkt! Alla, en stor applåd.",a:"Thank you! That was fun.",as:"Tack! Det var roligt.",
+    nara:"Thank you! That were fun.",varfor:"That går ihop med was, inte were."},
+   {id:"schb6",q:"For next week, please read chapter three.",qs:"Till nästa vecka, läs kapitel tre.",a:"Which page does it start on?",as:"På vilken sida börjar det?",
+    nara:"Which page it starts on?",varfor:"En fråga behöver does: Which page does it start on?"}],
+  [{id:"schc1",q:"Why aren't you changed for PE?",qs:"Varför har du inte bytt om till idrotten?",a:"I'm sorry. I forgot my PE kit at home.",as:"Förlåt. Jag glömde idrottskläderna hemma.",
+    nara:"I'm sorry. I forget my PE kit at home.",varfor:"Det har redan hänt: forgot (glömde), inte forget."},
+   {id:"schc2",q:"That's the second time this week.",qs:"Det är andra gången den här veckan.",a:"I know. It won't happen again.",as:"Jag vet. Det ska inte hända igen.",
+    nara:"I know. It won't happens again.",varfor:"Efter won't kommer verbet i grundform: happen."},
+   {id:"schc3",q:"Can you borrow some clothes from a friend?",qs:"Kan du låna kläder av en kompis?",a:"Maybe. I can ask Tom.",as:"Kanske. Jag kan fråga Tom.",
+    nara:"Maybe. I can asking Tom.",varfor:"Efter can kommer verbet i grundform: ask."},
+   {id:"schc4",q:"Good idea. What size are your shoes?",qs:"Bra idé. Vilken storlek har du på skorna?",a:"I'm a size five.",as:"Jag har storlek fem (brittisk storlek).",
+    nara:"I'm a size fives.",varfor:"Size five är en storlek. Det blir inget s."},
+   {id:"schc5",q:"Here are some shoes from the lost property box.",qs:"Här är några skor från hittegodslådan.",a:"Thanks! They fit perfectly.",as:"Tack! De passar perfekt.",
+    nara:"Thanks! They fits perfectly.",varfor:"Efter they får verbet inget s: they fit."},
+   {id:"schc6",q:"Great. Now let's play basketball!",qs:"Bra. Nu spelar vi basket!",a:"Yay! Basketball is my favourite sport.",as:"Jaa! Basket är min favoritsport.",
+    nara:"Yay! Basketball is my favourite sports.",varfor:"Basket är en sport. Det blir inget s."}],
+  [{id:"schd1",q:"Tomorrow we're going on a school trip to the zoo!",qs:"I morgon åker vi på skolresa till djurparken!",a:"Really? I've never been to a zoo.",as:"Verkligen? Jag har aldrig varit på ett zoo.",
+    nara:"Really? I've never be to a zoo.",varfor:"Efter have kommer been: I've never been."},
+   {id:"schd2",q:"We'll leave at eight o'clock. Don't be late!",qs:"Vi åker klockan åtta. Kom inte för sent!",a:"I won't. I'll set my alarm.",as:"Det gör jag inte. Jag ska ställa väckarklockan.",
+    nara:"I won't. I set my alarm.",varfor:"Om framtiden säger man I'll: I'll set my alarm (jag ska ställa väckarklockan)."},
+   {id:"schd3",q:"What should you bring?",qs:"Vad ska ni ta med?",a:"A packed lunch and a water bottle.",as:"En matsäck och en vattenflaska.",
+    nara:"A packed lunch and a water bottles.",varfor:"A betyder en. Då blir det a water bottle, utan s."},
+   {id:"schd4",q:"Which animal do you want to see most?",qs:"Vilket djur vill du helst se?",a:"I want to see the elephants.",as:"Jag vill se elefanterna.",
+    nara:"I want see the elephants.",varfor:"Efter want kommer to: I want to see."},
+   {id:"schd5",q:"Elephants are the biggest animals on land.",qs:"Elefanter är de största djuren på land.",a:"Wow, I didn't know that!",as:"Wow, det visste jag inte!",
+    nara:"Wow, I didn't knew that!",varfor:"Efter didn't kommer verbet i grundform: know."},
+   {id:"schd6",q:"See you tomorrow morning!",qs:"Vi ses i morgon bitti!",a:"See you! I can't wait.",as:"Vi ses! Jag längtar.",
+    nara:"See you! I can't waiting.",varfor:"Efter can't kommer verbet i grundform: wait."}]]};
+
 /* ---------- rösten (Philippa, ljud/hello/) ---------- */
 const LJUDBAS="../ljud/hello/",LJUD_V=2;/* 2 = alla klipp ljudnormaliserade (-18 LUFS), Lauras var för tysta */let spelar=null;
 function tystna(){if(spelar){spelar.stop=true;if(spelar.a)spelar.a.pause();spelar.knapp&&spelar.knapp.classList.remove("spelar");spelar=null}if(window.speechSynthesis)speechSynthesis.cancel()}
@@ -335,7 +489,7 @@ const NIV=[null,
 const stjHtml=n=>[1,2,3].map(i=>i<=n?"★":'<span class="off">★</span>').join("");
 function show(id){document.querySelectorAll(".screen").forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id)}
 function hem(){tystna();stoppaMic();if(G)G.v++;$("niv").innerHTML=[1,2,3].map(l=>`<button data-l="${l}"><span class="nr" style="background:${NIV[l].col}">${l}</span><span><b>${NIV[l].namn}</b><small>${NIV[l].txt}</small></span><span class="st">${stjHtml(data.stars[l]||0)}</span></button>`).join("");
-  $("kontakter").innerHTML=CHATTAR.map(c=>`<button data-c="${c.id}"><span class="emo" style="background:${c.col}">${c.ikon}</span><span class="kt"><b>${esc(c.namn)}</b><small lang="en">${esc(c.rep[0].q)}</small><i>${esc(c.om)}</i></span><span class="kh"><em>${c.ak}</em><span class="st">${stjHtml(data.stars["c-"+c.id]||0)}</span></span></button>`).join("");show("home")}
+  $("kontakter").innerHTML=CHATTAR.map(c=>`<button data-c="${c.id}"><span class="emo" style="background:${c.col}">${c.ikon}</span><span class="kt"><b>${esc(c.namn)}</b><small lang="en">${esc((FLER[c.id]?pick([c.rep,...FLER[c.id]]):c.rep)[0].q)}</small><i>${esc(c.om)} · ${1+(FLER[c.id]||[]).length} berättelser</i></span><span class="kh"><em>${c.ak}</em><span class="st">${stjHtml(data.stars["c-"+c.id]||0)}</span></span></button>`).join("");show("home")}
 $("niv").onclick=e=>{const b=e.target.closest("[data-l]");if(b)starta(+b.dataset.l)};
 $("kontakter").onclick=e=>{const b=e.target.closest("[data-c]");if(b)starta("c-"+b.dataset.c)};
 
@@ -347,7 +501,8 @@ function klocka(){const d=new Date();$("klocka").textContent=d.getHours()+":"+St
 function rulla(){const l=$("chatt");l.scrollTop=l.scrollHeight}
 /* key = 1, 2, 3 (nivåerna med det egna djuret) eller "c-cafe" (en chatt). G.l styr hur svaren visas, G.bank är replikerna. */
 function starta(key){const ch=typeof key==="string"?CHATTAR.find(c=>"c-"+c.id===key):null;let l,bank,ordning,avaHtml,namn;
-  if(ch){l=ch.typ;bank=ch.rep;ordning=ch.rep.slice();avaHtml=`<span class="emo" style="background:${ch.col}">${ch.ikon}</span>`;namn=ch.namn}
+  if(ch){l=ch.typ;const alla=[ch.rep,...(FLER[ch.id]||[])],senast=(data.senast||{})[ch.id];let nr;do{nr=Math.floor(Math.random()*alla.length)}while(alla.length>1&&nr===senast);
+    data.senast=Object.assign({},data.senast,{[ch.id]:nr});save();bank=alla[nr];ordning=bank.slice();avaHtml=`<span class="emo" style="background:${ch.col}">${ch.ikon}</span>`;namn=ch.namn}
   else{l=key;bank=SAMTAL[l];const lista=bank.slice();
     /* nivå 1 är ett riktigt samtal: hello först och goodbye sist, fyra slumpade emellan. */
     ordning=l===1?[lista[0],...shuffle(lista.slice(1,-1)).slice(0,RUNDA-2),lista[lista.length-1]]:shuffle(lista).slice(0,RUNDA);avaHtml=djurSvg();namn=djurNamn()}
@@ -417,7 +572,7 @@ $("rIgen").onclick=()=>starta(G.key);$("rHome").onclick=hem;
 function confetti(){if(reduced())return;const cols=["#3D8BFD","#FF9F43","#2BB673","#FFC93C","#7B61FF","#FF6B6B"],c=$("fx"),x=c.getContext("2d"),dpr=devicePixelRatio||1,W=innerWidth,H=innerHeight;c.width=W*dpr;c.height=H*dpr;x.setTransform(dpr,0,0,dpr,0,0);c.hidden=false;
   const P=Array.from({length:150},()=>({x:W/2+(Math.random()-.5)*120,y:H*.3,vx:(Math.random()-.5)*16,vy:-Math.random()*15-4,r:Math.random()*7+5,c:pick(cols),a:Math.random()*6,va:(Math.random()-.5)*.4}));
   let t=0;(function f(){x.clearRect(0,0,W,H);P.forEach(p=>{p.vy+=.45;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore()});if(++t<150)requestAnimationFrame(f);else c.hidden=true})()}
-window.__hello={SAMTAL,CHATTAR,starta,get G(){return G}};
+window.__hello={SAMTAL,CHATTAR,FLER,starta,get G(){return G}};
 hem();
 </script>
 </body>
