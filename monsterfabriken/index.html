@@ -87,6 +87,7 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 #fx{position:fixed;inset:0;pointer-events:none;z-index:50}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
+<link rel="stylesheet" href="monsterbygge.css?v=1">
 </head>
 <body>
 <script src="../ljud.js"></script>
@@ -103,7 +104,7 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
   <button type="button" data-home hidden tabindex="-1" aria-hidden="true" onclick="hem()"></button>
   <div class="topp"><div class="dots" id="dots"></div><span class="niva-t" id="nivT"></span><span class="pet" id="pet"></span></div>
   <div class="spel">
-    <div class="kort"><div class="uppdrag" id="uppdrag"></div><div id="bild"></div></div>
+    <div class="kort scenkort"><div class="uppdrag" id="uppdrag"></div><div id="bild"></div><p class="byggtips" id="byggtips" role="status">Dra dit en del, eller välj en del och tryck på monstret.</p><div class="byggverktyg"><button type="button" id="bAngra">↶ Ångra</button><button type="button" id="bTaBort" disabled>Ta bort vald del</button></div></div>
     <div class="kort"><div id="byggare"></div><button class="klar" id="bKlar" type="button">✅ Klar!</button><div class="fb" id="fb" aria-live="polite"></div></div>
   </div>
 </section>
@@ -118,6 +119,7 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 </section>
 </main>
 <canvas id="fx" hidden></canvas>
+<script src="monsterbygge.js?v=1"></script>
 <script>
 const $=id=>document.getElementById(id);
 const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
@@ -143,23 +145,7 @@ function mening(k,v){if(k==="farg")return`Its body is ${v}.`;if(k==="mun")return
   const ord={ogon:["eye","eyes"],armar:["arm","arms"],ben:["leg","legs"],horn:["horn","horns"]}[k];return`It has ${TAL[v]} ${v===1?ord[0]:ord[1]}.`;}
 function svensk(k,v){if(k==="farg")return`Kroppen är ${FARG[v][1]}.`;if(k==="mun")return v==="big"?"Den har en stor mun.":"Den har en liten mun.";
   const ord={ogon:"ögon",armar:"armar",ben:"ben",horn:"horn"}[k];return v===0?`Den har inga ${ord}.`:`Den har ${TALSV[v]} ${v===1?{ogon:"öga",armar:"arm",ben:"ben",horn:"horn"}[k]:ord}.`.replace("ett arm","en arm");}
-function rita(m,stor){const c=FARG[m.farg][0],d="#1D2B53",L=`stroke="${d}" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"`;let s="";
-  const cx=100,cy=118,rx=56,ry=60;
-  // ben
-  for(let i=0;i<m.ben;i++){const x=cx+(i-(m.ben-1)/2)*(m.ben>3?26:32);s+=`<path d="M${x} ${cy+ry-12}V${cy+ry+22}" ${L} stroke-width="11"/><path d="M${x} ${cy+ry-12}V${cy+ry+22}" stroke="${c}" stroke-width="5.5" stroke-linecap="round"/><ellipse cx="${x+5}" cy="${cy+ry+24}" rx="11" ry="6" fill="${c}" ${L}/>`;}
-  // armar, parvis på sidorna
-  const par=m.armar/2;for(let i=0;i<par;i++){const y=cy-10+i*26-(par-1)*13;for(const sid of [-1,1]){const x0=cx+sid*(rx-8),x1=cx+sid*(rx+30),y1=y-14+i*6;
-    s+=`<path d="M${x0} ${y}Q${cx+sid*(rx+16)} ${y+8} ${x1} ${y1}" fill="none" ${L} stroke-width="11"/><path d="M${x0} ${y}Q${cx+sid*(rx+16)} ${y+8} ${x1} ${y1}" fill="none" stroke="${c}" stroke-width="5.5" stroke-linecap="round"/><circle cx="${x1}" cy="${y1}" r="7" fill="${c}" ${L}/>`;}}
-  // horn
-  for(let i=0;i<m.horn;i++){const x=cx+(i-(m.horn-1)/2)*30;s+=`<path d="M${x-9} ${cy-ry+12}L${x+(i-(m.horn-1)/2)*6} ${cy-ry-24}L${x+9} ${cy-ry+12}Z" fill="#FFF3D6" ${L}/>`;}
-  // kropp
-  s+=`<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="${c}" ${L}/><ellipse cx="${cx-18}" cy="${cy-26}" rx="16" ry="10" fill="#fff" opacity=".22"/>`;
-  // ögon (högst tre per rad)
-  const n=m.ogon,rader=n>3?2:1,per=[Math.ceil(n/rader),n-Math.ceil(n/rader)].filter(x=>x>0),er=n>4?9:n>2?11:13;
-  per.forEach((k,r)=>{for(let i=0;i<k;i++){const x=cx+(i-(k-1)/2)*(er*2.5),y=cy-30+r*(er*2.3)-(rader-1)*er;s+=`<circle cx="${x}" cy="${y}" r="${er}" fill="#fff" ${L}/><circle cx="${x+er*.25}" cy="${y+er*.15}" r="${er*.48}" fill="${d}"/><circle cx="${x+er*.42}" cy="${y-er*.1}" r="${er*.15}" fill="#fff"/>`;}});
-  // mun
-  const my=cy+24+(rader-1)*6;s+=m.mun==="big"?`<path d="M${cx-30} ${my}Q${cx} ${my+38} ${cx+30} ${my}Z" fill="#7A1F2B" ${L}/><path d="M${cx-18} ${my+2}l5 9 5-9M${cx+8} ${my+2}l5 9 5-9" fill="#fff" stroke="#fff" stroke-width="1"/>`:`<path d="M${cx-11} ${my+4}Q${cx} ${my+14} ${cx+11} ${my+4}" fill="none" ${L}/>`;
-  return`<svg class="monster" viewBox="0 -4 200 230" role="img" aria-label="Monstret">${s}</svg>`;}
+function rita(m){return MonsterBygge.picture(m)}
 const START={farg:"green",ogon:2,armar:2,ben:2,horn:0,mun:"small"};
 const slump=()=>({farg:pick(Object.keys(FARG)),ogon:rnd(1,6),armar:pick([0,2,4,6]),ben:pick([0,2,3,4]),horn:pick([0,1,2,3]),mun:pick(["big","small"])});
 
@@ -184,12 +170,12 @@ const NIV=[null,
  {namn:"Nivå 3: Läs och bygg",txt:"Läs hela beskrivningen och bygg monstret. Åk 5–6.",col:"#7B61FF",antal:5,saker:6,las:true}];
 const stjHtml=n=>[1,2,3].map(i=>i<=n?"★":'<span class="off">★</span>').join("");
 function show(id){document.querySelectorAll(".screen").forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
-function hem(){tystna();$("niv").innerHTML=[1,2,3].map(l=>`<button data-l="${l}"><span class="nr" style="background:${NIV[l].col}">${l}</span><span><b>${NIV[l].namn}</b><small>${NIV[l].txt}</small></span><span class="st">${stjHtml(data.stars[l]||0)}</span></button>`).join("");show("home")}
+function hem(){clearTimeout(nextTimer);builder?.destroy();builder=null;tystna();$("niv").innerHTML=[1,2,3].map(l=>`<button data-l="${l}"><span class="nr" style="background:${NIV[l].col}">${l}</span><span><b>${NIV[l].namn}</b><small>${NIV[l].txt}</small></span><span class="st">${stjHtml(data.stars[l]||0)}</span></button>`).join("");show("home")}
 $("niv").onclick=e=>{const b=e.target.closest("[data-l]");if(b)starta(+b.dataset.l)};
 $("heroM").innerHTML=rita({farg:"orange",ogon:3,armar:4,ben:2,horn:2,mun:"big"});
 
-let G=null;
-function starta(l){G={l,i:0,fel:0,res:[]};$("nivT").textContent="Nivå "+l;$("pet").innerHTML=window.owlSVG?owlSVG(lasDjur()):"";show("game");ny()}
+let G=null,builder=null,nextTimer=null;
+function starta(l){clearTimeout(nextTimer);builder?.destroy();builder=null;G={l,i:0,fel:0,res:[]};$("nivT").textContent="Nivå "+l;$("pet").innerHTML=window.owlSVG?owlSVG(lasDjur()):"";show("game");ny()}
 function prickar(){$("dots").innerHTML=Array.from({length:NIV[G.l].antal},(_,j)=>`<i class="${j<G.i?(G.res[j]?"ok":"f"):j===G.i?"nu":""}"></i>`).join("")}
 /* Nivå 3: hela beskrivningen som löpande text (för att läsa), uppläsningen är de inspelade meningarna i rad */
 function lastext(m){const del=[];del.push(`My monster has ${TAL[m.ogon]} ${m.ogon===1?"eye":"eyes"}`);
@@ -197,35 +183,47 @@ function lastext(m){const del=[];del.push(`My monster has ${TAL[m.ogon]} ${m.ogo
   let t=del[0]+(fler.length?", "+fler.slice(0,-1).join(", ")+(fler.length>1?" and ":"")+fler[fler.length-1]:"")+". ";
   const inga=[];if(!m.horn)inga.push("horns");if(!m.armar)inga.push("arms");if(!m.ben)inga.push("legs");if(inga.length)t+=`It has no ${inga.join(" and no ")}. `;
   t+=`Its body is ${m.farg}, and it has a ${m.mun} mouth.`;return t;}
-function ny(){if(G.i>=NIV[G.l].antal){slut();return}tystna();const n=NIV[G.l];G.forsta=true;G.lost=false;
+function ny(){$("bild").classList.remove("fira");builder?.destroy();builder=null;if(G.i>=NIV[G.l].antal){slut();return}tystna();const n=NIV[G.l];G.forsta=true;G.lost=false;
   if(n.saker===1){G.bygg=G.i===0||!G.bygg?{...START}:{...G.bygg};let k,v;do{k=pick(DELAR).k;v=pick(DELAR.find(d=>d.k===k).val)}while(G.bygg[k]===v);G.mal={[k]:v};}
-  else if(n.saker===3){G.bygg={...START};const s=slump(),ks=shuffle(DELAR.map(d=>d.k)).filter(k=>s[k]!==START[k]).slice(0,3);G.mal={};ks.forEach(k=>G.mal[k]=s[k]);}
+  else if(n.saker===3){G.bygg={...START};G.mal={};shuffle(DELAR.slice()).slice(0,3).forEach(d=>G.mal[d.k]=pick(d.val.filter(v=>v!==START[d.k])));}
   else{G.bygg={...START};G.mal=slump();}
+  if(n.saker!==1||!G.parts)G.parts=MonsterBygge.defaults(G.bygg);
   G.meningar=Object.entries(G.mal).map(([k,v])=>mening(k,v));
   const u=$("uppdrag");
   if(n.las)u.innerHTML=`<p style="margin:0 0 4px">Läs beskrivningen och bygg monstret.</p><div class="text">${lastext(G.mal)}</div><button class="lyssna" id="bLyss" type="button" style="min-height:46px;font-size:1rem">🔊 Lyssna</button>`;
   else u.innerHTML=`<button class="lyssna" id="bLyss" type="button">🔊 ${n.saker===1?"Lyssna":"Lyssna på tre saker"}</button><p>${n.saker===1?"Vad ska du ändra på monstret?":"Bygg alla tre sakerna."}</p><div class="text dold" id="facit" hidden></div><div class="svensk" id="facitSv" hidden></div>`;
   $("bLyss").onclick=()=>{if(window.Ljud&&Ljud.on===false&&!n.las){const f=$("facit");f.hidden=false;f.classList.remove("dold");f.textContent=G.meningar.join(" ");$("fb").className="fb";$("fb").textContent="Ljudet är av, så meningen syns som text. Slå på 🔊 uppe till höger för att lyssna.";return}spela(G.meningar,$("bLyss"))};
   $("fb").textContent="";$("fb").className="fb";$("bKlar").disabled=false;prickar();rit();}
-function rit(markera){$("bild").innerHTML=rita(G.bygg);
-  $("byggare").innerHTML=DELAR.map(d=>`<div class="rad${markera&&markera[d.k]?" "+markera[d.k]:""}" data-k="${d.k}"><span class="namn">${d.ik} ${d.en}<small>${d.sv}</small></span><span class="val">${d.val.map(v=>d.k==="farg"?`<button class="f" type="button" data-v="${v}" aria-label="${v}" aria-pressed="${G.bygg.farg===v}" style="background:${FARG[v][0]}"></button>`:`<button type="button" data-v="${v}" aria-pressed="${G.bygg[d.k]===v}">${d.k==="mun"?v:v}</button>`).join("")}</span></div>`).join("");}
-$("byggare").onclick=e=>{const b=e.target.closest("[data-v]");if(!b||!G)return;const k=b.closest(".rad").dataset.k,d=DELAR.find(x=>x.k===k),v=d.val.find(x=>String(x)===b.dataset.v);G.bygg[k]=v;ljud("pip");rit()};
-$("bKlar").onclick=()=>{if(!G)return;const fel=Object.keys(G.mal).filter(k=>G.bygg[k]!==G.mal[k]),mark={};
+function tray(){
+ $('byggare').innerHTML='<h2 class="delrub">Delar till ditt monster</h2><div class="rad" data-k="farg"><span class="namn">Body<small>Kroppens färg</small></span><span class="val">'+Object.entries(FARG).map(([k,v])=>`<button class="f" type="button" data-color="${k}" aria-label="${k}" aria-pressed="${G.bygg.farg===k}" style="background:${v[0]}"></button>`).join('')+'</span></div><div class="dellada">'+[
+ ['ogon','eye','Eyes','Ögon'],['armar','arm','Arms','Armar'],['ben','leg','Legs','Ben'],['horn','horn','Horns','Horn'],['mun','mouth','Small mouth','Liten mun','small'],['mun','mouth','Big mouth','Stor mun','big']
+ ].map(([k,file,en,sv,v])=>`<button type="button" class="delknapp ${v||''}" data-part="${k}" ${v?`data-variant="${v}"`:''} data-k="${k}" aria-label="${en}, ${sv}. Dra eller välj och placera." aria-pressed="false"><img src="bilder/${file}.webp" alt="" draggable="false"><b>${en}</b><small>${sv}</small><span class="antal" data-count="${k}"></span></button>`).join('')+'</div><p class="ladtips">Dra en del till monstret. För färre delar: välj en del på monstret och tryck Ta bort.</p>';
+}
+function counts(){document.querySelectorAll('[data-color]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.color===G.bygg.farg)));document.querySelectorAll('[data-count]').forEach(b=>{const k=b.dataset.count;b.textContent=k==='mun'?'':G.bygg[k]});}
+function rit(markera){
+ if(!builder){tray();builder=MonsterBygge.mount($('bild'),{model:G.bygg,parts:G.parts,tray:$('byggare'),hint:$('byggtips'),locked:()=>G.lost,changed:parts=>{G.parts=parts;counts();document.querySelectorAll('#byggare .fel,#byggare .ratt').forEach(e=>e.classList.remove('fel','ratt'))},choice:part=>{document.querySelectorAll('[data-part]').forEach(b=>b.setAttribute('aria-pressed',String(!!part&&part.k===b.dataset.part&&(part.v||'')===(b.dataset.variant||''))))},controls:(selected,n)=>{$('bTaBort').disabled=!selected||G.lost;$('bAngra').disabled=!n||G.lost}})}
+ else builder.render();
+ counts();if(markera)document.querySelectorAll('#byggare [data-k]').forEach(el=>{el.classList.toggle('fel',markera[el.dataset.k]==='fel');el.classList.toggle('ratt',markera[el.dataset.k]==='ratt')});
+}
+$('byggare').onclick=e=>{const b=e.target.closest('[data-color]');if(b&&!G.lost)builder.color(b.dataset.color)};
+$('bTaBort').onclick=()=>builder?.remove();$('bAngra').onclick=()=>builder?.undo();
+$("bKlar").onclick=()=>{if(!G||G.lost)return;const fel=Object.keys(G.mal).filter(k=>G.bygg[k]!==G.mal[k]),mark={};
   Object.keys(G.mal).forEach(k=>mark[k]=fel.includes(k)?"fel":"ratt");
-  if(!fel.length){ljud("ok");const p=$("pet");p.classList.remove("hopp");void p.offsetWidth;p.classList.add("hopp");G.res[G.i]=G.forsta;if(!G.forsta)G.fel++;
-    rit(mark);$("fb").className="fb ratt";$("fb").textContent=G.forsta?"Rätt! 👾":"Nu blev det rätt!";$("bKlar").disabled=true;
+  if(!fel.length){G.lost=true;ljud("ok");const p=$("pet");p.classList.remove("hopp");void p.offsetWidth;p.classList.add("hopp");G.res[G.i]=G.forsta;if(!G.forsta)G.fel++;
+    rit(mark);$("bild").classList.add("fira");$("fb").className="fb ratt";$("fb").textContent=G.forsta?"Rätt! 👾":"Nu blev det rätt!";$("bKlar").disabled=true;
     const f=$("facit");if(f){f.hidden=false;f.classList.remove("dold");f.textContent=G.meningar.join(" ");$("facitSv").hidden=false;$("facitSv").textContent=Object.entries(G.mal).map(([k,v])=>svensk(k,v)).join(" ")}
-    setTimeout(()=>{G.i++;ny()},2200);return}
+    nextTimer=setTimeout(()=>{$("bild").classList.remove("fira");G.i++;ny()},2200);return}
   ljud("bad");G.forsta=false;rit(mark);$("fb").className="fb fel";
-  $("fb").textContent=NIV[G.l].las?`Inte riktigt. Läs igen och titta på de rosa raderna.`:`Inte riktigt. Lyssna igen och titta på ${fel.length===1?"den rosa raden":"de rosa raderna"}.`;};
+  $("fb").textContent=NIV[G.l].las?`Inte riktigt. Läs igen och titta på de rosa delarna.`:`Inte riktigt. Lyssna igen och titta på ${fel.length===1?"den rosa delen":"de rosa delarna"}.`;};
 function slut(){tystna();const st=G.fel===0?3:G.fel<=2?2:1,old=data.stars[G.l]||0;data.stars[G.l]=Math.max(old,st);save();
-  $("rBild").innerHTML=rita(G.bygg);$("rStj").innerHTML=stjHtml(st);$("rRub").textContent=st===3?"Perfekt! 🎉":st===2?"Bra jobbat!":"Bra kämpat!";
+  $("rBild").innerHTML=MonsterBygge.picture(G.bygg,G.parts);$("rStj").innerHTML=stjHtml(st);$("rRub").textContent=st===3?"Perfekt! 🎉":st===2?"Bra jobbat!":"Bra kämpat!";
   $("rTxt").textContent=`${NIV[G.l].antal-G.fel} av ${NIV[G.l].antal} monster rätt direkt.`;show("result");if(st===3){ljud("fanfare");confetti()}else ljud("chime")}
 $("rIgen").onclick=()=>starta(G.l);$("rHome").onclick=hem;
 function confetti(){if(reduced())return;const cols=["#3D8BFD","#FF9F43","#2BB673","#FFC93C","#7B61FF","#FF6B6B"],c=$("fx"),x=c.getContext("2d"),dpr=devicePixelRatio||1,W=innerWidth,H=innerHeight;c.width=W*dpr;c.height=H*dpr;x.setTransform(dpr,0,0,dpr,0,0);c.hidden=false;
   const P=Array.from({length:150},()=>({x:W/2+(Math.random()-.5)*120,y:H*.3,vx:(Math.random()-.5)*16,vy:-Math.random()*15-4,r:Math.random()*7+5,c:pick(cols),a:Math.random()*6,va:(Math.random()-.5)*.4}));
   let t=0;(function f(){x.clearRect(0,0,W,H);P.forEach(p=>{p.vy+=.45;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore()});if(++t<150)requestAnimationFrame(f);else c.hidden=true})()}
-window.__mf={rita,mening,svensk,lastext,starta,get G(){return G}};
+window.__mf={rita,mening,svensk,lastext,starta,get G(){return G},get builder(){return builder}};
+window.addEventListener("pagehide",()=>{tystna();clearTimeout(nextTimer)});
 hem();
 </script>
 </body>
