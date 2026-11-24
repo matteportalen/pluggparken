@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<script src="../tema.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Monsterfabriken – Pluggparken</title>
+<meta name="description" content="Monsterfabriken: lyssna på engelska och bygg monstret. It has three eyes and a red body! Siffror, färger och kroppsdelar på engelska.">
+<link rel="canonical" href="https://pluggparken.se/monsterfabriken/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Pluggparken">
+<meta property="og:locale" content="sv_SE">
+<meta property="og:title" content="Monsterfabriken – Pluggparken">
+<meta property="og:description" content="Lyssna på engelska och bygg monstret.">
+<meta property="og:url" content="https://pluggparken.se/monsterfabriken/">
+<meta property="og:image" content="https://pluggparken.se/og.jpg">
+<meta name="theme-color" content="#1F3A35">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+:root{
+  --bg:#EAF3FF; --ink:#1D2B53; --muted:#56668F; --card:#FFFFFF; --line:#C6D6F2; --soft:#F1F6FF;
+  --good:#1E9E5E; --good-dark:#157548; --bad:#E5484D; --accent:#3D5AFE; --gold:#F2B707;
+  --font:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:900px;margin:0 auto;padding:12px 16px 40px}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;border:0;background:none}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+[hidden]{display:none!important}
+.hero{display:flex;gap:16px;align-items:center;background:linear-gradient(135deg,#7B61FF,#5A3FE0);color:#fff;border-radius:24px;padding:16px 18px;box-shadow:0 5px 0 #3D2AA8;margin:6px 0 16px}
+.hero .hm{flex:none;width:110px}
+.hero h1{margin:0;font-size:clamp(1.7rem,6vw,2.3rem);line-height:1.05}
+.hero p{margin:6px 0 0;font-weight:600;opacity:.95}
+.niv{display:grid;gap:10px}
+.niv button{display:flex;align-items:center;gap:14px;background:var(--card);border-radius:18px;padding:12px 14px;box-shadow:0 4px 0 var(--line);text-align:left;width:100%}
+.niv button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.niv .nr{flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-weight:800;font-size:1.4rem;color:#fff}
+.niv b{display:block;font-size:1.12rem;line-height:1.15}
+.niv small{display:block;color:var(--muted);font-weight:600;font-size:.88rem;line-height:1.25}
+.niv .st{margin-left:auto;flex:none;color:var(--gold);font-size:1.15rem;letter-spacing:1px}
+.niv .st .off{color:var(--line)}
+.info{color:var(--muted);font-size:.9rem;margin:14px 2px 0}
+.topp{display:flex;align-items:center;gap:10px;margin:4px 0 10px}
+.dots{display:flex;gap:6px;flex:1;flex-wrap:wrap}
+.dots i{width:12px;height:12px;border-radius:50%;background:var(--line)}
+.dots i.ok{background:var(--good)}.dots i.f{background:var(--bad)}.dots i.nu{background:var(--gold)}
+.niva-t{font-weight:800;color:var(--muted);font-size:.9rem}
+.pet{flex:none;width:48px;height:52px;pointer-events:none}.pet svg{width:100%;height:100%}
+.pet.hopp{animation:hopp .55s ease}
+@keyframes hopp{40%{transform:translateY(-18px)}}
+.spel{display:grid;gap:12px}
+@media(min-width:760px){.spel{grid-template-columns:300px 1fr;align-items:start}}
+.kort{background:var(--card);border-radius:22px;box-shadow:0 4px 0 var(--line);padding:12px}
+.uppdrag{text-align:center}
+.uppdrag .lyssna{display:inline-flex;align-items:center;gap:8px;min-height:56px;padding:8px 22px;border-radius:999px;background:var(--accent);color:#fff;font-weight:800;font-size:1.15rem;box-shadow:0 4px 0 #2A3FB8}
+.uppdrag .lyssna:active{transform:translateY(3px)}
+.uppdrag .lyssna.spelar{background:#7B61FF;box-shadow:0 4px 0 #3D2AA8}
+.uppdrag p{margin:6px 0 0;font-weight:700;color:var(--muted);font-size:.95rem}
+.text{font-size:1.25rem;font-weight:800;line-height:1.45;margin:8px 4px 4px;text-align:left}
+.text.dold{filter:blur(6px);user-select:none}
+.svensk{font-weight:600;color:var(--muted);font-size:.95rem;margin:2px 4px 0;text-align:left}
+.monster{display:block;width:100%;max-width:280px;margin:0 auto}
+.rad{display:flex;align-items:center;gap:8px;padding:6px 4px;border-radius:14px;flex-wrap:wrap}
+.rad+.rad{border-top:2px dashed #E6ECF8}
+.rad .namn{flex:0 0 92px;font-weight:800;font-size:1.05rem;line-height:1.05}
+.rad .namn small{display:block;font-weight:600;color:var(--muted);font-size:.78rem}
+.rad .val{display:flex;flex-wrap:wrap;gap:6px;flex:1}
+.rad .val button{min-width:48px;min-height:48px;padding:4px 10px;border-radius:12px;background:var(--soft);box-shadow:0 3px 0 var(--line);font-weight:800;font-size:1.1rem}
+.rad .val button[aria-pressed=true]{background:var(--ink);color:#fff;box-shadow:0 3px 0 #0E1735}
+.rad .val button.f{width:48px;padding:0;border:4px solid #fff;box-shadow:0 0 0 2px var(--line)}
+.rad .val button.f[aria-pressed=true]{box-shadow:0 0 0 4px var(--ink)}
+.rad.fel{background:#FDE7E8}
+.rad.ratt{background:#E6F7EE}
+.klar{display:block;width:100%;min-height:56px;margin-top:10px;border-radius:18px;background:var(--good);color:#fff;font-weight:800;font-size:1.2rem;box-shadow:0 5px 0 var(--good-dark)}
+.klar:active{transform:translateY(3px)}
+.fb{text-align:center;font-weight:700;margin:10px 0 0;min-height:1.6em}
+.fb.ratt{color:var(--good-dark)}.fb.fel{color:#B4232A}
+.res{text-align:center}
+.res .stj{font-size:3rem;letter-spacing:6px;color:var(--gold);margin:8px 0}
+.res .stj .off{color:var(--line)}
+.knapp{display:inline-block;background:var(--good);color:#fff;border-radius:16px;padding:12px 26px;font-weight:800;font-size:1.15rem;box-shadow:0 5px 0 var(--good-dark);margin:6px}
+.knapp.vit{background:var(--card);color:var(--ink);box-shadow:0 5px 0 var(--line)}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:50}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<script src="../ljud.js"></script>
+<script src="../djur.js"></script>
+<script src="../huvud.js" data-titel="Monsterfabriken" data-ikon="👾"></script>
+<main class="wrap">
+<section class="screen" id="home">
+  <div class="hero"><div class="hm" id="heroM"></div><div><h1>Monsterfabriken</h1><p>Lyssna på engelska och bygg monstret. Hur många ögon? Vilken färg?</p></div></div>
+  <div class="niv" id="niv"></div>
+  <p class="info">Tryck på 🔊 för att höra vad monstret ska ha. Rösten säger det bara när du trycker.</p>
+</section>
+
+<section class="screen" id="game" hidden>
+  <button type="button" data-home hidden tabindex="-1" aria-hidden="true" onclick="hem()"></button>
+  <div class="topp"><div class="dots" id="dots"></div><span class="niva-t" id="nivT"></span><span class="pet" id="pet"></span></div>
+  <div class="spel">
+    <div class="kort"><div class="uppdrag" id="uppdrag"></div><div id="bild"></div></div>
+    <div class="kort"><div id="byggare"></div><button class="klar" id="bKlar" type="button">✅ Klar!</button><div class="fb" id="fb" aria-live="polite"></div></div>
+  </div>
+</section>
+
+<section class="screen res" id="result" hidden>
+  <div id="rBild" style="max-width:220px;margin:0 auto"></div>
+  <h2 id="rRub" style="margin:4px 0 0">Bra jobbat!</h2>
+  <div class="stj" id="rStj"></div>
+  <p id="rTxt" style="font-weight:700;margin:0 0 14px"></p>
+  <button class="knapp" id="rIgen">Spela igen</button>
+  <button class="knapp vit" id="rHome">Välj nivå</button>
+</section>
+</main>
+<canvas id="fx" hidden></canvas>
+<script>
+const $=id=>document.getElementById(id);
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const KEY="mattespel-monsterfabriken-v1";
+const data=(()=>{try{return Object.assign({stars:{}},JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){return{stars:{}}}})();
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}};
+const reduced=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
+const ljud=n=>{window.Ljud&&Ljud[n]&&Ljud[n]()};
+
+/* ---------- monstret ---------- */
+const FARG={red:["#E5484D","röd"],blue:["#3D8BFD","blå"],green:["#2BB673","grön"],yellow:["#F7C531","gul"],purple:["#7B61FF","lila"],orange:["#FF9F43","orange"],pink:["#FF5FA2","rosa"]};
+const DELAR=[
+ {k:"farg",en:"body",sv:"kroppen",ik:"🎨",val:Object.keys(FARG)},
+ {k:"ogon",en:"eyes",sv:"ögon",ik:"👀",val:[1,2,3,4,5,6]},
+ {k:"armar",en:"arms",sv:"armar",ik:"💪",val:[0,2,4,6]},
+ {k:"ben",en:"legs",sv:"ben",ik:"🦵",val:[0,2,3,4]},
+ {k:"horn",en:"horns",sv:"horn",ik:"🦄",val:[0,1,2,3]},
+ {k:"mun",en:"mouth",sv:"mun",ik:"👄",val:["big","small"]}];
+const TAL=["no","one","two","three","four","five","six"],TALSV=["inga","ett","två","tre","fyra","fem","sex"];
+function mening(k,v){if(k==="farg")return`Its body is ${v}.`;if(k==="mun")return`It has a ${v} mouth.`;
+  const ord={ogon:["eye","eyes"],armar:["arm","arms"],ben:["leg","legs"],horn:["horn","horns"]}[k];return`It has ${TAL[v]} ${v===1?ord[0]:ord[1]}.`;}
+function svensk(k,v){if(k==="farg")return`Kroppen är ${FARG[v][1]}.`;if(k==="mun")return v==="big"?"Den har en stor mun.":"Den har en liten mun.";
+  const ord={ogon:"ögon",armar:"armar",ben:"ben",horn:"horn"}[k];return v===0?`Den har inga ${ord}.`:`Den har ${TALSV[v]} ${v===1?{ogon:"öga",armar:"arm",ben:"ben",horn:"horn"}[k]:ord}.`.replace("ett arm","en arm");}
+function rita(m,stor){const c=FARG[m.farg][0],d="#1D2B53",L=`stroke="${d}" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"`;let s="";
+  const cx=100,cy=118,rx=56,ry=60;
+  // ben
+  for(let i=0;i<m.ben;i++){const x=cx+(i-(m.ben-1)/2)*(m.ben>3?26:32);s+=`<path d="M${x} ${cy+ry-12}V${cy+ry+22}" ${L} stroke-width="11"/><path d="M${x} ${cy+ry-12}V${cy+ry+22}" stroke="${c}" stroke-width="5.5" stroke-linecap="round"/><ellipse cx="${x+5}" cy="${cy+ry+24}" rx="11" ry="6" fill="${c}" ${L}/>`;}
+  // armar, parvis på sidorna
+  const par=m.armar/2;for(let i=0;i<par;i++){const y=cy-10+i*26-(par-1)*13;for(const sid of [-1,1]){const x0=cx+sid*(rx-8),x1=cx+sid*(rx+30),y1=y-14+i*6;
+    s+=`<path d="M${x0} ${y}Q${cx+sid*(rx+16)} ${y+8} ${x1} ${y1}" fill="none" ${L} stroke-width="11"/><path d="M${x0} ${y}Q${cx+sid*(rx+16)} ${y+8} ${x1} ${y1}" fill="none" stroke="${c}" stroke-width="5.5" stroke-linecap="round"/><circle cx="${x1}" cy="${y1}" r="7" fill="${c}" ${L}/>`;}}
+  // horn
+  for(let i=0;i<m.horn;i++){const x=cx+(i-(m.horn-1)/2)*30;s+=`<path d="M${x-9} ${cy-ry+12}L${x+(i-(m.horn-1)/2)*6} ${cy-ry-24}L${x+9} ${cy-ry+12}Z" fill="#FFF3D6" ${L}/>`;}
+  // kropp
+  s+=`<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="${c}" ${L}/><ellipse cx="${cx-18}" cy="${cy-26}" rx="16" ry="10" fill="#fff" opacity=".22"/>`;
+  // ögon (högst tre per rad)
+  const n=m.ogon,rader=n>3?2:1,per=[Math.ceil(n/rader),n-Math.ceil(n/rader)].filter(x=>x>0),er=n>4?9:n>2?11:13;
+  per.forEach((k,r)=>{for(let i=0;i<k;i++){const x=cx+(i-(k-1)/2)*(er*2.5),y=cy-30+r*(er*2.3)-(rader-1)*er;s+=`<circle cx="${x}" cy="${y}" r="${er}" fill="#fff" ${L}/><circle cx="${x+er*.25}" cy="${y+er*.15}" r="${er*.48}" fill="${d}"/><circle cx="${x+er*.42}" cy="${y-er*.1}" r="${er*.15}" fill="#fff"/>`;}});
+  // mun
+  const my=cy+24+(rader-1)*6;s+=m.mun==="big"?`<path d="M${cx-30} ${my}Q${cx} ${my+38} ${cx+30} ${my}Z" fill="#7A1F2B" ${L}/><path d="M${cx-18} ${my+2}l5 9 5-9M${cx+8} ${my+2}l5 9 5-9" fill="#fff" stroke="#fff" stroke-width="1"/>`:`<path d="M${cx-11} ${my+4}Q${cx} ${my+14} ${cx+11} ${my+4}" fill="none" ${L}/>`;
+  return`<svg class="monster" viewBox="0 -4 200 230" role="img" aria-label="Monstret">${s}</svg>`;}
+const START={farg:"green",ogon:2,armar:2,ben:2,horn:0,mun:"small"};
+const slump=()=>({farg:pick(Object.keys(FARG)),ogon:rnd(1,6),armar:pick([0,2,4,6]),ben:pick([0,2,3,4]),horn:pick([0,1,2,3]),mun:pick(["big","small"])});
+
+/* ---------- rösten (Philippa, ljud/monster/) ---------- */
+const LJUDBAS="../ljud/monster/";let karta=null,spelar=null,svVoice=null;
+fetch(LJUDBAS+"karta.json").then(r=>r.json()).then(k=>karta=k).catch(()=>{});
+function tystna(){if(spelar){spelar.stop=true;if(spelar.a)spelar.a.pause();spelar=null}if(window.speechSynthesis)speechSynthesis.cancel();}
+function reserv(t,klar){if(!("speechSynthesis" in window)){klar();return}const u=new SpeechSynthesisUtterance(t);u.lang="en-GB";u.rate=.85;const v=speechSynthesis.getVoices().find(v=>/^en-GB/i.test(v.lang));if(v)u.voice=v;u.onend=klar;u.onerror=klar;speechSynthesis.speak(u);}
+function spela(meningar,knapp){tystna();const s={stop:false};spelar=s;knapp&&knapp.classList.add("spelar");let i=0;
+  const slut=()=>{if(spelar===s)spelar=null;knapp&&knapp.classList.remove("spelar")};
+  const nasta=()=>{if(s.stop){slut();return}if(i>=meningar.length){slut();return}const t=meningar[i++],f=karta&&karta[t.toLowerCase()];
+    const vidare=()=>setTimeout(nasta,450);
+    if(!f||!(window.Ljud&&Ljud.on!==false)){if(window.Ljud&&Ljud.on===false){slut();return}reserv(t,vidare);return}
+    const a=new Audio(LJUDBAS+f+".mp3");s.a=a;a.onended=vidare;a.onerror=()=>reserv(t,vidare);a.play().catch(()=>reserv(t,vidare));};
+  nasta();}
+
+/* ---------- nivåer ---------- */
+const NIV=[null,
+ {namn:"Nivå 1: En sak i taget",txt:"Lyssna och ändra en sak på monstret. Åk 1–3.",col:"#2BB673",antal:8,saker:1},
+ {namn:"Nivå 2: Tre saker",txt:"Lyssna på tre saker i rad och bygg dem. Åk 3–4.",col:"#FF9F43",antal:5,saker:3},
+ {namn:"Nivå 3: Läs och bygg",txt:"Läs hela beskrivningen och bygg monstret. Åk 5–6.",col:"#7B61FF",antal:5,saker:6,las:true}];
+const stjHtml=n=>[1,2,3].map(i=>i<=n?"★":'<span class="off">★</span>').join("");
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
+function hem(){tystna();$("niv").innerHTML=[1,2,3].map(l=>`<button data-l="${l}"><span class="nr" style="background:${NIV[l].col}">${l}</span><span><b>${NIV[l].namn}</b><small>${NIV[l].txt}</small></span><span class="st">${stjHtml(data.stars[l]||0)}</span></button>`).join("");show("home")}
+$("niv").onclick=e=>{const b=e.target.closest("[data-l]");if(b)starta(+b.dataset.l)};
+$("heroM").innerHTML=rita({farg:"orange",ogon:3,armar:4,ben:2,horn:2,mun:"big"});
+
+let G=null;
+function starta(l){G={l,i:0,fel:0,res:[]};$("nivT").textContent="Nivå "+l;$("pet").innerHTML=window.owlSVG?owlSVG(lasDjur()):"";show("game");ny()}
+function prickar(){$("dots").innerHTML=Array.from({length:NIV[G.l].antal},(_,j)=>`<i class="${j<G.i?(G.res[j]?"ok":"f"):j===G.i?"nu":""}"></i>`).join("")}
+/* Nivå 3: hela beskrivningen som löpande text (för att läsa), uppläsningen är de inspelade meningarna i rad */
+function lastext(m){const del=[];del.push(`My monster has ${TAL[m.ogon]} ${m.ogon===1?"eye":"eyes"}`);
+  const fler=[];if(m.horn)fler.push(`${TAL[m.horn]} ${m.horn===1?"horn":"horns"}`);if(m.armar)fler.push(`${TAL[m.armar]} arms`);if(m.ben)fler.push(`${TAL[m.ben]} legs`);
+  let t=del[0]+(fler.length?", "+fler.slice(0,-1).join(", ")+(fler.length>1?" and ":"")+fler[fler.length-1]:"")+". ";
+  const inga=[];if(!m.horn)inga.push("horns");if(!m.armar)inga.push("arms");if(!m.ben)inga.push("legs");if(inga.length)t+=`It has no ${inga.join(" and no ")}. `;
+  t+=`Its body is ${m.farg}, and it has a ${m.mun} mouth.`;return t;}
+function ny(){if(G.i>=NIV[G.l].antal){slut();return}tystna();const n=NIV[G.l];G.forsta=true;G.lost=false;
+  if(n.saker===1){G.bygg=G.i===0||!G.bygg?{...START}:{...G.bygg};let k,v;do{k=pick(DELAR).k;v=pick(DELAR.find(d=>d.k===k).val)}while(G.bygg[k]===v);G.mal={[k]:v};}
+  else if(n.saker===3){G.bygg={...START};const s=slump(),ks=shuffle(DELAR.map(d=>d.k)).filter(k=>s[k]!==START[k]).slice(0,3);G.mal={};ks.forEach(k=>G.mal[k]=s[k]);}
+  else{G.bygg={...START};G.mal=slump();}
+  G.meningar=Object.entries(G.mal).map(([k,v])=>mening(k,v));
+  const u=$("uppdrag");
+  if(n.las)u.innerHTML=`<p style="margin:0 0 4px">Läs beskrivningen och bygg monstret.</p><div class="text">${lastext(G.mal)}</div><button class="lyssna" id="bLyss" type="button" style="min-height:46px;font-size:1rem">🔊 Lyssna</button>`;
+  else u.innerHTML=`<button class="lyssna" id="bLyss" type="button">🔊 ${n.saker===1?"Lyssna":"Lyssna på tre saker"}</button><p>${n.saker===1?"Vad ska du ändra på monstret?":"Bygg alla tre sakerna."}</p><div class="text dold" id="facit" hidden></div><div class="svensk" id="facitSv" hidden></div>`;
+  $("bLyss").onclick=()=>{if(window.Ljud&&Ljud.on===false&&!n.las){const f=$("facit");f.hidden=false;f.classList.remove("dold");f.textContent=G.meningar.join(" ");$("fb").className="fb";$("fb").textContent="Ljudet är av, så meningen syns som text. Slå på 🔊 uppe till höger för att lyssna.";return}spela(G.meningar,$("bLyss"))};
+  $("fb").textContent="";$("fb").className="fb";$("bKlar").disabled=false;prickar();rit();}
+function rit(markera){$("bild").innerHTML=rita(G.bygg);
+  $("byggare").innerHTML=DELAR.map(d=>`<div class="rad${markera&&markera[d.k]?" "+markera[d.k]:""}" data-k="${d.k}"><span class="namn">${d.ik} ${d.en}<small>${d.sv}</small></span><span class="val">${d.val.map(v=>d.k==="farg"?`<button class="f" type="button" data-v="${v}" aria-label="${v}" aria-pressed="${G.bygg.farg===v}" style="background:${FARG[v][0]}"></button>`:`<button type="button" data-v="${v}" aria-pressed="${G.bygg[d.k]===v}">${d.k==="mun"?v:v}</button>`).join("")}</span></div>`).join("");}
+$("byggare").onclick=e=>{const b=e.target.closest("[data-v]");if(!b||!G)return;const k=b.closest(".rad").dataset.k,d=DELAR.find(x=>x.k===k),v=d.val.find(x=>String(x)===b.dataset.v);G.bygg[k]=v;ljud("pip");rit()};
+$("bKlar").onclick=()=>{if(!G)return;const fel=Object.keys(G.mal).filter(k=>G.bygg[k]!==G.mal[k]),mark={};
+  Object.keys(G.mal).forEach(k=>mark[k]=fel.includes(k)?"fel":"ratt");
+  if(!fel.length){ljud("ok");const p=$("pet");p.classList.remove("hopp");void p.offsetWidth;p.classList.add("hopp");G.res[G.i]=G.forsta;if(!G.forsta)G.fel++;
+    rit(mark);$("fb").className="fb ratt";$("fb").textContent=G.forsta?"Rätt! 👾":"Nu blev det rätt!";$("bKlar").disabled=true;
+    const f=$("facit");if(f){f.hidden=false;f.classList.remove("dold");f.textContent=G.meningar.join(" ");$("facitSv").hidden=false;$("facitSv").textContent=Object.entries(G.mal).map(([k,v])=>svensk(k,v)).join(" ")}
+    setTimeout(()=>{G.i++;ny()},2200);return}
+  ljud("bad");G.forsta=false;rit(mark);$("fb").className="fb fel";
+  $("fb").textContent=NIV[G.l].las?`Inte riktigt. Läs igen och titta på de rosa raderna.`:`Inte riktigt. Lyssna igen och titta på ${fel.length===1?"den rosa raden":"de rosa raderna"}.`;};
+function slut(){tystna();const st=G.fel===0?3:G.fel<=2?2:1,old=data.stars[G.l]||0;data.stars[G.l]=Math.max(old,st);save();
+  $("rBild").innerHTML=rita(G.bygg);$("rStj").innerHTML=stjHtml(st);$("rRub").textContent=st===3?"Perfekt! 🎉":st===2?"Bra jobbat!":"Bra kämpat!";
+  $("rTxt").textContent=`${NIV[G.l].antal-G.fel} av ${NIV[G.l].antal} monster rätt direkt.`;show("result");if(st===3){ljud("fanfare");confetti()}else ljud("chime")}
+$("rIgen").onclick=()=>starta(G.l);$("rHome").onclick=hem;
+function confetti(){if(reduced())return;const cols=["#3D8BFD","#FF9F43","#2BB673","#FFC93C","#7B61FF","#FF6B6B"],c=$("fx"),x=c.getContext("2d"),dpr=devicePixelRatio||1,W=innerWidth,H=innerHeight;c.width=W*dpr;c.height=H*dpr;x.setTransform(dpr,0,0,dpr,0,0);c.hidden=false;
+  const P=Array.from({length:150},()=>({x:W/2+(Math.random()-.5)*120,y:H*.3,vx:(Math.random()-.5)*16,vy:-Math.random()*15-4,r:Math.random()*7+5,c:pick(cols),a:Math.random()*6,va:(Math.random()-.5)*.4}));
+  let t=0;(function f(){x.clearRect(0,0,W,H);P.forEach(p=>{p.vy+=.45;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore()});if(++t<150)requestAnimationFrame(f);else c.hidden=true})()}
+window.__mf={rita,mening,svensk,lastext,starta,get G(){return G}};
+hem();
+</script>
+</body>
+</html>

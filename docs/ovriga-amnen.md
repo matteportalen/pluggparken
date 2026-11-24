@@ -79,6 +79,15 @@ Kartorna är gjorda ur Natural Earth (public domain). Europakartan, Världskarta
 - Rätt kräver förstahandsgissning, minst 35 %, två kontroller i rad och minst 2 sekunders ritande. Trösklarna är justerade tre gånger mot riktiga teckningar: ändra dem inte utan att mäta. Inga gissningar på ett ensamt streck.
 - 20 sekunder per ord, 6 ord per runda. Teckningarna skickas ingenstans.
 
+## Engelska som eget ämne (24 nov 2026)
+- Läraren: engelska behövde fler övningar och ett eget kort, och får gälla upp till åk 6. **Eget ämneskort på första sidan** (`amnek en`, pratbubbla "Hi!") och **ämnessidan `engelska/`** (samma mall som `fler/`). `huvud.js`: `engelska` i `NYMENY` och `amneAv` (engelskaord, klockanengelska, monsterfabriken och Draw it! hör till Engelska), 🏝️ leder till Fler ämnen-ön. Övningarna ligger kvar i Fler ämnen också.
+- **Planerade övningar** (läraren gillade alla sex): Monsterfabriken (byggd), Var är katten? (in/on/under), Hello! (prata med djuret, spela in sig själv), Måla efter röst, Shopping, Morning routine (på tavlan).
+
+## Monsterfabriken (`monsterfabriken/`, `mattespel-monsterfabriken-v1`)
+- Lyssna och bygg monstret: kroppsfärg (7), ögon 1–6, armar 0/2/4/6, ben 0/2/3/4, horn 0–3, stor eller liten mun. Raderna har engelska namn med svenska under. **Nivå 1** en sak i taget (åk 1–3, 8 uppgifter), **nivå 2** tre saker i rad (åk 3–4, 5), **nivå 3** läs en beskrivning i löpande text och bygg allt (åk 5–6, 5). Fel: de felaktiga raderna blir rosa och man försöker igen. Efter rätt svar visas meningen på engelska och svenska.
+- 🔊 bara när man trycker. Riktig röst Philippa, 28 inspelade meningar i `ljud/monster/` (manus `manus/monster-manus.txt`); nivå 2 och 3 spelar meningarna i rad. Saknas en fil används webbläsarens röst. Är sajtens ljud av visas meningen som text i stället.
+- Monstret är ritat i SVG (`rita(m)`), godkänt av läraren som del av idén. Klistermärke 👾 Monstermakaren (tre stjärnor på nivå 3).
+
 ## Engelska ord
 
 - Omgjord nov 2026: inga "välj rätt ord av fyra". Uppgifter: **lyssna** (🔊 säger ordet, tryck på rätt bild av sex), **läs** (ordet står, tryck på bilden), **bygg** (stava ordet med bokstavsbrickor) och på nivå 3 **para ihop** (fyra engelska och fyra svenska fraser), **hör** (lyssna, välj betydelsen) och bygg frasen av ordbrickor.

@@ -97,13 +97,15 @@ body.mph-mini #quit{display:none}
   const NYMENY=[{id:'hem',namn:'Välj ämne',sub:'Alla ämnen',href:'',logo:em('🏠')},{id:'matte',namn:'Matematik',sub:'Räkna, spela och utforska',href:'matte/',logo:em('🔢')},
     {id:'svenska',namn:'Svenska',sub:'Ord, stavning, läsning och sagor',href:'svenska/',logo:em('📖')},{id:'no',namn:'NO',sub:'Rymden, kroppen, naturen och tekniken',href:'no/',logo:em('🔬')},
     {id:'so',namn:'SO',sub:'Kartor, länder och platser',href:'so/',logo:em('🗺️')},{id:'special',namn:'Specialare',sub:'Minilektioner om spännande ämnen',href:'specialare/',logo:em('🎁')},
-    {id:'fler',namn:'Fler ämnen',sub:'Engelska, logik, kod och pengar',href:'fler/',logo:em('🧩')},
+    {id:'engelska',namn:'Engelska',sub:'Lyssna, prata och bygg monster',href:'engelska/',logo:em('🇬🇧')},
+    {id:'fler',namn:'Fler ämnen',sub:'Logik, kod och pengar',href:'fler/',logo:em('🧩')},
     {id:'extra',namn:'Extra',sub:'Saker att göra själv',href:'extra/',logo:em('✨')}];
   // vilket ämne en sida hör till (för menyn och tillbaka-knappen)
   const REL=location.pathname.replace(/^\//,'').replace(/index\.html$/,'');
   function amneAv(){const seg=REL.split('/'),top=seg[0],sub=seg[1]||'';
     if(REL==='')return'hem';
-    if(['matte','svenska','so','no','fler','extra'].includes(top)&&seg.length<=2)return top;
+    if(['matte','svenska','so','no','fler','extra','engelska'].includes(top)&&seg.length<=2)return top;
+    if(/^(engelskaord|klockanengelska|monsterfabriken)$/.test(top)||(top==='ovriga'&&sub==='rita'))return'engelska';
     if(top==='extra')return'extra';
     if(top==='ovriga'){if(/^(ordgomma|ordgatan|hogfrekventa|lasflyt|bokstaver)$/.test(sub))return'svenska';if(/^(sverigekartan|europa|varlden)$/.test(sub))return'so';
       if(/^(rymdlabbet|solsystemet|vintergatan)$/.test(sub))return'no';if(sub==='ansiktsloppan')return'extra';return'fler';}
@@ -112,11 +114,11 @@ body.mph-mini #quit{display:none}
     if(/^(brobygget|tornverkstan|flytasjunka|vattenkretslopp|kontinentdrift|elkrets|sjon)$/.test(top))return'no';
     if(/^(stavningsjakten|meningsbyggaren|vemgorvad|delameningar|verb|substantiv|adjektiv|ordfargaren|sorteraord|ordregn|ordkedjan|ordgissning|dubbelteckning|knepigaljud|sagobyggaren|handstil)$/.test(top))return'svenska';
     if(top==='tidslinjen'||top==='vikingatiden'||top==='demokrati')return'so';
-    if(/^(engelskaord|klockanengelska|schack|trerirad|sudoku|trafikstockning|gissastorlek|fylltillstrecket)$/.test(top))return'fler';
+    if(/^(schack|trerirad|sudoku|trafikstockning|gissastorlek|fylltillstrecket)$/.test(top))return'fler';
     if(top==='specialare')return'special';
     if(/^(mittrum|flytta)$/.test(top))return'hem';
     return'matte';}
-  const AMNE=amneAv(),EGENSIDA=REL===''||['matte','svenska','so','no','fler','extra'].includes(REL.replace(/\/$/,''));   // sidan är ämnets egen sida
+  const AMNE=amneAv(),EGENSIDA=REL===''||['matte','svenska','so','no','fler','extra','engelska'].includes(REL.replace(/\/$/,''));   // sidan är ämnets egen sida
   const MENY=DESIGN==='ny'?NYMENY:PORTALER,MENYNU=DESIGN==='ny'?(NYMENY.find(p=>p.id===AMNE)||null):PORTAL;
   window.MPLogo=LOGO_PP;
   // loggan som ikon i webbläsarfliken
@@ -131,7 +133,7 @@ body.mph-mini #quit{display:none}
     return T10.map(T=>{if(T10.every(n=>lv(n,T)===3))return 3;if(T10.every(n=>lv(n,T)>=2))return 2;if(T10.every(n=>h(n,T).some(x=>x[0])))return 1;return 0});
   }
   // stjärnor per övning (samma regler som startsidan); k = mappens namn, "spel:<spel>" för spelen i Spelhörnan, "spelhornan" för alla där
-  const STJ=['brobygget','tornverkstan','flytasjunka','vattenkretslopp','kontinentdrift','elkrets','sjon','prickatalet','diagram','vikingatiden','glodvaktaren','tradgard','gissastorlek','fylltillstrecket','tidslinjen','knepigaljud','sagobyggaren','meningsbyggaren','vemgorvad','delameningar','verb','substantiv','adjektiv','ordfargaren','sorteraord','ordregn','handstil','tiointe','klockan','geometri','brak','uppstallning','hundraruta','tiotal','taluppfattning','sverigekartan','ordgomma','europa','varlden','talfoljd','rutjakten','brakbitar','kortdivision','vagen','gomda','kulbanan','slungan','tradgard','affaren','hogfrekventa','rita','ordgatan','tangentbord','kodverkstan','delaupp','matning','pengar','lasflyt','sagoriket','sifferslottet','schack','trerirad','sudoku','trafikstockning','rutnat','dubbelteckning','ordgissning','ordkedjan','engelskaord','klockanengelska','demokrati','lillaplus'];
+  const STJ=['brobygget','tornverkstan','monsterfabriken','flytasjunka','vattenkretslopp','kontinentdrift','elkrets','sjon','prickatalet','diagram','vikingatiden','glodvaktaren','tradgard','gissastorlek','fylltillstrecket','tidslinjen','knepigaljud','sagobyggaren','meningsbyggaren','vemgorvad','delameningar','verb','substantiv','adjektiv','ordfargaren','sorteraord','ordregn','handstil','tiointe','klockan','geometri','brak','uppstallning','hundraruta','tiotal','taluppfattning','sverigekartan','ordgomma','europa','varlden','talfoljd','rutjakten','brakbitar','kortdivision','vagen','gomda','kulbanan','slungan','tradgard','affaren','hogfrekventa','rita','ordgatan','tangentbord','kodverkstan','delaupp','matning','pengar','lasflyt','sagoriket','sifferslottet','schack','trerirad','sudoku','trafikstockning','rutnat','dubbelteckning','ordgissning','ordkedjan','engelskaord','klockanengelska','demokrati','lillaplus'];
   const SPELSUB=['fly','mem','car','space','frog','tower','skatt','kiosk','bubbel','tug'];
   const SPELHORNAN=['glodvaktaren','skattjakten','kulbanan','slungan','tradgard','sagoriket','sifferslottet','affaren','rutjakten'];
   function stjFor(k){
@@ -202,7 +204,7 @@ body.mph-mini #quit{display:none}
     const hr=h.querySelector('.mph-right');if(hr)hr.prepend(va);}}catch(e){}
   // på första sidan och ämnessidorna: en liten rund 🏝️-knapp till Pluggparken-världen (läraren 24 nov 2026);
   // från en ämnessida hamnar man direkt på ämnets ö (varlden/#matte osv., Specialare har Biografen, Extra har Musikön)
-  const ÖN={matte:['matte','Matte-parken'],svenska:['svenska','Svenska-parken'],so:['so','SO-parken'],no:['no','NO-parken'],fler:['fler','Fler ämnen-ön'],extra:['extra','Musikön'],specialare:['bio','Biografen']},ön=ÖN[REL.replace(/\/$/,'')];
+  const ÖN={matte:['matte','Matte-parken'],svenska:['svenska','Svenska-parken'],so:['so','SO-parken'],no:['no','NO-parken'],fler:['fler','Fler ämnen-ön'],engelska:['fler','Fler ämnen-ön'],extra:['extra','Musikön'],specialare:['bio','Biografen']},ön=ÖN[REL.replace(/\/$/,'')];
   if((paStart||ön)&&!h.querySelector('.mph-varld')){const vo=document.createElement('a');vo.className='mph-ö';vo.href=hem+'varlden/'+(ön?'#'+ön[0]:'');vo.title=ön?'Till '+ön[1]+' i Pluggparken-världen':'Pluggparken-världen: gå runt på en ö i 3D';vo.setAttribute('aria-label',ön?ön[1]+' i Pluggparken-världen':'Pluggparken-världen, en ö i 3D');vo.textContent='🏝️';
     const sk=h.querySelector('.mph-sok');sk&&sk.parentNode.insertBefore(vo,sk);}
   // sökning: sok.js hämtas först när den behövs
