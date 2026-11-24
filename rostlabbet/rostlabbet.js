@@ -1,3 +1,4 @@
+import {drawFront} from './framifran.js';
 import {swedishPhrases} from './svenska-ljud.js';
 import {initChimera,chimeraModule} from './chimera/wasm/chimera.js';
 const $=id=>document.getElementById(id),clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
@@ -103,6 +104,7 @@ function draw(time){
  if(canvas.width!==Math.round(w*dpr)||canvas.height!==Math.round(h*dpr)){canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);renderer.resize(w,h)}
  ctx.setTransform(dpr,0,0,dpr,0,0);ctx.globalCompositeOperation='source-over';ctx.fillStyle='#0c2234';ctx.fillRect(0,0,w,h);
  shown=tele&&wanted?VoiceModel.articFromArray(tele.t.artic):artic;frame=model.frame(shown);
+ drawFront($('front'),shown);
  renderer.face.update(wanted?tele:null,dt);
  renderer.draw(ctx,model,frame,shown,wanted?tele:null,{pressure:true,particles:!matchMedia('(prefers-reduced-motion: reduce)').matches,grid:false,calipers:false},{hover,drag:drag?.id||null,dt,formants:[],slots:[],info:[]});
  const ww=wave.clientWidth,wh=wave.clientHeight;if(wave.width!==Math.round(ww*dpr)){wave.width=Math.round(ww*dpr);wave.height=Math.round(wh*dpr)}waveCtx.setTransform(dpr,0,0,dpr,0,0);waveCtx.clearRect(0,0,ww,wh);samples.fill(0);if(analyser&&wanted)analyser.getFloatTimeDomainData(samples);
