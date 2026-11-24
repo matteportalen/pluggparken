@@ -71,6 +71,18 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
 .opts.pics button{padding:6px}
 .opts.pics svg{width:56px;height:56px}
 .opts.kr svg{width:84px;height:84px}
+.vikbox{display:flex;flex-direction:column;align-items:center;gap:8px;margin:4px 0}
+.vik{position:relative;width:calc(var(--s)*4);height:calc(var(--s)*3);perspective:700px;margin:6px auto}
+.vik .vrot{position:absolute;width:var(--s);height:var(--s);transform-style:preserve-3d;transform-origin:50% 50% calc(var(--s)/-2);transition:transform 1s ease}
+.vik .vf{position:absolute;width:var(--s);height:var(--s);box-sizing:border-box;background:#fff;border:2px solid #C0563B;transform-style:preserve-3d;transition:transform 1.1s ease}
+.vik .vf>svg{position:absolute;inset:0;width:100%;height:100%}
+.vik .vf.vo{background:#FFE58A}.vik .vf.vq{background:#DDF5E7}
+.vik.vikt .vf{transform:var(--r,none)}
+.vik.vikt .vrot{transform:rotateX(-24deg) rotateY(-32deg)}
+.vik.vikt.snurr .vrot{animation:vsnurr 9s linear infinite}
+@keyframes vsnurr{from{transform:rotateX(-24deg) rotateY(-32deg)}to{transform:rotateX(-24deg) rotateY(328deg)}}
+.vikk{background:var(--accent);color:#fff;border-radius:14px;padding:8px 16px;font-weight:800;font-size:1rem;box-shadow:0 4px 0 #2A3FB8;min-height:44px}
+.vikk:active{transform:translateY(3px)}
 .row.kr svg{width:64px;height:64px}
 .row .dim1{opacity:.45}
 .row .hl1{background:var(--warn-bg,#FFF4CC);border-radius:12px;box-shadow:0 0 0 3px var(--gold)}
@@ -133,6 +145,9 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
 .hs{cursor:pointer}
 .hs.sel{stroke:#3D5AFE;stroke-width:5px;filter:drop-shadow(0 0 3px #3D5AFE)}
 .hl{stroke:#1E9E5E;stroke-width:4.5px}
+.hunt .kr .gl{fill:#FFE58A;opacity:0;transition:opacity .15s}
+.hunt .kr.sel .gl{opacity:1}.hunt .hs.kr.sel{stroke:none}.hunt .kr.sel{filter:drop-shadow(0 0 3px #F2B707)}
+.hunt .kr.rt .gl{fill:#BDEBCF;opacity:1}.hunt .kr.ft .gl{fill:#FDC9CB;opacity:1}.hunt .kr.dim{opacity:.3}
 .dim{opacity:.35}
 .necksvg{width:100%;max-width:380px;height:auto}
 .bigpet{width:120px;margin:2px auto 0}
@@ -451,13 +466,15 @@ function genArtor(){
     html:wireSVG(k)+`<div class="cap">${cap(WNAMN[k])} av ärtor och pinnar</div>`,answer:ans,unit:v?"ärtor":"pinnar",
     help:()=>({vis:wireSVG(k,v?"v":"e"),tip:W.tip})};}
 /* räkna likadana kroppar i bilden */
+/* Tryck på alla cylindrar (lärarens önskan 24 nov 2026: roligare än "hur många", kropparna lyser upp när man trycker) */
 function genRakna(){
   const k=pickOne(SOLIDS),typer=[k,...shuffle(SOLIDS.filter(x=>x!==k&&!(["kub","rätblock"].includes(x)&&["kub","rätblock"].includes(k)))).slice(0,rnd(2,3))],nk=rnd(1,4),n=rnd(Math.max(6,nk+3),8),lista=shuffle(Array.from({length:n},(_,i)=>i<nk?k:pickOne(typer.slice(1))));
-  const cell=(mode)=>`<svg viewBox="0 0 200 100" aria-hidden="true" style="width:min(86vw,340px)"><rect x="0" y="92" width="200" height="8" rx="3" fill="#C99A6B"/>${lista.map((t,i)=>{const c=i%4,r=Math.floor(i/4),sz=[40,46,36,44][(i*7)%4],[sx,sy]=sc[i];
-    return `<g opacity="${mode&&t!==k?.22:1}">${solidS(t,cols[i],sx,sy).replace("<svg",`<svg x="${c*50+(50-sz)/2}" y="${r*46+(46-sz)/2}" width="${sz}" height="${sz}"`)}</g>`;}).join("")}</svg>`;
-  const cols=lista.map(()=>pickOne(COLS)),sc=lista.map(t=>stretch(t));
-  return{kind:"keys",instr:`Hur många ${PLS[k]} finns i bilden?`,speak:`Titta på bilden. Hur många ${PLS[k]} finns det?`,html:cell(false),answer:nk,
-    help:()=>({vis:cell(true),tip:`${SPROPS[k]} I bilden finns ${nk} ${nk===1?k:PLS[k]}.`})};}
+  const cols=lista.map(()=>pickOne(COLS)),sc=lista.map(t=>stretch(t)),correct=lista.map((t,i)=>t===k?i:-1).filter(i=>i>=0);
+  const bild=(mode,sel)=>`<div class="hunt"><svg viewBox="0 0 200 100" aria-hidden="true"><rect x="0" y="92" width="200" height="8" rx="3" fill="#C99A6B"/>${lista.map((t,i)=>{const c=i%4,r=Math.floor(i/4),sz=[40,46,36,44][(i*7)%4],x=c*50+(50-sz)/2,y=r*46+(46-sz)/2,[sx,sy]=sc[i];
+    const kl=mode?(t===k?"kr rt":(sel||[]).includes(i)?"kr ft":"kr dim"):"hs kr";
+    return `<g class="${kl}" data-i="${i}"><circle class="gl" cx="${c*50+25}" cy="${r*46+23}" r="22" stroke="none"/><rect x="${c*50+2}" y="${r*46}" width="46" height="46" fill="transparent" stroke="none"/>${solidS(t,cols[i],sx,sy).replace("<svg",`<svg x="${x}" y="${y}" width="${sz}" height="${sz}"`)}</g>`;}).join("")}</svg></div>`;
+  const t={kind:"hunt",enhet:["kropp","kroppar"],instr:`Tryck på alla ${PLS[k]}.`,speak:`Titta på hyllan. Tryck på alla ${PLS[k]}. Tryck sedan på Klar.`,html:bild(false),correct,
+    help:()=>({vis:bild(true,t.sel),tip:`${SPROPS[k]} På hyllan finns ${nk} ${nk===1?k:PLS[k]}, de gröna.`})};return t;}
 /* vilken kropp kan man vika av mönstret (nätet)? */
 function natSVG(k,col){const st=`fill="${col}" stroke="#1D2B53" stroke-width="2" stroke-linejoin="round"`;let h="";
   const R=(x,y,w,hh)=>`<rect x="${x}" y="${y}" width="${w}" height="${hh}" ${st}/>`;
@@ -478,14 +495,25 @@ function genNat(){
 /* tärningen: motsatta sidor blir alltid 7 */
 function pips(n,x,y,s){const P={1:[[.5,.5]],2:[[.27,.27],[.73,.73]],3:[[.25,.25],[.5,.5],[.75,.75]],4:[[.27,.27],[.73,.27],[.27,.73],[.73,.73]],5:[[.25,.25],[.75,.25],[.5,.5],[.25,.75],[.75,.75]],6:[[.27,.22],[.73,.22],[.27,.5],[.73,.5],[.27,.78],[.73,.78]]};
   return P[n].map(([a,b])=>`<circle cx="${x+a*s}" cy="${y+b*s}" r="${s*.09}" fill="#1D2B53"/>`).join("");}
+/* Tärningen (förtydligad 24 nov 2026, lärarens önskan "vik ihop det här till en tärning"): nätet ritas som HTML-rutor
+   i ett träd (ringens ruta 1 är roten), så att 🎲 Vik ihop kan vika det till en kub i 3D med CSS. Varje ruta viks bakåt kring
+   kanten mot sin förälder, så att prickarna hamnar på utsidan. */
+function tarnNat(F,V,q,o,help){const S=58,kids={1:[[0,"v"],[2,"h"]],2:[[3,"h"]]},cap=[[4,F[4][0],"u"],[5,F[5][0],"n"]];
+  cap.forEach(([i,c,d])=>{(kids[c]=kids[c]||[]).push([i,d])});
+  const ROT={v:"rotateY(-90deg)",h:"rotateY(90deg)",u:"rotateX(90deg)",n:"rotateX(-90deg)"},POS={v:`left:${-S}px;top:0;transform-origin:100% 50%`,h:`left:${S}px;top:0;transform-origin:0 50%`,u:`left:0;top:${-S}px;transform-origin:50% 100%`,n:`left:0;top:${S}px;transform-origin:50% 0`};
+  const yta=i=>`<svg viewBox="0 0 22 22" aria-hidden="true">${i===q?`<text x="11" y="15.5" text-anchor="middle" font-size="12" font-weight="800" fill="#3D5AFE">${help?V[q]:"?"}</text>`:pips(V[i],0,0,22)}</svg>`;
+  const ruta=(i,d)=>`<div class="vf${help&&i===o?" vo":""}${help&&i===q?" vq":""}" style="${d?POS[d]+";--r:"+ROT[d]:""}">${yta(i)}${(kids[i]||[]).map(([j,dd])=>ruta(j,dd)).join("")}</div>`;
+  return`<div class="vik" style="--s:${S}px"><div class="vrot" style="left:${S}px;top:${S}px">${ruta(1,"")}</div></div>`;}
+window.vikTarning=b=>{const v=b.parentNode.querySelector(".vik");if(!v)return;const nu=!v.classList.contains("vikt");v.classList.toggle("vikt",nu);b.textContent=nu?"↩ Vik upp igen":"🎲 Vik ihop";
+  clearTimeout(v._t);v.classList.remove("snurr");if(nu&&!matchMedia("(prefers-reduced-motion: reduce)").matches)v._t=setTimeout(()=>v.classList.add("snurr"),1300);};
 function genTarning(){
   const c0=rnd(0,3),c2=rnd(0,3),F=[[0,1],[1,1],[2,1],[3,1],[c0,0],[c2,2]],opp=[2,3,0,1,5,4];   // ringen viks runt, locken hamnar uppe och nere
   const par=shuffle([[1,6],[2,5],[3,4]]).map(p=>shuffle(p.slice())),V=[par[0][0],par[1][0],par[0][1],par[1][1],par[2][0],par[2][1]];
-  const q=rnd(0,5),o=opp[q],S=22;
-  const net=help=>`<svg viewBox="-2 -2 ${4*S+4} ${3*S+4}" aria-hidden="true" style="width:min(80vw,300px)">${F.map(([c,r],i)=>`<rect x="${c*S}" y="${r*S}" width="${S}" height="${S}" fill="${help&&i===o?"#FFE58A":help&&i===q?"#DDF5E7":"#fff"}" stroke="#C0563B" stroke-width="1.2"/>`+(i===q?`<text x="${c*S+S/2}" y="${r*S+S*.68}" text-anchor="middle" font-size="${S*.55}" font-weight="800" fill="#3D5AFE">${help?V[q]:"?"}</text>`:pips(V[i],c*S,r*S,S))).join("")}</svg>`;
-  return{kind:"keys",instr:"Hur många prickar ska det vara på ?-sidan?",speak:"Det här är en tärning som vecklats ut. På en tärning blir de motsatta sidorna alltid sju tillsammans. Hur många prickar ska det vara på sidan med frågetecknet?",
-    html:net(false)+`<div class="cap">Motsatta sidor blir alltid 7.</div>`,answer:V[q],
-    help:()=>({vis:net(true),tip:`När man viker ihop tärningen hamnar den gula sidan mittemot ?-sidan. Den har ${V[o]} prickar, och ${V[o]} + ${V[q]} = 7. I raden med fyra sidor hamnar varannan sida mittemot varandra. Sidan överst och sidan nederst hamnar också mittemot varandra.`})};}
+  const q=rnd(0,5),o=opp[q];
+  return{kind:"keys",instr:"Tärningen är utvikt. Vik ihop den. Hur många prickar ska det vara på ?-sidan?",
+    speak:"Det här är en tärning som någon har klippt upp och vikt ut, så att den ligger platt. Tänk dig att du viker ihop den till en tärning igen. Du kan trycka på Vik ihop och se. På en tärning blir två sidor som sitter mittemot varandra alltid sju tillsammans. Ett och sex, två och fem, tre och fyra. Hur många prickar ska det vara på sidan med frågetecknet?",
+    html:`<div class="vikbox">${tarnNat(F,V,q,o,false)}<button type="button" class="vikk" onclick="vikTarning(this)">🎲 Vik ihop</button></div><div class="cap">Sidor mittemot varandra blir alltid 7 tillsammans.</div>`,answer:V[q],
+    help:()=>({vis:`<div class="vikbox">${tarnNat(F,V,q,o,true)}<button type="button" class="vikk" onclick="vikTarning(this)">🎲 Vik ihop</button></div>`,tip:`När man viker ihop tärningen hamnar den gula sidan mittemot ?-sidan. Den har ${V[o]} prickar, och ${V[o]} + ${V[q]} = 7. Tryck på Vik ihop och titta.`})};}
 const KTYP=[[genKropparNamn,3.5],[genRingaIn,1.2],[genUdda,1.2],[genArtor,1.2],[genRakna,1.1],[genNat,1.2],[genTarning,.6]];
 function genKroppar(){let r=Math.random()*KTYP.reduce((a,b)=>a+b[1],0);for(const [f,w] of KTYP){if((r-=w)<0)return f();}return genKropparNamn();}
 
@@ -798,7 +826,7 @@ function render(){
     c.innerHTML=t.html+`<button class="go" id="done">Klar</button>`;
     c.querySelectorAll(".hs").forEach(el=>el.addEventListener("click",()=>{if(!G.busy)el.classList.toggle("sel");}));
     $("done").onclick=()=>{if(G.busy)return;const sel=[...c.querySelectorAll(".hs.sel")].map(e=>+e.dataset.i);
-      const ok=sel.length===t.correct.length&&t.correct.every(i=>sel.includes(i));ok?done():wrong(sel.length?`${sel.length} ${sel.length===1?"form":"former"}`:"ingen form");};
+      t.sel=sel;const en=t.enhet||["form","former"],ok=sel.length===t.correct.length&&t.correct.every(i=>sel.includes(i));ok?done():wrong(sel.length?`${sel.length} ${sel.length===1?en[0]:en[1]}`:"ingen "+en[0]);};
   }else if(t.kind==="draw"){
     G.sel=[];const draw=()=>{c.innerHTML=t.fig(G.sel)+`<button class="go" id="done">Klar</button>`;
       c.querySelectorAll(".ptw").forEach(el=>el.onclick=()=>{if(G.busy)return;const l=el.dataset.l,i=G.sel.indexOf(l);
