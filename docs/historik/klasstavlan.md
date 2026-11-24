@@ -115,3 +115,7 @@ _Historik för `docs/klasstavlan.md`: hur allt byggdes, med detaljer, mått och 
 
 - **Ritlås** (12 nov 2026): knappen `#bRitLas` i `larare/index.html`, variabeln `ritLas`, `sattRitLas()`, `visaRitLas()`. Spärren ligger i `cv`:s pointerdown (efter kontrollen av vänsterknapp, före lagerkontrollen) samt i `angra()` och `rensaRitning()`. Pågående streck (högst två punkter) kastas när man låser. Testat med Playwright (1280 × 720): ritar före låset, ingen ritning/sudd/ångra/sudda allt/Ctrl+Z när låst, kort tryck låser inte upp, låset överlever omladdning, en sekunds håll låser upp, ritar igen. Inte provat på pekskärm eller projektor. Textrutor och post-it kan fortfarande skrivas i när ritningen är låst.
 
+
+## 2026-11-24 – Utgångsbiljetten
+
+Läraren ville ha utgångsbiljetter digitalt, ledda på projektorn: "det dyker upp en fråga på ämnet, någon får svara och därmed gå ut, sen kommer nästa". Ämnet är ofta okänt i förväg, därför tre sorter: färdiga mattegeneratorer (`MATTE`, 13 sorter; division visas med bråkstreck), egna frågelistor och frågor som passar alla ämnen (`ALLA`). Egen sida `larare/utgang.html` (inte en ruta i tavlan: frågan ska fylla hela skärmen). Matte undviker upprepningar inom de senaste 30 frågorna; egna frågor och alla-ämnen-frågorna blandas och börjar om när de tar slut. Knappen i Klasstavlans ⚙️ Mer-meny (`bUtgang`). Testat i Playwright 1280 × 760 och 390 px: alla mattesorter, klockan med svar, tangentbordet, sparad lista efter omladdning, inga JS-fel.
