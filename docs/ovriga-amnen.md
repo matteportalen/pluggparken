@@ -98,9 +98,11 @@ Kartorna är gjorda ur Natural Earth (public domain). Europakartan, Världskarta
 - Rösten Philippa, 59 meningar för nivåerna och 240 för chattarna (personerna: Peter, Freya, Daniel, Nella, Jack Anthony, Laura) i `ljud/hello/` (`q-<id>`, `a-<id>`, manus `manus/hello-manus.txt`), varje mening inspelad för sig. Innehållet ligger i `SAMTAL` överst i skriptet.
 
 ## Var är katten? (`varkatten/`, `mattespel-varkatten-v1`)
-- Lägesord på engelska. Ett rum med en låda, en stol och en säng (emojis) och fyra saker (cat, dog, ball, teddy). **Nivå 1** (åk 1–3, 8 uppgifter): in, on, under, next to, en sak i taget. **Nivå 2** (åk 3–4, 6): två meningar i rad, också behind, in front of och between. **Nivå 3** (åk 5–6, 6): alla saker står i rummet, "Where is the dog?", välj rätt mening av tre (🔊 vid varje).
+- Lägesord på engelska. Ett rum med en låda, en stol och en säng med egna målade rasterbilder och fyra saker (cat, dog, ball, teddy). **Nivå 1** (åk 1–3, 8 uppgifter): in, on, under, next to, en sak i taget. **Nivå 2** (åk 3–4, 6): två meningar i rad, också behind, in front of och between. **Nivå 3** (åk 5–6, 6): alla saker står i rummet, "Where is the dog?", välj rätt mening av tre (🔊 vid varje).
 - Dra saken till rätt plats (streckade ringar visas medan man drar) eller tryck på saken och sedan på ringen. "Next to" godtas på båda sidor, och mellan två möbler räknas också som bredvid. Fel: andra försöket visar en grön ring där saken ska stå. Efter rätt svar visas meningen på engelska och svenska.
 - Rösten Philippa, 21 delar i `ljud/katten/` (manus `manus/katten-manus.txt`): "Put the cat," + "under the chair." spelas direkt efter varandra. Är ljudet av visas meningen som text.
+
+- Illustrationerna finns i `varkatten/bilder/`, promptar i `PROMPTS.md`. Katten är en grå brittisk korthår och hunden en strävhårig terrier med naturliga ögon. Bildlagren visar saker inuti lådan och bakom/under möblerna; `bilder.css` sköter rummets bildstil. Nivåer, röst och sparnyckel är oförändrade.
 
 ## Engelska ord
 

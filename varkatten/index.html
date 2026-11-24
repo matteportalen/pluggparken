@@ -94,6 +94,7 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 #fx{position:fixed;inset:0;pointer-events:none;z-index:50}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
+<link rel="stylesheet" href="bilder.css?v=1">
 </head>
 <body>
 <script src="../ljud.js"></script>
@@ -101,7 +102,7 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 <script src="../huvud.js" data-titel="Var är katten?" data-ikon="🐱"></script>
 <main class="wrap">
 <section class="screen" id="home">
-  <div class="hero"><div class="hm" aria-hidden="true">🐱📦</div><div><h1>Var är katten?</h1><p>Lyssna på engelska och flytta sakerna. In, on, under, behind …</p></div></div>
+  <div class="hero"><div class="hm" aria-hidden="true"><img src="bilder/cat.webp" alt=""></div><div><h1>Var är katten?</h1><p>Lyssna på engelska och flytta sakerna. In, on, under, behind …</p></div></div>
   <div class="niv" id="niv"></div>
   <p class="info">Tryck på 🔊 för att höra vad du ska göra. Dra saken dit, eller tryck på saken och sedan på platsen.</p>
 </section>
@@ -120,7 +121,7 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 </section>
 
 <section class="screen res" id="result" hidden>
-  <div style="font-size:4rem;font-family:var(--emoji)">🐱</div>
+  <img class="result-cat" src="bilder/cat.webp" alt="En glad katt">
   <h2 id="rRub" style="margin:4px 0 0">Bra jobbat!</h2>
   <div class="stj" id="rStj"></div>
   <p id="rTxt" style="font-weight:700;margin:0 0 14px"></p>
@@ -141,11 +142,12 @@ const reduced=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
 const ljud=n=>{window.Ljud&&Ljud[n]&&Ljud[n]()};
 
 /* ---------- rummet ----------
-   Möblerna är emojis. Platserna (zoner) har en position och ett lager: z 1 = bakom möbeln, 3 = framför. */
-const MOB={box:{e:"📦",x:17,y:62,s:17,sv:"lådan"},chair:{e:"🪑",x:49,y:56,s:22,sv:"stolen"},bed:{e:"🛏️",x:79,y:60,s:22,sv:"sängen"}};
-const SAK={cat:{e:"🐱",sv:"katten"},dog:{e:"🐶",sv:"hunden"},ball:{e:"⚽",sv:"bollen"},teddy:{e:"🧸",sv:"nallen"}};
-const ZON={inBox:{x:17,y:52,z:1,s:.85},onBox:{x:17,y:43,z:3},onChair:{x:49,y:52,z:3},underChair:{x:49,y:69,z:1,s:.7},behindChair:{x:52,y:38,z:1,s:.8},frontChair:{x:49,y:80,z:3},
-  onBed:{x:79,y:52,z:3},underBed:{x:79,y:72,z:1,s:.6},G0:{x:5,y:70,z:3},G1:{x:33,y:70,z:3},G2:{x:64,y:70,z:3},G3:{x:95,y:70,z:3}};
+   Egna målade rasterbilder. Lådans framkant är ett separat klippt bildlager, så att djuret verkligen syns inuti. */
+const MOB={box:{x:20,y:62,w:23,h:29,sv:"lådan"},chair:{x:50,y:52,w:23,h:49,sv:"stolen"},bed:{x:80,y:60,w:28,h:34,sv:"sängen"}};
+const SAK={cat:{sv:"katten"},dog:{sv:"hunden"},ball:{sv:"bollen"},teddy:{sv:"nallen"}};
+const bild=(id,cls='')=>`<img class="${cls}" src="bilder/${id}.webp" alt="" draggable="false">`;
+const ZON={inBox:{x:20,y:57,z:2,s:.85},onBox:{x:20,y:40,z:5},onChair:{x:50,y:45,z:5},underChair:{x:50,y:69,z:2,s:.72},behindChair:{x:58,y:66,z:2,s:.85},frontChair:{x:50,y:84,z:5},
+  onBed:{x:78,y:47,z:5},underBed:{x:80,y:72,z:2,s:.5},G0:{x:6,y:76,z:5},G1:{x:35,y:76,z:5},G2:{x:65,y:76,z:5},G3:{x:95,y:76,z:5}};
 /* fras -> vilka zoner som är rätt (next to = båda sidorna; mellan två möbler räknas också som bredvid) */
 const FRAS={"in-box":{en:"in the box",sv:"i lådan",z:["inBox"]},"on-box":{en:"on the box",sv:"på lådan",z:["onBox"]},"next-box":{en:"next to the box",sv:"bredvid lådan",z:["G0","G1"]},
   "on-chair":{en:"on the chair",sv:"på stolen",z:["onChair"]},"under-chair":{en:"under the chair",sv:"under stolen",z:["underChair"]},"next-chair":{en:"next to the chair",sv:"bredvid stolen",z:["G1","G2"]},
@@ -175,20 +177,20 @@ const NIV=[null,
  {namn:"Nivå 3: Var är den?",txt:"Titta på rummet och läs. Vilken mening stämmer? Åk 5–6.",col:"#7B61FF",antal:6,las:true}];
 const stjHtml=n=>[1,2,3].map(i=>i<=n?"★":'<span class="off">★</span>').join("");
 function show(id){document.querySelectorAll(".screen").forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id)}
-function hem(){tystna();$("niv").innerHTML=[1,2,3].map(l=>`<button data-l="${l}"><span class="nr" style="background:${NIV[l].col}">${l}</span><span><b>${NIV[l].namn}</b><small>${NIV[l].txt}</small></span><span class="st">${stjHtml(data.stars[l]||0)}</span></button>`).join("");show("home")}
+function hem(){clearTimeout(nextTimer);tystna();$("niv").innerHTML=[1,2,3].map(l=>`<button data-l="${l}"><span class="nr" style="background:${NIV[l].col}">${l}</span><span><b>${NIV[l].namn}</b><small>${NIV[l].txt}</small></span><span class="st">${stjHtml(data.stars[l]||0)}</span></button>`).join("");show("home")}
 $("niv").onclick=e=>{const b=e.target.closest("[data-l]");if(b)starta(+b.dataset.l)};
 
-let G=null;
-function starta(l){G={l,i:0,fel:0,res:[]};$("nivT").textContent="Nivå "+l;$("pet").innerHTML=window.owlSVG?owlSVG(lasDjur()):"";show("game");ny()}
+let G=null,nextTimer=null;
+function starta(l){clearTimeout(nextTimer);G={l,i:0,fel:0,res:[]};$("nivT").textContent="Nivå "+l;$("pet").innerHTML=window.owlSVG?owlSVG(lasDjur()):"";show("game");ny()}
 function prickar(){$("dots").innerHTML=Array.from({length:NIV[G.l].antal},(_,j)=>`<i class="${j<G.i?(G.res[j]?"ok":"f"):j===G.i?"nu":""}"></i>`).join("")}
 const mening=(o,f)=>`Put the ${o} ${FRAS[f].en}.`,svMening=(o,f)=>`Lägg ${SAK[o].sv} ${FRAS[f].sv}.`;
-function ny(){if(G.i>=NIV[G.l].antal){slut();return}tystna();const n=NIV[G.l];G.forsta=true;G.vald=null;G.pos={};
+function ny(){if(G.i>=NIV[G.l].antal){slut();return}tystna();const n=NIV[G.l];G.forsta=true;G.lost=false;G.vald=null;G.pos={};
   $("fb").textContent="";$("fb").className="fb";$("bKlar").hidden=!!n.las;$("bKlar").disabled=false;$("val3").hidden=!n.las;
   if(n.las){/* alla fyra sakerna står i rummet, en fråga om en av dem */
     const zoner=shuffle(Object.keys(ZON)).filter(z=>!/^G[03]$/.test(z)),sakerna=Object.keys(SAK);sakerna.forEach((o,i)=>G.pos[o]=zoner[i]);
     const o=pick(sakerna),ratt=zonFras(G.pos[o]),fel=shuffle(Object.keys(FRAS).filter(k=>!FRAS[k].z.includes(G.pos[o]))).slice(0,2);
     G.fraga={o,ratt,alt:shuffle([ratt,...fel])};
-    $("uppdrag").innerHTML=`<div class="fraga">Where is the ${o}? <span style="font-family:var(--emoji)">${SAK[o].e}</span></div>`;
+    $("uppdrag").innerHTML=`<div class="fraga">Where is the ${o}? ${bild(o,"question-animal")}</div>`;
     $("val3").innerHTML=G.fraga.alt.map(f=>`<div class="alt"><button class="hor" type="button" data-hor="${f}" aria-label="Lyssna">🔊</button><button class="svar" type="button" data-f="${f}">The ${o} is ${FRAS[f].en}.</button></div>`).join("");
     $("hylla").innerHTML="";}
   else{const ant=n.tva?2:1,objs=shuffle(Object.keys(SAK)).slice(0,ant),lista=n.tva?SVARA.concat(ENKLA):ENKLA;let fr;
@@ -199,37 +201,41 @@ function ny(){if(G.i>=NIV[G.l].antal){slut();return}tystna();const n=NIV[G.l];G.
       spela(G.mal.map(m=>["put-"+m.o,m.f]),$("bLyss"),G.mal.map(m=>mening(m.o,m.f)).join(" "))};}
   prickar();rita()}
 function visaFacit(barEngelska){const f=$("facit");if(!f)return;f.hidden=false;f.innerHTML=G.mal.map(m=>mening(m.o,m.f)).join(" ")+(barEngelska?"":`<small>${G.mal.map(m=>svMening(m.o,m.f)).join(" ")}</small>`)}
-function rita(markera){const r=$("rum");let h=Object.entries(MOB).map(([k,m])=>`<span class="m" style="left:${m.x}%;top:${m.y}%;font-size:${m.s}cqw;z-index:2">${m.e}</span>`).join("");
-  h+=Object.entries(ZON).map(([k,z])=>`<span class="zon${markera&&markera.includes(k)?" mal":""}" data-z="${k}" style="left:${z.x}%;top:${z.y}%;z-index:4"></span>`).join("");
-  for(const [o,z] of Object.entries(G.pos)){const Z=ZON[z];h+=`<span class="sak${G.vald===o?" vald":""}" data-o="${o}" style="left:${Z.x}%;top:${Z.y}%;--s:${Z.s||1};z-index:${Z.z}">${SAK[o].e}</span>`}
-  r.innerHTML=h;
-  if(!NIV[G.l].las){const ute=Object.keys(SAK).filter(o=>!G.pos[o]);$("hylla").innerHTML=ute.map(o=>`<span class="sak hyl${G.vald===o?" vald":""}" data-o="${o}" style="position:relative;font-family:var(--emoji);font-size:2.8rem;cursor:grab;touch-action:none;line-height:1">${SAK[o].e}</span>`).join("")||'<span class="tom">Alla saker står i rummet.</span>'}}
+function rita(markera){const r=$("rum");let h='<div class="room-window" aria-hidden="true"></div><div class="room-rug" aria-hidden="true"></div>';
+ h+=Object.entries(MOB).map(([k,m])=>`<span class="m furniture ${k}" style="left:${m.x}%;top:${m.y}%;width:${m.w}%;height:${m.h}%;z-index:${k==='box'?1:3}" role="img" aria-label="${m.sv}">${bild(k)}</span>`).join('');
+ const box=MOB.box;h+=`<span class="m box-front" style="left:${box.x}%;top:${box.y}%;width:${box.w}%;height:${box.h}%;z-index:4" aria-hidden="true">${bild('box')}</span>`;
+ h+=Object.entries(ZON).map(([k,z])=>`<button type="button" aria-label="${FRAS[zonFras(k)].sv}" class="zon${markera&&markera.includes(k)?" mal":""}" data-z="${k}" style="left:${z.x}%;top:${z.y}%;z-index:6" tabindex="${G.vald?0:-1}"></button>`).join('');
+ for(const [o,z]of Object.entries(G.pos)){const Z=ZON[z];h+=`<button type="button" aria-label="Flytta ${SAK[o].sv}" class="sak${G.vald===o?' vald':''}" data-o="${o}" style="left:${Z.x}%;top:${Z.y}%;--s:${Z.s||1};z-index:${Z.z}">${bild(o)}</button>`}
+ r.innerHTML=h;
+ if(!NIV[G.l].las){const ute=Object.keys(SAK).filter(o=>!G.pos[o]);$('hylla').innerHTML=ute.map(o=>`<button type="button" aria-label="Flytta ${SAK[o].sv}" class="sak hyl${G.vald===o?' vald':''}" data-o="${o}">${bild(o)}</button>`).join('')||'<span class="tom">Alla saker står i rummet.</span>'}
+}
 /* ---------- dra eller tryck ---------- */
 function narmasteZon(cx,cy){const r=$("rum").getBoundingClientRect();let b=null,bd=1e9;for(const [k,z] of Object.entries(ZON)){const x=r.left+z.x/100*r.width,y=r.top+z.y/100*r.height,d=Math.hypot(cx-x,cy-y);if(d<bd){bd=d;b=k}}
   return bd<r.width*.12?b:null}
 function placera(o,z){if(!z){delete G.pos[o];rita();return}for(const [p,q] of Object.entries(G.pos))if(q===z&&p!==o)delete G.pos[p];G.pos[o]=z;ljud("pip");rita()}
-document.addEventListener("pointerdown",e=>{if(!G||NIV[G.l].las||$("game").hidden)return;const el=e.target.closest(".sak");
+document.addEventListener("pointerdown",e=>{if(!G||G.lost||NIV[G.l].las||$("game").hidden)return;const el=e.target.closest(".sak");
   if(!el){const zon=e.target.closest(".zon");if(zon&&G.vald){placera(G.vald,zon.dataset.z);G.vald=null;$("rum").classList.remove("visa");rita()}return}
   e.preventDefault();const o=el.dataset.o,sx=e.clientX,sy=e.clientY;let ghost=null,flyttad=false;
   const mv=ev=>{if(!flyttad&&Math.hypot(ev.clientX-sx,ev.clientY-sy)>8){flyttad=true;ghost=el.cloneNode(true);ghost.classList.add("lyft");const b=el.getBoundingClientRect();
-      ghost.style.cssText=`position:fixed;left:${b.left+b.width/2}px;top:${b.top+b.height/2}px;transform:translate(-50%,-50%) scale(1.15);font-size:${Math.max(40,b.height)}px;z-index:80;pointer-events:none;margin:0`;document.body.appendChild(ghost);el.style.opacity=".3";$("rum").classList.add("visa")}
+      ghost.style.cssText=`position:fixed;left:${b.left+b.width/2}px;top:${b.top+b.height/2}px;transform:translate(-50%,-50%) scale(1.15);width:${Math.max(40,b.width)}px;height:${Math.max(40,b.height)}px;z-index:80;pointer-events:none;margin:0`;document.body.appendChild(ghost);el.style.opacity=".3";$("rum").classList.add("visa")}
     if(ghost){ghost.style.left=ev.clientX+"px";ghost.style.top=ev.clientY+"px"}};
   const upp=ev=>{removeEventListener("pointermove",mv);removeEventListener("pointerup",upp);removeEventListener("pointercancel",upp);$("rum").classList.remove("visa");
     if(ghost){ghost.remove();const r=$("rum").getBoundingClientRect(),inne=ev.clientX>r.left&&ev.clientX<r.right&&ev.clientY>r.top&&ev.clientY<r.bottom;placera(o,inne?narmasteZon(ev.clientX,ev.clientY):null)}
     else{G.vald=G.vald===o?null:o;$("rum").classList.toggle("visa",!!G.vald);rita();if(G.vald)$("rum").classList.add("visa")}};
   addEventListener("pointermove",mv);addEventListener("pointerup",upp);addEventListener("pointercancel",upp)});
+document.addEventListener('click',e=>{if(e.detail!==0||!G||G.lost||NIV[G.l].las||$('game').hidden)return;const sak=e.target.closest('.sak');if(sak){G.vald=G.vald===sak.dataset.o?null:sak.dataset.o;rita();$('rum').classList.toggle('visa',!!G.vald);return}const zon=e.target.closest('.zon');if(zon&&G.vald){placera(G.vald,zon.dataset.z);G.vald=null;rita();$('rum').classList.remove('visa')}});
 /* ---------- rätta ---------- */
-$("bKlar").onclick=()=>{if(!G)return;const fel=G.mal.filter(m=>!FRAS[m.f].z.includes(G.pos[m.o]));
-  if(!fel.length){ljud("ok");const p=$("pet");p.classList.remove("hopp");void p.offsetWidth;p.classList.add("hopp");G.res[G.i]=G.forsta;if(!G.forsta)G.fel++;
-    $("fb").className="fb ratt";$("fb").textContent=G.forsta?"Rätt! 🎉":"Nu blev det rätt!";$("bKlar").disabled=true;visaFacit();setTimeout(()=>{G.i++;ny()},2600);return}
+$("bKlar").onclick=()=>{if(!G||G.lost)return;const fel=G.mal.filter(m=>!FRAS[m.f].z.includes(G.pos[m.o]));
+  if(!fel.length){G.lost=true;ljud("ok");const p=$("pet");p.classList.remove("hopp");void p.offsetWidth;p.classList.add("hopp");G.res[G.i]=G.forsta;if(!G.forsta)G.fel++;
+    $("fb").className="fb ratt";$("fb").textContent=G.forsta?"Rätt! 🎉":"Nu blev det rätt!";$("bKlar").disabled=true;visaFacit();nextTimer=setTimeout(()=>{G.i++;ny()},2600);return}
   ljud("bad");G.forsta=false;$("fb").className="fb fel";
   const m=fel[0],var_=G.pos[m.o];
-  $("fb").textContent=!var_?`Du har inte flyttat ${SAK[m.o].sv} ${SAK[m.o].e} än. Lyssna igen.`:`Inte riktigt. Lyssna igen på ${SAK[m.o].sv} ${SAK[m.o].e}.`;
+  $("fb").textContent=!var_?`Du har inte flyttat ${SAK[m.o].sv} än. Lyssna igen.`:`Inte riktigt. Lyssna igen på ${SAK[m.o].sv}.`;
   if(G.fel2===G.i){visaFacit();rita(FRAS[m.f].z);$("fb").textContent=`Den gröna ringen visar var ${SAK[m.o].sv} ska stå.`}G.fel2=G.i};
 $("val3").onclick=e=>{const h=e.target.closest("[data-hor]");if(h){spela([["is-"+G.fraga.o,h.dataset.hor]],null,`The ${G.fraga.o} is ${FRAS[h.dataset.hor].en}.`);return}
   const b=e.target.closest("[data-f]");if(!b||b.disabled)return;const f=b.dataset.f,o=G.fraga.o;
   if(f===G.fraga.ratt){ljud("ok");b.classList.add("ratt");$("val3").querySelectorAll(".svar").forEach(x=>x.disabled=true);G.res[G.i]=G.forsta;if(!G.forsta)G.fel++;
-    $("fb").className="fb ratt";$("fb").innerHTML=`${G.forsta?"Rätt!":"Nu blev det rätt!"} <span style="font-weight:600;color:var(--muted)">${stor(SAK[o].sv)} är ${FRAS[f].sv}.</span>`;setTimeout(()=>{G.i++;ny()},2400)}
+    $("fb").className="fb ratt";$("fb").innerHTML=`${G.forsta?"Rätt!":"Nu blev det rätt!"} <span style="font-weight:600;color:var(--muted)">${stor(SAK[o].sv)} är ${FRAS[f].sv}.</span>`;nextTimer=setTimeout(()=>{G.i++;ny()},2400)}
   else{ljud("bad");G.forsta=false;b.classList.add("fel");b.disabled=true;$("fb").className="fb fel";$("fb").textContent=`Nej, ${SAK[o].sv} är inte ${FRAS[f].sv}. Titta igen.`}};
 const stor=s=>s.charAt(0).toUpperCase()+s.slice(1);
 function slut(){tystna();const st=G.fel===0?3:G.fel<=2?2:1,old=data.stars[G.l]||0;data.stars[G.l]=Math.max(old,st);save();

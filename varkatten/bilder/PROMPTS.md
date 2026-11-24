@@ -1,0 +1,22 @@
+# Bildprompter
+
+Genererade med det inbyggda imagegen-verktyget. Transparenta original normaliserade till WebP.
+
+## Katt
+
+Use case: illustration-story. Original raster sprite for Swedish school game, transparent background. Traditional Scandinavian storybook gouache and colored pencil, matte pigment, visible confident irregular pencil contours, restrained simple shapes, charming observational animal drawing. Full body sitting upright with paws and tail visible, nearly frontal, isolated centered. Small natural almond eyes with colored iris and narrow pupils, no white sparkle dots, no oversized eyes, no glossy eyes, no baby proportions, no Disney/Pixar look, no airbrushed fur, no emoji, no 3D, no floor shadow, no text. A blue-grey British shorthair cat, sturdy body, rounded cheeks, short dense blue grey coat, small amber almond-shaped eyes with vertical pupils, calm slightly curious expression, natural cat anatomy.
+
+## Hund
+
+Use case: illustration-story. Original raster sprite for Swedish school game, transparent background. Traditional Scandinavian storybook gouache and colored pencil, matte pigment, visible confident irregular pencil contours, restrained simple shapes, charming observational animal drawing. Full body sitting upright with paws and tail visible, nearly frontal, isolated centered. Small natural almond eyes with colored iris and narrow pupils, no white sparkle dots, no oversized eyes, no glossy eyes, no baby proportions, no Disney/Pixar look, no airbrushed fur, no emoji, no 3D, no floor shadow, no text. A scruffy wire-haired Jack Russell terrier with white coat, russet brown patches on head and one ear, folded triangular ears, narrow muzzle, little wiry beard, small dark brown almond eyes, lively inquisitive expression. Adult dog proportions.
+
+## Övriga originalbilder
+Gemensam prompt: Use case: illustration-story. Asset type: single transparent raster game sprite for a polished Swedish children's educational picture book game. Soft hand-painted gouache with subtle paper texture, beautiful gentle shading, warm soft light, clear silhouette and readable small details, charming not babyish, not emoji, not SVG or flat vector. One object centered and entirely visible, no text or border, no surrounding objects, no floor, no cast shadow, transparent background with clean edge and no halo.
+
+- teddy.webp: A lovable warm brown teddy bear sitting upright, entire round body, two arms and two feet visible, front view. Round ears, stitched small nose, cream belly and foot pads, tactile plush fabric, friendly expression, no clothing.
+- ball.webp: One classic small football, soccer ball, with ivory and muted navy pentagonal panels. Three-dimensional spherical shape with soft rounded shading and hand-painted gouache surface. No face, no stand, no ground shadow.
+- chair.webp: A standalone pale teal wooden child-sized chair, almost frontal view, just enough perspective to see its seat top. The tall rectangular backrest has THREE separated vertical wooden slats, with generous transparent gaps between them. A broad horizontal seat and FOUR slender legs, a LARGE OPEN GAP underneath the seat, transparent space between the legs so a cat can be visible underneath. No crossbar below the seat, no cushion, no props, no person. Whole chair from top of backrest to feet. Warm painted wood texture. Width about 65% of height.
+- bed.webp: A standalone small wooden children's single bed viewed broadly SIDE-ON, headboard on the RIGHT, foot end on the LEFT. A muted blue quilt with a few cream stars, white pillow at right. Oak bedframe is slim and raised high on FOUR slender legs, a LARGE OPEN TRANSPARENT SPACE under the entire bed, unobstructed by any bedspread or underbed panel, to show a cat hiding underneath. All bed legs visible and intact. Width about twice its total height. No objects under bed.
+- box.webp: A standalone OPEN rectangular cardboard storage box, frontal view from slightly above, two small open flaps extending to sides, no tall rear flap. Warm honey kraft cardboard with visible paper texture, a clear wide dark opening at the TOP and a broad uninterrupted front panel occupying the LOWER HALF. The front panel top edge is straight horizontal at the image's vertical midpoint, so a cat can sit inside with its head visible above the front edge. Entire box visible, no contents, no markings, no tape, no text.
+
+kort.webp är en beskuren skärmbild från övningen. Ingen extern bildkälla eller tredjepartsillustration har använts.
