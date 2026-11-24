@@ -7,6 +7,13 @@ _Under bygge (nov 2026). Den som tar över läser bara den här filen och `konti
 - **En 3D-glob (three.js) där jordens plattor rör sig tillbaka i tiden (250 miljoner år) och fram till nu.** Riktig jordtextur (Solar System Scope, CC BY 4.0, `ovriga/solsystemet/bilder/2k_earth_daymap.jpg`) delad i plattor som flyttas som stela kroppar. Inga riktiga rekonstruktionsdata (GPlates) finns offline: **rörelserna är anpassade för hand och med en liten optimering så att kontinenterna passar ihop i Pangaea**. Starkt förenklat, det ska stå på sidan. Texterna är inte granskade av en geolog.
 - Spara tokens: små tester, få skärmbilder, en incheckning per steg, uppdatera Status.
 
+## Berättarröst i Tidsresan (lärarens beslut 24 nov 2026)
+- Knappen **▶ Berätta** överst i Tidsresan: globen glider tid för tid (250, 220, 170, 100, 50, Nu) och kameran vänder sig mot det som berättas, sedan läser rösten med undertext. Sist **framtiden**: globen står på Nu med gula pilar (Australien norrut, Afrika mot Europa, Östafrika österut) och en röd spricka i Östafrika. Framtiden spolas inte fram på globen (det vore gissade rörelser); rösten säger att forskarna gissar olika.
+- Rösten är **Malin** (`zyfJspwEDo0sxPeFmtsn`), **inte Paul Axel** (läraren: för trött). Manus `manus/kontinentdrift-manus.txt` (godkänt av läraren), filer `ljud/kontinentdrift/s0-1 … s6-2.mp3` (64 kbps mono). Byts en fil: höj `BER_V` i sidan.
+- Startar bara när man trycker. ⏭ hoppar till nästa del. Rör eleven reglaget, ▶ eller en tidsknapp slutar berättelsen. Är sajtens ljud av går den på timer med undertexten.
+- Bevisen har ingen berättare (gissa först).
+- ERA-texten för 170 Mya är rättad: Atlanten öppnas först mellan Nordamerika och Afrika (inte "Nordatlanten").
+
 ## Plan
 - **Nivå 1 Tidsresan:** globen, tidsreglage (250 → 0 Mya), spela-knapp, era-kort (Perm, Trias, Jura, Krita, Paleogen, Nu), valbara "dagens kuster" som spöke, tryck på en platta för namn och fakta. Inga stjärnor.
 - **Nivå 2 Bevisen (gissa först):** fyra ledtrådar Wegener använde (Mesosaurus-fossil i Sydamerika och Afrika, bergskedjan Appalacherna som fortsätter i Skottland och Norge, Glossopteris-växten, Indien som kraschar in i Asien på ~50 Mya med reglaget). Eleven gissar, globen spolas tillbaka och visar att platserna låg intill varandra. Stjärnor efter antal rätt.
