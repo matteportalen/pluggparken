@@ -10,7 +10,7 @@
 <meta name="theme-color" content="#1F3A35">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/fonts/fonts.css">
-<link rel="stylesheet" href="rostlabbet.css?v=2">
+<link rel="stylesheet" href="rostlabbet.css?v=4">
 </head>
 <body>
 <script src="../ljud.js"></script><script src="../djur.js"></script>
@@ -20,9 +20,9 @@
 <div class="lab">
 <section class="visual card" aria-label="Röstens insida">
 <div class="visual-top"><span class="live" id="live">Rösten vilar</span><button class="small" id="reset" disabled>↺ Börja om</button></div>
-<div class="head-wrap"><canvas id="head" role="img" aria-label="Huvud i genomskärning. Dra i tungan, käken eller läpparna. Samma inställningar finns i reglagen bredvid."></canvas><div class="loading" id="loading" role="status">Hämtar röstens insida …</div></div>
-<div class="legend"><span><i class="tongue"></i>Tunga</span><span><i class="jaw"></i>Käke</span><span><i class="lips"></i>Läppar</span></div>
-<p class="drag-hint">Dra i de färgade punkterna och lyssna.</p>
+<div class="views"><div class="side-view"><h2>Inuti munnen</h2><div class="head-wrap"><canvas id="head" role="img" aria-label="Huvud i genomskärning. Dra i tungan, käken eller läpparna. Samma inställningar finns i reglagen bredvid."></canvas><div class="loading" id="loading" role="status">Hämtar röstens insida …</div></div>
+</div><div class="front-view"><h2>Framifrån</h2><canvas id="front" role="img" aria-label="Ansikte framifrån. Läppar och käke följer samma rörelser som genomskärningen."></canvas><p>Läpparna formar ljudet</p></div></div><div class="legend"><span><i class="tongue"></i>Tunga</span><span><i class="jaw"></i>Käke</span><span><i class="lips"></i>Läppar</span></div>
+<p class="drag-hint">Dra i de färgade punkterna. Se samma rörelse från två håll.</p>
 <div class="wave-row"><span>Ljudvågen</span><canvas id="wave" aria-label="Ljudvågen när rösten låter" role="img"></canvas></div>
 </section>
 <section class="controls card" aria-label="Forma rösten">
@@ -54,5 +54,5 @@
 <p class="about">Ljuden skapas av en simulerad röst. Här kan du utforska hur munnen formar ljud.</p>
 <details class="credits"><summary>Om Röstlabbet</summary><p>Röstlabbet använder CHIMERA av Jameson Hodge (MIT-licens). Ljudet räknas fram i din webbläsare. Ingen mikrofon eller inspelning behövs. Vokalljuden är syntetiska exempel, inte en bedömning av svenskt uttal.</p><a href="chimera/SOURCE.md">Källa och ändringar</a> · <a href="chimera/LICENSE.txt">Licens</a></details>
 </main>
-<script type="module" src="rostlabbet.js?v=3"></script>
+<script type="module" src="rostlabbet.js?v=4"></script>
 </body></html>
