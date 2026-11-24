@@ -96,6 +96,7 @@ const IDX=[
  ['ovriga/rymdlabbet/#film-zoom','Zooma ut i universum (film)','Film från jorden ut till Vintergatan, galaxerna och det kosmiska nätet','🔭','zooma ut film universum jorden månen solsystemet vintergatan galax laniakea kosmiska nätet ljusår storlek skala','NO'],
  ['ovriga/rymdlabbet/','Rymdlabbet','Solsystemet, dag och natt, månens faser och mer','🔭','rymden planeter måne stjärnor svarta hål årstider förmörkelse universum galax jättar','NO'],
  ['engelska/','Engelska','Ämnet engelska: lyssna, prata och bygg monster','🇬🇧','engelska english ämne språk','Engelska'],
+ ['varkatten/','Var är katten?','Lyssna på engelska och flytta katten: in, on, under, behind, between','🐱','var är katten where is the cat engelska english prepositioner lägesord in on under behind between next to in front of lyssna','Engelska'],
  ['monsterfabriken/','Monsterfabriken','Lyssna på engelska och bygg monstret: ögon, armar, färger','👾','monster monsterfabriken engelska english lyssna färger siffror kroppsdelar body eyes arms legs colours','Engelska'],
  ['tornverkstan/','Tornverkstan','Bygg ett torn av trä, stål och rep: så högt som möjligt, en vattentank på toppen och storm.','🗼','torn tornbygge bygga kraft krafter tyngd triangel fackverk vind storm stag rep vattentorn kikärtor tandpetare konstruktion teknik hållfasthet','NO'],
  ['brobygget/','Brobygget','Bygg en bro av väg, trä, stål och rep och testa hur tunga fordon den bär.','🌉','bro broar bygga brobygge kraft krafter tyngd balans triangel fackverk hängbro konstruktion teknik hållfasthet lastbil','NO'],

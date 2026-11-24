@@ -88,6 +88,11 @@ Kartorna är gjorda ur Natural Earth (public domain). Europakartan, Världskarta
 - 🔊 bara när man trycker. Riktig röst Philippa, 28 inspelade meningar i `ljud/monster/` (**varje mening inspelad för sig**: när alla meningar spelades in i en tagning med pauser emellan pratade rösten för fort och hopdraget, läraren: "has four arms" och "fourleg"; lägre fart och nedsaktning hjälpte inte; höj `LJUD_V` om filerna görs om) (manus `manus/monster-manus.txt`); nivå 2 och 3 spelar meningarna i rad. Saknas en fil används webbläsarens röst. Är sajtens ljud av visas meningen som text i stället.
 - Monstret är ritat i SVG (`rita(m)`), godkänt av läraren som del av idén. Klistermärke 👾 Monstermakaren (tre stjärnor på nivå 3).
 
+## Var är katten? (`varkatten/`, `mattespel-varkatten-v1`)
+- Lägesord på engelska. Ett rum med en låda, en stol och en säng (emojis) och fyra saker (cat, dog, ball, teddy). **Nivå 1** (åk 1–3, 8 uppgifter): in, on, under, next to, en sak i taget. **Nivå 2** (åk 3–4, 6): två meningar i rad, också behind, in front of och between. **Nivå 3** (åk 5–6, 6): alla saker står i rummet, "Where is the dog?", välj rätt mening av tre (🔊 vid varje).
+- Dra saken till rätt plats (streckade ringar visas medan man drar) eller tryck på saken och sedan på ringen. "Next to" godtas på båda sidor, och mellan två möbler räknas också som bredvid. Fel: andra försöket visar en grön ring där saken ska stå. Efter rätt svar visas meningen på engelska och svenska.
+- Rösten Philippa, 21 delar i `ljud/katten/` (manus `manus/katten-manus.txt`): "Put the cat," + "under the chair." spelas direkt efter varandra. Är ljudet av visas meningen som text.
+
 ## Engelska ord
 
 - Omgjord nov 2026: inga "välj rätt ord av fyra". Uppgifter: **lyssna** (🔊 säger ordet, tryck på rätt bild av sex), **läs** (ordet står, tryck på bilden), **bygg** (stava ordet med bokstavsbrickor) och på nivå 3 **para ihop** (fyra engelska och fyra svenska fraser), **hör** (lyssna, välj betydelsen) och bygg frasen av ordbrickor.
