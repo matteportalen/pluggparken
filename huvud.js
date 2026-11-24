@@ -200,8 +200,10 @@ body.mph-mini #quit{display:none}
       vs.textContent='.mph .mph-varld{display:inline-flex;align-items:center;gap:5px;min-height:40px;padding:0 12px;border-radius:999px;background:#1E9E5E;color:#fff;font-weight:800;font-size:.95rem;box-shadow:0 2px 0 rgba(0,0,0,.25);white-space:nowrap}.mph .mph-varld:active{transform:translateY(2px)}.mph-varld em{font-style:normal}@media(max-width:560px){.mph-varld em{display:none}}';document.head.appendChild(vs);}
     const va=document.createElement('a');va.className='mph-varld';va.href=hem+'varlden/';va.setAttribute('aria-label','Tillbaka till Pluggparken-världen');va.innerHTML='🏝️<em>Världen</em>';
     const hr=h.querySelector('.mph-right');if(hr)hr.prepend(va);}}catch(e){}
-  // på första sidan: en liten rund 🏝️-knapp till Pluggparken-världen (läraren 24 nov 2026: inte en stor knapp bland ämnena)
-  if(paStart&&!h.querySelector('.mph-varld')){const vo=document.createElement('a');vo.className='mph-ö';vo.href=hem+'varlden/';vo.title='Pluggparken-världen: gå runt på en ö i 3D';vo.setAttribute('aria-label','Pluggparken-världen, en ö i 3D');vo.textContent='🏝️';
+  // på första sidan och ämnessidorna: en liten rund 🏝️-knapp till Pluggparken-världen (läraren 24 nov 2026);
+  // från en ämnessida hamnar man direkt på ämnets ö (varlden/#matte osv., Specialare har Biografen, Extra har Musikön)
+  const ÖN={matte:['matte','Matte-parken'],svenska:['svenska','Svenska-parken'],so:['so','SO-parken'],no:['no','NO-parken'],fler:['fler','Fler ämnen-ön'],extra:['extra','Musikön'],specialare:['bio','Biografen']},ön=ÖN[REL.replace(/\/$/,'')];
+  if((paStart||ön)&&!h.querySelector('.mph-varld')){const vo=document.createElement('a');vo.className='mph-ö';vo.href=hem+'varlden/'+(ön?'#'+ön[0]:'');vo.title=ön?'Till '+ön[1]+' i Pluggparken-världen':'Pluggparken-världen: gå runt på en ö i 3D';vo.setAttribute('aria-label',ön?ön[1]+' i Pluggparken-världen':'Pluggparken-världen, en ö i 3D');vo.textContent='🏝️';
     const sk=h.querySelector('.mph-sok');sk&&sk.parentNode.insertBefore(vo,sk);}
   // sökning: sok.js hämtas först när den behövs
   const rotUrl=new URL('.',(me&&me.src)||location.href).href;

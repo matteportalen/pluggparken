@@ -1679,6 +1679,9 @@ function laddaScen(id,plats){
   stjarnaText();$('stj').style.display=iHuset()?'none':'';uppdateraArende();dimma();$('hem2').hidden=S.id==='hub';
 }
 function startVarlden(){
+  /* varlden/#matte (från ämnessidornas 🏝️-knapp) börjar på ämnets ö, vid öns startplats */
+  const hö=decodeURIComponent(location.hash.slice(1));if(hö&&(hö==='hub'||PARKER[hö])){try{history.replaceState(null,'',location.pathname+location.search);}catch(e){}
+    laddaScen(hö,null);sparaPlats({scen:hö});return;}
   const s=lasPlats();let id=s&&(s.scen==='hub'||s.scen==='hus'||s.scen==='lekrum'||PARKER[s.scen])?s.scen:'hub';
   laddaScen(id,null);
   const O=S.O;
