@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<script src="../tema.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hello! – Pluggparken</title>
+<meta name="description" content="Hello! Prata engelska med ditt djur. Lyssna på frågan och välj rätt svar: hälsa, berätta hur gammal du är, vad du gillar och var du bor.">
+<link rel="canonical" href="https://pluggparken.se/hello/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Pluggparken">
+<meta property="og:locale" content="sv_SE">
+<meta property="og:title" content="Hello! – Pluggparken">
+<meta property="og:description" content="Prata engelska med ditt djur: lyssna på frågan och välj rätt svar.">
+<meta property="og:url" content="https://pluggparken.se/hello/">
+<meta property="og:image" content="https://pluggparken.se/og.jpg">
+<meta name="theme-color" content="#1F3A35">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+:root{
+  --bg:#EAF3FF; --ink:#1D2B53; --muted:#56668F; --card:#FFFFFF; --line:#C6D6F2; --soft:#F1F6FF;
+  --good:#1E9E5E; --good-dark:#157548; --bad:#E5484D; --accent:#3D5AFE; --gold:#F2B707;
+  --font:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+  --emoji:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:720px;margin:0 auto;padding:12px 16px 40px}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;border:0;background:none}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+[hidden]{display:none!important}
+.hero{display:flex;gap:16px;align-items:center;background:linear-gradient(135deg,#2BB673,#14915A);color:#fff;border-radius:24px;padding:16px 18px;box-shadow:0 5px 0 #0E6B42;margin:6px 0 16px}
+.hero .hm{flex:none;font-size:3.6rem;font-family:var(--emoji);line-height:1}
+.hero h1{margin:0;font-size:clamp(1.7rem,6vw,2.3rem);line-height:1.05}
+.hero p{margin:6px 0 0;font-weight:600;opacity:.95}
+.niv{display:grid;gap:10px}
+.niv button{display:flex;align-items:center;gap:14px;background:var(--card);border-radius:18px;padding:12px 14px;box-shadow:0 4px 0 var(--line);text-align:left;width:100%}
+.niv button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.niv .nr{flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-weight:800;font-size:1.4rem;color:#fff}
+.niv b{display:block;font-size:1.12rem;line-height:1.15}
+.niv small{display:block;color:var(--muted);font-weight:600;font-size:.88rem;line-height:1.25}
+.niv .st{margin-left:auto;flex:none;color:var(--gold);font-size:1.15rem;letter-spacing:1px}
+.niv .st .off{color:var(--line)}
+.info{color:var(--muted);font-size:.9rem;margin:14px 2px 0}
+.topp{display:flex;align-items:center;gap:10px;margin:4px 0 10px}
+.dots{display:flex;gap:6px;flex:1;flex-wrap:wrap}
+.dots i{width:12px;height:12px;border-radius:50%;background:var(--line)}
+.dots i.ok{background:var(--good)}.dots i.f{background:var(--bad)}.dots i.nu{background:var(--gold)}
+.niva-t{font-weight:800;color:var(--muted);font-size:.9rem}
+/* chatten */
+.chatt{background:var(--card);border-radius:22px;box-shadow:0 4px 0 var(--line);padding:14px 12px;display:flex;flex-direction:column;gap:12px;min-height:240px}
+.rad{display:flex;align-items:flex-end;gap:8px}
+.rad.jag{justify-content:flex-end}
+.ava{flex:none;width:58px;height:64px}.ava svg{width:100%;height:100%}
+.ava.hopp{animation:hopp .55s ease}
+@keyframes hopp{40%{transform:translateY(-14px)}}
+.bubbla{position:relative;max-width:78%;border-radius:20px;padding:10px 14px;font-weight:700;font-size:1.18rem;line-height:1.3}
+.rad.djur .bubbla{background:var(--soft);border-bottom-left-radius:6px;box-shadow:0 3px 0 var(--line)}
+.rad.jag .bubbla{background:#DDF5E8;border-bottom-right-radius:6px;box-shadow:0 3px 0 #9ED9BA}
+.bubbla .namn{display:block;font-size:.78rem;font-weight:800;color:var(--muted);margin-bottom:2px}
+.bubbla .sv{display:block;font-weight:600;font-size:.92rem;color:var(--muted);margin-top:4px}
+.bubbla .verk{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.liten{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:4px 14px;border-radius:999px;background:var(--card);box-shadow:0 3px 0 var(--line);font-weight:800;font-size:.95rem}
+.liten:active{transform:translateY(2px)}
+.liten.spelar{background:#7B61FF;color:#fff;box-shadow:0 3px 0 #3D2AA8}
+.liten.lyss{background:var(--accent);color:#fff;box-shadow:0 3px 0 #2A3FB8}
+.gamla .rad{opacity:.55}
+.gamla .verk{display:none}
+.pling{animation:in .3s ease}
+@keyframes in{from{opacity:0;transform:translateY(8px)}}
+/* svaren */
+.svar-rub{font-weight:800;color:var(--muted);font-size:.92rem;margin:14px 4px 6px;text-align:right}
+.alt{display:grid;gap:10px}
+.alt .r{display:flex;align-items:center;gap:8px;justify-content:flex-end}
+.alt button.s{flex:1;max-width:520px;min-height:58px;border-radius:20px;border-bottom-right-radius:6px;background:var(--card);box-shadow:0 4px 0 var(--line);font-weight:800;font-size:1.12rem;text-align:left;padding:8px 16px}
+.alt button.s:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.alt button.s.fel{background:#FDE7E8;box-shadow:0 3px 0 #F0A3A6;color:#7A2A2E}
+.alt button.s.skak{animation:skak .4s ease}
+@keyframes skak{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.alt button.h{flex:none;width:48px;height:48px;border-radius:50%;background:var(--card);box-shadow:0 3px 0 var(--line);font-size:1.2rem}
+.alt button.h.spelar{background:#7B61FF;box-shadow:0 3px 0 #3D2AA8}
+.fb{font-weight:700;margin:12px 4px 0;min-height:1.6em}
+.fb.ratt{color:var(--good-dark)}.fb.fel{color:#B4232A}
+.fb small{display:block;font-weight:600;color:var(--muted)}
+.efter{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:12px}
+.knapp{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:56px;background:var(--good);color:#fff;border-radius:16px;padding:10px 24px;font-weight:800;font-size:1.15rem;box-shadow:0 5px 0 var(--good-dark)}
+.knapp:active{transform:translateY(3px)}
+.knapp.vit{background:var(--card);color:var(--ink);box-shadow:0 5px 0 var(--line)}
+.knapp.mic{background:#FF6B6B;box-shadow:0 5px 0 #C24141}
+.knapp.mic.spelar{background:#7B61FF;box-shadow:0 5px 0 #3D2AA8}
+.res{text-align:center}
+.res .stj{font-size:3rem;letter-spacing:6px;color:var(--gold);margin:8px 0}
+.res .stj .off{color:var(--line)}
+.res .ava{width:110px;height:120px;margin:0 auto}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:50}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<script src="../ljud.js"></script>
+<script src="../djur.js"></script>
+<script src="../huvud.js" data-titel="Hello!" data-ikon="👋"></script>
+<main class="wrap">
+<section class="screen" id="home">
+  <div class="hero"><div class="hm" aria-hidden="true">👋💬</div><div><h1>Hello!</h1><p>Prata engelska med ditt djur. Lyssna på frågan och välj vad du svarar.</p></div></div>
+  <div class="niv" id="niv"></div>
+  <p class="info">Tryck på 🔊 för att höra frågan. "Vad betyder det?" visar frågan på svenska. När du har svarat rätt kan du trycka på 🎤 och säga meningen själv. Inget sparas.</p>
+</section>
+
+<section class="screen" id="game" hidden>
+  <button type="button" data-home hidden tabindex="-1" aria-hidden="true" onclick="hem()"></button>
+  <div class="topp"><div class="dots" id="dots"></div><span class="niva-t" id="nivT"></span></div>
+  <div class="chatt" id="chatt" aria-live="polite"></div>
+  <div id="svarDel">
+    <div class="svar-rub" id="svarRub">Vad svarar du?</div>
+    <div class="alt" id="alt"></div>
+  </div>
+  <div class="fb" id="fb" aria-live="polite"></div>
+  <div class="efter" id="efter" hidden>
+    <button class="knapp mic" id="bMic" type="button" hidden>🎤 Säg det själv</button>
+    <button class="knapp" id="bNasta" type="button">Nästa ➜</button>
+  </div>
+</section>
+
+<section class="screen res" id="result" hidden>
+  <div class="ava" id="rAva"></div>
+  <h2 id="rRub" style="margin:4px 0 0">Bra jobbat!</h2>
+  <div class="stj" id="rStj"></div>
+  <p id="rTxt" style="font-weight:700;margin:0 0 14px"></p>
+  <button class="knapp" id="rIgen">Spela igen</button>
+  <button class="knapp vit" id="rHome">Välj nivå</button>
+</section>
+</main>
+<canvas id="fx" hidden></canvas>
+<script>
+const $=id=>document.getElementById(id);
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const KEY="mattespel-hello-v1";
+const data=(()=>{try{return Object.assign({stars:{}},JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){return{stars:{}}}})();
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}};
+const reduced=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
+const ljud=n=>{window.Ljud&&Ljud[n]&&Ljud[n]()};
+const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+
+/* ---------- samtalen ----------
+   id = ljudfilen (ljud/hello/q-id.mp3 och a-id.mp3). Nivå 3: svaren har inget ljud (läs själv),
+   och "nara" är ett nästan rätt svar med ett grammatikfel; "varfor" förklarar felet på svenska. */
+const SAMTAL={
+ 1:[{id:"hello",q:"Hello! Nice to meet you!",qs:"Hej! Trevligt att träffas!",a:"Nice to meet you too!",as:"Trevligt att träffas, du också!"},
+    {id:"howareyou",q:"How are you?",qs:"Hur mår du?",a:"I'm fine, thank you.",as:"Jag mår bra, tack."},
+    {id:"howold",q:"How old are you?",qs:"Hur gammal är du?",a:"I'm eight years old.",as:"Jag är åtta år gammal."},
+    {id:"pet",q:"Do you have a pet?",qs:"Har du något husdjur?",a:"Yes, I have a dog.",as:"Ja, jag har en hund."},
+    {id:"goodbye",q:"Goodbye!",qs:"Hej då!",a:"Bye! See you tomorrow!",as:"Hej då! Vi ses i morgon!"}],
+ 2:[{id:"colour",q:"What's your favourite colour?",qs:"Vilken är din favoritfärg?",a:"My favourite colour is blue.",as:"Min favoritfärg är blå."},
+    {id:"pizza",q:"Do you like pizza?",qs:"Gillar du pizza?",a:"Yes, I do. I love pizza!",as:"Ja, det gör jag. Jag älskar pizza!"},
+    {id:"swim",q:"Can you swim?",qs:"Kan du simma?",a:"Yes, I can.",as:"Ja, det kan jag."},
+    {id:"live",q:"Where do you live?",qs:"Var bor du?",a:"I live in Sweden.",as:"Jag bor i Sverige."},
+    {id:"weather",q:"What's the weather like today?",qs:"Hur är vädret i dag?",a:"It's sunny and warm.",as:"Det är soligt och varmt."},
+    {id:"time",q:"What time is it?",qs:"Vad är klockan?",a:"It's three o'clock.",as:"Klockan är tre."}],
+ 3:[{id:"help",q:"Can I help you?",qs:"Kan jag hjälpa dig? (i en affär)",a:"Yes, please. I'd like an ice cream.",as:"Ja tack. Jag skulle vilja ha en glass.",
+     nara:"Yes, please. I like a ice cream.",varfor:"Före ett ord som börjar med vokalljud blir det an: an ice cream. Och när man beställer säger man I'd like (jag skulle vilja ha), inte I like (jag gillar)."},
+    {id:"station",q:"Excuse me, where is the train station?",qs:"Ursäkta, var ligger tågstationen?",a:"It's next to the bank.",as:"Den ligger bredvid banken.",
+     nara:"It's next the bank.",varfor:"Bredvid heter next to. Ordet to får inte fattas."},
+    {id:"yesterday",q:"What did you do yesterday?",qs:"Vad gjorde du i går?",a:"I played football with my friends.",as:"Jag spelade fotboll med mina kompisar.",
+     nara:"I play football yesterday.",varfor:"I går har redan hänt. Då blir det played (spelade), inte play (spelar)."},
+    {id:"juice",q:"Would you like some juice?",qs:"Vill du ha lite juice?",a:"No, thank you. I'm not thirsty.",as:"Nej tack. Jag är inte törstig.",
+     nara:"No, thank you. I don't thirsty.",varfor:"Törstig är något man är: I'm not thirsty. Don't används med ett verb, som I don't like."},
+    {id:"late",q:"Why are you late?",qs:"Varför är du sen?",a:"Sorry, I missed the bus.",as:"Förlåt, jag missade bussen.",
+     nara:"Sorry, I missing the bus.",varfor:"Det har redan hänt. Då blir det missed (missade)."}]};
+
+/* ---------- rösten (Philippa, ljud/hello/) ---------- */
+const LJUDBAS="../ljud/hello/",LJUD_V=1;let spelar=null;
+function tystna(){if(spelar){spelar.stop=true;if(spelar.a)spelar.a.pause();spelar.knapp&&spelar.knapp.classList.remove("spelar");spelar=null}if(window.speechSynthesis)speechSynthesis.cancel()}
+function reserv(t,klar){if(!("speechSynthesis" in window)){klar();return}const u=new SpeechSynthesisUtterance(t);u.lang="en-GB";u.rate=.85;const v=speechSynthesis.getVoices().find(v=>/^en-GB/i.test(v.lang));if(v)u.voice=v;u.onend=klar;u.onerror=klar;speechSynthesis.speak(u)}
+function spela(fil,text,knapp){tystna();const s={stop:false,knapp};spelar=s;knapp&&knapp.classList.add("spelar");
+  const slut=()=>{if(spelar===s)spelar=null;knapp&&knapp.classList.remove("spelar")};
+  const a=new Audio(LJUDBAS+fil+".mp3?v="+LJUD_V);s.a=a;a.onended=slut;
+  const fel=()=>{if(s.stop)return;s.stop=true;reserv(text,slut)};a.onerror=fel;a.play().catch(fel)}
+
+/* ---------- nivåer ---------- */
+const NIV=[null,
+ {namn:"Nivå 1: Hej och hej då",txt:"Hälsa, berätta hur du mår och hur gammal du är. Svaren har 🔊. Åk 1–3.",col:"#2BB673"},
+ {namn:"Nivå 2: Om dig",txt:"Favoritfärg, pizza, simma, var du bor, vädret och klockan. Åk 3–4.",col:"#FF9F43"},
+ {namn:"Nivå 3: Ute i världen",txt:"I affären, på gatan och i skolan. Läs svaren själv: ett av dem har ett litet fel. Åk 5–6.",col:"#7B61FF"}];
+const stjHtml=n=>[1,2,3].map(i=>i<=n?"★":'<span class="off">★</span>').join("");
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id)}
+function hem(){tystna();stoppaMic();$("niv").innerHTML=[1,2,3].map(l=>`<button data-l="${l}"><span class="nr" style="background:${NIV[l].col}">${l}</span><span><b>${NIV[l].namn}</b><small>${NIV[l].txt}</small></span><span class="st">${stjHtml(data.stars[l]||0)}</span></button>`).join("");show("home")}
+$("niv").onclick=e=>{const b=e.target.closest("[data-l]");if(b)starta(+b.dataset.l)};
+
+const djurSvg=()=>window.owlSVG?owlSVG(lasDjur()):"";
+const djurNamn=()=>{try{return (window.PETNAME&&PETNAME[lasDjur().animal])||"Ugglan"}catch(e){return"Ugglan"}};
+let G=null;
+function starta(l){const lista=SAMTAL[l].slice();
+  /* nivå 1 är ett riktigt samtal: hello först och goodbye sist. De andra blandas. */
+  const ordning=l===1?[lista[0],...shuffle(lista.slice(1,-1)),lista[lista.length-1]]:shuffle(lista);
+  G={l,i:0,fel:0,res:[],lista:ordning};$("nivT").textContent="Nivå "+l;$("chatt").innerHTML="";show("game");ny()}
+function prickar(){$("dots").innerHTML=G.lista.map((_,j)=>`<i class="${j<G.i?(G.res[j]?"ok":"f"):j===G.i?"nu":""}"></i>`).join("")}
+function ny(){if(G.i>=G.lista.length){slut();return}tystna();stoppaMic();const t=G.lista[G.i];G.forsta=true;G.t=t;
+  $("fb").textContent="";$("fb").className="fb";$("efter").hidden=true;$("svarDel").hidden=false;
+  /* tidigare repliker bleks, bara de två senaste syns */
+  const c=$("chatt");[...c.children].forEach(r=>r.classList.add("gamla"));while(c.children.length>2)c.firstChild.remove();
+  const rad=document.createElement("div");rad.className="pling";
+  rad.innerHTML=`<div class="rad djur"><span class="ava" id="ava">${djurSvg()}</span><div class="bubbla"><span class="namn">${esc(djurNamn())}</span><span lang="en">${esc(t.q)}</span><span class="sv" hidden>${esc(t.qs)}</span>
+    <div class="verk"><button class="liten lyss" type="button" data-q>🔊 Lyssna</button><button class="liten" type="button" data-sv>Vad betyder det?</button></div></div></div>`;
+  [...c.querySelectorAll("#ava")].forEach(a=>a.removeAttribute("id"));c.appendChild(rad);rad.querySelector(".ava").id="ava";
+  rad.querySelector("[data-q]").onclick=e=>spela("q-"+t.id,t.q,e.currentTarget);
+  rad.querySelector("[data-sv]").onclick=e=>{const s=rad.querySelector(".sv");s.hidden=!s.hidden;e.currentTarget.textContent=s.hidden?"Vad betyder det?":"Dölj svenskan"};
+  /* svarsalternativ */
+  const andra=SAMTAL[G.l].filter(x=>x!==t);let alt;
+  if(G.l===3)alt=[{txt:t.a,ratt:true},{txt:t.nara,nara:true},{txt:pick(andra).a,annan:true}];
+  else alt=[{txt:t.a,ratt:true},...shuffle(andra).slice(0,2).map(x=>({txt:x.a,annan:true,id:x.id}))];
+  G.alt=shuffle(alt);
+  $("svarRub").textContent=G.l===3?"Vad svarar du? Läs noga.":"Vad svarar du?";
+  $("alt").innerHTML=G.alt.map((a,k)=>`<div class="r">${G.l<3?`<button class="h" type="button" data-h="${k}" aria-label="Lyssna på svaret">🔊</button>`:""}<button class="s" type="button" data-k="${k}" lang="en">${esc(a.txt)}</button></div>`).join("");
+  prickar()}
+$("alt").onclick=e=>{const h=e.target.closest("[data-h]");if(h){const a=G.alt[+h.dataset.h],id=a.ratt?G.t.id:a.id;spela("a-"+id,a.txt,h);return}
+  const b=e.target.closest("[data-k]");if(!b||b.disabled)return;const a=G.alt[+b.dataset.k],t=G.t;
+  if(a.ratt){ljud("ok");G.res[G.i]=G.forsta;if(!G.forsta)G.fel++;tystna();
+    const rad=document.createElement("div");rad.className="rad jag pling";
+    rad.innerHTML=`<div class="bubbla"><span class="namn">Du</span><span lang="en">${esc(t.a)}</span><span class="sv">${esc(t.as)}</span>${G.l<3?`<div class="verk"><button class="liten" type="button" data-a>🔊 Lyssna</button></div>`:""}</div>`;
+    $("chatt").appendChild(rad);const la=rad.querySelector("[data-a]");if(la)la.onclick=ev=>spela("a-"+t.id,t.a,ev.currentTarget);
+    $("svarDel").hidden=true;$("fb").className="fb ratt";$("fb").textContent=G.forsta?"Rätt! 🎉":"Nu blev det rätt!";
+    const av=$("ava");if(av){av.classList.remove("hopp");void av.offsetWidth;av.classList.add("hopp")}
+    $("bMic").hidden=!micFinns();$("bMic").textContent="🎤 Säg det själv";$("efter").hidden=false;
+    $("bNasta").textContent=G.i+1>=G.lista.length?"Klar ➜":"Nästa ➜";rad.scrollIntoView({block:"nearest",behavior:reduced()?"auto":"smooth"});return}
+  ljud("bad");G.forsta=false;b.classList.add("fel");b.classList.remove("skak");void b.offsetWidth;b.classList.add("skak");b.disabled=true;$("fb").className="fb fel";
+  if(a.nara)$("fb").innerHTML=`Nästan! Men det är ett litet fel i meningen.<small>${esc(t.varfor)}</small>`;
+  else{const x=SAMTAL[G.l].find(y=>y.a===a.txt);$("fb").innerHTML=`Det svaret passar till en annan fråga${x?`: <i lang="en">${esc(x.q)}</i>`:""}.<small>Frågan betyder: ${esc(t.qs)}</small>`;
+    const sv=$("chatt").lastElementChild.querySelector(".sv");if(sv){sv.hidden=false;const k=$("chatt").lastElementChild.querySelector("[data-sv]");if(k)k.textContent="Dölj svenskan"}}};
+$("bNasta").onclick=()=>{G.i++;ny()};
+
+/* ---------- 🎤 Säg det själv: spelar in 3 sekunder och spelar upp. Inget sparas eller skickas. ---------- */
+const micFinns=()=>!!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia&&window.MediaRecorder);
+let MIC=null;
+function stoppaMic(){if(!MIC)return;try{MIC.rec&&MIC.rec.state!=="inactive"&&MIC.rec.stop()}catch(e){}MIC.strom&&MIC.strom.getTracks().forEach(t=>t.stop());MIC.ljud&&MIC.ljud.pause();clearInterval(MIC.tid);MIC=null;
+  const b=$("bMic");b.classList.remove("spelar");b.disabled=false}
+$("bMic").onclick=async()=>{const b=$("bMic");if(MIC){stoppaMic();b.textContent="🎤 Säg det själv";return}tystna();
+  let strom;try{strom=await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){b.hidden=true;$("fb").className="fb";$("fb").textContent="Mikrofonen gick inte att använda. Säg meningen högt ändå!";return}
+  const m={strom,bitar:[]};MIC=m;let rec;try{rec=new MediaRecorder(strom)}catch(e){stoppaMic();b.hidden=true;return}m.rec=rec;
+  rec.ondataavailable=e=>{if(e.data&&e.data.size)m.bitar.push(e.data)};
+  rec.onstop=()=>{strom.getTracks().forEach(t=>t.stop());if(MIC!==m)return;clearInterval(m.tid);const blob=new Blob(m.bitar,{type:rec.mimeType||"audio/webm"}),url=URL.createObjectURL(blob),a=new Audio(url);m.ljud=a;
+    b.textContent="🔊 Så här lät du";a.onended=()=>{URL.revokeObjectURL(url);if(MIC===m){MIC=null;b.classList.remove("spelar");b.textContent="🎤 Säg det igen"}};a.play().catch(()=>{MIC=null;b.classList.remove("spelar");b.textContent="🎤 Säg det igen"})};
+  rec.start();b.classList.add("spelar");let kvar=3;b.textContent=`🔴 Prata nu … ${kvar}`;
+  m.tid=setInterval(()=>{kvar--;if(kvar>0)b.textContent=`🔴 Prata nu … ${kvar}`;else{clearInterval(m.tid);try{rec.stop()}catch(e){}}},1000)};
+
+function slut(){tystna();stoppaMic();const st=G.fel===0?3:G.fel<=1?2:1,old=data.stars[G.l]||0;data.stars[G.l]=Math.max(old,st);save();
+  $("rAva").innerHTML=djurSvg();$("rStj").innerHTML=stjHtml(st);$("rRub").textContent=st===3?"Perfekt! 🎉":st===2?"Bra jobbat!":"Bra kämpat!";
+  $("rTxt").textContent=`${G.lista.length-G.fel} av ${G.lista.length} svar rätt direkt.`;show("result");if(st===3){ljud("fanfare");confetti()}else ljud("chime")}
+$("rIgen").onclick=()=>starta(G.l);$("rHome").onclick=hem;
+function confetti(){if(reduced())return;const cols=["#3D8BFD","#FF9F43","#2BB673","#FFC93C","#7B61FF","#FF6B6B"],c=$("fx"),x=c.getContext("2d"),dpr=devicePixelRatio||1,W=innerWidth,H=innerHeight;c.width=W*dpr;c.height=H*dpr;x.setTransform(dpr,0,0,dpr,0,0);c.hidden=false;
+  const P=Array.from({length:150},()=>({x:W/2+(Math.random()-.5)*120,y:H*.3,vx:(Math.random()-.5)*16,vy:-Math.random()*15-4,r:Math.random()*7+5,c:pick(cols),a:Math.random()*6,va:(Math.random()-.5)*.4}));
+  let t=0;(function f(){x.clearRect(0,0,W,H);P.forEach(p=>{p.vy+=.45;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore()});if(++t<150)requestAnimationFrame(f);else c.hidden=true})()}
+window.__hello={SAMTAL,starta,get G(){return G}};
+hem();
+</script>
+</body>
+</html>

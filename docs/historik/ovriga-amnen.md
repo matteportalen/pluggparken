@@ -149,3 +149,9 @@ Läraren skickade ett Instagram-klipp med ett engelskt skrivspel (ord faller, ma
 - **Rättning efter användarens förtydligande:** Web Speech-uppläsaren borttagen. Text → enkel svensk fonemtolkning → Chimeras planPhrases → worklet schedule. Både ljud och synlig artikulation kommer från samma fysiska motor; inga fejkade läpprörelser. Vanliga ord har explicita ljudföljder, övriga får stavningsregler. Experimentellt svenskt uttal, inte validerad talsyntes. Tester kör riktig WASM, förbjuder speechSynthesis, mäter ljud och varierande artikulation, avslut/stopp/fokusförlust vid 1200 och 390 px.
 
 - **Tydligare munanimation:** Ny frontal canvasvy (`rostlabbet/framifran.js`) bredvid genomskärningen. Samma aktuella artikulation från Chimera styr läppbredd, rundning, öppning, käke och synlig tunga. Färger matchar sidovyn. Förenklad pedagogisk illustration, inte en exakt anatomisk projektion. Granskad vid 390 px; regression för verkligt ljud, ändrad frontalbild, dragning och tal körd på dator/mobil.
+
+## Hello! (nov 2026)
+- Byggd som nästa engelskövning efter Monsterfabriken och Var är katten?. Chatt i `.chatt`: djurets bubbla (`.rad.djur`) och elevens (`.rad.jag`); äldre repliker bleks (`.gamla`) och bara de två senaste ligger kvar. Svaren i `#alt` (`G.alt`: `ratt`, `nara`, `annan`).
+- 27 klipp från ElevenLabs (Philippa), inspelade ett och ett, trimmade med ffmpeg silenceremove (-55 dB) och 64 kbps mono, totalt cirka 300 kB. Saknas en fil används webbläsarens engelska röst.
+- 🎤: `getUserMedia` + `MediaRecorder`, 3 s nedräkning, uppspelning ur en blob-URL som sedan släpps; knappen döljs om webbläsaren saknar stöd eller nekar mikrofonen.
+- Testat i Playwright (390×844 och 1280×900): alla tre nivåer med ett fel per nivå, alla 27 ljudfiler laddas, inga konsolfel.
