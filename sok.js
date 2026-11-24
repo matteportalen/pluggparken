@@ -82,7 +82,7 @@ const IDX=[
  ['delameningar/','Dela upp i meningar','En text utan punkter: hitta var varje mening slutar','✂️','mening meningar dela upp punkt frågetecken utropstecken stor bokstav text skiljetecken svenska','Svenska'],
  ['ordkedjan/','Ordkedjan','Skriv ett ord som börjar på sista bokstaven i förra ordet','⛓️','ordkedja ord bokstav kedja katt tak kaka ordlek svenska stava','Svenska'],
  ['ordgissning/','Ordgissning','Gissa det hemliga ordet, grönt gult grått, som Wordle','🔤','wordle gissa ord bokstäver ordlek ledtråd svenska stava','Svenska'],
- ['dubbelteckning/','Dubbelteckning','Kamma eller kama? Stavning med två konsonanter','✍️','dubbelteckning stavning dubbla konsonanter kamma kama ck stava svenska kort vokal lång vokal','Svenska'],
+ ['dubbelteckning/','Dubbelteckning','Katt eller kat? Dra rätt bokstäver till bilden','✍️','dubbelteckning stavning dubbla konsonanter katt kat ck k stava svenska kort vokal lång vokal bild','Svenska'],
  ['sagobyggaren/','Sagobyggaren','tjugo bildserier om vardag, fabler och fantasi – skriv din egen saga','📖','saga berättelse skriva bok bildserie vardag fabler fantasi mysterier kompisar vänskap sagobok','Svenska'],
  ['knepigaljud/','Knepiga ljud','ng, tj, sj och ck: välj rätt bokstäver till bilden','🔊','stavning ljud ng tj sj ck kiwi kyss skjorta stjärna nyckel stava','Svenska'],
  ['ovriga/ordgatan/','Ordgåtan','Läs ledtråden och gissa ordet','❓','ordgåta ledtråd gissa ord krysslösning','Svenska'],

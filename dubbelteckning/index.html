@@ -5,13 +5,13 @@
 <script src="../tema.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Dubbelteckning – Pluggparken</title>
-<meta name="description" content="Dubbelteckning: kamma eller kama? Välj rätt stavning i meningen och lär dig när vi skriver två konsonanter, och när bara en.">
+<meta name="description" content="Dubbelteckning: katt eller kat? Titta på bilden, dra rätt bokstäver till ordet och lär dig när vi skriver två konsonanter, och när bara en.">
 <link rel="canonical" href="https://pluggparken.se/dubbelteckning/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Pluggparken">
 <meta property="og:locale" content="sv_SE">
 <meta property="og:title" content="Dubbelteckning – Pluggparken">
-<meta property="og:description" content="Dubbelteckning: kamma eller kama? Välj rätt stavning i meningen och lär dig när vi skriver två konsonanter, och när bara en.">
+<meta property="og:description" content="Dubbelteckning: katt eller kat? Titta på bilden, dra rätt bokstäver till ordet och lär dig när vi skriver två konsonanter, och när bara en.">
 <meta property="og:url" content="https://pluggparken.se/dubbelteckning/">
 <meta property="og:image" content="https://pluggparken.se/og.jpg">
 <meta property="og:image:width" content="1200">
@@ -72,15 +72,9 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 @media(max-width:420px){.hero svg{width:96px}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
-.mening{font-family:var(--ord);font-size:clamp(1.3rem,5.4vw,1.7rem);font-weight:700;text-align:center;line-height:1.5;padding:18px 8px 14px}
-.mening .lucka{display:inline-block;min-width:3.4em;border-bottom:4px solid var(--accent);color:transparent;margin:0 4px}
-.mening .lucka.bokst{color:var(--accent);font-weight:800}
-.mening .ifylld{color:var(--good-dark);border-bottom-color:var(--good)}
 .dubb{color:#E5484D}
 .fraga{text-align:center;font-weight:800;line-height:1.4;margin:0 4px 12px;font-size:1.05rem}
 .fraga small{display:block;font-weight:600;color:var(--muted);margin-top:4px;font-size:.88rem}
-.val.vok button{font-family:inherit;font-size:1.2rem;line-height:1.25}
-.val.vok button small{display:block;font-family:var(--ord);font-size:.95rem;font-weight:600;color:var(--muted);margin-top:2px}
 .rep{display:inline-block;background:#FFF1C2;border:2px solid var(--gold);color:#7A5B00;border-radius:999px;padding:1px 10px;font-size:.78rem;font-weight:800;margin-bottom:6px}
 .ratt-ruta{padding:4px 2px}
 .ratt-ruta h3{margin:0 0 6px;font-size:1.25rem;text-align:center}
@@ -103,6 +97,23 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 .regel.visas{display:block}
 .regel b{color:var(--good-dark)}
 .rad2{display:flex;gap:6px;justify-content:center;margin-top:10px;flex-wrap:wrap}
+.bildrad{display:grid;justify-items:center;gap:8px;margin:2px 0 4px}
+.bildrad img{width:150px;height:150px;object-fit:contain;filter:drop-shadow(0 6px 0 rgba(29,43,83,.12))}
+.ordrad{font-family:var(--ord);font-size:clamp(2.2rem,11vw,3.3rem);font-weight:700;text-align:center;letter-spacing:.04em;margin:6px 0 14px;min-height:1.4em;color:var(--ink)}
+.ordrad .lucka{display:inline-block;min-width:1.7em;line-height:1.15;vertical-align:baseline;text-align:center;border:3px dashed var(--accent);border-radius:12px;margin:0 3px;padding:0 6px;color:transparent;background:var(--soft);transition:background .15s,border-color .15s}
+.ordrad .lucka.over{background:#E3EAFF;border-style:solid}
+.ordrad .lucka.fylld{color:#E5484D;border-style:solid;border-color:var(--good);background:#E6F7EE;font-weight:800}
+.ordrad .lucka.fylld.en{color:var(--good-dark)}
+.ordrad .lucka.fel{color:#B4232A;border-color:#F0A3A6;background:#FDE7E8;animation:skak .35s}
+.val.tiles{grid-template-columns:1fr 1fr;max-width:360px;margin:0 auto}
+.tile{min-height:78px;border-radius:18px;background:var(--card);box-shadow:0 5px 0 var(--line);border:3px solid var(--line);font-family:var(--ord);font-size:2rem;font-weight:700;color:var(--ink);touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
+.tile:active{cursor:grabbing}
+.tile.lyft{opacity:.35}
+.tile.ghost{opacity:.95;box-shadow:0 12px 24px rgba(0,0,0,.25);cursor:grabbing}
+.tile.ratt{background:#E6F7EE;border-color:var(--good);box-shadow:0 5px 0 var(--good)}
+.tile.fel{background:#FDE7E8;border-color:#F0A3A6;box-shadow:0 5px 0 #F0A3A6;opacity:.6;pointer-events:none}
+.tile:disabled{pointer-events:none}
+@keyframes skak{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 
 </style>
 </head>
@@ -114,14 +125,11 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 
 <section class="screen" id="home">
   <div class="hero">
-    <svg viewBox="0 0 120 64" aria-hidden="true"><rect x="2" y="2" width="116" height="60" rx="10" fill="#fff"/>
-<g font-family="Andika, Baloo 2, sans-serif" font-weight="700" font-size="17" text-anchor="middle"><rect x="8" y="9" width="48" height="26" rx="10" fill="#E6F7EE" stroke="#1E9E5E" stroke-width="2.5"/><text x="32" y="28" fill="#1D2B53">ka<tspan fill="#E5484D">mm</tspan>a</text>
-<rect x="64" y="9" width="48" height="26" rx="10" fill="#FDE7E8" stroke="#F0A3A6" stroke-width="2.5"/><text x="88" y="28" fill="#8A93AD">kama</text>
-<text x="60" y="52" font-size="13" fill="#1D2B53">Kamma eller kama?</text></g></svg>
-    <div><h1>Dubbelteckning</h1><p>Kamma eller kama? Välj rätt stavning och lär dig varför.</p></div>
+    <svg viewBox="0 0 120 64" aria-hidden="true"><rect x="2" y="2" width="116" height="60" rx="10" fill="#fff"/><image href="bilder/1f408.svg" x="8" y="8" width="40" height="40"/><g font-family="Andika, Baloo 2, sans-serif" font-weight="700" text-anchor="middle"><text x="80" y="33" font-size="19" fill="#1D2B53">ka<tspan fill="#3D5AFE">__</tspan></text><text x="80" y="52" font-size="12" fill="#3D5AFE">t eller tt?</text></g></svg>
+    <div><h1>Dubbelteckning</h1><p>Katt eller kat? Titta på bilden och dra rätt bokstäver till ordet.</p></div>
   </div>
   <div class="niv" id="niv"></div>
-  <p class="info">Kort vokal betyder oftast två konsonanter (ma-mma). Lång vokal betyder en konsonant (ba-da). Efter varje svar visas varför.</p>
+  <p class="info">Kort vokal betyder två konsonanter (katt, socka). Lång vokal betyder en konsonant (sol, drake). Tryck på 🔊 för att höra ordet. Efter varje ord visas varför.</p>
   
 </section>
 
@@ -129,9 +137,9 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
   <button type="button" data-home hidden tabindex="-1" aria-hidden="true" onclick="hem()"></button>
   <div class="topp"><div class="dots" id="dots"></div><span class="niva-t" id="nivT"></span><span class="pet" id="pet"></span></div>
   <div class="kort" id="kortQ">
-    <div class="fraga" id="fraga"></div>
-    <div class="mening" id="mening"></div>
-    <div class="val" id="val"></div>
+    <div class="bildrad"><img id="bild" alt="" width="150" height="150"><button class="lyssna" id="bLas" type="button" aria-label="Lyssna på ordet">🔊 Lyssna</button></div>
+    <div class="ordrad" id="ordrad" aria-live="polite"></div>
+    <div class="val tiles" id="val"></div>
     <div class="regel" id="regel"></div>
   </div>
   <div class="kort ratt-ruta" id="rattK" hidden>
@@ -142,7 +150,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
     <div class="nav" style="display:flex;gap:8px;justify-content:center;margin-top:12px"><button class="knapp" id="rattKlar" type="button">Klar, rätta!</button><button class="knapp bla" id="rattFram" type="button" hidden>Fortsätt ▶</button></div>
   </div>
   <div class="fb" id="fb" aria-live="polite"></div>
-  <div class="rad2"><button class="lyssna" id="bLas" hidden>🔊 Lyssna</button><button class="knapp bla" id="bNasta" hidden>Nästa ▶</button></div>
+  <div class="rad2"><button class="knapp bla" id="bNasta" hidden>Nästa ▶</button></div>
 </section>
 
 <section class="screen res" id="result" hidden>
@@ -164,7 +172,7 @@ const KEY="mattespel-dubbelteckning-v1";
 const data=(()=>{try{return Object.assign({stars:{}},JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){return{stars:{}}}})();
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}};
 const reduced=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
-const NIV=[null].concat([{"namn": "Nivå 1: Kort vokal", "txt": "Efter en kort vokal skriver vi två konsonanter: mamma, kopp, katt (och ck, som är dubbelt k). Några ord har lång vokal.", "col": "#2BB673"}, {"namn": "Nivå 2: Lång vokal", "txt": "Efter en lång vokal skriver vi bara en konsonant: bada, spela, skola. Några ord har kort vokal.", "col": "#FF9F43"}, {"namn": "Nivå 3: Blandat", "txt": "Nu blandas allt: kort och lång vokal, ck (som i stickar) och ord som nästan stavas lika, som tack och tak.", "col": "#7B61FF"}]);
+const NIV=[null].concat([{"namn": "Nivå 1: Kort vokal", "txt": "Efter en kort vokal skriver vi två konsonanter: katt, glass, socka (ck är dubbelt k). Några ord har lång vokal.", "col": "#2BB673"}, {"namn": "Nivå 2: Lång vokal", "txt": "Efter en lång vokal skriver vi bara en konsonant: sol, apa, drake. Några ord har kort vokal.", "col": "#FF9F43"}, {"namn": "Nivå 3: Blandat", "txt": "Nu blandas allt: kort och lång vokal, ck och k (socka och drake).", "col": "#7B61FF"}]);
 const stjHtml=n=>[1,2,3].map(i=>i<=n?"★":'<span class="off">★</span>').join("");
 function show(id){document.querySelectorAll(".screen").forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
 function hem(){
@@ -192,63 +200,67 @@ const RUND=8;
 const D={1:[["Jag älskar min ___.", "mamma", "mama", "Vokalen är kort, så vi skriver två konsonanter."], ["Min ___ jobbar i en affär.", "pappa", "papa", "Vokalen är kort, så vi skriver två konsonanter."], ["Jag dricker saft ur en ___.", "kopp", "kop", "Vokalen är kort, så vi skriver två konsonanter."], ["En ___ har fyra tassar och fina morrhår.", "katt", "kat", "Vokalen är kort, så vi skriver två konsonanter."], ["Jag vill inte ___ min glass.", "tappa", "tapa", "Vokalen är kort, så vi skriver två konsonanter."], ["Hunden ___ högt när någon ringer på.", "skäller", "skäler", "Vokalen är kort, så vi skriver två konsonanter."], ["Det är ___ ute, ta på dig jackan.", "kallt", "kalt", "Vokalen är kort, så vi skriver två konsonanter."], ["Hon är så ___ mot alla.", "snäll", "snäl", "Vokalen är kort, så vi skriver två konsonanter."], ["Jag har en varm ___ på huvudet.", "mössa", "mösa", "Vokalen är kort, så vi skriver två konsonanter."], ["Fåglarna ___ i trädet.", "sitter", "siter", "Vokalen är kort, så vi skriver två konsonanter."], ["Jag ___ saft i glaset.", "häller", "häler", "Vokalen är kort, så vi skriver två konsonanter."], ["Katten ___ på stolen.", "ligger", "liger", "Vokalen är kort, så vi skriver två konsonanter."], ["Jag ___ in i rummet.", "kommer", "komer", "Vokalen är kort, så vi skriver två konsonanter."], ["Bussen ___ vid hållplatsen.", "stannar", "stanar", "Vokalen är kort, så vi skriver två konsonanter."], ["Fisken ___ i vattnet.", "simmar", "simar", "Vokalen är kort, så vi skriver två konsonanter."], ["Jag ___ dig väldigt bra.", "känner", "käner", "Vokalen är kort, så vi skriver två konsonanter."], ["Vi ___ en snögubbe.", "bygger", "byger", "Vokalen är kort, så vi skriver två konsonanter."], ["Jag ___ ha en glass.", "vill", "vil", "Vokalen är kort, så vi skriver två konsonanter."], ["En ___ man satt på bänken.", "gammal", "gamal", "Vokalen är kort, så vi skriver två konsonanter."], ["Jag har ont i min ___.", "tumme", "tume", "Vokalen är kort, så vi skriver två konsonanter."], ["Jag äter ett ___.", "äpple", "äple", "Vokalen är kort, så vi skriver två konsonanter."], ["Jag ___ håret med en kam.", "kammar", "kamar", "Vokalen är kort, så vi skriver två konsonanter."], ["Det är en ___ tröja.", "tunn", "tun", "Vokalen är kort, så vi skriver två konsonanter."], ["Vi har många ___ i trädgården.", "blommor", "blomor", "Vokalen är kort, så vi skriver två konsonanter."], ["En liten ___ surrar i rummet.", "mygga", "myga", "Vokalen är kort, så vi skriver två konsonanter."], ["Jag kan inte ___ min väska.", "hitta", "hita", "Vokalen är kort, så vi skriver två konsonanter."], ["Jag äter inte ___.", "kött", "köt", "Vokalen är kort, så vi skriver två konsonanter."], ["Jag spelar ___ med mina kompisar.", "tennis", "tenis", "Vokalen är kort, så vi skriver två konsonanter."], ["Jag ska ___ mina händer.", "tvätta", "tväta", "Vokalen är kort, så vi skriver två konsonanter."], ["Hunden ___ på en pinne.", "tuggar", "tugar", "Vokalen är kort, så vi skriver två konsonanter."]],2:[["Vi går till ___ varje dag.", "skolan", "skollan", "Vokalen är lång, så vi skriver bara en konsonant."], ["Jag vill ___ fotboll.", "spela", "spella", "Vokalen är lång, så vi skriver bara en konsonant."], ["Jag ska ___ läxorna.", "göra", "görra", "Vokalen är lång, så vi skriver bara en konsonant."], ["Vi ska ___ mat till middag.", "laga", "lagga", "Vokalen är lång, så vi skriver bara en konsonant."], ["Jag ___ en bild.", "ritar", "rittar", "Vokalen är lång, så vi skriver bara en konsonant."], ["Vi ska ___ till stan.", "åka", "åkka", "Vokalen är lång, så vi skriver bara en konsonant."], ["Jag älskar att ___ böcker.", "läsa", "lässa", "Vokalen är lång, så vi skriver bara en konsonant."], ["Kan du ___ kakan i två delar?", "dela", "della", "Vokalen är lång, så vi skriver bara en konsonant."], ["Hon har ___ tänder.", "vita", "vitta", "Vokalen är lång, så vi skriver bara en konsonant."], ["Barnen leker i en ___ i skogen.", "koja", "kojja", "Vokalen är lång, så vi skriver bara en konsonant."], ["Det ___ en gång en prinsessa.", "var", "varr", "Vokalen är lång, så vi skriver bara en konsonant."], ["Vi ska ___ en bok.", "köpa", "köppa", "Vokalen är lång, så vi skriver bara en konsonant."], ["Jag kan ___ alla bokstäver.", "stava", "stavva", "Vokalen är lång, så vi skriver bara en konsonant."], ["Vi ___ godis på lördag.", "äter", "ätter", "Vokalen är lång, så vi skriver bara en konsonant."], ["Kan du ___ lite högre?", "tala", "talla", "Vokalen är lång, så vi skriver bara en konsonant."], ["Min ___ är lika gammal som jag.", "kusin", "kussin", "Vokalen är lång, så vi skriver bara en konsonant."], ["Sjung en ___ !", "låt", "lått", "Vokalen är lång, så vi skriver bara en konsonant."], ["Det ligger en ___ på marken.", "sten", "stenn", "Vokalen är lång, så vi skriver bara en konsonant."], ["Jag spelar på en ___.", "dator", "dattor", "Vokalen är lång, så vi skriver bara en konsonant."], ["Vi har en ny ___ i köket.", "spis", "spiss", "Vokalen är lång, så vi skriver bara en konsonant."]],3:[["Jag säger ___ för maten.", "tack", "tak", "tack kommer av att tacka. Ett tak sitter överst på ett hus."], ["Ett hus har ett ___ som skyddar mot regnet.", "tak", "tack", "Ett tak sitter överst på ett hus. Tack säger man när man är tacksam."], ["Vi ___ pannkakor.", "bakar", "backar", "Bakar är att göra kakor. Backar är att köra bakåt."], ["Bilen ___ ut ur garaget.", "backar", "bakar", "Backar är att köra bakåt. Bakar är att göra kakor."], ["Vi har en ___ på väggen.", "klocka", "kloka", "Klocka visar tiden. Kloka är de som tänker efter."], ["Jag har en hemlighet i min ___.", "ficka", "fika", "Ficka är på kläderna. Fika är att ta en kaffepaus."], ["Vi tar en ___ med kaffe och bullar.", "fika", "ficka", "Fika är en paus med något gott. Ficka är på kläderna."], ["Jag sätter ett ___ på burken.", "lock", "lok", "Lock skrivs med ck efter kort o. Ett lok är ett tåg som drar vagnar."], ["Ett ___ drar tåget längs rälsen.", "lok", "lock", "Ett lok drar tåget. Ett lock sitter på en burk, och det skrivs med ck."], ["Hon ger honom en ___.", "kyss", "kys", "Efter kort y skriver vi ss: kyss."], ["Jag ___ i en bok.", "bläddrar", "bläderar", "Efter kort ä skriver vi dd: bläddrar."]]};
 const CK=[["Jag vill ha ett ___ bröd.", "stycke", "styke", "Efter kort y skriver vi ck: stycke."],["Jag ___ på dörren.", "knackar", "knakar", "Efter kort a skriver vi ck: knackar."],["Hon ___ en tröja.", "stickar", "stikar", "Efter kort i skriver vi ck: stickar."],["Jag har en ___ till dörren.", "nyckel", "nykel", "Efter kort y skriver vi ck: nyckel."],["Vi ___ upp frukt på marken.", "plockar", "plokar", "Efter kort o skriver vi ck: plockar."],["Du får inte ___ i min jacka.", "rycka", "ryka", "Efter kort y skriver vi ck: rycka."],["En ___ full med potatis.", "säck", "säk", "Efter kort ä skriver vi ck: säck."]];
 const PAR=D[3];D[3]=D[1].concat(D[2],PAR,CK);   // nivå 3 blandar kort och lång vokal, plus ord som nästan stavas lika
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 function dubb(w){return w.replace(/(.)\1/g,"<span class='dubb'>$1$1</span>");}   // gör dubbla bokstäver röda
-const korta=r=>/(.)\1|ck/.test(r);   // kort vokal: dubbelteckning eller ck
 const sv=()=>{data.svara=data.svara||{};return data.svara;};
+// bildord: [ord, bild, före luckan, rätt, efter luckan, fel]. Två konsonanter (eller ck) = kort vokal.
+const K=[["katt","1f408","ka","tt","","t"],["hatt","1f3a9","ha","tt","","t"],["glass","1f366","gla","ss","","s"],["äpple","1f34e","ä","pp","le","p"],["dörr","1f6aa","dö","rr","","r"],["hammare","1f528","ha","mm","are","m"],["klubba","1f36d","klu","bb","a","b"],["nalle","1f9f8","na","ll","e","l"],["penna","270f","pe","nn","a","n"],["mygga","1f99f","my","gg","a","g"],["igelkott","1f994","igelko","tt","","t"],["sköldpadda","1f422","sköldpa","dd","a","d"],["trumma","1f941","tru","mm","a","m"],["gitarr","1f3b8","gita","rr","","r"],["snögubbe","26c4","snögu","bb","e","b"],["flagga","1f6a9","fla","gg","a","g"],["uggla","1f989","u","gg","la","g"],["troll","1f9cc","tro","ll","","l"],["socka","1f9e6","so","ck","a","k"],["jacka","1f9e5","ja","ck","a","k"],["klocka","23f0","klo","ck","a","k"],["nyckel","1f511","ny","ck","el","k"],["kock","1f9d1_200d_1f373","ko","ck","","k"]];
+const L=[["tåg","1f686","tå","g","","gg"],["sol","2600","so","l","","ll"],["måne","1f319","må","n","e","nn"],["hus","1f3e0","hu","s","","ss"],["gris","1f416","gri","s","","ss"],["mus","1f401","mu","s","","ss"],["apa","1f412","a","p","a","pp"],["val","1f40b","va","l","","ll"],["räv","1f98a","rä","v","","vv"],["myra","1f41c","my","r","a","rr"],["snigel","1f40c","sni","g","el","gg"],["tiger","1f405","ti","g","er","gg"],["groda","1f438","gro","d","a","dd"],["druvor","1f347","dru","v","or","vv"],["päron","1f350","pä","r","on","rr"],["tomat","1f345","toma","t","","tt"],["morot","1f955","mo","r","ot","rr"],["potatis","1f954","pota","t","is","tt"],["lök","1f9c5","lö","k","","ck"],["stol","1fa91","sto","l","","ll"],["robot","1f916","ro","b","ot","bb"],["raket","1f680","rake","t","","tt"],["drake","1f409","dra","k","e","ck"],["räka","1f990","rä","k","a","ck"],["bok","1f4d6","bo","k","","ck"],["cykel","1f6b2","cy","k","el","ck"],["is","1f9ca","i","s","","ss"],["säl","1f9ad","sä","l","","ll"],["banan","1f34c","bana","n","","nn"]];
+const korta=w=>w[3].length===2;
+const vokal=w=>{const m=w[2].match(/[aouåeiyäö](?=[^aouåeiyäö]*$)/i);return m?m[0]:"";};
+function regelTxt(w){const v=vokal(w),r=w[3];
+  if(korta(w))return `Vokalen ${v} är kort, så vi skriver ${r==="ck"?"ck (dubbelt k)":"två "+r[0]}.`;
+  return `Vokalen ${v} är lång, så vi skriver bara ett ${r}.`;}
+(()=>{const ord=new Set(K.concat(L).map(w=>w[0]));for(const n in sv())for(const k in sv()[n])if(!ord.has(k))delete sv()[n][k];})();   // gamla meningsnycklar städas bort
 function begin(lvl){
   // ord eleven missat förut kommer tillbaka (högst tre per runda), tills de gått rätt två gånger
-  const pool=lvl===1?D[1].concat(CK):D[lvl];   // ck (dubbelt k) hör till kort vokal och finns på alla nivåer
+  const pool=lvl===1?K:lvl===2?L:K.concat(L);
   const s0=(sv()[lvl]=sv()[lvl]||{});const aterv=shuffle(pool.filter(x=>s0[x[0]]>0)).slice(0,3);
-  const fria=pool.filter(x=>!aterv.includes(x)),behov=RUND-aterv.length;let nya;
-  if(lvl===3){const par=shuffle(PAR.filter(x=>!aterv.includes(x))).slice(0,Math.min(1,behov)).concat(shuffle(CK.filter(x=>!aterv.includes(x))).slice(0,Math.min(1,Math.max(0,behov-1)))),ovr=fria.filter(x=>!par.includes(x)&&!PAR.includes(x)&&!CK.includes(x)),k=shuffle(ovr.filter(x=>korta(x[1]))),l=shuffle(ovr.filter(x=>!korta(x[1]))),rest=behov-par.length,nk=Math.ceil(rest/2);nya=par.concat(k.slice(0,nk),l.slice(0,rest-nk));}
-  else{const annan=lvl===1?D[2]:D[1].concat(CK),ge=Math.min(2,behov);nya=shuffle(fria).slice(0,behov-ge).concat(shuffle(annan.filter(x=>!aterv.includes(x))).slice(0,ge));}   // två ord från den andra regeln, så att steg 1 inte alltid har samma svar
+  const behov=RUND-aterv.length,ut=x=>!aterv.includes(x);let nya;
+  if(lvl===3){const nk=Math.ceil(behov/2);nya=shuffle(K.filter(ut)).slice(0,nk).concat(shuffle(L.filter(ut)).slice(0,behov-nk));}
+  else{const annan=lvl===1?L:K,ge=Math.min(2,behov);nya=shuffle(pool.filter(ut)).slice(0,behov-ge).concat(shuffle(annan.filter(ut)).slice(0,ge));}   // två ord från den andra regeln, så att svaret inte alltid är detsamma
   const kv=shuffle(nya.map(x=>({x,retry:false})).concat(aterv.map(x=>({x,retry:false,rep:true}))));
   G={lvl,i:0,fel:0,res:[],kv,retries:0,gjort:false,ratta:null};$("nivT").textContent="Nivå "+lvl;$("pet").innerHTML=owlSVG(lasDjur());$("kortQ").hidden=false;$("rattK").hidden=true;show("game");nasta();}
 function antal(){return G.kv.length;}
 function nasta(){if(window.speechSynthesis)speechSynthesis.cancel();if(G.i>=G.kv.length){rattarrunda();return;}
-  const q=G.q=G.kv[G.i];G.gjort=false;G.steg=1;G.miss=false;G.kort=korta(q.x[1]);prickar(antal(),G.i,G.res);
-  $("mening").innerHTML=q.x[0].replace("___",'<span class="lucka bokst">'+q.x[1][0]+'…</span>');
-  $("fb").textContent="";$("fb").className="fb";$("regel").className="regel";$("bNasta").hidden=true;$("bLas").hidden=true;
-  $("fraga").innerHTML=(q.rep?'<span class="rep">↩ Ett ord du övade på förut</span><br>':"")+'<b>Steg 1.</b> Ordet i luckan börjar på den bokstav som står där. Tänk ut ordet och säg det högt. Är den första vokalen <b>kort</b> eller <b>lång</b>?<small>Dra ut vokalen: går det bra (spääla) är den lång. Låter det konstigt (mammma) är den kort.</small>';
-  $("val").className="val vok";
-  $("val").innerHTML=`<button data-k="kort" type="button">Kort vokal<small>mam·ma, kopp</small></button><button data-k="lang" type="button">Lång vokal<small>ba·da, tak</small></button>`;}
-function slutaFraga(ratt1,ratt2){   // ett ord är klart: räkna, spara svåra ord
-  const sd=sv()[G.lvl]=sv()[G.lvl]||{},key=G.q.x[0],ok=ratt1&&ratt2;
-  if(!ok){G.res[G.i]=false;if(!G.q.retry)G.fel++;sd[key]=2;if(!G.q.retry&&G.retries<3){G.retries++;G.kv.push({x:G.q.x,retry:true});}}
-  else{G.res[G.i]=true;if(G.q.rep&&!G.q.retry){sd[key]=(sd[key]||1)-1;if(sd[key]<=0)delete sd[key];}}
-  save();return ok;}
-$("val").onclick=e=>{
-  const k=e.target.closest("[data-k]");
-  if(k&&G.steg===1){G.steg=2;const ratt=(k.dataset.k==="kort")===G.kort;G.miss=!ratt;
-    $("val").querySelectorAll("button").forEach(x=>{x.disabled=true;if((x.dataset.k==="kort")===G.kort)x.classList.add("ratt");});
-    if(!ratt)k.dataset.k&&k.classList.add("fel");
-    window.Ljud&&(ratt?Ljud.ok&&Ljud.ok():Ljud.bad&&Ljud.bad());
-    $("fb").className="fb "+(ratt?"ratt":"fel");
-    $("fb").textContent=ratt?`Rätt! Vokalen är ${G.kort?"kort":"lång"}.`:`Inte riktigt. Vokalen är ${G.kort?"kort":"lång"}.`;
-    // steg 2: regeln leder till stavningen
-    setTimeout(()=>{const [s,r,f]=G.q.x;
-      $("fraga").innerHTML=`<b>Steg 2.</b> ${G.kort?"Vokalen är kort, så ordet stannar upp efter vokalen: vi skriver <b>två konsonanter</b>.":"Vokalen är lång, så ordet glider vidare: vi skriver <b>en konsonant</b>."}<small>Vilken stavning är rätt?</small>`;
-      $("val").className="val";$("val").innerHTML=shuffle([r,f]).map(w=>`<button data-w="${w}" type="button">${w}</button>`).join("");$("fb").textContent="";$("fb").className="fb";},ratt?900:1700);
-    return;}
-  const b=e.target.closest("[data-w]");if(!b||G.gjort||G.steg!==2)return;G.gjort=true;const [s,r,f,regel]=G.q.x,ratt=b.dataset.w===r;
-  $("val").querySelectorAll("button").forEach(x=>{x.disabled=true;if(x.dataset.w===r)x.classList.add("ratt");});
-  $("mening").innerHTML=s.replace("___",'<span class="lucka ifylld">'+dubb(r)+'</span>');
-  const ok=slutaFraga(!G.miss,ratt);
-  if(ratt){window.Ljud&&Ljud.ok&&Ljud.ok();haj();$("fb").className="fb "+(ok?"ratt":"fel");$("fb").textContent=ok?"Rätt!":"Rätt stavning, men vokalen var "+(G.kort?"kort":"lång")+". Ordet kommer tillbaka.";}
-  else{b.classList.add("fel");window.Ljud&&Ljud.bad&&Ljud.bad();$("fb").className="fb fel";$("fb").textContent=`Inte riktigt. Det heter ${r}.`;}
-  const rg=$("regel");rg.innerHTML=`<b>${dubb(r)}</b> – ${regel}`;rg.className="regel visas";
-  $("bNasta").hidden=false;$("bNasta").focus({preventScroll:true});$("bLas").hidden=false;G.i++;prickar(antal(),G.i,G.res);};
+  const q=G.q=G.kv[G.i];G.gjort=false;G.fel1=false;prickar(antal(),G.i,G.res);
+  const [ord,kod,fore,ratt,efter,fel]=q.x;
+  $("bild").src="bilder/"+kod+".svg";
+  $("ordrad").innerHTML=`${esc(fore)}<span class="lucka" id="lucka">${esc(ratt)}</span>${esc(efter)}`;
+  $("fb").innerHTML=q.rep?'<span class="rep">↩ Ett ord du övade på förut</span>':"";$("fb").className="fb";$("regel").className="regel";$("bNasta").hidden=true;
+  $("val").innerHTML=[ratt,fel].sort((a,b)=>a.length-b.length).map(o=>`<button class="tile" data-o="${o}" type="button">${o}</button>`).join("");}   // alltid en bokstav till vänster, två till höger
+function valj(o,knapp){if(G.gjort)return;const w=G.q.x,[ord,kod,fore,ratt]=w,r=o===ratt,Lu=$("lucka");
+  if(r){G.gjort=true;const sd=(sv()[G.lvl]=sv()[G.lvl]||{});
+    Lu.textContent=o;Lu.className="lucka fylld"+(korta(w)?"":" en");knapp.classList.add("ratt");$("val").querySelectorAll("button").forEach(x=>x.disabled=true);
+    window.Ljud&&Ljud.ok&&Ljud.ok();haj();
+    if(G.fel1){G.res[G.i]=false;sd[ord]=2;}else{G.res[G.i]=true;if(G.q.rep&&!G.q.retry){sd[ord]=(sd[ord]||1)-1;if(sd[ord]<=0)delete sd[ord];}}
+    save();$("fb").className="fb ratt";$("fb").textContent=G.fel1?"Nu blev det rätt!":"Rätt!";
+    const rg=$("regel");rg.innerHTML=`<b>${dubb(esc(ord))}</b>: ${esc(regelTxt(w))}`;rg.className="regel visas";
+    $("bNasta").hidden=false;$("bNasta").focus({preventScroll:true});G.i++;prickar(antal(),G.i,G.res);}
+  else{if(!G.fel1){G.fel1=true;if(!G.q.retry){G.fel++;if(G.retries<3){G.retries++;G.kv.push({x:w,retry:true});}}}
+    knapp.classList.add("fel");Lu.textContent=o;Lu.className="lucka fel";setTimeout(()=>{if(!G.gjort){Lu.textContent=ratt;Lu.className="lucka";}},650);
+    window.Ljud&&Ljud.bad&&Ljud.bad();$("fb").className="fb fel";$("fb").textContent="Inte riktigt. Lyssna på ordet: är vokalen kort eller lång?";}}
+// tryck eller dra: en bricka som flyttas minst 8 px dras, annars är det ett tryck
+$("val").addEventListener("pointerdown",e=>{const b=e.target.closest(".tile");if(!b||b.disabled||G.gjort||b.classList.contains("fel"))return;e.preventDefault();
+  const sx=e.clientX,sy=e.clientY,r=b.getBoundingClientRect();let ghost=null,moved=false;
+  const over=ev=>{const lr=$("lucka").getBoundingClientRect();return ev.clientX>lr.left-24&&ev.clientX<lr.right+24&&ev.clientY>lr.top-24&&ev.clientY<lr.bottom+24;};
+  const mv=ev=>{const dx=ev.clientX-sx,dy=ev.clientY-sy;
+    if(!moved&&Math.hypot(dx,dy)>8){moved=true;ghost=b.cloneNode(true);ghost.classList.add("ghost");ghost.style.cssText=`position:fixed;left:${r.left}px;top:${r.top}px;width:${r.width}px;height:${r.height}px;z-index:70;pointer-events:none;margin:0`;document.body.appendChild(ghost);b.classList.add("lyft");}
+    if(ghost){ghost.style.transform=`translate(${dx}px,${dy}px) scale(1.06)`;$("lucka").classList.toggle("over",over(ev));}};
+  const up=ev=>{window.removeEventListener("pointermove",mv);window.removeEventListener("pointerup",up);window.removeEventListener("pointercancel",up);
+    const dropped=moved&&over(ev);if(ghost)ghost.remove();b.classList.remove("lyft");const lu=$("lucka");lu&&lu.classList.remove("over");
+    if(!moved||dropped)valj(b.dataset.o,b);};
+  window.addEventListener("pointermove",mv);window.addEventListener("pointerup",up);window.addEventListener("pointercancel",up);});
 $("bNasta").onclick=nasta;
-$("bLas").onclick=()=>lasUpp(G.q.x[0].replace("___",G.q.x[1]));
+$("bLas").onclick=()=>lasUpp(G.q.x[0]);
 // rättarrunda: ett kort stycke med felstavade ord som eleven ska hitta
 function rattarrunda(){
   const pool=shuffle((G.lvl===1?D[1].concat(CK):D[G.lvl]).slice()).slice(0,4),fel=new Set(shuffle([0,1,2,3]).slice(0,2));
   const tok=[];pool.forEach((x,n)=>{const [s,r,f,regel]=x;s.split(" ").forEach(w=>{if(w.includes("___")){const wrong=fel.has(n);tok.push({t:w.replace("___",wrong?f:r),wrong,r,regel,f});}else tok.push({t:w});});});
-  G.ratta={tok,v:new Set()};$("kortQ").hidden=true;$("rattK").hidden=false;$("fb").textContent="";$("fb").className="fb";$("bNasta").hidden=true;$("bLas").hidden=true;
+  G.ratta={tok,v:new Set()};$("kortQ").hidden=true;$("rattK").hidden=false;$("fb").textContent="";$("fb").className="fb";$("bNasta").hidden=true;
   $("rattF").innerHTML="Det här stycket innehåller <b>2 felstavade ord</b>. Läs och tryck på de ord du tror är fel.";
   $("rattT").className="ratt-text";$("rattT").innerHTML=tok.map((o,j)=>`<span class="w" data-j="${j}">${esc(o.t)}</span>`).join(" ");
   $("rattS").hidden=true;$("rattKlar").hidden=false;$("rattFram").hidden=true;window.scrollTo(0,0);}
-const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 $("rattT").onclick=e=>{const w=e.target.closest("[data-j]");if(!w||!G.ratta)return;const j=+w.dataset.j;if(G.ratta.v.has(j)){G.ratta.v.delete(j);w.classList.remove("v");}else{G.ratta.v.add(j);w.classList.add("v");}window.Ljud&&Ljud.pop&&Ljud.pop(1);};
 $("rattKlar").onclick=()=>{const R=G.ratta;if(!R)return;let hit=0,miss=0,falsk=0;const rad=[];
   R.tok.forEach((o,j)=>{const el=$("rattT").querySelector(`[data-j="${j}"]`),v=R.v.has(j);el.classList.remove("v");
@@ -264,7 +276,7 @@ $("rattFram").onclick=()=>{$("rattK").hidden=true;$("kortQ").hidden=false;slut()
 function slut(){const st=G.fel===0?3:G.fel<=2?2:1;const kvar=Object.keys(sv()[G.lvl]||{}).length;
   resultat(st,`${RUND-G.fel} av ${RUND} rätt på första försöket på nivå ${G.lvl}.${G.ratta&&G.ratta.hit!=null?` Rättarrundan: ${G.ratta.hit} av 2 felstavade ord hittade.`:""}${kvar?` ${kvar} ord kommer tillbaka nästa gång så att de sätter sig.`:""}${st<3?" Spela igen och se om du kan få alla rätt!":""}`);}
 document.addEventListener("keydown",e=>{if($("game").hidden)return;if(e.key==="Enter"&&!$("bNasta").hidden)$("bNasta").click();});
-window.__dt={D,begin};
+window.__dt={D,K,L,begin};
 
 hem();
 </script>
