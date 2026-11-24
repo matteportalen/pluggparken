@@ -41,5 +41,14 @@ function steg(W,damp){const h=DT/SUB,P=W.p,f=W.ford,hj=f?[f.a,f.b]:[],d=1-(damp|
   if(varst){varst.b.hel=false;W.brott.push({n:varst.b.n,t:W.t,T:varst.b.T,x:(P[varst.b.i].x+P[varst.b.j].x)/2,y:(P[varst.b.i].y+P[varst.b.j].y)/2})}
   if(f&&!f.klar&&!f.plums){if(f.a.x>W.niv.gap+.6&&f.a.kont)f.klar=true;else if(Math.max(f.a.y,f.b.y)>W.niv.djup-.1)f.plums=true}
   W.t+=DT}
-g.MPFack={MAT,GRAV,DT,SUB,FART,narmast,nyVarld,steg,kostnad};
+/* Foga in en ny balk (lärarens önskan 24 nov 2026): balkar sitter bara ihop i leder. Hamnar den nya balkens ände mitt på en
+   annan balk delas den balken där, och går den nya balken rakt över en led som redan finns delas den nya. Då sitter allt ihop där
+   det ser ut att sitta ihop. Rutpunkterna är heltal, så kontrollen är exakt. Dubbletter tas bort (den gamla balken behålls). */
+function foga(bal,nb,extra){const inne=(q,x,y)=>{const dx=q[2]-q[0],dy=q[3]-q[1];if(dx*(y-q[1])-dy*(x-q[0])!==0)return -1;const t=(x-q[0])*dx+(y-q[1])*dy,L2=dx*dx+dy*dy;return t>0&&t<L2?t/L2:-1};
+  const dela=(q,pts)=>{const ps=pts.map(p=>[inne(q,p[0],p[1]),p]).filter(v=>v[0]>0).sort((u,v)=>u[0]-v[0]);if(!ps.length)return[q];const o=[];let x=q[0],y=q[1];
+    for(const [,p] of ps){if(p[0]===x&&p[1]===y)continue;o.push([x,y,p[0],p[1],q[4]]);x=p[0];y=p[1]}o.push([x,y,q[2],q[3],q[4]]);return o};
+  const ander=[[nb[0],nb[1]],[nb[2],nb[3]]],leder=(extra||[]).concat(bal.flatMap(q=>[[q[0],q[1]],[q[2],q[3]]]));
+  const ut=[],sett=new Set(),nyckel=q=>{const a=q[0]+","+q[1],b=q[2]+","+q[3];return a<b?a+"|"+b:b+"|"+a};
+  for(const q of bal.flatMap(q=>dela(q,ander)).concat(dela(nb,leder))){const k=nyckel(q);if(!sett.has(k)){sett.add(k);ut.push(q)}}return ut}
+g.MPFack={MAT,GRAV,DT,SUB,FART,narmast,nyVarld,steg,kostnad,foga};
 })(typeof window!=="undefined"?window:globalThis);

@@ -20,15 +20,15 @@ const dra=async(a,b)=>{const p=await pt(...a),q=await pt(...b);await page.mouse.
 const bal=()=>page.evaluate(()=>__bro.G.bal.map(b=>b.join()));
 await dra([0,0],[3,0]);await dra([3,0],[4,0]);assert.deepEqual(await bal(),['0,0,3,0,vag','3,0,4,0,vag']);assert.match(await page.locator('#kTxt').textContent(),/80 av 200/);console.log('dra väg mellan punkter, kostnad 80 kr OK');
 await dra([0,0],[3,0]);assert.equal((await bal()).length,2);await dra([2,-2],[3,-2]);assert.equal((await bal()).length,2);console.log('dubbla balkar och start i tomma luften avvisas OK');
-await page.locator('[data-v="tra"]').click();await dra([0,2],[1,0]);await dra([4,2],[3,0]);assert.equal((await bal()).length,4);
-await page.locator('[data-v="sudda"]').click();const m=await pt(.5,1);await page.mouse.click(m.x,m.y);assert.equal((await bal()).length,3);await page.locator('[data-a="angra"]').click();assert.equal((await bal()).length,4);console.log('trä, sudda och ångra OK');
-await page.locator('[data-v="vag"]').click();await dra([0,0],[0,-3]);await dra([0,-3],[3,-3]);assert.equal((await bal()).length,5);assert.match(await page.locator('#expl').textContent(),/Pengarna räcker inte/);console.log('budgeten stoppar för dyra balkar OK');
-await page.locator('[data-a="angra"]').click();assert.equal((await bal()).length,4);const vantat=await page.evaluate(()=>__bro.prov(__bro.G.niv,__bro.G.bal,__bro.G.niv.mal).klarade);assert(vantat>=3);
+await page.locator('[data-v="tra"]').click();await dra([0,2],[1,0]);assert.deepEqual((await bal()).sort(),['0,0,1,0,vag','0,2,1,0,tra','1,0,3,0,vag','3,0,4,0,vag'],'stöttan mitt på vägen ska dela vägen');await dra([4,2],[3,0]);assert.equal((await bal()).length,5);
+await page.locator('[data-v="sudda"]').click();const m=await pt(.5,1);await page.mouse.click(m.x,m.y);assert.equal((await bal()).length,4);await page.locator('[data-a="angra"]').click();assert.equal((await bal()).length,5);console.log('trä, sudda och ångra OK');
+await page.locator('[data-v="vag"]').click();await dra([0,0],[0,-3]);await dra([0,-3],[3,-3]);assert.equal((await bal()).length,6);assert.match(await page.locator('#expl').textContent(),/Pengarna räcker inte/);console.log('budgeten stoppar för dyra balkar OK');
+await page.locator('[data-a="angra"]').click();assert.equal((await bal()).length,5);const vantat=await page.evaluate(()=>__bro.prov(__bro.G.niv,__bro.G.bal,__bro.G.niv.mal).klarade);assert(vantat>=3);
 if(bild)await page.locator('#game').screenshot({path:bild+'/bro-bygg.png'});
 // Testa: däck + stöttor ska bära moped, bil och minibuss men inte elefanten
 await page.click('#bTesta');await page.click('#bFort');if(bild){await page.waitForFunction(()=>__bro.G.W.ford&&__bro.G.W.ford.b.x>1.2);await page.locator('#game').screenshot({path:bild+'/bro-prov.png'})}
 await page.waitForFunction(()=>__bro.G.pr&&__bro.G.pr.fas==='slut',null,{timeout:60000});const res=await page.evaluate(()=>({kl:__bro.G.pr.klarade,st:JSON.parse(localStorage.getItem('mattespel-brobygget-v1'))}));
-assert.equal(res.kl,vantat);assert.equal(res.st.stars[1],3);assert.equal(res.st.rek[1],vantat);assert.equal(res.st.bro[1].length,4);assert.match(await page.locator('#pExpl').textContent(),/Din bro bar en .+ på \d+ ton/);assert(await page.locator('#bNasta').isVisible());console.log('provet i sidan stämmer med motorn, 3 stjärnor, rekord och bron sparade OK:',(await page.locator('#pExpl').textContent()).slice(3,90));
+assert.equal(res.kl,vantat);assert.equal(res.st.stars[1],3);assert.equal(res.st.rek[1],vantat);assert.equal(res.st.bro[1].length,5);assert.match(await page.locator('#pExpl').textContent(),/Din bro bar en .+ på \d+ ton/);assert(await page.locator('#bNasta').isVisible());console.log('provet i sidan stämmer med motorn, 3 stjärnor, rekord och bron sparade OK:',(await page.locator('#pExpl').textContent()).slice(3,90));
 if(bild)await page.locator('#game').screenshot({path:bild+'/bro-klar.png'});
 await page.click('#bBygg');assert(await page.locator('#byggUI').isVisible());assert(await page.evaluate(()=>__bro.G.mark&&__bro.G.mark.forst!=null));
 // Bara en halv väg: fordonet faller, tydligt besked

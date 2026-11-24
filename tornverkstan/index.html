@@ -191,7 +191,7 @@ function storlek(){if(!G)return;const r=cv.getBoundingClientRect(),d=Math.min(2,
   cv.style.height=h+"px";cv.width=Math.round(w*d);cv.height=Math.round(h*d);V.d=d;V.s=Math.min(cv.width/WW,cv.height/WH);V.ox=(cv.width-BRED*V.s)/2;V.oy=cv.height-.9*V.s}
 new ResizeObserver(()=>storlek()).observe($("scen"));addEventListener("resize",storlek);
 function stoppa(){cancelAnimationFrame(raf);raf=0;G=null;part=[]}
-function starta(l){stoppa();const niv=NIV[l],sparad=(data.torn[l]||[]).filter(b=>Array.isArray(b)&&b.length===5&&niv.mat.includes(b[4]));
+function starta(l){stoppa();const niv=NIV[l],sparad=(data.torn[l]||[]).filter(b=>Array.isArray(b)&&b.length===5&&niv.mat.includes(b[4])).reduce((o,b)=>MPFack.foga(o,b,niv.ank),[]);   // äldre sparade bygg fogas ihop i lederna
   G={l,niv,bal:sparad.map(b=>b.slice()),hist:[],verk:niv.mat[0],lage:"bygg",pr:null,drag:null,mark:null,t:0,rensa:0};
   $("uRub").textContent=`Torn ${l} av ${ANT}: ${niv.namn}`;$("uTxt").textContent=uppdrag(niv);
   show("game");verkRit();tillBygg();storlek();raf=requestAnimationFrame(ram)}
@@ -216,9 +216,9 @@ function narmLed(p,t){let b=null,bd=t;for(const n of leder()){const d=Math.hypot
 function malPunkt(f,p,mat){const mx=MAT[mat].max,R=Math.ceil(mx);let b=null,bd=1e9;for(let x=f[0]-R;x<=f[0]+R;x++)for(let y=f[1]-R;y<=f[1]+R;y++){const L=Math.hypot(x-f[0],y-f[1]);if(L<.5||L>mx+1e-6||!tillaten(x,y))continue;if(arAnk(x,y)&&arAnk(f[0],f[1]))continue;const d=Math.hypot(x-p.x,y-p.y);if(d<bd){bd=d;b=[x,y]}}return b}
 const finns=(a,b)=>G.bal.some(q=>(q[0]===a[0]&&q[1]===a[1]&&q[2]===b[0]&&q[3]===b[1])||(q[0]===b[0]&&q[1]===b[1]&&q[2]===a[0]&&q[3]===a[1]));
 function narmBalk(p,t){let b=-1,bd=t;G.bal.forEach((q,i)=>{const c=narmast(p.x,p.y,q[0],q[1],q[2],q[3]),d=Math.hypot(p.x-c.x,p.y-c.y);if(d<bd){bd=d;b=i}});return b}
-function laggBalk(a,b,mat){if(finns(a,b))return false;const pris=Math.round(Math.hypot(b[0]-a[0],b[1]-a[1])*MAT[mat].pris);
-  if(kost()+pris>G.niv.kr){const k=$("kassa");k.classList.remove("skak");void k.offsetWidth;k.classList.add("skak");sag("Pengarna räcker inte till den balken. Sudda något du inte behöver, eller välj ett billigare material.","fel");ljud("bad");return false}
-  G.hist.push(JSON.stringify(G.bal));if(G.hist.length>60)G.hist.shift();G.bal.push([a[0],a[1],b[0],b[1],mat]);G.mark=null;spara();ljud("clonk");sag(G.niv.tips);uppd();return true}
+function laggBalk(a,b,mat){if(finns(a,b))return false;const ny=MPFack.foga(G.bal,[a[0],a[1],b[0],b[1],mat],G.niv.ank);
+  if(kostnad(ny)>G.niv.kr){const k=$("kassa");k.classList.remove("skak");void k.offsetWidth;k.classList.add("skak");sag("Pengarna räcker inte till den balken. Sudda något du inte behöver, eller välj ett billigare material.","fel");ljud("bad");return false}
+  G.hist.push(JSON.stringify(G.bal));if(G.hist.length>60)G.hist.shift();G.bal=ny;G.mark=null;spara();ljud("clonk");sag(G.niv.tips);uppd();return true}
 function suddaVid(p){const i=narmBalk(p,tol(16));if(i<0)return;G.hist.push(JSON.stringify(G.bal));G.bal.splice(i,1);G.mark=null;spara();ljud("pip");uppd()}
 cv.addEventListener("pointerdown",e=>{if(!G||G.lage!=="bygg"||e.button>0)return;e.preventDefault();const p=varld(e);
   if(G.verk==="sudda"){cv.setPointerCapture(e.pointerId);G.drag={sudda:true,id:e.pointerId};suddaVid(p);return}
@@ -306,7 +306,7 @@ function ram(ts){if(!G){raf=0;return}const t=ts/1000,c=ctx,s=V.s,dt=Math.min(.05
     leder().forEach(p=>led(c,p[0],p[1],arAnk(p[0],p[1])));
     const d=G.drag,n=G.niv;
     if(d&&d.f){c.beginPath();c.arc(X(d.f[0]),Y(d.f[1]),s*.3,0,7);c.strokeStyle="#3D5AFE";c.lineWidth=s*.06;c.stroke();
-      if(d.mal){const dyr=kost()+Math.round(Math.hypot(d.mal[0]-d.f[0],d.mal[1]-d.f[1])*MAT[G.verk].pris)>n.kr,dub=finns(d.f,d.mal);balk(c,d.f[0],d.f[1],d.mal[0],d.mal[1],G.verk,null,dub?.25:.75);c.beginPath();c.arc(X(d.mal[0]),Y(d.mal[1]),s*.26,0,7);c.fillStyle=dyr?"rgba(229,72,77,.35)":"rgba(61,90,254,.28)";c.fill();c.strokeStyle=dyr?"#E5484D":"#3D5AFE";c.lineWidth=s*.06;c.stroke()}}
+      if(d.mal){const dyr=kostnad(MPFack.foga(G.bal,[d.f[0],d.f[1],d.mal[0],d.mal[1],G.verk],n.ank))>n.kr,dub=finns(d.f,d.mal);balk(c,d.f[0],d.f[1],d.mal[0],d.mal[1],G.verk,null,dub?.25:.75);c.beginPath();c.arc(X(d.mal[0]),Y(d.mal[1]),s*.26,0,7);c.fillStyle=dyr?"rgba(229,72,77,.35)":"rgba(61,90,254,.28)";c.fill();c.strokeStyle=dyr?"#E5484D":"#3D5AFE";c.lineWidth=s*.06;c.stroke()}}
     else if(G.pek&&G.verk!=="sudda"){const f=narmLed(G.pek,tol(20));if(f){c.beginPath();c.arc(X(f[0]),Y(f[1]),s*.27,0,7);c.strokeStyle="rgba(61,90,254,.8)";c.lineWidth=s*.05;c.stroke()}}
     else if(G.pek&&G.verk==="sudda"){const i=narmBalk(G.pek,tol(16));if(i>=0){const q=G.bal[i];c.lineCap="round";c.lineWidth=s*.4;c.strokeStyle="rgba(229,72,77,.4)";c.beginPath();c.moveTo(X(q[0]),Y(q[1]));c.lineTo(X(q[2]),Y(q[3]));c.stroke()}}
     if(!G.bal.length&&!d){const a=n.ank[0],u=reduced()?.6:(t*.55)%1.4,k=Math.min(1,u),hy=-k*2;c.save();c.setLineDash([s*.16,s*.14]);c.lineWidth=s*.12;c.strokeStyle="rgba(61,90,254,.75)";c.lineCap="round";c.beginPath();c.moveTo(X(a[0]),Y(0));c.lineTo(X(a[0]),Y(hy));c.stroke();c.restore();c.font=`${Math.round(s*.9)}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;c.textAlign="left";c.textBaseline="middle";c.fillText("👆",X(a[0])+s*.1,Y(hy))}}
