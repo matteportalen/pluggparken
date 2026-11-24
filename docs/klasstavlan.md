@@ -12,7 +12,8 @@ En interaktiv whiteboard för projektorn i klassrummet, allt i `larare/index.htm
 
 localStorage: `pluggparken-larare-v1` (rutor, tavlor, lager, favoriter) och `pluggparken-larare-v1-ritning`. **Nycklarna ligger inte i `PKEYS` och synkas aldrig till molnet.**
 
-## Utgångsbiljetten (`larare/utgang.html`, lärarens önskan 24 nov 2026)
+## Exit tickets (`larare/utgang.html`, lärarens önskan 24 nov 2026)
+- Heter **Exit tickets** (lärarens namn) och har en egen pillknapp på första sidan, under Klasstavlan.
 - Egen sida för projektorn, länkad från ⚙️ Mer i Klasstavlan och från sökningen. **En fråga i taget dyker upp, eleven svarar högt och går ut, läraren trycker 🚪 Nästa elev** (eller Enter, mellanslag, →). 🔄 Annan fråga byter frågan till samma elev, 👁 Visa svaret när det finns ett svar. Räknaren visar hur många som gått ut; när alla gått: "Alla har gått ut! 👋" och konfetti.
 - Tre sorters frågor: **Matte** (nya frågor varje gång, en eller flera sorter blandas: addition och subtraktion 0–10 och över tiotalet, tiokompisar, dubbelt och hälften, talgrannar, tiotal, addition upp till 100, multiplikation och division med valda tabeller, klockan hel/halv/kvart eller femminuter med `klocka.js`), **Egna frågor** (en per rad, svar efter `|`, sparade listor med namn) och **Passar alla ämnen** (tolv reflektionsfrågor, läraren: svårt när man inte vet ämnet).
 - Sparar bara lärarens val och frågelistor i `pluggparken-utgang-v1`. **Inga elevnamn och inga svar sparas.** Inte i `PKEYS`.
