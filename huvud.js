@@ -60,6 +60,7 @@
 html.mph-nozoom,html.mph-nozoom body{touch-action:pan-x pan-y}
 .mph-zoomut{position:fixed;right:12px;bottom:max(12px,env(safe-area-inset-bottom));z-index:99998;border:0;border-radius:999px;padding:10px 18px;font:800 1rem/1 "Baloo 2",sans-serif;background:#F2B707;color:#2A2108;box-shadow:0 4px 0 #7A5F1E,0 8px 20px rgba(0,0,0,.35);cursor:pointer}
 .mph-snd{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.18)!important;font-size:1.15rem;flex:none}
+.mph-ö{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;text-decoration:none;font-size:1.2rem;flex:none;background:linear-gradient(145deg,#7BE0A0,#1E9E5E 60%,#157548);box-shadow:0 2px 0 rgba(0,0,0,.25)}.mph-ö:active{transform:translateY(2px)}
 .mph.ovriga{background:linear-gradient(110deg,#17302F 0%,#1C3F3D 50%,#25605C 100%);box-shadow:0 3px 0 #7E5129}
 .mph-menu{position:absolute;top:calc(100% + 6px);left:10px;animation:mph-ner .18s ease-out;background:#fff;color:#1D2B53;border-radius:18px;padding:6px;box-shadow:0 10px 30px rgba(29,43,83,.25),0 3px 0 #C6D6F2;min-width:240px;z-index:30}
 .mph-menu a{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;font-weight:800;font-size:1.1rem}
@@ -199,6 +200,9 @@ body.mph-mini #quit{display:none}
       vs.textContent='.mph .mph-varld{display:inline-flex;align-items:center;gap:5px;min-height:40px;padding:0 12px;border-radius:999px;background:#1E9E5E;color:#fff;font-weight:800;font-size:.95rem;box-shadow:0 2px 0 rgba(0,0,0,.25);white-space:nowrap}.mph .mph-varld:active{transform:translateY(2px)}.mph-varld em{font-style:normal}@media(max-width:560px){.mph-varld em{display:none}}';document.head.appendChild(vs);}
     const va=document.createElement('a');va.className='mph-varld';va.href=hem+'varlden/';va.setAttribute('aria-label','Tillbaka till Pluggparken-världen');va.innerHTML='🏝️<em>Världen</em>';
     const hr=h.querySelector('.mph-right');if(hr)hr.prepend(va);}}catch(e){}
+  // på första sidan: en liten rund 🏝️-knapp till Pluggparken-världen (läraren 24 nov 2026: inte en stor knapp bland ämnena)
+  if(paStart&&!h.querySelector('.mph-varld')){const vo=document.createElement('a');vo.className='mph-ö';vo.href=hem+'varlden/';vo.title='Pluggparken-världen: gå runt på en ö i 3D';vo.setAttribute('aria-label','Pluggparken-världen, en ö i 3D');vo.textContent='🏝️';
+    const sk=h.querySelector('.mph-sok');sk&&sk.parentNode.insertBefore(vo,sk);}
   // sökning: sok.js hämtas först när den behövs
   const rotUrl=new URL('.',(me&&me.src)||location.href).href;
   // stjärnlapp på varje kort som ger stjärnor: "⭐ 5 stjärnor" (grå "☆ 0 stjärnor" om inga än)
