@@ -152,12 +152,6 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 .tavlalank .tl-for{font-size:.82rem;font-weight:800;color:#C23A40;white-space:nowrap}
 .tavlalank.exit{border-color:#F5C77A;margin-top:12px}.tavlalank.exit .tl-ik{background:linear-gradient(145deg,#FFD27A,#F2932F 58%,#D9601A);font-size:2rem}.tavlalank.exit .tl-for{color:#B4560E}@media(hover:hover){.tavlalank.exit:hover{border-color:#F2932F}}
 .tavlalank.skrivut{border-color:#A9B9F5}
-.tavlalank.extern{margin-top:22px;margin-bottom:26px;border-color:#F2932F;background:#FFF4E6}
-.tavlalank.extern .tl-ik{background:none;box-shadow:none;overflow:hidden}.tavlalank.extern .tl-ik::before{display:none}
-.tavlalank.extern .tl-ik img{width:62px;height:62px;border-radius:18px;object-fit:cover;display:block;box-shadow:0 3px 0 rgba(0,0,0,.2)}
-.tavlalank.extern .tl-txt small{color:#B4560E;font-weight:700}
-.tavlalank.extern .tl-ut{flex:none;margin-left:auto;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;border:2px solid #F2932F;color:#B4560E;font-weight:800;font-size:1.15rem;background:#fff}
-@media(hover:hover){.tavlalank.extern:hover{border-color:#D9601A}}
 .utJa,.utNej{min-height:50px;padding:8px 20px;border-radius:16px;font-weight:800;font-size:1.05rem}
 .utJa{background:#F2932F;color:#fff;box-shadow:0 4px 0 #B4560E}.utNej{background:var(--card,#fff);color:var(--ink);box-shadow:0 4px 0 var(--line);border:2px solid var(--line)}
 .utJa:active,.utNej:active{transform:translateY(3px)}
@@ -402,7 +396,12 @@ html[data-tema="mork"] .herosok{background:#1A2748;color:#A3B0D6}
 /* profilraden: logga in, stjärnor, Garderoben, Mitt rum och Klistermärken på en rad */
 .mini{grid-template-columns:repeat(2,minmax(0,1fr));margin:0 0 6px}
 @media(min-width:760px){.mini{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media(min-width:1100px){.mini{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(min-width:1100px){.mini{grid-template-columns:repeat(6,minmax(0,1fr))}}
+.mini .fritidmini{background:#FFF4E6;border:2px dashed #F2932F;box-shadow:0 3px 0 #F5C77A;padding:4px 10px}
+.mini .fritidmini img.ic{width:30px;height:30px;border-radius:9px;object-fit:cover}
+.mini .fritidmini small{color:#B4560E;font-weight:700}
+.mini .fritidmini .fm-ut{margin-left:auto;flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;border:2px solid #F2932F;color:#B4560E;font-weight:800;font-size:.8rem;background:#fff}
+@media(max-width:759px){.mini .fritidmini{grid-column:1/-1}}
 .mini .whoami{margin:0;padding:0;background:none;box-shadow:none;border-radius:0;min-height:48px;justify-content:stretch}
 .mini .whoami .chip{width:100%;justify-content:center;min-height:48px;padding:6px 14px 6px 6px;border-radius:14px;box-shadow:0 3px 0 var(--line)}
 @media(max-width:759px){.mini .whoami{grid-column:1/-1}}
@@ -448,6 +447,7 @@ html[data-tema="mork"] .herosok{background:#1A2748;color:#A3B0D6}
     <button id="btnWard"><span class="ic">👗</span><span><b>Garderoben<span class="new" id="newWard" hidden>Nytt!</span></b><small id="wardInfo">Välj djur och kläder</small></span></button>
     <a href="mittrum/" id="btnRum"><span class="ic">🏠</span><span><b>Mitt rum</b><small>Inred med mynt</small></span></a>
     <button id="btnAlbum"><span class="ic">📒</span><span><b>Klistermärken<span class="new" id="newAlbum" hidden>Nytt!</span></b><small id="albumInfo">0 av 0</small></span></button>
+    <a class="fritidmini" id="fritidLank" href="https://fritidsparken.se" target="_blank" rel="noopener" aria-label="Fritidsparken, en annan sajt (öppnas på en ny sida)"><img class="ic" src="fritidsparken-logo.jpg" alt="" width="30" height="30"><span><b>Fritidsparken</b><small>fritidsparken.se ↗</small></span><span class="fm-ut" aria-hidden="true">↗</span></a>
   </div>
 
   <h2 class="grp"><span aria-hidden="true">🧭</span>Välj ämne</h2>
@@ -460,8 +460,6 @@ html[data-tema="mork"] .herosok{background:#1A2748;color:#A3B0D6}
     <a class="amnek fl" data-a style="--c:#0E9AA7" href="fler/"><span class="ik a"><svg viewBox="0 0 48 48" aria-hidden="true"><g class="pcA b"><path class="s" d="M6 15H20V20A4 4 0 0 1 20 28V33H6Z"/></g><g class="pcB b"><path class="f" d="M26 15H42V33H26V28A4 4 0 0 0 26 20Z" style="stroke:#fff;stroke-width:3.4;stroke-linejoin:round"/></g><g class="spk spC b" transform="translate(24 10)"><path class="f" d="M0-4 1.1-1.1 4 0 1.1 1.1 0 4-1.1 1.1-4 0-1.1-1.1z"/></g></svg></span><span class="txt"><b>Fler ämnen</b><small>Engelska, logik, kod och pengar</small></span><span class="chev" aria-hidden="true">›</span></a>
     <a class="amnek ex" data-a style="--c:#D6409F" href="extra/"><span class="ik a"><svg viewBox="0 0 48 48" aria-hidden="true"><g class="cb b"><path class="s" d="M22 20 22 38 9 31 9 17Z"/><path class="s" d="M22 20 35 17 35 31 22 38Z" style="fill:rgba(255,255,255,.12)"/><path d="M22 20 9 17 22 10 35 17Z"/><path d="M22 20V38"/></g><g class="spk spB b" transform="translate(38 10)"><path class="f" d="M0-4 1.1-1.1 4 0 1.1 1.1 0 4-1.1 1.1-4 0-1.1-1.1z"/></g><g class="spk spC b" transform="translate(40 30)"><path class="f" d="M0-3 .8-.8 3 0 .8.8 0 3-.8.8-3 0-.8-.8z"/></g></svg></span><span class="txt"><b>Extra</b><small>Saker att göra själv: skriv ut, vik och bygg</small></span><span class="chev" aria-hidden="true">›</span></a>
     </nav>
-
-  <a class="tavlalank extern" id="fritidLank" href="https://fritidsparken.se" target="_blank" rel="noopener" aria-label="Fritidsparken, en annan sajt (öppnas på en ny sida)"><span class="tl-ik" aria-hidden="true"><img src="fritidsparken-logo.jpg" alt="" width="62" height="62"></span><span class="tl-txt"><b>Fritidsparken</b><small>fritidsparken.se ↗ · Är skolan slut?</small></span><span class="tl-ut" aria-hidden="true">↗</span></a>
 
   <a class="tavlalank" href="larare/"><span class="tl-ik" aria-hidden="true"><svg viewBox="0 0 48 48"><rect class="s" x="5" y="7" width="38" height="25" rx="3.5"/><path class="sq" d="M11 22c3-7 5-7 7-1s4 6 6-1 4-6 7 0"/><path d="M13 14h10"/><path d="M12 38h20"/><g class="pn"><path d="M31 37l10-10"/><path class="f" d="M40 25.6l2.4 2.4-1.7 1.7-2.4-2.4z"/></g></svg></span><span class="tl-txt"><b>Klasstavlan</b><small>Interaktiv whiteboard för klassrummet</small></span><span class="tl-for">För lärare ›</span></a>
 
