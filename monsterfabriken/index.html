@@ -164,7 +164,8 @@ const START={farg:"green",ogon:2,armar:2,ben:2,horn:0,mun:"small"};
 const slump=()=>({farg:pick(Object.keys(FARG)),ogon:rnd(1,6),armar:pick([0,2,4,6]),ben:pick([0,2,3,4]),horn:pick([0,1,2,3]),mun:pick(["big","small"])});
 
 /* ---------- rösten (Philippa, ljud/monster/) ---------- */
-const LJUDBAS="../ljud/monster/";let karta=null,spelar=null,svVoice=null;
+/* höj LJUD_V när filerna görs om (v3: varje mening inspelad för sig, läraren: "has four arms" och "four legs" lät som ett ord) */
+const LJUDBAS="../ljud/monster/",LJUD_V=3;let karta=null,spelar=null,svVoice=null;
 fetch(LJUDBAS+"karta.json").then(r=>r.json()).then(k=>karta=k).catch(()=>{});
 function tystna(){if(spelar){spelar.stop=true;if(spelar.a)spelar.a.pause();spelar=null}if(window.speechSynthesis)speechSynthesis.cancel();}
 function reserv(t,klar){if(!("speechSynthesis" in window)){klar();return}const u=new SpeechSynthesisUtterance(t);u.lang="en-GB";u.rate=.85;const v=speechSynthesis.getVoices().find(v=>/^en-GB/i.test(v.lang));if(v)u.voice=v;u.onend=klar;u.onerror=klar;speechSynthesis.speak(u);}
@@ -173,7 +174,7 @@ function spela(meningar,knapp){tystna();const s={stop:false};spelar=s;knapp&&kna
   const nasta=()=>{if(s.stop){slut();return}if(i>=meningar.length){slut();return}const t=meningar[i++],f=karta&&karta[t.toLowerCase()];
     const vidare=()=>setTimeout(nasta,450);
     if(!f||!(window.Ljud&&Ljud.on!==false)){if(window.Ljud&&Ljud.on===false){slut();return}reserv(t,vidare);return}
-    const a=new Audio(LJUDBAS+f+".mp3");s.a=a;a.onended=vidare;a.onerror=()=>reserv(t,vidare);a.play().catch(()=>reserv(t,vidare));};
+    const a=new Audio(LJUDBAS+f+".mp3?v="+LJUD_V);s.a=a;a.onended=vidare;a.onerror=()=>reserv(t,vidare);a.play().catch(()=>reserv(t,vidare));};
   nasta();}
 
 /* ---------- nivåer ---------- */

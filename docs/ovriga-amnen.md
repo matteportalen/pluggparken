@@ -85,7 +85,7 @@ Kartorna är gjorda ur Natural Earth (public domain). Europakartan, Världskarta
 
 ## Monsterfabriken (`monsterfabriken/`, `mattespel-monsterfabriken-v1`)
 - Lyssna och bygg monstret: kroppsfärg (7), ögon 1–6, armar 0/2/4/6, ben 0/2/3/4, horn 0–3, stor eller liten mun. Raderna har engelska namn med svenska under. **Nivå 1** en sak i taget (åk 1–3, 8 uppgifter), **nivå 2** tre saker i rad (åk 3–4, 5), **nivå 3** läs en beskrivning i löpande text och bygg allt (åk 5–6, 5). Fel: de felaktiga raderna blir rosa och man försöker igen. Efter rätt svar visas meningen på engelska och svenska.
-- 🔊 bara när man trycker. Riktig röst Philippa, 28 inspelade meningar i `ljud/monster/` (manus `manus/monster-manus.txt`); nivå 2 och 3 spelar meningarna i rad. Saknas en fil används webbläsarens röst. Är sajtens ljud av visas meningen som text i stället.
+- 🔊 bara när man trycker. Riktig röst Philippa, 28 inspelade meningar i `ljud/monster/` (**varje mening inspelad för sig**: när alla meningar spelades in i en tagning med pauser emellan pratade rösten för fort och hopdraget, läraren: "has four arms" och "fourleg"; lägre fart och nedsaktning hjälpte inte; höj `LJUD_V` om filerna görs om) (manus `manus/monster-manus.txt`); nivå 2 och 3 spelar meningarna i rad. Saknas en fil används webbläsarens röst. Är sajtens ljud av visas meningen som text i stället.
 - Monstret är ritat i SVG (`rita(m)`), godkänt av läraren som del av idén. Klistermärke 👾 Monstermakaren (tre stjärnor på nivå 3).
 
 ## Engelska ord
