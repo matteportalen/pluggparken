@@ -319,7 +319,7 @@ const CHATTAR=[
    nara:"Thank you for you help!",varfor:"Din hjälp heter your help. You betyder du."}]}];
 
 /* ---------- rösten (Philippa, ljud/hello/) ---------- */
-const LJUDBAS="../ljud/hello/",LJUD_V=1;let spelar=null;
+const LJUDBAS="../ljud/hello/",LJUD_V=2;/* 2 = alla klipp ljudnormaliserade (-18 LUFS), Lauras var för tysta */let spelar=null;
 function tystna(){if(spelar){spelar.stop=true;if(spelar.a)spelar.a.pause();spelar.knapp&&spelar.knapp.classList.remove("spelar");spelar=null}if(window.speechSynthesis)speechSynthesis.cancel()}
 function reserv(t,klar){if(!("speechSynthesis" in window)){klar();return}const u=new SpeechSynthesisUtterance(t);u.lang="en-GB";u.rate=.85;const v=speechSynthesis.getVoices().find(v=>/^en-GB/i.test(v.lang));if(v)u.voice=v;u.onend=klar;u.onerror=klar;speechSynthesis.speak(u)}
 function spela(fil,text,knapp){tystna();const s={stop:false,knapp};spelar=s;knapp&&knapp.classList.add("spelar");
