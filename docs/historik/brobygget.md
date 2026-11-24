@@ -13,3 +13,7 @@ Lärarens beställning efter att Flyta eller sjunka dömts ut som billig: ett by
 - **Rättat efter skärmbilder:** trasiga brodelar syntes ovanpå berget; solen krockade med Hängbrons torn; materialknapparnas färgprov låg dikt an mot texten; lösa leder inne i berget ritades.
 - **Testat** (`skript/test-brobygget.cjs`): referensbroarna för alla sju nivåer (tre stjärnor inom budget, bara väg räcker inte efter nivå 1), dra balkar med mus, dubbletter och start i tomma luften avvisas, sudda, ångra, budgetstopp, ett helt prov i sidan som stämmer med `prov`, stjärnor/rekord/bro sparas, halv bro ger besked, 390/375/1024 px utan sidledsscroll, inga JS-fel.
 - **Inte testat:** riktig pekskärm, iPad, Chromebook. Hur ljuden låter.
+
+## 2026-11-24 – Mer pengar på nivå 3–7
+
+Läraren tyckte att pengarna tog slut. Referensbroarna låg nästan på budgeten (Stenen 472/500, Ravinen 632/650, Stålbron 1110/1150), så ett barn som provar sig fram hade inget utrymme. Ny budget: Stenen 650, Ravinen 850, Stålbron 1500, Hängbron 950, Rekordbron 1800 kr. Materialen och fordonen är oförändrade. `skript/test-brobygget.cjs` gick igenom (bara väg räcker fortfarande inte efter nivå 1).

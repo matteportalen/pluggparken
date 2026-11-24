@@ -18,6 +18,7 @@ _Det som gäller nu för `brobygget/`. Hur det byggdes och alla mätvärden stå
 - Leder är punkter med massa, balkar håller avstånd (XPBD, 16 delsteg per bild, fast tidssteg 1/60 s, alltså samma resultat varje gång). Kraften i balken läses ur lösaren, jämnas ut och jämförs med `styrka`; över 1 brister balken.
 - Fordon = två hjul med stel axel; hjulen ligger an mot vägbalkar och fördelar trycket på balkens två leder. `prov(niv,bal,från)` kör ett helt prov utan att rita och används av testet.
 - Förenkling som står på sidan: balkar kan dras och tryckas men inte böjas. En ensam rak balk mellan två stöd är därför stel; en kedja av vägbitar hänger som en lina.
+- **Budgeten har marginal (24 nov 2026, läraren: "pengarna tar slut"):** minst ca 30 % mer än referensbron för tre stjärnor, så att man har råd att prova sig fram. Stenen 650, Ravinen 850, Stålbron 1500, Hängbron 950, Rekordbron 1800 kr (Bäcken 200 och Bussbron 320 som förut).
 - **Rör inte materialvärdena utan att köra testet**: nivåerna är kalibrerade mot referensbroar (bara väg bär bilen men inte minibussen; varje nivå har en verifierad trestjärnig lösning inom budget).
 
 ## Testning
