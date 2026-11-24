@@ -156,13 +156,12 @@ const MATTE={
   klocka:{n:"Klockan",s:"hel, halv, kvart",g:()=>{const h=rnd(1,12),m=pick([0,0,30,30,15,45]);return[{klocka:[h,m]},MPKlocka.phrase(h,m)]}},
   klocka5:{n:"Klockan",s:"femminuter",g:()=>{const h=rnd(1,12),m=rnd(0,11)*5;return[{klocka:[h,m]},MPKlocka.phrase(h,m)]}}};
 /* Frågor som passar alla ämnen (läraren 24 nov 2026: när man inte vet ämnet) */
-const ALLA=[
- ["Minnas",["Säg en sak du lärde dig idag.","Säg två saker du kommer ihåg från idag.","Vad var det viktigaste vi lärde oss idag?","Vad kom du ihåg från förra lektionen?","Vad gjorde vi först på lektionen idag?"]],
- ["Förklara",["Förklara ett ord från lektionen.","Säg ett nytt ord du har lärt dig.","Säg en mening där du använder ett ord från idag.","Hur skulle du förklara dagens lektion för en kompis?","Var i verkligheten kan man ha nytta av det vi lärde oss?","Säg en sak du vet om det här som vi inte pratade om idag."]],
- ["Svårt och lätt",["Vad var svårast idag?","Säg en sak som var lätt idag.","Vad kan du nu som du inte kunde i morse?","Vad gjorde du när det blev svårt?","Var det något du inte förstod? Berätta vad.","Vad har du lärt dig av ett misstag idag?"]],
- ["Känsla och stolthet",["Säg något du tyckte var roligt idag.","Vad gjorde du bra idag?","Säg en sak du är stolt över idag.","Vilken del av lektionen var bäst? Varför?","Säg ett ord som beskriver dagens lektion.","Säg något du blev förvånad över idag."]],
- ["Framåt",["Vad vill du lära dig mer om?","Vad vill du öva mer på?","Säg en fråga du fortfarande har.","Vad skulle du vilja göra igen?","Vad tar du med dig hem från idag?","Vad skulle du vilja berätta hemma om dagens lektion?","Om du fick bestämma nästa lektion, vad skulle vi göra?"]],
- ["Tillsammans",["Vem hjälpte dig idag, och hur?","Hur hjälpte du någon annan idag?","Hitta på en fråga om dagens lektion som en kompis kan svara på."]]];
+const ALLA=[   // granskade med läraren 24 nov 2026: korta, går att svara på i dörren, ingen behöver erkänna något inför klassen
+ ["Minnas",["Säg en sak du lärde dig idag.","Säg två saker du kommer ihåg från idag.","Vad var det viktigaste vi lärde oss idag?","Vad ska du komma ihåg tills imorgon?"]],
+ ["Förklara",["Förklara ett ord från lektionen.","Säg ett nytt ord du har lärt dig.","Säg en mening där du använder ett ord från idag.","Hur skulle du förklara dagens lektion för en kompis?","Var i verkligheten kan man ha nytta av det vi lärde oss?"]],
+ ["Svårt och lätt",["Vad var svårast idag?","Säg en sak som var lätt idag.","Vad kan du nu som du inte kunde innan lektionen?","Om något blev svårt, vad gjorde du då?"]],
+ ["Känsla och stolthet",["Säg något du tyckte var roligt idag.","Vad gjorde du bra idag?","Säg en sak du är stolt över idag.","Vilken del av lektionen var bäst? Varför?","Säg ett ord som beskriver dagens lektion."]],
+ ["Framåt",["Vad vill du lära dig mer om?","Vad vill du öva mer på?","Säg en fråga du fortfarande har.","Vad skulle du vilja göra igen?","Vad skulle du vilja berätta hemma om dagens lektion?","Om du fick bestämma nästa lektion, vad skulle vi göra?","Hitta på en fråga om dagens lektion som en kompis kan svara på."]]];
 const allaFragor=()=>ALLA.flatMap(([,l])=>l).filter(f=>!(data.borta||[]).includes(f));
 
 /* ---------- inställningar ---------- */
