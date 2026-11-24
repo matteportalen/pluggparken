@@ -14,7 +14,7 @@ _Det som gäller nu för `brobygget/`. Hur det byggdes och alla mätvärden stå
 - **Stjärnor:** 1 = uppdragets fordon kom över, 2 = nästa tyngre också, 3 = två steg tyngre. Rekordet (tyngsta fordon) visas på nivåkortet.
 - **Efter provet:** balken som brast först är markerad med rött kryss i byggläget, och hårt belastade balkar är färgade.
 
-## Motorn (i `index.html`, mellan rubrikerna MOTORN och NIVÅER)
+## Motorn (`fackverk.js` i roten, `MPFack`; delas med Tornverkstan sedan 24 nov 2026)
 - Leder är punkter med massa, balkar håller avstånd (XPBD, 16 delsteg per bild, fast tidssteg 1/60 s, alltså samma resultat varje gång). Kraften i balken läses ur lösaren, jämnas ut och jämförs med `styrka`; över 1 brister balken.
 - Fordon = två hjul med stel axel; hjulen ligger an mot vägbalkar och fördelar trycket på balkens två leder. `prov(niv,bal,från)` kör ett helt prov utan att rita och används av testet.
 - Förenkling som står på sidan: balkar kan dras och tryckas men inte böjas. En ensam rak balk mellan två stöd är därför stel; en kedja av vägbitar hänger som en lina.
@@ -31,3 +31,10 @@ _Det som gäller nu för `brobygget/`. Hur det byggdes och alla mätvärden stå
 - Inget klistermärke i `STICKERS`. Ingen 🔊-uppläsning. Ingen instruktionsfilm (nivå 1 visar en hand som drar).
 - Inte provat på riktig pekskärm. På mobil i stående läge blir de breda broarna små; sidan tipsar om att vända mobilen.
 - Idéer: gungbräda och ramp (resten av bygglabbet), vind, flera fordon samtidigt, dela sin bro med länk.
+
+## Tornverkstan (`tornverkstan/`, lärarens önskan 24 nov 2026)
+- Läraren ville ha "alla tre varianter" av ett tornspel med brofysiken: **så högt som möjligt** (höjd), **bär lasten** (vattentank på toppen) och **vind**. Bilden med kikärtor och tandpetare ur lärarens NO-bok var inspiration: torn 1 ritar trä som tandpetare och lederna som kikärtor (`kik:true`, samma fysik som trä).
+- Sex torn: Kikärtstornet (höjd 3/4/5 m), Vattentornet (last, tre fästpunkter: fler ben delar på tyngden), Blåsiga berget (vind, fyra fästpunkter för stöttor), Masten (vind, rep till fästpunkter ute på marken), Höga vattentornet (last, stål), Rekordtornet (höjd 7/8/9 m i kuling). Vatten: 2, 5, 10, 15, 20, 30, 45, 70 ton. Vind: bris, frisk vind, kuling, storm, orkan.
+- Tornet har **vält** om en led flyttat sig mer än 1 m; en pinne rakt upp och en stege utan sneda stag välter (en svag bris under "sätter sig" puttar till). Last och vind kräver minst `hmin` meters höjd innan provet. Tanken ställs på de högsta lederna.
+- Sparnyckel `mattespel-tornverkstan-v1` = `{stars, rek, torn}` (rek: meter för höjd, index i listan annars). Inkopplad som Brobygget (NO-sidan, sök, sitemap, `PKEYS`, `huvud.js`, startsidans stjärnor och `snap`, Världens teknikplats, `docs/lgr22.md`).
+- **Kalibrerad:** `node skript/test-tornverkstan.cjs` (server på 8765) kontrollerar att varje torn har en enkel lösning med färre än tre stjärnor och en referenslösning med tre stjärnor inom budgeten. Ändra inte `KV`, `LAST`, `VIND` eller budgetarna utan att köra testet.

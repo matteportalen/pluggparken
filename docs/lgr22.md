@@ -18,6 +18,7 @@ NO åk 4–6 delas: Biologi *Natur och miljö*, *Kropp och hälsa*, *Systematisk
 | Sjön | Året runt i naturen (näringskedjor); Systematiska undersökningar | Biologi: Natur och miljö |
 | Vattnets kretslopp | Material och ämnen (vattnets former); Systematiska undersökningar | Kemi: Kemin i naturen… (vattnets kretslopp); Fysik: Fysiken i naturen och samhället (väder) |
 | Brobygget | Kraft och rörelse (tyngdkraft, balans); Material och ämnen (materials egenskaper); teknik: hållfasta och stabila konstruktioner | Teknik: Tekniska lösningar (hållfasta och stabila konstruktioner, fackverk) |
+| Tornverkstan | Kraft och rörelse (tyngdkraft, vind som kraft); Material och ämnen (materials egenskaper); teknik: hållfasta och stabila konstruktioner (trianglar, stag, bred bas) | Teknik: Tekniska lösningar (hållfasta och stabila konstruktioner) |
 | Flyta eller sjunka | Material och ämnen (sortera material efter egenskaper, flyta/sjunka); Systematiska undersökningar | (ingen) |
 | Elkretsen | Systematiska undersökningar | Fysik: Fysiken i naturen och samhället (elektriska kretsar) |
 | Rymdlabbet, Solsystemet 3D | Kraft och rörelse (solsystemet, människan i rymden) | Fysik: Fysiken i naturen och samhället (dag, natt, årstider) |

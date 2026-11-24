@@ -17,3 +17,11 @@ Lärarens beställning efter att Flyta eller sjunka dömts ut som billig: ett by
 ## 2026-11-24 – Mer pengar på nivå 3–7
 
 Läraren tyckte att pengarna tog slut. Referensbroarna låg nästan på budgeten (Stenen 472/500, Ravinen 632/650, Stålbron 1110/1150), så ett barn som provar sig fram hade inget utrymme. Ny budget: Stenen 650, Ravinen 850, Stålbron 1500, Hängbron 950, Rekordbron 1800 kr. Materialen och fordonen är oförändrade. `skript/test-brobygget.cjs` gick igenom (bara väg räcker fortfarande inte efter nivå 1).
+
+## 2026-11-24 – Motorn utflyttad till fackverk.js och Tornverkstan byggd
+
+Motorn (MAT, nyVarld, steg, narmast, kostnad, konstanterna) flyttades oförändrad från `brobygget/index.html` till `fackverk.js` (`MPFack`). Två tillägg som inte ändrar Brobygget: en led kan ha en sidokraft `fx` (vind), och `seg` (bergkanterna för hjulen) skapas bara om nivån har `gap`. Brobyggets test gav exakt samma siffror efteråt.
+
+Tornverkstan (`tornverkstan/index.html`): byggläge och ritning efter Brobyggets mönster (rutnät 0–8 m brett, 1–10 m högt, fästpunkter på marken, Sudda/Ångra/Rensa, budget, linjal med meter och streckade mållinjer). Provet är ett tillståndsobjekt `nyttProv(niv,bal)` med `steg1()` som används både av animationen och av `prov()` (headless): 90 bilder "sätter sig" med dämpning och vind 2 m/s, sedan för varje steg 60 bilder upprampning och håll (vind 220, last 150, höjd 240 bilder). Vindkraft per balk = `KV·v²·L` (KV = 8, med byar ±18 %), delad på balkens två leder, från vänster. Last = massa på de högsta lederna. Brott = motorns balkbrott; välta = någon led har flyttat sig mer än 1 m.
+
+Kalibrering (referenstorn → stjärnor, kostnad): Kikärtstornet stege 3 m → 1, stege 5 m med 2 m-fack 3 (238/300; med 1 m-fack 310, över budget). Vattentornet två ben → 2 (15 t), tre ben → 3 (20 t, 312/350). Blåsiga berget sicksack-stege → 1 (kuling), kryss + stålstöttor → 3 (orkan, 450/500). Masten stege → 1, stege + två rep → 3 (storm, 406/600; repen trycker ner läbenet, som då brister i orkan). Höga vattentornet tre träben → 2 (20 t), tre stålben → 3 (70 t, 828/900). Rekordtornet stege 7 m utan rep brast i kuling (0), 9 m med rep → 3 (494/600). Testat i Playwright 390 × 844 och 1280 × 900: bygga med musen, prov i sidan, ingen sidledsscroll, inga JS-fel.
