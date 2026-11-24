@@ -44,6 +44,23 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 .niv small{display:block;color:var(--muted);font-weight:600;font-size:.88rem;line-height:1.25}
 .niv .st{margin-left:auto;flex:none;color:var(--gold);font-size:1.15rem;letter-spacing:1px}
 .niv .st .off{color:var(--line)}
+.sekt{margin:22px 4px 8px;font-size:1.25rem}
+.kontakter{background:var(--card);border-radius:20px;box-shadow:0 4px 0 var(--line);overflow:hidden}
+.kontakter button{display:flex;align-items:center;gap:12px;width:100%;padding:10px 14px;text-align:left;border-bottom:1px solid #E6ECF7;min-height:72px}
+.kontakter button:last-child{border-bottom:0}
+.kontakter button:active{background:var(--soft)}
+.emo{display:grid;place-items:center;width:100%;height:100%;border-radius:50%;font-family:var(--emoji);line-height:1}
+.kontakter .emo{flex:none;width:52px;height:52px;font-size:1.7rem}
+.kontakter .kt{flex:1;min-width:0}
+.kontakter .kt b{display:block;font-size:1.08rem;line-height:1.2}
+.kontakter .kt small{display:block;color:var(--muted);font-weight:700;font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kontakter .kt i{display:block;font-style:normal;color:var(--muted);font-weight:600;font-size:.8rem;opacity:.8}
+.kontakter .kh{flex:none;text-align:right}
+.kontakter .kh em{display:block;font-style:normal;font-weight:800;font-size:.78rem;color:var(--muted)}
+.kontakter .st{color:var(--gold);font-size:1rem;letter-spacing:1px}.kontakter .st .off{color:var(--line)}
+.chead .emo{font-size:1.6em;width:1.65em;height:1.65em;margin-top:.15em}
+.msg .mini .emo{font-size:1.15em;width:1.6em;height:1.6em}
+.res .ava .emo{font-size:4rem;width:110px;height:110px}
 .info{color:var(--muted);font-size:.9rem;margin:14px 2px 0}
 .topp{display:flex;align-items:center;gap:10px;margin:4px 0 10px}
 .dots{display:flex;gap:6px;flex:1;flex-wrap:wrap}
@@ -141,8 +158,10 @@ body:has(#game:not([hidden])) .wrap{max-width:none;padding-top:8px;padding-botto
 <script src="../huvud.js" data-titel="Hello!" data-ikon="👋"></script>
 <main class="wrap">
 <section class="screen" id="home">
-  <div class="hero"><div class="hm" aria-hidden="true">👋💬</div><div><h1>Hello!</h1><p>Prata engelska med ditt djur. Lyssna på frågan och välj vad du svarar.</p></div></div>
+  <div class="hero"><div class="hm" aria-hidden="true">👋💬</div><div><h1>Hello!</h1><p>Prata engelska med ditt djur, eller chatta med Leo, Mia, doktorn och fler. Lyssna och välj vad du svarar.</p></div></div>
   <div class="niv" id="niv"></div>
+  <h2 class="sekt">💬 Chattar</h2>
+  <div class="kontakter" id="kontakter"></div>
   <p class="info">Tryck på 🔊 för att höra frågan. "Vad betyder det?" visar frågan på svenska. När du har svarat rätt kan du trycka på 🎤 och säga meningen själv. Inget sparas.</p>
 </section>
 
@@ -240,6 +259,65 @@ const SAMTAL={
     {id:"taller",q:"Who is taller, you or your brother?",qs:"Vem är längst, du eller din bror?",a:"My brother is taller than me.",as:"Min bror är längre än jag.",
      nara:"My brother is more tall than me.",varfor:"Korta ord får -er på slutet: taller. More används med långa ord, som more beautiful."}]};
 
+/* ---------- chattarna: små berättelser i sex steg med en egen person och röst ----------
+   typ = som nivåerna: 1–2 = svaren har 🔊, 3 = läs själv och ett svar har ett grammatikfel.
+   Ljud: q-<id>.mp3 (personens röst), a-<id>.mp3 (Philippa). Ordningen är fast: det är en berättelse. */
+const CHATTAR=[
+ {id:"leo",namn:"Leo",ikon:"🧒",col:"#FFD166",ak:"Åk 1–3",typ:1,om:"Ny kompis på skolgården",rost:"Peter",rep:[
+  {id:"leo1",q:"Hi! I'm new here. My name is Leo.",qs:"Hej! Jag är ny här. Jag heter Leo.",a:"Hi Leo! I'm Sam.",as:"Hej Leo! Jag heter Sam."},
+  {id:"leo2",q:"Is this your school?",qs:"Är det här din skola?",a:"Yes, it is. Welcome!",as:"Ja, det är det. Välkommen!"},
+  {id:"leo3",q:"Do you want to play with me?",qs:"Vill du leka med mig?",a:"Yes, let's play!",as:"Ja, vi leker!",inte:["leo4"]},
+  {id:"leo4",q:"What do you want to play?",qs:"Vad vill du leka?",a:"Let's play football!",as:"Vi spelar fotboll!",inte:["leo3"]},
+  {id:"leo5",q:"Ouch! I fell down!",qs:"Aj! Jag ramlade!",a:"Oh no! Are you okay?",as:"Åh nej! Hur gick det?"},
+  {id:"leo6",q:"I'm okay. Thank you, friend!",qs:"Det gick bra. Tack, kompis!",a:"You're welcome. See you tomorrow!",as:"Varsågod. Vi ses i morgon!"}]},
+ {id:"cafe",namn:"Kaféet",ikon:"☕",col:"#C8A27A",ak:"Åk 3–4",typ:2,om:"Beställ något gott",rost:"Freya",rep:[
+  {id:"cafe1",q:"Hi there! What would you like?",qs:"Hej! Vad vill du ha?",a:"A hot chocolate, please.",as:"En varm choklad, tack."},
+  {id:"cafe2",q:"Small or large?",qs:"Liten eller stor?",a:"Large, please.",as:"Stor, tack."},
+  {id:"cafe3",q:"Would you like something to eat?",qs:"Vill du ha något att äta?",a:"Yes, a cinnamon bun, please.",as:"Ja, en kanelbulle, tack.",inte:["cafe1"]},
+  {id:"cafe4",q:"Is that for here or to go?",qs:"Äter du här eller tar du med?",a:"For here, please.",as:"Här, tack."},
+  {id:"cafe5",q:"That's five pounds, please.",qs:"Det blir fem pund, tack.",a:"Here you are.",as:"Varsågod (här är pengarna)."},
+  {id:"cafe6",q:"Thank you! Enjoy!",qs:"Tack! Smaklig måltid!",a:"Thanks! Have a nice day!",as:"Tack! Ha en bra dag!"}]},
+ {id:"doc",namn:"Doktorn",ikon:"🩺",col:"#8ECAE6",ak:"Åk 3–4",typ:2,om:"Du är sjuk och går till doktorn",rost:"Daniel",rep:[
+  {id:"doc1",q:"Hello! What's the matter?",qs:"Hej! Vad är det som är fel?",a:"I don't feel well.",as:"Jag mår inte bra.",inte:["doc2","doc4"]},
+  {id:"doc2",q:"Oh dear. Where does it hurt?",qs:"Oj då. Var gör det ont?",a:"My tummy hurts.",as:"Det gör ont i magen.",inte:["doc1"]},
+  {id:"doc3",q:"When did it start?",qs:"När började det?",a:"It started yesterday.",as:"Det började i går."},
+  {id:"doc4",q:"Do you have a fever?",qs:"Har du feber?",a:"Yes, I feel very hot.",as:"Ja, jag är jättevarm."},
+  {id:"doc5",q:"Drink lots of water and rest in bed.",qs:"Drick mycket vatten och vila i sängen.",a:"Okay, I will.",as:"Okej, det ska jag göra."},
+  {id:"doc6",q:"I hope you feel better soon!",qs:"Krya på dig!",a:"Thank you, doctor!",as:"Tack, doktorn!"}]},
+ {id:"party",namn:"Mia",ikon:"🎂",col:"#FFB3C6",ak:"Åk 3–4",typ:2,om:"Mia kommer på ditt kalas",rost:"Nella",rep:[
+  {id:"party1",q:"Happy birthday! How old are you today?",qs:"Grattis på födelsedagen! Hur gammal blir du i dag?",a:"I'm ten today!",as:"Jag fyller tio i dag!"},
+  {id:"party2",q:"Here is a present for you.",qs:"Här är en present till dig.",a:"Thank you! Can I open it?",as:"Tack! Får jag öppna den?"},
+  {id:"party3",q:"Of course! Do you like it?",qs:"Så klart! Gillar du den?",a:"I love it! It's a great book.",as:"Jag älskar den! Det är en jättebra bok."},
+  {id:"party4",q:"Is there any cake?",qs:"Finns det någon tårta?",a:"Yes, there's a big chocolate cake.",as:"Ja, det finns en stor chokladtårta."},
+  {id:"party5",q:"What games are we playing?",qs:"Vilka lekar ska vi leka?",a:"We're playing hide and seek.",as:"Vi leker kurragömma."},
+  {id:"party6",q:"That was a great party. Bye!",qs:"Det var ett jättebra kalas. Hej då!",a:"Thanks for coming. Bye!",as:"Tack för att du kom. Hej då!"}]},
+ {id:"lon",namn:"Vilse i London",ikon:"🗺️",col:"#A0C4FF",ak:"Åk 5–6",typ:3,om:"Fråga om vägen till museet",rost:"Jack",rep:[
+  {id:"lon1",q:"Hello! You look lost. Can I help you?",qs:"Hej! Du ser vilsen ut. Kan jag hjälpa dig?",a:"Yes, please. I'm looking for the museum.",as:"Ja tack. Jag letar efter museet.",
+   nara:"Yes, please. I looking for the museum.",varfor:"Det fattas am. Det heter I'm looking (I am looking) när något händer just nu."},
+  {id:"lon2",q:"Go straight on, cross the bridge and turn left at the bank.",qs:"Gå rakt fram, gå över bron och sväng vänster vid banken.",a:"Sorry, could you say that again?",as:"Förlåt, kan du säga det igen?",
+   nara:"Sorry, could you saying that again?",varfor:"Efter could kommer verbet i grundform: say, inte saying."},
+  {id:"lon3",q:"Of course. Straight on, then left at the bank.",qs:"Så klart. Rakt fram, sedan vänster vid banken.",a:"Thank you. How long does it take to walk?",as:"Tack. Hur lång tid tar det att gå?",
+   nara:"Thank you. How long it takes to walk?",varfor:"En fråga med how long behöver does: How long does it take?"},
+  {id:"lon4",q:"About ten minutes. Where are you from?",qs:"Ungefär tio minuter. Var kommer du ifrån?",a:"I'm from Sweden.",as:"Jag kommer från Sverige.",
+   nara:"I'm from Swedish.",varfor:"Landet heter Sweden. Swedish betyder svensk eller svenska."},
+  {id:"lon5",q:"Sweden! Is this your first time in London?",qs:"Sverige! Är det första gången du är i London?",a:"Yes, it is. I arrived yesterday.",as:"Ja, det är det. Jag kom i går.",
+   nara:"Yes, it is. I arrive yesterday.",varfor:"I går har redan hänt. Då blir det arrived (kom), inte arrive."},
+  {id:"lon6",q:"Enjoy your visit!",qs:"Ha ett trevligt besök!",a:"Thanks a lot. Goodbye!",as:"Tack så mycket. Hej då!",
+   nara:"Thanks a lots. Goodbye!",varfor:"Det heter a lot, utan s."}]},
+ {id:"sch",namn:"Nya skolan",ikon:"🏫",col:"#B9E769",ak:"Åk 5–6",typ:3,om:"Första dagen i en skola i England",rost:"Laura",rep:[
+  {id:"sch1",q:"Good morning! You must be the new student.",qs:"God morgon! Du måste vara den nya eleven.",a:"Yes, I am. My name is Alex.",as:"Ja, det är jag. Jag heter Alex.",
+   nara:"Yes, I'm. My name is Alex.",varfor:"Sist i ett kort svar får man inte dra ihop orden: Yes, I am (inte Yes, I'm)."},
+  {id:"sch2",q:"Welcome! Which subject do you like best?",qs:"Välkommen! Vilket ämne tycker du bäst om?",a:"I like maths best.",as:"Jag tycker bäst om matte.",
+   nara:"I like maths most good.",varfor:"Bäst heter best: I like maths best."},
+  {id:"sch3",q:"Have you got a pencil case?",qs:"Har du ett pennskrin?",a:"Yes, I have. It's in my bag.",as:"Ja, det har jag. Det ligger i min väska.",
+   nara:"Yes, I have. It's in mine bag.",varfor:"Min väska heter my bag. Mine står ensamt: The bag is mine."},
+  {id:"sch4",q:"Lunch is at twelve. Is there anything you can't eat?",qs:"Lunchen är klockan tolv. Finns det något du inte kan äta?",a:"Yes, I can't eat nuts.",as:"Ja, jag kan inte äta nötter.",
+   nara:"Yes, I can't eats nuts.",varfor:"Efter can't kommer verbet i grundform: eat, utan s."},
+  {id:"sch5",q:"Do you have any questions?",qs:"Har du några frågor?",a:"Where is the toilet, please?",as:"Var är toaletten?",
+   nara:"Where are the toilet, please?",varfor:"Toilet är en enda sak. Då blir det is: Where is the toilet?"},
+  {id:"sch6",q:"It's down the hall, on the right. See you in class!",qs:"Den ligger längre ner i korridoren, till höger. Vi ses på lektionen!",a:"Thank you for your help!",as:"Tack för hjälpen!",
+   nara:"Thank you for you help!",varfor:"Din hjälp heter your help. You betyder du."}]}];
+
 /* ---------- rösten (Philippa, ljud/hello/) ---------- */
 const LJUDBAS="../ljud/hello/",LJUD_V=1;let spelar=null;
 function tystna(){if(spelar){spelar.stop=true;if(spelar.a)spelar.a.pause();spelar.knapp&&spelar.knapp.classList.remove("spelar");spelar=null}if(window.speechSynthesis)speechSynthesis.cancel()}
@@ -256,8 +334,10 @@ const NIV=[null,
  {namn:"Nivå 3: Ute i världen",txt:"I affären, på gatan och i skolan. Läs svaren själv: ett av dem har ett litet fel. Åk 5–6.",col:"#7B61FF"}];
 const stjHtml=n=>[1,2,3].map(i=>i<=n?"★":'<span class="off">★</span>').join("");
 function show(id){document.querySelectorAll(".screen").forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id)}
-function hem(){tystna();stoppaMic();if(G)G.v++;$("niv").innerHTML=[1,2,3].map(l=>`<button data-l="${l}"><span class="nr" style="background:${NIV[l].col}">${l}</span><span><b>${NIV[l].namn}</b><small>${NIV[l].txt}</small></span><span class="st">${stjHtml(data.stars[l]||0)}</span></button>`).join("");show("home")}
+function hem(){tystna();stoppaMic();if(G)G.v++;$("niv").innerHTML=[1,2,3].map(l=>`<button data-l="${l}"><span class="nr" style="background:${NIV[l].col}">${l}</span><span><b>${NIV[l].namn}</b><small>${NIV[l].txt}</small></span><span class="st">${stjHtml(data.stars[l]||0)}</span></button>`).join("");
+  $("kontakter").innerHTML=CHATTAR.map(c=>`<button data-c="${c.id}"><span class="emo" style="background:${c.col}">${c.ikon}</span><span class="kt"><b>${esc(c.namn)}</b><small lang="en">${esc(c.rep[0].q)}</small><i>${esc(c.om)}</i></span><span class="kh"><em>${c.ak}</em><span class="st">${stjHtml(data.stars["c-"+c.id]||0)}</span></span></button>`).join("");show("home")}
 $("niv").onclick=e=>{const b=e.target.closest("[data-l]");if(b)starta(+b.dataset.l)};
+$("kontakter").onclick=e=>{const b=e.target.closest("[data-c]");if(b)starta("c-"+b.dataset.c)};
 
 const djurSvg=()=>window.owlSVG?owlSVG(lasDjur()):"";
 const djurNamn=()=>{try{return (window.PETNAME&&PETNAME[lasDjur().animal])||"Ugglan"}catch(e){return"Ugglan"}};
@@ -265,20 +345,23 @@ let G=null;const RUNDA=6;/* varje runda: 6 repliker ur banken, så samtalen blir
 const vanta=ms=>new Promise(r=>setTimeout(r,reduced()?Math.min(ms,150):ms));
 function klocka(){const d=new Date();$("klocka").textContent=d.getHours()+":"+String(d.getMinutes()).padStart(2,"0")}
 function rulla(){const l=$("chatt");l.scrollTop=l.scrollHeight}
-function starta(l){const lista=SAMTAL[l].slice();
-  /* nivå 1 är ett riktigt samtal: hello först och goodbye sist, fyra slumpade emellan. */
-  const ordning=l===1?[lista[0],...shuffle(lista.slice(1,-1)).slice(0,RUNDA-2),lista[lista.length-1]]:shuffle(lista).slice(0,RUNDA);
-  G={l,i:0,fel:0,res:[],lista:ordning,v:(G?G.v:0)+1};$("nivT").textContent="Nivå "+l;klocka();
-  $("ava").innerHTML=djurSvg();$("cNamn").textContent=djurNamn();$("chatt").innerHTML=`<div class="dag">I dag ${$("klocka").textContent}</div>`;show("game");ny()}
+/* key = 1, 2, 3 (nivåerna med det egna djuret) eller "c-cafe" (en chatt). G.l styr hur svaren visas, G.bank är replikerna. */
+function starta(key){const ch=typeof key==="string"?CHATTAR.find(c=>"c-"+c.id===key):null;let l,bank,ordning,avaHtml,namn;
+  if(ch){l=ch.typ;bank=ch.rep;ordning=ch.rep.slice();avaHtml=`<span class="emo" style="background:${ch.col}">${ch.ikon}</span>`;namn=ch.namn}
+  else{l=key;bank=SAMTAL[l];const lista=bank.slice();
+    /* nivå 1 är ett riktigt samtal: hello först och goodbye sist, fyra slumpade emellan. */
+    ordning=l===1?[lista[0],...shuffle(lista.slice(1,-1)).slice(0,RUNDA-2),lista[lista.length-1]]:shuffle(lista).slice(0,RUNDA);avaHtml=djurSvg();namn=djurNamn()}
+  G={key,l,bank,ch,avaHtml,i:0,fel:0,res:[],lista:ordning,v:(G?G.v:0)+1};$("nivT").textContent=ch?ch.ak:"Nivå "+l;klocka();
+  $("ava").innerHTML=avaHtml;$("cNamn").textContent=namn;$("chatt").innerHTML=`<div class="dag">I dag ${$("klocka").textContent}</div>`;show("game");ny()}
 function prickar(){$("dots").innerHTML=G.lista.map((_,j)=>`<i class="${j<G.i?(G.res[j]?"ok":"f"):j===G.i?"nu":""}"></i>`).join("")}
 async function ny(){if(G.i>=G.lista.length){slut();return}tystna();stoppaMic();const t=G.lista[G.i],v=G.v;G.forsta=true;G.t=t;
   $("fb").textContent="";$("fb").className="fb";$("efter").hidden=true;$("svarDel").hidden=true;$("falt").textContent="Välj ett svar …";$("falt").className="falt";$("skicka").className="skicka";prickar();
   /* djuret skriver … */
-  const c=$("chatt"),skr=document.createElement("div");skr.className="msg djur";skr.innerHTML=`<span class="mini">${djurSvg()}</span><div class="bub"><span class="prickar"><i></i><i></i><i></i></span></div>`;
+  const c=$("chatt"),skr=document.createElement("div");skr.className="msg djur";skr.innerHTML=`<span class="mini">${G.avaHtml}</span><div class="bub"><span class="prickar"><i></i><i></i><i></i></span></div>`;
   $("cStatus").textContent="skriver …";$("cStatus").className="skriver";c.appendChild(skr);rulla();
   await vanta(G.i===0?700:1000);if(!G||G.v!==v)return;skr.remove();$("cStatus").textContent="online";$("cStatus").className="";ljud("pip");
   const m=document.createElement("div");
-  m.innerHTML=`<div class="msg djur"><span class="mini">${djurSvg()}</span><div class="bub"><span lang="en">${esc(t.q)}</span><button class="hor" type="button" data-q aria-label="Lyssna">🔊</button><span class="sv" hidden>${esc(t.qs)}</span></div></div>
+  m.innerHTML=`<div class="msg djur"><span class="mini">${G.avaHtml}</span><div class="bub"><span lang="en">${esc(t.q)}</span><button class="hor" type="button" data-q aria-label="Lyssna">🔊</button><span class="sv" hidden>${esc(t.qs)}</span></div></div>
     <div class="under"><button type="button" data-sv>Vad betyder det?</button></div>`;
   while(m.firstChild)c.appendChild(m.firstChild);
   const bub=c.lastElementChild.previousElementSibling;
@@ -286,7 +369,7 @@ async function ny(){if(G.i>=G.lista.length){slut();return}tystna();stoppaMic();c
   c.lastElementChild.querySelector("[data-sv]").onclick=e=>{const s=bub.querySelector(".sv");s.hidden=!s.hidden;e.currentTarget.textContent=s.hidden?"Vad betyder det?":"Dölj svenskan";rulla()};
   G.svBub=bub;G.svKnapp=c.lastElementChild.querySelector("[data-sv]");
   /* svarsförslag */
-  const andra=SAMTAL[G.l].filter(x=>x!==t&&!(t.inte||[]).includes(x.id));let alt;
+  const andra=G.bank.filter(x=>x!==t&&!(t.inte||[]).includes(x.id));let alt;
   if(G.l===3)alt=[{txt:t.a,ratt:true},{txt:t.nara,nara:true},{txt:pick(andra).a,annan:true}];
   else alt=[{txt:t.a,ratt:true},...shuffle(andra).slice(0,2).map(x=>({txt:x.a,annan:true,id:x.id}))];
   G.alt=shuffle(alt);
@@ -309,7 +392,7 @@ $("alt").onclick=async e=>{const h=e.target.closest("[data-h]");if(h){const a=G.
     $("bNasta").textContent=G.i+1>=G.lista.length?"Klar ➜":"Nästa ➜";rulla();return}
   ljud("bad");G.forsta=false;b.classList.add("fel");b.classList.remove("skak");void b.offsetWidth;b.classList.add("skak");b.disabled=true;$("fb").className="fb fel";
   if(a.nara)$("fb").innerHTML=`Nästan! Men det är ett litet fel i meningen.<small>${esc(t.varfor)}</small>`;
-  else{const x=SAMTAL[G.l].find(y=>y.a===a.txt);$("fb").innerHTML=`Det svaret passar till en annan fråga${x?`: <i lang="en">${esc(x.q)}</i>`:""}.<small>Frågan betyder: ${esc(t.qs)}</small>`;
+  else{const x=G.bank.find(y=>y.a===a.txt);$("fb").innerHTML=`Det svaret passar till en annan fråga${x?`: <i lang="en">${esc(x.q)}</i>`:""}.<small>Frågan betyder: ${esc(t.qs)}</small>`;
     const sv=G.svBub&&G.svBub.querySelector(".sv");if(sv){sv.hidden=false;G.svKnapp.textContent="Dölj svenskan";rulla()}}};
 $("bNasta").onclick=()=>{G.i++;ny()};
 
@@ -327,14 +410,14 @@ $("bMic").onclick=async()=>{const b=$("bMic");if(MIC){stoppaMic();b.textContent=
   rec.start();b.classList.add("spelar");let kvar=3;b.textContent=`🔴 Prata nu … ${kvar}`;
   m.tid=setInterval(()=>{kvar--;if(kvar>0)b.textContent=`🔴 Prata nu … ${kvar}`;else{clearInterval(m.tid);try{rec.stop()}catch(e){}}},1000)};
 
-function slut(){tystna();stoppaMic();const st=G.fel===0?3:G.fel<=1?2:1,old=data.stars[G.l]||0;data.stars[G.l]=Math.max(old,st);save();
-  $("rAva").innerHTML=djurSvg();G.v++;$("rStj").innerHTML=stjHtml(st);$("rRub").textContent=st===3?"Perfekt! 🎉":st===2?"Bra jobbat!":"Bra kämpat!";
+function slut(){tystna();stoppaMic();const st=G.fel===0?3:G.fel<=1?2:1,old=data.stars[G.key]||0;data.stars[G.key]=Math.max(old,st);save();
+  $("rAva").innerHTML=G.avaHtml;G.v++;$("rStj").innerHTML=stjHtml(st);$("rRub").textContent=st===3?"Perfekt! 🎉":st===2?"Bra jobbat!":"Bra kämpat!";
   $("rTxt").textContent=`${G.lista.length-G.fel} av ${G.lista.length} svar rätt direkt.`;show("result");if(st===3){ljud("fanfare");confetti()}else ljud("chime")}
-$("rIgen").onclick=()=>starta(G.l);$("rHome").onclick=hem;
+$("rIgen").onclick=()=>starta(G.key);$("rHome").onclick=hem;
 function confetti(){if(reduced())return;const cols=["#3D8BFD","#FF9F43","#2BB673","#FFC93C","#7B61FF","#FF6B6B"],c=$("fx"),x=c.getContext("2d"),dpr=devicePixelRatio||1,W=innerWidth,H=innerHeight;c.width=W*dpr;c.height=H*dpr;x.setTransform(dpr,0,0,dpr,0,0);c.hidden=false;
   const P=Array.from({length:150},()=>({x:W/2+(Math.random()-.5)*120,y:H*.3,vx:(Math.random()-.5)*16,vy:-Math.random()*15-4,r:Math.random()*7+5,c:pick(cols),a:Math.random()*6,va:(Math.random()-.5)*.4}));
   let t=0;(function f(){x.clearRect(0,0,W,H);P.forEach(p=>{p.vy+=.45;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore()});if(++t<150)requestAnimationFrame(f);else c.hidden=true})()}
-window.__hello={SAMTAL,starta,get G(){return G}};
+window.__hello={SAMTAL,CHATTAR,starta,get G(){return G}};
 hem();
 </script>
 </body>
