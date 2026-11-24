@@ -8,6 +8,8 @@ _Det som gäller nu för `brobygget/`. Hur det byggdes och alla mätvärden stå
 - Fordonen är emojis (speglade så att de kör åt höger). Berg, vatten, torn och balkar ritas på canvas.
 - Sparnyckel `mattespel-brobygget-v1` = `{stars:{1..7}, rek:{nivå: fordonsindex}, bro:{nivå: [[x1,y1,x2,y2,material], ...]}}`. Bron sparas vid varje ändring.
 
+- Klistermärke 🌉 **Brobyggaren** (`brobyggare` i `STICKERS` på startsidan): tre stjärnor på någon bro.
+
 ## Så fungerar det
 - **Bygga:** dra från en fästpunkt eller led till en rutpunkt (1 m rutnät). **Balkar sitter bara ihop i leder.** Hamnar en ny balks ände mitt på en annan balk delas den balken där, och går en ny balk över en befintlig led delas den nya (`MPFack.foga`, 24 nov 2026; läraren förstod inte hur asfalten fäste i plankorna: en stötta mitt på en lång vägbit satt förut inte fast men såg ut att göra det). Gäller även Tornverkstan och äldre sparade bygg. Material: väg (enda man kan köra på), trä, stål, rep (bara drag, får vara långt). Längsta balk 3,2 m, rep 5,2 m. Varje nivå har en budget som inte går att överskrida. Sudda, Ångra, Rensa allt (två tryck).
 - **Testa:** bron sätter sig, sedan kör uppdragets fordon, och därefter **tyngre och tyngre** tills något brister: 🚲 100 kg, 🛵 300 kg, 🚗 1,5 t, 🚐 3 t, 🐘 5 t, 🚚 9 t, 🚌 14 t, 🚛 25 t, 🦕 40 t. Balkarna färgas grön → gul → röd efter kraften. ⏩ fyrdubblar farten.

@@ -695,7 +695,7 @@ const bbt=get("mattespel-brakbitar-v1");S.bitar=(bbt&&bbt.stars)||{};
 {const gs=get("mattespel-gissastorlek-v1");S.stars+=sum((gs&&gs.stars)||{});}
 {const ft=get("mattespel-fylltillstrecket-v1");S.stars+=sum((ft&&ft.stars)||{});}
 {const t10=get("mattespel-tiointe-v1");S.stars+=sum((t10&&t10.stars)||{});} // 10 eller inte 10?
-{const x=get("mattespel-brobygget-v1");S.stars+=sum((x&&x.stars)||{});}
+S.bro=get("mattespel-brobygget-v1")||{};S.stars+=sum(S.bro.stars||{});
 S.torn=get("mattespel-tornverkstan-v1")||{};S.stars+=sum(S.torn.stars||{}); // Tornverkstan (NO)
 {const x=get("mattespel-flytasjunka-v1");S.stars+=sum((x&&x.stars)||{});}
 {const x=get("mattespel-vattenkretslopp-v1");S.stars+=sum((x&&x.stars)||{});}
@@ -883,6 +883,7 @@ const STICKERS=[
   ["rutmastare","🏅","Rutmästaren","Få tre stjärnor i en variant i Rutjakten.",()=>Object.values(S.rut).some(v=>v>=3)],
   ["skattmastare","🏴‍☠️","Skattmästaren","Hitta alla skatter på nivå 3 i Skattjakten.",()=>((S.sj.stars||{})[3]||0)>=3],
   ["bubbelpoppare","🫧","Bubbelpopparen","Töm en hel bana i Bubbelskjutaren.",()=>Object.values(S.spel.bubbel||{}).some(r=>(r.bana||0)>=1)],
+  ["brobyggare","🌉","Brobyggaren","Få tre stjärnor på en bro i Brobygget.",()=>Object.values(S.bro.stars||{}).some(v=>v>=3)],
   ["tornbyggare","🗼","Tornbyggaren","Få tre stjärnor på ett torn i Tornverkstan.",()=>Object.values(S.torn.stars||{}).some(v=>v>=3)],
   ["bubbelras","🌧️","Bubbelras","Få fem bubblor att ramla på ett enda skott i Bubbelskjutaren.",()=>!!S.spel.bubbelRas]
 ];
