@@ -16,7 +16,7 @@ _Det som gäller nu för svenskaövningarna (kort på `svenska/index.html`). Hur
 | `verb/`, `substantiv/`, `adjektiv/`, `ordfargaren/`, `sorteraord/`, `ordregn/` | Ordklasser | `mattespel-<namn>-v1` |
 | `ordkedjan/` | Ordkedjan. `ord.txt` = 853 000 ordformer ur SALDO (CC BY 4.0, källan står på sidan). | `mattespel-ordkedjan-v1` |
 | `ordgissning/` | Ordgissning | `mattespel-ordgissning-v1` |
-| `dubbelteckning/` | Dubbelteckning. Bilder: Noto Emoji (Apache 2.0). | `mattespel-dubbelteckning-v1` |
+| `dubbelteckning/` | Dubbelteckning. 52 egna illustrationer i Diagramverkstans stil; källa `skript/rita-ordbilder.cjs`. | `mattespel-dubbelteckning-v1` |
 | `knepigaljud/` | Knepiga ljud (ng, tj, sj, ck). Bilder: Noto Emoji (Apache 2.0). | `mattespel-knepigaljud-v1` |
 
 Typsnittet för ord som eleven ska läsa är **Andika** (`var(--ord)`).

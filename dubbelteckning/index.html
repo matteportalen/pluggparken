@@ -125,7 +125,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 
 <section class="screen" id="home">
   <div class="hero">
-    <svg viewBox="0 0 120 64" aria-hidden="true"><rect x="2" y="2" width="116" height="60" rx="10" fill="#fff"/><image href="bilder/1f408.svg" x="8" y="8" width="40" height="40"/><g font-family="Andika, Baloo 2, sans-serif" font-weight="700" text-anchor="middle"><text x="80" y="33" font-size="19" fill="#1D2B53">ka<tspan fill="#3D5AFE">__</tspan></text><text x="80" y="52" font-size="12" fill="#3D5AFE">t eller tt?</text></g></svg>
+    <svg viewBox="0 0 120 64" aria-hidden="true"><rect x="2" y="2" width="116" height="60" rx="10" fill="#fff"/><image href="bilder/1f408.svg?v=2" x="8" y="8" width="40" height="40"/><g font-family="Andika, Baloo 2, sans-serif" font-weight="700" text-anchor="middle"><text x="80" y="33" font-size="19" fill="#1D2B53">ka<tspan fill="#3D5AFE">__</tspan></text><text x="80" y="52" font-size="12" fill="#3D5AFE">t eller tt?</text></g></svg>
     <div><h1>Dubbelteckning</h1><p>Katt eller kat? Titta på bilden och dra rätt bokstäver till ordet.</p></div>
   </div>
   <div class="niv" id="niv"></div>
@@ -225,7 +225,7 @@ function antal(){return G.kv.length;}
 function nasta(){if(window.speechSynthesis)speechSynthesis.cancel();if(G.i>=G.kv.length){rattarrunda();return;}
   const q=G.q=G.kv[G.i];G.gjort=false;G.fel1=false;prickar(antal(),G.i,G.res);
   const [ord,kod,fore,ratt,efter,fel]=q.x;
-  $("bild").src="bilder/"+kod+".svg";
+  $("bild").src="bilder/"+kod+".svg?v=2";
   $("ordrad").innerHTML=`${esc(fore)}<span class="lucka" id="lucka">${esc(ratt)}</span>${esc(efter)}`;
   $("fb").innerHTML=q.rep?'<span class="rep">↩ Ett ord du övade på förut</span>':"";$("fb").className="fb";$("regel").className="regel";$("bNasta").hidden=true;
   $("val").innerHTML=[ratt,fel].sort((a,b)=>a.length-b.length).map(o=>`<button class="tile" data-o="${o}" type="button">${o}</button>`).join("");}   // alltid en bokstav till vänster, två till höger

@@ -242,6 +242,7 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
 }
 .gempty,.gnote{color:var(--muted);font-weight:700;text-align:center}.gnote{font-size:.85rem;margin:10px 0 0}
 @media (prefers-reduced-motion:reduce){.pet svg{animation:none !important}}
+.sakbild{width:110px;height:110px;object-fit:contain;display:block;margin:auto}.sakfraga .sakbild{width:150px;height:150px}.opts.saker .sakbild{width:90px;height:90px;max-width:100%}
 </style>
 </head>
 <body>
@@ -399,23 +400,25 @@ const SOLIDS=["kub","rätblock","klot","cylinder","kon","pyramid"];
 const SPROPS={kub:"En kub ser ut som en tärning. Alla sidor är lika stora kvadrater.",rätblock:"Ett rätblock ser ut som en låda eller ett mjölkpaket. Sidorna är rektanglar.",
   klot:"Ett klot är runt åt alla håll, som en boll.",cylinder:"En cylinder ser ut som en burk. Den har två runda ytor, en upptill och en nertill.",
   kon:"En kon ser ut som en glasstrut. Den har en rund botten och en spets.",pyramid:"En pyramid har en botten och trekantiga sidor som möts i en spets."};
-const THINGS=[["🎲","kub"],["🧊","kub"],["⚽","klot"],["🏀","klot"],["🥫","cylinder"],["🕯️","cylinder"],["🧻","cylinder"],["🥁","cylinder"],["🎂","cylinder"],
-  ["🍦","kon"],["📦","rätblock"],["🧱","rätblock"]];
+const THINGS=[["tärning","kub"],["is","kub"],["fotboll","klot"],["basketboll","klot"],["burk","cylinder"],["ljus","cylinder"],["pappersrulle","cylinder"],["trumma","cylinder"],["tårta","cylinder"],
+  ["glass","kon"],["låda","rätblock"],["tegelsten","rätblock"]];
+const THING_NAMES={is:"isbit",glass:"glasstrut",pappersrulle:"toalettpappersrulle"};
+const thingImg=name=>`<img class="sakbild" src="bilder/saker/${name}.svg" alt="${THING_NAMES[name]||name}" draggable="false">`;
 const ART={kub:"en kub",klot:"ett klot",cylinder:"en cylinder",kon:"en kon",rätblock:"ett rätblock",pyramid:"en pyramid"};
 const PLS={kub:"kuber",klot:"klot",cylinder:"cylindrar",kon:"koner",rätblock:"rätblock",pyramid:"pyramider"};
-const thingVis=(e,k,col)=>`<div style="display:flex;justify-content:center;align-items:center;gap:10px"><span style="font-size:4rem">${e}</span><span style="font-size:2rem">=</span>${solid(k,col).replace("<svg",'<svg style="width:110px"')}</div>`;
+const thingVis=(e,k,col)=>`<div style="display:flex;justify-content:center;align-items:center;gap:10px">${thingImg(e)}<span style="font-size:2rem">=</span>${solid(k,col).replace("<svg",'<svg style="width:110px"')}</div>`;
 function genKropparNamn(){
   const col=pickOne(COLS),r=Math.random();
   if(r<.3){const k=pickOne(SOLIDS),o=shuffle([k,...shuffle(SOLIDS.filter(x=>x!==k)).slice(0,3)]).map(cap),vis=solid(k,col);
     return{kind:"opts",instr:"Vad heter kroppen?",speak:"Vad heter kroppen?",html:vis,options:o,answer:cap(k),help:()=>({vis,tip:SPROPS[k]})};}
   if(r<.65){const [e,k]=pickOne(THINGS),o=shuffle([k,...shuffle(SOLIDS.filter(x=>x!==k)).slice(0,3)]);
-    return{kind:"opts",instr:"Vilken kropp liknar saken?",speak:"Vilken kropp liknar saken?",html:`<div style="font-size:5rem;line-height:1.1">${e}</div>`,
+    return{kind:"opts",instr:"Vilken kropp liknar saken?",speak:"Vilken kropp liknar saken?",html:`<div class="sakfraga">${thingImg(e)}</div>`,
       options:o.map(cap),answer:cap(k),help:()=>({vis:thingVis(e,k,col),tip:SPROPS[k]})};}
   /* Tvärtom: visa kroppen och låt eleven hitta saken */
   const kinds=[...new Set(THINGS.map(t=>t[1]))],k=pickOne(kinds),right=pickOne(THINGS.filter(t=>t[1]===k));
   const opts=shuffle([right,...shuffle(kinds.filter(x=>x!==k)).slice(0,3).map(x=>pickOne(THINGS.filter(t=>t[1]===x)))]);
-  return{kind:"opts",emo:true,instr:`Vilken sak har formen av ${ART[k]}?`,speak:`Titta på kroppen. Den heter ${k}. Vilken sak har formen av ${ART[k]}?`,html:solid(k,col),
-    options:opts.map(t=>t[0]),answer:right[0],help:()=>({vis:thingVis(right[0],k,col),tip:SPROPS[k]})};
+  return{kind:"opts",pics:true,cls:"saker",instr:`Vilken sak har formen av ${ART[k]}?`,speak:`Titta på kroppen. Den heter ${k}. Vilken sak har formen av ${ART[k]}?`,html:solid(k,col),
+    options:opts.map(t=>t[0]),labels:opts.map(t=>thingImg(t[0])),answer:right[0],help:()=>({vis:thingVis(right[0],k,col),tip:SPROPS[k]})};
 }
 
 /* Fler sorters uppgifter om kroppar (lärarens önskan 24 nov 2026, efter mattebokens sidor):
