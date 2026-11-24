@@ -70,6 +70,10 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
 .opts.emo button{font-size:2.3rem;min-height:70px}
 .opts.pics button{padding:6px}
 .opts.pics svg{width:56px;height:56px}
+.opts.kr svg{width:84px;height:84px}
+.row.kr svg{width:64px;height:64px}
+.row .dim1{opacity:.45}
+.row .hl1{background:var(--warn-bg,#FFF4CC);border-radius:12px;box-shadow:0 0 0 3px var(--gold)}
 .opts button.bad{background:var(--err-bg,#FDE4E4);color:var(--bad)}
 .opts button.right{background:var(--ok-bg,#DDF5E7);color:var(--ok-ink,var(--good-dark))}
 .tapgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:6px}
@@ -370,20 +374,22 @@ function solid(k,col){
   const d="#1D2B53",L=`stroke="${d}" stroke-width="2.5" stroke-linejoin="round"`,sh="rgba(0,0,0,.18)",hl="rgba(255,255,255,.35)";
   if(k==="kub")return svg(`<polygon points="22,38 62,38 62,82 22,82" fill="${col}" ${L}/><polygon points="22,38 38,22 78,22 62,38" fill="${col}" ${L}/><polygon points="22,38 38,22 78,22 62,38" fill="${hl}"/><polygon points="62,38 78,22 78,66 62,82" fill="${col}" ${L}/><polygon points="62,38 78,22 78,66 62,82" fill="${sh}"/>`);
   if(k==="rätblock")return svg(`<polygon points="10,44 70,44 70,82 10,82" fill="${col}" ${L}/><polygon points="10,44 26,30 86,30 70,44" fill="${col}" ${L}/><polygon points="10,44 26,30 86,30 70,44" fill="${hl}"/><polygon points="70,44 86,30 86,68 70,82" fill="${col}" ${L}/><polygon points="70,44 86,30 86,68 70,82" fill="${sh}"/>`);
-  if(k==="klot")return svg(`<defs><radialGradient id="g${col.slice(1)}" cx="38%" cy="35%"><stop offset="0" stop-color="#fff" stop-opacity=".8"/><stop offset=".4" stop-color="${col}"/><stop offset="1" stop-color="${col}"/></radialGradient></defs><circle cx="50" cy="52" r="36" fill="url(#g${col.slice(1)})" ${L}/><path d="M14 52 Q50 66 86 52" fill="none" stroke="${d}" stroke-width="1.5" stroke-dasharray="4 4" opacity=".5"/>`);
+  if(k==="klot"){const gid="g"+col.slice(1)+"_"+(++solid.n);return svg(`<defs><radialGradient id="${gid}" cx="38%" cy="35%"><stop offset="0" stop-color="#fff" stop-opacity=".8"/><stop offset=".4" stop-color="${col}"/><stop offset="1" stop-color="${col}"/></radialGradient></defs><circle cx="50" cy="52" r="36" fill="url(#${gid})" ${L}/><path d="M14 52 Q50 66 86 52" fill="none" stroke="${d}" stroke-width="1.5" stroke-dasharray="4 4" opacity=".5"/>`);}
   if(k==="cylinder")return svg(`<path d="M24 24 V78 A26 9 0 0 0 76 78 V24" fill="${col}" ${L}/><path d="M50 24 V78 A26 9 0 0 0 76 78 V24" fill="${sh}"/><ellipse cx="50" cy="24" rx="26" ry="9" fill="${col}" ${L}/><ellipse cx="50" cy="24" rx="26" ry="9" fill="${hl}"/>`);
   if(k==="kon")return svg(`<path d="M50 12 L78 78 A28 9 0 0 1 22 78 Z" fill="${col}" ${L}/><path d="M50 12 L78 78 A28 9 0 0 1 50 87 Z" fill="${sh}"/>`);
   return svg(`<polygon points="14,74 60,86 86,70 40,60" fill="${col}" ${L}/><polygon points="14,74 60,86 50,14" fill="${col}" ${L}/><polygon points="60,86 86,70 50,14" fill="${col}" ${L}/><polygon points="60,86 86,70 50,14" fill="${sh}"/>`);
 }
+solid.n=0;   // varje klot får ett eget id på sin gradient (annars blir kloten vita när första bilden göms)
 const SOLIDS=["kub","rätblock","klot","cylinder","kon","pyramid"];
 const SPROPS={kub:"En kub ser ut som en tärning. Alla sidor är lika stora kvadrater.",rätblock:"Ett rätblock ser ut som en låda eller ett mjölkpaket. Sidorna är rektanglar.",
   klot:"Ett klot är runt åt alla håll, som en boll.",cylinder:"En cylinder ser ut som en burk. Den har två runda ytor, en upptill och en nertill.",
   kon:"En kon ser ut som en glasstrut. Den har en rund botten och en spets.",pyramid:"En pyramid har en botten och trekantiga sidor som möts i en spets."};
 const THINGS=[["🎲","kub"],["🧊","kub"],["⚽","klot"],["🏀","klot"],["🥫","cylinder"],["🕯️","cylinder"],["🧻","cylinder"],["🥁","cylinder"],["🎂","cylinder"],
   ["🍦","kon"],["📦","rätblock"],["🧱","rätblock"]];
-const ART={kub:"en kub",klot:"ett klot",cylinder:"en cylinder",kon:"en kon",rätblock:"ett rätblock"};
+const ART={kub:"en kub",klot:"ett klot",cylinder:"en cylinder",kon:"en kon",rätblock:"ett rätblock",pyramid:"en pyramid"};
+const PLS={kub:"kuber",klot:"klot",cylinder:"cylindrar",kon:"koner",rätblock:"rätblock",pyramid:"pyramider"};
 const thingVis=(e,k,col)=>`<div style="display:flex;justify-content:center;align-items:center;gap:10px"><span style="font-size:4rem">${e}</span><span style="font-size:2rem">=</span>${solid(k,col).replace("<svg",'<svg style="width:110px"')}</div>`;
-function genKroppar(){
+function genKropparNamn(){
   const col=pickOne(COLS),r=Math.random();
   if(r<.3){const k=pickOne(SOLIDS),o=shuffle([k,...shuffle(SOLIDS.filter(x=>x!==k)).slice(0,3)]).map(cap),vis=solid(k,col);
     return{kind:"opts",instr:"Vad heter kroppen?",speak:"Vad heter kroppen?",html:vis,options:o,answer:cap(k),help:()=>({vis,tip:SPROPS[k]})};}
@@ -396,6 +402,92 @@ function genKroppar(){
   return{kind:"opts",emo:true,instr:`Vilken sak har formen av ${ART[k]}?`,speak:`Titta på kroppen. Den heter ${k}. Vilken sak har formen av ${ART[k]}?`,html:solid(k,col),
     options:opts.map(t=>t[0]),answer:right[0],help:()=>({vis:thingVis(right[0],k,col),tip:SPROPS[k]})};
 }
+
+/* Fler sorters uppgifter om kroppar (lärarens önskan 24 nov 2026, efter mattebokens sidor):
+   ringa in kropparna bland platta former, vilken hör inte till gruppen, ärtor och pinnar (hörn och kanter),
+   räkna kroppar i bilden, vilken kropp blir mönstret (nät) och tärningens motsatta sidor. */
+function solidS(k,col,sx=1,sy=1){const t=solid(k,col);if(sx===1&&sy===1)return t;
+  return t.replace(/(<svg[^>]*>)/,`$1<g transform="translate(50 52) scale(${sx} ${sy}) translate(-50 -52)">`).replace(/<\/svg>$/,"</g></svg>");}
+const stretch=k=>k==="klot"||k==="kub"?[1,1]:k==="rätblock"?pickOne([[1,1],[1,.8]]):pickOne([[1,1],[.7,1],[1,.7],[.75,.85],[1,1]]);   // rätblocket smalnas aldrig av (då liknar det en kub)   // kub och klot sträcks aldrig (då blir de något annat)
+function flat2D(k,col){if(k==="sexhörning")return svg(`<polygon points="${pts(regPoly(6,50,50,36,0))}" fill="${col}" stroke="#1D2B53" stroke-width="3" stroke-linejoin="round"/>`);
+  return svg(shape2D(k,col,{s:.85,ratio:1.9,tri:randTri()}));}
+function genRingaIn(){
+  const n=rnd(3,5),kr=shuffle(SOLIDS.slice()).slice(0,n),fl=shuffle(["cirkel","triangel","kvadrat","rektangel","sexhörning"]).slice(0,8-n);
+  const items=shuffle(kr.map(k=>({k,d:3})).concat(fl.map(k=>({k,d:2})))).map(o=>({...o,h:o.d===3?solidS(o.k,pickOne(COLS),...stretch(o.k)):flat2D(o.k,pickOne(COLS))}));
+  const correct=items.map((o,i)=>o.d===3?i:-1).filter(i=>i>=0),t={kind:"tap",instr:"Tryck på alla geometriska kroppar.",
+    speak:"Tryck på alla geometriska kroppar. En kropp är inte platt, den har djup, som en låda eller en boll. Tryck sedan på Klar.",items:items.map(o=>o.h),correct,answer:correct.join(),
+    help:()=>({vis:`<div class="tapgrid">${items.map((o,i)=>`<span class="tapit ${o.d===3?"right":(t.sel||[]).includes(i)?"bad":""}">${o.h}</span>`).join("")}</div>`,
+      tip:`Kroppar är inte platta. De har djup, som en låda, en burk eller en boll. Kvadrater, trianglar och cirklar är platta former. Här finns ${n} kroppar, de gröna.`})};
+  return t;}
+function genUdda(){
+  const fam=k=>k==="rätblock"?"kub":k;   // kub och rätblock blandas aldrig ihop
+  const k=pickOne(SOLIDS),odd=pickOne(SOLIDS.filter(x=>fam(x)!==fam(k)));
+  const lab=[],oddAt=rnd(0,3);for(let i=0;i<4;i++)lab.push(i===oddAt?solidS(odd,pickOne(COLS),...stretch(odd)):solidS(k,pickOne(COLS),...stretch(k)));
+  const vis=`<div class="row kr">${lab.map((h,i)=>`<span class="${i===oddAt?"hl1":"dim1"}">${h}</span>`).join("")}</div>`;
+  return{kind:"opts",pics:true,cls:"kr",instr:"Vilken kropp hör inte till gruppen?",speak:"Tre av kropparna hör ihop. Vilken kropp hör inte till gruppen?",html:"",
+    options:["0","1","2","3"],labels:lab,answer:String(oddAt),
+    help:()=>({vis,tip:`Tre av dem är ${PLS[k]}. Den som inte hör till är ${ART[odd]}. ${SPROPS[odd]}`})};}
+/* ärtor (hörn) och pinnar (kanter) */
+const WIRE={
+  kub:{v:[[20,40],[60,40],[60,80],[20,80],[38,24],[78,24],[78,64],[38,64]],e:[[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[0,4],[1,5],[2,6],[7,4,1],[7,6,1],[7,3,1]],hid:7,
+    tip:"En kub har 4 hörn fram och 4 hörn bak: 8 ärtor. Den har 4 kanter fram, 4 bak och 4 som går bakåt: 12 pinnar."},
+  rätblock:{v:[[10,48],[68,48],[68,80],[10,80],[28,30],[86,30],[86,62],[28,62]],e:[[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[0,4],[1,5],[2,6],[7,4,1],[7,6,1],[7,3,1]],hid:7,
+    tip:"Ett rätblock har 4 hörn fram och 4 hörn bak: 8 ärtor. Det har 4 kanter fram, 4 bak och 4 som går bakåt: 12 pinnar."},
+  pyramid:{v:[[14,74],[62,86],[88,70],[40,60],[50,14]],e:[[0,1],[1,2],[3,0,1],[3,2,1],[0,4],[1,4],[2,4],[3,4,1]],hid:3,
+    tip:"En pyramid med fyrkantig botten har 4 hörn i botten och 1 i toppen: 5 ärtor. Den har 4 kanter i botten och 4 upp till toppen: 8 pinnar."},
+  tetra:{v:[[12,78],[66,88],[88,62],[48,12]],e:[[0,1],[1,2],[0,2,1],[0,3],[1,3],[2,3]],hid:-1,
+    tip:"En pyramid med trekantig botten har 3 hörn i botten och 1 i toppen: 4 ärtor. Den har 3 kanter i botten och 3 upp till toppen: 6 pinnar."}};
+const WNAMN={kub:"en kub",rätblock:"ett rätblock",pyramid:"en pyramid",tetra:"en pyramid med trekantig botten"};
+function wireSVG(k,num){const W=WIRE[k],P=W.v;let h="";
+  W.e.forEach(([a,b,d],i)=>{h+=`<line x1="${P[a][0]}" y1="${P[a][1]}" x2="${P[b][0]}" y2="${P[b][1]}" stroke="#B07A45" stroke-width="3.2" stroke-linecap="round"${d?' stroke-dasharray="5 5" opacity=".75"':""}/>`;});
+  if(num==="e")W.e.forEach(([a,b],i)=>{const x=(P[a][0]+P[b][0])/2,y=(P[a][1]+P[b][1])/2;h+=`<circle cx="${x}" cy="${y}" r="5.2" fill="#FFC93C" stroke="#1D2B53" stroke-width=".8"/><text x="${x}" y="${y+2.6}" text-anchor="middle" font-size="7" font-weight="800" fill="#1D2B53">${i+1}</text>`;});
+  P.forEach(([x,y],i)=>{h+=`<circle cx="${x}" cy="${y}" r="5.5" fill="#57B84A" stroke="#2E6B26" stroke-width="1.4"${i===W.hid?' opacity=".8"':""}/>`;
+    if(num==="v")h+=`<text x="${x}" y="${y+2.6}" text-anchor="middle" font-size="7" font-weight="800" fill="#fff">${i+1}</text>`;});
+  return svg(h,"0 0 100 100");}
+function genArtor(){
+  const k=pickOne(["kub","rätblock","pyramid","pyramid","tetra"]),W=WIRE[k],v=Math.random()<.5,ans=v?W.v.length:W.e.length;
+  return{kind:"keys",instr:v?"Hur många ärtor behövs?":"Hur många pinnar behövs?",
+    speak:`${petName} bygger ${WNAMN[k]} av ärtor och pinnar. Ärtorna sitter i hörnen och pinnarna är kanterna. De streckade sitter bakom. Hur många ${v?"ärtor":"pinnar"} behövs?`,
+    html:wireSVG(k)+`<div class="cap">${cap(WNAMN[k])} av ärtor och pinnar</div>`,answer:ans,unit:v?"ärtor":"pinnar",
+    help:()=>({vis:wireSVG(k,v?"v":"e"),tip:W.tip})};}
+/* räkna likadana kroppar i bilden */
+function genRakna(){
+  const k=pickOne(SOLIDS),typer=[k,...shuffle(SOLIDS.filter(x=>x!==k&&!(["kub","rätblock"].includes(x)&&["kub","rätblock"].includes(k)))).slice(0,rnd(2,3))],nk=rnd(1,4),n=rnd(Math.max(6,nk+3),8),lista=shuffle(Array.from({length:n},(_,i)=>i<nk?k:pickOne(typer.slice(1))));
+  const cell=(mode)=>`<svg viewBox="0 0 200 100" aria-hidden="true" style="width:min(86vw,340px)"><rect x="0" y="92" width="200" height="8" rx="3" fill="#C99A6B"/>${lista.map((t,i)=>{const c=i%4,r=Math.floor(i/4),sz=[40,46,36,44][(i*7)%4],[sx,sy]=sc[i];
+    return `<g opacity="${mode&&t!==k?.22:1}">${solidS(t,cols[i],sx,sy).replace("<svg",`<svg x="${c*50+(50-sz)/2}" y="${r*46+(46-sz)/2}" width="${sz}" height="${sz}"`)}</g>`;}).join("")}</svg>`;
+  const cols=lista.map(()=>pickOne(COLS)),sc=lista.map(t=>stretch(t));
+  return{kind:"keys",instr:`Hur många ${PLS[k]} finns i bilden?`,speak:`Titta på bilden. Hur många ${PLS[k]} finns det?`,html:cell(false),answer:nk,
+    help:()=>({vis:cell(true),tip:`${SPROPS[k]} I bilden finns ${nk} ${nk===1?k:PLS[k]}.`})};}
+/* vilken kropp kan man vika av mönstret (nätet)? */
+function natSVG(k,col){const st=`fill="${col}" stroke="#1D2B53" stroke-width="2" stroke-linejoin="round"`;let h="";
+  const R=(x,y,w,hh)=>`<rect x="${x}" y="${y}" width="${w}" height="${hh}" ${st}/>`;
+  if(k==="kub")[[1,0],[0,1],[1,1],[2,1],[3,1],[1,2]].forEach(([c,r])=>h+=R(8+c*21,18+r*21,21,21));
+  else if(k==="rätblock"){const a=26,b=16,c=12,y=36;h+=R(6,y,a,b)+R(6+a,y,c,b)+R(6+a+c,y,a,b)+R(6+2*a+c,y,c,b)+R(6,y-c,a,c)+R(6,y+b,a,c);}
+  else if(k==="pyramid")h+=`<rect x="36" y="36" width="28" height="28" ${st}/><polygon points="36,36 64,36 50,8" ${st}/><polygon points="64,36 64,64 92,50" ${st}/><polygon points="36,64 64,64 50,92" ${st}/><polygon points="36,36 36,64 8,50" ${st}/>`;
+  else if(k==="cylinder")h+=R(18,34,64,30)+`<circle cx="50" cy="23" r="11" ${st}/><circle cx="50" cy="75" r="11" ${st}/>`;
+  else h+=`<path d="M50 10 L84 56 A42 42 0 0 1 16 56 Z" ${st}/><circle cx="50" cy="80" r="13" ${st}/>`;
+  return svg(h);}
+const NATTIP={kub:"Sex lika stora kvadrater kan vikas till en kub.",rätblock:"Sex rektanglar, två och två lika stora, kan vikas till ett rätblock.",
+  pyramid:"En fyrkant i mitten och fyra trianglar som viks upp mot en spets blir en pyramid.",cylinder:"En rektangel som rullas ihop och två cirklar som lock blir en cylinder.",
+  kon:"En tårtbit som rullas ihop till en strut, med en cirkel som botten, blir en kon."};
+function genNat(){
+  const K=["kub","rätblock","pyramid","cylinder","kon"],k=pickOne(K),col=pickOne(COLS),o=shuffle([k,...shuffle(K.filter(x=>x!==k)).slice(0,3)]);
+  const vis=`<div style="display:flex;justify-content:center;align-items:center;gap:6px">${natSVG(k,col).replace("<svg",'<svg style="width:120px"')}<span style="font-size:2rem">→</span>${solid(k,col).replace("<svg",'<svg style="width:110px"')}</div>`;
+  return{kind:"opts",pics:true,cls:"kr",instr:"Vilken kropp kan man vika av mönstret?",speak:"Tänk dig att du klipper ut mönstret och viker ihop det. Vilken kropp blir det?",
+    html:natSVG(k,col),options:o,labels:o.map(x=>solid(x,col)),answer:k,help:()=>({vis,tip:NATTIP[k]})};}
+/* tärningen: motsatta sidor blir alltid 7 */
+function pips(n,x,y,s){const P={1:[[.5,.5]],2:[[.27,.27],[.73,.73]],3:[[.25,.25],[.5,.5],[.75,.75]],4:[[.27,.27],[.73,.27],[.27,.73],[.73,.73]],5:[[.25,.25],[.75,.25],[.5,.5],[.25,.75],[.75,.75]],6:[[.27,.22],[.73,.22],[.27,.5],[.73,.5],[.27,.78],[.73,.78]]};
+  return P[n].map(([a,b])=>`<circle cx="${x+a*s}" cy="${y+b*s}" r="${s*.09}" fill="#1D2B53"/>`).join("");}
+function genTarning(){
+  const c0=rnd(0,3),c2=rnd(0,3),F=[[0,1],[1,1],[2,1],[3,1],[c0,0],[c2,2]],opp=[2,3,0,1,5,4];   // ringen viks runt, locken hamnar uppe och nere
+  const par=shuffle([[1,6],[2,5],[3,4]]).map(p=>shuffle(p.slice())),V=[par[0][0],par[1][0],par[0][1],par[1][1],par[2][0],par[2][1]];
+  const q=rnd(0,5),o=opp[q],S=22;
+  const net=help=>`<svg viewBox="-2 -2 ${4*S+4} ${3*S+4}" aria-hidden="true" style="width:min(80vw,300px)">${F.map(([c,r],i)=>`<rect x="${c*S}" y="${r*S}" width="${S}" height="${S}" fill="${help&&i===o?"#FFE58A":help&&i===q?"#DDF5E7":"#fff"}" stroke="#C0563B" stroke-width="1.2"/>`+(i===q?`<text x="${c*S+S/2}" y="${r*S+S*.68}" text-anchor="middle" font-size="${S*.55}" font-weight="800" fill="#3D5AFE">${help?V[q]:"?"}</text>`:pips(V[i],c*S,r*S,S))).join("")}</svg>`;
+  return{kind:"keys",instr:"Hur många prickar ska det vara på ?-sidan?",speak:"Det här är en tärning som vecklats ut. På en tärning blir de motsatta sidorna alltid sju tillsammans. Hur många prickar ska det vara på sidan med frågetecknet?",
+    html:net(false)+`<div class="cap">Motsatta sidor blir alltid 7.</div>`,answer:V[q],
+    help:()=>({vis:net(true),tip:`När man viker ihop tärningen hamnar den gula sidan mittemot ?-sidan. Den har ${V[o]} prickar, och ${V[o]} + ${V[q]} = 7. I raden med fyra sidor hamnar varannan sida mittemot varandra. Sidan överst och sidan nederst hamnar också mittemot varandra.`})};}
+const KTYP=[[genKropparNamn,3.5],[genRingaIn,1.2],[genUdda,1.2],[genArtor,1.2],[genRakna,1.1],[genNat,1.2],[genTarning,.6]];
+function genKroppar(){let r=Math.random()*KTYP.reduce((a,b)=>a+b[1],0);for(const [f,w] of KTYP){if((r-=w)<0)return f();}return genKropparNamn();}
 
 
 /* ---------- Hörn och sidor ---------- */
@@ -693,15 +785,15 @@ function next(){
 function render(){
   const t=G.t,c=$("content");$("pad").hidden=t.kind!=="keys";
   if(t.kind==="opts"){
-    c.innerHTML=t.html+`<div class="opts${t.emo?" emo":""}${t.pics?" pics":""}">${t.options.map((o,i)=>`<button data-o="${o}">${t.labels?t.labels[i]:o}</button>`).join("")}</div>`;
+    c.innerHTML=t.html+`<div class="opts${t.emo?" emo":""}${t.pics?" pics":""}${t.cls?" "+t.cls:""}">${t.options.map((o,i)=>`<button data-o="${o}">${t.labels?t.labels[i]:o}</button>`).join("")}</div>`;
     c.querySelectorAll(".opts button").forEach(b=>b.onclick=()=>{if(G.busy)return;if(b.dataset.o===String(t.answer)){b.classList.add("right");done();}else{b.classList.add("bad");wrong(b.dataset.o,t.labels?b.innerHTML:null);}});
   }else if(t.kind==="keys"){
     c.innerHTML=t.html+`<div><span class="box1" id="box">?</span>${t.unit?` <b>${t.unit}</b>`:""}</div>`;
   }else if(t.kind==="tap"){
     c.innerHTML=`<div class="tapgrid">${t.items.map((p,i)=>`<button class="tapit" data-i="${i}">${p}</button>`).join("")}</div><button class="go" id="done">Klar</button>`;
     c.querySelectorAll(".tapit").forEach(b=>b.onclick=()=>{if(!G.busy)b.classList.toggle("sel");});
-    $("done").onclick=()=>{if(G.busy)return;const sel=[...c.querySelectorAll(".tapit.sel")].map(b=>+b.dataset.i);
-      const ok=sel.length===t.correct.length&&t.correct.every(i=>sel.includes(i));ok?done():wrong(sel.length?`${sel.length} former`:"ingen form");};
+    $("done").onclick=()=>{if(G.busy)return;const sel=[...c.querySelectorAll(".tapit.sel")].map(b=>+b.dataset.i);t.sel=sel;
+      const ok=sel.length===t.correct.length&&t.correct.every(i=>sel.includes(i));ok?done():wrong(sel.length?`${sel.length} ${sel.length===1?"bild":"bilder"}`:"ingen bild");};
   }else if(t.kind==="hunt"){
     c.innerHTML=t.html+`<button class="go" id="done">Klar</button>`;
     c.querySelectorAll(".hs").forEach(el=>el.addEventListener("click",()=>{if(!G.busy)el.classList.toggle("sel");}));
