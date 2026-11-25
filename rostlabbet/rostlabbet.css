@@ -56,3 +56,27 @@
 canvas.mun{flex:none;width:84px;height:110px;border-radius:16px;background:#0c2234}
 .munrad .karaoke{margin:14px 0 10px}.munrad .steg{margin-top:0}
 @media(max-width:560px){canvas.mun{width:64px;height:86px}.piano{min-width:calc(var(--vita)*34px);height:150px}.tang .tk{display:none}}
+/* ---- version 2: melodier, tonrulle, film, rutnät, djurens genomskärning, Ljudskola ---- */
+.smal{margin:10px 0 6px;font-weight:700;font-size:.9rem}
+.melodier{display:flex;flex-wrap:wrap;gap:8px}
+.rulle{display:block;width:100%;height:120px;border-radius:16px;margin:0 0 12px}
+.sjungknappar{flex-wrap:wrap}.knapp.film{background:#FFE08A;box-shadow:0 4px #E8B931}
+.filmyta{display:grid;grid-template-columns:minmax(0,200px) 1fr;gap:14px;align-items:center;margin-top:14px;padding:12px;border-radius:16px;background:var(--soft)}
+.filmyta video{width:100%;border-radius:12px;background:#000;aspect-ratio:9/16}.filmyta p{margin:0 0 10px}.filmyta .knapp{width:auto;display:inline-flex;text-decoration:none;color:#fff}.filmyta #filmBort{color:inherit}
+.natwrap{overflow-x:auto}
+.nat{display:grid;grid-template-columns:28px repeat(var(--n),minmax(20px,1fr));gap:3px;min-width:calc(28px + var(--n)*23px)}
+.radnamn{display:grid;place-items:center;font-size:1rem;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
+.ruta{border:0;padding:0;height:22px;border-radius:5px;background:#E3EAFB}.ruta.slag{background:#D3DDF6}
+.ruta.på{background:var(--accent);box-shadow:inset 0 0 0 2px #2A3FB8}.ruta.nu{outline:2px solid #F2B707;outline-offset:-1px}.ruta.på.nu{background:#F2B707}
+.djurcanvas{display:block;width:100%;height:300px;border-radius:18px;margin-top:14px;touch-action:none}
+.djurkort{display:block}
+.vokalrad{display:grid;grid-template-columns:minmax(0,1.3fr) 1fr;gap:16px;align-items:center}
+.vokalkarta{display:block;width:100%;height:260px;border-radius:18px;touch-action:none;cursor:crosshair}
+.vokalinfo p{margin:0 0 8px}.nuvokal{font-weight:800;font-size:1.3rem;color:#1E9E5E;min-height:1.5em}
+.konsonanter{display:grid;gap:12px;margin-top:8px}
+.kgrupp>b{display:block;margin-bottom:6px}.kgrupp>div{display:flex;flex-wrap:wrap;gap:8px}
+.kons{border:0;border-radius:14px;min-width:64px;min-height:62px;padding:6px 10px;background:var(--soft);box-shadow:0 3px var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.kons span{font-size:1.4rem;font-weight:800;line-height:1.1}.kons small{font-size:.75rem;color:var(--muted);font-weight:700}
+.kons.nu{background:#1D2B53;color:#fff;box-shadow:0 3px #0E1735}.kons.nu small{color:#C6D6F2}
+@media(max-width:560px){.flik{flex:1 1 40%;font-size:.92rem;min-height:46px}.rulle{height:96px}.filmyta{grid-template-columns:1fr}.filmyta video{max-height:360px;width:auto;margin:auto}
+ .vokalrad{grid-template-columns:1fr}.vokalkarta{height:230px}.djurcanvas{height:240px}.nat{grid-template-columns:24px repeat(var(--n),minmax(17px,1fr));min-width:calc(24px + var(--n)*19px)}.ruta{height:19px}}

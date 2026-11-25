@@ -4,7 +4,7 @@ import {initChimera,chimeraModule} from './chimera/wasm/chimera.js';
 const $=id=>document.getElementById(id),clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
 let model,renderer,VoiceModel,NEUTRAL,SPECS,TARGETS,artic,shown,frame,tele=null;
 let context=null,node=null,gain=null,analyser=null,starting=null,wanted=false,ready=false,mode='normal',pitch=170,volume=35;
-let extra=1,utterance=null,speechId=0,planPhrases,tokenizeIpa,eng=null,ctele=null,bodyName='male';
+let tap=null,extra=1,scenAktiv=false,utterance=null,speechId=0,planPhrases,tokenizeIpa,eng=null,ctele=null,bodyName='male';
 const lyssnare=new Set(),stoppare=new Set();   // scen.js: meddelanden från motorn och det som ska tystna vid Tyst
 let drag=null,hover=null,lastFrame=0,raf=0,experiment=0;
 const canvas=$('head'),ctx=canvas.getContext('2d'),wave=$('wave'),waveCtx=wave.getContext('2d');
@@ -21,7 +21,7 @@ function setVolume(){if(gain&&context){gain.gain.cancelScheduledValues(context.c
 function setSource(){send({type:'source',values:{f0:pitch,voiced:mode!=='whisper',breathiness:mode==='whisper'?.6:.15,vibratoDepth:mode==='sing'?.025:0,vibratoRate:5.5,roughness:.03,drift:2}});}
 function stop(message='Rösten är tyst. Tryck på Starta för att fortsätta.'){
  for(const f of stoppare)try{f()}catch(e){console.error(e)}
- extra=1;
+ extra=1;scenAktiv=false;
  stopSpeech();wanted=false;send({type:'stopSpeech'});send({type:'gate',level:0});setVolume();reflectPlay();status(message);
 }
 function failAudio(error){console.error('Röstlabbet:',error);stop();node?.disconnect();node=null;const old=context;context=null;gain=null;analyser=null;void old?.close().catch(()=>{});status('Ljudet kunde inte starta. Tryck på Starta för att försöka igen.',true);}
@@ -53,7 +53,7 @@ async function ensureAudio(){
     if(data.type==='error'){clearTimeout(timer);reject(new Error(data.message));failAudio(new Error(data.message));}
    };
   });
-  model.dispose();model=new VoiceModel(body,c.sampleRate);tele=null;
+  tap=null;model.dispose();model=new VoiceModel(body,c.sampleRate);tele=null;
   send({type:'body',body:{...body}});send({type:'artic',values:artic,tipFree:true});setSource();
   c.onstatechange=()=>{if(c!==context)return;if(c.state==='interrupted'||c.state==='suspended')stop('Rösten pausades. Tryck på Starta för att fortsätta.');reflectPlay()};
  })().finally(()=>{starting=null});
@@ -130,7 +130,7 @@ async function boot(){
   const uArtic={};for(const key of Object.keys(TARGETS.y.artic))uArtic[key]=(TARGETS.y.artic[key]+TARGETS.u.artic[key])/2;
   TARGETS['sv-u']={artic:uArtic};VoiceModel=analysis.VoiceModel;
   model=new VoiceModel(body,48000);renderer=new view.AnatomyRenderer();artic={...NEUTRAL};vowel('ɑ');ready=true;refreshSpeech();
-  import('./scen.js?v=2').then(m=>m.init(window.__rostApi)).catch(e=>console.error('scen.js',e));
+  import('./scen.js?v=3').then(m=>m.init(window.__rostApi)).catch(e=>console.error('scen.js',e));
   $('loading').hidden=true;canvas.parentElement.classList.add('ready');$('settings').disabled=false;$('play').disabled=false;$('reset').disabled=false;requestAnimationFrame(draw);
  }catch(error){console.error(error);$('loading').textContent='Röstlabbet kunde inte laddas. Ladda om sidan och försök igen.';status('Röstmotorn kunde inte laddas.',true)}
 }
@@ -147,15 +147,29 @@ async function aktivera(text){
  stop(text||'Rösten gör sig redo …');
  if(window.Ljud&&!Ljud.on){Ljud.set(true);document.dispatchEvent(new Event('mp-ljud-andrat'));}
  wanted=true;reflectPlay();
- try{await ensureAudio();if(!wanted||document.hidden){stop();return false}send({type:'gate',level:0});setSource();setVolume();reflectPlay();return true}
+ try{await ensureAudio();if(!wanted||document.hidden){stop();return false}scenAktiv=true;send({type:'gate',level:0});setSource();setVolume();reflectPlay();return true}
  catch(error){failAudio(error);return false}}
+const extra_aktiv=()=>scenAktiv;
 window.__rostApi={send,aktivera,stop,setBody,status,förstärk(x){extra=x;setVolume()},
  get eng(){return eng},get body(){return {...body}},get bodyName(){return bodyName},get ready(){return ready},get playing(){return wanted&&!!node},
  get clock(){return tele?tele.t.clock+Math.min(.25,(performance.now()-(tele._at||performance.now()))/1000):null},get tele(){return tele},get ctele(){return ctele},
  setUtterance(u){utterance=u},get utterance(){return utterance},
  setArtic(values){for(const [k,v] of Object.entries(values)){if(SPECS[k])artic[k]=clamp(v,SPECS[k].min,SPECS[k].max)}send({type:'artic',values:artic,tipFree:true});syncControls()},
  level(){if(!analyser)return 0;const b=new Float32Array(1024);analyser.getFloatTimeDomainData(b);let s=0;for(const v of b)s+=v*v;return Math.sqrt(s/b.length)},
- lyssna(f){lyssnare.add(f);return()=>lyssnare.delete(f)},vidStopp(f){stoppare.add(f);return()=>stoppare.delete(f)}};
+ lyssna(f){lyssnare.add(f);return()=>lyssnare.delete(f)},vidStopp(f){stoppare.add(f);return()=>stoppare.delete(f)},
+ get model(){return model},get artic(){return {...artic}},get shown(){return shown||artic},
+ /** starta den vanliga rösten (som Starta-knappen) om den inte redan låter */
+ async startaRost(){if(wanted&&!utterance&&!extra_aktiv())return true;if(wanted)stop();await play();return wanted},
+ /** säg IPA-text med motorns munmodell (Ljudskolan: a-p-a) */
+ async sagIpa(ipa,klar){const segs=tokenizeIpa(ipa);if(!segs.length)return;const id=++speechId;
+  const plan=planPhrases([{segments:segs,intonation:'statement',pause:.2}],{body,t0:0,rate:.7,f0:pitch});
+  stop();if(window.Ljud&&!Ljud.on){Ljud.set(true);document.dispatchEvent(new Event('mp-ljud-andrat'))}
+  utterance={id,end:null};wanted=true;reflectPlay();
+  try{await ensureAudio();if(!utterance||utterance.id!==id)return;send({type:'gate',level:0});setSource();setVolume();
+   send({type:'schedule',id,gestures:plan.gestures,segments:plan.segments,end:plan.end,replace:true});klar&&klar()}catch(e){failAudio(e)}},
+ /** ljudet som en ström (för att spela in film); null före start */
+ ljudStrom(){if(!context||!gain)return null;if(!tap){tap=context.createMediaStreamDestination();const g=context.createGain();g.gain.value=5;const k=context.createDynamicsCompressor();k.threshold.value=-6;k.ratio.value=20;k.attack.value=.002;k.release.value=.1;gain.connect(g);g.connect(k);k.connect(tap)}return tap.stream},   // filmen får starkare ljud än högtalarna (volymreglaget är oftast lågt)
+ get huvud(){return canvas}};
 // Read-only diagnostic access for browser regression tests.
 window.__rost={get ready(){return ready},get playing(){return wanted},get artic(){return {...artic}},get telemetry(){return tele},get audioState(){return context?.state||'not-started'},get mode(){return mode},get handles(){return ready&&frame?renderer.handles(model,frame,shown).map(h=>({id:h.id,x:renderer.X(h.pos),y:renderer.Y(h.pos)})):[]},sample(){const s=new Float32Array(2048);analyser?.getFloatTimeDomainData(s);return Array.from(s)}};
 function speechStatus(text){$('speech-status').textContent=text}
