@@ -202,6 +202,16 @@ body.mph-mini #quit{display:none}
       vs.textContent='.mph .mph-varld{display:inline-flex;align-items:center;gap:5px;min-height:40px;padding:0 12px;border-radius:999px;background:#1E9E5E;color:#fff;font-weight:800;font-size:.95rem;box-shadow:0 2px 0 rgba(0,0,0,.25);white-space:nowrap}.mph .mph-varld:active{transform:translateY(2px)}.mph-varld em{font-style:normal}@media(max-width:560px){.mph-varld em{display:none}}';document.head.appendChild(vs);}
     const va=document.createElement('a');va.className='mph-varld';va.href=hem+'varlden/';va.setAttribute('aria-label','Tillbaka till Pluggparken-världen');va.innerHTML='🏝️<em>Världen</em>';
     const hr=h.querySelector('.mph-right');if(hr)hr.prepend(va);}}catch(e){}
+  // kom man hit från ett uppdrag (uppdrag/, QR-koden från läraren) finns en lila 📋-knapp tillbaka till listan, även under räknandet
+  try{const up=sessionStorage.getItem('mp-uppdrag');if(up&&/\/uppdrag\/#/.test(up)&&!/\/uppdrag\/?$/.test(location.pathname)){
+    if(!document.getElementById('mph-upp-css')){const us=document.createElement('style');us.id='mph-upp-css';
+      us.textContent='.mph .mph-upp{flex:none;display:inline-flex;align-items:center;gap:6px;min-height:42px;padding:0 14px;border-radius:999px;background:#7B61FF;color:#fff;font-weight:800;font-size:.98rem;box-shadow:0 3px 0 #4B36B8;white-space:nowrap;text-decoration:none}.mph .mph-upp:active{transform:translateY(2px);box-shadow:0 1px 0 #4B36B8}.mph-upp i{font-style:normal;font-size:1.15rem}.mph-upp .k{display:none}.mph.has-upp .mph-title{display:none}.mph.mini.has-upp .mph-title{display:none}@media(max-width:560px){.mph-upp .l{display:none}.mph-upp .k{display:inline}.mph .mph-upp{padding:0 11px}}@media(max-width:430px){.mph.has-upp .mph-pet{display:none}}@media(max-width:340px){.mph-upp .k{display:none}}@media print{.mph-upp{display:none}}';
+      document.head.appendChild(us);}
+    const ua=document.createElement('a');ua.className='mph-upp';ua.href=up;ua.setAttribute('aria-label','Tillbaka till mina uppdrag');ua.innerHTML='<i>📋</i><span class="l">Mina uppdrag</span><span class="k">Uppdrag</span>';
+    const tt=h.querySelector('.mph-title');tt.parentNode.insertBefore(ua,tt.nextSibling);h.classList.add('has-upp');
+    // bocken i uppdrag/: spara övningsnycklarna när sidan har startat (och en del har öppnats med ?del=), så att det som sparas vid starten inte räknas
+    const bas=()=>{try{const o={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(/^mattespel-/.test(k))o[k]=localStorage.getItem(k);}sessionStorage.setItem('mp-upp-bas',JSON.stringify({t:Date.now(),o}));}catch(e){}};
+    const tid=()=>setTimeout(bas,2500);if(document.readyState==='complete')tid();else addEventListener('load',tid,{once:true});}}catch(e){}
   // på första sidan och ämnessidorna: en liten rund 🏝️-knapp till Pluggparken-världen (läraren 24 nov 2026);
   // från en ämnessida hamnar man direkt på ämnets ö (varlden/#matte osv., Specialare har Biografen, Extra har Musikön)
   const ÖN={matte:['matte','Matte-parken'],svenska:['svenska','Svenska-parken'],so:['so','SO-parken'],no:['no','NO-parken'],fler:['fler','Fler ämnen-ön'],engelska:['fler','Fler ämnen-ön'],extra:['extra','Musikön'],specialare:['bio','Biografen']},ön=ÖN[REL.replace(/\/$/,'')];

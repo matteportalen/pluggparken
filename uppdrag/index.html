@@ -227,12 +227,15 @@ function elev(u,kodStr){const id=hashId(kodStr),d=las(EK,{});
   const p=d[id]||{namn:u.namn,kod:kodStr,klar:[],tid:Date.now()};p.namn=u.namn;p.kod=kodStr;p.sedd=Date.now();d[id]=p;
   /* bara de tio senaste uppdragen sparas */
   const ids=Object.keys(d).sort((a,b)=>(d[b].sedd||0)-(d[a].sedd||0));ids.slice(10).forEach(k=>delete d[k]);skriv(EK,d);
-  E={id,u};$("eRub").textContent=u.namn;document.title=u.namn+" – Pluggparken";$("elev").hidden=false;kolla();ritaElev()}
+  E={id,u};try{sessionStorage.setItem("mp-uppdrag",location.href)}catch(e){}  // huvud.js visar 📋 Mina uppdrag på övningarnas sidor
+  $("eRub").textContent=u.namn;document.title=u.namn+" – Pluggparken";$("elev").hidden=false;kolla();ritaElev()}
 function post(){return las(EK,{})[E.id]}
 function sparaPost(f){const d=las(EK,{});if(!d[E.id])return;f(d[E.id]);skriv(EK,d)}
 function kolla(){/* kom eleven tillbaka från en övning? */
   if(!E)return;const p=post();if(!p||!p.oppen)return;
-  if(andrat(p.oppen.fore))sparaPost(q=>{if(!q.klar.includes(q.oppen.i))q.klar.push(q.oppen.i);q.oppen=null});
+  /* huvud.js sparar en ny baslinje 2,5 s efter att övningen startat (mp-upp-bas); den gäller om den är nyare än klicket */
+  let fore=p.oppen.fore;try{const b=JSON.parse(sessionStorage.getItem("mp-upp-bas")||"null");if(b&&b.t>(p.oppen.tid||0))fore=b.o}catch(e){}
+  if(andrat(fore))sparaPost(q=>{if(!q.klar.includes(q.oppen.i))q.klar.push(q.oppen.i);q.oppen=null});
   ritaElev()}
 let firat=false;
 function ritaElev(){const p=post()||{klar:[]},n=E.u.items.length,k=E.u.items.filter((_,i)=>p.klar.includes(i)).length;
@@ -244,7 +247,7 @@ function ritaElev(){const p=post()||{klar:[]},n=E.u.items.length,k=E.u.items.fil
   if(allt&&!firat){firat=true;if(p.firad!==true){sparaPost(q=>q.firad=true);window.Ljud&&Ljud.fanfare&&Ljud.fanfare();konfetti()}}}
 $("lista").addEventListener("click",e=>{const m=e.target.closest("[data-m]");
   if(m){const i=+m.dataset.m;sparaPost(q=>{if(!q.klar.includes(i))q.klar.push(i);q.oppen=null});window.Ljud&&Ljud.ok&&Ljud.ok();ritaElev();return}
-  const a=e.target.closest("a[data-i]");if(!a)return;const i=+a.dataset.i;sparaPost(q=>q.oppen={i,fore:nycklar()})});
+  const a=e.target.closest("a[data-i]");if(!a)return;const i=+a.dataset.i;try{sessionStorage.removeItem("mp-upp-bas")}catch(e){}sparaPost(q=>q.oppen={i,fore:nycklar(),tid:Date.now()})});
 addEventListener("pageshow",kolla);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)kolla()});
 
