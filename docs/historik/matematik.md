@@ -143,3 +143,11 @@ Lärarens önskan: nivåanpassa från åk 1 till åk 6, bilderna ersätts med x 
 - Delar: `{s,c}` (antal), `{n}`, `{q}`, `{par:{c,t}}`, `{fr:{s,d}}`, `m` = minus. `val`, `rowW`, `varsOf`, `rowVars`. Djurnivåerna använder `gen(k,o)` med nivåns gränser, bokstäverna `genL(k,nivå)` med mallar `MALL[4|5|6]`. Bokstäverna står alltid x, y, z i svarsraden; vilken som ska lösas först är slumpad.
 - Bokstäverna ritas i Source Serif 4 kursiv (`.vx`). Återkopplingen sätter in talen: "Om x är 12 blir 2 · (12 + 4) = 32, men det ska vara 34." Första uppgiften har ett tips per nivå (nivå 4: "grisen blir x").
 - Testat: 3 000 uppgifter per nivå lösbara en rad i taget med exakt ett svar; Playwright 1280 × 900 och 390 × 844, fel svar och hela nivå 5 igenom, stjärnor sparas per nivå.
+
+## 2026-11-25 – Bildstöd i Mätning
+
+Alla konkreta vardagsfrågor i RIM, LUCKA, SKATT och UNITS samt sorteringsföremålen har nu egna målade rasterillustrationer. 32 nya transparenta WebP-bilder i `matning/bilder/`, skapade med inbyggd bildgenerering och dokumenterade i `PROMPTS.md`. Katt, hund och säng återanvänds från Var är katten. `bildstod.js` kopplar föremålen till bilder, `bildstod.css` håller layouten kompakt. Linjaler, balansvågar och graderade mätglas behåller sina exakta diagram; ren enhetsomvandling får ingen dekorationsbild.
+
+Räcker-saften-uppgiften lagrar liter, antal kompisar och dl per glas som strukturerad data. Bilden visar en kanna och exakt rätt antal glas med etiketter; först efter avslutad uppgift visas total mängd samt rest eller brist. Svaret avslöjas inte av en förifylld lösning. Knappar, nivåer, rättning och sparnyckel är kvar.
+
+Verifierat med `skript/test-matning-bilder.cjs`: samtliga konkreta frågetexter har en bild, alla bildfiler kan laddas, 18 kombinationer av saftmängder/glasantal på både 1200×844 och 390×844, rätt/fel svar, dold lösning före svar och fungerande sortering. Bildkontaktkarta och skärmbilder granskade. Syntaxkontroll av inline-JS, bildstödet och testskriptet. Scrollmätning före/efter för saft, föremål och sortering: 0/0 px vid både 375×667 och 1200×760, ingen horisontell overflow.
