@@ -71,6 +71,10 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 .rum .sak.vald{filter:drop-shadow(0 0 6px #3D5AFE) drop-shadow(0 0 2px #3D5AFE)}
 .rum .zon{position:absolute;width:9cqw;height:9cqw;border-radius:50%;transform:translate(-50%,-50%);border:2px dashed rgba(61,90,254,.55);background:rgba(61,90,254,.07);opacity:0;transition:opacity .15s;pointer-events:none}
 .rum.visa .zon{opacity:1;pointer-events:auto}
+.rum .sak.forhand{pointer-events:none;transition:none;animation:forhand .18s ease-out}
+@keyframes forhand{from{transform:translate(-50%,-50%) scale(calc(var(--s,1)*.8))}}
+.rum.visa.pv .zon{opacity:.3}
+.rum.visa.pv .zon.nara{opacity:0}
 .rum .zon.mal{opacity:1;border:3px solid var(--good);background:rgba(30,158,94,.18);animation:pulse 1s ease-in-out infinite}
 @keyframes pulse{50%{transform:translate(-50%,-50%) scale(1.15)}}
 .hylla{display:flex;justify-content:center;gap:10px;margin-top:10px;min-height:64px}
@@ -213,14 +217,27 @@ function rita(markera){const r=$("rum");let h='<div class="room-window" aria-hid
 function narmasteZon(cx,cy){const r=$("rum").getBoundingClientRect();let b=null,bd=1e9;for(const [k,z] of Object.entries(ZON)){const x=r.left+z.x/100*r.width,y=r.top+z.y/100*r.height,d=Math.hypot(cx-x,cy-y);if(d<bd){bd=d;b=k}}
   return bd<r.width*.12?b:null}
 function placera(o,z){if(!z){delete G.pos[o];rita();return}for(const [p,q] of Object.entries(G.pos))if(q===z&&p!==o)delete G.pos[p];G.pos[o]=z;ljud("pip");rita()}
+/* Förhandsvisning medan man drar (lärarens önskan: se om katten står bakom innan man släpper): nära en plats hoppar saken in
+   i rummet med platsens lager och storlek (bakom stolsryggen, i lådan, under sängen) och ringen lyser; utanför följer den fingret. */
+let pvZon=null;
+function forhand(o,cx,cy,ghost){const rum=$("rum");let pv=rum.querySelector(".forhand");
+  const r=rum.getBoundingClientRect(),inne=o&&cx>r.left&&cx<r.right&&cy>r.top&&cy<r.bottom,z=inne?narmasteZon(cx,cy):null;
+  if(z===pvZon&&(z||!pv))return;pvZon=z;
+  rum.querySelectorAll(".zon.nara").forEach(x=>x.classList.remove("nara"));
+  rum.classList.toggle("pv",!!z);
+  if(!z){if(pv)pv.remove();if(ghost)ghost.style.opacity="";return}
+  const Z=ZON[z];if(!pv){pv=document.createElement("span");pv.className="sak forhand";pv.setAttribute("aria-hidden","true");pv.innerHTML=bild(o);rum.appendChild(pv)}
+  pv.style.cssText=`left:${Z.x}%;top:${Z.y}%;--s:${Z.s||1};z-index:${Z.z}`;
+  const ring=rum.querySelector(`.zon[data-z="${z}"]`);if(ring)ring.classList.add("nara");
+  if(ghost)ghost.style.opacity="0";if(navigator.vibrate)try{navigator.vibrate(8)}catch(e){}}
 document.addEventListener("pointerdown",e=>{if(!G||G.lost||NIV[G.l].las||$("game").hidden)return;const el=e.target.closest(".sak");
   if(!el){const zon=e.target.closest(".zon");if(zon&&G.vald){placera(G.vald,zon.dataset.z);G.vald=null;$("rum").classList.remove("visa");rita()}return}
   e.preventDefault();const o=el.dataset.o,sx=e.clientX,sy=e.clientY;let ghost=null,flyttad=false;
   const mv=ev=>{if(!flyttad&&Math.hypot(ev.clientX-sx,ev.clientY-sy)>8){flyttad=true;ghost=el.cloneNode(true);ghost.classList.add("lyft");const b=el.getBoundingClientRect();
       ghost.style.cssText=`position:fixed;left:${b.left+b.width/2}px;top:${b.top+b.height/2}px;transform:translate(-50%,-50%) scale(1.15);width:${Math.max(40,b.width)}px;height:${Math.max(40,b.height)}px;z-index:80;pointer-events:none;margin:0`;document.body.appendChild(ghost);el.style.opacity=".3";$("rum").classList.add("visa")}
-    if(ghost){ghost.style.left=ev.clientX+"px";ghost.style.top=ev.clientY+"px"}};
+    if(ghost){ghost.style.left=ev.clientX+"px";ghost.style.top=ev.clientY+"px";forhand(o,ev.clientX,ev.clientY,ghost)}};
   const upp=ev=>{removeEventListener("pointermove",mv);removeEventListener("pointerup",upp);removeEventListener("pointercancel",upp);$("rum").classList.remove("visa");
-    if(ghost){ghost.remove();const r=$("rum").getBoundingClientRect(),inne=ev.clientX>r.left&&ev.clientX<r.right&&ev.clientY>r.top&&ev.clientY<r.bottom;placera(o,inne?narmasteZon(ev.clientX,ev.clientY):null)}
+    forhand(null);if(ghost){ghost.remove();const r=$("rum").getBoundingClientRect(),inne=ev.clientX>r.left&&ev.clientX<r.right&&ev.clientY>r.top&&ev.clientY<r.bottom;placera(o,inne?narmasteZon(ev.clientX,ev.clientY):null)}
     else{G.vald=G.vald===o?null:o;$("rum").classList.toggle("visa",!!G.vald);rita();if(G.vald)$("rum").classList.add("visa")}};
   addEventListener("pointermove",mv);addEventListener("pointerup",upp);addEventListener("pointercancel",upp)});
 document.addEventListener('click',e=>{if(e.detail!==0||!G||G.lost||NIV[G.l].las||$('game').hidden)return;const sak=e.target.closest('.sak');if(sak){G.vald=G.vald===sak.dataset.o?null:sak.dataset.o;rita();$('rum').classList.toggle('visa',!!G.vald);return}const zon=e.target.closest('.zon');if(zon&&G.vald){placera(G.vald,zon.dataset.z);G.vald=null;rita();$('rum').classList.remove('visa')}});

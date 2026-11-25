@@ -99,6 +99,7 @@ Kartorna är gjorda ur Natural Earth (public domain). Europakartan, Världskarta
 
 ## Var är katten? (`varkatten/`, `mattespel-varkatten-v1`)
 - Lägesord på engelska. Ett rum med en låda, en stol och en säng med egna målade rasterbilder och fyra saker (cat, dog, ball, teddy). **Nivå 1** (åk 1–3, 8 uppgifter): in, on, under, next to, en sak i taget. **Nivå 2** (åk 3–4, 6): två meningar i rad, också behind, in front of och between. **Nivå 3** (åk 5–6, 6): alla saker står i rummet, "Where is the dog?", välj rätt mening av tre (🔊 vid varje).
+- Medan man drar visas saken på den närmaste platsen med rätt djup (bakom stolsryggen, i lådan, under sängen) innan man släpper (lärarens önskan). "Behind the chair" = saken tittar upp över stolsryggen.
 - Dra saken till rätt plats (streckade ringar visas medan man drar) eller tryck på saken och sedan på ringen. "Next to" godtas på båda sidor, och mellan två möbler räknas också som bredvid. Fel: andra försöket visar en grön ring där saken ska stå. Efter rätt svar visas meningen på engelska och svenska.
 - Rösten Philippa, 21 delar i `ljud/katten/` (manus `manus/katten-manus.txt`): "Put the cat," + "under the chair." spelas direkt efter varandra. Är ljudet av visas meningen som text.
 
