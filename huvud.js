@@ -227,7 +227,7 @@ body.mph-mini #quit{display:none}
     if(p&&p.konto&&!window.MPKonto){const k=document.createElement('script');k.src=rotUrl+'konto.js?v=3';document.head.appendChild(k);}}catch(e){}
   window.MPSokOpen=function(){
     if(window.MPSok)return MPSok.open();
-    const sc=document.createElement('script');sc.src=rotUrl+'sok.js?v=1';sc.onload=()=>MPSok.open();document.head.appendChild(sc);};
+    const sc=document.createElement('script');sc.src=rotUrl+'sok.js?v=2';sc.onload=()=>MPSok.open();document.head.appendChild(sc);};
   h.querySelector('.mph-sok').onclick=()=>MPSokOpen();
   document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('[data-sok]');if(t){e.preventDefault();MPSokOpen();}});
   document.addEventListener('keydown',e=>{if(e.key==='/'&&!e.ctrlKey&&!e.metaKey&&!e.altKey){const a=document.activeElement,tag=a&&a.tagName;if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT'||(a&&a.isContentEditable))return;if(window.MPSok&&document.querySelector('.sok-ov'))return;e.preventDefault();MPSokOpen();}});

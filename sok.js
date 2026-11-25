@@ -68,6 +68,7 @@ const IDX=[
  ['skriv-ut/ordjakt.html','Ordjakt med egna ord (utskrift)','Skriv in veckans ord och skriv ut en ordjakt med facit','🖨️','ordjakt ordletare bokstavsruta ord egna ord veckans ord skriva ut utskrift blad arbetsblad facit generator','Svenska'],
  ['skriv-ut/multiplikation.html','Multiplikationsprov och tabellhäfte (utskrift)','Skriv ut veckans prov på tid eller ett tabellhäfte med facit','🖨️','multiplikation prov veckans prov tabeller tabellhäfte gångertabellen multiplikationstabellen skriva ut utskrift facit på tid mängdträning','Matte'],
  ['skriv-ut/arshjul.html','Årshjulet (utskrift)','Skriv ut ett runt årshjul med veckonummer, röda dagar, högtider, månens faser och egna händelser','🗓️','årshjul kalender år läsår planering runt cirkel veckonummer röda dagar högtider månens faser fullmåne skriva ut utskrift affisch','Skriv ut'],
+ ['uppdrag/#skapa','Uppdrag till klassen','Välj övningar i ordning och visa en QR-kod. Eleverna skannar och får sina uppdrag','📋','uppdrag läxa lista spellista qr qr-kod kod skanna klassen elever välja övningar ordning dagens pass veckans lärare tavla projektor','Lärare'],
  ['larare/utgang.html','Exit tickets','En fråga i taget på tavlan: eleven svarar och går ut, sedan nästa','🚪','utgångsbiljett exit ticket exit tickets lektionsslut avslut fråga projektor tavla klassen egna frågor reflektion lärare','Lärare'],
  ['skriv-ut/talmaskin.html','Talmaskinen (utskrift)','Skriv ut tallinjer, talrutor och tiorutor som du själv ställer in','📏','tallinje tallinjer talruta hundraruta tioruta tiorutor skriva ut utskrift blad mall tom tallinje steg negativa tal tejpa ihop','Matte'],
  ['skriv-ut/hundraruta.html','Hundrarutan med hål (utskrift)','Skriv ut en ny hundraruta med slumpade hål, med facit','🖨️','hundraruta hål skriva ut utskrift blad arbetsblad facit slumpa tal 100 saknade tal','Matte'],
@@ -285,5 +286,5 @@ function open(){
   document.addEventListener('keydown',key,true);
   rita();setTimeout(()=>inp.focus(),30);
 }
-window.MPSok={open,close,sok};
+window.MPSok={open,close,sok,IDX};
 })();

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<script src="../tema.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Uppdrag – Pluggparken</title>
+<meta name="description" content="Läraren väljer övningar på Pluggparken och visar en QR-kod. Eleverna skannar den och får sina uppdrag i rätt ordning.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#1F3A35">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+:root{
+  --bg:#EAF3FF; --ink:#1D2B53; --muted:#56668F; --card:#FFFFFF; --line:#C6D6F2; --soft:#F1F6FF;
+  --good:#1E9E5E; --good-dark:#157548; --bad:#E5484D; --accent:#3D5AFE; --gold:#F2B707;
+  --font:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+  --emoji:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;
+}
+html[data-tema="mork"]{--bg:#121A30;--ink:#EEF2FA;--muted:#A9B4D0;--card:#1C2540;--line:#2D3A5E;--soft:#222D4C}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer;touch-action:manipulation;border:0;background:none}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+[hidden]{display:none!important}
+.wrap{max-width:860px;margin:0 auto;padding:12px 16px 48px}
+.hero{display:flex;gap:16px;align-items:center;background:linear-gradient(135deg,#3D5AFE,#7B61FF);color:#fff;border-radius:24px;padding:16px 18px;box-shadow:0 5px 0 #2A3FB8;margin:6px 0 16px}
+.hero .hm{flex:none;font-size:3.2rem;font-family:var(--emoji);line-height:1}
+.hero h1{margin:0;font-size:clamp(1.6rem,6vw,2.3rem);line-height:1.05;overflow-wrap:anywhere}
+.hero p{margin:6px 0 0;font-weight:600;opacity:.95}
+.panel{background:var(--card);border-radius:20px;padding:14px;box-shadow:0 5px 0 var(--line);margin-bottom:14px}
+.panel h2{margin:0 0 8px;font-size:1.15rem}
+.hint{margin:6px 0 0;color:var(--muted);font-size:.92rem;font-weight:600}
+/* elevens lista */
+.mal{display:flex;align-items:center;gap:10px;margin:0 2px 12px;font-weight:800;color:var(--muted)}
+.mal .bar{flex:1;height:14px;border-radius:999px;background:var(--line);overflow:hidden}
+.mal .bar i{display:block;height:100%;background:var(--good);border-radius:999px;transition:width .4s}
+.lista{display:grid;gap:12px;margin:0;padding:0;list-style:none}
+.upp{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:20px;padding:12px 14px;box-shadow:0 4px 0 var(--line);color:inherit;text-decoration:none;min-height:84px}
+a.upp:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.upp .nr{flex:none;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:1.3rem;background:var(--accent);color:#fff}
+.upp .ik{flex:none;width:54px;height:54px;border-radius:16px;background:var(--soft);display:grid;place-items:center;font-size:2rem;font-family:var(--emoji)}
+.upp .tx{min-width:0;flex:1}
+.upp b{display:block;font-size:1.15rem;line-height:1.15}
+.upp small{display:block;color:var(--muted);font-weight:600;font-size:.9rem;line-height:1.25}
+.upp .gaa{flex:none;font-weight:800;color:var(--accent);font-size:1rem;white-space:nowrap}
+.upp.klar{background:#E6F7EE;box-shadow:0 4px 0 #9FD9B9}
+.upp.klar .nr{background:var(--good)}
+.upp.klar .gaa{color:var(--good-dark)}
+html[data-tema="mork"] .upp.klar{background:#173A2B;box-shadow:0 4px 0 #1E6B45}
+.markera{display:block;margin:-4px 0 0 auto;padding:6px 12px;border-radius:12px;font-weight:800;font-size:.88rem;color:var(--muted)}
+.alla{text-align:center;background:var(--card);border-radius:20px;padding:16px;box-shadow:0 5px 0 var(--line);margin-top:14px}
+.alla .stor{font-size:3rem;font-family:var(--emoji);line-height:1}
+.alla h2{margin:6px 0 0}
+.tom{color:var(--muted);font-weight:600;text-align:center;padding:10px}
+.tidigare a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;background:var(--soft);color:inherit;text-decoration:none;font-weight:800;margin-top:8px}
+.tidigare a small{margin-left:auto;color:var(--muted);font-weight:700}
+.lararlank{display:block;text-align:center;margin-top:18px;color:var(--muted);font-weight:700}
+/* lärarens del */
+input[type=text]{width:100%;min-height:50px;padding:8px 12px;border-radius:14px;border:2px solid var(--line);background:var(--soft);font-weight:700}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chips button{padding:6px 12px;border-radius:999px;background:var(--soft);box-shadow:0 2px 0 var(--line);font-weight:800;font-size:.92rem}
+.chips button[aria-pressed=true]{background:var(--ink);color:var(--bg);box-shadow:none}
+.hitta{list-style:none;margin:10px 0 0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);gap:6px;max-height:420px;overflow-y:auto;overflow-x:hidden}
+.hitta li{min-width:0}
+.hitta li{display:flex;align-items:center;gap:10px;padding:6px 6px 6px 10px;border-radius:14px;background:var(--soft)}
+.hitta .ik{flex:none;font-size:1.5rem;font-family:var(--emoji);width:34px;text-align:center}
+.hitta .tx{flex:1;min-width:0;line-height:1.15}
+.hitta .tx b{display:block}
+.hitta .tx small{display:block;color:var(--muted);font-weight:600;font-size:.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hitta .pl{font-size:.72rem;font-weight:800;color:var(--accent);margin-left:4px}
+.plus{flex:none;min-width:48px;min-height:44px;border-radius:12px;background:var(--good);color:#fff;font-weight:800;font-size:1.3rem;box-shadow:0 3px 0 var(--good-dark)}
+.plus:disabled{background:var(--line);box-shadow:none;color:var(--muted);font-size:1rem}
+.vald{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.vald li{background:var(--soft);border-radius:14px;padding:8px 8px 8px 10px}
+.vald .rad{display:flex;align-items:center;gap:8px}
+.vald .nr{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:#fff;font-weight:800}
+.vald .ik{font-size:1.4rem;font-family:var(--emoji)}
+.vald b{flex:1;min-width:0;line-height:1.15}
+.vald .sm{flex:none;width:40px;height:40px;border-radius:10px;background:var(--card);box-shadow:0 2px 0 var(--line);font-weight:800}
+.vald .sm:disabled{opacity:.35}
+.tab{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 2px 38px;align-items:center}
+.tab span{font-weight:700;color:var(--muted);font-size:.88rem;margin-right:2px}
+.tab button{min-width:40px;min-height:40px;border-radius:10px;background:var(--card);box-shadow:0 2px 0 var(--line);font-weight:800}
+.tab button[aria-pressed=true]{background:var(--good);color:#fff;box-shadow:0 2px 0 var(--good-dark)}
+.stort{display:block;width:100%;min-height:62px;border-radius:20px;background:var(--good);color:#fff;font-weight:800;font-size:1.3rem;box-shadow:0 5px 0 var(--good-dark);margin-top:12px}
+.stort:active{transform:translateY(3px)}
+.stort:disabled{background:var(--line);box-shadow:none;color:var(--muted)}
+.mina{display:flex;flex-wrap:wrap;gap:8px}
+.mina span{display:inline-flex;align-items:center;background:var(--soft);border-radius:12px;box-shadow:0 2px 0 var(--line)}
+.mina button{padding:8px 12px;font-weight:800}
+.mina .x{color:var(--muted);padding:8px 10px 8px 2px}
+/* QR för projektorn */
+#qrv{position:fixed;inset:0;z-index:60;background:#fff;color:#1D2B53;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px;text-align:center;overflow:auto}
+#qrv h2{margin:0;font-size:clamp(1.6rem,5vw,3rem);line-height:1.05}
+#qrv .steg{margin:0;font-weight:700;color:#56668F;font-size:clamp(1rem,2.4vw,1.4rem)}
+#qrBox{background:#fff;padding:12px;border-radius:16px;box-shadow:0 0 0 3px #C6D6F2}
+#qrBox img,#qrBox canvas{display:block;width:min(62vh,82vw)!important;height:auto!important;image-rendering:pixelated}
+#qrv .ovr{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-width:900px}
+#qrv .ovr span{background:#EAF3FF;border-radius:999px;padding:3px 12px;font-weight:800}
+#qrv .lank{font-weight:700;color:#56668F;font-size:.85rem;word-break:break-all;max-width:900px}
+#qrv .knappar{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+#qrv .knappar button{min-height:48px;padding:8px 18px;border-radius:14px;background:#EAF3FF;box-shadow:0 3px 0 #C6D6F2;font-weight:800;color:#1D2B53}
+#qrv .knappar .stang{background:#1D2B53;color:#fff;box-shadow:0 3px 0 #0E1735}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:70}
+@media print{.mph,#lar,#elev,.knappar{display:none!important}#qrv{position:static}#qrBox img,#qrBox canvas{width:12cm!important}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<script src="../ljud.js"></script>
+<script src="../djur.js"></script>
+<script src="../huvud.js" data-titel="Uppdrag" data-ikon="📋" data-nav="av"></script>
+<script src="../sok.js?v=2"></script>
+<main class="wrap">
+
+<!-- ===== elevens sida ===== -->
+<section id="elev" hidden>
+  <div class="hero"><div class="hm" aria-hidden="true">📋</div><div><h1 id="eRub">Dagens uppdrag</h1><p id="eUnder">Gör uppdragen i ordning. Tryck på ett uppdrag för att börja.</p></div></div>
+  <div class="mal" id="mal"><span id="malT"></span><span class="bar"><i id="malB"></i></span></div>
+  <ol class="lista" id="lista"></ol>
+  <div class="alla" id="alla" hidden><div class="stor">🎉</div><h2>Alla uppdrag klara!</h2><p class="hint">Bra jobbat! Fråga din lärare vad du får göra nu.</p></div>
+</section>
+
+<!-- ===== utan länk: elevens tidigare uppdrag ===== -->
+<section id="tomt" hidden>
+  <div class="hero"><div class="hm" aria-hidden="true">📋</div><div><h1>Uppdrag</h1><p>Här hamnar uppdragen från din lärare när du skannar QR-koden.</p></div></div>
+  <div class="panel tidigare" id="tidigare"></div>
+  <a class="lararlank" href="#skapa">👩‍🏫 Är du lärare? Skapa ett uppdrag</a>
+</section>
+
+<!-- ===== lärarens sida ===== -->
+<section id="lar" hidden>
+  <div class="hero"><div class="hm" aria-hidden="true">👩‍🏫</div><div><h1>Skapa uppdrag</h1><p>Välj övningar i den ordning eleverna ska göra dem. Visa QR-koden på tavlan.</p></div></div>
+  <div class="panel">
+    <h2>1. Namn på uppdraget</h2>
+    <input type="text" id="namn" maxlength="40" placeholder="Dagens uppdrag" autocomplete="off">
+  </div>
+  <div class="panel">
+    <h2>2. Lägg till övningar</h2>
+    <input type="text" id="sok" placeholder="Sök, till exempel gånger, engelska, flyta …" autocomplete="off" aria-label="Sök övning">
+    <div class="chips" id="amnen"></div>
+    <ul class="hitta" id="hitta"></ul>
+  </div>
+  <div class="panel">
+    <h2>3. Uppdraget</h2>
+    <ol class="vald" id="vald"></ol>
+    <p class="hint" id="valdTom">Inga övningar än. Tryck på + ovanför.</p>
+    <button class="stort" id="bQR" type="button" disabled>📱 Visa QR-kod för klassen</button>
+    <p class="hint">Ingenting skickas någonstans: övningarna står i själva länken. Eleverna ser sina bockar på sin egen enhet, du kan inte se deras resultat.</p>
+  </div>
+  <div class="panel" id="minaP" hidden>
+    <h2>Mina uppdrag</h2>
+    <div class="mina" id="mina"></div>
+  </div>
+</section>
+</main>
+
+<div id="qrv" hidden role="dialog" aria-modal="true" aria-label="QR-kod för uppdraget">
+  <h2 id="qRub"></h2>
+  <p class="steg">Öppna kameran och skanna koden</p>
+  <div id="qrBox"></div>
+  <div class="ovr" id="qOvr"></div>
+  <div class="lank" id="qLank"></div>
+  <div class="knappar"><button type="button" id="qKop">🔗 Kopiera länk</button><button type="button" id="qPrint">🖨️ Skriv ut</button><button type="button" class="stang" id="qStang">Stäng</button></div>
+</div>
+<canvas id="fx" hidden></canvas>
+
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const SITE="https://pluggparken.se/uppdrag/";
+/* Elevens bockar per uppdrag (följer med profilen, PKEYS). Lärarens sparade uppdrag ligger för sig och synkas inte. */
+const EK="matteportalen-uppdrag",LK="pluggparken-uppdrag-v1";
+const las=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}};
+const skriv=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+
+/* ---------- övningarna: sökningens lista (sok.js) ---------- */
+const BORT=/^(Lärare|Skriv ut)$/;
+const ALLA=((window.MPSok&&MPSok.IDX)||[]).filter(e=>!BORT.test(e[5])&&!/^skriv-ut\//.test(e[0])&&!/^uppdrag\//.test(e[0]))
+  .map(e=>({u:e[0],n:e[1],t:e[2],i:e[3],k:e[4],p:e[5]}));
+const PER=Object.fromEntries(ALLA.map(e=>[e.u,e]));
+/* tabeller kan väljas där övningen tar emot ?t= (Multiplikation 1–10, Division 1–10) */
+const TABELL={"multiplikation/":10,"division/":10};
+
+/* ---------- länken: #n=namn&o=adress~adress?t=5 ---------- */
+function kod(namn,items){return "n="+encodeURIComponent(namn)+"&o="+items.map(x=>encodeURIComponent(x.u+(x.t&&x.t.length?"?t="+x.t.join(","):""))).join("~")}
+function avkod(h){const q=new URLSearchParams(h.replace(/^#/,""));if(!q.has("o"))return null;
+  const items=[];for(const del of (q.get("o")||"").split("~")){let s;try{s=decodeURIComponent(del)}catch(e){continue}
+    const m=s.match(/^([^?]+)(?:\?t=([\d,]+))?$/);if(!m||!PER[m[1]])continue;  // bara kända övningar, inga andra adresser
+    const t=m[2]&&TABELL[m[1]]?[...new Set(m[2].split(",").map(Number).filter(n=>n>=1&&n<=TABELL[m[1]]))].sort((a,b)=>a-b):[];
+    items.push({u:m[1],t});if(items.length>=12)break}
+  return {namn:(q.get("n")||"").slice(0,40).trim()||"Dagens uppdrag",items}}
+const adress=x=>"../"+x.u+(x.t&&x.t.length?(x.u.includes("?")?"&":"?")+"t="+x.t.join(","):"");
+const hashId=s=>{let h=5381;for(let i=0;i<s.length;i++)h=(h*33+s.charCodeAt(i))>>>0;return h.toString(36)};
+
+/* ---------- vilka skärmar ---------- */
+function visa(){const h=location.hash;
+  $("elev").hidden=$("lar").hidden=$("tomt").hidden=true;$("qrv").hidden=true;
+  if(/^#skapa/.test(h)){larare();return}
+  const u=avkod(h);if(u&&u.items.length){elev(u,h.replace(/^#/,""));return}
+  tidigare()}
+addEventListener("hashchange",visa);
+
+/* ================= ELEVEN ================= */
+let E=null;
+/* Bocken: när eleven öppnar en övning sparas en ögonblicksbild av alla övningsnycklar (mattespel-…).
+   Har någon ändrats när eleven kommer tillbaka har hen gjort något i övningen, och uppdraget bockas av. */
+function nycklar(){const o={};try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(/^mattespel-/.test(k))o[k]=localStorage.getItem(k)}}catch(e){}return o}
+function andrat(fore){const nu=nycklar();for(const k in nu)if(nu[k]!==fore[k])return true;return false}
+function elev(u,kodStr){const id=hashId(kodStr),d=las(EK,{});
+  const p=d[id]||{namn:u.namn,kod:kodStr,klar:[],tid:Date.now()};p.namn=u.namn;p.kod=kodStr;p.sedd=Date.now();d[id]=p;
+  /* bara de tio senaste uppdragen sparas */
+  const ids=Object.keys(d).sort((a,b)=>(d[b].sedd||0)-(d[a].sedd||0));ids.slice(10).forEach(k=>delete d[k]);skriv(EK,d);
+  E={id,u};$("eRub").textContent=u.namn;document.title=u.namn+" – Pluggparken";$("elev").hidden=false;kolla();ritaElev()}
+function post(){return las(EK,{})[E.id]}
+function sparaPost(f){const d=las(EK,{});if(!d[E.id])return;f(d[E.id]);skriv(EK,d)}
+function kolla(){/* kom eleven tillbaka från en övning? */
+  if(!E)return;const p=post();if(!p||!p.oppen)return;
+  if(andrat(p.oppen.fore))sparaPost(q=>{if(!q.klar.includes(q.oppen.i))q.klar.push(q.oppen.i);q.oppen=null});
+  ritaElev()}
+let firat=false;
+function ritaElev(){const p=post()||{klar:[]},n=E.u.items.length,k=E.u.items.filter((_,i)=>p.klar.includes(i)).length;
+  $("malT").textContent=`${k} av ${n} klara`;$("malB").style.width=(100*k/n)+"%";
+  $("lista").innerHTML=E.u.items.map((x,i)=>{const e=PER[x.u],klar=p.klar.includes(i),oppnad=p.oppen&&p.oppen.i===i;
+    const extra=x.t&&x.t.length?` <small>${x.u==="division/"?"Division med":"Tabell"} ${x.t.join(", ")}</small>`:"";
+    return `<li><a class="upp${klar?" klar":""}" href="${esc(adress(x))}" data-i="${i}"><span class="nr">${klar?"✓":i+1}</span><span class="ik" aria-hidden="true">${e.i}</span><span class="tx"><b>${esc(e.n)}</b>${extra||`<small>${esc(e.t)}</small>`}</span><span class="gaa">${klar?"Klar ✓":"Börja ›"}</span></a>${oppnad&&!klar?`<button class="markera" type="button" data-m="${i}">✓ Jag är klar med den här</button>`:""}</li>`}).join("");
+  const allt=k===n;$("alla").hidden=!allt;$("mal").hidden=allt;
+  if(allt&&!firat){firat=true;if(p.firad!==true){sparaPost(q=>q.firad=true);window.Ljud&&Ljud.fanfare&&Ljud.fanfare();konfetti()}}}
+$("lista").addEventListener("click",e=>{const m=e.target.closest("[data-m]");
+  if(m){const i=+m.dataset.m;sparaPost(q=>{if(!q.klar.includes(i))q.klar.push(i);q.oppen=null});window.Ljud&&Ljud.ok&&Ljud.ok();ritaElev();return}
+  const a=e.target.closest("a[data-i]");if(!a)return;const i=+a.dataset.i;sparaPost(q=>q.oppen={i,fore:nycklar()})});
+addEventListener("pageshow",kolla);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)kolla()});
+
+/* utan länk: elevens senaste uppdrag på den här enheten */
+function tidigare(){const d=las(EK,{}),ids=Object.keys(d).sort((a,b)=>(d[b].sedd||0)-(d[a].sedd||0));
+  $("tidigare").innerHTML=ids.length?`<h2 style="margin:0 0 4px;font-size:1.15rem">Mina uppdrag</h2>`+ids.map(id=>{const p=d[id],u=avkod("#"+p.kod);if(!u)return"";const n=u.items.length,k=u.items.filter((_,i)=>p.klar.includes(i)).length;
+      return `<a href="#${esc(p.kod)}"><span aria-hidden="true" style="font-family:var(--emoji)">${k===n?"✅":"📋"}</span>${esc(p.namn)}<small>${k} av ${n}</small></a>`}).join("")
+    :`<p class="tom">Du har inga uppdrag än. Skanna QR-koden som din lärare visar.</p>`;
+  $("tomt").hidden=false}
+
+/* ================= LÄRAREN ================= */
+let V=[],amne="";
+const AMNEN=[["","Alla"],["Matte","Matte"],["Svenska","Svenska"],["Engelska","Engelska"],["NO","NO"],["SO","SO"],["Spel","Spel"],["Specialare","Specialare"],["Övrigt","Övrigt"]];
+const amneAv=e=>/^(Matte|Verktygslådan)$/.test(e.p)?"Matte":/^(Svenska|Engelska|NO|SO|Specialare)$/.test(e.p)?e.p:/^(Spelhörnan|Spel|Logik och strategi)$/.test(e.p)?"Spel":"Övrigt";
+function larare(){$("lar").hidden=false;document.title="Skapa uppdrag – Pluggparken";
+  if(!V.length){const ls=las(LK,{senast:null});if(ls.senast){$("namn").value=ls.senast.namn||"";V=(ls.senast.items||[]).filter(x=>PER[x.u])}}
+  $("amnen").innerHTML=AMNEN.map(([k,n])=>`<button type="button" data-a="${k}" aria-pressed="${k===amne}">${n}</button>`).join("");
+  hitta();ritaVald();ritaMina()}
+function hitta(){const q=$("sok").value.trim();let r;
+  if(q&&window.MPSok){const ok=new Set(MPSok.sok(q).map(e=>e.u));r=ALLA.filter(e=>ok.has(e.u));
+    /* sökningens ordning */const ord=MPSok.sok(q).map(e=>e.u);r.sort((a,b)=>ord.indexOf(a.u)-ord.indexOf(b.u))}
+  else r=ALLA.slice();
+  if(amne)r=r.filter(e=>amneAv(e)===amne);
+  if(!q&&!amne)r=r.filter(e=>e.p!=="Specialare");
+  $("hitta").innerHTML=r.length?r.map(e=>{const med=V.some(x=>x.u===e.u);return `<li><span class="ik" aria-hidden="true">${e.i}</span><span class="tx"><b>${esc(e.n)}<span class="pl">${esc(e.p)}</span></b><small>${esc(e.t)}</small></span><button class="plus" type="button" data-u="${esc(e.u)}" ${med||V.length>=12?"disabled":""} aria-label="Lägg till ${esc(e.n)}">${med?"✓":"+"}</button></li>`}).join("")
+    :`<li><span class="tx"><small>Hittade ingenting. Prova ett annat ord.</small></span></li>`}
+$("sok").addEventListener("input",hitta);
+$("amnen").addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(!b)return;amne=b.dataset.a;$("amnen").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b));hitta()});
+$("hitta").addEventListener("click",e=>{const b=e.target.closest("[data-u]");if(!b||b.disabled)return;V.push({u:b.dataset.u,t:[]});spara();hitta();ritaVald()});
+function ritaVald(){$("valdTom").hidden=V.length>0;$("bQR").disabled=!V.length;
+  $("vald").innerHTML=V.map((x,i)=>{const e=PER[x.u],max=TABELL[x.u];
+    const tab=max?`<div class="tab"><span>${x.u==="division/"?"Bara vissa tabeller:":"Bara vissa tabeller:"}</span>${Array.from({length:max},(_,j)=>j+1).map(n=>`<button type="button" data-t="${i}:${n}" aria-pressed="${x.t.includes(n)}">${n}</button>`).join("")}</div>`:"";
+    return `<li><div class="rad"><span class="nr">${i+1}</span><span class="ik" aria-hidden="true">${e.i}</span><b>${esc(e.n)}</b><button class="sm" type="button" data-up="${i}" ${i?"":"disabled"} aria-label="Flytta upp">↑</button><button class="sm" type="button" data-ner="${i}" ${i<V.length-1?"":"disabled"} aria-label="Flytta ner">↓</button><button class="sm" type="button" data-bort="${i}" aria-label="Ta bort">✕</button></div>${tab}</li>`}).join("")}
+$("vald").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const d=b.dataset;
+  if(d.up){const i=+d.up;[V[i-1],V[i]]=[V[i],V[i-1]]}
+  else if(d.ner){const i=+d.ner;[V[i+1],V[i]]=[V[i],V[i+1]]}
+  else if(d.bort){V.splice(+d.bort,1)}
+  else if(d.t){const [i,n]=d.t.split(":").map(Number),t=V[i].t;const j=t.indexOf(n);if(j<0)t.push(n);else t.splice(j,1);t.sort((a,b)=>a-b)}
+  else return;spara();ritaVald();hitta()});
+$("namn").addEventListener("input",spara);
+function namn(){return $("namn").value.trim().slice(0,40)||"Dagens uppdrag"}
+function spara(){const ls=las(LK,{});ls.senast={namn:$("namn").value,items:V};skriv(LK,ls)}
+function ritaMina(){const ls=las(LK,{}),m=ls.mina||[];$("minaP").hidden=!m.length;
+  $("mina").innerHTML=m.map((x,i)=>`<span><button type="button" data-ladda="${i}">📋 ${esc(x.namn)} <small style="color:var(--muted)">(${x.items.length})</small></button><button class="x" type="button" data-glom="${i}" aria-label="Ta bort ${esc(x.namn)}">✕</button></span>`).join("")}
+$("mina").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const ls=las(LK,{}),m=ls.mina||[];
+  if(b.dataset.ladda){const x=m[+b.dataset.ladda];$("namn").value=x.namn;V=x.items.filter(y=>PER[y.u]).map(y=>({u:y.u,t:(y.t||[]).slice()}));spara();ritaVald();hitta()}
+  else if(b.dataset.glom){m.splice(+b.dataset.glom,1);ls.mina=m;skriv(LK,ls);ritaMina()}});
+
+/* ---------- QR-koden ---------- */
+let lank="";
+$("bQR").onclick=()=>{if(!V.length)return;const n=namn();lank=SITE+"#"+kod(n,V);
+  /* spara bland Mina uppdrag (samma namn ersätts), högst 20 */
+  const ls=las(LK,{}),m=(ls.mina||[]).filter(x=>x.namn!==n);m.unshift({namn:n,items:V.map(x=>({u:x.u,t:x.t.slice()}))});ls.mina=m.slice(0,20);skriv(LK,ls);ritaMina();
+  $("qRub").textContent=n;$("qLank").textContent=lank;
+  $("qOvr").innerHTML=V.map((x,i)=>`<span>${i+1}. ${PER[x.u].i} ${esc(PER[x.u].n)}${x.t.length?" ("+x.t.join(", ")+")":""}</span>`).join("");
+  $("qrBox").innerHTML="";$("qrv").hidden=false;
+  const rita=()=>{try{new QRCode($("qrBox"),{text:lank,width:512,height:512,correctLevel:QRCode.CorrectLevel.M})}catch(e){$("qrBox").textContent="QR-koden kunde inte visas. Kopiera länken i stället."}};
+  if(window.QRCode)rita();else{const s=document.createElement("script");s.src="/lib/qrcodejs/qrcode.min.js";s.onload=rita;s.onerror=()=>{$("qrBox").textContent="QR-koden kunde inte laddas. Kopiera länken i stället."};document.head.appendChild(s)}};
+$("qStang").onclick=()=>{$("qrv").hidden=true};
+$("qPrint").onclick=()=>print();
+$("qKop").onclick=async()=>{try{await navigator.clipboard.writeText(lank);$("qKop").textContent="✓ Kopierad"}catch(e){prompt("Kopiera länken:",lank)}setTimeout(()=>$("qKop").textContent="🔗 Kopiera länk",1800)};
+addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("qrv").hidden){e.stopPropagation();$("qrv").hidden=true}},true);
+
+function konfetti(){if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;const cols=["#3D8BFD","#FF9F43","#2BB673","#FFC93C","#7B61FF","#FF6B6B"],c=$("fx"),x=c.getContext("2d"),dpr=devicePixelRatio||1,W=innerWidth,H=innerHeight;c.width=W*dpr;c.height=H*dpr;x.setTransform(dpr,0,0,dpr,0,0);c.hidden=false;
+  const P=Array.from({length:150},()=>({x:W/2+(Math.random()-.5)*120,y:H*.3,vx:(Math.random()-.5)*16,vy:-Math.random()*15-4,r:Math.random()*7+5,c:cols[Math.floor(Math.random()*cols.length)],a:Math.random()*6,va:(Math.random()-.5)*.4}));
+  let t=0;(function f(){x.clearRect(0,0,W,H);P.forEach(p=>{p.vy+=.45;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore()});if(++t<150)requestAnimationFrame(f);else c.hidden=true})()}
+
+window.__upp={kod,avkod,ALLA,get V(){return V}};
+visa();
+</script>
+</body>
+</html>
