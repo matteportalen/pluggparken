@@ -61,7 +61,7 @@ Fem saker måste uppdateras (fyra på startsidan och en i `sok.js`), annars föl
 2. Stjärnorna räknas in i `S.stars` (läs nyckeln, summera `stars`).
 3. Nyckeln läggs i listan `snap` (dagar i rad) på startsidan och i **`PKEYS`** i `konto.js` (profiler, flyttkod, inloggningskort och molnkonton).
 4. Gärna ett eller två klistermärken i `STICKERS`.
-5. **En rad i `sok.js`** (listan `IDX`: adress, namn, kort text, ikon, sökord, plats), annars hittas övningen inte av sökningen. Nya minilektioner eller prova-själv-saker i Specialare: kör `node skript/bygg-sok.js`.
+5. **En rad i `sok.js`** (listan `IDX`: adress, namn, kort text, ikon, sökord, plats), annars hittas övningen inte av sökningen. Nya minilektioner eller prova-själv-saker i Specialare: kör `node skript/bygg-sok.js`. Har övningen nivåer eller delar: kör `node skript/bygg-delar.js` (listan i Uppdrag till klassen).
 ## Gemensam design
 - **Ingen ruta med nya klistermärken när startsidan öppnas** (läraren gillade inte popuppen); man går själv in i Klistermärken, som visar "Nytt!". "Nytt!" på Garderoben och Klistermärken sitter som en **etikett på knappens hörn** (absolut placerad), så att raden inte blir bredare.
 - **Inga "Nytt!"-lappar på korten** (läraren: allt är nytt). Bara Garderoben och Klistermärken på startsidan visar "Nytt!" när det finns något nytt att hämta.

@@ -321,3 +321,16 @@ body.mph-mini #quit{display:none}
     if(kvar)lamna();   // skärmen har ingen egen tillbaka-knapp: lämna sidan med det här trycket i stället för att ingenting händer
   });
 })();
+
+/* Direkt till en del (Uppdrag till klassen, uppdrag/): ?del=a:kroppar trycker på sidans egen startknapp [data-a="kroppar"]
+   (l = nivå, a = område, c = chatt). Listan över delar byggs av `node skript/bygg-delar.js` (delar.js). */
+(function(){
+  let del;try{del=new URLSearchParams(location.search).get('del');}catch(e){}
+  const m=del&&del.match(/^([lac]):([\w-]{1,30})$/);if(!m)return;
+  const sel=`[data-${m[1]}="${m[2]}"]`;
+  const tryck=()=>{const el=[...document.querySelectorAll(sel)].find(x=>x.offsetParent!==null&&!x.disabled&&!x.closest('[hidden]'));if(!el)return false;
+    try{const u=new URL(location.href);u.searchParams.delete('del');history.replaceState(history.state,'',u.pathname+u.search+u.hash);}catch(e){}
+    el.click();return true;};
+  const start=()=>{let n=0;const f=()=>{if(tryck()||++n>20)return;setTimeout(f,100);};setTimeout(f,0);};
+  if(document.readyState==='complete')start();else addEventListener('load',start,{once:true});
+})();
