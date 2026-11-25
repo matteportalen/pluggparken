@@ -91,6 +91,8 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
 .grab{cursor:grab}.grab:active{cursor:grabbing}
 @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
 </style>
+<link rel="stylesheet" href="bildstod.css?v=1">
+<script src="bildstod.js?v=1"></script>
 </head>
 <body>
 <div class="wrap">
@@ -221,7 +223,7 @@ function logicTask(){const [se,s1,sp,be,b1,bp]=pick(LOGIK),a=rnd(2,4),m=rnd(2,3)
 function tareTask(){const s=pick(SAKER);if(Math.random()<.5){const b=rnd(1,3),m=rnd(2,6);return{k:"tare",v:b+m,a:m,e:"🥣",sub:`Skålen väger ${b} hg. Hur mycket väger mjölet i skålen?`,h:`Vågen visar ${b+m} hg. Ta bort skålens ${b} hg.`,unit:"hg"};}
   const v=rnd(2,8);return{k:"tare",v,a:10-v,e:s[0],sub:`Hur många hg till behövs för att det ska bli 1 kg?`,h:`1 kg = 10 hg. Vågen visar ${v} hg. Hur mycket fattas till 10?`,unit:"hg"};}
 function rackerTask(){const L=pick([1,1,2]),d=pick([1,2,3]),k=rnd(2,6),tot=k*d,ok=tot<=L*10;
-  return{k:"mc",q:`Du har ${L} l saft. ${k} kompisar ska få ${d} dl var. Räcker saften?`,a:ok?"Ja, det räcker":"Nej, det räcker inte",opts:["Ja, det räcker","Nej, det räcker inte"],fixed:true,
+  return{k:"mc",q:`Du har ${L} l saft. ${k} kompisar ska få ${d} dl var. Räcker saften?`,a:ok?"Ja, det räcker":"Nej, det räcker inte",opts:["Ja, det räcker","Nej, det räcker inte"],fixed:true,juice:{litres:L,each:d,count:k},
     why:`${k} · ${d} dl = ${tot} dl, och ${L} l = ${L*10} dl. ${ok?`${tot} dl ryms i ${L*10} dl.`:`${tot} dl är mer än ${L*10} dl.`}`};}
 const rimTask=k=>{const r=pick(RIM[k]);return{k:"mc",q:`${r[0]} Är det rimligt?`,a:r[1]?"Rimligt":"Orimligt",opts:["Rimligt","Orimligt"],fixed:true,why:r[2]};};
 const luckaTask=k=>{const r=pick(LUCKA[k]);return mc(`Vilken enhet saknas? ${r[0]}`,r[1],r[2],"");};
@@ -352,11 +354,11 @@ function render(){
     $("stage").innerHTML=`<div style="width:100%;max-width:420px">${MPVag.svg(L,R,{th:T.sw?8:-8})}</div>`;$("ans").innerHTML="";
     $("choices").innerHTML=[[T.heavy,T.hn],[T.light,T.ln]].sort(()=>Math.random()-.5).map(([e,n])=>`<button data-c="${n}" aria-label="${n}"><span class="em">${e}</span></button>`).join("");}
   else if(k==="mc"){say(T.q);$("ans").innerHTML="";
-    $("stage").innerHTML=T.bev?twoGlassSVG():T.logic?`<div style="width:100%;max-width:420px">${MPVag.svg(Array.from({length:T.logic.a},()=>({t:"s",e:T.logic.se,c:"#3D8BFD"})),[{t:"s",e:T.logic.be,c:"#FF9F43"}],{th:0})}</div>`:"";
+    $("stage").innerHTML=T.bev?twoGlassSVG():T.logic?`<div style="width:100%;max-width:420px">${MPVag.svg(Array.from({length:T.logic.a},()=>({t:"s",e:T.logic.se,c:"#3D8BFD"})),[{t:"s",e:T.logic.be,c:"#FF9F43"}],{th:0})}</div>`:MatBild.render(T);
     if(!T.drawn){T.drawn=1;if(T.fixed)T.opts=T.opts.slice();}
     $("choices").innerHTML=T.opts.map(o=>`<button data-c="${o}"${o.length>11?' style="font-size:1rem;line-height:1.15"':""}>${o}</button>`).join("");}
   else if(k==="sort"){const by=T.kind==="len"?"kortast till längst":"lättast till tyngst";say(`Sortera från ${by}. Tryck på dem i ordning.`);$("stage").innerHTML="";$("ans").innerHTML="";
-    $("choices").innerHTML=T.items.map((it,i)=>{const n=T.order.indexOf(i);return`<button data-s="${i}" class="${T.done&&T.right?"ok":""}"><span class="em">${it.e}</span><br><span style="font-size:.95rem">${it.n}</span>${n>=0?`<br><b style="color:var(--accent)">${n+1}</b>`:""}</button>`;}).join("");}
+    $("choices").innerHTML=T.items.map((it,i)=>{const n=T.order.indexOf(i);return`<button data-s="${i}" class="${T.done&&T.right?"ok":""}">${MatBild.subject(it.n)?MatBild.img(MatBild.subject(it.n),"mat-sort-picture"):`<span class="em">${it.e}</span><br>`}<span style="font-size:.95rem">${it.n}</span>${n>=0?`<br><b style="color:var(--accent)">${n+1}</b>`:""}</button>`;}).join("");}
   else if(k==="tare"){say(T.sub);$("stage").innerHTML=scaleSVG(T.v,10,"hg",T.e);$("ans").innerHTML=`${box()}<span>hg</span>`;}
   else if(k==="glass2"){say("Hur mycket saft är det? Skalan visar bara varannan siffra.");$("stage").innerHTML=glassSVG(T.v,true,2);$("ans").innerHTML=`<span>Det är</span>${box()}<span>dl</span>`;}
   else if(k==="fill"){say(`Häll upp exakt ${T.target} dl. Du har ett 2-dl-mått och ett 1-dl-mått.`);$("stage").innerHTML=glassSVG(Math.min(T.n,10),true);

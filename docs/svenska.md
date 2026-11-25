@@ -44,7 +44,7 @@ Typsnittet för ord som eleven ska läsa är **Andika** (`var(--ord)`).
 - **Dubbelteckning (lärarens önskan 24 nov 2026):** en bild och ordet med en lucka (ka__), eleven drar eller trycker en av två brickor: en eller två konsonanter (t/tt, k/ck). En bokstav alltid till vänster. Efter svaret: "Vokalen a är kort, så vi skriver två t." Vid fel: "Lyssna på ordet: är vokalen kort eller lång?" och man försöker igen. Den gamla frågan "kort eller lång vokal?" före stavningen är borttagen. Den andra stavningen får vara ett riktigt ord (tak/tack), bilden avgör. Bara ord som har en tydlig bild (sallad, smör och kaka valdes bort). ck hör till kort vokal och finns på alla nivåer; ng och nk hör inte hit. Rättarrundan med meningar ligger kvar sist i varje runda.
 - **Vem gör vad?:** frågan innehåller meningens eget ord ("Vem eller vad **äter**?").
 - **Dela upp i meningar:** man trycker på sista ordet i varje mening, orden färgas per mening.
-- **Ordregn:** 60 sekunder, ingen game over. I Fånga-lägena en korg som bara rör sig i sidled.
+- **Ordregn:** 60 sekunder i tre vågor à 20 s som blir snabbare ("Våg 2!"), ingen game over. I Fånga-lägena en korg som bara rör sig i sidled (flyttas med `translate`, studsen får aldrig flytta den). Vid fel och miss en kort lapp som förklarar ordklassen (aldrig bara "fel"). Rekord per läge (`data.rekord`), slutskärmen visar fångade och missade ord med 🔊. Ett ord som tryckts fel i Alla tre ger inga poäng när det sedan sorteras rätt.
 
 ## Handstil
 
