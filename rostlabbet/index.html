@@ -10,7 +10,7 @@
 <meta name="theme-color" content="#1F3A35">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/fonts/fonts.css">
-<link rel="stylesheet" href="rostlabbet.css?v=4">
+<link rel="stylesheet" href="rostlabbet.css?v=6">
 </head>
 <body>
 <script src="../ljud.js"></script><script src="../djur.js"></script>
@@ -32,6 +32,7 @@
 <legend class="sr-only">Röstens inställningar</legend>
 <div class="control-section"><h2>Börja med ett ljud</h2><div class="vowels" role="group" aria-label="Välj vokalljud"><button class="knapp vowel selected" data-vowel="ɑ" aria-pressed="true">A</button><button class="knapp vowel" data-vowel="e" aria-pressed="false">E</button><button class="knapp vowel" data-vowel="i" aria-pressed="false">I</button><button class="knapp vowel" data-vowel="u" aria-pressed="false">O</button><button class="knapp vowel" data-vowel="sv-u" aria-pressed="false">U</button><button class="knapp vowel" data-vowel="y" aria-pressed="false">Y</button><button class="knapp vowel" data-vowel="o" aria-pressed="false">Å</button><button class="knapp vowel" data-vowel="ɛ" aria-pressed="false">Ä</button><button class="knapp vowel" data-vowel="ø" aria-pressed="false">Ö</button></div></div>
 <div class="modes" role="group" aria-label="Hur rösten låter"><button class="small selected" data-mode="normal" aria-pressed="true">Vanlig</button><button class="small" data-mode="whisper" aria-pressed="false">Viskning</button><button class="small" data-mode="sing" aria-pressed="false">Sjung</button></div>
+<div class="modes kroppar" role="group" aria-label="Vems röst"><button class="small" data-body="child" aria-pressed="false">🧒 Barn</button><button class="small" data-body="female" aria-pressed="false">👩 Ljus vuxen</button><button class="small selected" data-body="male" aria-pressed="true">👨 Mörk vuxen</button></div>
 <div class="sliders">
 <label class="slider jaw-control" for="jaw"><span>Öppna munnen <output id="jaw-value"></output></span><input id="jaw" type="range" min="0" max="100" value="50"><small>Stängd <span>Öppen</span></small></label>
 <label class="slider lips-control" for="round"><span>Runda läpparna <output id="round-value"></output></span><input id="round" type="range" min="0" max="100" value="0"><small>Breda <span>Runda</span></small></label>
@@ -42,6 +43,7 @@
 </fieldset>
 </section>
 </div>
+<section class="scen card" id="scen" hidden aria-label="Sjung, beatbox och djurröster"></section>
 <section class="speech card" aria-labelledby="speech-title">
 <h2 id="speech-title">Skriv något – låt munnen prata</h2>
 <p>Skriv ett ord eller en kort mening. Tungan, käken och läpparna formar ljuden! Svenskan är experimentell och vissa ord kan låta annorlunda.</p>
@@ -52,7 +54,7 @@
 </section>
 <section class="experiment card" aria-label="Ljudexperiment"><span class="experiment-icon" aria-hidden="true">💡</span><div><p class="eyebrow" id="experiment-count">EXPERIMENT 1 AV 3</p><h2 id="experiment-title">Vad händer när munnen öppnas?</h2><p id="experiment-text">Välj A och starta rösten. Öppna och stäng munnen långsamt. Hur förändras ljudet?</p></div><button class="knapp" id="next">Nästa experiment →</button></section>
 <p class="about">Ljuden skapas av en simulerad röst. Här kan du utforska hur munnen formar ljud.</p>
-<details class="credits"><summary>Om Röstlabbet</summary><p>Röstlabbet använder CHIMERA av Jameson Hodge (MIT-licens). Ljudet räknas fram i din webbläsare. Ingen mikrofon eller inspelning behövs. Vokalljuden är syntetiska exempel, inte en bedömning av svenskt uttal.</p><a href="chimera/SOURCE.md">Källa och ändringar</a> · <a href="chimera/LICENSE.txt">Licens</a></details>
+<details class="credits"><summary>Om Röstlabbet</summary><p>Röstlabbet använder CHIMERA av Jameson Hodge (MIT-licens): rösten, sångerna, beatboxljuden och djurrösterna. Ljudet räknas fram i din webbläsare. Ingen mikrofon eller inspelning behövs. Vokalljuden är syntetiska exempel, inte en bedömning av svenskt uttal.</p><a href="chimera/SOURCE.md">Källa och ändringar</a> · <a href="chimera/LICENSE.txt">Licens</a></details>
 </main>
-<script type="module" src="rostlabbet.js?v=4"></script>
+<script type="module" src="rostlabbet.js?v=6"></script>
 </body></html>

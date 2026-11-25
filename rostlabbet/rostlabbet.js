@@ -4,7 +4,8 @@ import {initChimera,chimeraModule} from './chimera/wasm/chimera.js';
 const $=id=>document.getElementById(id),clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
 let model,renderer,VoiceModel,NEUTRAL,SPECS,TARGETS,artic,shown,frame,tele=null;
 let context=null,node=null,gain=null,analyser=null,starting=null,wanted=false,ready=false,mode='normal',pitch=170,volume=35;
-let utterance=null,speechId=0,planPhrases,tokenizeIpa;
+let extra=1,utterance=null,speechId=0,planPhrases,tokenizeIpa,eng=null,ctele=null,bodyName='male';
+const lyssnare=new Set(),stoppare=new Set();   // scen.js: meddelanden från motorn och det som ska tystna vid Tyst
 let drag=null,hover=null,lastFrame=0,raf=0,experiment=0;
 const canvas=$('head'),ctx=canvas.getContext('2d'),wave=$('wave'),waveCtx=wave.getContext('2d');
 const samples=new Float32Array(1024),body={female:0,child:0};
@@ -16,9 +17,11 @@ const experiments=[
 function status(text,error=false){$('status').textContent=text;$('status').classList.toggle('error',error)}
 function reflectPlay(){const on=wanted&&context?.state==='running'&&!!node;$('play').textContent=wanted?'Ⅱ Pausa rösten':'▶ Starta rösten';$('play').setAttribute('aria-pressed',String(wanted));$('play').classList.toggle('playing',wanted);$('live').textContent=on?'Rösten låter':'Rösten vilar';$('live').classList.toggle('on',on);$('stop').disabled=!wanted&&!utterance;}
 function send(message){node?.port.postMessage(message)}
-function setVolume(){if(gain&&context){gain.gain.cancelScheduledValues(context.currentTime);gain.gain.setTargetAtTime(wanted ? .6*(volume/100)**2 : 0,context.currentTime,.02)}}
+function setVolume(){if(gain&&context){gain.gain.cancelScheduledValues(context.currentTime);gain.gain.setTargetAtTime(wanted ? .6*(volume/100)**2*extra : 0,context.currentTime,.02)}}
 function setSource(){send({type:'source',values:{f0:pitch,voiced:mode!=='whisper',breathiness:mode==='whisper'?.6:.15,vibratoDepth:mode==='sing'?.025:0,vibratoRate:5.5,roughness:.03,drift:2}});}
 function stop(message='Rösten är tyst. Tryck på Starta för att fortsätta.'){
+ for(const f of stoppare)try{f()}catch(e){console.error(e)}
+ extra=1;
  stopSpeech();wanted=false;send({type:'stopSpeech'});send({type:'gate',level:0});setVolume();reflectPlay();status(message);
 }
 function failAudio(error){console.error('Röstlabbet:',error);stop();node?.disconnect();node=null;const old=context;context=null;gain=null;analyser=null;void old?.close().catch(()=>{});status('Ljudet kunde inte starta. Tryck på Starta för att försöka igen.',true);}
@@ -44,12 +47,14 @@ async function ensureAudio(){
    n.port.onmessage=({data})=>{
     if(data.type==='ready'){clearTimeout(timer);resolve();}
     if(data.type==='planned'&&utterance?.id===data.id)utterance.end=data.end;
-    if(data.type==='telemetry'){tele=data;if(utterance?.end&&data.t.clock>utterance.end+.15){stop();speechStatus('Klart! Prova ett nytt ord eller en ny mening.')}}
+    if(data.type==='telemetry'){tele=data;tele._at=performance.now();if(utterance?.end&&data.t.clock>utterance.end+.15){stop();speechStatus('Klart! Prova ett nytt ord eller en ny mening.')}}
+    if(data.type==='ctelemetry')ctele=data;
+    for(const f of lyssnare)try{f(data)}catch(e){}
     if(data.type==='error'){clearTimeout(timer);reject(new Error(data.message));failAudio(new Error(data.message));}
    };
   });
   model.dispose();model=new VoiceModel(body,c.sampleRate);tele=null;
-  send({type:'artic',values:artic,tipFree:true});setSource();
+  send({type:'body',body:{...body}});send({type:'artic',values:artic,tipFree:true});setSource();
   c.onstatechange=()=>{if(c!==context)return;if(c.state==='interrupted'||c.state==='suspended')stop('Rösten pausades. Tryck på Starta för att fortsätta.');reflectPlay()};
  })().finally(()=>{starting=null});
  return starting;
@@ -105,6 +110,7 @@ function draw(time){
  ctx.setTransform(dpr,0,0,dpr,0,0);ctx.globalCompositeOperation='source-over';ctx.fillStyle='#0c2234';ctx.fillRect(0,0,w,h);
  shown=tele&&wanted?VoiceModel.articFromArray(tele.t.artic):artic;frame=model.frame(shown);
  drawFront($('front'),shown);
+ document.querySelectorAll('canvas.mun').forEach(c=>{if(c.offsetParent)drawFront(c,shown)});   // små munnar i scen.js
  renderer.face.update(wanted?tele:null,dt);
  renderer.draw(ctx,model,frame,shown,wanted?tele:null,{pressure:true,particles:!matchMedia('(prefers-reduced-motion: reduce)').matches,grid:false,calipers:false},{hover,drag:drag?.id||null,dt,formants:[],slots:[],info:[]});
  const ww=wave.clientWidth,wh=wave.clientHeight;if(wave.width!==Math.round(ww*dpr)){wave.width=Math.round(ww*dpr);wave.height=Math.round(wh*dpr)}waveCtx.setTransform(dpr,0,0,dpr,0,0);waveCtx.clearRect(0,0,ww,wh);samples.fill(0);if(analyser&&wanted)analyser.getFloatTimeDomainData(samples);
@@ -119,14 +125,37 @@ async function boot(){
  try{
   await initChimera(new URL('./chimera/wasm/chimera.wasm',import.meta.url).href);
   const [engine,analysis,view]=await Promise.all([import('./chimera/wasm/engine.js'),import('./chimera/ui/analysis.js'),import('./chimera/ui/render/anatomy.js')]);
-  planPhrases=engine.planPhrases;tokenizeIpa=engine.tokenizeIpa;NEUTRAL=engine.NEUTRAL;SPECS=engine.ARTIC_SPECS;TARGETS={...engine.VOWEL_TARGETS.male};
+  eng=engine;planPhrases=engine.planPhrases;tokenizeIpa=engine.tokenizeIpa;NEUTRAL=engine.NEUTRAL;SPECS=engine.ARTIC_SPECS;TARGETS={...engine.VOWEL_TARGETS.male};
   // Approximate Swedish central rounded U between the calibrated Y and O postures.
   const uArtic={};for(const key of Object.keys(TARGETS.y.artic))uArtic[key]=(TARGETS.y.artic[key]+TARGETS.u.artic[key])/2;
   TARGETS['sv-u']={artic:uArtic};VoiceModel=analysis.VoiceModel;
   model=new VoiceModel(body,48000);renderer=new view.AnatomyRenderer();artic={...NEUTRAL};vowel('ɑ');ready=true;refreshSpeech();
+  import('./scen.js?v=2').then(m=>m.init(window.__rostApi)).catch(e=>console.error('scen.js',e));
   $('loading').hidden=true;canvas.parentElement.classList.add('ready');$('settings').disabled=false;$('play').disabled=false;$('reset').disabled=false;requestAnimationFrame(draw);
  }catch(error){console.error(error);$('loading').textContent='Röstlabbet kunde inte laddas. Ladda om sidan och försök igen.';status('Röstmotorn kunde inte laddas.',true)}
 }
+/* Gränssnitt för scen.js (Sjung och spela, Beatbox, Djurens röster): samma motor, samma ljud och samma Tyst. */
+const PITCH_OF={male:120,female:200,child:260};
+function setBody(name){if(!eng||!(name in PITCH_OF))return;bodyName=name;body.female=name==='female'?1:0;body.child=name==='child'?1:0;
+ TARGETS={...eng.VOWEL_TARGETS[name]};const u={};for(const k of Object.keys(TARGETS.y.artic))u[k]=(TARGETS.y.artic[k]+TARGETS.u.artic[k])/2;TARGETS['sv-u']={artic:u};
+ model?.dispose?.();model=new VoiceModel(body,context?.sampleRate||48000);send({type:'body',body:{...body}});
+ pitch=PITCH_OF[name];setSource();syncControls();
+ document.querySelectorAll('[data-body]').forEach(b=>{const on=b.dataset.body===name;b.classList.toggle('selected',on);b.setAttribute('aria-pressed',String(on))});}
+document.querySelectorAll('[data-body]').forEach(b=>b.onclick=()=>setBody(b.dataset.body));
+/** Gör rösten redo för något som spelas av motorn (sång, beat, djur): ljudet på, inga andra planer, andningen styrs av gesterna. */
+async function aktivera(text){
+ stop(text||'Rösten gör sig redo …');
+ if(window.Ljud&&!Ljud.on){Ljud.set(true);document.dispatchEvent(new Event('mp-ljud-andrat'));}
+ wanted=true;reflectPlay();
+ try{await ensureAudio();if(!wanted||document.hidden){stop();return false}send({type:'gate',level:0});setSource();setVolume();reflectPlay();return true}
+ catch(error){failAudio(error);return false}}
+window.__rostApi={send,aktivera,stop,setBody,status,förstärk(x){extra=x;setVolume()},
+ get eng(){return eng},get body(){return {...body}},get bodyName(){return bodyName},get ready(){return ready},get playing(){return wanted&&!!node},
+ get clock(){return tele?tele.t.clock+Math.min(.25,(performance.now()-(tele._at||performance.now()))/1000):null},get tele(){return tele},get ctele(){return ctele},
+ setUtterance(u){utterance=u},get utterance(){return utterance},
+ setArtic(values){for(const [k,v] of Object.entries(values)){if(SPECS[k])artic[k]=clamp(v,SPECS[k].min,SPECS[k].max)}send({type:'artic',values:artic,tipFree:true});syncControls()},
+ level(){if(!analyser)return 0;const b=new Float32Array(1024);analyser.getFloatTimeDomainData(b);let s=0;for(const v of b)s+=v*v;return Math.sqrt(s/b.length)},
+ lyssna(f){lyssnare.add(f);return()=>lyssnare.delete(f)},vidStopp(f){stoppare.add(f);return()=>stoppare.delete(f)}};
 // Read-only diagnostic access for browser regression tests.
 window.__rost={get ready(){return ready},get playing(){return wanted},get artic(){return {...artic}},get telemetry(){return tele},get audioState(){return context?.state||'not-started'},get mode(){return mode},get handles(){return ready&&frame?renderer.handles(model,frame,shown).map(h=>({id:h.id,x:renderer.X(h.pos),y:renderer.Y(h.pos)})):[]},sample(){const s=new Float32Array(2048);analyser?.getFloatTimeDomainData(s);return Array.from(s)}};
 function speechStatus(text){$('speech-status').textContent=text}
