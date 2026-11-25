@@ -57,7 +57,9 @@ html[data-tema="mork"] .upp.klar{background:#173A2B;box-shadow:0 4px 0 #1E6B45}
 .alla h2{margin:6px 0 0}
 .tom{color:var(--muted);font-weight:600;text-align:center;padding:10px}
 .tidigare a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;background:var(--soft);color:inherit;text-decoration:none;font-weight:800;margin-top:8px}
-.tidigare a small{margin-left:auto;color:var(--muted);font-weight:700}
+.tidigare a small{color:var(--muted);font-weight:700}
+.tidigare a.klar{background:#E6F7EE}
+html[data-tema="mork"] .tidigare a.klar{background:#173A2B}
 .lararlank{display:block;text-align:center;margin-top:18px;color:var(--muted);font-weight:700}
 /* lärarens del */
 input[type=text]{width:100%;min-height:50px;padding:8px 12px;border-radius:14px;border:2px solid var(--line);background:var(--soft);font-weight:700}
@@ -74,6 +76,11 @@ input[type=text]{width:100%;min-height:50px;padding:8px 12px;border-radius:14px;
 .hitta .pl{font-size:.72rem;font-weight:800;color:var(--accent);margin-left:4px}
 .plus{flex:none;min-width:48px;min-height:44px;border-radius:12px;background:var(--good);color:#fff;font-weight:800;font-size:1.3rem;box-shadow:0 3px 0 var(--good-dark)}
 .plus:disabled{background:var(--line);box-shadow:none;color:var(--muted);font-size:1rem}
+.slutrad{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.slutrad input[type=date]{min-height:50px;padding:6px 10px;border-radius:14px;border:2px solid var(--line);background:var(--soft);font-weight:700}
+.sparinfo{margin:-6px 2px 12px;font-weight:700;color:var(--muted);font-size:.95rem}
+.sparinfo b{color:var(--ink)}
+.gatt{background:#FFF3DC;border-radius:16px;padding:10px 14px;margin:0 0 12px;font-weight:700;color:#8A5A00}
 .vald{list-style:none;margin:0;padding:0;display:grid;gap:8px}
 .vald li{background:var(--soft);border-radius:14px;padding:8px 8px 8px 10px}
 .vald .rad{display:flex;align-items:center;gap:8px}
@@ -122,6 +129,8 @@ input[type=text]{width:100%;min-height:50px;padding:8px 12px;border-radius:14px;
 <!-- ===== elevens sida ===== -->
 <section id="elev" hidden>
   <div class="hero"><div class="hm" aria-hidden="true">📋</div><div><h1 id="eRub">Dagens uppdrag</h1><p id="eUnder">Gör uppdragen i ordning. Tryck på ett uppdrag för att börja.</p></div></div>
+  <p class="sparinfo" id="sparinfo"></p>
+  <p class="gatt" id="gatt" hidden></p>
   <div class="mal" id="mal"><span id="malT"></span><span class="bar"><i id="malB"></i></span></div>
   <ol class="lista" id="lista"></ol>
   <div class="alla" id="alla" hidden><div class="stor">🎉</div><h2>Alla uppdrag klara!</h2><p class="hint">Bra jobbat! Fråga din lärare vad du får göra nu.</p></div>
@@ -140,6 +149,9 @@ input[type=text]{width:100%;min-height:50px;padding:8px 12px;border-radius:14px;
   <div class="panel">
     <h2>1. Namn på uppdraget</h2>
     <input type="text" id="namn" maxlength="40" placeholder="Dagens uppdrag" autocomplete="off">
+    <h2 style="margin-top:14px">Sparas till</h2>
+    <div class="slutrad"><input type="date" id="slut" aria-label="Sista dagen"><span class="chips" id="slutSnabb" style="margin:0"><button type="button" data-dgr="1">I dag</button><button type="button" data-dgr="7">1 vecka</button><button type="button" data-dgr="14">2 veckor</button><button type="button" data-dgr="28">4 veckor</button></span></div>
+    <p class="hint">Uppdraget ligger kvar i elevernas Mina uppdrag (och på deras konto) till och med den dagen. Sedan försvinner det.</p>
   </div>
   <div class="panel">
     <h2>2. Lägg till övningar</h2>
@@ -153,7 +165,7 @@ input[type=text]{width:100%;min-height:50px;padding:8px 12px;border-radius:14px;
     <p class="hint" id="valdTom">Inga övningar än. Tryck på + ovanför.</p>
     <p class="hint" id="forManga" hidden style="color:#B4232A"></p>
     <button class="stort" id="bQR" type="button" disabled>📱 Visa QR-kod för klassen</button>
-    <p class="hint">Ingenting skickas någonstans: övningarna står i själva länken. Eleverna ser sina bockar på sin egen enhet, du kan inte se deras resultat.</p>
+    <p class="hint">Övningarna står i själva länken. Eleverna sparar uppdraget i Mina uppdrag, och på sitt konto om de är inloggade. Du kan inte se deras resultat.</p>
   </div>
   <div class="panel" id="minaP" hidden>
     <h2>Mina uppdrag</h2>
@@ -164,7 +176,7 @@ input[type=text]{width:100%;min-height:50px;padding:8px 12px;border-radius:14px;
 
 <div id="qrv" hidden role="dialog" aria-modal="true" aria-label="QR-kod för uppdraget">
   <h2 id="qRub"></h2>
-  <p class="steg">Öppna kameran och skanna koden</p>
+  <p class="steg">Öppna kameran och skanna koden <span id="qSlut" style="display:block;font-size:.85em"></span></p>
   <div id="qrBox"></div>
   <div class="ovr" id="qOvr"></div>
   <div class="lank" id="qLank"></div>
@@ -198,14 +210,20 @@ const MAX=12,utvidga=L=>L.flatMap(x=>{const ds=dsAv(x);return ds.length?ds.map(d
 
 /* ---------- länken: #n=namn&o=adress~adress?t=5~adress?del=a:kroppar ---------- */
 const fraga=x=>x.t&&x.t.length?"?t="+x.t.join(","):x.d?"?del="+x.d:"";
-function kod(namn,items){return "n="+encodeURIComponent(namn)+"&o="+items.map(x=>encodeURIComponent(x.u+fraga(x))).join("~")}
+/* s = sista dagen (ÅÅÅÅMMDD); uppdraget gäller till och med den dagens slut */
+const dagStr=d=>d.getFullYear()+String(d.getMonth()+1).padStart(2,"0")+String(d.getDate()).padStart(2,"0");
+const dagSlut=s=>{const m=/^(\d{4})(\d{2})(\d{2})$/.exec(s||"");if(!m)return 0;const d=new Date(+m[1],+m[2]-1,+m[3],23,59,59);return isNaN(d)?0:d.getTime()};
+const visDag=ms=>new Date(ms).toLocaleDateString("sv-SE",{weekday:"long",day:"numeric",month:"long"});
+const VECKA=7*864e5;
+function kod(namn,items,slut){return "n="+encodeURIComponent(namn)+(slut?"&s="+slut:"")+"&o="+items.map(x=>encodeURIComponent(x.u+fraga(x))).join("~")}
 function avkod(h){const q=new URLSearchParams(h.replace(/^#/,""));if(!q.has("o"))return null;
   const items=[];for(const del of (q.get("o")||"").split("~")){let s;try{s=decodeURIComponent(del)}catch(e){continue}
     const m=s.match(/^([^?]+)(?:\?(?:t=([\d,]+)|del=([lac]:[\w-]{1,30})))?$/);if(!m||!PER[m[1]])continue;  // bara kända övningar och delar, inga andra adresser
     const t=m[2]&&TABELL[m[1]]?[...new Set(m[2].split(",").map(Number).filter(n=>n>=1&&n<=TABELL[m[1]]))].sort((a,b)=>a-b):[];
     const d=delAv(m[1],m[3])?m[3]:"";
     items.push({u:m[1],t,d});if(items.length>=12)break}
-  return {namn:(q.get("n")||"").slice(0,40).trim()||"Dagens uppdrag",items}}
+  let slut=dagSlut(q.get("s"));if(slut>Date.now()+400*864e5)slut=0;
+  return {namn:(q.get("n")||"").slice(0,40).trim()||"Dagens uppdrag",items,slut}}
 const adress=x=>"../"+x.u+(/[?#]/.test(x.u)?"":fraga(x));
 const hashId=s=>{let h=5381;for(let i=0;i<s.length;i++)h=(h*33+s.charCodeAt(i))>>>0;return h.toString(36)};
 
@@ -223,14 +241,22 @@ let E=null;
    Har någon ändrats när eleven kommer tillbaka har hen gjort något i övningen, och uppdraget bockas av. */
 function nycklar(){const o={};try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(/^mattespel-/.test(k))o[k]=localStorage.getItem(k)}}catch(e){}return o}
 function andrat(fore){const nu=nycklar();for(const k in nu)if(nu[k]!==fore[k])return true;return false}
-function elev(u,kodStr){const id=hashId(kodStr),d=las(EK,{});
-  const p=d[id]||{namn:u.namn,kod:kodStr,klar:[],tid:Date.now()};p.namn=u.namn;p.kod=kodStr;p.sedd=Date.now();d[id]=p;
-  /* bara de tio senaste uppdragen sparas */
-  const ids=Object.keys(d).sort((a,b)=>(d[b].sedd||0)-(d[a].sedd||0));ids.slice(10).forEach(k=>delete d[k]);skriv(EK,d);
+/* uppdragen ligger kvar till sista dagen (slut); utan datum en vecka från första gången. Gamla rensas bort. */
+const slutAv=p=>p.slut||((p.tid||p.sedd||0)+VECKA);
+function rensa(d){const nu=Date.now();Object.keys(d).forEach(k=>{if(!d[k]||!d[k].kod||slutAv(d[k])<nu)delete d[k]});
+  Object.keys(d).sort((a,b)=>(d[b].sedd||0)-(d[a].sedd||0)).slice(30).forEach(k=>delete d[k]);return d}
+function mittKonto(){try{const id=localStorage.getItem("mp-owner");if(!id)return null;const p=(JSON.parse(localStorage.getItem("mp-profiles")||"[]")||[]).find(x=>x.id===id);return p&&p.konto?p:null}catch(e){return null}}
+const puffa=()=>{try{window.MPKonto&&MPKonto.puffa()}catch(e){}};
+function elev(u,kodStr){const id=hashId(kodStr),d=rensa(las(EK,{})),gatt=u.slut&&u.slut<Date.now();
+  if(!gatt){const p=d[id]||{namn:u.namn,kod:kodStr,klar:[],tid:Date.now()};p.namn=u.namn;p.kod=kodStr;p.sedd=Date.now();p.slut=u.slut||p.slut||Date.now()+VECKA;d[id]=p}
+  skriv(EK,d);puffa();
+  const k=mittKonto(),sl=gatt?0:d[id].slut;
+  $("sparinfo").innerHTML=gatt?"":`💾 Sparat i <b>Mina uppdrag</b> till ${esc(visDag(sl))}.<br>`+(k?`☁️ Sparas också på ditt konto${k.name?" ("+esc(k.name)+")":""}.`:`Logga in på första sidan för att ha uppdragen på alla enheter.`);
+  $("gatt").hidden=!gatt;if(gatt)$("gatt").textContent=`Det här uppdraget gällde till ${visDag(u.slut)}. Du kan öva ändå, men det sparas inte.`;
   E={id,u};try{sessionStorage.setItem("mp-uppdrag",location.href)}catch(e){}  // huvud.js visar 📋 Mina uppdrag på övningarnas sidor
   $("eRub").textContent=u.namn;document.title=u.namn+" – Pluggparken";$("elev").hidden=false;kolla();ritaElev()}
 function post(){return las(EK,{})[E.id]}
-function sparaPost(f){const d=las(EK,{});if(!d[E.id])return;f(d[E.id]);skriv(EK,d)}
+function sparaPost(f){const d=las(EK,{});if(!d[E.id])return;f(d[E.id]);skriv(EK,d);puffa()}
 function kolla(){/* kom eleven tillbaka från en övning? */
   if(!E)return;const p=post();if(!p||!p.oppen)return;
   /* huvud.js sparar en ny baslinje 2,5 s efter att övningen startat (mp-upp-bas); den gäller om den är nyare än klicket */
@@ -252,9 +278,11 @@ addEventListener("pageshow",kolla);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)kolla()});
 
 /* utan länk: elevens senaste uppdrag på den här enheten */
-function tidigare(){const d=las(EK,{}),ids=Object.keys(d).sort((a,b)=>(d[b].sedd||0)-(d[a].sedd||0));
-  $("tidigare").innerHTML=ids.length?`<h2 style="margin:0 0 4px;font-size:1.15rem">Mina uppdrag</h2>`+ids.map(id=>{const p=d[id],u=avkod("#"+p.kod);if(!u)return"";const n=u.items.length,k=u.items.filter((_,i)=>p.klar.includes(i)).length;
-      return `<a href="#${esc(p.kod)}"><span aria-hidden="true" style="font-family:var(--emoji)">${k===n?"✅":"📋"}</span>${esc(p.namn)}<small>${k} av ${n}</small></a>`}).join("")
+function tidigare(){const d=rensa(las(EK,{}));skriv(EK,d);
+  const rader=Object.keys(d).map(id=>{const p=d[id],u=avkod("#"+p.kod);if(!u||!u.items.length)return null;const n=u.items.length,k=u.items.filter((_,i)=>(p.klar||[]).includes(i)).length;return{p,n,k}}).filter(Boolean)
+    .sort((a,b)=>(a.k===a.n)-(b.k===b.n)||(b.p.sedd||0)-(a.p.sedd||0));   // ej klara först
+  $("tidigare").innerHTML=rader.length?`<h2 style="margin:0 0 4px;font-size:1.15rem">Mina uppdrag</h2>`+rader.map(({p,n,k})=>
+      `<a href="#${esc(p.kod)}" class="${k===n?"klar":""}"><span aria-hidden="true" style="font-family:var(--emoji);font-size:1.6rem">${k===n?"✅":"📋"}</span><span>${esc(p.namn)}<small style="display:block;margin:0;font-weight:600">${k===n?"Klart!":`${k} av ${n} klara`} · till ${esc(visDag(slutAv(p)))}</small></span></a>`).join("")
     :`<p class="tom">Du har inga uppdrag än. Skanna QR-koden som din lärare visar.</p>`;
   $("tomt").hidden=false}
 
@@ -262,7 +290,12 @@ function tidigare(){const d=las(EK,{}),ids=Object.keys(d).sort((a,b)=>(d[b].sedd
 let V=[],amne="";
 const AMNEN=[["","Alla"],["Matte","Matte"],["Svenska","Svenska"],["Engelska","Engelska"],["NO","NO"],["SO","SO"],["Spel","Spel"],["Specialare","Specialare"],["Övrigt","Övrigt"]];
 const amneAv=e=>/^(Matte|Verktygslådan)$/.test(e.p)?"Matte":/^(Svenska|Engelska|NO|SO|Specialare)$/.test(e.p)?e.p:/^(Spelhörnan|Spel|Logik och strategi)$/.test(e.p)?"Spel":"Övrigt";
+const isoLok=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+function satt(dgr){const d=new Date();d.setDate(d.getDate()+dgr-(dgr===1?1:0));$("slut").value=isoLok(d)}
+function slutVal(){const v=$("slut").value;return /^\d{4}-\d{2}-\d{2}$/.test(v)?v.replace(/-/g,""):""}
+$("slutSnabb").addEventListener("click",e=>{const b=e.target.closest("[data-dgr]");if(b)satt(+b.dataset.dgr)});
 function larare(){$("lar").hidden=false;document.title="Skapa uppdrag – Pluggparken";
+  {$("slut").min=isoLok(new Date());if(!$("slut").value||$("slut").value<$("slut").min)satt(7)}
   if(!V.length){const ls=las(LK,{senast:null});if(ls.senast){$("namn").value=ls.senast.namn||"";V=(ls.senast.items||[]).filter(x=>PER[x.u]).map(x=>({u:x.u,t:x.t||[],ds:dsAv(x)}))}}
   $("amnen").innerHTML=AMNEN.map(([k,n])=>`<button type="button" data-a="${k}" aria-pressed="${k===amne}">${n}</button>`).join("");
   hitta();ritaVald();ritaMina()}
@@ -303,10 +336,10 @@ $("mina").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)
 
 /* ---------- QR-koden ---------- */
 let lank="";
-$("bQR").onclick=()=>{const U=utvidga(V);if(!U.length||U.length>MAX)return;const n=namn();lank=SITE+"#"+kod(n,U);
+$("bQR").onclick=()=>{const U=utvidga(V);if(!U.length||U.length>MAX)return;const n=namn();const sl=slutVal();lank=SITE+"#"+kod(n,U,sl);
   /* spara bland Mina uppdrag (samma namn ersätts), högst 20 */
   const ls=las(LK,{}),m=(ls.mina||[]).filter(x=>x.namn!==n);m.unshift({namn:n,items:V.map(x=>({u:x.u,t:x.t.slice(),ds:dsAv(x)}))});ls.mina=m.slice(0,20);skriv(LK,ls);ritaMina();
-  $("qRub").textContent=n;$("qLank").textContent=lank;
+  $("qRub").textContent=n;$("qSlut").textContent=sl?"Sparas till "+visDag(dagSlut(sl)):"";$("qLank").textContent=lank;
   $("qOvr").innerHTML=U.map((x,i)=>`<span>${i+1}. ${PER[x.u].i} ${esc(PER[x.u].n)}${x.t.length?" ("+x.t.join(", ")+")":delAv(x.u,x.d)?": "+esc(delAv(x.u,x.d)[1]):""}</span>`).join("");
   $("qrBox").innerHTML="";$("qrv").hidden=false;
   const rita=()=>{try{new QRCode($("qrBox"),{text:lank,width:512,height:512,correctLevel:QRCode.CorrectLevel.M})}catch(e){$("qrBox").textContent="QR-koden kunde inte visas. Kopiera länken i stället."}};

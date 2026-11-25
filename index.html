@@ -152,7 +152,15 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 .tavlalank .tl-for{font-size:.82rem;font-weight:800;color:#C23A40;white-space:nowrap}
 .tavlalank.exit{border-color:#F5C77A;margin-top:12px}.tavlalank.exit .tl-ik{background:linear-gradient(145deg,#FFD27A,#F2932F 58%,#D9601A);font-size:2rem}.tavlalank.exit .tl-for{color:#B4560E}@media(hover:hover){.tavlalank.exit:hover{border-color:#F2932F}}
 .tavlalank.upp{border-color:#B9A9F5;margin-top:12px}.tavlalank.upp .tl-ik{background:linear-gradient(145deg,#B9A5FF,#7B61FF 58%,#5A3FD6);font-size:2rem}.tavlalank.upp .tl-for{color:#5A3FD6}@media(hover:hover){.tavlalank.upp:hover{border-color:#7B61FF}}
-.mittupp{display:flex;align-items:center;gap:12px;max-width:520px;margin:0 auto 14px;padding:10px 16px;border-radius:18px;background:linear-gradient(135deg,#3D5AFE,#7B61FF);color:#fff;text-decoration:none;box-shadow:0 4px 0 #2A3FB8;font-weight:800}.mittupp .mu-ik{font-size:2rem;line-height:1}.mittupp small{display:block;font-weight:600;opacity:.9}.mittupp .mu-gaa{margin-left:auto;font-size:1.4rem}
+.mittupp{max-width:520px;margin:0 auto 14px;padding:10px 12px 12px;border-radius:20px;background:linear-gradient(135deg,#3D5AFE,#7B61FF);color:#fff;box-shadow:0 4px 0 #2A3FB8}
+.mittupp h2{margin:0 4px 8px;font-size:1.1rem;color:#fff}
+.mu-rad{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:14px;background:rgba(255,255,255,.16);color:#fff;text-decoration:none;font-weight:800;margin-top:6px;min-height:52px}
+.mu-rad:active{transform:translateY(2px)}
+.mu-rad.klar{background:rgba(255,255,255,.08)}
+.mu-ik{font-size:1.6rem;line-height:1;flex:none}
+.mu-tx{flex:1;min-width:0;line-height:1.15}.mu-tx b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.mu-tx small{display:block;font-weight:600;opacity:.92}
+.mu-bar{flex:none;width:56px;height:10px;border-radius:999px;background:rgba(255,255,255,.3);overflow:hidden}.mu-bar i{display:block;height:100%;background:#fff;border-radius:999px}
+.mu-gaa{font-size:1.3rem;flex:none}
 .tavlalank.skrivut{border-color:#A9B9F5}
 .utJa,.utNej{min-height:50px;padding:8px 20px;border-radius:16px;font-weight:800;font-size:1.05rem}
 .utJa{background:#F2932F;color:#fff;box-shadow:0 4px 0 #B4560E}.utNej{background:var(--card,#fff);color:var(--ink);box-shadow:0 4px 0 var(--line);border:2px solid var(--line)}
@@ -453,13 +461,16 @@ html[data-tema="mork"] .herosok{background:#1A2748;color:#A3B0D6}
   </div>
 
   <h2 class="grp"><span aria-hidden="true">🧭</span>Välj ämne</h2>
-  <a class="mittupp" id="mittUpp" href="uppdrag/" hidden><span class="mu-ik" aria-hidden="true">📋</span><span><span id="muNamn">Ditt uppdrag</span><small id="muInfo"></small></span><span class="mu-gaa" aria-hidden="true">›</span></a>
-  <script>/* Uppdrag från läraren (uppdrag/): visa det senaste som inte är klart, högst en vecka gammalt */
-  (function(){try{const d=JSON.parse(localStorage.getItem("matteportalen-uppdrag")||"{}");let b=null;
-    for(const id in d){const p=d[id];if(!p||!p.kod||Date.now()-(p.sedd||0)>7*864e5)continue;const n=((new URLSearchParams(p.kod).get("o"))||"").split("~").filter(Boolean).length,k=(p.klar||[]).filter(i=>i<n).length;
-      if(n&&k<n&&(!b||p.sedd>b.p.sedd))b={p,n,k}}
-    if(!b)return;const el=document.getElementById("mittUpp");el.href="uppdrag/#"+b.p.kod;document.getElementById("muNamn").textContent=b.p.namn||"Ditt uppdrag";
-    document.getElementById("muInfo").textContent=b.k+" av "+b.n+" klara. Fortsätt!";el.hidden=false}catch(e){}})();</script>
+  <section class="mittupp" id="mittUpp" hidden aria-labelledby="muRub"><h2 id="muRub"><span aria-hidden="true">📋</span> Mina uppdrag</h2><div id="muLista"></div></section>
+  <script>/* Uppdrag från läraren (uppdrag/): alla som inte har gått ut, ej klara först, ✅ på dem som är klara */
+  (function(){try{const d=JSON.parse(localStorage.getItem("matteportalen-uppdrag")||"{}"),nu=Date.now(),esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+    const r=Object.values(d).map(p=>{if(!p||!p.kod)return null;const slut=p.slut||((p.tid||p.sedd||0)+7*864e5);if(slut<nu)return null;
+      const n=((new URLSearchParams(p.kod).get("o"))||"").split("~").filter(Boolean).length,k=(p.klar||[]).filter(i=>i<n).length;return n?{p,n,k,slut}:null}).filter(Boolean)
+      .sort((a,b)=>(a.k===a.n)-(b.k===b.n)||(b.p.sedd||0)-(a.p.sedd||0)).slice(0,5);
+    if(!r.length)return;
+    document.getElementById("muLista").innerHTML=r.map(({p,n,k,slut})=>{const klar=k===n,dag=new Date(slut).toLocaleDateString("sv-SE",{weekday:"short",day:"numeric",month:"short"});
+      return `<a class="mu-rad${klar?" klar":""}" href="uppdrag/#${esc(p.kod)}"><span class="mu-ik" aria-hidden="true">${klar?"✅":"📋"}</span><span class="mu-tx"><b>${esc(p.namn||"Uppdrag")}</b><small>${klar?"Klart!":k+" av "+n+" klara"} · till ${esc(dag)}</small></span>${klar?"":`<span class="mu-bar" aria-hidden="true"><i style="width:${Math.round(100*k/n)}%"></i></span>`}<span class="mu-gaa" aria-hidden="true">›</span></a>`}).join("");
+    document.getElementById("mittUpp").hidden=false}catch(e){}})();</script>
   <nav class="amnen" aria-label="Ämnen">
     <a class="amnek matte" data-a style="--c:#3D5AFE" href="matte/"><span class="ik a"><svg viewBox="0 0 48 48" aria-hidden="true"><g class="rot vb"><path d="M8 24h32"/><path class="v vb" d="M24 8v32"/></g><circle class="dot f vb" cx="24" cy="10" r="4.2"/><circle class="dot f vb" cx="24" cy="38" r="4.2"/></svg></span><span class="txt"><b>Matematik</b><small>Räkna, mäta, spela och upptäck tal</small></span><span class="chev" aria-hidden="true">›</span></a>
     <a class="amnek sv" data-a style="--c:#E5484D" href="svenska/"><span class="ik a"><svg viewBox="0 0 48 48" aria-hidden="true"><g class="bk b"><path class="s" d="M24 16C19 13 12 13 8 15V38C12 36 19 36 24 39Z"/><path class="s" d="M24 16C29 13 36 13 40 15V38C36 36 29 36 24 39Z"/><path d="M12 22h8M12 27h8M28 22h8M28 27h8" style="stroke-width:2;opacity:.75"/></g><text class="lt l1" x="14" y="24">Å</text><text class="lt l2" x="24" y="24">A</text><text class="lt l3" x="34" y="24">Ö</text></svg></span><span class="txt"><b>Svenska</b><small>Ord, stavning, läsning och sagor</small></span><span class="chev" aria-hidden="true">›</span></a>
@@ -633,7 +644,7 @@ html[data-tema="mork"] .herosok{background:#1A2748;color:#A3B0D6}
 
 <script src="ljud.js"></script>
 <script src="djur.js"></script>
-<script src="konto.js?v=3"></script>
+<script src="konto.js?v=4"></script>
 <script src="huvud.js" data-hem="./" data-nav="av"></script>
 <script>
 const $=id=>document.getElementById(id);
