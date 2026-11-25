@@ -77,12 +77,6 @@ function passaSang(t,syls,shift){const notes=[],from=[];rader(syls,fragStorlek(t
 
 /* ================= FLIKARNA ================= */
 const HTML=`
-<div class="flikar" role="tablist" aria-label="Mer att göra med rösten">
- <button role="tab" class="flik" data-flik="sjung" aria-selected="false">🎹 Sjung och spela</button>
- <button role="tab" class="flik" data-flik="beat" aria-selected="false">🥁 Beatbox</button>
- <button role="tab" class="flik" data-flik="djur" aria-selected="false">🐘 Djurens röster</button>
- <button role="tab" class="flik" data-flik="skola" aria-selected="false">🔤 Ljudskola</button>
-</div>
 <div class="flikyta" id="f-sjung" role="tabpanel" hidden>
  <p class="lead">Välj en sång. Låt huvudet sjunga den, eller spela själv: <b>varje tangent sjunger nästa stavelse</b>. Följ den gula tangenten!</p>
  <div class="sanger" id="sanger" role="group" aria-label="Välj sång"></div>
@@ -114,7 +108,6 @@ const HTML=`
 <div class="flikyta" id="f-djur" role="tabpanel" hidden>
  <p class="lead">Djur har också röster, men byggda på andra sätt. Motorn räknar fram ljudet ur djurets kropp. Titta hur luftrören lyser när ljudet går igenom!</p>
  <div class="djur" id="djurval" role="group" aria-label="Välj djur"></div>
- <canvas class="djurcanvas" id="djurcanvas" role="img" aria-label="Djurets luftvägar i genomskärning"></canvas>
  <div class="djurkort" id="djurkort"></div>
 </div>
 <div class="flikyta" id="f-skola" role="tabpanel" hidden>${SKOLA_HTML}</div>`;
@@ -297,15 +290,21 @@ function tickDjur(t){
 }
 
 /* ================= START ================= */
+/* Lägena i panelen till höger (som originalets Play, Speak, Sing …): Forma och Prata finns i index.html, resten här.
+   Huvudet till vänster syns hela tiden; i Djur ritas djurets genomskärning där i stället. */
+const LAGEN=['forma','prata','sjung','beat','djur','skola'],SCEN=['sjung','beat','djur','skola'];
 function visaFlik(f){
- if(flik===f)return;
+ if(!LAGEN.includes(f))f='forma';if(flik===f)return;
  if(flik)A.stop('Rösten är tyst.');
- flik=f;document.querySelectorAll('.flik').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.flik===f)));
- for(const x of ['sjung','beat','djur','skola'])$('f-'+x).hidden=x!==f;
+ flik=f;document.querySelectorAll('#lagen [data-lage]').forEach(b=>{const on=b.dataset.lage===f;b.setAttribute('aria-selected',String(on));b.classList.toggle('on',on)});
+ $('l-forma').hidden=f!=='forma';$('l-prata').hidden=f!=='prata';$('scen').hidden=!SCEN.includes(f);
+ for(const x of SCEN)$('f-'+x).hidden=x!==f;
+ const djur=f==='djur';document.querySelectorAll('.visual .views,.visual .legend,.visual .drag-hint').forEach(el=>el.hidden=djur);$('djurcanvas').hidden=!djur;
+ $('scen').scrollTop=0;document.querySelector('.panel')?.scrollTo?.(0,0);
  try{sessionStorage.setItem('rost-flik',f)}catch(e){}
 }
 export function init(api){
- A=api;const host=$('scen');if(!host)return;host.innerHTML=HTML;host.hidden=false;
+ A=api;const host=$('scen');if(!host)return;host.innerHTML=HTML;
  // Tyst (knappen, Escape, flikbyte, ljudet av) stoppar allt här också
  A.vidStopp(()=>{stoppaHela();tystaToner();S.aktiv=false;
   if(B.spelar||B.aktiv){A.send({type:'beat',playing:false});B.spelar=false;B.aktiv=false;$('taktSpela').textContent='▶ Spela takten'}
@@ -346,8 +345,8 @@ export function init(api){
  // ljudskolan
  initSkola(A);
  // flikar
- host.querySelector('.flikar').onclick=e=>{const b=e.target.closest('[data-flik]');if(b)visaFlik(b.dataset.flik)};
- let f='sjung';try{f=sessionStorage.getItem('rost-flik')||'sjung'}catch(e){}visaFlik(['sjung','beat','djur','skola'].includes(f)?f:'sjung');
+ $('lagen').onclick=e=>{const b=e.target.closest('[data-lage]');if(b)visaFlik(b.dataset.lage)};
+ let f='forma';try{f=sessionStorage.getItem('rost-flik')||'forma'}catch(e){}visaFlik(f);
  // rösttyp ändrar sångens läge
  document.querySelectorAll('[data-body]').forEach(b=>b.addEventListener('click',()=>setTimeout(laddaSang,0)));
  (function loop(t){requestAnimationFrame(loop);if(document.hidden)return;

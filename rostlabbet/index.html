@@ -10,22 +10,24 @@
 <meta name="theme-color" content="#1F3A35">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/fonts/fonts.css">
-<link rel="stylesheet" href="rostlabbet.css?v=7">
+<link rel="stylesheet" href="rostlabbet.css?v=9">
 </head>
 <body>
 <script src="../ljud.js"></script><script src="../djur.js"></script>
 <script src="../huvud.js" data-titel="Röstlabbet" data-ikon="🎙️" data-hem="../extra/" data-nav="av"></script>
-<main class="wrap">
-<header class="hero"><div><p class="eyebrow">LYSSNA · FORMA · UPPTÄCK</p><h1>Röstlabbet</h1><p>En liten rörelse. Ett helt annat ljud.</p></div><span class="hero-mark" aria-hidden="true">Aa<span>Oo</span></span></header>
+<main class="wrap rl">
 <div class="lab">
 <section class="visual card" aria-label="Röstens insida">
 <div class="visual-top"><span class="live" id="live">Rösten vilar</span><button class="small" id="reset" disabled>↺ Börja om</button></div>
 <div class="views"><div class="side-view"><h2>Inuti munnen</h2><div class="head-wrap"><canvas id="head" role="img" aria-label="Huvud i genomskärning. Dra i tungan, käken eller läpparna. Samma inställningar finns i reglagen bredvid."></canvas><div class="loading" id="loading" role="status">Hämtar röstens insida …</div></div>
 </div><div class="front-view"><h2>Framifrån</h2><canvas id="front" role="img" aria-label="Ansikte framifrån. Läppar och käke följer samma rörelser som genomskärningen."></canvas><p>Läpparna formar ljudet</p></div></div><div class="legend"><span><i class="tongue"></i>Tunga</span><span><i class="jaw"></i>Käke</span><span><i class="lips"></i>Läppar</span></div>
 <p class="drag-hint">Dra i de färgade punkterna. Se samma rörelse från två håll.</p>
+<canvas id="djurcanvas" class="djurcanvas" role="img" aria-label="Djurets luftvägar i genomskärning" hidden></canvas>
 <div class="wave-row"><span>Ljudvågen</span><canvas id="wave" aria-label="Ljudvågen när rösten låter" role="img"></canvas></div>
 </section>
-<section class="controls card" aria-label="Forma rösten">
+<section class="controls card panel" aria-label="Röstlabbet">
+<nav class="lagen" id="lagen" role="tablist" aria-label="Vad vill du göra?"><button role="tab" data-lage="forma" aria-selected="false"><span aria-hidden="true">🎛️</span>Forma</button><button role="tab" data-lage="prata" aria-selected="false"><span aria-hidden="true">💬</span>Prata</button><button role="tab" data-lage="sjung" aria-selected="false"><span aria-hidden="true">🎹</span>Sjung</button><button role="tab" data-lage="beat" aria-selected="false"><span aria-hidden="true">🥁</span>Beatbox</button><button role="tab" data-lage="djur" aria-selected="false"><span aria-hidden="true">🐘</span>Djur</button><button role="tab" data-lage="skola" aria-selected="false"><span aria-hidden="true">🔤</span>Ljudskola</button></nav>
+<div class="lageyta" id="l-forma" role="tabpanel">
 <div class="play-row"><button class="knapp primary" id="play" disabled aria-pressed="false">▶ Starta rösten</button><button class="knapp" id="stop" disabled>■ Tyst</button></div>
 <p id="status" class="status" role="status">Ljudet börjar när du trycker på Starta.</p>
 <fieldset id="settings" disabled>
@@ -41,20 +43,21 @@
 </div>
 <details><summary>Flytta tungan med reglage</summary><label class="slider tongue-control" for="tongue-x"><span>Tungan framåt</span><input id="tongue-x" type="range" min="0" max="100" value="50"><small>Bakåt <span>Framåt</span></small></label><label class="slider tongue-control" for="tongue-y"><span>Tungan uppåt</span><input id="tongue-y" type="range" min="0" max="100" value="50"><small>Neråt <span>Uppåt</span></small></label></details>
 </fieldset>
-</section>
+<div class="experiment" aria-label="Ljudexperiment"><span class="experiment-icon" aria-hidden="true">💡</span><div><p class="eyebrow" id="experiment-count">EXPERIMENT 1 AV 3</p><h2 id="experiment-title">Vad händer när munnen öppnas?</h2><p id="experiment-text">Välj A och starta rösten. Öppna och stäng munnen långsamt. Hur förändras ljudet?</p></div><button class="knapp" id="next">Nästa experiment →</button></div>
+<p class="about">Ljuden skapas av en simulerad röst. Här kan du utforska hur munnen formar ljud.</p>
+<details class="credits"><summary>Om Röstlabbet</summary><p>Röstlabbet använder CHIMERA av Jameson Hodge (MIT-licens): rösten, sångerna, beatboxljuden och djurrösterna. Ljudet räknas fram i din webbläsare. Ingen mikrofon eller inspelning behövs. Vokalljuden är syntetiska exempel, inte en bedömning av svenskt uttal.</p><a href="chimera/SOURCE.md">Källa och ändringar</a> · <a href="chimera/LICENSE.txt">Licens</a></details>
 </div>
-<section class="scen card" id="scen" hidden aria-label="Sjung, beatbox och djurröster"></section>
-<section class="speech card" aria-labelledby="speech-title">
+<div class="lageyta speech" id="l-prata" role="tabpanel" hidden>
 <h2 id="speech-title">Skriv något – låt munnen prata</h2>
 <p>Skriv ett ord eller en kort mening. Tungan, käken och läpparna formar ljuden! Svenskan är experimentell och vissa ord kan låta annorlunda.</p>
 <label for="sentence">Din mening</label>
 <textarea id="sentence" rows="2" maxlength="200" placeholder="Hej! Vill du leka med mig?" aria-describedby="speech-status"></textarea>
 <div class="speech-actions"><button class="knapp primary" id="read" disabled>▶ Låt munnen prata</button><button class="knapp" id="read-stop" disabled>■ Tyst</button><span id="sentence-count">0 / 200</span></div>
 <p id="speech-status" class="status" role="status">Prova till exempel: Hej mamma! eller Vill du leka med mig?</p>
+</div>
+<div class="lageyta scenyta" id="scen" hidden></div>
 </section>
-<section class="experiment card" aria-label="Ljudexperiment"><span class="experiment-icon" aria-hidden="true">💡</span><div><p class="eyebrow" id="experiment-count">EXPERIMENT 1 AV 3</p><h2 id="experiment-title">Vad händer när munnen öppnas?</h2><p id="experiment-text">Välj A och starta rösten. Öppna och stäng munnen långsamt. Hur förändras ljudet?</p></div><button class="knapp" id="next">Nästa experiment →</button></section>
-<p class="about">Ljuden skapas av en simulerad röst. Här kan du utforska hur munnen formar ljud.</p>
-<details class="credits"><summary>Om Röstlabbet</summary><p>Röstlabbet använder CHIMERA av Jameson Hodge (MIT-licens): rösten, sångerna, beatboxljuden och djurrösterna. Ljudet räknas fram i din webbläsare. Ingen mikrofon eller inspelning behövs. Vokalljuden är syntetiska exempel, inte en bedömning av svenskt uttal.</p><a href="chimera/SOURCE.md">Källa och ändringar</a> · <a href="chimera/LICENSE.txt">Licens</a></details>
+</div>
 </main>
-<script type="module" src="rostlabbet.js?v=7"></script>
+<script type="module" src="rostlabbet.js?v=8"></script>
 </body></html>

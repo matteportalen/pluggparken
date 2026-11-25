@@ -130,7 +130,7 @@ async function boot(){
   const uArtic={};for(const key of Object.keys(TARGETS.y.artic))uArtic[key]=(TARGETS.y.artic[key]+TARGETS.u.artic[key])/2;
   TARGETS['sv-u']={artic:uArtic};VoiceModel=analysis.VoiceModel;
   model=new VoiceModel(body,48000);renderer=new view.AnatomyRenderer();artic={...NEUTRAL};vowel('ɑ');ready=true;refreshSpeech();
-  import('./scen.js?v=3').then(m=>m.init(window.__rostApi)).catch(e=>console.error('scen.js',e));
+  import('./scen.js?v=4').then(m=>m.init(window.__rostApi)).catch(e=>console.error('scen.js',e));
   $('loading').hidden=true;canvas.parentElement.classList.add('ready');$('settings').disabled=false;$('play').disabled=false;$('reset').disabled=false;requestAnimationFrame(draw);
  }catch(error){console.error(error);$('loading').textContent='Röstlabbet kunde inte laddas. Ladda om sidan och försök igen.';status('Röstmotorn kunde inte laddas.',true)}
 }
