@@ -18,7 +18,7 @@ const IDX=[
  ['diagram/','Diagramverkstan','Bygg dina egna stapeldiagram och läs av dem','📊','diagram stapeldiagram statistik tabell räkna bilder måla rutor sortera läsa av staplar diagrammaskin eget diagram gör diagram rita diagram stapeldiagrammaskin','Matte'],
  ['talfoljd/','Talföljder','Hitta mönstret och hjälp grodan över bäcken','🐸','mönster tal grodan regel ökar minskar','Matte'],
  ['vagen/','Vågen','Likhetstecknet: lika mycket på båda sidor','⚖️','likhetstecken balans lika mycket ekvation våg','Matte'],
- ['gomda/','Gömda tal','Djuren har gömt tal. Lista ut vilka','🎁','ekvation okänt tal djur gåta lista ut','Matte'],
+ ['gomda/','Gömda tal','Djur och bokstäver har gömt tal. Åk 1–6','🎁','ekvation ekvationer okänt tal djur gåta lista ut x y algebra obekant parentes mellanstadiet','Matte'],
  ['brak/','Bråk','Halvor, fjärdedelar och andra delar','🍕','halva halvor fjärdedel tredjedel pizza tårta chokladkaka delar jämför','Matte'],
  ['brakbitar/','Bråkbitarna','Bygg med bråkbitar','🧩','bråk bygga lika stora addition subtraktion decimal procent','Matte'],
  ['klockan/','Klockan','Analog och digital tid, och att mäta tid','🕒','tid analog digital station tåg kvart halv över i minuter timmar','Matte'],
