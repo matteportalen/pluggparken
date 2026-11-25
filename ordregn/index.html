@@ -96,11 +96,11 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 .hud .tid{min-width:70px}.hud .po{color:var(--ink)}.hud .ser{color:#B85A06;min-width:60px}.hud .ml{flex:1}
 .hud .pet{flex:none}
 .hud button{background:var(--card);border-radius:12px;box-shadow:0 3px 0 var(--line);padding:6px 12px;font-weight:800}
-.himmel{position:relative;height:clamp(300px,52vh,520px);border-radius:20px;overflow:hidden;background:linear-gradient(#A9DAFF,#D9EEFF 60%,#F2F9FF);box-shadow:0 4px 0 var(--line);touch-action:manipulation}
+.himmel{position:relative;height:clamp(340px,calc(100vh - 250px),860px);height:clamp(340px,calc(100svh - 250px),860px);border-radius:20px;overflow:hidden;background:linear-gradient(#A9DAFF,#D9EEFF 60%,#F2F9FF);box-shadow:0 4px 0 var(--line);touch-action:manipulation}
 .himmel .mo{position:absolute;background:#fff;border-radius:50px;opacity:.85;filter:blur(1px)}
-.fall{position:absolute;top:0;left:0;will-change:transform;background:#fff;border:2px solid #C6D6F2;border-radius:14px;padding:6px 14px;font-family:var(--ord);font-weight:800;font-size:1.55rem;line-height:1.25;box-shadow:0 4px 0 #C6D6F2;white-space:nowrap;color:var(--ink)}
+.fall{position:absolute;top:0;left:0;will-change:transform;background:#fff;border:2px solid #C6D6F2;border-radius:14px;padding:6px 16px;font-family:var(--ord);font-weight:800;font-size:clamp(1.55rem,2.6vw,2.05rem);line-height:1.25;box-shadow:0 4px 0 #C6D6F2;white-space:nowrap;color:var(--ink)}
 .fall.fokus{border-color:#1D2B53;box-shadow:0 0 0 4px rgba(61,90,254,.35),0 4px 0 #1D2B53}
-.fall.mening{white-space:normal;font-size:1.12rem;width:92%;text-align:center;font-weight:700}
+.fall.mening{white-space:normal;font-size:clamp(1.12rem,1.9vw,1.45rem);width:92%;text-align:center;font-weight:700}
 .fall mark{background:#FFE27A;border-radius:6px;padding:0 6px;font-weight:800}
 .fall.felad{background:#FDE7E8;border-color:#F0A3A6}
 .fall.bort{transition:transform .3s ease-in,opacity .3s ease-in;opacity:0}
@@ -118,10 +118,30 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 @keyframes ja{40%{transform:scale(1.06)}}
 .spl{position:absolute;left:50%;top:20%;width:10px;height:10px;border-radius:50%;pointer-events:none;animation:spl .7s ease-out forwards}
 @keyframes spl{to{transform:translate(var(--dx),var(--dy));opacity:0}}
-.korg{position:absolute;bottom:0;left:0;height:58px;border-radius:16px 16px 6px 6px;border:3px solid var(--c);background:var(--bg2);overflow:hidden;z-index:3;will-change:transform;text-align:center;box-shadow:0 -2px 0 rgba(0,0,0,.05);touch-action:none;display:flex;flex-direction:column}
+.korg{position:absolute;bottom:0;left:0;height:64px;border-radius:16px 16px 6px 6px;border:3px solid var(--c);background:var(--bg2);overflow:hidden;z-index:3;will-change:translate;text-align:center;box-shadow:0 -2px 0 rgba(0,0,0,.05);touch-action:none;display:flex;flex-direction:column}
 .korg b{display:block;background:var(--c);color:#fff;padding:2px 4px;font-size:1rem;line-height:1.25}
 .korg .ant{font-size:1.5rem;font-weight:800;line-height:1.3;flex:1;display:grid;place-items:center}
-.korg.fel{animation:skaka .45s;border-color:#E5484D}.korg.ja{animation:ja .3s}
+.korg.fel{animation:skakaK .45s;border-color:#E5484D}.korg.ja{animation:jaK .3s}
+/* korgen flyttas med translate; studsen (scale) och skakningen (transform) ändrar inte var den står */
+@keyframes jaK{40%{scale:1.07}}
+@keyframes skakaK{20%{transform:translateX(-9px)}40%{transform:translateX(9px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+body.spelar .wrap{max-width:1000px}
+body.spelar.lador3 .himmel{height:clamp(320px,calc(100vh - 370px),760px);height:clamp(320px,calc(100svh - 370px),760px)}
+.lapp{position:absolute;left:50%;top:12px;translate:-50% 0;z-index:4;max-width:92%;background:#fff;border:2px solid var(--c,#F0A3A6);border-radius:14px;padding:7px 14px;font-weight:700;font-size:1.05rem;line-height:1.3;text-align:center;box-shadow:0 4px 0 rgba(29,43,83,.12);pointer-events:none;animation:lapp 2.6s ease forwards}
+.lapp b{font-family:var(--ord);color:var(--c)}
+@keyframes lapp{0%{opacity:0;transform:translateY(-8px)}8%{opacity:1;transform:none}82%{opacity:1}100%{opacity:0}}
+.vag{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;z-index:4;font-size:clamp(2.6rem,9vw,4.5rem);font-weight:800;color:#fff;text-shadow:0 4px 0 #2F7DE1,0 0 24px rgba(47,125,225,.5);animation:vag 1.4s ease forwards}
+@keyframes vag{0%{opacity:0;transform:scale(.6)}20%{opacity:1;transform:scale(1.08)}35%{transform:scale(1)}75%{opacity:1}100%{opacity:0}}
+.hud .rek{color:var(--muted);font-size:1rem}
+.ordlista{max-width:640px;margin:0 auto 14px;text-align:left}
+.ordlista h3{margin:14px 4px 6px;font-size:1.05rem}
+.ordlista .ol{display:flex;flex-wrap:wrap;gap:8px}
+.ordlista .tom{color:var(--muted);font-weight:600;margin:0 4px}
+.oc{display:inline-flex;align-items:center;gap:6px;font-family:var(--ord);font-weight:700;font-size:1.2rem;background:var(--bg2);border:2px solid var(--c);border-radius:12px;padding:5px 12px;box-shadow:0 3px 0 var(--c);color:var(--ink)}
+.oc:active{transform:translateY(2px);box-shadow:0 1px 0 var(--c)}
+.oc small{font-family:var(--font);font-size:.75rem;font-weight:800;color:var(--c2)}
+.oc .hr{font-size:.85rem}
+.res .nyrek{display:inline-block;background:var(--gold);color:#1D2B53;font-weight:800;border-radius:999px;padding:4px 14px;margin:0 0 10px}
 .himmel.kor{touch-action:none;cursor:ew-resize}
 .tips2{text-align:center;color:var(--muted);font-weight:700;font-size:.9rem;margin-top:8px}
 :root{--hero1:#5AA9FF;--hero2:#2F7DE1;--heroS:#1F5DB0}
@@ -145,7 +165,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 </section>
 
 <section class="screen" id="game" hidden>
-  <div class="hud"><span class="tid" id="hTid">⏱ 1:00</span><span class="po" id="hPo">⭐ 0</span><span class="ser" id="hSer"></span><span class="ml"></span><button id="bPaus" aria-label="Pausa">⏸</button><span class="pet" id="pet"></span></div>
+  <div class="hud"><span class="tid" id="hTid">⏱ 1:00</span><span class="po" id="hPo">⭐ 0</span><span class="ser" id="hSer"></span><span class="ml"></span><span class="rek" id="hRek"></span><button id="bPaus" aria-label="Pausa">⏸</button><span class="pet" id="pet"></span></div>
   <div class="himmel" id="himmel"><i class="mo" style="left:6%;top:12%;width:90px;height:30px"></i><i class="mo" style="left:60%;top:28%;width:120px;height:36px"></i><i class="mo" style="left:22%;top:58%;width:100px;height:28px"></i><div class="stor" id="stor" hidden></div></div>
   <div class="lador" id="lador"></div>
   <div class="tips2" id="tips2">Tryck på lådan när ordet är rätt sort. Tangentbord: 1 2 3.</div>
@@ -154,7 +174,9 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 <section class="screen res" id="result" hidden>
   <h2 id="rRub" style="margin:10px 0 0">Bra jobbat!</h2>
   <div class="stj" id="rStj"></div>
+  <div id="rRek"></div>
   <p id="rTxt" style="font-weight:700;margin:0 0 14px"></p>
+  <div class="ordlista" id="rOrd"></div>
   <button class="knapp" id="rIgen">Spela igen</button>
   <button class="knapp vit" id="rHome">Välj nivå</button>
 </section>
@@ -172,7 +194,7 @@ const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}};
 const reduced=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
 const NIV_UNUSED=[null].concat([{"namn": "Nivå 1: Ordning", "txt": "Sätt orden i rätt ordning. Stor bokstav och punkt är med.", "col": "#2BB673"}, {"namn": "Nivå 2: Skiljetecken", "txt": "Ordning och rätt tecken på slutet: punkt, frågetecken eller utropstecken.", "col": "#FF9F43"}, {"namn": "Nivå 3: Stor bokstav", "txt": "Ordning, tecken och stor bokstav i början och på namn.", "col": "#7B61FF"}]);
 const stjHtml=n=>[1,2,3].map(i=>i<=n?"★":'<span class="off">★</span>').join("");
-function show(id){document.querySelectorAll(".screen").forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.hidden=s.id!==id);document.body.classList.toggle("spelar",id==="game");window.scrollTo(0,0);if(window.MPS)MPS.visa(id);}
 function hem(){
   $("niv").innerHTML=[1,2,3].map(l=>`<button data-l="${l}"><span class="nr" style="background:${NIV[l].col}">${l}</span><span><b>${NIV[l].namn}</b><small>${NIV[l].txt}</small></span><span class="st">${stjHtml(data.stars[l]||0)}</span></button>`).join("");
   if(window.speechSynthesis)speechSynthesis.cancel();show("home");}
@@ -200,6 +222,8 @@ const ORD={"V": ["springer", "sover", "äter", "simmar", "hoppar", "läser", "sk
 const BANK3=["De små_A barnen_S vill_V leka_V i den stora_A parken_S.", "Mamma_S och pappa_S ska_V åka_V till en liten_A stad_S.", "Den hungriga_A katten_S äter_V och dricker_V ur sin skål_S.", "Pojken_S är_V glad_A och hoppar_V över ett högt_A staket_S.", "Jag tycker_V om den söta_A glassen_S.", "Hunden_S springer_V efter den runda_A bollen_S och skäller_V.", "Vår nya_A lärare_S är_V snäll_A.", "Den stora_A björnen_S sover_V hela vintern_S i en mörk_A håla_S.", "Flickan_S har_V en röd_A cykel_S och cyklar_V till skolan_S.", "Fåglarna_S bygger_V ett litet_A bo_S i det höga_A trädet_S.", "Barnen_S åker_V pulka_S i den branta_A backen_S.", "Den lilla_A musen_S gömmer_V sig i ett stort_A hål_S.", "Vi lagar_V en varm_A soppa_S och dukar_V bordet_S.", "Skogen_S är_V mörk_A och tyst_A.", "Himlen_S är_V grå_A och regnet_S faller_V.", "Solen_S skiner_V över det gröna_A fältet_S.", "Den kalla_A vinden_S blåser_V och träden_S gungar_V.", "Pappa_S köper_V en ny_A cykel_S åt barnen_S.", "Ugglan_S sitter_V i trädet_S och tittar_V med stora_A ögon_S."];
 const COLX={"V": ["#F2780C", "#FFE7C2", "#B85A06", "Verb"], "S": ["#3D5AFE", "#E3EAFF", "#2A3FB8", "Substantiv"], "A": ["#1E9E5E", "#DDF4E6", "#157548", "Adjektiv"]};
 const NAMN={V:"verb",S:"substantiv",A:"adjektiv"};
+const DEF={V:"något man gör",S:"en sak, ett djur eller en person",A:"hur något är"};
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"})[c]);
 const MODER=[
  {id:"V",namn:"Fånga verb",txt:"Flytta korgen i sidled och fånga bara verb.",col:"#F2780C",ik:"🏃"},
  {id:"S",namn:"Fånga substantiv",txt:"Flytta korgen och fånga bara substantiv.",col:"#3D5AFE",ik:"🐕"},
@@ -216,7 +240,14 @@ const enk=()=>G.mode==="V"||G.mode==="S"||G.mode==="A";
 function lador(){return enk()?[G.mode]:["V","S","A"];}
 function ritaLador(){const L=lador();$("lador").style.setProperty("--n",L.length);
   $("lador").innerHTML=L.map(k=>{const c=COLX[k];return`<button class="lada" data-k="${k}" style="--c:${c[0]};--bg2:${c[1]}" aria-label="${c[3]}"><b>${c[3]}</b><span class="ant">${G.box[k]}</span></button>`;}).join("");}
-function kon(){return G.mode==="mening"?{fall:[9.5,7.2],int:[4.4,3.4],max:2}:G.mode==="alla"?{fall:[6.2,4.3],int:[2.1,1.35],max:4}:{fall:[7.4,5.2],int:[2.3,1.6],max:3};}
+// tre vågor à 20 s, varje våg snabbare (fall = sekunder från topp till botten, int = sekunder mellan orden)
+const VAGOR={enk:{fall:[5.2,4.1,3.3],int:[1.35,1.05,.85],max:[3,4,4]},alla:{fall:[5.4,4.5,3.7],int:[2,1.6,1.25],max:[3,3,4]},mening:{fall:[9,7.6,6.4],int:[4.2,3.6,3.1],max:[2,2,2]}};
+const VAGLEN=20;
+function vagNr(){return Math.min(2,Math.floor(G.t/VAGLEN));}
+function kon(){const V=VAGOR[enk()?"enk":G.mode],v=vagNr();return{fall:V.fall[v],int:V.int[v],max:V.max[v]};}
+function visaVag(n){$("himmel").querySelectorAll(".vag").forEach(e=>e.remove());const e=document.createElement("div");e.className="vag";e.textContent="Våg "+n+"!";$("himmel").appendChild(e);setTimeout(()=>e.remove(),1500);window.Ljud&&Ljud.whoosh&&Ljud.whoosh();}
+function lapp(html,k){$("himmel").querySelectorAll(".lapp").forEach(e=>e.remove());const e=document.createElement("div");e.className="lapp";if(k)e.style.setProperty("--c",COLX[k][2]);e.innerHTML=html;$("himmel").appendChild(e);setTimeout(()=>e.remove(),2700);}
+function logga(o,res){if(o.loggad)return;o.loggad=true;G.logg.push({w:o.w,k:o.k,res});}
 function kort(){
   if(G.mode==="mening"){if(!G.kö.length){const alla=[];BANK3.forEach(s=>{const T=s.split(" ").map(parseTok);T.forEach((x,j)=>{if(x.k)alla.push({k:x.k,T,j});});});G.kö=shuffle(alla);}return G.kö.pop();}
   if(!G.kö.length){const ks=G.mode==="alla"?["V","S","A"]:[G.mode],ut=[];
@@ -224,28 +255,29 @@ function kort(){
     else{const an=["V","S","A"].filter(k=>k!==G.mode);shuffle(ORD[G.mode].slice()).forEach(w=>ut.push({w,k:G.mode}));shuffle(ORD[an[0]].slice(0,9).concat(ORD[an[1]].slice(0,9))).forEach(w=>{const k=ORD[an[0]].includes(w)?an[0]:an[1];ut.push({w,k});});}
     G.kö=shuffle(ut);}
   return G.kö.pop();}
-function begin(mode){stoppa();G={lvl:mode,mode,t:0,ord:[],ratt:0,fel:0,serie:0,bast:0,paus:false,igang:false,sist:0,nasta:0,kö:[],box:{V:0,S:0,A:0},poang:0};
-  $("himmel").querySelectorAll(".fall,.spl").forEach(e=>e.remove());$("pet").innerHTML=owlSVG(lasDjur());$("himmel").querySelectorAll(".korg").forEach(e=>e.remove());$("himmel").classList.toggle("kor",enk());$("lador").hidden=enk();if(!enk())ritaLador();
+function begin(mode){stoppa();G={lvl:mode,mode,t:0,ord:[],ratt:0,fel:0,serie:0,bast:0,paus:false,igang:false,sist:0,nasta:0,kö:[],box:{V:0,S:0,A:0},poang:0,vag:0,logg:[]};
+  $("himmel").querySelectorAll(".fall,.spl").forEach(e=>e.remove());$("pet").innerHTML=owlSVG(lasDjur());$("himmel").querySelectorAll(".korg").forEach(e=>e.remove());$("himmel").classList.toggle("kor",enk());$("lador").hidden=enk();document.body.classList.toggle("lador3",!enk());if(!enk())ritaLador();$("himmel").querySelectorAll(".lapp,.vag").forEach(e=>e.remove());
   $("tips2").textContent=enk()?"Dra i sidled (eller ← →) för att flytta korgen. Fånga bara "+NAMN[G.mode]+".":"Tryck på lådan när ordet är rätt sort. Tangentbord: 1 2 3.";uppdHud();show("game");if(enk())skapaKorg();
   const st=$("stor");st.hidden=false;st.className="stor";let n=3;st.textContent=n;
   const steg=()=>{n--;if(n>0){st.textContent=n;tmo.push(setTimeout(steg,650));}else if(n===0){st.textContent="Gå!";tmo.push(setTimeout(steg,500));}else{st.hidden=true;G.igang=true;G.sist=performance.now();loopId=requestAnimationFrame(tick);}};
   tmo.push(setTimeout(steg,650));}
-function uppdHud(){const s=Math.max(0,Math.ceil(TID-G.t));$("hTid").textContent="⏱ "+Math.floor(s/60)+":"+String(s%60).padStart(2,"0");$("hPo").textContent="⭐ "+G.poang;$("hSer").textContent=G.serie>=3?"🔥 x"+G.serie:"";}
-const KH=58;
+function uppdHud(){const s=Math.max(0,Math.ceil(TID-G.t));$("hTid").textContent="⏱ "+Math.floor(s/60)+":"+String(s%60).padStart(2,"0");$("hPo").textContent="⭐ "+G.poang;$("hSer").textContent=G.serie>=3?"🔥 x"+G.serie:"";const rk=(data.rekord||{})[G.mode]||0;$("hRek").textContent=rk?"🏆 "+Math.max(rk,G.poang):"";}
+const KH=64;
 function skapaKorg(){const c=COLX[G.mode],k=document.createElement("div");k.className="korg";k.style.cssText="--c:"+c[0]+";--bg2:"+c[1];k.innerHTML='<b>'+c[3].toUpperCase()+'</b><span class="ant">0</span>';$("himmel").appendChild(k);
-  const W=$("himmel").clientWidth;G.kb=Math.max(110,Math.round(W*.3));k.style.width=G.kb+"px";G.kx=(W-G.kb)/2;G.mal=G.kx;G.tast={l:false,r:false};G.korg=k;k.style.transform="translateX("+Math.round(G.kx)+"px)";}
+  const W=$("himmel").clientWidth;G.kb=Math.max(110,Math.min(250,Math.round(W*.28)));k.style.width=G.kb+"px";G.kx=(W-G.kb)/2;G.mal=G.kx;G.tast={l:false,r:false};G.korg=k;k.style.translate=Math.round(G.kx)+"px 0";}
 function flyttaKorg(dt){if(!G.korg)return;const W=$("himmel").clientWidth;if(G.tast.l)G.mal-=W*1.1*dt;if(G.tast.r)G.mal+=W*1.1*dt;G.mal=Math.max(0,Math.min(W-G.kb,G.mal));
-  G.kx+=(G.mal-G.kx)*Math.min(1,dt*16);G.korg.style.transform="translateX("+Math.round(G.kx)+"px)";}
-function lagg(){const K=kon(),f=Math.min(1,G.t/TID),fallT=K.fall[0]+(K.fall[1]-K.fall[0])*f,c=kort();if(!c)return;
+  G.kx+=(G.mal-G.kx)*Math.min(1,dt*16);G.korg.style.translate=Math.round(G.kx)+"px 0";}
+function lagg(){const K=kon(),fallT=K.fall,c=kort();if(!c)return;
   const el=document.createElement("div");el.className="fall";
   if(c.T){el.classList.add("mening");el.innerHTML=c.T.map((x,j)=>j===c.j?`<mark>${x.t}</mark>`:x.t).join(" ");el.style.left="4%";}
   else{el.textContent=c.w;}
   $("himmel").appendChild(el);const W=$("himmel").clientWidth;if(!c.T)el.style.left=Math.round(Math.random()*Math.max(10,W-el.offsetWidth-16)+8)+"px";
-  const o={k:c.k,w:c.w,el,y:0,fallT,h:el.offsetHeight,x:el.offsetLeft,bw:el.offsetWidth,felad:false,klar:false};G.ord.push(o);return o;}
+  const o={k:c.k,w:c.T?c.T[c.j].w:c.w,el,y:0,fallT,h:el.offsetHeight,x:el.offsetLeft,bw:el.offsetWidth,felad:false,klar:false};G.ord.push(o);return o;}
 function lagst(){let b=null;G.ord.forEach(o=>{if(!o.klar&&(!b||o.y>b.y))b=o;});return b;}
 function tick(now){loopId=requestAnimationFrame(tick);const dt=Math.min(.05,(now-G.sist)/1000);G.sist=now;if(G.paus)return;
-  G.t+=dt;const K=kon(),f=Math.min(1,G.t/TID),H=$("himmel").clientHeight;
-  if(G.t<TID-3&&G.nasta<=G.t&&G.ord.filter(o=>!o.klar).length<K.max&&!G.ord.some(o=>!o.klar&&o.y<.2)){lagg();G.nasta=G.t+K.int[0]+(K.int[1]-K.int[0])*f;}
+  G.t+=dt;const K=kon(),H=$("himmel").clientHeight;
+  if(vagNr()>G.vag){G.vag=vagNr();visaVag(G.vag+1);}
+  if(G.t<TID-3&&G.nasta<=G.t&&G.ord.filter(o=>!o.klar).length<K.max&&!G.ord.some(o=>!o.klar&&o.y<.2)){lagg();G.nasta=G.t+K.int;}
   flyttaKorg(dt);
   G.ord.forEach(o=>{if(o.klar)return;o.y+=dt/o.fallT;
     if(o.y>=1){o.y=1;marken(o);}
@@ -256,23 +288,24 @@ function tick(now){loopId=requestAnimationFrame(tick);const dt=Math.min(.05,(now
 function marken(o){o.klar=true;const enkel=enk();
   if(o.studs){o.el.classList.add("plopp");setTimeout(()=>o.el.remove(),400);return;}
   if(enkel&&o.k!==G.mode){G.ratt++;}
-  else{G.fel++;G.serie=0;window.Ljud&&Ljud.bad&&Ljud.bad();}
+  else{if(!o.felad)G.fel++;G.serie=0;window.Ljud&&Ljud.bad&&Ljud.bad();
+    if(!o.felad)lapp(`Du missade <b>${esc(o.w)}</b>. Det är ett ${NAMN[o.k]}, ${DEF[o.k]}.`,o.k);logga(o,"miss");}
   o.el.classList.add("plopp");setTimeout(()=>o.el.remove(),400);}
 function stank(k){const b=$("lador").querySelector(`[data-k="${k}"]`);if(!b)return;const c=COLX[k][0];
   for(let i=0;i<10;i++){const s=document.createElement("i");s.className="spl";s.style.cssText=`background:${c};--dx:${Math.round((Math.random()-.5)*120)}px;--dy:${-Math.round(Math.random()*90+20)}px`;b.appendChild(s);setTimeout(()=>s.remove(),750);}}
 function fang(o,H){const k=G.korg;
-  if(o.k===G.mode){o.klar=true;G.ratt++;G.serie++;G.bast=Math.max(G.bast,G.serie);G.poang+=10+Math.min(10,G.serie>1?G.serie:0);G.box[G.mode]++;
+  if(o.k===G.mode){o.klar=true;G.ratt++;G.serie++;logga(o,"ratt");G.bast=Math.max(G.bast,G.serie);G.poang+=10+Math.min(10,G.serie>1?G.serie:0);G.box[G.mode]++;
     const dx=Math.round(G.kx+G.kb/2-o.x-o.bw/2),dy=Math.round(H-KH-o.h*.2);o.el.classList.add("bort");o.el.style.transform="translate("+dx+"px,"+dy+"px) scale(.3)";setTimeout(()=>o.el.remove(),320);
     k.querySelector(".ant").textContent=G.box[G.mode];k.classList.remove("ja");void k.offsetWidth;k.classList.add("ja");stankKorg();window.Ljud&&Ljud.ok&&Ljud.ok();uppdHud();return;}
-  o.studs=true;G.fel++;G.serie=0;o.el.classList.add("felad");const riktn=o.x+o.bw/2<G.kx+G.kb/2?-1:1;o.y=Math.max(0,o.y-.22);o.x=Math.max(0,Math.min($("himmel").clientWidth-o.bw,o.x+riktn*70));o.el.style.left=Math.round(o.x)+"px";
+  o.studs=true;G.fel++;G.serie=0;o.el.classList.add("felad");logga(o,"fel");lapp(`<b>${esc(o.w)}</b> är ett ${NAMN[o.k]}, inte ett ${NAMN[G.mode]}.`,o.k);const riktn=o.x+o.bw/2<G.kx+G.kb/2?-1:1;o.y=Math.max(0,o.y-.22);o.x=Math.max(0,Math.min($("himmel").clientWidth-o.bw,o.x+riktn*70));o.el.style.left=Math.round(o.x)+"px";
   window.Ljud&&Ljud.bad&&Ljud.bad();k.classList.remove("fel");void k.offsetWidth;k.classList.add("fel");uppdHud();}
 function stankKorg(){const c=COLX[G.mode][0];for(let i=0;i<10;i++){const s=document.createElement("i");s.className="spl";s.style.cssText="background:"+c+";--dx:"+Math.round((Math.random()-.5)*120)+"px;--dy:"+(-Math.round(Math.random()*90+20))+"px;top:-6px";G.korg.appendChild(s);setTimeout(()=>s.remove(),750);}}
 function trycka(k){if(enk())return;if(!G.igang||G.paus||G.t>=TID)return;const o=lagst();if(!o)return;const b=$("lador").querySelector(`[data-k="${k}"]`);
-  if(o.k===k){o.klar=true;G.ratt++;G.serie++;G.bast=Math.max(G.bast,G.serie);G.poang+=10+Math.min(10,G.serie>1?G.serie:0);G.box[k]++;
+  if(o.k===k){o.klar=true;G.box[k]++;if(!o.felad){G.ratt++;G.serie++;G.bast=Math.max(G.bast,G.serie);G.poang+=10+Math.min(10,G.serie>1?G.serie:0);logga(o,"ratt");}
     const hr=$("himmel").getBoundingClientRect(),br=b.getBoundingClientRect(),er=o.el.getBoundingClientRect();
     o.el.classList.add("bort");o.el.style.transform="translate("+Math.round(br.left+br.width/2-er.left-er.width/2)+"px,"+Math.round(br.top-hr.top-er.height/2)+"px) scale(.3)";setTimeout(()=>o.el.remove(),320);
     b.querySelector(".ant").textContent=G.box[k];b.classList.remove("ja");void b.offsetWidth;b.classList.add("ja");stank(k);window.Ljud&&Ljud.ok&&Ljud.ok();uppdHud();return;}
-  if(!o.felad){o.felad=true;G.fel++;G.serie=0;}o.el.classList.add("felad");o.y=Math.max(0,o.y-.1);window.Ljud&&Ljud.bad&&Ljud.bad();b.classList.remove("fel");void b.offsetWidth;b.classList.add("fel");uppdHud();}
+  if(!o.felad){o.felad=true;G.fel++;G.serie=0;logga(o,"fel");lapp(`<b>${esc(o.w)}</b> är inte ett ${NAMN[k]}. Prova en annan låda!`);}o.el.classList.add("felad");o.y=Math.max(0,o.y-.1);window.Ljud&&Ljud.bad&&Ljud.bad();b.classList.remove("fel");void b.offsetWidth;b.classList.add("fel");uppdHud();}
 $("himmel").addEventListener("pointermove",e=>{if(!G||!G.korg||!G.igang||G.paus)return;const r=$("himmel").getBoundingClientRect();G.mal=Math.max(0,Math.min(r.width-G.kb,e.clientX-r.left-G.kb/2));});
 $("himmel").addEventListener("pointerdown",e=>{if(!G||!G.korg||!G.igang||G.paus)return;const r=$("himmel").getBoundingClientRect();G.mal=Math.max(0,Math.min(r.width-G.kb,e.clientX-r.left-G.kb/2));try{$("himmel").setPointerCapture(e.pointerId);}catch(x){}});
 $("lador").addEventListener("pointerdown",e=>{const b=e.target.closest("[data-k]");if(b){e.preventDefault();trycka(b.dataset.k);}});
@@ -286,9 +319,21 @@ document.addEventListener("keyup",e=>{if(!G||!G.tast)return;if(e.key==="ArrowLef
 function paus(){if(!G||!G.igang||G.t>=TID)return;G.paus=!G.paus;const st=$("stor");st.hidden=!G.paus;st.className="stor liten";st.textContent="Paus. Tryck för att fortsätta.";$("bPaus").textContent=G.paus?"▶":"⏸";G.sist=performance.now();}
 $("bPaus").onclick=paus;$("stor").onclick=()=>{if(G.paus)paus();};
 document.addEventListener("visibilitychange",()=>{if(document.hidden&&G&&G.igang&&!G.paus&&G.t<TID)paus();});
+function ordChip(x){const c=COLX[x.k];return`<button class="oc" data-w="${esc(x.w)}" style="--c:${c[0]};--bg2:${c[1]};--c2:${c[2]}" aria-label="Lyssna: ${esc(x.w)}, ${NAMN[x.k]}"><span class="hr" aria-hidden="true">🔊</span>${esc(x.w)}<small>${NAMN[x.k]}</small></button>`;}
+function ordLista(){const sett=new Set(),bra=[],ova=[];
+  G.logg.forEach(x=>{const id=x.w+"|"+x.k;if(x.res==="ratt"){if(!sett.has(id))bra.push(x);}else if(!ova.some(y=>y.w===x.w&&y.k===x.k))ova.push(x);sett.add(id);});
+  const ovaIds=new Set(ova.map(x=>x.w+"|"+x.k)),bra2=bra.filter(x=>!ovaIds.has(x.w+"|"+x.k));
+  $("rOrd").innerHTML=(G.logg.length?'<p class="tom" style="text-align:center">Tryck på ett ord för att höra det.</p>':"")+
+    `<h3>✅ Rätt fångade (${bra2.length})</h3><div class="ol">${bra2.length?bra2.map(ordChip).join(""):'<span class="tom">Inga den här gången.</span>'}</div>`+
+    (ova.length?`<h3>🔁 Öva på de här (${ova.length})</h3><div class="ol">${ova.map(ordChip).join("")}</div>`:`<h3>🔁 Öva på de här</h3><p class="tom">Inga missar. Snyggt!</p>`);}
+$("rOrd").addEventListener("click",e=>{const b=e.target.closest("[data-w]");if(b)lasUpp(b.dataset.w);});
 function slut(){stoppa();G.igang=false;const N=G.ratt+G.fel,acc=N?G.ratt/N:0,st=N>=8&&acc>=.9?3:N>=6&&acc>=.7?2:1;
-  $("himmel").querySelectorAll(".fall").forEach(e=>e.remove());
-  resultat(st,`${G.ratt} av ${N} ord rätt (${Math.round(acc*100)} %). ${G.poang} poäng. Längsta serie: ${G.bast}.${st<3?" Spela igen och se om du kan få fler rätt!":""}`);}
+  $("himmel").querySelectorAll(".fall,.lapp,.vag").forEach(e=>e.remove());
+  data.rekord=data.rekord||{};const gammal=data.rekord[G.mode]||0,nyRek=G.poang>gammal&&gammal>0;if(G.poang>gammal)data.rekord[G.mode]=G.poang;
+  $("rRek").innerHTML=nyRek?`<span class="nyrek">🏆 Nytt rekord! ${G.poang} poäng (förut ${gammal})</span>`:gammal&&G.poang<=gammal?`<p class="tom" style="margin:0 0 8px;color:var(--muted);font-weight:700">🏆 Ditt rekord: ${gammal} poäng</p>`:"";
+  ordLista();
+  resultat(st,`${G.ratt} av ${N} ord rätt (${Math.round(acc*100)} %). ${G.poang} poäng. Längsta serie: ${G.bast}.${st<3?" Spela igen och se om du kan få fler rätt!":""}`);
+  if(nyRek&&st<3)confetti();}
 window.__or={begin,MODER,ORD,BANK3};
 
 hem();
