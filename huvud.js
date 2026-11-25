@@ -211,7 +211,12 @@ body.mph-mini #quit{display:none}
     const tt=h.querySelector('.mph-title');tt.parentNode.insertBefore(ua,tt.nextSibling);h.classList.add('has-upp');
     // bocken i uppdrag/: spara övningsnycklarna när sidan har startat (och en del har öppnats med ?del=), så att det som sparas vid starten inte räknas
     const bas=()=>{try{const o={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(/^mattespel-/.test(k))o[k]=localStorage.getItem(k);}sessionStorage.setItem('mp-upp-bas',JSON.stringify({t:Date.now(),o}));}catch(e){}};
-    const tid=()=>setTimeout(bas,2500);if(document.readyState==='complete')tid();else addEventListener('load',tid,{once:true});}}catch(e){}
+    const tid=()=>setTimeout(bas,2500);if(document.readyState==='complete')tid();else addEventListener('load',tid,{once:true});
+    // rundor: varje gång sidan visar sin resultatskärm (#result) räknas en färdig runda, så att uppdraget bockas av först när övningen är gjord
+    const RK='mp-upp-runda',rLas=()=>{try{return JSON.parse(sessionStorage.getItem(RK)||'null')}catch(e){return null}},rSkriv=r=>{try{sessionStorage.setItem(RK,JSON.stringify(r))}catch(e){}};
+    const rStart=()=>{const r=rLas();if(!r||r.p!==location.pathname)rSkriv({p:location.pathname,n:0,res:!!document.getElementById('result')});else if(!r.res&&document.getElementById('result')){r.res=true;rSkriv(r);}};
+    if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',rStart,{once:true});else rStart();
+    window.__mpUppRunda=()=>{const r=rLas()||{p:location.pathname,n:0,res:true};if(r.p!==location.pathname){r.p=location.pathname;r.n=0;}r.res=true;r.n++;rSkriv(r);};}}catch(e){}
   // på första sidan och ämnessidorna: en liten rund 🏝️-knapp till Pluggparken-världen (läraren 24 nov 2026);
   // från en ämnessida hamnar man direkt på ämnets ö (varlden/#matte osv., Specialare har Biografen, Extra har Musikön)
   const ÖN={matte:['matte','Matte-parken'],svenska:['svenska','Svenska-parken'],so:['so','SO-parken'],no:['no','NO-parken'],fler:['fler','Fler ämnen-ön'],engelska:['fler','Fler ämnen-ön'],extra:['extra','Musikön'],specialare:['bio','Biografen']},ön=ÖN[REL.replace(/\/$/,'')];
@@ -234,7 +239,7 @@ body.mph-mini #quit{display:none}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',stjLappar);else setTimeout(stjLappar,0);
   // konton i molnet: konto.js laddas bara om profilen på enheten har ett konto
   try{const ow=localStorage.getItem('mp-owner'),ps=JSON.parse(localStorage.getItem('mp-profiles')||'[]'),p=ow&&ps.find(x=>x.id===ow);
-    if(p&&p.konto&&!window.MPKonto){const k=document.createElement('script');k.src=rotUrl+'konto.js?v=4';document.head.appendChild(k);}}catch(e){}
+    if(p&&p.konto&&!window.MPKonto){const k=document.createElement('script');k.src=rotUrl+'konto.js?v=5';document.head.appendChild(k);}}catch(e){}
   window.MPSokOpen=function(){
     if(window.MPSok)return MPSok.open();
     const sc=document.createElement('script');sc.src=rotUrl+'sok.js?v=2';sc.onload=()=>MPSok.open();document.head.appendChild(sc);};
@@ -306,7 +311,7 @@ body.mph-mini #quit{display:none}
        i stället för att landa på sidans egen startskärm. Anropas före show(id). */
     start(id){if(!navOn)return;const d=djup(id);cur={mp:id,d,i:0};st=[d];history.replaceState(cur,'');},
     visa(id){
-      mode(id);if(id==='result')MPMynt.runda();if(!navOn)return;
+      mode(id);if(id==='result'){MPMynt.runda();if(!popping&&window.__mpUppRunda)window.__mpUppRunda();}if(!navOn)return;
       const d=djup(id);
       if(popping){cur={mp:id,d,i:cur.i};return;}
       if(d>cur.d){cur={mp:id,d,i:cur.i+1};st.length=cur.i;st.push(d);history.pushState(cur,'');}

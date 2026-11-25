@@ -51,6 +51,8 @@ a.upp:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
 .upp.klar .nr{background:var(--good)}
 .upp.klar .gaa{color:var(--good-dark)}
 html[data-tema="mork"] .upp.klar{background:#173A2B;box-shadow:0 4px 0 #1E6B45}
+.upp small.gg{color:var(--accent);font-weight:800}
+.upp.klar small.gg{color:var(--good-dark)}
 .markera{display:block;margin:-4px 0 0 auto;padding:6px 12px;border-radius:12px;font-weight:800;font-size:.88rem;color:var(--muted)}
 .alla{text-align:center;background:var(--card);border-radius:20px;padding:16px;box-shadow:0 5px 0 var(--line);margin-top:14px}
 .alla .stor{font-size:3rem;font-family:var(--emoji);line-height:1}
@@ -206,25 +208,32 @@ const DEL=window.MPDelar||{};
 const delAv=(u,d)=>d&&DEL[u]&&DEL[u].find(x=>x[0]===d);
 /* i lärarens lista kan en övning ha flera delar (ds, gröna knappar); i länken blir varje del ett eget uppdrag */
 const dsAv=x=>(Array.isArray(x.ds)?x.ds:x.d?[x.d]:[]).filter(d=>delAv(x.u,d));
-const MAX=12,utvidga=L=>L.flatMap(x=>{const ds=dsAv(x);return ds.length?ds.map(d=>({u:x.u,t:[],d})):[{u:x.u,t:x.t||[],d:""}]});
+const GANGER=[1,2,3,5],gAv=x=>GANGER.includes(+x.g)?+x.g:1;
+const MAX=12,utvidga=L=>L.flatMap(x=>{const ds=dsAv(x),g=gAv(x);return ds.length?ds.map(d=>({u:x.u,t:[],d,g})):[{u:x.u,t:x.t||[],d:"",g}]});
 
 /* ---------- länken: #n=namn&o=adress~adress?t=5~adress?del=a:kroppar ---------- */
-const fraga=x=>x.t&&x.t.length?"?t="+x.t.join(","):x.d?"?del="+x.d:"";
+/* adressens frågedel: t (tabeller) eller del, och g (antal gånger) i länken; övningen själv bryr sig inte om g */
+const fraga=x=>{const q=[];if(x.t&&x.t.length)q.push("t="+x.t.join(","));else if(x.d)q.push("del="+x.d);return q.length?"?"+q.join("&"):""};
+const fragaG=x=>{const f=fraga(x),g=gAv(x);return g>1?f+(f?"&":"?")+"g="+g:f};
 /* s = sista dagen (ÅÅÅÅMMDD); uppdraget gäller till och med den dagens slut */
 const dagStr=d=>d.getFullYear()+String(d.getMonth()+1).padStart(2,"0")+String(d.getDate()).padStart(2,"0");
 const dagSlut=s=>{const m=/^(\d{4})(\d{2})(\d{2})$/.exec(s||"");if(!m)return 0;const d=new Date(+m[1],+m[2]-1,+m[3],23,59,59);return isNaN(d)?0:d.getTime()};
 const visDag=ms=>new Date(ms).toLocaleDateString("sv-SE",{weekday:"long",day:"numeric",month:"long"});
 const VECKA=7*864e5;
-function kod(namn,items,slut){return "n="+encodeURIComponent(namn)+(slut?"&s="+slut:"")+"&o="+items.map(x=>encodeURIComponent(x.u+fraga(x))).join("~")}
+function kod(namn,items,slut){return "n="+encodeURIComponent(namn)+(slut?"&s="+slut:"")+"&o="+items.map(x=>encodeURIComponent(x.u+fragaG(x))).join("~")}
 function avkod(h){const q=new URLSearchParams(h.replace(/^#/,""));if(!q.has("o"))return null;
   const items=[];for(const del of (q.get("o")||"").split("~")){let s;try{s=decodeURIComponent(del)}catch(e){continue}
-    const m=s.match(/^([^?]+)(?:\?(?:t=([\d,]+)|del=([lac]:[\w-]{1,30})))?$/);if(!m||!PER[m[1]])continue;  // bara kända övningar och delar, inga andra adresser
-    const t=m[2]&&TABELL[m[1]]?[...new Set(m[2].split(",").map(Number).filter(n=>n>=1&&n<=TABELL[m[1]]))].sort((a,b)=>a-b):[];
-    const d=delAv(m[1],m[3])?m[3]:"";
-    items.push({u:m[1],t,d});if(items.length>=12)break}
+    const m=s.match(/^([^?]+)(?:\?([\w=,:&-]*))?$/);if(!m||!PER[m[1]])continue;  // bara kända övningar och delar, inga andra adresser
+    const qs=new URLSearchParams(m[2]||""),tt=qs.get("t"),dd=qs.get("del");
+    const t=tt&&/^[\d,]+$/.test(tt)&&TABELL[m[1]]?[...new Set(tt.split(",").map(Number).filter(n=>n>=1&&n<=TABELL[m[1]]))].sort((a,b)=>a-b):[];
+    const d=delAv(m[1],dd)?dd:"",g=gAv({g:qs.get("g")});
+    items.push({u:m[1],t,d,g});if(items.length>=12)break}
   let slut=dagSlut(q.get("s"));if(slut>Date.now()+400*864e5)slut=0;
   return {namn:(q.get("n")||"").slice(0,40).trim()||"Dagens uppdrag",items,slut}}
 const adress=x=>"../"+x.u+(/[?#]/.test(x.u)?"":fraga(x));
+const stig=x=>{try{return new URL(adress(x),location.href).pathname}catch(e){return""}};
+/* filmer och verktyg har inget att räkna: där finns knappen "Jag är klar" */
+const titta=x=>/#/.test(x.u)||/^(verktyg|specialare)\//.test(x.u)||/^(Verktygslådan|Specialare)$/.test((PER[x.u]||{}).p);
 const hashId=s=>{let h=5381;for(let i=0;i<s.length;i++)h=(h*33+s.charCodeAt(i))>>>0;return h.toString(36)};
 
 /* ---------- vilka skärmar ---------- */
@@ -261,19 +270,25 @@ function kolla(){/* kom eleven tillbaka från en övning? */
   if(!E)return;const p=post();if(!p||!p.oppen)return;
   /* huvud.js sparar en ny baslinje 2,5 s efter att övningen startat (mp-upp-bas); den gäller om den är nyare än klicket */
   let fore=p.oppen.fore;try{const b=JSON.parse(sessionStorage.getItem("mp-upp-bas")||"null");if(b&&b.t>(p.oppen.tid||0))fore=b.o}catch(e){}
-  if(andrat(fore))sparaPost(q=>{if(!q.klar.includes(q.oppen.i))q.klar.push(q.oppen.i);q.oppen=null});
+  /* rundor: huvud.js räknar varje gång övningen visar sin resultatskärm (mp-upp-runda). Övningar utan resultatskärm
+     (Brobygget, Tornverkstan, Tangram …): en gång när övningen har sparat något nytt. */
+  const x=E.u.items[p.oppen.i];let r=null;try{r=JSON.parse(sessionStorage.getItem("mp-upp-runda")||"null")}catch(e){}
+  const n=r&&r.p===stig(x)&&r.res?r.n:andrat(fore)?1:0;
+  if(n>0)sparaPost(q=>{q.gjort=q.gjort||{};q.gjort[q.oppen.i]=(q.gjort[q.oppen.i]||0)+n;if(q.gjort[q.oppen.i]>=(x.g||1)&&!q.klar.includes(q.oppen.i))q.klar.push(q.oppen.i);q.oppen=titta(x)?q.oppen:null});
+  try{sessionStorage.removeItem("mp-upp-runda")}catch(e){}
   ritaElev()}
 let firat=false;
 function ritaElev(){const p=post()||{klar:[]},n=E.u.items.length,k=E.u.items.filter((_,i)=>p.klar.includes(i)).length;
   $("malT").textContent=`${k} av ${n} klara`;$("malB").style.width=(100*k/n)+"%";
   $("lista").innerHTML=E.u.items.map((x,i)=>{const e=PER[x.u],klar=p.klar.includes(i),oppnad=p.oppen&&p.oppen.i===i;
-    const dl=delAv(x.u,x.d),extra=x.t&&x.t.length?` <small>${x.u==="division/"?"Division med":"Tabell"} ${x.t.join(", ")}</small>`:dl?` <small>${esc(dl[1])}</small>`:"";
-    return `<li><a class="upp${klar?" klar":""}" href="${esc(adress(x))}" data-i="${i}"><span class="nr">${klar?"✓":i+1}</span><span class="ik" aria-hidden="true">${e.i}</span><span class="tx"><b>${esc(e.n)}</b>${extra||`<small>${esc(e.t)}</small>`}</span><span class="gaa">${klar?"Klar ✓":"Börja ›"}</span></a>${oppnad&&!klar?`<button class="markera" type="button" data-m="${i}">✓ Jag är klar med den här</button>`:""}</li>`}).join("");
+    const dl=delAv(x.u,x.d),gj=Math.min((p.gjort||{})[i]||0,x.g||1),gg=x.g>1?`<small class="gg">${klar?`${x.g} gånger ✓`:`${gj} av ${x.g} gånger`}</small>`:"";
+    const extra=(x.t&&x.t.length?` <small>${x.u==="division/"?"Division med":"Tabell"} ${x.t.join(", ")}</small>`:dl?` <small>${esc(dl[1])}</small>`:"")+gg;
+    return `<li><a class="upp${klar?" klar":""}" href="${esc(adress(x))}" data-i="${i}"><span class="nr">${klar?"✓":i+1}</span><span class="ik" aria-hidden="true">${e.i}</span><span class="tx"><b>${esc(e.n)}</b>${extra||`<small>${esc(e.t)}</small>`}</span><span class="gaa">${klar?"Klar ✓":"Börja ›"}</span></a>${oppnad&&!klar&&titta(x)?`<button class="markera" type="button" data-m="${i}">✓ Jag har tittat klart</button>`:""}</li>`}).join("");
   const allt=k===n;$("alla").hidden=!allt;$("mal").hidden=allt;
   if(allt&&!firat){firat=true;if(p.firad!==true){sparaPost(q=>q.firad=true);window.Ljud&&Ljud.fanfare&&Ljud.fanfare();konfetti()}}}
 $("lista").addEventListener("click",e=>{const m=e.target.closest("[data-m]");
   if(m){const i=+m.dataset.m;sparaPost(q=>{if(!q.klar.includes(i))q.klar.push(i);q.oppen=null});window.Ljud&&Ljud.ok&&Ljud.ok();ritaElev();return}
-  const a=e.target.closest("a[data-i]");if(!a)return;const i=+a.dataset.i;try{sessionStorage.removeItem("mp-upp-bas")}catch(e){}sparaPost(q=>q.oppen={i,fore:nycklar(),tid:Date.now()})});
+  const a=e.target.closest("a[data-i]");if(!a)return;const i=+a.dataset.i;try{sessionStorage.removeItem("mp-upp-bas")}catch(e){}try{sessionStorage.removeItem("mp-upp-runda")}catch(e){}sparaPost(q=>q.oppen={i,fore:nycklar(),tid:Date.now()})});
 addEventListener("pageshow",kolla);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)kolla()});
 
@@ -296,7 +311,7 @@ function slutVal(){const v=$("slut").value;return /^\d{4}-\d{2}-\d{2}$/.test(v)?
 $("slutSnabb").addEventListener("click",e=>{const b=e.target.closest("[data-dgr]");if(b)satt(+b.dataset.dgr)});
 function larare(){$("lar").hidden=false;document.title="Skapa uppdrag – Pluggparken";
   {$("slut").min=isoLok(new Date());if(!$("slut").value||$("slut").value<$("slut").min)satt(7)}
-  if(!V.length){const ls=las(LK,{senast:null});if(ls.senast){$("namn").value=ls.senast.namn||"";V=(ls.senast.items||[]).filter(x=>PER[x.u]).map(x=>({u:x.u,t:x.t||[],ds:dsAv(x)}))}}
+  if(!V.length){const ls=las(LK,{senast:null});if(ls.senast){$("namn").value=ls.senast.namn||"";V=(ls.senast.items||[]).filter(x=>PER[x.u]).map(x=>({u:x.u,t:x.t||[],ds:dsAv(x),g:gAv(x)}))}}
   $("amnen").innerHTML=AMNEN.map(([k,n])=>`<button type="button" data-a="${k}" aria-pressed="${k===amne}">${n}</button>`).join("");
   hitta();ritaVald();ritaMina()}
 function hitta(){const q=$("sok").value.trim();let r;
@@ -309,17 +324,19 @@ function hitta(){const q=$("sok").value.trim();let r;
     :`<li><span class="tx"><small>Hittade ingenting. Prova ett annat ord.</small></span></li>`}
 $("sok").addEventListener("input",hitta);
 $("amnen").addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(!b)return;amne=b.dataset.a;$("amnen").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b));hitta()});
-$("hitta").addEventListener("click",e=>{const b=e.target.closest("[data-u]");if(!b||b.disabled)return;V.push({u:b.dataset.u,t:[],ds:[]});spara();hitta();ritaVald()});
+$("hitta").addEventListener("click",e=>{const b=e.target.closest("[data-u]");if(!b||b.disabled)return;V.push({u:b.dataset.u,t:[],ds:[],g:1});spara();hitta();ritaVald()});
 function ritaVald(){const n=utvidga(V).length;$("valdTom").hidden=V.length>0;$("bQR").disabled=!V.length||n>MAX;
   $("forManga").hidden=n<=MAX;$("forManga").textContent=`Det blir ${n} uppdrag. Högst ${MAX} får plats, ta bort några.`;
   $("vald").innerHTML=V.map((x,i)=>{const e=PER[x.u],max=TABELL[x.u];
     const tab=max?`<div class="tab"><span>${x.u==="division/"?"Bara vissa tabeller:":"Bara vissa tabeller:"}</span>${Array.from({length:max},(_,j)=>j+1).map(n=>`<button type="button" data-t="${i}:${n}" aria-pressed="${x.t.includes(n)}">${n}</button>`).join("")}</div>`:"";
     const dl=DEL[x.u]?`<div class="tab dl"><span>Delar, välj en eller flera:</span><button type="button" data-d="${i}:" aria-pressed="${!dsAv(x).length}">Hela övningen</button>${DEL[x.u].map(([id,n,t])=>`<button type="button" data-d="${i}:${id}" aria-pressed="${dsAv(x).includes(id)}" title="${esc(t)}">${esc(n)}</button>`).join("")}</div>`:"";
-    return `<li><div class="rad"><span class="nr">${i+1}</span><span class="ik" aria-hidden="true">${e.i}</span><b>${esc(e.n)}${dsAv(x).length?`<small style="display:block;color:var(--good-dark);font-size:.85rem">${dsAv(x).map(d=>esc(delAv(x.u,d)[1])).join(" · ")}${dsAv(x).length>1?` (${dsAv(x).length} uppdrag)`:""}</small>`:""}</b><button class="sm" type="button" data-up="${i}" ${i?"":"disabled"} aria-label="Flytta upp">↑</button><button class="sm" type="button" data-ner="${i}" ${i<V.length-1?"":"disabled"} aria-label="Flytta ner">↓</button><button class="sm" type="button" data-bort="${i}" aria-label="Ta bort">✕</button></div>${tab}${dl}</li>`}).join("")}
+    const gv=titta(x)?"":`<div class="tab"><span>Antal gånger:</span>${GANGER.map(n=>`<button type="button" data-g="${i}:${n}" aria-pressed="${gAv(x)===n}">${n}</button>`).join("")}</div>`;
+    return `<li><div class="rad"><span class="nr">${i+1}</span><span class="ik" aria-hidden="true">${e.i}</span><b>${esc(e.n)}${dsAv(x).length?`<small style="display:block;color:var(--good-dark);font-size:.85rem">${dsAv(x).map(d=>esc(delAv(x.u,d)[1])).join(" · ")}${dsAv(x).length>1?` (${dsAv(x).length} uppdrag)`:""}</small>`:""}</b><button class="sm" type="button" data-up="${i}" ${i?"":"disabled"} aria-label="Flytta upp">↑</button><button class="sm" type="button" data-ner="${i}" ${i<V.length-1?"":"disabled"} aria-label="Flytta ner">↓</button><button class="sm" type="button" data-bort="${i}" aria-label="Ta bort">✕</button></div>${tab}${dl}${gv}</li>`}).join("")}
 $("vald").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const d=b.dataset;
   if(d.up){const i=+d.up;[V[i-1],V[i]]=[V[i],V[i-1]]}
   else if(d.ner){const i=+d.ner;[V[i+1],V[i]]=[V[i],V[i+1]]}
   else if(d.bort){V.splice(+d.bort,1)}
+  else if(d.g){const [i,n]=d.g.split(":").map(Number);V[i].g=n}
   else if(d.d!==undefined){const k=d.d.indexOf(":"),i=+d.d.slice(0,k),id=d.d.slice(k+1),x=V[i];let ds=dsAv(x);
     if(!id)ds=[];else if(ds.includes(id))ds=ds.filter(y=>y!==id);else ds=DEL[x.u].map(y=>y[0]).filter(y=>y===id||ds.includes(y));  // delarna i övningens ordning
     x.ds=ds;delete x.d}
@@ -331,16 +348,16 @@ function spara(){const ls=las(LK,{});ls.senast={namn:$("namn").value,items:V};sk
 function ritaMina(){const ls=las(LK,{}),m=ls.mina||[];$("minaP").hidden=!m.length;
   $("mina").innerHTML=m.map((x,i)=>`<span><button type="button" data-ladda="${i}">📋 ${esc(x.namn)} <small style="color:var(--muted)">(${x.items.length})</small></button><button class="x" type="button" data-glom="${i}" aria-label="Ta bort ${esc(x.namn)}">✕</button></span>`).join("")}
 $("mina").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const ls=las(LK,{}),m=ls.mina||[];
-  if(b.dataset.ladda){const x=m[+b.dataset.ladda];$("namn").value=x.namn;V=x.items.filter(y=>PER[y.u]).map(y=>({u:y.u,t:(y.t||[]).slice(),ds:dsAv(y)}));spara();ritaVald();hitta()}
+  if(b.dataset.ladda){const x=m[+b.dataset.ladda];$("namn").value=x.namn;V=x.items.filter(y=>PER[y.u]).map(y=>({u:y.u,t:(y.t||[]).slice(),ds:dsAv(y),g:gAv(y)}));spara();ritaVald();hitta()}
   else if(b.dataset.glom){m.splice(+b.dataset.glom,1);ls.mina=m;skriv(LK,ls);ritaMina()}});
 
 /* ---------- QR-koden ---------- */
 let lank="";
 $("bQR").onclick=()=>{const U=utvidga(V);if(!U.length||U.length>MAX)return;const n=namn();const sl=slutVal();lank=SITE+"#"+kod(n,U,sl);
   /* spara bland Mina uppdrag (samma namn ersätts), högst 20 */
-  const ls=las(LK,{}),m=(ls.mina||[]).filter(x=>x.namn!==n);m.unshift({namn:n,items:V.map(x=>({u:x.u,t:x.t.slice(),ds:dsAv(x)}))});ls.mina=m.slice(0,20);skriv(LK,ls);ritaMina();
+  const ls=las(LK,{}),m=(ls.mina||[]).filter(x=>x.namn!==n);m.unshift({namn:n,items:V.map(x=>({u:x.u,t:x.t.slice(),ds:dsAv(x),g:gAv(x)}))});ls.mina=m.slice(0,20);skriv(LK,ls);ritaMina();
   $("qRub").textContent=n;$("qSlut").textContent=sl?"Sparas till "+visDag(dagSlut(sl)):"";$("qLank").textContent=lank;
-  $("qOvr").innerHTML=U.map((x,i)=>`<span>${i+1}. ${PER[x.u].i} ${esc(PER[x.u].n)}${x.t.length?" ("+x.t.join(", ")+")":delAv(x.u,x.d)?": "+esc(delAv(x.u,x.d)[1]):""}</span>`).join("");
+  $("qOvr").innerHTML=U.map((x,i)=>`<span>${i+1}. ${PER[x.u].i} ${esc(PER[x.u].n)}${x.t.length?" ("+x.t.join(", ")+")":delAv(x.u,x.d)?": "+esc(delAv(x.u,x.d)[1]):""}${x.g>1?" × "+x.g:""}</span>`).join("");
   $("qrBox").innerHTML="";$("qrv").hidden=false;
   const rita=()=>{try{new QRCode($("qrBox"),{text:lank,width:512,height:512,correctLevel:QRCode.CorrectLevel.M})}catch(e){$("qrBox").textContent="QR-koden kunde inte visas. Kopiera länken i stället."}};
   if(window.QRCode)rita();else{const s=document.createElement("script");s.src="/lib/qrcodejs/qrcode.min.js";s.onload=rita;s.onerror=()=>{$("qrBox").textContent="QR-koden kunde inte laddas. Kopiera länken i stället."};document.head.appendChild(s)}};

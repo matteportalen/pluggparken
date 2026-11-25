@@ -47,7 +47,7 @@ function merge(a,b){const out=Object.assign({},a);
     if(k==="matteportalen-uppdrag"){try{const x=JSON.parse(a[k])||{},y=JSON.parse(b[k])||{},o={},nu=Date.now(),V=7*864e5;
       for(const id of new Set([...Object.keys(x),...Object.keys(y)])){const u=x[id],v=y[id];if(!u&&!v)continue;
         const ny=!u?v:!v?u:(v.sedd||0)>(u.sedd||0)?v:u,r={...ny};
-        r.klar=[...new Set([...((u&&u.klar)||[]),...((v&&v.klar)||[])])].sort((p,q)=>p-q);r.firad=!!((u&&u.firad)||(v&&v.firad));
+        r.klar=[...new Set([...((u&&u.klar)||[]),...((v&&v.klar)||[])])].sort((p,q)=>p-q);r.gjort={};for(const g of [(u&&u.gjort)||{},(v&&v.gjort)||{}])for(const [i,n] of Object.entries(g))r.gjort[i]=Math.max(r.gjort[i]||0,n);r.firad=!!((u&&u.firad)||(v&&v.firad));
         r.slut=Math.max((u&&u.slut)||0,(v&&v.slut)||0)||((r.tid||r.sedd||0)+V);if(r.slut<nu||!r.kod)continue;o[id]=r;}
       out[k]=JSON.stringify(o);}catch(e){}return;}
     // Mitt rum: varje plats för sig (tapet, golv, matta …), den senast ändrade vinner; gamla data utan tid: det som inte är grundvalet vinner
