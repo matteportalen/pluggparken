@@ -4,7 +4,7 @@ _Under bygge (nov 2026). Överlämning: den som tar över läser bara den här f
 
 ## Beslut (lärarens, 12 nov 2026)
 - Nytt NO-flaggskepp: eleven jobbar **helt själv**, ingen fyra-knappar-quiz. Kort under 🔬 NO i `fler/index.html`.
-- **Figurerna ritas i SVG** (läraren sa ja just för den här övningen; i övrigt gäller "rita inte nya figurer i SVG utan att fråga").
+- **Figurerna är rasterbilder med mörka konturer och rena färgfält** (lärarens val 27 nov 2026, samma stil som äpplet och skeden). Åtta bilder i `sjon/bilder/`, solen återanvänds ur `bilder/illustrationer/`. SVG-symbolerna är behållare för bilderna; scen, rörelser och diagram är fortsatt SVG.
 - **Nivå 1 och 2 först.** Nivå 3 (gissa först, sedan simulering) väntar tills läraren provat sjön.
 - Starkt förenklad modell. Texterna är skrivna av Claude och inte granskade av en biolog. Säg det på sidan.
 - Spara tokens: små tester, få skärmbilder, en incheckning per steg, uppdatera den här filen efter varje steg.
@@ -37,7 +37,7 @@ Fel: första felet markerar fel och ger en ledtråd, andra felet visar svaret.
 - **Fiskgjusen dyker:** med några sekunders mellanrum flyger den mot en fisk, plaskar vid ytan och flyger iväg med en liten fisk (`dyk()` i skriptet). Bara utseende. Ingen dykning vid `prefers-reduced-motion`.
 
 ## Tekniska regler
-- En enda `sjon/index.html`, inga bibliotek. localStorage `mattespel-sjon-v1` = {stars:{1,2}}.
+- `sjon/index.html` med lokala bilder i `sjon/bilder/`, inga bibliotek. localStorage `mattespel-sjon-v1` = {stars:{1,2}}.
 - Inkopplingar (kryssa av): kort i `fler/index.html`, `sok.js`, `sitemap.xml`, `konto.js` (`PKEYS`), startsidans stjärnor + `snap` i `index.html`, `STJ` i `huvud.js`, portal i `varlden/index.html`, rad i `docs/`-tabellen i `CLAUDE.md`.
 - Testa med Playwright i 390 × 844, 375 × 667 och 1200 × 760 (utan scroll). Kör `node --check` på skriptet.
 
