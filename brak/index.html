@@ -151,6 +151,8 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
 .plate{width:86px;height:86px;border-radius:50%;background:var(--card,#fff);box-shadow:inset 0 0 0 7px var(--lc-E6ECF7,#E6ECF7),0 3px 0 var(--line,#C6D6F2);display:flex;flex-wrap:wrap;align-content:center;justify-content:center;font-size:1.05rem;line-height:1.15;padding:13px}
 .plate.on{box-shadow:inset 0 0 0 7px #9BE0B8,0 3px 0 #1E9E5E}
 </style>
+<link rel="stylesheet" href="../illustrationer.css?v=1">
+<script src="../illustrationer.js?v=1"></script>
 </head>
 <body>
 <div class="wrap">
@@ -364,7 +366,7 @@ function genSkarPizza(){
 const genLika=()=>{const r=Math.random();return r<.4?genRattvist():r<.7?genSkarPizza():genSkarRulle();};
 /* ---------- 5. Del av antal: dela lika på tallrikar ---------- */
 const THINGS=["🍓","🍎","🧁","🍪","🍒","🥕","🍋","🍩"];
-const platesHTML=(e,d,each,hl)=>`<div class="plates">${Array.from({length:d},(_,g)=>`<span class="plate${hl&&g<hl?" on":""}">${e.repeat(each)}</span>`).join("")}</div>`;
+const platesHTML=(e,d,each,hl)=>`<div class="plates">${Array.from({length:d},(_,g)=>`<span class="plate${hl&&g<hl?" on":""}">${PPBild.html(e).repeat(each)}</span>`).join("")}</div>`;
 /* Prova att dela: dra en sak till en tallrik, eller tryck så hamnar den på tallriken som har minst. Tryck på en sak på en tallrik så går den tillbaka. */
 function mountDeal(c){
   const pool=c.querySelector(".things"),plates=[...c.querySelectorAll(".plate")];
@@ -385,7 +387,7 @@ function genAntal(){
   const d=pickN([2,2,3,4,5]),each=rnd(2,d===2?8:5),n=d*each,k=d>2&&Math.random()<.35?rnd(2,d-1):1,e=pickOne(THINGS),ans=k*each;
   const what=k===1&&d===2?"hälften":ordOf(k,d);
   return{kind:"keys",instr:`Hur många är ${what} av ${n}?`,speak:`${petName} har ${n} saker till picknicken. De ska delas lika på ${TAL[d]} tallrikar. Hur många är ${what} av ${n}?`,
-    html:`<div class="things">${Array.from({length:n},()=>`<span class="tok">${e}</span>`).join("")}</div>`+platesHTML("",d,0)+
+    html:`<div class="things">${Array.from({length:n},()=>`<span class="tok">${PPBild.html(e)}</span>`).join("")}</div>`+platesHTML("",d,0)+
       `<div class="dealtip">Osäker? Dra eller tryck för att dela ut. <button class="reset" id="reset">Börja om</button></div>`,answer:ans,mount:mountDeal,
     help:()=>({vis:platesHTML(e,d,each,k),tip:`Dela ${n} lika på ${d} tallrikar. Det blir ${each} på varje, eftersom ${d} · ${each} = ${n}.${k>1?` ${cap(what)} är ${k} tallrikar: ${k} · ${each} = ${ans}.`:` ${cap(what)} är en tallrik: ${ans}.`}`})};
 }
@@ -433,7 +435,7 @@ function genLinje(){
 const ICON={
   enhet:pizzaSVG(equalCuts(4),i=>i===1?"out":"on"),del:pizzaSVG(equalCuts(4),i=>i<3?"on":"eaten"),farg:chocSVG(equalCuts(4),i=>i<2?"eaten":"on"),
   lika:pizzaSVG([[0,1]],()=>"on",{extra:`<line x1="50" y1="3" x2="50" y2="97" stroke="#1D2B53" stroke-width="5.5"/><line x1="3" y1="50" x2="97" y2="50" stroke="#1D2B53" stroke-width="5.5"/><line x1="50" y1="3" x2="50" y2="97" stroke="#FFF6E0" stroke-width="2.5"/><line x1="3" y1="50" x2="97" y2="50" stroke="#FFF6E0" stroke-width="2.5"/>`}),
-  antal:`<span style="font-size:1.6rem;line-height:1">🍓🍓<br>🍓🍓</span>`,
+  antal:`<span style="font-size:1.6rem;line-height:1">${PPBild.html("🍓").repeat(2)}<br>${PPBild.html("🍓").repeat(2)}</span>`,
   jamfor:`<span style="font-size:1.8rem;font-weight:800">${fr(1,2)}<span style="font-size:.8em"> &gt; </span>${fr(1,4)}</span>`,
   linje:`<svg viewBox="0 0 200 90" aria-hidden="true">${rollEl([.5],4)}<line x1="10" y1="62" x2="190" y2="62" stroke="#1D2B53" stroke-width="5"/><line x1="10" y1="50" x2="10" y2="74" stroke="#1D2B53" stroke-width="5"/><line x1="190" y1="50" x2="190" y2="74" stroke="#1D2B53" stroke-width="5"/><circle cx="100" cy="62" r="8" fill="#E5484D"/></svg>`
 };

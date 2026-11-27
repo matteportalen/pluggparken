@@ -4,7 +4,7 @@ _Under bygge (12 nov 2026). Den som tar över läser bara den här filen och `fl
 
 ## Beslut (lärarens, 12 nov 2026)
 - Nytt NO-flaggskepp för åk 1–3 (och uppåt), fyller Lgr22-luckan *Material och ämnen* (se `docs/lgr22.md`). Samma recept som Sjön/Kretsloppet: gissa först, riktig fysik, ingen mallad flervalsövning. Kort under 🔬 NO i `fler/index.html`.
-- Föremål är **emojis**, ingen SVG-konst. Sparnyckel `mattespel-flytasjunka-v1` = {stars:{1,2,3}}.
+- Föremål är **rasterbilder med tydliga mörka konturer**, enligt lärarens godkända äpple och sked (26 nov 2026). Delas via `illustrationer.js` och `bilder/illustrationer/`. Båtens skrov ritas fortfarande av fysikmodellen. Sparnyckel `mattespel-flytasjunka-v1` = {stars:{1,2,3}}.
 - Spara tokens: små tester, få skärmbilder.
 
 ## Fysiken (en enda modell för alla nivåer)

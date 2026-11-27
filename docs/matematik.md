@@ -103,3 +103,5 @@ Delade ritningar i roten, inga kopior i sidorna: `klocka.js`, `vag.js`, `brak.js
 - **Diagramverkstans bilder** (18 nov 2026): egna vektorillustrationer i `diagram/bilder.js` ersätter kategoriemojis i övningarna, frågor, räkningsfält, diagram och bildväljaren för egna diagram. Samma motiv återanvänds överallt och fungerar i utskrift. Emoji finns kvar som interna nycklar för kompatibilitet med sparade diagram; verktygsikoner är oförändrade. Användaren bad uttryckligen om egna ritade bilder för den här övningen.
 
 - **Egna diagram: bildväljare och standard** (18 nov 2026): responsiv panel med sex kolumner på dator/fyra på mobil, rullning inom panelen, bildnamn, kategorifilter och stängknapp. 79 motiv, inklusive träsläde med medar. Nya diagram börjar med blå/orange/grön kategori som matchar stapelfärgerna; tillagda rader föreslår motsvarande färg. Sparade egna diagram behålls.
+
+- **Bråk, Del av antal (26 nov 2026):** de åtta sorterna saker använder det gemensamma rasterbiblioteket i `bilder/illustrationer/`, både för utdelning och hjälptallrikar. Tryck, dragning, antal och facit fungerar som tidigare.

@@ -94,3 +94,5 @@ Sveriges landskap (frågeövning), Raketbygget och Månbasen. Det gamla Zooma ut
 - Rymdlabbet startar båda filmerna genom `MPSkalresa` (kort "Zooma in" med egen bild `ovriga/rymdlabbet/zoomin-kort.jpg`, gjord ur filmen). Djuplänkar: `#film-zoomin`, `#film-zoom`. Genväg på NO-sidan och två rader i `sok.js`.
 - **Väntar:** röstfilerna (läraren), Zooma in i Biografen i 3D-världen (kräver en rad för rymdfilmerna där), prov på riktig iPad/Chromebook.
 
+
+- **Ordgömman (26 nov 2026):** teman Djur, Frukt och grönsaker samt Kroppen använder gemensamma rasterbilder med tydliga konturer. Några återkommande föremål används även i andra teman. Ordlister och generering är oförändrade.

@@ -109,6 +109,8 @@ body.morkt .gtop .pill,body.morkt .lista{color:var(--ink)}
 #fx{position:fixed;inset:0;pointer-events:none;z-index:50}
 @media (prefers-reduced-motion:reduce){.ring.ny{animation:none;stroke-dashoffset:0}.grid span.tip::before,.klart .owl,.band.fel{animation:none}.tema{transition:none}}
 </style>
+<link rel="stylesheet" href="../../illustrationer.css?v=1">
+<script src="../../illustrationer.js?v=1"></script>
 </head>
 <body>
 <div id="deko" aria-hidden="true"></div>
@@ -154,13 +156,13 @@ body.morkt .gtop .pill,body.morkt .lista{color:var(--ink)}
 const $=id=>document.getElementById(id);
 /* ---------- Teman och ord (3–12 bokstäver, landskapen 13) ---------- */
 const TEMAN=[
- {id:'djur',namn:'Djur',ikon:'🐾',em:['🦊','🐻','🦉','🐰','🦌','🐸','🌳','🐿️','🌼','🦔','🐝','🍄'],
+ {id:'djur',namn:'Djur',ikon:'🐾',em:['🐱','🐶','🐴','🐮','🐷','🐸','🌳','🐦','🌼','🐟','🐶','🐱'],
   ord:'HUND KATT HÄST GRIS FÅR GET ANKA UGGLA RÄV VARG BJÖRN ÄLG RÅDJUR HARE IGELKOTT EKORRE MUS RÅTTA SÄL VAL HAJ LAX ABBORRE GÄDDA FJÄRIL MYRA GETING SPINDEL ORM GRODA PADDA SNIGEL KANIN HÖNA TUPP SVAN MÅS KRÅKA SKATA LEJON TIGER APA ZEBRA GIRAFF ELEFANT PANDA PINGVIN KROKODIL BÄVER UTTER GRÄVLING NOSHÖRNING'},
  {id:'frukt',namn:'Frukt och grönsaker',ikon:'🍎',em:['🍎','🍐','🍌','🍓','🥕','🍇','🍋','🥦','🍉','🌽','🍒','🥒'],
   ord:'ÄPPLE PÄRON BANAN APELSIN CITRON KIWI MELON PLOMMON KÖRSBÄR JORDGUBBE HALLON BLÅBÄR LINGON VINDRUVA ANANAS MANGO PERSIKA MOROT POTATIS GURKA TOMAT LÖK PAPRIKA MAJS ÄRTOR BÖNOR SALLAD KÅL BROCCOLI RÄDISA PUMPA SELLERI SVAMP AVOKADO VITLÖK BLOMKÅL'},
  {id:'skola',namn:'Skolan',ikon:'🏫',mork:1,em:['✏️','📏','📚','✂️','🖍️','🎒','📐','🔤','🖊️','📓','🧮','🔔'],
   ord:'PENNA SUDD LINJAL BOK SAX LIM KRITA TAVLA BÄNK STOL LÄRARE REKTOR RAST MATTE SVENSKA ENGELSKA BILD MUSIK SLÖJD IDROTT MATSAL KLASS ELEV HÄFTE PAPPER KARTA GLOB DATOR VÄSKA SKOLGÅRD KLOCKA LÄXA FRITIDS BIBLIOTEK PENNVÄSSARE SKOLBUSS'},
- {id:'kropp',namn:'Kroppen',ikon:'👃',em:['🩹','❤️','👣','✋','👀','🦷','👂','💪','🦶','👃','🧠','🫁'],
+ {id:'kropp',namn:'Kroppen',ikon:'👃',em:['✋','👀','👂','👃','🦶','👄','✋','👀','👂','👃','🦶','👄'],
   ord:'HUVUD HÅR ÖGA ÖRA NÄSA MUN TAND TUNGA LÄPP HALS NACKE AXEL ARM ARMBÅGE HAND HANDLED FINGER TUMME NAGEL MAGE NAVEL RYGG BEN KNÄ FOT HÄL LÅR VAD PANNA KIND HAKA ÖGONBRYN ÖGONFRANS HJÄRTA LUNGOR HJÄRNA SKELETT MUSKEL BLOD HUD'},
  {id:'farg',namn:'Färger',ikon:'🎨',antal:10,em:['🎨','🖌️','🖍️','🌈','🟥','🟦','🟨','🟩','🟪','🟧','✨','🖍️'],
   ord:'RÖD BLÅ GUL GRÖN SVART VIT GRÅ ROSA LILA ORANGE BRUN TURKOS BEIGE GULD SILVER VINRÖD MARINBLÅ LJUSBLÅ MÖRKGRÖN CERISE'},
@@ -243,11 +245,11 @@ const PLATS=[[3,7],[91,5],[5,30],[94,27],[2,55],[95,50],[6,80],[92,76],[28,94],[
 function deko(t){const d=$('deko'),bc=document.body.classList;[...bc].filter(c=>/^t-|^morkt$/.test(c)).forEach(c=>bc.remove(c));if(!t){d.innerHTML='';return;}
   document.body.classList.add('t-'+t.id);if(t.mork)document.body.classList.add('morkt');
   d.innerHTML=(t.lina?'<div class="lina"></div>':'')+PLATS.map((p,i)=>{const e=t.em[i%t.em.length];
-    if(t.lina&&i<6){const x=6+i*17.5;return`<span style="left:${x}%;top:100px;font-size:2.6rem;transform:rotate(${i%2?6:-6}deg)">${e}</span>`;}
-    return`<span style="left:${p[0]}%;top:${p[1]}%;font-size:${2+((i*7)%5)*.35}rem;transform:translate(-50%,-50%) rotate(${((i*37)%30)-15}deg)">${e}</span>`;}).join('');}
+    if(t.lina&&i<6){const x=6+i*17.5;return`<span style="left:${x}%;top:100px;font-size:2.6rem;transform:rotate(${i%2?6:-6}deg)">${PPBild.html(e)}</span>`;}
+    return`<span style="left:${p[0]}%;top:${p[1]}%;font-size:${2+((i*7)%5)*.35}rem;transform:translate(-50%,-50%) rotate(${((i*37)%30)-15}deg)">${PPBild.html(e)}</span>`;}).join('');}
 function openHome(){G=null;if('speechSynthesis' in window)speechSynthesis.cancel();deko(null);
   $('teman').innerHTML=TEMAN.map(t=>{const k=data.klar[t.id];
-    const em=[[8,10],[70,8],[84,48],[44,30]].map((p,i)=>`<span class="em" style="left:${p[0]}%;top:${p[1]}%;transform:rotate(${i%2?10:-10}deg)">${t.em[i]}</span>`).join('');
+    const em=[[8,10],[70,8],[84,48],[44,30]].map((p,i)=>`<span class="em" style="left:${p[0]}%;top:${p[1]}%;transform:rotate(${i%2?10:-10}deg)">${PPBild.html(t.em[i])}</span>`).join('');
     return`<button class="tema t-${t.id}" data-id="${t.id}">${em}${k===2?'<span class="klar">⭐ Klar</span>':k===1?'<span class="klar">💡 Med tips</span>':''}<span class="namn">${t.ikon} ${t.namn}<small>${t.ord.length} ord</small></span></button>`;}).join('');
   const n=TEMAN.filter(t=>data.klar[t.id]===2).length;
   $('homeNote').textContent=`Du får en stjärna för varje tema när du hittar alla orden utan tips. ${n} av ${TEMAN.length} teman klara.${data.antal?` Du har löst ${data.antal} ordgömm${data.antal===1?'a':'or'}.`:''}`;

@@ -101,6 +101,8 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 @media(max-width:420px){.hero .hk{width:88px;height:64px}.hero{gap:12px;padding:14px}}
 @media(prefers-reduced-motion:reduce){.puls{animation:none}}
 </style>
+<link rel="stylesheet" href="../illustrationer.css?v=1">
+<script src="../illustrationer.js?v=1"></script>
 </head>
 <body>
 <script src="../ljud.js"></script>
@@ -152,6 +154,7 @@ function hem(){stoppa();$("niv").innerHTML=[1,2,3].map(l=>`<button data-l="${l}"
 $("niv").onclick=e=>{const b=e.target.closest("[data-l]");if(b)starta(+b.dataset.l);};
 
 /* ======================= FYSIKEN (se docs/flytasjunka.md) ======================= */
+PPBild.preload(['🍎','🪙','🧊','🥚','🍃','🔑','🥔','🍌','🪵','🏊']);
 const W=360,H=240,WY=104,FLOOR=222,TL=12,TR=348,SC=4;
 let objs=[],rhoW=1,rhoTarget=1,bubb=[],t0=0,raf=0,G=null;
 const mk=o=>Object.assign({x:180,y:46,vy:0,rho:1,s:34,w:34,e:"",hull:null,bob:0},o);
@@ -187,7 +190,7 @@ function ritaObj(c,o){c.save();c.translate(o.x,o.y);
     if(h.h>0.05){c.beginPath();c.rect(-Wp/2,-Hp/2,tp,Hp-tp);c.rect(Wp/2-tp,-Hp/2,tp,Hp-tp);c.fill();c.stroke();}
     const cols=Math.max(1,Math.floor(h.w/2.4)),CO=["#E5484D","#F2B707","#2BB673","#3D5AFE"];
     for(let i=0;i<h.n;i++){const cx=-((cols-1)*2.4*SC)/2+(i%cols)*2.4*SC,cy=Hp/2-tp-1.2*SC-Math.floor(i/cols)*2.4*SC;c.fillStyle=CO[i%4];c.beginPath();c.arc(cx,cy,1.15*SC,0,7);c.fill();c.strokeStyle="rgba(0,0,0,.25)";c.lineWidth=.8;c.stroke();}}
-  else{c.font=`${Math.round(o.s*.92)}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;c.textAlign="center";c.textBaseline="middle";c.fillText(o.e,0,1);}
+  else{const image=PPBild.get(o.e);if(image&&image.complete&&image.naturalWidth){const h=o.s,w=h*image.naturalWidth/image.naturalHeight;c.drawImage(image,-w/2,-h/2,w,h);}else{c.font=`${Math.round(o.s*.92)}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;c.textAlign="center";c.textBaseline="middle";c.fillText(o.e,0,1);}}
   c.restore();}
 function ram(ts){const dt=Math.min(.033,(ts-(t0||ts))/1000);t0=ts;const tsek=ts/1000;
   rhoW+=(rhoTarget-rhoW)*Math.min(1,dt*2.2);if(Math.abs(rhoTarget-rhoW)<.002)rhoW=rhoTarget;

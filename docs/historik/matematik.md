@@ -151,3 +151,10 @@ Alla konkreta vardagsfrågor i RIM, LUCKA, SKATT och UNITS samt sorteringsförem
 Räcker-saften-uppgiften lagrar liter, antal kompisar och dl per glas som strukturerad data. Bilden visar en kanna och exakt rätt antal glas med etiketter; först efter avslutad uppgift visas total mängd samt rest eller brist. Svaret avslöjas inte av en förifylld lösning. Knappar, nivåer, rättning och sparnyckel är kvar.
 
 Verifierat med `skript/test-matning-bilder.cjs`: samtliga konkreta frågetexter har en bild, alla bildfiler kan laddas, 18 kombinationer av saftmängder/glasantal på både 1200×844 och 390×844, rätt/fel svar, dold lösning före svar och fungerande sortering. Bildkontaktkarta och skärmbilder granskade. Syntaxkontroll av inline-JS, bildstödet och testskriptet. Scrollmätning före/efter för saft, föremål och sortering: 0/0 px vid både 375×667 och 1200×760, ingen horisontell overflow.
+
+
+## 26 november 2026 – tydliga rasterbilder
+
+Bråk: åtta föremål i Del av antal ersatta med rasterbilder, inklusive hjälp och områdeskort. Testat tryck till/från tallrik, dragning, återställning och rätt svar. Gemensamt bibliotek: 52 WebP-bilder i `bilder/illustrationer/`, källor och fulla promptar i `PROMPTS.md`; `illustrationer.js/css` kopplar bild till föremål. Användarens godkända äpple och sked är stilreferenser.
+
+Validering: `skript/test-illustrationer.cjs` passerar på 390×844 och 1200×844; bildladdning, skärmbilder och skriptsyntax kontrollerade. Scrolljämförelse mot HEAD med samma slumpfrö i 375×667 och 1200×760: oförändrad höjd på alla fyra sidor, ingen horisontell overflow. Engelska/Flyta 0/0 px, Bråk 155/40 px, Ordgömman 163/30 px.

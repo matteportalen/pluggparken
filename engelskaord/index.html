@@ -123,6 +123,8 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 @media(max-width:420px){.hero .hb{width:88px}.hero{gap:12px;padding:14px}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
+<link rel="stylesheet" href="../illustrationer.css?v=1">
+<script src="../illustrationer.js?v=1"></script>
 </head>
 <body>
 <script src="../ljud.js"></script>
@@ -132,7 +134,7 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 
 <section class="screen" id="home">
   <div class="hero">
-    <div class="hb" aria-hidden="true"><span>🐱</span><b>cat</b><span>🍎</span><b>apple</b></div>
+    <div class="hb" aria-hidden="true"><span><img src="../bilder/illustrationer/cat.webp" alt="" style="width:1em;height:1em;object-fit:contain"></span><b>cat</b><span><img src="../bilder/illustrationer/apple.webp" alt="" style="width:1em;height:1em;object-fit:contain"></span><b>apple</b></div>
     <div><h1>Engelska ord</h1><p>Lyssna, bygg ordet och para ihop.</p></div>
   </div>
   <div class="niv" id="niv"></div>
@@ -186,7 +188,7 @@ const NIV=[null,
   {namn:"Djur, saker och mat",txt:"Cat, house, apple och fler.",col:"#2BB673",typer:["lyssna","lyssna","lyssna","las","las","bygg","bygg","bygg"]},
   {namn:"Färger, tal och kropp",txt:"Red, seven, hand och fler.",col:"#FF9F43",typer:["lyssna","lyssna","lyssna","las","las","bygg","bygg","bygg"]},
   {namn:"Hälsa och artighet",txt:"Hello, thank you, how are you?",col:"#7B61FF",typer:["para","para","para","hor","hor","bygg","bygg","bygg"]}];
-function bildHtml(b){if(b.startsWith("färg:"))return `<span class="bild"><span class="prick" style="background:${b.slice(5)}"></span></span>`;
+function bildHtml(b){if(PPBild.src(b))b=PPBild.src(b);if(b.startsWith("färg:"))return `<span class="bild"><span class="prick" style="background:${b.slice(5)}"></span></span>`;
   if(b.startsWith("tal:"))return `<span class="bild"><span class="tal">${b.slice(4)}</span></span>`;
   if(b.includes("."))return `<span class="bild"><img src="${b}" alt=""></span>`;
   return `<span class="bild"><span class="em">${b}</span></span>`;}
