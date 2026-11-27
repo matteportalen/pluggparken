@@ -1,0 +1,23 @@
+const {chromium}=require('playwright');const assert=require('node:assert/strict');
+const base=process.env.BASE_URL||'http://127.0.0.1:8765';
+(async()=>{const browser=await chromium.launch({channel:'chrome'});
+for(const viewport of [{width:390,height:844},{width:1200,height:844}]){
+const page=await browser.newPage({viewport});const errors=[];page.on('pageerror',e=>errors.push(e.message));
+await page.goto(base+'/division/');assert((await page.evaluate(()=>PPBild.preload(CANDY))).every(Boolean));
+await page.evaluate(()=>{sel.tables=[2];startGame('order')});
+assert.equal(await page.locator('#scene .pile img').count(),await page.evaluate(()=>nOf(G.cur)));
+for(const n of await page.evaluate(()=>String(G.cur.q)))await page.locator(`[data-k="${n}"]`).click();
+await page.locator('#okBtn').click();assert.equal(await page.evaluate(()=>G.correct),1);
+await page.evaluate(()=>{G.cur={d:3,q:4,r:2};showHelp(G.cur,'0')});
+assert.equal(await page.locator('#groups img').count(),14);
+assert.equal(await page.locator('#groups .over img').count(),2);
+await page.screenshot({path:`/tmp/division-bilder-${viewport.width}.png`});
+await page.goto(base+'/geometri/');assert((await page.evaluate(()=>PPBild.preload(VEG.map(v=>v[0])))).every(Boolean));
+await page.evaluate(()=>{start(AREAS.find(a=>a.id==='matt'));let t;do{t=genMatt()}while(!t.html.includes('<image'));G.t=t;document.querySelector('#instr').textContent=t.instr;render()});
+assert.equal(await page.locator('#content svg image').count(),await page.evaluate(()=>G.t.answer));
+await page.screenshot({path:`/tmp/geometri-bilder-${viewport.width}.png`});
+for(const n of await page.evaluate(()=>String(G.t.answer)))await page.locator(`[data-k="${n}"]`).click();
+await page.locator('[data-k="ok"]').click();assert(await page.evaluate(()=>G.busy));
+assert.deepEqual(errors,[]);assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);await page.close();
+}await browser.close();console.log('Division: rättning, bildantal och rest. Geometri: bildantal, rättning. Mobil och dator OK.');
+})().catch(e=>{console.error(e);process.exit(1)});

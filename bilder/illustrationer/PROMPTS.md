@@ -470,3 +470,63 @@ Prompt:
 Use case: illustration-story. Create ONE isolated raster illustration for a Swedish school activity, matching the supplied apple and spoon STYLE REFERENCES. Bold slightly irregular dark navy contour, simplified purposeful shapes, clear cheerful colors, flat solid color regions, at most one hard-edged shading shape. Natural small eyes if animal/person, no mascot expressions. Crisp edges, generous empty margin around entire object, transparent background. Match reference line weight relative to object size. No watercolor/gouache, no paper/pencil/brush texture, no grain, no fuzzy edges or glow, no gradient shading, no photorealism, no 3D, no text, no border, no ground shadow. Subject: One whole green cucumber with a single slice beside it, pale green interior.
 ```
 
+
+# Komplettering 27 november 2026
+
+Sju bilder för Division och Geometri. Inbyggd OpenAI-bildgenerering med apple.webp och spoon.webp som stilreferenser, transparent bakgrund. Samma WebP-normalisering som ovan.
+
+## candy.webp
+
+Källa: `/Users/jesper/.codex/generated_images/01a1e609-a348-75b1-bc15-589c740af925/exec-c861814f-151f-47a6-95cf-283dd0d97299.png`
+
+```text
+Create ONE isolated raster school illustration matching the supplied style references. Bold slightly irregular dark navy outline, simple purposeful shapes, flat clear colors, one hard edged highlight at most. No gradients, no grain, no watercolor, no fuzzy edges, no 3D, no text, no ground shadow, no face. Transparent background with margin. Entire subject visible. Subject: One single red wrapped sweet, with twisted yellow wrapper ends.
+```
+
+## lollipop.webp
+
+Källa: `/Users/jesper/.codex/generated_images/01a1e609-a348-75b1-bc15-589c740af925/exec-4a000fda-90a6-45d1-8e36-bd24cdff8d5f.png`
+
+```text
+Create ONE isolated raster school illustration matching the supplied style references. Bold slightly irregular dark navy outline, simple purposeful shapes, flat clear colors, one hard edged highlight at most. No gradients, no grain, no watercolor, no fuzzy edges, no 3D, no text, no ground shadow, no face. Transparent background with margin. Entire subject visible. Subject: One round pink and yellow spiral lollipop on a short white stick.
+```
+
+## chocolate.webp
+
+Källa: `/Users/jesper/.codex/generated_images/01a1e609-a348-75b1-bc15-589c740af925/exec-8242af60-3d88-49df-89a7-6b6d50532c49.png`
+
+```text
+Create ONE isolated raster school illustration matching the supplied style references. Bold slightly irregular dark navy outline, simple purposeful shapes, flat clear colors, one hard edged highlight at most. No gradients, no grain, no watercolor, no fuzzy edges, no 3D, no text, no ground shadow, no face. Transparent background with margin. Entire subject visible. Subject: One chocolate bar with six squares, lower end in a simple blue wrapper, no letters.
+```
+
+## icecream.webp
+
+Källa: `/Users/jesper/.codex/generated_images/01a1e609-a348-75b1-bc15-589c740af925/exec-912d253c-1df0-410e-a6bf-5513729065fa.png`
+
+```text
+Create ONE isolated raster school illustration matching the supplied style references. Bold slightly irregular dark navy outline, simple purposeful shapes, flat clear colors, one hard edged highlight at most. No gradients, no grain, no watercolor, no fuzzy edges, no 3D, no text, no ground shadow, no face. Transparent background with margin. Entire subject visible. Subject: One small ice cream cone with a single pink scoop, no face.
+```
+
+## cake.webp
+
+Källa: `/Users/jesper/.codex/generated_images/01a1e609-a348-75b1-bc15-589c740af925/exec-4400fc21-770c-4a15-9d7a-49fb0f1f160f.png`
+
+```text
+Create ONE isolated raster school illustration matching the supplied style references. Bold slightly irregular dark navy outline, simple purposeful shapes, flat clear colors, one hard edged highlight at most. No gradients, no grain, no watercolor, no fuzzy edges, no 3D, no text, no ground shadow, no face. Transparent background with margin. Entire subject visible. Subject: One triangular slice of cake, cream layers and pink icing, no plate.
+```
+
+## lettuce.webp
+
+Källa: `/Users/jesper/.codex/generated_images/01a1e609-a348-75b1-bc15-589c740af925/exec-f705fd16-6898-47c5-bbca-583a8a793022.png`
+
+```text
+Create ONE isolated raster school illustration matching the supplied style references. Bold slightly irregular dark navy outline, simple purposeful shapes, flat clear colors, one hard edged highlight at most. No gradients, no grain, no watercolor, no fuzzy edges, no 3D, no text, no ground shadow, no face. Transparent background with margin. Entire subject visible. Subject: One green head of leaf lettuce with three broad leaves, simple recognizable form.
+```
+
+## sunflower.webp
+
+Källa: `/Users/jesper/.codex/generated_images/01a1e609-a348-75b1-bc15-589c740af925/exec-caa0efbb-88b3-4159-b665-074963389684.png`
+
+```text
+Create ONE isolated raster school illustration matching the supplied style references. Bold slightly irregular dark navy outline, simple purposeful shapes, flat clear colors, one hard edged highlight at most. No gradients, no grain, no watercolor, no fuzzy edges, no 3D, no text, no ground shadow, no face. Transparent background with margin. Entire subject visible. Subject: One sunflower with yellow petals, dark brown centre, short green stem and two leaves.
+```

@@ -224,6 +224,8 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
 .tcard .dnum small{font-size:.26em;font-weight:700;opacity:.92;margin-bottom:.12em;white-space:nowrap}
 .board .rh{font-weight:800;color:var(--ink);font-size:clamp(.7rem,3vw,1rem)}
 </style>
+<link rel="stylesheet" href="../illustrationer.css?v=2">
+<script src="../illustrationer.js?v=2"></script>
 </head>
 <body>
 <div class="wrap">
@@ -372,7 +374,7 @@ function tableFacts(T,rest){return rest?range(1,10).flatMap(q=>range(1,T-1).map(
 /* ---------- Kalaset: elevens djur med partyhatt och en godissort per tabell ---------- */
 const pet=Object.assign(lasDjur(),{hat:'party'}),petName=PETNAME[pet.animal]||'Ugglan',lc=petName.toLowerCase();
 const CANDY=['🍬','🍭','🍫','🍩','🧁','🍪','🍓','🍒','🍦','🍰'];
-const candyOf=d=>CANDY[(d-1)%10];
+const candyOf=d=>PPBild.html(CANDY[(d-1)%10]);
 const petFx=c=>{const p=$('#hpet');if(p){p.classList.remove('hop','hmm');void p.offsetWidth;p.classList.add(c);}};
 $('#homePet').innerHTML=owlSVG(pet);$('#hpet').innerHTML=owlSVG(pet);
 

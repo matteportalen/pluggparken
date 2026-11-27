@@ -105,3 +105,5 @@ Delade ritningar i roten, inga kopior i sidorna: `klocka.js`, `vag.js`, `brak.js
 - **Egna diagram: bildväljare och standard** (18 nov 2026): responsiv panel med sex kolumner på dator/fyra på mobil, rullning inom panelen, bildnamn, kategorifilter och stängknapp. 79 motiv, inklusive träsläde med medar. Nya diagram börjar med blå/orange/grön kategori som matchar stapelfärgerna; tillagda rader föreslår motsvarande färg. Sparade egna diagram behålls.
 
 - **Bråk, Del av antal (26 nov 2026):** de åtta sorterna saker använder det gemensamma rasterbiblioteket i `bilder/illustrationer/`, både för utdelning och hjälptallrikar. Tryck, dragning, antal och facit fungerar som tidigare.
+
+- **Division och Geometri, area (27 nov 2026):** godsaker i uppgifter, hjälppåsar, tabellkort, godisskål och blixtrunda samt växter i odlingsrutor använder gemensamma rasterbilder i `bilder/illustrationer/`. Samma sorter, antal och facit. Geometrins rutnät och hjälpsiffror är kvar.

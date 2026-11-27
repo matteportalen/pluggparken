@@ -9,7 +9,7 @@ const base=process.env.BASE_URL||'http://127.0.0.1:8765';
   page.on('pageerror',e=>errors.push(e.message));
   await page.goto(base+'/engelskaord/');
   const loaded=await page.evaluate(()=>PPBild.preload(PPBild.names));
-  assert.equal(loaded.length,52);assert(loaded.every(Boolean),'Alla bilder ska laddas');
+  assert(loaded.length>=52);assert(loaded.every(Boolean),'Alla bilder ska laddas');
   await page.evaluate(()=>{starta(1);G.U=G.kv.find(u=>u.typ==='las'||u.typ==='lyssna');ritaFraga();ritaYta();});
   const correct=await page.evaluate(()=>G.U.val.findIndex(o=>o[0]===G.U.en));
   assert(await page.locator('#rutor img').count()>0);
@@ -50,5 +50,5 @@ const base=process.env.BASE_URL||'http://127.0.0.1:8765';
   await page.screenshot({path:`/tmp/ordgomma-${viewport.width}.png`});
   assert.deepEqual(errors,[]);await page.close();
  }
- await browser.close();console.log('52 bilder, engelskt bildval, bråk (tryck/dra/återställ/svar), flyta och tre ordteman: OK på mobil och dator.');
+ await browser.close();console.log('Bildbiblioteket, engelskt bildval, bråk (tryck/dra/återställ/svar), flyta och tre ordteman: OK på mobil och dator.');
 })().catch(e=>{console.error(e);process.exit(1)});

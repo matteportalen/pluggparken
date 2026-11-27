@@ -158,3 +158,10 @@ Verifierat med `skript/test-matning-bilder.cjs`: samtliga konkreta frågetexter 
 Bråk: åtta föremål i Del av antal ersatta med rasterbilder, inklusive hjälp och områdeskort. Testat tryck till/från tallrik, dragning, återställning och rätt svar. Gemensamt bibliotek: 52 WebP-bilder i `bilder/illustrationer/`, källor och fulla promptar i `PROMPTS.md`; `illustrationer.js/css` kopplar bild till föremål. Användarens godkända äpple och sked är stilreferenser.
 
 Validering: `skript/test-illustrationer.cjs` passerar på 390×844 och 1200×844; bildladdning, skärmbilder och skriptsyntax kontrollerade. Scrolljämförelse mot HEAD med samma slumpfrö i 375×667 och 1200×760: oförändrad höjd på alla fyra sidor, ingen horisontell overflow. Engelska/Flyta 0/0 px, Bråk 155/40 px, Ordgömman 163/30 px.
+
+
+## 27 november 2026 – rasterbilder i Division och Geometri
+
+Division använder PPBild.html i candyOf, så samma tio godsaker visas som rasterbilder i uppgifter, hjälppåsar (även rest), tabellkort, godisskål och blixtrunda. Geometrins plotHTML använder rasterbild inuti varje odlingsruta; rutnät, färgad area och hjälpsiffror behålls. Sju nya WebP-bilder kompletterar biblioteket: godis, klubba, choklad, glass, tårtbit, sallad och solros. Original och promptar dokumenteras i bilder/illustrationer/PROMPTS.md.
+
+Testat med skript/test-division-geometri-bilder.cjs på 390×844 och 1200×844: bildladdning, antal, rätt svar i båda övningarna samt 14 godsaker uppdelade i tre grupper om fyra med två i rest. Visuell kontroll av nya bilder och mobilvyer. Gemensamma bibliotekets tidigare fyra övningar regressionstestade. Skriptsyntax och git diff --check godkända. Scroll före/efter oförändrad: Division 63 px i 375×667 och 11 px i 1200×760; Geometri 207/146 px. Ingen horisontell overflow.
